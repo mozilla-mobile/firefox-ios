@@ -202,7 +202,7 @@ class UpdateViewModelTests: XCTestCase {
         ]
 
         return OnboardingViewModel(cards: withCards ? cards : [],
-                                   isDismissable: true)
+                                   isDismissible: true)
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {

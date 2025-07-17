@@ -28,7 +28,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
         self.linkAction = linkAction
 
         var attrString = AttributedString(fullText)
-        attrString.foregroundColor = Color(uiColor: theme.colors.textPrimary)
+        attrString.foregroundColor = Color(uiColor: theme.colors.textSecondary)
 
         let actionURL = URL(string: "action://\(action.rawValue)")!
         if let range = attrString.range(of: linkText) {

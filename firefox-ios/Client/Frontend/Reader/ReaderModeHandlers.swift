@@ -9,12 +9,17 @@ import Shared
 import WebEngine
 
 protocol ReaderModeHandlersProtocol {
+    @MainActor
     func register(_ webServer: WebServerProtocol, profile: Profile)
 }
 
+@MainActor
 struct ReaderModeHandlers: ReaderModeHandlersProtocol {
-    // TODO: FXIOS-12591 This global property is not concurrency safe
-    nonisolated(unsafe) static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
+    private static var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
+
+    static func setCache(_ cache: ReaderModeCache) {
+        readerModeCache = cache
+    }
 
     func register(_ webServer: WebServerProtocol, profile: Profile) {
         // Temporary hacky casting to allow for gradual movement to protocol oriented programming

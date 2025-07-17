@@ -123,12 +123,15 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         // Section ordering
         sectionItems.append(TopSitesSettings(settings: self))
 
-        if let profile {
+        let shouldHideSections = featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly)
+                              && featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+
+        if let profile, !shouldHideSections {
             let jumpBackInSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.FeatureFlags.JumpBackInSection,
-                defaultValue: !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly),
+                prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
+                defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatchLegacy(
@@ -144,8 +147,8 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             let bookmarksSetting = BoolSetting(
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
-                prefKey: PrefsKeys.FeatureFlags.BookmarksSection,
-                defaultValue: !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly),
+                prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
+                defaultValue: true,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatchLegacy(

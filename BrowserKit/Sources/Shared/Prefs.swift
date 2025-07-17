@@ -78,14 +78,17 @@ public struct PrefsKeys {
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
-        public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
-        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
+    }
+
+    public struct HomepageSettings {
+        public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
+        public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
     }
 
     public struct SearchSettings {
@@ -211,12 +214,15 @@ public struct PrefsKeys {
     // Used to only show the felt deletion alert confirmation once, used for private mode
     public static let dataClearanceAlertShown = "dataClearanceAlertShownKey"
 
+    // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
+    public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
+
     public struct Usage {
         public static let profileId = "profileId"
     }
 }
 
-public protocol Prefs {
+public protocol Prefs: Sendable {
     func getBranchPrefix() -> String
     func branch(_ branch: String) -> Prefs
     func setTimestamp(_ value: Timestamp, forKey defaultName: String)

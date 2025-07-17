@@ -22,6 +22,7 @@ class MainMenuViewController: UIViewController,
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
         static let backgroundAlpha: CGFloat = 0.8
+        static let menuHeightTolerance: CGFloat = 30
     }
     typealias SubscriberStateType = MainMenuState
 
@@ -62,9 +63,14 @@ class MainMenuViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
     }
 
+    private var bannerShown: Bool {
+        profile.prefs.boolForKey(PrefsKeys.defaultBrowserBannerShown) ?? false
+    }
+
     private var hasBeenExpanded = false
     private var currentCustomMenuHeight = 0.0
     private var isBrowserDefault = false
+    private var isPhoneLandscape = false
 
     private var isHomepage: Bool {
         guard let element = menuState.menuElements.first(where: { $0.isHomepage }) else { return false }
@@ -127,8 +133,16 @@ class MainMenuViewController: UIViewController,
             )
         )
 
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.updateMenuAppearance
+            )
+        )
+
         if isMenuRedesign {
             setupRedesignView()
+            setupMenuOrientation()
         } else {
             setupView()
         }
@@ -147,9 +161,10 @@ class MainMenuViewController: UIViewController,
             }
 
             menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
-                if let customHeight = self?.currentCustomMenuHeight, height > customHeight {
+                let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
+                if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
                     self?.currentCustomMenuHeight = height
-                    if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+                    if #available(iOS 16.0, *) {
                         let customDetent = UISheetPresentationController.Detent.custom { context in
                             return height
                         }
@@ -164,8 +179,12 @@ class MainMenuViewController: UIViewController,
                 }
             }
 
-            menuRedesignContent.bannerButtonCallback = {
-                DefaultApplicationHelper().openSettings()
+            menuRedesignContent.bannerButtonCallback = { [weak self] in
+                self?.dispatchDefaultBrowserAction()
+            }
+
+            menuRedesignContent.closeBannerButtonCallback = { [weak self] in
+                self?.profile.prefs.setBool(true, forKey: PrefsKeys.defaultBrowserBannerShown)
             }
 
             menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
@@ -224,6 +243,13 @@ class MainMenuViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         adjustLayout()
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.updateMenuAppearance
+            )
+        )
+        setupMenuOrientation()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -276,7 +302,12 @@ class MainMenuViewController: UIViewController,
                                          subtitle: .MainMenu.HeaderBanner.Subtitle,
                                          image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
                                          isBannerFlagEnabled: isMenuDefaultBrowserBanner,
-                                         isBrowserDefault: isBrowserDefault)
+                                         isBrowserDefault: isBrowserDefault,
+                                         bannerShown: bannerShown)
+    }
+
+    private func setupMenuOrientation() {
+        menuRedesignContent.setupMenuMenuOrientation(isPhoneLandscape: isPhoneLandscape)
     }
 
     private func setupHintView() {
@@ -311,17 +342,28 @@ class MainMenuViewController: UIViewController,
         } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = windowScene.windows.first {
             window.addSubview(hintView)
+
+            if UIScreen.main.bounds.height < UX.hintViewHeight + menuRedesignContent.frame.height {
+                if isMenuRedesign {
+                    hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                                  constant: UX.hintViewMargin).isActive = true
+                } else {
+                    hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                  constant: UX.hintViewMargin).isActive = true
+                }
+            } else {
+                if isMenuRedesign {
+                    hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                                     constant: -UX.hintViewMargin).isActive = true
+                } else {
+                    hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                     constant: -UX.hintViewMargin).isActive = true
+                }
+            }
             NSLayoutConstraint.activate([
                 hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
                 hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin)
             ])
-            if isMenuRedesign {
-                hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
-                                                 constant: -UX.hintViewMargin).isActive = true
-            } else {
-                hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                 constant: -UX.hintViewMargin).isActive = true
-            }
         }
         hintViewHeightConstraint = hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
         hintViewHeightConstraint?.isActive = true
@@ -361,6 +403,7 @@ class MainMenuViewController: UIViewController,
         menuState = state
 
         isBrowserDefault = menuState.isBrowserDefault
+        isPhoneLandscape = menuState.isPhoneLandscape
 
         if let accountData = menuState.accountData {
             updateHeaderWith(accountData: accountData, icon: menuState.accountIcon)
@@ -423,6 +466,17 @@ class MainMenuViewController: UIViewController,
         )
     }
 
+    private func dispatchDefaultBrowserAction() {
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.defaultBrowser),
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -448,12 +502,14 @@ class MainMenuViewController: UIViewController,
     private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
         var state = String.MainMenu.SiteProtection.ProtectionsOn
         var stateImage = StandardImageIdentifiers.Small.shieldCheckmarkFill
+        var shouldUseRenderMode = false
 
         switch siteProtectionsData.state {
         case .notSecure:
             state = String.MainMenu.SiteProtection.ConnectionNotSecure
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-        case .on: break
+        case .on:
+            shouldUseRenderMode = true
         case .off:
             state = String.MainMenu.SiteProtection.ProtectionsOff
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
@@ -464,7 +520,8 @@ class MainMenuViewController: UIViewController,
             subtitle: siteProtectionsData.subtitle,
             image: siteProtectionsData.image,
             state: state,
-            stateImage: stateImage)
+            stateImage: stateImage,
+            shouldUseRenderMode: shouldUseRenderMode)
     }
 
     // MARK: - A11y

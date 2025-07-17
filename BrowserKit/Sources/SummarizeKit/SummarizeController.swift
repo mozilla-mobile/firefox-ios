@@ -16,9 +16,11 @@ let dummyText = """
 // swiftlint: enable line_length
 
 public struct SummarizeViewModel {
-    let summarizeLabel: String
-    let summarizeA11yLabel: String
+    let loadingLabel: String
+    let loadingA11yLabel: String
+    let loadingA11yId: String
     let summarizeTextViewA11yLabel: String
+    let summarizeTextViewA11yId: String
 
     let closeButtonModel: CloseButtonViewModel
     let tabSnapshot: UIImage
@@ -28,18 +30,22 @@ public struct SummarizeViewModel {
     let onShouldShowTabSnapshot: @MainActor () -> Void
 
     public init(
-        summarizeLabel: String,
-        summarizeA11yLabel: String,
+        loadingLabel: String,
+        loadingA11yLabel: String,
+        loadingA11yId: String,
         summarizeTextViewA11yLabel: String,
+        summarizeTextViewA11yId: String,
         closeButtonModel: CloseButtonViewModel,
         tabSnapshot: UIImage,
         tabSnapshotTopOffset: CGFloat,
         onDismiss: @escaping @MainActor () -> Void,
         onShouldShowTabSnapshot: @escaping @MainActor () -> Void
     ) {
-        self.summarizeLabel = summarizeLabel
-        self.summarizeA11yLabel = summarizeA11yLabel
+        self.loadingLabel = loadingLabel
+        self.loadingA11yLabel = loadingA11yLabel
+        self.loadingA11yId = loadingA11yId
         self.summarizeTextViewA11yLabel = summarizeTextViewA11yLabel
+        self.summarizeTextViewA11yId = summarizeTextViewA11yId
         self.closeButtonModel = closeButtonModel
         self.tabSnapshot = tabSnapshot
         self.onDismiss = onDismiss
@@ -61,6 +67,7 @@ public class SummarizeController: UIViewController, Themeable {
         static let panCloseSummaryVelocityThreshold: CGFloat = 1000.0
         static let panCloseSummaryHeightPercentageThreshold: CGFloat = 0.25
         static let closeButtonEdgePadding: CGFloat = 16.0
+        static let tabSnapshotBringToFrontAnimationDuration: CGFloat = 0.25
     }
 
     private let viewModel: SummarizeViewModel
@@ -99,7 +106,7 @@ public class SummarizeController: UIViewController, Themeable {
         )
     }
     private var screenCornerRadius: CGFloat {
-        return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
+        return 32.0
     }
 
     public init(
@@ -138,7 +145,10 @@ public class SummarizeController: UIViewController, Themeable {
     private func setupSubviews() {
         view.addSubviews(tabSnapshot, gradient, closeButton, summaryView, loadingLabel)
 
-        loadingLabel.text = viewModel.summarizeLabel
+        loadingLabel.text = viewModel.loadingLabel
+        loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
+        loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
+
         closeButton.configure(viewModel: viewModel.closeButtonModel)
         closeButton.addAction(
             UIAction(handler: { [weak self] _ in
@@ -177,6 +187,8 @@ public class SummarizeController: UIViewController, Themeable {
             mutable.endEditing()
             summaryView.attributedText = mutable
         }
+        summaryView.accessibilityIdentifier = viewModel.summarizeTextViewA11yId
+        summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
 
         tabSnapshotTopConstraint = tabSnapshot.topAnchor.constraint(equalTo: view.topAnchor)
         tabSnapshotTopConstraint?.isActive = true
@@ -229,7 +241,7 @@ public class SummarizeController: UIViewController, Themeable {
             self.tabSnapshot.layer.cornerRadius = self.screenCornerRadius
             self.loadingLabel.alpha = 1.0
         }) { _ in
-            // This is here just to show case the full animation
+            // TODO: - FXIOS-12858 replace this demo code with the actual backend API
             DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                 self.showSummary()
             }
@@ -251,10 +263,9 @@ public class SummarizeController: UIViewController, Themeable {
            closeButton.alpha = 1.0
            view.backgroundColor = theme.colors.layer1
         } completion: { [weak self] _ in
-            if let snapshot = self?.tabSnapshot {
-                UIView.animate(withDuration: 0.2) {
-                    self?.view.bringSubviewToFront(snapshot)
-                }
+            guard let tabSnapshotView = self?.tabSnapshot else { return }
+            UIView.animate(withDuration: UX.tabSnapshotBringToFrontAnimationDuration) {
+                self?.view.bringSubviewToFront(tabSnapshotView)
             }
         }
     }
@@ -267,7 +278,7 @@ public class SummarizeController: UIViewController, Themeable {
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
         let tabSnapshotTransform = CGAffineTransform(translationX: 0.0,
-                                                   y: tabSnapshotYTransform)
+                                                     y: tabSnapshotYTransform)
         switch gesture.state {
         case .changed:
             handleTabPanChanged(tabSnapshotTransform: tabSnapshotTransform, translationY: translationY)

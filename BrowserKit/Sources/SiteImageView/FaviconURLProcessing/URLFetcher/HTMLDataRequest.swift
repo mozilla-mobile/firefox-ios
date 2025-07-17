@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol HTMLDataRequest {
+protocol HTMLDataRequest: Sendable {
     func fetchDataForURL(_ url: URL) async throws -> Data
 }
 

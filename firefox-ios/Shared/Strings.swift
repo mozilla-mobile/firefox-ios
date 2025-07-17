@@ -1048,6 +1048,11 @@ extension String {
         public struct RecentlySaved { }
 
         public struct Shortcuts {
+            public static let SectionTitle = MZLocalizedString(
+                key: "FirefoxHomepage.Shortcuts.SectionTitle.v142",
+                tableName: "FirefoxHomepage",
+                value: "Shortcuts",
+                comment: "This is the section title for the Shortcuts section on Firefox Homepage.")
             public static let Sponsored = MZLocalizedString(
                 key: "FirefoxHomepage.Shortcuts.Sponsored.v100",
                 tableName: nil,
@@ -1060,6 +1065,14 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+        }
+
+        public struct SearchBar {
+            public static let PlaceholderTitle = MZLocalizedString(
+                key: "FirefoxHomepage.SearchBar.PlaceholderTitle.v142",
+                tableName: "FirefoxHomepage",
+                value: "Search or enter address",
+                comment: "This is the placeholder text that is at the center of the search bar on the Firefox Homepage.")
         }
 
         public struct YourLibrary { }
@@ -2031,6 +2044,29 @@ extension String {
             tableName: "SearchHeaderTitle",
             value: "Google Search",
             comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This string will be used as a header for Google search results listed as suggestions.")
+    }
+}
+
+extension String {
+    public struct Summarizer {
+        public static let LoadingLabel = MZLocalizedString(
+            key: "Summarizer.Loading.Label.v142",
+            tableName: "Summarizer",
+            value: "Summarizing ...",
+            comment: "When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed."
+        )
+        public static let LoadingAccessibilityLabel = MZLocalizedString(
+            key: "Summarizer.Loading.Accessibility.Label.v142",
+            tableName: "Summarizer",
+            value: "Loading Summary label",
+            comment: "The a11y label for the loading label"
+        )
+        public static let SummaryTextAccessibilityLabel = MZLocalizedString(
+            key: "Summarizer.Summary.Text.Accessibility.Label.v142",
+            tableName: "Summarizer",
+            value: "Summary report text",
+            comment: "The a11y label for the summary text shown when the summarizer returns a text result."
+        )
     }
 }
 

@@ -20,8 +20,13 @@ class AnimatedGradientOutlineView: UIView,
         static let endPointFinalAnimationValue = CGPoint(x: 0.0, y: 0.8)
         static let colorsLocation = [NSNumber(0.0), NSNumber(0.8), NSNumber(1.0)]
         static let colorsKeyPath = "colors"
+        static let initialAnimationDuration = 1.0
         static let startPointKeyPath = "startPoint"
         static let endPointKeyPath = "endPoint"
+        static let animateGradientAnimationKey = "animateGradient"
+        static let startPointAnimationKey = "startPointAnimation"
+        static let endPointAnimationKey = "endPointAnimation"
+        static let startPointAnimationDelay = 0.5
     }
 
     private let gradientLayer = CAGradientLayer()
@@ -79,13 +84,13 @@ class AnimatedGradientOutlineView: UIView,
             GradientColors.clearRed.cgColor,
             GradientColors.blue.cgColor
         ]
-        animation.duration = 1.0
+        animation.duration = UX.initialAnimationDuration
         animation.repeatCount = 0
         animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         animation.fillMode = .forwards
         animation.delegate = self
         animation.isRemovedOnCompletion = false
-        gradientLayer.add(animation, forKey: "animateGradient")
+        gradientLayer.add(animation, forKey: UX.animateGradientAnimationKey)
     }
 
     // MARK: - Animation Delegate
@@ -105,8 +110,8 @@ class AnimatedGradientOutlineView: UIView,
         startPointAnimation.duration = UX.positionChangeAnimationDuration
         startPointAnimation.isRemovedOnCompletion = false
         startPointAnimation.fillMode = .forwards
-        startPointAnimation.beginTime = CACurrentMediaTime() + 0.5
-        gradientLayer.add(startPointAnimation, forKey: "startPointAnimation")
+        startPointAnimation.beginTime = CACurrentMediaTime() + UX.startPointAnimationDelay
+        gradientLayer.add(startPointAnimation, forKey: UX.startPointAnimationKey)
 
         let endPointAnimation = CABasicAnimation(keyPath: UX.endPointKeyPath)
         endPointAnimation.fromValue = CGPoint.bottomCenter
@@ -115,6 +120,6 @@ class AnimatedGradientOutlineView: UIView,
         endPointAnimation.isRemovedOnCompletion = false
         endPointAnimation.fillMode = .forwards
         endPointAnimation.timingFunction = animationCurve
-        gradientLayer.add(endPointAnimation, forKey: "endPointAnimation")
+        gradientLayer.add(endPointAnimation, forKey: UX.endPointAnimationKey)
     }
 }

@@ -3,8 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import OnboardingKit
-@testable import Client
+@testable import OnboardingKit
 
 class OnboardingFlowViewModelTests: XCTestCase {
     var viewModel: OnboardingFlowViewModel<MockOnboardingCardInfoModel>!

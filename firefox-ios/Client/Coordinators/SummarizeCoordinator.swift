@@ -40,12 +40,14 @@ class SummarizeCoordinator: BaseCoordinator {
 
     func start() {
         let model = SummarizeViewModel(
-            summarizeLabel: "Summarizing...",
-            summarizeA11yLabel: "summary-label",
-            summarizeTextViewA11yLabel: "summary-text-view-label",
+            loadingLabel: .Summarizer.LoadingLabel,
+            loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
+            loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel,
+            summarizeTextViewA11yLabel: .Summarizer.SummaryTextAccessibilityLabel,
+            summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: "",
-                a11yIdentifier: "",
+                a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeButton,
                 image: UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
             ),
             tabSnapshot: browserSnapshot,

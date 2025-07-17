@@ -486,7 +486,7 @@ struct AccessibilityIdentifiers {
             static let searchNavigationBar = "Search"
             static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
-            static let disableSearchSuggestsInPrivateMode = "PrivateMode.DisableSearchSuggests"
+            static let showPrivateSuggestions = "PrivateMode.showPrivateSuggestions"
             static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
         }
 
@@ -705,6 +705,12 @@ struct AccessibilityIdentifiers {
             static let blockAudio = "BlockAudio"
             static let blockAudioAndVideo = "BlockAudioAndVideo"
         }
+    }
+
+    struct Summarizer {
+        static let closeButton = "closeButton"
+        static let loadingLabel = "summaryLoadingLabel"
+        static let summaryTextView = "summaryTextView"
     }
 
     struct ShareTo {

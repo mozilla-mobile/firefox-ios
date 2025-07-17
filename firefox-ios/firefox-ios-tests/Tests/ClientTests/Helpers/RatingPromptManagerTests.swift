@@ -163,7 +163,7 @@ class RatingPromptManagerTests: XCTestCase {
 }
 
 // MARK: - CrashingMockLogger
-class CrashingMockLogger: Logger {
+final class CrashingMockLogger: Logger, @unchecked Sendable {
     func setup(sendCrashReports: Bool) {}
     func configure(crashManager: CrashManager) {}
     func copyLogsToDocuments() {}

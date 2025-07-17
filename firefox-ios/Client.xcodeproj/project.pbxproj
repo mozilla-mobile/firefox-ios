@@ -977,6 +977,7 @@
 		8A6B799B2CDBCF3D003C3077 /* TopSitesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B79992CDBCE2E003C3077 /* TopSitesManagerTests.swift */; };
 		8A6B799D2CDBDAE4003C3077 /* MockContileProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B799C2CDBDAE4003C3077 /* MockContileProvider.swift */; };
 		8A6B79A02CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B799F2CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift */; };
+		8A6CDB472DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */; };
 		8A6E13982A71BA4E00A88FA8 /* TabWebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */; };
 		8A6E63C52D4946760040D355 /* JumpBackInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E63C42D49466C0040D355 /* JumpBackInCell.swift */; };
 		8A6E63C72D4946B90040D355 /* JumpBackInSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E63C62D4946B40040D355 /* JumpBackInSectionState.swift */; };
@@ -1288,8 +1289,6 @@
 		8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */; };
 		8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA4E80E2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift */; };
 		8CA6FA0E2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6FA0D2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift */; };
-		8CA6FA102E1D2D650032D57D /* OnboardingFlowViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6FA0F2E1D2D650032D57D /* OnboardingFlowViewModelTests.swift */; };
-		8CA6FA122E1D2DAD0032D57D /* MockOnboardingCardInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA6FA112E1D2DAD0032D57D /* MockOnboardingCardInfoModel.swift */; };
 		8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8CC033F92BA476840033449E /* FormAutofillHelper.js */; };
 		8CC617092C35463B001C7688 /* AddressModifiedStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC617082C35463B001C7688 /* AddressModifiedStatus.swift */; };
 		8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */; };
@@ -1381,6 +1380,8 @@
 		B12DDFED2A8DE825008CE9CF /* ToolbarMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */; };
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B1664E9E2B163B7A005D4C71 /* CreditCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */; };
+		B184D4B62E1D4C2B00549CAC /* storiesRedesignOff.json in Resources */ = {isa = PBXBuildFile; fileRef = B184D4B52E1D4C2B00549CAC /* storiesRedesignOff.json */; };
+		B184D4B82E1D4E1500549CAC /* storiesRedesignOn.json in Resources */ = {isa = PBXBuildFile; fileRef = B184D4B72E1D4E1500549CAC /* storiesRedesignOn.json */; };
 		B1B95C622D3680DB00FD1337 /* ShareToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B95C612D3680DB00FD1337 /* ShareToolbarTests.swift */; };
 		B1CA62822C0DB43600D31625 /* MultiWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CA62812C0DB43600D31625 /* MultiWindowTests.swift */; };
 		B1E156A62CD5080E009DF9E5 /* C_AddressesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E156A52CD5080E009DF9E5 /* C_AddressesTests.swift */; };
@@ -1421,6 +1422,8 @@
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
 		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
+		BCFB141D2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json in Resources */ = {isa = PBXBuildFile; fileRef = BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */; };
+		BCFB141F2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json in Resources */ = {isa = PBXBuildFile; fileRef = BCFB141E2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
 		BCFF93F02AABA55A005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */; };
 		BCFF93F22AAF9688005B5B71 /* FirefoxSuggestSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */; };
@@ -8416,6 +8419,7 @@
 		8A6B79992CDBCE2E003C3077 /* TopSitesManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesManagerTests.swift; sourceTree = "<group>"; };
 		8A6B799C2CDBDAE4003C3077 /* MockContileProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockContileProvider.swift; sourceTree = "<group>"; };
 		8A6B799F2CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGoogleTopSiteManager.swift; sourceTree = "<group>"; };
+		8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabDisplayViewDragAndDropInteraction.swift; sourceTree = "<group>"; };
 		8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewTests.swift; sourceTree = "<group>"; };
 		8A6E63C42D49466C0040D355 /* JumpBackInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInCell.swift; sourceTree = "<group>"; };
 		8A6E63C62D4946B40040D355 /* JumpBackInSectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInSectionState.swift; sourceTree = "<group>"; };
@@ -8730,8 +8734,6 @@
 		8CA4E80C2D22C066007207C1 /* GleanUsageReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanUsageReporting.swift; sourceTree = "<group>"; };
 		8CA4E80E2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanUsageReportingLifecycleObserverTest.swift; sourceTree = "<group>"; };
 		8CA6FA0D2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingKitCardInfoModel.swift; sourceTree = "<group>"; };
-		8CA6FA0F2E1D2D650032D57D /* OnboardingFlowViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowViewModelTests.swift; sourceTree = "<group>"; };
-		8CA6FA112E1D2DAD0032D57D /* MockOnboardingCardInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOnboardingCardInfoModel.swift; sourceTree = "<group>"; };
 		8CA841E0986514988B705D97 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Menu.strings; sourceTree = "<group>"; };
 		8CC033F92BA476840033449E /* FormAutofillHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FormAutofillHelper.js; sourceTree = "<group>"; };
 		8CC617082C35463B001C7688 /* AddressModifiedStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressModifiedStatus.swift; sourceTree = "<group>"; };
@@ -9104,6 +9106,8 @@
 		B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMenuTests.swift; sourceTree = "<group>"; };
 		B15058802AA0A878008B7382 /* OpeningScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningScreenTests.swift; sourceTree = "<group>"; };
 		B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardsTests.swift; sourceTree = "<group>"; };
+		B184D4B52E1D4C2B00549CAC /* storiesRedesignOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = storiesRedesignOff.json; sourceTree = "<group>"; };
+		B184D4B72E1D4E1500549CAC /* storiesRedesignOn.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = storiesRedesignOn.json; sourceTree = "<group>"; };
 		B1864C62B7F68815AA1FE0C2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		B18D4F2291BA5459431EDCA9 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Shared.strings"; sourceTree = "<group>"; };
 		B19648D5B3667FE0CB25D069 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -9229,6 +9233,8 @@
 		BC4B49618B8FC822D4D0FCC2 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BC81442AA84F635F3067A2C5 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
+		BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feltPrivacySimplifiedUIOff.json; sourceTree = "<group>"; };
+		BCFB141E2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feltPrivacySimplifiedUIOn.json; sourceTree = "<group>"; };
 		BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFirefoxSuggest.swift; sourceTree = "<group>"; };
 		BCFF93EF2AAB97A8005B5B71 /* BackgroundFirefoxSuggestIngestUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundFirefoxSuggestIngestUtility.swift; sourceTree = "<group>"; };
 		BCFF93F12AAF9688005B5B71 /* FirefoxSuggestSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSuggestSettings.swift; sourceTree = "<group>"; };
@@ -12573,7 +12579,6 @@
 			isa = PBXGroup;
 			children = (
 				EDDB13862D3184EB00C4B165 /* Site+createSponsoredSite.swift */,
-				8AD3AFC22D143EF000CFC887 /* HomepageDimensionImplementation.swift */,
 				8A454D3E2CB9B8A0009436D9 /* TopSitesSectionState.swift */,
 				8A454D422CB9B8F5009436D9 /* TopSitesManager.swift */,
 				8A454D402CB9B8AA009436D9 /* TopSitesAction.swift */,
@@ -12815,6 +12820,7 @@
 				8ABDBAA42CB6BF3A00B51F63 /* Pocket */,
 				8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */,
 				8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */,
+				8AD3AFC22D143EF000CFC887 /* HomepageDimensionImplementation.swift */,
 				8AA0A6642CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift */,
 				8AF347DC2CADD0E100624036 /* Redux */,
 			);
@@ -14023,6 +14029,7 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */,
 				8A01FE3F2DF0CE49002C483B /* MockDateProvider.swift */,
 				8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */,
 				8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */,
@@ -14032,7 +14039,6 @@
 				0B7B053E2D64C022007FD7AC /* MockTabWebView.swift */,
 				8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */,
 				8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */,
-				8CA6FA112E1D2DAD0032D57D /* MockOnboardingCardInfoModel.swift */,
 				45D5EDBF292D619000311934 /* MockablePinnedSites.swift */,
 				2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */,
 				8A359EF52A1FE840004A5BB7 /* MockAdjustWrapper.swift */,
@@ -14179,7 +14185,6 @@
 				C87700472A13E612008BCA86 /* Mocks */,
 				C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */,
 				8CF40B472DFC22C200DCB7F0 /* OnboardingServiceTests.swift */,
-				8CA6FA0F2E1D2D650032D57D /* OnboardingFlowViewModelTests.swift */,
 				8CA6FA0D2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift */,
 				C8610DA72A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift */,
 				C89C91AC2A1FE9E900BE57B1 /* OnboardingTelemetryDelegationTests.swift */,
@@ -14804,6 +14809,10 @@
 		E1AF27422A17BCF700CE5991 /* TestData */ = {
 			isa = PBXGroup;
 			children = (
+				BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */,
+				BCFB141E2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json */,
+				B184D4B72E1D4E1500549CAC /* storiesRedesignOn.json */,
+				B184D4B52E1D4C2B00549CAC /* storiesRedesignOff.json */,
 				8A94DB942E0F16E60005FE69 /* homepageSearchBarOff.json */,
 				8A94DB952E0F16E70005FE69 /* homepageSearchBarOn.json */,
 				8A3709E22DC1290E004B9350 /* defaultEnabledOn.json */,
@@ -16071,6 +16080,7 @@
 			buildPhases = (
 				5AFF989D2D821A27008A0B79 /* Update Version */,
 				C874A4E327F62C5B006F54E5 /* Swiftlint */,
+				D48146712E26CB3300231244 /* Populate test-fixtures script */,
 				5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */,
 				5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */,
 				F84B21BA1A090F8100AAB793 /* Sources */,
@@ -16691,11 +16701,15 @@
 				E4CD9F5B1A71506C00318571 /* Reader.css in Resources */,
 				5FACA10C2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan in Resources */,
 				D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */,
+				BCFB141D2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json in Resources */,
 				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
 				8ABE9F1E2CB462CA0080E1DF /* RemoteSettingsFetchConfig.json in Resources */,
+				BCFB141F2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json in Resources */,
 				1D91C1872CF11EA500B24960 /* disconnect-block-cookies-advertising.json in Resources */,
+				B184D4B62E1D4C2B00549CAC /* storiesRedesignOff.json in Resources */,
 				1D91C1842CF11EA500B24960 /* disconnect-block-cryptomining.json in Resources */,
 				78CD8C9E2D4150D800CA1BBF /* L10nSnapshotTests.xctestplan in Resources */,
+				B184D4B82E1D4E1500549CAC /* storiesRedesignOn.json in Resources */,
 				39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */,
 				8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */,
 				43175DB626B8774D00C41C31 /* Ads.js in Resources */,
@@ -16798,6 +16812,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 		43338D08278F725C00A23914 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16816,6 +16831,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 		43338D0A278F726D00A23914 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16834,6 +16850,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 		43338D0B278F727600A23914 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16852,6 +16869,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then \n    rm -fr Frameworks\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 		4368F81027955AE80013419B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16870,6 +16888,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "movedFrameworks=()\n        cd \"${CODESIGNING_FOLDER_PATH}/Frameworks/\"\n        for framework in *; do\n            if [ -d \"$framework\" ]; then\n                if [ -d \"${framework}/Frameworks\" ]; then\n                    echo \"Moving nested frameworks from ${framework}/Frameworks/ to ${PRODUCT_NAME}.app/Frameworks/\"\n        \n                    cd \"${framework}/Frameworks/\"\n                    for nestedFramework in *; do\n                        echo \"- nested: ${nestedFramework}\"\n                        movedFrameworks+=(\"${nestedFramework}\")\n                    done\n                    cd ..\n                    cd ..\n        \n                    cp -R \"${framework}/Frameworks/\" .\n                    rm -rf \"${framework}/Frameworks\"\n                fi\n            fi\n        done\n        \n        if [ \"${CONFIGURATION}\" == \"Debug\" ] & [ \"${PLATFORM_NAME}\" != \"iphonesimulator\" ] ; then\n            for movedFramework in \"${movedFrameworks[@]}\"\n            do\n                codesign --force --deep --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --preserve-metadata=identifier,entitlements --timestamp=none \"${movedFramework}\"\n            done\n        else\n            echo \"Info: CODESIGNING is only needed for Debug on device (will be re-signed anyway when archiving) \"\n        fi\n";
+			showEnvVarsInLog = 0;
 		};
 		45CC573928AD89CB006D55AA /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16973,6 +16992,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nSWIFTLINT_ROOT=\"${SRCROOT}/..\"\n\nif which swiftlint > /dev/null; then\n    # Move to the location of the root Swiftlint config file in\n    # order to use nested configurations\n    cd ${SWIFTLINT_ROOT}\n\n    swiftlint lint ${MODIFIED_FILES}\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
+		};
+		D48146712E26CB3300231244 /* Populate test-fixtures script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Populate test-fixtures script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "fixtures=\"${SRCROOT}/../test-fixtures\"\n[[ -e $fixtures ]] || exit 1\n\noutpath=\"${TARGET_BUILD_DIR}/Client.app\"\nrsync -zvrt --update \"$fixtures\" \"$outpath\" \n";
+			showEnvVarsInLog = 0;
 		};
 		E6639F191BF11E3A002D0853 /* Conditionally Add Optional Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -18545,7 +18583,6 @@
 				C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */,
 				C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */,
 				8A9D31662D13586500171502 /* MockFolderHierarchyFetcher.swift in Sources */,
-				8CA6FA102E1D2D650032D57D /* OnboardingFlowViewModelTests.swift in Sources */,
 				B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */,
 				8ABA9C8D28931223002C0077 /* MockDispatchQueue.swift in Sources */,
 				8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */,
@@ -18745,7 +18782,6 @@
 				2165B2C02860BB41004C0786 /* AdjustTelemetryHelperTests.swift in Sources */,
 				21F96EE42D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift in Sources */,
 				C869915428917803007ACC5C /* WallpaperTestDataProvider.swift in Sources */,
-				8CA6FA122E1D2DAD0032D57D /* MockOnboardingCardInfoModel.swift in Sources */,
 				0AC659292BF493CE005C614A /* MockFxAWebViewModel.swift in Sources */,
 				8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */,
 				C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */,
@@ -18804,6 +18840,7 @@
 				21FA8FB22AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift in Sources */,
 				8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */,
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,
+				8A6CDB472DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift in Sources */,
 				C818AD452A2100BA007F30BC /* OnboardingNotificationCardHelperTests.swift in Sources */,
 				0B6153E22E24ECCA000D2FBD /* SummarizeCoordinatorTests.swift in Sources */,
 				E1AEC178286E0CF500062E29 /* LegacyHomepageViewControllerTests.swift in Sources */,
@@ -29201,7 +29238,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 142.0.20250708050416;
+				version = 142.0.20250715050256;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {

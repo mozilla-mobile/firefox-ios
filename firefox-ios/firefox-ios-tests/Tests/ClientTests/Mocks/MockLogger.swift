@@ -4,7 +4,7 @@
 
 import Common
 
-class MockLogger: Logger {
+final class MockLogger: Logger, @unchecked Sendable {
     var crashedLastLaunch = false
     var savedMessage: String?
     var savedLevel: LoggerLevel?

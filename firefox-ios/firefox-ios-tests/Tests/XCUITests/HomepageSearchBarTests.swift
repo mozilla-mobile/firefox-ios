@@ -3,8 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 final class HomepageSearchBarTests: FeatureFlaggedTestBase {
-    func test_homepageSearchBar_doesNotShowSearchBar_experimentOff() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090297
+    func testDoesNotShowSearchBarTabTrayToolbarOnHomepageOff_homepageSearchBarExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
         let homepageSearchBar = app.collectionViews
@@ -15,7 +19,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_homepageSearchBar_switchFromTopToBottomToolbar_showsExpectedBehavior_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090298
+    func testSwitchFromTopToBottomToolbarShowsExpectedBehavior_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -39,7 +44,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_homepageSearchBar_switchFromBottomToTopToolbar_showsExpectedBehavior_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090299
+    func testSwitchFromBottomToTopToolbarShowsExpectedBehavior_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -65,7 +71,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_homepageSearchBar_fromPortraitToLandscape_showsOnlyInPortrait_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090300
+    func testFromPortraitToLandscapeShowsOnlyInPortrait_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -84,7 +91,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_tappingOnHomepageSearchBar_showsZeroSearchState_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090301
+    func testTappingOnShowsZeroSearchState_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -108,7 +116,33 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_tappingOnSearchButton_forNavigationToolbar_showsZeroSearchState_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090302
+    func testTappingOnHomepageSearchBarShowsZeroSearchState_homepageSearchBarExperimentOn() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.nowAt(NewTabScreen)
+
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        mozWaitForElementToExist(homepageSearchBar)
+        homepageSearchBar.tap()
+
+        let zeroSearchScrimDimmingView = app.otherElements[AccessibilityIdentifiers.ZeroSearch.dimmingView]
+        mozWaitForElementToExist(zeroSearchScrimDimmingView)
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(zeroSearchScrimDimmingView)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3090303
+    func testTappingOnSearchButtonForNavigationToolbarShowsZeroSearchState_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -133,7 +167,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromTabTray_hidesSearchBar_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090304
+    func testOpenNewTabFromTabTrayHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -153,7 +188,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromMenu_hidesSearchBar_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090305
+    func testOpenNewTabFromMenuHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -173,7 +209,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromLongPress_hidesSearchBar_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090306
+    func testOpenNewTabFromLongPressHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -194,7 +231,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromNavigationToolbar_FromWebpage_hidesSearchBar_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090307
+    func testOpenNewTabFromNavigationToolbarFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -212,7 +250,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromTabTray_FromWebpage_hidesSearchBar_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090308
+    func testOpenNewTabFromTabTrayFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -229,7 +268,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromMenu_FromWebpage_hidesSearchBar_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090309
+    func testOpenNewTabFromMenuFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -246,7 +286,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromLongPress_FromWebpage_hidesSearchBar_experimentOn() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090310
+    func testOpenNewTabFromLongPressFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -262,11 +303,36 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3090324
+    func testNavigateBackFromWebpageToHomepageForTopToolbar_homepageSearchBarExperimentOn() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        navigator.nowAt(BrowserTab)
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
     // MARK: - Bottom Toolbar
-    func test_homepageSearchBar_forBottomToolbar_experimentOff_doesNotShowSearchBar() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090311
+    func testHomepageSearchBarBottom_tabTrayToolbarOnHomepageOff() throws {
+        guard !iPad() else {
+            throw XCTSkip("Bottom address bar is not available for iPad")
+        }
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectToolbarBottom)
@@ -279,7 +345,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_homepageSearchBar_forBottomToolbar_showsOnlyInPortrait() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090312
+    func testHomepageSearchBarForBottomToolbarShowsOnlyInPortrait_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -301,7 +368,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_tappingOnHomepageSearchBar_experimentOn_forBottomToolbar_showsZeroSearchState() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090313
+    func testTappingOnHomepageSearchBarForBottomToolbarShowsZeroSearchState_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -327,7 +395,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_tappingOnSearchButton_forNavigationToolbar_forBottomToolbar_experimentOn_showsZeroSearchState() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090314
+    func testTappingOnSearchButtonForNavigationToolbarForBottomToolbarShowsZeroSearchState_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -353,7 +422,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromTabTray_experimentOn_forBottomToolbar_hidesSearchBar() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090315
+    func testOpenNewTabFromTabTrayForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -374,7 +444,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromMenu_experimentOn_forBottomToolbar_hidesSearchBar() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090316
+    func testOpenNewTabFromMenuForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -395,7 +466,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromLongPress_experimentOn_forBottomToolbar_hidesSearchBar() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090317
+    func testOpenNewTabFromLongPressForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -417,7 +489,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromNavigationToolbar_FromWebpage_experimentOn_forBottomToolbar_hidesSearchBar() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090318
+    func testOpenNewTabFromNavigationToolbarFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -436,7 +509,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromTabTray_FromWebpage_experimentOn_forBottomToolbar_hidesSearchBar() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090319
+    func testOpenNewTabFromTabTrayFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -455,7 +529,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromMenu_FromWebpage_experimentOn_forBottomToolbar_hidesSearchBar() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090320
+    func testOpenNewTabFromMenuFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -474,7 +549,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
-    func test_openNewTabFromLongPress_FromWebpage_experimentOn_forBottomToolbar_hidesSearchBar() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3090321
+    func testOpenNewTabFromLongPressFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else { return }
@@ -492,6 +568,25 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
+    func testNavigateBackFromWebpageToHomepageForBottomToolbar_homepageSearchBarExperimentOn() {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else { return }
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        let homepageSearchBar = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
+
+        navigator.nowAt(BrowserTab)
+        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
+
+        mozWaitForElementToExist(homepageSearchBar)
+        mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
     private func navigateToWebPage(with homepageSearchBar: XCUIElement, searchTextFieldA11y: String) {

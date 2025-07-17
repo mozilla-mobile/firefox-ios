@@ -17,6 +17,7 @@ class RectangularFadeMaskLayer: CALayer {
         static let fadeDownAnimationDuration: CFTimeInterval = 0.5
         static let filterMode = "multiplyBlendMode"
         static let colorsKeyPath = "colors"
+        static let fadeDownAnimationKey = "fadeDownAnimation"
     }
 
     private let horizontal = CAGradientLayer()
@@ -75,7 +76,7 @@ class RectangularFadeMaskLayer: CALayer {
 
     /// Animates the fade layer down by moving the clear area from the center to the bottom of the layer's bound.
     func animateFadeDown() {
-        let animation = CABasicAnimation(keyPath: "colors")
+        let animation = CABasicAnimation(keyPath: UX.colorsKeyPath)
         animation.fromValue = vertical.colors
         animation.toValue = [
             UIColor.white.cgColor,
@@ -86,6 +87,6 @@ class RectangularFadeMaskLayer: CALayer {
         animation.duration = UX.fadeDownAnimationDuration
         animation.fillMode = .forwards
         animation.isRemovedOnCompletion = false
-        vertical.add(animation, forKey: "fadeDownAnimation")
+        vertical.add(animation, forKey: UX.fadeDownAnimationKey)
     }
 }

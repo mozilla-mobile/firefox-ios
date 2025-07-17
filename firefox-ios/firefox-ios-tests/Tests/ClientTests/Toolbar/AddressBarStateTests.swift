@@ -487,6 +487,25 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
     }
 
+    func test_scrollAlphaDidChangeAction_returnsExpectedState() {
+        setupStore()
+        let initialState = ToolbarState(windowUUID: windowUUID)
+        let reducer = ToolbarState.reducer
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                scrollAlpha: 0,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.scrollAlphaDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.scrollAlpha, 0)
+        XCTAssertNotEqual(initialState.scrollAlpha, newState.scrollAlpha)
+    }
+
     func test_cancelEditOnHomepageAction_withURL_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
@@ -774,6 +793,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             canGoBack: toolbarState.canGoBack,
             canGoForward: toolbarState.canGoForward,
             numberOfTabs: toolbarState.numberOfTabs,
+            scrollAlpha: toolbarState.scrollAlpha,
             showMenuWarningBadge: toolbarState.showMenuWarningBadge,
             isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
             canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,

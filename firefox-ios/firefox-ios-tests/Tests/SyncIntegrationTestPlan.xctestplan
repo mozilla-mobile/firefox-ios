@@ -113,6 +113,7 @@
         "HistoryTests",
         "HomeButtonTests",
         "HomePageSettingsUITests",
+        "HomepageSearchBarTests",
         "InactiveTabsTest",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",

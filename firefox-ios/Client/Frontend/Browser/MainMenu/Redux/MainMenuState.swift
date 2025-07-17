@@ -80,6 +80,7 @@ struct MainMenuState: ScreenState, Equatable {
     var accountData: AccountData?
     var accountIcon: UIImage?
     var isBrowserDefault: Bool
+    var isPhoneLandscape: Bool
 
     var siteProtectionsData: SiteProtectionsData?
 
@@ -109,7 +110,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: mainMenuState.accountData,
             accountIcon: mainMenuState.accountIcon,
             siteProtectionsData: mainMenuState.siteProtectionsData,
-            isBrowserDefault: mainMenuState.isBrowserDefault
+            isBrowserDefault: mainMenuState.isBrowserDefault,
+            isPhoneLandscape: mainMenuState.isPhoneLandscape
         )
     }
 
@@ -124,7 +126,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: nil,
             accountIcon: nil,
             siteProtectionsData: nil,
-            isBrowserDefault: false
+            isBrowserDefault: false,
+            isPhoneLandscape: false
         )
     }
 
@@ -138,7 +141,8 @@ struct MainMenuState: ScreenState, Equatable {
         accountData: AccountData?,
         accountIcon: UIImage?,
         siteProtectionsData: SiteProtectionsData?,
-        isBrowserDefault: Bool
+        isBrowserDefault: Bool,
+        isPhoneLandscape: Bool
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
@@ -150,6 +154,7 @@ struct MainMenuState: ScreenState, Equatable {
         self.accountIcon = accountIcon
         self.siteProtectionsData = siteProtectionsData
         self.isBrowserDefault = isBrowserDefault
+        self.isPhoneLandscape = isPhoneLandscape
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -169,6 +174,8 @@ struct MainMenuState: ScreenState, Equatable {
             return handleUpdateAccountHeaderAction(state: state, action: action)
         case MainMenuMiddlewareActionType.updateBannerVisibility:
             return handleUpdateBannerVisibilityAction(state: state, action: action)
+        case MainMenuMiddlewareActionType.updateMenuAppearance:
+            return handleUpdateMenuAppearanceAction(state: state, action: action)
         case MainMenuActionType.updateSiteProtectionsHeader:
             return handleUpdateSiteProtectionsHeaderAction(state: state, action: action)
         case MainMenuActionType.updateCurrentTabInfo:
@@ -205,7 +212,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -217,7 +225,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -231,7 +240,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: action.accountData,
             accountIcon: action.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -245,7 +255,23 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: action.isBrowserDefault
+            isBrowserDefault: action.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
+        )
+    }
+
+    private static func handleUpdateMenuAppearanceAction(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction else { return defaultState(from: state) }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon,
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: action.isPhoneLandscape
         )
     }
 
@@ -259,7 +285,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: action.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -279,7 +306,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -301,7 +329,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -316,7 +345,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -331,7 +361,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -344,7 +375,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -357,7 +389,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -370,7 +403,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 
@@ -383,7 +417,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountData: state.accountData,
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape
         )
     }
 }

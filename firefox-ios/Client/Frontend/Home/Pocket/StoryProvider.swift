@@ -4,7 +4,7 @@
 
 import Foundation
 
-class StoryProvider: FeatureFlaggable {
+final class StoryProvider: FeatureFlaggable, Sendable {
     private let numberOfPocketStories: Int
     private let pocketAPI: PocketStoriesProviding
 
