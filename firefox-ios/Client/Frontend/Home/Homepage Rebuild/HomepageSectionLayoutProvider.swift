@@ -538,10 +538,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var totalHeight: CGFloat = 0
         let topSitesState = state.topSitesState
+        let rows = topSitesState.numberOfRows
         let cols = topSitesState.numberOfTilesPerRow
+        let maxCells = rows * cols
 
         // Build flat array of configured cells
-        let allCells = topSitesState.topSitesData.enumerated().compactMap { index, data in
+        let allCells = topSitesState.topSitesData.prefix(maxCells).map { data in
             let cell = TopSiteCell()
             cell.configure(data, position: 0, theme: LightTheme(), textColor: .black)
             return cell
