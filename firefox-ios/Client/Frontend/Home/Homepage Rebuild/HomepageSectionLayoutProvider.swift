@@ -15,7 +15,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         static let iPadInset: CGFloat = 50
         static let spacingBetweenSections: CGFloat = 62
         static let standardSingleItemHeight: CGFloat = 100
-        static let sectionHeaderHeight: CGFloat = 34
+        static let sectionHeaderHeight: CGFloat = 75
 
         @MainActor
         static func leadingInset(
@@ -506,9 +506,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let collectionViewHeight = environment.container.contentSize.height
-        let spacerHeight = collectionViewHeight - getShortcutsSectionHeight()
-                                                - getStoriesSectionHeight(environment: environment)
-                                                - getSearchBarSectionHeight()
+        // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
+        let spacerHeight = max(0.1, collectionViewHeight - getShortcutsSectionHeight(environment: environment)
+                                                         - getStoriesSectionHeight(environment: environment)
+                                                         - getSearchBarSectionHeight(environment: environment)
+        )
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .absolute(spacerHeight))
@@ -532,7 +534,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return NSCollectionLayoutSection(group: emptyGroup)
     }
 
-    private func getShortcutsSectionHeight() -> CGFloat {
+    private func getShortcutsSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var totalHeight: CGFloat = 0
         let topSitesState = state.topSitesState
@@ -560,10 +562,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += CGFloat(rowsShown - 1) * UX.standardSpacing
 
         // Add header height
-        let header = LabelButtonHeaderView()
+        let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
         header.configure(state: topSitesState.sectionHeaderState, textColor: .black, theme: LightTheme())
+        let containerWidth = environment.container.contentSize.width
         let size = header.systemLayoutSizeFitting(
-            CGSize(width: 0, height: UIView.layoutFittingCompressedSize.height),
+            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
@@ -587,10 +590,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += max(getTallestStoryCellHeight(cellWidth: cellWidth), UX.PocketConstants.redesignedMinimumCellHeight)
 
         // Add header height
-        let header = LabelButtonHeaderView()
+        let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
         header.configure(state: storiesState.sectionHeaderState, textColor: .black, theme: LightTheme())
+        let containerWidth = environment.container.contentSize.width
         let size = header.systemLayoutSizeFitting(
-            CGSize(width: 0, height: UIView.layoutFittingCompressedSize.height),
+            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
@@ -602,14 +606,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return totalHeight
     }
 
-    private func getSearchBarSectionHeight() -> CGFloat {
+    private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
                   state.searchState.shouldShowSearchBar else { return 0 }
         var totalHeight: CGFloat = 0
 
         let searchBarCell = SearchBarCell()
+        let containerWidth = environment.container.contentSize.width
         let size = searchBarCell.systemLayoutSizeFitting(
-            CGSize(width: 0, height: UIView.layoutFittingCompressedSize.height),
+            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
