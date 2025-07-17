@@ -6,32 +6,6 @@ import SwiftUI
 import MetalKit
 import Common
 
-enum AnimatedGradientRendererError: Error {
-    case failedToCreateMetalDevice
-    case failedToCreateCommandQueue
-    case failedToCreateDefaultLibrary
-    case missingShaderFunction(functionName: String)
-    case failedToCreateRenderPipelineState(Error)
-    case failedToCreateTexture(size: CGSize)
-
-    var localizedDescription: String {
-        switch self {
-        case .failedToCreateMetalDevice:
-            return "Failed to create Metal device"
-        case .failedToCreateCommandQueue:
-            return "Failed to create Metal command queue"
-        case .failedToCreateDefaultLibrary:
-            return "Failed to create Metal default library"
-        case .missingShaderFunction(let functionName):
-            return "Missing shader function: \(functionName)"
-        case .failedToCreateRenderPipelineState(let error):
-            return "Failed to create render pipeline state: \(error.localizedDescription)"
-        case .failedToCreateTexture(let size):
-            return "Failed to create texture with size: \(size)"
-        }
-    }
-}
-
 private enum AnimatedGradientUX {
     static let timeIncrementPerFrame: Float = 0.0045
     static let vertexShaderFunctionName = "animatedGradientVertex"
@@ -42,19 +16,21 @@ private enum AnimatedGradientUX {
 }
 
 class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
-    private let logger: Logger = DefaultLogger.shared
-    private let metalDevice: MTLDevice
+    private let logger: Logger
     private let commandQueue: MTLCommandQueue
     private let renderPipelineState: MTLRenderPipelineState
     private var currentTime: Float = 0.0
     private var previousFrameTexture: MTLTexture?
+    let metalDevice: MTLDevice
 
-    init(device: MTLDevice?) throws {
+    init?(logger: Logger = DefaultLogger.shared, device: MTLDevice?) {
+        self.logger = logger
+
         if let device {
             metalDevice = device
         } else {
             logger.log("No Metal device available", level: .fatal, category: .onboarding)
-            throw AnimatedGradientRendererError.failedToCreateMetalDevice
+            return nil
         }
 
         guard let queue = metalDevice.makeCommandQueue() else {
@@ -63,7 +39,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
                 level: .fatal,
                 category: .onboarding
             )
-            throw AnimatedGradientRendererError.failedToCreateCommandQueue
+            return nil
         }
         commandQueue = queue
 
@@ -76,23 +52,19 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
                 level: .fatal,
                 category: .onboarding
             )
-            throw AnimatedGradientRendererError.failedToCreateDefaultLibrary
+            return nil
         }
 
         guard let vertexFunction = shaderLibrary.makeFunction(name: AnimatedGradientUX.vertexShaderFunctionName) else {
             let errorMessage = "Missing vertex shader function: \(AnimatedGradientUX.vertexShaderFunctionName)"
             logger.log(errorMessage, level: .fatal, category: .onboarding)
-            throw AnimatedGradientRendererError.missingShaderFunction(
-                functionName: AnimatedGradientUX.vertexShaderFunctionName
-            )
+            return nil
         }
 
         guard let fragmentFunction = shaderLibrary.makeFunction(name: AnimatedGradientUX.fragmentShaderFunctionName) else {
             let errorMessage = "Missing fragment shader function: \(AnimatedGradientUX.fragmentShaderFunctionName)"
             logger.log(errorMessage, level: .fatal, category: .onboarding)
-            throw AnimatedGradientRendererError.missingShaderFunction(
-                functionName: AnimatedGradientUX.fragmentShaderFunctionName
-            )
+            return nil
         }
 
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
@@ -108,7 +80,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
                 level: .fatal,
                 category: .onboarding
             )
-            throw AnimatedGradientRendererError.failedToCreateRenderPipelineState(error)
+            return nil
         }
 
         super.init()
@@ -197,7 +169,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         advanceAnimationTime()
     }
 
-    private func createPreviousFrameTexture(size: CGSize) throws {
+    private func createPreviousFrameTexture(size: CGSize) {
         let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: .bgra8Unorm,
             width: Int(size.width),
@@ -207,7 +179,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         textureDescriptor.usage = [.shaderRead, .renderTarget]
 
         guard let texture = metalDevice.makeTexture(descriptor: textureDescriptor) else {
-            throw AnimatedGradientRendererError.failedToCreateTexture(size: size)
+            return
         }
 
         previousFrameTexture = texture
@@ -283,18 +255,14 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
 }
 
 struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
-    private let delegate: MTKViewDelegate
-    init(delegate: MTKViewDelegate) {
+    private weak var delegate: AnimatedGradientRenderer?
+    init(delegate: AnimatedGradientRenderer) {
         self.delegate = delegate
-    }
-
-    func makeCoordinator() -> MTKViewDelegate {
-        return delegate
     }
 
     func makeUIView(context: Context) -> MTKView {
         let metalView = MTKView()
-        metalView.device = MTLCreateSystemDefaultDevice()
+        metalView.device = delegate?.metalDevice
         metalView.framebufferOnly = false
         metalView.colorPixelFormat = .bgra8Unorm
         metalView.delegate = delegate
@@ -305,9 +273,9 @@ struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
 }
 
 struct AnimatedGradientMetalView: View {
-    private let delegate: MTKViewDelegate?
+    @State private var delegate: AnimatedGradientRenderer?
     init(metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice()) {
-        delegate = try? AnimatedGradientRenderer(device: metalDevice)
+        delegate = AnimatedGradientRenderer(device: metalDevice)
     }
 
     var body: some View {
