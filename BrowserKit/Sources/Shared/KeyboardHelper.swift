@@ -45,11 +45,22 @@ public struct KeyboardState {
 }
 
 public protocol KeyboardHelperDelegate: AnyObject {
+    @MainActor
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState)
+
+    @MainActor
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState)
+
+    @MainActor
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState)
+
+    @MainActor
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState)
+
+    @MainActor
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState)
+
+    @MainActor
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState)
 }
 
@@ -135,6 +146,7 @@ open class KeyboardHelper: NSObject {
         delegates.append(WeakKeyboardDelegate(delegate))
     }
 
+    @MainActor
     @objc
     private func keyboardWillShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
@@ -145,6 +157,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
+    @MainActor
     @objc
     private func keyboardDidShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
@@ -155,6 +168,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
+    @MainActor
     @objc
     private func keyboardWillHide(_ notification: Notification) {
         if let userInfo = notification.userInfo {
@@ -165,6 +179,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
+    @MainActor
     @objc
     private func keyboardDidHide(_ notification: Notification) {
         if let userInfo = notification.userInfo {
@@ -175,6 +190,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
+    @MainActor
     @objc
     private func keyboardWillChange(_ notification: Notification) {
         if let userInfo = notification.userInfo {
@@ -186,6 +202,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
+    @MainActor
     @objc
     private func keyboardDidChange(_ notification: Notification) {
         if let userInfo = notification.userInfo {
