@@ -6,86 +6,85 @@
 import XCTest
 
 final class SummarizationCheckerTests: XCTestCase {
-  func testSummarizationCheckerCanSummarizeTrue() throws {
-    let jsStub: [String: Any] = [
-      "canSummarize": true,
-      "wordCount": 42,
-    ]
-
-    let result = try SummarizationChecker.parse(jsStub)
-    XCTAssertTrue(result.canSummarize)
-    XCTAssertNil(result.reason)
-    XCTAssertEqual(result.wordCount, 42)
-  }
-
-  /// JS stub for a page that is not reader‑readable.
-  func testSummarizationCheckerCanSummarizeFalseDocumentNotReady() throws {
-    let jsStub: [String: Any] = [
-      "canSummarize": false,
-      "reason": "documentNotReady",
-      "wordCount": 0,
-    ]
-
-    let result = try SummarizationChecker.parse(jsStub)
-    XCTAssertFalse(result.canSummarize)
-    XCTAssertEqual(result.reason, .documentNotReady)
-    XCTAssertEqual(result.wordCount, 0)
-  }
-
-  /// JS stub for a page that is not reader‑readable.
-  func testSummarizationCheckerCanSummarizeFalseNotReadable() throws {
-    let jsStub: [String: Any] = [
-      "canSummarize": false,
-      "reason": "documentNotReadable",
-      "wordCount": 0,
-    ]
-
-    let result = try SummarizationChecker.parse(jsStub)
-    XCTAssertFalse(result.canSummarize)
-    XCTAssertEqual(result.reason, .documentNotReadable)
-    XCTAssertEqual(result.wordCount, 0)
-  }
-
-  /// JS stub for a page that is too long to summarize.
-  func testSummarizationCheckerCanSummarizeFalseContentTooLong() throws {
-    let jsStub: [String: Any] = [
-      "canSummarize": false,
-      "reason": "contentTooLong",
-      "wordCount": 9001,
-    ]
-
-    let result = try SummarizationChecker.parse(jsStub)
-    XCTAssertFalse(result.canSummarize)
-    XCTAssertEqual(result.reason, .contentTooLong)
-    XCTAssertEqual(result.wordCount, 9001)
-  }
-
-  /// When a required key is missing, decoding should throw `.decodingFailed`.
-  func testSummarizationCheckerMissingField() {
-    // Missing `wordCount`
-    let jsStub: [String: Any] = [
-      "canSummarize": true
-    ]
-
-    XCTAssertThrowsError(try SummarizationChecker.parse(jsStub)) { error in
-      guard case .decodingFailed = error as? SummarizationCheckError else {
-        return XCTFail("Expected .decodingFailed, got \(error)")
-      }
+    func jsStubBuilder(
+        canSummarize: Bool,
+        reason: SummarizationReason? = nil,
+        wordCount: Int
+    ) -> [String: Any] {
+        var stub: [String: Any] = [
+            "canSummarize": canSummarize,
+            "wordCount": wordCount,
+        ]
+        if let reason = reason {
+            stub["reason"] = reason.rawValue
+        }
+        return stub
     }
-  }
 
-  /// When the `reason` value doesn’t map to any enum case, decoding should throw `.decodingFailed`.
-  func testSummarizationCheckerUnknownReason() {
-    let jsStub: [String: Any] = [
-      "canSummarize": false,
-      "reason": "fooReason",
-      "wordCount": 0,
-    ]
-
-    XCTAssertThrowsError(try SummarizationChecker.parse(jsStub)) { error in
-      guard case .decodingFailed = error as? SummarizationCheckError else {
-        return XCTFail("Expected .decodingFailed, got \(error)")
-      }
+    func testSummarizationCheckerCanSummarizeTrue() throws {
+        let result = try SummarizationChecker.parse(
+            jsStubBuilder(canSummarize: true, wordCount: 42))
+        XCTAssertTrue(result.canSummarize)
+        XCTAssertNil(result.reason)
+        XCTAssertEqual(result.wordCount, 42)
     }
-  }
+
+    /// JS stub for a page that is not reader‑readable.
+    func testSummarizationCheckerCanSummarizeFalseDocumentNotReady() throws {
+        let result = try SummarizationChecker.parse(
+            jsStubBuilder(canSummarize: false, reason: "documentNotReady", wordCount: 0))
+        XCTAssertFalse(result.canSummarize)
+        XCTAssertEqual(result.reason, .documentNotReady)
+        XCTAssertEqual(result.wordCount, 0)
+    }
+
+    /// JS stub for a page that is not reader‑readable.
+    func testSummarizationCheckerCanSummarizeFalseNotReadable() throws {
+        let result = try SummarizationChecker.parse(
+            jsStubBuilder(canSummarize: false, reason: "documentNotReadable", wordCount: 0))
+        XCTAssertFalse(result.canSummarize)
+        XCTAssertEqual(result.reason, .documentNotReadable)
+        XCTAssertEqual(result.wordCount, 0)
+    }
+
+    /// JS stub for a page that is too long to summarize.
+    func testSummarizationCheckerCanSummarizeFalseContentTooLong() throws {
+        let result = try SummarizationChecker.parse(
+            jsStubBuilder(canSummarize: false, reason: "contentTooLong", wordCount: 9001))
+        XCTAssertFalse(result.canSummarize)
+        XCTAssertEqual(result.reason, .contentTooLong)
+        XCTAssertEqual(result.wordCount, 9001)
+    }
+
+    /// When a required key is missing, decoding should throw `.decodingFailed`.
+    func testSummarizationCheckerMissingField() {
+        // Missing `wordCount`
+        let jsStub: [String: Any] = [
+            "canSummarize": true
+        ]
+
+        XCTAssertThrowsError(try SummarizationChecker.parse(jsStubBuilder(canSummarize: true))) { error in
+            guard case .decodingFailed = error as? SummarizationCheckError else {
+                return XCTFail("Expected .decodingFailed, got \(error)")
+            }
+        }
+    }
+
+    /// When the `reason` value doesn’t map to any enum case, decoding should throw `.decodingFailed`.
+    func testSummarizationCheckerUnknownReason() {
+        let jsStub: [String: Any] = [
+            "canSummarize": false,
+            "reason": "fooReason",
+            "wordCount": 0,
+        ]
+
+        XCTAssertThrowsError(
+            try SummarizationChecker.parse(
+                jsStubBuilder(canSummarize: false, reason: "fooReason", wordCount: 0))
+        ) { error in
+            guard case .decodingFailed = error as? SummarizationCheckError else {
+                return XCTFail("Expected .decodingFailed, got \(error)")
+            }
+        }
+    }
 }
