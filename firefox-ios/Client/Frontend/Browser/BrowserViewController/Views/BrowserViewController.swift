@@ -1971,25 +1971,21 @@ class BrowserViewController: UIViewController,
     
     private func presentToUBottomSheet() {
         guard ToUManager.shared.shouldShow() else { return }
-        var viewModel = ToUBottomSheetViewModel()
 
+        var viewModel = ToUBottomSheetViewModel()
         viewModel.onAccept = {
             ToUManager.shared.markAccepted()
         }
-
         viewModel.onNotNow = {
             ToUManager.shared.markDismissed()
         }
 
-        let vc = ToUBottomSheetViewController(viewModel: viewModel, windowUUID: self.windowUUID)
-        vc.modalPresentationStyle = .pageSheet
+        let touVC = ToUBottomSheetViewController(
+            viewModel: viewModel,
+            windowUUID: self.windowUUID
+        )
 
-        if let sheet = vc.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.prefersGrabberVisible = true
-        }
-
-        present(vc, animated: true)
+        present(touVC, animated: true)
     }
     
     

@@ -17,6 +17,10 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         static let descriptionMaxWidth: CGFloat = 300
         static let acceptButtonHeight: CGFloat = 44
         static let remindMeLaterButtonHeight: CGFloat = 30
+        static let grabberWidth: CGFloat = 36
+        static let grabberHeight: CGFloat = 5
+        static let grabberTopPadding: CGFloat = 8
+        static let maxSheetWidth: CGFloat = 500
     }
 
     var notificationCenter: NotificationProtocol
@@ -26,8 +30,9 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     var currentWindowUUID: UUID? { windowUUID }
 
     private let viewModel: ToUBottomSheetViewModel
-
-    // MARK: - Init
+    private let grabberView = UIView()
+    private let sheetContainer = UIView()
+    private var stackView: UIStackView!
 
     init(viewModel: ToUBottomSheetViewModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -38,18 +43,26 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .overFullScreen
+        modalTransitionStyle = .crossDissolve
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIAccessibility.post(notification: .announcement, argument: "Terms of Use sheet opened")
+
+        setupBackground()
+        setupSheetContainer()
+        setupGrabber()
+        setupContentStack()
+        setupDismissGesture()
+        setupPanGesture()
+
         listenForThemeChange(view)
-        setupView()
         applyTheme()
     }
 
@@ -58,44 +71,116 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        view.backgroundColor = currentTheme().colors.layer1
+        sheetContainer.backgroundColor = currentTheme().colors.layer1
     }
 
-    // MARK: - Setup View
+    private func setupBackground() {
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+    }
 
-    private func setupView() {
-        let stackView = createStackView()
+    private func setupSheetContainer() {
+        sheetContainer.layer.cornerRadius = UX.cornerRadius
+        sheetContainer.clipsToBounds = true
+        sheetContainer.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(sheetContainer)
+
+        var constraints = [
+            sheetContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            sheetContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            sheetContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ]
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            constraints.append(sheetContainer.widthAnchor.constraint(lessThanOrEqualToConstant: UX.maxSheetWidth))
+            constraints.append(sheetContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        }
+
+        NSLayoutConstraint.activate(constraints)
+    }
+
+    private func setupGrabber() {
+        grabberView.backgroundColor = UIColor.systemGray3
+        grabberView.layer.cornerRadius = UX.grabberHeight / 2
+        grabberView.translatesAutoresizingMaskIntoConstraints = false
+        sheetContainer.addSubview(grabberView)
+
+        NSLayoutConstraint.activate([
+            grabberView.topAnchor.constraint(equalTo: sheetContainer.topAnchor, constant: UX.grabberTopPadding),
+            grabberView.centerXAnchor.constraint(equalTo: sheetContainer.centerXAnchor),
+            grabberView.widthAnchor.constraint(equalToConstant: UX.grabberWidth),
+            grabberView.heightAnchor.constraint(equalToConstant: UX.grabberHeight)
+        ])
+    }
+
+    private func setupContentStack() {
+        stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = UX.stackSpacing
+        stackView.alignment = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+
+        sheetContainer.addSubview(stackView)
+
+
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: sheetContainer.leadingAnchor, constant: UX.stackSidePadding),
+            stackView.trailingAnchor.constraint(equalTo: sheetContainer.trailingAnchor, constant: -UX.stackSidePadding),
+            stackView.topAnchor.constraint(equalTo: grabberView.bottomAnchor, constant: UX.stackSpacing),
+            stackView.bottomAnchor.constraint(equalTo: sheetContainer.bottomAnchor, constant: -UX.stackSidePadding)
+        ])
+
+       
         let logoImageView = createLogoImageView()
         let titleLabel = createTitleLabel()
         let descriptionTextView = createDescriptionTextView()
         let acceptButton = createAcceptButton()
         let remindMeLaterButton = createRemindMeLaterButton()
-
+        
         [logoImageView, titleLabel, descriptionTextView, acceptButton, remindMeLaterButton].forEach {
             stackView.addArrangedSubview($0)
         }
-
-        view.addSubview(stackView)
-
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.stackSidePadding),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.stackSidePadding),
-            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.stackSidePadding),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -UX.stackSidePadding)
-        ])
-
         setupAccessibilityIdentifiers(logoImageView, titleLabel, descriptionTextView, acceptButton, remindMeLaterButton)
+
     }
 
-    // MARK: - UI Elements Creation
+    private func setupDismissGesture() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
 
-    private func createStackView() -> UIStackView {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = UX.stackSpacing
-        stackView.alignment = .fill
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
+    private func setupPanGesture() {
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        sheetContainer.addGestureRecognizer(panGesture)
+    }
+
+    @objc private func backgroundTapped(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in: view)
+        if !sheetContainer.frame.contains(location) {
+            dismiss(animated: true)
+        }
+    }
+
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        switch gesture.state {
+        case .changed:
+            if translation.y > 0 {
+                sheetContainer.transform = CGAffineTransform(translationX: 0, y: translation.y)
+            }
+        case .ended:
+            let velocity = gesture.velocity(in: view)
+            if translation.y > 100 || velocity.y > 800 {
+                dismiss(animated: true)
+            } else {
+                UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseOut) {
+                    self.sheetContainer.transform = .identity
+                }
+            }
+        default:
+            break
+        }
     }
 
     private func createLogoImageView() -> UIImageView {
@@ -104,6 +189,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.logo
         return imageView
     }
 
@@ -115,6 +201,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         label.textColor = currentTheme().colors.textPrimary
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.title
         return label
     }
 
@@ -123,7 +210,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.backgroundColor = .clear
-        textView.textAlignment = .center
+        textView.textAlignment = .left
         textView.attributedText = makeAttributedText()
         textView.linkTextAttributes = [
             .foregroundColor: currentTheme().colors.textAccent,
@@ -132,6 +219,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         textView.delegate = self
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.descriptionMaxWidth).isActive = true
+        textView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.description
         return textView
     }
 
@@ -142,6 +230,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: UX.acceptButtonHeight).isActive = true
         button.addTarget(self, action: #selector(acceptTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
         return button
     }
 
@@ -153,26 +242,9 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(notNowTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
         return button
     }
-
-    // MARK: - Accessibility
-
-    private func setupAccessibilityIdentifiers(
-        _ logoImageView: UIImageView,
-        _ titleLabel: UILabel,
-        _ descriptionTextView: UITextView,
-        _ acceptButton: UIButton,
-        _ remindMeLaterButton: UIButton
-    ) {
-        logoImageView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.logo
-        titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.title
-        descriptionTextView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.description
-        acceptButton.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
-        remindMeLaterButton.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
-    }
-
-    // MARK: - Attributed Text
 
     private func makeAttributedText() -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
@@ -200,8 +272,21 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
 
         return attributed
     }
+    // MARK: - Accessibility
 
-    // MARK: - Actions
+    private func setupAccessibilityIdentifiers(
+        _ logoImageView: UIImageView,
+        _ titleLabel: UILabel,
+        _ descriptionTextView: UITextView,
+        _ acceptButton: UIButton,
+        _ remindMeLaterButton: UIButton
+    ) {
+        logoImageView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.logo
+        titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.title
+        descriptionTextView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.description
+        acceptButton.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
+        remindMeLaterButton.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
+    }
 
     @objc private func acceptTapped() {
         viewModel.onAccept?()
@@ -214,16 +299,13 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     }
 }
 
-// MARK: - UITextViewDelegate
-
 extension ToUBottomSheetViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         guard interaction == .invokeDefaultAction else { return true }
 
         let linkVC = ToULinkViewController(url: URL, windowUUID: windowUUID)
-        //linkVC.modalPresentationStyle = .formSheet
         self.present(linkVC, animated: true)
-
         return false
     }
 }
+
