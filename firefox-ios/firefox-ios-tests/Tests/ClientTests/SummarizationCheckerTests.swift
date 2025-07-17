@@ -8,16 +8,12 @@ import XCTest
 final class SummarizationCheckerTests: XCTestCase {
     func jsStubBuilder(
         canSummarize: Bool,
-        reason: SummarizationReason? = nil,
-        wordCount: Int
+        reason: String? = nil,
+        wordCount: Int? = nil
     ) -> [String: Any] {
-        var stub: [String: Any] = [
-            "canSummarize": canSummarize,
-            "wordCount": wordCount,
-        ]
-        if let reason = reason {
-            stub["reason"] = reason.rawValue
-        }
+        var stub: [String: Any] = ["canSummarize": canSummarize]
+        if let reason = reason { stub["reason"] = reason }
+        if let wordCount = wordCount { stub["wordCount"] = wordCount }
         return stub
     }
 
@@ -58,11 +54,6 @@ final class SummarizationCheckerTests: XCTestCase {
 
     /// When a required key is missing, decoding should throw `.decodingFailed`.
     func testSummarizationCheckerMissingField() {
-        // Missing `wordCount`
-        let jsStub: [String: Any] = [
-            "canSummarize": true
-        ]
-
         XCTAssertThrowsError(try SummarizationChecker.parse(jsStubBuilder(canSummarize: true))) { error in
             guard case .decodingFailed = error as? SummarizationCheckError else {
                 return XCTFail("Expected .decodingFailed, got \(error)")
@@ -72,12 +63,6 @@ final class SummarizationCheckerTests: XCTestCase {
 
     /// When the `reason` value doesn’t map to any enum case, decoding should throw `.decodingFailed`.
     func testSummarizationCheckerUnknownReason() {
-        let jsStub: [String: Any] = [
-            "canSummarize": false,
-            "reason": "fooReason",
-            "wordCount": 0,
-        ]
-
         XCTAssertThrowsError(
             try SummarizationChecker.parse(
                 jsStubBuilder(canSummarize: false, reason: "fooReason", wordCount: 0))
