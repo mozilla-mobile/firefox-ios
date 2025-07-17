@@ -10,7 +10,6 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     private var viewModel: MockLaunchScreenViewModel!
     private var profile: MockProfile!
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
-    private var dispacthQueue: MockDispatchQueue!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -19,7 +18,6 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
-        dispacthQueue = MockDispatchQueue()
         viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: MockProfile())
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
@@ -27,7 +25,6 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         AppContainer.shared.reset()
-        dispacthQueue = nil
         viewModel = nil
         profile = nil
         coordinatorDelegate = nil
