@@ -1231,7 +1231,7 @@ extension BrowserViewController: UIDropInteractionDelegate {
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         _ = session.loadObjects(ofClass: URL.self) { urls in
-            guard let url = urls.first else {
+            guard let draggedUrl = urls.first, let url = URIFixup.getURL(entry: draggedUrl.absoluteString) else {
                 return
             }
 
