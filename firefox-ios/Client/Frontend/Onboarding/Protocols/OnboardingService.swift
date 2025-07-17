@@ -54,7 +54,6 @@ final class OnboardingService: FeatureFlaggable {
         self.searchBarLocationSaver = searchBarLocationSaver
     }
 
-    // TODO: FXIOS-12843 Test that calling these completion handlers on the main thread does not cause issues for each action
     @MainActor
     func handleAction(
         _ action: OnboardingActions,
