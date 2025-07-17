@@ -150,6 +150,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()
+
+        case .webpageSummary: break
+            // TODO(FXIOS-12688): Redirect to summary view
         }
     }
 
