@@ -10,7 +10,10 @@ import SwiftUI
 import Common
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
+    @MainActor
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
+
+    @MainActor
     func devicePickerViewController(
         _ devicePickerViewController: DevicePickerViewController,
         didPickDevices devices: [RemoteDevice]
