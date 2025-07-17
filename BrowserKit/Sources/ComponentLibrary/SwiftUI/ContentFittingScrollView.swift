@@ -86,7 +86,6 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
         var containerView: UIView?
         var containerHeightConstraint: NSLayoutConstraint?
         private var dynamicTypeObserver: NSObjectProtocol?
-        private var notificationTask: Task<Void, Never>?
 
         func setupDynamicTypeObserver() {
             dynamicTypeObserver = NotificationCenter.default.addObserver(
@@ -224,10 +223,6 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
                     )
                 }
             }
-        }
-
-        deinit {
-            notificationTask?.cancel()
         }
     }
 }
