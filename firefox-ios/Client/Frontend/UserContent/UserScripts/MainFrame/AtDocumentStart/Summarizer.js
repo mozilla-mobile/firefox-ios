@@ -6,11 +6,6 @@
 "use strict";
 import { Readability } from "@mozilla/readability";
 
-// TODO(FXIOS-xxx): the max input is 5000 words, but we need to take into account the prompt length.
-// Once we have a final prompt length, we can adjust this value.
-// This should be 5000 - <prompt length>.
-const MAX_DOCUMENT_LENGTH_IN_WORDS = 5000;
-
 const extractContent = () => {
   const uri = {
     spec: document.location.href,
@@ -48,7 +43,7 @@ const checkSummarization = (maxWords = MAX_DOCUMENT_LENGTH_IN_WORDS) => {
   if (document.readyState === "loading") {
     return {
       canSummarize: false,
-      reason: "DocumentNotReady",
+      reason: "documentNotReady",
       wordCount: 0,
     };
   }
@@ -57,7 +52,7 @@ const checkSummarization = (maxWords = MAX_DOCUMENT_LENGTH_IN_WORDS) => {
   if (!isProbablyReaderable(document)) {
     return {
       canSummarize: false,
-      reason: "DocumentNotReadeable",
+      reason: "documentNotReadeable",
       wordCount: 0,
     };
   }
@@ -69,7 +64,7 @@ const checkSummarization = (maxWords = MAX_DOCUMENT_LENGTH_IN_WORDS) => {
   if (wordCount > maxWords) {
     return {
       canSummarize: false,
-      reason: "ContentTooLong",
+      reason: "contentTooLong",
       wordCount,
     };
   }
