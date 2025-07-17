@@ -58,6 +58,11 @@ final class MicrosurveyTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776933
     func testCloseButtonDismissesMicrosurveyPrompt_tabTrayExperimentOff() {
+        // Workaround: The microsurvey prompt may not appear on the first run due to retained app state or missing triggers.
+        // To ensure the prompt is shown, the app is terminated and relaunched to make sure the
+        // microsurvey is triggered again.
+        app.terminate()
+        app.launch()
         generateTriggerForMicrosurvey()
         waitForElementsToExist(
             [
