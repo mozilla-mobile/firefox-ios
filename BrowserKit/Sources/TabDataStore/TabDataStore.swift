@@ -35,8 +35,9 @@ public actor DefaultTabDataStore: TabDataStore {
         case failedToFetchData
     }
 
-    private let logger: Logger
-    private let fileManager: TabFileManager
+    nonisolated private let logger: Logger
+    // Note: The underlying shared `FileManager` of `DefaultTabFileManager` is safe to access from multiple threads
+    nonisolated private let fileManager: TabFileManager
     private let throttleTime: UInt64
     private var windowDataToSave: WindowData?
     private var nextSaveIsScheduled = false
