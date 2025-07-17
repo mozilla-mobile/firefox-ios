@@ -5,45 +5,6 @@
 import WebKit
 import Foundation
 
-/// Model for all the reasons summarization might be disallowed.
-public enum SummarizationReason: String, Decodable {
-    case documentNotReady, documentNotReadable, contentTooLong
-}
-
-/// Model for the JS `checkSummarization()` result
-/// See UserScripts/MainFrame/AtDocumentStart/Summarizer.js for more context
-public struct SummarizationCheckResult: Decodable {
-    public let canSummarize: Bool
-    public let reason: SummarizationReason?
-    public let wordCount: Int
-
-    /// Convenience initializer for constructing a failure result.
-    static func failure(_ error: SummarizationCheckError) -> SummarizationCheckResult {
-        SummarizationCheckResult(canSummarize: false, reason: nil, wordCount: 0)
-    }
-}
-
-/// Possible errors encountered when evaluating or parsing the JS result.
-public enum SummarizationCheckError: Error {
-    /// Thrown when `evaluateJavaScript` itself fails.
-    case jsEvaluationFailed(Error)
-    /// Thrown when the raw JS result is not valid JSON.
-    case invalidJSON
-    /// Thrown when decoding the JSON into a model fails.
-    case decodingFailed(Error)
-
-    var description: String {
-        switch self {
-        case .jsEvaluationFailed(let error):
-            return "JavaScript evaluation failed: \(error.localizedDescription)"
-        case .invalidJSON:
-            return "Invalid JSON from page script"
-        case .decodingFailed(let error):
-            return "Decoding failed: \(error.localizedDescription)"
-        }
-    }
-}
-
 public struct SummarizationChecker {
     /// Calls `checkSummarization(maxWords:)` in the web page and returns a typed result.
     /// - Parameters:
