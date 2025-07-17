@@ -27,7 +27,7 @@ struct OnboardingRegularView<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     var body: some View {
         ZStack {
-            MilkyWayMetalView()
+            AnimatedGradientMetalView()
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 TabView(selection: $viewModel.pageCount) {
