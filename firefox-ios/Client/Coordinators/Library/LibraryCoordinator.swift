@@ -8,12 +8,18 @@ import Foundation
 import enum MozillaAppServices.VisitType
 
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
+    @MainActor
     func didFinishLibrary(from coordinator: Coordinator)
 }
 
 protocol LibraryNavigationHandler: AnyObject {
+    @MainActor
     func start(panelType: LibraryPanelType, navigationController: UINavigationController)
+
+    @MainActor
     func shareLibraryItem(url: URL, sourceView: UIView)
+
+    @MainActor
     func setNavigationBarHidden(_ value: Bool)
 }
 
@@ -26,7 +32,7 @@ class LibraryCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private var libraryViewController: LibraryViewController?
     weak var parentCoordinator: LibraryCoordinatorDelegate?
-    override var isDismissable: Bool { false }
+    override var isDismissible: Bool { false }
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     init(

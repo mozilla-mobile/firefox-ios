@@ -6,7 +6,7 @@
 import WebEngine
 
 class BrowserWebUIDelegate: NSObject, WKUIDelegate {
-    private weak var bvc: BrowserViewController?
+    private weak var legacyResponder: WKUIDelegate?
     private let engineResponder: WKUIHandler
 
     /// Initializes the `BrowserWebUIDelegate` with a legacy and engine responder.
@@ -14,8 +14,8 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
     ///  - engineResponder: The object which actually responds to `WKUIDelegate` methods
     ///  being forwarded from `BrowserWebUIDelegate`.
     ///  - legacyResponder: The responder used when `engineResponder` can't respond to a delegate call.
-    init(engineResponder: WKUIHandler, legacyResponder: BrowserViewController) {
-        self.bvc = legacyResponder
+    init(engineResponder: WKUIHandler, legacyResponder: WKUIDelegate) {
+        self.legacyResponder = legacyResponder
         self.engineResponder = engineResponder
     }
 
@@ -39,9 +39,9 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor () -> Void
+        completionHandler: @escaping @MainActor @Sendable () -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             runJavaScriptAlertPanelWithMessage: message,
             initiatedByFrame: frame,
@@ -53,9 +53,9 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         _ webView: WKWebView,
         runJavaScriptConfirmPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (Bool) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Bool) -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             runJavaScriptConfirmPanelWithMessage: message,
             initiatedByFrame: frame,
@@ -68,9 +68,9 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (String?) -> Void
+        completionHandler: @escaping @MainActor @Sendable (String?) -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             runJavaScriptTextInputPanelWithPrompt: prompt,
             defaultText: defaultText,
@@ -80,15 +80,15 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        bvc?.webViewDidClose(webView)
+        legacyResponder?.webViewDidClose?(webView)
     }
 
     func webView(
         _ webView: WKWebView,
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
-        completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
+        completionHandler: @escaping @MainActor @Sendable (UIContextMenuConfiguration?) -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             contextMenuConfigurationForElement: elementInfo,
             completionHandler: completionHandler
@@ -96,7 +96,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
-        bvc?.webView(webView, contextMenuDidEndForElement: elementInfo)
+        legacyResponder?.webView?(webView, contextMenuDidEndForElement: elementInfo)
     }
 
     func webView(
@@ -104,9 +104,9 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         requestMediaCapturePermissionFor origin: WKSecurityOrigin,
         initiatedByFrame frame: WKFrameInfo,
         type: WKMediaCaptureType,
-        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
+        decisionHandler: @escaping @MainActor @Sendable (WKPermissionDecision) -> Void
     ) {
-        bvc?.webView(
+        legacyResponder?.webView?(
             webView,
             requestMediaCapturePermissionFor: origin,
             initiatedByFrame: frame,

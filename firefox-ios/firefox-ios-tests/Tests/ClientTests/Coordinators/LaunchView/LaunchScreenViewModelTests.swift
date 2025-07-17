@@ -172,7 +172,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         ]
 
         return OnboardingViewModel(cards: cards,
-                                   isDismissable: true)
+                                   isDismissible: true)
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {

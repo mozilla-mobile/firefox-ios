@@ -2,13 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import WebEngine
-// FXIOS-12832 We shouldn't need `@preconcurrency` on `MockWKUIHandler` to suppress warnings
-@preconcurrency import WebKit
+import WebKit
 
-class MockWKUIHandler: NSObject, WKUIHandler {
-    var delegate: (any WebEngine.EngineSessionDelegate)?
-    var isActive = false
+class MockLegacyResponder: NSObject, WKUIDelegate {
     var createWebViewCalled = 0
     var runJavaScriptAlertPanelCalled = 0
     var runJavaScriptConfirmPanelCalled = 0
@@ -16,6 +12,9 @@ class MockWKUIHandler: NSObject, WKUIHandler {
     var webViewDidCloseCalled = 0
     var contextMenuConfigurationCalled = 0
     var requestMediaCapturePermissionCalled = 0
+    var contextMenuDidEndForElementCalled = 0
+
+    // MARK: - WKUIDelegate
 
     func webView(
         _ webView: WKWebView,
@@ -75,5 +74,10 @@ class MockWKUIHandler: NSObject, WKUIHandler {
         decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
     ) {
         requestMediaCapturePermissionCalled += 1
+    }
+
+    func webView(_ webView: WKWebView,
+                 contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
+        contextMenuDidEndForElementCalled += 1
     }
 }

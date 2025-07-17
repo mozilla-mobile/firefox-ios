@@ -6,5 +6,6 @@ import Foundation
 
 /// Share navigation across the library panels
 protocol LibraryPanelCoordinatorDelegate: AnyObject {
+    @MainActor
     func shareLibraryItem(url: URL, sourceView: UIView)
 }

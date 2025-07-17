@@ -27,6 +27,7 @@ extension UILabel {
 }
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
+@MainActor
 class Setting: NSObject {
     private var _title: NSAttributedString?
     private var _footerTitle: NSAttributedString?

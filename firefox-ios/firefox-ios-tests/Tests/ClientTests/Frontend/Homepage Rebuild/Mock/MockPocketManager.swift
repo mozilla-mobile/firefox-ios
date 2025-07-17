@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Client
 
-final class MockPocketManager: PocketManagerProvider {
+final class MockPocketManager: PocketManagerProvider, @unchecked Sendable {
     var getPocketItemsCalled = 0
     func getPocketItems() async -> [PocketStoryConfiguration] {
         getPocketItemsCalled += 1

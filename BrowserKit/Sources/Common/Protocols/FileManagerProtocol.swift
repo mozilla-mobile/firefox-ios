@@ -4,7 +4,7 @@
 
 import Foundation
 
-public protocol FileManagerProtocol {
+public protocol FileManagerProtocol: Sendable {
     func fileExists(atPath path: String) -> Bool
     func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL]
     func contentsOfDirectory(atPath path: String) throws -> [String]
@@ -18,4 +18,13 @@ public protocol FileManagerProtocol {
                                    withFilenamePrefix prefix: String) throws -> [String]
 }
 
-extension FileManager: FileManagerProtocol {}
+// PR #28007: The Foundation FileManager is protected by a lock and marked @unchecked Sendable.
+extension FileManager: FileManagerProtocol, @unchecked @retroactive Sendable {}
+
+public extension FileManager {
+    func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
+        return try FileManager.default.contentsOfDirectory(atPath: path)
+            .filter { $0.hasPrefix("\(prefix).") }
+            .sorted { $0 < $1 }
+    }
+}

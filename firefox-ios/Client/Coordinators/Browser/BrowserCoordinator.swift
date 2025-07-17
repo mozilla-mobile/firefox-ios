@@ -54,7 +54,7 @@ class BrowserCoordinator: BaseCoordinator,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
-    override var isDismissable: Bool { false }
+    override var isDismissible: Bool { false }
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -81,8 +81,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     func start(with launchType: LaunchType?) {
         router.push(browserViewController, animated: false)
-
-        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
+        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
+        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         }
     }
