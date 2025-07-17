@@ -38,13 +38,11 @@ final class TabScrollController: NSObject,
     weak var tab: Tab? {
         willSet {
             self.scrollView?.delegate = nil
-//            self.scrollView?.removeGestureRecognizer(panGesture)
         }
 
         didSet {
             // FXIOS-9781 This could result in scrolling not closing the toolbar
             assert(scrollView != nil, "Can't set the scrollView delegate if the webView.scrollView is nil")
-//            scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
@@ -157,16 +155,6 @@ final class TabScrollController: NSObject,
         return bottomContainerHeight
     }
 
-//    private lazy var panGesture: UIPanGestureRecognizer = {
-//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-//        panGesture.maximumNumberOfTouches = 1
-//        // Note: Setting this mask enables the pan gesture to recognize scroll events,
-//        // like a mouse scroll movement or a two-finger scroll on a track pad.
-//        panGesture.allowedScrollTypesMask = .continuous
-//        panGesture.delegate = self
-//        return panGesture
-//    }()
-
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
@@ -246,13 +234,7 @@ final class TabScrollController: NSObject,
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
     }
 
-//    @objc
     func handlePan(translation: CGPoint) {
-//        guard gesture.state != .ended, gesture.state != .cancelled else {
-//            lastPanTranslation = 0
-//            return
-//        }
-
         guard !tabIsLoading() else { return }
 
         tab?.shouldScrollToTop = false
@@ -271,10 +253,14 @@ final class TabScrollController: NSObject,
             }
 
             lastPanTranslation = translation.y
-            if checkRubberbanding() && shouldUpdateUIWhenScrolling {
-                scrollWithDelta(delta)
-                updateToolbarState()
-            }
+            return
+        }
+        setScrollDirection(delta)
+
+        lastPanTranslation = translation.y
+        if shouldToolbarReactToScrolling() {
+            updateToolbarOffset(for: delta)
+            updateToolbarState()
         }
     }
 
@@ -315,7 +301,7 @@ final class TabScrollController: NSObject,
 
         toolbarState = .visible
 
-        let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * showDurationRatio)
+        let actualDuration = UX.toolbarBaseAnimationDuration // TimeInterval(UX.toolbarBaseAnimationDuration * showDurationRatio)
         animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
@@ -437,20 +423,6 @@ final class TabScrollController: NSObject,
         tab.shouldScrollToTop = false
 
         lastPanTranslation = 0
-
-//        // Change toolbar status if scrolling will continue decelerate == true
-//        // scrolling will stops decelerate == false but we are still animating
-//        if decelerate || !isAnimatingToolbar {
-//            if scrollDirection == .up {
-//                showToolbars(animated: true)
-//            } else {
-//                hideToolbars(animated: true, isFindInPageMode: tab.isFindInPageMode)
-//            }
-//
-//            // this action controls the address toolbar's border position,
-//            // we keep track of lastContentOffsetY to know if the border needs to be updated
-//            sendActionToShowToolbarBorder(contentOffset: scrollView.contentOffset)
-//        }
     }
 
     // checking if an abrupt scroll event was triggered and adjusting the offset to the one
@@ -604,13 +576,9 @@ private extension TabScrollController {
     /// - Scrolling beyond the top boundary (`contentOffset.y < delta`)
     ///
     /// - Returns: `true` if the scroll delta is allowed without rubberbanding; otherwise, `false`.
-    func checkRubberbanding() -> Bool {
-        // Check top rubberbanding
-        //        guard scrollDirection == .up else {
-        //            return isBottomRubberbanding && hasScrollableContent
-        //        }
-        //
-        //        return isTopRubberbanding
+    func shouldToolbarReactToScrolling() -> Bool {
+        guard shouldUpdateUIWhenScrolling else { return false }
+
         return true
     }
 
@@ -662,7 +630,7 @@ private extension TabScrollController {
     ///
     /// - Parameter delta: The amount by which to scroll, where a positive delta scrolls down and
     ///   a negative delta scrolls up.
-    func scrollWithDelta(_ delta: CGFloat) {
+    func updateToolbarOffset(for delta: CGFloat) {
         guard hasScrollableContent else { return }
 
         let updatedOffset = headerTopOffset - delta
@@ -728,7 +696,10 @@ private extension TabScrollController {
             alpha: alpha
         )
 
-        runToolbarAnimation(animated: animated, duration: duration, animations: animationBlock, completion: completion)
+        runToolbarAnimation(animated: animated,
+                            duration: duration,
+                            animations: animationBlock,
+                            completion: completion)
     }
 
     func buildToolbarAnimationBlock(headerOffset: CGFloat,
