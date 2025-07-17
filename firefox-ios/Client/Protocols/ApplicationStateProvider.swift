@@ -9,4 +9,5 @@ protocol ApplicationStateProvider: Sendable {
     var applicationState: UIApplication.State { get }
 }
 
-extension UIApplication: ApplicationStateProvider {}
+// Since UIApplication is marked `@MainActor`, it is implicitly `Sendable`.
+extension UIApplication: @retroactive Sendable, ApplicationStateProvider {}
