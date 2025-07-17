@@ -270,6 +270,11 @@ public class SummarizeController: UIViewController, Themeable {
         }
     }
 
+    public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        viewModel.onDismiss()
+        super.dismiss(animated: flag, completion: completion)
+    }
+
     // MARK: - PanGesture
 
     @objc

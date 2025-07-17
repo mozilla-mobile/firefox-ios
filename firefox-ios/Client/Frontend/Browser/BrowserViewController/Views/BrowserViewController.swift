@@ -830,7 +830,7 @@ class BrowserViewController: UIViewController,
     // MARK: - BrowserContentHiding
     func showBrowserContent() {
         contentContainer.isHidden = false
-        scrollController.showToolbars(animated: true)
+        scrollController.showToolbars(animated: false)
     }
 
     func hideBrowserContent() {

@@ -46,7 +46,7 @@ class SummarizeCoordinator: BaseCoordinator {
             summarizeTextViewA11yLabel: .Summarizer.SummaryTextAccessibilityLabel,
             summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
             closeButtonModel: CloseButtonViewModel(
-                a11yLabel: "",
+                a11yLabel: .Summarizer.CloseButtonAccessibilityLabel,
                 a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeButton,
                 image: UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
             ),

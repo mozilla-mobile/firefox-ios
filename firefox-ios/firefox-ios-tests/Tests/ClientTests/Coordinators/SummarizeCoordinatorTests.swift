@@ -7,6 +7,7 @@ import Common
 import SummarizeKit
 @testable import Client
 
+@MainActor
 final class SummarizeCoordinatorTests: XCTestCase {
     private var browserViewController: MockBrowserViewController!
     private var router: MockRouter!
@@ -35,6 +36,15 @@ final class SummarizeCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(router.presentCalled, 1)
         XCTAssertTrue(router.presentedViewController is SummarizeController)
+    }
+
+    func testDeinit_callsParentCoordinatorDelegate() {
+        let subject = createSubject()
+
+        subject.start()
+        router.presentedViewController?.dismiss(animated: false)
+
+        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
     private func createSubject() -> SummarizeCoordinator {

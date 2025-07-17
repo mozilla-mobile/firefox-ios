@@ -2067,6 +2067,12 @@ extension String {
             value: "Summary report text",
             comment: "The a11y label for the summary text shown when the summarizer returns a text result."
         )
+        public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+            key: "Summarizer.CloseButton.Accessibility.Label.v142",
+            tableName: "Summarizer",
+            value: "Close summary button",
+            comment: "The a11y label for the close button in the summary view."
+        )
     }
 }
 
