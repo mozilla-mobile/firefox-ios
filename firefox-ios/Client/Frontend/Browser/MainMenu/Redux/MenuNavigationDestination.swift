@@ -24,6 +24,7 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case shareSheet
     case saveAsPDF
     case saveAsPDFV2
+    case webpageSummary
     case zoom
 }
 
