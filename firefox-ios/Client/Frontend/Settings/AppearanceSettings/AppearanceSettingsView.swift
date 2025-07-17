@@ -7,6 +7,7 @@ import Common
 
 /// Child settings pages appearance actions
 protocol AppearanceSettingsDelegate: AnyObject {
+    @MainActor
     func pressedPageZoom()
 }
 

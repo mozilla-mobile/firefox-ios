@@ -8,7 +8,10 @@ import Common
 import struct MozillaAppServices.LoginEntry
 
 protocol PasswordManagerCoordinatorDelegate: AnyObject, ParentCoordinatorDelegate {
+    @MainActor
     func settingsOpenURLInNewTab(_ url: URL)
+
+    @MainActor
     func didFinishPasswordManager(from: PasswordManagerCoordinator)
 }
 

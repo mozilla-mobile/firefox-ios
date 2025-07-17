@@ -7,7 +7,10 @@ import Shared
 
 /// Child settings pages browsing actions
 protocol BrowsingSettingsDelegate: AnyObject {
+    @MainActor
     func pressedMailApp()
+
+    @MainActor
     func pressedAutoPlay()
 }
 

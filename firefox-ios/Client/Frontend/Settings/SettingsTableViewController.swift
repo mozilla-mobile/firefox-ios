@@ -806,7 +806,10 @@ class WithoutAccountSetting: AccountSetting {
 
 @objc
 protocol SettingsDelegate: AnyObject {
+    @MainActor
     func settingsOpenURLInNewTab(_ url: URL)
+
+    @MainActor
     func didFinish()
 }
 
