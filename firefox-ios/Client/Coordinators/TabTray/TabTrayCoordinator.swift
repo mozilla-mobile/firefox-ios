@@ -5,6 +5,7 @@
 import Common
 
 protocol TabTrayCoordinatorDelegate: AnyObject {
+    @MainActor
     func didDismissTabTray(from coordinator: TabTrayCoordinator)
 }
 

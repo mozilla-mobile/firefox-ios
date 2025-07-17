@@ -311,7 +311,7 @@ class TabManagerImplementation: NSObject,
         tab.close()
 
         // Notify of tab removal
-        ensureMainThread { [unowned self] in
+        ensureMainThread { @MainActor [unowned self] in
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !tabRestoreHasFinished) }
             TabEvent.post(.didClose, for: tab)
         }
@@ -822,6 +822,7 @@ class TabManagerImplementation: NSObject,
         saveSessionData(forTab: selectedTab)
     }
 
+    @MainActor
     func notifyCurrentTabDidFinishLoading() {
         delegates.forEach {
             $0.get()?.tabManagerTabDidFinishLoading()
