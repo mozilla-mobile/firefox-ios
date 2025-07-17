@@ -68,6 +68,7 @@ public class SummarizeController: UIViewController, Themeable {
         static let panCloseSummaryHeightPercentageThreshold: CGFloat = 0.25
         static let closeButtonEdgePadding: CGFloat = 16.0
         static let tabSnapshotBringToFrontAnimationDuration: CGFloat = 0.25
+        static let tabSnapshotCornerRadius: CGFloat = 32.0
     }
 
     private let viewModel: SummarizeViewModel
@@ -104,9 +105,6 @@ public class SummarizeController: UIViewController, Themeable {
             bottom: UX.tabSnapshotFinalPositionBottomPadding,
             right: 0.0
         )
-    }
-    private var screenCornerRadius: CGFloat {
-        return 32.0
     }
 
     public init(
@@ -156,7 +154,6 @@ public class SummarizeController: UIViewController, Themeable {
                     self?.tabSnapshot.transform = .identity
                     self?.tabSnapshot.layer.cornerRadius = 0.0
                 } completion: { _ in
-                    self?.viewModel.onDismiss()
                     self?.dismiss(animated: true)
                 }
             }),
@@ -238,7 +235,7 @@ public class SummarizeController: UIViewController, Themeable {
         gradient.animatePositionChange(animationCurve: UX.initialTransformTimingCurve)
 
         UIView.animate(withDuration: UX.initialTransformAnimationDuration, delay: 0.0, options: [], animations: {
-            self.tabSnapshot.layer.cornerRadius = self.screenCornerRadius
+            self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
             self.loadingLabel.alpha = 1.0
         }) { _ in
             // TODO: - FXIOS-12858 replace this demo code with the actual backend API
@@ -270,7 +267,7 @@ public class SummarizeController: UIViewController, Themeable {
         }
     }
 
-    public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+    override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         viewModel.onDismiss()
         super.dismiss(animated: flag, completion: completion)
     }
@@ -312,7 +309,6 @@ public class SummarizeController: UIViewController, Themeable {
                 tabSnapshot.transform = .identity
                 tabSnapshot.layer.cornerRadius = 0.0
             } completion: { [weak self] _ in
-                self?.viewModel.onDismiss()
                 self?.dismiss(animated: true)
             }
         } else {
