@@ -95,6 +95,6 @@ final class AppFxACommandsTests: XCTestCase {
 }
 
 // MARK: MockApplicationStateProvider
-class MockApplicationStateProvider: ApplicationStateProvider {
+final class MockApplicationStateProvider: ApplicationStateProvider {
     var applicationState: UIApplication.State = .active
 }
