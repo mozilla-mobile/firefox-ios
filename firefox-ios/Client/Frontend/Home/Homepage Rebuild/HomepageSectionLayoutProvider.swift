@@ -83,7 +83,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let minCards = 4
             static let redesignedTopSitesBottomSpacingLandscape: CGFloat = 16
 
-            @MainActor
             static func getBottomInset() -> CGFloat {
                 if UIDevice.current.orientation.isLandscape {
                     return redesignedTopSitesBottomSpacingLandscape
