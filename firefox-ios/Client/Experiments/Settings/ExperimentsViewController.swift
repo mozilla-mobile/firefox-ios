@@ -23,8 +23,19 @@ class ExperimentsViewController: UIViewController {
             self.showSettings()
         }
 
-        NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: .main) { _ in
-            self.onExperimentsApplied()
+        NotificationCenter.default.addObserver(
+            forName: .nimbusExperimentsApplied,
+            object: nil,
+            queue: .main
+        ) { _ in
+            guard Thread.isMainThread else {
+                assertionFailure("This must be called main thread")
+                return
+            }
+
+            MainActor.assumeIsolated {
+                self.onExperimentsApplied()
+            }
         }
     }
 
