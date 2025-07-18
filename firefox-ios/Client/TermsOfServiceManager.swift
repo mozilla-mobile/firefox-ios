@@ -7,13 +7,13 @@ import Shared
 import Glean
 import MozillaAppServices
 
-protocol VersionProviding {
+protocol VersionProviding: Sendable {
     func object(forInfoDictionaryKey key: String) -> Any?
 }
 
 extension Bundle: VersionProviding {}
 
-struct TermsOfServiceManager: FeatureFlaggable {
+struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     var prefs: Prefs
     private let bundle: VersionProviding
 

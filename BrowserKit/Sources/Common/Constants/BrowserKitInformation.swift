@@ -8,7 +8,7 @@ import Foundation
 // BrowserKit should stay agnostic of the application it's used in, and so the
 // client should pass down this information on setup of the application.
 public class BrowserKitInformation {
-    public static var shared = BrowserKitInformation()
+    public static let shared = BrowserKitInformation()
 
     public var buildChannel: AppBuildChannel?
     public var nightlyAppVersion: String?
