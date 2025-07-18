@@ -15,6 +15,7 @@ final class TabScrollController: NSObject,
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
         static let minimalAddressBarAnimationDuration: CGFloat = 0.4
         static let heightOffset: CGFloat = 14
+        static let minimumScrollThreshold: CGFloat = 18
     }
 
     private var isMinimalAddressBarEnabled: Bool {
@@ -234,6 +235,9 @@ final class TabScrollController: NSObject,
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
             let delta = lastPanTranslation - translation.y
+            
+            // Ignore small scrolls to prevent toggling the toolbar on minor movements
+            guard abs(delta) > UX.minimumScrollThreshold else { return }
 
             setScrollDirection(delta)
 
