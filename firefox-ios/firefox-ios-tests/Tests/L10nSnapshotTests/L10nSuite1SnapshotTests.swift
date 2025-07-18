@@ -4,6 +4,7 @@
 
 import XCTest
 import Shared
+import Common
 
 class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     var noSkipIntroTest = ["testIntro"]
