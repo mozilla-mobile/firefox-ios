@@ -1,4 +1,10 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Body.v142" = "അടയാളക്കുറിപ്പുകളും നാൾവഴിയും ക്രമീകരണങ്ങളും — എല്ലാം ഉടൻ നേടാം.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Title.v142" = "വെടിപ്പുള്ള പുതിയ കുറിപ്പടി";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
 "ContextualHints.MainMenu.NewMenu.Body.v132" = "സ്വകാര്യ തിരയലും കരുതിവയ്ക്കൽ പ്രവർത്തനങ്ങളും എല്ലാം പെട്ടന്നു് കണ്ടെത്തുക.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
@@ -6,6 +12,9 @@
 
 /* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "താളിനെ കുറിച്ചിടുക";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.AccessibilityLabels.CloseButton.142" = "കുറിപ്പടി അടയ്ക്കുക";
 
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "മങ്ങിയതു്";
@@ -16,8 +25,14 @@
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "അടയ്ക്കുക";
 
+/* The accessibility label for the close button of the header menu banner. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "അടയ്ക്കുക";
+
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "ഒളിവാക്കുകളും ടാബുകളും മറ്റും സമന്വയിപ്പിക്കാൻ പ്രവേശിക്കൽ ചെയ്യുക";
+
+/* On the main menu, when the user is signed in. */
+"MainMenu.Account.SignedIn.Description.v141" = "താങ്ങൾ എന്തിന്റെ കരുതൽപ്പകൎപ്പു് എടുക്കാൻ പോവുന്നു അല്ലെങ്കിൽ സമന്വയിപ്പിക്കാൻ പോവുന്നുയെന്നു കൈകാര്യം ചെയ്യുക";
 
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "ഒളിവാക്കുകളും ടാബുകളും മറ്റും സമന്വയിപ്പിക്കുക";
@@ -32,10 +47,22 @@
 "MainMenu.Account.SyncError.Description.v131" = "സമന്വയിപ്പിക്കൽ താൽക്കാലികമായി നിർത്തി";
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
-"MainMenu.Account.SyncError.Title.v131" = "സമന്വയിപ്പിക്കാനായി പ്രവേശിക്കൽ ചെയ്യുക";
+"MainMenu.Account.SyncError.Title.v131" = "സമന്വയിപ്പിക്കാനായി പ്രവേശിക്കുക";
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.BookmarkPage.Title.v141" = "താളിനെ കുറിച്ചിടുക";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
+"MainMenu.DesktopSiteOff.Title.v142" = "അണച്ചതു്";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
+"MainMenu.DesktopSiteOn.Title.v142" = "തുടങ്ങിവച്ചതു്";
+
+/* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
+"MainMenu.HeaderBanner.Subtitle.v142" = "ഞൊടികൾ മാത്രമെടുക്കും. എപ്പോഴെങ്കിലും മാറ്റാം.";
+
+/* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
+"MainMenu.HeaderBanner.Title.v142" = "%@-നെ തനിമട്ടാക്കുക";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "അണച്ചതു്";
@@ -263,13 +290,13 @@
 "MainMenu.Submenus.Tools.Share.Title.v131" = "പങ്കിടുക";
 
 /* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "വെബിട ഇരുണ്ട പരി അണക്കുക";
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "വെബ്ബിട ഇരുളിമ പരി അണയ്ക്കുക";
 
 /* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "വെബിട ഇരുണ്ട പരി ഇടുക";
+"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "വെബ്ബിട ഇരുളിമപരി ഇടുക";
 
 /* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
-"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "വെബ്ബിട ഇരുണ്ട പരി";
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "വെബ്ബിട ഇരുളിമപരി";
 
 /* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
 "MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
@@ -298,8 +325,14 @@
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "പുതിയ ടാബു്";
 
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "ചുരുക്കി";
+
 /* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "ഉപരിഫലക വെബ്ബിടം";
+
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
+"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "വലുതാക്കിയതു്";
 
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "താളില്‍ കണ്ടെത്തുക";
@@ -307,8 +340,14 @@
 /* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "കുറച്ചു്";
 
+/* On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...) */
+"MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142" = "ഗ്രന്ഥപ്പുര";
+
 /* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "കൂടുതല്‍";
+
+/* On the main menu, the accessibility label for the action that will open the page zoom tool. */
+"MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "താൾ വലിപ്പം";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "കരുതിവയ്ക്കുക";
@@ -327,6 +366,9 @@
 
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "ഉപകരണ ഉപക്കുറിപ്പടിക്കട്ട";
+
+/* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
+"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "വെബ്ബിട ഇരുളിമപരി";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
 "MainMenu.ToolsSection.DesktopSite.Title.v141" = "ഉപരിഫലക വെബ്ബിടം";
@@ -354,4 +396,10 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "ഉപകരണങ്ങള്‍";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
+"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "അണച്ചതു്";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON. */
+"MainMenu.WebsiteDarkModeOnV2.Title.v142" = "തുടങ്ങിവച്ചതു്";
 

@@ -65,7 +65,7 @@
 "Settings.AddressAutofill.Title.v126" = "住所";
 
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
-"Settings.Appearance.Zoom.Default.Title.v140" = "既定";
+"Settings.Appearance.Zoom.Default.Title.v140" = "デフォルト";
 
 /* Button to reset specific zoom site levels back to default */
 "Settings.Appearance.Zoom.Reset.Button.v140" = "サイト設定をリセット";
