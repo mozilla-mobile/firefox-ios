@@ -1644,7 +1644,7 @@ class BrowserViewController: UIViewController,
         }
 
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: true, isFindInPageMode: true)
+            scrollController.hideToolbars(animated: true)
         } else {
             adjustBottomSearchBarForKeyboard()
         }

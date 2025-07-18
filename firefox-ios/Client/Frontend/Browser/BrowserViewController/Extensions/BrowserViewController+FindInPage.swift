@@ -21,6 +21,7 @@ extension BrowserViewController {
         guard let webView = tabManager.selectedTab?.webView else { return }
 
         if isVisible {
+            webView.scrollView.keyboardDismissMode = .none
             webView.isFindInteractionEnabled = true
             webView.findInteraction?.searchText = searchText ?? ""
             webView.findInteraction?.presentFindNavigator(showingReplace: false)
