@@ -477,7 +477,7 @@ extension LegacyWebViewController: WKNavigationDelegate {
 
         if let httpResponse = response as? HTTPURLResponse,
            let contentDisposition = httpResponse.allHeaderFields["Content-Disposition"] as? String {
-            if contentDisposition.trimmingCharacters(in: .whitespaces).starts(with: "attachment") {
+            if contentDisposition.starts(with: "attachment") {
                 // Bugzilla #1976296
                 decisionHandler(.cancel)
                 return
