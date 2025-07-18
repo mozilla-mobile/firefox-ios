@@ -326,6 +326,7 @@
 			packageProductDependencies = (
 				8A0F446D2B56EF1A00438589 /* WebEngine */,
 				E132973B2BA9E71B0095FF61 /* ToolbarKit */,
+				0B4142742E13D69F0091BD0D /* SummarizeKit */,
 			);
 			productName = SampleBrowser;
 			productReference = 8A4601E12B0FE20500FFD17F /* SampleBrowser.app */;
@@ -665,6 +666,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0B4142742E13D69F0091BD0D /* SummarizeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SummarizeKit;
+		};
 		8A0F446D2B56EF1A00438589 /* WebEngine */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WebEngine;

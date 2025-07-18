@@ -37,6 +37,7 @@ class BrowserViewController: UIViewController,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
+                             BrowserContentHiding,
                              BrowserStatusBarScrollDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
@@ -322,6 +323,10 @@ class BrowserViewController: UIViewController,
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
+    var isSummarizeFeatureEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -812,6 +817,25 @@ class BrowserViewController: UIViewController,
         }
 
         dispatchStartAtHomeAction()
+    }
+
+    // MARK: - Summarize
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        super.motionEnded(motion, with: event)
+        guard motion == .motionShake, isSummarizeFeatureEnabled else { return }
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return }
+        navigationHandler?.showSummarizePanel()
+    }
+
+    // MARK: - BrowserContentHiding
+    func showBrowserContent() {
+        contentContainer.isHidden = false
+        scrollController.showToolbars(animated: false)
+    }
+
+    func hideBrowserContent() {
+        contentContainer.isHidden = true
+        scrollController.hideToolbars(animated: true)
     }
 
     // MARK: - Start At Home

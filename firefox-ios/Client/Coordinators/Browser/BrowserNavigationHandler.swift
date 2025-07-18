@@ -109,6 +109,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Removes the Document loading view from screen
     @MainActor
     func removeDocumentLoading()
+
+    @MainActor
+    func showSummarizePanel()
 }
 
 extension BrowserNavigationHandler {
