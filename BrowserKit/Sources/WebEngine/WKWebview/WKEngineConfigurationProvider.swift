@@ -82,8 +82,8 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         // may safely share cookies.
         // The cookie store should only be created once, otherwise we can loose them. See FXIOS-11833
         configuration.websiteDataStore = parameters.isPrivate
-            ? DefaultWKEngineConfigurationProvider.nonPersistentStore
-            : DefaultWKEngineConfigurationProvider.defaultStore
+            ? Self.nonPersistentStore
+            : Self.defaultStore
 
         // Popup WKWebViewConfiguration can have the scheme already registered thus registering again
         // leads to crash
