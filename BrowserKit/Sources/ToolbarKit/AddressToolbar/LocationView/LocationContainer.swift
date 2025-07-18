@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-class LocationContainer: UIView, ThemeApplicable {
+final class LocationContainer: UIView, ThemeApplicable {
     private enum UX {
         static let shadowRadius: CGFloat = 14
         static let shadowOpacity: Float = 1

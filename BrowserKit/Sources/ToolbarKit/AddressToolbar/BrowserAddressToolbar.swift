@@ -121,12 +121,12 @@ public class BrowserAddressToolbar: UIView,
                           isUnifiedSearchEnabled: Bool,
                           animated: Bool) {
         [navigationActionStack, leadingPageActionStack, pageActionStack, browserActionStack].forEach {
-            $0.isHidden = config.uxConfiguration.scrollAlpha == 0
+            $0.isHidden = config.uxConfiguration.scrollAlpha.isZero
         }
         self.toolbarDelegate = toolbarDelegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        self.previousConfiguration = config
         addressBarPosition = toolbarPosition
+        previousConfiguration = config
         configureUX(config: config.uxConfiguration, toolbarPosition: toolbarPosition)
         updateSpacing(uxConfig: config.uxConfiguration, leading: leadingSpace, trailing: trailingSpace)
         configure(config: config,
@@ -488,8 +488,11 @@ public class BrowserAddressToolbar: UIView,
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         let colors = theme.colors
-        backgroundColor = previousConfiguration?.uxConfiguration
-            .addressToolbarBackgroundColor(theme: theme)
+        // Set background color to clear when address bar is positioned at top to avoid
+        // double opacity effects. The status bar overlay already provides the necessary
+        // alpha gradient that matches the bottom navigation bar's appearance.
+        backgroundColor = addressBarPosition == .top ? .clear :
+        previousConfiguration?.uxConfiguration.addressToolbarBackgroundColor(theme: theme)
         locationContainer.backgroundColor = previousConfiguration?.uxConfiguration
             .locationContainerBackgroundColor(theme: theme)
         locationDividerView.backgroundColor = colors.layer1
