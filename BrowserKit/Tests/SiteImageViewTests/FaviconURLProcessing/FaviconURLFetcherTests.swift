@@ -7,11 +7,11 @@ import XCTest
 
 class FaviconURLFetcherTests: XCTestCase {
     var subject: DefaultFaviconURLFetcher!
-    var networkMock: HTMLDataRequestMock!
+    var networkMock: MockHTMLDataRequest!
 
     override func setUp() {
         super.setUp()
-        networkMock = HTMLDataRequestMock()
+        networkMock = MockHTMLDataRequest()
         subject = DefaultFaviconURLFetcher(network: networkMock)
     }
 
