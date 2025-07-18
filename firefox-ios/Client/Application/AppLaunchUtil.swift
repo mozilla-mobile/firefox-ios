@@ -9,10 +9,10 @@ import Account
 import Glean
 import MozillaAppServices
 
-final class AppLaunchUtil {
-    private var logger: Logger
+final class AppLaunchUtil: Sendable {
+    private let logger: Logger
 //    private var adjustHelper: AdjustHelper
-    private var profile: Profile
+    private let profile: Profile
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
 
@@ -27,6 +27,7 @@ final class AppLaunchUtil {
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
     }
 
+    @MainActor
     func setUpPreLaunchDependencies() {
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
@@ -98,6 +99,7 @@ final class AppLaunchUtil {
 
         // Save toolbar position to user prefs
         SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+        let deviceName = UIDevice.current.name
 
         NotificationCenter.default.addObserver(
             forName: .FSReadingListAddReadingListItem,
@@ -109,7 +111,7 @@ final class AppLaunchUtil {
                 self.profile.readingList.createRecordWithURL(
                     url.absoluteString,
                     title: title,
-                    addedBy: UIDevice.current.name
+                    addedBy: deviceName
                 )
             }
         }
@@ -186,6 +188,7 @@ final class AppLaunchUtil {
 
     /// Used to migrate user preferences for TopSites row numbers if the new design is
     /// enabled from greater than two to 2. See FXIOS-12704
+    @MainActor
     private func migrateTopSitesRowNumbers() {
         if LegacyFeatureFlagsManager.shared
             .isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) {

@@ -7,7 +7,7 @@ import SwiftUI
 public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
     public let onboardingCards: [ViewModel]
-    public let onActionTap: (
+    public let onActionTap: @MainActor (
         ViewModel.OnboardingActionType,
         String,
         @escaping (Result<TabAction, Error>) -> Void
@@ -27,7 +27,7 @@ public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>
 
     public init(
         onboardingCards: [ViewModel],
-        onActionTap: @escaping (
+        onActionTap: @MainActor @escaping (
             ViewModel.OnboardingActionType,
             String,
             @escaping (Result<TabAction, Error>) -> Void) -> Void,
@@ -43,6 +43,7 @@ public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>
         self.onComplete = onComplete
     }
 
+    @MainActor
     public func handleBottomButtonAction(
         action: ViewModel.OnboardingActionType,
         cardName: String

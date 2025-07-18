@@ -30,6 +30,7 @@ final class DefaultBrowserUtilTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testFirstLaunchWithDMAUser() {
         guard #available(iOS 18.2, *) else { return }
 
@@ -46,6 +47,7 @@ final class DefaultBrowserUtilTests: XCTestCase {
         XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
+    @MainActor
     func testFirstLaunchWithNonDMAUser() {
         guard #available(iOS 18.2, *) else { return }
 
@@ -62,6 +64,7 @@ final class DefaultBrowserUtilTests: XCTestCase {
         XCTAssertEqual(userDefaults.setCalledCount, 1)
     }
 
+    @MainActor
     func testSecondLaunchWithDMAUser() {
         guard #available(iOS 18.2, *) else { return }
 
@@ -78,6 +81,7 @@ final class DefaultBrowserUtilTests: XCTestCase {
         XCTAssertEqual(userDefaults.setCalledCount, 1)
     }
 
+    @MainActor
     func testSecondLaunchWithNonDMAUser() {
         guard #available(iOS 18.2, *) else { return }
 
@@ -94,6 +98,7 @@ final class DefaultBrowserUtilTests: XCTestCase {
         XCTAssertEqual(userDefaults.setCalledCount, 1)
     }
 
+    @MainActor
     private func setupSubject() {
         subject = DefaultBrowserUtil(userDefault: userDefaults,
                                      telemetryWrapper: telemetryWrapper,
