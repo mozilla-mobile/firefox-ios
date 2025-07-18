@@ -68,7 +68,7 @@ enum TabEventHandlerWindowResponseType {
     }
 }
 
-protocol TabEventHandler: AnyObject {
+protocol TabEventHandler: AnyObject, Sendable {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { get }
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
@@ -106,7 +106,7 @@ enum TabEventLabel: String {
 }
 
 // Names of events must be unique!
-enum TabEvent {
+enum TabEvent: Sendable {
     case didChangeURL(URL)
     case didLoadPageMetadata(PageMetadata)
     case didLoadReadability(ReadabilityResult)
@@ -191,15 +191,30 @@ extension TabEventHandler {
     func register(_ observer: AnyObject, forTabEvents events: TabEventLabel...) {
         let wrapper = ObserverWrapper()
         wrapper.observers = events.map { [weak self] eventType in
-            center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
-                guard let self else { return }
-                guard let tab = notification.object as? Tab,
-                      let event = notification.userInfo?["payload"] as? TabEvent,
-                      self.tabEventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID) else {
+            center.addObserver(
+                forName: eventType.name,
+                object: nil,
+                queue: .main
+            ) { [weak self] notification in
+                guard Thread.isMainThread else {
+                    assertionFailure("This must be called main thread")
                     return
                 }
 
-                event.handle(tab, with: self)
+                // Parse out anything we need from non-Sendable `Notification`
+                let tab = notification.object as? Tab
+                let event = notification.userInfo?["payload"] as? TabEvent
+
+                MainActor.assumeIsolated {
+                    guard let self,
+                          let tab,
+                          let event,
+                          self.tabEventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID) else {
+                        return
+                    }
+
+                    event.handle(tab, with: self)
+                }
             }
         }
 

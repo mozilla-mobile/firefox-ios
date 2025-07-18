@@ -182,8 +182,16 @@ open class TabToolbarHelper: NSObject {
             object: nil,
             queue: nil
         ) { [weak self] _ in
-            self?.longPressGestureRecognizers.forEach { gesture in
-                gesture.minimumPressDuration = longPressDuration
+            guard Thread.isMainThread else {
+                assertionFailure("This must be called main thread")
+                return
+            }
+
+            // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
+            MainActor.assumeIsolated {
+                self?.longPressGestureRecognizers.forEach { gesture in
+                    gesture.minimumPressDuration = longPressDuration
+                }
             }
         }
     }

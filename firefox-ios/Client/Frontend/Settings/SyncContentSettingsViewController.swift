@@ -35,7 +35,15 @@ class ManageFxAccountSetting: Setting {
             object: nil,
             queue: .main
         ) { [weak settings] _ in
-            settings?.dismiss(animated: true, completion: nil)
+            guard Thread.isMainThread else {
+                assertionFailure("This must be called main thread")
+                return
+            }
+
+            // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
+            MainActor.assumeIsolated {
+                settings?.dismiss(animated: true, completion: nil)
+            }
         }
     }
 
@@ -160,6 +168,7 @@ class DeviceNameSetting: StringSetting {
     }
 
     deinit {
+        // TODO: FXIOS-12870 If we used selector-based observers, we do not need to remove them in nonisolated deinits
         if let notification = notification {
             NotificationCenter.default.removeObserver(notification)
         }
