@@ -4,9 +4,11 @@
 
 import Foundation
 
-class TabsSectionManager: FeatureFlaggable {
+@MainActor
+final class TabsSectionManager: FeatureFlaggable {
     struct UX {
         // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
+        @MainActor
         static let cellEstimatedWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 170
         static let cellAbsoluteHeight: CGFloat = 200
         static let cardSpacing: CGFloat = 16
