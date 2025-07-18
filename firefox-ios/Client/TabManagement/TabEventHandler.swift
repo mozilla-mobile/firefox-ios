@@ -68,7 +68,7 @@ enum TabEventHandlerWindowResponseType {
     }
 }
 
-protocol TabEventHandler: AnyObject, Sendable {
+protocol TabEventHandler: AnyObject {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { get }
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
