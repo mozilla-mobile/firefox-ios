@@ -9,7 +9,10 @@ import Redux
 import enum MozillaAppServices.VisitType
 
 protocol RemoteTabsPanelDelegate: AnyObject {
+    @MainActor
     func presentFirefoxAccountSignIn()
+
+    @MainActor
     func presentFxAccountSettings()
 }
 

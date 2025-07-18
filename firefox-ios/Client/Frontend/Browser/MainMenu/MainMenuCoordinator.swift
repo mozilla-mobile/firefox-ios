@@ -6,19 +6,41 @@ import Common
 import Foundation
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
+    @MainActor
     func editBookmarkForCurrentTab()
+
+    @MainActor
     func openURLInNewTab(_ url: URL?)
+
+    @MainActor
     func openNewTab(inPrivateMode: Bool)
+
+    @MainActor
     func showLibraryPanel(_ panel: Route.HomepanelSection)
+
+    @MainActor
     func showSettings(at destination: Route.SettingsSection)
+
+    @MainActor
     func showFindInPage()
+
+    @MainActor
     func showSignInView(fxaParameters: FxASignInViewParameters?)
+
+    @MainActor
     func updateZoomPageBarVisibility()
+
+    @MainActor
     func presentSavePDFController()
+
+    @MainActor
     func presentSiteProtections()
+
+    @MainActor
     func showPrintSheet()
 
     /// Open the share sheet to share the currently selected `Tab`.
+    @MainActor
     func showShareSheetForCurrentlySelectedTab()
 }
 
@@ -150,6 +172,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()
+
+        case .webpageSummary: break
+            // TODO(FXIOS-12688): Redirect to summary view
         }
     }
 

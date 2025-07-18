@@ -22,6 +22,7 @@ class SurveySurfaceViewModel {
         delegate?.didDisplayMessage()
     }
 
+    @MainActor
     func didTapTakeSurvey() {
         delegate?.didTapTakeSurvey()
     }

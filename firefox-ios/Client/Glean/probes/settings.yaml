@@ -52,24 +52,6 @@ preferences:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  new_tab_experience:
-    type: string
-    description: |
-      The name of the view that the user wants to see on new tabs.
-      For example History, Homepage or Blank. It is used to measure
-      usage of this feature, to see how effective feature promotion
-      campaigns are and to establish a baseline number for when we
-      introduce the new Activity Stream features.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
   home_page_setting:
     type: string
     description: |
@@ -89,20 +71,6 @@ preferences:
     type: boolean
     description: |
       Measures the state of the "Save Logins" preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  show_clipboard_bar:
-    type: boolean
-    description: |
-      Measures the state of the "Show Clipboard Bar" preference.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
@@ -157,53 +125,6 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  jump_back_in:
-    type: boolean
-    description: |
-      An indication of whether the Jump back in section
-      is enabled to be displayed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  recently_visited:
-    type: boolean
-    description: |
-      An indication of whether the Recently visited section
-      is enabled to be displayed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  recently_saved:
-    type: boolean
-    description: |
-      An indication of whether the recently saved section
-      is enabled to be displayed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  pocket:
-    type: boolean
-    description: |
-      An indication of whether Pocket is enabled to be displayed.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/14908
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/15583
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"

@@ -8,14 +8,28 @@ import WebKit
 // MARK: - TabManagerDelegate
 protocol TabManagerDelegate: AnyObject {
     // Must be called on the main thread
+    @MainActor
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool)
+
+    @MainActor
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool)
+
+    @MainActor
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool)
 
+    @MainActor
     func tabManagerDidRestoreTabs(_ tabManager: TabManager)
+
+    @MainActor
     func tabManagerDidAddTabs(_ tabManager: TabManager)
+
+    @MainActor
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?)
+
+    @MainActor
     func tabManagerUpdateCount()
+
+    @MainActor
     func tabManagerTabDidFinishLoading()
 }
 

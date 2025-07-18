@@ -28,6 +28,7 @@ protocol GleanPlumbMessageManagerProtocol {
     /// An optional UUID for the originating window can be provided to ensure any
     /// resulting UI is displayed in the correct window.
     /// Surface calls.
+    @MainActor
     func onMessagePressed(_ message: GleanPlumbMessage, window: WindowUUID?, shouldExpire: Bool)
 
     /// Handles what to do with a message when a user has dismissed it.
@@ -208,6 +209,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                                      extras: extras)
     }
 
+    @MainActor
     private func handleLinkAction(
         for message: GleanPlumbMessage,
         action: String,

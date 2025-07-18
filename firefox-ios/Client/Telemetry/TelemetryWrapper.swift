@@ -229,13 +229,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // FxA Account Login status
         GleanMetrics.Preferences.fxaLoggedIn.set(profile.hasSyncableAccount())
 
-        // Record New Tab setting
-        if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
-            GleanMetrics.Preferences.newTabExperience.set(newTabChoice)
-        } else {
-            GleanMetrics.Preferences.newTabExperience.set(NewTabAccessors.Default.rawValue)
-        }
-
         // Record `Home` setting, where Firefox Home is "Home", a custom URL is "other" and blank is "Blank".
         let homePageSetting = NewTabAccessors.getHomePage(prefs)
         switch homePageSetting {
@@ -258,13 +251,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.Preferences.saveLogins.set(saveLogins)
         } else {
             GleanMetrics.Preferences.saveLogins.set(true)
-        }
-
-        // Show clipboard bar
-        if let showClipboardBar = prefs.boolForKey(PrefsKeys.ShowClipboardBar) {
-            GleanMetrics.Preferences.showClipboardBar.set(showClipboardBar)
-        } else {
-            GleanMetrics.Preferences.showClipboardBar.set(false)
         }
 
         // Close private tabs
@@ -303,17 +289,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             // https://mozilla.github.io/glean/book/reference/metrics/index.html#label-format)
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.id.lowercased()].add()
         }
-
-        // Homepage section preferences
-        let isJumpBackInEnabled = !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
-        GleanMetrics.Preferences.jumpBackIn.set(isJumpBackInEnabled)
-
-        let isBookmarksEnabled = !featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
-        GleanMetrics.Preferences.recentlySaved.set(isBookmarksEnabled)
-
-        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        let isPocketEnabled = isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
-        GleanMetrics.Preferences.pocket.set(isPocketEnabled)
 
         let startAtHomeOption: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption.rawValue)

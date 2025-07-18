@@ -7,8 +7,13 @@ import Foundation
 import Shared
 
 protocol LaunchFinishedLoadingDelegate: AnyObject {
+    @MainActor
     func launchWith(launchType: LaunchType)
+
+    @MainActor
     func launchBrowser()
+
+    @MainActor
     func finishedLoadingLaunchOrder()
 }
 
@@ -47,10 +52,12 @@ class LaunchScreenViewModel {
         profile.prefs.setBool(true, forKey: PrefsKeys.splashScreenShownKey)
     }
 
+    @MainActor
     func startLoading(appVersion: String = AppInfo.appVersion) {
         loadLaunchType(appVersion: appVersion)
     }
 
+    @MainActor
     func loadNextLaunchType() {
         guard let launches = launchOrder else { return }
 
@@ -62,6 +69,7 @@ class LaunchScreenViewModel {
         }
     }
 
+    @MainActor
     private func loadLaunchType(appVersion: String) {
         var launchOrder = [LaunchType]()
 

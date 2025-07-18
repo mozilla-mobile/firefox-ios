@@ -47,7 +47,10 @@ class ETPSectionView: UIView {
 }
 
 protocol EnhancedTrackingProtectionMenuDelegate: AnyObject {
+    @MainActor
     func settingsOpenPage(settings: Route.SettingsSection)
+
+    @MainActor
     func didFinish()
 }
 

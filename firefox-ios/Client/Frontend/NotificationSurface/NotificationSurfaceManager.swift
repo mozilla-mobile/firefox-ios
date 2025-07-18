@@ -8,6 +8,7 @@ import Shared
 
 protocol NotificationSurfaceDelegate: AnyObject {
     func didDisplayMessage(_ message: GleanPlumbMessage)
+    @MainActor
     func didTapNotification(_ userInfo: [AnyHashable: Any])
     func didDismissNotification(_ userInfo: [AnyHashable: Any])
 }

@@ -7,9 +7,11 @@ import Foundation
 // Only push the task async if we are not already on the main thread.
 // Unless you want another event to fire before your work happens.
 // This is better than using DispatchQueue.main.async to ensure main thread
-func ensureMainThread(execute work: @escaping @convention(block) () -> Swift.Void) {
+func ensureMainThread(execute work: @escaping @MainActor @convention(block) () -> Swift.Void) {
     if Thread.isMainThread {
-        work()
+        MainActor.assumeIsolated {
+            work()
+        }
     } else {
         DispatchQueue.main.async {
             work()

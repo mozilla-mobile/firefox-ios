@@ -6,6 +6,7 @@ import Foundation
 
 protocol MobileMessageSurfaceProtocol {
     func handleMessageDisplayed()
+    @MainActor
     func handleMessagePressed()
     func handleMessageDismiss()
 }

@@ -43,6 +43,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
         static let saveAsPDF = StandardImageIdentifiers.Large.folder
         static let saveAsPDFV2 = StandardImageIdentifiers.Large.saveFile
+        static let summarizer = StandardImageIdentifiers.Large.summarizer
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
         static let avatarWarningLargeLight = StandardImageIdentifiers.Large.avatarWarningCircleFillMulticolorLight
         static let avatarWarningLargeDark = StandardImageIdentifiers.Large.avatarWarningCircleFillMulticolorDark
@@ -58,6 +59,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
     private var isNewAppearanceMenuOn: Bool {
         featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
+    }
+
+    private var isSummarizerOn: Bool {
+        featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
     }
 
     private var isMenuRedesignOn: Bool {
@@ -284,8 +289,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     )
                 }
             ),
-            configureUserAgentItemV2(with: uuid, tabInfo: tabInfo)
         ]
+        // Conditionally add the Summarizer item if the feature is enabled
+        if isSummarizerOn {
+            options.append(configureSummarizerItem(with: uuid, tabInfo: tabInfo))
+        }
+        options.append(configureUserAgentItemV2(with: uuid, tabInfo: tabInfo))
 
         if !isExpanded {
             options.append(configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
@@ -404,6 +413,31 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 )
             }
         )
+    }
+
+    private func configureSummarizerItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+            return MenuElement(
+                title: .MainMenu.ToolsSection.SummarizePage,
+                iconName: Icons.summarizer,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.SummarizePage,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.summarizePage,
+                action: {
+                    store.dispatchLegacy(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.webpageSummary),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        )
+                    )
+                }
+            )
     }
 
     private func configureMoreLessItem(
@@ -592,72 +626,80 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with uuid: WindowUUID,
         and configuration: MainMenuTabInfo
     ) -> MenuSection {
-        return MenuSection(
-            options: [
-                configureUserAgentItem(with: uuid, tabInfo: configuration),
-                MenuElement(
-                    title: .MainMenu.ToolsSection.FindInPage,
-                    iconName: Icons.findInPage,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.FindInPage,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.findInPage,
-                    action: {
-                        store.dispatchLegacy(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.tapNavigateToDestination,
-                                navigationDestination: MenuNavigationDestination(.findInPage),
-                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
-                            )
+        var options: [MenuElement] = [
+            configureUserAgentItem(with: uuid, tabInfo: configuration),
+            MenuElement(
+                title: .MainMenu.ToolsSection.FindInPage,
+                iconName: Icons.findInPage,
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.FindInPage,
+                a11yHint: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.findInPage,
+                action: {
+                    store.dispatchLegacy(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.findInPage),
+                            telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                         )
-                    }
-                ),
-                MenuElement(
-                    title: .MainMenu.ToolsSection.Tools,
-                    description: getToolsSubmenuDescription(with: configuration),
-                    iconName: Icons.tools,
-                    isEnabled: true,
-                    isActive: false,
-                    hasSubmenu: true,
-                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Tools,
-                    a11yHint: getToolsSubmenuDescription(with: configuration),
-                    a11yId: AccessibilityIdentifiers.MainMenu.tools,
-                    action: {
-                        store.dispatchLegacy(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.tapShowDetailsView,
-                                changeMenuViewTo: .tools,
-                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
-                            )
+                    )
+                }
+            ),
+        ]
+
+        // Conditionally add the Summarizer item if the feature is enabled
+        if isSummarizerOn {
+            options.append(configureSummarizerItem(with: uuid, tabInfo: configuration))
+        }
+
+        // Append the rest of the tools submenu items
+        options.append(contentsOf: [
+            MenuElement(
+                title: .MainMenu.ToolsSection.Tools,
+                description: getToolsSubmenuDescription(with: configuration),
+                iconName: Icons.tools,
+                isEnabled: true,
+                isActive: false,
+                hasSubmenu: true,
+                a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Tools,
+                a11yHint: getToolsSubmenuDescription(with: configuration),
+                a11yId: AccessibilityIdentifiers.MainMenu.tools,
+                action: {
+                    store.dispatchLegacy(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapShowDetailsView,
+                            changeMenuViewTo: .tools,
+                            telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                         )
-                    }
-                ),
-                MenuElement(
-                    title: .MainMenu.ToolsSection.Save,
-                    description: getSaveSubmenuDescription(with: configuration),
-                    iconName: Icons.save,
-                    isEnabled: true,
-                    isActive: false,
-                    hasSubmenu: true,
-                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Save,
-                    a11yHint: getSaveSubmenuDescription(with: configuration),
-                    a11yId: AccessibilityIdentifiers.MainMenu.save,
-                    action: {
-                        store.dispatchLegacy(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.tapShowDetailsView,
-                                changeMenuViewTo: .save,
-                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
-                            )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.ToolsSection.Save,
+                description: getSaveSubmenuDescription(with: configuration),
+                iconName: Icons.save,
+                isEnabled: true,
+                isActive: false,
+                hasSubmenu: true,
+                a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Save,
+                a11yHint: getSaveSubmenuDescription(with: configuration),
+                a11yId: AccessibilityIdentifiers.MainMenu.save,
+                action: {
+                    store.dispatchLegacy(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.tapShowDetailsView,
+                            changeMenuViewTo: .save,
+                            telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                         )
-                    }
-                ),
-            ]
-        )
+                    )
+                }
+            ),
+        ])
+        return MenuSection(options: options)
     }
 
     private func getToolsSubmenuDescription(with _: MainMenuTabInfo) -> String {

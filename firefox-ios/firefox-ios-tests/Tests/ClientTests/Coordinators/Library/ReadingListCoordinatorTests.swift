@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class ReadingListCoordinatorTests: XCTestCase {
     var router: MockRouter!
     var parentCoordinator: MockLibraryCoordinatorDelegate!

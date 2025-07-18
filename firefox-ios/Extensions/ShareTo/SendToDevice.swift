@@ -30,6 +30,7 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
         return themeManager.windowNonspecificTheme()
     }
 
+    @MainActor
     func initialViewController() -> UIViewController {
         let theme = currentTheme()
         guard let shareItem = sharedItem else {

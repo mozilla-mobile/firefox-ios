@@ -379,6 +379,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
 
         case .defaultBrowser:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.defaultBrowserSettings)
+
+        case .webpageSummary: break
+            // TODO(FXIOS-12761): Add telemetry for summarizer MVP
         }
     }
 }

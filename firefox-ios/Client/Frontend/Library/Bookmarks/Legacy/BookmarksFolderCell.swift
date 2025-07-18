@@ -12,6 +12,7 @@ import class MozillaAppServices.BookmarkItemData
 protocol BookmarksFolderCell: BookmarksRefactorFeatureFlagProvider {
     func getViewModel() -> OneLineTableViewCellViewModel
 
+    @MainActor
     func didSelect(profile: Profile,
                    searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,
@@ -88,6 +89,7 @@ extension BookmarkItemData: BookmarksFolderCell {
         }
     }
 
+    @MainActor
     func didSelect(profile: Profile,
                    searchEnginesManager: SearchEnginesManager,
                    windowUUID: WindowUUID,

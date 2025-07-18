@@ -38,14 +38,16 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
     // We override this method, for handling taps on MenuSquareView views
     // This may be a temporary fix
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard self.bounds.contains(point) else { return nil }
-        for subview in contentStackView.arrangedSubviews {
+        if self.isHidden || self.alpha.isZero || !self.isUserInteractionEnabled {
+            return nil
+        }
+        for subview in contentStackView.arrangedSubviews.reversed() {
             let convertedPoint = self.convert(point, to: subview)
-            if let hitView = subview.hitTest(convertedPoint, with: event) {
-                return hitView
+            if let hit = subview.hitTest(convertedPoint, with: event) {
+                return hit
             }
         }
-        return super.hitTest(point, with: event)
+        return nil
     }
 
     private func setupUI() {

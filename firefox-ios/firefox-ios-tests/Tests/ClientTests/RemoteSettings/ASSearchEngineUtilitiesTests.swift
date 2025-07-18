@@ -26,11 +26,13 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
                 base: "https://dict.leo.org/englisch-deutsch/{searchTerms}",
                 method: "GET",
                 params: [],
-                searchTermParamName: nil
+                searchTermParamName: nil,
+                displayName: nil
             ),
             suggestions: nil,
             trending: nil,
-            searchForm: nil
+            searchForm: nil,
+            visualSearch: nil
         ),
         orderHint: nil,
         clickUrl: nil
@@ -56,11 +58,13 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
                     enterpriseValue: nil,
                     experimentConfig: nil
                 )],
-                searchTermParamName: nil
+                searchTermParamName: nil,
+                displayName: nil
             ),
             suggestions: nil,
             trending: nil,
-            searchForm: nil
+            searchForm: nil,
+            visualSearch: nil
         ),
         orderHint: nil,
         clickUrl: nil
@@ -100,7 +104,8 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
                         experimentConfig: "google_channel_us"
                     )
                 ],
-                searchTermParamName: "q"
+                searchTermParamName: "q",
+                displayName: nil
             ),
             suggestions: SearchEngineUrl(
                 base: "https://www.google.com/complete/search",
@@ -111,7 +116,8 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
                     enterpriseValue: nil,
                     experimentConfig: nil
                 )],
-                searchTermParamName: "q"
+                searchTermParamName: "q",
+                displayName: nil
             ),
             trending: SearchEngineUrl(
                 base: "https://www.google.com/complete/search",
@@ -122,9 +128,11 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
                     enterpriseValue: nil,
                     experimentConfig: nil
                 )],
-                searchTermParamName: "q"
+                searchTermParamName: "q",
+                displayName: nil
             ),
-            searchForm: nil
+            searchForm: nil,
+            visualSearch: nil
         ),
         orderHint: nil,
         clickUrl: nil

@@ -11,6 +11,7 @@ class MockSSLTrackingProtectionDelegate: ETPCoordinatorSSLStatusDelegate {
     var showHasOnlySecureContentInTrackingPanel = true
 }
 
+@MainActor
 final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!

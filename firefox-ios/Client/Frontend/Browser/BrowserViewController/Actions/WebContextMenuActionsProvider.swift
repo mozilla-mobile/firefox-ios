@@ -117,6 +117,7 @@ class WebContextMenuActionsProvider {
         })
     }
 
+    @MainActor
     func addShare(url: URL,
                   tabManager: TabManager,
                   webView: WKWebView,

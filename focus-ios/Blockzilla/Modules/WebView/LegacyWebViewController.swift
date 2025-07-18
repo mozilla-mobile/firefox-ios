@@ -475,6 +475,15 @@ extension LegacyWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         let response = navigationResponse.response
 
+        if let httpResponse = response as? HTTPURLResponse,
+           let contentDisposition = httpResponse.allHeaderFields["Content-Disposition"] as? String {
+            if contentDisposition.trimmingCharacters(in: .whitespaces).starts(with: "attachment") {
+                // Bugzilla #1976296
+                decisionHandler(.cancel)
+                return
+            }
+        }
+
         guard let responseMimeType = response.mimeType else {
             decisionHandler(.allow)
             return

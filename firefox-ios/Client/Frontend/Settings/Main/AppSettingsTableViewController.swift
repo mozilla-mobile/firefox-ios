@@ -16,13 +16,28 @@ protocol SettingsFlowDelegate: AnyObject,
                                AccountSettingsDelegate,
                                AboutSettingsDelegate,
                                SupportSettingsDelegate {
+    @MainActor
     func showDevicePassCode()
+
+    @MainActor
     func showCreditCardSettings()
+
+    @MainActor
     func showExperiments()
+
+    @MainActor
     func showFirefoxSuggest()
+
+    @MainActor
     func openDebugTestTabs(count: Int)
+
+    @MainActor
     func showDebugFeatureFlags()
+
+    @MainActor
     func showPasswordManager(shouldShowOnboarding: Bool)
+
+    @MainActor
     func didFinishShowingSettings()
 }
 

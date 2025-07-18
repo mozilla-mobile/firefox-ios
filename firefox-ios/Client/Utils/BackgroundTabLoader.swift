@@ -31,13 +31,14 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
     func loadBackgroundTabs() {
         // Make sure we load queued tabs on a background thread
         backgroundQueue.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.dequeueQueuedTabs()
         }
     }
 
     private func dequeueQueuedTabs() {
-        tabQueue.getQueuedTabs { [weak self] urls in
+        // Opens the database on a background thread
+        tabQueue.getQueuedTabs { @MainActor [weak self] urls in
             guard let self = self else { return }
             // This assumes that the DB returns rows in a sane order.
             guard !urls.isEmpty else { return }
@@ -55,6 +56,7 @@ final class DefaultBackgroundTabLoader: BackgroundTabLoader {
         }
     }
 
+    @MainActor
     private func open(urls: [URL]) {
         for urlToOpen in urls {
             let urlString = URL.mozInternalScheme + "://open-url?url=\(urlToOpen)"

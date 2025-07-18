@@ -8,6 +8,7 @@ import WebKit
 
 @objc
 protocol JSPromptAlertControllerDelegate: AnyObject {
+    @MainActor
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController)
 }
 

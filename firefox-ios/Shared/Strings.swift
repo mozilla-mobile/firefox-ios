@@ -4555,6 +4555,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Less",
                 comment: "On the main menu, the title for the action that will hide some menu options in the current section of the menu.")
+            public static let SummarizePage = MZLocalizedString(
+                key: "MainMenu.ToolsSection.LessOptions.SummarizePage.v142",
+                tableName: "MainMenu",
+                value: "Summarize Page",
+                comment: "On the main menu, the title for the action that will summarize the content of the webpage.")
 
             public struct AccessibilityLabels {
                 public static let SwitchToDesktopSite = MZLocalizedString(
@@ -4612,6 +4617,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Less",
                     comment: "On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu.")
+                public static let SummarizePage = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.LessOptions.SummarizePage.v142",
+                    tableName: "MainMenu",
+                    value: "Summarize Page",
+                    comment: "On the main menu, the accessibility label for the action that will summarize the content of the webpage.")
                 public static let CollapsedHint = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142",
                     tableName: "MainMenu",

@@ -7,7 +7,9 @@ import Foundation
 import Shared
 
 protocol MicrosurveyCoordinatorDelegate: AnyObject {
+    @MainActor
     func dismissFlow()
+
     @MainActor
     func showPrivacy(with content: String?)
 }

@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class MicrosurveyCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var mockTabManager: MockTabManager!

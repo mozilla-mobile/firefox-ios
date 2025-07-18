@@ -6,9 +6,18 @@ import Foundation
 
 /// Child settings pages account actions
 protocol AccountSettingsDelegate: AnyObject {
+    @MainActor
     func pressedConnectSetting()
+
+    @MainActor
     func pressedAdvancedAccountSetting()
+
+    @MainActor
     func pressedToShowSyncContent()
+
+    @MainActor
     func pressedToShowFirefoxAccount()
+
+    @MainActor
     func askedToOpen(url: URL?, withTitle title: NSAttributedString?)
 }

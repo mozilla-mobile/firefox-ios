@@ -136,7 +136,7 @@ class SearchTests: FeatureFlaggedTestBase {
         } else {
             urlBarAddress.press(forDuration: 1)
         }
-        if !app.menuItems["Select All"].exists {
+        if !app.menuItems["Select All"].waitForExistence(timeout: 3) {
             urlBarAddress.waitAndTap()
         }
         app.menuItems["Select All"].waitAndTap()

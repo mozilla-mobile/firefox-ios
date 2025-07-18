@@ -8,6 +8,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class ContextMenuCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
 

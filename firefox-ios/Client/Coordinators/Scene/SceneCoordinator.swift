@@ -77,14 +77,16 @@ class SceneCoordinator: BaseCoordinator,
         let profile: Profile = AppContainer.shared.resolve()
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
-        return launchType.canLaunch(fromType: .SceneCoordinator)
+        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
+        return launchType.canLaunch(fromType: .SceneCoordinator, isIphone: isIphone)
     }
 
     private func showIntroOnboardingIfNeeded() {
         let profile: Profile = AppContainer.shared.resolve()
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
-        if launchType.canLaunch(fromType: .SceneCoordinator) {
+        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
+        if launchType.canLaunch(fromType: .SceneCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         }
     }
@@ -92,7 +94,8 @@ class SceneCoordinator: BaseCoordinator,
     // MARK: - LaunchFinishedLoadingDelegate
 
     func launchWith(launchType: LaunchType) {
-        guard launchType.canLaunch(fromType: .SceneCoordinator) else {
+        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
+        guard launchType.canLaunch(fromType: .SceneCoordinator, isIphone: isIphone) else {
             startBrowser(with: launchType)
             return
         }

@@ -6,6 +6,7 @@ import XCTest
 import Common
 @testable import Client
 
+@MainActor
 final class RemoteTabsCoordinatorTests: XCTestCase {
     private var mockProfile: MockProfile!
     private var mockRouter: MockRouter!

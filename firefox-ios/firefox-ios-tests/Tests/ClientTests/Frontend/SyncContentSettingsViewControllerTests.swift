@@ -6,6 +6,7 @@
 import XCTest
 import Common
 
+@MainActor
 class SyncContentSettingsViewControllerTests: XCTestCase {
     var profile: MockProfile!
     var syncContentSettingsVC: SyncContentSettingsViewController?

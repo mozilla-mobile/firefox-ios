@@ -16,6 +16,7 @@ private struct RecentlyClosedPanelUX {
 }
 
 protocol RecentlyClosedPanelDelegate: AnyObject {
+    @MainActor
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool)
 }
 

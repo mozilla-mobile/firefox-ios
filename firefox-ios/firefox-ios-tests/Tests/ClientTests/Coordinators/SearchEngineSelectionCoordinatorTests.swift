@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class SearchEngineSelectionCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var mockParentCoordinator: MockParentCoordinator!

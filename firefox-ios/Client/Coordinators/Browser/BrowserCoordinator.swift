@@ -81,8 +81,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     func start(with launchType: LaunchType?) {
         router.push(browserViewController, animated: false)
-
-        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
+        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
+        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         }
     }

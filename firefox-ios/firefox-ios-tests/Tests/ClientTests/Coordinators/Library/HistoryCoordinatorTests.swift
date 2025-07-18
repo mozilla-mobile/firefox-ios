@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class HistoryCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var profile: MockProfile!

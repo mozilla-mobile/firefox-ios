@@ -7,6 +7,7 @@ import Common
 import Shared
 
 protocol HistoryCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
+    @MainActor
     func showRecentlyClosedTab()
 }
 

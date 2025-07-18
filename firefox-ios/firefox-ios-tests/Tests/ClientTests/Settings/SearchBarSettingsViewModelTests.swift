@@ -8,6 +8,7 @@ import Shared
 
 @testable import Client
 
+@MainActor
 class SearchBarSettingsViewModelTests: XCTestCase {
     var prefs: Prefs!
     var mockNotificationCenter: MockNotificationCenter!

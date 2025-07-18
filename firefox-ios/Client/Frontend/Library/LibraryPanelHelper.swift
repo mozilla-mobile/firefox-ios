@@ -8,8 +8,13 @@ import Common
 import enum MozillaAppServices.VisitType
 
 protocol LibraryPanelDelegate: AnyObject {
+    @MainActor
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
+
+    @MainActor
     func libraryPanel(didSelectURL url: URL, visitType: VisitType)
+
+    @MainActor
     var libraryPanelWindowUUID: WindowUUID { get }
 }
 

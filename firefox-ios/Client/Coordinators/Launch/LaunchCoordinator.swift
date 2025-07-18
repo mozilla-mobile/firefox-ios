@@ -10,7 +10,10 @@ import SwiftUI
 import ComponentLibrary
 
 protocol LaunchCoordinatorDelegate: AnyObject {
+    @MainActor
     func didFinishTermsOfService(from coordinator: LaunchCoordinator)
+
+    @MainActor
     func didFinishLaunch(from coordinator: LaunchCoordinator)
 }
 

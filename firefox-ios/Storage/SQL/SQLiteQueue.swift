@@ -21,14 +21,17 @@ open class SQLiteQueue: TabQueue {
         return ShareItem(url: url, title: "")
     }
 
-    open func getQueuedTabs(completion: @escaping ([ShareItem]) -> Void) {
+    open func getQueuedTabs(completion: @escaping @MainActor ([ShareItem]) -> Void) {
         let sql = "SELECT url FROM queue"
         let deferredResponse = db.runQuery(sql, args: nil, factory: self.factory) >>== { cursor in
             return deferMaybe(cursor.asArray())
         }
 
         deferredResponse.upon { result in
-            completion(result.successValue ?? [])
+            // TODO: FXIOS-12842 It would be better if we could refactor Defer usage to rely on Swift Concurrency
+            DispatchQueue.main.async {
+                completion(result.successValue ?? [])
+            }
         }
     }
 

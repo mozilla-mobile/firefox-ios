@@ -8,6 +8,7 @@ import Shared
 
 protocol SurveySurfaceDelegate: AnyObject {
     func didDisplayMessage()
+    @MainActor
     func didTapTakeSurvey()
     func didTapDismissSurvey()
 }

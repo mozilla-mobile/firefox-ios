@@ -26,6 +26,7 @@ class BrowserWindow: UIWindow {
 }
 
 struct SceneSetupHelper {
+    @MainActor
     func configureWindowFor(_ scene: UIScene,
                             windowUUID: WindowUUID,
                             screenshotServiceDelegate: UIScreenshotServiceDelegate) -> UIWindow {
@@ -45,6 +46,7 @@ struct SceneSetupHelper {
         return window
     }
 
+    @MainActor
     func createNavigationController() -> UINavigationController {
         let navigationController = RootNavigationController()
         navigationController.isNavigationBarHidden = true

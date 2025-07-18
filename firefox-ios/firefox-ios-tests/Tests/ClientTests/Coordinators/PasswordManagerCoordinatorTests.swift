@@ -7,6 +7,7 @@ import Storage
 import Common
 @testable import Client
 
+@MainActor
 final class PasswordManagerCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var mockParentCoordinator: PasswordManagerCoordinatorDelegateMock!

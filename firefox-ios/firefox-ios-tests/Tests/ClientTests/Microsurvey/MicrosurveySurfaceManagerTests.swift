@@ -68,6 +68,7 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
+    @MainActor
     func testManager_messagePressedCalled() {
         let subject = createSubject()
         messageManager.message = createMessage()
@@ -80,7 +81,7 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
-    func testManager_messageDimissCalled() {
+    func testManager_messageDismissCalled() {
         let subject = createSubject()
         messageManager.message = createMessage()
         _ = subject.showMicrosurveyPrompt()

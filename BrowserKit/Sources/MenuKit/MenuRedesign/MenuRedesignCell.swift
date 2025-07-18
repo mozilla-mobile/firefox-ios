@@ -69,7 +69,9 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
         self.contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
-        self.iconImageView.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
+        self.iconImageView.image = UIImage(named: model.iconName)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection()
         self.isAccessibilityElement = true
         self.isUserInteractionEnabled = !model.isEnabled ? false : true
         self.accessibilityIdentifier = model.a11yId

@@ -7,6 +7,7 @@ import XCTest
 @testable import Client
 import SwiftUI
 
+@MainActor
 final class SettingsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var wallpaperManager: WallpaperManagerMock!

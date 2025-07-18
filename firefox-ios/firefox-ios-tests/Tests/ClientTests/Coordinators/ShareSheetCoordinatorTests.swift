@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class ShareSheetCoordinatorTests: XCTestCase {
     private var parentCoordinator: MockParentCoordinator!
     private var mockRouter: MockRouter!

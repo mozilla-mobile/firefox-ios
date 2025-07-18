@@ -7,6 +7,7 @@ import Foundation
 import enum MozillaAppServices.VisitType
 
 protocol ReadingListNavigationHandler: AnyObject, LibraryPanelCoordinatorDelegate {
+    @MainActor
     func openUrl(_ url: URL, visitType: VisitType)
 }
 

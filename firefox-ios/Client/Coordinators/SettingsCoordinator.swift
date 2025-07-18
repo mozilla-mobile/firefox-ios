@@ -8,8 +8,13 @@ import Redux
 import SwiftUI
 
 protocol SettingsCoordinatorDelegate: AnyObject {
+    @MainActor
     func openURLinNewTab(_ url: URL)
+
+    @MainActor
     func openDebugTestTabs(count: Int)
+
+    @MainActor
     func didFinishSettings(from coordinator: SettingsCoordinator)
 }
 
