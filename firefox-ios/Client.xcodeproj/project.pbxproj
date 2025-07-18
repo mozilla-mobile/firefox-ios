@@ -785,6 +785,7 @@
 		81DAB2F72C89004D00F4BE98 /* MainMenuMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F62C89004D00F4BE98 /* MainMenuMiddlewareTests.swift */; };
 		81DAB2F92C8901AC00F4BE98 /* MainMenuStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F82C8901AC00F4BE98 /* MainMenuStateTests.swift */; };
 		81E1914D2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E1914C2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift */; };
+		81E9B6E82E2AB73400CE6FF6 /* MerinoStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */; };
 		81F617C92C8755AB003799BF /* MainMenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F617C82C8755AB003799BF /* MainMenuAction.swift */; };
 		81F617CB2C877EC7003799BF /* MainMenuTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F617CA2C877EC7003799BF /* MainMenuTelemetry.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
@@ -8172,6 +8173,7 @@
 		81DF4C79AE53A2FCA08EEE9C /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = "da.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		81E1914C2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMultipleChoiceSelectionDelegate.swift; sourceTree = "<group>"; };
 		81E446CF88B278374B416BF5 /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoStory.swift; sourceTree = "<group>"; };
 		81F617C82C8755AB003799BF /* MainMenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuAction.swift; sourceTree = "<group>"; };
 		81F617CA2C877EC7003799BF /* MainMenuTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuTelemetry.swift; sourceTree = "<group>"; };
 		81F647D98E79EC6406CDFCB4 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
@@ -14154,6 +14156,7 @@
 		C8B0F5F0283B7CCE007AE65D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */,
 				C8B0F5F1283B7CCE007AE65D /* PocketSponsoredStory.swift */,
 				C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */,
 				C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */,
@@ -17926,6 +17929,7 @@
 				8A1E3BDF28CBA81E003388C4 /* SponsoredContentFilterUtility.swift in Sources */,
 				8A5BD95F2878B7B6000FE773 /* TopSitesWidgetManager.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
+				81E9B6E82E2AB73400CE6FF6 /* MerinoStory.swift in Sources */,
 				E1442FD2294782D9003680B0 /* UIViewController+Extension.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
 				8A9E04192D4D07EF0022ED90 /* BookmarksCell.swift in Sources */,

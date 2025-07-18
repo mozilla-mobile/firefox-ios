@@ -5,7 +5,7 @@
 import Foundation
 
 final class StoryProvider: FeatureFlaggable, Sendable {
-    private let numberOfPocketStories: Int
+    private let numberOfStories: Int
     private let pocketAPI: PocketStoriesProviding
 
     init(
@@ -13,15 +13,15 @@ final class StoryProvider: FeatureFlaggable, Sendable {
         numberOfPocketStories: Int = 12
     ) {
         self.pocketAPI = pocketAPI
-        self.numberOfPocketStories = numberOfPocketStories
+        self.numberOfStories = numberOfPocketStories
     }
 
     func fetchPocketStories() async -> [PocketStory] {
         let isStoriesRedesignEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
-        let numberOfPocketStoriesIfRedesignEnabled = 9
-        let numberOfPocketStories = isStoriesRedesignEnabled ? numberOfPocketStoriesIfRedesignEnabled
-                                                             : self.numberOfPocketStories
-        let global = (try? await pocketAPI.fetchStories(items: numberOfPocketStories)) ?? []
+        let numberOfStoriesIfRedesignEnabled = 9
+        let numberOfStories = isStoriesRedesignEnabled ? numberOfStoriesIfRedesignEnabled
+                                                             : self.numberOfStories
+        let global = (try? await pocketAPI.fetchStories(items: numberOfStories)) ?? []
         // Convert global feed to PocketStory
         return global.map(PocketStory.init)
     }
