@@ -1385,7 +1385,6 @@ class BrowserViewController: UIViewController,
             browserDelegate?.browserHasLoaded()
         }
         AppEventQueue.signal(event: .browserIsReady)
-        presentToUBottomSheet()
     }
 
     func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
@@ -1967,25 +1966,6 @@ class BrowserViewController: UIViewController,
         self.microsurvey = nil
         updateBarBordersForMicrosurvey()
         updateViewConstraints()
-    }
-    
-    private func presentToUBottomSheet() {
-        guard ToUManager.shared.shouldShow() else { return }
-
-        var viewModel = ToUBottomSheetViewModel()
-        viewModel.onAccept = {
-            ToUManager.shared.markAccepted()
-        }
-        viewModel.onNotNow = {
-            ToUManager.shared.markDismissed()
-        }
-
-        let touVC = ToUBottomSheetViewController(
-            viewModel: viewModel,
-            windowUUID: self.windowUUID
-        )
-
-        present(touVC, animated: true)
     }
     
     

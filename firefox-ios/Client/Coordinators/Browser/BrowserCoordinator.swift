@@ -84,7 +84,13 @@ class BrowserCoordinator: BaseCoordinator,
         let isIphone = UIDevice.current.userInterfaceIdiom == .phone
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
-        }
+        } else {
+                   // If no onboarding launch, check and present ToU bottom sheet
+                   DispatchQueue.main.async { [weak self] in
+                       self?.presentToUBottomSheet()
+                   }
+               }
+        
     }
 
     // MARK: - Helper methods
@@ -102,7 +108,12 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
-        router.dismiss(animated: true, completion: nil)
+        router.dismiss(animated: true, completion: { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.presentToUBottomSheet()
+            }
+        })
         remove(child: coordinator)
 
         // Once launch is done, we check for any saved Route
@@ -159,6 +170,10 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+        // Show ToU if needed, safely
+           DispatchQueue.main.async { [weak self] in
+               self?.presentToUBottomSheet()
+           }
 
     }
 
@@ -393,7 +408,34 @@ class BrowserCoordinator: BaseCoordinator,
             }
         }
     }
+    private func presentToUBottomSheet() {
+        let presentingVC = homepageViewController ?? browserViewController
 
+            // Check if something is already presented (e.g., onboarding, modal, sheet)
+            if presentingVC.presentedViewController != nil {
+                logger.log("presentToUBottomSheet skipped: another VC is already presented", level: .info, category: .coordinator)
+                return
+            }
+
+        guard ToUManager.shared.shouldShow() else { return }
+
+        var viewModel = ToUBottomSheetViewModel()
+        viewModel.onAccept = {
+            ToUManager.shared.markAccepted()
+        }
+        viewModel.onNotNow = {
+            ToUManager.shared.markDismissed()
+        }
+
+        let touVC = ToUBottomSheetViewController(
+            viewModel: viewModel,
+            windowUUID: self.windowUUID
+        )
+
+        
+            presentingVC.present(touVC, animated: true)
+        
+    }
     private func showIntroOnboarding() {
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)

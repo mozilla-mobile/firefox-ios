@@ -165,7 +165,6 @@ final class HomepageViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         trackVisibleItemImpressions()
-        presentToUBottomSheet()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -981,26 +980,6 @@ final class HomepageViewController: UIViewController,
     private func resetTrackedObjects() {
         alreadyTrackedSections.removeAll()
         alreadyTrackedTopSites.removeAll()
-    }
-    
-    
-    private func presentToUBottomSheet() {
-        guard ToUManager.shared.shouldShow() else { return }
-
-        var viewModel = ToUBottomSheetViewModel()
-        viewModel.onAccept = {
-            ToUManager.shared.markAccepted()
-        }
-        viewModel.onNotNow = {
-            ToUManager.shared.markDismissed()
-        }
-
-        let touVC = ToUBottomSheetViewController(
-            viewModel: viewModel,
-            windowUUID: self.windowUUID
-        )
-
-        present(touVC, animated: true)
     }
 
     // MARK: - UIPopoverPresentationControllerDelegate - Context Hints (CFR)
