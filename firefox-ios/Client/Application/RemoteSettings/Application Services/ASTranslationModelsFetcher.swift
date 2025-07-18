@@ -37,7 +37,7 @@ protocol TranslationModelsFetching {
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data?
 }
 
-final class ASTranslationModelsFetcher: TranslationModelsFetching {
+final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
     static let shared = ASTranslationModelsFetcher()
     // Pin versions to avoid using unsupported models
     private enum Constants {
