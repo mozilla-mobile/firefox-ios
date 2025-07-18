@@ -154,6 +154,7 @@ final class TabScrollController: NSObject,
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
+    private var shouldRespondToScroll = false
 
     var themeManager: any ThemeManager
     var themeObserver: (any NSObjectProtocol)?
@@ -255,7 +256,6 @@ final class TabScrollController: NSObject,
         }
     }
 
-    var shouldRespondToScroll = false
     /// Determines whether a scroll gesture is significant enough to trigger UI changes,
     /// based on minimum translation distance and velocity thresholds.
     ///
@@ -264,9 +264,9 @@ final class TabScrollController: NSObject,
     ///   - delta: The vertical scroll delta calculated from gesture translation.
     ///   - containerView: The view in which the gesture translation and velocity are measured.
     /// - Returns: A Boolean value indicating whether the gesture should trigger a UI response.
-    func shouldRespondToScrollGesture(_ gesture: UIPanGestureRecognizer,
-                                      delta: CGFloat,
-                                      in containerView: UIView) -> Bool {
+    private func shouldRespondToScrollGesture(_ gesture: UIPanGestureRecognizer,
+                                              delta: CGFloat,
+                                              in containerView: UIView) -> Bool {
         let velocity = gesture.velocity(in: containerView).y
         let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
         let isFastEnough = abs(velocity) > UX.minimumScrollVelocity
