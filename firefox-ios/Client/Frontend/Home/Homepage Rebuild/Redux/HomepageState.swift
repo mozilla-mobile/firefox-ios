@@ -29,6 +29,7 @@ struct HomepageState: ScreenState, Equatable {
     /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
     let isZeroSearch: Bool
     let shouldTriggerImpression: Bool
+    let shouldShowSpacer: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -51,7 +52,8 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: homepageState.pocketState,
             wallpaperState: homepageState.wallpaperState,
             isZeroSearch: homepageState.isZeroSearch,
-            shouldTriggerImpression: homepageState.shouldTriggerImpression
+            shouldTriggerImpression: homepageState.shouldTriggerImpression,
+            shouldShowSpacer: homepageState.shouldShowSpacer
         )
     }
 
@@ -67,7 +69,8 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
             isZeroSearch: false,
-            shouldTriggerImpression: false
+            shouldTriggerImpression: false,
+            shouldShowSpacer: false
         )
     }
 
@@ -82,7 +85,8 @@ struct HomepageState: ScreenState, Equatable {
         pocketState: PocketState,
         wallpaperState: WallpaperState,
         isZeroSearch: Bool,
-        shouldTriggerImpression: Bool
+        shouldTriggerImpression: Bool,
+        shouldShowSpacer: Bool
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -95,6 +99,7 @@ struct HomepageState: ScreenState, Equatable {
         self.wallpaperState = wallpaperState
         self.isZeroSearch = isZeroSearch
         self.shouldTriggerImpression = shouldTriggerImpression
+        self.shouldShowSpacer = shouldShowSpacer
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -116,7 +121,12 @@ struct HomepageState: ScreenState, Equatable {
 
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             return handleDidTabChangeToHomepageAction(state: state, action: action)
+<<<<<<< HEAD
 
+=======
+        case HomepageMiddlewareActionType.configuredSpacer:
+            return handleSpacerInitialization(action: action, state: state)
+>>>>>>> 44d313425 (Add FXIOS-12740 [Homepage Redesign] Updated homepage layout  (#27956))
         default:
             return defaultState(from: state, action: action)
         }
@@ -134,7 +144,8 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState.reducer(state.pocketState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
-            shouldTriggerImpression: false
+            shouldTriggerImpression: false,
+            shouldShowSpacer: state.shouldShowSpacer
         )
     }
 
@@ -152,7 +163,8 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState.reducer(state.pocketState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: isZeroSearch,
-            shouldTriggerImpression: false
+            shouldTriggerImpression: false,
+            shouldShowSpacer: state.shouldShowSpacer
         )
     }
 
@@ -168,7 +180,29 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState.reducer(state.pocketState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
-            shouldTriggerImpression: true
+            shouldTriggerImpression: true,
+            shouldShowSpacer: state.shouldShowSpacer
+        )
+    }
+
+    private static func handleSpacerInitialization(action: Action, state: Self) -> HomepageState {
+        guard let isSpacerEnabled = (action as? HomepageAction)?.shouldShowSpacer else {
+            return defaultState(from: state)
+        }
+
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: PocketState.reducer(state.pocketState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: false,
+            shouldShowSpacer: isSpacerEnabled
         )
     }
 
@@ -204,7 +238,8 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: pocketState,
             wallpaperState: wallpaperState,
             isZeroSearch: state.isZeroSearch,
-            shouldTriggerImpression: false
+            shouldTriggerImpression: false,
+            shouldShowSpacer: state.shouldShowSpacer
         )
     }
 
