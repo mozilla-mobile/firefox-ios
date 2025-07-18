@@ -9,7 +9,7 @@ import Storage
 protocol TopSiteHistoryManagerProvider {
     func getTopSites(completion: @escaping ([Site]?) -> Void)
     func removeDefaultTopSitesTile(site: Site)
-    func removeTopSite(site: Site)
+    func remove(pinnedSite: Site) async -> Result<Void, Error>
 }
 
 // Manages the top site
@@ -32,6 +32,14 @@ class TopSiteHistoryManager: TopSiteHistoryManagerProvider {
         topSitesProvider.getTopSites { [weak self] result in
             guard self != nil else { return }
             completion(result)
+        }
+    }
+
+    func remove(pinnedSite: Site) async -> Result<Void, Error> {
+        do {
+            return try await profile.pinnedSites.remove(pinnedSite: pinnedSite)
+        } catch {
+            return .failure(error)
         }
     }
 

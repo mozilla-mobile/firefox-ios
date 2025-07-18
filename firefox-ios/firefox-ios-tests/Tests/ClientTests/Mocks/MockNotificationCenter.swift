@@ -6,6 +6,7 @@ import Foundation
 import Common
 
 final class MockNotificationCenter: NotificationProtocol, @unchecked Sendable {
+    var postCalled: (NSNotification.Name) -> Void = { _ in }
     var postCallCount = 0
     var addObserverCallCount = 0
     var removeObserverCallCount = 0
@@ -28,6 +29,7 @@ final class MockNotificationCenter: NotificationProtocol, @unchecked Sendable {
         savePostObject = anObject
         saveUserInfo = info
         postCallCount += 1
+        postCalled(aName)
         self.notifiableListener?.handleNotifications(Notification(name: aName))
     }
 
