@@ -33,6 +33,7 @@ class ExperimentsViewController: UIViewController {
                 return
             }
 
+            // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
             MainActor.assumeIsolated {
                 self.onExperimentsApplied()
             }

@@ -39,7 +39,11 @@ extension AppDelegate {
                                                        NotificationSurfaceManager.notificationCategory]
         UNUserNotificationCenter.current().setNotificationCategories(categories)
 
-        NotificationCenter.default.addObserver(forName: .RegisterForPushNotifications, object: nil, queue: .main) { _ in
+        NotificationCenter.default.addObserver(
+            forName: .RegisterForPushNotifications,
+            object: nil,
+            queue: .main
+        ) { _ in
             Task { @MainActor in
                 let settings = await UNUserNotificationCenter.current().notificationSettings()
                 if settings.authorizationStatus != .denied {
@@ -59,16 +63,17 @@ extension AppDelegate {
                 return
             }
 
-            if let newState = notification.userInfo?["newState"] as? ConstellationState {
-                // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
-                MainActor.assumeIsolated {
-                    // TODO: FXIOS-12854 Rust components need explicit Sendable conformance
-                    self.setPreferencesForSyncedAccount(for: newState)
-                    if newState.localDevice?.pushEndpointExpired ?? false {
-                        NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-                        // Our endpoint expired, we should check for missed messages
-                        self.profile.pollCommands(forcePoll: true)
-                    }
+            // Parse out anything we need from non-Sendable `Notification`
+            guard let newState = notification.userInfo?["newState"] as? ConstellationState else { return }
+
+            // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
+            MainActor.assumeIsolated {
+                // TODO: FXIOS-12854 Rust components need explicit Sendable conformance
+                self.setPreferencesForSyncedAccount(for: newState)
+                if newState.localDevice?.pushEndpointExpired ?? false {
+                    NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+                    // Our endpoint expired, we should check for missed messages
+                    self.profile.pollCommands(forcePoll: true)
                 }
             }
         }
