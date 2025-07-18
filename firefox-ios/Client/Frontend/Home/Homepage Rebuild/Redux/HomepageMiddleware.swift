@@ -57,11 +57,8 @@ final class HomepageMiddleware: FeatureFlaggable {
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition,
             ToolbarActionType.cancelEdit, GeneralBrowserActionType.navigateBack:
             self.dispatchSearchBarConfigurationAction(action: action)
-<<<<<<< HEAD
-=======
             self.dispatchSpacerConfigurationAction(action: action)
 
->>>>>>> 44d313425 (Add FXIOS-12740 [Homepage Redesign] Updated homepage layout  (#27956))
         default:
             break
         }

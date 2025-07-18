@@ -111,22 +111,16 @@ struct HomepageState: ScreenState, Equatable {
         switch action.actionType {
         case HomepageActionType.initialize, HomepageActionType.viewWillTransition:
             return handleInitializeAndViewWillTransitionAction(state: state, action: action)
-
         case HomepageActionType.embeddedHomepage:
             guard let isZeroSearch = (action as? HomepageAction)?.isZeroSearch else {
                 return defaultState(from: state)
             }
 
             return handleEmbeddedHomepageAction(state: state, action: action, isZeroSearch: isZeroSearch)
-
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             return handleDidTabChangeToHomepageAction(state: state, action: action)
-<<<<<<< HEAD
-
-=======
         case HomepageMiddlewareActionType.configuredSpacer:
             return handleSpacerInitialization(action: action, state: state)
->>>>>>> 44d313425 (Add FXIOS-12740 [Homepage Redesign] Updated homepage layout  (#27956))
         default:
             return defaultState(from: state, action: action)
         }
