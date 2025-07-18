@@ -53,9 +53,6 @@ public protocol WKEngineConfigurationProvider {
 
 /// FXIOS-11986 - This will be internal when the WebEngine is fully integrated in Firefox iOS
 public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvider {
-    private static let normalSessionsProcessPool = WKProcessPool()
-    private static let privateSessionsProcessPool = WKProcessPool()
-
     private static let nonPersistentStore = WKWebsiteDataStore.nonPersistent()
     private static let defaultStore = WKWebsiteDataStore.default()
     private static let defaultDataDetectorTypes: WKDataDetectorTypes = [.phoneNumber]
@@ -66,12 +63,6 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     }
 
     public func createConfiguration(parameters: WKWebViewParameters) -> WKEngineConfiguration {
-        // Since our app creates multiple web views, we assign the same WKProcessPool object to web views that
-        // may safely share a process space
-        configuration.processPool = parameters.isPrivate
-        ? DefaultWKEngineConfigurationProvider.privateSessionsProcessPool
-        : DefaultWKEngineConfigurationProvider.normalSessionsProcessPool
-
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !parameters.blockPopups
         configuration.mediaTypesRequiringUserActionForPlayback = parameters.autoPlay
         configuration.userContentController = WKUserContentController()
@@ -87,11 +78,12 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 //            configuration.preferences.isElementFullscreenEnabled = true
 //        }
 
-        // The cookie store should only be created once, otherwise we can loose them
-        // https://mozilla-hub.atlassian.net/browse/FXIOS-11833
+        // Since our app creates multiple web views, we assign the same WKWebsiteDataStore object to web views that
+        // may safely share cookies.
+        // The cookie store should only be created once, otherwise we can loose them. See FXIOS-11833
         configuration.websiteDataStore = parameters.isPrivate
-        ? DefaultWKEngineConfigurationProvider.nonPersistentStore
-        : DefaultWKEngineConfigurationProvider.defaultStore
+            ? DefaultWKEngineConfigurationProvider.nonPersistentStore
+            : DefaultWKEngineConfigurationProvider.defaultStore
 
         // Popup WKWebViewConfiguration can have the scheme already registered thus registering again
         // leads to crash
