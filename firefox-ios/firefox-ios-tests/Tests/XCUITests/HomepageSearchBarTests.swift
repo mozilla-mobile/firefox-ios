@@ -84,8 +84,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
-        guard #available(iOS 16, *) else {
-            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
         }
         let homepageSearchBar = app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
@@ -135,6 +135,9 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
+        }
+        guard #available(iOS 16, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
         }
         navigator.nowAt(NewTabScreen)
 
@@ -261,6 +264,9 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
+        }
 
         let homepageSearchBar = app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
@@ -302,8 +308,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
-        guard #available(iOS 16, *) else {
-            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
         }
         let homepageSearchBar = app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
@@ -346,8 +352,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
-        guard #available(iOS 16, *) else {
-            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
         }
         let homepageSearchBar = app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
@@ -391,8 +397,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
-        guard #available(iOS 16, *) else {
-            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
         }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
@@ -596,6 +602,9 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
+        }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
         let homepageSearchBar = app.collectionViews
@@ -640,8 +649,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
-        guard #available(iOS 16, *) else {
-            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
         }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
