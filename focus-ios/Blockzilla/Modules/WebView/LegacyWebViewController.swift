@@ -475,6 +475,22 @@ extension LegacyWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         let response = navigationResponse.response
 
+        let isBinaryData = {
+            let octetStream = "application/octet-stream"
+            if let httpResponse = response as? HTTPURLResponse,
+               let typeStr = httpResponse.allHeaderFields["Content-Type"] as? String,
+               typeStr == octetStream {
+                return true
+            }
+            return response.mimeType == octetStream
+        }()
+
+        if isBinaryData {
+            // Bugzilla #1976296
+            decisionHandler(.cancel)
+            return
+        }
+
         if let httpResponse = response as? HTTPURLResponse,
            let contentDisposition = httpResponse.allHeaderFields["Content-Disposition"] as? String {
             if contentDisposition.trimmingCharacters(in: .whitespaces).starts(with: "attachment") {
