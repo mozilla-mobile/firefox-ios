@@ -184,6 +184,8 @@ final class AppLaunchUtil {
         UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.Session.Last)
     }
 
+    /// Used to migrate user preferences for TopSites row numbers if the new design is
+    /// enabled from greater than two to 2. See FXIOS-12704
     private func migrateTopSitesRowNumbers() {
         if LegacyFeatureFlagsManager.shared
             .isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) {
