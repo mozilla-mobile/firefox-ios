@@ -19,15 +19,26 @@ protocol LibraryPanelDelegate: AnyObject {
 }
 
 protocol LibraryPanel: UIViewController {
+    @MainActor
     var libraryPanelDelegate: LibraryPanelDelegate? { get set }
+
+    @MainActor
     var state: LibraryPanelMainState { get set }
+
+    @MainActor
     var bottomToolbarItems: [UIBarButtonItem] { get }
 
+    @MainActor
     func handleLeftTopButton()
+
+    @MainActor
     func handleRightTopButton()
+
+    @MainActor
     func shouldDismissOnDone() -> Bool
 }
 
+@MainActor
 extension LibraryPanel {
     var flexibleSpace: UIBarButtonItem {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

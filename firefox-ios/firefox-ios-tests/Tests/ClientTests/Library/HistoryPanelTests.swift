@@ -7,6 +7,7 @@ import XCTest
 import Common
 @testable import Client
 
+@MainActor
 class HistoryPanelTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     private var notificationCenter: MockNotificationCenter!

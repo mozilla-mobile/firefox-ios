@@ -7,6 +7,7 @@ import Common
 
 @testable import Client
 
+@MainActor
 class LegacyBookmarksPanelTests: XCTestCase {
     override func setUp() {
         super.setUp()
