@@ -195,7 +195,7 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState.reducer(state.pocketState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
-            shouldTriggerImpression: true,
+            shouldTriggerImpression: false,
             shouldShowSpacer: isSpacerEnabled
         )
     }
