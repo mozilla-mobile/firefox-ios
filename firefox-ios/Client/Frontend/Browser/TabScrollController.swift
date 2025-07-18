@@ -127,8 +127,13 @@ final class TabScrollController: NSObject,
     }
 
     private var overKeyboardScrollHeight: CGFloat {
-        let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
-        return overKeyboardHeight
+        let overKeyboardContainerHeight = overKeyboardContainer?.frame.height ?? 0
+        guard isMinimalAddressBarEnabled else { return overKeyboardContainerHeight }
+        // Here it checks if the device has `Home Indicator`(Bottom Bar on newer iPhones).
+        // Devices with physical home button need adjustment.
+        let hasHomeIndicator = UIWindow.keyWindow?.safeAreaInsets.bottom ?? .zero > 0
+        let topInset = UIWindow.keyWindow?.safeAreaInsets.top ?? .zero
+        return hasHomeIndicator ? .zero : overKeyboardContainerHeight - topInset
     }
 
     private var bottomContainerScrollHeight: CGFloat {
@@ -595,9 +600,9 @@ private extension TabScrollController {
                         actionType: ToolbarActionType.scrollAlphaDidChange
                     )
                 )
-            } else {
-                overKeyboardContainerOffset = overKeyboardOffset
             }
+
+            overKeyboardContainerOffset = overKeyboardOffset
             overKeyboardContainer?.updateAlphaForSubviews(alpha)
             overKeyboardContainer?.superview?.layoutIfNeeded()
 
