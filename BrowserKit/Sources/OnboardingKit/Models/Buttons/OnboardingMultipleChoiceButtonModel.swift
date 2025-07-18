@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType> {
+public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType: Sendable>: Sendable {
     public let title: String
     public let action: OnboardingMultipleChoiceActionType
     public var imageID: String

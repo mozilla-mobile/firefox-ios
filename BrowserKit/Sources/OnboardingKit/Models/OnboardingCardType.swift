@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum OnboardingCardType: String, Codable {
+public enum OnboardingCardType: String, Codable, Sendable {
     case basic
     case multipleChoice = "multiple-choice"
 }

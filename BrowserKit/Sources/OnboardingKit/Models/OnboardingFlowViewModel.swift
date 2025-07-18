@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
+public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
     public let onboardingCards: [ViewModel]
     public let onActionTap: (
