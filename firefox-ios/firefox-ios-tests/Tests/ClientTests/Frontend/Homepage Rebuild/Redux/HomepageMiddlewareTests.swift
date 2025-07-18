@@ -250,12 +250,20 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? HomepageAction)
-        let actionsType = try XCTUnwrap(actionCalled.actionType as? HomepageMiddlewareActionType)
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionsType, .configuredSearchBar)
-        XCTAssertEqual(actionCalled.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
     }
 
     func test_initializeAction_doesNotConfigureSearchBar() throws {
@@ -276,12 +284,20 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? HomepageAction)
-        let actionsType = try XCTUnwrap(actionCalled.actionType as? HomepageMiddlewareActionType)
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionsType, .configuredSearchBar)
-        XCTAssertEqual(actionCalled.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
     }
 
     func test_viewWillTransitionAction_configuresSearchBar() throws {
@@ -302,12 +318,20 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? HomepageAction)
-        let actionsType = try XCTUnwrap(actionCalled.actionType as? HomepageMiddlewareActionType)
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionsType, .configuredSearchBar)
-        XCTAssertEqual(actionCalled.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
     }
 
     func test_viewWillTransitionAction_doesNotConfigureSearchBar() throws {
@@ -328,12 +352,20 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? HomepageAction)
-        let actionsType = try XCTUnwrap(actionCalled.actionType as? HomepageMiddlewareActionType)
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionsType, .configuredSearchBar)
-        XCTAssertEqual(actionCalled.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
     }
 
     func test_toolbarCancelEditAction_configuresSearchBar() throws {
@@ -354,12 +386,20 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? HomepageAction)
-        let actionsType = try XCTUnwrap(actionCalled.actionType as? HomepageMiddlewareActionType)
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionsType, .configuredSearchBar)
-        XCTAssertEqual(actionCalled.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
     }
 
     func test_toolbarCancelEditAction_doesNotConfigureSearchBar() throws {
@@ -379,12 +419,20 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? HomepageAction)
-        let actionsType = try XCTUnwrap(actionCalled.actionType as? HomepageMiddlewareActionType)
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionsType, .configuredSearchBar)
-        XCTAssertEqual(actionCalled.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
     }
 
     func test_navigateBackAction_configuresSearchBar() throws {
@@ -405,12 +453,20 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? HomepageAction)
-        let actionsType = try XCTUnwrap(actionCalled.actionType as? HomepageMiddlewareActionType)
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionsType, .configuredSearchBar)
-        XCTAssertEqual(actionCalled.isSearchBarEnabled, true)
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
     }
 
     func test_navigateBackAction_doesNotConfigureSearchBar() throws {
@@ -430,12 +486,20 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? HomepageAction)
-        let actionsType = try XCTUnwrap(actionCalled.actionType as? HomepageMiddlewareActionType)
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionsType, .configuredSearchBar)
-        XCTAssertEqual(actionCalled.isSearchBarEnabled, false)
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
     }
 
     // MARK: - Helpers
