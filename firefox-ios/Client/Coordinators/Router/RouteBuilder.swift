@@ -29,6 +29,7 @@ final class RouteBuilder: FeatureFlaggable {
         return DeeplinkInput.Host(rawValue: urlScanner.host.lowercased())
     }
 
+    @MainActor
     func makeRoute(url: URL) -> Route? {
         guard let urlScanner = URLScanner(url: url) else { return nil }
 

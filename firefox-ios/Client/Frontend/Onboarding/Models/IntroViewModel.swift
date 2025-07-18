@@ -83,6 +83,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         introScreenManager?.didSeeIntroScreen()
     }
 
+    @MainActor
     func saveSearchBarPosition() {
         SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
     }

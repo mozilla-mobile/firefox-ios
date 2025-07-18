@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Common
 
+@MainActor
 struct DefaultBrowserUtil {
     let userDefault: UserDefaultsInterface
     let telemtryWrapper: TelemetryWrapperProtocol

@@ -27,6 +27,7 @@ final class AppLaunchUtil {
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
     }
 
+    @MainActor
     func setUpPreLaunchDependencies() {
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
