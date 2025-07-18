@@ -4,24 +4,24 @@
 
 import UIKit
 
-public protocol OnboardingCardInfoModelProtocol {
-    associatedtype OnboardingType
-    associatedtype OnboardingPopupActionType
-    associatedtype OnboardingMultipleChoiceActionType: Hashable
-    associatedtype OnboardingActionType: RawRepresentable where OnboardingActionType.RawValue == String
-    var cardType: OnboardingCardType { get set }
-    var name: String { get set }
-    var order: Int { get set }
-    var title: String { get set }
-    var body: String { get set }
-    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>? { get set }
-    var link: OnboardingLinkInfoModel? { get set }
-    var buttons: OnboardingButtons<OnboardingActionType> { get set }
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>] { get set }
-    var onboardingType: OnboardingType { get set }
-    var a11yIdRoot: String { get set }
-    var imageID: String { get set }
-    var embededLinkText: [EmbeddedLink] { get set }
+public protocol OnboardingCardInfoModelProtocol: Sendable {
+    associatedtype OnboardingType: Sendable
+    associatedtype OnboardingPopupActionType: Sendable
+    associatedtype OnboardingMultipleChoiceActionType: Hashable & Sendable
+    associatedtype OnboardingActionType: RawRepresentable, Sendable where OnboardingActionType.RawValue == String
+    var cardType: OnboardingCardType { get }
+    var name: String { get }
+    var order: Int { get }
+    var title: String { get }
+    var body: String { get }
+    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>? { get }
+    var link: OnboardingLinkInfoModel? { get }
+    var buttons: OnboardingButtons<OnboardingActionType> { get }
+    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>] { get }
+    var onboardingType: OnboardingType { get }
+    var a11yIdRoot: String { get }
+    var imageID: String { get }
+    var embededLinkText: [EmbeddedLink] { get }
     var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>? { get }
 
     var image: UIImage? { get }

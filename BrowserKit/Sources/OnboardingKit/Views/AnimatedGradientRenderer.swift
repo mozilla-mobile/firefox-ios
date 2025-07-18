@@ -93,15 +93,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        do {
-            try createPreviousFrameTexture(size: size)
-        } catch {
-            logger.log(
-                "Failed to create previous frame texture: \(error)",
-                level: .warning,
-                category: .onboarding
-            )
-        }
+        createPreviousFrameTexture(size: size)
     }
 
     func draw(in view: MTKView) {
@@ -134,16 +126,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
 
         let currentDrawableSize = view.drawableSize
         if shouldRecreateFrameTexture(for: currentDrawableSize) {
-            do {
-                try createPreviousFrameTexture(size: currentDrawableSize)
-            } catch {
-                logger.log(
-                    "Failed to recreate previous frame texture: \(error)",
-                    level: .warning,
-                    category: .onboarding
-                )
-                return
-            }
+            createPreviousFrameTexture(size: currentDrawableSize)
         }
 
         guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else {

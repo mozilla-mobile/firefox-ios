@@ -5,7 +5,7 @@
 import SwiftUI
 import Common
 
-struct OnboardingSegmentedControl<Action: Equatable & Hashable>: View {
+struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View {
     @State private var actionPrimary: Color = .clear
     @State private var noSelection: Color = .clear
     @Binding var selection: Action

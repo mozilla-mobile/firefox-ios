@@ -5,24 +5,20 @@
 import OnboardingKit
 
 struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol {
-    var image: UIImage? {
-        return UIImage(named: imageID)
-    }
-
     // MARK: Protocol properties
-    var cardType: OnboardingKit.OnboardingCardType
-    var name: String
-    var order: Int
-    var title: String
-    var body: String
-    var instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
-    var link: OnboardingKit.OnboardingLinkInfoModel?
-    var buttons: OnboardingKit.OnboardingButtons<OnboardingActions>
-    var multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
-    var onboardingType: OnboardingType
-    var a11yIdRoot: String
-    var imageID: String
-    var embededLinkText: [OnboardingKit.EmbeddedLink]
+    let cardType: OnboardingKit.OnboardingCardType
+    let name: String
+    let order: Int
+    let title: String
+    let body: String
+    let instructionsPopup: OnboardingKit.OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
+    let link: OnboardingKit.OnboardingLinkInfoModel?
+    let buttons: OnboardingKit.OnboardingButtons<OnboardingActions>
+    let multipleChoiceButtons: [OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
+    let onboardingType: OnboardingType
+    let a11yIdRoot: String
+    let imageID: String
+    let embededLinkText: [OnboardingKit.EmbeddedLink]
 
     // Required initializer
     init(
@@ -99,4 +95,14 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
         default: return Int.max        // No priority
         }
     }
+
+    var image: UIImage? {
+        return UIImage(named: imageID)
+    }
 }
+
+// TODO: FXIOS-12866 Nimbus generated code should add `Sendable` to enums
+extension OnboardingInstructionsPopupActions: @unchecked Sendable {}
+extension OnboardingActions: @unchecked Sendable {}
+extension OnboardingMultipleChoiceAction: @unchecked Sendable {}
+extension OnboardingType: @unchecked Sendable {}

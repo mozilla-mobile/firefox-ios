@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum TosAction: String {
+public enum TosAction: String, Sendable {
     case accept
     case openTermsOfService
     case openPrivacyNotice
