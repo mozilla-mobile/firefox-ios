@@ -16,7 +16,7 @@ final class TabScrollController: NSObject,
         static let minimalAddressBarAnimationDuration: CGFloat = 0.4
         static let heightOffset: CGFloat = 14
         static let minimumScrollThreshold: CGFloat = 20
-        static let minimumScrollVelocity: CGFloat = 300
+        static let minimumScrollVelocity: CGFloat = 100
     }
 
     private var isMinimalAddressBarEnabled: Bool {
@@ -243,8 +243,7 @@ final class TabScrollController: NSObject,
             let delta = lastPanTranslation - translation.y
             setScrollDirection(delta)
 
-            guard let containerView = scrollView?.superview,
-                  !shouldRespondToScrollGesture(gesture, delta: delta, in: containerView) else {
+            guard shouldRespondToScrollGesture(gesture, delta: delta, in: containerView) else {
                 return
             }
 
