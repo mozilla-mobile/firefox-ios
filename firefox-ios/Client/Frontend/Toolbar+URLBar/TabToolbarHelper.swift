@@ -50,7 +50,7 @@ enum MiddleButtonState {
     case fire
 }
 
-@objcMembers
+@MainActor
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
     let ImageSearch = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
@@ -94,6 +94,7 @@ open class TabToolbarHelper: NSObject {
 
     init(toolbar: TabToolbarProtocol) {
         self.toolbar = toolbar
+
         super.init()
 
         toolbar.addUILargeContentViewInteraction(interaction: uiLargeContentViewInteraction)
@@ -188,12 +189,26 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
+    @objc
     func didClickBack() {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         toolbar.tabToolbarDelegate?.tabToolbarDidPressBack(toolbar, button: toolbar.backButton)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .navigateTabHistoryBack)
     }
 
+    @objc
     func didLongPressBack(_ recognizer: UILongPressGestureRecognizer) {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         if recognizer.state == .began {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressBack(toolbar, button: toolbar.backButton)
             uiLargeContentViewInteraction.gestureRecognizerForExclusionRelationship.state = .cancelled
@@ -201,23 +216,51 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
+    @objc
     func didClickTabs() {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         toolbar.tabToolbarDelegate?.tabToolbarDidPressTabs(toolbar, button: toolbar.tabsButton)
     }
 
+    @objc
     func didLongPressTabs(_ recognizer: UILongPressGestureRecognizer) {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         if recognizer.state == .began {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressTabs(toolbar, button: toolbar.tabsButton)
             uiLargeContentViewInteraction.gestureRecognizerForExclusionRelationship.state = .cancelled
         }
     }
 
+    @objc
     func didClickForward() {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         toolbar.tabToolbarDelegate?.tabToolbarDidPressForward(toolbar, button: toolbar.forwardButton)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .navigateTabHistoryForward)
     }
 
+    @objc
     func didLongPressForward(_ recognizer: UILongPressGestureRecognizer) {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         if recognizer.state == .began {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressForward(toolbar, button: toolbar.forwardButton)
             uiLargeContentViewInteraction.gestureRecognizerForExclusionRelationship.state = .cancelled
@@ -225,15 +268,36 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
+    @objc
     func didClickMenu() {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.appMenuButton)
     }
 
+    @objc
     func didClickLibrary() {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         toolbar.tabToolbarDelegate?.tabToolbarDidPressBookmarks(toolbar, button: toolbar.appMenuButton)
     }
 
+    @objc
     func didClickAddNewTab() {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .addNewTabButton)
         toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(
             toolbar,
@@ -241,7 +305,14 @@ open class TabToolbarHelper: NSObject {
         )
     }
 
+    @objc
     func didPressMultiStateButton() {
+        // For @objc methods, we want to guard against concurrency abuse via direct calls with .perform()
+        guard Thread.isMainThread else {
+            assertionFailure("This must be called main thread")
+            return
+        }
+
         switch middleButtonState {
         case .home:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.multiStateButton)
