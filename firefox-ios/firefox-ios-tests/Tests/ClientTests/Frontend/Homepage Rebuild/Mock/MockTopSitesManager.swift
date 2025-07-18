@@ -15,7 +15,6 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     // We add these completions since this method is called in an asynchronous
     var removeTopSiteCalled: () -> Void = {}
     var unpinTopSiteCalled: () -> Void = {}
-    
 
     func getOtherSites() async -> [TopSiteConfiguration] {
         return createSites(count: 15, subtitle: ": otherSites")

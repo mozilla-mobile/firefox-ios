@@ -328,7 +328,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         mockTopSitesManager.unpinTopSiteCalled = {
             unpinTopSiteExpectation.fulfill()
         }
-        
+
         subject.topSitesProvider(appState, action)
 
         try checkContextMenuMetricsCalled(withExtra: "unpin")

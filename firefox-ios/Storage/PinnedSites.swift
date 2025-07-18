@@ -9,7 +9,7 @@ public protocol PinnedSites {
     // Pinning top sites
     // Without Deferred
     func remove(pinnedSite site: Site) async throws -> Result<Void, Error>
-    
+
     // With Deferred
     @discardableResult
     func removeFromPinnedTopSites(_ site: Site) -> Success
