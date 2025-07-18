@@ -13,7 +13,8 @@ protocol OnboardingDefaultBrowserModelProtocol: Sendable {
     var a11yIdRoot: String { get }
 }
 
-public struct OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType: Sendable>: OnboardingDefaultBrowserModelProtocol {
+public struct OnboardingInstructionsPopupInfoModel
+<OnboardingPopupActionType: Sendable>: OnboardingDefaultBrowserModelProtocol {
     public let title: String
     public let instructionSteps: [String]
     public let buttonTitle: String
