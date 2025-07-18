@@ -32,6 +32,7 @@ enum SentTabAction: String {
 }
 
 extension AppDelegate {
+    @MainActor
     func pushNotificationSetup() {
         UNUserNotificationCenter.current().delegate = self
         let categories: Set<UNNotificationCategory> = [SentTabAction.notificationCategory,
@@ -51,14 +52,23 @@ extension AppDelegate {
         NotificationCenter.default.addObserver(
             forName: .constellationStateUpdate,
             object: nil,
-            queue: nil
+            queue: .main
         ) { notification in
+            guard Thread.isMainThread else {
+                assertionFailure("This must be called main thread")
+                return
+            }
+
             if let newState = notification.userInfo?["newState"] as? ConstellationState {
-                self.setPreferencesForSyncedAccount(for: newState)
-                if newState.localDevice?.pushEndpointExpired ?? false {
-                    NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-                    // Our endpoint expired, we should check for missed messages
-                    self.profile.pollCommands(forcePoll: true)
+                // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
+                MainActor.assumeIsolated {
+                    // TODO: FXIOS-12854 Rust components need explicit Sendable conformance
+                    self.setPreferencesForSyncedAccount(for: newState)
+                    if newState.localDevice?.pushEndpointExpired ?? false {
+                        NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+                        // Our endpoint expired, we should check for missed messages
+                        self.profile.pollCommands(forcePoll: true)
+                    }
                 }
             }
         }
