@@ -109,7 +109,8 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
         if #unavailable(iOS 17) {
-            fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
+            fennecElement = app.collectionViews.scrollViews.cells
+                .matching(identifier: "XCElementSnapshotPrivilegedValuePlaceholder").element(boundBy: 1)
         }
         fennecElement.waitAndTap()
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])

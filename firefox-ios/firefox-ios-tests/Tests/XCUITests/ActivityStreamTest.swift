@@ -116,11 +116,23 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         let topSitesCells = app.collectionViews.links["TopSitesCell"]
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        } else {
+            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+        }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
-        topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        if #available(iOS 16, *) {
+            topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        } else {
+            topSitesCells.staticTexts["Mozilla — Internet for people, not profit"].press(forDuration: 1)
+        }
         selectOptionFromContextMenu(option: "Pin")
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        } else {
+            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+        }
         waitForExistence(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -128,7 +140,11 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        } else {
+            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+        }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
@@ -156,17 +172,34 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         let topSitesCells = app.collectionViews.links["TopSitesCell"]
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        } else {
+            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+        }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
-        topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        if #available(iOS 16, *) {
+            topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        } else {
+            topSitesCells.staticTexts["Mozilla — Internet for people, not profit"].press(forDuration: 1)
+        }
+
         selectOptionFromContextMenu(option: "Pin")
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        } else {
+            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+        }
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        } else {
+            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
+        }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
