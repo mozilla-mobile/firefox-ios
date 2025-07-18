@@ -5,10 +5,12 @@
 import Common
 
 protocol TabTrayCoordinatorDelegate: AnyObject {
+    @MainActor
     func didDismissTabTray(from coordinator: TabTrayCoordinator)
 }
 
 protocol TabTrayNavigationHandler: AnyObject {
+    @MainActor
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController)
 }
 

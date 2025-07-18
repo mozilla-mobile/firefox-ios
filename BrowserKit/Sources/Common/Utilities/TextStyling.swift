@@ -7,7 +7,7 @@ import UIKit
 import SwiftUI
 
 // This class should only be instantiated in FXFontStyles
-public struct TextStyling {
+public struct TextStyling: Sendable {
     private let textStyle: UIFont.TextStyle
     private let size: CGFloat
     private let weight: UIFont.Weight

@@ -17,34 +17,31 @@ extension UIApplication {
 /// Sync will get the list of sent tabs, and try to display any in that list.
 /// Thus, push notifications are not needed to receive sent or closed tabs;
 /// they can be handled when the app performs a sync.
-class AppFxACommandsDelegate: FxACommandsDelegate, @unchecked Sendable {
+final class AppFxACommandsDelegate: FxACommandsDelegate, Sendable {
     private let app: ApplicationStateProvider
-    private var applicationHelper: ApplicationHelper
-    private var mainQueue: DispatchQueueInterface
+    private let applicationHelper: ApplicationHelper
 
     init(app: ApplicationStateProvider,
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-         mainQueue: DispatchQueueInterface = DispatchQueue.main) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.app = app
         self.applicationHelper = applicationHelper
-        self.mainQueue = mainQueue
     }
 
+    @MainActor
     func openSendTabs(for urls: [URL]) {
-        mainQueue.async {
-            guard self.app.applicationState == .active else { return }
+        guard app.applicationState == .active else { return }
 
-            for urlToOpen in urls {
-                let urlString = URL.mozInternalScheme + "://open-url?url=\(urlToOpen)"
-                guard let url = URL(string: urlString) else { continue }
-                self.applicationHelper.open(url)
-            }
+        for urlToOpen in urls {
+            let urlString = URL.mozInternalScheme + "://open-url?url=\(urlToOpen)"
+            guard let url = URL(string: urlString) else { continue }
+
+            applicationHelper.open(url)
         }
     }
 
     func closeTabs(for urls: [URL]) {
         Task {
-            await self.applicationHelper.closeTabs(urls)
+            await applicationHelper.closeTabs(urls)
         }
     }
 }

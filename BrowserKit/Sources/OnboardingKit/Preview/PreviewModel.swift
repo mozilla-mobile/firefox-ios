@@ -231,7 +231,7 @@ extension PreviewModel {
 
 #Preview("Onboarding Card") {
     ZStack {
-        MilkyWayMetalView()
+        AnimatedGradientMetalView()
             .edgesIgnoringSafeArea(.all)
         OnboardingBasicCardView(
             viewModel: PreviewModel.welcome,
@@ -244,7 +244,7 @@ extension PreviewModel {
 
 #Preview("Multiple Choice Onboarding Card") {
     ZStack {
-        MilkyWayMetalView()
+        AnimatedGradientMetalView()
             .edgesIgnoringSafeArea(.all)
         OnboardingMultipleChoiceCardView(
             viewModel: PreviewModel.customizationToolbar,
