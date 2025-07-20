@@ -5,24 +5,24 @@
 import Foundation
 import Common
 
-protocol PocketDataAdaptor {
+protocol StoryDataAdaptor {
     @MainActor
     func getMerinoData() -> [MerinoStory]
 }
 
-protocol PocketDelegate: AnyObject {
+protocol StoryDelegate: AnyObject {
     @MainActor
     func didLoadNewData()
 }
 
 @MainActor
-final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable, Notifiable {
+final class StoryDataAdaptorImplementation: StoryDataAdaptor, FeatureFlaggable, Notifiable {
     let notificationCenter: NotificationProtocol
     private let merinoAPI: MerinoStoriesProviding
     private let storyProvider: StoryProvider
     private var merinoStories = [MerinoStory]()
 
-    weak var delegate: PocketDelegate?
+    weak var delegate: StoryDelegate?
 
     init(merinoAPI: MerinoStoriesProviding,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {

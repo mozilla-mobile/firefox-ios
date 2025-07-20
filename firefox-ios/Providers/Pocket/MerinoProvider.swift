@@ -29,29 +29,24 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, Sendable {
         case failure
     }
 
-    // Allow endPoint to be overridden for testing
-    init(
-        //        endPoint: String = PocketProvider.GlobalFeed,
-        prefs: Prefs) {
-            //        self.pocketGlobalFeed = endPoint
+    init(prefs: Prefs) {
             self.prefs = prefs
-            //        self.urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent,
-            //                                         configuration: URLSessionConfiguration.defaultMPTCP)
+        // RGB
             //        self.pocketKey = Bundle.main.object(forInfoDictionaryKey: pocketEnvAPIKey) as? String
         }
 
     func fetchStories(items: Int32) async throws -> [RecommendationDataItem] {
-        //        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        //        let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
-        //
-                if shouldUseMockData {
-                    return try await getMockDataFeed(count: items)
-                }
-        //
-        //        // Ensure the feature is enabled and current locale is supported
-        //        guard isFeatureEnabled, isCurrentLocaleSupported else {
-        //            throw Error.failure
-        //        }
+        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
+        let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
+
+        if shouldUseMockData {
+            return try await getMockDataFeed(count: items)
+        }
+
+        // Ensure the feature is enabled and current locale is supported
+        guard isFeatureEnabled, isCurrentLocaleSupported else {
+            throw Error.failure
+        }
 
         return try await getFeedItems(items: items)
     }
@@ -118,6 +113,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, Sendable {
     /// Because we're not testing the Merino API/AS module, we're simply providing some
     /// dummy data here.
     private func getMockDataFeed(count: Int32 = 2) async throws -> [RecommendationDataItem] {
+        // swiftlint:disable line_length
         return [
                 MozillaAppServices.RecommendationDataItem(
                     corpusItemId: "3533e87e-4997-40d9-b9fb-d1cb0251f7a2",
@@ -290,18 +286,6 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, Sendable {
                     receivedRank: 11
                 )
             ]
-
-//        guard let path = Bundle(for: type(of: self)).path(forResource: "merinoFeed", ofType: "json"),
-//              let data = try? Data(contentsOf: URL(fileURLWithPath: path))
-//        else {
-//            throw Error.failure
-//        }
-//
-//        let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-//        guard let items = json?["data"] as? [[String: Any]] else {
-//            throw Error.failure
-//        }
-//
-//        return Array(RecommendationDataItem.parseJSON(list: items).prefix(count))
+        // swiftlint:enable line_length
     }
 }

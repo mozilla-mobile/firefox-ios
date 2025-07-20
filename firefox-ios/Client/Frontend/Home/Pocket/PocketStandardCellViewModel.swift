@@ -4,11 +4,10 @@
 
 import Foundation
 
-class PocketStandardCellViewModel {
+class StoryStandardCellViewModel {
     var title: String { story.title }
     var imageURL: URL { story.imageURL }
     var url: URL? { story.url }
-//    var sponsor: String? { story.sponsor }
     var description: String {
         return  "\(story.publisher)"
     }
@@ -16,11 +15,9 @@ class PocketStandardCellViewModel {
         return "\(title), \(description)"
     }
 
-    var shouldHideSponsor: Bool {
-        // RGB
-        return true
-//        return sponsor == nil
-    }
+    /// Merino will eventually have sponsors, so there's no reason to change the logic
+    /// in the UI for this now.
+    var shouldHideSponsor: Bool { return true }
 
     var onTap: (IndexPath) -> Void = { _ in }
 

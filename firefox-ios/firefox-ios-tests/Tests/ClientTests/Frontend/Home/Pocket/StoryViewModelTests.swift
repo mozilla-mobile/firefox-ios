@@ -10,13 +10,13 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
-    private var adaptor: MockPocketDataAdaptor!
+final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
+    private var adaptor: MockStoryDataAdaptor!
     private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
-        adaptor = MockPocketDataAdaptor()
+        adaptor = MockStoryDataAdaptor()
         profile = MockProfile()
 
         featureFlags.initializeDeveloperFeatures(with: profile)
@@ -70,13 +70,13 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     func testDimensioniPhoneLandscape() {
         let subject = createSubject()
         let dimension = subject.getWidthDimension(device: .phone, isLandscape: true)
-        XCTAssertEqual(dimension, .fractionalWidth(PocketViewModel.UX.fractionalWidthiPhoneLandscape))
+        XCTAssertEqual(dimension, .fractionalWidth(StoryViewModel.UX.fractionalWidthiPhoneLandscape))
     }
 
     func testDimensioniPhonePortrait() {
         let subject = createSubject()
         let dimension = subject.getWidthDimension(device: .phone, isLandscape: false)
-        XCTAssertEqual(dimension, .fractionalWidth(PocketViewModel.UX.fractionalWidthiPhonePortrait))
+        XCTAssertEqual(dimension, .fractionalWidth(StoryViewModel.UX.fractionalWidthiPhonePortrait))
     }
 
     func testDimensioniPadPortrait() {
@@ -145,7 +145,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
 }
 
 // MARK: Helpers
-extension PocketViewModelTests {
+extension StoryViewModelTests {
     func createStories(numberOfStories: Int) -> [PocketStory] {
         var stories = [PocketStory]()
         (0..<numberOfStories).forEach { index in
@@ -169,21 +169,23 @@ extension PocketViewModelTests {
         return stories
     }
 
-    func createSubject(isZeroSearch: Bool = true,
-                       file: StaticString = #filePath,
-                       line: UInt = #line) -> PocketViewModel {
-        let subject = PocketViewModel(pocketDataAdaptor: adaptor,
-                                      isZeroSearch: isZeroSearch,
-                                      theme: LightTheme(),
-                                      prefs: profile.prefs,
-                                      wallpaperManager: WallpaperManager())
+    func createSubject(
+        isZeroSearch: Bool = true,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> StoryViewModel {
+        let subject = StoryViewModel(pocketDataAdaptor: adaptor,
+                                     isZeroSearch: isZeroSearch,
+                                     theme: LightTheme(),
+                                     prefs: profile.prefs,
+                                     wallpaperManager: WallpaperManager())
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }
 
-// MARK: MockPocketDataAdaptor
-class MockPocketDataAdaptor: PocketDataAdaptor {
+// MARK: MockStoryDataAdaptor
+class MockStoryDataAdaptor: StoryDataAdaptor {
     var pocketStories = [PocketStory]()
     func getPocketData() -> [PocketStory] {
         return pocketStories

@@ -86,7 +86,7 @@ class LegacyPocketStandardCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: PocketStandardCellViewModel, theme: Theme) {
+    func configure(viewModel: StoryStandardCellViewModel, theme: Theme) {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
