@@ -7,7 +7,7 @@ import Common
 
 protocol PocketDataAdaptor {
     @MainActor
-    func getPocketData() -> [PocketStory]
+    func getMerinoData() -> [MerinoStory]
 }
 
 protocol PocketDelegate: AnyObject {
@@ -18,17 +18,17 @@ protocol PocketDelegate: AnyObject {
 @MainActor
 final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable, Notifiable {
     let notificationCenter: NotificationProtocol
-    private let pocketAPI: PocketStoriesProviding
+    private let merinoAPI: MerinoStoriesProviding
     private let storyProvider: StoryProvider
-    private var pocketStories = [PocketStory]()
+    private var merinoStories = [MerinoStory]()
 
     weak var delegate: PocketDelegate?
 
-    init(pocketAPI: PocketStoriesProviding,
+    init(merinoAPI: MerinoStoriesProviding,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.pocketAPI = pocketAPI
+        self.merinoAPI = merinoAPI
         self.notificationCenter = notificationCenter
-        self.storyProvider = StoryProvider(pocketAPI: pocketAPI)
+        self.storyProvider = StoryProvider(merinoAPI: merinoAPI)
         setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
 
         Task {
@@ -36,13 +36,13 @@ final class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable
         }
     }
 
-    func getPocketData() -> [PocketStory] {
-        return pocketStories
+    func getMerinoData() -> [MerinoStory] {
+        return merinoStories
     }
 
     private func updatePocketSites() async {
-        let stories = await storyProvider.fetchPocketStories()
-        pocketStories = stories
+        let stories = await storyProvider.fetchStories()
+        merinoStories = stories
         delegate?.didLoadNewData()
     }
 

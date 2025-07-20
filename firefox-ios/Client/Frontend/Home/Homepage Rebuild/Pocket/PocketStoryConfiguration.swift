@@ -45,7 +45,7 @@ import Foundation
 //    }
 //}
 
-final class PocketStoryConfiguration: Sendable, Equatable, Hashable {
+final class MerinoStoryConfiguration: Sendable, Equatable, Hashable {
     private let story: MerinoStory
 
     init(story: MerinoStory) {
@@ -54,7 +54,7 @@ final class PocketStoryConfiguration: Sendable, Equatable, Hashable {
 
     var title: String { story.title }
     var url: URL? { story.url }
-    var imageURL: URL { story.imageUrl }
+    var imageURL: URL { story.imageURL }
     var description: String {
         return "\(story.publisher)"
     }
@@ -68,7 +68,7 @@ final class PocketStoryConfiguration: Sendable, Equatable, Hashable {
     }
 
     // MARK: - Equatable
-    static func == (lhs: PocketStoryConfiguration, rhs: PocketStoryConfiguration) -> Bool {
+    static func == (lhs: MerinoStoryConfiguration, rhs: MerinoStoryConfiguration) -> Bool {
         lhs.story == rhs.story
     }
 

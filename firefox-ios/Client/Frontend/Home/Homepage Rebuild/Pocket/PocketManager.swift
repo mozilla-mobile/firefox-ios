@@ -4,19 +4,19 @@
 
 import Foundation
 
-protocol PocketManagerProvider: Sendable {
-    func getPocketItems() async -> [PocketStoryConfiguration]
+protocol MerinoManagerProvider: Sendable {
+    func getMerinoItems() async -> [MerinoStoryConfiguration]
 }
 
-final class PocketManager: PocketManagerProvider {
+final class MerinoManager: MerinoManagerProvider {
     private let storyProvider: StoryProvider
 
-    init(pocketAPI: PocketStoriesProviding) {
-        self.storyProvider = StoryProvider(pocketAPI: pocketAPI)
+    init(merinoAPI: MerinoStoriesProviding) {
+        self.storyProvider = StoryProvider(merinoAPI: merinoAPI)
     }
 
-    func getPocketItems() async -> [PocketStoryConfiguration] {
-        let stories = await storyProvider.fetchPocketStories()
-        return stories.compactMap { PocketStoryConfiguration(story: $0) }
+    func getMerinoItems() async -> [MerinoStoryConfiguration] {
+        let stories = await storyProvider.fetchStories()
+        return stories.compactMap { MerinoStoryConfiguration(story: $0) }
     }
 }

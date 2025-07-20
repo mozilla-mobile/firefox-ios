@@ -8,16 +8,17 @@ import Redux
 import Shared
 
 final class PocketMiddleware {
-    private let pocketManager: PocketManagerProvider
+    private let merinoManager: MerinoManagerProvider
     private let homepageTelemetry: HomepageTelemetry
     private let logger: Logger
 
     init(
-        pocketManager: PocketManagerProvider = AppContainer.shared.resolve(),
+        // RGB
+        merinoManager: MerinoManagerProvider = AppContainer.shared.resolve(),
         homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
         logger: Logger = DefaultLogger.shared
     ) {
-        self.pocketManager = pocketManager
+        self.merinoManager = merinoManager
         self.homepageTelemetry = homepageTelemetry
         self.logger = logger
     }
@@ -41,12 +42,10 @@ final class PocketMiddleware {
 
     private func getPocketDataAndUpdateState(for action: Action) {
         Task {
-            merinoTest()
-
-            let pocketStories = await pocketManager.getPocketItems()
+            let merinoStories = await merinoManager.getMerinoItems()
             store.dispatchLegacy(
                 PocketAction(
-                    pocketStories: pocketStories,
+                    merinoStories: merinoStories,
                     windowUUID: action.windowUUID,
                     actionType: PocketMiddlewareActionType.retrievedUpdatedStories
                 )
@@ -76,46 +75,5 @@ final class PocketMiddleware {
             return
         }
         self.homepageTelemetry.sendOpenInPrivateTabEventForPocket()
-    }
-
-    private func merinoTest() {
-        do {
-            let client = try CuratedRecommendationsClient(
-                config: CuratedRecommendationsConfig(
-                    baseHost: "https://merino.services.mozilla.com",
-                    userAgentHeader: UserAgent.getUserAgent()
-                )
-            )
-
-            let merinoRequest = CuratedRecommendationsRequest(
-                locale: CuratedRecommendationLocale.enUs,
-                count: 10
-            )
-
-            let response = try client.getCuratedRecommendations(request: merinoRequest)
-            print("RGB - \(response)")
-        } catch let error as CuratedRecommendationsApiError {
-            switch error {
-            case .Network(let reason):
-                print("Network error when fetching Curated Recommendations: \(reason)")
-
-            case .Other(let code?, let reason) where code == 400:
-                print("Bad Request: \(reason)")
-
-            case .Other(let code?, let reason) where code == 422:
-                print("Validation Error: \(reason)")
-
-            case .Other(let code?, let reason) where (500...599).contains(code):
-                print("Server Error: \(reason)")
-
-            case .Other(nil, let reason):
-                print("Missing status code: \(reason)")
-
-            case .Other(_, let reason):
-                print("Unexpected Error: \(reason)")
-            }
-        } catch {
-            print("Unhandled error: \(error)")
-        }
     }
 }

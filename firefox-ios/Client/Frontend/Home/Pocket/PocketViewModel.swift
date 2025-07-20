@@ -94,7 +94,7 @@ class PocketViewModel: @unchecked Sendable {
 
     @MainActor
     private func updateData() {
-        let stories = dataAdaptor.getPocketData()
+        let stories = dataAdaptor.getMerinoData()
         pocketStoriesViewModels = []
         // Add the story in the view models list
         for story in stories {

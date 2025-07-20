@@ -8,30 +8,29 @@ import MozillaAppServices
 struct MerinoStory: Equatable, Hashable {
     let corpusItemId: String
     let scheduledCorpusItemId: String
-    let url: URL
+    let url: URL?
     let title: String
     let excerpt: String
     let topic: String?
     let publisher: String
     let isTimeSensitive: Bool
-    let imageUrl: URL
-    let iconUrl: URL?
+    let imageURL: URL
+    let iconURL: URL?
     let tileId: Int64
     let receivedRank: Int
 
     init(from item: RecommendationDataItem) {
         self.corpusItemId = item.corpusItemId
         self.scheduledCorpusItemId = item.scheduledCorpusItemId
-        self.url = URL(string: item.url)!
+        self.url = URL(string: item.url)
         self.title = item.title
         self.excerpt = item.excerpt
         self.topic = item.topic
         self.publisher = item.publisher
         self.isTimeSensitive = item.isTimeSensitive
-        self.imageUrl = URL(string: item.imageUrl)!
-        self.iconUrl = item.iconUrl.flatMap(URL.init(string:))
+        self.imageURL = URL(string: item.imageUrl)!
+        self.iconURL = item.iconUrl.flatMap(URL.init(string:))
         self.tileId = item.tileId
         self.receivedRank = Int(item.receivedRank)
     }
 }
-

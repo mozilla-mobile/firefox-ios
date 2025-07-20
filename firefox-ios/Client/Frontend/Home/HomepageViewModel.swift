@@ -147,7 +147,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         self.bookmarksViewModel = BookmarksViewModel(profile: profile,
                                                      theme: theme,
                                                      wallpaperManager: wallpaperManager)
-        let pocketDataAdaptor = PocketDataAdaptorImplementation(pocketAPI: PocketProvider(prefs: profile.prefs))
+        let pocketDataAdaptor = PocketDataAdaptorImplementation(merinoAPI: MerinoProvider(prefs: profile.prefs))
         self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor,
                                                theme: theme,
                                                prefs: profile.prefs,

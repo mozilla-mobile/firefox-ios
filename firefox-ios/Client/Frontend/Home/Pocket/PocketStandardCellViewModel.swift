@@ -8,33 +8,27 @@ class PocketStandardCellViewModel {
     var title: String { story.title }
     var imageURL: URL { story.imageURL }
     var url: URL? { story.url }
-    var sponsor: String? { story.sponsor }
+//    var sponsor: String? { story.sponsor }
     var description: String {
-        if let sponsor = story.sponsor {
-            return sponsor
-        } else {
-            if let timeToRead = story.timeToRead {
-                return "\(story.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, timeToRead))"
-            } else {
-               return  "\(story.domain)"
-            }
-        }
+        return  "\(story.publisher)"
     }
     var accessibilityLabel: String {
         return "\(title), \(description)"
     }
 
     var shouldHideSponsor: Bool {
-        return sponsor == nil
+        // RGB
+        return true
+//        return sponsor == nil
     }
 
     var onTap: (IndexPath) -> Void = { _ in }
 
     var tag = 0
 
-    private let story: PocketStory
+    private let story: MerinoStory
 
-    init(story: PocketStory) {
+    init(story: MerinoStory) {
         self.story = story
     }
 }

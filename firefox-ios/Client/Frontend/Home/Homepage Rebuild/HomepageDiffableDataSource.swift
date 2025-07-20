@@ -43,7 +43,7 @@ final class HomepageDiffableDataSource:
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
-        case pocket(PocketStoryConfiguration)
+        case pocket(MerinoStoryConfiguration)
         case customizeHomepage
         case spacer
 
@@ -138,7 +138,7 @@ final class HomepageDiffableDataSource:
     private func getPocketStories(
         with pocketState: PocketState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
-        let stories: [HomeItem] = pocketState.pocketData.compactMap { .pocket($0) }
+        let stories: [HomeItem] = pocketState.merinoData.compactMap { .pocket($0) }
         guard pocketState.shouldShowSection, !stories.isEmpty else { return nil }
         return stories
     }

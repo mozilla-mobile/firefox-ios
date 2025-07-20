@@ -645,7 +645,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getTallestStoryCellHeight(cellWidth: CGFloat) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var storyCells: [StoryCell] = []
-        for story in state.pocketState.pocketData {
+        for story in state.pocketState.merinoData {
             let cell = StoryCell()
             cell.configure(story: story, theme: LightTheme())
             storyCells.append(cell)

@@ -40,7 +40,7 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
     }
 
     var notificationCenter: NotificationProtocol
-    private var story: PocketStoryConfiguration?
+    private var story: MerinoStoryConfiguration?
 
     // MARK: - Inits
 
@@ -72,7 +72,7 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
 
     // MARK: - Helpers
 
-    func configure(story: PocketStoryConfiguration, theme: Theme) {
+    func configure(story: MerinoStoryConfiguration, theme: Theme) {
         self.story = story
         titleLabel.text = story.title
         titleLabel.numberOfLines = getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)

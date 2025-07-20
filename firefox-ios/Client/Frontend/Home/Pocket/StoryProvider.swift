@@ -3,26 +3,27 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
+import Shared
 
 final class StoryProvider: FeatureFlaggable, Sendable {
     private let numberOfStories: Int
-    private let pocketAPI: PocketStoriesProviding
+    private let merinoAPI: MerinoStoriesProviding
 
     init(
-        pocketAPI: PocketStoriesProviding,
+        merinoAPI: MerinoStoriesProviding,
         numberOfPocketStories: Int = 12
     ) {
-        self.pocketAPI = pocketAPI
+        self.merinoAPI = merinoAPI
         self.numberOfStories = numberOfPocketStories
     }
 
-    func fetchPocketStories() async -> [PocketStory] {
+    func fetchStories() async -> [MerinoStory] {
         let isStoriesRedesignEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
         let numberOfStoriesIfRedesignEnabled = 9
         let numberOfStories = isStoriesRedesignEnabled ? numberOfStoriesIfRedesignEnabled
                                                              : self.numberOfStories
-        let global = (try? await pocketAPI.fetchStories(items: numberOfStories)) ?? []
-        // Convert global feed to PocketStory
-        return global.map(PocketStory.init)
+        let data = (try? await merinoAPI.fetchStories(items: numberOfStories)) ?? []
+        return data.map(MerinoStory.init)
     }
 }

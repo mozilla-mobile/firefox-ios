@@ -12,18 +12,18 @@ struct OpenPocketTelemetryConfig {
 }
 
 final class PocketAction: Action {
-    let pocketStories: [PocketStoryConfiguration]?
+    let merinoStories: [MerinoStoryConfiguration]?
     let isEnabled: Bool?
     let telemetryConfig: OpenPocketTelemetryConfig?
 
     init(
-        pocketStories: [PocketStoryConfiguration]? = nil,
+        merinoStories: [MerinoStoryConfiguration]? = nil,
         isEnabled: Bool? = nil,
         telemetryConfig: OpenPocketTelemetryConfig? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
-        self.pocketStories = pocketStories
+        self.merinoStories = merinoStories
         self.isEnabled = isEnabled
         self.telemetryConfig = telemetryConfig
         super.init(windowUUID: windowUUID, actionType: actionType)

@@ -778,6 +778,7 @@
 		81A3F6F02C2DAEE200BDD86B /* MainMenuCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A3F6EF2C2DAEE200BDD86B /* MainMenuCoordinator.swift */; };
 		81A3F6F22C2DB00900BDD86B /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A3F6F12C2DB00900BDD86B /* MainMenuViewController.swift */; };
 		81C297F92CA3117200B8BE78 /* MenuNavigationDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C297F82CA3117200B8BE78 /* MenuNavigationDestination.swift */; };
+		81C381502E2D22DB00096AAE /* MerinoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C3814F2E2D22DB00096AAE /* MerinoProvider.swift */; };
 		81C3E6092C93261A00A19A5A /* MainMenuDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C3E6082C93261A00A19A5A /* MainMenuDetailsViewController.swift */; };
 		81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */; };
 		81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F02C88F02500F4BE98 /* MainMenuViewControllerTests.swift */; };
@@ -8164,6 +8165,7 @@
 		81A3F6F12C2DB00900BDD86B /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		81C14765AA7C25DF1817AC04 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Today.strings; sourceTree = "<group>"; };
 		81C297F82CA3117200B8BE78 /* MenuNavigationDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuNavigationDestination.swift; sourceTree = "<group>"; };
+		81C3814F2E2D22DB00096AAE /* MerinoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoProvider.swift; sourceTree = "<group>"; };
 		81C3E6082C93261A00A19A5A /* MainMenuDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuDetailsViewController.swift; sourceTree = "<group>"; };
 		81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerState.swift; sourceTree = "<group>"; };
 		81DAB2F02C88F02500F4BE98 /* MainMenuViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewControllerTests.swift; sourceTree = "<group>"; };
@@ -14149,6 +14151,7 @@
 			children = (
 				C8B0F5F0283B7CCE007AE65D /* Model */,
 				C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */,
+				81C3814F2E2D22DB00096AAE /* MerinoProvider.swift */,
 			);
 			path = Pocket;
 			sourceTree = "<group>";
@@ -17936,6 +17939,7 @@
 				E127313C28B6AD99006F39D2 /* WallpaperSettingsViewController.swift in Sources */,
 				43D4BCBA2972082400775FB5 /* CreditCardSettingsViewModel.swift in Sources */,
 				9636D92A27F767EC00771F5E /* NimbusMessagingEvaluationUtility.swift in Sources */,
+				81C381502E2D22DB00096AAE /* MerinoProvider.swift in Sources */,
 				E127313F28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift in Sources */,
 				0BBC50952CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift in Sources */,
 				8A3EF80F2A2FD05D00796E3A /* ToggleInactiveTabs.swift in Sources */,

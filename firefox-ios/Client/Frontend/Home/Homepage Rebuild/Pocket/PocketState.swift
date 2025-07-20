@@ -15,7 +15,7 @@ struct PocketDiscoverConfiguration: Equatable, Hashable {
 /// State for the pocket section that is used in the homepage
 struct PocketState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let pocketData: [PocketStoryConfiguration]
+    let merinoData: [MerinoStoryConfiguration]
     let shouldShowSection: Bool
 
     let sectionHeaderState = SectionHeaderConfiguration(
@@ -32,18 +32,18 @@ struct PocketState: StateType, Equatable {
 
         self.init(
             windowUUID: windowUUID,
-            pocketData: [],
+            merinoData: [],
             shouldShowSection: shouldShowSection
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        pocketData: [PocketStoryConfiguration],
+        merinoData: [MerinoStoryConfiguration],
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
-        self.pocketData = pocketData
+        self.merinoData = merinoData
         self.shouldShowSection = shouldShowSection
     }
 
@@ -65,14 +65,14 @@ struct PocketState: StateType, Equatable {
 
     private static func handlePocketStoriesAction(_ action: Action, state: PocketState) -> PocketState {
         guard let pocketAction = action as? PocketAction,
-              let pocketStories = pocketAction.pocketStories
+              let pocketStories = pocketAction.merinoStories
         else {
             return defaultState(from: state)
         }
 
         return PocketState(
             windowUUID: state.windowUUID,
-            pocketData: pocketStories,
+            merinoData: pocketStories,
             shouldShowSection: !pocketStories.isEmpty && state.shouldShowSection
         )
     }
@@ -86,7 +86,7 @@ struct PocketState: StateType, Equatable {
 
         return PocketState(
             windowUUID: state.windowUUID,
-            pocketData: state.pocketData,
+            merinoData: state.merinoData,
             shouldShowSection: isEnabled
         )
     }
@@ -94,7 +94,7 @@ struct PocketState: StateType, Equatable {
     static func defaultState(from state: PocketState) -> PocketState {
         return PocketState(
             windowUUID: state.windowUUID,
-            pocketData: state.pocketData,
+            merinoData: state.merinoData,
             shouldShowSection: state.shouldShowSection
         )
     }
