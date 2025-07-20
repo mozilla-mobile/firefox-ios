@@ -117,6 +117,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(selectedTab.isPrivate)
     }
 
+    @MainActor
     func testDidSelectedTabChange_appliesExpectedUIModeToAllUIElements_whenToolbarRefactorDisabled() {
         let subject = createSubject()
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
@@ -132,6 +133,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(subject.toolbar.privateModeBadge.badge.isHidden)
     }
 
+    @MainActor
     func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController_whenToolbarRefactorEnabled() {
         let subject = createSubject()
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
@@ -148,6 +150,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(subject.toolbar.privateModeBadge.badge.isHidden)
     }
 
+    @MainActor
     func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {
         let subject = createSubject()
         let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)

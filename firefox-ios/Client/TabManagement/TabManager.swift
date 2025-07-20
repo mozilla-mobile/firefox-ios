@@ -112,11 +112,15 @@ protocol TabManager: AnyObject {
     /// Commits the pending changes to the persistent store.
     func commitChanges()
 
+    @MainActor
     func notifyCurrentTabDidFinishLoading()
+
     @MainActor
     func restoreTabs(_ forced: Bool)
+
     func expireLoginAlerts()
     @discardableResult
+
     @MainActor
     func switchPrivacyMode() -> SwitchPrivacyModeResult
 

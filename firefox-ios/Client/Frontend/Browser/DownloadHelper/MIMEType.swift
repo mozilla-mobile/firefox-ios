@@ -35,21 +35,8 @@ struct MIMEType {
         MIMEType.WebP
     ]
 
-    private static let downloadableTypes: [String] = [
-        MIMEType.PDF,
-        MIMEType.OpenDocument,
-        MIMEType.MicrosoftWord,
-        MIMEType.PNG,
-        MIMEType.JPEG
-    ]
-
     static func canShowInWebView(_ mimeType: String) -> Bool {
         return webViewViewableTypes.contains(mimeType.lowercased())
-    }
-
-    static func canBeDownloaded(_ mimeType: String?) -> Bool {
-        guard let mimeType else { return false }
-        return downloadableTypes.contains(mimeType.lowercased())
     }
 
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {

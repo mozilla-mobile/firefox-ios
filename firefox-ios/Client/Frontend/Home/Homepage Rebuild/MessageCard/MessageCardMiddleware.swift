@@ -20,7 +20,8 @@ final class MessageCardMiddleware {
         self.messagingManager = messagingManager
     }
 
-    lazy var messageCardProvider: Middleware<AppState> = { _, action in
+    // TODO: FXIOS-12831 We need this middleware isolated to the main actor (due to `onMessagePressed` call)
+    lazy var messageCardProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
 
         switch action.actionType {

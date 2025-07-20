@@ -63,6 +63,10 @@ class MainMenuViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
     }
 
+    private var bannerShown: Bool {
+        profile.prefs.boolForKey(PrefsKeys.defaultBrowserBannerShown) ?? false
+    }
+
     private var hasBeenExpanded = false
     private var currentCustomMenuHeight = 0.0
     private var isBrowserDefault = false
@@ -177,6 +181,10 @@ class MainMenuViewController: UIViewController,
 
             menuRedesignContent.bannerButtonCallback = { [weak self] in
                 self?.dispatchDefaultBrowserAction()
+            }
+
+            menuRedesignContent.closeBannerButtonCallback = { [weak self] in
+                self?.profile.prefs.setBool(true, forKey: PrefsKeys.defaultBrowserBannerShown)
             }
 
             menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
@@ -294,7 +302,8 @@ class MainMenuViewController: UIViewController,
                                          subtitle: .MainMenu.HeaderBanner.Subtitle,
                                          image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
                                          isBannerFlagEnabled: isMenuDefaultBrowserBanner,
-                                         isBrowserDefault: isBrowserDefault)
+                                         isBrowserDefault: isBrowserDefault,
+                                         bannerShown: bannerShown)
     }
 
     private func setupMenuOrientation() {
@@ -493,12 +502,14 @@ class MainMenuViewController: UIViewController,
     private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
         var state = String.MainMenu.SiteProtection.ProtectionsOn
         var stateImage = StandardImageIdentifiers.Small.shieldCheckmarkFill
+        var shouldUseRenderMode = false
 
         switch siteProtectionsData.state {
         case .notSecure:
             state = String.MainMenu.SiteProtection.ConnectionNotSecure
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-        case .on: break
+        case .on:
+            shouldUseRenderMode = true
         case .off:
             state = String.MainMenu.SiteProtection.ProtectionsOff
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
@@ -509,7 +520,8 @@ class MainMenuViewController: UIViewController,
             subtitle: siteProtectionsData.subtitle,
             image: siteProtectionsData.image,
             state: state,
-            stateImage: stateImage)
+            stateImage: stateImage,
+            shouldUseRenderMode: shouldUseRenderMode)
     }
 
     // MARK: - A11y

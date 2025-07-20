@@ -76,13 +76,13 @@ class DisconnectSetting: Setting {
             preferredStyle: UIAlertController.Style.alert)
 
         alertController.addAction(
-            UIAlertAction(title: .SettingsDisconnectCancelAction, style: .default) { (_) in
+            UIAlertAction(title: .SettingsDisconnectCancelAction, style: .default) { (action) in
                 // Do nothing.
             }
         )
 
         alertController.addAction(
-            UIAlertAction(title: .SettingsDisconnectDestructiveAction, style: .destructive) { (_) in
+            UIAlertAction(title: .SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
                 self.profile?.removeAccount()
                 TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncUserLoggedOut)
 
@@ -140,9 +140,17 @@ class DeviceNameSetting: StringSetting {
         notification = NotificationCenter.default.addObserver(
             forName: Notification.Name.constellationStateUpdate,
             object: nil,
-            queue: nil
-        ) { [weak self] _ in
-            self?.tableView?.tableView.reloadData()
+            queue: .main
+        ) { [weak self] notification in
+            guard Thread.isMainThread else {
+                assertionFailure("This must be called main thread")
+                return
+            }
+
+            // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
+            MainActor.assumeIsolated {
+                self?.tableView?.tableView.reloadData()
+            }
         }
     }
 

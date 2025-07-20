@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 class RouteTests: XCTestCase {
     func testSearchRouteWithUrl() {
         let subject = createSubject()

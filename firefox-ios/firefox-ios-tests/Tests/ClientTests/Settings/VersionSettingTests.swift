@@ -7,6 +7,7 @@ import XCTest
 import Shared
 import Common
 
+@MainActor
 class VersionSettingTests: XCTestCase {
     private var delegate: MockDebugSettingsDelegate!
     let windowUUID: WindowUUID = .XCTestDefaultUUID

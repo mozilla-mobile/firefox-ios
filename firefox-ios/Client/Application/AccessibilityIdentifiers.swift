@@ -121,6 +121,7 @@ struct AccessibilityIdentifiers {
         static let zoom = "MainMenu.Zoom"
         static let moreLess = "MainMenu.MoreLess"
         static let signIn = "MainMenu.SignIn"
+        static let summarizePage = "MainMenu.SummarizePage"
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
@@ -486,7 +487,7 @@ struct AccessibilityIdentifiers {
             static let searchNavigationBar = "Search"
             static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
-            static let disableSearchSuggestsInPrivateMode = "PrivateMode.DisableSearchSuggests"
+            static let showPrivateSuggestions = "PrivateMode.showPrivateSuggestions"
             static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
         }
 

@@ -32,7 +32,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
         return OnboardingViewModel(
             cards: cards,
-            isDismissable: framework.dismissable)
+            isDismissible: framework.dismissable)
     }
 
     private func getOrderedOnboardingCards(

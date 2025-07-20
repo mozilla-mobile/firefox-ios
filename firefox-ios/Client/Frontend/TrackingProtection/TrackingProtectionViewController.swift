@@ -30,7 +30,10 @@ struct TPMenuUX {
 }
 
 protocol TrackingProtectionMenuDelegate: AnyObject {
+    @MainActor
     func settingsOpenPage(settings: Route.SettingsSection)
+
+    @MainActor
     func didFinish()
 }
 

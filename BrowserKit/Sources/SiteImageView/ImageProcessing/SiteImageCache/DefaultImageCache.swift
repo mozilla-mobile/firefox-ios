@@ -7,9 +7,9 @@ import UIKit
 
 // MARK: - Kingfisher wrapper
 
-/// Image cache wrapper around Kingfisher image cache
-/// Used in SiteImageCache
-protocol DefaultImageCache {
+/// Image cache wrapper around Kingfisher image cache. Used in SiteImageCache.
+/// Note: Kingfisher is designed to be thread safe.
+protocol DefaultImageCache: Sendable {
     func retrieve(forKey key: String) async throws -> UIImage?
 
     func store(image: UIImage, forKey key: String)

@@ -5,8 +5,8 @@
 import Foundation
 import Common
 
-/// Base event type protocol. Conforming types must be hashable.
-public protocol AppEventType: Hashable { }
+/// Base event type protocol. Conforming types must be Hashable.
+public protocol AppEventType: Hashable, Sendable { }
 
 public enum AppEvent: AppEventType {
     // MARK: - Global App Events

@@ -42,6 +42,7 @@ final class AddressToolbarContainer: UIView,
     typealias SubscriberStateType = ToolbarState
 
     private let isSwipingTabsEnabled: Bool
+    private let isMinimalAddressBarEnabled: Bool
     private var windowUUID: WindowUUID?
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
@@ -116,8 +117,9 @@ final class AddressToolbarContainer: UIView,
     /// and the Cancel button is visible (allowing the user to leave overlay mode).
     var inOverlayMode = false
 
-    init(isSwipingTabsEnabled: Bool) {
+    init(isSwipingTabsEnabled: Bool, isMinimalAddressBarEnabled: Bool) {
         self.isSwipingTabsEnabled = isSwipingTabsEnabled
+        self.isMinimalAddressBarEnabled = isMinimalAddressBarEnabled
         super.init(frame: .zero)
         setupLayout()
     }
@@ -221,8 +223,10 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - AlphaDimmable
     func updateAlphaForSubviews(_ alpha: CGFloat) {
-        // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
-        regularToolbar.alpha = alpha
+        if !isMinimalAddressBarEnabled {
+            // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
+            regularToolbar.alpha = alpha
+        }
         if isSwipingTabsEnabled {
             leftSkeletonAddressBar.alpha = alpha
             rightSkeletonAddressBar.alpha = alpha

@@ -214,12 +214,15 @@ public struct PrefsKeys {
     // Used to only show the felt deletion alert confirmation once, used for private mode
     public static let dataClearanceAlertShown = "dataClearanceAlertShownKey"
 
+    // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
+    public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
+
     public struct Usage {
         public static let profileId = "profileId"
     }
 }
 
-public protocol Prefs {
+public protocol Prefs: Sendable {
     func getBranchPrefix() -> String
     func branch(_ branch: String) -> Prefs
     func setTimestamp(_ value: Timestamp, forKey defaultName: String)
@@ -244,7 +247,7 @@ public protocol Prefs {
     func clearAll()
 }
 
-open class MockProfilePrefs: Prefs {
+open class MockProfilePrefs: Prefs, @unchecked Sendable {
     let prefix: String
 
     open func getBranchPrefix() -> String {

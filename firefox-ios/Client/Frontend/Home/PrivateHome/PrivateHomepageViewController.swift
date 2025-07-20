@@ -9,7 +9,9 @@ import Shared
 
 // Delegate for coordinator to be able to handle navigation
 protocol PrivateHomepageDelegate: AnyObject {
+    @MainActor
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool)
+
     @MainActor
     func switchMode()
 }

@@ -18,6 +18,7 @@ protocol TabTrayController: UIViewController,
 }
 
 protocol TabTrayViewControllerDelegate: AnyObject {
+    @MainActor
     func didFinish()
 }
 
@@ -30,7 +31,8 @@ class TabTrayViewController: UIViewController,
                              StoreSubscriber,
                              FeatureFlaggable,
                              TabTraySelectorDelegate,
-                             TabTrayAnimationDelegate {
+                             TabTrayAnimationDelegate,
+                             TabDisplayViewDragAndDropInteraction {
     typealias SubscriberStateType = TabTrayState
     private struct UX {
         struct NavigationMenu {
@@ -64,6 +66,7 @@ class TabTrayViewController: UIViewController,
 
     private lazy var panelContainer: UIView = .build { _ in }
     private var pageViewController: UIPageViewController?
+    private weak var pageScrollView: UIScrollView?
     private var swipeFromIndex: Int?
     private lazy var themeAnimator = TabTrayThemeAnimator()
 
@@ -996,5 +999,15 @@ class TabTrayViewController: UIViewController,
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         swipeFromIndex = nil
+    }
+
+    // MARK: TabDisplayViewDragAndDropInteraction
+
+    func dragAndDropStarted() {
+        pageScrollView?.isScrollEnabled = false
+    }
+
+    func dragAndDropEnded() {
+        pageScrollView?.isScrollEnabled = true
     }
 }

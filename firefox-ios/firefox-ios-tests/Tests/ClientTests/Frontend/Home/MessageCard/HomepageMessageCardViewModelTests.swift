@@ -73,6 +73,7 @@ class HomepageMessageCardViewModelTests: XCTestCase {
         XCTAssertEqual(messageManager.onMessageDismissedCalled, 0)
     }
 
+    @MainActor
     func testMessagePressed() {
         adaptor.message = createMessage(isExpired: false)
         let subject = createSubject()

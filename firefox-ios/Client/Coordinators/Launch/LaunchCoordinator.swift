@@ -10,7 +10,10 @@ import SwiftUI
 import ComponentLibrary
 
 protocol LaunchCoordinatorDelegate: AnyObject {
+    @MainActor
     func didFinishTermsOfService(from coordinator: LaunchCoordinator)
+
+    @MainActor
     func didFinishLaunch(from coordinator: LaunchCoordinator)
 }
 
@@ -37,6 +40,7 @@ final class LaunchCoordinator: BaseCoordinator,
         super.init(router: router)
     }
 
+    @MainActor
     func start(with launchType: LaunchType) {
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
@@ -238,6 +242,7 @@ final class LaunchCoordinator: BaseCoordinator,
     }()
 
     // MARK: - Intro
+    @MainActor
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
@@ -259,7 +264,7 @@ final class LaunchCoordinator: BaseCoordinator,
             themeManager: themeManager,
             viewModel: OnboardingFlowViewModel(
                 onboardingCards: onboardingCards,
-                onActionTap: { [weak self] action, cardName, completion in
+                onActionTap: { @MainActor [weak self] action, cardName, completion in
                     self?.onboardingService.handleAction(
                         action,
                         from: cardName,
@@ -317,7 +322,7 @@ final class LaunchCoordinator: BaseCoordinator,
             introViewController.modalPresentationStyle = .formSheet
             // Disables dismissing the view by tapping outside the view, based on
             // Nimbus's configuration
-            if !introViewModel.isDismissable {
+            if !introViewModel.isDismissible {
                 introViewController.isModalInPresentation = true
             }
             router.present(introViewController, animated: true) {
@@ -345,7 +350,7 @@ final class LaunchCoordinator: BaseCoordinator,
                 height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
             updateViewController.modalPresentationStyle = .formSheet
             // Nimbus's configuration
-            if !updateViewModel.isDismissable {
+            if !updateViewModel.isDismissible {
                 updateViewController.isModalInPresentation = true
             }
             router.present(updateViewController)

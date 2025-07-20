@@ -441,10 +441,14 @@ class BaseTestCase: XCTestCase {
     func openNewTabAndValidateURLisPaste(url: String) {
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         app.buttons["Cancel"].waitAndTap()
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
+        urlBar.press(forDuration: 2)
+        if !pasteAction.exists {
+            urlBar.press(forDuration: 2)
+        }
+        mozWaitForElementToExist(app.tables["Context Menu"])
+        pasteAction.waitAndTap()
         mozWaitForValueContains(urlBar, value: url)
     }
 

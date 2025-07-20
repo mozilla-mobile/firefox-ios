@@ -8,6 +8,7 @@ import UIKit
 import SwiftUI
 
 // Animation for when the user launches the app on first run
+@MainActor
 struct SplashScreenAnimation {
     private let animationView: LottieAnimationView
     private enum UX {

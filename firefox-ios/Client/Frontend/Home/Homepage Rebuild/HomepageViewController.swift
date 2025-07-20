@@ -179,7 +179,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        collectionView?.collectionViewLayout.invalidateLayout()
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
 
@@ -238,8 +238,15 @@ final class HomepageViewController: UIViewController,
                 theme: theme
             )
         }
+
+        // We only want to proceed if content exceeds the frame (aka scrollable),
+        // otherwise we will spamming the redux action (GeneralBrowserMiddlewareAction) below
+        guard scrollView.contentSize.height > scrollView.frame.height else { return }
+
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        // The logic detects whether there is a transition across the top of the view
+        // where scrollView.contentOffset.y is zero.
         if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
@@ -570,6 +577,16 @@ final class HomepageViewController: UIViewController,
             }, theme: currentTheme)
 
             return customizeHomeCell
+
+        case .spacer:
+            guard let spacerCell = collectionView?.dequeueReusableCell(
+                cellType: HomepageSpacerCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            return spacerCell
         }
     }
 

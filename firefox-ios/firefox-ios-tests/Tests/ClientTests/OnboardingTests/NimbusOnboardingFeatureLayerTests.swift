@@ -44,7 +44,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
-        XCTAssertTrue(subject.isDismissable)
+        XCTAssertTrue(subject.isDismissible)
     }
 
     func testLayer_dismissable_isFalse() {
@@ -52,7 +52,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
         let subject = layer.getOnboardingModel(for: .freshInstall)
 
-        XCTAssertFalse(subject.isDismissable)
+        XCTAssertFalse(subject.isDismissible)
     }
 
     // MARK: - Test A11yRoot

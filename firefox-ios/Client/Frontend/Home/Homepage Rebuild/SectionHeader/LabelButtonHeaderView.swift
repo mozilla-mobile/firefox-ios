@@ -48,15 +48,9 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private var stackViewLeadingConstraint: NSLayoutConstraint?
-
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(moreButton)
-        addSubview(stackView)
-
         setupLayout()
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
@@ -67,12 +61,9 @@ class LabelButtonHeaderView: UICollectionReusableView,
         stackView.addArrangedSubview(moreButton)
         addSubview(stackView)
 
-        stackViewLeadingConstraint = stackView.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                                        constant: UX.leadingInset)
-        stackViewLeadingConstraint?.isActive = true
-
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingInset),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
         ])
