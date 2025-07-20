@@ -6,8 +6,8 @@ import Common
 import Foundation
 import SiteImageView
 
-/// The standard cell used in homepage pocket section
-class PocketStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
+/// The standard cell used in homepage merino section
+class MerinoStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
     struct UX {
         static let cellHeight: CGFloat = 112
         static let cellWidth: CGFloat = 350

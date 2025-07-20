@@ -41,10 +41,10 @@ final class PocketStateTests: XCTestCase {
 
         let newState = reducer(
             initialState,
-            PocketAction(
+            MerinoAction(
                 pocketStories: stories,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: PocketMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
             )
         )
 
@@ -59,10 +59,10 @@ final class PocketStateTests: XCTestCase {
 
         let newState = reducer(
             initialState,
-            PocketAction(
+            MerinoAction(
                 isEnabled: true,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: PocketActionType.toggleShowSectionSetting
+                actionType: MerinoActionType.toggleShowSectionSetting
             )
         )
 
@@ -76,10 +76,10 @@ final class PocketStateTests: XCTestCase {
 
         let newState = reducer(
             initialState,
-            PocketAction(
+            MerinoAction(
                 isEnabled: false,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: PocketActionType.toggleShowSectionSetting
+                actionType: MerinoActionType.toggleShowSectionSetting
             )
         )
 
@@ -88,11 +88,11 @@ final class PocketStateTests: XCTestCase {
     }
 
     // MARK: - Private
-    private func createSubject() -> PocketState {
-        return PocketState(windowUUID: .XCTestDefaultUUID)
+    private func createSubject() -> MerinoState {
+        return MerinoState(windowUUID: .XCTestDefaultUUID)
     }
 
-    private func pocketReducer() -> Reducer<PocketState> {
-        return PocketState.reducer
+    private func pocketReducer() -> Reducer<MerinoState> {
+        return MerinoState.reducer
     }
 }

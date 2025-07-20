@@ -899,12 +899,12 @@
 		8A4490952BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4490942BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift */; };
 		8A44D3612DB7DFD700B7D80B /* MockThrottler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44D3602DB7DFD200B7D80B /* MockThrottler.swift */; };
 		8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44F20D2B585E1F0016BC81 /* HomepageTelemetry.swift */; };
-		8A454D292CB7078D009436D9 /* PocketState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D282CB7078D009436D9 /* PocketState.swift */; };
-		8A454D2C2CB81153009436D9 /* PocketStandardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */; };
-		8A454D2E2CB81668009436D9 /* PocketAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2D2CB81668009436D9 /* PocketAction.swift */; };
-		8A454D302CB81697009436D9 /* PocketMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */; };
-		8A454D322CB8170D009436D9 /* PocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D312CB8170D009436D9 /* PocketManager.swift */; };
-		8A454D362CB86993009436D9 /* PocketStoryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D352CB86993009436D9 /* PocketStoryConfiguration.swift */; };
+		8A454D292CB7078D009436D9 /* MerinoState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D282CB7078D009436D9 /* MerinoState.swift */; };
+		8A454D2C2CB81153009436D9 /* MerinoStandardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2B2CB81153009436D9 /* MerinoStandardCell.swift */; };
+		8A454D2E2CB81668009436D9 /* MerinoAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2D2CB81668009436D9 /* MerinoAction.swift */; };
+		8A454D302CB81697009436D9 /* MerinoMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2F2CB81697009436D9 /* MerinoMiddleware.swift */; };
+		8A454D322CB8170D009436D9 /* MerinoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D312CB8170D009436D9 /* MerinoManager.swift */; };
+		8A454D362CB86993009436D9 /* MerinoStoryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D352CB86993009436D9 /* MerinoStoryConfiguration.swift */; };
 		8A454D372CB86B86009436D9 /* PocketStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D332CB85C7D009436D9 /* PocketStateTests.swift */; };
 		8A454D3F2CB9B8A0009436D9 /* TopSitesSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D3E2CB9B8A0009436D9 /* TopSitesSectionState.swift */; };
 		8A454D412CB9B8AA009436D9 /* TopSitesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D402CB9B8AA009436D9 /* TopSitesAction.swift */; };
@@ -989,7 +989,7 @@
 		8A75AF9C2DE8A1CF00B2C592 /* StartAtHomeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A75AF9B2DE8A1C700B2C592 /* StartAtHomeMiddleware.swift */; };
 		8A75F1B828B558E20054E34D /* MessageCardDataAdaptorImplementationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A75F1B728B558E20054E34D /* MessageCardDataAdaptorImplementationTests.swift */; };
 		8A7653BD28A2C61D00924ABF /* StoryDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653BC28A2C61D00924ABF /* StoryDataAdaptor.swift */; };
-		8A7653BF28A2C92600924ABF /* PocketStandardCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */; };
+		8A7653BF28A2C92600924ABF /* StoryStandardCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653BE28A2C92600924ABF /* StoryStandardCellViewModel.swift */; };
 		8A7653C228A2E57D00924ABF /* PocketDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C128A2E57D00924ABF /* PocketDataAdaptorTests.swift */; };
 		8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */; };
 		8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76B01529F6EB3900A82607 /* ScreenshotService.swift */; };
@@ -1573,9 +1573,6 @@
 		C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4137328BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift */; };
 		C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */; };
 		C8B0F5ED283B7C9F007AE65D /* LegacyPocketStandardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */; };
-		C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */; };
-		C8B0F5F5283B7CCE007AE65D /* PocketSponsoredStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F1283B7CCE007AE65D /* PocketSponsoredStory.swift */; };
-		C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */; };
 		C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */; };
 		C8B394362A0ED55D00700E49 /* MockOnboardingCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */; };
 		C8B41E0A29F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0929F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift */; };
@@ -8343,13 +8340,13 @@
 		8A4490942BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyConfirmationView.swift; sourceTree = "<group>"; };
 		8A44D3602DB7DFD200B7D80B /* MockThrottler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockThrottler.swift; sourceTree = "<group>"; };
 		8A44F20D2B585E1F0016BC81 /* HomepageTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageTelemetry.swift; sourceTree = "<group>"; };
-		8A454D282CB7078D009436D9 /* PocketState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketState.swift; sourceTree = "<group>"; };
-		8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStandardCell.swift; sourceTree = "<group>"; };
-		8A454D2D2CB81668009436D9 /* PocketAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketAction.swift; sourceTree = "<group>"; };
-		8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketMiddleware.swift; sourceTree = "<group>"; };
-		8A454D312CB8170D009436D9 /* PocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketManager.swift; sourceTree = "<group>"; };
+		8A454D282CB7078D009436D9 /* MerinoState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoState.swift; sourceTree = "<group>"; };
+		8A454D2B2CB81153009436D9 /* MerinoStandardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoStandardCell.swift; sourceTree = "<group>"; };
+		8A454D2D2CB81668009436D9 /* MerinoAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoAction.swift; sourceTree = "<group>"; };
+		8A454D2F2CB81697009436D9 /* MerinoMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoMiddleware.swift; sourceTree = "<group>"; };
+		8A454D312CB8170D009436D9 /* MerinoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoManager.swift; sourceTree = "<group>"; };
 		8A454D332CB85C7D009436D9 /* PocketStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStateTests.swift; sourceTree = "<group>"; };
-		8A454D352CB86993009436D9 /* PocketStoryConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStoryConfiguration.swift; sourceTree = "<group>"; };
+		8A454D352CB86993009436D9 /* MerinoStoryConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoStoryConfiguration.swift; sourceTree = "<group>"; };
 		8A454D3E2CB9B8A0009436D9 /* TopSitesSectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSectionState.swift; sourceTree = "<group>"; };
 		8A454D402CB9B8AA009436D9 /* TopSitesAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesAction.swift; sourceTree = "<group>"; };
 		8A454D422CB9B8F5009436D9 /* TopSitesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesManager.swift; sourceTree = "<group>"; };
@@ -8439,7 +8436,7 @@
 		8A75F1E428B56B1E0054E34D /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A75F1E628B56B330054E34D /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A7653BC28A2C61D00924ABF /* StoryDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDataAdaptor.swift; sourceTree = "<group>"; };
-		8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStandardCellViewModel.swift; sourceTree = "<group>"; };
+		8A7653BE28A2C92600924ABF /* StoryStandardCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryStandardCellViewModel.swift; sourceTree = "<group>"; };
 		8A7653C128A2E57D00924ABF /* PocketDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketDataAdaptorTests.swift; sourceTree = "<group>"; };
 		8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPocketAPI.swift; sourceTree = "<group>"; };
 		8A76B01529F6EB3900A82607 /* ScreenshotService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotService.swift; sourceTree = "<group>"; };
@@ -9447,9 +9444,6 @@
 		C8A74FF69C3971EDBE73157F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFlaggableFeature.swift; sourceTree = "<group>"; };
 		C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyPocketStandardCell.swift; sourceTree = "<group>"; };
-		C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketProvider.swift; sourceTree = "<group>"; };
-		C8B0F5F1283B7CCE007AE65D /* PocketSponsoredStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketSponsoredStory.swift; sourceTree = "<group>"; };
-		C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketStory.swift; sourceTree = "<group>"; };
 		C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketFeedStory.swift; sourceTree = "<group>"; };
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOnboardingCardDelegate.swift; sourceTree = "<group>"; };
@@ -13093,12 +13087,12 @@
 		8ABDBAA42CB6BF3A00B51F63 /* Pocket */ = {
 			isa = PBXGroup;
 			children = (
-				8A454D282CB7078D009436D9 /* PocketState.swift */,
-				8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */,
-				8A454D312CB8170D009436D9 /* PocketManager.swift */,
-				8A454D2D2CB81668009436D9 /* PocketAction.swift */,
-				8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */,
-				8A454D352CB86993009436D9 /* PocketStoryConfiguration.swift */,
+				8A454D282CB7078D009436D9 /* MerinoState.swift */,
+				8A454D2F2CB81697009436D9 /* MerinoMiddleware.swift */,
+				8A454D312CB8170D009436D9 /* MerinoManager.swift */,
+				8A454D2D2CB81668009436D9 /* MerinoAction.swift */,
+				8A454D2B2CB81153009436D9 /* MerinoStandardCell.swift */,
+				8A454D352CB86993009436D9 /* MerinoStoryConfiguration.swift */,
 				C743CB1C2DF201D50069CB23 /* StoryCell.swift */,
 			);
 			path = Pocket;
@@ -14010,7 +14004,7 @@
 			isa = PBXGroup;
 			children = (
 				C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */,
-				8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */,
+				8A7653BE28A2C92600924ABF /* StoryStandardCellViewModel.swift */,
 				8A9AC46A276D11280047F5B0 /* StoryViewModel.swift */,
 				8A7653BC28A2C61D00924ABF /* StoryDataAdaptor.swift */,
 				E58368A9287D632F0087A449 /* StoryProvider.swift */,
@@ -14144,7 +14138,6 @@
 			isa = PBXGroup;
 			children = (
 				C8B0F5F0283B7CCE007AE65D /* Model */,
-				C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */,
 				81C3814F2E2D22DB00096AAE /* MerinoProvider.swift */,
 			);
 			path = Pocket;
@@ -14154,8 +14147,6 @@
 			isa = PBXGroup;
 			children = (
 				81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */,
-				C8B0F5F1283B7CCE007AE65D /* PocketSponsoredStory.swift */,
-				C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */,
 				C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */,
 			);
 			path = Model;
@@ -17585,7 +17576,7 @@
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
 				219638EC2DBFBC56007C3893 /* ZoomLevel.swift in Sources */,
 				D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */,
-				8A454D322CB8170D009436D9 /* PocketManager.swift in Sources */,
+				8A454D322CB8170D009436D9 /* MerinoManager.swift in Sources */,
 				80967F802D0A36890057F0C7 /* RecordedNimbusContext.swift in Sources */,
 				8AF99B4F29EF1BA700108DEC /* BrowserDelegate.swift in Sources */,
 				C87D8B802818333F00A6307D /* NimbusManager.swift in Sources */,
@@ -17648,7 +17639,7 @@
 				C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */,
 				8ABDBAA62CB6BF6600B51F63 /* HomepageHeaderCell.swift in Sources */,
 				8CE1E4372B8C76C80026530B /* LoginAutofillView.swift in Sources */,
-				8A454D2E2CB81668009436D9 /* PocketAction.swift in Sources */,
+				8A454D2E2CB81668009436D9 /* MerinoAction.swift in Sources */,
 				DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */,
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
@@ -17877,7 +17868,7 @@
 				8AEAD9F32C3D7B3E001A2C5A /* FeatureFlagsSettings.swift in Sources */,
 				216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */,
 				1DDDCEB92E04897F000D34AE /* JSAlertThrottler.swift in Sources */,
-				8A454D302CB81697009436D9 /* PocketMiddleware.swift in Sources */,
+				8A454D302CB81697009436D9 /* MerinoMiddleware.swift in Sources */,
 				C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */,
 				8A7835352D5100970052E328 /* BookmarksAction.swift in Sources */,
 				8A46F5AE2C9E4389005B6422 /* RemoteSettingsUtils.swift in Sources */,
@@ -17958,7 +17949,6 @@
 				0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */,
 				8A7653BD28A2C61D00924ABF /* StoryDataAdaptor.swift in Sources */,
 				8A093D7D2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift in Sources */,
-				C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */,
 				1DC372022B23C80F000F96C8 /* WindowManager.swift in Sources */,
 				C8E531C829E5EB6100E03FEF /* RouteBuilder.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
@@ -18052,7 +18042,7 @@
 				AB3DB0C92B596739001D32CB /* AppStartupTelemetry.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */,
-				8A454D2C2CB81153009436D9 /* PocketStandardCell.swift in Sources */,
+				8A454D2C2CB81153009436D9 /* MerinoStandardCell.swift in Sources */,
 				AB9CBC042C53B64C00102610 /* TrackingProtectionModel.swift in Sources */,
 				C8DC90C52A066B6A0008832B /* MarkupTokenizingUtility.swift in Sources */,
 				0EBD66922DBFE41000A78532 /* ConcurrencyThrottler.swift in Sources */,
@@ -18105,7 +18095,7 @@
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
 				8A9F4EF62DC8F164004644B9 /* AutofillProvider.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
-				8A454D362CB86993009436D9 /* PocketStoryConfiguration.swift in Sources */,
+				8A454D362CB86993009436D9 /* MerinoStoryConfiguration.swift in Sources */,
 				61CEFF5E2DA8BC78000B88A7 /* TabsPanelTelemetry.swift in Sources */,
 				8AE459922CEFB1DC002D6679 /* InactiveTabsTelemetry.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
@@ -18167,7 +18157,6 @@
 				8A454D412CB9B8AA009436D9 /* TopSitesAction.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				8C4B0F5D2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift in Sources */,
-				C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */,
 				ED67B2962D0C921600BDC599 /* ShareTelemetry.swift in Sources */,
 				63B2132A2CCA797400A466DB /* NativeErrorPageState.swift in Sources */,
 				8ADAE4222A33A113007BF926 /* SendDataSetting.swift in Sources */,
@@ -18235,7 +18224,7 @@
 				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
 				F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */,
 				8A7892052CF91FEF00490CA4 /* UnifiedAdsCallbackTelemetry.swift in Sources */,
-				8A454D292CB7078D009436D9 /* PocketState.swift in Sources */,
+				8A454D292CB7078D009436D9 /* MerinoState.swift in Sources */,
 				21E77E502AA8BAEC00FABA10 /* TabTrayState.swift in Sources */,
 				8C2447E82DFADF3D00BD2C91 /* ActivityEventHelper.swift in Sources */,
 				0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */,
@@ -18273,7 +18262,6 @@
 				D59431ED25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */,
 				213778632980448C00D01309 /* DownloadFileFetcher.swift in Sources */,
 				F85C7EDF2710B4DD004BDBA4 /* LoginOnboarding.swift in Sources */,
-				C8B0F5F5283B7CCE007AE65D /* PocketSponsoredStory.swift in Sources */,
 				8AF6D4E12A856B4500B0474B /* ContileNetworking.swift in Sources */,
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
 				8AC6F2262D6E263500D10A9F /* ExperimentRemoteTabsEmptyView.swift in Sources */,
@@ -18325,7 +18313,7 @@
 				8AABBD012A001ADF0089941E /* ApplicationHelper.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* PasswordDetailViewController.swift in Sources */,
 				8A9AC46B276D11280047F5B0 /* StoryViewModel.swift in Sources */,
-				8A7653BF28A2C92600924ABF /* PocketStandardCellViewModel.swift in Sources */,
+				8A7653BF28A2C92600924ABF /* StoryStandardCellViewModel.swift in Sources */,
 				2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */,
 				2142B12D2D9F1284003AA82F /* ZoomPageBar.swift in Sources */,
 				0B8BF3752CA2EFC000E9812D /* EditBookmarkCell.swift in Sources */,

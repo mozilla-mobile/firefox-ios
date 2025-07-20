@@ -11,7 +11,7 @@ struct OpenPocketTelemetryConfig {
     let position: Int
 }
 
-final class PocketAction: Action {
+final class MerinoAction: Action {
     let merinoStories: [MerinoStoryConfiguration]?
     let isEnabled: Bool?
     let telemetryConfig: OpenPocketTelemetryConfig?
@@ -30,12 +30,12 @@ final class PocketAction: Action {
     }
 }
 
-enum PocketActionType: ActionType {
+enum MerinoActionType: ActionType {
     case toggleShowSectionSetting
-    case tapOnHomepagePocketCell
+    case tapOnHomepageMerinoCell
     case viewedSection
 }
 
-enum PocketMiddlewareActionType: ActionType {
+enum MerinoMiddlewareActionType: ActionType {
     case retrievedUpdatedStories
 }

@@ -542,10 +542,10 @@ final class HomepageViewController: UIViewController,
             bookmarksCell.configure(config: item, theme: currentTheme)
             return bookmarksCell
 
-        case .pocket(let story):
+        case .merino(let story):
             let isHomepageStoriesCardsEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign,
                                                                               checking: .buildOnly)
-            let cellType: ReusableCell.Type = isHomepageStoriesCardsEnabled ? StoryCell.self : PocketStandardCell.self
+            let cellType: ReusableCell.Type = isHomepageStoriesCardsEnabled ? StoryCell.self : MerinoStandardCell.self
 
             guard let storyCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
@@ -554,7 +554,7 @@ final class HomepageViewController: UIViewController,
             if let storyCell = storyCell as? StoryCell {
                 storyCell.configure(story: story, theme: currentTheme)
                 return storyCell
-            } else if let legacyPocketCell = storyCell as? PocketStandardCell {
+            } else if let legacyPocketCell = storyCell as? MerinoStandardCell {
                 legacyPocketCell.configure(story: story, theme: currentTheme)
                 return legacyPocketCell
             }
@@ -825,7 +825,7 @@ final class HomepageViewController: UIViewController,
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
         let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
         store.dispatchLegacy(
-            PocketAction(
+            MerinoAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
                 actionType: actionType
@@ -894,14 +894,14 @@ final class HomepageViewController: UIViewController,
                 visitType: .bookmark
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-        case .pocket(let story):
+        case .merino(let story):
             let destination = NavigationDestination(
                 .link,
                 url: story.url,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-            dispatchOpenPocketAction(at: indexPath.item, actionType: PocketActionType.tapOnHomepagePocketCell)
+            dispatchOpenPocketAction(at: indexPath.item, actionType: MerinoActionType.tapOnHomepageMerinoCell)
         default:
             return
         }

@@ -116,15 +116,15 @@ class StoryViewModel: @unchecked Sendable {
 // MARK: HomeViewModelProtocol
 extension StoryViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
-        return .pocket
+        return .merino
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
         let textColor = wallpaperManager.currentWallpaper.textColor
 
         return LabelButtonHeaderViewModel(
-            title: HomepageSectionType.pocket.title,
-            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
+            title: HomepageSectionType.merino.title,
+            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
             isButtonHidden: true,
             textColor: textColor)
     }
@@ -173,7 +173,7 @@ extension StoryViewModel: HomepageViewModelProtocol {
 
     var isEnabled: Bool {
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        return isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
+        return isFeatureEnabled && MerinoProvider.islocaleSupported(Locale.current.identifier)
     }
 
     var hasData: Bool {

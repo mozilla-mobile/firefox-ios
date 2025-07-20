@@ -35,7 +35,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testDefaultPocketViewModelProtocolValues_withEmptyData() {
         let subject = createSubject()
-        XCTAssertEqual(subject.sectionType, .pocket)
+        XCTAssertEqual(subject.sectionType, .merino)
         XCTAssertNotEqual(subject.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
         XCTAssertEqual(subject.numberOfItemsInSection(), 0)
         XCTAssertFalse(subject.hasData)
@@ -186,8 +186,8 @@ extension StoryViewModelTests {
 
 // MARK: MockStoryDataAdaptor
 class MockStoryDataAdaptor: StoryDataAdaptor {
-    var pocketStories = [PocketStory]()
-    func getPocketData() -> [PocketStory] {
-        return pocketStories
+    var merinoStories = [MerinoStory]()
+    func getMerinoData() -> [MerinoStory] {
+        return merinoStories
     }
 }

@@ -7,13 +7,12 @@ import MozillaAppServices
 import Redux
 import Shared
 
-final class PocketMiddleware {
+final class MerinoMiddleware {
     private let merinoManager: MerinoManagerProvider
     private let homepageTelemetry: HomepageTelemetry
     private let logger: Logger
 
     init(
-        // RGB
         merinoManager: MerinoManagerProvider = AppContainer.shared.resolve(),
         homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
         logger: Logger = DefaultLogger.shared
@@ -27,11 +26,11 @@ final class PocketMiddleware {
         switch action.actionType {
         case HomepageActionType.initialize,
             HomepageMiddlewareActionType.enteredForeground,
-            PocketActionType.toggleShowSectionSetting:
+            MerinoActionType.toggleShowSectionSetting:
             self.getPocketDataAndUpdateState(for: action)
-        case PocketActionType.tapOnHomepagePocketCell:
+        case MerinoActionType.tapOnHomepageMerinoCell:
             self.sendOpenPocketItemTelemetry(for: action)
-        case PocketActionType.viewedSection:
+        case MerinoActionType.viewedSection:
             self.homepageTelemetry.sendPocketSectionCounter()
         case ContextMenuActionType.tappedOnOpenNewPrivateTab:
             self.sendOpenInPrivateTelemetry(for: action)
@@ -44,17 +43,17 @@ final class PocketMiddleware {
         Task {
             let merinoStories = await merinoManager.getMerinoItems()
             store.dispatchLegacy(
-                PocketAction(
+                MerinoAction(
                     merinoStories: merinoStories,
                     windowUUID: action.windowUUID,
-                    actionType: PocketMiddlewareActionType.retrievedUpdatedStories
+                    actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
                 )
             )
         }
     }
 
     private func sendOpenPocketItemTelemetry(for action: Action) {
-        guard let config = (action as? PocketAction)?.telemetryConfig else {
+        guard let config = (action as? MerinoAction)?.telemetryConfig else {
             self.logger.log(
                 "Unable to retrieve config for \(action.actionType)",
                 level: .debug,

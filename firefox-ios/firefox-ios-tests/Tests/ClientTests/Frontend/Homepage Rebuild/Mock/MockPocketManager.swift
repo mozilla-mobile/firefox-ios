@@ -6,16 +6,16 @@ import Foundation
 
 @testable import Client
 
-final class MockPocketManager: PocketManagerProvider, @unchecked Sendable {
-    var getPocketItemsCalled = 0
-    func getPocketItems() async -> [PocketStoryConfiguration] {
-        getPocketItemsCalled += 1
+final class MockMerinoManager: MerinoManagerProvider, @unchecked Sendable {
+    var getMerinoItemsCalled = 0
+    func getMerinoItems() async -> [MerinoStoryConfiguration] {
+        getMerinoItemsCalled += 1
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
             .make(title: "feed3"),
         ]
 
-        return stories.compactMap { PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0)) }
+        return stories.compactMap { MerinoStoryConfiguration(story: MerinoStory(pocketFeedStory: $0)) }
     }
 }

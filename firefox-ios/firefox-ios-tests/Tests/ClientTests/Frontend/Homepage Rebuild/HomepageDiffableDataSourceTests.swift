@@ -64,10 +64,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
-            PocketAction(
+            MerinoAction(
                 pocketStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: PocketMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
             )
         )
 
@@ -128,10 +128,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
-            PocketAction(
+            MerinoAction(
                 pocketStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: PocketMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
             )
         )
 
