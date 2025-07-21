@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-class ToUManager {
+class ToUManager: FeatureFlaggable {
 
     static let shared = ToUManager()
 
@@ -11,6 +11,10 @@ class ToUManager {
     private let lastShownDateKey = "termsOfUseLastShownDate"
 
     private var didShowThisLaunch = false
+    
+    private var isToUFeatureEnabled: Bool {
+            featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
+        }
 
     /// Check if user has accepted
     var hasAccepted: Bool {
@@ -25,6 +29,11 @@ class ToUManager {
     /// Decide if bottom sheet should show
     func shouldShow() -> Bool {
         let now = Date()
+        
+        // 🚩 Check Nimbus feature flag first
+                if !isToUFeatureEnabled {
+                    return false
+                }
 
         // If accepted, never show again
         if hasAccepted {

@@ -54,6 +54,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarTranslucency
     case toolbarMinimalAddressBar
     case tosFeature
+    case touFeature
     case trackingProtectionRefactor
     case unifiedAds
     case unifiedSearch
@@ -85,6 +86,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .pdfRefactor,
                 .downloadLiveActivities,
                 .summarizer,
+                .touFeature,
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
@@ -162,6 +164,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarTranslucency,
                 .toolbarMinimalAddressBar,
                 .tosFeature,
+                .touFeature,
                 .trackingProtectionRefactor,
                 .unifiedAds,
                 .unifiedSearch,
