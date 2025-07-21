@@ -19,7 +19,15 @@ extension MerinoStoriesProviding {
 }
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, Sendable {
-    private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
+    private static let SupportedLocales = [
+        "en_CA",
+        "en_US",
+        "en_GB",
+        "en_ZA",
+        "de_DE",
+        "de_AT",
+        "de_CH"
+    ]
 
     private let prefs: Prefs
 

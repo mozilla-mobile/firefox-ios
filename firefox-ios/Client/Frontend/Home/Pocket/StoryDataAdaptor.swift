@@ -24,15 +24,17 @@ final class StoryDataAdaptorImplementation: StoryDataAdaptor, FeatureFlaggable, 
 
     weak var delegate: StoryDelegate?
 
-    init(merinoAPI: MerinoStoriesProviding,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(
+        merinoAPI: MerinoStoriesProviding,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.merinoAPI = merinoAPI
         self.notificationCenter = notificationCenter
         self.storyProvider = StoryProvider(merinoAPI: merinoAPI)
         setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
 
-        Task {
-            await updatePocketSites()
+        Task { [weak self] in
+            await self?.updateMerinoSites()
         }
     }
 
@@ -40,19 +42,18 @@ final class StoryDataAdaptorImplementation: StoryDataAdaptor, FeatureFlaggable, 
         return merinoStories
     }
 
-    private func updatePocketSites() async {
+    private func updateMerinoSites() async {
         let stories = await storyProvider.fetchStories()
         merinoStories = stories
         delegate?.didLoadNewData()
     }
 
     // MARK: - Notifiable
-
     nonisolated func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willEnterForegroundNotification:
-            Task {
-                await updatePocketSites()
+            Task { [weak self] in
+                await self?.updateMerinoSites()
             }
         default: break
         }

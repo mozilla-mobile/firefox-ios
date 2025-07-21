@@ -990,7 +990,7 @@
 		8A7653BD28A2C61D00924ABF /* StoryDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653BC28A2C61D00924ABF /* StoryDataAdaptor.swift */; };
 		8A7653BF28A2C92600924ABF /* StoryStandardCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653BE28A2C92600924ABF /* StoryStandardCellViewModel.swift */; };
 		8A7653C228A2E57D00924ABF /* StoryDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C128A2E57D00924ABF /* StoryDataAdaptorTests.swift */; };
-		8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */; };
+		8A7653C528A2E69100924ABF /* MockMerinoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C328A2E68B00924ABF /* MockMerinoAPI.swift */; };
 		8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76B01529F6EB3900A82607 /* ScreenshotService.swift */; };
 		8A7835332D50FEFF0052E328 /* BookmarksMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7835322D50FEFC0052E328 /* BookmarksMiddleware.swift */; };
 		8A7835352D5100970052E328 /* BookmarksAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7835342D5100970052E328 /* BookmarksAction.swift */; };
@@ -8435,7 +8435,7 @@
 		8A7653BC28A2C61D00924ABF /* StoryDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDataAdaptor.swift; sourceTree = "<group>"; };
 		8A7653BE28A2C92600924ABF /* StoryStandardCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryStandardCellViewModel.swift; sourceTree = "<group>"; };
 		8A7653C128A2E57D00924ABF /* StoryDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDataAdaptorTests.swift; sourceTree = "<group>"; };
-		8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPocketAPI.swift; sourceTree = "<group>"; };
+		8A7653C328A2E68B00924ABF /* MockMerinoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMerinoAPI.swift; sourceTree = "<group>"; };
 		8A76B01529F6EB3900A82607 /* ScreenshotService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotService.swift; sourceTree = "<group>"; };
 		8A7835322D50FEFC0052E328 /* BookmarksMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksMiddleware.swift; sourceTree = "<group>"; };
 		8A7835342D5100970052E328 /* BookmarksAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksAction.swift; sourceTree = "<group>"; };
@@ -14051,7 +14051,7 @@
 				E18259E229B2A51B00E6BE76 /* MockNotificationManager.swift */,
 				21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */,
 				8A9D315F2D13506100171502 /* MockParentFolderSelector.swift */,
-				8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */,
+				8A7653C328A2E68B00924ABF /* MockMerinoAPI.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				8A7A26E029D4785900EA76F1 /* MockRouter.swift */,
 				0BAF20E62E02AA7A000D4542 /* MockWKUIHandler.swift */,
@@ -18620,7 +18620,7 @@
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				8CA6FA0E2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift in Sources */,
 				439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */,
-				8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */,
+				8A7653C528A2E69100924ABF /* MockMerinoAPI.swift in Sources */,
 				8A83B74A2A265044002FF9AC /* SettingsCoordinatorTests.swift in Sources */,
 				8A6E13982A71BA4E00A88FA8 /* TabWebViewTests.swift in Sources */,
 				8AF3B15E2AF99D2F009BB262 /* DownloadsPanelTests.swift in Sources */,

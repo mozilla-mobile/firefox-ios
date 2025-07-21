@@ -12,10 +12,10 @@ final class StoryProvider: FeatureFlaggable, Sendable {
 
     init(
         merinoAPI: MerinoStoriesProviding,
-        numberOfPocketStories: Int = 12
+        numberOfStories: Int = 12
     ) {
         self.merinoAPI = merinoAPI
-        self.numberOfStories = numberOfPocketStories
+        self.numberOfStories = numberOfStories
     }
 
     func fetchStories() async -> [MerinoStory] {

@@ -8,7 +8,7 @@ import MozillaAppServices
 @testable import Client
 
 final class MerinoManagerTests: XCTestCase {
-    func test_getPocketItems_withSuccess_returnExpectedStories() async {
+    func test_getMerinoItems_withSuccess_returnExpectedStories() async {
         let subject = createSubject(
             with: MockMerinoAPI(result: .success(getMockStoriesData()))
         )
@@ -16,7 +16,7 @@ final class MerinoManagerTests: XCTestCase {
         XCTAssertEqual(stories.count, 3)
     }
 
-    func test_getPocketItems_withSucess_returnEmptyStories() async {
+    func test_getMerinoItems_withSucess_returnEmptyStories() async {
         let subject = createSubject(
             with: MockMerinoAPI(result: .success([]))
         )
@@ -24,7 +24,7 @@ final class MerinoManagerTests: XCTestCase {
         XCTAssertEqual(stories.count, 0)
     }
 
-    func test_getPocketItems_withFailure_returnEmptyStories() async {
+    func test_getMerinoItems_withFailure_returnEmptyStories() async {
         let subject = createSubject(
             with: MockMerinoAPI(result: .failure(TestError.example))
         )

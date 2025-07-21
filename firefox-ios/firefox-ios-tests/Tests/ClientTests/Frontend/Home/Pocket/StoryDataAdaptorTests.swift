@@ -28,8 +28,8 @@ class StoryDataAdaptorTests: XCTestCase {
     func testEmptyData() async throws {
         mockMerinoAPI = MockMerinoAPI(result: .success([]))
         let subject = createSubject()
-        let data = subject.getMerinoData()
         try await Task.sleep(nanoseconds: sleepTime)
+        let data = subject.getMerinoData()
         XCTAssertEqual(data.count, 0, "Data should be null")
     }
 
@@ -45,14 +45,15 @@ class StoryDataAdaptorTests: XCTestCase {
         let data = subject.getMerinoData()
         XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
     }
-}
 
-// MARK: Helper
-private extension StoryDataAdaptorTests {
-    func createSubject(file: StaticString = #filePath,
-                       line: UInt = #line) -> StoryDataAdaptorImplementation {
-        let subject = StoryDataAdaptorImplementation(merinoAPI: mockMerinoAPI,
-                                                     notificationCenter: mockNotificationCenter)
+    private func createSubject(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> StoryDataAdaptorImplementation {
+        let subject = StoryDataAdaptorImplementation(
+            merinoAPI: mockMerinoAPI,
+            notificationCenter: mockNotificationCenter
+        )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
