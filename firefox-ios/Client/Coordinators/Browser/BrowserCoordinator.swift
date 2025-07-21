@@ -87,7 +87,6 @@ class BrowserCoordinator: BaseCoordinator,
         } else {
             showToUBottomSheet()
         }
-        
     }
 
     // MARK: - Helper methods
@@ -165,7 +164,6 @@ class BrowserCoordinator: BaseCoordinator,
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
         showToUBottomSheet()
-
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
@@ -399,7 +397,6 @@ class BrowserCoordinator: BaseCoordinator,
             }
         }
     }
-    
     private func showIntroOnboarding() {
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
@@ -1148,12 +1145,11 @@ class BrowserCoordinator: BaseCoordinator,
         guard controller.shouldUseiPadSetup() else { return }
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
     }
-    
+
     // MARK: - Terms of Use Bottom Sheet
-    
+
     private func showToUBottomSheet() {
         guard ToUManager.shared.shouldShow() else { return }
-        
         let presentingVC = homepageViewController ?? browserViewController
         let viewModel = ToUBottomSheetViewModel()
         let touVC = ToUBottomSheetViewController(

@@ -21,17 +21,17 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         static let grabberTopPadding: CGFloat = 8
         static let maxSheetWidth: CGFloat = 500
     }
-    
+
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private let viewModel: ToUBottomSheetViewModel
     private let windowUUID: WindowUUID
-    private var stackView: UIStackView!
+    var currentWindowUUID: UUID? { windowUUID }
 
+    private var stackView = UIStackView()
     private let sheetContainer = UIView()
     private let grabberView = UIView()
-    var currentWindowUUID: UUID? { windowUUID }
 
     init(viewModel: ToUBottomSheetViewModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -62,7 +62,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         super.viewDidAppear(animated)
         viewModel.markToUAppeared()
     }
-    
+
     private func setupUI() {
         setupBackground()
         setupSheetContainer()
@@ -86,7 +86,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
 
         var constraints = [
             sheetContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            sheetContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor) // ⬅️ no safeArea here
+            sheetContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
 
         if isPad {
@@ -216,7 +216,11 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
             if translation.y > 100 || gesture.velocity(in: view).y > 800 {
                 dismiss(animated: true)
             } else {
-                UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseOut) {
+                UIView.animate(withDuration: 0.25,
+                               delay: 0,
+                               usingSpringWithDamping: 0.8,
+                               initialSpringVelocity: 1,
+                               options: .curveEaseOut) {
                     self.sheetContainer.transform = .identity
                 }
             }
@@ -245,7 +249,10 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
 }
 
 extension ToUBottomSheetViewController: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldInteractWith url: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+    func textView(_ textView: UITextView,
+                  shouldInteractWith url: URL,
+                  in characterRange: NSRange,
+                  interaction: UITextItemInteraction) -> Bool {
         guard interaction == .invokeDefaultAction else { return true }
         let linkVC = ToULinkViewController(url: url, windowUUID: windowUUID)
         present(linkVC, animated: true)
