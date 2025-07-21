@@ -62,6 +62,7 @@ final class AppFxACommandsTests: XCTestCase {
     }
 
     // MARK: - Close Remote Tabs Tests
+    @MainActor
     func testCloseSendTabs_activeWithOneURL_callsDeeplink() async {
         let url = URL(string: "https://mozilla.com")!
         let subject = createSubject()
@@ -72,6 +73,7 @@ final class AppFxACommandsTests: XCTestCase {
         XCTAssertEqual(applicationHelper.closeTabsCalled, 1)
     }
 
+    @MainActor
     func testCloseSendTabs_activeWithMultipleURLs_callsDeeplink() async {
         let url1 = URL(string: "https://example.com")!
         let url2 = URL(string: "https://example.com/1")!
