@@ -20,7 +20,7 @@
 "ActivityStream.ContextMenu.AddToShortcuts" = "Додати до ярликів";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite2" = "Прикріпити";
+"ActivityStream.ContextMenu.PinTopsite2" = "Закріпити";
 
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Відкріпити";
