@@ -77,20 +77,28 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         sheetContainer.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(sheetContainer)
 
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+
         var constraints = [
-            sheetContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            sheetContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            sheetContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            sheetContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            sheetContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor) // ⬅️ no safeArea here
         ]
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            constraints.append(sheetContainer.widthAnchor.constraint(lessThanOrEqualToConstant: UX.maxSheetWidth))
-            constraints.append(sheetContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        if isPad {
+            constraints.append(contentsOf: [
+                sheetContainer.widthAnchor.constraint(equalToConstant: UX.maxSheetWidth),
+                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 40),
+                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -40)
+            ])
+        } else {
+            constraints.append(contentsOf: [
+                sheetContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                sheetContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
         }
 
         NSLayoutConstraint.activate(constraints)
     }
-
     private func setupGrabber() {
         grabberView.backgroundColor = UIColor.systemGray3
         grabberView.layer.cornerRadius = UX.grabberHeight / 2

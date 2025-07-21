@@ -85,11 +85,8 @@ class BrowserCoordinator: BaseCoordinator,
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         } else {
-                   // If no onboarding launch, check and present ToU bottom sheet
-                   DispatchQueue.main.async { [weak self] in
-                       self?.presentToUBottomSheet()
-                   }
-               }
+            showToUBottomSheet()
+        }
         
     }
 
@@ -109,11 +106,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true, completion: { [weak self] in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.presentToUBottomSheet()
-            }
-        })
+                self?.showToUBottomSheet()
+            })
         remove(child: coordinator)
 
         // Once launch is done, we check for any saved Route
@@ -170,10 +164,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
-        // Show ToU if needed, safely
-           DispatchQueue.main.async { [weak self] in
-               self?.presentToUBottomSheet()
-           }
+        showToUBottomSheet()
 
     }
 
@@ -408,34 +399,7 @@ class BrowserCoordinator: BaseCoordinator,
             }
         }
     }
-    private func presentToUBottomSheet() {
-        let presentingVC = homepageViewController ?? browserViewController
-
-            // Check if something is already presented (e.g., onboarding, modal, sheet)
-            if presentingVC.presentedViewController != nil {
-                logger.log("presentToUBottomSheet skipped: another VC is already presented", level: .info, category: .coordinator)
-                return
-            }
-
-        guard ToUManager.shared.shouldShow() else { return }
-
-        var viewModel = ToUBottomSheetViewModel()
-        viewModel.onAccept = {
-            ToUManager.shared.markAccepted()
-        }
-        viewModel.onNotNow = {
-            ToUManager.shared.markDismissed()
-        }
-
-        let touVC = ToUBottomSheetViewController(
-            viewModel: viewModel,
-            windowUUID: self.windowUUID
-        )
-
-        
-            presentingVC.present(touVC, animated: true)
-        
-    }
+    
     private func showIntroOnboarding() {
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
@@ -1183,6 +1147,22 @@ class BrowserCoordinator: BaseCoordinator,
     private func setiPadLayoutDetents(for controller: UIViewController) {
         guard controller.shouldUseiPadSetup() else { return }
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
+    }
+    
+    // MARK: - Terms of Use Bottom Sheet
+    
+    private func showToUBottomSheet() {
+        //check for presented controller to avoid multiple presentation attempts
+        if homepageViewController?.presentedViewController != nil && UIDevice.current.userInterfaceIdiom == .pad { return }
+        
+        let presentingVC = homepageViewController ?? browserViewController
+        guard ToUManager.shared.shouldShow() else { return }
+        let viewModel = ToUBottomSheetViewModel()
+        let touVC = ToUBottomSheetViewController(
+            viewModel: viewModel,
+            windowUUID: self.windowUUID
+        )
+        presentingVC.present(touVC, animated: true)
     }
 
     // MARK: - Password Generator

@@ -21,6 +21,14 @@ struct ToUBottomSheetViewModel {
         TermsOfUse.LinkLearnMore
     ]
 
+    init(
+        onAccept: (() -> Void)? = { ToUManager.shared.markAccepted() },
+        onNotNow: (() -> Void)? = { ToUManager.shared.markDismissed() }
+    ) {
+        self.onAccept = onAccept
+        self.onNotNow = onNotNow
+    }
+
     func makeAttributedDescription(theme: Theme) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 2
