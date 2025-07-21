@@ -1550,7 +1550,7 @@ class BrowserViewController: UIViewController,
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
+            contentContainer.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
         ])
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
