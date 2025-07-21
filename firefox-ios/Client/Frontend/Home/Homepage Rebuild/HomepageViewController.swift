@@ -179,7 +179,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        collectionView?.collectionViewLayout.invalidateLayout()
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
 
@@ -567,6 +567,16 @@ final class HomepageViewController: UIViewController,
             }, theme: currentTheme)
 
             return customizeHomeCell
+
+        case .spacer:
+            guard let spacerCell = collectionView?.dequeueReusableCell(
+                cellType: HomepageSpacerCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            return spacerCell
         }
     }
 
