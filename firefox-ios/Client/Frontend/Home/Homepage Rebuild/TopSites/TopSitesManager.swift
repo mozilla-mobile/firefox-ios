@@ -43,8 +43,8 @@ protocol TopSitesManagerInterface {
 }
 
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
-class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
-    private var logger: Logger
+final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
+    private let logger: Logger
     private let profile: Profile
     private let contileProvider: ContileProviderInterface
     private let googleTopSiteManager: GoogleTopSiteManagerProvider

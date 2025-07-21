@@ -446,7 +446,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 }
 
 // MARK: - ContileProviderMock
-class ContileProviderMock: ContileProviderInterface, UnifiedAdsProviderInterface {
+final class ContileProviderMock: ContileProviderInterface, UnifiedAdsProviderInterface, @unchecked Sendable {
     typealias Mock = ContileProviderMock
     private var result: ContileResult
 
