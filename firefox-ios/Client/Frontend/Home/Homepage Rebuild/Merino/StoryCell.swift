@@ -78,7 +78,7 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
         titleLabel.numberOfLines = getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)
         accessibilityLabel = story.accessibilityLabel
 
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL.absoluteString,
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL?.absoluteString ?? "",
                                                             generalCornerRadius: UX.thumbnailCornerRadius,
                                                             faviconCornerRadius: UX.thumbnailCornerRadius,
                                                             heroImageSize: UX.thumbnailImageSize)

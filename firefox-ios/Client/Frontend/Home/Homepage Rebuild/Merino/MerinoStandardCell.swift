@@ -90,7 +90,7 @@ class MerinoStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
         descriptionLabel.text = story.description
         accessibilityLabel = story.accessibilityLabel
 
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL.absoluteString,
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL?.absoluteString ?? "",
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)
         sponsoredStack.isHidden = story.shouldHideSponsor

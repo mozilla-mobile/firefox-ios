@@ -785,6 +785,7 @@
 		81DAB2F92C8901AC00F4BE98 /* MainMenuStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F82C8901AC00F4BE98 /* MainMenuStateTests.swift */; };
 		81E1914D2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E1914C2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift */; };
 		81E9B6E82E2AB73400CE6FF6 /* MerinoStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */; };
+		81F1010D2E2EB64A008F6FDC /* MerinoTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F1010C2E2EB642008F6FDC /* MerinoTestData.swift */; };
 		81F617C92C8755AB003799BF /* MainMenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F617C82C8755AB003799BF /* MainMenuAction.swift */; };
 		81F617CB2C877EC7003799BF /* MainMenuTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F617CA2C877EC7003799BF /* MainMenuTelemetry.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
@@ -8165,6 +8166,7 @@
 		81E1914C2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMultipleChoiceSelectionDelegate.swift; sourceTree = "<group>"; };
 		81E446CF88B278374B416BF5 /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoStory.swift; sourceTree = "<group>"; };
+		81F1010C2E2EB642008F6FDC /* MerinoTestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoTestData.swift; sourceTree = "<group>"; };
 		81F617C82C8755AB003799BF /* MainMenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuAction.swift; sourceTree = "<group>"; };
 		81F617CA2C877EC7003799BF /* MainMenuTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuTelemetry.swift; sourceTree = "<group>"; };
 		81F647D98E79EC6406CDFCB4 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
@@ -14129,13 +14131,14 @@
 			path = OnboardingFeatureLayer;
 			sourceTree = "<group>";
 		};
-		C8B0F5EE283B7CCE007AE65D /* Pocket */ = {
+		C8B0F5EE283B7CCE007AE65D /* Merino */ = {
 			isa = PBXGroup;
 			children = (
 				C8B0F5F0283B7CCE007AE65D /* Model */,
 				81C3814F2E2D22DB00096AAE /* MerinoProvider.swift */,
+				81F1010C2E2EB642008F6FDC /* MerinoTestData.swift */,
 			);
-			path = Pocket;
+			path = Merino;
 			sourceTree = "<group>";
 		};
 		C8B0F5F0283B7CCE007AE65D /* Model */ = {
@@ -14385,7 +14388,7 @@
 			children = (
 				8A9F4EDF2DC8EE44004644B9 /* RustProtocols */,
 				6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */,
-				C8B0F5EE283B7CCE007AE65D /* Pocket */,
+				C8B0F5EE283B7CCE007AE65D /* Merino */,
 				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
 				F8B7109D2ABE380B0029726E /* RustErrors.swift */,
 				F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */,
@@ -17878,6 +17881,7 @@
 				EDADF77C2D70C58200C39295 /* SettingsTelemetry.swift in Sources */,
 				C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */,
 				8A19ACB22A3290AE001C2147 /* ClearPrivateDataSetting.swift in Sources */,
+				81F1010D2E2EB64A008F6FDC /* MerinoTestData.swift in Sources */,
 				8A9B87AF2C1B39EA0042B894 /* SearchListSection.swift in Sources */,
 				0E2E01DA2D77810D000BDBCF /* DownloadLiveActivityWrapper.swift in Sources */,
 				CA520E7A24913C1B00CCAB48 /* PasswordManagerViewModel.swift in Sources */,

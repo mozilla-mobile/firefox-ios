@@ -91,7 +91,7 @@ class LegacyPocketStandardCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
 
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.imageURL.absoluteString,
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.imageURL?.absoluteString ?? "",
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)
         sponsoredStack.isHidden = viewModel.shouldHideSponsor

@@ -14,7 +14,7 @@ struct MerinoStory: Equatable, Hashable {
     let topic: String?
     let publisher: String
     let isTimeSensitive: Bool
-    let imageURL: URL
+    let imageURL: URL?
     let iconURL: URL?
     let tileId: Int64
     let receivedRank: Int
@@ -29,7 +29,7 @@ struct MerinoStory: Equatable, Hashable {
             topic: item.topic,
             publisher: item.publisher,
             isTimeSensitive: item.isTimeSensitive,
-            imageURL: URL(string: item.imageUrl)!,
+            imageURL: URL(string: item.imageUrl),
             iconURL: item.iconUrl.flatMap(URL.init(string:)),
             tileId: item.tileId,
             receivedRank: Int(item.receivedRank)
@@ -45,7 +45,7 @@ struct MerinoStory: Equatable, Hashable {
         topic: String?,
         publisher: String,
         isTimeSensitive: Bool,
-        imageURL: URL,
+        imageURL: URL?,
         iconURL: URL?,
         tileId: Int64,
         receivedRank: Int

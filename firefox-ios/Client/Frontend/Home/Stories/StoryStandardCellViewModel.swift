@@ -6,7 +6,7 @@ import Foundation
 
 class StoryStandardCellViewModel {
     var title: String { story.title }
-    var imageURL: URL { story.imageURL }
+    var imageURL: URL? { story.imageURL }
     var url: URL? { story.url }
     var description: String {
         return  "\(story.publisher)"
