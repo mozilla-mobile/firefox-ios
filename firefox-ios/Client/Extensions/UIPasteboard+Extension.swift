@@ -23,10 +23,12 @@ extension UIPasteboard {
     }
 
     private var syncURL: URL? {
-        guard UIPasteboard.general.hasURLs,
-              let url = UIPasteboard.general.url,
-              url.isWebPage() else { return nil }
-        return url
+        return UIPasteboard.general.string.flatMap {
+            guard let url = URL(string: $0),
+                  url.isWebPage()
+            else { return nil }
+            return url
+        }
     }
 
     /// Preferred method to get URLs out of the clipboard.
