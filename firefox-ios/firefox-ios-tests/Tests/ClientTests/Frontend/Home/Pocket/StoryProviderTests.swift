@@ -7,7 +7,7 @@ import MozillaAppServices
 
 @testable import Client
 
-class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
+class StoryProviderTests: XCTestCase, FeatureFlaggable {
     var subject: StoryProvider!
 
     override func tearDown() {

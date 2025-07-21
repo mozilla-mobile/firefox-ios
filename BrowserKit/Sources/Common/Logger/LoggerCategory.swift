@@ -45,6 +45,9 @@ public enum LoggerCategory: String {
     /// Related to the main menu.
     case mainMenu
 
+    /// Related to Merio AS.
+    case merino
+
     /// Related to onboarding
     case onboarding
 

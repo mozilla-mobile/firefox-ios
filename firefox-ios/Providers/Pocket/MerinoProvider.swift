@@ -2,9 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
-import Shared
 import MozillaAppServices
+import Shared
 
 protocol MerinoStoriesProviding: Sendable {
     typealias StoryResult = Swift.Result<[RecommendationDataItem], Error>
@@ -18,7 +19,7 @@ extension MerinoStoriesProviding {
     }
 }
 
-final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, Sendable {
+final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
     private static let SupportedLocales = [
         "en_CA",
         "en_US",
@@ -30,6 +31,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, Sendable {
     ]
 
     private let prefs: Prefs
+    private var logger: Logger
 
     let MerinoServicesBaseURL = "https://merino.services.mozilla.com"
 
@@ -37,8 +39,12 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, Sendable {
         case failure
     }
 
-    init(prefs: Prefs) {
+    init(
+        prefs: Prefs,
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.prefs = prefs
+        self.logger = logger
     }
 
     func fetchStories(items: Int32) async throws -> [RecommendationDataItem] {
@@ -80,26 +86,47 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, Sendable {
         } catch let error as CuratedRecommendationsApiError {
             switch error {
             case .Network(let reason):
-                print("Network error when fetching Curated Recommendations: \(reason)")
+                logger.log("Network error when fetching Curated Recommendations: \(reason)",
+                        level: .debug,
+                        category: .merino
+                    )
 
             case .Other(let code?, let reason) where code == 400:
-                print("Bad Request: \(reason)")
+                logger.log("Bad Request: \(reason)",
+                        level: .debug,
+                        category: .merino
+                    )
 
             case .Other(let code?, let reason) where code == 422:
-                print("Validation Error: \(reason)")
+                logger.log("Validation Error: \(reason)",
+                        level: .debug,
+                        category: .merino
+                    )
 
             case .Other(let code?, let reason) where (500...599).contains(code):
-                print("Server Error: \(reason)")
+                logger.log("Server Error: \(reason)",
+                        level: .debug,
+                        category: .merino
+                    )
 
             case .Other(nil, let reason):
-                print("Missing status code: \(reason)")
+                logger.log("Missing status code: \(reason)",
+                        level: .debug,
+                        category: .merino
+                    )
 
             case .Other(_, let reason):
-                print("Unexpected Error: \(reason)")
+                logger.log("Unexpected Error: \(reason)",
+                        level: .debug,
+                        category: .merino
+                    )
             }
             return []
         } catch {
-            print("Unhandled error: \(error)")
+            logger.log("Unhandled error: \(error)",
+                    level: .debug,
+                    category: .merino
+                )
             return []
         }
     }

@@ -29,7 +29,6 @@ struct MerinoStory: Equatable, Hashable {
             topic: item.topic,
             publisher: item.publisher,
             isTimeSensitive: item.isTimeSensitive,
-            //RGB
             imageURL: URL(string: item.imageUrl)!,
             iconURL: item.iconUrl.flatMap(URL.init(string:)),
             tileId: item.tileId,
