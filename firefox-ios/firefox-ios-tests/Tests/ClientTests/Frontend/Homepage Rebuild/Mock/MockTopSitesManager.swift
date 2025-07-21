@@ -12,7 +12,7 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     var recalculateTopSitesCalledCount = 0
     var pinTopSiteCalledCount = 0
 
-    // We add these completions since this method is called in an asynchronous
+    // We add these completions since this method is called asynchronously
     var removeTopSiteCalled: () -> Void = {}
     var unpinTopSiteCalled: () -> Void = {}
 

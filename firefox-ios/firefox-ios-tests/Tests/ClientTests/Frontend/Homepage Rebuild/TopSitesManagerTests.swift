@@ -12,17 +12,14 @@ import Common
 final class TopSitesManagerTests: XCTestCase {
     private var profile: MockProfile!
     private var mockNotificationCenter: MockNotificationCenter!
-    private var dispatchQueue: MockDispatchQueue?
     override func setUp() {
         super.setUp()
         profile = MockProfile()
-        dispatchQueue = MockDispatchQueue()
         mockNotificationCenter = MockNotificationCenter()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
-        dispatchQueue = nil
         profile = nil
         mockNotificationCenter = nil
         super.tearDown()
@@ -488,7 +485,6 @@ final class TopSitesManagerTests: XCTestCase {
         line: UInt = #line
     ) throws -> TopSitesManager {
         let mockProfile = try XCTUnwrap(injectedProfile ?? profile)
-        let mockQueue = try XCTUnwrap(dispatchQueue)
         let mockNotificationCenter = try XCTUnwrap(mockNotificationCenter)
         let subject = TopSitesManager(
             profile: mockProfile,
@@ -497,7 +493,6 @@ final class TopSitesManagerTests: XCTestCase {
             googleTopSiteManager: googleTopSiteManager,
             topSiteHistoryManager: topSiteHistoryManager,
             searchEnginesManager: searchEngineManager,
-            dispatchQueue: mockQueue,
             notification: mockNotificationCenter,
             maxTopSites: maxCount
         )

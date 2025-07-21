@@ -43,6 +43,7 @@ class TopSiteHistoryManager: TopSiteHistoryManagerProvider {
         }
     }
 
+    // TODO: FXIOS-10245 Remove when we nuke legacy homepage from the codebase
     func removeTopSite(site: Site) {
         profile.pinnedSites.removeFromPinnedTopSites(site)
     }

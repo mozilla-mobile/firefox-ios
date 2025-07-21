@@ -53,7 +53,7 @@ extension BrowserDBSQLite: PinnedSites {
 
     /// Helper method that converts using the deferred types to result
     /// and adopts modern swift concurrency to avoid refactoring the database level
-    func awaitDatabaseRun(for commands: [(String, Args)]) async -> Result<Void, Error> {
+    private func awaitDatabaseRun(for commands: [(String, Args)]) async -> Result<Void, Error> {
         await withCheckedContinuation { continuation in
             database.run(commands).upon { result in
                 switch result {
