@@ -4,10 +4,11 @@
 
 import UIKit
 
+@MainActor
 public protocol Application {
     func open(url: URL)
 
-    func canOpen(url: URL) -> Bool
+    nonisolated func canOpen(url: URL) -> Bool
 }
 
 extension UIApplication: Application {
