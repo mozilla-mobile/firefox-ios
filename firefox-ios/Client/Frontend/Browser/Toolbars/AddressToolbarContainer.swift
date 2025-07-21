@@ -383,6 +383,9 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.transform = transform
         if shouldAddNewTab {
             let percentageTransform = abs(transform.tx) / bounds.width
+            if transform == .identity {
+                addNewTabView.showHideAddTabIcon(shouldShow: false)
+            }
             UIView.animate(withDuration: UX.addNewTabFadeAnimationDuration) {
                 self.addNewTabView.showHideAddTabIcon(shouldShow:
                                                         percentageTransform > UX.addNewTabPercentageAnimationThreshold)
