@@ -87,46 +87,46 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
             switch error {
             case .Network(let reason):
                 logger.log("Network error when fetching Curated Recommendations: \(reason)",
-                        level: .debug,
-                        category: .merino
-                    )
+                           level: .debug,
+                           category: .merino
+                )
 
             case .Other(let code?, let reason) where code == 400:
                 logger.log("Bad Request: \(reason)",
-                        level: .debug,
-                        category: .merino
-                    )
+                           level: .debug,
+                           category: .merino
+                )
 
             case .Other(let code?, let reason) where code == 422:
                 logger.log("Validation Error: \(reason)",
-                        level: .debug,
-                        category: .merino
-                    )
+                           level: .debug,
+                           category: .merino
+                )
 
             case .Other(let code?, let reason) where (500...599).contains(code):
                 logger.log("Server Error: \(reason)",
-                        level: .debug,
-                        category: .merino
-                    )
+                           level: .debug,
+                           category: .merino
+                )
 
             case .Other(nil, let reason):
                 logger.log("Missing status code: \(reason)",
-                        level: .debug,
-                        category: .merino
-                    )
+                           level: .debug,
+                           category: .merino
+                )
 
             case .Other(_, let reason):
                 logger.log("Unexpected Error: \(reason)",
-                        level: .debug,
-                        category: .merino
-                    )
+                           level: .debug,
+                           category: .merino
+                )
             }
             return []
         } catch {
             logger.log("Unhandled error: \(error)",
-                    level: .debug,
-                    category: .merino
-                )
+                       level: .debug,
+                       category: .merino
+            )
             return []
         }
     }
