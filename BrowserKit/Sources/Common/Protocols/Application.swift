@@ -8,7 +8,7 @@ import UIKit
 public protocol Application {
     func open(url: URL)
 
-    nonisolated func canOpen(url: URL) -> Bool
+    func canOpen(url: URL) -> Bool
 }
 
 extension UIApplication: Application {
@@ -16,7 +16,7 @@ extension UIApplication: Application {
         open(url, options: [:])
     }
 
-    public func canOpen(url: URL) -> Bool {
+    nonisolated public func canOpen(url: URL) -> Bool {
         return canOpenURL(url)
     }
 }
