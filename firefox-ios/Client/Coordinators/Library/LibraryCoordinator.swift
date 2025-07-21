@@ -8,12 +8,18 @@ import Foundation
 import enum MozillaAppServices.VisitType
 
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
+    @MainActor
     func didFinishLibrary(from coordinator: Coordinator)
 }
 
 protocol LibraryNavigationHandler: AnyObject {
+    @MainActor
     func start(panelType: LibraryPanelType, navigationController: UINavigationController)
+
+    @MainActor
     func shareLibraryItem(url: URL, sourceView: UIView)
+
+    @MainActor
     func setNavigationBarHidden(_ value: Bool)
 }
 

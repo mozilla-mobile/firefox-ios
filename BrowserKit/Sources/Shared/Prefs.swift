@@ -247,7 +247,7 @@ public protocol Prefs: Sendable {
     func clearAll()
 }
 
-open class MockProfilePrefs: Prefs {
+open class MockProfilePrefs: Prefs, @unchecked Sendable {
     let prefix: String
 
     open func getBranchPrefix() -> String {

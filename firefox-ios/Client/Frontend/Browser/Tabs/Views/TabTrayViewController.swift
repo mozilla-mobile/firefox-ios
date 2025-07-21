@@ -18,6 +18,7 @@ protocol TabTrayController: UIViewController,
 }
 
 protocol TabTrayViewControllerDelegate: AnyObject {
+    @MainActor
     func didFinish()
 }
 

@@ -12,10 +12,14 @@ class DisplaySettingTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.navigationBars["Appearance"],
-                app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView],
-                app.switches[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle]
+                app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView]
             ]
         )
+        if #available(iOS 17, *) {
+            waitForElementsToExist([app.switches[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle]])
+        } else {
+            waitForElementsToExist([app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle]])
+        }
 
         let automaticIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].value
         XCTAssertEqual(automaticIsSelected as? String, "1")

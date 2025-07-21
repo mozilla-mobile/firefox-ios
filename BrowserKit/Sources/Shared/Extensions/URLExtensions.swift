@@ -209,7 +209,7 @@ extension URL {
 // MARK: - Exported URL Schemes
 
 extension URL {
-    public static var mozPublicScheme: String = {
+    public static let mozPublicScheme: String = {
         guard let string = Bundle.main.object(
             forInfoDictionaryKey: "MozPublicURLScheme"
         ) as? String, !string.isEmpty else {
@@ -219,7 +219,7 @@ extension URL {
         return string
     }()
 
-    public static var mozInternalScheme: String = {
+    public static let mozInternalScheme: String = {
         guard let string = Bundle.main.object(
             forInfoDictionaryKey: "MozInternalURLScheme"
         ) as? String, !string.isEmpty else {
