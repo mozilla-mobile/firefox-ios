@@ -1015,7 +1015,7 @@ class BrowserViewController: UIViewController,
 
         if #available(iOS 16.0, *) {
             let clipboardHandler = DefaultClipboardBarDisplayHandler(prefs: profile.prefs,
-                                                                     windowUUID: tabManager.windowUUID)
+                                                                     windowUUID: windowUUID)
             clipboardHandler.delegate = self
             self.clipboardBarDisplayHandler = clipboardHandler
         } else {
