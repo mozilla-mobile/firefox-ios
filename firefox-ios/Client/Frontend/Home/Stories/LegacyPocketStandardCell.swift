@@ -86,12 +86,12 @@ class LegacyPocketStandardCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: PocketStandardCellViewModel, theme: Theme) {
+    func configure(viewModel: StoryStandardCellViewModel, theme: Theme) {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
 
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.imageURL.absoluteString,
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.imageURL?.absoluteString ?? "",
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)
         sponsoredStack.isHidden = viewModel.shouldHideSponsor

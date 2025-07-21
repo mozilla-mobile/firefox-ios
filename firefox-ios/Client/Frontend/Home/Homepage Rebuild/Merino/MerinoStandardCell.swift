@@ -6,8 +6,8 @@ import Common
 import Foundation
 import SiteImageView
 
-/// The standard cell used in homepage pocket section
-class PocketStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
+/// The standard cell used in homepage merino section
+class MerinoStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
     struct UX {
         static let cellHeight: CGFloat = 112
         static let cellWidth: CGFloat = 350
@@ -85,12 +85,12 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
 
     // MARK: - Helpers
 
-    func configure(story: PocketStoryConfiguration, theme: Theme) {
+    func configure(story: MerinoStoryConfiguration, theme: Theme) {
         titleLabel.text = story.title
         descriptionLabel.text = story.description
         accessibilityLabel = story.accessibilityLabel
 
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL.absoluteString,
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL?.absoluteString ?? "",
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)
         sponsoredStack.isHidden = story.shouldHideSponsor

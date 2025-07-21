@@ -5,7 +5,7 @@
 import XCTest
 import Common
 
-class PocketTests: BaseTestCase {
+class StoryTests: BaseTestCase {
     enum SwipeDirection {
         case up, down, left, right
     }
@@ -47,9 +47,9 @@ class PocketTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
     func testPocketEnabledByDefault() {
         navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
         XCTAssertEqual(
-            app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket].label,
+            app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino].label,
             "Stories"
         )
 
@@ -60,11 +60,11 @@ class PocketTests: BaseTestCase {
 
         // Disable Pocket
         togglePocket(shouldEnable: false)
-        mozWaitForElementToNotExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        mozWaitForElementToNotExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
 
         // Enable it again
         togglePocket(shouldEnable: true)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
 
         // Tap on the first Pocket element
         app.collectionViews
@@ -79,7 +79,7 @@ class PocketTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
     func testValidatePocketContextMenu() {
         navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
         // Long tap on one of the stories
         let pocketCell = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
         app.collectionViews.cells.matching(identifier: pocketCell).staticTexts.firstMatch.press(forDuration: 1.5)

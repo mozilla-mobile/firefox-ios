@@ -582,7 +582,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var totalHeight: CGFloat = 0
-        let storiesState = state.pocketState
+        let storiesState = state.merinoState
 
         // Add header height
         totalHeight += getHeaderHeight(headerState: storiesState.sectionHeaderState, environment: environment)
@@ -645,7 +645,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getTallestStoryCellHeight(cellWidth: CGFloat) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var storyCells: [StoryCell] = []
-        for story in state.pocketState.pocketData {
+        for story in state.merinoState.merinoData {
             let cell = StoryCell()
             cell.configure(story: story, theme: LightTheme())
             storyCells.append(cell)

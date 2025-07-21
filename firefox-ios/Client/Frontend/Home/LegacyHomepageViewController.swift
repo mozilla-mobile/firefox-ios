@@ -482,7 +482,7 @@ class LegacyHomepageViewController:
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
         let visitType = VisitType.bookmark
-        // Called from top sites, pocket, learn more in pocket section
+        // Called from top sites, merino, learn more in merino section
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
@@ -777,7 +777,7 @@ private extension LegacyHomepageViewController {
         }
 
         viewModel.pocketViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .pocket)
+            self?.contextMenuHelper.presentContextMenu(for: site, with: sourceView, sectionType: .merino)
         }
 
         // Customize home

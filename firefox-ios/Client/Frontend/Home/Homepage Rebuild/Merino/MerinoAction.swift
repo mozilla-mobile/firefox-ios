@@ -11,31 +11,31 @@ struct OpenPocketTelemetryConfig {
     let position: Int
 }
 
-final class PocketAction: Action {
-    let pocketStories: [PocketStoryConfiguration]?
+final class MerinoAction: Action {
+    let merinoStories: [MerinoStoryConfiguration]?
     let isEnabled: Bool?
     let telemetryConfig: OpenPocketTelemetryConfig?
 
     init(
-        pocketStories: [PocketStoryConfiguration]? = nil,
+        merinoStories: [MerinoStoryConfiguration]? = nil,
         isEnabled: Bool? = nil,
         telemetryConfig: OpenPocketTelemetryConfig? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
-        self.pocketStories = pocketStories
+        self.merinoStories = merinoStories
         self.isEnabled = isEnabled
         self.telemetryConfig = telemetryConfig
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
-enum PocketActionType: ActionType {
+enum MerinoActionType: ActionType {
     case toggleShowSectionSetting
-    case tapOnHomepagePocketCell
+    case tapOnHomepageMerinoCell
     case viewedSection
 }
 
-enum PocketMiddlewareActionType: ActionType {
+enum MerinoMiddlewareActionType: ActionType {
     case retrievedUpdatedStories
 }

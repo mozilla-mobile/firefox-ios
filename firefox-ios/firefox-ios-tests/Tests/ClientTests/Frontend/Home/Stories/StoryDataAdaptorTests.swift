@@ -3,13 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import MozillaAppServices
+
 @testable import Client
 
 @MainActor
-class PocketDataAdaptorTests: XCTestCase {
+class StoryDataAdaptorTests: XCTestCase {
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     var mockNotificationCenter: MockNotificationCenter!
-    var mockPocketAPI: MockPocketAPI!
+    var mockMerinoAPI: MockMerinoAPI!
 
     override func setUp() {
         super.setUp()
@@ -20,37 +22,38 @@ class PocketDataAdaptorTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         mockNotificationCenter = nil
-        mockPocketAPI = nil
+        mockMerinoAPI = nil
     }
 
     func testEmptyData() async throws {
-        mockPocketAPI = MockPocketAPI(result: .success([]))
+        mockMerinoAPI = MockMerinoAPI(result: .success([]))
         let subject = createSubject()
-        let data = subject.getPocketData()
         try await Task.sleep(nanoseconds: sleepTime)
+        let data = subject.getMerinoData()
         XCTAssertEqual(data.count, 0, "Data should be null")
     }
 
     func testGetPocketData() async throws {
-        let stories: [PocketFeedStory] = [
+        let stories: [RecommendationDataItem] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
             .make(title: "feed3"),
         ]
-        mockPocketAPI = MockPocketAPI(result: .success(stories))
+        mockMerinoAPI = MockMerinoAPI(result: .success(stories))
         let subject = createSubject()
         try await Task.sleep(nanoseconds: sleepTime)
-        let data = subject.getPocketData()
+        let data = subject.getMerinoData()
         XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
     }
-}
 
-// MARK: Helper
-private extension PocketDataAdaptorTests {
-    func createSubject(file: StaticString = #filePath,
-                       line: UInt = #line) -> PocketDataAdaptorImplementation {
-        let subject = PocketDataAdaptorImplementation(pocketAPI: mockPocketAPI,
-                                                      notificationCenter: mockNotificationCenter)
+    private func createSubject(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> StoryDataAdaptorImplementation {
+        let subject = StoryDataAdaptorImplementation(
+            merinoAPI: mockMerinoAPI,
+            notificationCenter: mockNotificationCenter
+        )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

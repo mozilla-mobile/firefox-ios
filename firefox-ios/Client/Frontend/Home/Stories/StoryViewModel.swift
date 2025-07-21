@@ -8,7 +8,7 @@ import Storage
 import Shared
 
 // TODO: - FXIOS-12756 the class should conform to Sendable
-class PocketViewModel: @unchecked Sendable {
+class StoryViewModel: @unchecked Sendable {
     struct UX {
         static let numberOfItemsInColumn = 3
         static let fractionalWidthiPhonePortrait: CGFloat = 0.90
@@ -27,13 +27,13 @@ class PocketViewModel: @unchecked Sendable {
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
     weak var delegate: HomepageDataModelDelegate?
 
-    private var dataAdaptor: PocketDataAdaptor
-    private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
+    private var dataAdaptor: StoryDataAdaptor
+    private var storiesViewModels = [StoryStandardCellViewModel]()
     private var wallpaperManager: WallpaperManager
     private var prefs: Prefs
     private let logger: Logger
 
-    init(pocketDataAdaptor: PocketDataAdaptor,
+    init(pocketDataAdaptor: StoryDataAdaptor,
          isZeroSearch: Bool = false,
          theme: Theme,
          prefs: Prefs,
@@ -61,8 +61,8 @@ class PocketViewModel: @unchecked Sendable {
     }
 
     private func getSitesDetail(for index: Int) -> Site {
-        return Site.createBasicSite(url: pocketStoriesViewModels[index].url?.absoluteString ?? "",
-                                    title: pocketStoriesViewModels[index].title)
+        return Site.createBasicSite(url: storiesViewModels[index].url?.absoluteString ?? "",
+                                    title: storiesViewModels[index].title)
     }
 
     // MARK: - Telemetry
@@ -94,37 +94,37 @@ class PocketViewModel: @unchecked Sendable {
 
     @MainActor
     private func updateData() {
-        let stories = dataAdaptor.getPocketData()
-        pocketStoriesViewModels = []
+        let stories = dataAdaptor.getMerinoData()
+        storiesViewModels = []
         // Add the story in the view models list
         for story in stories {
-            bind(pocketStoryViewModel: .init(story: story))
+            bind(storyViewModel: .init(story: story))
         }
     }
 
-    private func bind(pocketStoryViewModel: PocketStandardCellViewModel) {
-        pocketStoryViewModel.onTap = { [weak self] indexPath in
+    private func bind(storyViewModel: StoryStandardCellViewModel) {
+        storyViewModel.onTap = { [weak self] indexPath in
             self?.recordTapOnStory(index: indexPath.row)
-            let siteUrl = self?.pocketStoriesViewModels[indexPath.row].url
+            let siteUrl = self?.storiesViewModels[indexPath.row].url
             siteUrl.map { self?.onTapTileAction?($0) }
         }
 
-        pocketStoriesViewModels.append(pocketStoryViewModel)
+        storiesViewModels.append(storyViewModel)
     }
 }
 
 // MARK: HomeViewModelProtocol
-extension PocketViewModel: HomepageViewModelProtocol {
+extension StoryViewModel: HomepageViewModelProtocol {
     var sectionType: HomepageSectionType {
-        return .pocket
+        return .merino
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
         let textColor = wallpaperManager.currentWallpaper.textColor
 
         return LabelButtonHeaderViewModel(
-            title: HomepageSectionType.pocket.title,
-            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
+            title: HomepageSectionType.merino.title,
+            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
             isButtonHidden: true,
             textColor: textColor)
     }
@@ -168,16 +168,16 @@ extension PocketViewModel: HomepageViewModelProtocol {
     }
 
     func numberOfItemsInSection() -> Int {
-        return !pocketStoriesViewModels.isEmpty ? pocketStoriesViewModels.count : 0
+        return !storiesViewModels.isEmpty ? storiesViewModels.count : 0
     }
 
     var isEnabled: Bool {
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        return isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
+        return isFeatureEnabled && MerinoProvider.islocaleSupported(Locale.current.identifier)
     }
 
     var hasData: Bool {
-        return !pocketStoriesViewModels.isEmpty
+        return !storiesViewModels.isEmpty
     }
 
     func screenWasShown() {
@@ -190,7 +190,7 @@ extension PocketViewModel: HomepageViewModelProtocol {
 }
 
 // MARK: FxHomeSectionHandler
-extension PocketViewModel: HomepageSectionHandler {
+extension StoryViewModel: HomepageSectionHandler {
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         recordSectionHasShown()
@@ -202,7 +202,7 @@ extension PocketViewModel: HomepageSectionHandler {
                        category: .legacyHomepage)
             return UICollectionViewCell()
         }
-        let viewModel = pocketStoriesViewModels[indexPath.row]
+        let viewModel = storiesViewModels[indexPath.row]
         viewModel.tag = indexPath.row
         cell.configure(viewModel: viewModel, theme: theme)
         return cell
@@ -217,7 +217,7 @@ extension PocketViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-        pocketStoriesViewModels[indexPath.row].onTap(indexPath)
+        storiesViewModels[indexPath.row].onTap(indexPath)
     }
 
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
@@ -229,7 +229,7 @@ extension PocketViewModel: HomepageSectionHandler {
     }
 }
 
-extension PocketViewModel: PocketDelegate {
+extension StoryViewModel: StoryDelegate {
     func didLoadNewData() {
         updateData()
         guard isEnabled else { return }
