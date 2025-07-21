@@ -44,9 +44,8 @@ class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
         self.sites = sites
     }
 
-    func remove(pinnedSite: Storage.Site) async -> Result<Void, any Error> {
+    func remove(pinnedSite: Storage.Site) async throws {
         removePinnedSiteCalled()
-        return .success(())
     }
 
     func getTopSites(completion: @escaping ([Site]?) -> Void) {

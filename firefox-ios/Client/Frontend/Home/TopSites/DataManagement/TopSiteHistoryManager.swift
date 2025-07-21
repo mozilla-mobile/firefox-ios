@@ -9,7 +9,7 @@ import Storage
 protocol TopSiteHistoryManagerProvider {
     func getTopSites(completion: @escaping ([Site]?) -> Void)
     func removeDefaultTopSitesTile(site: Site)
-    func remove(pinnedSite: Site) async -> Result<Void, Error>
+    func remove(pinnedSite: Site) async throws
 }
 
 // Manages the top site
@@ -35,12 +35,8 @@ class TopSiteHistoryManager: TopSiteHistoryManagerProvider {
         }
     }
 
-    func remove(pinnedSite: Site) async -> Result<Void, Error> {
-        do {
-            return try await profile.pinnedSites.remove(pinnedSite: pinnedSite)
-        } catch {
-            return .failure(error)
-        }
+    func remove(pinnedSite: Site) async throws {
+        try await profile.pinnedSites.remove(pinnedSite: pinnedSite)
     }
 
     // TODO: FXIOS-10245 Remove when we nuke legacy homepage from the codebase

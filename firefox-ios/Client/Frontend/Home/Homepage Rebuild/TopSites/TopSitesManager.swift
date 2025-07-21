@@ -228,9 +228,16 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     // MARK: - Context menu actions
     func removeTopSite(_ site: Site) async {
         googleTopSiteManager.removeGoogleTopSite(site: site)
-        let result = await topSiteHistoryManager.remove(pinnedSite: site)
-        guard case .success = result else { return }
-        hideURLFromTopSites(site)
+        do {
+            try await topSiteHistoryManager.remove(pinnedSite: site)
+            hideURLFromTopSites(site)
+        } catch {
+            logger.log(
+                "Removing pinned site threw an error - \(error.localizedDescription)",
+                level: .warning,
+                category: .homepage
+            )
+        }
     }
 
     func pinTopSite(_ site: Site) {
@@ -239,7 +246,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
 
     func unpinTopSite(_ site: Site) async {
         googleTopSiteManager.removeGoogleTopSite(site: site)
-        _ = await topSiteHistoryManager.remove(pinnedSite: site)
+        try? await topSiteHistoryManager.remove(pinnedSite: site)
     }
 
     private func hideURLFromTopSites(_ site: Site) {

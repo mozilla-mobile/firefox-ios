@@ -8,7 +8,7 @@ import Shared
 public protocol PinnedSites {
     // Pinning top sites
     // Without Deferred
-    func remove(pinnedSite site: Site) async throws -> Result<Void, Error>
+    func remove(pinnedSite site: Site) async throws
 
     // With Deferred
     @discardableResult

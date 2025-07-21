@@ -40,27 +40,26 @@ extension SDRow {
 
 extension BrowserDBSQLite: PinnedSites {
     // Methods for new homepage that complies with Swift 6 Migration
-    public func remove(pinnedSite site: Site) async throws -> Result<Void, Error> {
+    public func remove(pinnedSite site: Site) async throws {
         guard let host = (site.url as String).asURL?.normalizedHost else {
-            return .failure(DatabaseError(description: "Invalid url for site \(site.url)"))
+            throw DatabaseError(description: "Invalid url for site \(site.url)")
         }
 
-        let deleteResult = await awaitDatabaseRun(for: [("DELETE FROM pinned_top_sites where domain = ?", [host])])
-        guard case .success = deleteResult else { return deleteResult }
+        try await awaitDatabaseRun(for: [("DELETE FROM pinned_top_sites where domain = ?", [host])])
         self.notificationCenter.post(name: .TopSitesUpdated, object: nil)
-        return await awaitDatabaseRun(for: [("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
+        try await awaitDatabaseRun(for: [("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
     }
 
     /// Helper method that converts using the deferred types to result
     /// and adopts modern swift concurrency to avoid refactoring the database level
-    private func awaitDatabaseRun(for commands: [(String, Args)]) async -> Result<Void, Error> {
-        await withCheckedContinuation { continuation in
+    private func awaitDatabaseRun(for commands: [(String, Args)]) async throws {
+        try await withCheckedThrowingContinuation { continuation in
             database.run(commands).upon { result in
                 switch result {
                 case .success:
-                    continuation.resume(returning: .success(()))
+                    continuation.resume()
                 case .failure(let error):
-                    continuation.resume(returning: .failure(error))
+                    continuation.resume(throwing: error)
                 }
             }
         }
