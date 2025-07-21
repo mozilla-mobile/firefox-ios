@@ -373,7 +373,7 @@ final class TopSitesManagerTests: XCTestCase {
         let mockTopSiteHistoryManager = MockTopSiteHistoryManager()
         let subject = try createSubject(
             googleTopSiteManager: mockGoogleTopSiteManager,
-            topSiteHistoryManager: mockTopSiteHistoryManager,
+            topSiteHistoryManager: mockTopSiteHistoryManager
         )
         let site = Site.createBasicSite(url: "www.example.com", title: "Example Pinned Site")
         let removePinnedSiteExpectation = XCTestExpectation(
