@@ -183,6 +183,7 @@ class BrowserViewController: UIViewController,
 
     // The content container contains the homepage, error page or webview. Embedded by the coordinator.
     private(set) lazy var contentContainer: ContentContainer = .build { _ in }
+    private var contentContainerBottomConstraint: NSLayoutConstraint?
 
     // A view for displaying a preview of the web page.
     private lazy var webPagePreview: TabWebViewPreview = .build()
@@ -322,6 +323,10 @@ class BrowserViewController: UIViewController,
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
+    var isHomepageSearchBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -1550,7 +1555,6 @@ class BrowserViewController: UIViewController,
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentContainer.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
         ])
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
@@ -1564,6 +1568,17 @@ class BrowserViewController: UIViewController,
 
         updateHeaderConstraints()
         setupBlurViews()
+    }
+
+    private func updateContentContainerConstraints(isHomepage: Bool) {
+        if isHomepage && isHomepageSearchBarEnabled {
+            contentContainerBottomConstraint = contentContainer.bottomAnchor
+                .constraint(equalTo: bottomContainer.topAnchor)
+        } else {
+            contentContainerBottomConstraint = contentContainer.bottomAnchor
+                .constraint(equalTo: overKeyboardContainer.topAnchor)
+        }
+        contentContainerBottomConstraint?.isActive = true
     }
 
     private func setupBlurViews() {
@@ -1814,6 +1829,7 @@ class BrowserViewController: UIViewController,
         }
 
         updateToolbarDisplay()
+        updateContentContainerConstraints(isHomepage: true)
     }
 
     func showEmbeddedWebview() {
@@ -1839,6 +1855,7 @@ class BrowserViewController: UIViewController,
 
         browserDelegate?.show(webView: webView)
         updateToolbarDisplay()
+        updateContentContainerConstraints(isHomepage: false)
     }
 
     // MARK: - Document Loading
