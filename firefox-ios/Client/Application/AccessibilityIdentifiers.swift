@@ -268,7 +268,7 @@ struct AccessibilityIdentifiers {
             static let radioButton = "Microsurvey.Survey.RadioButton"
         }
     }
-    
+
     struct TermsOfUse {
         static let logo = "TermsOfUse.Logo"
         static let title = "TermsOfUse.Title"
