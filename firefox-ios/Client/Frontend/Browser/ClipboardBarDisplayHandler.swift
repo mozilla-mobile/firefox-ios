@@ -49,7 +49,9 @@ class ClipboardBarDisplayHandler: NSObject {
         )
     }
 
+    // TODO: FXIOS-TODO This can be removed once iOS 15 is dropped since iOS 16.0+ doesn't use lastDisplayedURL
     @objc
+    @preconcurrency
     private func UIPasteboardChanged() {
         // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
         NotificationCenter.default.removeObserver(self, name: UIPasteboard.changedNotification, object: nil)
