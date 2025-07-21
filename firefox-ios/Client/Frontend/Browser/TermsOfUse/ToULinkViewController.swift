@@ -2,14 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import UIKit
 import WebKit
 import Common
 import Shared
 import ComponentLibrary
 
 class ToULinkViewController: UIViewController, Themeable {
-
     private let url: URL
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -20,8 +18,6 @@ class ToULinkViewController: UIViewController, Themeable {
 
     private var webView: WKWebView!
 
-    // MARK: - Init
-
     init(url: URL,
          windowUUID: UUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -31,29 +27,24 @@ class ToULinkViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
-        
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
         listenForThemeChange(view)
+        setupHeader()
         setupWebView()
-        setupHeaderBar()
         applyTheme()
     }
 
-    // MARK: - Setup
-
-    private func setupHeaderBar() {
+    private func setupHeader() {
         let header = UIView()
-        header.translatesAutoresizingMaskIntoConstraints = false
         header.backgroundColor = currentTheme().colors.layer1
+        header.translatesAutoresizingMaskIntoConstraints = false
 
         let backButton = UIButton(type: .system)
         backButton.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
@@ -62,8 +53,8 @@ class ToULinkViewController: UIViewController, Themeable {
         backButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         backButton.translatesAutoresizingMaskIntoConstraints = false
 
-        header.addSubview(backButton)
         view.addSubview(header)
+        header.addSubview(backButton)
 
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -78,36 +69,29 @@ class ToULinkViewController: UIViewController, Themeable {
 
     private func setupWebView() {
         let config = WKWebViewConfiguration()
-        config.setURLSchemeHandler(
-            InternalSchemeHandler(shouldUseOldErrorPage: true),
-            forURLScheme: InternalURL.scheme
-        )
+        config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
+
         webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
-
         view.addSubview(webView)
+
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
         webView.load(URLRequest(url: url))
     }
 
-    // MARK: - Theming
-
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = currentTheme().colors.layer1
     }
 
-    // MARK: - Actions
-
     @objc private func closeTapped() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true)
     }
 
     private func currentTheme() -> Theme {
@@ -115,13 +99,11 @@ class ToULinkViewController: UIViewController, Themeable {
     }
 }
 
-// MARK: - WKNavigationDelegate
-
 extension ToULinkViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: any Error) {
-        let error = error as NSError
-        if error.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
-            ErrorPageHelper(certStore: nil).loadPage(error, forUrl: url, inWebView: webView)
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
+        let nsError = error as NSError
+        if nsError.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
+            ErrorPageHelper(certStore: nil).loadPage(nsError, forUrl: url, inWebView: webView)
         }
     }
 }

@@ -7,19 +7,43 @@ import Shared
 import Localizations
 
 struct ToUBottomSheetViewModel {
-    let titleText: String
-    let descriptionText: String
-    let acceptButtonTitle: String
-    let remindMeLaterButtonTitle: String
+    let titleText = TermsOfUse.Title
+    let descriptionText = TermsOfUse.Description
+    let acceptButtonTitle = TermsOfUse.AcceptButton
+    let remindMeLaterButtonTitle = TermsOfUse.RemindMeLaterButton
 
     var onAccept: (() -> Void)?
     var onNotNow: (() -> Void)?
 
-    init() {
-        self.titleText = TermsOfUse.Title
-        self.descriptionText = TermsOfUse.Description
-        self.acceptButtonTitle = TermsOfUse.AcceptButton
-        self.remindMeLaterButtonTitle = TermsOfUse.RemindMeLaterButton
+    private let terms = [
+        TermsOfUse.LinkTermsOfUse,
+        TermsOfUse.LinkPrivacyNotice,
+        TermsOfUse.LinkLearnMore
+    ]
+
+    func makeAttributedDescription(theme: Theme) -> NSAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 2
+        paragraphStyle.alignment = .left
+
+        let attributed = NSMutableAttributedString(
+            string: descriptionText,
+            attributes: [
+                .font: FXFontStyles.Regular.body.scaledFont(),
+                .foregroundColor: theme.colors.textSecondary,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+
+        for term in terms {
+            if let url = linkURL(for: term),
+               let range = attributed.string.range(of: term) {
+                let nsRange = NSRange(range, in: attributed.string)
+                attributed.addAttribute(.link, value: url, range: nsRange)
+            }
+        }
+
+        return attributed
     }
 
     func linkURL(for term: String) -> URL? {
@@ -29,16 +53,15 @@ struct ToUBottomSheetViewModel {
         case TermsOfUse.LinkPrivacyNotice:
             return URL(string: "https://www.mozilla.org/privacy/firefox/")
         case TermsOfUse.LinkLearnMore:
-            return URLForTopic("firefox-terms-of-use-faq")
+            return sumoFAQURL("firefox-terms-of-use-faq")
         default:
             return nil
         }
     }
-    
-    func URLForTopic(_ topic: String) -> URL? {
+
+    private func sumoFAQURL(_ topic: String) -> URL? {
         guard let escapedTopic = topic.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-              let languageIdentifier = Locale.preferredLanguages.first
-        else {
+              let languageIdentifier = Locale.preferredLanguages.first else {
             return nil
         }
         return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
