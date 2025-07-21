@@ -12762,14 +12762,14 @@
 			path = SectionHeader;
 			sourceTree = "<group>";
 		};
-		8A7653C028A2E54800924ABF /* Pocket */ = {
+		8A7653C028A2E54800924ABF /* Stories */ = {
 			isa = PBXGroup;
 			children = (
 				8A7653C128A2E57D00924ABF /* StoryDataAdaptorTests.swift */,
 				E571EE79287569960051D9AA /* StoryProviderTests.swift */,
 				8AA7347A28AEDB3100443D24 /* StoryViewModelTests.swift */,
 			);
-			path = Pocket;
+			path = Stories;
 			sourceTree = "<group>";
 		};
 		8A7AF0C42C9A1135009691B5 /* Redux */ = {
@@ -12800,7 +12800,7 @@
 				8A62B15B2CED40800045F46E /* ContextMenu */,
 				8A454D3D2CB9B896009436D9 /* TopSites */,
 				8A454D2A2CB7079A009436D9 /* Header */,
-				8ABDBAA42CB6BF3A00B51F63 /* Pocket */,
+				8ABDBAA42CB6BF3A00B51F63 /* Merino */,
 				8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */,
 				8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */,
 				8AD3AFC22D143EF000CFC887 /* HomepageDimensionImplementation.swift */,
@@ -13079,7 +13079,7 @@
 			path = FeatureFlags;
 			sourceTree = "<group>";
 		};
-		8ABDBAA42CB6BF3A00B51F63 /* Pocket */ = {
+		8ABDBAA42CB6BF3A00B51F63 /* Merino */ = {
 			isa = PBXGroup;
 			children = (
 				8A454D282CB7078D009436D9 /* MerinoState.swift */,
@@ -13090,7 +13090,7 @@
 				8A454D352CB86993009436D9 /* MerinoStoryConfiguration.swift */,
 				C743CB1C2DF201D50069CB23 /* StoryCell.swift */,
 			);
-			path = Pocket;
+			path = Merino;
 			sourceTree = "<group>";
 		};
 		8AC225632B6D3F9600CDA7FD /* Telemetry */ = {
@@ -13995,7 +13995,7 @@
 			path = Bookmarks;
 			sourceTree = "<group>";
 		};
-		C87DC86127B2CC27006EFCE2 /* Pocket */ = {
+		C87DC86127B2CC27006EFCE2 /* Stories */ = {
 			isa = PBXGroup;
 			children = (
 				C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */,
@@ -14004,7 +14004,7 @@
 				8A7653BC28A2C61D00924ABF /* StoryDataAdaptor.swift */,
 				E58368A9287D632F0087A449 /* StoryProvider.swift */,
 			);
-			path = Pocket;
+			path = Stories;
 			sourceTree = "<group>";
 		};
 		C889D7D22858C85200121E1D /* Mocks */ = {
@@ -14753,7 +14753,7 @@
 				8ADAFAC428AEBF5000FFEBE3 /* LogoHeader */,
 				8A32DD4E28B4199E00D57C60 /* MessageCard */,
 				5A9A09D128AFD51900B6F51E /* MockHomepageDataModelDelegate.swift */,
-				8A7653C028A2E54800924ABF /* Pocket */,
+				8A7653C028A2E54800924ABF /* Stories */,
 				8A6E8DE92B275B49000C4301 /* PrivateHomepageViewControllerTests.swift */,
 				5A3A7DD42889CF140065F81A /* Bookmarks */,
 				8AE80BAB2891955400BC12EA /* TopSites */,
@@ -15601,7 +15601,7 @@
 				C87DC85F27B2CC1A006EFCE2 /* JumpBackIn */,
 				8AB8573527D950F30075C173 /* LogoHeader */,
 				8A0017BF28A3FED300FEFC8B /* MessageCard */,
-				C87DC86127B2CC27006EFCE2 /* Pocket */,
+				C87DC86127B2CC27006EFCE2 /* Stories */,
 				C87DC86027B2CC21006EFCE2 /* Bookmarks */,
 				8AB8571B27D929240075C173 /* TopSites */,
 				DFACBF82277B9278003D5F41 /* Wallpapers */,

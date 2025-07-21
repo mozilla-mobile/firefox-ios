@@ -31,7 +31,7 @@ class StoryProviderTests: XCTestCase, FeatureFlaggable {
     }
 }
 
-extension PocketStoryProviderTests {
+extension StoryProviderTests {
     enum TestError: Error {
         case `default`
     }
