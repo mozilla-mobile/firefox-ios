@@ -6,18 +6,15 @@ class ToUManager {
 
     static let shared = ToUManager()
 
-    private let acceptedKey = "termsOfUseAcceptedVersion"
+    private let acceptedKey = "termsOfUseAccepted"
     private let dismissedKey = "termsOfUseDismissed"
-    private let currentVersion = "2025-07-01"
+    private let lastShownDateKey = "termsOfUseLastShownDate"
 
     private var didShowThisLaunch = false
 
-    private init() {}
-
-    /// Check if user already accepted the latest ToU
-    var hasAcceptedCurrentVersion: Bool {
-        let accepted = UserDefaults.standard.string(forKey: acceptedKey)
-        return accepted == currentVersion
+    /// Check if user has accepted
+    var hasAccepted: Bool {
+        UserDefaults.standard.bool(forKey: acceptedKey)
     }
 
     /// Check if user dismissed without accepting
@@ -25,30 +22,42 @@ class ToUManager {
         UserDefaults.standard.bool(forKey: dismissedKey)
     }
 
-    /// Decide if bottom sheet should show (only once per app launch)
+    /// Decide if bottom sheet should show
     func shouldShow() -> Bool {
+        let now = Date()
+
+        // If accepted, never show again
+        if hasAccepted {
+            return false
+        }
+
+        // If last shown over 3 days ago → show again
+        if let lastShown = UserDefaults.standard.object(forKey: lastShownDateKey) as? Date {
+            let daysSince = Calendar.current.dateComponents([.day], from: lastShown, to: now).day ?? 0
+            if daysSince >= 3 {
+                UserDefaults.standard.set(now, forKey: lastShownDateKey)
+                return true
+            }
+        }
+
+        // If already shown this launch → skip
         if didShowThisLaunch {
             return false
         }
-        if hasAcceptedCurrentVersion {
-            return false
-        }
-        didShowThisLaunch = true // mark as shown for this launch
+
+        // First time this launch → show and record timestamp
+        didShowThisLaunch = true
+        UserDefaults.standard.set(now, forKey: lastShownDateKey)
         return true
     }
 
     func markAccepted() {
-        UserDefaults.standard.set(currentVersion, forKey: acceptedKey)
+        UserDefaults.standard.set(true, forKey: acceptedKey)
         UserDefaults.standard.set(false, forKey: dismissedKey)
     }
 
     func markDismissed() {
         UserDefaults.standard.set(true, forKey: dismissedKey)
-    }
-
-    func resetForTesting() {
-        UserDefaults.standard.removeObject(forKey: acceptedKey)
-        UserDefaults.standard.removeObject(forKey: dismissedKey)
-        didShowThisLaunch = false
+        UserDefaults.standard.set(Date(), forKey: lastShownDateKey)
     }
 }

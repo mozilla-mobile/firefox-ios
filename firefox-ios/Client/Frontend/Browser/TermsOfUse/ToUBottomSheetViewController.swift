@@ -256,15 +256,15 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
             .foregroundColor: currentTheme().colors.textSecondary,
             .paragraphStyle: paragraphStyle
         ])
-
-        let links: [(String, URL)] = [
-            (TermsOfUse.LinkTermsOfUse, viewModel.termsOfUseURL),
-            (TermsOfUse.LinkPrivacyNotice, viewModel.privacyNoticeURL),
-            (TermsOfUse.LinkLearnMore, viewModel.learnMoreURL)
+        let terms = [
+            TermsOfUse.LinkTermsOfUse,
+            TermsOfUse.LinkPrivacyNotice,
+            TermsOfUse.LinkLearnMore
         ]
-
-        for (term, url) in links {
-            if let range = attributed.string.range(of: term) {
+        print("[ToU Debug] Generated SUMO FAQ URL: \(String(describing: viewModel.linkURL(for: TermsOfUse.LinkLearnMore)))")
+        for term in terms {
+            if let url = viewModel.linkURL(for: term),
+               let range = attributed.string.range(of: term) {
                 let nsRange = NSRange(range, in: attributed.string)
                 attributed.addAttribute(.link, value: url, range: nsRange)
             }

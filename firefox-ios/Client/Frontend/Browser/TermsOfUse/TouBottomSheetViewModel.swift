@@ -5,17 +5,12 @@
 import Common
 import Shared
 import Localizations
-import ComponentLibrary
 
 struct ToUBottomSheetViewModel {
     let titleText: String
     let descriptionText: String
     let acceptButtonTitle: String
     let remindMeLaterButtonTitle: String
-
-    let termsOfUseURL: URL
-    let privacyNoticeURL: URL
-    let learnMoreURL: URL
 
     var onAccept: (() -> Void)?
     var onNotNow: (() -> Void)?
@@ -25,27 +20,27 @@ struct ToUBottomSheetViewModel {
         self.descriptionText = TermsOfUse.Description
         self.acceptButtonTitle = TermsOfUse.AcceptButton
         self.remindMeLaterButtonTitle = TermsOfUse.RemindMeLaterButton
-
-        self.termsOfUseURL = URL(string: "https://www.mozilla.org/about/legal/terms/firefox/") ??
-            URL(string: "https://support.mozilla.org")!
-
-        self.privacyNoticeURL = URL(string: "https://www.mozilla.org/privacy/firefox/") ??
-            URL(string: "https://support.mozilla.org")!
-
-        self.learnMoreURL = SupportUtils.URLForTopic("mobile-firefox-terms-of-use-faq") ??
-            URL(string: "https://support.mozilla.org")!
     }
 
     func linkURL(for term: String) -> URL? {
         switch term {
         case TermsOfUse.LinkTermsOfUse:
-            return termsOfUseURL
+            return URL(string: "https://www.mozilla.org/about/legal/terms/firefox/")
         case TermsOfUse.LinkPrivacyNotice:
-            return privacyNoticeURL
+            return URL(string: "https://www.mozilla.org/privacy/firefox/")
         case TermsOfUse.LinkLearnMore:
-            return learnMoreURL
+            return URLForTopic("firefox-terms-of-use-faq")
         default:
             return nil
         }
+    }
+    
+    func URLForTopic(_ topic: String) -> URL? {
+        guard let escapedTopic = topic.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+              let languageIdentifier = Locale.preferredLanguages.first
+        else {
+            return nil
+        }
+        return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 }
