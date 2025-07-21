@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-final class PocketStateTests: XCTestCase {
+final class MerinoStateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -23,7 +23,7 @@ final class PocketStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(initialState.pocketData, [])
+        XCTAssertEqual(initialState.merinoData, [])
     }
 
     func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
@@ -37,21 +37,21 @@ final class PocketStateTests: XCTestCase {
         ]
 
         let stories = feedStories.compactMap {
-            PocketStoryConfiguration(story: MerinoStory(RecommendationDataItem: $0))
+            MerinoStoryConfiguration(story: MerinoStory(from: $0))
         }
 
         let newState = reducer(
             initialState,
             MerinoAction(
-                pocketStories: stories,
+                merinoStories: stories,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.pocketData.count, 3)
-        XCTAssertEqual(newState.pocketData.compactMap { $0.title }, ["feed1", "feed2", "feed3"])
+        XCTAssertEqual(newState.merinoData.count, 3)
+        XCTAssertEqual(newState.merinoData.compactMap { $0.title }, ["feed1", "feed2", "feed3"])
     }
 
     func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() throws {

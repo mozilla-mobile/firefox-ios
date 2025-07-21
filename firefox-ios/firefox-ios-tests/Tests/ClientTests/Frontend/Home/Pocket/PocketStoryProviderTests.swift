@@ -23,7 +23,7 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
         ]
 
         subject = StoryProvider(
-            merinoAPI: MockPocketAPI(result: .success(stories))
+            merinoAPI: MockMerinoAPI(result: .success(stories))
         )
 
         let fetched = await subject.fetchStories()

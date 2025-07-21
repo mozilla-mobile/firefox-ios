@@ -7,37 +7,37 @@ import MozillaAppServices
 
 @testable import Client
 
-final class PocketManagerTests: XCTestCase {
+final class MerinoManagerTests: XCTestCase {
     func test_getPocketItems_withSuccess_returnExpectedStories() async {
         let subject = createSubject(
-            with: MockPocketAPI(result: .success(getMockStoriesData()))
+            with: MockMerinoAPI(result: .success(getMockStoriesData()))
         )
-        let stories = await subject.getPocketItems()
+        let stories = await subject.getMerinoItems()
         XCTAssertEqual(stories.count, 3)
     }
 
     func test_getPocketItems_withSucess_returnEmptyStories() async {
         let subject = createSubject(
-            with: MockPocketAPI(result: .success([]))
+            with: MockMerinoAPI(result: .success([]))
         )
-        let stories = await subject.getPocketItems()
+        let stories = await subject.getMerinoItems()
         XCTAssertEqual(stories.count, 0)
     }
 
     func test_getPocketItems_withFailure_returnEmptyStories() async {
         let subject = createSubject(
-            with: MockPocketAPI(result: .failure(TestError.example))
+            with: MockMerinoAPI(result: .failure(TestError.example))
         )
-        let stories = await subject.getPocketItems()
+        let stories = await subject.getMerinoItems()
         XCTAssertEqual(stories.count, 0)
     }
 
     private func createSubject(
-        with pocketAPI: MockPocketAPI,
+        with merinoAPI: MockMerinoAPI,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> PocketManager {
-        let subject = PocketManager(pocketAPI: pocketAPI)
+    ) -> MerinoManager {
+        let subject = MerinoManager(merinoAPI: merinoAPI)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

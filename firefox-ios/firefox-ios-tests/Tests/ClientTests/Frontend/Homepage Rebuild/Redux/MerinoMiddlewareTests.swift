@@ -8,8 +8,8 @@ import XCTest
 
 @testable import Client
 
-final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
-    let merinoManager = MockPocketManager()
+final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
+    let merinoManager = MockMerinoManager()
     var mockGleanWrapper: MockGleanWrapper!
     var mockStore: MockStoreForMiddleware<AppState>!
 
@@ -28,7 +28,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_initializeAction_getPocketData() throws {
-        let subject = createSubject(pocketManager: pocketManager)
+        let subject = createSubject(merinoManager: merinoManager)
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
         let expectation = XCTestExpectation(description: "Homepage action initialize dispatched")
 
@@ -46,11 +46,11 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionCalled.merinoStories?.count, 3)
-        XCTAssertEqual(pocketManager.getPocketItemsCalled, 1)
+        XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
     func test_enterForegroundAction_getPocketData() throws {
-        let subject = createSubject(pocketManager: pocketManager)
+        let subject = createSubject(merinoManager: merinoManager)
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageMiddlewareActionType.enteredForeground
@@ -72,11 +72,11 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
         XCTAssertEqual(actionCalled.merinoStories?.count, 3)
-        XCTAssertEqual(pocketManager.getPocketItemsCalled, 1)
+        XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
     func test_toggleShowSectionSetting_getPocketData() throws {
-        let subject = createSubject(pocketManager: pocketManager)
+        let subject = createSubject(merinoManager: merinoManager)
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: MerinoActionType.toggleShowSectionSetting
@@ -98,11 +98,11 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
         XCTAssertEqual(actionCalled.merinoStories?.count, 3)
-        XCTAssertEqual(pocketManager.getPocketItemsCalled, 1)
+        XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
     func test_tapOnHomepagePocketCellAction_sendTelemetryData() throws {
-        let subject = createSubject(pocketManager: pocketManager)
+        let subject = createSubject(merinoManager: merinoManager)
         let config = OpenPocketTelemetryConfig(isZeroSearch: false, position: 0)
         let action = MerinoAction(
             telemetryConfig: config,
@@ -136,7 +136,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_tapOnHomepagePocketCell_doesNotSendTelemetryData() throws {
-        let subject = createSubject(pocketManager: pocketManager)
+        let subject = createSubject(merinoManager: merinoManager)
         let action = MerinoAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: MerinoActionType.tapOnHomepageMerinoCell
@@ -148,7 +148,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_viewedSectionAction_sendTelemetryData() throws {
-        let subject = createSubject(pocketManager: pocketManager)
+        let subject = createSubject(merinoManager: merinoManager)
         let action = MerinoAction(windowUUID: .XCTestDefaultUUID, actionType: MerinoActionType.viewedSection)
 
         subject.pocketSectionProvider(AppState(), action)
@@ -163,7 +163,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_tappedOnOpenNewPrivateTabAction_sendTelemetryData() throws {
-        let subject = createSubject(pocketManager: pocketManager)
+        let subject = createSubject(merinoManager: merinoManager)
         let action = ContextMenuAction(
             section: .pocket(nil),
             windowUUID: .XCTestDefaultUUID,
@@ -181,7 +181,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_tappedOnOpenNewPrivateTabAction_doesNotSendTelemetryData() {
-        let subject = createSubject(pocketManager: pocketManager)
+        let subject = createSubject(merinoManager: merinoManager)
         let action = ContextMenuAction(
             section: .topSites(nil, 4),
             windowUUID: .XCTestDefaultUUID,
@@ -194,7 +194,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
-    private func createSubject(pocketManager: MockPocketManager) -> MerinoMiddleware {
+    private func createSubject(merinoManager: MockMerinoManager) -> MerinoMiddleware {
         return MerinoMiddleware(
             merinoManager: merinoManager,
             homepageTelemetry: HomepageTelemetry(
