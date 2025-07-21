@@ -402,6 +402,20 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
             return WebEngineIntegrationRefactor(enabled: enabled)
         }
     }
+
+    func testWebViewDidFinishNavigation_takeScreenshotWhenTabIsSelected() {
+        let subject = createSubject()
+        let screenshotHelper = MockScreenshotHelper(controller: subject)
+        subject.screenshotHelper = screenshotHelper
+
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+
+        subject.webView(tab.webView!, didFinish: nil)
+
+        XCTAssertTrue(screenshotHelper.takeScreenshotCalled)
+    }
 }
 
 class MockNavigationAction: WKNavigationAction {
