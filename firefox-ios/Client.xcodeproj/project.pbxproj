@@ -1065,6 +1065,7 @@
 		8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */; };
 		8A8D277D2CC000BE0076AD3A /* NavigationBrowserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
+		8A927D4B2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A927D4A2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift */; };
 		8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */; };
 		8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080A27C01AD60052167D /* SingleActionViewModel.swift */; };
 		8A93F85E29D36DA9004159D9 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F85D29D36DA9004159D9 /* Coordinator.swift */; };
@@ -8516,6 +8517,7 @@
 		8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationType.swift; sourceTree = "<group>"; };
 		8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBrowserAction.swift; sourceTree = "<group>"; };
 		8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManager.swift; sourceTree = "<group>"; };
+		8A927D4A2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyClipboardBarDisplayHandlerDelegate.swift; sourceTree = "<group>"; };
 		8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetContainerCell.swift; sourceTree = "<group>"; };
 		8A93080A27C01AD60052167D /* SingleActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleActionViewModel.swift; sourceTree = "<group>"; };
 		8A93F85D29D36DA9004159D9 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -14550,6 +14552,7 @@
 				C8F457A61F1FD75A000CB895 /* BrowserViewController */,
 				C4F3B2991CFCF93A00966259 /* ButtonToast.swift */,
 				31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */,
+				8A927D4A2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift */,
 				D3B6923C1B9F9444004B87A4 /* FindInPageBar.swift */,
 				EBB8950B2193994A00EB91A0 /* FirefoxTabContentBlocker.swift */,
 				8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */,
@@ -17564,6 +17567,7 @@
 				8A3EF8072A2FCFF700796E3A /* SentryIDSetting.swift in Sources */,
 				ED390D202CF4DE2E00A775F9 /* URLActivityItemProvider.swift in Sources */,
 				8A03294E288F1F0800AD9B89 /* TopSitesDimension.swift in Sources */,
+				8A927D4B2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift in Sources */,
 				E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */,
 				EDDB13872D3184F300C4B165 /* Site+createSponsoredSite.swift in Sources */,
 				ED07C0EB2CCADCD5006C0627 /* SearchEngineSelectionState.swift in Sources */,
