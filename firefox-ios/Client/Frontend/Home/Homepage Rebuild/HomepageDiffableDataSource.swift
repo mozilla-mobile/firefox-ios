@@ -42,7 +42,7 @@ final class HomepageDiffableDataSource:
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
-        case pocket(PocketStoryConfiguration)
+        case merino(MerinoStoryConfiguration)
         case customizeHomepage
 
         static var cellTypes: [ReusableCell.Type] {
@@ -55,7 +55,7 @@ final class HomepageDiffableDataSource:
                 JumpBackInCell.self,
                 SyncedTabCell.self,
                 BookmarksCell.self,
-                PocketStandardCell.self,
+                MerinoStandardCell.self,
                 StoryCell.self,
                 CustomizeHomepageSectionCell.self
             ]
@@ -71,7 +71,7 @@ final class HomepageDiffableDataSource:
                 return .jumpBackInSyncedTab
             case .bookmark:
                 return .bookmark
-            case .pocket:
+            case .merino:
                 return .story
             case .customizeHomepage:
                 return .customizeHomepage
@@ -114,7 +114,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
-        if let stories = getPocketStories(with: state.pocketState) {
+        if let stories = getPocketStories(with: state.merinoState) {
             snapshot.appendSections([.pocket(textColor)])
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
@@ -128,9 +128,9 @@ final class HomepageDiffableDataSource:
     }
 
     private func getPocketStories(
-        with pocketState: PocketState
+        with pocketState: MerinoState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
-        let stories: [HomeItem] = pocketState.pocketData.compactMap { .pocket($0) }
+        let stories: [HomeItem] = pocketState.merinoData.compactMap { .merino($0) }
         guard pocketState.shouldShowSection, !stories.isEmpty else { return nil }
         return stories
     }

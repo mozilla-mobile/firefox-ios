@@ -3,19 +3,21 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import MozillaAppServices
 import Redux
+import Shared
 
-final class PocketMiddleware {
-    private let pocketManager: PocketManagerProvider
+final class MerinoMiddleware {
+    private let merinoManager: MerinoManagerProvider
     private let homepageTelemetry: HomepageTelemetry
     private let logger: Logger
 
     init(
-        pocketManager: PocketManagerProvider = AppContainer.shared.resolve(),
+        merinoManager: MerinoManagerProvider = AppContainer.shared.resolve(),
         homepageTelemetry: HomepageTelemetry = HomepageTelemetry(),
         logger: Logger = DefaultLogger.shared
     ) {
-        self.pocketManager = pocketManager
+        self.merinoManager = merinoManager
         self.homepageTelemetry = homepageTelemetry
         self.logger = logger
     }
@@ -24,11 +26,11 @@ final class PocketMiddleware {
         switch action.actionType {
         case HomepageActionType.initialize,
             HomepageMiddlewareActionType.enteredForeground,
-            PocketActionType.toggleShowSectionSetting:
+            MerinoActionType.toggleShowSectionSetting:
             self.getPocketDataAndUpdateState(for: action)
-        case PocketActionType.tapOnHomepagePocketCell:
+        case MerinoActionType.tapOnHomepageMerinoCell:
             self.sendOpenPocketItemTelemetry(for: action)
-        case PocketActionType.viewedSection:
+        case MerinoActionType.viewedSection:
             self.homepageTelemetry.sendPocketSectionCounter()
         case ContextMenuActionType.tappedOnOpenNewPrivateTab:
             self.sendOpenInPrivateTelemetry(for: action)
@@ -39,19 +41,19 @@ final class PocketMiddleware {
 
     private func getPocketDataAndUpdateState(for action: Action) {
         Task {
-            let pocketStories = await pocketManager.getPocketItems()
+            let merinoStories = await merinoManager.getMerinoItems()
             store.dispatchLegacy(
-                PocketAction(
-                    pocketStories: pocketStories,
+                MerinoAction(
+                    merinoStories: merinoStories,
                     windowUUID: action.windowUUID,
-                    actionType: PocketMiddlewareActionType.retrievedUpdatedStories
+                    actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
                 )
             )
         }
     }
 
     private func sendOpenPocketItemTelemetry(for action: Action) {
-        guard let config = (action as? PocketAction)?.telemetryConfig else {
+        guard let config = (action as? MerinoAction)?.telemetryConfig else {
             self.logger.log(
                 "Unable to retrieve config for \(action.actionType)",
                 level: .debug,

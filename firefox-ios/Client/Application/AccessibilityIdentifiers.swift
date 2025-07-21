@@ -203,7 +203,7 @@ struct AccessibilityIdentifiers {
         struct SectionTitles {
             static let jumpBackIn = "jumpBackInTitle"
             static let bookmarks = "bookmarksTitle"
-            static let pocket = "pocketTitle"
+            static let merino = "pocketTitle"
             static let topSites = "topSitesTitle"
         }
 

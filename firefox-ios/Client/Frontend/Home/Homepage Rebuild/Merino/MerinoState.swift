@@ -7,43 +7,38 @@ import Foundation
 import Redux
 import Shared
 
-struct PocketDiscoverConfiguration: Equatable, Hashable {
-    var title: String
-    var url: URL?
-}
-
-/// State for the pocket section that is used in the homepage
-struct PocketState: StateType, Equatable {
+/// State for the Merino stories section that is used in the homepage
+struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let pocketData: [PocketStoryConfiguration]
+    let merinoData: [MerinoStoryConfiguration]
     let shouldShowSection: Bool
 
     let sectionHeaderState = SectionHeaderConfiguration(
         title: .FirefoxHomepage.Pocket.SectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket
+        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino
     )
 
     let footerURL = SupportUtils.URLForPocketLearnMore
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let userPrefs = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        let isLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
+        let isLocaleSupported = MerinoProvider.islocaleSupported(Locale.current.identifier)
         let shouldShowSection = userPrefs && isLocaleSupported
 
         self.init(
             windowUUID: windowUUID,
-            pocketData: [],
+            merinoData: [],
             shouldShowSection: shouldShowSection
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        pocketData: [PocketStoryConfiguration],
+        merinoData: [MerinoStoryConfiguration],
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
-        self.pocketData = pocketData
+        self.merinoData = merinoData
         self.shouldShowSection = shouldShowSection
     }
 
@@ -54,47 +49,47 @@ struct PocketState: StateType, Equatable {
         }
 
         switch action.actionType {
-        case PocketMiddlewareActionType.retrievedUpdatedStories:
+        case MerinoMiddlewareActionType.retrievedUpdatedStories:
             return handlePocketStoriesAction(action, state: state)
-        case PocketActionType.toggleShowSectionSetting:
+        case MerinoActionType.toggleShowSectionSetting:
             return handleSettingsToggleAction(action, state: state)
         default:
             return defaultState(from: state)
         }
     }
 
-    private static func handlePocketStoriesAction(_ action: Action, state: PocketState) -> PocketState {
-        guard let pocketAction = action as? PocketAction,
-              let pocketStories = pocketAction.pocketStories
+    private static func handlePocketStoriesAction(_ action: Action, state: MerinoState) -> MerinoState {
+        guard let pocketAction = action as? MerinoAction,
+              let pocketStories = pocketAction.merinoStories
         else {
             return defaultState(from: state)
         }
 
-        return PocketState(
+        return MerinoState(
             windowUUID: state.windowUUID,
-            pocketData: pocketStories,
+            merinoData: pocketStories,
             shouldShowSection: !pocketStories.isEmpty && state.shouldShowSection
         )
     }
 
-    private static func handleSettingsToggleAction(_ action: Action, state: PocketState) -> PocketState {
-        guard let pocketAction = action as? PocketAction,
+    private static func handleSettingsToggleAction(_ action: Action, state: MerinoState) -> MerinoState {
+        guard let pocketAction = action as? MerinoAction,
               let isEnabled = pocketAction.isEnabled
         else {
             return defaultState(from: state)
         }
 
-        return PocketState(
+        return MerinoState(
             windowUUID: state.windowUUID,
-            pocketData: state.pocketData,
+            merinoData: state.merinoData,
             shouldShowSection: isEnabled
         )
     }
 
-    static func defaultState(from state: PocketState) -> PocketState {
-        return PocketState(
+    static func defaultState(from state: MerinoState) -> MerinoState {
+        return MerinoState(
             windowUUID: state.windowUUID,
-            pocketData: state.pocketData,
+            merinoData: state.merinoData,
             shouldShowSection: state.shouldShowSection
         )
     }

@@ -4,18 +4,25 @@
 
 import Common
 import Glean
+import MozillaAppServices
 import Shared
 import XCTest
 
 @testable import Client
 
+<<<<<<< HEAD:firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Home/Pocket/PocketViewModelTests.swift
 final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     private var adaptor: MockPocketDataAdaptor!
+=======
+@MainActor
+final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
+    private var adaptor: MockStoryDataAdaptor!
+>>>>>>> 72d19c08e (Add FXIOS-12218 [Homepage] Add Merino with AS client (#28099)):firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Home/Stories/StoryViewModelTests.swift
     private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
-        adaptor = MockPocketDataAdaptor()
+        adaptor = MockStoryDataAdaptor()
         profile = MockProfile()
 
         featureFlags.initializeDeveloperFeatures(with: profile)
@@ -34,7 +41,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testDefaultPocketViewModelProtocolValues_withEmptyData() {
         let subject = createSubject()
-        XCTAssertEqual(subject.sectionType, .pocket)
+        XCTAssertEqual(subject.sectionType, .merino)
         XCTAssertNotEqual(subject.headerViewModel, LabelButtonHeaderViewModel.emptyHeader)
         XCTAssertEqual(subject.numberOfItemsInSection(), 0)
         XCTAssertFalse(subject.hasData)
@@ -48,7 +55,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testRecordSectionHasShown() throws {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
@@ -69,13 +76,13 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     func testDimensioniPhoneLandscape() {
         let subject = createSubject()
         let dimension = subject.getWidthDimension(device: .phone, isLandscape: true)
-        XCTAssertEqual(dimension, .fractionalWidth(PocketViewModel.UX.fractionalWidthiPhoneLandscape))
+        XCTAssertEqual(dimension, .fractionalWidth(StoryViewModel.UX.fractionalWidthiPhoneLandscape))
     }
 
     func testDimensioniPhonePortrait() {
         let subject = createSubject()
         let dimension = subject.getWidthDimension(device: .phone, isLandscape: false)
-        XCTAssertEqual(dimension, .fractionalWidth(PocketViewModel.UX.fractionalWidthiPhonePortrait))
+        XCTAssertEqual(dimension, .fractionalWidth(StoryViewModel.UX.fractionalWidthiPhonePortrait))
     }
 
     func testDimensioniPadPortrait() {
@@ -93,7 +100,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     // MARK: - Standard cell
 
     func testConfigureStandardCell() throws {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
@@ -105,7 +112,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testClickingStandardCell_recordsTapOnStory() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         subject.didSelectItem(at: IndexPath(item: 0, section: 0), homePanelDelegate: nil, libraryPanelDelegate: nil)
@@ -115,7 +122,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testClickingStandardCell_callsTapTileAction() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         subject.onTapTileAction = { url in
@@ -127,7 +134,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testLongPressStandardCell_callsHandleLongPress() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         subject.onLongPressTileAction = { (site, _) in
@@ -142,30 +149,31 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
 }
 
 // MARK: Helpers
-extension PocketViewModelTests {
-    func createStories(numberOfStories: Int) -> [PocketStory] {
-        var stories = [PocketStory]()
+extension StoryViewModelTests {
+    func createStories(numberOfStories: Int) -> [MerinoStory] {
+        var stories = [MerinoStory]()
         (0..<numberOfStories).forEach { index in
-            let story = PocketStory(url: URL(string: "www.test\(index).com")!,
-                                    title: "Story \(index)",
-                                    domain: "test\(index)",
-                                    timeToRead: nil,
-                                    storyDescription: "Story \(index)",
-                                    imageURL: URL(string: "www.test\(index).com")!,
-                                    id: index,
-                                    flightId: nil,
-                                    campaignId: nil,
-                                    priority: nil,
-                                    context: nil,
-                                    rawImageSrc: nil,
-                                    shim: nil,
-                                    caps: nil,
-                                    sponsor: nil)
+            let story = MerinoStory(
+                from: RecommendationDataItem(
+                    corpusItemId: "",
+                    scheduledCorpusItemId: "",
+                    url: "www.test\(index).com",
+                    title: "Story \(index)",
+                    excerpt: "Story \(index)",
+                    publisher: "",
+                    isTimeSensitive: false,
+                    imageUrl: "www.test\(index).com",
+                    iconUrl: "",
+                    tileId: Int64(index),
+                    receivedRank: 0
+                )
+            )
             stories.append(story)
         }
         return stories
     }
 
+<<<<<<< HEAD:firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Home/Pocket/PocketViewModelTests.swift
     func createSubject(isZeroSearch: Bool = true,
                        file: StaticString = #file,
                        line: UInt = #line) -> PocketViewModel {
@@ -174,15 +182,27 @@ extension PocketViewModelTests {
                                       theme: LightTheme(),
                                       prefs: profile.prefs,
                                       wallpaperManager: WallpaperManager())
+=======
+    func createSubject(
+        isZeroSearch: Bool = true,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> StoryViewModel {
+        let subject = StoryViewModel(pocketDataAdaptor: adaptor,
+                                     isZeroSearch: isZeroSearch,
+                                     theme: LightTheme(),
+                                     prefs: profile.prefs,
+                                     wallpaperManager: WallpaperManager())
+>>>>>>> 72d19c08e (Add FXIOS-12218 [Homepage] Add Merino with AS client (#28099)):firefox-ios/firefox-ios-tests/Tests/ClientTests/Frontend/Home/Stories/StoryViewModelTests.swift
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 }
 
-// MARK: MockPocketDataAdaptor
-class MockPocketDataAdaptor: PocketDataAdaptor {
-    var pocketStories = [PocketStory]()
-    func getPocketData() -> [PocketStory] {
-        return pocketStories
+// MARK: MockStoryDataAdaptor
+class MockStoryDataAdaptor: StoryDataAdaptor {
+    var merinoStories = [MerinoStory]()
+    func getMerinoData() -> [MerinoStory] {
+        return merinoStories
     }
 }

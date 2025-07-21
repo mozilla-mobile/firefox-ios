@@ -499,6 +499,107 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return NSCollectionLayoutSection(group: emptyGroup)
     }
 
+<<<<<<< HEAD
+=======
+    /// Creates a "dummy" top sites section and returns its height
+    private func getShortcutsSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        var totalHeight: CGFloat = 0
+        let topSitesState = state.topSitesState
+        let rows = topSitesState.numberOfRows
+        let cols = topSitesState.numberOfTilesPerRow
+        let maxCells = rows * cols
+
+        // Add header height
+        totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
+
+        // Build array of configured cells for the data being displayed on the homepage
+        let allCells = topSitesState.topSitesData.prefix(maxCells).map { data in
+            let cell = TopSiteCell()
+            cell.configure(data, position: 0, theme: LightTheme(), textColor: .black)
+            return cell
+        }
+
+        // Group into rows and compute each rows max height
+        let rowHeights = stride(from: 0, to: allCells.count, by: cols).map { start in
+            let end = min(start + cols, allCells.count)
+            let rowCells = Array(allCells[start..<end])
+            return HomepageDimensionCalculator.getTallestViewHeight(views: rowCells, viewWidth: 0)
+        }
+
+        // Sum up row heights
+        totalHeight += rowHeights.reduce(0, +)
+
+        // Add inter-row spacing
+        let rowsShown = ceil(Double(topSitesState.topSitesData.count) / Double(cols))
+        totalHeight += CGFloat(rowsShown - 1) * UX.standardSpacing
+
+        // Add section insets
+        totalHeight += UX.TopSitesConstants.getBottomInset()
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" stories section and returns its height
+    private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        var totalHeight: CGFloat = 0
+        let storiesState = state.merinoState
+
+        // Add header height
+        totalHeight += getHeaderHeight(headerState: storiesState.sectionHeaderState, environment: environment)
+
+        // Add stories height
+        let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
+            collectionViewWidth: environment.container.contentSize.width
+        )
+        totalHeight += max(getTallestStoryCellHeight(cellWidth: cellWidth), UX.PocketConstants.redesignedMinimumCellHeight)
+
+        // Add section insets
+        totalHeight += UX.standardInset
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" search bar section and returns its height
+    private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+                  state.searchState.shouldShowSearchBar else { return 0 }
+        var totalHeight: CGFloat = 0
+
+        // Add search bar height
+        let searchBarCell = SearchBarCell()
+        let containerWidth = environment.container.contentSize.width
+        let searchBarHeight = searchBarCell.systemLayoutSizeFitting(
+            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        totalHeight += searchBarHeight
+
+        // Add section insets
+        totalHeight += UX.standardInset
+        totalHeight += UX.HeaderConstants.bottomSpacing
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" header and returns it's height
+    private func getHeaderHeight(headerState: SectionHeaderConfiguration,
+                                 environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
+        header.configure(state: headerState, textColor: .black, theme: LightTheme())
+        let containerWidth = environment.container.contentSize.width
+        let headerHeight = header.systemLayoutSizeFitting(
+            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+
+        return headerHeight
+    }
+
+>>>>>>> 72d19c08e (Add FXIOS-12218 [Homepage] Add Merino with AS client (#28099))
     // Determines the tallest story cell so that all story cells can have a uniform height. This is accomplished by creating
     // "dummy" (never rendered) cells to determine the height of the tallest cell.
     // Although this calculation occurs every time the layout is updated (with each new HomepageState), no noticeable
@@ -507,7 +608,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getTallestStoryCellHeight(cellWidth: CGFloat) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var storyCells: [StoryCell] = []
-        for story in state.pocketState.pocketData {
+        for story in state.merinoState.merinoData {
             let cell = StoryCell()
             cell.configure(story: story, theme: LightTheme())
             storyCells.append(cell)
