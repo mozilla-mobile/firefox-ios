@@ -4,8 +4,8 @@
 
 import Foundation
 
-protocol URLSessionProtocol {
-    typealias DataTaskResult = (Data?, URLResponse?, Error?) -> Void
+protocol URLSessionProtocol: Sendable {
+    typealias DataTaskResult = @Sendable (Data?, URLResponse?, Error?) -> Void
 
     func data(from url: URL) async throws -> (Data, URLResponse)
 
