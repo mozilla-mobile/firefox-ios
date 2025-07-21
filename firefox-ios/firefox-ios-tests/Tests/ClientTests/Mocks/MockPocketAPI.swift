@@ -3,16 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
+
 @testable import Client
 
-final class MockPocketAPI: PocketStoriesProviding {
-    init(result: Result<[PocketFeedStory], Error>) {
+final class MockMerinoAPI: MerinoStoriesProviding {
+    init(result: Result<[RecommendationDataItem], Error>) {
         self.result = result
     }
 
-    let result: Result<[PocketFeedStory], Error>
+    let result: Result<[RecommendationDataItem], Error>
 
-    func fetchStories(items: Int) async throws -> [PocketFeedStory] {
+    func fetchStories(items: Int) async throws -> [RecommendationDataItem] {
         switch result {
         case .success(let value):
             return Array(value.prefix(items))

@@ -4,6 +4,7 @@
 
 import Common
 import Glean
+import MozillaAppServices
 import Shared
 import XCTest
 
@@ -49,7 +50,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testRecordSectionHasShown() throws {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
@@ -94,7 +95,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
     // MARK: - Standard cell
 
     func testConfigureStandardCell() throws {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
@@ -107,7 +108,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
 
     @MainActor
     func testClickingStandardCell_recordsTapOnStory() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         subject.didSelectItem(at: IndexPath(item: 0, section: 0), homePanelDelegate: nil, libraryPanelDelegate: nil)
@@ -118,7 +119,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
 
     @MainActor
     func testClickingStandardCell_callsTapTileAction() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         subject.onTapTileAction = { url in
@@ -130,7 +131,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testLongPressStandardCell_callsHandleLongPress() {
-        adaptor.pocketStories = createStories(numberOfStories: 1)
+        adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
         subject.onLongPressTileAction = { (site, _) in
@@ -146,24 +147,24 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
 
 // MARK: Helpers
 extension StoryViewModelTests {
-    func createStories(numberOfStories: Int) -> [PocketStory] {
-        var stories = [PocketStory]()
+    func createStories(numberOfStories: Int) -> [MerinoStory] {
+        var stories = [MerinoStory]()
         (0..<numberOfStories).forEach { index in
-            let story = PocketStory(url: URL(string: "www.test\(index).com")!,
-                                    title: "Story \(index)",
-                                    domain: "test\(index)",
-                                    timeToRead: nil,
-                                    storyDescription: "Story \(index)",
-                                    imageURL: URL(string: "www.test\(index).com")!,
-                                    id: index,
-                                    flightId: nil,
-                                    campaignId: nil,
-                                    priority: nil,
-                                    context: nil,
-                                    rawImageSrc: nil,
-                                    shim: nil,
-                                    caps: nil,
-                                    sponsor: nil)
+            let story = MerinoStory(
+                from: RecommendationDataItem(
+                    corpusItemId: "",
+                    scheduledCorpusItemId: "",
+                    url: "www.test\(index).com",
+                    title: "Story \(index)",
+                    excerpt: "Story \(index)",
+                    publisher: "",
+                    isTimeSensitive: false,
+                    imageUrl: "www.test\(index).com",
+                    iconUrl: "",
+                    tileId: Int64(index),
+                    receivedRank: 0
+                )
+            )
             stories.append(story)
         }
         return stories

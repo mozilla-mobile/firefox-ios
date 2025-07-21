@@ -11,7 +11,7 @@ final class ContextMenuConfigurationTests: XCTestCase {
     func tests_initialState_forPocketItem_returnsExpectedState() {
         let pocketItem: HomepageItem = .pocket(
             PocketStoryConfiguration(
-                story: PocketStory(
+                story: MerinoStory(
                         url: URL("www.example.com/1234")!,
                         title: "Site 0",
                         domain: "www.example.com",

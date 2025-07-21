@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import MozillaAppServices
 import XCTest
 
 @testable import Client
@@ -29,14 +30,14 @@ final class PocketStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = pocketReducer()
 
-        let feedStories: [PocketFeedStory] = [
+        let feedStories: [RecommendationDataItem] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
             .make(title: "feed3"),
         ]
 
         let stories = feedStories.compactMap {
-            PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0))
+            PocketStoryConfiguration(story: MerinoStory(RecommendationDataItem: $0))
         }
 
         let newState = reducer(

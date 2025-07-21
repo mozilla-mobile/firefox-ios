@@ -1573,7 +1573,6 @@
 		C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4137328BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift */; };
 		C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */; };
 		C8B0F5ED283B7C9F007AE65D /* LegacyPocketStandardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */; };
-		C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */; };
 		C8B394362A0ED55D00700E49 /* MockOnboardingCardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */; };
 		C8B41E0A29F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0929F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift */; };
 		C8B41E0F29F0357300FE218A /* NimbusOnboardingFeatureLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */; };
@@ -9444,7 +9443,6 @@
 		C8A74FF69C3971EDBE73157F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFlaggableFeature.swift; sourceTree = "<group>"; };
 		C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyPocketStandardCell.swift; sourceTree = "<group>"; };
-		C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketFeedStory.swift; sourceTree = "<group>"; };
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C8B394352A0ED55D00700E49 /* MockOnboardingCardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOnboardingCardDelegate.swift; sourceTree = "<group>"; };
 		C8B41E0929F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayer.swift; sourceTree = "<group>"; };
@@ -14147,7 +14145,6 @@
 			isa = PBXGroup;
 			children = (
 				81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */,
-				C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -18211,7 +18208,6 @@
 				8AF99B4D29EF076800108DEC /* WebviewViewController.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				B2DFB7E12B619DF60004CEA5 /* AddressListView.swift in Sources */,
-				C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */,
 				0AFF7F6D2C7C7BBA00265214 /* CertificatesViewController.swift in Sources */,
 				96A562A027D6D0E80045144A /* ContileProvider.swift in Sources */,
 				8A5D1CAC2A30D70B005AD35C /* OpenWithSetting.swift in Sources */,

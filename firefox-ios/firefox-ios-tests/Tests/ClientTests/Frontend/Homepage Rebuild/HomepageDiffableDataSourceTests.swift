@@ -65,7 +65,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
-                pocketStories: createStories(),
+                merinoStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
             )
@@ -129,7 +129,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
-                pocketStories: createStories(),
+                merinoStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
             )
@@ -266,15 +266,15 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         return sites
     }
 
-    private func createStories(count: Int = 20) -> [PocketStoryConfiguration] {
-        var feedStories = [PocketFeedStory]()
+    private func createStories(count: Int = 20) -> [MerinoStoryConfiguration] {
+        var feedStories = [RecommendationDataItem]()
         (0..<count).forEach {
-            let story: PocketFeedStory = .make(title: "feed \($0)")
+            let story: RecommendationDataItem = .make(title: "feed \($0)")
             feedStories.append(story)
         }
 
         let stories = feedStories.compactMap {
-            PocketStoryConfiguration(story: PocketStory(pocketFeedStory: $0))
+            MerinoStoryConfiguration(story: MerinoStory(from: $0))
         }
         return stories
     }

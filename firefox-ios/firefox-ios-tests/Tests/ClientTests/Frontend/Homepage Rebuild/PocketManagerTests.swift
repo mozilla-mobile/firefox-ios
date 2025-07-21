@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import MozillaAppServices
 
 @testable import Client
 
@@ -41,7 +42,7 @@ final class PocketManagerTests: XCTestCase {
         return subject
     }
 
-    private func getMockStoriesData() -> [PocketFeedStory] {
+    private func getMockStoriesData() -> [RecommendationDataItem] {
         return [
             .make(title: "feed1"),
             .make(title: "feed2"),

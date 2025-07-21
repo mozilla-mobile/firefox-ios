@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import MozillaAppServices
+
 @testable import Client
 
 @MainActor
@@ -32,7 +34,7 @@ class PocketDataAdaptorTests: XCTestCase {
     }
 
     func testGetPocketData() async throws {
-        let stories: [PocketFeedStory] = [
+        let stories: [RecommendationDataItem] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
             .make(title: "feed3"),

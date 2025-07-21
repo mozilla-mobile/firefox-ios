@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import MozillaAppServices
+
 @testable import Client
 
 class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
@@ -14,18 +16,18 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
     }
 
     func tesFetchingStories_ReturnsList() async {
-        let stories: [PocketFeedStory] = [
+        let stories: [RecommendationDataItem] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
             .make(title: "feed3"),
         ]
 
         subject = StoryProvider(
-            pocketAPI: MockPocketAPI(result: .success(stories))
+            merinoAPI: MockPocketAPI(result: .success(stories))
         )
 
-        let fetched = await subject.fetchPocketStories()
-        XCTAssertEqual(fetched, stories.map(PocketStory.init))
+        let fetched = await subject.fetchStories()
+        XCTAssertEqual(fetched, stories.map(MerinoStory.init))
     }
 }
 
@@ -35,15 +37,21 @@ extension PocketStoryProviderTests {
     }
 }
 
-extension PocketFeedStory {
-    static func make(title: String) -> PocketFeedStory {
-        PocketFeedStory(
+extension RecommendationDataItem {
+    static func make(title: String) -> RecommendationDataItem {
+        RecommendationDataItem(
+            corpusItemId: "",
+            scheduledCorpusItemId: "",
+            url: "www.google.com",
             title: title,
-            url: URL(string: "www.google.com")!,
-            domain: "",
-            timeToRead: 1,
-            storyDescription: "",
-            imageURL: URL(string: "www.google.com")!
+            excerpt: "",
+            topic: "",
+            publisher: "",
+            isTimeSensitive: false,
+            imageUrl: "www.google.com",
+            iconUrl: "",
+            tileId: 0,
+            receivedRank: 0
         )
     }
 }

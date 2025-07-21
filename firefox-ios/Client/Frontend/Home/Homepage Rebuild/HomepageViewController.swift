@@ -648,7 +648,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
-                state: homepageState.pocketState.sectionHeaderState,
+                state: homepageState.merinoState.sectionHeaderState,
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -760,7 +760,7 @@ final class HomepageViewController: UIViewController,
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
                     .link,
-                    url: homepageState.pocketState.footerURL,
+                    url: homepageState.merinoState.footerURL,
                     visitType: .link
                 ),
                 windowUUID: self.windowUUID,

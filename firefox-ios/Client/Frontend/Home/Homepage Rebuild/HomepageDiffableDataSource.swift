@@ -122,7 +122,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
-        if let stories = getPocketStories(with: state.pocketState) {
+        if let stories = getPocketStories(with: state.merinoState) {
             snapshot.appendSections([.pocket(textColor)])
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }

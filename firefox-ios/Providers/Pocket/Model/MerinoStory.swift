@@ -33,4 +33,32 @@ struct MerinoStory: Equatable, Hashable {
         self.tileId = item.tileId
         self.receivedRank = Int(item.receivedRank)
     }
+
+    init(
+        corpusItemId: String,
+        scheduledCorpusItemId: String,
+        url: URL?,
+        title: String,
+        excerpt: String,
+        topic: String?,
+        publisher: String,
+        isTimeSensitive: Bool,
+        imageURL: URL,
+        iconURL: URL?,
+        tileId: Int64,
+        receivedRank: Int
+    ) {
+        self.corpusItemId = corpusItemId
+        self.scheduledCorpusItemId = scheduledCorpusItemId
+        self.url = url
+        self.title = title
+        self.excerpt = excerpt
+        self.topic = topic
+        self.publisher = publisher
+        self.isTimeSensitive = isTimeSensitive
+        self.imageURL = imageURL
+        self.iconURL = iconURL
+        self.tileId = tileId
+        self.receivedRank = receivedRank
+    }
 }
