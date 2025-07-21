@@ -28,6 +28,10 @@ struct ToUBottomSheetViewModel {
         self.onAccept = onAccept
         self.onNotNow = onNotNow
     }
+    
+    func markToUAppeared() {
+        ToUManager.shared.didShowThisLaunch = true
+    }
 
     func makeAttributedDescription(theme: Theme) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()

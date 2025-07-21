@@ -58,6 +58,11 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         applyTheme()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.markToUAppeared()
+    }
+    
     private func setupUI() {
         setupBackground()
         setupSheetContainer()

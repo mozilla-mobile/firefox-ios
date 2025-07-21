@@ -11,11 +11,11 @@ class ToUManager: FeatureFlaggable {
     private let dismissedKey = "termsOfUseDismissed"
     private let lastShownDateKey = "termsOfUseLastShownDate"
 
-    private var didShowThisLaunch = false
-
     private var isToUFeatureEnabled: Bool {
         featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
     }
+    
+    var didShowThisLaunch = false
 
     var hasAccepted: Bool {
         UserDefaults.standard.bool(forKey: acceptedKey)
@@ -38,7 +38,6 @@ class ToUManager: FeatureFlaggable {
 
         if didShowThisLaunch { return false }
 
-        didShowThisLaunch = true
         UserDefaults.standard.set(now, forKey: lastShownDateKey)
         return true
     }

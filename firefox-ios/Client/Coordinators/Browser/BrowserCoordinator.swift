@@ -1152,11 +1152,9 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Terms of Use Bottom Sheet
     
     private func showToUBottomSheet() {
-        //check for presented controller to avoid multiple presentation attempts
-        if homepageViewController?.presentedViewController != nil && UIDevice.current.userInterfaceIdiom == .pad { return }
+        guard ToUManager.shared.shouldShow() else { return }
         
         let presentingVC = homepageViewController ?? browserViewController
-        guard ToUManager.shared.shouldShow() else { return }
         let viewModel = ToUBottomSheetViewModel()
         let touVC = ToUBottomSheetViewController(
             viewModel: viewModel,
