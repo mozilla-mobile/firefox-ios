@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@MainActor
 final class AppFxACommandsTests: XCTestCase {
     private var applicationStateProvider: MockApplicationStateProvider!
     private var applicationHelper: MockApplicationHelper!
@@ -21,7 +22,6 @@ final class AppFxACommandsTests: XCTestCase {
         self.applicationHelper = nil
     }
 
-    @MainActor
     func testOpenSendTabs_inactiveState_doesntCallDeeplink() {
         applicationStateProvider.applicationState = .inactive
         let url = URL(string: "https://mozilla.com")!
@@ -31,7 +31,6 @@ final class AppFxACommandsTests: XCTestCase {
         XCTAssertEqual(applicationHelper.openURLCalled, 0)
     }
 
-    @MainActor
     func testOpenSendTabs_backgroundState_doesntCallDeeplink() {
         applicationStateProvider.applicationState = .background
         let url = URL(string: "https://mozilla.com")!
@@ -41,7 +40,6 @@ final class AppFxACommandsTests: XCTestCase {
         XCTAssertEqual(applicationHelper.openURLCalled, 0)
     }
 
-    @MainActor
     func testOpenSendTabs_activeWithOneURL_callsDeeplink() {
         let url = URL(string: "https://mozilla.com")!
         let subject = createSubject()
@@ -52,7 +50,6 @@ final class AppFxACommandsTests: XCTestCase {
         XCTAssertEqual(applicationHelper.lastOpenURL, expectedURL)
     }
 
-    @MainActor
     func testOpenSendTabs_activeWithMultipleURLs_callsDeeplink() {
         let url = URL(string: "https://mozilla.com")!
         let subject = createSubject()
@@ -62,7 +59,6 @@ final class AppFxACommandsTests: XCTestCase {
     }
 
     // MARK: - Close Remote Tabs Tests
-    @MainActor
     func testCloseSendTabs_activeWithOneURL_callsDeeplink() async {
         let url = URL(string: "https://mozilla.com")!
         let subject = createSubject()
@@ -73,7 +69,6 @@ final class AppFxACommandsTests: XCTestCase {
         XCTAssertEqual(applicationHelper.closeTabsCalled, 1)
     }
 
-    @MainActor
     func testCloseSendTabs_activeWithMultipleURLs_callsDeeplink() async {
         let url1 = URL(string: "https://example.com")!
         let url2 = URL(string: "https://example.com/1")!
