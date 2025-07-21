@@ -92,7 +92,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         }
     }
 
-    func setScreenshot(_ url: URL?) {
+    func setScreenshot(url: URL? = nil) {
         faviconImageView.isHidden = url == nil
         webPageScreenshotImageView.isHidden = true
         faviconImageView.setFavicon(FaviconImageViewModel(siteURLString: url?.absoluteString,
