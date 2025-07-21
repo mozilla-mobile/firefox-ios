@@ -150,8 +150,11 @@ let package = Package(
             dependencies: [
                 "Common",
                 "ComponentLibrary"
-            ]
+            ],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]
         ),
+        .testTarget(name: "SummarizeKitTests",
+                    dependencies: ["SummarizeKit"]),
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],

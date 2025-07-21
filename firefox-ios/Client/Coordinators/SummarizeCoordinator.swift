@@ -47,8 +47,7 @@ class SummarizeCoordinator: BaseCoordinator {
             summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: .Summarizer.CloseButtonAccessibilityLabel,
-                a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeButton,
-                image: UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
+                a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeButton
             ),
             tabSnapshot: browserSnapshot,
             tabSnapshotTopOffset: browserSnapshotTopOffset

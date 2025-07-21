@@ -41,9 +41,6 @@ public class CloseButton: UIButton,
 
     public func configure(viewModel: CloseButtonViewModel,
                           notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        if let image = viewModel.image {
-            setImage(image, for: .normal)
-        }
         self.notificationCenter = notificationCenter
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
 
