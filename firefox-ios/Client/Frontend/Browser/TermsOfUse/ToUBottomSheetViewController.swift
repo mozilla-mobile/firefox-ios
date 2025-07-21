@@ -4,7 +4,6 @@
 
 import Common
 import Shared
-import Localizations
 import ComponentLibrary
 
 class ToUBottomSheetViewController: UIViewController, Themeable {
@@ -12,14 +11,14 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
         static let stackSidePadding: CGFloat = 24
+        static let sheetContainerSidePadding: CGFloat = 40
         static let logoSize: CGFloat = 40
-        static let descriptionMaxWidth: CGFloat = 300
         static let acceptButtonHeight: CGFloat = 44
         static let remindMeLaterButtonHeight: CGFloat = 30
         static let grabberWidth: CGFloat = 36
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
-        static let maxSheetWidth: CGFloat = 500
+        static let iPadWidthMultiplier: CGFloat = 0.6
     }
 
     var notificationCenter: NotificationProtocol
@@ -73,7 +72,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     }
 
     private func setupBackground() {
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
     }
 
     private func setupSheetContainer() {
@@ -91,9 +90,12 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
 
         if isPad {
             constraints.append(contentsOf: [
-                sheetContainer.widthAnchor.constraint(equalToConstant: UX.maxSheetWidth),
-                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 40),
-                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -40)
+                sheetContainer.widthAnchor.constraint(equalToConstant:
+                                                        UIScreen.main.bounds.width * UX.iPadWidthMultiplier),
+                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant:
+                                                            UX.sheetContainerSidePadding),
+                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant:
+                                                            -UX.sheetContainerSidePadding)
             ])
         } else {
             constraints.append(contentsOf: [
@@ -167,7 +169,6 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
         textView.delegate = self
-        textView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.descriptionMaxWidth).isActive = true
         return textView
     }
 

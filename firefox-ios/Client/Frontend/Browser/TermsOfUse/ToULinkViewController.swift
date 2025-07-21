@@ -2,12 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import WebKit
 import Common
 import Shared
-import ComponentLibrary
+import WebKit
 
 class ToULinkViewController: UIViewController, Themeable {
+    private struct UX {
+        static let headerHeight: CGFloat = 44
+        static let backButtonLeading: CGFloat = 16
+    }
+
     private let url: URL
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -16,17 +20,27 @@ class ToULinkViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
 
-    private var webView: WKWebView!
+    private let webView: WKWebView
 
-    init(url: URL,
-         windowUUID: UUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(
+        url: URL,
+        windowUUID: UUID,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.url = url
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+
+        let config = WKWebViewConfiguration()
+        config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
+        self.webView = WKWebView(frame: .zero, configuration: config)
+
         super.init(nibName: nil, bundle: nil)
+
+        self.webView.navigationDelegate = self
+        self.webView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     required init?(coder: NSCoder) {
@@ -57,27 +71,21 @@ class ToULinkViewController: UIViewController, Themeable {
         header.addSubview(backButton)
 
         NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            header.topAnchor.constraint(equalTo: view.topAnchor),
             header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            header.heightAnchor.constraint(equalToConstant: 44),
+            header.heightAnchor.constraint(equalToConstant: UX.headerHeight),
 
-            backButton.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
+            backButton.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: UX.backButtonLeading),
             backButton.centerYAnchor.constraint(equalTo: header.centerYAnchor)
         ])
     }
 
     private func setupWebView() {
-        let config = WKWebViewConfiguration()
-        config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
-
-        webView = WKWebView(frame: .zero, configuration: config)
-        webView.navigationDelegate = self
-        webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
 
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
+            webView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerHeight),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)

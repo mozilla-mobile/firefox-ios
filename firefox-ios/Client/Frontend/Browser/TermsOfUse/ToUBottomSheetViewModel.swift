@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Shared
 import Localizations
 
 struct ToUBottomSheetViewModel {
@@ -28,7 +27,7 @@ struct ToUBottomSheetViewModel {
         self.onAccept = onAccept
         self.onNotNow = onNotNow
     }
-    
+
     func markToUAppeared() {
         ToUManager.shared.didShowThisLaunch = true
     }

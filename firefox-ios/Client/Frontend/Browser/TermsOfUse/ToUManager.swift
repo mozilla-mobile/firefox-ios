@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Shared
+import Foundation
 
 class ToUManager: FeatureFlaggable {
     static let shared = ToUManager()
@@ -14,7 +14,7 @@ class ToUManager: FeatureFlaggable {
     private var isToUFeatureEnabled: Bool {
         featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
     }
-    
+
     var didShowThisLaunch = false
 
     var hasAccepted: Bool {
@@ -51,5 +51,4 @@ class ToUManager: FeatureFlaggable {
         UserDefaults.standard.set(true, forKey: dismissedKey)
         UserDefaults.standard.set(Date(), forKey: lastShownDateKey)
     }
-
 }
