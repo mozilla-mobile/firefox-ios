@@ -322,23 +322,37 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnUnpinTopSite
         )
+        let unpinTopSiteExpectation = XCTestExpectation(
+            description: "Unpin top sites method is called from top site manager"
+        )
+        mockTopSitesManager.unpinTopSiteCalled = {
+            unpinTopSiteExpectation.fulfill()
+        }
 
         subject.topSitesProvider(appState, action)
 
         try checkContextMenuMetricsCalled(withExtra: "unpin")
 
-        XCTAssertEqual(mockTopSitesManager.unpinTopSiteCalledCount, 1)
+        wait(for: [unpinTopSiteExpectation], timeout: 1)
     }
 
     func test_tappedOnUnpinTopSite_withoutSite_doesNotCallUnpinTopSite() {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let action = TopSitesAction(windowUUID: .XCTestDefaultUUID, actionType: ContextMenuActionType.tappedOnUnpinTopSite)
 
+        let unpinTopSiteExpectation = XCTestExpectation(
+            description: "Unpin top sites method is called from top site manager"
+        )
+        unpinTopSiteExpectation.isInverted = true
+        mockTopSitesManager.unpinTopSiteCalled = {
+            unpinTopSiteExpectation.fulfill()
+        }
+
         subject.topSitesProvider(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
-        XCTAssertEqual(mockTopSitesManager.unpinTopSiteCalledCount, 0)
+        wait(for: [unpinTopSiteExpectation], timeout: 1)
     }
 
     func test_tappedOnRemoveTopSite_withSite_callsRemoveTopSite() throws {
@@ -350,22 +364,38 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: ContextMenuActionType.tappedOnRemoveTopSite
         )
 
+        let removeTopSiteExpectation = XCTestExpectation(
+            description: "Remove top sites method is called from top site manager"
+        )
+        mockTopSitesManager.removeTopSiteCalled = {
+            removeTopSiteExpectation.fulfill()
+        }
+
         subject.topSitesProvider(appState, action)
 
         try checkContextMenuMetricsCalled(withExtra: "remove")
 
-        XCTAssertEqual(mockTopSitesManager.removeTopSiteCalledCount, 1)
+        wait(for: [removeTopSiteExpectation], timeout: 1)
     }
 
     func test_tappedOnRemoveTopSite_withoutSite_doesNotCallRemoveTopSite() {
         let subject = createSubject(topSitesManager: mockTopSitesManager)
         let action = TopSitesAction(windowUUID: .XCTestDefaultUUID, actionType: ContextMenuActionType.tappedOnRemoveTopSite)
 
+        let removeTopSiteExpectation = XCTestExpectation(
+            description: "Remove top sites method is called from top site manager"
+        )
+        removeTopSiteExpectation.isInverted = true
+
+        mockTopSitesManager.removeTopSiteCalled = {
+            removeTopSiteExpectation.fulfill()
+        }
+
         subject.topSitesProvider(appState, action)
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 0)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 0)
-        XCTAssertEqual(mockTopSitesManager.removeTopSiteCalledCount, 0)
+        wait(for: [removeTopSiteExpectation], timeout: 1)
     }
 
     func test_tappedOnOpenNewPrivateTabAction_sendTelemetryData() throws {

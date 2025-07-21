@@ -39,6 +39,34 @@ extension SDRow {
 }
 
 extension BrowserDBSQLite: PinnedSites {
+    // Methods for new homepage that complies with Swift 6 Migration
+    public func remove(pinnedSite site: Site) async throws -> Result<Void, Error> {
+        guard let host = (site.url as String).asURL?.normalizedHost else {
+            return .failure(DatabaseError(description: "Invalid url for site \(site.url)"))
+        }
+
+        let deleteResult = await awaitDatabaseRun(for: [("DELETE FROM pinned_top_sites where domain = ?", [host])])
+        guard case .success = deleteResult else { return deleteResult }
+        self.notificationCenter.post(name: .TopSitesUpdated, object: nil)
+        return await awaitDatabaseRun(for: [("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
+    }
+
+    /// Helper method that converts using the deferred types to result
+    /// and adopts modern swift concurrency to avoid refactoring the database level
+    func awaitDatabaseRun(for commands: [(String, Args)]) async -> Result<Void, Error> {
+        await withCheckedContinuation { continuation in
+            database.run(commands).upon { result in
+                switch result {
+                case .success:
+                    continuation.resume(returning: .success(()))
+                case .failure(let error):
+                    continuation.resume(returning: .failure(error))
+                }
+            }
+        }
+    }
+
+    // Legacy methods that use deferred
     public func removeFromPinnedTopSites(_ site: Site) -> Success {
         guard let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
