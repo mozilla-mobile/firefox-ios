@@ -1967,8 +1967,7 @@ class BrowserViewController: UIViewController,
         updateBarBordersForMicrosurvey()
         updateViewConstraints()
     }
-    
-    
+
     // MARK: - Native Error Page
 
     func showEmbeddedNativeErrorPage() {
