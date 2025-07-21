@@ -20,18 +20,21 @@ struct MerinoStory: Equatable, Hashable {
     let receivedRank: Int
 
     init(from item: RecommendationDataItem) {
-        self.corpusItemId = item.corpusItemId
-        self.scheduledCorpusItemId = item.scheduledCorpusItemId
-        self.url = URL(string: item.url)
-        self.title = item.title
-        self.excerpt = item.excerpt
-        self.topic = item.topic
-        self.publisher = item.publisher
-        self.isTimeSensitive = item.isTimeSensitive
-        self.imageURL = URL(string: item.imageUrl)!
-        self.iconURL = item.iconUrl.flatMap(URL.init(string:))
-        self.tileId = item.tileId
-        self.receivedRank = Int(item.receivedRank)
+        self.init(
+            corpusItemId: item.corpusItemId,
+            scheduledCorpusItemId: item.scheduledCorpusItemId,
+            url: URL(string: item.url),
+            title: item.title,
+            excerpt: item.excerpt,
+            topic: item.topic,
+            publisher: item.publisher,
+            isTimeSensitive: item.isTimeSensitive,
+            //RGB
+            imageURL: URL(string: item.imageUrl)!,
+            iconURL: item.iconUrl.flatMap(URL.init(string:)),
+            tileId: item.tileId,
+            receivedRank: Int(item.receivedRank)
+        )
     }
 
     init(
