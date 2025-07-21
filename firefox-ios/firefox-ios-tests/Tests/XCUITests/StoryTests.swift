@@ -5,7 +5,7 @@
 import XCTest
 import Common
 
-class PocketTests: BaseTestCase {
+class StoryTests: BaseTestCase {
     enum SwipeDirection {
         case up, down, left, right
     }
