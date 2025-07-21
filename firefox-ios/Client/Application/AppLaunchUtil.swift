@@ -88,6 +88,9 @@ final class AppLaunchUtil {
         // has been started.
         initializeExperiments()
 
+        // Should be done post nimbus initialization in case of experiment
+        migrateTopSitesRowNumbers()
+
         // We migrate history from browser db to places if it hasn't already
         DispatchQueue.global().async {
             self.runAppServicesHistoryMigration()
@@ -181,6 +184,19 @@ final class AppLaunchUtil {
         UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.Session.Last)
     }
 
+    /// Used to migrate user preferences for TopSites row numbers if the new design is
+    /// enabled from greater than two to 2. See FXIOS-12704
+    private func migrateTopSitesRowNumbers() {
+        if LegacyFeatureFlagsManager.shared
+            .isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) {
+            let defaultNumber = TopSitesRowCountSettingsController.defaultNumberOfRows
+            let userNumberOfTopSiteRows = profile.prefs.intForKey(
+                PrefsKeys.NumberOfTopSiteRows
+            ) ?? defaultNumber
+            let migratedNumber = userNumberOfTopSiteRows > 2 ? defaultNumber : userNumberOfTopSiteRows
+            profile.prefs.setInt(migratedNumber, forKey: PrefsKeys.NumberOfTopSiteRows)
+        }
+    }
     // MARK: - Application Services History Migration
 
     private func runAppServicesHistoryMigration() {
