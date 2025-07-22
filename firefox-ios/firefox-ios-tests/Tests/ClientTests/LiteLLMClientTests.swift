@@ -13,7 +13,6 @@ class LiteLLMClientTests: XCTestCase {
         LiteLLMMessage(role: .system, content: "Init chat"),
         LiteLLMMessage(role: .user, content: "Hello")
     ]
-    private var mockClient: LiteLLMClient!
 
     private static let liteLLMMessagePayload = """
     {
@@ -57,16 +56,6 @@ class LiteLLMClientTests: XCTestCase {
     }
     """.data(using: .utf8)!
 
-    override func setUp() {
-        super.setUp()
-        mockClient = LiteLLMClient(apiKey: Self.mockAPIKey, baseURL: URL(string: Self.mockAPIEndpoint)!)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        mockClient = nil
-    }
-
     func testLiteLLMMessageCodable() throws {
         let msg = try JSONDecoder().decode(LiteLLMMessage.self, from: Self.liteLLMMessagePayload)
         XCTAssertEqual(msg.role, .user)
@@ -96,7 +85,8 @@ class LiteLLMClientTests: XCTestCase {
     }
 
     func testMakeRequestBuildsURLRequestNonStreaming() throws {
-        let urlRequest = try mockClient.makeRequest(
+        let subject = createSubject()
+        let urlRequest = try subject.makeRequest(
             messages: Self.mockMessages,
             model: "fake-model",
             maxTokens: 50,
@@ -128,7 +118,8 @@ class LiteLLMClientTests: XCTestCase {
     }
 
     func testMakeRequestBuildsURLRequestStreaming() throws {
-        let urlRequest = try mockClient.makeRequest(
+        let subject = createSubject()
+        let urlRequest = try subject.makeRequest(
             messages: Self.mockMessages,
             model: "fake-model",
             maxTokens: 50,
@@ -144,5 +135,14 @@ class LiteLLMClientTests: XCTestCase {
         let json = try JSONSerialization.jsonObject(with: bodyData, options: [])
                     as? [String: Any]
         XCTAssertEqual(json?["stream"] as? Bool, true)
+    }
+
+    private func createSubject() -> LiteLLMClient {
+        let subject = LiteLLMClient(
+            apiKey: Self.mockAPIKey,
+            baseURL: URL(string: Self.mockAPIEndpoint)!
+        )
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
