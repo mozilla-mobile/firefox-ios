@@ -63,7 +63,7 @@ struct TermsOfUseViewModel {
               let languageIdentifier = Locale.preferredLanguages.first else {
             return nil
         }
-        return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(topic)")
+        return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 
     func markToUAppeared() {
