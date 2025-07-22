@@ -404,6 +404,7 @@
         "ShareToolbarTests",
         "SiteLoadTest",
         "SiteLoadTest\/testLoadSite()",
+        "StoryTests",
         "SwipingTabsTests",
         "SyncUITests",
         "SyncUITests\/testCreateAnAccountLink()",
