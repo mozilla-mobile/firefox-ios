@@ -78,7 +78,7 @@ final class SummarizationCheckerTests: XCTestCase {
             }
         }
     }
-    
+
     private func createSubject() -> SummarizationChecker {
         let subject = SummarizationChecker()
         trackForMemoryLeaks(subject)
