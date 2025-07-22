@@ -325,6 +325,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
+    var isStoriesRedesignEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+    }
+
     var isHomepageSearchBarEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
@@ -1179,6 +1183,7 @@ class BrowserViewController: UIViewController,
         guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
             guard addressToolbarContainer.isHidden == true else { return }
             addressToolbarContainer.isHidden = false
+            updateContentContainerConstraints(isHomepage: browserViewControllerState?.browserViewType != .webview)
             store.dispatchLegacy(
                 GeneralBrowserAction(windowUUID: windowUUID, actionType: GeneralBrowserActionType.didUnhideToolbar)
             )
@@ -1571,10 +1576,15 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateContentContainerConstraints(isHomepage: Bool) {
-        let isKeyboardShowing = keyboardState != nil
-
         contentContainerBottomConstraint?.isActive = false
-        if isHomepage && (isHomepageSearchBarEnabled || !isBottomSearchBar || isKeyboardShowing) {
+
+        // Constrain content (homepage) to navigation toolbar when one of the following are true
+        // 1) Homepage search bar experiment is enabled
+        // 2) Stories redesign is enabled and we are currently editing the address
+        let isBottomSearchBarEditing = isBottomSearchBar && keyboardState != nil
+        let shouldConstrainToBottomContainer = isHomepage && (isHomepageSearchBarEnabled || (isStoriesRedesignEnabled
+                                                                                             && isBottomSearchBarEditing))
+        if shouldConstrainToBottomContainer {
             contentContainerBottomConstraint = contentContainer.bottomAnchor
                 .constraint(equalTo: bottomContainer.topAnchor)
         } else {
