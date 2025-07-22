@@ -86,7 +86,7 @@ public class SummarizeController: UIViewController, Themeable {
         $0.alpha = 0
         $0.numberOfLines = 0
     }
-    private let closeButton: UIButton = .build {
+    private let closeButton: CloseButton = .build {
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
         $0.alpha = 0
     }
@@ -149,10 +149,7 @@ public class SummarizeController: UIViewController, Themeable {
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
 
-        closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
-        closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
-        closeButton.setImage(UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-                             for: .normal)
+        closeButton.configure(viewModel: viewModel.closeButtonModel)
         closeButton.addAction(
             UIAction(handler: { [weak self] _ in
                 UIView.animate(withDuration: UX.panEndAnimationDuration) {
