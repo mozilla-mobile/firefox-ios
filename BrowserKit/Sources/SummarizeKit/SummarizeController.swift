@@ -5,6 +5,7 @@
 import Foundation
 import Common
 import UIKit
+import ComponentLibrary
 
 // swiftlint:disable line_length
 let dummyText = """
