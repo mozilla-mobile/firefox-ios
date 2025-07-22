@@ -83,7 +83,7 @@ class LiteLLMClientTests: XCTestCase {
     }
 
     func testStreamResponseCodable() throws {
-        let stream = try JSONDecoder().decode(StreamResponse.self, from: Self.streamResponsePayload)
+        let stream = try JSONDecoder().decode(LiteLLMStreamResponse.self, from: Self.streamResponsePayload)
         XCTAssertEqual(stream.id, "stream-123")
         XCTAssertEqual(stream.created, 1690000000)
         XCTAssertEqual(stream.model, "stream-model")
