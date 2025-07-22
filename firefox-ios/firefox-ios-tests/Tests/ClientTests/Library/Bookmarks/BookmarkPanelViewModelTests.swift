@@ -328,16 +328,29 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 }
 
 // MARK: - Mocks
-private final class MockBookmarkNode: FxBookmarkNode {
-    var type: BookmarkNodeType = .bookmark
-    var guid = "12345"
-    var parentGUID: String?
-    var position: UInt32 = 0
-    var isRoot = false
-    var title: String
+// TODO: FXIOS-12903 This is unchecked sendable because BookmarkNodeType in rust components
+private final class MockBookmarkNode: @unchecked Sendable, FxBookmarkNode {
+    let type: BookmarkNodeType
+    let guid: String
+    let parentGUID: String?
+    let position: UInt32
+    let isRoot: Bool
+    let title: String
 
-    init(title: String) {
+    init(
+        title: String,
+        type: BookmarkNodeType = .bookmark,
+        guid: String = "12345",
+        parentGUID: String? = nil,
+        position: UInt32 = 0,
+        isRoot: Bool = false
+    ) {
         self.title = title
+        self.type = type
+        self.guid = guid
+        self.parentGUID = parentGUID
+        self.position = position
+        self.isRoot = isRoot
     }
 }
 
