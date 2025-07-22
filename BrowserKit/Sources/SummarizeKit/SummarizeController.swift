@@ -6,6 +6,7 @@ import Foundation
 import Common
 import UIKit
 import ComponentLibrary
+import MarkdownKit
 
 // swiftlint:disable line_length
 let dummyText = """
@@ -163,31 +164,16 @@ public class SummarizeController: UIViewController, Themeable {
             }),
             for: .touchUpInside
         )
-
-        let document = try? NSAttributedString(
-            data: Data(dummyText.utf8),
-            options: [
-                .documentType: NSAttributedString.DocumentType.html,
-                .characterEncoding: String.Encoding.utf8.rawValue,
-            ],
-            documentAttributes: nil
-        )
-        if let document {
-            let mutable = NSMutableAttributedString(attributedString: document)
-            mutable.beginEditing()
-            mutable.enumerateAttribute(.font, in: NSRange(location: 0, length: mutable.length)) { value, range, _ in
-                if let oldFont = value as? UIFont {
-                    let newDescriptor = FXFontStyles.Regular.body.scaledFont().fontDescriptor
-                        .withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits)
-                    if let newDescriptor {
-                        let newFont = UIFont(descriptor: newDescriptor, size: oldFont.pointSize)
-                        mutable.addAttribute(.font, value: newFont, range: range)
-                    }
-                }
-            }
-            mutable.endEditing()
-            summaryView.attributedText = mutable
-        }
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let baseFont = FXFontStyles.Regular.body.scaledFont()
+        let headerFont = FXFontStyles.Regular.headline.scaledFont()
+        let baseColor = theme.colors.textPrimary
+        let markdownParser = MarkdownParser(font: baseFont, color: baseColor)
+        /// NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
+        /// To keep the MVP safe, link rendering is disabled.
+        markdownParser.enabledElements =  .all.subtracting([.link, .automaticLink])
+        markdownParser.header.font = headerFont
+        summaryView.attributedText = markdownParser.parse(dummyText)
         summaryView.accessibilityIdentifier = viewModel.summarizeTextViewA11yId
         summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
 
