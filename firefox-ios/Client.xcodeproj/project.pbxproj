@@ -745,6 +745,24 @@
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
 		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
+		789A0B232E2E969D004547CE /* FxUserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F62DF6EF17000AA578 /* FxUserState.swift */; };
+		789A0B242E2E96B7004547CE /* NavigationRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F72DF6EF17000AA578 /* NavigationRegistry.swift */; };
+		789A0B252E2E96BF004547CE /* registerCommonNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F82DF6EF17000AA578 /* registerCommonNavigation.swift */; };
+		789A0B262E2E96C6004547CE /* registerContextMenuNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F92DF6EF17000AA578 /* registerContextMenuNavigation.swift */; };
+		789A0B272E2E96D1004547CE /* registerFxAccountNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FA2DF6EF17000AA578 /* registerFxAccountNavigation.swift */; };
+		789A0B282E2E96DA004547CE /* registerHomePanelNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FB2DF6EF17000AA578 /* registerHomePanelNavigation.swift */; };
+		789A0B292E2E96E5004547CE /* registerLibraryPanelNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FC2DF6EF17000AA578 /* registerLibraryPanelNavigation.swift */; };
+		789A0B2A2E2E96ED004547CE /* registerMiscellanousActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FD2DF6EF17000AA578 /* registerMiscellanousActions.swift */; };
+		789A0B2B2E2E96F6004547CE /* registerMiscellanousNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FE2DF6EF17000AA578 /* registerMiscellanousNavigation.swift */; };
+		789A0B2C2E2E96FE004547CE /* registerMobileNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423FF2DF6EF17000AA578 /* registerMobileNavigation.swift */; };
+		789A0B2D2E2E9705004547CE /* registerOnboardingNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424002DF6EF17000AA578 /* registerOnboardingNavigation.swift */; };
+		789A0B2E2E2E970C004547CE /* registerSettingsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424012DF6EF17000AA578 /* registerSettingsNavigation.swift */; };
+		789A0B2F2E2E9712004547CE /* registerTabMenuNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424022DF6EF17000AA578 /* registerTabMenuNavigation.swift */; };
+		789A0B302E2E971A004547CE /* registerTabTrayNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424032DF6EF17000AA578 /* registerTabTrayNavigation.swift */; };
+		789A0B312E2E9722004547CE /* registerToolbarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424042DF6EF17000AA578 /* registerToolbarNavigation.swift */; };
+		789A0B322E2E972B004547CE /* registerTrackingProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424052DF6EF17000AA578 /* registerTrackingProtection.swift */; };
+		789A0B332E2E9731004547CE /* registerUrlBarNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424062DF6EF17000AA578 /* registerUrlBarNavigation.swift */; };
+		789A0B342E2E9738004547CE /* registerZoomNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5424072DF6EF17000AA578 /* registerZoomNavigation.swift */; };
 		78CD8C9E2D4150D800CA1BBF /* L10nSnapshotTests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 78CD8C9D2D4150D700CA1BBF /* L10nSnapshotTests.xctestplan */; };
 		78F28FC02CB81FDF00DA862E /* InactiveTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */; };
 		78FE1E892B040E7000338465 /* FirefoxSuggestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */; };
@@ -1174,7 +1192,6 @@
 		8AC8841F2D5261170033ABF5 /* MockCrashTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC8841E2D5261170033ABF5 /* MockCrashTracker.swift */; };
 		8AC884212D5262070033ABF5 /* CrashTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC884202D5261FC0033ABF5 /* CrashTrackerTests.swift */; };
 		8AC976C22DBFED8C00C4E298 /* FeatureFlaggedTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC976C12DBFED8C00C4E298 /* FeatureFlaggedTestBase.swift */; };
-		8AC976C32DBFED8C00C4E298 /* FeatureFlaggedTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC976C12DBFED8C00C4E298 /* FeatureFlaggedTestBase.swift */; };
 		8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */; };
 		8ACA8F7629198D6400D3075D /* GCDThrottlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F7529198D6400D3075D /* GCDThrottlerTests.swift */; };
 		8ACE9BFB2A54A010001E7A73 /* ExpandButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */; };
@@ -17311,17 +17328,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4859A7727328569009A2390 /* AccessibilityIdentifiers.swift in Sources */,
+				789A0B2F2E2E9712004547CE /* registerTabMenuNavigation.swift in Sources */,
 				7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */,
+				789A0B312E2E9722004547CE /* registerToolbarNavigation.swift in Sources */,
+				789A0B2E2E2E970C004547CE /* registerSettingsNavigation.swift in Sources */,
+				789A0B292E2E96E5004547CE /* registerLibraryPanelNavigation.swift in Sources */,
+				789A0B2B2E2E96F6004547CE /* registerMiscellanousNavigation.swift in Sources */,
+				789A0B232E2E969D004547CE /* FxUserState.swift in Sources */,
+				789A0B252E2E96BF004547CE /* registerCommonNavigation.swift in Sources */,
 				7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */,
+				789A0B262E2E96C6004547CE /* registerContextMenuNavigation.swift in Sources */,
+				789A0B2C2E2E96FE004547CE /* registerMobileNavigation.swift in Sources */,
 				5F2B55FE2D4CD7FE00A4E2CF /* A11yUtils.swift in Sources */,
 				D88C01B722B29EC200936951 /* ScreenGraphTest.swift in Sources */,
 				E40AFC541DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift in Sources */,
+				789A0B302E2E971A004547CE /* registerTabTrayNavigation.swift in Sources */,
 				E40AFC6C1DD128DA00DA5651 /* L10nSuite1SnapshotTests.swift in Sources */,
 				D437C4FD25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift in Sources */,
-				8AC976C32DBFED8C00C4E298 /* FeatureFlaggedTestBase.swift in Sources */,
 				E40AFC651DD0F25500DA5651 /* L10nBaseSnapshotTests.swift in Sources */,
+				789A0B272E2E96D1004547CE /* registerFxAccountNavigation.swift in Sources */,
+				789A0B342E2E9738004547CE /* registerZoomNavigation.swift in Sources */,
 				391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */,
+				789A0B242E2E96B7004547CE /* NavigationRegistry.swift in Sources */,
+				789A0B332E2E9731004547CE /* registerUrlBarNavigation.swift in Sources */,
+				789A0B282E2E96DA004547CE /* registerHomePanelNavigation.swift in Sources */,
+				789A0B322E2E972B004547CE /* registerTrackingProtection.swift in Sources */,
 				8A9F0B5727C59E1700FE09AE /* ImageIdentifiers.swift in Sources */,
+				789A0B2D2E2E9705004547CE /* registerOnboardingNavigation.swift in Sources */,
+				789A0B2A2E2E96ED004547CE /* registerMiscellanousActions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
