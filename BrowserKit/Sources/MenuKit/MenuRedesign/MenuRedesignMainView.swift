@@ -131,12 +131,13 @@ public final class MenuRedesignMainView: UIView,
     public func announceAccessibility(expandedHint: String) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             UIAccessibility.post(notification: .announcement, argument: expandedHint)
-            if let section = self?.menuData.first,
-               let optionalElementIndex = section.options.firstIndex(where: { $0.isOptional }) {
-                if let firstCell = self?.tableView.tableView.visibleCells[optionalElementIndex] {
-                    UIAccessibility.post(notification: .layoutChanged, argument: firstCell)
-                }
-            }
+
+            guard let section = self?.menuData.first,
+               let optionalElementIndex = section.options.firstIndex(where: { $0.isOptional }),
+               let firstCell = self?.tableView.tableView.visibleCells[optionalElementIndex]
+            else { return }
+
+            UIAccessibility.post(notification: .layoutChanged, argument: firstCell)
         }
     }
 
