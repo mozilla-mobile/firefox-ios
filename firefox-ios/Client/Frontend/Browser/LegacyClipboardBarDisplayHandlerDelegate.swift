@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Common
 
-// TODO: FXIOS-TODO This legacy ClipboardBar code can be removed once iOS 15 is dropped
+// TODO: FXIOS-12907 This legacy ClipboardBar code can be removed once iOS 15 is dropped
 protocol LegacyClipboardBarDisplayHandlerDelegate: AnyObject {
     func shouldDisplay(clipBoardURL url: URL)
 }
@@ -58,9 +58,7 @@ final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
                     return
                 }
 
-                MainActor.assumeIsolated {
-                    self.lastDisplayedURL = url.absoluteString
-                }
+                self.lastDisplayedURL = url.absoluteString
             }
         }
     }
