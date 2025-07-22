@@ -12,7 +12,7 @@ public enum LLMClientError: LocalizedError {
     case decodingFailed
     case networkError(underlying: Error)
 
-    public var errorDescription: String? {
+    public var errorDescription: String {
         switch self {
         case .requestCreationFailed:
             return "Unable to prepare the request. Please try again later."

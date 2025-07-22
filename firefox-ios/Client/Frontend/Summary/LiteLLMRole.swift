@@ -4,7 +4,10 @@
 
 import Foundation
 
-/// Defines the role of an LLM message, catching typos at compile time.
+/// Using explicit roles not only catches typos at compile time, it also helps mitigate prompt-injection:
+/// - `system`: trusted policy/constraints the model must follow
+/// - `user`: untrusted input that should never override `system` content
+/// - `assistant`: model output
 public enum LiteLLMRole: String, Codable {
     case system, user, assistant
 }

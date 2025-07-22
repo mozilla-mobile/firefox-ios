@@ -14,7 +14,6 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
     private static let sseDataPrefix = "data: "
     private static let sseDoneSignal = "[DONE]"
 
-    private var logger: Logger = DefaultLogger.shared
     private let apiKey: String
     private let baseURL: URL
     private lazy var session: URLSession = {
@@ -36,7 +35,7 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
 
     /// Sends a chat completion request.
     /// - Parameters:
-    ///   - messages: Array of `ChatMessage`.
+    ///   - messages: Array of `LiteLLMMessage`.
     ///   - model: Model identifier.
     ///   - maxTokens: Maximum tokens to generate.
     ///   - stream: Whether to stream the response (`true`) or not (`false`).
