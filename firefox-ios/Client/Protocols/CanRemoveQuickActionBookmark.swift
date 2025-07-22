@@ -8,7 +8,9 @@ import Storage
 import class MozillaAppServices.BookmarkItemData
 
 protocol CanRemoveQuickActionBookmark {
-    @MainActor var bookmarksHandler: BookmarksHandler { get }
+    @MainActor
+    var bookmarksHandler: BookmarksHandler { get }
+
     @MainActor
     func removeBookmarkShortcut(quickAction: QuickActions)
 }
