@@ -58,7 +58,9 @@ final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
                     return
                 }
 
-                self.lastDisplayedURL = url.absoluteString
+                MainActor.assumeIsolated {
+                    self.lastDisplayedURL = url.absoluteString
+                }
             }
         }
     }
