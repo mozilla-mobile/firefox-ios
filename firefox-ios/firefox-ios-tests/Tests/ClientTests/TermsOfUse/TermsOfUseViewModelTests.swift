@@ -7,34 +7,71 @@ import Shared
 import Localizations
 @testable import Client
 
-class TermsOfUseViewModelTests: XCTestCase {
-        func test_combinedTextContainsDescriptionAndReview() {
-            let vm = TermsOfUseViewModel()
-            XCTAssertTrue(vm.combinedText.contains(vm.descriptionText))
-            XCTAssertTrue(vm.combinedText.contains(vm.reviewAndAcceptText))
-        }
+final class TermsOfUseViewModelTests: XCTestCase {
+    var termsOfUseManager: TermsOfUseManager!
 
-        func test_linkTermsIncludesExpectedLabels() {
-            let vm = TermsOfUseViewModel()
-            let terms = vm.linkTerms
-            XCTAssertTrue(terms.contains(String.localizedStringWithFormat(
-                TermsOfUse.LinkTermsOfUse,
-                AppName.shortName.rawValue)))
-            XCTAssertTrue(terms.contains(TermsOfUse.LinkPrivacyNotice))
-            XCTAssertTrue(terms.contains(TermsOfUse.LinkLearnMore))
-        }
+    override func setUp() {
+        super.setUp()
+        termsOfUseManager = TermsOfUseManager()
+    }
 
-        func test_linkURLReturnsCorrectURLs() {
-            let vm = TermsOfUseViewModel()
+    override func tearDown() {
+        termsOfUseManager = nil
+        super.tearDown()
+    }
 
-            let termsOfUseURL = vm.linkURL(for: String.localizedStringWithFormat(
-                TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue))
-            XCTAssertTrue(termsOfUseURL?.absoluteString.contains("mozilla.org/about/legal/terms") ?? false)
+    func test_combinedTextContainsDescriptionAndReview() {
+        let viewModel = TermsOfUseViewModel(termsOfUseManager: termsOfUseManager)
+        XCTAssertTrue(viewModel.combinedText.contains(viewModel.descriptionText))
+        XCTAssertTrue(viewModel.combinedText.contains(viewModel.reviewAndAcceptText))
+    }
 
-            let privacyURL = vm.linkURL(for: TermsOfUse.LinkPrivacyNotice)
-            XCTAssertTrue(privacyURL?.absoluteString.contains("mozilla.org/privacy/firefox") ?? false)
+    func test_linkTermsIncludesExpectedLabels() {
+        let viewModel = TermsOfUseViewModel(termsOfUseManager: termsOfUseManager)
+        let terms = viewModel.linkTerms
 
-            let learnMoreURL = vm.linkURL(for: TermsOfUse.LinkLearnMore)
-            XCTAssertTrue(learnMoreURL?.absoluteString.contains("support.mozilla.org") ?? false)
-        }
+        XCTAssertTrue(terms.contains(String.localizedStringWithFormat(
+            TermsOfUse.LinkTermsOfUse,
+            AppName.shortName.rawValue
+        )))
+        XCTAssertTrue(terms.contains(TermsOfUse.LinkPrivacyNotice))
+        XCTAssertTrue(terms.contains(TermsOfUse.LinkLearnMore))
+    }
+
+    func test_linkURLReturnsCorrectURLs() {
+        let viewModel = TermsOfUseViewModel(termsOfUseManager: termsOfUseManager)
+
+        let termsOfUseURL = viewModel.linkURL(for: String.localizedStringWithFormat(
+            TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue))
+        XCTAssertTrue(termsOfUseURL?.absoluteString.contains("mozilla.org/about/legal/terms") ?? false)
+
+        let privacyURL = viewModel.linkURL(for: TermsOfUse.LinkPrivacyNotice)
+        XCTAssertTrue(privacyURL?.absoluteString.contains("mozilla.org/privacy/firefox") ?? false)
+
+        let learnMoreURL = viewModel.linkURL(for: TermsOfUse.LinkLearnMore)
+        XCTAssertTrue(learnMoreURL?.absoluteString.contains("support.mozilla.org") ?? false)
+    }
+
+    func test_markToUAppearedSetsFlag() {
+        let viewModel = TermsOfUseViewModel(termsOfUseManager: termsOfUseManager)
+        XCTAssertFalse(termsOfUseManager.didShowThisLaunch)
+        viewModel.markToUAppeared()
+        XCTAssertTrue(termsOfUseManager.didShowThisLaunch)
+    }
+
+    func test_onAcceptCallsManager() {
+        let viewModel = TermsOfUseViewModel(termsOfUseManager: termsOfUseManager)
+        termsOfUseManager.markDismissed()
+        XCTAssertFalse(termsOfUseManager.hasAccepted)
+        viewModel.onAccept?()
+        XCTAssertTrue(termsOfUseManager.hasAccepted)
+    }
+
+    func test_onNotNowCallsManager() {
+        let viewModel = TermsOfUseViewModel(termsOfUseManager: termsOfUseManager)
+        termsOfUseManager.markAccepted()
+        XCTAssertFalse(termsOfUseManager.wasDismissed)
+        viewModel.onNotNow?()
+        XCTAssertTrue(termsOfUseManager.wasDismissed)
+    }
 }

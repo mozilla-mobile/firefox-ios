@@ -7,6 +7,8 @@ import Localizations
 import Shared
 
 struct TermsOfUseViewModel {
+    private let termsOfUseManager: TermsOfUseManager
+
     let titleText = TermsOfUse.Title
     let descriptionText: String
     let reviewAndAcceptText = TermsOfUse.ReviewAndAcceptText
@@ -17,11 +19,13 @@ struct TermsOfUseViewModel {
     var onNotNow: (() -> Void)?
 
     init(
-        onAccept: (() -> Void)? = { TermsOfUseManager.shared.markAccepted() },
-        onNotNow: (() -> Void)? = { TermsOfUseManager.shared.markDismissed() }
+        termsOfUseManager: TermsOfUseManager,
+        onAccept: (() -> Void)? = nil,
+        onNotNow: (() -> Void)? = nil
     ) {
-        self.onAccept = onAccept
-        self.onNotNow = onNotNow
+        self.termsOfUseManager = termsOfUseManager
+        self.onAccept = onAccept ?? { termsOfUseManager.markAccepted() }
+        self.onNotNow = onNotNow ?? { termsOfUseManager.markDismissed() }
 
         self.descriptionText = String.localizedStringWithFormat(
             TermsOfUse.Description,
@@ -59,10 +63,10 @@ struct TermsOfUseViewModel {
               let languageIdentifier = Locale.preferredLanguages.first else {
             return nil
         }
-        return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
+        return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(topic)")
     }
 
     func markToUAppeared() {
-        TermsOfUseManager.shared.didShowThisLaunch = true
+        termsOfUseManager.didShowThisLaunch = true
     }
 }

@@ -6,7 +6,8 @@ import Common
 import Shared
 import ComponentLibrary
 
-class TermsOfUseViewController: UIViewController, Themeable, UITextViewDelegate {
+final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDelegate {
+
     private struct UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
@@ -39,6 +40,8 @@ class TermsOfUseViewController: UIViewController, Themeable, UITextViewDelegate 
     private let viewModel: TermsOfUseViewModel
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+
+    private var activeContainerConstraints: [NSLayoutConstraint] = []
 
     private lazy var sheetContainer: UIView = {
         let view = UIView()
@@ -144,6 +147,14 @@ class TermsOfUseViewController: UIViewController, Themeable, UITextViewDelegate 
         viewModel.markToUAppeared()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
+            setupConstraints()
+            view.layoutIfNeeded()
+        }
+    }
+
     private func setupUI() {
         view.backgroundColor = UIColor.black.withAlphaComponent(UX.backgroundAlpha)
         view.addSubview(sheetContainer)
@@ -156,20 +167,18 @@ class TermsOfUseViewController: UIViewController, Themeable, UITextViewDelegate 
     }
 
     private func setupConstraints() {
-        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        NSLayoutConstraint.deactivate(activeContainerConstraints)
 
         var containerConstraints = [
             sheetContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             sheetContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
 
-        if isPad {
+        if traitCollection.horizontalSizeClass == .regular {
             containerConstraints.append(contentsOf: [
                 sheetContainer.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * UX.iPadWidthMultiplier),
-                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
-                                                        constant: UX.sheetContainerSidePadding),
-                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor,
-                                                         constant: -UX.sheetContainerSidePadding)
+                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: UX.sheetContainerSidePadding),
+                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -UX.sheetContainerSidePadding)
             ])
         } else {
             containerConstraints.append(contentsOf: [
@@ -179,6 +188,7 @@ class TermsOfUseViewController: UIViewController, Themeable, UITextViewDelegate 
         }
 
         NSLayoutConstraint.activate(containerConstraints)
+        activeContainerConstraints = containerConstraints
 
         NSLayoutConstraint.activate([
             grabberView.topAnchor.constraint(equalTo: sheetContainer.topAnchor, constant: UX.grabberTopPadding),

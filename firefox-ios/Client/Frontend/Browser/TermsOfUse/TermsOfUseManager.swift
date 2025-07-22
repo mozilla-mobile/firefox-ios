@@ -4,9 +4,7 @@
 
 import Foundation
 
-class TermsOfUseManager: FeatureFlaggable {
-    static let shared = TermsOfUseManager()
-
+final class TermsOfUseManager: FeatureFlaggable {
     private let acceptedKey = "termsOfUseAccepted"
     private let dismissedKey = "termsOfUseDismissed"
     private let lastShownDateKey = "termsOfUseLastShownDate"

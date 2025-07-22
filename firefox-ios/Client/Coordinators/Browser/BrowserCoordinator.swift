@@ -45,6 +45,7 @@ class BrowserCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private let windowManager: WindowManager
+    private let termsOfUseManager: TermsOfUseManager
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
@@ -62,6 +63,7 @@ class BrowserCoordinator: BaseCoordinator,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         termsOfUseManager: TermsOfUseManager = TermsOfUseManager(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
@@ -69,6 +71,7 @@ class BrowserCoordinator: BaseCoordinator,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowManager = windowManager
+        self.termsOfUseManager = termsOfUseManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
@@ -1149,14 +1152,14 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Terms of Use Bottom Sheet
 
     private func showTermsOfUse() {
-        guard TermsOfUseManager.shared.shouldShow() else { return }
+        guard termsOfUseManager.shouldShow() else { return }
         let presentingVC = homepageViewController ?? browserViewController
-        let viewModel = TermsOfUseViewModel()
-        let touVC = TermsOfUseViewController(
+        let viewModel = TermsOfUseViewModel(termsOfUseManager: termsOfUseManager)
+        let termsOfUseViewController = TermsOfUseViewController(
             viewModel: viewModel,
             windowUUID: self.windowUUID
         )
-        presentingVC.present(touVC, animated: true)
+        presentingVC.present(termsOfUseViewController, animated: true)
     }
 
     // MARK: - Password Generator
