@@ -332,6 +332,7 @@ class BrowserViewController: UIViewController,
 
     var isHomepageSearchBarEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+    }
 
     var isSummarizeFeatureEnabled: Bool {
         return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
