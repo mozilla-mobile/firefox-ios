@@ -624,7 +624,7 @@ extension Notification.Name {
 class FxAStatePersistenceCallback: PersistCallback {
     weak var manager: FxAccountManager?
 
-    public init(manager: FxAccountManager) {
+    init(manager: FxAccountManager) {
         self.manager = manager
     }
 
