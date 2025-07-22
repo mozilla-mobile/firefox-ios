@@ -6,7 +6,8 @@ import MozillaAppServices
 
 @testable import Client
 
-struct MockFxBookmarkNode: FxBookmarkNode {
+// TODO: FXIOS-12903 This is unchecked sendable because BookmarkNodeType in rust components
+struct MockFxBookmarkNode: @unchecked Sendable, FxBookmarkNode {
     var type: MozillaAppServices.BookmarkNodeType
     var guid: String
     var parentGUID: String?

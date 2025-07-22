@@ -9,7 +9,7 @@ import enum MozillaAppServices.BookmarkNodeType
 
 // Provides a layer of abstraction so we have more power over BookmarkNodeData provided by App Services.
 // For instance, this enables us to have the LocalDesktopFolder.
-protocol FxBookmarkNode {
+protocol FxBookmarkNode: Sendable {
     var type: BookmarkNodeType { get }
     var guid: String { get }
     var parentGUID: String? { get }
@@ -26,15 +26,18 @@ extension FxBookmarkNode {
     }
 }
 
-extension BookmarkItemData: FxBookmarkNode {}
+// TODO: FXIOS-12903 Bookmark Data from Rust components is not Sendable
+extension BookmarkItemData: @unchecked @retroactive Sendable, FxBookmarkNode {}
 
-extension BookmarkFolderData: FxBookmarkNode {
+// TODO: FXIOS-12903 Bookmark Data from Rust components is not Sendable
+extension BookmarkFolderData: @unchecked @retroactive Sendable, FxBookmarkNode {
     // Convenience to be able to fetch children as an array of FxBookmarkNode
     var fxChildren: [FxBookmarkNode]? {
         return self.children as? [FxBookmarkNode]
     }
 }
 
-extension BookmarkSeparatorData: FxBookmarkNode {
+// TODO: FXIOS-12903 Bookmark Data from Rust components is not Sendable
+extension BookmarkSeparatorData: @unchecked @retroactive Sendable, FxBookmarkNode {
     var title: String { "" }
 }

@@ -13,6 +13,7 @@ class CanRemoveQuickActionBookmarkTests: XCTestCase {
     private var mockBookmarksHandler: BookmarksHandlerMock!
     private var mockQuickActions: MockQuickActions!
 
+    @MainActor
     override func setUp() {
         super.setUp()
         mockQuickActions = MockQuickActions()
@@ -27,6 +28,7 @@ class CanRemoveQuickActionBookmarkTests: XCTestCase {
         subject = nil
     }
 
+    @MainActor
     func testWithoutBookmarks() {
         subject.removeBookmarkShortcut(quickAction: mockQuickActions)
         mockBookmarksHandler.callGetRecentBookmarksCompletion(with: [])
@@ -37,6 +39,7 @@ class CanRemoveQuickActionBookmarkTests: XCTestCase {
         XCTAssertEqual(mockQuickActions.addFromShareItemCalled, 0)
     }
 
+    @MainActor
     func testWithBookmarks() {
         subject.removeBookmarkShortcut(quickAction: mockQuickActions)
         mockBookmarksHandler.callGetRecentBookmarksCompletion(with: getMockBookmarks())
@@ -63,6 +66,7 @@ private extension CanRemoveQuickActionBookmarkTests {
 }
 
 // MARK: - CanRemoveQuickActionBookmarkMock
+@MainActor
 private class MockCanRemoveQuickActionBookmark: CanRemoveQuickActionBookmark {
     var bookmarksHandler: BookmarksHandler
 
