@@ -77,11 +77,6 @@ final class AppLaunchUtil: Sendable {
         let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
         conversionValue.adNetworkAttributionUpdateConversionEvent()
 
-        // Used by share extension to determine if the bookmarks refactor feature flag is enabled
-        profile.prefs.setBool(LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksRefactor,
-                                                                                checking: .buildOnly),
-                              forKey: PrefsKeys.IsBookmarksRefactorEnabled)
-
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()
 
