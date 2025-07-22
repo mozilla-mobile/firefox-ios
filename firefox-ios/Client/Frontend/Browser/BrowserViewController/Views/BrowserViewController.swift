@@ -1585,6 +1585,9 @@ class BrowserViewController: UIViewController,
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+        contentContainerBottomConstraint = contentContainer.bottomAnchor
+            .constraint(equalTo: overKeyboardContainer.topAnchor)
+        contentContainerBottomConstraint?.isActive = true
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             NSLayoutConstraint.activate([
@@ -1603,10 +1606,7 @@ class BrowserViewController: UIViewController,
         contentContainerBottomConstraint?.isActive = false
 
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-        else {
-            activateFallbackContentContainerConstraints()
-            return
-        }
+        else { return }
 
         // Constrain content (homepage) to bottomContainer when one of the following are true
         // 1) Homepage search bar experiment is enabled
@@ -1621,14 +1621,10 @@ class BrowserViewController: UIViewController,
                 .constraint(equalTo: bottomContainer.topAnchor)
             contentContainerBottomConstraint?.isActive = true
         } else {
-            activateFallbackContentContainerConstraints()
-        }
-
-        func activateFallbackContentContainerConstraints() {
             contentContainerBottomConstraint = contentContainer.bottomAnchor
                 .constraint(equalTo: overKeyboardContainer.topAnchor)
-            contentContainerBottomConstraint?.isActive = true
         }
+        contentContainerBottomConstraint?.isActive = true
     }
 
     private func setupBlurViews() {
