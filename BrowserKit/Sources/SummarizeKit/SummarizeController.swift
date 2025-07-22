@@ -81,7 +81,6 @@ public class SummarizeController: UIViewController, Themeable {
 
     // MARK: - UI properties
     private let loadingLabel: UILabel = .build {
-        $0.adjustsFontSizeToFitWidth = true
         $0.font = FXFontStyles.Regular.body.scaledFont()
         $0.alpha = 0
         $0.numberOfLines = 0
