@@ -12,7 +12,9 @@ import Redux
 /// Classes conforming to this protocol can manage adding and removing bookmarks.
 /// Since bookmarks are not using Redux, we use this instead of dispatching an action.
 protocol BookmarksHandlerDelegate: AnyObject {
+    @MainActor
     func addBookmark(urlString: String, title: String?, site: Site?)
+    @MainActor
     func removeBookmark(urlString: String, title: String?, site: Site?)
 }
 

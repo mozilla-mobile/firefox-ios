@@ -8,8 +8,11 @@ import Shared
 import Common
 
 protocol QRCodeViewControllerDelegate: AnyObject {
+    @MainActor
     func didScanQRCodeWithURL(_ url: URL)
+    @MainActor
     func didScanQRCodeWithTextContent(_ content: TextContentDetector.DetectedType?, rawText: String)
+    @MainActor
     var qrCodeScanningPermissionLevel: QRCodeScanPermissions { get }
 }
 

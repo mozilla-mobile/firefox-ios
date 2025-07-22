@@ -10,6 +10,7 @@ protocol StatusBarScrollDelegate: AnyObject {
 }
 
 protocol BrowserStatusBarScrollDelegate: AnyObject {
+    @MainActor
     func homepageScrollViewDidScroll(scrollOffset: CGFloat)
 }
 

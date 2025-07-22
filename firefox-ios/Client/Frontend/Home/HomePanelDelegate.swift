@@ -7,19 +7,27 @@ import Foundation
 import enum MozillaAppServices.VisitType
 
 protocol HomePanelDelegate: AnyObject {
+    @MainActor
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
+    @MainActor
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
+    @MainActor
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
+    @MainActor
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayPanelType?)
+    @MainActor
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
+    @MainActor
     func homePanelDidRequestBookmarkToast(urlString: String?, action: BookmarkAction)
 }
 
 extension HomePanelDelegate {
+    @MainActor
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
         homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 
+    @MainActor
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab? = nil,
                                           focusedSegment: TabTrayPanelType? = nil) {
         homePanelDidRequestToOpenTabTray(withFocusedTab: tabToFocus, focusedSegment: focusedSegment)

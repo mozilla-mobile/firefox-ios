@@ -26,22 +26,28 @@ private struct SearchViewControllerUX {
 }
 
 protocol SearchViewControllerDelegate: AnyObject {
+    @MainActor
     func searchViewController(
         _ searchViewController: SearchViewController,
         didSelectURL url: URL,
         searchTerm: String?
     )
+    @MainActor
     func searchViewController(_ searchViewController: SearchViewController, uuid: String)
+    @MainActor
     func presentSearchSettingsController()
+    @MainActor
     func searchViewController(
         _ searchViewController: SearchViewController,
         didHighlightText text: String,
         search: Bool
     )
+    @MainActor
     func searchViewController(
         _ searchViewController: SearchViewController,
         didAppend text: String
     )
+    @MainActor
     func searchViewControllerWillHide(_ searchViewController: SearchViewController)
 }
 

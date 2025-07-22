@@ -8,15 +8,25 @@ import ToolbarKit
 import UIKit
 
 protocol AddressToolbarContainerDelegate: AnyObject {
+    @MainActor
     func searchSuggestions(searchTerm: String)
+    @MainActor
     func openBrowser(searchTerm: String)
+    @MainActor
     func openSuggestions(searchTerm: String)
+    @MainActor
     func configureContextualHint(for button: UIButton, with contextualHintType: String)
+    @MainActor
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool)
+    @MainActor
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
+    @MainActor
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
+    @MainActor
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
+    @MainActor
     func addressToolbarDidBeginDragInteraction()
+    @MainActor
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
 }
 

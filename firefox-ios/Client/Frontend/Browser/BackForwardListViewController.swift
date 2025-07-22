@@ -14,10 +14,13 @@ private struct BackForwardViewUX {
 
 /// Provides information about the size of various BrowserViewController's subviews.
 protocol BrowserFrameInfoProvider: AnyObject {
+    @MainActor
     func getBottomContainerSize() -> CGSize
 
+    @MainActor
     func getHeaderSize() -> CGSize
 
+    @MainActor
     func getOverKeyboardContainerSize() -> CGSize
 }
 
