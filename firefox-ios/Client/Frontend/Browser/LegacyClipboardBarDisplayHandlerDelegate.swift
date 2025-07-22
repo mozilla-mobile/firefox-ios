@@ -32,10 +32,21 @@ final class LegacyClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
 
         NotificationCenter.default.addObserver(
             self,
+            selector: #selector(appWillEnterForegroundNotification),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
             selector: #selector(UIPasteboardChanged),
             name: UIPasteboard.changedNotification,
             object: nil
         )
+    }
+
+    @objc
+    private func appWillEnterForegroundNotification() {
+        checkIfShouldDisplayBar()
     }
 
     @objc
