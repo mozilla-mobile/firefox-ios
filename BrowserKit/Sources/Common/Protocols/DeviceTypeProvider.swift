@@ -4,6 +4,7 @@
 
 import UIKit
 
+@MainActor
 public protocol DeviceTypeProvider {
     var userInterfaceIdiom: UIUserInterfaceIdiom { get }
 }

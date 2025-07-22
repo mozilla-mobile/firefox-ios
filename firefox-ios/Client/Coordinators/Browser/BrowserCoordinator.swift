@@ -9,6 +9,7 @@ import Shared
 import Storage
 import Redux
 import PDFKit
+import SummarizeKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -162,10 +163,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
-        if tabManager.selectedTab?.isPrivate == true {
-            return privateHomepageViewController
+        let newTabSettings = browserViewController.newTabSettings
+        switch newTabSettings {
+        case .blankPage, .homePage:
+            return nil
+        case .topSites:
+            if tabManager.selectedTab?.isPrivate == true {
+                return privateHomepageViewController
+            }
+            return homepageViewController ?? legacyHomepageViewController
         }
-        return homepageViewController ?? legacyHomepageViewController
     }
 
     func setHomepageVisibility(isVisible: Bool) {
@@ -1063,6 +1070,33 @@ class BrowserCoordinator: BaseCoordinator,
 
     func removeDocumentLoading() {
         browserViewController.removeDocumentLoadingView()
+    }
+
+    func showSummarizePanel() {
+        let contentContainer = browserViewController.contentContainer
+        let browserFrame = browserViewController.view.frame
+        var browserScreenshot = browserViewController.view.snapshot
+        if let croppedImage = browserScreenshot.cgImage?.cropping(
+            to: CGRect(
+                x: contentContainer.frame.origin.x * browserScreenshot.scale,
+                y: contentContainer.frame.origin.y * browserScreenshot.scale,
+                width: contentContainer.frame.width * browserScreenshot.scale,
+                height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * browserScreenshot.scale
+            )) {
+            browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
+        }
+
+        guard !childCoordinators.contains(where: { $0 is SummarizeController }) else { return }
+        let coordinator = SummarizeCoordinator(
+            browserSnapshot: browserScreenshot,
+            browserSnapshotTopOffset: contentContainer.frame.origin.y,
+            browserContentHiding: browserViewController,
+            parentCoordinatorDelegate: self,
+            windowUUID: windowUUID,
+            router: router
+        )
+        add(child: coordinator)
+        coordinator.start()
     }
 
     // MARK: Microsurvey

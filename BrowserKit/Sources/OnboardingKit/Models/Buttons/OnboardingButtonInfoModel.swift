@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct OnboardingButtonInfoModel<OnboardingActionType> {
+public struct OnboardingButtonInfoModel<OnboardingActionType: Sendable>: Sendable {
     let title: String
     let action: OnboardingActionType
 

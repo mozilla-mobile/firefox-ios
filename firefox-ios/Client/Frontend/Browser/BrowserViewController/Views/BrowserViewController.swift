@@ -37,6 +37,7 @@ class BrowserViewController: UIViewController,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
+                             BrowserContentHiding,
                              BrowserStatusBarScrollDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
@@ -322,6 +323,10 @@ class BrowserViewController: UIViewController,
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
+    var isSummarizeFeatureEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -814,6 +819,25 @@ class BrowserViewController: UIViewController,
         dispatchStartAtHomeAction()
     }
 
+    // MARK: - Summarize
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        super.motionEnded(motion, with: event)
+        guard motion == .motionShake, isSummarizeFeatureEnabled else { return }
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return }
+        navigationHandler?.showSummarizePanel()
+    }
+
+    // MARK: - BrowserContentHiding
+    func showBrowserContent() {
+        contentContainer.isHidden = false
+        scrollController.showToolbars(animated: false)
+    }
+
+    func hideBrowserContent() {
+        contentContainer.isHidden = true
+        scrollController.hideToolbars(animated: true)
+    }
+
     // MARK: - Start At Home
     private func dispatchStartAtHomeAction() {
         let startAtHomeAction = StartAtHomeAction(
@@ -983,6 +1007,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
         topTabsViewController?.applyTheme()
+        webPagePreview.applyTheme(theme: theme)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
         listenForThemeChange(view)
@@ -1260,7 +1285,8 @@ class BrowserViewController: UIViewController,
             statusBarOverlay: statusBarOverlay,
             tabManager: tabManager,
             windowUUID: windowUUID,
-            screenshotHelper: screenshotHelper
+            screenshotHelper: screenshotHelper,
+            prefs: profile.prefs
         )
     }
 
@@ -1300,6 +1326,9 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: false)
             addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
                 return self?.browserDelegate?.homepageScreenshotTool()
+            }
+            addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
+                return self?.newTabSettings
             }
         }
     }
@@ -1383,7 +1412,7 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
+            statusBarOverlay.bottomAnchor.constraint(equalTo: header.bottomAnchor)
         ])
         NSLayoutConstraint.activate(statusBarOverlayConstraints)
 
@@ -4804,8 +4833,8 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && NewTabAccessors.getHomePage(profile.prefs) == .homePage
-        let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
+        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && newTabSettings == .homePage
+        let homePageURL = NewTabHomePageAccessors.getHomePage(profile.prefs)
 
         if shouldLoadCustomHomePage, let url = homePageURL {
             openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)

@@ -7,12 +7,12 @@ import Shared
 
 @testable import Client
 
-class MockSponsoredProvider: ContileProviderInterface, UnifiedAdsProviderInterface {
+final class MockSponsoredProvider: ContileProviderInterface, UnifiedAdsProviderInterface {
     enum MockError: Error {
         case testError
     }
 
-    private var result: ContileResult
+    private let result: ContileResult
 
     // TODO FXIOS-12605 This global property is not concurrency safe
     nonisolated(unsafe) static var emptySuccessData: [Contile] = []

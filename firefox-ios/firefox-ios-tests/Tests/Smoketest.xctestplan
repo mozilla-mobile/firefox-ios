@@ -425,6 +425,7 @@
         "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",
+        "StoryTests",
         "SwipingTabsTests",
         "SyncUITests",
         "SyncUITests\/testCreateAnAccountLink()",

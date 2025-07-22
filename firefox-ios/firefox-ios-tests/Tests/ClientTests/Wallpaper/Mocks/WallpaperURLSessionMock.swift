@@ -14,7 +14,7 @@ class WallpaperURLSessionDataTaskMock: URLSessionDataTaskProtocol {
     }
 }
 
-class WallpaperURLSessionMock: URLSessionProtocol {
+final class WallpaperURLSessionMock: URLSessionProtocol, @unchecked Sendable {
     var dataTask = WallpaperURLSessionDataTaskMock()
     private let data: Data?
     private let response: URLResponse?

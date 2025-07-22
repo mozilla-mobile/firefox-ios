@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Client
 
-class MockContileNetworking: ContileNetworking {
+final class MockContileNetworking: ContileNetworking, @unchecked Sendable {
     var error: Error?
     var data: Data?
     var response: HTTPURLResponse?

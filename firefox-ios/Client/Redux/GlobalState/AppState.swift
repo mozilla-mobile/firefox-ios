@@ -74,7 +74,7 @@ let middlewares = [
     TopSitesMiddleware().topSitesProvider,
     TrackingProtectionMiddleware().trackingProtectionProvider,
     PasswordGeneratorMiddleware().passwordGeneratorProvider,
-    PocketMiddleware().pocketSectionProvider,
+    MerinoMiddleware().pocketSectionProvider,
     NativeErrorPageMiddleware().nativeErrorPageProvider,
     WallpaperMiddleware().wallpaperProvider,
     BookmarksMiddleware().bookmarksProvider,

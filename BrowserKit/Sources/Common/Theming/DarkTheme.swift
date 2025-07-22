@@ -56,6 +56,12 @@ private struct DarkColourPalette: ThemeColourPalette {
     ])
     var layerSurfaceLow = FXColors.DarkGrey60
     var layerSurfaceMedium = FXColors.DarkGrey80
+    var layerSummary: UIColor = FXColors.Pink50
+    var layerSummaryGradient = Gradient(colors: [
+        FXColors.Orange50,
+        FXColors.Pink50,
+        FXColors.Blue10
+    ])
 
     // MARK: - Ratings
     var layerRatingA: UIColor = FXColors.Green20

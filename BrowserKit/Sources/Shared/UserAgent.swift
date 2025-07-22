@@ -14,9 +14,6 @@ open class UserAgent {
     public static let platform = "AppleWebKit/605.1.15"
     public static let platformDetails = "(KHTML, like Gecko)"
 
-    // For iPad, we need to append this to the default UA for google.com to show correct page
-    public static let uaBitGoogleIpad = "Version/13.0.3"
-
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
@@ -51,7 +48,7 @@ open class UserAgent {
 
     public static func desktopUserAgent() -> String {
         // swiftlint:disable line_length
-        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15"
+        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.7 Safari/605.1.15"
         // swiftlint:enable line_length
     }
 
@@ -175,7 +172,7 @@ public struct UserAgentBuilder {
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
         return UserAgentBuilder(
             product: UserAgent.product,
-            systemInfo: "(Macintosh; Intel Mac OS X 10.15)",
+            systemInfo: "(Macintosh; Intel Mac OS X 10_15_7)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
             extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")

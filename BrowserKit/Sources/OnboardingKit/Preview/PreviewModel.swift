@@ -7,23 +7,15 @@ import SwiftUI
 import Common
 
 private struct PreviewModel: OnboardingCardInfoModelProtocol {
-    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? =
-    OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
-        title: "Bottom",
-        action: OnboardingMultipleChoiceAction.toolbarBottom,
-        imageID: "toolbarBottom"
-    )
-
-    var image: UIImage? { UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) }
-    var cardType: OnboardingCardType
-    var name, title, body, a11yIdRoot, imageID: String
-    var order: Int
-    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
-    var link: OnboardingLinkInfoModel?
-    var buttons: OnboardingButtons<OnboardingActions>
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
-    var onboardingType: OnboardingType
-    var embededLinkText: [EmbeddedLink]
+    let cardType: OnboardingCardType
+    let name, title, body, a11yIdRoot, imageID: String
+    let order: Int
+    let instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingInstructionsPopupActions>?
+    let link: OnboardingLinkInfoModel?
+    let buttons: OnboardingButtons<OnboardingActions>
+    let multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>]
+    let onboardingType: OnboardingType
+    let embededLinkText: [EmbeddedLink]
 
     init(
         cardType: OnboardingCardType,
@@ -46,14 +38,23 @@ private struct PreviewModel: OnboardingCardInfoModelProtocol {
         self.instructionsPopup = instructionsPopup
         self.embededLinkText = embededLinkText
     }
+
+    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? =
+    OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>(
+        title: "Bottom",
+        action: OnboardingMultipleChoiceAction.toolbarBottom,
+        imageID: "toolbarBottom"
+    )
+
+    var image: UIImage? { UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) }
 }
 
-public enum OnboardingType: String, Codable {
+public enum OnboardingType: String, Codable, Sendable {
     case freshInstall = "fresh-install"
     case upgrade
 }
 
-public enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable {
+public enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable, Sendable {
     case themeDark = "theme-dark"
     case themeLight = "theme-light"
     case themeSystemDefault = "theme-system-default"
@@ -77,7 +78,7 @@ public enum OnboardingMultipleChoiceAction: String, CaseIterable, Codable {
     }
 }
 
-public enum OnboardingInstructionsPopupActions: String, CaseIterable, Codable {
+public enum OnboardingInstructionsPopupActions: String, CaseIterable, Codable, Sendable {
     case dismiss
     case dismissAndNextCard = "dismiss-and-next-card"
     case openIosFxSettings = "open-ios-fx-settings"
@@ -86,7 +87,7 @@ public enum OnboardingInstructionsPopupActions: String, CaseIterable, Codable {
     var id: String { rawValue }
 }
 
-public enum OnboardingActions: String, CaseIterable, Codable {
+public enum OnboardingActions: String, CaseIterable, Codable, Sendable {
     case endOnboarding = "end-onboarding"
     case forwardOneCard = "forward-one-card"
     case forwardTwoCard = "forward-two-card"

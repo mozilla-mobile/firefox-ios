@@ -35,6 +35,8 @@ let package = Package(
         .library(
             name: "MenuKit",
             targets: ["MenuKit"]),
+        .library(name: "SummarizeKit",
+                 targets: ["SummarizeKit"]),
         .library(
             name: "UnifiedSearchKit",
             targets: ["UnifiedSearchKit"]),
@@ -143,6 +145,16 @@ let package = Package(
         .testTarget(
             name: "MenuKitTests",
             dependencies: ["MenuKit"]),
+        .target(
+            name: "SummarizeKit",
+            dependencies: [
+                "Common",
+                "ComponentLibrary"
+            ],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]
+        ),
+        .testTarget(name: "SummarizeKitTests",
+                    dependencies: ["SummarizeKit"]),
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],
