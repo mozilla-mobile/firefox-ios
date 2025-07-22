@@ -2032,17 +2032,17 @@ public struct TermsOfUse {
         key: "TermsOfUse.Description",
         tableName: "TermsOfUse",
         value: """
-        We’ve introduced a Firefox Terms of Use and updated our Privacy Notice.
+        We’ve introduced a %@ Terms of Use and updated our Privacy Notice.
 
         Please take a moment to review and accept. Learn more.
         """,
-        comment: "Main description text with embedded links"
+        comment: "Main description text with embedded links. %@ is the app name (e.g. Firefox)."
     )
     public static let LinkTermsOfUse = MZLocalizedString(
         key: "TermsOfUse.Link.TermsOfUse",
         tableName: "TermsOfUse",
-        value: "Firefox Terms of Use",
-        comment: "Label for Terms of Use link"
+        value: "%@ Terms of Use",
+        comment: "Label for Terms of Use link. %@ is the app name (e.g. Firefox)."
     )
     public static let LinkPrivacyNotice = MZLocalizedString(
         key: "TermsOfUse.Link.PrivacyNotice",
