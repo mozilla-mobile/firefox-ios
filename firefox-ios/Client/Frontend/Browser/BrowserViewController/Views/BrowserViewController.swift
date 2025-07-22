@@ -1571,7 +1571,10 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateContentContainerConstraints(isHomepage: Bool) {
-        if isHomepage && isHomepageSearchBarEnabled {
+        let isKeyboardShowing = keyboardState != nil
+
+        contentContainerBottomConstraint?.isActive = false
+        if isHomepage && (isHomepageSearchBarEnabled || !isBottomSearchBar || isKeyboardShowing) {
             contentContainerBottomConstraint = contentContainer.bottomAnchor
                 .constraint(equalTo: bottomContainer.topAnchor)
         } else {
@@ -1668,6 +1671,8 @@ class BrowserViewController: UIViewController,
         } else {
             adjustBottomSearchBarForKeyboard()
         }
+
+        updateContentContainerConstraints(isHomepage: browserViewControllerState?.browserViewType != .webview)
 
         super.updateViewConstraints()
     }
