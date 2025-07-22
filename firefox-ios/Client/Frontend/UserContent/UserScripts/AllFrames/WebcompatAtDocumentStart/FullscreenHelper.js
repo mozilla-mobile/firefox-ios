@@ -52,6 +52,7 @@ if (!isFullScreenEnabled && isFullscreenVideosSupported && !/mobile/i.test(navig
 /// This is a good default because it makes videos less intrusive.
 /// Calling `requestFullscreen()` on the video element still works as expected and
 /// the user can still enter full screen by interacting with the video controls.
+/// FXIOS-12482 has more details on this issue.
 if (!/mobile/i.test(navigator.userAgent)) {
   const forceInline = (video) => {
     const inlineAttributes = ["playsinline", "webkit-playsinline"];
