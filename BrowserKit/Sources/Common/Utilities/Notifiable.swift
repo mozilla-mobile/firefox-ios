@@ -14,7 +14,7 @@ public protocol NotificationProtocol: Sendable {
     @discardableResult
     func addObserver(name: NSNotification.Name?,
                      queue: OperationQueue?,
-                     using block: @escaping (Notification) -> Void) -> NSObjectProtocol?
+                     using block: @Sendable @escaping (Notification) -> Void) -> NSObjectProtocol?
     func removeObserver(_ observer: Any)
 }
 
@@ -32,7 +32,7 @@ extension NotificationCenter: NotificationProtocol {
 
     public func addObserver(name: NSNotification.Name?,
                             queue: OperationQueue?,
-                            using block: @escaping (Notification) -> Void) -> NSObjectProtocol? {
+                            using block: @Sendable @escaping (Notification) -> Void) -> NSObjectProtocol? {
         self.addObserver(forName: name,
                          object: nil,
                          queue: queue,
