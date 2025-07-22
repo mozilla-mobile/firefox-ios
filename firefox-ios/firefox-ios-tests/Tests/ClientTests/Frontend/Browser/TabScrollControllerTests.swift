@@ -15,7 +15,8 @@ final class TabScrollControllerTests: XCTestCase {
     var mockGesture: UIPanGestureRecognizerMock!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    var header: BaseAlphaStackView = .build { _ in }
+    var header: BaseAlphaStackView = .build()
+    var overKeyboardContainer: BaseAlphaStackView = .build()
 
     override func setUp() {
         super.setUp()
@@ -135,6 +136,110 @@ final class TabScrollControllerTests: XCTestCase {
         XCTAssertNotNil(pullRefresh)
     }
 
+    // MARK: - overKeyboardScrollHeight Helper Method Tests
+    func testOverKeyboardScrollHeight_whenMinimalAddressBarDisabled_returnsContainerHeight() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let containerHeight: CGFloat = 100
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+
+        let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
+        let result = subject.overKeyboardScrollHeight(
+            with: safeAreaInsets,
+            isMinimalAddressBarEnabled: false
+        )
+
+        XCTAssertEqual(result, containerHeight)
+    }
+
+    func testOverKeyboardScrollHeight_minimalEnabledWithHomeIndicator_returnsZero() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let containerHeight: CGFloat = 100
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+
+        let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
+        let result = subject.overKeyboardScrollHeight(
+            with: safeAreaInsets,
+            isMinimalAddressBarEnabled: true
+        )
+
+        XCTAssertEqual(result, 0)
+    }
+
+    func testOverKeyboardScrollHeight_minimalEnabledWithoutHomeIndicator_returnsAdjustedHeight() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        // Set up container with specific height
+        let containerHeight: CGFloat = 100
+        let topInset: CGFloat = 20
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+
+        // Device without home indicator (bottom safe area = 0)
+        let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        let result = subject.overKeyboardScrollHeight(
+            with: safeAreaInsets,
+            isMinimalAddressBarEnabled: true
+        )
+
+        let expectedResult = containerHeight - topInset
+        XCTAssertEqual(result, expectedResult)
+    }
+
+    func testOverKeyboardScrollHeight_nilContainer_returnsZero() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        subject.overKeyboardContainer = nil
+
+        let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
+        let result = subject.overKeyboardScrollHeight(
+            with: safeAreaInsets,
+            isMinimalAddressBarEnabled: true
+        )
+
+        XCTAssertEqual(result, 0)
+    }
+
+    func testOverKeyboardScrollHeight_nilSafeAreaInsets_returnsContainerHeight() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let containerHeight: CGFloat = 100
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+
+        let result = subject.overKeyboardScrollHeight(
+            with: nil,
+            isMinimalAddressBarEnabled: true
+        )
+
+        XCTAssertEqual(result, containerHeight)
+    }
+
+    func testOverKeyboardScrollHeight_zeroSafeAreaInsets_returnsContainerHeight() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let containerHeight: CGFloat = 100
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+
+        let result = subject.overKeyboardScrollHeight(
+            with: UIEdgeInsets.zero,
+            isMinimalAddressBarEnabled: true
+        )
+
+        XCTAssertEqual(result, containerHeight)
+    }
+
+    // MARK: - Setup
     private func setupTabScroll(with subject: TabScrollController) {
         tab.createWebview(configuration: .init())
         tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)

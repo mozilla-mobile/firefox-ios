@@ -126,9 +126,27 @@ final class TabScrollController: NSObject,
         }
     }
 
+    /// Helper method for testing overKeyboardScrollHeight behavior.
+    /// - Parameters:
+    ///   - safeAreaInsets: The safe area insets to use (nil treated as .zero).
+    ///   - isMinimalAddressBarEnabled: Whether minimal address bar feature is enabled.
+    /// - Returns: The calculated scroll height.
+    func overKeyboardScrollHeight(with safeAreaInsets: UIEdgeInsets?,
+                                  isMinimalAddressBarEnabled: Bool) -> CGFloat {
+        guard let overKeyboardContainerHeight = overKeyboardContainer?.frame.height else { return .zero }
+        guard isMinimalAddressBarEnabled else { return overKeyboardContainerHeight }
+        // Here it checks if the device has `Home Indicator`(Bottom Bar on newer iPhones).
+        // Devices with physical home button need adjustment.
+        let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
+        let topInset = safeAreaInsets?.top ?? .zero
+        return hasHomeIndicator ? .zero : overKeyboardContainerHeight - topInset
+    }
+
     private var overKeyboardScrollHeight: CGFloat {
-        let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
-        return overKeyboardHeight
+        return overKeyboardScrollHeight(
+            with: UIWindow.keyWindow?.safeAreaInsets,
+            isMinimalAddressBarEnabled: isMinimalAddressBarEnabled
+        )
     }
 
     private var bottomContainerScrollHeight: CGFloat {
@@ -595,9 +613,9 @@ private extension TabScrollController {
                         actionType: ToolbarActionType.scrollAlphaDidChange
                     )
                 )
-            } else {
-                overKeyboardContainerOffset = overKeyboardOffset
             }
+
+            overKeyboardContainerOffset = overKeyboardOffset
             overKeyboardContainer?.updateAlphaForSubviews(alpha)
             overKeyboardContainer?.superview?.layoutIfNeeded()
 

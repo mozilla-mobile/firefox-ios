@@ -1412,7 +1412,7 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
+            statusBarOverlay.bottomAnchor.constraint(equalTo: header.bottomAnchor)
         ])
         NSLayoutConstraint.activate(statusBarOverlayConstraints)
 
