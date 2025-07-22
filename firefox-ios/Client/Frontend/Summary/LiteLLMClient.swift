@@ -6,79 +6,6 @@ import Foundation
 import Common
 import Shared
 
-/// Defines the role of an LLM message, catching typos at compile time.
-enum LiteLLMRole: String, Codable {
-    case system, user, assistant
-}
-
-/// Represents a single message exchanged with the LLM.
-public struct LiteLLMMessage: Codable {
-    let role: LiteLLMRole
-    let content: String
-}
-
-struct LiteLLMResponse: Codable {
-    let id: String
-    let choices: [LiteLLMChoice]
-}
-
-struct LiteLLMChoice: Codable {
-    let index: Int
-    let message: LiteLLMMessage?
-    let delta: LiteLLMMessage?
-    let finishReason: String?
-}
-
-struct StreamResponse: Codable {
-    let id: String
-    let created: Int
-    let model: String
-    let object: String
-    let choices: [StreamChoice]
-}
-
-struct StreamChoice: Codable {
-    let index: Int
-    let delta: Delta
-}
-
-struct Delta: Codable {
-    let role: String?
-    let content: String?
-}
-
-/// Errors produced by LiteLLMClient, with user-friendly descriptions.
-public enum LLMClientError: LocalizedError {
-    case requestCreationFailed
-    case invalidResponse
-    case noContent
-    case decodingFailed
-    case networkError(underlying: Error)
-
-    public var errorDescription: String? {
-        switch self {
-        case .requestCreationFailed:
-            return "Unable to prepare the request. Please try again later."
-        case .invalidResponse:
-            return "Received an unexpected response from the server."
-        case .noContent:
-            return "The server returned no message."
-        case .decodingFailed:
-            return "Failed to read the server's response."
-        case .networkError:
-            return "Network error occurred. Check your connection and try again."
-        }
-    }
-}
-
-/// Delegate protocol for streaming chat completions.
-public protocol LiteLLMStreamDelegate: AnyObject {
-    /// Called when a new chunk of content is received.
-    func liteLLMClient(_ client: LiteLLMClient, didReceive text: String)
-    /// Called when the stream ends or errors out.
-    func liteLLMClient(_ client: LiteLLMClient, didFinishWith error: Error?)
-}
-
 /// A lightweight client for interacting with a chat completions endpoint.
 public class LiteLLMClient: NSObject {
     /// NOTE: OpenAI like APIs including LiteLLM don't use websockets for streaming mode
@@ -225,7 +152,7 @@ extension LiteLLMClient: URLSessionDataDelegate {
     private func decodeAndForward(_ jsonString: String) {
         guard
             let data = jsonString.data(using: .utf8),
-            let chunk = try? JSONDecoder().decode(StreamResponse.self, from: data)
+            let chunk = try? JSONDecoder().decode(LiteLLMStreamResponse.self, from: data)
         else { return }
 
         if let content = chunk.choices.first?.delta.content {
