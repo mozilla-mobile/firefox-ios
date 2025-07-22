@@ -924,6 +924,7 @@ class BrowserViewController: UIViewController,
 
         dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
+        updateContentContainerConstraints()
     }
 
     private func showToastType(toast: ToastType) {
@@ -1207,7 +1208,6 @@ class BrowserViewController: UIViewController,
         guard shouldShowSearchBar, !isEditing, contentContainer.hasHomepage else {
             guard addressToolbarContainer.isHidden == true else { return }
             addressToolbarContainer.isHidden = false
-            updateContentContainerConstraints(isHomepage: browserViewControllerState?.browserViewType != .webview)
             store.dispatchLegacy(
                 GeneralBrowserAction(windowUUID: windowUUID, actionType: GeneralBrowserActionType.didUnhideToolbar)
             )
@@ -1599,23 +1599,36 @@ class BrowserViewController: UIViewController,
         setupBlurViews()
     }
 
-    private func updateContentContainerConstraints(isHomepage: Bool) {
+    private func updateContentContainerConstraints() {
         contentContainerBottomConstraint?.isActive = false
 
-        // Constrain content (homepage) to navigation toolbar when one of the following are true
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else {
+            activateFallbackContentContainerConstraints()
+            return
+        }
+
+        // Constrain content (homepage) to bottomContainer when one of the following are true
         // 1) Homepage search bar experiment is enabled
-        // 2) Stories redesign is enabled and we are currently editing the address
-        let isBottomSearchBarEditing = isBottomSearchBar && keyboardState != nil
+        // 2) Stories redesign is enabled and the address bar is in edit mode
+        let isHomepage = browserViewControllerState?.browserViewType != .webview
+        let isBottomSearchBarEditing = isBottomSearchBar && toolbarState.addressToolbar.isEditing
+
         let shouldConstrainToBottomContainer = isHomepage && (isHomepageSearchBarEnabled || (isStoriesRedesignEnabled
                                                                                              && isBottomSearchBarEditing))
         if shouldConstrainToBottomContainer {
             contentContainerBottomConstraint = contentContainer.bottomAnchor
                 .constraint(equalTo: bottomContainer.topAnchor)
+            contentContainerBottomConstraint?.isActive = true
         } else {
+            activateFallbackContentContainerConstraints()
+        }
+
+        func activateFallbackContentContainerConstraints() {
             contentContainerBottomConstraint = contentContainer.bottomAnchor
                 .constraint(equalTo: overKeyboardContainer.topAnchor)
+            contentContainerBottomConstraint?.isActive = true
         }
-        contentContainerBottomConstraint?.isActive = true
     }
 
     private func setupBlurViews() {
@@ -1705,8 +1718,6 @@ class BrowserViewController: UIViewController,
         } else {
             adjustBottomSearchBarForKeyboard()
         }
-
-        updateContentContainerConstraints(isHomepage: browserViewControllerState?.browserViewType != .webview)
 
         super.updateViewConstraints()
     }
@@ -1868,7 +1879,6 @@ class BrowserViewController: UIViewController,
         }
 
         updateToolbarDisplay()
-        updateContentContainerConstraints(isHomepage: true)
     }
 
     func showEmbeddedWebview() {
@@ -1894,7 +1904,6 @@ class BrowserViewController: UIViewController,
 
         browserDelegate?.show(webView: webView)
         updateToolbarDisplay()
-        updateContentContainerConstraints(isHomepage: false)
     }
 
     // MARK: - Document Loading
