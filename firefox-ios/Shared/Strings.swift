@@ -2052,7 +2052,7 @@ extension String {
         public static let LoadingLabel = MZLocalizedString(
             key: "Summarizer.Loading.Label.v142",
             tableName: "Summarizer",
-            value: "Summarizing ...",
+            value: "Summarizing …",
             comment: "When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed."
         )
         // TODO: - FXIOS-12899 add the correct value and key for the accessibility labels
