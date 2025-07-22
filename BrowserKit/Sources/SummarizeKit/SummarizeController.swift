@@ -149,7 +149,10 @@ public class SummarizeController: UIViewController, Themeable {
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
 
-        closeButton.configure(viewModel: viewModel.closeButtonModel)
+        closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
+        closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
+        closeButton.setImage(UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+                             for: .normal)
         closeButton.addAction(
             UIAction(handler: { [weak self] _ in
                 UIView.animate(withDuration: UX.panEndAnimationDuration) {
