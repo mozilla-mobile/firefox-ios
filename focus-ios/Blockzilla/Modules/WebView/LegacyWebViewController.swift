@@ -482,11 +482,12 @@ extension LegacyWebViewController: WKNavigationDelegate {
                typeStr == octetStream {
                 return true
             }
-            return response.mimeType == octetStream
+            // Identical handling to Firefox, if no MIME type we assume octet stream
+            return (response.mimeType ?? octetStream) == octetStream
         }()
 
         if isBinaryData {
-            // Bugzilla #1976296
+            // Bugzilla #1976296; Binary content is blocked from loading on Focus.
             decisionHandler(.cancel)
             return
         }
