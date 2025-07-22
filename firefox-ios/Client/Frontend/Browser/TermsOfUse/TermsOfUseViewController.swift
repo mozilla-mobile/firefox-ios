@@ -177,12 +177,10 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         if traitCollection.horizontalSizeClass == .regular {
             containerConstraints.append(contentsOf: [
                 sheetContainer.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * UX.iPadWidthMultiplier),
-                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo:
-                                                        view.leadingAnchor,
+                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
                                                         constant: UX.sheetContainerSidePadding),
-                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo:
-                                                        view.trailingAnchor,
-                                                        constant: -UX.sheetContainerSidePadding)
+                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor,
+                                                         constant: -UX.sheetContainerSidePadding)
             ])
         } else {
             containerConstraints.append(contentsOf: [
