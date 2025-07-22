@@ -20,7 +20,7 @@ final class LocationView: UIView,
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
         static let iconAnimationTime: CGFloat = 0.1
         static let iconAnimationDelay: CGFloat = 0.03
-        static let bottomAddressBarYoffset: CGFloat = -20
+        static let bottomAddressBarYoffset: CGFloat = -28
         static let topAddressBarYoffset: CGFloat = 26
         static let smallScale: CGFloat = 0.7
         static let identityResetAnimationDuration: TimeInterval = 0.2
