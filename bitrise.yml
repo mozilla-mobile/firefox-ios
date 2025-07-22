@@ -522,23 +522,6 @@ workflows:
             cd -
         title: Set xcodeproj code_sign_identity to iPhone Developer
     - script@1.2.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64 arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-            echo 'EXCLUDED_ARCHS=$(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))' >> /tmp/tmp.xcconfig
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: Workaround carthage lipo
-    - script@1.2.1:
         title: Pin swiftlint version to 0.59.1 (Workaround)
         inputs:
         - content: |-
@@ -570,16 +553,6 @@ workflows:
                 exit 1
             fi
         title: Fail build if swiftlint fails
-    - script@1.2.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-        title: Remove carthage lipo workaround
   3_provisioning_and_npm_installation:
     steps:
     - script@1.2.1:
@@ -724,35 +697,8 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            echo 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64 arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-            echo 'EXCLUDED_ARCHS=$(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))' >> /tmp/tmp.xcconfig
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: Workaround carthage lipo bug
-    - script@1.2.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
-        inputs:
-        - content: |-
             ./bootstrap.sh
         title: Run bootstrap
-    - script@1.2.1:
-        run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-        title: Remove carthage lipo workaround
     - script@1.2.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
@@ -1674,12 +1620,16 @@ workflows:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - configuration: Fennec_Testing
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
         - maximum_test_repetitions: 10
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.large
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   #
