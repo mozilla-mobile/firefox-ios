@@ -6,7 +6,7 @@ import Common
 import Shared
 import ComponentLibrary
 
-class TermsOfUseViewController: UIViewController, Themeable {
+class TermsOfUseViewController: UIViewController, Themeable, UITextViewDelegate {
     private struct UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
@@ -14,11 +14,23 @@ class TermsOfUseViewController: UIViewController, Themeable {
         static let sheetContainerSidePadding: CGFloat = 40
         static let logoSize: CGFloat = 40
         static let acceptButtonHeight: CGFloat = 44
+        static let acceptButtonCornerRadius: CGFloat = 12
         static let remindMeLaterButtonHeight: CGFloat = 30
         static let grabberWidth: CGFloat = 36
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
         static let iPadWidthMultiplier: CGFloat = 0.6
+        static let panDismissDistance: CGFloat = 100
+        static let panDismissVelocity: CGFloat = 800
+        static let animationDuration: TimeInterval = 0.25
+        static let springDamping: CGFloat = 0.8
+        static let initialSpringVelocity: CGFloat = 1
+        static let backgroundAlpha: CGFloat = 0.6
+
+        static let titleFont = FXFontStyles.Regular.headline.scaledFont()
+        static let descriptionFont = FXFontStyles.Regular.body.scaledFont()
+        static let acceptButtonFont = FXFontStyles.Regular.callout.scaledFont()
+        static let remindMeLaterFont = FXFontStyles.Regular.body.scaledFont()
     }
 
     var notificationCenter: NotificationProtocol
@@ -28,9 +40,79 @@ class TermsOfUseViewController: UIViewController, Themeable {
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
-    private var stackView = UIStackView()
-    private let sheetContainer = UIView()
-    private let grabberView = UIView()
+    private lazy var sheetContainer: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = UX.cornerRadius
+        view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var grabberView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = UX.grabberHeight / 2
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = UX.stackSpacing
+        stack.alignment = .fill
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+
+    private lazy var logoImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall))
+        imageView.contentMode = .scaleAspectFit
+        imageView.heightAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
+        return imageView
+    }()
+
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = viewModel.titleText
+        label.font = UX.titleFont
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+
+    private lazy var descriptionTextView: UITextView = {
+        let textView = UITextView()
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.backgroundColor = .clear
+        textView.attributedText = makeAttributedDescription()
+        textView.linkTextAttributes = [
+            .foregroundColor: currentTheme().colors.textAccent,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        textView.delegate = self
+        return textView
+    }()
+
+    private lazy var acceptButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(viewModel.acceptButtonTitle, for: .normal)
+        button.titleLabel?.font = UX.acceptButtonFont
+        button.layer.cornerRadius = UX.acceptButtonCornerRadius
+        button.heightAnchor.constraint(equalToConstant: UX.acceptButtonHeight).isActive = true
+        button.addTarget(self, action: #selector(acceptTapped), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var remindMeLaterButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(viewModel.remindMeLaterButtonTitle, for: .normal)
+        button.titleLabel?.font = UX.remindMeLaterFont
+        button.heightAnchor.constraint(equalToConstant: UX.remindMeLaterButtonHeight).isActive = true
+        button.addTarget(self, action: #selector(remindMeLaterTapped), for: .touchUpInside)
+        return button
+    }()
 
     init(viewModel: TermsOfUseViewModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -63,132 +145,84 @@ class TermsOfUseViewController: UIViewController, Themeable {
     }
 
     private func setupUI() {
-        setupBackground()
-        setupSheetContainer()
-        setupGrabber()
-        setupContentStack()
+        view.backgroundColor = UIColor.black.withAlphaComponent(UX.backgroundAlpha)
+        view.addSubview(sheetContainer)
+        sheetContainer.addSubview(grabberView)
+        sheetContainer.addSubview(stackView)
+        setupConstraints()
         setupDismissGesture()
         setupPanGesture()
+        addStackSubviews()
     }
 
-    private func setupBackground() {
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-    }
-
-    private func setupSheetContainer() {
-        sheetContainer.layer.cornerRadius = UX.cornerRadius
-        sheetContainer.clipsToBounds = true
-        sheetContainer.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(sheetContainer)
-
+    private func setupConstraints() {
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
 
-        var constraints = [
+        var containerConstraints = [
             sheetContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             sheetContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
 
         if isPad {
-            constraints.append(contentsOf: [
-                sheetContainer.widthAnchor.constraint(equalToConstant:
-                                                        UIScreen.main.bounds.width * UX.iPadWidthMultiplier),
-                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant:
-                                                            UX.sheetContainerSidePadding),
-                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant:
-                                                            -UX.sheetContainerSidePadding)
+            containerConstraints.append(contentsOf: [
+                sheetContainer.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * UX.iPadWidthMultiplier),
+                sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
+                                                        constant: UX.sheetContainerSidePadding),
+                sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor,
+                                                         constant: -UX.sheetContainerSidePadding)
             ])
         } else {
-            constraints.append(contentsOf: [
+            containerConstraints.append(contentsOf: [
                 sheetContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 sheetContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         }
 
-        NSLayoutConstraint.activate(constraints)
-    }
-    private func setupGrabber() {
-        grabberView.backgroundColor = UIColor.systemGray3
-        grabberView.layer.cornerRadius = UX.grabberHeight / 2
-        grabberView.translatesAutoresizingMaskIntoConstraints = false
-        sheetContainer.addSubview(grabberView)
+        NSLayoutConstraint.activate(containerConstraints)
 
         NSLayoutConstraint.activate([
             grabberView.topAnchor.constraint(equalTo: sheetContainer.topAnchor, constant: UX.grabberTopPadding),
             grabberView.centerXAnchor.constraint(equalTo: sheetContainer.centerXAnchor),
             grabberView.widthAnchor.constraint(equalToConstant: UX.grabberWidth),
-            grabberView.heightAnchor.constraint(equalToConstant: UX.grabberHeight)
-        ])
-    }
+            grabberView.heightAnchor.constraint(equalToConstant: UX.grabberHeight),
 
-    private func setupContentStack() {
-        stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = UX.stackSpacing
-        stackView.alignment = .fill
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        sheetContainer.addSubview(stackView)
-
-        NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: sheetContainer.leadingAnchor, constant: UX.stackSidePadding),
             stackView.trailingAnchor.constraint(equalTo: sheetContainer.trailingAnchor, constant: -UX.stackSidePadding),
             stackView.topAnchor.constraint(equalTo: grabberView.bottomAnchor, constant: UX.stackSpacing),
             stackView.bottomAnchor.constraint(equalTo: sheetContainer.bottomAnchor, constant: -UX.stackSidePadding)
         ])
+    }
 
-        [createLogo(), createTitle(), createDescription(), createAcceptButton(), createRemindMeLaterButton()].forEach {
-            stackView.addArrangedSubview($0)
+    private func addStackSubviews() {
+        stackView.addArrangedSubview(logoImageView)
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(descriptionTextView)
+        stackView.addArrangedSubview(acceptButton)
+        stackView.addArrangedSubview(remindMeLaterButton)
+    }
+
+    private func makeAttributedDescription() -> NSAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 2
+        paragraphStyle.alignment = .left
+
+        let attributed = NSMutableAttributedString(
+            string: viewModel.combinedText,
+            attributes: [
+                .font: UX.descriptionFont,
+                .foregroundColor: currentTheme().colors.textSecondary,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+
+        for term in viewModel.linkTerms {
+            if let url = viewModel.linkURL(for: term),
+               let range = attributed.string.range(of: term) {
+                let nsRange = NSRange(range, in: attributed.string)
+                attributed.addAttribute(.link, value: url, range: nsRange)
+            }
         }
-    }
-
-    private func createLogo() -> UIImageView {
-        let imageView = UIImageView(image: UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall))
-        imageView.contentMode = .scaleAspectFit
-        imageView.heightAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
-        return imageView
-    }
-
-    private func createTitle() -> UILabel {
-        let label = UILabel()
-        label.text = viewModel.titleText
-        label.font = FXFontStyles.Regular.headline.scaledFont()
-        label.textAlignment = .center
-        label.textColor = currentTheme().colors.textPrimary
-        label.numberOfLines = 0
-        return label
-    }
-
-    private func createDescription() -> UITextView {
-        let textView = UITextView()
-        textView.isEditable = false
-        textView.isScrollEnabled = false
-        textView.backgroundColor = .clear
-        textView.attributedText = viewModel.makeAttributedDescription(theme: currentTheme())
-        textView.linkTextAttributes = [
-            .foregroundColor: currentTheme().colors.textAccent,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ]
-        textView.delegate = self
-        return textView
-    }
-
-    private func createAcceptButton() -> UIButton {
-        let button = PrimaryRoundedButton()
-        button.setTitle(viewModel.acceptButtonTitle, for: .normal)
-        button.applyTheme(theme: currentTheme())
-        button.heightAnchor.constraint(equalToConstant: UX.acceptButtonHeight).isActive = true
-        button.addTarget(self, action: #selector(acceptTapped), for: .touchUpInside)
-        return button
-    }
-
-    private func createRemindMeLaterButton() -> UIButton {
-        let button = UIButton(type: .system)
-        button.setTitle(viewModel.remindMeLaterButtonTitle, for: .normal)
-        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
-        button.tintColor = currentTheme().colors.actionPrimary
-        button.heightAnchor.constraint(equalToConstant: UX.remindMeLaterButtonHeight).isActive = true
-        button.addTarget(self, action: #selector(notNowTapped), for: .touchUpInside)
-        return button
+        return attributed
     }
 
     private func setupDismissGesture() {
@@ -214,13 +248,13 @@ class TermsOfUseViewController: UIViewController, Themeable {
         case .changed where translation.y > 0:
             sheetContainer.transform = CGAffineTransform(translationX: 0, y: translation.y)
         case .ended:
-            if translation.y > 100 || gesture.velocity(in: view).y > 800 {
+            if translation.y > UX.panDismissDistance || gesture.velocity(in: view).y > UX.panDismissVelocity {
                 dismiss(animated: true)
             } else {
-                UIView.animate(withDuration: 0.25,
+                UIView.animate(withDuration: UX.animationDuration,
                                delay: 0,
-                               usingSpringWithDamping: 0.8,
-                               initialSpringVelocity: 1,
+                               usingSpringWithDamping: UX.springDamping,
+                               initialSpringVelocity: UX.initialSpringVelocity,
                                options: .curveEaseOut) {
                     self.sheetContainer.transform = .identity
                 }
@@ -235,21 +269,26 @@ class TermsOfUseViewController: UIViewController, Themeable {
         dismiss(animated: true)
     }
 
-    @objc private func notNowTapped() {
+    @objc private func remindMeLaterTapped() {
         viewModel.onNotNow?()
         dismiss(animated: true)
     }
 
     func applyTheme() {
         sheetContainer.backgroundColor = currentTheme().colors.layer1
+        grabberView.backgroundColor = currentTheme().colors.iconDisabled
+        titleLabel.textColor = currentTheme().colors.textPrimary
+        acceptButton.tintColor = currentTheme().colors.textOnDark
+        acceptButton.backgroundColor = currentTheme().colors.actionPrimary
+        remindMeLaterButton.tintColor = currentTheme().colors.actionPrimary
     }
 
     private func currentTheme() -> Theme {
         themeManager.getCurrentTheme(for: currentWindowUUID)
     }
-}
 
-extension TermsOfUseViewController: UITextViewDelegate {
+    // MARK: TextView Delegate
+
     func textView(_ textView: UITextView,
                   shouldInteractWith url: URL,
                   in characterRange: NSRange,

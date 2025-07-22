@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		033C94F52E2F83CA00C2382F /* TermsOfUseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C94F42E2F83BC00C2382F /* TermsOfUseViewModelTests.swift */; };
 		03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */; };
 		0430A545203B372D00FDF76D /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0430A544203B372D00FDF76D /* IntegrationTests.swift */; };
 		047F9B2924E1FE1C00CD7DF7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD46F3524A1606C001B3967 /* SwiftUI.framework */; };
@@ -2455,6 +2456,7 @@
 		02C94BE0922C110AFF6944E3 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		02E547BF89DA742677E367E6 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		02FC4A06A948593BE97BC508 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/LoginManager.strings"; sourceTree = "<group>"; };
+		033C94F42E2F83BC00C2382F /* TermsOfUseViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseViewModelTests.swift; sourceTree = "<group>"; };
 		033D4FBDA7761FAB7C0B00B3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Storage.strings; sourceTree = "<group>"; };
 		036B499AA4BEE3FA05346002 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		03A14EF0A7BA733D9C3F2D93 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Search.strings"; sourceTree = "<group>"; };
@@ -10895,6 +10897,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		033C94F32E2F839900C2382F /* TermsOfUse */ = {
+			isa = PBXGroup;
+			children = (
+				033C94F42E2F83BC00C2382F /* TermsOfUseViewModelTests.swift */,
+			);
+			path = TermsOfUse;
+			sourceTree = "<group>";
+		};
 		047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -15512,6 +15522,7 @@
 				8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */,
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
 				0B7B053C2D647D00007FD7AC /* TemporaryDocumentTests.swift */,
+				033C94F32E2F839900C2382F /* TermsOfUse */,
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 				8A33222027DFE64C008F809E /* TestingHelperClasses */,
 				E16941B22C4E498600FF5F4E /* Toolbar */,
@@ -18695,6 +18706,7 @@
 				0BAF20E72E02AA7A000D4542 /* MockWKUIHandler.swift in Sources */,
 				8A83B74C2A265061002FF9AC /* LibraryCoordinatorTests.swift in Sources */,
 				8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */,
+				033C94F52E2F83CA00C2382F /* TermsOfUseViewModelTests.swift in Sources */,
 				21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */,
 				F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */,
 				ED07C0F22CCAFED1006C0627 /* SearchEngineSelectionStateTests.swift in Sources */,

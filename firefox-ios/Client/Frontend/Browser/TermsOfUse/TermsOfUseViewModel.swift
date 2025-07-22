@@ -4,21 +4,17 @@
 
 import Common
 import Localizations
+import Shared
 
 struct TermsOfUseViewModel {
     let titleText = TermsOfUse.Title
-    let descriptionText = TermsOfUse.Description
+    let descriptionText: String
+    let reviewAndAcceptText = TermsOfUse.ReviewAndAcceptText
     let acceptButtonTitle = TermsOfUse.AcceptButton
     let remindMeLaterButtonTitle = TermsOfUse.RemindMeLaterButton
 
     var onAccept: (() -> Void)?
     var onNotNow: (() -> Void)?
-
-    private let terms = [
-        TermsOfUse.LinkTermsOfUse,
-        TermsOfUse.LinkPrivacyNotice,
-        TermsOfUse.LinkLearnMore
-    ]
 
     init(
         onAccept: (() -> Void)? = { TermsOfUseManager.shared.markAccepted() },
@@ -26,40 +22,28 @@ struct TermsOfUseViewModel {
     ) {
         self.onAccept = onAccept
         self.onNotNow = onNotNow
-    }
 
-    func markToUAppeared() {
-        TermsOfUseManager.shared.didShowThisLaunch = true
-    }
-
-    func makeAttributedDescription(theme: Theme) -> NSAttributedString {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 2
-        paragraphStyle.alignment = .left
-
-        let attributed = NSMutableAttributedString(
-            string: descriptionText,
-            attributes: [
-                .font: FXFontStyles.Regular.body.scaledFont(),
-                .foregroundColor: theme.colors.textSecondary,
-                .paragraphStyle: paragraphStyle
-            ]
+        self.descriptionText = String.localizedStringWithFormat(
+            TermsOfUse.Description,
+            AppName.shortName.rawValue
         )
+    }
 
-        for term in terms {
-            if let url = linkURL(for: term),
-               let range = attributed.string.range(of: term) {
-                let nsRange = NSRange(range, in: attributed.string)
-                attributed.addAttribute(.link, value: url, range: nsRange)
-            }
-        }
+    var combinedText: String {
+        "\(descriptionText)\n\n\(reviewAndAcceptText)"
+    }
 
-        return attributed
+    var linkTerms: [String] {
+        [
+            String.localizedStringWithFormat(TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue),
+            TermsOfUse.LinkPrivacyNotice,
+            TermsOfUse.LinkLearnMore
+        ]
     }
 
     func linkURL(for term: String) -> URL? {
         switch term {
-        case TermsOfUse.LinkTermsOfUse:
+        case String.localizedStringWithFormat(TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue):
             return URL(string: "https://www.mozilla.org/about/legal/terms/firefox/")
         case TermsOfUse.LinkPrivacyNotice:
             return URL(string: "https://www.mozilla.org/privacy/firefox/")
@@ -76,5 +60,9 @@ struct TermsOfUseViewModel {
             return nil
         }
         return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
+    }
+
+    func markToUAppeared() {
+        TermsOfUseManager.shared.didShowThisLaunch = true
     }
 }

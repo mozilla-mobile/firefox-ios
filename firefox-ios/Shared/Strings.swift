@@ -2031,12 +2031,14 @@ public struct TermsOfUse {
     public static let Description = MZLocalizedString(
         key: "TermsOfUse.Description",
         tableName: "TermsOfUse",
-        value: """
-        We’ve introduced a %@ Terms of Use and updated our Privacy Notice.
-
-        Please take a moment to review and accept. Learn more.
-        """,
-        comment: "Main description text with embedded links. %@ is the app name (e.g. Firefox)."
+        value: "We’ve introduced a %@ Terms of Use and updated our Privacy Notice.",
+        comment: "Description text with embedded links. %@ is the app name (e.g. Firefox)."
+    )
+    public static let ReviewAndAcceptText = MZLocalizedString(
+        key: "TermsOfUse.ReviewAndAcceptText",
+        tableName: "TermsOfUse",
+        value: "Please take a moment to review and accept. Learn more.",
+        comment: "Description text for review and accept with embedded link."
     )
     public static let LinkTermsOfUse = MZLocalizedString(
         key: "TermsOfUse.Link.TermsOfUse",

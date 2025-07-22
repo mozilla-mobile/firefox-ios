@@ -6,10 +6,11 @@ import Common
 import Shared
 import WebKit
 
-class TermsOfUseLinkViewController: UIViewController, Themeable {
+class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigationDelegate {
     private struct UX {
         static let headerHeight: CGFloat = 44
         static let backButtonLeading: CGFloat = 16
+        static let webViewTopInset: CGFloat = 44
     }
 
     private let url: URL
@@ -20,7 +21,31 @@ class TermsOfUseLinkViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
 
-    private let webView: WKWebView
+    private lazy var header: UIView = {
+        let view = UIView()
+        view.backgroundColor = currentTheme().colors.layer1
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var backButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        button.setTitle("Back", for: .normal)
+        button.tintColor = currentTheme().colors.actionPrimary
+        button.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private lazy var webView: WKWebView = {
+        let config = WKWebViewConfiguration()
+        config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
+        let webView = WKWebView(frame: .zero, configuration: config)
+        webView.navigationDelegate = self
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        return webView
+    }()
 
     init(
         url: URL,
@@ -32,15 +57,7 @@ class TermsOfUseLinkViewController: UIViewController, Themeable {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-
-        let config = WKWebViewConfiguration()
-        config.setURLSchemeHandler(InternalSchemeHandler(shouldUseOldErrorPage: true), forURLScheme: InternalURL.scheme)
-        self.webView = WKWebView(frame: .zero, configuration: config)
-
         super.init(nibName: nil, bundle: nil)
-
-        self.webView.navigationDelegate = self
-        self.webView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     required init?(coder: NSCoder) {
@@ -50,25 +67,15 @@ class TermsOfUseLinkViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         listenForThemeChange(view)
-        setupHeader()
-        setupWebView()
+        setupViews()
         applyTheme()
+        webView.load(URLRequest(url: url))
     }
 
-    private func setupHeader() {
-        let header = UIView()
-        header.backgroundColor = currentTheme().colors.layer1
-        header.translatesAutoresizingMaskIntoConstraints = false
-
-        let backButton = UIButton(type: .system)
-        backButton.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
-        backButton.setTitle("Back", for: .normal)
-        backButton.tintColor = currentTheme().colors.actionPrimary
-        backButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-
+    private func setupViews() {
         view.addSubview(header)
         header.addSubview(backButton)
+        view.addSubview(webView)
 
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.topAnchor),
@@ -77,21 +84,13 @@ class TermsOfUseLinkViewController: UIViewController, Themeable {
             header.heightAnchor.constraint(equalToConstant: UX.headerHeight),
 
             backButton.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: UX.backButtonLeading),
-            backButton.centerYAnchor.constraint(equalTo: header.centerYAnchor)
-        ])
-    }
+            backButton.centerYAnchor.constraint(equalTo: header.centerYAnchor),
 
-    private func setupWebView() {
-        view.addSubview(webView)
-
-        NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerHeight),
+            webView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.webViewTopInset),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-
-        webView.load(URLRequest(url: url))
     }
 
     func applyTheme() {
@@ -105,9 +104,9 @@ class TermsOfUseLinkViewController: UIViewController, Themeable {
     private func currentTheme() -> Theme {
         themeManager.getCurrentTheme(for: currentWindowUUID)
     }
-}
 
-extension TermsOfUseLinkViewController: WKNavigationDelegate {
+    // MARK: WebKit Navigation Delegate
+
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
         let nsError = error as NSError
         if nsError.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
