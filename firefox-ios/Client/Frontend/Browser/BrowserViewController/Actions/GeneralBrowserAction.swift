@@ -66,6 +66,7 @@ enum GeneralBrowserActionType: ActionType {
     case didSelectedTabChangeToHomepage
     case enteredZeroSearchScreen
     case didUnhideToolbar
+    case didCloseTabFromToolbar
 }
 
 class GeneralBrowserMiddlewareAction: Action {
