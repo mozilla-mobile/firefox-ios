@@ -13,7 +13,7 @@ class ShareLongPressTests: BaseTestCase {
             waitForElementsToExist(
                 [
                     app.navigationBars["Reminders"],
-                    app.links.elementContainingText("https://www")
+                    app.links.elementContainingText("https://")
                 ]
             )
         }
@@ -37,7 +37,7 @@ class ShareLongPressTests: BaseTestCase {
         app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
             .staticTexts.firstMatch.waitAndTap()
-        openNewTabAndValidateURLisPaste(url: "https://www")
+        openNewTabAndValidateURLisPaste(url: "https://")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864380
