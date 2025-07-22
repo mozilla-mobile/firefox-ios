@@ -42,3 +42,33 @@ if (!isFullScreenEnabled && isFullscreenVideosSupported && !/mobile/i.test(navig
         }
     });
 }
+
+/// When desktop mode is on, creating a `<video>` without `playsinline/webkit-playsinline`
+/// that also has `autoplay` will cause it to play fullscreen by default.
+/// This is potentially an issue since real desktop browsers don't do this by default but in our case
+/// we are still on a phone so the native full screen player takes over.
+/// In order to prevent this we monkey-patch `document.createElement` to add
+/// `playsinline` to every newly created `<video>` element when desktop mode is enabled.
+/// This is a good default because it makes videos less intrusive.
+/// Calling `requestFullscreen()` on the video element still works as expected and
+/// the user can still enter full screen by interacting with the video controls.
+/// FXIOS-12482 has more details on this issue.
+if (!/mobile/i.test(navigator.userAgent)) {
+  const forceInline = (video) => {
+    const inlineAttributes = ["playsinline", "webkit-playsinline"];
+    inlineAttributes.forEach((attr) => {
+      if (!video.hasAttribute(attr)) {
+        video.setAttribute(attr, "");
+      }
+    });
+  };
+
+  const originalCreateElement = document.createElement;
+  document.createElement = function (tag) {
+    const el = originalCreateElement.call(this, tag);
+    if (el.localName === "video") {
+      forceInline(el);
+    }
+    return el;
+  };
+}
