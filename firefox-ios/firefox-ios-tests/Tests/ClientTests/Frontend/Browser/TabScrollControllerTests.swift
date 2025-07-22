@@ -210,7 +210,7 @@ final class TabScrollControllerTests: XCTestCase {
     func testOverKeyboardScrollHeight_nilSafeAreaInsets_returnsContainerHeight() {
         let subject = createSubject()
         setupTabScroll(with: subject)
-        
+
         let containerHeight: CGFloat = 100
         overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
         subject.overKeyboardContainer = overKeyboardContainer
