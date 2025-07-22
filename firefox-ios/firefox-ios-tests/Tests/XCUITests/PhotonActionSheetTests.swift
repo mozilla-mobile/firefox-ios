@@ -109,6 +109,7 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(shortcutCell)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3102521
     func testPinToShortcuts_andThenRemovingShortcuts_topSitesVisualRefreshFlagDisabled() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hnt-top-sites-visual-refresh-feature")
         app.launch()
