@@ -5,6 +5,7 @@
 import UIKit
 
 extension UIImage {
+    @MainActor
     func overlayWith(image: UILabel) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: size.width, height: size.height), false, 0.0)
         draw(in: CGRect(origin: CGPoint.zero, size: size))
