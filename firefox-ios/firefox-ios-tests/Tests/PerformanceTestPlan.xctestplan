@@ -127,6 +127,7 @@
         "ShareMenuTests",
         "ShareToolbarTests",
         "SiteLoadTest",
+        "StoryTests",
         "SwipingTabsTests",
         "SyncUITests",
         "TabCounterTests",

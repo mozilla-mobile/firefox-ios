@@ -15,10 +15,10 @@ struct HomepageState: ScreenState, Equatable {
     let searchState: SearchBarState
     let jumpBackInState: JumpBackInSectionState
     let bookmarkState: BookmarksSectionState
-    let pocketState: PocketState
+    let merinoState: MerinoState
     let wallpaperState: WallpaperState
 
-    /// FXIOS-11504 - This is mainly used for telemetry for top sites and pocket and presenting CFRs.
+    /// FXIOS-11504 - This is mainly used for telemetry for top sites and merino and presenting CFRs.
     /// At this time, we are keeping `isZeroSearch` the same as legacy. However, we should revisit this value
     /// and confirm what the expectation is, as it seems inconsistent. See more details in ticket.
     ///
@@ -49,7 +49,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: homepageState.searchState,
             jumpBackInState: homepageState.jumpBackInState,
             bookmarkState: homepageState.bookmarkState,
-            pocketState: homepageState.pocketState,
+            pocketState: homepageState.merinoState,
             wallpaperState: homepageState.wallpaperState,
             isZeroSearch: homepageState.isZeroSearch,
             shouldTriggerImpression: homepageState.shouldTriggerImpression,
@@ -66,7 +66,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
-            pocketState: PocketState(windowUUID: windowUUID),
+            pocketState: MerinoState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
             isZeroSearch: false,
             shouldTriggerImpression: false,
@@ -82,7 +82,7 @@ struct HomepageState: ScreenState, Equatable {
         searchState: SearchBarState,
         jumpBackInState: JumpBackInSectionState,
         bookmarkState: BookmarksSectionState,
-        pocketState: PocketState,
+        pocketState: MerinoState,
         wallpaperState: WallpaperState,
         isZeroSearch: Bool,
         shouldTriggerImpression: Bool,
@@ -95,7 +95,7 @@ struct HomepageState: ScreenState, Equatable {
         self.searchState = searchState
         self.jumpBackInState = jumpBackInState
         self.bookmarkState = bookmarkState
-        self.pocketState = pocketState
+        self.merinoState = pocketState
         self.wallpaperState = wallpaperState
         self.isZeroSearch = isZeroSearch
         self.shouldTriggerImpression = shouldTriggerImpression
@@ -135,7 +135,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: PocketState.reducer(state.pocketState, action),
+            pocketState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
@@ -154,7 +154,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: PocketState.reducer(state.pocketState, action),
+            pocketState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: isZeroSearch,
             shouldTriggerImpression: false,
@@ -171,7 +171,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: PocketState.reducer(state.pocketState, action),
+            pocketState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: true,
@@ -192,7 +192,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: PocketState.reducer(state.pocketState, action),
+            pocketState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
@@ -203,7 +203,7 @@ struct HomepageState: ScreenState, Equatable {
     private static func defaultState(from state: HomepageState, action: Action?) -> HomepageState {
         var headerState = state.headerState
         var messageState = state.messageState
-        var pocketState = state.pocketState
+        var merinoState = state.merinoState
         var topSitesState = state.topSitesState
         var searchState = state.searchState
         var jumpBackInState = state.jumpBackInState
@@ -213,7 +213,7 @@ struct HomepageState: ScreenState, Equatable {
         if let action {
             headerState = HeaderState.reducer(state.headerState, action)
             messageState = MessageCardState.reducer(state.messageState, action)
-            pocketState = PocketState.reducer(state.pocketState, action)
+            merinoState = MerinoState.reducer(state.merinoState, action)
             searchState = SearchBarState.reducer(state.searchState, action)
             jumpBackInState = JumpBackInSectionState.reducer(state.jumpBackInState, action)
             bookmarkState = BookmarksSectionState.reducer(state.bookmarkState, action)
@@ -229,7 +229,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: searchState,
             jumpBackInState: jumpBackInState,
             bookmarkState: bookmarkState,
-            pocketState: pocketState,
+            pocketState: merinoState,
             wallpaperState: wallpaperState,
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,

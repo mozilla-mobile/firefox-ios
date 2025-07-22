@@ -22,7 +22,7 @@
 //        let nimbusLayer = NimbusFeatureFlagLayer()
 //
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
-//        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.pocket))
+//        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.merino))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
@@ -30,7 +30,7 @@
 //
 //    func testInitializedWithTrueValues() {
 //        let homescreenSettings = [HomeScreenSection.jumpBackIn: true,
-//                                  HomeScreenSection.pocket: true,
+//                                  HomeScreenSection.merino: true,
 //                                  HomeScreenSection.libraryShortcuts: true,
 //                                  HomeScreenSection.topSites: true,
 //                                  HomeScreenSection.recentExplorations: true,
@@ -43,7 +43,7 @@
 //        nimbusLayer.updateData()
 //
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
-//        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.pocket))
+//        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.merino))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
@@ -51,7 +51,7 @@
 //
 //    func testUpdatingFeaturesOnRestart() {
 //        var homescreenSettings = [HomeScreenSection.jumpBackIn: true,
-//                                  HomeScreenSection.pocket: true,
+//                                  HomeScreenSection.merino: true,
 //                                  HomeScreenSection.libraryShortcuts: true,
 //                                  HomeScreenSection.topSites: true,
 //                                  HomeScreenSection.recentExplorations: true,
@@ -64,7 +64,7 @@
 //        nimbusLayer.updateData()
 //
 //        // New Nimbus configuration downloaded simulation
-//        homescreenSettings[HomeScreenSection.pocket] = false
+//        homescreenSettings[HomeScreenSection.merino] = false
 //        homescreenSettings[HomeScreenSection.libraryShortcuts] = false
 //        homescreenSettings[HomeScreenSection.recentExplorations] = false
 //        tabTraySettings[TabTraySection.inactiveTabs] = false
@@ -88,7 +88,7 @@
 //        nimbusLayer.updateData()
 //
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
-//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.pocket))
+//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.merino))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
@@ -111,7 +111,7 @@
 //        nimbusLayer.updateData()
 //
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
-//        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.pocket))
+//        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.merino))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))

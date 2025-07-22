@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import MozillaAppServices
 import Storage
 import XCTest
 
@@ -9,24 +10,22 @@ import XCTest
 
 final class ContextMenuConfigurationTests: XCTestCase {
     func tests_initialState_forPocketItem_returnsExpectedState() {
-        let pocketItem: HomepageItem = .pocket(
-            PocketStoryConfiguration(
-                story: PocketStory(
-                        url: URL("www.example.com/1234")!,
-                        title: "Site 0",
-                        domain: "www.example.com",
-                        timeToRead: nil,
-                        storyDescription: "example description",
-                        imageURL: URL("www.example.com/image")!,
-                        id: 0,
-                        flightId: nil,
-                        campaignId: nil,
-                        priority: nil,
-                        context: nil,
-                        rawImageSrc: nil,
-                        shim: nil,
-                        caps: nil,
-                        sponsor: nil)
+        let pocketItem: HomepageItem = .merino(
+            MerinoStoryConfiguration(
+                story: MerinoStory(
+                    corpusItemId: "",
+                    scheduledCorpusItemId: "",
+                    url: URL("www.example.com/1234")!,
+                    title: "Site 0",
+                    excerpt: "example description",
+                    topic: nil,
+                    publisher: "",
+                    isTimeSensitive: false,
+                    imageURL: URL("www.example.com/image")!,
+                    iconURL: nil,
+                    tileId: 0,
+                    receivedRank: 0
+                )
             )
         )
         let subject = ContextMenuConfiguration(

@@ -9,6 +9,7 @@ import SiteImageView
 import enum MozillaAppServices.VisitType
 
 protocol CollapsibleTableViewSection: AnyObject {
+    @MainActor
     func hideTableViewSection(_ section: Int)
 }
 

@@ -15,6 +15,8 @@ final class TabScrollController: NSObject,
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
         static let minimalAddressBarAnimationDuration: CGFloat = 0.4
         static let heightOffset: CGFloat = 14
+        static let minimumScrollThreshold: CGFloat = 20
+        static let minimumScrollVelocity: CGFloat = 100
     }
 
     private var isMinimalAddressBarEnabled: Bool {
@@ -126,9 +128,27 @@ final class TabScrollController: NSObject,
         }
     }
 
+    /// Helper method for testing overKeyboardScrollHeight behavior.
+    /// - Parameters:
+    ///   - safeAreaInsets: The safe area insets to use (nil treated as .zero).
+    ///   - isMinimalAddressBarEnabled: Whether minimal address bar feature is enabled.
+    /// - Returns: The calculated scroll height.
+    func overKeyboardScrollHeight(with safeAreaInsets: UIEdgeInsets?,
+                                  isMinimalAddressBarEnabled: Bool) -> CGFloat {
+        guard let overKeyboardContainerHeight = overKeyboardContainer?.frame.height else { return .zero }
+        guard isMinimalAddressBarEnabled else { return overKeyboardContainerHeight }
+        // Here it checks if the device has `Home Indicator`(Bottom Bar on newer iPhones).
+        // Devices with physical home button need adjustment.
+        let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
+        let topInset = safeAreaInsets?.top ?? .zero
+        return hasHomeIndicator ? .zero : overKeyboardContainerHeight - topInset
+    }
+
     private var overKeyboardScrollHeight: CGFloat {
-        let overKeyboardHeight = overKeyboardContainer?.frame.height ?? 0
-        return overKeyboardHeight
+        return overKeyboardScrollHeight(
+            with: UIWindow.keyWindow?.safeAreaInsets,
+            isMinimalAddressBarEnabled: isMinimalAddressBarEnabled
+        )
     }
 
     private var bottomContainerScrollHeight: CGFloat {
@@ -152,6 +172,7 @@ final class TabScrollController: NSObject,
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
+    private var shouldRespondToScroll = false
 
     var themeManager: any ThemeManager
     var themeObserver: (any NSObjectProtocol)?
@@ -163,10 +184,14 @@ final class TabScrollController: NSObject,
     /// Returns true when the scrollview contentSize height is bigger than device height plus delta
     /// and voice over is turned off
     var shouldUpdateUIWhenScrolling: Bool {
-        let heightNeedsScrolling = (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
-            contentSize.height
         let voiceOverOff = !UIAccessibility.isVoiceOverRunning
-        return heightNeedsScrolling && voiceOverOff
+        return hasScrollableContent && voiceOverOff
+    }
+
+    // If scrollview contenSize is bigger than scrollview height scroll is enabled
+    var hasScrollableContent: Bool {
+        return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
+            contentSize.height
     }
 
     deinit {
@@ -234,8 +259,11 @@ final class TabScrollController: NSObject,
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
             let delta = lastPanTranslation - translation.y
-
             setScrollDirection(delta)
+
+            guard shouldRespondToScrollGesture(gesture, delta: delta, in: containerView) else {
+                return
+            }
 
             lastPanTranslation = translation.y
             if checkRubberbanding() && shouldUpdateUIWhenScrolling {
@@ -243,6 +271,24 @@ final class TabScrollController: NSObject,
                 updateToolbarState()
             }
         }
+    }
+
+    /// Determines whether a scroll gesture is significant enough to trigger UI changes,
+    /// based on minimum translation distance and velocity thresholds.
+    ///
+    /// - Parameters:
+    ///   - gesture: The pan gesture recognizer used to detect scroll movement.
+    ///   - delta: The vertical scroll delta calculated from gesture translation.
+    ///   - containerView: The view in which the gesture translation and velocity are measured.
+    /// - Returns: A Boolean value indicating whether the gesture should trigger a UI response.
+    private func shouldRespondToScrollGesture(_ gesture: UIPanGestureRecognizer,
+                                              delta: CGFloat,
+                                              in containerView: UIView) -> Bool {
+        let velocity = gesture.velocity(in: containerView).y
+        let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
+        let isFastEnough = abs(velocity) > UX.minimumScrollVelocity
+        shouldRespondToScroll = isSignificantScroll || isFastEnough
+        return shouldRespondToScroll
     }
 
     /// Updates the current scroll direction based on the scroll delta.
@@ -402,11 +448,6 @@ private extension TabScrollController {
 
     var isBottomRubberbanding: Bool {
         return contentOffset.y + scrollViewHeight > contentSize.height
-    }
-
-    // If scrollview contenSize is bigger than scrollview height scroll is enabled
-    var hasScrollableContent: Bool {
-        return scrollViewHeight < contentSize.height
     }
 
     // Scroll alpha is only for header views since status bar has an overlay
@@ -595,9 +636,9 @@ private extension TabScrollController {
                         actionType: ToolbarActionType.scrollAlphaDidChange
                     )
                 )
-            } else {
-                overKeyboardContainerOffset = overKeyboardOffset
             }
+
+            overKeyboardContainerOffset = overKeyboardOffset
             overKeyboardContainer?.updateAlphaForSubviews(alpha)
             overKeyboardContainer?.superview?.layoutIfNeeded()
 
@@ -664,7 +705,7 @@ extension TabScrollController: UIScrollViewDelegate {
 
         // Change toolbar status if scrolling will continue decelerate == true
         // scrolling will stops decelerate == false but we are still animating
-        if decelerate || !isAnimatingToolbar {
+        if !isAnimatingToolbar && shouldRespondToScroll {
             if scrollDirection == .up {
                 showToolbars(animated: true)
             } else {

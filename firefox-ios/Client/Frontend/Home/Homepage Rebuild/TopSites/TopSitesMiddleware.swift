@@ -63,14 +63,10 @@ final class TopSitesMiddleware: FeatureFlaggable {
             self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .pin)
 
         case ContextMenuActionType.tappedOnUnpinTopSite:
-            guard let site = self.getSite(for: action) else { return }
-            self.topSitesManager.unpinTopSite(site)
-            self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .unpin)
+            self.handleTappedOnUnpinSites(for: action)
 
         case ContextMenuActionType.tappedOnRemoveTopSite:
-            guard let site = self.getSite(for: action) else { return }
-            self.topSitesManager.removeTopSite(site)
-            self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .remove)
+            self.handleTappedOnRemoveTopSites(for: action)
 
         case ContextMenuActionType.tappedOnOpenNewPrivateTab:
             self.sendOpenInPrivateTelemetry(for: action)
@@ -83,6 +79,22 @@ final class TopSitesMiddleware: FeatureFlaggable {
         default:
             break
         }
+    }
+
+    private func handleTappedOnRemoveTopSites(for action: Action) {
+        guard let site = self.getSite(for: action) else { return }
+        Task { @MainActor in
+            await self.topSitesManager.removeTopSite(site)
+        }
+        self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .remove)
+    }
+
+    private func handleTappedOnUnpinSites(for action: Action) {
+        guard let site = self.getSite(for: action) else { return }
+        Task { @MainActor in
+            await self.topSitesManager.unpinTopSite(site)
+        }
+        self.homepageTelemetry.sendContextMenuOpenedEventForTopSites(for: .unpin)
     }
 
     private func getSite(for action: Action) -> Site? {

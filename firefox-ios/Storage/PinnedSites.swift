@@ -7,6 +7,10 @@ import Shared
 /// A protocol to manage pinned sites in BrowserDB
 public protocol PinnedSites {
     // Pinning top sites
+    // Without Deferred
+    func remove(pinnedSite site: Site) async throws
+
+    // With Deferred
     @discardableResult
     func removeFromPinnedTopSites(_ site: Site) -> Success
     @discardableResult

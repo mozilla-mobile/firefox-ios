@@ -7,8 +7,8 @@ import Foundation
 import Shared
 
 struct ContileResultData {
-    var data: Data
-    var response: HTTPURLResponse
+    let data: Data
+    let response: HTTPURLResponse
 }
 
 typealias NetworkingContileResult = Swift.Result<(ContileResultData), Error>
@@ -17,13 +17,13 @@ enum ContileNetworkingError: Error {
     case dataUnavailable
 }
 
-protocol ContileNetworking {
+protocol ContileNetworking: Sendable {
     func data(from request: URLRequest, completion: @escaping (NetworkingContileResult) -> Void)
 }
 
-class DefaultContileNetwork: ContileNetworking {
-    private var urlSession: URLSessionProtocol
-    private var logger: Logger
+final class DefaultContileNetwork: ContileNetworking {
+    private let urlSession: URLSessionProtocol
+    private let logger: Logger
 
     init(with urlSession: URLSessionProtocol,
          logger: Logger = DefaultLogger.shared) {
