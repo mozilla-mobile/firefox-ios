@@ -85,7 +85,7 @@ class BrowserCoordinator: BaseCoordinator,
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         } else {
-            showToUBottomSheet()
+            showTermsOfUse()
         }
     }
 
@@ -105,7 +105,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true, completion: { [weak self] in
-                self?.showToUBottomSheet()
+                self?.showTermsOfUse()
             })
         remove(child: coordinator)
 
@@ -163,7 +163,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
-        showToUBottomSheet()
+        showTermsOfUse()
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
@@ -1148,11 +1148,11 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Terms of Use Bottom Sheet
 
-    private func showToUBottomSheet() {
-        guard ToUManager.shared.shouldShow() else { return }
+    private func showTermsOfUse() {
+        guard TermsOfUseManager.shared.shouldShow() else { return }
         let presentingVC = homepageViewController ?? browserViewController
-        let viewModel = ToUBottomSheetViewModel()
-        let touVC = ToUBottomSheetViewController(
+        let viewModel = TermsOfUseViewModel()
+        let touVC = TermsOfUseViewController(
             viewModel: viewModel,
             windowUUID: self.windowUUID
         )

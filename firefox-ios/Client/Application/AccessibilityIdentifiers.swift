@@ -279,7 +279,7 @@ struct AccessibilityIdentifiers {
         static let linkPrivacyNotice = "TermsOfUse.Link.PrivacyNotice"
         static let linkLearnMore = "TermsOfUse.Link.LearnMore"
     }
-    
+
     struct PrivateMode {
         static let dimmingView = "PrivateMode.DimmingView"
         struct Homepage {

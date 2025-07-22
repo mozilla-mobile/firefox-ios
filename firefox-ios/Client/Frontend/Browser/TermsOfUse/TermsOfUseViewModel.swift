@@ -5,7 +5,7 @@
 import Common
 import Localizations
 
-struct ToUBottomSheetViewModel {
+struct TermsOfUseViewModel {
     let titleText = TermsOfUse.Title
     let descriptionText = TermsOfUse.Description
     let acceptButtonTitle = TermsOfUse.AcceptButton
@@ -21,15 +21,15 @@ struct ToUBottomSheetViewModel {
     ]
 
     init(
-        onAccept: (() -> Void)? = { ToUManager.shared.markAccepted() },
-        onNotNow: (() -> Void)? = { ToUManager.shared.markDismissed() }
+        onAccept: (() -> Void)? = { TermsOfUseManager.shared.markAccepted() },
+        onNotNow: (() -> Void)? = { TermsOfUseManager.shared.markDismissed() }
     ) {
         self.onAccept = onAccept
         self.onNotNow = onNotNow
     }
 
     func markToUAppeared() {
-        ToUManager.shared.didShowThisLaunch = true
+        TermsOfUseManager.shared.didShowThisLaunch = true
     }
 
     func makeAttributedDescription(theme: Theme) -> NSAttributedString {

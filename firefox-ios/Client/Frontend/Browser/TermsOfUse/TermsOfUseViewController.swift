@@ -6,7 +6,7 @@ import Common
 import Shared
 import ComponentLibrary
 
-class ToUBottomSheetViewController: UIViewController, Themeable {
+class TermsOfUseViewController: UIViewController, Themeable {
     private struct UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
@@ -24,7 +24,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    private let viewModel: ToUBottomSheetViewModel
+    private let viewModel: TermsOfUseViewModel
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -32,7 +32,7 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     private let sheetContainer = UIView()
     private let grabberView = UIView()
 
-    init(viewModel: ToUBottomSheetViewModel,
+    init(viewModel: TermsOfUseViewModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: UUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -249,13 +249,13 @@ class ToUBottomSheetViewController: UIViewController, Themeable {
     }
 }
 
-extension ToUBottomSheetViewController: UITextViewDelegate {
+extension TermsOfUseViewController: UITextViewDelegate {
     func textView(_ textView: UITextView,
                   shouldInteractWith url: URL,
                   in characterRange: NSRange,
                   interaction: UITextItemInteraction) -> Bool {
         guard interaction == .invokeDefaultAction else { return true }
-        let linkVC = ToULinkViewController(url: url, windowUUID: windowUUID)
+        let linkVC = TermsOfUseLinkViewController(url: url, windowUUID: windowUUID)
         present(linkVC, animated: true)
         return false
     }

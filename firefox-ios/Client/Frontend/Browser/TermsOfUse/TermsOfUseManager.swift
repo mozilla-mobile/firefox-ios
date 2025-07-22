@@ -4,8 +4,8 @@
 
 import Foundation
 
-class ToUManager: FeatureFlaggable {
-    static let shared = ToUManager()
+class TermsOfUseManager: FeatureFlaggable {
+    static let shared = TermsOfUseManager()
 
     private let acceptedKey = "termsOfUseAccepted"
     private let dismissedKey = "termsOfUseDismissed"

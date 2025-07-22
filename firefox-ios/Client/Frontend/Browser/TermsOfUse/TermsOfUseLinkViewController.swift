@@ -6,7 +6,7 @@ import Common
 import Shared
 import WebKit
 
-class ToULinkViewController: UIViewController, Themeable {
+class TermsOfUseLinkViewController: UIViewController, Themeable {
     private struct UX {
         static let headerHeight: CGFloat = 44
         static let backButtonLeading: CGFloat = 16
@@ -107,7 +107,7 @@ class ToULinkViewController: UIViewController, Themeable {
     }
 }
 
-extension ToULinkViewController: WKNavigationDelegate {
+extension TermsOfUseLinkViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
         let nsError = error as NSError
         if nsError.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
