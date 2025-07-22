@@ -33,6 +33,8 @@ public protocol ThemeColourPalette {
     var layerGradientURL: Gradient { get }
     var layerSurfaceLow: UIColor { get }
     var layerSurfaceMedium: UIColor { get }
+    var layerSummary: UIColor { get }
+    var layerSummaryGradient: Gradient { get }
 
     // MARK: - Ratings
     var layerRatingA: UIColor { get }

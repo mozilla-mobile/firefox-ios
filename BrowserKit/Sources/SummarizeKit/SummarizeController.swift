@@ -134,8 +134,9 @@ public class SummarizeController: UIViewController, Themeable {
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         gradient.startAnimating { [weak self] in
-            self?.view.backgroundColor = GradientColors.red
+            self?.view.backgroundColor = theme.colors.layerSummary
             self?.viewModel.onShouldShowTabSnapshot()
             self?.embedSnapshot()
         }
@@ -332,5 +333,6 @@ public class SummarizeController: UIViewController, Themeable {
         summaryView.backgroundColor = .clear
         view.backgroundColor = .clear
         closeButton.tintColor = theme.colors.textPrimary
+        gradient.applyTheme(theme: theme)
     }
 }

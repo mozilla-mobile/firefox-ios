@@ -3,16 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-
-struct GradientColors {
-    static let red = UIColor(colorString: "FF0048")
-    static let clearRed = UIColor(colorString: "FF0048").withAlphaComponent(0.8)
-    static let clearOrange = UIColor(colorString: "FF4C00").withAlphaComponent(0.8)
-    static let orange = UIColor(colorString: "FF4C00")
-    static let blue = UIColor(colorString: "72D3FF").withAlphaComponent(0.8)
-}
+import Common
 
 class AnimatedGradientOutlineView: UIView,
+                                   ThemeApplicable,
                                    CAAnimationDelegate {
     struct UX {
         static let positionChangeAnimationDuration: CFTimeInterval = 1.25
@@ -50,11 +44,6 @@ class AnimatedGradientOutlineView: UIView,
     private func setupLayers() {
         backgroundColor = .clear
 
-        gradientLayer.colors = [
-            GradientColors.clearOrange.cgColor,
-            GradientColors.blue.cgColor,
-            GradientColors.clearRed.cgColor
-        ]
         gradientLayer.startPoint = CGPoint.topCenter
         gradientLayer.endPoint = CGPoint.bottomCenter
         gradientLayer.locations = UX.colorsLocation
@@ -79,11 +68,6 @@ class AnimatedGradientOutlineView: UIView,
         onAnimationEnd = completion
         let animation = CABasicAnimation(keyPath: UX.colorsKeyPath)
         animation.fromValue = gradientLayer.colors
-        animation.toValue = [
-            GradientColors.clearOrange.cgColor,
-            GradientColors.clearRed.cgColor,
-            GradientColors.blue.cgColor
-        ]
         animation.duration = UX.initialAnimationDuration
         animation.repeatCount = 0
         animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
@@ -121,5 +105,9 @@ class AnimatedGradientOutlineView: UIView,
         endPointAnimation.fillMode = .forwards
         endPointAnimation.timingFunction = animationCurve
         gradientLayer.add(endPointAnimation, forKey: UX.endPointAnimationKey)
+    }
+
+    func applyTheme(theme: any Theme) {
+        gradientLayer.colors = theme.colors.layerSummaryGradient.cgColors
     }
 }
