@@ -42,14 +42,12 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
     ///   - completion: Completion handler for non-streaming requests. Ignored if `stream` is `true`.
     public func requestChatCompletion(
         messages: [LiteLLMMessage],
-        model: String = "fake-openai-endpoint-5",
-        maxTokens: Int = 1000,
-        stream: Bool = false,
+        options: LiteLLMChatOptions,
         completion: ((Result<String, Error>) -> Void)? = nil
     ) {
         do {
-            let request = try makeRequest(messages: messages, model: model, maxTokens: maxTokens, stream: stream)
-            if stream {
+            let request = try makeRequest(messages: messages, options: options)
+            if options.stream {
                 session.dataTask(with: request).resume()
             } else {
                 URLSession.shared.dataTask(with: request) { data, _, error in
@@ -57,7 +55,7 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
                 }.resume()
             }
         } catch {
-            if stream {
+            if options.stream {
                 streamDelegate?.liteLLMClient(self, didFinishWith: LLMClientError.requestCreationFailed)
             } else {
                 completion?(.failure(LLMClientError.requestCreationFailed))
@@ -67,9 +65,7 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
 
     func makeRequest(
         messages: [LiteLLMMessage],
-        model: String,
-        maxTokens: Int,
-        stream: Bool
+        options: LiteLLMChatOptions
     ) throws -> URLRequest {
         let endpoint = baseURL.appendingPathComponent("chat/completions")
         var request = URLRequest(url: endpoint)
@@ -78,12 +74,12 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
         var payload: [String: Any] = [
-            "model": model,
+            "model": options.model,
             "messages": messages.map { ["role": $0.role.rawValue, "content": $0.content] },
-            "max_tokens": maxTokens
+            "max_tokens": options.maxTokens
         ]
 
-        if stream {
+        if options.stream {
             request.addValue("text/event-stream", forHTTPHeaderField: "Accept")
             request.addValue("keep-alive", forHTTPHeaderField: "Connection")
             payload["stream"] = true

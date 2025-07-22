@@ -86,12 +86,12 @@ final class LiteLLMClientTests: XCTestCase {
 
     func testMakeRequestBuildsURLRequestNonStreaming() throws {
         let subject = createSubject()
-        let urlRequest = try subject.makeRequest(
-            messages: Self.mockMessages,
+        let options = LiteLLMChatOptions(
             model: "fake-model",
             maxTokens: 50,
             stream: false
         )
+        let urlRequest = try subject.makeRequest(messages: Self.mockMessages, options: options)
 
         XCTAssertEqual(urlRequest.httpMethod, HTTPMethod.post.rawValue)
         XCTAssertEqual(urlRequest.url?.absoluteString, "\(Self.mockAPIEndpoint)/chat/completions")
@@ -119,12 +119,12 @@ final class LiteLLMClientTests: XCTestCase {
 
     func testMakeRequestBuildsURLRequestStreaming() throws {
         let subject = createSubject()
-        let urlRequest = try subject.makeRequest(
-            messages: Self.mockMessages,
+        let options = LiteLLMChatOptions(
             model: "fake-model",
             maxTokens: 50,
             stream: true
         )
+        let urlRequest = try subject.makeRequest(messages: Self.mockMessages, options: options)
 
         // Verify headers for streaming mode
         let headers = try XCTUnwrap(urlRequest.allHTTPHeaderFields, "Expected headers to be non‑nil")
