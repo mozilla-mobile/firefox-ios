@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-struct AddressBarState: StateType, Equatable {
+struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
     var navigationActions: [ToolbarActionConfiguration]
     var leadingPageActions: [ToolbarActionConfiguration]
