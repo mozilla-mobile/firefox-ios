@@ -54,8 +54,8 @@ def main():
                 text=True,
                 capture_output=True,
             )
-        if result.returncode == 0 and result.stdout.strip() == "OPEN":
-            print("PR already open – branch updated in place")
+            if result.returncode == 0 and result.stdout.strip() == "OPEN":
+                print("PR already open – branch updated in place")
         except subprocess.CalledProcessError:
             subprocess.check_call([
                 "gh", "pr", "create",
