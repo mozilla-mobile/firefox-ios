@@ -32,14 +32,14 @@ protocol TopSitesManagerInterface {
 
     /// Removes the site out of the top sites.
     /// If site is pinned it removes it from pinned and top sites list.
-    func removeTopSite(_ site: Site)
+    func removeTopSite(_ site: Site) async
 
     /// Adds the top site as a pinned tile in the top sites lists.
     func pinTopSite(_ site: Site)
 
     /// Unpin removes the top site from the location it's in.
     /// The site still can appear in the top sites as unpin.
-    func unpinTopSite(_ site: Site)
+    func unpinTopSite(_ site: Site) async
 }
 
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
@@ -51,7 +51,6 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     private let topSiteHistoryManager: TopSiteHistoryManagerProvider
     private let searchEnginesManager: SearchEnginesManagerProvider
     private let unifiedAdsProvider: UnifiedAdsProviderInterface
-    private let dispatchQueue: DispatchQueueInterface
     private let notification: NotificationProtocol
 
     private let maxTopSites: Int
@@ -65,7 +64,6 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         topSiteHistoryManager: TopSiteHistoryManagerProvider,
         searchEnginesManager: SearchEnginesManagerProvider,
         logger: Logger = DefaultLogger.shared,
-        dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
         notification: NotificationProtocol = NotificationCenter.default,
         maxTopSites: Int = 4 * 14 // Max rows * max tiles on the largest screen plus some padding
     ) {
@@ -76,7 +74,6 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         self.topSiteHistoryManager = topSiteHistoryManager
         self.searchEnginesManager = searchEnginesManager
         self.logger = logger
-        self.dispatchQueue = dispatchQueue
         self.notification = notification
         self.maxTopSites = maxTopSites
     }
@@ -229,10 +226,17 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
     }
 
     // MARK: - Context menu actions
-    func removeTopSite(_ site: Site) {
-        unpinTopSite(site)
-        dispatchQueue.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.hideURLFromTopSites(site)
+    func removeTopSite(_ site: Site) async {
+        googleTopSiteManager.removeGoogleTopSite(site: site)
+        do {
+            try await topSiteHistoryManager.remove(pinnedSite: site)
+            hideURLFromTopSites(site)
+        } catch {
+            logger.log(
+                "Removing pinned site threw an error - \(error.localizedDescription)",
+                level: .warning,
+                category: .homepage
+            )
         }
     }
 
@@ -240,9 +244,9 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         profile.pinnedSites.addPinnedTopSite(site)
     }
 
-    func unpinTopSite(_ site: Site) {
+    func unpinTopSite(_ site: Site) async {
         googleTopSiteManager.removeGoogleTopSite(site: site)
-        topSiteHistoryManager.removeTopSite(site: site)
+        try? await topSiteHistoryManager.remove(pinnedSite: site)
     }
 
     private func hideURLFromTopSites(_ site: Site) {
@@ -250,7 +254,7 @@ final class TopSitesManager: TopSitesManagerInterface, FeatureFlaggable {
         // We make sure to remove all history for URL so it doesn't show anymore in the
         // top sites, this is the approach that Android takes too.
         profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { [weak self] _ in
-            self?.notification.post(name: .TopSitesUpdated, withObject: self)
+            self?.notification.post(name: .TopSitesUpdated, withObject: nil)
         }
     }
 }
