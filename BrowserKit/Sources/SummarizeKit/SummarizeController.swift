@@ -5,7 +5,6 @@
 import Foundation
 import Common
 import UIKit
-import ComponentLibrary
 
 // swiftlint:disable line_length
 let dummyText = """
@@ -86,7 +85,7 @@ public class SummarizeController: UIViewController, Themeable {
         $0.alpha = 0
         $0.numberOfLines = 0
     }
-    private let closeButton: CloseButton = .build {
+    private let closeButton: UIButton = .build {
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
         $0.alpha = 0
     }
