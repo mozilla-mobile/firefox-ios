@@ -7,7 +7,9 @@ import Foundation
 import Redux
 import Storage
 
-final class ContextMenuAction: Action {
+struct ContextMenuAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let section: HomepageSection?
     let site: Site?
 
@@ -17,9 +19,10 @@ final class ContextMenuAction: Action {
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.section = section
         self.site = site
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

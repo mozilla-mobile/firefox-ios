@@ -11,7 +11,9 @@ struct MoveTabData {
     let isPrivate: Bool
 }
 
-class TabPanelViewAction: Action {
+struct TabPanelViewAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let panelType: TabTrayPanelType?
     let isPrivateModeActive: Bool?
     let urlRequest: URLRequest?
@@ -35,6 +37,8 @@ class TabPanelViewAction: Action {
          deleteTabPeriod: TabsDeletionPeriod? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.panelType = panelType
         self.isPrivateModeActive = isPrivateModeActive
         self.urlRequest = urlRequest
@@ -45,8 +49,6 @@ class TabPanelViewAction: Action {
         self.shareSheetURL = shareSheetURL
         self.isInactiveTab = isInactiveTab
         self.deleteTabPeriod = deleteTabPeriod
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
     }
 }
 
@@ -72,7 +74,9 @@ enum TabPanelViewActionType: ActionType {
     case selectTab
 }
 
-class TabPanelMiddlewareAction: Action {
+struct TabPanelMiddlewareAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let tabDisplayModel: TabDisplayModel?
     let inactiveTabModels: [InactiveTabsModel]?
     let toastType: ToastType??
@@ -84,12 +88,12 @@ class TabPanelMiddlewareAction: Action {
          scrollBehavior: TabScrollBehavior? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.tabDisplayModel = tabDisplayModel
         self.inactiveTabModels = inactiveTabModels
         self.toastType = toastType
         self.scrollBehavior = scrollBehavior
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
     }
 }
 
@@ -103,12 +107,15 @@ enum TabPanelMiddlewareActionType: ActionType {
     case scrollToTab
 }
 
-final class ScreenshotAction: Action {
+struct ScreenshotAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let tab: Tab
 
     init(windowUUID: WindowUUID, tab: Tab, actionType: any ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.tab = tab
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

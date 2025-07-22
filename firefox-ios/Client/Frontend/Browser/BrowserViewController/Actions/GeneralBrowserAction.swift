@@ -7,7 +7,9 @@ import Redux
 import Common
 import WebKit
 
-class GeneralBrowserAction: Action {
+struct GeneralBrowserAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let selectedTabURL: URL?
     let isPrivateBrowsing: Bool?
     let toastType: ToastType?
@@ -24,6 +26,8 @@ class GeneralBrowserAction: Action {
          frame: WKFrameInfo? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.selectedTabURL = selectedTabURL
         self.isPrivateBrowsing = isPrivateBrowsing
         self.toastType = toastType
@@ -31,8 +35,6 @@ class GeneralBrowserAction: Action {
         self.showOverlay = showOverlay
         self.isNativeErrorPage = isNativeErrorPage
         self.frame = frame
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
     }
 }
 
@@ -68,7 +70,9 @@ enum GeneralBrowserActionType: ActionType {
     case didUnhideToolbar
 }
 
-class GeneralBrowserMiddlewareAction: Action {
+struct GeneralBrowserMiddlewareAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let scrollOffset: CGPoint?
     let toolbarPosition: SearchBarPosition?
 
@@ -76,10 +80,10 @@ class GeneralBrowserMiddlewareAction: Action {
          toolbarPosition: SearchBarPosition? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.scrollOffset = scrollOffset
         self.toolbarPosition = toolbarPosition
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
     }
 }
 

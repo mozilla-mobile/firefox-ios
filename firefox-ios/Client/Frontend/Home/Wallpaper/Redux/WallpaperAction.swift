@@ -6,15 +6,18 @@ import Foundation
 import Redux
 import Common
 
-final class WallpaperAction: Action {
+struct WallpaperAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let wallpaperConfiguration: WallpaperConfiguration
 
     init(wallpaperConfiguration: WallpaperConfiguration,
          windowUUID: WindowUUID,
          actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.wallpaperConfiguration = wallpaperConfiguration
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

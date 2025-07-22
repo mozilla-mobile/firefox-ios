@@ -11,7 +11,9 @@ struct TopSitesTelemetryConfig {
     let topSiteConfiguration: TopSiteConfiguration
 }
 
-final class TopSitesAction: Action {
+struct TopSitesAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let topSites: [TopSiteConfiguration]?
     let numberOfRows: Int?
     let isEnabled: Bool?
@@ -25,11 +27,12 @@ final class TopSitesAction: Action {
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.isEnabled = isEnabled
         self.topSites = topSites
         self.numberOfRows = numberOfRows
         self.telemetryConfig = telemetryConfig
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

@@ -5,7 +5,9 @@
 import Redux
 import Common
 
-class TabPeekAction: Action {
+struct TabPeekAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let tabUUID: TabUUID?
     let tabPeekModel: TabPeekModel?
 
@@ -13,10 +15,10 @@ class TabPeekAction: Action {
          tabPeekModel: TabPeekModel? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.tabUUID = tabUUID
         self.tabPeekModel = tabPeekModel
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
     }
 }
 
