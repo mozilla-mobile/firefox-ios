@@ -2047,6 +2047,36 @@ extension String {
     }
 }
 
+extension String {
+    public struct Summarizer {
+        public static let LoadingLabel = MZLocalizedString(
+            key: "Summarizer.Loading.Label.v142",
+            tableName: "Summarizer",
+            value: "Summarizing ...",
+            comment: "When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed."
+        )
+        // TODO: - FXIOS-12899 add the correct value and key for the accessibility labels
+        public static let LoadingAccessibilityLabel = MZLocalizedString(
+            key: "", // Summarizer.Loading.Accessibility.Label.v142
+            tableName: "Summarizer",
+            value: "Loading Summary label",
+            comment: "The a11y label for the loading label"
+        )
+        public static let SummaryTextAccessibilityLabel = MZLocalizedString(
+            key: "", // Summarizer.Summary.Text.Accessibility.Label.v142
+            tableName: "Summarizer",
+            value: "Summary report text",
+            comment: "The a11y label for the summary text shown when the summarizer returns a text result."
+        )
+        public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+            key: "", // Summarizer.CloseButton.Accessibility.Label.v142
+            tableName: "Summarizer",
+            value: "Close summary button",
+            comment: "The a11y label for the close button in the summary view."
+        )
+    }
+}
+
 // MARK: - Settings screen
 extension String {
     public struct Settings {

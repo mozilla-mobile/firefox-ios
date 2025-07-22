@@ -708,6 +708,12 @@ struct AccessibilityIdentifiers {
         }
     }
 
+    struct Summarizer {
+        static let closeButton = "closeButton"
+        static let loadingLabel = "summaryLoadingLabel"
+        static let summaryTextView = "summaryTextView"
+    }
+
     struct ShareTo {
         struct HelpView {
             static let doneButton = "doneButton"

@@ -554,6 +554,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(browserViewController.removeDocumentLoadingViewCalled, 1)
     }
 
+    @MainActor
+    func testShowSummarizePanel() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showSummarizePanel()
+
+        let childCoordinator = subject.childCoordinators.first
+        XCTAssertTrue(childCoordinator is SummarizeCoordinator)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {
