@@ -2070,6 +2070,12 @@ public struct TermsOfUse {
         value: "Remind Me Later",
         comment: "Remind Me Later button title"
     )
+    public static let BackButton = MZLocalizedString(
+        key: "TermsOfUse.BackButton",
+        tableName: "TermsOfUse",
+        value: "Back",
+        comment: "Title for back button."
+    )
 }
 
 // MARK: - Search

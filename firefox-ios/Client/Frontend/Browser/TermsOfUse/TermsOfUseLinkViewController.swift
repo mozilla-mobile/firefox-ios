@@ -3,14 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Localizations
 import Shared
 import WebKit
 
-class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigationDelegate {
+final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigationDelegate {
     private struct UX {
         static let headerHeight: CGFloat = 44
-        static let backButtonLeading: CGFloat = 16
+        static let backButtonLeading: CGFloat = 8
         static let webViewTopInset: CGFloat = 44
+        static let backArrowImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
     }
 
     private let url: URL
@@ -30,8 +32,8 @@ class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigationDel
 
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
-        button.setTitle("Back", for: .normal)
+        button.setImage(UX.backArrowImage, for: .normal)
+        button.setTitle(TermsOfUse.BackButton, for: .normal)
         button.tintColor = currentTheme().colors.actionPrimary
         button.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
