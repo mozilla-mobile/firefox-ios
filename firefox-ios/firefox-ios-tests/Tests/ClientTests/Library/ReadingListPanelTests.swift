@@ -6,6 +6,7 @@ import XCTest
 import Common
 @testable import Client
 
+@MainActor
 class ReadingListPanelTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     override func setUp() {
