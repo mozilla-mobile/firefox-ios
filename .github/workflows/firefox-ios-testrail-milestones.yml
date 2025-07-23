@@ -1,4 +1,4 @@
-name: TestRail Milestone
+name: Create TestRail Milestone
 
 on:
   release:
@@ -24,3 +24,5 @@ jobs:
           testrail-host: ${{ secrets.TESTRAIL_HOST }}
           testrail-username: ${{ secrets.TESTRAIL_USERNAME }}
           testrail-api-key: ${{ secrets.TESTRAIL_PASSWORD }}
+          slack_webhook_url: ${{ secrets.WEBHOOK_SLACK_MOBILE_TESTENG_RELEASES_CHANNEL }}
+          slack_webhook_url_error_channel: ${{ secrets.WEBHOOK_SLACK_MOBILE_ALERTS_IOS_CHANNEL }}
