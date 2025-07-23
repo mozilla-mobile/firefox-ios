@@ -25,7 +25,8 @@ final class TermsOfUseStateTests: XCTestCase {
     // MARK: - Initialization tests
     func test_mockDefaultsInitializesEmpty() {
         XCTAssertTrue(userDefaults.savedData.isEmpty, "savedData should be empty when initializing object")
-        XCTAssertTrue(userDefaults.registrationDictionary.isEmpty, "registrationDictionary should be empty when initializing object")
+        XCTAssertTrue(userDefaults.registrationDictionary.isEmpty,
+                      "registrationDictionary should be empty when initializing object")
     }
 
     func testDefaultInit_readsFromUserDefaults() {
