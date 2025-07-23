@@ -8,11 +8,13 @@ import UIKit
 import Shared
 
 protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable {
+    @MainActor
     func configure(config: RemoteTabsPanelEmptyStateReason,
                    delegate: RemoteTabsEmptyViewDelegate?)
 }
 
-class ExperimentRemoteTabsEmptyView: UIView, RemoteTabsEmptyViewProtocol {
+class ExperimentRemoteTabsEmptyView: UIView,
+                                        RemoteTabsEmptyViewProtocol {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
