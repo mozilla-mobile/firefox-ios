@@ -8,6 +8,7 @@ import Shared
 import Common
 import WebKit
 
+@MainActor
 final class PasswordGeneratorMiddleware {
     private let logger: Logger
     private let generatedPasswordStorage: GeneratedPasswordStorageProtocol
@@ -65,7 +66,7 @@ final class PasswordGeneratorMiddleware {
                 actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                 password: password
             )
-            store.dispatchLegacy(newAction)
+            store.dispatch(newAction)
         } else {
             generateNewPassword(frame: frame, completion: { generatedPassword in
                 self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
@@ -74,7 +75,7 @@ final class PasswordGeneratorMiddleware {
                     actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                     password: generatedPassword
                 )
-                store.dispatchLegacy(newAction)
+                store.dispatch(newAction)
             })
         }
     }
@@ -128,7 +129,7 @@ final class PasswordGeneratorMiddleware {
                 actionType: PasswordGeneratorActionType.updateGeneratedPassword,
                 password: generatedPassword
             )
-            store.dispatchLegacy(newAction)
+            store.dispatch(newAction)
         })
     }
 
