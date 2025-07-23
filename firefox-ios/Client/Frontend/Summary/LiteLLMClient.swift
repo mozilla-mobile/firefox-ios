@@ -16,6 +16,11 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
 
     private let apiKey: String
     private let baseURL: URL
+
+    /// TODO(FXIOS-12930): Use `URLSessionProtocol`. 
+    /// Currently, `URLSessionProtocol` doesn’t expose any streaming surface (like bytes(for:)). 
+    /// The streaming branch relies on URLSessionDataDelegate right now. 
+    /// It would make testing easier if we can use `URLSessionProtocol`.
     private lazy var session: URLSession = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config, delegate: self, delegateQueue: nil)
@@ -36,9 +41,7 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
     /// Sends a chat completion request.
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
-    ///   - model: Model identifier.
-    ///   - maxTokens: Maximum tokens to generate.
-    ///   - stream: Whether to stream the response (`true`) or not (`false`).
+    ///   - options: inference options as described by LiteLLMChatOptions ( includes model name, max tokens, ...).
     ///   - completion: Completion handler for non-streaming requests. Ignored if `stream` is `true`.
     public func requestChatCompletion(
         messages: [LiteLLMMessage],
@@ -89,6 +92,7 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
         return request
     }
 
+    // TODO(FXIOS-12931): Since we are adopting modern concurrency, we should look into using async/await here instead.
     private func handleResponse(
         data: Data?,
         error: Error?,
@@ -119,6 +123,7 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
 
     // MARK: - URLSessionDataDelegate
 
+    // TODO(FXIOS-12931): Since we are adopting modern concurrency, we should look into using async/await here instead.
     public func urlSession(_ session: URLSession,
                            dataTask: URLSessionDataTask,
                            didReceive data: Data) {
@@ -138,6 +143,7 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
         }
     }
 
+    // TODO(FXIOS-12931): Since we are adopting modern concurrency, we should look into using the async/await here instead.
     public func urlSession(_ session: URLSession,
                            task: URLSessionTask,
                            didCompleteWithError error: Error?) {
