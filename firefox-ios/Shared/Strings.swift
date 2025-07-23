@@ -2023,55 +2023,55 @@ extension String {
 
 public struct TermsOfUse {
     public static let Title = MZLocalizedString(
-        key: "TermsOfUse.Title",
+        key: "TermsOfUse.Title.v142",
         tableName: "TermsOfUse",
         value: "We’ve got an update",
         comment: "Title for the Terms of Use bottom sheet"
     )
     public static let Description = MZLocalizedString(
-        key: "TermsOfUse.Description",
+        key: "TermsOfUse.Description.v142",
         tableName: "TermsOfUse",
         value: "We’ve introduced a %@ Terms of Use and updated our Privacy Notice.",
         comment: "Description text with embedded links. %@ is the app name (e.g. Firefox)."
     )
     public static let ReviewAndAcceptText = MZLocalizedString(
-        key: "TermsOfUse.ReviewAndAcceptText",
+        key: "TermsOfUse.ReviewAndAcceptText.v142",
         tableName: "TermsOfUse",
         value: "Please take a moment to review and accept. Learn more.",
         comment: "Description text for review and accept with embedded link."
     )
     public static let LinkTermsOfUse = MZLocalizedString(
-        key: "TermsOfUse.Link.TermsOfUse",
+        key: "TermsOfUse.Link.TermsOfUse.v142",
         tableName: "TermsOfUse",
         value: "%@ Terms of Use",
         comment: "Label for Terms of Use link. %@ is the app name (e.g. Firefox)."
     )
     public static let LinkPrivacyNotice = MZLocalizedString(
-        key: "TermsOfUse.Link.PrivacyNotice",
+        key: "TermsOfUse.Link.PrivacyNotice.v142",
         tableName: "TermsOfUse",
         value: "Privacy Notice",
         comment: "Label for Privacy Notice link"
     )
     public static let LinkLearnMore = MZLocalizedString(
-        key: "TermsOfUse.Link.LearnMore",
+        key: "TermsOfUse.Link.LearnMore.v142",
         tableName: "TermsOfUse",
         value: "Learn more",
         comment: "Label for Learn More link"
     )
     public static let AcceptButton = MZLocalizedString(
-        key: "TermsOfUse.AcceptButton",
+        key: "TermsOfUse.AcceptButton.v142",
         tableName: "TermsOfUse",
         value: "Accept",
         comment: "Accept button title"
     )
     public static let RemindMeLaterButton = MZLocalizedString(
-        key: "TermsOfUse.RemindMeLaterButton",
+        key: "TermsOfUse.RemindMeLaterButton.v142",
         tableName: "TermsOfUse",
         value: "Remind Me Later",
         comment: "Remind Me Later button title"
     )
     public static let BackButton = MZLocalizedString(
-        key: "TermsOfUse.BackButton",
+        key: "TermsOfUse.BackButton.v142",
         tableName: "TermsOfUse",
         value: "Back",
         comment: "Title for back button."
