@@ -73,7 +73,7 @@ final class LoggerFileManagerTests: XCTestCase {
 }
 
 // MARK: - MockFileManager
-private final class MockFileManager: FileManagerProtocol {
+private final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     let fileExists = false
     func fileExists(atPath path: String) -> Bool {
         return fileExists
