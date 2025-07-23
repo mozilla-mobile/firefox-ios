@@ -131,7 +131,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
 
     // MARK: - RemotePanelDelegate
     func testRemotePanelDidRequestToSignIn_forwardsCallsToDelegate() {
-        let mockDelegate = RemoteTabsPanelDelegateMock()
+        let mockDelegate = MockRemoteTabsPanelDelegate()
         let subject = createSubject()
         subject.remoteTabsDelegate = mockDelegate
 
@@ -141,7 +141,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
     }
 
     func testPresentFxAccountSettings_forwardsCallsToDelegate() {
-        let mockDelegate = RemoteTabsPanelDelegateMock()
+        let mockDelegate = MockRemoteTabsPanelDelegate()
         let subject = createSubject()
         subject.remoteTabsDelegate = mockDelegate
 

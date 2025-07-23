@@ -4,7 +4,7 @@
 
 @testable import Client
 
-final class MockRemoteTabsEmptyViewDelegate: RemoteTabsEmptyViewDelegate {
+final class MockRemoteTabsEmptyViewDelegate: RemoteTabsEmptyViewDelegate, @unchecked Sendable {
     private(set) var remotePanelDidRequestToSignInCallCount = 0
     private(set) var presentFxAccountSettingsCallCount = 0
     private(set) var remotePanelDidRequestToOpenInNewTabCallCount = 0
