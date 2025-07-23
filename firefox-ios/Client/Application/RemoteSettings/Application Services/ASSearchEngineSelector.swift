@@ -8,7 +8,7 @@ import Common
 import Shared
 
 /// Describes public API for search engine selector wrapper for Application Services.
-protocol ASSearchEngineSelectorProtocol {
+protocol ASSearchEngineSelectorProtocol: Sendable {
     /// Fetches search engines from Remote Settings based on the current locale and region.
     /// - Parameters:
     ///   - locale: the locale (e.g. 'en-US')
@@ -23,10 +23,13 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
     private let engineSelector = SearchEngineSelector()
     private let service: RemoteSettingsService
     private let logger: Logger
+    private let deviceIdiom: UIUserInterfaceIdiom
 
+    @MainActor
     init(service: RemoteSettingsService, logger: Logger = DefaultLogger.shared) {
         self.service = service
         self.logger = logger
+        self.deviceIdiom = UIDevice.current.userInterfaceIdiom
     }
 
     // MARK: - ASSearchEngineSelectorProtocol
@@ -37,7 +40,7 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
         do {
             engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
 
-            let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
+            let deviceType: SearchDeviceType = deviceIdiom == .pad ? .tablet : .smartphone
             let env = SearchUserEnvironment(locale: locale,
                                             region: region,
                                             updateChannel: SearchUpdateChannel.release,
