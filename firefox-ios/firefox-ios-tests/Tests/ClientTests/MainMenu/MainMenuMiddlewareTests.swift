@@ -24,6 +24,7 @@ final class MainMenuMiddlewareTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testDismissMenuAction() throws {
         let mockStore = Store(
             state: AppState(),
