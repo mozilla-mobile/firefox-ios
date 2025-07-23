@@ -11,12 +11,12 @@ enum HomepageSectionType: Int, CaseIterable {
     case topSites
     case jumpBackIn
     case bookmarks
-    case pocket
+    case merino
     case customizeHome
 
     var title: String? {
         switch self {
-        case .pocket: return .FirefoxHomepage.Pocket.SectionTitle
+        case .merino: return .FirefoxHomepage.Pocket.SectionTitle
         case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
         case .bookmarks: return .BookmarksSectionTitle
         default: return nil
@@ -30,7 +30,7 @@ enum HomepageSectionType: Int, CaseIterable {
         // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .topSites: return ""
         // Pocket has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
-        case .pocket: return ""
+        case .merino: return ""
         // JumpBackIn has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .jumpBackIn: return ""
         case .bookmarks: return LegacyBookmarksCell.cellIdentifier
@@ -62,7 +62,7 @@ enum HomepageSectionType: Int, CaseIterable {
                                          method: .tap,
                                          object: .newPrivateTab,
                                          value: .topSite)
-        case .pocket:
+        case .merino:
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .newPrivateTab,

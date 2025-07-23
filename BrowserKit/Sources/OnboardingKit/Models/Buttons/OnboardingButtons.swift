@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct OnboardingButtons<OnboardingActionType> {
+public struct OnboardingButtons<OnboardingActionType: Sendable>: Sendable {
     let primary: OnboardingButtonInfoModel<OnboardingActionType>
     let secondary: OnboardingButtonInfoModel<OnboardingActionType>?
 

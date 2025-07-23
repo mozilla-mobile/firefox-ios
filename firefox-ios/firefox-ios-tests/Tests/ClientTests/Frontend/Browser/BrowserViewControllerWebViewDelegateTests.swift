@@ -251,50 +251,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    // MARK: - Decide policy for navigation response
-    @MainActor
-    func testWebViewDecidePolicyForNavigationResponse_cancelLoading_whenResponseIsPDFThatWasntDownloadedPreviously() {
-        let subject = createSubject()
-        let tab = createTab()
-
-        let pdfURL = URL(string: "https://example.com/test.pdf")!
-        let response = URLResponse(
-            url: pdfURL,
-            mimeType: MIMEType.PDF,
-            expectedContentLength: 0,
-            textEncodingName: nil
-        )
-        subject.pendingRequests[pdfURL.absoluteString] = URLRequest(url: pdfURL)
-        tabManager.tabs = [tab]
-
-        subject.webView(tab.webView!, decidePolicyFor: MockNavigationResponse(response: response)) { policy in
-            XCTAssertEqual(policy, .cancel)
-        }
-    }
-
-    @MainActor
-    func testWebViewDecidePolicyForNavigationResponse_allowsLoading_whenResponseIsLocalPDFFileAlreadyDownloaded() {
-        let subject = createSubject()
-        let tab = createTab()
-
-        let pdfURL = URL(string: "https://example.com/test.pdf")!
-        let localPDFURL = URL(string: "file://test.pdf")!
-        let response = URLResponse(
-            url: localPDFURL,
-            mimeType: MIMEType.PDF,
-            expectedContentLength: 0,
-            textEncodingName: nil
-        )
-        fileManager.fileExists = true
-        subject.pendingRequests[pdfURL.absoluteString] = URLRequest(url: pdfURL)
-        tab.restoreTemporaryDocumentSession([localPDFURL: pdfURL])
-        tabManager.tabs = [tab]
-
-        subject.webView(tab.webView!, decidePolicyFor: MockNavigationResponse(response: response)) { policy in
-            XCTAssertEqual(policy, .allow)
-        }
-    }
-
     // MARK: - Authentication
 
     @MainActor
@@ -402,6 +358,20 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
             return WebEngineIntegrationRefactor(enabled: enabled)
         }
     }
+
+    func testWebViewDidFinishNavigation_takeScreenshotWhenTabIsSelected() {
+        let subject = createSubject()
+        let screenshotHelper = MockScreenshotHelper(controller: subject)
+        subject.screenshotHelper = screenshotHelper
+
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+
+        subject.webView(tab.webView!, didFinish: nil)
+
+        XCTAssertTrue(screenshotHelper.takeScreenshotCalled)
+    }
 }
 
 class MockNavigationAction: WKNavigationAction {
@@ -419,33 +389,6 @@ class MockNavigationAction: WKNavigationAction {
     init(url: URL, type: WKNavigationType? = nil) {
         self.type = type
         self.urlRequest = URLRequest(url: url)
-    }
-}
-
-class MockNavigationResponse: WKNavigationResponse {
-    private let _response: URLResponse
-    private let _isMainFrame: Bool
-    private let _canShowMIMEType: Bool
-
-    override var response: URLResponse {
-        return _response
-    }
-
-    override var isForMainFrame: Bool {
-        return _isMainFrame
-    }
-
-    override var canShowMIMEType: Bool {
-        return _canShowMIMEType
-    }
-
-    init(response: URLResponse,
-         canShowMIMEType: Bool = true,
-         isMainFrame: Bool = true) {
-        self._response = response
-        self._isMainFrame = isMainFrame
-        self._canShowMIMEType = canShowMIMEType
-        super.init()
     }
 }
 

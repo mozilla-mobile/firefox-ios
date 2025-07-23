@@ -57,12 +57,25 @@ final class MainMenuMiddleware: FeatureFlaggable {
     }
 
     lazy var mainMenuProvider: Middleware<AppState> = { state, action in
-        guard let action = action as? MainMenuAction else { return }
-        let isHomepage = action.telemetryInfo?.isHomepage ?? false
-
-        self.handleMainMenuActions(action: action, isHomepage: isHomepage)
+        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
+        // because we dispatch to the main thread in the store. We will want to
+        // also isolate that to the @MainActor to remove this.
+        guard Thread.isMainThread else {
+            self.logger.log(
+                "Main Menu Middleware is not being called from the main thread!",
+                level: .fatal,
+                category: .tabs
+            )
+            return
+        }
+        MainActor.assumeIsolated {
+            guard let action = action as? MainMenuAction else { return }
+            let isHomepage = action.telemetryInfo?.isHomepage ?? false
+            self.handleMainMenuActions(action: action, isHomepage: isHomepage)
+        }
     }
 
+    @MainActor
     private func handleMainMenuActions(action: MainMenuAction, isHomepage: Bool) {
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
@@ -143,9 +156,6 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuDetailsActionType.tapDismissView:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
 
-        case MainMenuActionType.tapMoreOptions:
-            handleTapMoreOptions(action: action)
-
         default: break
         }
     }
@@ -184,6 +194,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         telemetry.toolsSubmenuOptionTapped(with: false, and: option)
     }
 
+    @MainActor
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
         if !isMenuRedesignOn {
             guard let accountData = getAccountData() else {
@@ -206,6 +217,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func dispatchUpdateBannerVisibility(action: MainMenuAction) {
         store.dispatchLegacy(
             MainMenuAction(
@@ -301,15 +313,6 @@ final class MainMenuMiddleware: FeatureFlaggable {
                            subtitle: subtitle,
                            warningIcon: warningIcon,
                            iconURL: iconURL)
-    }
-
-    private func handleTapMoreOptions(action: MainMenuAction) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            UIAccessibility.post(
-                notification: .announcement,
-                argument: String.MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint
-            )
-        }
     }
 
     private func handleTelemetryFor(for navigationDestination: MainMenuNavigationDestination,

@@ -102,7 +102,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     var topSiteViewModel: TopSitesViewModel
     var bookmarksViewModel: BookmarksViewModel
     var jumpBackInViewModel: JumpBackInViewModel
-    var pocketViewModel: PocketViewModel
+    var pocketViewModel: StoryViewModel
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
     var shouldDisplayHomeTabBanner: Bool {
@@ -147,11 +147,11 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         self.bookmarksViewModel = BookmarksViewModel(profile: profile,
                                                      theme: theme,
                                                      wallpaperManager: wallpaperManager)
-        let pocketDataAdaptor = PocketDataAdaptorImplementation(pocketAPI: PocketProvider(prefs: profile.prefs))
-        self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor,
-                                               theme: theme,
-                                               prefs: profile.prefs,
-                                               wallpaperManager: wallpaperManager)
+        let pocketDataAdaptor = StoryDataAdaptorImplementation(merinoAPI: MerinoProvider(prefs: profile.prefs))
+        self.pocketViewModel = StoryViewModel(pocketDataAdaptor: pocketDataAdaptor,
+                                              theme: theme,
+                                              prefs: profile.prefs,
+                                              wallpaperManager: wallpaperManager)
         pocketDataAdaptor.delegate = pocketViewModel
 
         self.customizeButtonViewModel = CustomizeHomepageSectionViewModel(theme: theme)

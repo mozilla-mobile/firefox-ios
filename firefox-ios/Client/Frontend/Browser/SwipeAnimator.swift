@@ -22,12 +22,14 @@ private let DefaultParameters =
         minExitVelocity: 800,
         recenterAnimationDuration: 0.15)
 
+@MainActor
 protocol SwipeAnimatorDelegate: AnyObject {
     func swipeAnimator(_ animator: SwipeAnimator)
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool
 }
 
-class SwipeAnimator: NSObject {
+@MainActor
+final class SwipeAnimator: NSObject {
     weak var delegate: SwipeAnimatorDelegate?
     weak var animatingView: UIView?
 

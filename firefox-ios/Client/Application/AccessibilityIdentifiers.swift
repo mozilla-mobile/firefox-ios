@@ -208,7 +208,7 @@ struct AccessibilityIdentifiers {
         struct SectionTitles {
             static let jumpBackIn = "jumpBackInTitle"
             static let bookmarks = "bookmarksTitle"
-            static let pocket = "pocketTitle"
+            static let merino = "pocketTitle"
             static let topSites = "topSitesTitle"
         }
 
@@ -706,6 +706,12 @@ struct AccessibilityIdentifiers {
             static let blockAudio = "BlockAudio"
             static let blockAudioAndVideo = "BlockAudioAndVideo"
         }
+    }
+
+    struct Summarizer {
+        static let closeButton = "closeButton"
+        static let loadingLabel = "summaryLoadingLabel"
+        static let summaryTextView = "summaryTextView"
     }
 
     struct ShareTo {

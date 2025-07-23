@@ -10,12 +10,11 @@ import XCTest
 
 final class MockTopSitesManager: TopSitesManagerInterface {
     var recalculateTopSitesCalledCount = 0
-
-    var removeTopSiteCalledCount = 0
     var pinTopSiteCalledCount = 0
-    var unpinTopSiteCalledCount = 0
 
-    private let lock = NSLock()
+    // We add these completions since this method is called asynchronously
+    var removeTopSiteCalled: () -> Void = {}
+    var unpinTopSiteCalled: () -> Void = {}
 
     func getOtherSites() async -> [TopSiteConfiguration] {
         return createSites(count: 15, subtitle: ": otherSites")
@@ -27,7 +26,6 @@ final class MockTopSitesManager: TopSitesManagerInterface {
     }
 
     func recalculateTopSites(otherSites: [TopSiteConfiguration], sponsoredSites: [Site]) -> [TopSiteConfiguration] {
-        // We add this completion since this method is called in an asynchronous
         recalculateTopSitesCalledCount += 1
         XCTAssertTrue(Thread.isMainThread)
         return createSites(subtitle: ": total top sites")
@@ -43,15 +41,15 @@ final class MockTopSitesManager: TopSitesManagerInterface {
         return sites
     }
 
-    func removeTopSite(_ site: Site) {
-        removeTopSiteCalledCount += 1
+    func removeTopSite(_ site: Site) async {
+        removeTopSiteCalled()
     }
 
     func pinTopSite(_ site: Site) {
         pinTopSiteCalledCount += 1
     }
 
-    func unpinTopSite(_ site: Site) {
-        unpinTopSiteCalledCount += 1
+    func unpinTopSite(_ site: Site) async {
+        unpinTopSiteCalled()
     }
 }

@@ -11,7 +11,7 @@ class DependencyHelperMock {
         injectedWindowManager: WindowManager? = nil,
         injectedTabManager: TabManager? = nil,
         injectedMicrosurveyManager: MicrosurveyManager? = nil,
-        injectedPocketManager: PocketManagerProvider? = nil
+        injectedMerinoManager: MerinoManagerProvider? = nil
     ) {
         AppContainer.shared.reset()
 
@@ -57,8 +57,8 @@ class DependencyHelperMock {
         let microsurveyManager: MicrosurveyManager = injectedMicrosurveyManager ?? MockMicrosurveySurfaceManager()
         AppContainer.shared.register(service: microsurveyManager as MicrosurveyManager)
 
-        let pocketManager: PocketManagerProvider = injectedPocketManager ?? MockPocketManager()
-        AppContainer.shared.register(service: pocketManager as PocketManagerProvider)
+        let merinoManager: MerinoManagerProvider = injectedMerinoManager ?? MockMerinoManager()
+        AppContainer.shared.register(service: merinoManager as MerinoManagerProvider)
 
         let documentLogger = DocumentLogger(logger: MockLogger())
         AppContainer.shared.register(service: documentLogger)

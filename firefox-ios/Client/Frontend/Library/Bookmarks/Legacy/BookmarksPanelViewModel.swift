@@ -11,7 +11,15 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import enum MozillaAppServices.BookmarkRoots
 
-final class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
+let LocalizedRootBookmarkFolderStrings = [
+    BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
+    BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
+    BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
+    BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile,
+    LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
+]
+
+final class BookmarksPanelViewModel {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }
@@ -141,13 +149,7 @@ final class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
     /// we need to account for this when saving bookmark index in A-S. This is done by subtracting
     /// the Local Desktop Folder number of rows it takes to the actual index.
     func getNewIndex(from index: Int) -> Int {
-        var isDesktopFolderPresent = false
-        if isBookmarkRefactorEnabled && hasDesktopFolders {
-            isDesktopFolderPresent = true
-        } else if isBookmarkRefactorEnabled == false {
-            isDesktopFolderPresent = true
-        }
-        guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID, isDesktopFolderPresent else {
+        guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID, hasDesktopFolders else {
             return max(index, 0)
         }
 
@@ -216,10 +218,10 @@ final class BookmarksPanelViewModel: BookmarksRefactorFeatureFlagProvider {
     // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
     // subfolders
     private func createDesktopBookmarksFolder(completion: @escaping () -> Void) {
-        self.bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
+        bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
             switch result {
             case .success(let bookmarkCount):
-                if bookmarkCount > 0 || !self.isBookmarkRefactorEnabled {
+                if bookmarkCount > 0 {
                     self.hasDesktopFolders = true
                     let desktopFolder = LocalDesktopFolder()
                     self.mainQueue.async {

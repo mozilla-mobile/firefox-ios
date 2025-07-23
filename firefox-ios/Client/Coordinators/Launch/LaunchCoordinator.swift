@@ -40,6 +40,7 @@ final class LaunchCoordinator: BaseCoordinator,
         super.init(router: router)
     }
 
+    @MainActor
     func start(with launchType: LaunchType) {
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
@@ -241,6 +242,7 @@ final class LaunchCoordinator: BaseCoordinator,
     }()
 
     // MARK: - Intro
+    @MainActor
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
@@ -262,7 +264,7 @@ final class LaunchCoordinator: BaseCoordinator,
             themeManager: themeManager,
             viewModel: OnboardingFlowViewModel(
                 onboardingCards: onboardingCards,
-                onActionTap: { [weak self] action, cardName, completion in
+                onActionTap: { @MainActor [weak self] action, cardName, completion in
                     self?.onboardingService.handleAction(
                         action,
                         from: cardName,

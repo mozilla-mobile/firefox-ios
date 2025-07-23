@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-public enum ReaderModeFontType: String {
+public enum ReaderModeFontType: String, Sendable {
     case serif = "serif"
     case serifBold = "serif-bold"
     case sansSerif = "sans-serif"

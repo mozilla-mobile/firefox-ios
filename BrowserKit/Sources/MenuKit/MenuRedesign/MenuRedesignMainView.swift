@@ -128,6 +128,19 @@ public final class MenuRedesignMainView: UIView,
         self.isPhoneLandscape = isPhoneLandscape
     }
 
+    public func announceAccessibility(expandedHint: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            UIAccessibility.post(notification: .announcement, argument: expandedHint)
+
+            guard let section = self?.menuData.first,
+               let optionalElementIndex = section.options.firstIndex(where: { $0.isOptional }),
+               let firstCell = self?.tableView.tableView.visibleCells[optionalElementIndex]
+            else { return }
+
+            UIAccessibility.post(notification: .layoutChanged, argument: firstCell)
+        }
+    }
+
     // MARK: - Interface
     public func reloadDataView(with data: [MenuSection]) {
         setupView(with: data)

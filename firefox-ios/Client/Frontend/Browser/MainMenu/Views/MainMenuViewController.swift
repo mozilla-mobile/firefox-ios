@@ -432,6 +432,11 @@ class MainMenuViewController: UIViewController,
         changeDetentIfNecessary()
         removeHintViewIfNecessary()
         reloadTableView(with: menuState.menuElements)
+
+        if menuState.moreCellTapped {
+            let expandedHint = String.MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint
+            menuRedesignContent.announceAccessibility(expandedHint: expandedHint)
+        }
     }
 
     private func dispatchCloseMenuAction() {

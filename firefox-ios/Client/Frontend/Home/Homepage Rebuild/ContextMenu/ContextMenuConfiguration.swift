@@ -19,7 +19,7 @@ struct ContextMenuConfiguration: Equatable {
             return Site.createBasicSite(url: config.url.absoluteString, title: config.titleText)
         case .bookmark(let state):
             return Site.createBasicSite(url: state.site.url, title: state.site.title)
-        case .pocket(let state):
+        case .merino(let state):
             return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
         default:
             return nil

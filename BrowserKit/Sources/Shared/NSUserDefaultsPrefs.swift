@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-open class NSUserDefaultsPrefs: Prefs {
+open class NSUserDefaultsPrefs: Prefs, @unchecked Sendable {
     fileprivate let prefixWithDot: String
     fileprivate let userDefaults: UserDefaults
 

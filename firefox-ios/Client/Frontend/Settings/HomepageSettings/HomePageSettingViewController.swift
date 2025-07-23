@@ -20,7 +20,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     var isPocketSectionEnabled: Bool {
-        return PocketProvider.islocaleSupported(Locale.current.identifier)
+        return MerinoProvider.islocaleSupported(Locale.current.identifier)
     }
 
     // MARK: - Initializers
@@ -171,10 +171,10 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Stories
             ) { value in
                 store.dispatchLegacy(
-                    PocketAction(
+                    MerinoAction(
                         isEnabled: value,
                         windowUUID: self.windowUUID,
-                        actionType: PocketActionType.toggleShowSectionSetting
+                        actionType: MerinoActionType.toggleShowSectionSetting
                     )
                 )
             }

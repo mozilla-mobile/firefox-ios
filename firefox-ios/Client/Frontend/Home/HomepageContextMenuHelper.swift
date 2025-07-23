@@ -29,7 +29,6 @@ enum BookmarkAction {
 }
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol,
-                                 BookmarksRefactorFeatureFlagProvider,
                                  CanRemoveQuickActionBookmark {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     private let profile: Profile
@@ -75,7 +74,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         if sectionType == .topSites,
            let topSitesActions = getTopSitesActions(site: site, with: sourceView) {
             actions = topSitesActions
-        } else if sectionType == .pocket,
+        } else if sectionType == .merino,
                   let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
         } else if sectionType == .bookmarks,
@@ -131,8 +130,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     private func getPocketActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
         guard let siteURL = site.url.asURL else { return nil }
 
-        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .pocket)
-        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .pocket)
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .merino)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .merino)
         let shareAction = getShareAction(site: site, sourceView: sourceView)
         let bookmarkAction = getBookmarkAction(site: site)
 
@@ -147,7 +146,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         ) { _ in
             self.delegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
 
-            if sectionType == .pocket {
+            if sectionType == .merino {
                 let originExtras = TelemetryWrapper.getOriginExtras(isZeroSearch: self.viewModel.isZeroSearch)
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,
@@ -206,9 +205,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
         })
     }
 
-    /// Handles share from long press on pocket articles, jump back in websites, bookmarks, etc. on the home screen.
+    /// Handles share from long press on merino articles, jump back in websites, bookmarks, etc. on the home screen.
     /// - Parameters:
-    ///   - site: Site for pocket article
+    ///   - site: Site for merino article
     ///   - sourceView: View to show the popover
     /// - Returns: Share action
     private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {

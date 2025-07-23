@@ -8,6 +8,7 @@ import Shared
 
 /// A class that adheres to all the requirements for a profile's pinned sites
 class MockablePinnedSites: PinnedSites {
+    func remove(pinnedSite site: Storage.Site) async throws { }
     var addPinnedTopSiteCalledCount = 0
     func removeFromPinnedTopSites(_ site: Site) -> Success { fatalError() }
     func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> { fatalError()}

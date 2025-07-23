@@ -33,10 +33,10 @@ class BrowserViewController: UIViewController,
                              BrowserFrameInfoProvider,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
-                             BookmarksRefactorFeatureFlagProvider,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
+                             BrowserContentHiding,
                              BrowserStatusBarScrollDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
@@ -322,6 +322,10 @@ class BrowserViewController: UIViewController,
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
+    var isSummarizeFeatureEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -814,6 +818,25 @@ class BrowserViewController: UIViewController,
         dispatchStartAtHomeAction()
     }
 
+    // MARK: - Summarize
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        super.motionEnded(motion, with: event)
+        guard motion == .motionShake, isSummarizeFeatureEnabled else { return }
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return }
+        navigationHandler?.showSummarizePanel()
+    }
+
+    // MARK: - BrowserContentHiding
+    func showBrowserContent() {
+        contentContainer.isHidden = false
+        scrollController.showToolbars(animated: false)
+    }
+
+    func hideBrowserContent() {
+        contentContainer.isHidden = true
+        scrollController.hideToolbars(animated: true)
+    }
+
     // MARK: - Start At Home
     private func dispatchStartAtHomeAction() {
         let startAtHomeAction = StartAtHomeAction(
@@ -908,11 +931,7 @@ class BrowserViewController: UIViewController,
                 .removeFromReadingList:
             showToast()
         case .addBookmark(let urlString):
-            if isBookmarkRefactorEnabled {
-                showBookmarkToast(urlString: urlString, action: .add)
-            } else {
-                showToast()
-            }
+            showBookmarkToast(urlString: urlString, action: .add)
         default:
             let viewModel = ButtonToastViewModel(
                 labelText: toast.title,
@@ -983,6 +1002,7 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
         topTabsViewController?.applyTheme()
+        webPagePreview.applyTheme(theme: theme)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
         listenForThemeChange(view)
@@ -1260,7 +1280,8 @@ class BrowserViewController: UIViewController,
             statusBarOverlay: statusBarOverlay,
             tabManager: tabManager,
             windowUUID: windowUUID,
-            screenshotHelper: screenshotHelper
+            screenshotHelper: screenshotHelper,
+            prefs: profile.prefs
         )
     }
 
@@ -1300,6 +1321,9 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: false)
             addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
                 return self?.browserDelegate?.homepageScreenshotTool()
+            }
+            addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
+                return self?.newTabSettings
             }
         }
     }
@@ -1383,7 +1407,7 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
+            statusBarOverlay.bottomAnchor.constraint(equalTo: header.bottomAnchor)
         ])
         NSLayoutConstraint.activate(statusBarOverlayConstraints)
 
@@ -2140,12 +2164,9 @@ class BrowserViewController: UIViewController,
     private func showBookmarkToast(urlString: String? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
-            if !isBookmarkRefactorEnabled {
-                showToast(urlString, title, message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
-            }
             // Get the folder title using the recent bookmark folder pref
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
-            else if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
+            if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
                 recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
                 profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { result in
                     guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
@@ -2178,20 +2199,7 @@ class BrowserViewController: UIViewController,
                   let parentGuid = bookmarkItem.parentGUID else { return }
             self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
                 guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
-
-                if self.isBookmarkRefactorEnabled {
-                    self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
-                } else {
-                    let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
-                                                                     windowUUID: self.windowUUID,
-                                                                     bookmarkNode: bookmarkItem,
-                                                                     parentBookmarkFolder: parentFolder,
-                                                                     presentedFromToast: true,
-                                                                     deleteBookmark: {})
-                    let controller: DismissableNavigationViewController
-                    controller = DismissableNavigationViewController(rootViewController: detailController)
-                    self.present(controller, animated: true, completion: nil)
-                }
+                self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
             }
         }
     }
@@ -4660,7 +4668,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     /// Used to get the context menu save image in the context menu, shown from long press on webview links
-    func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
+    func getImageData(_ url: URL, success: @Sendable @escaping (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
@@ -4804,8 +4812,8 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && NewTabAccessors.getHomePage(profile.prefs) == .homePage
-        let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
+        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && newTabSettings == .homePage
+        let homePageURL = NewTabHomePageAccessors.getHomePage(profile.prefs)
 
         if shouldLoadCustomHomePage, let url = homePageURL {
             openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)

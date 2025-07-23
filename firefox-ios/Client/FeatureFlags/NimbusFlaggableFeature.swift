@@ -13,7 +13,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
     case appearanceMenu
-    case bookmarksRefactor
     case bottomSearchBar
     case deeplinkOptimizationRefactor
     case defaultZoomFeature
@@ -66,7 +65,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
         switch self {
         case    .appearanceMenu,
                 .addressBarMenu,
-                .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .hntTopSitesVisualRefresh,
@@ -128,7 +126,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .appearanceMenu,
                 .addressAutofillEdit,
                 .addressBarMenu,
-                .bookmarksRefactor,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,

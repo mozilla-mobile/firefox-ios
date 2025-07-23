@@ -82,6 +82,61 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(cell)
     }
 
+    func testPinToShortcuts_andThenRemovingShortcuts_topSitesVisualRefreshFlagEnabled() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
+        app.launch()
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+        navigator.performAction(Action.PinToTopSitesPAM)
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let shortcutCell = itemCell.staticTexts["Example Domain"]
+        mozWaitForElementToExist(shortcutCell)
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images[StandardImageIdentifiers.Large.pinFill])
+        } else {
+            // No identifier is available for iOS 17 amd below
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images.element(boundBy: 1))
+        }
+
+        let pinnedShortcutCell = app.collectionViews.links["Pinned: Example Domain"]
+        pinnedShortcutCell.press(forDuration: 2)
+        app.tables.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+
+        mozWaitForElementToNotExist(pinnedShortcutCell)
+        mozWaitForElementToNotExist(shortcutCell)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3102521
+    func testPinToShortcuts_andThenRemovingShortcuts_topSitesVisualRefreshFlagDisabled() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hnt-top-sites-visual-refresh-feature")
+        app.launch()
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+        navigator.performAction(Action.PinToTopSitesPAM)
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let shortcutCell = itemCell.staticTexts["Example Domain"]
+        mozWaitForElementToExist(shortcutCell)
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+        } else {
+            // No identifier is available for iOS 17 amd below
+            mozWaitForElementToExist(app.links["Pinned: Example Domain"].images.element(boundBy: 1))
+        }
+
+        let pinnedShortcutCell = app.collectionViews.links["Pinned: Example Domain"]
+        pinnedShortcutCell.press(forDuration: 2)
+        app.tables.cells.buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
+
+        mozWaitForElementToNotExist(shortcutCell)
+        mozWaitForElementToNotExist(pinnedShortcutCell)
+    }
+
     private func openNewShareSheet() {
         app.launch()
         navigator.openURL("example.com")

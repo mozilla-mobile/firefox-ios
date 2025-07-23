@@ -11,8 +11,7 @@ import SiteImageView
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider,
-                            FeatureFlaggable {
+class TabManagerMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager

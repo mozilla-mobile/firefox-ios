@@ -10,6 +10,7 @@ protocol StatusBarScrollDelegate: AnyObject {
 }
 
 protocol BrowserStatusBarScrollDelegate: AnyObject {
+    @MainActor
     func homepageScrollViewDidScroll(scrollOffset: CGFloat)
 }
 
@@ -18,7 +19,7 @@ protocol BrowserStatusBarScrollDelegate: AnyObject {
 /// - On homepage with bottom URL bar, the status bar overlay alpha changes when the user scrolls.
 /// - In all other cases apart from this one, the status bar should be opaque
 /// - With top tabs, the status bar overlay has a different color than without it
-class StatusBarOverlay: UIView,
+final class StatusBarOverlay: UIView,
                         ThemeApplicable,
                         StatusBarScrollDelegate,
                         SearchBarLocationProvider,

@@ -9,7 +9,8 @@ public struct CloseButtonViewModel {
     public let a11yLabel: String
     public let a11yIdentifier: String
 
-    public init(a11yLabel: String, a11yIdentifier: String) {
+    public init(a11yLabel: String,
+                a11yIdentifier: String) {
         self.a11yLabel = a11yLabel
         self.a11yIdentifier = a11yIdentifier
     }

@@ -146,6 +146,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testHomepageScreenshotTool_returnsHomepage_forNormalTab() throws {
         let subject = createSubject()
+        subject.browserViewController = browserViewController
         subject.showHomepage(
             overlayManager: overlayModeManager,
             isZeroSearch: false,
@@ -157,8 +158,36 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(screenshotTool is HomepageViewController)
     }
 
+    func testHomepageScreenshotTool_returnsNil_forNewBlankNewTab() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        browserViewController.overrideNewTabSettings = .blankPage
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
+        XCTAssertNil(subject.homepageScreenshotTool())
+    }
+
+    func testHomepageScreenshotTool_returnsNil_forNewCustomURLNewTab() throws {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        browserViewController.overrideNewTabSettings = .homePage
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
+
+        XCTAssertNil(subject.homepageScreenshotTool())
+    }
+
     func testHomepageScreenshotTool_returnsLegacyHomepage_forNormalTab() throws {
         let subject = createSubject()
+        browserViewController.overrideNewTabSettings = .topSites
         subject.showLegacyHomepage(
             inline: false,
             toastContainer: UIView(),
@@ -175,6 +204,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     @MainActor
     func testHomepageScreenshotTool_returnsPrivateHomepage_forPrivateTab() throws {
         let subject = createSubject()
+        browserViewController.overrideNewTabSettings = .topSites
         let tab = tabManager.addTab(nil, afterTab: nil, zombie: false, isPrivate: true)
         tabManager.selectTab(tab)
         subject.showPrivateHomepage(overlayManager: overlayModeManager)
@@ -522,6 +552,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         XCTAssertEqual(browserViewController.showDocumentLoadingViewCalled, 0)
         XCTAssertEqual(browserViewController.removeDocumentLoadingViewCalled, 1)
+    }
+
+    @MainActor
+    func testShowSummarizePanel() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showSummarizePanel()
+
+        let childCoordinator = subject.childCoordinators.first
+        XCTAssertTrue(childCoordinator is SummarizeCoordinator)
     }
 
     // MARK: - ParentCoordinatorDelegate

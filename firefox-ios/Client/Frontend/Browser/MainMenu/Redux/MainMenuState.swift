@@ -81,6 +81,7 @@ struct MainMenuState: ScreenState, Equatable {
     var accountIcon: UIImage?
     var isBrowserDefault: Bool
     var isPhoneLandscape: Bool
+    var moreCellTapped: Bool
 
     var siteProtectionsData: SiteProtectionsData?
 
@@ -111,7 +112,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: mainMenuState.accountIcon,
             siteProtectionsData: mainMenuState.siteProtectionsData,
             isBrowserDefault: mainMenuState.isBrowserDefault,
-            isPhoneLandscape: mainMenuState.isPhoneLandscape
+            isPhoneLandscape: mainMenuState.isPhoneLandscape,
+            moreCellTapped: mainMenuState.moreCellTapped
         )
     }
 
@@ -127,7 +129,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: nil,
             siteProtectionsData: nil,
             isBrowserDefault: false,
-            isPhoneLandscape: false
+            isPhoneLandscape: false,
+            moreCellTapped: false
         )
     }
 
@@ -142,7 +145,8 @@ struct MainMenuState: ScreenState, Equatable {
         accountIcon: UIImage?,
         siteProtectionsData: SiteProtectionsData?,
         isBrowserDefault: Bool,
-        isPhoneLandscape: Bool
+        isPhoneLandscape: Bool,
+        moreCellTapped: Bool
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
@@ -155,6 +159,7 @@ struct MainMenuState: ScreenState, Equatable {
         self.siteProtectionsData = siteProtectionsData
         self.isBrowserDefault = isBrowserDefault
         self.isPhoneLandscape = isPhoneLandscape
+        self.moreCellTapped = moreCellTapped
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -213,7 +218,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -226,7 +232,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -241,7 +248,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: action.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -256,7 +264,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: action.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -271,7 +280,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: action.isPhoneLandscape
+            isPhoneLandscape: action.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -286,7 +296,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: action.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -307,7 +318,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -330,7 +342,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: true
         )
     }
 
@@ -346,7 +359,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -362,7 +376,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -376,7 +391,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -390,7 +406,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -404,7 +421,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 
@@ -418,7 +436,8 @@ struct MainMenuState: ScreenState, Equatable {
             accountIcon: state.accountIcon,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: false
         )
     }
 }

@@ -50,6 +50,7 @@ protocol SearchBarPreferenceDelegate: AnyObject {
 protocol SearchBarLocationProvider: FeatureFlaggable {
     var isSearchBarLocationFeatureEnabled: Bool { get }
     var searchBarPosition: SearchBarPosition { get }
+    @MainActor
     var isBottomSearchBar: Bool { get }
 }
 
