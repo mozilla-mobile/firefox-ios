@@ -54,9 +54,9 @@ class SummarizeCoordinator: BaseCoordinator {
                 guard let self else { return }
                 parentCoordinatorDelegate?.didFinish(from: self)
                 browserContentHiding?.showBrowserContent()
-            } onShouldShowTabSnapshot: { [weak self] in
-                self?.browserContentHiding?.hideBrowserContent()
-            }
+        } onShouldShowTabSnapshot: { [weak self] in
+            self?.browserContentHiding?.hideBrowserContent()
+        }
 
         let controller = SummarizeController(windowUUID: windowUUID, viewModel: model)
         controller.modalTransitionStyle = .crossDissolve
