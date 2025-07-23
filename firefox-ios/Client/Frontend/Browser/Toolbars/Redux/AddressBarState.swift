@@ -12,7 +12,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     var leadingPageActions: [ToolbarActionConfiguration]
     var trailingPageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
-    var borderPosition: AddressToolbarBorderPosition?
+    let borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
     var lockIconImageName: String?
