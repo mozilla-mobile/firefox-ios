@@ -50,14 +50,13 @@ class SummarizeCoordinator: BaseCoordinator {
                 a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeButton
             ),
             tabSnapshot: browserSnapshot,
-            tabSnapshotTopOffset: browserSnapshotTopOffset
-        ) { [weak self] in
-            guard let self else { return }
-            parentCoordinatorDelegate?.didFinish(from: self)
-            browserContentHiding?.showBrowserContent()
-        } onShouldShowTabSnapshot: { [weak self] in
-            self?.browserContentHiding?.hideBrowserContent()
-        }
+            tabSnapshotTopOffset: browserSnapshotTopOffset) { [weak self] in
+                guard let self else { return }
+                parentCoordinatorDelegate?.didFinish(from: self)
+                browserContentHiding?.showBrowserContent()
+            } onShouldShowTabSnapshot: { [weak self] in
+                self?.browserContentHiding?.hideBrowserContent()
+            }
 
         let controller = SummarizeController(windowUUID: windowUUID, viewModel: model)
         controller.modalTransitionStyle = .crossDissolve
