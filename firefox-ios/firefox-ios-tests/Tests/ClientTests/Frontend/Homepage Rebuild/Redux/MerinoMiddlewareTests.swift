@@ -27,6 +27,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
+    @MainActor
     func test_initializeAction_getPocketData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
@@ -49,6 +50,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
+    @MainActor
     func test_enterForegroundAction_getPocketData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let action = HomepageAction(
@@ -75,6 +77,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
+    @MainActor
     func test_toggleShowSectionSetting_getPocketData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let action = HomepageAction(
@@ -101,6 +104,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
+    @MainActor
     func test_tapOnHomepagePocketCellAction_sendTelemetryData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let config = OpenPocketTelemetryConfig(isZeroSearch: false, position: 0)
@@ -135,6 +139,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
     }
 
+    @MainActor
     func test_tapOnHomepagePocketCell_doesNotSendTelemetryData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let action = MerinoAction(
@@ -147,6 +152,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 0)
     }
 
+    @MainActor
     func test_viewedSectionAction_sendTelemetryData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let action = MerinoAction(windowUUID: .XCTestDefaultUUID, actionType: MerinoActionType.viewedSection)
@@ -162,6 +168,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
+    @MainActor
     func test_tappedOnOpenNewPrivateTabAction_sendTelemetryData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let action = ContextMenuAction(
@@ -180,6 +187,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
+    @MainActor
     func test_tappedOnOpenNewPrivateTabAction_doesNotSendTelemetryData() {
         let subject = createSubject(merinoManager: merinoManager)
         let action = ContextMenuAction(
@@ -194,6 +202,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
+    @MainActor
     private func createSubject(merinoManager: MockMerinoManager) -> MerinoMiddleware {
         return MerinoMiddleware(
             merinoManager: merinoManager,
