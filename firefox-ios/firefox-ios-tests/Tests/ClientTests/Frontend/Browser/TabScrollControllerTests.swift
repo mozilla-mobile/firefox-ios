@@ -42,7 +42,7 @@ final class TabScrollControllerTests: XCTestCase {
         mockGesture.gestureTranslation = CGPoint(x: 0, y: 100)
         subject.handlePan(mockGesture)
 
-        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.collapsed)
+        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.collapsed)
     }
 
     func testHandlePan_ScrollingDown() {
@@ -52,7 +52,7 @@ final class TabScrollControllerTests: XCTestCase {
         mockGesture.gestureTranslation = CGPoint(x: 0, y: -100)
         subject.handlePan(mockGesture)
 
-        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.visible)
+        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.visible)
     }
 
     func testShowToolbar_AfterHidingWithScroll() {
@@ -65,7 +65,7 @@ final class TabScrollControllerTests: XCTestCase {
 
         // Force call to showToolbars like clicking on top bar area
         subject.showToolbars(animated: true)
-        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.visible)
+        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.visible)
         XCTAssertEqual(subject.header?.alpha, 1)
     }
 
@@ -78,7 +78,7 @@ final class TabScrollControllerTests: XCTestCase {
         subject.handlePan(mockGesture)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
 
-        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.visible)
+        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.visible)
         XCTAssertEqual(subject.header?.alpha, 1)
     }
 
@@ -91,7 +91,7 @@ final class TabScrollControllerTests: XCTestCase {
         subject.handlePan(mockGesture)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
 
-        XCTAssertEqual(subject.toolbarState, TabScrollController.ToolbarState.collapsed)
+        XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.collapsed)
     }
 
     func testDidSetTab_addsPullRefreshViewToScrollView() {
@@ -286,7 +286,7 @@ final class TabScrollControllerTests: XCTestCase {
     }
 
     // MARK: - Setup
-    private func setupTabScroll(with subject: TabScrollController) {
+    private func setupTabScroll(with subject: LegacyTabScrollController) {
         tab.createWebview(configuration: .init())
         tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
@@ -295,7 +295,7 @@ final class TabScrollControllerTests: XCTestCase {
         subject.header = header
     }
 
-    private func createSubject() -> TabScrollController {
+    private func createSubject() -> LegacyTabScrollController {
         let subject = TabScrollController(windowUUID: .XCTestDefaultUUID)
         trackForMemoryLeaks(subject)
         return subject
