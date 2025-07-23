@@ -257,6 +257,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3105073
     func testCloseTabFromLongPressHidesSearchBar_homepageSearchBarExperimentOn() throws {
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
