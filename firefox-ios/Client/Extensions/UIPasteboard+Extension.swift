@@ -25,15 +25,15 @@ extension UIPasteboard {
     private var syncURL: URL? {
         return UIPasteboard.general.string.flatMap {
             guard let url = URL(string: $0),
-                    url.isWebPage()
+                  url.isWebPage()
             else { return nil }
             return url
         }
     }
 
     /// Preferred method to get URLs out of the clipboard.
-    func asyncURL(completionHandler: @escaping (URL?) -> Void) {
-        DispatchQueue.global().async {
+    func asyncURL(completionHandler: @Sendable @escaping (URL?) -> Void) {
+        Task {
             completionHandler(self.syncURL)
         }
     }

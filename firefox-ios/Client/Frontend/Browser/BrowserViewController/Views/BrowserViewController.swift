@@ -1008,9 +1008,17 @@ class BrowserViewController: UIViewController,
         listenForThemeChange(view)
         setupAccessibleActions()
 
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs,
-                                                                tabManager: tabManager)
-        clipboardBarDisplayHandler?.delegate = self
+        if #available(iOS 16.0, *) {
+            let clipboardHandler = DefaultClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                     windowUUID: windowUUID)
+            clipboardHandler.delegate = self
+            self.clipboardBarDisplayHandler = clipboardHandler
+        } else {
+            let clipboardHandler = LegacyClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                    tabManager: tabManager)
+            clipboardHandler.delegate = self
+            self.clipboardBarDisplayHandler = clipboardHandler
+        }
 
         navigationToolbarContainer.toolbarDelegate = self
         scrollController.header = header
@@ -3889,7 +3897,7 @@ class BrowserViewController: UIViewController,
     }
 }
 
-extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
+extension BrowserViewController: @preconcurrency LegacyClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
@@ -3909,9 +3917,11 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+        show(toast: toast, duration: LegacyClipboardBarDisplayHandler.UX.toastDelay)
     }
+}
 
+extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     @available(iOS 16.0, *)
     func shouldDisplay() {
         let viewModel = ButtonToastViewModel(
@@ -3928,15 +3938,14 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+        show(toast: toast, duration: DefaultClipboardBarDisplayHandler.UX.toastDelay)
     }
 
     override func paste(itemProviders: [NSItemProvider]) {
         for provider in itemProviders where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, error in
-                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
-
-                DispatchQueue.main.async {
+            _ = provider.loadObject(ofClass: URL.self) { url, _ in
+                DispatchQueue.main.async { [weak self] in
+                    let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
                     self?.openURLInNewTab(url, isPrivate: isPrivate)
                 }
             }
