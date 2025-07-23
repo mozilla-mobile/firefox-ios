@@ -23,12 +23,9 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
 
-    private lazy var header: UIView = {
-        let view = UIView()
-        view.backgroundColor = currentTheme().colors.layer1
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private lazy var header: UIView = .build { view in
+        view.backgroundColor = self.currentTheme().colors.layer1
+    }
 
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)

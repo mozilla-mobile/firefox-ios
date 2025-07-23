@@ -264,8 +264,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkTouFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.touFeature.value()
-        return config.status
+        return nimbus.features.touFeature.value().status
     }
 
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {

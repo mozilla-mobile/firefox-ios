@@ -140,6 +140,7 @@ class BrowserCoordinator: BaseCoordinator,
         guard browserViewController.embedContent(legacyHomepageViewController) else { return }
         self.legacyHomepageViewController = legacyHomepageViewController
         legacyHomepageViewController.scrollToTop()
+        showTermsOfUse()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
     }
@@ -1159,7 +1160,7 @@ class BrowserCoordinator: BaseCoordinator,
                                                             window: self.windowUUID),
               termsOfUseState.shouldShow() else { return }
 
-        let presenter = self.homepageViewController ?? self.browserViewController
+        let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
         presenter.present(TermsOfUseViewController(windowUUID: self.windowUUID), animated: true)
     }
 
