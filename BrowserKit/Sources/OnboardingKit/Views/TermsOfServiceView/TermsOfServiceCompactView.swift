@@ -36,7 +36,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
             ZStack {
-                AnimatedGradientMetalView()
+                AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                     .ignoresSafeArea()
                     .accessibilityHidden(true)
                 VStack {
