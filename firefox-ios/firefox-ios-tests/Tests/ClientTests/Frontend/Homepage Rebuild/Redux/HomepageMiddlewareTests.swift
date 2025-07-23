@@ -239,7 +239,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             actionType: HomepageActionType.initialize
         )
-        setupNimbusSearchBarTesting(isEnabled: true)
+
         let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
 
         mockStore.dispatchCalled = {
@@ -250,13 +250,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -284,13 +279,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -318,13 +308,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -352,13 +337,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -386,13 +366,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -419,13 +394,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -453,13 +423,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -486,13 +451,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -569,6 +529,207 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
     }
 
+    // MARK: - Spacer
+    func test_initializeAction_configuresSpacer() throws {
+        setupNimbusStoriesRedesignTesting(isEnabled: true)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
+        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
+
+        XCTAssertEqual(configuredSpacerActionCount, 1)
+        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
+        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, true)
+    }
+
+    func test_initializeAction_doesNotConfigureSpacer() throws {
+        setupNimbusStoriesRedesignTesting(isEnabled: false)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
+        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
+
+        XCTAssertEqual(configuredSpacerActionCount, 1)
+        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
+        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, false)
+    }
+
+    func test_viewWillTransitionAction_configuresSpacer() throws {
+        setupNimbusStoriesRedesignTesting(isEnabled: true)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.viewWillTransition
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
+        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
+
+        XCTAssertEqual(configuredSpacerActionCount, 1)
+        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
+        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, true)
+    }
+
+    func test_viewWillTransitionAction_doesNotConfigureSpacer() throws {
+        setupNimbusStoriesRedesignTesting(isEnabled: false)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.viewWillTransition
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
+        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
+
+        XCTAssertEqual(configuredSpacerActionCount, 1)
+        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
+        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, false)
+    }
+
+    func test_toolbarCancelEditAction_configuresSpacer() throws {
+        setupNimbusStoriesRedesignTesting(isEnabled: true)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.cancelEdit
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
+        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
+
+        XCTAssertEqual(configuredSpacerActionCount, 1)
+        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
+        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, true)
+    }
+
+    func test_toolbarCancelEditAction_doesNotConfigureSpacer() throws {
+        setupNimbusStoriesRedesignTesting(isEnabled: false)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.cancelEdit
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
+        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
+
+        XCTAssertEqual(configuredSpacerActionCount, 1)
+        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
+        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, false)
+    }
+
+    func test_navigateBackAction_configuresSpacer() throws {
+        setupNimbusStoriesRedesignTesting(isEnabled: true)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.navigateBack
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
+        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
+
+        XCTAssertEqual(configuredSpacerActionCount, 1)
+        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
+        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, true)
+    }
+
+    func test_navigateBackAction_doesNotConfigureSpacer() throws {
+        setupNimbusStoriesRedesignTesting(isEnabled: false)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.navigateBack
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
+        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
+
+        XCTAssertEqual(configuredSpacerActionCount, 1)
+        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
+        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, false)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> HomepageMiddleware {
         return HomepageMiddleware(
@@ -583,6 +744,27 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             return HomepageRedesignFeature(searchBar: isEnabled)
         }
+    }
+
+    private func setupNimbusStoriesRedesignTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(storiesRedesign: isEnabled)
+        }
+    }
+
+    private func getActionInfo(for actionType: HomepageMiddlewareActionType)
+    throws -> (HomepageAction, Int) {
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+
+        let action = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == actionType
+        }))
+
+        let actionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == actionType
+        }.count
+
+        return (action, actionCount)
     }
 
     // MARK: StoreTestUtility
