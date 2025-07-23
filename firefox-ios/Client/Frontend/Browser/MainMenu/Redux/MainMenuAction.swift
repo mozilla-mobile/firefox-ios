@@ -18,6 +18,7 @@ final class MainMenuAction: Action {
     var isExpanded: Bool?
     var isBrowserDefault: Bool
     var isPhoneLandscape: Bool
+    var moreCellTapped: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -32,7 +33,8 @@ final class MainMenuAction: Action {
         telemetryInfo: TelemetryInfo? = nil,
         isExpanded: Bool? = nil,
         isBrowserDefault: Bool = false,
-        isPhoneLandscape: Bool = false
+        isPhoneLandscape: Bool = false,
+        moreCellTapped: Bool = false
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
@@ -45,6 +47,7 @@ final class MainMenuAction: Action {
         self.isExpanded = isExpanded
         self.isBrowserDefault = isBrowserDefault
         self.isPhoneLandscape = isPhoneLandscape
+        self.moreCellTapped = moreCellTapped
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -75,6 +78,7 @@ enum MainMenuMiddlewareActionType: ActionType {
     case updateAccountHeader
     case updateBannerVisibility
     case updateMenuAppearance
+    case updateMenuCells
 }
 
 enum MainMenuDetailsActionType: ActionType {

@@ -43,5 +43,4 @@ features:
           menu-hint: true
           menu-redesign: false
           menu-default-browser-banner: false
-          menu-redesign-hint: false
           menu-redesign-hint: true
