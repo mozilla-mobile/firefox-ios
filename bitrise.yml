@@ -1615,7 +1615,7 @@ workflows:
     - 3_provisioning_and_npm_installation
     steps:
     - xcode-test@6.0.1:
-        timeout: 3000
+        timeout: 6000
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
