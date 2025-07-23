@@ -5,6 +5,7 @@
 import Common
 import Redux
 
+@MainActor
 protocol ThemeManagerProvider {
     func getCurrentThemeManagerState(windowUUID: WindowUUID) -> ThemeSettingsState
     func updateManualTheme(with action: ThemeSettingsViewAction)
@@ -15,7 +16,8 @@ protocol ThemeManagerProvider {
     func updatePrivateMode(with action: PrivateModeAction)
 }
 
-class ThemeManagerMiddleware: ThemeManagerProvider {
+@MainActor
+final class ThemeManagerMiddleware: ThemeManagerProvider {
     var themeManager: ThemeManager
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
@@ -142,6 +144,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             windowUUID: oldAction.windowUUID,
             actionType: newActionType)
 
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 }
