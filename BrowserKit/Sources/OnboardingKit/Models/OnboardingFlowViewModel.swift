@@ -4,6 +4,7 @@
 
 import SwiftUI
 
+@MainActor
 public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
     public let onboardingCards: [ViewModel]
@@ -43,7 +44,6 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         self.onComplete = onComplete
     }
 
-    @MainActor
     public func handleBottomButtonAction(
         action: ViewModel.OnboardingActionType,
         cardName: String
