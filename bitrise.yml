@@ -1614,7 +1614,7 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - xcode-build-for-test@6.0.1:
+    - xcode-build-for-test@3:
         timeout: 600
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
