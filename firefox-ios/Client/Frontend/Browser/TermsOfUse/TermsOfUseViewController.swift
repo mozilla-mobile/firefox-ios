@@ -35,7 +35,7 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    private let viewModel: TermsOfUseViewModel
+    private let strings = TermsOfUseStrings()
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -75,7 +75,7 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = viewModel.titleText
+        label.text = TermsOfUseStrings.titleText
         label.font = UX.titleFont
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -98,7 +98,7 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
 
     private lazy var acceptButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(viewModel.acceptButtonTitle, for: .normal)
+        button.setTitle(TermsOfUseStrings.acceptButtonTitle, for: .normal)
         button.titleLabel?.font = UX.acceptButtonFont
         button.layer.cornerRadius = UX.acceptButtonCornerRadius
         button.heightAnchor.constraint(equalToConstant: UX.acceptButtonHeight).isActive = true
@@ -108,18 +108,16 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
 
     private lazy var remindMeLaterButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(viewModel.remindMeLaterButtonTitle, for: .normal)
+        button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
         button.titleLabel?.font = UX.remindMeLaterFont
         button.heightAnchor.constraint(equalToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(remindMeLaterTapped), for: .touchUpInside)
         return button
     }()
 
-    init(viewModel: TermsOfUseViewModel,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: UUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
@@ -142,7 +140,7 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.markToUAppeared()
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markShownThisLaunch))
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -217,7 +215,7 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         paragraphStyle.alignment = .left
 
         let attributed = NSMutableAttributedString(
-            string: viewModel.combinedText,
+            string: TermsOfUseStrings.combinedText,
             attributes: [
                 .font: UX.descriptionFont,
                 .foregroundColor: currentTheme().colors.textSecondary,
@@ -225,8 +223,8 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
             ]
         )
 
-        for term in viewModel.linkTerms {
-            if let url = viewModel.linkURL(for: term),
+        for term in TermsOfUseStrings.linkTerms {
+            if let url = TermsOfUseStrings.linkURL(for: term),
                let range = attributed.string.range(of: term) {
                 let nsRange = NSRange(range, in: attributed.string)
                 attributed.addAttribute(.link, value: url, range: nsRange)
@@ -275,12 +273,12 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
     }
 
     @objc private func acceptTapped() {
-        viewModel.onAccept?()
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markAccepted))
         dismiss(animated: true)
     }
 
     @objc private func remindMeLaterTapped() {
-        viewModel.onNotNow?()
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
         dismiss(animated: true)
     }
 

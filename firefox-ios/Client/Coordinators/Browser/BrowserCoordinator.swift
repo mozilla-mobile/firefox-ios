@@ -45,7 +45,6 @@ class BrowserCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private let windowManager: WindowManager
-    private let termsOfUseManager: TermsOfUseManager
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
@@ -63,7 +62,6 @@ class BrowserCoordinator: BaseCoordinator,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
-         termsOfUseManager: TermsOfUseManager = TermsOfUseManager(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
         self.screenshotService = screenshotService
@@ -71,7 +69,6 @@ class BrowserCoordinator: BaseCoordinator,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowManager = windowManager
-        self.termsOfUseManager = termsOfUseManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
@@ -1149,17 +1146,21 @@ class BrowserCoordinator: BaseCoordinator,
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
     }
 
-    // MARK: - Terms of Use Bottom Sheet
+    // MARK: - Terms of Use
 
-    private func showTermsOfUse() {
-        guard termsOfUseManager.shouldShow() else { return }
-        let presentingVC = homepageViewController ?? browserViewController
-        let viewModel = TermsOfUseViewModel(termsOfUseManager: termsOfUseManager)
-        let termsOfUseViewController = TermsOfUseViewController(
-            viewModel: viewModel,
-            windowUUID: self.windowUUID
-        )
-        presentingVC.present(termsOfUseViewController, animated: true)
+    func showTermsOfUse() {
+        let action = ScreenAction(windowUUID: self.windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .termsOfUse)
+        store.dispatchLegacy(action)
+
+        guard let termsOfUseState = store.state.screenState(TermsOfUseState.self,
+                                                            for: .termsOfUse,
+                                                            window: self.windowUUID),
+              termsOfUseState.shouldShow() else { return }
+
+        let presenter = self.homepageViewController ?? self.browserViewController
+        presenter.present(TermsOfUseViewController(windowUUID: self.windowUUID), animated: true)
     }
 
     // MARK: - Password Generator

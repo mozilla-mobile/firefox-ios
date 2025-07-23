@@ -1,51 +1,34 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
-
 import Common
 import Localizations
 import Shared
 
-struct TermsOfUseViewModel {
-    private let termsOfUseManager: TermsOfUseManager
+struct TermsOfUseStrings {
+    static let titleText = TermsOfUse.Title
 
-    let titleText = TermsOfUse.Title
-    let descriptionText: String
-    let reviewAndAcceptText = TermsOfUse.ReviewAndAcceptText
-    let acceptButtonTitle = TermsOfUse.AcceptButton
-    let remindMeLaterButtonTitle = TermsOfUse.RemindMeLaterButton
-
-    var onAccept: (() -> Void)?
-    var onNotNow: (() -> Void)?
-
-    init(
-        termsOfUseManager: TermsOfUseManager,
-        onAccept: (() -> Void)? = nil,
-        onNotNow: (() -> Void)? = nil
-    ) {
-        self.termsOfUseManager = termsOfUseManager
-        self.onAccept = onAccept ?? { termsOfUseManager.markAccepted() }
-        self.onNotNow = onNotNow ?? { termsOfUseManager.markDismissed() }
-
-        self.descriptionText = String.localizedStringWithFormat(
-            TermsOfUse.Description,
-            AppName.shortName.rawValue
-        )
+    static var descriptionText: String {
+        return String.localizedStringWithFormat(TermsOfUse.Description, AppName.shortName.rawValue)
     }
 
-    var combinedText: String {
-        "\(descriptionText)\n\n\(reviewAndAcceptText)"
+    static let reviewAndAcceptText = TermsOfUse.ReviewAndAcceptText
+    static let acceptButtonTitle = TermsOfUse.AcceptButton
+    static let remindMeLaterButtonTitle = TermsOfUse.RemindMeLaterButton
+
+    static var combinedText: String {
+        return "\(descriptionText)\n\n\(reviewAndAcceptText)"
     }
 
-    var linkTerms: [String] {
-        [
+    static var linkTerms: [String] {
+        return [
             String.localizedStringWithFormat(TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue),
             TermsOfUse.LinkPrivacyNotice,
             TermsOfUse.LinkLearnMore
         ]
     }
 
-    func linkURL(for term: String) -> URL? {
+    static func linkURL(for term: String) -> URL? {
         switch term {
         case String.localizedStringWithFormat(TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue):
             return URL(string: "https://www.mozilla.org/about/legal/terms/firefox/")
@@ -58,15 +41,11 @@ struct TermsOfUseViewModel {
         }
     }
 
-    private func sumoFAQURL(_ topic: String) -> URL? {
+    private static func sumoFAQURL(_ topic: String) -> URL? {
         guard let escapedTopic = topic.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
               let languageIdentifier = Locale.preferredLanguages.first else {
             return nil
         }
         return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
-    }
-
-    func markToUAppeared() {
-        termsOfUseManager.didShowThisLaunch = true
     }
 }
