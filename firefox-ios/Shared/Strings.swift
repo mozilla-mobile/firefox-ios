@@ -2037,7 +2037,7 @@ public struct TermsOfUse {
     public static let ReviewAndAcceptText = MZLocalizedString(
         key: "TermsOfUse.ReviewAndAcceptText.v142",
         tableName: "TermsOfUse",
-        value: "Please take a moment to review and accept. Learn more.",
+        value: "Please take a moment to review and accept. Learn more",
         comment: "Description text for review and accept with embedded link."
     )
     public static let LinkTermsOfUse = MZLocalizedString(

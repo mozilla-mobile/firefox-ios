@@ -6,20 +6,33 @@ import XCTest
 @testable import Client
 
 final class TermsOfUseStateTests: XCTestCase {
-    let windowUUID = WindowUUID()
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
+    // MARK: - Variables
+    private var userDefaults: MockUserDefaults!
+
+    // MARK: - Test lifecycle
     override func setUp() {
         super.setUp()
-        UserDefaults.standard.removeObject(forKey: "termsOfUseAccepted")
-        UserDefaults.standard.removeObject(forKey: "termsOfUseDismissed")
-        UserDefaults.standard.removeObject(forKey: "termsOfUseLastShownDate")
+        userDefaults = MockUserDefaults()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        userDefaults = nil
+    }
+
+    // MARK: - Initialization tests
+    func test_mockDefaultsInitializesEmpty() {
+        XCTAssertTrue(userDefaults.savedData.isEmpty, "savedData should be empty when initializing object")
+        XCTAssertTrue(userDefaults.registrationDictionary.isEmpty, "registrationDictionary should be empty when initializing object")
     }
 
     func testDefaultInit_readsFromUserDefaults() {
-        UserDefaults.standard.set(true, forKey: "termsOfUseAccepted")
-        UserDefaults.standard.set(true, forKey: "termsOfUseDismissed")
+        userDefaults.set(true, forKey: "termsOfUseAccepted")
+        userDefaults.set(true, forKey: "termsOfUseDismissed")
         let date = Date(timeIntervalSinceNow: -1000)
-        UserDefaults.standard.set(date, forKey: "termsOfUseLastShownDate")
+        userDefaults.set(date, forKey: "termsOfUseLastShownDate")
 
         let state = TermsOfUseState(windowUUID: windowUUID)
 
@@ -37,8 +50,8 @@ final class TermsOfUseStateTests: XCTestCase {
 
         XCTAssertTrue(state.hasAccepted)
         XCTAssertFalse(state.wasDismissed)
-        XCTAssertTrue(UserDefaults.standard.bool(forKey: "termsOfUseAccepted"))
-        XCTAssertFalse(UserDefaults.standard.bool(forKey: "termsOfUseDismissed"))
+        XCTAssertTrue(userDefaults.bool(forKey: "termsOfUseAccepted"))
+        XCTAssertFalse(userDefaults.bool(forKey: "termsOfUseDismissed"))
     }
 
     func testReducer_markDismissed_setsCorrectValuesAndPersists() {
@@ -49,8 +62,8 @@ final class TermsOfUseStateTests: XCTestCase {
 
         XCTAssertTrue(state.wasDismissed)
         XCTAssertNotNil(state.lastShownDate)
-        XCTAssertTrue(UserDefaults.standard.bool(forKey: "termsOfUseDismissed"))
-        XCTAssertNotNil(UserDefaults.standard.object(forKey: "termsOfUseLastShownDate"))
+        XCTAssertTrue(userDefaults.bool(forKey: "termsOfUseDismissed"))
+        XCTAssertNotNil(userDefaults.object(forKey: "termsOfUseLastShownDate"))
     }
 
     func testReducer_markShownThisLaunch_setsFlag() {
@@ -72,8 +85,7 @@ final class TermsOfUseStateTests: XCTestCase {
         state.didShowThisLaunch = true
         XCTAssertFalse(state.shouldShow())
 
-        // Case: not accepted, last shown less than 3 days ago
-        state.didShowThisLaunch = true
+        // Case: not accepted, last shown < 3 days ago
         state.lastShownDate = Calendar.current.date(byAdding: .day, value: -2, to: Date())
         XCTAssertFalse(state.shouldShow())
     }

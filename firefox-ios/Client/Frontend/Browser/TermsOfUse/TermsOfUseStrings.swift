@@ -16,7 +16,7 @@ struct TermsOfUseStrings {
     static let acceptButtonTitle = TermsOfUse.AcceptButton
     static let remindMeLaterButtonTitle = TermsOfUse.RemindMeLaterButton
 
-    static var combinedText: String {
+    static var termsOfUseInfoText: String {
         return "\(descriptionText)\n\n\(reviewAndAcceptText)"
     }
 

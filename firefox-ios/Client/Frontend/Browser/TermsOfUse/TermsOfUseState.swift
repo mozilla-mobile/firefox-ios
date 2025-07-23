@@ -7,30 +7,37 @@ import Redux
 import Shared
 
 struct TermsOfUseState: ScreenState, Equatable, FeatureFlaggable {
+    struct TermsOfUseDefaultsKeys {
+        static let acceptedKey = "termsOfUseAccepted"
+        static let dismissedKey = "termsOfUseDismissed"
+        static let lastShownKey = "termsOfUseLastShownDate"
+    }
+
     let windowUUID: WindowUUID
     var hasAccepted: Bool
     var wasDismissed: Bool
     var lastShownDate: Date?
     var didShowThisLaunch: Bool
 
+    var userDefaults: UserDefaults = .standard
+
     private var isToUFeatureEnabled: Bool {
         featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
     }
 
-    var windowUUIDForState: WindowUUID {
-        return windowUUID
-    }
+    var windowUUIDForState: WindowUUID { windowUUID }
 
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID, userDefaults: UserDefaults = .standard) {
         self.windowUUID = windowUUID
-        self.hasAccepted = UserDefaults.standard.bool(forKey: "termsOfUseAccepted")
-        self.wasDismissed = UserDefaults.standard.bool(forKey: "termsOfUseDismissed")
-        self.lastShownDate = UserDefaults.standard.object(forKey: "termsOfUseLastShownDate") as? Date
+        self.userDefaults = userDefaults
+        self.hasAccepted = userDefaults.bool(forKey: TermsOfUseDefaultsKeys.acceptedKey)
+        self.wasDismissed = userDefaults.bool(forKey: TermsOfUseDefaultsKeys.dismissedKey)
+        self.lastShownDate = userDefaults.object(forKey: TermsOfUseDefaultsKeys.lastShownKey) as? Date
         self.didShowThisLaunch = false
     }
 
     static func defaultState(from state: TermsOfUseState) -> TermsOfUseState {
-        return TermsOfUseState(windowUUID: state.windowUUID)
+        return TermsOfUseState(windowUUID: state.windowUUID, userDefaults: state.userDefaults)
     }
 
     static let reducer: Reducer<TermsOfUseState> = { state, action in
@@ -39,17 +46,22 @@ struct TermsOfUseState: ScreenState, Equatable, FeatureFlaggable {
               let type = action.actionType as? TermsOfUseActionType,
               action.windowUUID == state.windowUUID else { return newState }
 
+        let userDefaults = state.userDefaults
+
         switch type {
         case .markAccepted:
             newState.hasAccepted = true
             newState.wasDismissed = false
-            UserDefaults.standard.set(true, forKey: "termsOfUseAccepted")
-            UserDefaults.standard.set(false, forKey: "termsOfUseDismissed")
+            userDefaults.set(true, forKey: TermsOfUseDefaultsKeys.acceptedKey)
+            userDefaults.set(false, forKey: TermsOfUseDefaultsKeys.dismissedKey)
+
         case .markDismissed:
+            let now = Date()
             newState.wasDismissed = true
-            newState.lastShownDate = Date()
-            UserDefaults.standard.set(true, forKey: "termsOfUseDismissed")
-            UserDefaults.standard.set(newState.lastShownDate, forKey: "termsOfUseLastShownDate")
+            newState.lastShownDate = now
+            userDefaults.set(true, forKey: TermsOfUseDefaultsKeys.dismissedKey)
+            userDefaults.set(now, forKey: TermsOfUseDefaultsKeys.lastShownKey)
+
         case .markShownThisLaunch:
             newState.didShowThisLaunch = true
         }
@@ -63,9 +75,7 @@ struct TermsOfUseState: ScreenState, Equatable, FeatureFlaggable {
 
         if let lastShown = lastShownDate {
             let days = Calendar.current.dateComponents([.day], from: lastShown, to: Date()).day ?? 0
-            if days >= 3 {
-                return true
-            }
+            if days >= 3 { return true }
         }
 
         return !didShowThisLaunch

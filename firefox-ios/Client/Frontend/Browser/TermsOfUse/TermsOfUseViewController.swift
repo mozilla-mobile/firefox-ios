@@ -41,60 +41,51 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
 
     private var activeContainerConstraints: [NSLayoutConstraint] = []
 
-    private lazy var sheetContainer: UIView = {
-        let view = UIView()
+    private var sheetContainer: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
         view.clipsToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    }
 
-    private lazy var grabberView: UIView = {
-        let view = UIView()
+    private lazy var grabberView: UIView = .build { view in
         view.layer.cornerRadius = UX.grabberHeight / 2
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    }
 
-    private lazy var stackView: UIStackView = {
-        let stack = UIStackView()
+    private lazy var stackView: UIStackView = .build { stack in
         stack.axis = .vertical
         stack.spacing = UX.stackSpacing
         stack.alignment = .fill
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
+        stack.addArrangedSubview(self.logoImageView)
+        stack.addArrangedSubview(self.titleLabel)
+        stack.addArrangedSubview(self.descriptionTextView)
+        stack.addArrangedSubview(self.acceptButton)
+        stack.addArrangedSubview(self.remindMeLaterButton)
+    }
 
-    private lazy var logoImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall))
+    private lazy var logoImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
         imageView.heightAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
-        return imageView
-    }()
+    }
 
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
+    private lazy var titleLabel: UILabel = .build { label in
         label.text = TermsOfUseStrings.titleText
         label.font = UX.titleFont
         label.textAlignment = .center
         label.numberOfLines = 0
-        return label
-    }()
+    }
 
-    private lazy var descriptionTextView: UITextView = {
-        let textView = UITextView()
+    private lazy var descriptionTextView: UITextView = .build { [self] textView in
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.backgroundColor = .clear
-        textView.attributedText = makeAttributedDescription()
+        textView.attributedText = self.makeAttributedDescription()
         textView.linkTextAttributes = [
             .foregroundColor: currentTheme().colors.textAccent,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
         textView.delegate = self
-        return textView
-    }()
+    }
 
     private lazy var acceptButton: UIButton = {
         let button = UIButton(type: .system)
@@ -159,7 +150,6 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         setupConstraints()
         setupDismissGesture()
         setupPanGesture()
-        addStackSubviews()
     }
 
     private func setupConstraints() {
@@ -201,21 +191,13 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         ])
     }
 
-    private func addStackSubviews() {
-        stackView.addArrangedSubview(logoImageView)
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(descriptionTextView)
-        stackView.addArrangedSubview(acceptButton)
-        stackView.addArrangedSubview(remindMeLaterButton)
-    }
-
     private func makeAttributedDescription() -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 2
         paragraphStyle.alignment = .left
 
         let attributed = NSMutableAttributedString(
-            string: TermsOfUseStrings.combinedText,
+            string: TermsOfUseStrings.termsOfUseInfoText,
             attributes: [
                 .font: UX.descriptionFont,
                 .foregroundColor: currentTheme().colors.textSecondary,
