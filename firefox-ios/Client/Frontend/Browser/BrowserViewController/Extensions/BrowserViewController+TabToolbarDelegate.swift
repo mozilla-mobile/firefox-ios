@@ -352,6 +352,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             if let tab = self.tabManager.selectedTab {
                 self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 self.tabManager.removeTabWithCompletion(tab.tabUUID) {
+                    store.dispatchLegacy(
+                        GeneralBrowserAction(
+                            windowUUID: self.windowUUID,
+                            actionType: GeneralBrowserActionType.didCloseTabFromToolbar
+                        )
+                    )
                     self.updateTabCountUsingTabManager(self.tabManager)
 
                     if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
