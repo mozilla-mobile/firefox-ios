@@ -349,12 +349,10 @@ class BrowserViewController: UIViewController,
 
     // todo: comment and explain the math
     var availableHomepageContentHeight: CGFloat {
-        guard isStoriesRedesignEnabled else { return 0 }
-
         // status bar overlay includes the header height so we don't need to subtract it as well
         let subtractForToolbar = isHomepageSearchBarEnabled ? 0 : overKeyboardContainer.frame.height
 
-        return availableHeight = view.frame.height - statusBarOverlay.frame.height -
+        return view.frame.height - statusBarOverlay.frame.height -
                                 bottomContentStackView.frame.height -
                                 bottomContainer.frame.height -
                                 subtractForToolbar
@@ -1449,19 +1447,8 @@ class BrowserViewController: UIViewController,
         // toolbar translucency needs to be updated
         updateToolbarDisplay()
 
-        if isStoriesRedesignEnabled,
-           let browserViewControllerState,
-           browserViewControllerState.browserViewType == .normalHomepage,
-           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
-           homepageState.availableContentHeight != availableHomepageContentHeight {
-            store.dispatchLegacy(
-                HomepageAction(
-                    availableContentHeight: availableHomepageContentHeight,
-                    windowUUID: windowUUID,
-                    actionType: HomepageActionType.availableContentHeightDidChange
-                )
-            )
-        }
+        // Update available height for the homepage
+        dispatchAvailableContentHeightChangedAction()
     }
 
     func checkForJSAlerts() {
@@ -3074,6 +3061,21 @@ class BrowserViewController: UIViewController,
             actionType: ToolbarActionType.traitCollectionDidChange
         )
         store.dispatchLegacy(action)
+    }
+
+    private func dispatchAvailableContentHeightChangedAction() {
+        guard isStoriesRedesignEnabled, let browserViewControllerState,
+           browserViewControllerState.browserViewType == .normalHomepage,
+           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+           homepageState.availableContentHeight != availableHomepageContentHeight else { return }
+
+        store.dispatchLegacy(
+            HomepageAction(
+                availableContentHeight: availableHomepageContentHeight,
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
     }
 
     // MARK: Opening New Tabs
