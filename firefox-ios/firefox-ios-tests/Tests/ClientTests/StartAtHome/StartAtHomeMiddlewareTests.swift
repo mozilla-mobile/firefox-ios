@@ -40,6 +40,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
+    @MainActor
     func test_didBrowserBecomeActiveAction_withAfterFourHours_returnsTrueStartAtHomeCheck() throws {
         mockProfile.prefs.setString(StartAtHome.afterFourHours.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome)
         let subject = createSubject(with: mockProfile)
@@ -66,6 +67,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.shouldStartAtHome, true)
     }
 
+    @MainActor
     func test_didBrowserBecomeActiveAction_withAlways_returnsTrueStartAtHomeCheck() throws {
         mockProfile.prefs.setString(StartAtHome.always.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome)
         let subject = createSubject(with: mockProfile)
@@ -92,6 +94,7 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.shouldStartAtHome, true)
     }
 
+    @MainActor
     func test_didBrowserBecomeActiveAction_withDisabled_returnsFalseStartAtHomeCheck() throws {
         mockProfile.prefs.setString(StartAtHome.disabled.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome)
         let subject = createSubject(with: mockProfile)
@@ -119,6 +122,8 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
+
+    @MainActor
     private func createSubject(with mockProfile: Profile = MockProfile()) -> StartAtHomeMiddleware {
         /// 9 Sep 2001 8:00 pm GMT + 0
         let testDate = Date(timeIntervalSince1970: 1_000_065_600)

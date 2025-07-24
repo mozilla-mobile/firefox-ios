@@ -53,6 +53,8 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
         // TODO: if you need it
     }
 
+    /// We implemented the lock to ensure that this is thread safe
+    /// since actions can be dispatch in concurrent tasks
     func dispatch(_ action: Redux.Action) {
         lock.lock()
         defer { lock.unlock() }
