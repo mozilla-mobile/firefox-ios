@@ -511,10 +511,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     // result in it having a different height (eg changes to top/bottom insets).
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let collectionViewHeight = environment.container.contentSize.height
+        let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+        let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
+
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
-        let spacerHeight = max(0.1, collectionViewHeight - getShortcutsSectionHeight(environment: environment)
-                                                         - getStoriesSectionHeight(environment: environment)
-                                                         - getSearchBarSectionHeight(environment: environment)
+        let spacerHeight = max(0.1, availableContentHeight - getShortcutsSectionHeight(environment: environment)
+                                                        - getStoriesSectionHeight(environment: environment)
+                                                        - getSearchBarSectionHeight(environment: environment)
         )
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
