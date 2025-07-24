@@ -6,6 +6,20 @@
 "use strict";
 import { Readability } from "@mozilla/readability";
 
+const ALLOWED_LANGS = ["en"];
+
+const isPageLanguageSupported = () => {
+  // Attempt to use the <html> lang attribute. 
+  // When the lang attribute is not set we get "". In that case, default to "en".
+  const rawLang = document.documentElement.lang?.trim() || "en";
+  try {
+    const locale = new Intl.Locale(rawLang);
+    return ALLOWED_LANGS.includes(locale.language);
+  } catch {
+    return true;
+  }
+}
+
 const extractContent = () => {
   const uri = {
     spec: document.location.href,
@@ -58,6 +72,15 @@ const documentReady = () =>  new Promise(resolve => {
 const checkSummarization = async (maxWords) => {
   // 0. Document should be ready before we do anything.
   await documentReady();
+
+  // 1. Check if the page language is supported.
+  if (!isPageLanguageSupported()) {
+    return {
+      canSummarize: false,
+      reason: "documentLanguageUnsupported",
+      wordCount: 0,
+    };
+  }
 
   // 1. Readerable check
   if (!isProbablyReaderable(document)) {
