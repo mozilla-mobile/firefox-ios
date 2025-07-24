@@ -474,7 +474,7 @@ class RemoteTabsTableViewController: UITableViewController,
                                                           repeats: false) { _ in
             guard Thread.isMainThread else {
                 self.logger.log(
-                    "RemoteTabsViewController is not being called from the main thread!",
+                    "RemoteTabsViewController Timer callback is not being called from the main thread!",
                     level: .fatal,
                     category: .tabs
                 )
