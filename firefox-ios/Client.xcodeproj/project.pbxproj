@@ -1448,6 +1448,8 @@
 		BAEB9EB22E2869C400F9F482 /* SummarizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */; };
 		BAEB9EB42E28726A00F9F482 /* SummarizationCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9EB32E28726100F9F482 /* SummarizationCheckerTests.swift */; };
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
+		BC0723522E33D7A6005BAC05 /* AppleIntelligenceUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0723512E33D7A2005BAC05 /* AppleIntelligenceUtilTests.swift */; };
+		BC8E91DC2E32953C00434FD0 /* AppleIntelligenceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */; };
 		BCFB141D2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json in Resources */ = {isa = PBXBuildFile; fileRef = BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */; };
 		BCFB141F2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json in Resources */ = {isa = PBXBuildFile; fileRef = BCFB141E2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
@@ -9265,8 +9267,10 @@
 		BBE94C27A604339C9C38E02F /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/Menu.strings; sourceTree = "<group>"; };
 		BBF04862A944340C80C053E0 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerTests.swift; sourceTree = "<group>"; };
+		BC0723512E33D7A2005BAC05 /* AppleIntelligenceUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceUtilTests.swift; sourceTree = "<group>"; };
 		BC4B49618B8FC822D4D0FCC2 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BC81442AA84F635F3067A2C5 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
+		BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceUtil.swift; sourceTree = "<group>"; };
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feltPrivacySimplifiedUIOff.json; sourceTree = "<group>"; };
 		BCFB141E2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feltPrivacySimplifiedUIOn.json; sourceTree = "<group>"; };
@@ -12388,6 +12392,7 @@
 		8A171A6029F82AD90085770E /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				BC0723512E33D7A2005BAC05 /* AppleIntelligenceUtilTests.swift */,
 				5AD3B67F2CF6674B00AFA1FE /* MockUIApplication.swift */,
 				5AD3B6792CF653A200AFA1FE /* MockLocale.swift */,
 				8A13FA882AD82BC8007527AB /* AppSendTabDelegateTests.swift */,
@@ -15540,6 +15545,7 @@
 			isa = PBXGroup;
 			children = (
 				5AD3B6732CF625A300AFA1FE /* DefaultBrowserUtil.swift */,
+				BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */,
 				8A46F5AA2C9E4389005B6422 /* RemoteSettings */,
 				C84266742728462900382274 /* AccessibilityIdentifiers.swift */,
 				5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */,
@@ -17995,6 +18001,7 @@
 				21B548952B1E5F1400DC1DF8 /* InactiveTabsManager.swift in Sources */,
 				8A6E63C92D4948BE0040D355 /* JumpBackInTabConfiguration.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
+				BC8E91DC2E32953C00434FD0 /* AppleIntelligenceUtil.swift in Sources */,
 				964FA97728A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift in Sources */,
 				8A1E3BDF28CBA81E003388C4 /* SponsoredContentFilterUtility.swift in Sources */,
 				8A5BD95F2878B7B6000FE773 /* TopSitesWidgetManager.swift in Sources */,
@@ -18771,6 +18778,7 @@
 				8A5604F829DF0D2600035CA3 /* BrowserCoordinatorTests.swift in Sources */,
 				8ABB15C92D5A4E3900A4635C /* RemoteTabsMiddlewareTests.swift in Sources */,
 				C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */,
+				BC0723522E33D7A6005BAC05 /* AppleIntelligenceUtilTests.swift in Sources */,
 				39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */,
 				630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */,
 				8AAEB9FE2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift in Sources */,

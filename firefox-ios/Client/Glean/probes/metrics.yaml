@@ -3586,6 +3586,8 @@ nimbus_system:
           type: boolean
         has_enabled_tips_notifications:
           type: boolean
+        is_apple_intelligence_available:
+          type: boolean
     description: |
       The Nimbus context object that is recorded to Glean
     bugs:
