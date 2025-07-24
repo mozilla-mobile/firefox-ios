@@ -11,7 +11,7 @@ struct MockLanguageModelResponseProtocol: LanguageModelResponseProtocol {
     var transcriptEntries: ArraySlice<Transcript.Entry>
 }
 
-/// Mock implementation of a language model sessionfor testing the session and responses.
+/// Mock implementation of a language model session for testing the session and responses.
 /// This allows injecting controlled outputs or errors without calling the real inference backend.
 @available(iOS 26, *)
 final class MockLanguageModelSession: LanguageModelSessionProtocol {

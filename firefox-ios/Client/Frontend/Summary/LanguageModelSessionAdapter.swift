@@ -9,7 +9,7 @@ import FoundationModels
 /// This is needed because `LanguageModelSession.respond()` returns a concrete type `LanguageModelSession.Response`
 /// whereas `LanguageModelSessionProtocol.respond() returns `any ResponseProtocol`. 
 /// Eventhough `LanguageModelSession.Response` conforms to `ResponseProtocol`, the compiler treats them as different types.
-/// In tests, this will use `MockLanguageModelSession` instead.
+/// In tests, `MockLanguageModelSession` will be used instead of this.
 @available(iOS 26, *)
 final class LanguageModelSessionAdapter: LanguageModelSessionProtocol {
     private let realSession: LanguageModelSession

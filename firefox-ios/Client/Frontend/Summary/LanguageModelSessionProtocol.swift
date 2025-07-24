@@ -5,7 +5,7 @@
 import Foundation
 import FoundationModels
 
-/// Interface for a language model inference session for both streamed and non=streamed responses.
+/// Interface for a language model inference session for both streamed and non-streamed responses.
 /// This used because we want to be able to replace the real `LanguageModelSession` with a mock during testing.
 @available(iOS 26, *)
 protocol LanguageModelSessionProtocol {
