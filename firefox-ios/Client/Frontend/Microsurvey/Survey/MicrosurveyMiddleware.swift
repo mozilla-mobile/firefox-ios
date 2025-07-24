@@ -6,6 +6,7 @@ import Foundation
 import Redux
 import Common
 
+@MainActor
 final class MicrosurveyMiddleware {
     private let microsurveyTelemetry = MicrosurveyTelemetry()
 
@@ -16,7 +17,7 @@ final class MicrosurveyMiddleware {
         case MicrosurveyActionType.closeSurvey:
             self.dismissSurvey(windowUUID: windowUUID, surveyId: surveyId)
         case MicrosurveyActionType.tapPrivacyNotice:
-            self.sendTelemtryForNavigatingToPrivacyNotice(surveyId: surveyId)
+            self.sendTelemetryForNavigatingToPrivacyNotice(surveyId: surveyId)
         case MicrosurveyActionType.submitSurvey:
             self.sendTelemetryAndClosePrompt(windowUUID: windowUUID, action: action, surveyId: surveyId)
         case MicrosurveyActionType.surveyDidAppear:
@@ -33,7 +34,7 @@ final class MicrosurveyMiddleware {
         closeMicrosurveyPrompt(windowUUID: windowUUID)
     }
 
-    private func sendTelemtryForNavigatingToPrivacyNotice(surveyId: String) {
+    private func sendTelemetryForNavigatingToPrivacyNotice(surveyId: String) {
         microsurveyTelemetry.privacyNoticeTapped(surveyId: surveyId)
     }
 
@@ -44,7 +45,7 @@ final class MicrosurveyMiddleware {
     }
 
     private func closeMicrosurveyPrompt(windowUUID: WindowUUID) {
-        store.dispatchLegacy(
+        store.dispatch(
             MicrosurveyPromptAction(
                 windowUUID: windowUUID,
                 actionType: MicrosurveyPromptActionType.closePrompt
