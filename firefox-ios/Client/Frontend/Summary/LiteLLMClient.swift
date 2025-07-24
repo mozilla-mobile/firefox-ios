@@ -7,7 +7,7 @@ import Common
 import Shared
 
 /// A lightweight client for interacting with a chat completions endpoint.
-public class LiteLLMClient: NSObject, URLSessionDataDelegate {
+public final class LiteLLMClient: NSObject, URLSessionDataDelegate, @unchecked Sendable {
     /// NOTE: OpenAI like APIs including LiteLLM don't use websockets for streaming mode
     /// but instead use Server Sent Events (SSE) to send chunked responses.
     private static let sseEventDelimiter = "\n\n"
@@ -46,7 +46,7 @@ public class LiteLLMClient: NSObject, URLSessionDataDelegate {
     public func requestChatCompletion(
         messages: [LiteLLMMessage],
         options: LiteLLMChatOptions,
-        completion: ((Result<String, Error>) -> Void)? = nil
+        completion: (@Sendable (Result<String, Error>) -> Void)? = nil
     ) {
         do {
             let request = try makeRequest(messages: messages, options: options)
