@@ -27,15 +27,16 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
         view.backgroundColor = self.currentTheme().colors.layer1
     }
 
-    private lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UX.backArrowImage, for: .normal)
+    private lazy var backButton: UIButton = .build { button in
+        button.setImage(UX.backArrowImage.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        button.imageView?.contentMode = .scaleAspectFit
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.setTitle(TermsOfUse.BackButton, for: .normal)
-        button.tintColor = currentTheme().colors.actionPrimary
-        button.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+        button.setTitleColor(self.currentTheme().colors.actionPrimary, for: .normal)
+        button.tintColor = self.currentTheme().colors.actionPrimary
+        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
+    }
 
     private lazy var webView: WKWebView = {
         let config = WKWebViewConfiguration()

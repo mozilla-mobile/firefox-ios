@@ -4,8 +4,13 @@
 
 import Common
 import Shared
+import Redux
 
-final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDelegate {
+final class TermsOfUseViewController: UIViewController,
+                                      Themeable,
+                                      UITextViewDelegate,
+                                      StoreSubscriber {
+
     private struct UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
@@ -31,6 +36,7 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         static let acceptButtonFont = FXFontStyles.Regular.callout.scaledFont()
         static let remindMeLaterFont = FXFontStyles.Regular.body.scaledFont()
     }
+    typealias SubscriberStateType = TermsOfUseState
 
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -54,11 +60,6 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         stack.axis = .vertical
         stack.spacing = UX.stackSpacing
         stack.alignment = .fill
-        stack.addArrangedSubview(self.logoImageView)
-        stack.addArrangedSubview(self.titleLabel)
-        stack.addArrangedSubview(self.descriptionTextView)
-        stack.addArrangedSubview(self.acceptButton)
-        stack.addArrangedSubview(self.remindMeLaterButton)
     }
 
     private lazy var logoImageView: UIImageView = .build { imageView in
@@ -87,24 +88,20 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         textView.delegate = self
     }
 
-    private lazy var acceptButton: UIButton = {
-        let button = UIButton(type: .system)
+    private lazy var acceptButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.acceptButtonTitle, for: .normal)
         button.titleLabel?.font = UX.acceptButtonFont
         button.layer.cornerRadius = UX.acceptButtonCornerRadius
         button.heightAnchor.constraint(equalToConstant: UX.acceptButtonHeight).isActive = true
-        button.addTarget(self, action: #selector(acceptTapped), for: .touchUpInside)
-        return button
-    }()
+        button.addTarget(self, action: #selector(self.acceptTapped), for: .touchUpInside)
+    }
 
-    private lazy var remindMeLaterButton: UIButton = {
-        let button = UIButton(type: .system)
+    private lazy var remindMeLaterButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
         button.titleLabel?.font = UX.remindMeLaterFont
         button.heightAnchor.constraint(equalToConstant: UX.remindMeLaterButtonHeight).isActive = true
-        button.addTarget(self, action: #selector(remindMeLaterTapped), for: .touchUpInside)
-        return button
-    }()
+        button.addTarget(self, action: #selector(self.remindMeLaterTapped), for: .touchUpInside)
+    }
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: UUID,
@@ -127,13 +124,40 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         setupUI()
         listenForThemeChange(view)
         applyTheme()
+        subscribeToRedux()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markShownThisLaunch))
+        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .markShownThisLaunch))
     }
 
+    deinit {
+        unsubscribeFromRedux()
+    }
+
+    func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .termsOfUse)
+        store.dispatchLegacy(action)
+        store.subscribe(self) {
+            $0.select { appState in
+                appState.screenState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
+                ?? TermsOfUseState(windowUUID: self.windowUUID)
+            }
+        }
+    }
+
+    func unsubscribeFromRedux() {
+            let action = ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.closeScreen,
+                screen: .termsOfUse
+            )
+            store.dispatch(action)
+            store.unsubscribe(self)
+        }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
@@ -142,16 +166,31 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         }
     }
 
+    func newState(state: TermsOfUseState) {
+        if state.hasAccepted {
+            dismiss(animated: true)
+        }
+    }
+
     private func setupUI() {
         view.backgroundColor = UIColor.black.withAlphaComponent(UX.backgroundAlpha)
         view.addSubview(sheetContainer)
         sheetContainer.addSubview(grabberView)
         sheetContainer.addSubview(stackView)
+        addStackSubviews()
         setupConstraints()
         setupDismissGesture()
         setupPanGesture()
     }
 
+    func addStackSubviews() {
+        stackView.addArrangedSubview(self.logoImageView)
+        stackView.addArrangedSubview(self.titleLabel)
+        stackView.addArrangedSubview(self.descriptionTextView)
+        stackView.addArrangedSubview(self.acceptButton)
+        stackView.addArrangedSubview(self.remindMeLaterButton)
+    }
+    
     private func setupConstraints() {
         NSLayoutConstraint.deactivate(activeContainerConstraints)
 
@@ -270,7 +309,7 @@ final class TermsOfUseViewController: UIViewController, Themeable, UITextViewDel
         titleLabel.textColor = currentTheme().colors.textPrimary
         acceptButton.tintColor = currentTheme().colors.textOnDark
         acceptButton.backgroundColor = currentTheme().colors.actionPrimary
-        remindMeLaterButton.tintColor = currentTheme().colors.actionPrimary
+        remindMeLaterButton.setTitleColor(currentTheme().colors.actionPrimary, for: .normal)
     }
 
     private func currentTheme() -> Theme {
