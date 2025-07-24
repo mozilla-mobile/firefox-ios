@@ -8,7 +8,9 @@ import Common
 import Shared
 
 // MARK: Header View
-class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
+class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView,
+                                       ReusableCell,
+                                       ThemeApplicable {
     // MARK: UX
     struct UX {
         static let headerElementsSpacing: CGFloat = 7.0
