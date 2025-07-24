@@ -73,21 +73,4 @@ final class TermsOfUseStateTests: XCTestCase {
         state = TermsOfUseState.reducer(state, action)
         XCTAssertTrue(state.didShowThisLaunch)
     }
-
-    func testShouldShow_logic() {
-        var state = TermsOfUseState(windowUUID: windowUUID)
-
-        // Case: accepted
-        state.hasAccepted = true
-        XCTAssertFalse(state.shouldShow())
-
-        // Case: not accepted and shown today
-        state.hasAccepted = false
-        state.didShowThisLaunch = true
-        XCTAssertFalse(state.shouldShow())
-
-        // Case: not accepted, last shown < 3 days ago
-        state.lastShownDate = Calendar.current.date(byAdding: .day, value: -2, to: Date())
-        XCTAssertFalse(state.shouldShow())
-    }
 }

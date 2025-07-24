@@ -6,7 +6,7 @@ import Common
 import Redux
 import Shared
 
-struct TermsOfUseState: ScreenState, Equatable, FeatureFlaggable {
+struct TermsOfUseState: ScreenState, Equatable {
     struct TermsOfUseDefaultsKeys {
         static let acceptedKey = "termsOfUseAccepted"
         static let dismissedKey = "termsOfUseDismissed"
@@ -20,10 +20,6 @@ struct TermsOfUseState: ScreenState, Equatable, FeatureFlaggable {
     var didShowThisLaunch: Bool
 
     var userDefaults: UserDefaults = .standard
-
-    private var isToUFeatureEnabled: Bool {
-        featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
-    }
 
     var windowUUIDForState: WindowUUID { windowUUID }
 
@@ -67,17 +63,5 @@ struct TermsOfUseState: ScreenState, Equatable, FeatureFlaggable {
         }
 
         return newState
-    }
-
-    func shouldShow() -> Bool {
-        guard isToUFeatureEnabled else { return false }
-        if hasAccepted { return false }
-
-        if let lastShown = lastShownDate {
-            let days = Calendar.current.dateComponents([.day], from: lastShown, to: Date()).day ?? 0
-            if days >= 3 { return true }
-        }
-
-        return !didShowThisLaunch
     }
 }

@@ -10,7 +10,6 @@ final class TermsOfUseViewController: UIViewController,
                                       Themeable,
                                       UITextViewDelegate,
                                       StoreSubscriber {
-
     private struct UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
@@ -37,7 +36,7 @@ final class TermsOfUseViewController: UIViewController,
         static let remindMeLaterFont = FXFontStyles.Regular.body.scaledFont()
     }
     typealias SubscriberStateType = TermsOfUseState
-
+    weak var coordinator: TermsOfUseCoordinatorDelegate?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -190,7 +189,7 @@ final class TermsOfUseViewController: UIViewController,
         stackView.addArrangedSubview(self.acceptButton)
         stackView.addArrangedSubview(self.remindMeLaterButton)
     }
-    
+
     private func setupConstraints() {
         NSLayoutConstraint.deactivate(activeContainerConstraints)
 
@@ -295,12 +294,12 @@ final class TermsOfUseViewController: UIViewController,
 
     @objc private func acceptTapped() {
         store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markAccepted))
-        dismiss(animated: true)
+        coordinator?.dismissTermsFlow()
     }
 
     @objc private func remindMeLaterTapped() {
         store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
-        dismiss(animated: true)
+        coordinator?.dismissTermsFlow()
     }
 
     func applyTheme() {
@@ -323,8 +322,7 @@ final class TermsOfUseViewController: UIViewController,
                   in characterRange: NSRange,
                   interaction: UITextItemInteraction) -> Bool {
         guard interaction == .invokeDefaultAction else { return true }
-        let linkVC = TermsOfUseLinkViewController(url: url, windowUUID: windowUUID)
-        present(linkVC, animated: true)
+        coordinator?.showTermsLink(url: url)
         return false
     }
 }

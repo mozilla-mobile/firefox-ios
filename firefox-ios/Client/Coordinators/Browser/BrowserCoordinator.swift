@@ -1148,20 +1148,23 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Terms of Use
-
     func showTermsOfUse() {
-        let action = ScreenAction(windowUUID: self.windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .termsOfUse)
-        store.dispatchLegacy(action)
-
-        guard let termsOfUseState = store.state.screenState(TermsOfUseState.self,
-                                                            for: .termsOfUse,
-                                                            window: self.windowUUID),
-              termsOfUseState.shouldShow() else { return }
-
         let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
-        presenter.present(TermsOfUseViewController(windowUUID: self.windowUUID), animated: true)
+
+        let router = DefaultRouter(navigationController: presenter.navigationController ?? UINavigationController())
+
+        let coordinator = TermsOfUseCoordinator(
+            windowUUID: windowUUID,
+            router: router,
+            themeManager: AppContainer.shared.resolve(),
+            notificationCenter: NotificationCenter.default
+        )
+        coordinator.parentCoordinator = self
+
+        guard coordinator.shouldShowTermsOfUse() else { return }
+
+        add(child: coordinator)
+        coordinator.start()
     }
 
     // MARK: - Password Generator
