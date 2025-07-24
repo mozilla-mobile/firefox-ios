@@ -14,7 +14,7 @@ protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable {
 }
 
 class ExperimentRemoteTabsEmptyView: UIView,
-                                        RemoteTabsEmptyViewProtocol {
+                                     RemoteTabsEmptyViewProtocol {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20

@@ -9,11 +9,13 @@ import Shared
 import ComponentLibrary
 
 protocol EmptyPrivateTabsViewDelegate: AnyObject {
+    @MainActor
     func didTapLearnMore(urlRequest: URLRequest)
 }
 
 // View we display when there are no private tabs created
-class EmptyPrivateTabsView: UIView, EmptyPrivateTabView {
+class EmptyPrivateTabsView: UIView,
+                            EmptyPrivateTabView {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
