@@ -438,6 +438,73 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.isSearchBarEnabled, false)
     }
 
+    func test_didCloseTabAction_configuresSearchBar() throws {
+        setupNimbusSearchBarTesting(isEnabled: true)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.didCloseTabFromToolbar
+        )
+
+        let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
+
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, true)
+    }
+
+    func test_didCloseTabAction_doesNotConfigureSearchBar() throws {
+        setupNimbusSearchBarTesting(isEnabled: false)
+        let subject = createSubject()
+        let action = ToolbarAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.didCloseTabFromToolbar
+        )
+        let dispatchExpectation = XCTestExpectation(description: "Search bar configured middleware action dispatched")
+
+        mockStore.dispatchCalled = {
+            dispatchExpectation.fulfill()
+        }
+
+        subject.homepageProvider(AppState(), action)
+
+        wait(for: [dispatchExpectation], timeout: 1)
+
+        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
+        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
+            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
+        }))
+        let configuredSearchBarActionCount = actionsCalled.filter {
+            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
+        }.count
+        let configuredSearchBarActionType = try XCTUnwrap(
+            configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
+        )
+
+        XCTAssertEqual(configuredSearchBarActionCount, 1)
+        XCTAssertEqual(configuredSearchBarActionType, .configuredSearchBar)
+        XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> HomepageMiddleware {
         return HomepageMiddleware(
