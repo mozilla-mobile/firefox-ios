@@ -351,12 +351,13 @@ class BrowserViewController: UIViewController,
     var availableHomepageContentHeight: CGFloat {
         guard isStoriesRedesignEnabled else { return 0 }
 
-        let subtractToolbar = isHomepageSearchBarEnabled ? 0 : header.frame.height + overKeyboardContainer.frame.height
-        var availableHeight = view.frame.height - statusBarOverlay.frame.height -
+        // status bar overlay includes the header height so we don't need to subtract it as well
+        let subtractForToolbar = isHomepageSearchBarEnabled ? 0 : overKeyboardContainer.frame.height
+
+        return availableHeight = view.frame.height - statusBarOverlay.frame.height -
                                 bottomContentStackView.frame.height -
-                                bottomContainer.frame.height
-        availableHeight -= subtractToolbar
-        return availableHeight
+                                bottomContainer.frame.height -
+                                subtractForToolbar
     }
 
     // MARK: Data management
