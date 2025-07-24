@@ -89,6 +89,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
     ///   - buttonView: the view from which the menu will be shown
     ///   - toastContainer: the view hosting a toast alert
     ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
+    @MainActor
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,

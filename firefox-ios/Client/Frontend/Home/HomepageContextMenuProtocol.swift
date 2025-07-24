@@ -7,16 +7,21 @@ import Foundation
 import Storage
 
 protocol HomepageContextMenuProtocol {
+    @MainActor
     func getContextMenuActions(
         for site: Site,
         with sourceView: UIView?,
         sectionType: HomepageSectionType
     ) -> [PhotonRowActions]?
+
+    @MainActor
     func presentContextMenu(
         for site: Site,
         with sourceView: UIView?,
         sectionType: HomepageSectionType
     )
+
+    @MainActor
     func presentContextMenu(
         for site: Site,
         with sourceView: UIView?,
@@ -27,12 +32,14 @@ protocol HomepageContextMenuProtocol {
 
 extension HomepageContextMenuProtocol {
     // MARK: Site
+    @MainActor
     func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType) {
         presentContextMenu(for: site, with: sourceView, sectionType: sectionType, completionHandler: { site in
             return self.contextMenu(for: site, with: sourceView, sectionType: sectionType)
         })
     }
 
+    @MainActor
     func contextMenu(
         for site: Site,
         with sourceView: UIView?,
