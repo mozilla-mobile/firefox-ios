@@ -6,6 +6,8 @@
 /// All implementations ( local models, litellm, ... ) must conform to this.
 protocol SummarizerProtocol {
     func summarize(prompt: String, text: String) async throws -> String
-    /// TODO(FXIOS-12931): Follow-up use AsyncStream and drop `onChunk` callback for better DX.
-    func summarizeStreamed(prompt: String, text: String, onChunk: @escaping @Sendable (String) -> Void) async throws
+    func summarizeStreamed(
+        prompt: String,
+        text: String
+    ) -> AsyncThrowingStream<String, Error>
 }
