@@ -1148,6 +1148,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Terms of Use
+    // Terms Of Use Bottom Sheet should appear on every app launch on homepage or on current tab,
+    // until user accepts terms of use.
     func showTermsOfUse() {
         let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
 

@@ -6,8 +6,12 @@ import Common
 import Localizations
 import Shared
 import WebKit
+import Redux
 
-final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigationDelegate {
+final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigationDelegate, StoreSubscriber {
+    weak var coordinator: TermsOfUseCoordinatorDelegate?
+
+    typealias StoreSubscriberStateType = TermsOfUseState
     private struct UX {
         static let headerHeight: CGFloat = 44
         static let backButtonLeading: CGFloat = 8
@@ -70,6 +74,26 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
         setupViews()
         applyTheme()
         webView.load(URLRequest(url: url))
+        subscribeToRedux()
+    }
+
+    func subscribeToRedux() {
+        store.subscribe(self) {
+            $0.select {
+                $0.screenState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
+                ?? TermsOfUseState(windowUUID: self.windowUUID)
+            }
+        }
+    }
+
+    deinit {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: TermsOfUseState) {
+        if state.hasAccepted {
+            coordinator?.dismissTermsFlow()
+        }
     }
 
     private func setupViews() {

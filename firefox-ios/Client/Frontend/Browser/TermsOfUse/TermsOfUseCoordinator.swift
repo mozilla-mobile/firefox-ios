@@ -39,6 +39,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         )
         vc.coordinator = self
         vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
         self.presentedVC = vc
 
         router.present(vc, animated: true)
@@ -63,13 +64,13 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     func shouldShowTermsOfUse() -> Bool {
         let defaults = UserDefaults.standard
 
-        let hasAccepted = defaults.bool(forKey: "termsOfUseAccepted")
+        let hasAccepted = defaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.acceptedKey)
         if hasAccepted { return false }
 
         let isFeatureEnabled = featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
         if !isFeatureEnabled { return false }
 
-        if let lastShown = defaults.object(forKey: "termsOfUseLastShownDate") as? Date {
+        if let lastShown = defaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.lastShownKey) as? Date {
             let days = Calendar.current.dateComponents([.day], from: lastShown, to: Date()).day ?? 0
             if days >= 3 { return true }
         }

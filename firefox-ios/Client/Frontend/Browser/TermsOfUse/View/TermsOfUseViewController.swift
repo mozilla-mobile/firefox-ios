@@ -109,8 +109,6 @@ final class TermsOfUseViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .overFullScreen
-        modalTransitionStyle = .crossDissolve
     }
 
     required init?(coder: NSCoder) {
