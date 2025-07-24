@@ -1443,6 +1443,7 @@
 		BA726E382E31F0A700325CC3 /* LanguageModelResponseStreamProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA726E372E31F0A000325CC3 /* LanguageModelResponseStreamProtocol.swift */; };
 		BA726E3A2E31F35200325CC3 /* MockLanguageModelSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA726E392E31F34A00325CC3 /* MockLanguageModelSession.swift */; };
 		BA726E3C2E31FC7100325CC3 /* LanguageModelSessionAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA726E3B2E31FC6700325CC3 /* LanguageModelSessionAdapter.swift */; };
+		BA726E3E2E31FEB200325CC3 /* FoundationModelsSummarizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA726E3D2E31FEA100325CC3 /* FoundationModelsSummarizerTests.swift */; };
 		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
 		BA9EBA1C2E1BDDF300A11D91 /* LiteLLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9EBA1B2E1BDDEE00A11D91 /* LiteLLMClient.swift */; };
@@ -9257,6 +9258,7 @@
 		BA726E372E31F0A000325CC3 /* LanguageModelResponseStreamProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageModelResponseStreamProtocol.swift; sourceTree = "<group>"; };
 		BA726E392E31F34A00325CC3 /* MockLanguageModelSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLanguageModelSession.swift; sourceTree = "<group>"; };
 		BA726E3B2E31FC6700325CC3 /* LanguageModelSessionAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageModelSessionAdapter.swift; sourceTree = "<group>"; };
+		BA726E3D2E31FEA100325CC3 /* FoundationModelsSummarizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationModelsSummarizerTests.swift; sourceTree = "<group>"; };
 		BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressWebViewManager.swift; sourceTree = "<group>"; };
 		BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AddressFormManager.js; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
@@ -15484,6 +15486,7 @@
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 				C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */,
+				BA726E3D2E31FEA100325CC3 /* FoundationModelsSummarizerTests.swift */,
 				E1AEC16D286E0CF500062E29 /* Frontend */,
 				3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */,
 				0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */,
@@ -18906,6 +18909,7 @@
 				6ADB651B285C03B100947EA4 /* DownloadHelperTests.swift in Sources */,
 				8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */,
 				0E9702742CC2F2FB00C357B7 /* PasswordGeneratorTelemetryTests.swift in Sources */,
+				BA726E3E2E31FEB200325CC3 /* FoundationModelsSummarizerTests.swift in Sources */,
 				CA7BD568248189E800A0A61B /* BreachAlertsTests.swift in Sources */,
 				253648E12B2111C100D5C2C5 /* SearchViewControllerTests.swift in Sources */,
 				4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */,
