@@ -7,6 +7,7 @@ import Common
 import Shared
 
 /// A lightweight client for interacting with a chat completions endpoint.
+/// TODO(FXIOS-12942): Implement proper thread-safety
 public final class LiteLLMClient: NSObject, URLSessionDataDelegate, @unchecked Sendable {
     /// NOTE: OpenAI like APIs including LiteLLM don't use websockets for streaming mode
     /// but instead use Server Sent Events (SSE) to send chunked responses.
