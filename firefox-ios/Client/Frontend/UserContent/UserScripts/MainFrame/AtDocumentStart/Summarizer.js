@@ -1,10 +1,9 @@
-/* vim: set ts=2 sts=2 sw=2 et tw=80: */
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 "use strict";
-import { Readability } from "@mozilla/readability";
+import { Readability, isProbablyReaderable} from "@mozilla/readability";
 
 const ALLOWED_LANGS = ["en"];
 
@@ -86,7 +85,7 @@ const checkSummarization = async (maxWords) => {
   if (!isProbablyReaderable(document)) {
     return {
       canSummarize: false,
-      reason: "documentNotReadeable",
+      reason: "documentNotReadable",
       wordCount: 0,
     };
   }
@@ -103,7 +102,13 @@ const checkSummarization = async (maxWords) => {
     };
   }
 
-  return { canSummarize: true, reason: null, wordCount };
+  return { canSummarize: true, reason: null, wordCount, textContent: text };
 };
 
-window.checkSummarization = checkSummarization;
+
+Object.defineProperty(window.__firefox__, "Summarizer", {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: Object.freeze({checkSummarization})
+});
