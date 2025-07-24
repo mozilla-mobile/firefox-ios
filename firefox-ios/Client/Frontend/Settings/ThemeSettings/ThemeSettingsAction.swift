@@ -5,7 +5,9 @@
 import Common
 import Redux
 
-class ThemeSettingsViewAction: Action {
+struct ThemeSettingsViewAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let useSystemAppearance: Bool?
     let automaticBrightnessEnabled: Bool?
     let manualThemeType: ThemeType?
@@ -19,24 +21,27 @@ class ThemeSettingsViewAction: Action {
          systemBrightness: Float? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.useSystemAppearance = useSystemAppearance
         self.automaticBrightnessEnabled = automaticBrightnessEnabled
         self.manualThemeType = manualThemeType
         self.userBrightness = userBrightness
         self.systemBrightness = systemBrightness
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
     }
 }
 
-class ThemeSettingsMiddlewareAction: Action {
+struct ThemeSettingsMiddlewareAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let themeSettingsState: ThemeSettingsState?
 
     init(themeSettingsState: ThemeSettingsState? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.themeSettingsState = themeSettingsState
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

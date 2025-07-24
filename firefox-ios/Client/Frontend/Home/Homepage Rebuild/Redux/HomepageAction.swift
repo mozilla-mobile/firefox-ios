@@ -13,7 +13,9 @@ struct HomepageTelemetryExtras {
     let topSitesTelemetryConfig: TopSitesTelemetryConfig?
 }
 
-final class HomepageAction: Action {
+struct HomepageAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let isSearchBarEnabled: Bool?
     let shouldShowSpacer: Bool?
     let showiPadSetup: Bool?
@@ -31,13 +33,14 @@ final class HomepageAction: Action {
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.isSearchBarEnabled = isSearchBarEnabled
         self.shouldShowSpacer = shouldShowSpacer
         self.numberOfTopSitesPerRow = numberOfTopSitesPerRow
         self.showiPadSetup = showiPadSetup
         self.telemetryExtras = telemetryExtras
         self.isZeroSearch = isZeroSearch
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

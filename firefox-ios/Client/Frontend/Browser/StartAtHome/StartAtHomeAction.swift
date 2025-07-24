@@ -5,15 +5,19 @@
 import Common
 import Redux
 
-final class StartAtHomeAction: Action {
+struct StartAtHomeAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let shouldStartAtHome: Bool?
+
     init(
         shouldStartAtHome: Bool? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.shouldStartAtHome = shouldStartAtHome
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
