@@ -3799,12 +3799,7 @@ extension String {
 
 // MARK: - Root Bookmarks folders
 extension String {
-    public static let LegacyBookmarksFolderTitleMobile = MZLocalizedString(
-        key: "Mobile Bookmarks",
-        tableName: "Storage",
-        value: nil,
-        comment: "The legacy title of the folder that contains mobile bookmarks.")
-    public static let BookmarksFolderTitleMobile = MZLocalizedString(
+        public static let BookmarksFolderTitleMobile = MZLocalizedString(
         key: "Bookmarks",
         tableName: "Storage",
         value: nil,
@@ -3828,31 +3823,11 @@ extension String {
 
 // MARK: - Bookmark Management
 extension String {
-    public static let BookmarksFolder = MZLocalizedString(
-        key: "Bookmarks.Folder.Label",
-        tableName: nil,
-        value: "Folder",
-        comment: "The label to show the location of the folder where the bookmark is located")
-    public static let BookmarksNewBookmark = MZLocalizedString(
-        key: "Bookmarks.NewBookmark.Label",
-        tableName: nil,
-        value: "New Bookmark",
-        comment: "The button to create a new bookmark")
     public static let BookmarksNewFolder = MZLocalizedString(
         key: "Bookmarks.NewFolder.Label",
         tableName: nil,
         value: "New Folder",
         comment: "The button to create a new folder")
-    public static let BookmarksNewSeparator = MZLocalizedString(
-        key: "Bookmarks.NewSeparator.Label",
-        tableName: nil,
-        value: "New Separator",
-        comment: "The button to create a new separator")
-    public static let BookmarksEditBookmark = MZLocalizedString(
-        key: "Bookmarks.EditBookmark.Label",
-        tableName: nil,
-        value: "Edit Bookmark",
-        comment: "The button to edit a bookmark")
     public static let BookmarksEdit = MZLocalizedString(
         key: "Bookmarks.Edit.Button",
         tableName: nil,
@@ -3893,11 +3868,6 @@ extension String {
         tableName: nil,
         value: "Title",
         comment: "The label for the Title field when editing a bookmark")
-    public static let BookmarkDetailFieldURL = MZLocalizedString(
-        key: "Bookmark.DetailFieldURL.Label",
-        tableName: nil,
-        value: "URL",
-        comment: "The label for the URL field when editing a bookmark")
 }
 
 // MARK: - Clipboard Toast
@@ -8308,6 +8278,38 @@ extension String {
                 tableName: "MainMenu",
                 value: "Off",
                 comment: "On the main menu, a title for a label that indicate the current option/action state is off.")
+        }
+        struct v142 {
+            public static let LegacyBookmarksFolderTitleMobile = MZLocalizedString(
+                key: "Mobile Bookmarks",
+                tableName: "Storage",
+                value: nil,
+                comment: "The legacy title of the folder that contains mobile bookmarks.")
+            public static let BookmarksFolder = MZLocalizedString(
+                key: "Bookmarks.Folder.Label",
+                tableName: nil,
+                value: "Folder",
+                comment: "The label to show the location of the folder where the bookmark is located")
+            public static let BookmarksNewBookmark = MZLocalizedString(
+                key: "Bookmarks.NewBookmark.Label",
+                tableName: nil,
+                value: "New Bookmark",
+                comment: "The button to create a new bookmark")
+            public static let BookmarksNewSeparator = MZLocalizedString(
+                key: "Bookmarks.NewSeparator.Label",
+                tableName: nil,
+                value: "New Separator",
+                comment: "The button to create a new separator")
+            public static let BookmarksEditBookmark = MZLocalizedString(
+                key: "Bookmarks.EditBookmark.Label",
+                tableName: nil,
+                value: "Edit Bookmark",
+                comment: "The button to edit a bookmark")
+            public static let BookmarkDetailFieldURL = MZLocalizedString(
+                key: "Bookmark.DetailFieldURL.Label",
+                tableName: nil,
+                value: "URL",
+                comment: "The label for the URL field when editing a bookmark")
         }
     }
 }

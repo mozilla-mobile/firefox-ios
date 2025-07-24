@@ -24,6 +24,7 @@ class WallpaperMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
+    @MainActor
     func test_hompageAction_returnsWallpaperManagerWallpaper() throws {
         let subject = WallpaperMiddleware(wallpaperManager: wallpaperManager)
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
@@ -38,6 +39,7 @@ class WallpaperMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.wallpaperConfiguration.cardColor, .purple)
     }
 
+    @MainActor
     func test_wallpaperAction_returnsWallpaperManagerWallpaper() throws {
         let subject = WallpaperMiddleware(wallpaperManager: wallpaperManager)
         let testWallpaper = WallpaperConfiguration()
