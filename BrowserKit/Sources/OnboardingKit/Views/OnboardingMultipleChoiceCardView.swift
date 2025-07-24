@@ -10,8 +10,6 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
-    @Environment(\.carouselPosition)
-    private var carouselPosition
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
