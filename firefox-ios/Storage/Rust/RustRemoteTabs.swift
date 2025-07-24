@@ -163,9 +163,9 @@ public class RustRemoteTabs {
                 }
                 .map { client -> ClientAndTabs in
                     // Sort tabs in descending order by lastUsed
-                    var clientCopy = client
-                    clientCopy.tabs.sort { $0.lastUsed > $1.lastUsed }
-                    return clientCopy
+                    var sortedTabs = client.tabs
+                    sortedTabs.sort { $0.lastUsed > $1.lastUsed }
+                    return ClientAndTabs(client: client.client, tabs: sortedTabs)
                 }
                 .sorted { lhs, rhs in
                     // Get the most recent tab timestamp for each client (or 0 if no tabs)
