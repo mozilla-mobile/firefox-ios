@@ -32,7 +32,7 @@ final class SearchEngineSelectionMiddleware {
                     // TODO: FXIOS-12943 Once we are on Swift 6, we can mark this closure @MainActor,
                     // since it is dispatched to the main queue behind the scenes under DefaultSearchEngineProvider
                     guard Thread.isMainThread else {
-                        self?.logger.log("Completion is not called on the main thread",
+                        self?.logger.log("SearchEngineSelectionMiddleware completion is not called on the main thread",
                                          level: .fatal,
                                          category: .storage)
                         return
