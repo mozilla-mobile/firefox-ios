@@ -33,20 +33,31 @@ const extractContent = () => {
 };
 
 /**
+ * Helper function to wait for document to be ready before running checks.
+ * Returns a Promise that resolves when the document is ready.
+ */
+const documentReady = () =>  new Promise(resolve => {
+  if (document.readyState !== "loading") {
+    resolve();
+  } else {
+    document.addEventListener("readystatechange", () => {
+      if (document.readyState !== "loading") {
+        resolve();
+      }
+    }, { once: true });
+  }
+});
+
+
+/**
  * Checks document summarization eligibility.
  * Returns an object with `canSummarize`, `reason`, and `wordCount`.
  * @param {number} maxWords - Maximum number of words allowed for summarization.
  * @returns {{ canSummarize: boolean, reason: string, wordCount: number }}
  */
-const checkSummarization = (maxWords = MAX_DOCUMENT_LENGTH_IN_WORDS) => {
+const checkSummarization = async (maxWords) => {
   // 0. Document should be ready before we do anything.
-  if (document.readyState === "loading") {
-    return {
-      canSummarize: false,
-      reason: "documentNotReady",
-      wordCount: 0,
-    };
-  }
+  await documentReady();
 
   // 1. Readerable check
   if (!isProbablyReaderable(document)) {
