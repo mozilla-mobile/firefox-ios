@@ -488,9 +488,7 @@ class MainMenuViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         if isMenuRedesign {
-            if #available(iOS 26, *) {
-                // No need to do something for iOS 26
-            } else {
+            if #unavailable(iOS 26.0) {
                 view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
             }
             menuRedesignContent.applyTheme(theme: theme)
