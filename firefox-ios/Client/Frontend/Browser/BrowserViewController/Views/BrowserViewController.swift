@@ -324,6 +324,14 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
+    var isStoriesRedesignEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+    }
+
+    var isHomepageSearchBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+    }
+
     var isSummarizeFeatureEnabled: Bool {
         return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
     }
@@ -337,6 +345,18 @@ class BrowserViewController: UIViewController,
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
+    }
+
+    // todo: comment and explain the math
+    var availableHomepageContentHeight: CGFloat {
+        guard isStoriesRedesignEnabled else { return 0 }
+
+        let subtractToolbar = isHomepageSearchBarEnabled ? 0 : header.frame.height + overKeyboardContainer.frame.height
+        var availableHeight = view.frame.height - statusBarOverlay.frame.height -
+                                bottomContentStackView.frame.height -
+                                bottomContainer.frame.height
+        availableHeight -= subtractToolbar
+        return availableHeight
     }
 
     // MARK: Data management
@@ -1427,6 +1447,20 @@ class BrowserViewController: UIViewController,
         // when toolbars are hidden/shown the mask on the content view that is used for
         // toolbar translucency needs to be updated
         updateToolbarDisplay()
+
+        if isStoriesRedesignEnabled,
+           let browserViewControllerState,
+           browserViewControllerState.browserViewType == .normalHomepage,
+           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+           homepageState.availableContentHeight != availableHomepageContentHeight {
+            store.dispatchLegacy(
+                HomepageAction(
+                    availableContentHeight: availableHomepageContentHeight,
+                    windowUUID: windowUUID,
+                    actionType: HomepageActionType.availableContentHeightDidChange
+                )
+            )
+        }
     }
 
     func checkForJSAlerts() {
