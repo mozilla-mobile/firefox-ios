@@ -241,7 +241,6 @@ final class TabScrollController: NSObject,
         tab?.shouldScrollToTop = false
 
         if let containerView = scrollView?.superview {
-//            let translation = gesture.translation(in: containerView)
             let delta = lastPanTranslation - translation.y
             guard abs(delta) >= 3 else {
                 lastPanTranslation = translation.y
