@@ -8,11 +8,11 @@ import Common
 final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentViewSpacing: CGFloat = 16
+        static let backgroundAlpha: CGFloat = 0.8
     }
 
     private var contentStackView: UIStackView = .build { stack in
         stack.axis = .horizontal
-        stack.spacing = UX.contentViewSpacing
         stack.distribution = .fillEqually
         stack.accessibilityContainerType = .semanticGroup
     }
@@ -59,6 +59,12 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
             contentStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
+
+        if #available(iOS 26.0, *) {
+            // No need to do something for iOS 26
+        } else {
+            contentStackView.spacing = UX.contentViewSpacing
+        }
     }
 
     func reloadData(with data: [MenuSection], and groupA11yLabel: String?) {
@@ -70,10 +76,11 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
     private func setupHorizontalTabs() {
         contentStackView.removeAllArrangedViews()
         guard let horizontalTabsSection else { return }
-        for option in horizontalTabsSection.options {
+        for (index, option) in horizontalTabsSection.options.enumerated() {
+            let isLastOption = index == horizontalTabsSection.options.count - 1
             let squareView: MenuSquareView = .build { [weak self] view in
                 guard let self else { return }
-                view.configureCellWith(model: option)
+                view.configureCellWith(model: option, shouldShowDivider: !isLastOption)
                 if let theme { view.applyTheme(theme: theme) }
                 view.cellTapCallback = {
                     option.action?()
@@ -87,6 +94,10 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
     func applyTheme(theme: Theme) {
         self.theme = theme
         backgroundColor = .clear
-        contentStackView.backgroundColor = .clear
+        if #available(iOS 26.0, *) {
+            contentStackView.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+        } else {
+            contentStackView.backgroundColor = .clear
+        }
     }
 }

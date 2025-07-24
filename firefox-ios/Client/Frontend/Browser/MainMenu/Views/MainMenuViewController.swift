@@ -288,7 +288,11 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupRedesignView() {
-        view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+        if #available(iOS 26.0, *) {
+            // No need to do something for iOS 26
+        } else {
+            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+        }
         view.addSubview(menuRedesignContent)
 
         NSLayoutConstraint.activate([
@@ -486,7 +490,11 @@ class MainMenuViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         if isMenuRedesign {
-            view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
+            if #available(iOS 26, *) {
+                // No need to do something for iOS 26
+            } else {
+                view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
+            }
             menuRedesignContent.applyTheme(theme: theme)
         } else {
             view.backgroundColor = theme.colors.layer3
