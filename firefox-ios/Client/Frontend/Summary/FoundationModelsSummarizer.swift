@@ -1,6 +1,6 @@
-//// This Source Code Form is subject to the terms of the Mozilla Public
-//// License, v. 2.0. If a copy of the MPL was not distributed with this
-//// file, You can obtain one at http://mozilla.org/MPL/2.0/
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import FoundationModels
@@ -16,7 +16,7 @@ final class FoundationModelsSummarizer: SummarizerProtocol {
     init(makeSession: @escaping SessionFactory = FoundationModelsSummarizer.defaultSessionFactory) {
         self.makeSession = makeSession
     }
-   
+
     private static func defaultSessionFactory(prompt: String) -> LanguageModelSessionProtocol {
         LanguageModelSessionAdapter(instructions: prompt)
     }
@@ -34,10 +34,11 @@ final class FoundationModelsSummarizer: SummarizerProtocol {
         } catch { throw mapError(error) }
     }
 
-    /// Streams a summarized response chunk-by-chunk and pushes each piece to `onChunk`.
-    /// NOTE: We can reuse this to build the normal `summarize` but for now a split implementation is better for a few reasons:
-    /// - Streaming uses an `AsyncSequence` so we might end up paying for chunk handling and buffering just to end up with a single string.
+    /// Streams a summarized response chunk-by-chunk.
+    /// NOTE: It's possible to build the normal `summarize` from `summarizeStreamed` but:
+    /// - Streaming uses an `AsyncSequence` so we pay for chunk handling and buffering.
     /// - If we concatenate chunks and an error throws mid‑stream, we would possibly emit or store partial text.
+    /// For now we keep both methods separate to avoid these potential issues.
     public func summarizeStreamed(
         prompt: String,
         text: String
