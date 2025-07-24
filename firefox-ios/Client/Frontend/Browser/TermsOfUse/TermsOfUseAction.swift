@@ -4,12 +4,15 @@
 import Common
 import Redux
 
-class TermsOfUseAction: Action {
+struct TermsOfUseAction: Action {
+    var windowUUID: WindowUUID
+    var actionType: ActionType
+
     init(windowUUID: WindowUUID, actionType: TermsOfUseActionType) {
-        super.init(windowUUID: windowUUID, actionType: actionType)
+        self.windowUUID = windowUUID
+        self.actionType = actionType
     }
 }
-
 enum TermsOfUseActionType: ActionType {
     case markAccepted
     case markDismissed
