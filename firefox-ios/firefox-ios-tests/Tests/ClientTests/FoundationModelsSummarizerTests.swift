@@ -99,7 +99,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
     /// Convenience method to simplify error checking in the test cases
     private func assertSummarizeThrows(
         _ expected: SummarizerError,
-        when running: @escaping () async throws -> Void,
+        when running: @escaping () async throws -> Void
     ) async {
         do {
             try await running()
