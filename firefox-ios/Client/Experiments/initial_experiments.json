@@ -2,6 +2,92 @@
   "data": [
     {
       "schemaVersion": "1.12.0",
+      "slug": "default-shortcuts-feature2",
+      "id": "default-shortcuts-feature2",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "default shortcuts feature2",
+      "userFacingDescription": "sponsored shortcut feature",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-hnt-sponsored-shortcuts-feature-release-2",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "hnt-sponsored-shortcuts-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [
+        {
+          "slug": "sponsored_tiles",
+          "priority": "secondary"
+        }
+      ],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "hnt-sponsored-shortcuts-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "hnt-sponsored-shortcuts-feature",
+              "enabled": true,
+              "value": {
+                "enabled": false
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('141.0.1') >= 0)))",
+      "startDate": "2025-07-24",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 14,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2025-07-24T15:18:28.385463Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": "",
+      "firefoxLabsDescription": "",
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": "",
+      "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
       "slug": "ios-dma-onboarding",
       "id": "ios-dma-onboarding",
       "arguments": {},
