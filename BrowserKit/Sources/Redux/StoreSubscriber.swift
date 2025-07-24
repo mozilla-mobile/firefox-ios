@@ -17,10 +17,12 @@ public protocol StoreSubscriber: AnyStoreSubscriber {
 
     /// Updates the subscriber with a new State for its screen state type.
     /// - Parameter state: the changed screen state.
+    @MainActor
     func newState(state: SubscriberStateType)
 }
 
 extension StoreSubscriber {
+    @MainActor
     public func newState(state: Any) {
         if let typedState = state as? SubscriberStateType {
             newState(state: typedState)
