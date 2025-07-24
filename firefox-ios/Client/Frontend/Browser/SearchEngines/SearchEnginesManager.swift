@@ -19,7 +19,6 @@ protocol SearchEngineDelegate: AnyObject {
 }
 
 struct SearchEngineProviderFactory {
-    @MainActor
     static let defaultSearchEngineProvider: SearchEngineProvider = {
         let secEnabled = SearchEngineFlagManager.isSECEnabled
         return secEnabled ? ASSearchEngineProvider() : DefaultSearchEngineProvider()
@@ -67,7 +66,6 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
 
     private lazy var isSECEnabled: Bool = { SearchEngineFlagManager.isSECEnabled }()
 
-    @MainActor
     init(prefs: Prefs,
          files: FileAccessor,
          engineProvider: SearchEngineProvider = SearchEngineProviderFactory.defaultSearchEngineProvider) {
