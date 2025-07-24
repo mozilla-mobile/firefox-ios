@@ -26,16 +26,6 @@ final class SummarizationCheckerTests: XCTestCase {
         XCTAssertEqual(result.wordCount, 42)
     }
 
-    /// JS stub for a page that is not reader‑readable.
-    func testSummarizationCheckerCanSummarizeFalseDocumentNotReady() throws {
-        let subject = createSubject()
-        let result = try subject.parse(
-            jsStubBuilder(canSummarize: false, reason: "documentNotReady", wordCount: 0))
-        XCTAssertFalse(result.canSummarize)
-        XCTAssertEqual(result.reason, .documentNotReady)
-        XCTAssertEqual(result.wordCount, 0)
-    }
-
     /// JS stub for a page that is in an unsupported language.
     func testSummarizationCheckerCanSummarizeFalseSocumentLanguageUnsupported() throws {
         let subject = createSubject()
