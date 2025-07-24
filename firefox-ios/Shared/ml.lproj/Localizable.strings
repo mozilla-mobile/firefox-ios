@@ -230,7 +230,7 @@
 "Create an account" = "അക്കൗണ്ട്‌ ഉണ്ടാക്കുക";
 
 /* Dark theme setting in Reading View settings */
-"Dark" = "ഇരുണ്ടത്";
+"Dark" = "ഇരുളിമ";
 
 /* Accessibility label for button decreasing font size in display settings of reader mode */
 "Decrease text size" = "അക്ഷരങ്ങളുടെ വലിപ്പം കുറയ്ക്കുക";
@@ -632,7 +632,7 @@
 "Licenses" = "അനുമതിപത്രങ്ങള്‍";
 
 /* Light theme setting in Reading View settings */
-"Light" = "ലഘുവായ";
+"Light" = "തെളിച്ചം";
 
 /* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "Load original page" = "ശരിയായ താള്‍ ലോഡ് ചെയ്യുക";
@@ -1163,7 +1163,7 @@
 "Settings.Appearance.WebsiteDarkMode.Description.v137" = "വെബിടങ്ങളെ ഒരു കറുത്ത നിറം തരുകാറുണ്ടു്. ചില വെബിടങ്ങൾ ശരിയായി കാണപ്പെടണമെന്നില്ല.";
 
 /* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
-"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "വെബിട ഇരുണ്ട പരി";
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "വെബ്ബിട ഇരുളിമ പരി";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "ബാഹ്യ പ്രയോഗങ്ങളെ തുറക്കുന്നത് തടയുക";
@@ -1220,10 +1220,10 @@
 "Settings.DisplayTheme.Manual.SwitchTitle" = "കരകൃതമായി";
 
 /* Option choice in display theme settings for dark theme */
-"Settings.DisplayTheme.OptionDark" = "ഇരുണ്ടത്";
+"Settings.DisplayTheme.OptionDark" = "ഇരുളിമ";
 
 /* Option choice in display theme settings for light theme */
-"Settings.DisplayTheme.OptionLight" = "തെളിച്ചമുള്ളത്";
+"Settings.DisplayTheme.OptionLight" = "തെളിച്ചം";
 
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "സ്ക്രീനിന്റെ തെളിച്ചം അടിസ്ഥാനമാക്കി, പ്രമേയങ്ങള്‍ തനിയെ മാറും. പ്രമേയം മാറാന്നുള്ള പരിധി നിങ്ങൾക്ക് നിശ്ചയിയ്ക്കാം. വട്ടം നിലവിലെ സ്ക്രീന്‍ തെളിച്ചം സൂചിപ്പിക്കുന്നു.";
@@ -1244,7 +1244,7 @@
 "Settings.DisplayTheme.SystemTheme.SectionHeader" = "വ്യവസ്ഥ അലങ്കാരം";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
-"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "വ്യവസ്ഥ വെള്ളിച്ച/ഇരുണ്ട രീതി ഉപയോഗിക്കുക";
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "വ്യവസ്ഥ തെളിച്ചം/ഇരുളിമ പരി ഉപയോഗിക്കുക";
 
 /* Theme picker settings section title */
 "Settings.DisplayTheme.ThemePicker.SectionHeader" = "അലങ്കാര കവാടഫലകം";
