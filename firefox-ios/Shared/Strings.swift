@@ -2026,55 +2026,61 @@ public struct TermsOfUse {
         key: "TermsOfUse.Title.v142",
         tableName: "TermsOfUse",
         value: "We’ve got an update",
-        comment: "Title for the Terms of Use bottom sheet"
+        comment: "Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use."
     )
     public static let Description = MZLocalizedString(
         key: "TermsOfUse.Description.v142",
         tableName: "TermsOfUse",
         value: "We’ve introduced a %@ Terms of Use and updated our Privacy Notice.",
-        comment: "Description text with embedded links. %@ is the app name (e.g. Firefox)."
+        comment: "Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox)."
     )
     public static let ReviewAndAcceptText = MZLocalizedString(
         key: "TermsOfUse.ReviewAndAcceptText.v142",
         tableName: "TermsOfUse",
         value: "Please take a moment to review and accept. Learn more",
-        comment: "Description text for review and accept with embedded link."
+        comment: "Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'."
     )
     public static let LinkTermsOfUse = MZLocalizedString(
         key: "TermsOfUse.Link.TermsOfUse.v142",
         tableName: "TermsOfUse",
         value: "%@ Terms of Use",
-        comment: "Label for Terms of Use link. %@ is the app name (e.g. Firefox)."
+        comment: "Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox)."
     )
     public static let LinkPrivacyNotice = MZLocalizedString(
         key: "TermsOfUse.Link.PrivacyNotice.v142",
         tableName: "TermsOfUse",
         value: "Privacy Notice",
-        comment: "Label for Privacy Notice link"
+        comment: "Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet."
     )
     public static let LinkLearnMore = MZLocalizedString(
         key: "TermsOfUse.Link.LearnMore.v142",
         tableName: "TermsOfUse",
         value: "Learn more",
-        comment: "Label for Learn More link"
+        comment: "Link shown in the Terms of Use sheet to direct users to more details about the update."
     )
     public static let AcceptButton = MZLocalizedString(
         key: "TermsOfUse.AcceptButton.v142",
         tableName: "TermsOfUse",
         value: "Accept",
-        comment: "Accept button title"
+        comment: "Label for the button that confirms user acceptance of the Terms of Use."
     )
     public static let RemindMeLaterButton = MZLocalizedString(
         key: "TermsOfUse.RemindMeLaterButton.v142",
         tableName: "TermsOfUse",
         value: "Remind Me Later",
-        comment: "Remind Me Later button title"
+        comment: "Label for the button that allows the user to postpone accepting the Terms of Use."
     )
     public static let BackButton = MZLocalizedString(
         key: "TermsOfUse.BackButton.v142",
         tableName: "TermsOfUse",
         value: "Back",
-        comment: "Title for back button."
+        comment: "Label for the back button shown in the Terms of Use web view."
+    )
+    public static let TermsOfUseHasOpened = MZLocalizedString(
+        key: "TermsOfUse.TermsOfUseHasOpened.v142",
+        tableName: "TermsOfUse",
+        value: "Terms of Use sheet opened",
+        comment: "Accessibility notification that is triggered when the Terms of Use sheet is presented."
     )
 }
 

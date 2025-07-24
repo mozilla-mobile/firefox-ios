@@ -117,7 +117,8 @@ final class TermsOfUseViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIAccessibility.post(notification: .announcement, argument: "Terms of Use sheet opened")
+        UIAccessibility.post(notification: .announcement, argument:
+                            TermsOfUseStrings.termsOfUseHasOpenedNotification)
         setupUI()
         listenForThemeChange(view)
         applyTheme()
