@@ -75,6 +75,7 @@ final class StoreTests: XCTestCase {
         XCTAssertEqual(MockState.actionsReduced[0] as? FakeReduxActionType, FakeReduxActionType.counterIncreased)
     }
 
+    @MainActor
     func testDispatchMultipleActions_mixThread() async {
         let expectation = expectation(description: "Wait for actions to run")
 
@@ -95,12 +96,12 @@ final class StoreTests: XCTestCase {
         let action2 = FakeReduxAction(
             windowUUID: UUID(),
             actionType: FakeReduxActionType.counterDecreased)
-        store.dispatchLegacy(action2)
+        store.dispatch(action2)
 
         let action3 = FakeReduxAction(
             windowUUID: UUID(),
             actionType: FakeReduxActionType.increaseCounter)
-        store.dispatchLegacy(action3)
+        store.dispatch(action3)
 
         await fulfillment(of: [expectation])
 
