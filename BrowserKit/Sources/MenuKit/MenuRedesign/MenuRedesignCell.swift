@@ -110,9 +110,7 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     private func configureCornerRadiusForCellPosition() {
-        if #available(iOS 26.0, *) {
-            // No need to do something for iOS 26
-        } else {
+        if #unavailable(iOS 26.0) {
             guard isFirstCell || isLastCell else { return }
             self.clipsToBounds = true
             layer.cornerRadius = UX.cornerRadius

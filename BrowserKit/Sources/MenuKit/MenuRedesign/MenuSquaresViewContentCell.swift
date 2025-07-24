@@ -60,9 +60,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
             contentStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
 
-        if #available(iOS 26.0, *) {
-            // No need to do something for iOS 26
-        } else {
+        if #unavailable(iOS 26.0) {
             contentStackView.spacing = UX.contentViewSpacing
         }
     }

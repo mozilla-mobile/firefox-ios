@@ -59,9 +59,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        if #available(iOS 26.0, *) {
-            // No need to do something for iOS 26
-        } else {
+        if #unavailable(iOS 26.0) {
             layer.cornerRadius = UX.cornerRadius
             self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
                                         .layerMinXMaxYCorner, .layerMaxXMaxYCorner]

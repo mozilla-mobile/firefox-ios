@@ -288,9 +288,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupRedesignView() {
-        if #available(iOS 26.0, *) {
-            // No need to do something for iOS 26
-        } else {
+        if #unavailable(iOS 26.0) {
             view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
         }
         view.addSubview(menuRedesignContent)
