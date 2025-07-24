@@ -35,6 +35,10 @@ final class SearchEngineSelectionMiddleware {
                         self?.logger.log("SearchEngineSelectionMiddleware completion is not called on the main thread",
                                          level: .fatal,
                                          category: .storage)
+                        // Fallback
+                        Task { @MainActor in
+                            self?.notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
+                        }
                         return
                     }
 
