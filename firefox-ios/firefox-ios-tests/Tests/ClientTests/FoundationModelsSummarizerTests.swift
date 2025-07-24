@@ -7,7 +7,12 @@ import XCTest
 import Common
 import Shared
 
+/// We need these compile time checks so the app can be built with pre‑iOS 26 SDKs.
+/// Once our BR workflow switches to 26, we can remove them,
+/// as the runtime @available checks will be enough.
+#if canImport(FoundationModels)
 import FoundationModels
+import Foundation
 
 @available(iOS 26, *)
 final class FoundationModelsSummarizerTests: XCTestCase {
@@ -130,3 +135,5 @@ extension SummarizerError: @retroactive Equatable {
         }
     }
 }
+
+#endif
