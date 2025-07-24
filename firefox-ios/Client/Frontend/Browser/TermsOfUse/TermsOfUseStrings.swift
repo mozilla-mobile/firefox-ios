@@ -32,21 +32,13 @@ struct TermsOfUseStrings {
     static func linkURL(for term: String) -> URL? {
         switch term {
         case String.localizedStringWithFormat(TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue):
-            return URL(string: "https://www.mozilla.org/about/legal/terms/firefox/")
+            return SupportUtils.URLForTermsOfUse
         case TermsOfUse.LinkPrivacyNotice:
-            return URL(string: "https://www.mozilla.org/privacy/firefox/")
+            return SupportUtils.URLForPrivacyNotice
         case TermsOfUse.LinkLearnMore:
-            return sumoFAQURL("firefox-terms-of-use-faq")
+            return SupportUtils.sumoFAQURL("firefox-terms-of-use-faq")
         default:
             return nil
         }
-    }
-
-    private static func sumoFAQURL(_ topic: String) -> URL? {
-        guard let escapedTopic = topic.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-              let languageIdentifier = Locale.preferredLanguages.first else {
-            return nil
-        }
-        return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 }

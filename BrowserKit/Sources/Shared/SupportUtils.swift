@@ -28,6 +28,14 @@ public struct SupportUtils {
         return URL(string: "https://www.mozilla.org/firefox/pocket/?utm_source=ff_ios")
     }
 
+    public static var URLForTermsOfUse: URL? {
+        return URL(string: "https://www.mozilla.org/about/legal/terms/firefox/")
+    }
+
+    public static var URLForPrivacyNotice: URL? {
+        return URL(string: "https://www.mozilla.org/privacy/firefox/")
+    }
+
     public static func URLForTopic(_ topic: String) -> URL? {
         // Construct a NSURL pointing to a specific topic on SUMO. The topic should be a non-escaped string. It will
         // be properly escaped by this function.
@@ -77,5 +85,13 @@ public struct SupportUtils {
             return nil
         }
         return URL(string: "https://webcompat.com/issues/new?src=mobile-reporter&label=browser-firefox-ios&label=\(deviceType)&url=\(escapedUrl)")
+    }
+
+    public static func sumoFAQURL(_ topic: String) -> URL? {
+        guard let escapedTopic = topic.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+              let languageIdentifier = Locale.preferredLanguages.first else {
+            return nil
+        }
+        return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 }
