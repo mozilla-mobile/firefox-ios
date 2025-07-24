@@ -132,22 +132,28 @@ final class TabScrollController: NSObject,
     /// - Parameters:
     ///   - safeAreaInsets: The safe area insets to use (nil treated as .zero).
     ///   - isMinimalAddressBarEnabled: Whether minimal address bar feature is enabled.
+    ///   - isBottomSearchBar: Whether search bar is set to the bottom.
     /// - Returns: The calculated scroll height.
     func overKeyboardScrollHeight(with safeAreaInsets: UIEdgeInsets?,
-                                  isMinimalAddressBarEnabled: Bool) -> CGFloat {
-        guard let overKeyboardContainerHeight = overKeyboardContainer?.frame.height else { return .zero }
-        guard isMinimalAddressBarEnabled else { return overKeyboardContainerHeight }
-        // Here it checks if the device has `Home Indicator`(Bottom Bar on newer iPhones).
-        // Devices with physical home button need adjustment.
+                                  isMinimalAddressBarEnabled: Bool,
+                                  isBottomSearchBar: Bool) -> CGFloat {
+        guard let containerHeight = overKeyboardContainer?.frame.height else { return .zero }
+        // Return full height if minimal address bar is disabled or not using bottom search bar.
+        guard isMinimalAddressBarEnabled && isBottomSearchBar else { return containerHeight }
+        // Return full height when zoom bar is present to avoid layout conflicts
+        guard zoomPageBar == nil else { return containerHeight }
+        // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
         let topInset = safeAreaInsets?.top ?? .zero
-        return hasHomeIndicator ? .zero : overKeyboardContainerHeight - topInset
+
+        return hasHomeIndicator ? .zero : containerHeight - topInset
     }
 
     private var overKeyboardScrollHeight: CGFloat {
         return overKeyboardScrollHeight(
             with: UIWindow.keyWindow?.safeAreaInsets,
-            isMinimalAddressBarEnabled: isMinimalAddressBarEnabled
+            isMinimalAddressBarEnabled: isMinimalAddressBarEnabled,
+            isBottomSearchBar: isBottomSearchBar
         )
     }
 
@@ -628,7 +634,7 @@ private extension TabScrollController {
             self.headerTopOffset = headerOffset
             self.bottomContainerOffset = bottomContainerOffset
 
-            if isMinimalAddressBarEnabled {
+            if isMinimalAddressBarEnabled && tab?.isFindInPageMode == false {
                 store.dispatchLegacy(
                     ToolbarAction(
                         scrollAlpha: Float(alpha),
@@ -639,8 +645,6 @@ private extension TabScrollController {
             }
 
             overKeyboardContainerOffset = overKeyboardOffset
-            overKeyboardContainer?.updateAlphaForSubviews(alpha)
-            overKeyboardContainer?.superview?.layoutIfNeeded()
 
             header?.updateAlphaForSubviews(alpha)
             header?.superview?.layoutIfNeeded()
