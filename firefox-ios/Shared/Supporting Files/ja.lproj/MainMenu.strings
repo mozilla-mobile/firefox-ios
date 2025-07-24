@@ -1,8 +1,23 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Body.v142" = "ブックマーク、履歴、設定など、すべて指先で操作できます。";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Title.v142" = "新しいメニュー、すっきり整理";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
 "ContextualHints.MainMenu.NewMenu.Body.v132" = "プライベートブラウジングから保存操作まで、必要なものをすばやく見つけられます。";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "新機能: 簡素化されたメニュー";
+
+/* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "ページをブックマークに追加";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.AccessibilityLabels.CloseButton.142" = "メニューを閉じる";
+
+/* The accessibility label for the dismiss button, for header banner, on top of the menu. */
+"MainMenu.AccessibilityLabels.DismissBanner.142" = "バナーを閉じる";
 
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "選択不可";
@@ -12,6 +27,9 @@
 
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "閉じる";
+
+/* The accessibility label for the close button of the header menu banner. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "閉じる";
 
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "ログインしてパスワードやタブなどを同期します";
@@ -33,6 +51,27 @@
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "ログインして Sync に戻る";
+
+/* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.BookmarkPage.Title.v141" = "ページをブックマークに追加";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
+"MainMenu.DesktopSiteOff.Title.v142" = "オフ";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
+"MainMenu.DesktopSiteOn.Title.v142" = "オン";
+
+/* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
+"MainMenu.HeaderBanner.Subtitle.v142" = "すぐに完了。いつでも変更できます。";
+
+/* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
+"MainMenu.HeaderBanner.Title.v142" = "%@ をデフォルトウェブブラウザーにしましょう";
+
+/* On the main menu, a title for a label that indicate the current option/action state is off. */
+"MainMenu.Off.Title.v141" = "オフ";
+
+/* On the main menu, a title for a label that indicate the current option/action state is on. */
+"MainMenu.On.Title.v141" = "オン";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "ブックマーク";
@@ -81,6 +120,15 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "%@ の新着情報";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
+"MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "接続は安全ではありません";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
+"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "保護はオフです";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
+"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "保護はオンです";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "ホーム";
@@ -214,6 +262,9 @@
 /* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. */
 "MainMenu.Submenus.Tools.PageZoom.Title.v140" = "ページズーム (%@)";
 
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. */
+"MainMenu.Submenus.Tools.PageZoomV2.Title.v141" = "ページズーム";
+
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
 "MainMenu.Submenus.Tools.Print.Subtitle.v131" = "プリント";
 
@@ -247,6 +298,9 @@
 /* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "ウェブサイトのダークモードをオンにする";
 
+/* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "ウェブサイトのダークモード";
+
 /* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
 "MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
 
@@ -274,14 +328,29 @@
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "新規タブ";
 
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "折りたたまれています";
+
+/* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "デスクトップサイト";
+
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
+"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "展開されています";
+
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "ページ内を検索";
 
 /* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "詳細を隠す";
 
+/* On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...) */
+"MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142" = "ライブラリー";
+
 /* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "他のメニュー";
+
+/* On the main menu, the accessibility label for the action that will open the page zoom tool. */
+"MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "ページズーム";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "保存";
@@ -301,8 +370,17 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "ツールサブメニュー";
 
+/* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
+"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "ウェブサイトのダークモード";
+
+/* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.DesktopSite.Title.v141" = "デスクトップサイト";
+
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "ページ内を検索...";
+
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPageV2.Title.v141" = "ページ内検索";
 
 /* On the main menu, the title for the action that will hide some menu options in the current section of the menu. */
 "MainMenu.ToolsSection.LessOptions.Title.v141" = "詳細を隠す";
@@ -321,4 +399,10 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "ツール";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
+"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "オフ";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON. */
+"MainMenu.WebsiteDarkModeOnV2.Title.v142" = "オン";
 

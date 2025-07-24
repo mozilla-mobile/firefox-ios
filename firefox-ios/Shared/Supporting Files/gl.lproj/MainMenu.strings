@@ -1,8 +1,23 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Body.v142" = "Marcadores, historial e configuración, todo na punta dos teus dedos.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Title.v142" = "Novo menú, sen desorde";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
 "ContextualHints.MainMenu.NewMenu.Body.v132" = "Busca o que necesite máis rápido, desde a navegación privada ata gardar accións.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Novo: menú simplificado";
+
+/* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "Engadir aos favoritos";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.AccessibilityLabels.CloseButton.142" = "Pechar menú";
+
+/* The accessibility label for the dismiss button, for header banner, on top of the menu. */
+"MainMenu.AccessibilityLabels.DismissBanner.142" = "Descartar o aviso";
 
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Atenuado";
@@ -13,11 +28,20 @@
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Pechar";
 
+/* The accessibility label for the close button of the header menu banner. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "Pechar";
+
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Acceda para sincronizar contrasinais, lapelas e moito máis";
 
+/* On the main menu, when the user is signed in. */
+"MainMenu.Account.SignedIn.Description.v141" = "Xestiona o que respaldas e sincronizas";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Sincronizar contrasinais, pestanas e moito máis";
+
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "Sincroniza marcadores, contrasinais, pestanas e moito máis";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Identificarse";
@@ -27,6 +51,27 @@
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Volver a acceder para sincronizar";
+
+/* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.BookmarkPage.Title.v141" = "Engadir aos favoritos";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
+"MainMenu.DesktopSiteOff.Title.v142" = "Desactivado";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
+"MainMenu.DesktopSiteOn.Title.v142" = "Activado";
+
+/* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
+"MainMenu.HeaderBanner.Subtitle.v142" = "Leva segundos. Cámbiao en calquera momento.";
+
+/* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
+"MainMenu.HeaderBanner.Title.v142" = "Establecer %@ como predeterminado";
+
+/* On the main menu, a title for a label that indicate the current option/action state is off. */
+"MainMenu.Off.Title.v141" = "Desactivado";
+
+/* On the main menu, a title for a label that indicate the current option/action state is on. */
+"MainMenu.On.Title.v141" = "Activado";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Marcadores";
@@ -75,6 +120,15 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. %@ is the app name (e.g. Firefox). */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Novo en %@";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the connection is not secure. */
+"MainMenu.SiteProtection.ConnectionNotSecure.Title.v141" = "A conexión non é segura";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are OFF. */
+"MainMenu.SiteProtection.ProtectionsOff.Title.v141" = "As proteccións están DESACTIVADAS";
+
+/* On the main menu, at the top, title for a button that open site protection settings. State of the button indicate that the protections are ON. */
+"MainMenu.SiteProtection.ProtectionsOn.Title.v141" = "As proteccións están ACTIVADAS";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Inicio";
@@ -205,6 +259,12 @@
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
 "MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "Modo nocturno";
 
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. */
+"MainMenu.Submenus.Tools.PageZoom.Title.v140" = "Aumento da páxina (%@)";
+
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. */
+"MainMenu.Submenus.Tools.PageZoomV2.Title.v141" = "Aumento da páxina";
+
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
 "MainMenu.Submenus.Tools.Print.Subtitle.v131" = "Imprimir";
 
@@ -232,6 +292,21 @@
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v131" = "Compartir";
 
+/* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "Desactiva o modo escuro do sitio web";
+
+/* On the main menu, the title for the action that will turn Website's Dark Mode on in the application. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137" = "Activa o modo escuro do sitio web";
+
+/* On the main menu, the title for the action that indicate, website dark mode can be turned on or off. */
+"MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141" = "Modo escuro do sitio web";
+
+/* This string is for the Zoom tool, when Zoom value is negative. (-50%) */
+"MainMenu.Submenus.Tools.Zoom.NegativeSymbol.v137" = "-";
+
+/* This string is for the Zoom tool, when Zoom value is positive. (+125%) */
+"MainMenu.Submenus.Tools.Zoom.PositiveSymbol.v137" = "+";
+
 /* On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
 "MainMenu.Submenus.Tools.Zoom.Subtitle.v131" = "Zoom";
 
@@ -253,8 +328,29 @@
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "Nova lapela";
 
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "Contraído";
+
+/* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Sitio de escritorio";
+
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
+"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "Expandido";
+
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Atopar na páxina";
+
+/* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "Menos";
+
+/* On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...) */
+"MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142" = "Biblioteca";
+
+/* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "Máis";
+
+/* On the main menu, the accessibility label for the action that will open the page zoom tool. */
+"MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "Aumento da páxina";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Gardar";
@@ -274,8 +370,23 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Submenú de ferramentas";
 
+/* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
+"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "Modo escuro do sitio web";
+
+/* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.DesktopSite.Title.v141" = "Sitio de escritorio";
+
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Atopar na páxina…";
+
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPageV2.Title.v141" = "Atopar na páxina";
+
+/* On the main menu, the title for the action that will hide some menu options in the current section of the menu. */
+"MainMenu.ToolsSection.LessOptions.Title.v141" = "Menos";
+
+/* On the main menu, the title for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.MoreOptions.Title.v141" = "Máis";
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Gardar";
@@ -288,4 +399,10 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Ferramentas";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
+"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Desactivado";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON. */
+"MainMenu.WebsiteDarkModeOnV2.Title.v142" = "Activado";
 
