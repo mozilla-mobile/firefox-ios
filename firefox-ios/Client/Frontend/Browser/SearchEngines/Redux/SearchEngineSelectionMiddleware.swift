@@ -5,6 +5,7 @@
 import Common
 import Redux
 
+@MainActor
 final class SearchEngineSelectionMiddleware {
     private let profile: Profile
     private let logger: Logger
@@ -28,7 +29,18 @@ final class SearchEngineSelectionMiddleware {
             guard !searchEngines.isEmpty else {
                 // The SearchEngineManager should have loaded these by now, but if not, attempt to fetch the search engines
                 self.searchEnginesManager.getOrderedEngines { [weak self] preferences, searchEngines in
-                    self?.notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
+                    // TODO: FXIOS-12943 Once we are on Swift 6, we can mark this closure @MainActor,
+                    // since it is dispatched to the main queue behind the scenes under DefaultSearchEngineProvider
+                    guard Thread.isMainThread else {
+                        self?.logger.log("Completion is not called on the main thread",
+                                         level: .fatal,
+                                         category: .storage)
+                        return
+                    }
+
+                    MainActor.assumeIsolated {
+                        self?.notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
+                    }
                 }
                 return
             }
@@ -38,7 +50,7 @@ final class SearchEngineSelectionMiddleware {
         case SearchEngineSelectionActionType.didTapSearchEngine:
             // Trigger editing in the toolbar
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
 
         default:
             break
@@ -51,6 +63,6 @@ final class SearchEngineSelectionMiddleware {
             actionType: SearchEngineSelectionActionType.didLoadSearchEngines,
             searchEngines: searchEngines.map({ $0.generateModel() })
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 }
