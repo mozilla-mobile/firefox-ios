@@ -480,13 +480,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
@@ -513,13 +508,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [dispatchExpectation], timeout: 1)
 
-        let actionsCalled = try XCTUnwrap(mockStore.dispatchedActions as? [HomepageAction])
-        let configuredSearchBarAction = try XCTUnwrap(actionsCalled.first(where: {
-            $0.actionType as? HomepageMiddlewareActionType == .configuredSearchBar
-        }))
-        let configuredSearchBarActionCount = actionsCalled.filter {
-            ($0.actionType as? HomepageMiddlewareActionType) == .configuredSearchBar
-        }.count
+        let (configuredSearchBarAction, configuredSearchBarActionCount) = try getActionInfo(for: .configuredSearchBar)
+
         let configuredSearchBarActionType = try XCTUnwrap(
             configuredSearchBarAction.actionType as? HomepageMiddlewareActionType
         )
