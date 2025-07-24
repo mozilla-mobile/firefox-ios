@@ -7,7 +7,7 @@ import Storage
 
 @testable import Client
 
-class MockGoogleTopSiteManager: GoogleTopSiteManagerProvider {
+final class MockGoogleTopSiteManager: GoogleTopSiteManagerProvider, @unchecked Sendable {
     private let mockSiteData: Site?
     var removeGoogleTopSiteCalledCount = 0
 
