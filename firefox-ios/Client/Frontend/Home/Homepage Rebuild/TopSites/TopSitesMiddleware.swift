@@ -8,7 +8,6 @@ import Redux
 import Storage
 
 /// Middleware to handle top sites related actions, if this gets too big, should split out the telemetry.
-@MainActor
 final class TopSitesMiddleware: FeatureFlaggable {
     private let topSitesManager: TopSitesManagerInterface
     private let homepageTelemetry: HomepageTelemetry
@@ -118,7 +117,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
     }
 
     private func dispatchTopSitesRetrievedAction(for windowUUID: WindowUUID, topSites: [TopSiteConfiguration]) {
-        store.dispatch(
+        store.dispatchLegacy(
             TopSitesAction(
                 topSites: topSites,
                 windowUUID: windowUUID,
