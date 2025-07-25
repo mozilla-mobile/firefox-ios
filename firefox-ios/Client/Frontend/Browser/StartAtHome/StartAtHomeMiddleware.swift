@@ -6,7 +6,6 @@ import Common
 import Redux
 import Shared
 
-@MainActor
 final class StartAtHomeMiddleware {
     private let windowManager: WindowManager
     private let logger: Logger
@@ -24,17 +23,31 @@ final class StartAtHomeMiddleware {
     }
 
     lazy var startAtHomeProvider: Middleware<AppState> = { state, action in
-        switch action.actionType {
-        case StartAtHomeActionType.didBrowserBecomeActive:
-            let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
-            store.dispatch(
-                StartAtHomeAction(
-                    shouldStartAtHome: shouldStartAtHome,
-                    windowUUID: action.windowUUID,
-                    actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
-                )
+        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
+        // because we dispatch to the main thread in the store. We will want
+        // to also isolate that to the @MainActor to remove this.
+        guard Thread.isMainThread else {
+            self.logger.log(
+                "Tab Manager Middleware is not being called from the main thread!",
+                level: .fatal,
+                category: .tabs
             )
-        default: break
+            return
+        }
+
+        MainActor.assumeIsolated {
+            switch action.actionType {
+            case StartAtHomeActionType.didBrowserBecomeActive:
+                let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
+                store.dispatchLegacy(
+                    StartAtHomeAction(
+                        shouldStartAtHome: shouldStartAtHome,
+                        windowUUID: action.windowUUID,
+                        actionType: StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted
+                    )
+                )
+            default: break
+            }
         }
     }
 
@@ -53,6 +66,7 @@ final class StartAtHomeMiddleware {
     /// based on user preferences and session state.
     ///
     /// - Returns: `true` if a homepage tab was selected and displayed, `false` otherwise.
+    @MainActor
     private func startAtHomeCheck(windowUUID: WindowUUID) -> Bool {
         let tabManager = tabManager(for: windowUUID)
         let startAtHomeManager = StartAtHomeHelper(
@@ -94,6 +108,7 @@ final class StartAtHomeMiddleware {
     ///   - privateMode: A Boolean indicating whether the tab is in private mode.
     ///   - profilePreferences: The user's profile preferences.
     /// - Returns: A tab configured to show the appropriate homepage content.
+    @MainActor
     private func createStartAtHomeTab(tabManager: TabManager,
                                       withExistingTab existingTab: Tab?,
                                       inPrivateMode privateMode: Bool,
