@@ -25,13 +25,10 @@ struct TermsOfUseState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<TermsOfUseState> = { state, action in
+        var newState = state
         guard let action = action as? TermsOfUseAction,
               let type = action.actionType as? TermsOfUseActionType,
-              action.windowUUID == state.windowUUID else {
-            return state
-        }
-
-        var newState = state
+              action.windowUUID == state.windowUUID else { return newState }
 
         switch type {
         case .markAccepted:
