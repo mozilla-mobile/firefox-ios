@@ -138,10 +138,9 @@ final class TabScrollController: NSObject,
                                   isMinimalAddressBarEnabled: Bool,
                                   isBottomSearchBar: Bool) -> CGFloat {
         guard let containerHeight = overKeyboardContainer?.frame.height else { return .zero }
-        // Return full height if minimal address bar is disabled or not using bottom search bar.
-        guard isMinimalAddressBarEnabled && isBottomSearchBar else { return containerHeight }
-        // Return full height when zoom bar is present to avoid layout conflicts
-        guard zoomPageBar == nil else { return containerHeight }
+        // Return full height if minimal address bar is disabled or not using bottom search bar
+        // or if zoom bar is not visible.
+        guard isMinimalAddressBarEnabled && isBottomSearchBar && zoomPageBar == nil else { return containerHeight }
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
         let topInset = safeAreaInsets?.top ?? .zero
