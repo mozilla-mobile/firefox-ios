@@ -37,7 +37,9 @@ final class BookmarksMiddleware {
                     )
                 )
             }
-            self?.dispatchBookmarksAction(windowUUID: windowUUID, updatedBookmarks: bookmarks)
+            Task { @MainActor in
+                self?.dispatchBookmarksAction(windowUUID: windowUUID, updatedBookmarks: bookmarks)
+            }
         }
     }
 
