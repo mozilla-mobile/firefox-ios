@@ -7,11 +7,12 @@ import XCTest
 @testable import Client
 
 class JSAlertThrottlerTests: XCTestCase {
-    private var throttler: JSAlertThrottler!
+    private var throttler: PopupThrottler!
+    private let popupType: PopupThrottler.PopupType = .alert
 
     override func setUp() {
         super.setUp()
-        throttler = JSAlertThrottler()
+        throttler = PopupThrottler()
     }
 
     override func tearDown() {
@@ -20,56 +21,56 @@ class JSAlertThrottlerTests: XCTestCase {
     }
 
     func testThatRapidAlertsUnderLimitDoNotPreventAddtlAlerts() {
-        let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
+        let threshold = popupType.maxPopupThreshold
         // Show alerts up to but not over threshold
         for _ in 0..<(threshold - 1) {
-            throttler.willShowJSAlert()
+            throttler.willShowAlert(type: .alert)
         }
-        XCTAssertTrue(throttler.canShowAlert())
+        XCTAssertTrue(throttler.canShowAlert(type: .alert))
     }
 
     func testThatRapidAlertsExceedingLimitPreventAddtlAlerts() {
-        let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
+        let threshold = popupType.maxPopupThreshold
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
-            throttler.willShowJSAlert()
+            throttler.willShowAlert(type: .alert)
         }
-        XCTAssertFalse(throttler.canShowAlert())
+        XCTAssertFalse(throttler.canShowAlert(type: .alert))
     }
 
     func testThatAlertsShownAfterSufficientDelayDoNotPreventAddtlAlerts() {
-        let customThrottler = JSAlertThrottler(resetTime: 1.0)
-        let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
+        let customThrottler = PopupThrottler(resetTime: [.alert: 1.0, .popupWindow: 1.0])
+        let threshold = popupType.maxPopupThreshold
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
-            customThrottler.willShowJSAlert()
+            customThrottler.willShowAlert(type: .alert)
         }
 
         // Wait longer than the necessary threshold, and then make sure alerts are allowed
         let expectation = XCTestExpectation(description: "Throttle expectation")
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            XCTAssertTrue(customThrottler.canShowAlert())
+            XCTAssertTrue(customThrottler.canShowAlert(type: .alert))
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 4.0)
     }
 
     func testThatAlertsShownAfterSufficientDelayResetAlertCount() {
-        let customThrottler = JSAlertThrottler(resetTime: 1.0)
-        let threshold = JSAlertThrottler.Thresholds.maxConsecutiveAlerts
+        let customThrottler = PopupThrottler(resetTime: [.alert: 1.0, .popupWindow: 1.0])
+        let threshold = popupType.maxPopupThreshold
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
-            XCTAssertTrue(customThrottler.canShowAlert())
-            customThrottler.willShowJSAlert()
+            XCTAssertTrue(customThrottler.canShowAlert(type: .alert))
+            customThrottler.willShowAlert(type: .alert)
         }
 
         // Wait longer than the necessary threshold, and then make sure alerts are allowed
         let expectation = XCTestExpectation(description: "Throttle expectation")
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            XCTAssertTrue(customThrottler.canShowAlert())
+            XCTAssertTrue(customThrottler.canShowAlert(type: .alert))
             // Now make sure that any immediate alerts are also allowed
-            customThrottler.willShowJSAlert()
-            XCTAssertTrue(customThrottler.canShowAlert())
+            customThrottler.willShowAlert(type: .alert)
+            XCTAssertTrue(customThrottler.canShowAlert(type: .alert))
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 4.0)
