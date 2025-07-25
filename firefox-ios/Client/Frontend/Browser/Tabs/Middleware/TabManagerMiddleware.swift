@@ -850,27 +850,29 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
 
         fetchProfileTabInfo(for: selectedTab.url) { profileTabInfo in
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: windowUUID,
-                    actionType: MainMenuActionType.updateCurrentTabInfo,
-                    currentTabInfo: MainMenuTabInfo(
-                        tabID: selectedTab.tabUUID,
-                        url: selectedTab.url,
-                        canonicalURL: selectedTab.canonicalURL?.displayURL,
-                        isHomepage: selectedTab.isFxHomeTab,
-                        isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
-                        hasChangedUserAgent: selectedTab.changedUserAgent,
-                        zoomLevel: selectedTab.pageZoom,
-                        readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
-                        isBookmarked: profileTabInfo.isBookmarked,
-                        isInReadingList: profileTabInfo.isInReadingList,
-                        isPinned: profileTabInfo.isPinned,
-                        accountData: accountData,
-                        accountProfileImage: profileImage
+            Task { @MainActor in
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: windowUUID,
+                        actionType: MainMenuActionType.updateCurrentTabInfo,
+                        currentTabInfo: MainMenuTabInfo(
+                            tabID: selectedTab.tabUUID,
+                            url: selectedTab.url,
+                            canonicalURL: selectedTab.canonicalURL?.displayURL,
+                            isHomepage: selectedTab.isFxHomeTab,
+                            isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
+                            hasChangedUserAgent: selectedTab.changedUserAgent,
+                            zoomLevel: selectedTab.pageZoom,
+                            readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                            isBookmarked: profileTabInfo.isBookmarked,
+                            isInReadingList: profileTabInfo.isInReadingList,
+                            isPinned: profileTabInfo.isPinned,
+                            accountData: accountData,
+                            accountProfileImage: profileImage
+                        )
                     )
                 )
-            )
+            }
         }
     }
 
