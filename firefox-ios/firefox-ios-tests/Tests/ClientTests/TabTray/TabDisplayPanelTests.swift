@@ -6,8 +6,6 @@ import Common
 import XCTest
 
 @testable import Client
-
-@MainActor
 final class TabDisplayPanelTests: XCTestCase {
     override func setUp() {
         super.setUp()
