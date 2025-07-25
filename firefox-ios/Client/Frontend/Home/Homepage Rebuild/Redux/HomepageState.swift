@@ -29,6 +29,11 @@ struct HomepageState: ScreenState, Equatable {
     /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
     let isZeroSearch: Bool
     let shouldTriggerImpression: Bool
+<<<<<<< HEAD
+=======
+    let shouldShowSpacer: Bool
+    let availableContentHeight: CGFloat
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -51,7 +56,13 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: homepageState.pocketState,
             wallpaperState: homepageState.wallpaperState,
             isZeroSearch: homepageState.isZeroSearch,
+<<<<<<< HEAD
             shouldTriggerImpression: homepageState.shouldTriggerImpression
+=======
+            shouldTriggerImpression: homepageState.shouldTriggerImpression,
+            shouldShowSpacer: homepageState.shouldShowSpacer,
+            availableContentHeight: homepageState.availableContentHeight
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
         )
     }
 
@@ -67,7 +78,13 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
             isZeroSearch: false,
+<<<<<<< HEAD
             shouldTriggerImpression: false
+=======
+            shouldTriggerImpression: false,
+            shouldShowSpacer: false,
+            availableContentHeight: 0
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
         )
     }
 
@@ -82,7 +99,13 @@ struct HomepageState: ScreenState, Equatable {
         pocketState: PocketState,
         wallpaperState: WallpaperState,
         isZeroSearch: Bool,
+<<<<<<< HEAD
         shouldTriggerImpression: Bool
+=======
+        shouldTriggerImpression: Bool,
+        shouldShowSpacer: Bool,
+        availableContentHeight: CGFloat
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -95,6 +118,11 @@ struct HomepageState: ScreenState, Equatable {
         self.wallpaperState = wallpaperState
         self.isZeroSearch = isZeroSearch
         self.shouldTriggerImpression = shouldTriggerImpression
+<<<<<<< HEAD
+=======
+        self.shouldShowSpacer = shouldShowSpacer
+        self.availableContentHeight = availableContentHeight
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -113,7 +141,12 @@ struct HomepageState: ScreenState, Equatable {
             }
 
             return handleEmbeddedHomepageAction(state: state, action: action, isZeroSearch: isZeroSearch)
+<<<<<<< HEAD
 
+=======
+        case HomepageActionType.availableContentHeightDidChange:
+            return handleAvailableContentHeightChangeAction(state: state, action: action)
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             return handleDidTabChangeToHomepageAction(state: state, action: action)
 
@@ -134,7 +167,13 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState.reducer(state.pocketState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
+<<<<<<< HEAD
             shouldTriggerImpression: false
+=======
+            shouldTriggerImpression: false,
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
         )
     }
 
@@ -152,7 +191,35 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState.reducer(state.pocketState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: isZeroSearch,
+<<<<<<< HEAD
             shouldTriggerImpression: false
+=======
+            shouldTriggerImpression: false,
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
+        )
+    }
+
+    private static func handleAvailableContentHeightChangeAction(state: HomepageState, action: Action) -> HomepageState {
+        guard let availableContentHeight = (action as? HomepageAction)?.availableContentHeight else {
+            return defaultState(from: state)
+        }
+
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: MerinoState.reducer(state.merinoState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: false,
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: availableContentHeight
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
         )
     }
 
@@ -168,7 +235,35 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: PocketState.reducer(state.pocketState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
+<<<<<<< HEAD
             shouldTriggerImpression: true
+=======
+            shouldTriggerImpression: true,
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
+        )
+    }
+
+    private static func handleSpacerInitialization(action: Action, state: Self) -> HomepageState {
+        guard let isSpacerEnabled = (action as? HomepageAction)?.shouldShowSpacer else {
+            return defaultState(from: state)
+        }
+
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: MerinoState.reducer(state.merinoState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: false,
+            shouldShowSpacer: isSpacerEnabled,
+            availableContentHeight: state.availableContentHeight
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
         )
     }
 
@@ -204,7 +299,13 @@ struct HomepageState: ScreenState, Equatable {
             pocketState: pocketState,
             wallpaperState: wallpaperState,
             isZeroSearch: state.isZeroSearch,
+<<<<<<< HEAD
             shouldTriggerImpression: false
+=======
+            shouldTriggerImpression: false,
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
         )
     }
 
