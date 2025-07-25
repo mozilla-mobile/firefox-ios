@@ -9,6 +9,7 @@ import UIKit
 /// Protocol followed by child of the bottom sheet, which holds the content shown in the bottom sheet.
 public protocol BottomSheetChild: UIViewController {
     /// Tells the child that the bottom sheet will get dismissed
+    @MainActor
     func willDismiss()
 }
 

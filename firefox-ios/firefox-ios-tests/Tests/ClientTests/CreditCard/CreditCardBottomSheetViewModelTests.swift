@@ -375,7 +375,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.decryptedCreditCard = nil
         subject.state = .selectSavedCard
 
-        subject.updateCreditCardList(queue: dispatchQueue) { cards in
+        subject.updateCreditCardList { cards in
             XCTAssertEqual(subject.creditCards, cards)
             XCTAssertEqual(cards?.count, 1)
             XCTAssertEqual(cards?.first?.guid, "1")
@@ -394,7 +394,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         subject.creditCard = nil
         subject.decryptedCreditCard = nil
 
-        subject.updateCreditCardList(queue: dispatchQueue) { cards in
+        subject.updateCreditCardList { cards in
             expectation.fulfill()
         }
         waitForExpectations(timeout: 1.0)
