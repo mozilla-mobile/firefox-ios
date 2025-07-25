@@ -8,7 +8,6 @@ import Common
 
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
-@MainActor
 final class HomepageMiddleware: FeatureFlaggable {
     private let homepageTelemetry: HomepageTelemetry
     private let notificationCenter: NotificationProtocol
@@ -75,7 +74,7 @@ final class HomepageMiddleware: FeatureFlaggable {
     }
 
     private func dispatchSearchBarConfigurationAction(action: Action) {
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 isSearchBarEnabled: self.shouldShowSearchBar(),
                 windowUUID: action.windowUUID,
@@ -85,7 +84,7 @@ final class HomepageMiddleware: FeatureFlaggable {
     }
 
     private func dispatchSpacerConfigurationAction(action: Action) {
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 shouldShowSpacer: self.shouldShowSpacer(),
                 windowUUID: action.windowUUID,
