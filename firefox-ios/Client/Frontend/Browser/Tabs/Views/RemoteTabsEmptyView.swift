@@ -8,12 +8,18 @@ import UIKit
 import Shared
 
 protocol RemoteTabsEmptyViewDelegate: AnyObject {
+    @MainActor
     func remotePanelDidRequestToSignIn()
+
+    @MainActor
     func presentFxAccountSettings()
+
+    @MainActor
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-class RemoteTabsEmptyView: UIView, RemoteTabsEmptyViewProtocol {
+class RemoteTabsEmptyView: UIView,
+                           RemoteTabsEmptyViewProtocol {
     struct UX {
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24

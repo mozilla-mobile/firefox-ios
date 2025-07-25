@@ -17,6 +17,7 @@ protocol RemoteTabsPanelDelegate: AnyObject {
 }
 
 protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
+    @MainActor
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
 }
 
