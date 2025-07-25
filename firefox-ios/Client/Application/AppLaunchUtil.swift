@@ -36,6 +36,9 @@ final class AppLaunchUtil: Sendable {
         }
 
         DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
+        if #available(iOS 26, *) {
+            AppleIntelligenceUtil().processAvailabilityState()
+        }
 
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true

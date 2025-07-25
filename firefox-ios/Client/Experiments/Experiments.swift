@@ -200,6 +200,11 @@ enum Experiments {
         return prefsReader.hasEnabledTipsNotifications()
     }
 
+    private static func isAppleIntelligenceAvailable() -> Bool {
+        guard #available(iOS 26, *) else { return false }
+        return AppleIntelligenceUtil().isAppleIntelligenceAvailable
+    }
+
     private static func buildNimbus(dbPath: String,
                                     errorReporter: @escaping NimbusErrorReporter,
                                     initialExperiments: URL?,
@@ -214,7 +219,8 @@ enum Experiments {
             isFirstRun: isFirstRun,
             isDefaultBrowser: isDefaultBrowser(),
             isBottomToolbarUser: isBottomToolbarUser(),
-            hasEnabledTipsNotifications: hasEnabledTipsNotifications()
+            hasEnabledTipsNotifications: hasEnabledTipsNotifications(),
+            isAppleIntelligenceAvailable: isAppleIntelligenceAvailable()
         )
 
         return NimbusBuilder(dbPath: dbPath)
