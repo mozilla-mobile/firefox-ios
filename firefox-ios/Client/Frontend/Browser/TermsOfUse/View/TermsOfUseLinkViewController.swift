@@ -80,7 +80,7 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
     deinit {
         unsubscribeFromRedux()
     }
-    
+
     func subscribeToRedux() {
         store.subscribe(self) {
             $0.select {
