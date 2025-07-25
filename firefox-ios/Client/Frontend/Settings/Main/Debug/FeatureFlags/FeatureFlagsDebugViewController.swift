@@ -170,8 +170,8 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 },
                 FeatureFlagsBoolSetting(
                     with: .touFeature,
-                    titleText: format(string: "Terms of Use Bottom Sheet"),
-                    statusText: format(string: "Toggle to enable Terms of Use bottom sheet feature")
+                    titleText: format(string: "Terms of Use"),
+                    statusText: format(string: "Toggle to enable Terms of Use feature")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
