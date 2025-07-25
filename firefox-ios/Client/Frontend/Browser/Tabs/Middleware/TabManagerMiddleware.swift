@@ -893,7 +893,7 @@ class TabManagerMiddleware: FeatureFlaggable {
                         accountProfileImage: profileImage
                     )
                 )
-            }
+            )
         }
     }
 
