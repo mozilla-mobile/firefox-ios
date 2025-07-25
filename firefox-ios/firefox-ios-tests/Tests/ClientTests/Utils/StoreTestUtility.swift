@@ -7,7 +7,6 @@ import Redux
 @testable import Client
 import XCTest
 
-@MainActor
 protocol StoreTestUtility {
     func setupAppState() -> AppState
     func setupStore()

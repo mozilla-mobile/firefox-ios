@@ -8,7 +8,6 @@ import XCTest
 
 @testable import Client
 
-@MainActor
 class ThemeSettingsControllerTests: XCTestCase, StoreTestUtility {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockStore: MockStoreForMiddleware<AppState>!
