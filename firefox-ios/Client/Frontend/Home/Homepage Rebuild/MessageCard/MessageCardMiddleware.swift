@@ -12,7 +12,6 @@ struct MessageCardConfiguration: Hashable {
     let buttonLabel: String?
 }
 
-@MainActor
 final class MessageCardMiddleware {
     private var message: GleanPlumbMessage?
     private let messagingManager: GleanPlumbMessageManagerProtocol
@@ -21,6 +20,7 @@ final class MessageCardMiddleware {
         self.messagingManager = messagingManager
     }
 
+    // TODO: FXIOS-12831 We need this middleware isolated to the main actor (due to `onMessagePressed` call)
     lazy var messageCardProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
 
@@ -60,6 +60,6 @@ final class MessageCardMiddleware {
             windowUUID: windowUUID,
             actionType: MessageCardMiddlewareActionType.initialize
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
     }
 }
