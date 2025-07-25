@@ -138,7 +138,7 @@ final class TermsOfUseViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .termsOfUse)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         store.subscribe(self) {
             $0.select { appState in
                 appState.screenState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
@@ -292,12 +292,12 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     @objc private func acceptTapped() {
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markAccepted))
+        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .markAccepted))
         coordinator?.dismissTermsFlow()
     }
 
     @objc private func remindMeLaterTapped() {
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
+        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
         coordinator?.dismissTermsFlow()
     }
 

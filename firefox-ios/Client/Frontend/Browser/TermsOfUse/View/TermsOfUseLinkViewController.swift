@@ -91,12 +91,6 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(
-            windowUUID: self.windowUUID,
-            actionType: ScreenActionType.closeScreen,
-            screen: .termsOfUse
-        )
-        store.dispatch(action)
         store.unsubscribe(self)
     }
 
