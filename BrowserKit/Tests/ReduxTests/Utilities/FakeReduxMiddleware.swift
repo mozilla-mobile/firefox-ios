@@ -6,7 +6,6 @@ import Foundation
 
 @testable import Redux
 
-@MainActor
 class FakeReduxMiddleware {
     lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
         switch action.actionType {
@@ -15,7 +14,7 @@ class FakeReduxMiddleware {
             let action = FakeReduxAction(counterValue: initialValue,
                                          windowUUID: windowUUID,
                                          actionType: FakeReduxActionType.initialValueLoaded)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
 
         case FakeReduxActionType.increaseCounter:
             let existingValue = state.counter
@@ -23,7 +22,7 @@ class FakeReduxMiddleware {
             let action = FakeReduxAction(counterValue: newValue,
                                          windowUUID: windowUUID,
                                          actionType: FakeReduxActionType.counterIncreased)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
 
         case FakeReduxActionType.decreaseCounter:
             let existingValue = state.counter
@@ -31,7 +30,7 @@ class FakeReduxMiddleware {
             let action = FakeReduxAction(counterValue: newValue,
                                          windowUUID: windowUUID,
                                          actionType: FakeReduxActionType.counterDecreased)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
 
         default:
            break

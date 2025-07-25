@@ -12,9 +12,9 @@ public class SummarizationChecker {
     ///   - maxWords: The maximum allowed words before summarization is disallowed.
     /// - Returns: A `SummarizationCheckResult`, even on error.
     public func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
-        let jsCall = "checkSummarization(\(maxWords));"
+        let jsCall = "return await window.__firefox__.Summarizer.checkSummarization(\(maxWords))"
         do {
-            let rawResult = try await webView.evaluateJavaScript(jsCall, in: nil, contentWorld: .defaultClient)
+            let rawResult = try await webView.callAsyncJavaScript(jsCall, contentWorld: .defaultClient)
             guard let rawResult = rawResult else { return SummarizationCheckResult.failure(.invalidJSON) }
             return try parse(rawResult)
         } catch {

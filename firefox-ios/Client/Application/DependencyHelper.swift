@@ -6,6 +6,7 @@ import Storage
 import Common
 
 class DependencyHelper {
+    @MainActor
     func bootstrapDependencies() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             // Fatal error here so we can gather info as this would cause a crash down the line anyway

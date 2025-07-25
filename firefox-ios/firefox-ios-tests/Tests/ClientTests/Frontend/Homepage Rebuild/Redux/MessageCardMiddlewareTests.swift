@@ -22,7 +22,6 @@ final class MessageCardMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
-    @MainActor
     func test_initializeAction_getMessageCardData() throws {
         let messagingManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage()
@@ -51,7 +50,6 @@ final class MessageCardMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(messagingManager.onMessageDisplayedCalled, 1)
     }
 
-    @MainActor
     func test_initializeAction_withInvalidSurface_doesNotGetMessageCardData() throws {
         let messagingManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(with: MockMessageData(surface: .microsurvey))
@@ -74,7 +72,6 @@ final class MessageCardMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(messagingManager.onMessageDisplayedCalled, 0)
     }
 
-    @MainActor
     func test_tappedOnActionButton_performsActionAndDismissesMessageCard() throws {
         let messagingManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(with: MockMessageData(surface: .newTabCard))
@@ -95,7 +92,6 @@ final class MessageCardMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(messagingManager.onMessagePressedCalled, 1)
     }
 
-    @MainActor
     func test_tappedOnCloseButton_dismissesMessageCard() throws {
         let messagingManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(with: MockMessageData(surface: .newTabCard))
@@ -117,7 +113,6 @@ final class MessageCardMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Helpers
-    @MainActor
     private func createSubject(messagingManager: GleanPlumbMessageManagerProtocol) -> MessageCardMiddleware {
         return MessageCardMiddleware(messagingManager: messagingManager)
     }

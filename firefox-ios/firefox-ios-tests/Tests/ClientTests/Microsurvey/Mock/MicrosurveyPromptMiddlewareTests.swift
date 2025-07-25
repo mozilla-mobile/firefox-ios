@@ -37,7 +37,6 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
         super.tearDown()
     }
 
-    @MainActor
     func testShowPromptAction_withInvalidModel() {
         let subject = createSubject(microsurveyManager: MockMicrosurveySurfaceManager(with: nil))
 
@@ -52,7 +51,6 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
         XCTAssertEqual(mockMicrosurveyManager.handleMessageDisplayedCount, 0)
     }
 
-    @MainActor
     func testShowPromptAction_withValidModel() throws {
         let subject = createSubject(microsurveyManager: mockMicrosurveyManager)
         let action = MicrosurveyPromptMiddlewareAction(
@@ -70,7 +68,6 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
         XCTAssertEqual(mockMicrosurveyManager.handleMessageDisplayedCount, 1)
     }
 
-    @MainActor
     func testClosePromptAction() {
         let subject = createSubject(microsurveyManager: mockMicrosurveyManager)
         let action = MicrosurveyPromptMiddlewareAction(
@@ -84,7 +81,6 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
         XCTAssertEqual(mockMicrosurveyManager.handleMessageDismissCount, 1)
     }
 
-    @MainActor
     func testContinueToSurveyAction() {
         let subject = createSubject(microsurveyManager: mockMicrosurveyManager)
         let action = MicrosurveyPromptMiddlewareAction(
@@ -99,7 +95,6 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    @MainActor
     private func createSubject(microsurveyManager: MockMicrosurveySurfaceManager) -> MicrosurveyPromptMiddleware {
         return MicrosurveyPromptMiddleware(microsurveyManager: microsurveyManager)
     }

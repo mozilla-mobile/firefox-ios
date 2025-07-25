@@ -148,7 +148,8 @@ final class TabScrollControllerTests: XCTestCase {
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
         let result = subject.overKeyboardScrollHeight(
             with: safeAreaInsets,
-            isMinimalAddressBarEnabled: false
+            isMinimalAddressBarEnabled: false,
+            isBottomSearchBar: true
         )
 
         XCTAssertEqual(result, containerHeight)
@@ -165,7 +166,8 @@ final class TabScrollControllerTests: XCTestCase {
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
         let result = subject.overKeyboardScrollHeight(
             with: safeAreaInsets,
-            isMinimalAddressBarEnabled: true
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: true
         )
 
         XCTAssertEqual(result, 0)
@@ -175,17 +177,16 @@ final class TabScrollControllerTests: XCTestCase {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
-        // Set up container with specific height
         let containerHeight: CGFloat = 100
         let topInset: CGFloat = 20
         overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
         subject.overKeyboardContainer = overKeyboardContainer
 
-        // Device without home indicator (bottom safe area = 0)
         let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         let result = subject.overKeyboardScrollHeight(
             with: safeAreaInsets,
-            isMinimalAddressBarEnabled: true
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: true
         )
 
         let expectedResult = containerHeight - topInset
@@ -201,7 +202,8 @@ final class TabScrollControllerTests: XCTestCase {
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
         let result = subject.overKeyboardScrollHeight(
             with: safeAreaInsets,
-            isMinimalAddressBarEnabled: true
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: true
         )
 
         XCTAssertEqual(result, 0)
@@ -217,7 +219,8 @@ final class TabScrollControllerTests: XCTestCase {
 
         let result = subject.overKeyboardScrollHeight(
             with: nil,
-            isMinimalAddressBarEnabled: true
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: true
         )
 
         XCTAssertEqual(result, containerHeight)
@@ -233,7 +236,50 @@ final class TabScrollControllerTests: XCTestCase {
 
         let result = subject.overKeyboardScrollHeight(
             with: UIEdgeInsets.zero,
-            isMinimalAddressBarEnabled: true
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: true
+        )
+
+        XCTAssertEqual(result, containerHeight)
+    }
+
+    func testOverKeyboardScrollHeight_minimalEnabledIsNotBottomSearchBar_returnsContainerHeight() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let containerHeight: CGFloat = 100
+        let topInset: CGFloat = 20
+
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+
+        let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        let result = subject.overKeyboardScrollHeight(
+            with: safeAreaInsets,
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: false
+        )
+
+        XCTAssertEqual(result, containerHeight)
+    }
+
+    func testOverKeyboardScrollHeight_minimalEnabledIsBottomSearchBarZoomBarIsNotNil_returnsContainerHeight() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let containerHeight: CGFloat = 100
+        let topInset: CGFloat = 20
+
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+        let zoomPageBar = ZoomPageBar(zoomManager: ZoomPageManager(windowUUID: windowUUID))
+        subject.zoomPageBar = zoomPageBar
+
+        let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        let result = subject.overKeyboardScrollHeight(
+            with: safeAreaInsets,
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: true
         )
 
         XCTAssertEqual(result, containerHeight)
