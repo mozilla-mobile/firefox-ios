@@ -513,7 +513,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
         let collectionViewHeight = environment.container.contentSize.height
 
-        // If something went wrong with out availableContentHeight calculation in BVC, fall back to just using the actual
+        // If something went wrong with our availableContentHeight calculation in BVC, fall back to just using the actual
         // collection view height
         let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
 
