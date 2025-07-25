@@ -48,6 +48,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertTrue(newState.headerState.showiPadSetup)
         XCTAssertFalse(newState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
+        XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
     }
 
     func test_embeddedHomepageAction_withTrueZeroSearch_returnsExpectedState() {
@@ -66,6 +67,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertTrue(newState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
+        XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
     }
 
     func test_embeddedHomepageAction_withFalseZeroSearch_returnsExpectedState() {
@@ -84,6 +86,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
+        XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
     }
 
     func test_didSelectedTabChangeToHomepageAction_returnsExpectedState() {
@@ -101,6 +104,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.isZeroSearch)
         XCTAssertTrue(newState.shouldTriggerImpression)
+        XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
     }
 
     func test_handleAvailableContentHeightChangeAction_returnsExpectedState() {
