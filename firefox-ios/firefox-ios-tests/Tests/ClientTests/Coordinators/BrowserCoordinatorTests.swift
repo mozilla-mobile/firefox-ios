@@ -65,14 +65,14 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
     }
 
-    func testWithoutLaunchType_startsBrowserAndTermsOfUse() {
+    func testWithoutLaunchType_startsBrowserOnly() {
         let subject = createSubject()
         subject.start(with: nil)
-
-        XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertNotNil(subject.childCoordinators[0] as? TermsOfUseCoordinator)
+        if !featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) {
+            XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
+            XCTAssertEqual(mockRouter.pushCalled, 1)
+            XCTAssertTrue(subject.childCoordinators.isEmpty)
+        }
     }
 
     func testWithLaunchType_startsLaunchCoordinator() {

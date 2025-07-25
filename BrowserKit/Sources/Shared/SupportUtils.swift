@@ -36,7 +36,7 @@ public struct SupportUtils {
         return URL(string: "https://www.mozilla.org/privacy/firefox/")
     }
 
-    public static func URLForTopic(_ topic: String) -> URL? {
+    public static func URLForTopic(_ topic: String, useMobilePath: Bool = true) -> URL? {
         // Construct a NSURL pointing to a specific topic on SUMO. The topic should be a non-escaped string. It will
         // be properly escaped by this function.
         //
@@ -47,7 +47,8 @@ public struct SupportUtils {
         else {
             return nil
         }
-        return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
+        let productPath = useMobilePath ? "mobile" : "firefox"
+        return URL(string: "https://support.mozilla.org/1/\(productPath)/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 
     public static func URLForPrivacyNotice(source: String, campaign: String, content: String?) -> URL? {
@@ -85,13 +86,5 @@ public struct SupportUtils {
             return nil
         }
         return URL(string: "https://webcompat.com/issues/new?src=mobile-reporter&label=browser-firefox-ios&label=\(deviceType)&url=\(escapedUrl)")
-    }
-
-    public static func sumoFAQURL(_ topic: String) -> URL? {
-        guard let escapedTopic = topic.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-              let languageIdentifier = Locale.preferredLanguages.first else {
-            return nil
-        }
-        return URL(string: "https://support.mozilla.org/1/firefox/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 }

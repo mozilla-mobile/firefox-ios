@@ -17,4 +17,5 @@ enum TermsOfUseActionType: ActionType {
     case markAccepted
     case markDismissed
     case markShownThisLaunch
+    case remindMeLater
 }

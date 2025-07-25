@@ -11,13 +11,20 @@ struct TermsOfUseState: ScreenState, Equatable {
     var wasDismissed: Bool
     var lastShownDate: Date?
     var didShowThisLaunch: Bool
+    var remindMeLater: Bool
 
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID,
+         hasAccepted: Bool = false,
+         wasDismissed: Bool = false,
+         lastShownDate: Date? = nil,
+         didShowThisLaunch: Bool = false,
+         remindMeLater: Bool = false) {
         self.windowUUID = windowUUID
-        self.hasAccepted = false
-        self.wasDismissed = false
-        self.lastShownDate = nil
-        self.didShowThisLaunch = false
+        self.hasAccepted = hasAccepted
+        self.wasDismissed = wasDismissed
+        self.lastShownDate = lastShownDate
+        self.didShowThisLaunch = didShowThisLaunch
+        self.remindMeLater = remindMeLater
     }
 
     static func defaultState(from state: TermsOfUseState) -> TermsOfUseState {
@@ -25,21 +32,39 @@ struct TermsOfUseState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<TermsOfUseState> = { state, action in
-        var newState = state
         guard let action = action as? TermsOfUseAction,
               let type = action.actionType as? TermsOfUseActionType,
-              action.windowUUID == state.windowUUID else { return newState }
+              action.windowUUID == state.windowUUID else { return state }
 
         switch type {
         case .markAccepted:
-            newState.hasAccepted = true
-            newState.wasDismissed = false
+            return TermsOfUseState(windowUUID: state.windowUUID,
+                                   hasAccepted: true,
+                                   wasDismissed: false,
+                                   lastShownDate: state.lastShownDate,
+                                   didShowThisLaunch: state.didShowThisLaunch,
+                                   remindMeLater: state.remindMeLater)
         case .markDismissed:
-            newState.wasDismissed = true
-            newState.lastShownDate = Date()
+            return TermsOfUseState(windowUUID: state.windowUUID,
+                                   hasAccepted: state.hasAccepted,
+                                   wasDismissed: true,
+                                   lastShownDate: Date(),
+                                   didShowThisLaunch: state.didShowThisLaunch,
+                                   remindMeLater: state.remindMeLater)
         case .markShownThisLaunch:
-            newState.didShowThisLaunch = true
+            return TermsOfUseState(windowUUID: state.windowUUID,
+                                   hasAccepted: state.hasAccepted,
+                                   wasDismissed: state.wasDismissed,
+                                   lastShownDate: state.lastShownDate,
+                                   didShowThisLaunch: true,
+                                   remindMeLater: state.remindMeLater)
+        case .remindMeLater:
+            return TermsOfUseState(windowUUID: state.windowUUID,
+                                   hasAccepted: state.hasAccepted,
+                                   wasDismissed: state.wasDismissed,
+                                   lastShownDate: state.lastShownDate,
+                                   didShowThisLaunch: state.didShowThisLaunch,
+                                   remindMeLater: true)
         }
-        return newState
     }
 }

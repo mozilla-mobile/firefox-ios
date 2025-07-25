@@ -4,6 +4,7 @@
 import Common
 import Redux
 
+@MainActor
 class TermsOfUseMiddleware {
     struct DefaultKeys {
         static let acceptedKey = "termsOfUseAccepted"
@@ -21,15 +22,15 @@ class TermsOfUseMiddleware {
               let type = action.actionType as? TermsOfUseActionType else { return }
 
         switch type {
-        case .markAccepted:
+        case TermsOfUseActionType.markAccepted:
             self.userDefaults.set(true, forKey: DefaultKeys.acceptedKey)
             self.userDefaults.set(false, forKey: DefaultKeys.dismissedKey)
 
-        case .markDismissed:
+        case TermsOfUseActionType.markDismissed:
             self.userDefaults.set(true, forKey: DefaultKeys.dismissedKey)
             self.userDefaults.set(Date(), forKey: DefaultKeys.lastShownKey)
 
-        case .markShownThisLaunch:
+        case TermsOfUseActionType.markShownThisLaunch, TermsOfUseActionType.remindMeLater:
             break
         }
     }

@@ -105,8 +105,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true, completion: { [weak self] in
-                self?.showTermsOfUse()
-            })
+            self?.showTermsOfUse()
+        })
         remove(child: coordinator)
 
         // Once launch is done, we check for any saved Route

@@ -165,13 +165,12 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     func newState(state: TermsOfUseState) {
-        if state.hasAccepted {
-            dismiss(animated: true)
+        if state.hasAccepted || state.wasDismissed {
+            coordinator?.dismissTermsFlow()
         }
     }
 
     private func setupUI() {
-        view.backgroundColor = UIColor.black.withAlphaComponent(UX.backgroundAlpha)
         view.addSubview(sheetContainer)
         sheetContainer.addSubview(grabberView)
         sheetContainer.addSubview(stackView)
@@ -264,8 +263,10 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     @objc private func backgroundTapped(_ sender: UITapGestureRecognizer) {
+        // Only dismiss the view if the tap occurred outside the visible sheetContainer.
+        // This prevents dismissing the Terms of Use sheet when interacting with its content.
         if !sheetContainer.frame.contains(sender.location(in: view)) {
-            dismiss(animated: true)
+            coordinator?.dismissTermsFlow()
         }
     }
 
@@ -293,15 +294,14 @@ final class TermsOfUseViewController: UIViewController,
 
     @objc private func acceptTapped() {
         store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .markAccepted))
-        coordinator?.dismissTermsFlow()
     }
 
     @objc private func remindMeLaterTapped() {
         store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
-        coordinator?.dismissTermsFlow()
     }
 
     func applyTheme() {
+        view.backgroundColor = currentTheme().colors.layerScrim.withAlphaComponent(UX.backgroundAlpha)
         sheetContainer.backgroundColor = currentTheme().colors.layer1
         grabberView.backgroundColor = currentTheme().colors.iconDisabled
         titleLabel.textColor = currentTheme().colors.textPrimary

@@ -36,7 +36,7 @@ struct TermsOfUseStrings {
         case TermsOfUse.LinkPrivacyNotice:
             return SupportUtils.URLForPrivacyNotice
         case TermsOfUse.LinkLearnMore:
-            return SupportUtils.sumoFAQURL("firefox-terms-of-use-faq")
+            return SupportUtils.URLForTopic("firefox-terms-of-use-faq", useMobilePath: false)
         default:
             return nil
         }
