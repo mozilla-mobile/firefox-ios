@@ -256,9 +256,19 @@ struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
 }
 
 struct AnimatedGradientMetalView: View {
+    @State private var gradientColors: [Color] = []
     @State private var delegate: AnimatedGradientRenderer?
-    init(metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice()) {
-        delegate = AnimatedGradientRenderer(device: metalDevice)
+    let windowUUID: WindowUUID
+    var themeManager: ThemeManager
+
+    init(
+        metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice(),
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager
+    ) {
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
+        _delegate = State(initialValue: AnimatedGradientRenderer(device: metalDevice))
     }
 
     var body: some View {
@@ -267,23 +277,38 @@ struct AnimatedGradientMetalView: View {
         } else {
             LinearGradient(
                 gradient: Gradient(
-                    colors: [
-                        UX.CardView.vividOrange,
-                        UX.CardView.electricBlue,
-                        UX.CardView.crimsonRed,
-                        UX.CardView.burntOrange
-                    ]
+                    colors: gradientColors
                 ),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
+            .onAppear {
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
         }
+    }
+
+    private func applyTheme(theme: Theme) {
+        let color = theme.colors
+        gradientColors = [
+            Color(color.vividOrange),
+            Color(color.electricBlue),
+            Color(color.crimsonRed),
+            Color(color.burntOrange)
+        ]
     }
 }
 
 struct AnimatedGradientMetalView_Previews: PreviewProvider {
     static var previews: some View {
-        AnimatedGradientMetalView()
-            .ignoresSafeArea(.all)
+        AnimatedGradientMetalView(
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+        )
+        .ignoresSafeArea(.all)
     }
 }
