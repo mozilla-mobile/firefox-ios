@@ -77,6 +77,10 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
         subscribeToRedux()
     }
 
+    deinit {
+        unsubscribeFromRedux()
+    }
+    
     func subscribeToRedux() {
         store.subscribe(self) {
             $0.select {
@@ -86,7 +90,13 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
         }
     }
 
-    deinit {
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(
+            windowUUID: self.windowUUID,
+            actionType: ScreenActionType.closeScreen,
+            screen: .termsOfUse
+        )
+        store.dispatch(action)
         store.unsubscribe(self)
     }
 
