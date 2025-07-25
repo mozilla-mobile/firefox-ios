@@ -269,11 +269,11 @@ final class TabScrollController: NSObject,
                                               in containerView: UIView) -> Bool {
         guard shouldUpdateUIWhenScrolling else { return false }
 
-//        let velocity = gesture.velocity(in: containerView).y
-//        let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
-//        let isFastEnough = abs(velocity) > UX.minimumScrollVelocity
-//        shouldRespondToScroll = isSignificantScroll || isFastEnough
-        return true // shouldRespondToScroll
+        let velocity = gesture.velocity(in: containerView).y
+        let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
+        let isFastEnough = abs(velocity) > UX.minimumScrollVelocity
+        shouldRespondToScroll = isSignificantScroll || isFastEnough
+        return shouldRespondToScroll
     }
 
     /// Updates the current scroll direction based on the scroll delta.
