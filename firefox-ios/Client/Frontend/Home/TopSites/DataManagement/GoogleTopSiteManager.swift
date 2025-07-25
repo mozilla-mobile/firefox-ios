@@ -7,13 +7,13 @@ import UIKit
 import Storage
 import SiteImageView
 
-public protocol GoogleTopSiteManagerProvider {
+public protocol GoogleTopSiteManagerProvider: Sendable {
     var pinnedSiteData: Site? { get }
     func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool
     func removeGoogleTopSite(site: Site)
 }
 // Manage the specific Google top site case
-class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
+final class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
     struct Constants {
         // US and rest of the world google urls
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
@@ -29,7 +29,7 @@ class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
 
     // No Google Top Site, it should be removed, if it already exists for invalid region
     private let invalidRegion = ["CN", "RU", "TR", "KZ", "BY"]
-    private var prefs: Prefs
+    private let prefs: Prefs
     private var url: String? {
         // Couldn't find a valid region hence returning a nil value for url
         guard let regionCode = Locale.current.regionCode, !invalidRegion.contains(regionCode) else { return nil }
