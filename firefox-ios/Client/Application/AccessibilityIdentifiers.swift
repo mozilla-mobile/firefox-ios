@@ -269,6 +269,17 @@ struct AccessibilityIdentifiers {
         }
     }
 
+    struct TermsOfUse {
+        static let logo = "TermsOfUse.Logo"
+        static let title = "TermsOfUse.Title"
+        static let description = "TermsOfUse.Description"
+        static let acceptButton = "TermsOfUse.AcceptButton"
+        static let remindMeLaterButton = "TermsOfUse.RemindMeLaterButton"
+        static let linkTermsOfUse = "TermsOfUse.Link.TermsOfUse"
+        static let linkPrivacyNotice = "TermsOfUse.Link.PrivacyNotice"
+        static let linkLearnMore = "TermsOfUse.Link.LearnMore"
+    }
+
     struct PrivateMode {
         static let dimmingView = "PrivateMode.DimmingView"
         struct Homepage {

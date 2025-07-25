@@ -24,6 +24,7 @@ enum AppScreen {
     case mainMenu
     case mainMenuDetails
     case microsurvey
+    case termsOfUse
     case trackingProtection
     case toolbar
     case searchEngineSelection

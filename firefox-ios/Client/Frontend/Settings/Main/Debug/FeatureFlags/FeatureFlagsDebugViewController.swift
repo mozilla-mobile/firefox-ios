@@ -169,6 +169,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .touFeature,
+                    titleText: format(string: "Terms of Use"),
+                    statusText: format(string: "Toggle to enable Terms of Use feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .hntTopSitesVisualRefresh,
                     titleText: format(string: "Top Sites Visual Refresh"),
                     statusText: format(string: "Toggle to enable the top sites visual refresh")

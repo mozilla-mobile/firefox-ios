@@ -45,6 +45,7 @@ include:
   - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/tosFeature.yaml
+  - nimbus-features/touFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/unifiedAds.yaml
   - nimbus-features/updatedPasswordManager.yaml
