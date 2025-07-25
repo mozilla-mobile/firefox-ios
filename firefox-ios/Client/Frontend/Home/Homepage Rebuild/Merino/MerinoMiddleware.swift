@@ -7,7 +7,6 @@ import MozillaAppServices
 import Redux
 import Shared
 
-@MainActor
 final class MerinoMiddleware {
     private let merinoManager: MerinoManagerProvider
     private let homepageTelemetry: HomepageTelemetry
@@ -43,7 +42,7 @@ final class MerinoMiddleware {
     private func getPocketDataAndUpdateState(for action: Action) {
         Task {
             let merinoStories = await merinoManager.getMerinoItems()
-            store.dispatch(
+            store.dispatchLegacy(
                 MerinoAction(
                     merinoStories: merinoStories,
                     windowUUID: action.windowUUID,

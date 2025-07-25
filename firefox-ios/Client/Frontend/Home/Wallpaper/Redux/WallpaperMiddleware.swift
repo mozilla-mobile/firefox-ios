@@ -4,7 +4,6 @@
 
 import Redux
 
-@MainActor
 class WallpaperMiddleware {
     private let wallpaperManager: WallpaperManagerInterface
     private var wallpaperConfiguration: WallpaperConfiguration {
@@ -32,7 +31,7 @@ class WallpaperMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         default:
             break
         }
@@ -46,7 +45,7 @@ class WallpaperMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidChange
             )
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         default:
             break
         }
