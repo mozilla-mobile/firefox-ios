@@ -296,7 +296,7 @@ final class TabScrollControllerTests: XCTestCase {
     }
 
     private func createSubject() -> LegacyTabScrollController {
-        let subject = TabScrollController(windowUUID: .XCTestDefaultUUID)
+        let subject = LegacyTabScrollController(windowUUID: .XCTestDefaultUUID)
         trackForMemoryLeaks(subject)
         return subject
     }
