@@ -41,6 +41,7 @@ final class BookmarksMiddleware {
         }
     }
 
+    @MainActor
     private func dispatchBookmarksAction(windowUUID: WindowUUID, updatedBookmarks: [BookmarkConfiguration]) {
         let newAction = BookmarksAction(
             bookmarks: updatedBookmarks,
