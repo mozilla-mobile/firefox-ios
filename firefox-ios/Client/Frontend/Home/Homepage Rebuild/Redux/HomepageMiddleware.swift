@@ -53,13 +53,13 @@ final class HomepageMiddleware: FeatureFlaggable {
         case HomepageActionType.sectionSeen:
             self.handleSectionSeenAction(action: action)
 
-        case HomepageActionType.initialize,
-            HomepageActionType.viewWillTransition,
-            ToolbarActionType.cancelEdit,
-            GeneralBrowserActionType.navigateBack,
-            GeneralBrowserActionType.didCloseTabFromToolbar:
+        case HomepageActionType.initialize:
             self.dispatchSearchBarConfigurationAction(action: action)
             self.dispatchSpacerConfigurationAction(action: action)
+
+        case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit,
+            GeneralBrowserActionType.navigateBack, GeneralBrowserActionType.didCloseTabFromToolbar:
+            self.dispatchSearchBarConfigurationAction(action: action)
 
         default:
             break

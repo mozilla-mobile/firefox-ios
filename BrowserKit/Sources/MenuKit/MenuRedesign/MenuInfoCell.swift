@@ -9,6 +9,7 @@ import UIKit
 final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 16
+        static let horizontalMargin: CGFloat = 24
         static let infoLabelHorizontalMargin: CGFloat = 8
         static let infoLabelVerticalPadding: CGFloat = 7
         static let infoLabelHorizontalPadding: CGFloat = 14
@@ -31,6 +32,22 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
             bottom: UX.infoLabelVerticalPadding,
             right: UX.infoLabelHorizontalPadding
         )
+    }
+
+    private var horizontalMargin: CGFloat {
+        if #available(iOS 26.0, *) {
+            return UX.horizontalMargin
+        } else {
+            return UX.contentMargin
+        }
+    }
+
+    private var infoLabelHorizontalMargin: CGFloat {
+        if #available(iOS 26.0, *) {
+            return UX.horizontalMargin
+        } else {
+            return UX.infoLabelHorizontalMargin
+        }
     }
 
     // MARK: - Properties
@@ -73,7 +90,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.addSubview(titleLabel)
         self.addSubview(infoLabelView)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.contentMargin),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalMargin),
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: UX.contentMargin),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.contentMargin),
 
@@ -81,7 +98,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
                 equalTo: infoLabelView.leadingAnchor,
                 constant: -UX.infoLabelHorizontalMargin
             ),
-            infoLabelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.infoLabelHorizontalMargin),
+            infoLabelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -infoLabelHorizontalMargin),
             infoLabelView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 

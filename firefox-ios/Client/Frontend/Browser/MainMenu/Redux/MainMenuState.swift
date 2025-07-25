@@ -71,23 +71,23 @@ struct MainMenuTabInfo: Equatable {
     let accountProfileImage: UIImage?
 }
 
-struct MainMenuState: ScreenState, Equatable {
-    var windowUUID: WindowUUID
-    var menuElements: [MenuSection]
+struct MainMenuState: ScreenState, Equatable, Sendable {
+    let windowUUID: WindowUUID
+    let menuElements: [MenuSection]
 
-    var shouldDismiss: Bool
+    let shouldDismiss: Bool
 
-    var accountData: AccountData?
-    var accountIcon: UIImage?
-    var isBrowserDefault: Bool
-    var isPhoneLandscape: Bool
-    var moreCellTapped: Bool
+    let accountData: AccountData?
+    let accountIcon: UIImage?
+    let isBrowserDefault: Bool
+    let isPhoneLandscape: Bool
+    let moreCellTapped: Bool
 
-    var siteProtectionsData: SiteProtectionsData?
+    let siteProtectionsData: SiteProtectionsData?
 
-    var navigationDestination: MenuNavigationDestination?
-    var currentTabInfo: MainMenuTabInfo?
-    var currentSubmenuView: MainMenuDetailsViewType?
+    let navigationDestination: MenuNavigationDestination?
+    let currentTabInfo: MainMenuTabInfo?
+    let currentSubmenuView: MainMenuDetailsViewType?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
 

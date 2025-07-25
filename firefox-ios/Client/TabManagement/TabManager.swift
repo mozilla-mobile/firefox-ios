@@ -65,6 +65,7 @@ protocol TabManager: AnyObject {
 
     /// Async Remove tab option using tabUUID.
     /// - Parameter tabUUID: UUID from the tab
+    @MainActor
     func removeTab(_ tabUUID: TabUUID) async
 
     /// Async Remove all tabs indicating if is on private mode or not
