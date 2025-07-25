@@ -10,7 +10,6 @@ import Redux
 
 import struct MozillaAppServices.Device
 
-@MainActor
 class RemoteTabsPanelMiddleware {
     private let profile: Profile
     var notificationCenter: NotificationProtocol
@@ -44,7 +43,7 @@ class RemoteTabsPanelMiddleware {
             let accountChangeAction = TabTrayAction(hasSyncableAccount: self.hasSyncableAccount,
                                                     windowUUID: uuid,
                                                     actionType: TabTrayActionType.firefoxAccountChanged)
-            store.dispatch(accountChangeAction)
+            store.dispatchLegacy(accountChangeAction)
         case RemoteTabsPanelActionType.refreshTabs:
             self.getSyncState(window: uuid)
         case RemoteTabsPanelActionType.refreshTabsWithCache:
@@ -68,31 +67,33 @@ class RemoteTabsPanelMiddleware {
     }
 
     private func getSyncState(window: WindowUUID, useCache: Bool = false) {
-        guard self.hasSyncableAccount else {
-            let action = RemoteTabsPanelAction(reason: .notLoggedIn,
-                                               windowUUID: window,
-                                               actionType: RemoteTabsPanelActionType.refreshDidFail)
-            store.dispatch(action)
-            return
+        ensureMainThread { [self] in
+            guard self.hasSyncableAccount else {
+                let action = RemoteTabsPanelAction(reason: .notLoggedIn,
+                                                   windowUUID: window,
+                                                   actionType: RemoteTabsPanelActionType.refreshDidFail)
+                store.dispatchLegacy(action)
+                return
+            }
+
+            let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
+            guard syncEnabled else {
+                let action = RemoteTabsPanelAction(reason: .syncDisabledByUser,
+                                                   windowUUID: window,
+                                                   actionType: RemoteTabsPanelActionType.refreshDidFail)
+                store.dispatchLegacy(action)
+                return
+            }
+
+            // If above checks have succeeded, we know we can perform the tab refresh. We
+            // need to update the State to .refreshing since there are implications for being
+            // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
+            let action = RemoteTabsPanelAction(windowUUID: window,
+                                               actionType: RemoteTabsPanelActionType.refreshDidBegin)
+            store.dispatchLegacy(action)
+
+            getTabsAndDevices(window: window, useCache: useCache)
         }
-
-        let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
-        guard syncEnabled else {
-            let action = RemoteTabsPanelAction(reason: .syncDisabledByUser,
-                                               windowUUID: window,
-                                               actionType: RemoteTabsPanelActionType.refreshDidFail)
-            store.dispatch(action)
-            return
-        }
-
-        // If above checks have succeeded, we know we can perform the tab refresh. We
-        // need to update the State to .refreshing since there are implications for being
-        // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
-        let action = RemoteTabsPanelAction(windowUUID: window,
-                                           actionType: RemoteTabsPanelActionType.refreshDidBegin)
-        store.dispatch(action)
-
-        getTabsAndDevices(window: window, useCache: useCache)
     }
 
     private func getTabsAndDevices(window: WindowUUID, useCache: Bool = false) {
@@ -101,7 +102,7 @@ class RemoteTabsPanelMiddleware {
                 let action = RemoteTabsPanelAction(reason: .failedToSync,
                                                    windowUUID: window,
                                                    actionType: RemoteTabsPanelActionType.refreshDidFail)
-                store.dispatch(action)
+                store.dispatchLegacy(action)
                 return
             }
             var action: RemoteTabsPanelAction
@@ -119,7 +120,7 @@ class RemoteTabsPanelMiddleware {
                                                windowUUID: window,
                                                actionType: RemoteTabsPanelActionType.refreshDidSucceed)
             }
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         }
 
         if useCache {
@@ -132,7 +133,7 @@ class RemoteTabsPanelMiddleware {
     private func handleFetchingMostRecentRemoteTab(windowUUID: WindowUUID) {
         let completion = { (result: [ClientAndTabs]?) in
             guard let mostRecentSyncedTab = self.retrieveConfigurationForMostRecentTab(from: result) else { return }
-            store.dispatch(
+            store.dispatchLegacy(
                 RemoteTabsAction(
                     mostRecentSyncedTab: mostRecentSyncedTab,
                     windowUUID: windowUUID,
@@ -192,11 +193,11 @@ class RemoteTabsPanelMiddleware {
             let accountChangeAction = TabTrayAction(hasSyncableAccount: hasSyncableAccount,
                                                     windowUUID: WindowUUID.unavailable,
                                                     actionType: TabTrayActionType.firefoxAccountChanged)
-            store.dispatch(accountChangeAction)
+            store.dispatchLegacy(accountChangeAction)
         case .constellationStateUpdate:
             let action = RemoteTabsPanelAction(windowUUID: WindowUUID.unavailable,
                                                actionType: RemoteTabsPanelActionType.remoteDevicesChanged)
-            store.dispatch(action)
+            store.dispatchLegacy(action)
         default: break
         }
     }
