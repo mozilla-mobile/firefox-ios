@@ -19,6 +19,7 @@ final class HomepageAction: Action {
     let numberOfTopSitesPerRow: Int?
     let telemetryExtras: HomepageTelemetryExtras?
     let isZeroSearch: Bool?
+    let availableContentHeight: CGFloat?
 
     init(
         isSearchBarEnabled: Bool? = nil,
@@ -26,6 +27,7 @@ final class HomepageAction: Action {
         showiPadSetup: Bool? = nil,
         telemetryExtras: HomepageTelemetryExtras? = nil,
         isZeroSearch: Bool? = nil,
+        availableContentHeight: CGFloat? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
@@ -34,7 +36,11 @@ final class HomepageAction: Action {
         self.showiPadSetup = showiPadSetup
         self.telemetryExtras = telemetryExtras
         self.isZeroSearch = isZeroSearch
+<<<<<<< HEAD
         super.init(windowUUID: windowUUID, actionType: actionType)
+=======
+        self.availableContentHeight = availableContentHeight
+>>>>>>> 4d43189b9 (Bugfix FXIOS-12865 [Homepage Redesign] Prevent homepage layout shift when keyboard is shown (#28230))
     }
 }
 
@@ -47,6 +53,7 @@ enum HomepageActionType: ActionType {
     case didSelectItem
     case embeddedHomepage
     case sectionSeen
+    case availableContentHeightDidChange
 }
 
 enum HomepageMiddlewareActionType: ActionType {
