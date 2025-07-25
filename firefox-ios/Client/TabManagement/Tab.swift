@@ -801,6 +801,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             guard let webView = self.webView,
                   let findInteraction = webView.findInteraction else { return }
             isFindInPageMode = findInteraction.isFindNavigatorVisible && isBottomSearchBar
+            // Restore the keyboard dismiss mode to its default behavior (.onDrag) after find-in-page mode ends,
+            // allowing normal keyboard dismissal patterns to resume for regular web browsing interactions.
+            webView.scrollView.keyboardDismissMode = .onDrag
         } else {
             isFindInPageMode = doesFindInPageBarExist && isBottomSearchBar
         }

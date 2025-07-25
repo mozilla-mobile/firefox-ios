@@ -3,10 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 @testable import Redux
 
-class FakeReduxAction: Action {
+struct FakeReduxAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let counterValue: Int?
     let privateMode: Bool?
 
@@ -14,10 +17,10 @@ class FakeReduxAction: Action {
          privateMode: Bool? = nil,
          windowUUID: UUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.counterValue = counterValue
         self.privateMode = privateMode
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
     }
 }
 

@@ -326,7 +326,7 @@ final class TabScrollController: NSObject,
             completion: nil)
     }
 
-    func hideToolbars(animated: Bool, isFindInPageMode: Bool = false) {
+    func hideToolbars(animated: Bool) {
         guard toolbarState != .collapsed else { return }
 
         toolbarState = .collapsed
@@ -712,7 +712,7 @@ extension TabScrollController: UIScrollViewDelegate {
             if scrollDirection == .up {
                 showToolbars(animated: true)
             } else {
-                hideToolbars(animated: true, isFindInPageMode: tab.isFindInPageMode)
+                hideToolbars(animated: true)
             }
 
             // this action controls the address toolbar's border position,

@@ -4,7 +4,7 @@
 
 import Common
 
-protocol SearchEnginePreferencesMigrator {
+protocol SearchEnginePreferencesMigrator: Sendable {
     func migratePrefsIfNeeded(_ prefs: SearchEnginePrefs,
                               to expectedVersion: SearchEngineOrderingPrefsVersion,
                               availableEngines: [OpenSearchEngine]) -> SearchEnginePrefs

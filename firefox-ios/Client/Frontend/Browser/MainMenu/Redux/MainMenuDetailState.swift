@@ -6,14 +6,14 @@ import Common
 import MenuKit
 import Redux
 
-struct MainMenuDetailsState: ScreenState, Equatable {
-    var windowUUID: WindowUUID
-    var menuElements: [MenuSection]
-    var shouldDismiss: Bool
-    var shouldGoBackToMainMenu: Bool
-    var navigationDestination: MenuNavigationDestination?
-    var submenuType: MainMenuDetailsViewType?
-    var isHomepage: Bool?
+struct MainMenuDetailsState: ScreenState, Equatable, Sendable {
+    let windowUUID: WindowUUID
+    let menuElements: [MenuSection]
+    let shouldDismiss: Bool
+    let shouldGoBackToMainMenu: Bool
+    let navigationDestination: MenuNavigationDestination?
+    let submenuType: MainMenuDetailsViewType?
+    let isHomepage: Bool?
 
     var title: String {
         typealias Titles = String.MainMenu.ToolsSection

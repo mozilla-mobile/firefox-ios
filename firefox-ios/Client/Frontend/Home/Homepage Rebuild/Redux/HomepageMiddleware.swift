@@ -8,6 +8,7 @@ import Common
 
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
+@MainActor
 final class HomepageMiddleware: FeatureFlaggable {
     private let homepageTelemetry: HomepageTelemetry
     private let notificationCenter: NotificationProtocol
@@ -43,29 +44,38 @@ final class HomepageMiddleware: FeatureFlaggable {
             )
 
         case HomepageActionType.didSelectItem:
-            guard let extras = (action as? HomepageAction)?.telemetryExtras, let type = extras.itemType else {
+            guard let extras = (action as? HomepageAction)?.telemetryExtras,
+                  let type = extras.itemType else {
                 return
             }
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: type)
 
         case HomepageActionType.sectionSeen:
-            guard let extras = (action as? HomepageAction)?.telemetryExtras, let type = extras.itemType else {
-                return
-            }
-            self.homepageTelemetry.sendSectionLabeledCounter(for: type)
+            self.handleSectionSeenAction(action: action)
 
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition,
-            ToolbarActionType.cancelEdit, GeneralBrowserActionType.navigateBack:
+        case HomepageActionType.initialize:
             self.dispatchSearchBarConfigurationAction(action: action)
             self.dispatchSpacerConfigurationAction(action: action)
+
+        case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit,
+            GeneralBrowserActionType.navigateBack, GeneralBrowserActionType.didCloseTabFromToolbar:
+            self.dispatchSearchBarConfigurationAction(action: action)
 
         default:
             break
         }
     }
 
+    private func handleSectionSeenAction(action: Action) {
+        guard let extras = (action as? HomepageAction)?.telemetryExtras,
+              let type = extras.itemType else {
+            return
+        }
+        self.homepageTelemetry.sendSectionLabeledCounter(for: type)
+    }
+
     private func dispatchSearchBarConfigurationAction(action: Action) {
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 isSearchBarEnabled: self.shouldShowSearchBar(),
                 windowUUID: action.windowUUID,
@@ -75,7 +85,7 @@ final class HomepageMiddleware: FeatureFlaggable {
     }
 
     private func dispatchSpacerConfigurationAction(action: Action) {
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 shouldShowSpacer: self.shouldShowSpacer(),
                 windowUUID: action.windowUUID,

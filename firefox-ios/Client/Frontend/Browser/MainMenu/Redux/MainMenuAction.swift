@@ -6,7 +6,9 @@ import Common
 import Foundation
 import Redux
 
-final class MainMenuAction: Action {
+struct MainMenuAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     var tabID: TabUUID?
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
@@ -36,6 +38,8 @@ final class MainMenuAction: Action {
         isPhoneLandscape: Bool = false,
         moreCellTapped: Bool = false
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
         self.currentTabInfo = currentTabInfo
@@ -48,7 +52,6 @@ final class MainMenuAction: Action {
         self.isBrowserDefault = isBrowserDefault
         self.isPhoneLandscape = isPhoneLandscape
         self.moreCellTapped = moreCellTapped
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

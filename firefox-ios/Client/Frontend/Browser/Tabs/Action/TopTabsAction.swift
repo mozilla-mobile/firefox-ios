@@ -3,9 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Common
 
 /// Actions related to top tabs shown on large device layout (i.e. iPad)
-class TopTabsAction: Action { }
+struct TopTabsAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
+}
 
 enum  TopTabsActionType: ActionType {
     case didTapNewTab
