@@ -6,7 +6,6 @@ import Common
 import Redux
 import Storage
 
-@MainActor
 final class BookmarksMiddleware {
     private let bookmarksHandler: BookmarksHandler
     private let bookmarkItemsLimit: UInt = 8
@@ -37,9 +36,7 @@ final class BookmarksMiddleware {
                     )
                 )
             }
-            Task { @MainActor in
-                self?.dispatchBookmarksAction(windowUUID: windowUUID, updatedBookmarks: bookmarks)
-            }
+            self?.dispatchBookmarksAction(windowUUID: windowUUID, updatedBookmarks: bookmarks)
         }
     }
 
@@ -49,6 +46,6 @@ final class BookmarksMiddleware {
             windowUUID: windowUUID,
             actionType: BookmarksMiddlewareActionType.initialize
         )
-        store.dispatch(newAction)
+        store.dispatchLegacy(newAction)
     }
 }
