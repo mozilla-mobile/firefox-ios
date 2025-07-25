@@ -85,6 +85,7 @@ public class Store<State: StateType & Sendable>: DefaultDispatchStore {
 
     @MainActor
     public func dispatch(_ action: Action) {
+        assert(Thread.isMainThread, "@MainActor doesn't guarantee dispatch is called on the main thread")
         logger.log("Dispatched action: \(action.debugDescription)", level: .info, category: .redux)
         actionQueue.append(action)
         processQueuedActions()
