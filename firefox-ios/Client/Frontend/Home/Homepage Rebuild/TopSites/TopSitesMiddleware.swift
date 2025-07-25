@@ -109,6 +109,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
         return site
     }
 
+    @MainActor
     private func getTopSitesDataAndUpdateState(for action: Action) async {
         async let sponsoredSites = await self.topSitesManager.fetchSponsoredSites()
         async let otherSites = await self.topSitesManager.getOtherSites()
