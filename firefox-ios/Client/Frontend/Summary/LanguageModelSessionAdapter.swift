@@ -28,7 +28,7 @@ final class LanguageModelSessionAdapter: LanguageModelSessionProtocol {
         isolation: isolated (any Actor)?
     ) async throws -> any LanguageModelResponseProtocol {
         let realResponse: LanguageModelSession.Response<String> =
-            try await realSession.respond(to: prompt, options: options, isolation: isolation)
+            try await realSession.respond(to: prompt, options: options)
         return realResponse
     }
 

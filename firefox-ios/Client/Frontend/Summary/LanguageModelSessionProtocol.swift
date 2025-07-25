@@ -13,7 +13,6 @@ import Foundation
 /// This used because we want to be able to replace the real `LanguageModelSession` with a mock during testing.
 @available(iOS 26, *)
 protocol LanguageModelSessionProtocol {
-    @discardableResult
     func respond(
         to prompt: Prompt,
         options: GenerationOptions,
