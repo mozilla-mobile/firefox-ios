@@ -148,14 +148,16 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
+        DispatchQueue.main.async {
             let action = ScreenAction(
-                windowUUID: windowUUID,
+                windowUUID: self.windowUUID,
                 actionType: ScreenActionType.closeScreen,
                 screen: .termsOfUse
             )
             store.dispatch(action)
             store.unsubscribe(self)
         }
+    }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {

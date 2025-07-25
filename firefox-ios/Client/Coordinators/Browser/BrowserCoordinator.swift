@@ -1161,10 +1161,8 @@ class BrowserCoordinator: BaseCoordinator,
             themeManager: AppContainer.shared.resolve(),
             notificationCenter: NotificationCenter.default
         )
-        coordinator.parentCoordinator = self
-
         guard coordinator.shouldShowTermsOfUse() else { return }
-
+        coordinator.parentCoordinator = self
         add(child: coordinator)
         coordinator.start()
     }
