@@ -12,7 +12,7 @@ import struct MozillaAppServices.Guid
 /// - Have the menu, unfiled and toolbar folders all under a desktop folder that doesn't exists in the backend
 /// - Present the menu, unfiled and toolbar folders to the users without making a backend call.
 /// Desktop folder content is fetched when folder is selected.
-final class LocalDesktopFolder: FxBookmarkNode {
+class LocalDesktopFolder: FxBookmarkNode {
     // Guid used locally, but never synced to Firefox Sync accounts
     static let localDesktopFolderGuid = "localDesktopFolder"
 
