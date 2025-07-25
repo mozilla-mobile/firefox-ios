@@ -2052,7 +2052,7 @@ extension String {
         public static let LoadingLabel = MZLocalizedString(
             key: "Summarizer.Loading.Label.v142",
             tableName: "Summarizer",
-            value: "Summarizing …",
+            value: "Summarizing…",
             comment: "When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed."
         )
         // TODO: - FXIOS-12899 add the correct value and key for the accessibility labels
@@ -4507,7 +4507,7 @@ extension String {
                 value: "Less",
                 comment: "On the main menu, the title for the action that will hide some menu options in the current section of the menu.")
             public static let SummarizePage = MZLocalizedString(
-                key: "MainMenu.ToolsSection.LessOptions.SummarizePage.v142",
+                key: "MainMenu.ToolsSection.SummarizePage.Title.v142",
                 tableName: "MainMenu",
                 value: "Summarize Page",
                 comment: "On the main menu, the title for the action that will summarize the content of the webpage.")
@@ -4569,7 +4569,7 @@ extension String {
                     value: "Less",
                     comment: "On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu.")
                 public static let SummarizePage = MZLocalizedString(
-                    key: "MainMenu.ToolsSection.LessOptions.SummarizePage.v142",
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142",
                     tableName: "MainMenu",
                     value: "Summarize Page",
                     comment: "On the main menu, the accessibility label for the action that will summarize the content of the webpage.")
