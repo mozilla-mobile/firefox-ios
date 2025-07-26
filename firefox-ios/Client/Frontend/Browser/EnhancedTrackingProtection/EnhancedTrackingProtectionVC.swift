@@ -274,6 +274,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     private func setupConnectionStatusView() {
         connectionView.addSubviews(connectionImage, connectionLabel, connectionDetailArrow, connectionButton)
         view.addSubview(connectionView)
+        setupConnectionAccessibilityConfiguration()
 
         let connectionConstraints = [
             connectionView.leadingAnchor.constraint(
@@ -428,6 +429,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
         siteDomainLabel.text = viewModel.websiteTitle
         connectionLabel.text = viewModel.connectionStatusString
+        connectionButton.accessibilityLabel = viewModel.connectionStatusString
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
         toggleLabel.text = .TrackingProtectionEnableTitle
         toggleStatusLabel.text = toggleSwitch.isOn ? .ETPOn : .ETPOff
@@ -498,6 +500,15 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
                 }
             }
         }
+    }
+
+    private func setupConnectionAccessibilityConfiguration() {
+        connectionView.isAccessibilityElement = false
+        connectionImage.isAccessibilityElement = false
+        connectionLabel.isAccessibilityElement = false
+        connectionDetailArrow.isAccessibilityElement = false
+        connectionButton.isAccessibilityElement = true
+        connectionButton.accessibilityTraits = .button
     }
 
     private func currentTheme() -> Theme {
