@@ -72,15 +72,25 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
         super.prepareForReuse()
         titleLabel.text = nil
         accessibilityLabel = nil
+        accessibilityHint = nil
     }
 
     // MARK: - Helpers
 
-    func configure(story: MerinoStoryConfiguration, theme: Theme) {
+    func configure(story: MerinoStoryConfiguration, theme: Theme, position: Int? = nil, totalCount: Int? = nil) {
         self.story = story
         titleLabel.text = story.title
         titleLabel.numberOfLines = getNumberOfLinesForTitle(isSponsoredStory: !story.shouldHideSponsor)
         accessibilityLabel = story.accessibilityLabel
+        if let position = position, let totalCount = totalCount {
+            accessibilityHint = String(
+                format: .FirefoxHomepage.Pocket.PositionAccessibilityHint,
+                String(position),
+                String(totalCount)
+            )
+        } else {
+            accessibilityHint = nil
+        }
 
         let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL?.absoluteString ?? "",
                                                             generalCornerRadius: UX.thumbnailCornerRadius,

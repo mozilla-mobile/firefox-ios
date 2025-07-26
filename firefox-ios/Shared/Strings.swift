@@ -1056,6 +1056,11 @@ extension String {
                     value: "Learn more",
                     comment: "This is the learn more text of the Pocket footer on Firefox Homepage.")
             }
+            public static let PositionAccessibilityHint = MZLocalizedString(
+                key: "FirefoxHomepage.Stories.PositionAccessibilityHint.v143",
+                tableName: "FirefoxHomepage",
+                value: "%@ of %@",
+                comment: "Accessibility hint for story position in the Stories section. First %@ is current position, second %@ is total count. Example: '1 of 5'")
         }
 
         public struct RecentlySaved { }
