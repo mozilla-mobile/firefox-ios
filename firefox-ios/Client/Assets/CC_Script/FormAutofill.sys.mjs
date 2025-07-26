@@ -24,8 +24,8 @@ const ENABLED_AUTOFILL_ADDRESSES_SUPPORTED_COUNTRIES_PREF =
   "extensions.formautofill.addresses.supportedCountries";
 const ENABLED_AUTOFILL_CREDITCARDS_PREF =
   "extensions.formautofill.creditCards.enabled";
-const AUTOFILL_CREDITCARDS_REAUTH_PREF =
-  "extensions.formautofill.creditCards.reauth.optout";
+const AUTOFILL_CREDITCARDS_OS_AUTH_LOCKED_PREF =
+  "extensions.formautofill.creditCards.os-auth.locked.enabled";
 const AUTOFILL_CREDITCARDS_HIDE_UI_PREF =
   "extensions.formautofill.creditCards.hideui";
 const FORM_AUTOFILL_SUPPORT_RTL_PREF = "extensions.formautofill.supportRTL";
@@ -45,6 +45,10 @@ const AUTOFILL_FILL_ON_DYNAMIC_FORM_CHANGES_TIMEOUT_PREF =
   "extensions.formautofill.heuristics.fillOnDynamicFormChanges.timeout";
 const AUTOFILL_FILL_ON_DYNAMIC_FORM_CHANGES_PREF =
   "extensions.formautofill.heuristics.fillOnDynamicFormChanges";
+const AUTOFILL_REFILL_ON_SITE_CLEARING_VALUE_PREF =
+  "extensions.formautofill.heuristics.refillOnSiteClearingFields";
+const AUTOFILL_REFILL_ON_SITE_CLEARING_VALUE_TIMEOUT_PREF =
+  "extensions.formautofill.heuristics.refillOnSiteClearingFields.timeout";
 
 export const FormAutofill = {
   ENABLED_AUTOFILL_ADDRESSES_PREF,
@@ -54,11 +58,13 @@ export const FormAutofill = {
   ENABLED_AUTOFILL_SAME_ORIGIN_WITH_TOP,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
   ENABLED_AUTOFILL_DETECT_DYNAMIC_FORM_CHANGES_PREF,
-  AUTOFILL_CREDITCARDS_REAUTH_PREF,
+  AUTOFILL_CREDITCARDS_OS_AUTH_LOCKED_PREF,
   AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF,
   AUTOFILL_ADDRESSES_AUTOCOMPLETE_OFF_PREF,
   AUTOFILL_FILL_ON_DYNAMIC_FORM_CHANGES_PREF,
   AUTOFILL_FILL_ON_DYNAMIC_FORM_CHANGES_TIMEOUT_PREF,
+  AUTOFILL_REFILL_ON_SITE_CLEARING_VALUE_PREF,
+  AUTOFILL_REFILL_ON_SITE_CLEARING_VALUE_TIMEOUT_PREF,
 
   _region: null,
 
@@ -212,10 +218,6 @@ export const FormAutofill = {
       prefix: logPrefix,
     });
   },
-
-  get isMLExperimentEnabled() {
-    return FormAutofill._isMLEnabled && FormAutofill._isMLExperimentEnabled;
-  },
 };
 
 // TODO: Bug 1747284. Use Region.home instead of reading "browser.serach.region"
@@ -326,27 +328,6 @@ XPCOMUtils.defineLazyPreferenceGetter(
 
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
-  "_isMLEnabled",
-  "browser.ml.enable",
-  false
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
-  "_isMLExperimentEnabled",
-  "extensions.formautofill.ml.experiment.enabled",
-  false
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
-  "MLModelRevision",
-  "extensions.formautofill.ml.experiment.modelRevision",
-  null
-);
-
-XPCOMUtils.defineLazyPreferenceGetter(
-  FormAutofill,
   "detectDynamicFormChanges",
   "extensions.formautofill.heuristics.detectDynamicFormChanges",
   false
@@ -363,6 +344,20 @@ XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
   "fillOnDynamicFormChangeTimeout",
   "extensions.formautofill.heuristics.fillOnDynamicFormChanges.timeout",
+  0
+);
+
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "refillOnSiteClearingFields",
+  "extensions.formautofill.heuristics.refillOnSiteClearingFields",
+  false
+);
+
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "refillOnSiteClearingFieldsTimeout",
+  "extensions.formautofill.heuristics.refillOnSiteClearingFields.timeout",
   0
 );
 
