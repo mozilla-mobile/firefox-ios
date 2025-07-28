@@ -90,7 +90,7 @@ class TabTraySelectorView: UIView,
             selectionBackgroundView.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
 
-        applyInitalConstraints()
+        applyInitialConstraints()
         applyTheme(theme: theme)
     }
 
@@ -125,7 +125,7 @@ class TabTraySelectorView: UIView,
         return button
     }
 
-    private func applyInitalConstraints() {
+    private func applyInitialConstraints() {
         guard buttons.indices.contains(selectedIndex) else { return }
         layoutIfNeeded()
 
