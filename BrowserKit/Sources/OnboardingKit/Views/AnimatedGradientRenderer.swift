@@ -7,16 +7,16 @@ import MetalKit
 import Common
 
 struct GradientPalette {
-    // swiftlint:disable:next large_tuple
-    var colors: (SIMD3<Float>, SIMD3<Float>, SIMD3<Float>, SIMD3<Float>)
+    var vividOrange: SIMD3<Float>
+    var electricBlue: SIMD3<Float>
+    var crimsonRed: SIMD3<Float>
+    var burntOrange: SIMD3<Float>
 
     static let defaultColors = GradientPalette(
-        colors: (
-            SIMD3<Float>(0.996, 0.514, 0.000),
-            SIMD3<Float>(0.180, 0.506, 0.996),
-            SIMD3<Float>(0.949, 0.020, 0.004),
-            SIMD3<Float>(0.996, 0.396, 0.000)
-        )
+        vividOrange: SIMD3<Float>(0.996, 0.514, 0.000),
+        electricBlue: SIMD3<Float>(0.180, 0.506, 0.996),
+        crimsonRed: SIMD3<Float>(0.949, 0.020, 0.004),
+        burntOrange: SIMD3<Float>(0.996, 0.396, 0.000)
     )
 }
 
@@ -114,7 +114,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         }
 
         super.init()
-        updatePaletteForCurrentTheme(colors: palette.colors)
+        updatePaletteForCurrentTheme(palette: palette)
 
         logger.log(
             "AnimatedGradientRenderer initialized successfully",
@@ -128,8 +128,8 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         metalView = view
     }
     // swiftlint:disable large_tuple
-    func updatePaletteForCurrentTheme(colors: (SIMD3<Float>, SIMD3<Float>, SIMD3<Float>, SIMD3<Float>)) {
-        palette = GradientPalette(colors: colors)
+    func updatePaletteForCurrentTheme(palette: GradientPalette) {
+        self.palette = palette
 
         // Trigger a redraw when palette changes
         triggerRedraw()
@@ -376,16 +376,14 @@ struct AnimatedGradientMetalView: View {
             Color(color.burntOrange)
         ]
 
-        // Update the Metal renderer's palette
-        if let delegate = delegate {
-            let newPalette = (
-                SIMD3<Float>(color.vividOrange),
-                SIMD3<Float>(color.electricBlue),
-                SIMD3<Float>(color.crimsonRed),
-                SIMD3<Float>(color.burntOrange)
+        delegate?.updatePaletteForCurrentTheme(
+            palette: GradientPalette(
+                vividOrange: SIMD3<Float>(color.vividOrange),
+                electricBlue: SIMD3<Float>(color.electricBlue),
+                crimsonRed: SIMD3<Float>(color.crimsonRed),
+                burntOrange: SIMD3<Float>(color.burntOrange)
             )
-            delegate.updatePaletteForCurrentTheme(colors: newPalette)
-        }
+        )
     }
 }
 

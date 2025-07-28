@@ -19,7 +19,10 @@ struct GradientControlPoint {
 
 // MARK: - Gradient Palette Struct
 struct GradientPalette {
-    float3 colors[4];   // 4 colors from Swift
+    float3 vividOrange;
+    float3 electricBlue;
+    float3 crimsonRed;
+    float3 burntOrange;
 };
 
 // MARK: - Utility Functions
@@ -137,10 +140,10 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
     const float kFourthPointAnimationSpeed = 1.1f;
 
     // Use colors from Swift
-    const half3 kVividOrange  = half3(palette.colors[0]);
-    const half3 kElectricBlue = half3(palette.colors[1]);
-    const half3 kCrimsonRed   = half3(palette.colors[2]);
-    const half3 kBurntOrange  = half3(palette.colors[3]);
+    const half3 kVividOrange  = half3(palette.vividOrange);
+    const half3 kElectricBlue = half3(palette.electricBlue);
+    const half3 kCrimsonRed   = half3(palette.crimsonRed);
+    const half3 kBurntOrange  = half3(palette.burntOrange);
 
     // Define base positions for gradient control points
     const float2 firstControlPointBase = float2(0.2f, 0.3f);
