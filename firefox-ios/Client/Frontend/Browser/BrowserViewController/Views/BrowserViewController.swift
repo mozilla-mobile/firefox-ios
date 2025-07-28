@@ -3035,7 +3035,7 @@ class BrowserViewController: UIViewController,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
            homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
 
-        store.dispatch(
+        store.dispatchLegacy(
             HomepageAction(
                 availableContentHeight: getAvailableHomepageContentHeight(),
                 windowUUID: windowUUID,
