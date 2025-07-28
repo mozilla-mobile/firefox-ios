@@ -5,7 +5,7 @@
 import WebKit
 import Foundation
 
-public class SummarizationChecker {
+public class SummarizationChecker: SummarizationCheckerProtocol {
     /// Calls `checkSummarization(maxWords:)` in the web page and returns a typed result.
     /// - Parameters:
     ///   - webView: The WKWebView instance with the JS already injected.
