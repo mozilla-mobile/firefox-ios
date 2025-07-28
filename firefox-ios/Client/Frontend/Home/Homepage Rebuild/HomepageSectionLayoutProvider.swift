@@ -14,7 +14,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         static let iPadInset: CGFloat = 50
         static let spacingBetweenSections: CGFloat = 62
         static let standardSingleItemHeight: CGFloat = 100
-        static let sectionHeaderHeight: CGFloat = 34
+        static let sectionHeaderHeight: CGFloat = 75
 
         static func leadingInset(
             traitCollection: UITraitCollection,
@@ -63,7 +63,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             }
 
             static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
-                                             isLandscape: Bool = UIWindow.isLandscape,
+                                             isLandscape: Bool = UIDevice.current.orientation.isLandscape,
                                              collectionViewWidth: CGFloat) -> CGFloat {
                 var fractionalWidth: CGFloat
                 if device == .pad {
@@ -81,6 +81,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         struct TopSitesConstants {
             static let cellEstimatedSize = CGSize(width: 85, height: 94)
             static let minCards = 4
+            static let redesignedTopSitesBottomSpacingLandscape: CGFloat = 16
+
+            static func getBottomInset() -> CGFloat {
+                if UIDevice.current.orientation.isLandscape {
+                    return redesignedTopSitesBottomSpacingLandscape
+                } else {
+                    return UX.spacingBetweenSections - UX.interGroupSpacing
+                }
+            }
         }
 
         struct JumpBackInConstants {
@@ -115,7 +124,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
-    private var storiesCellCachedHeight: CGFloat?
     private var isStoriesRedesignEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
@@ -164,6 +172,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             )
         case .bookmarks:
             return createBookmarksSectionLayout(for: traitCollection)
+        case .spacer:
+            return createSpacerSectionLayout(for: environment)
         }
     }
 
@@ -314,10 +324,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        let bottomInset = isStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
+                                                   : UX.spacingBetweenSections - UX.interGroupSpacing
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: leadingInset,
-            bottom: UX.spacingBetweenSections - UX.interGroupSpacing,
+            bottom: bottomInset,
             trailing: leadingInset
         )
         section.interGroupSpacing = UX.standardSpacing
@@ -486,6 +498,28 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return section
     }
 
+    // Creates the spacer section used to achieve a full-screen layout without having a full screen of content.
+    // The spacer section's height is manually calculated by summing up every other visible sections height, including it's
+    // content, headers/footers, vertical item/group/section spacing, and vertical item/group/section insets.
+    // It's important to update this calculation whenever a change is made to any of the calculated sections that would
+    // result in it having a different height (eg changes to top/bottom insets).
+    private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let collectionViewHeight = environment.container.contentSize.height
+        // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
+        let spacerHeight = max(0.1, collectionViewHeight - getShortcutsSectionHeight(environment: environment)
+                                                         - getStoriesSectionHeight(environment: environment)
+                                                         - getSearchBarSectionHeight(environment: environment)
+        )
+
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .absolute(spacerHeight))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
+        let sectionLayout = NSCollectionLayoutSection(group: group)
+        sectionLayout.interGroupSpacing = 0
+        return sectionLayout
+    }
+
     /// Returns an empty layout to avoid app crash when unable to section data
     func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
         let zeroLayoutSize = NSCollectionLayoutSize(
@@ -497,6 +531,104 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)]
         )
         return NSCollectionLayoutSection(group: emptyGroup)
+    }
+
+    /// Creates a "dummy" top sites section and returns its height
+    private func getShortcutsSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        var totalHeight: CGFloat = 0
+        let topSitesState = state.topSitesState
+        let rows = topSitesState.numberOfRows
+        let cols = topSitesState.numberOfTilesPerRow
+        let maxCells = rows * cols
+
+        // Add header height
+        totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
+
+        // Build array of configured cells for the data being displayed on the homepage
+        let allCells = topSitesState.topSitesData.prefix(maxCells).map { data in
+            let cell = TopSiteCell()
+            cell.configure(data, position: 0, theme: LightTheme(), textColor: .black)
+            return cell
+        }
+
+        // Group into rows and compute each rows max height
+        let rowHeights = stride(from: 0, to: allCells.count, by: cols).map { start in
+            let end = min(start + cols, allCells.count)
+            let rowCells = Array(allCells[start..<end])
+            return HomepageDimensionCalculator.getTallestViewHeight(views: rowCells, viewWidth: 0)
+        }
+
+        // Sum up row heights
+        totalHeight += rowHeights.reduce(0, +)
+
+        // Add inter-row spacing
+        let rowsShown = ceil(Double(topSitesState.topSitesData.count) / Double(cols))
+        totalHeight += CGFloat(rowsShown - 1) * UX.standardSpacing
+
+        // Add section insets
+        totalHeight += UX.TopSitesConstants.getBottomInset()
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" stories section and returns its height
+    private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        var totalHeight: CGFloat = 0
+        let storiesState = state.pocketState
+
+        // Add header height
+        totalHeight += getHeaderHeight(headerState: storiesState.sectionHeaderState, environment: environment)
+
+        // Add stories height
+        let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
+            collectionViewWidth: environment.container.contentSize.width
+        )
+        totalHeight += max(getTallestStoryCellHeight(cellWidth: cellWidth), UX.PocketConstants.redesignedMinimumCellHeight)
+
+        // Add section insets
+        totalHeight += UX.standardInset
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" search bar section and returns its height
+    private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+                  state.searchState.shouldShowSearchBar else { return 0 }
+        var totalHeight: CGFloat = 0
+
+        // Add search bar height
+        let searchBarCell = SearchBarCell()
+        let containerWidth = environment.container.contentSize.width
+        let searchBarHeight = searchBarCell.systemLayoutSizeFitting(
+            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        totalHeight += searchBarHeight
+
+        // Add section insets
+        totalHeight += UX.standardInset
+        totalHeight += UX.HeaderConstants.bottomSpacing
+
+        return totalHeight
+    }
+
+    /// Creates a "dummy" header and returns it's height
+    private func getHeaderHeight(headerState: SectionHeaderConfiguration,
+                                 environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
+        header.configure(state: headerState, textColor: .black, theme: LightTheme())
+        let containerWidth = environment.container.contentSize.width
+        let headerHeight = header.systemLayoutSizeFitting(
+            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+
+        return headerHeight
     }
 
     // Determines the tallest story cell so that all story cells can have a uniform height. This is accomplished by creating
