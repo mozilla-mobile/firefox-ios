@@ -2055,7 +2055,43 @@ extension String {
             value: "Summarizing …",
             comment: "When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed."
         )
+        public static let ToSAlertTitleLabel = MZLocalizedString(
+            key: "Summarizer.ToS.Alert.Title.Label.v142",
+            tableName: "Summarizer",
+            value: "Allow Page Summaries?",
+            comment: "The title for the ToS alert that asks the user if they want to allow page summaries."
+        )
+        public static let ToSAlertMessageLabel = MZLocalizedString(
+            key: "Summarizer.ToS.Alert.Message.Label.v142",
+            tableName: "Summarizer",
+            value: "Firefox uses AI securely hosted on Mozilla servers to summarize pages.",
+            comment: "The message for the ToS alert that asks the user if they want to allow page summaries."
+        )
+        public static let ToSAlertAllowButtonLabel = MZLocalizedString(
+            key: "Summarizer.ToS.Alert.AllowButton.Label.v142",
+            tableName: "Summarizer",
+            value: "Allow",
+            comment: "The label for the allow button on the ToS alert."
+        )
+        public static let ToSAlertCancelButtonLabel = MZLocalizedString(
+            key: "Summarizer.ToS.Alert.CancelButton.Label.v142",
+            tableName: "Summarizer",
+            value: "Cancel",
+            comment: "The label for the cancel button on the ToS alert."
+        )
+        public static let ToSAlertLinkButtonLabel = MZLocalizedString(
+            key: "Summarizer.ToS.Alert.CancelButton.Label.v142",
+            tableName: "Summarizer",
+            value: "Learn more",
+            comment: "The label for the learn more link button on the ToS alert."
+        )
         // TODO: - FXIOS-12899 add the correct value and key for the accessibility labels
+        public static let ToSCancelButtonAccessibilityLabel = MZLocalizedString(
+            key: "", // Summarizer.ToS.Alert.CloseButton.Accessibility.Label.v142
+            tableName: "Summarizer",
+            value: "Deny Term of Service button",
+            comment: "The a11y label for the cancel button on the ToS alert."
+        )
         public static let LoadingAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.Loading.Accessibility.Label.v142
             tableName: "Summarizer",

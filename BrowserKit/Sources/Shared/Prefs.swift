@@ -57,6 +57,10 @@ public struct PrefsKeys {
         public static let InternalURLUUID = "InternalURLUUID"
     }
 
+    public struct Summarizer {
+        public static let didAgreeToSTerms = "didAgreeToSTerms"
+    }
+
     public struct AppVersion {
         public static let Latest = "latestAppVersion"
     }

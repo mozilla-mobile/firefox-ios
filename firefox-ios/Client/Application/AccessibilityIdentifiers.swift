@@ -709,9 +709,12 @@ struct AccessibilityIdentifiers {
     }
 
     struct Summarizer {
-        static let closeButton = "closeButton"
+        static let closeSummaryButton = "closeSummaryButton"
         static let loadingLabel = "summaryLoadingLabel"
         static let summaryTextView = "summaryTextView"
+        static let tosCancelButton = "tosCancelButton"
+        static let tosAllowButton = "tosAllowButton"
+        static let tosLinkButton = "tosLinkButton"
     }
 
     struct ShareTo {

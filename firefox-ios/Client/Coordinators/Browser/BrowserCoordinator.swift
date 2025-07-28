@@ -1090,9 +1090,12 @@ class BrowserCoordinator: BaseCoordinator,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,
             browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
+            prefs: profile.prefs,
             windowUUID: windowUUID,
-            router: router
-        )
+            router: router) { [weak self] url in
+            guard let url else { return }
+            self?.openURLinNewTab(url)
+        }
         add(child: coordinator)
         coordinator.start()
     }
