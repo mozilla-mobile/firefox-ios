@@ -17,6 +17,7 @@ struct TabTraySelectorUX {
     static let horizontalInsets: CGFloat = 10
     static let fontScaleDelta: CGFloat = 0.055
     static let stackViewLeadingTrailingPadding: CGFloat = 8
+    static let containerHorizontalSpacing: CGFloat = 16
 }
 
 class TabTraySelectorView: UIView,
@@ -30,6 +31,8 @@ class TabTraySelectorView: UIView,
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
     private var stackViewOffsetConstraint: NSLayoutConstraint?
     private let edgeFadeGradientLayer = CAGradientLayer()
+
+    private lazy var containerView: UIView = .build()
 
     private lazy var selectionBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = TabTraySelectorUX.cornerRadius
@@ -72,9 +75,10 @@ class TabTraySelectorView: UIView,
     }
 
     private func setup() {
-        addSubview(selectionBackgroundView)
-        addSubview(stackView)
-        layer.mask = edgeFadeGradientLayer
+        addSubview(containerView)
+        containerView.addSubview(selectionBackgroundView)
+        containerView.addSubview(stackView)
+        containerView.layer.mask = edgeFadeGradientLayer
 
         for (index, title) in buttonTitles.enumerated() {
             let button = createButton(with: index, title: title)
@@ -84,10 +88,17 @@ class TabTraySelectorView: UIView,
         }
 
         NSLayoutConstraint.activate([
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                   constant: TabTraySelectorUX.containerHorizontalSpacing),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                    constant: -TabTraySelectorUX.containerHorizontalSpacing),
+
+            stackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             selectionBackgroundView.heightAnchor.constraint(equalTo: stackView.heightAnchor),
             selectionBackgroundView.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
-            selectionBackgroundView.centerXAnchor.constraint(equalTo: centerXAnchor)
+            selectionBackgroundView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
         ])
 
         applyInitialConstraints()
@@ -142,7 +153,7 @@ class TabTraySelectorView: UIView,
         let buttonCenter = selectedButton.convert(selectedButton.bounds.center, to: self)
         let offset = stackView.frame.midX - buttonCenter.x
         stackViewOffsetConstraint = stackView.centerXAnchor.constraint(
-            equalTo: centerXAnchor, constant: offset
+            equalTo: containerView.centerXAnchor, constant: offset
         )
         stackViewOffsetConstraint?.isActive = true
     }
@@ -285,7 +296,7 @@ class TabTraySelectorView: UIView,
 
         stackViewOffsetConstraint?.isActive = false
         stackViewOffsetConstraint = stackView.centerXAnchor.constraint(
-            equalTo: centerXAnchor, constant: offset
+            equalTo: containerView.centerXAnchor, constant: offset
         )
         stackViewOffsetConstraint?.isActive = true
 
@@ -298,7 +309,7 @@ class TabTraySelectorView: UIView,
     }
 
     private func updateEdgeFadeMask() {
-        edgeFadeGradientLayer.frame = bounds
+        edgeFadeGradientLayer.frame = containerView.bounds
         edgeFadeGradientLayer.colors = [UIColor.clear.cgColor,
                                         UIColor.black.cgColor,
                                         UIColor.black.cgColor,
