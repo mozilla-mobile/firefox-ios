@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Common
 import Redux
+import Foundation
 
 @MainActor
 class TermsOfUseMiddleware {
@@ -18,20 +19,29 @@ class TermsOfUseMiddleware {
     }
 
     lazy var termsOfUseProvider: Middleware<AppState> = { _, action in
-        guard let action = action as? TermsOfUseAction,
-              let type = action.actionType as? TermsOfUseActionType else { return }
+        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
+        // because we dispatch to the main thread in the store. We will want
+        // to also isolate that to the @MainActor to remove this.
+        guard Thread.isMainThread else {
+            return
+        }
 
-        switch type {
-        case TermsOfUseActionType.markAccepted:
-            self.userDefaults.set(true, forKey: DefaultKeys.acceptedKey)
-            self.userDefaults.set(false, forKey: DefaultKeys.dismissedKey)
+        MainActor.assumeIsolated {
+            guard let action = action as? TermsOfUseAction,
+                  let type = action.actionType as? TermsOfUseActionType else { return }
 
-        case TermsOfUseActionType.markDismissed:
-            self.userDefaults.set(true, forKey: DefaultKeys.dismissedKey)
-            self.userDefaults.set(Date(), forKey: DefaultKeys.lastShownKey)
+            switch type {
+            case TermsOfUseActionType.markAccepted:
+                self.userDefaults.set(true, forKey: DefaultKeys.acceptedKey)
+                self.userDefaults.set(false, forKey: DefaultKeys.dismissedKey)
 
-        case TermsOfUseActionType.markShownThisLaunch, TermsOfUseActionType.remindMeLater:
-            break
+            case TermsOfUseActionType.markDismissed:
+                self.userDefaults.set(true, forKey: DefaultKeys.dismissedKey)
+                self.userDefaults.set(Date(), forKey: DefaultKeys.lastShownKey)
+
+            case TermsOfUseActionType.markShownThisLaunch, TermsOfUseActionType.remindMeLater:
+                break
+            }
         }
     }
 }

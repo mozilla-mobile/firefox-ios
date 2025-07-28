@@ -77,21 +77,30 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
         subscribeToRedux()
     }
 
-    deinit {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         unsubscribeFromRedux()
     }
 
     func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .termsOfUse)
+        store.dispatchLegacy(action)
         store.subscribe(self) {
-            $0.select {
-                $0.screenState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
+            $0.select { appState in
+                appState.screenState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
                 ?? TermsOfUseState(windowUUID: self.windowUUID)
             }
         }
     }
 
     func unsubscribeFromRedux() {
-        store.unsubscribe(self)
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .termsOfUse)
+        store.dispatchLegacy(action)
+        // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
     func newState(state: TermsOfUseState) {

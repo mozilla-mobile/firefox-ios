@@ -8,6 +8,8 @@ protocol TermsOfUseCoordinatorDelegate: AnyObject {
     func dismissTermsFlow()
     func showTermsLink(url: URL)
 }
+
+@MainActor
 final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     private let windowUUID: WindowUUID
@@ -47,7 +49,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
     func dismissTermsFlow() {
         presentedVC?.dismiss(animated: true) { [weak self] in
-            self?.parentCoordinator?.didFinish(from: self!)
+            guard let self = self else { return }
+            self.parentCoordinator?.didFinish(from: self)
         }
     }
 

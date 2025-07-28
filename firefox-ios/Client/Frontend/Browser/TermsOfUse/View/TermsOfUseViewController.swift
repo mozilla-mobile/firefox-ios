@@ -127,10 +127,11 @@ final class TermsOfUseViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .markShownThisLaunch))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markShownThisLaunch))
     }
 
-    deinit {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         unsubscribeFromRedux()
     }
 
@@ -138,7 +139,7 @@ final class TermsOfUseViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .termsOfUse)
-        store.dispatch(action)
+        store.dispatchLegacy(action)
         store.subscribe(self) {
             $0.select { appState in
                 appState.screenState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
@@ -148,14 +149,12 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-            let action = ScreenAction(
-                windowUUID: windowUUID,
-                actionType: ScreenActionType.closeScreen,
-                screen: .termsOfUse
-            )
-            store.dispatch(action)
-            store.unsubscribe(self)
-        }
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .termsOfUse)
+        store.dispatchLegacy(action)
+        // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
+    }
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
@@ -293,11 +292,11 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     @objc private func acceptTapped() {
-        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .markAccepted))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markAccepted))
     }
 
     @objc private func remindMeLaterTapped() {
-        store.dispatch(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
     }
 
     func applyTheme() {
