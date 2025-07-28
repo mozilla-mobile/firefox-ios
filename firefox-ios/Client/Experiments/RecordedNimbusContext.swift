@@ -44,6 +44,7 @@ class RecordedNimbusContext: RecordedContext {
     var isDefaultBrowser: Bool
     var isBottomToolbarUser: Bool
     var hasEnabledTipsNotifications: Bool
+    var isAppleIntelligenceAvailable: Bool
     var appVersion: String?
     var region: String?
     var language: String?
@@ -60,6 +61,7 @@ class RecordedNimbusContext: RecordedContext {
          isDefaultBrowser: Bool,
          isBottomToolbarUser: Bool,
          hasEnabledTipsNotifications: Bool,
+         isAppleIntelligenceAvailable: Bool,
          eventQueries: [String: String] = RecordedNimbusContext.EVENT_QUERIES,
          isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
          bundle: Bundle = Bundle.main,
@@ -73,6 +75,7 @@ class RecordedNimbusContext: RecordedContext {
         self.isDefaultBrowser = isDefaultBrowser
         self.isBottomToolbarUser = isBottomToolbarUser
         self.hasEnabledTipsNotifications = hasEnabledTipsNotifications
+        self.isAppleIntelligenceAvailable = isAppleIntelligenceAvailable
 
         let info = bundle.infoDictionary ?? [:]
         appVersion = info["CFBundleShortVersionString"] as? String
@@ -141,7 +144,8 @@ class RecordedNimbusContext: RecordedContext {
                 region: region,
                 isDefaultBrowser: isDefaultBrowser,
                 isBottomToolbarUser: isBottomToolbarUser,
-                hasEnabledTipsNotifications: hasEnabledTipsNotifications
+                hasEnabledTipsNotifications: hasEnabledTipsNotifications,
+                isAppleIntelligenceAvailable: isAppleIntelligenceAvailable
             )
         )
         GleanMetrics.Pings.shared.nimbus.submit()
@@ -184,6 +188,7 @@ class RecordedNimbusContext: RecordedContext {
             "is_default_browser": isDefaultBrowser,
             "is_bottom_toolbar_user": isBottomToolbarUser,
             "has_enabled_tips_notifications": hasEnabledTipsNotifications,
+            "is_apple_intelligence_available": isAppleIntelligenceAvailable
         ]),
             let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
         else {
