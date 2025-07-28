@@ -91,6 +91,8 @@ class TabTraySelectorView: UIView,
         ])
 
         applyInitialConstraints()
+        addSwipeGestureRecognizer(direction: .right)
+        addSwipeGestureRecognizer(direction: .left)
         applyTheme(theme: theme)
     }
 
@@ -159,6 +161,31 @@ class TabTraySelectorView: UIView,
         let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
         let horizontalInsets = TabTraySelectorUX.horizontalInsets * 2
         button.widthAnchor.constraint(equalToConstant: boldWidth + horizontalInsets).isActive = true
+    }
+
+    // MARK: - Gesture Recognizers
+    private func addSwipeGestureRecognizer(direction: UISwipeGestureRecognizer.Direction) {
+        let gestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        gestureRecognizer.direction = direction
+        addGestureRecognizer(gestureRecognizer)
+    }
+
+    @objc
+    private func handleSwipeGesture(_ recognizer: UISwipeGestureRecognizer) {
+        switch recognizer.direction {
+        case .left:
+            let index = selectedIndex + 1
+            if buttons.indices.contains(index) {
+                sectionSelected(buttons[index])
+            }
+        case .right:
+            let index = selectedIndex - 1
+            if buttons.indices.contains(index) {
+                sectionSelected(buttons[index])
+            }
+        default:
+            break
+        }
     }
 
     @objc
