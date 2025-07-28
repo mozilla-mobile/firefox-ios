@@ -184,7 +184,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: MerinoState.reducer(state.merinoState, action),
+            pocketState: PocketState.reducer(state.pocketState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
