@@ -33,3 +33,5 @@ jobs:
           git config user.name "Firefox Sync Engineering"
       - name: Run nightly update
         run: python scripts/update_from_application_services.py nightly --push --remote=origin
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -7,6 +7,9 @@
 /* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "Creḍ asebter";
 
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.AccessibilityLabels.CloseButton.142" = "Mdel umuɣ";
+
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Asenɣes n tafat";
 
@@ -25,6 +28,9 @@
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Mtawi awalen n uεeddi, accaren akked wayen niḍen";
 
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "Mtawi ticraḍ n yisebtar, awalen n uεeddi, accaren akked wayen niḍen";
+
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Kcem";
 
@@ -36,6 +42,15 @@
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.BookmarkPage.Title.v141" = "Creḍ asebter";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
+"MainMenu.DesktopSiteOff.Title.v142" = "Yensa";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
+"MainMenu.DesktopSiteOn.Title.v142" = "Yermed";
+
+/* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
+"MainMenu.HeaderBanner.Subtitle.v142" = "Kra n tsinin kan. Beddel sya ɣer da";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "Yensa";
@@ -298,8 +313,14 @@
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "Iccer amaynut";
 
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "Yettwafneẓ";
+
 /* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Asmel n tnarit";
+
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
+"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "Yettusnefli";
 
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Nadi deg usebter";
@@ -307,8 +328,14 @@
 /* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "Ddaw";
 
+/* On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...) */
+"MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142" = "Tamkarḍit";
+
 /* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "Ugar";
+
+/* On the main menu, the accessibility label for the action that will open the page zoom tool. */
+"MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "Zoom n usebter";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Sekles";
@@ -327,6 +354,9 @@
 
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Umuɣ arnaw n yifecka";
+
+/* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
+"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "Askar aberkan n usmel web";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
 "MainMenu.ToolsSection.DesktopSite.Title.v141" = "Asmel n tnarit";
@@ -354,4 +384,10 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Ifecka";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
+"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Yensa";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON. */
+"MainMenu.WebsiteDarkModeOnV2.Title.v142" = "Yermed";
 

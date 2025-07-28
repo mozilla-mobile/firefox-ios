@@ -5,7 +5,9 @@
 import Common
 import Redux
 
-final class JumpBackInAction: Action {
+struct JumpBackInAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let isEnabled: Bool?
     let tab: Tab?
 
@@ -15,9 +17,10 @@ final class JumpBackInAction: Action {
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.isEnabled = isEnabled
         self.tab = tab
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

@@ -20,14 +20,10 @@ NIGHTLY_JSON_URL = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task
 def main():
     args = parse_args()
     version = VersionInfo(args.version)
-    tag = version.swift_version
 
     BRANCH = "rcs-auto-update"
     TITLE = f"Nightly auto-update ({version.swift_version})"
-    
-    if rev_exists(tag):
-        print(f"Tag {tag} already exists, quitting")
-        sys.exit(1)
+
     update_source(version)
     if not repo_has_changes():
         print("No changes detected, quitting")
@@ -42,29 +38,28 @@ def main():
         "--message",
         TITLE
     ])
-    subprocess.check_call(["git", "tag", tag])
     if args.push:
         subprocess.check_call(["git", "push", "--force-with-lease", "-u", args.remote, BRANCH])
-        subprocess.check_call(["git", "push", args.remote, tag])
-        # If we didn't merge the previous PR, lets auto-update it instead of making
-        # a new one
-        try:
-            result = subprocess.run(
-                ["gh", "pr", "view", BRANCH, "--json", "state", "--jq", ".state"],
-                text=True,
-                capture_output=True,
-            )
-            if result.returncode == 0 and result.stdout.strip() == "OPEN":
-                print("PR already open – branch updated in place")
-        except subprocess.CalledProcessError:
-            subprocess.check_call([
-                "gh", "pr", "create",
-                "--title",  TITLE,
-                "--body",  f"Automatically generated app-services nightly build for `{tag}`.",
-                "--base",  "main",
-                "--head",  BRANCH,
-                "--label", "auto-update,nightly"
-            ])
+
+        result = subprocess.run(
+            ["gh", "pr", "view", BRANCH, "--json", "state", "--jq", ".state"],
+            text=True,
+            capture_output=True,
+        )
+        # If the branch already has an open PR, nothing else to do
+        if result.returncode == 0 and result.stdout.strip() == "OPEN":
+            print("PR already open – branch updated in place")
+            return
+
+        # Otherwise create one
+        subprocess.check_call([
+            "gh", "pr", "create",
+            "--title",  TITLE,
+            "--body",  f"Automatically generated app-services nightly build for `{version.swift_version}`.",
+            "--base",  "main",
+            "--head",  BRANCH,
+            "--label", "auto-update,nightly"
+        ])
 
 def update_source(version):
     print("Updating Package.swift xcframework info", flush=True)

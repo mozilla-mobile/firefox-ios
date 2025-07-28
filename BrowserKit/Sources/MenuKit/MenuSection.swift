@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct MenuSection: Equatable {
+public struct MenuSection: Equatable, Sendable {
     public let isHorizontalTabsSection: Bool
     public let groupA11yLabel: String?
     public let isExpanded: Bool?

@@ -7,9 +7,9 @@ import Shared
 
 import struct MozillaAppServices.RemoteTabRecord
 
-public struct ClientAndTabs: Equatable, CustomStringConvertible {
+public struct ClientAndTabs: Equatable, CustomStringConvertible, Sendable {
     public let client: RemoteClient
-    public var tabs: [RemoteTab]
+    public let tabs: [RemoteTab]
 
     public var description: String {
         return "<Client guid: \(client.guid ?? "nil"), \(tabs.count) tabs.>"
@@ -26,7 +26,7 @@ public func == (lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
            (lhs.tabs == rhs.tabs)
 }
 
-public struct RemoteTab: Equatable {
+public struct RemoteTab: Equatable, Sendable {
     public let clientGUID: String?
     public let URL: Foundation.URL
     public let title: String

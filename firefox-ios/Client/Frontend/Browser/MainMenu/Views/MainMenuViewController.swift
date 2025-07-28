@@ -288,7 +288,9 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupRedesignView() {
-        view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+        if #unavailable(iOS 26.0) {
+            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+        }
         view.addSubview(menuRedesignContent)
 
         NSLayoutConstraint.activate([
@@ -486,7 +488,9 @@ class MainMenuViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         if isMenuRedesign {
-            view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
+            if #unavailable(iOS 26.0) {
+                view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
+            }
             menuRedesignContent.applyTheme(theme: theme)
         } else {
             view.backgroundColor = theme.colors.layer3
@@ -612,12 +616,17 @@ class MainMenuViewController: UIViewController,
 
         // Don't display CFR for fresh installs for users that never saw before the photon main menu
         if InstallType.get() == .fresh {
-            if let photonMainMenuShown = profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown),
-               photonMainMenuShown {
-                return viewProvider.shouldPresentContextualHint()
+            if isMenuRedesign {
+                viewProvider.markContextualHintPresented()
+                return false
+            } else {
+                if let photonMainMenuShown = profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown),
+                   photonMainMenuShown {
+                    return viewProvider.shouldPresentContextualHint()
+                }
+                viewProvider.markContextualHintPresented()
+                return false
             }
-            viewProvider.markContextualHintPresented()
-            return false
         }
 
         if isMenuRedesign, isHomepage {

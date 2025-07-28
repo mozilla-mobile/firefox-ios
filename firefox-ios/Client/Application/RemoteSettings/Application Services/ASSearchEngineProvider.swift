@@ -9,7 +9,7 @@ import Shared
 
 /// Provides a Remote-Settings-based substitute for our DefaultSearchEngineProvider
 /// This is unused unless SEC (Search Engine Consolidation) experiment is enabled.
-final class ASSearchEngineProvider: SearchEngineProvider {
+final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
     private let logger: Logger
     private let iconDataFetcher: ASSearchEngineIconDataFetcherProtocol?
     private let selector: ASSearchEngineSelectorProtocol?

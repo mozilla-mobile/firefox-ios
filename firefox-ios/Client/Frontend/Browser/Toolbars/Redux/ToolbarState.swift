@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-struct ToolbarState: ScreenState, Equatable {
+struct ToolbarState: ScreenState, Sendable, Equatable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
     var toolbarLayout: ToolbarLayoutStyle

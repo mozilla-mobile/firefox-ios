@@ -1,5 +1,5 @@
 {
-  "originHash" : "bf6f0f5b072e10c6337d42909976678ec37348611dda3437eac45e1259abba1f",
+  "originHash" : "07e754f1a18a49a28fa0ad66be53519032b34c7e4d4236ec0ca15a4b6f7bab82",
   "pins" : [
     {
       "identity" : "a-star",
@@ -89,6 +89,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "f56a6e483163a761adc8cd25c337db0ed1eac524"
+      }
+    },
+    {
+      "identity" : "markdownkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bmoliveira/MarkdownKit.git",
+      "state" : {
+        "revision" : "39ea7a3fc7e65bcafe55152592b834859be574a5",
+        "version" : "1.7.3"
       }
     },
     {

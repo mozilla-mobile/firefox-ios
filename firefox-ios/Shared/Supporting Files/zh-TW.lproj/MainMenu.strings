@@ -1,4 +1,10 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Body.v142" = "書籤、瀏覽紀錄、設定 — 只要手指輕鬆一點。";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Title.v142" = "新選單設計，不雜亂";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
 "ContextualHints.MainMenu.NewMenu.Body.v132" = "不論是隱私瀏覽模式還是儲存動作，讓您更快找到想要的功能。";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
@@ -6,6 +12,12 @@
 
 /* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "將頁面加入書籤";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.AccessibilityLabels.CloseButton.142" = "關閉選單";
+
+/* The accessibility label for the dismiss button, for header banner, on top of the menu. */
+"MainMenu.AccessibilityLabels.DismissBanner.142" = "關閉橫幅";
 
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "變暗";
@@ -42,6 +54,12 @@
 
 /* On the main menu,the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.BookmarkPage.Title.v141" = "將頁面加入書籤";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
+"MainMenu.DesktopSiteOff.Title.v142" = "關閉";
+
+/* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
+"MainMenu.DesktopSiteOn.Title.v142" = "開啟";
 
 /* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
 "MainMenu.HeaderBanner.Subtitle.v142" = "只要幾秒鐘，可隨時更換。";
@@ -310,8 +328,14 @@
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "開新分頁";
 
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "收合";
+
 /* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "桌面版網站";
+
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
+"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "展開";
 
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "在頁面中搜尋";
@@ -319,8 +343,14 @@
 /* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "更少";
 
+/* On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...) */
+"MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142" = "收藏庫";
+
 /* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "更多";
+
+/* On the main menu, the accessibility label for the action that will open the page zoom tool. */
+"MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "頁面縮放";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "儲存";
@@ -339,6 +369,9 @@
 
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "工具子選單";
+
+/* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
+"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "網站暗色模式";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
 "MainMenu.ToolsSection.DesktopSite.Title.v141" = "桌面版網站";
@@ -366,4 +399,10 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "工具";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
+"MainMenu.WebsiteDarkModeOffV2.Title.v142" = "關閉";
+
+/* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON. */
+"MainMenu.WebsiteDarkModeOnV2.Title.v142" = "開啟";
 

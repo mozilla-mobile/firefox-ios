@@ -1,3 +1,6 @@
+/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "Condiții de utilizare a serviciilor %@.";
+
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.TreatementA.v120" = "Ne place să te protejăm";
 

@@ -17,6 +17,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
         static let cornerRadius: CGFloat = 16
         static let backgroundAlpha: CGFloat = 0.8
         static let hyphenationFactor: Float = 1.0
+        static let dividerWidth: CGFloat = 0.5
     }
 
     // MARK: - UI Elements
@@ -37,8 +38,11 @@ final class MenuSquareView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
+    private var dividerView: UIView = .build()
+
     // MARK: - Properties
     var model: MenuElement?
+    private var shouldShowDivider = true
     var cellTapCallback: (() -> Void)?
 
     // MARK: - Initializers
@@ -55,13 +59,15 @@ final class MenuSquareView: UIView, ThemeApplicable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.layer.cornerRadius = UX.cornerRadius
-        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
-                                    .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        self.clipsToBounds = true
+        if #unavailable(iOS 26.0) {
+            layer.cornerRadius = UX.cornerRadius
+            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner,
+                                        .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            self.clipsToBounds = true
+        }
     }
 
-    func configureCellWith(model: MenuElement) {
+    func configureCellWith(model: MenuElement, shouldShowDivider: Bool = true) {
         self.model = model
         self.setTitle(with: model.title)
         self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
@@ -72,6 +78,8 @@ final class MenuSquareView: UIView, ThemeApplicable {
         self.accessibilityLabel = model.a11yLabel
         self.accessibilityHint = model.a11yHint
         self.accessibilityTraits = .button
+
+        self.shouldShowDivider = shouldShowDivider
     }
 
     private func setupView() {
@@ -79,6 +87,27 @@ final class MenuSquareView: UIView, ThemeApplicable {
         backgroundContentView.addSubview(contentStackView)
         contentStackView.addArrangedSubview(icon)
         contentStackView.addArrangedSubview(titleLabel)
+
+        if #available(iOS 26.0, *) {
+            backgroundContentView.addSubview(dividerView)
+            NSLayoutConstraint.activate([
+                dividerView.widthAnchor.constraint(equalToConstant: UX.dividerWidth),
+                dividerView.trailingAnchor.constraint(equalTo: backgroundContentView.trailingAnchor),
+                dividerView.topAnchor.constraint(equalTo: backgroundContentView.topAnchor),
+                dividerView.bottomAnchor.constraint(equalTo: backgroundContentView.bottomAnchor),
+
+                contentStackView.trailingAnchor.constraint(
+                    equalTo: dividerView.leadingAnchor,
+                    constant: -UX.contentViewHorizontalMargin
+                )
+            ])
+        } else {
+            contentStackView.trailingAnchor.constraint(
+                equalTo: backgroundContentView.trailingAnchor,
+                constant: -UX.contentViewHorizontalMargin
+            ).isActive = true
+        }
+
         NSLayoutConstraint.activate([
             backgroundContentView.topAnchor.constraint(equalTo: self.topAnchor),
             backgroundContentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -92,10 +121,6 @@ final class MenuSquareView: UIView, ThemeApplicable {
             contentStackView.leadingAnchor.constraint(
                 equalTo: backgroundContentView.leadingAnchor,
                 constant: UX.contentViewHorizontalMargin
-            ),
-            contentStackView.trailingAnchor.constraint(
-                equalTo: backgroundContentView.trailingAnchor,
-                constant: -UX.contentViewHorizontalMargin
             ),
             contentStackView.bottomAnchor.constraint(
                 lessThanOrEqualTo: backgroundContentView.bottomAnchor,
@@ -129,7 +154,12 @@ final class MenuSquareView: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         backgroundColor = .clear
         contentStackView.backgroundColor = .clear
-        backgroundContentView.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+        if #available(iOS 26.0, *) {
+            backgroundContentView.backgroundColor = .clear
+            dividerView.backgroundColor = shouldShowDivider ? theme.colors.borderPrimary : .clear
+        } else {
+            backgroundContentView.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+        }
         icon.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textSecondary
     }

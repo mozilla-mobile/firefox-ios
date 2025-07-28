@@ -101,33 +101,33 @@ class CreditCardBottomSheetViewModel {
 
     // MARK: Main Button Action
     public func didTapMainButton(queue: DispatchQueueInterface = DispatchQueue.main,
-                                 completion: @escaping (Error?) -> Void) {
+                                 completion: @escaping @Sendable (Error?) -> Void) {
         let decryptedCard = getPlainCreditCardValues(bottomSheetState: state)
         switch state {
         case .save:
-            saveCreditCard(with: decryptedCard) { _, error in
+            saveCreditCard(with: decryptedCard) { [logger] _, error in
                 queue.async {
                     guard let error = error else {
                         completion(nil)
                         return
                     }
-                    self.logger.log("Unable to save credit card with error: \(error)",
-                                    level: .fatal,
-                                    category: .autofill)
+                    logger.log("Unable to save credit card with error: \(error)",
+                               level: .fatal,
+                               category: .autofill)
                     completion(error)
                 }
             }
         case .update:
             updateCreditCard(for: creditCard?.guid,
-                             with: decryptedCard) { _, error in
+                             with: decryptedCard) { [logger] _, error in
                 queue.async {
                     guard let error = error else {
                         completion(nil)
                         return
                     }
-                    self.logger.log("Unable to save credit card with error: \(error)",
-                                    level: .fatal,
-                                    category: .autofill)
+                    logger.log("Unable to save credit card with error: \(error)",
+                               level: .fatal,
+                               category: .autofill)
                     completion(error)
                 }
             }
@@ -304,11 +304,10 @@ class CreditCardBottomSheetViewModel {
         })
     }
 
-    func updateCreditCardList(queue: DispatchQueueInterface = DispatchQueue.main,
-                              completionHandler: @escaping ([CreditCard]?) -> Void) {
+    func updateCreditCardList(completionHandler: @escaping @Sendable ([CreditCard]?) -> Void) {
         if state == .selectSavedCard {
             listStoredCreditCards { [weak self] cards in
-                queue.async {
+                Task { @MainActor in
                     self?.creditCards = cards
                     completionHandler(cards)
                 }

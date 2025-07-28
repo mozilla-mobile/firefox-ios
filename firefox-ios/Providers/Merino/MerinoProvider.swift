@@ -21,13 +21,16 @@ extension MerinoStoriesProviding {
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
     private static let SupportedLocales = [
+        "de_DE",
+        "de_AT",
+        "de_CH",
         "en_CA",
         "en_US",
         "en_GB",
         "en_ZA",
-        "de_DE",
-        "de_AT",
-        "de_CH"
+        "es_ES",
+        "fr_FR",
+        "it_IT",
     ]
 
     private let prefs: Prefs
@@ -150,13 +153,12 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         case "de_DE": return .deDe
         case "de_AT": return .deAt
         case "de_CH": return .deCh
-            // Not sure if we're supporting these yet
-            //        case "fr": return .fr
-            //        case "fr_FR": return .frFr
-            //        case "es": return .es
-            //        case "es_ES": return .esEs
-            //        case "it": return .it
-            //        case "it_IT": return .itIt
+        case "fr": return .fr
+        case "fr_FR": return .frFr
+        case "es": return .es
+        case "es_ES": return .esEs
+        case "it": return .it
+        case "it_IT": return .itIt
         default: return nil
         }
     }

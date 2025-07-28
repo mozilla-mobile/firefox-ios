@@ -195,7 +195,6 @@ extension CGImage {
         let x = Int(point.x)
         let y = Int(point.y)
         let width = self.width
-        let height = self.height
         let index = width * y + x
 
         guard let pixelData = self.dataProvider?.data,

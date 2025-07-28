@@ -5,7 +5,9 @@
 import Redux
 import Common
 
-class TabTrayAction: Action {
+struct TabTrayAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let panelType: TabTrayPanelType?
     let tabTrayModel: TabTrayModel?
     let hasSyncableAccount: Bool?
@@ -15,11 +17,11 @@ class TabTrayAction: Action {
          hasSyncableAccount: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.panelType = panelType
         self.tabTrayModel = tabTrayModel
         self.hasSyncableAccount = hasSyncableAccount
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
     }
 }
 

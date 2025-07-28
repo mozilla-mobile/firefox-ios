@@ -63,6 +63,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, RemoteTabsPanelActionType.refreshTabs)
     }
 
+    @MainActor
     func testNewState_setsNewStateInTableViewController() {
         let subject = createSubject()
         let newState = RemoteTabsPanelState(
@@ -80,6 +81,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - RemoteTabsClientAndTabsDataSourceDelegate
+    @MainActor
     func testRemoteTabsClientAndTabsDataSourceDidSelectURL_dispatchesCloseSelectedRemoteURLAction() throws {
         let subject = createSubject()
         subject.remoteTabsClientAndTabsDataSourceDidSelectURL(
@@ -130,8 +132,9 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - RemotePanelDelegate
+    @MainActor
     func testRemotePanelDidRequestToSignIn_forwardsCallsToDelegate() {
-        let mockDelegate = RemoteTabsPanelDelegateMock()
+        let mockDelegate = MockRemoteTabsPanelDelegate()
         let subject = createSubject()
         subject.remoteTabsDelegate = mockDelegate
 
@@ -140,8 +143,9 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockDelegate.presentFirefoxAccountSignInCallCount, 1)
     }
 
+    @MainActor
     func testPresentFxAccountSettings_forwardsCallsToDelegate() {
-        let mockDelegate = RemoteTabsPanelDelegateMock()
+        let mockDelegate = MockRemoteTabsPanelDelegate()
         let subject = createSubject()
         subject.remoteTabsDelegate = mockDelegate
 
@@ -151,6 +155,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - RemoteTabsEmptyViewDelegate
+    @MainActor
     func testRemotePanelDidRequestToOpenInNewTab_dispatchesCloseSelectedRemoteURLAction() throws {
         let subject = createSubject()
         subject.remotePanelDidRequestToOpenInNewTab(

@@ -1,0 +1,28 @@
+name: Create TestRail Milestone
+
+on:
+  release:
+    types: [published]  # Trigger only when a release is published
+
+jobs:
+  handle-new-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Release Info
+        run: |
+          echo "New release published!"
+          echo "Tag: ${{ github.event.release.tag_name }}"
+          echo "Release Name: ${{ github.event.release.name }}"
+          echo "Body: ${{ github.event.release.body }}"
+          echo "Published at: ${{ github.event.release.published_at }}"
+      - name: Run the reusable action from testops-tools
+        uses: mozilla-mobile/testops-tools/.github/actions/firefox-ios-milestone@main
+        with:
+          release-name: ${{ github.event.release.name }}
+          release-tag: ${{ github.event.release.tag_name }}
+          testrail-host: ${{ secrets.TESTRAIL_HOST }}
+          testrail-username: ${{ secrets.TESTRAIL_USERNAME }}
+          testrail-api-key: ${{ secrets.TESTRAIL_PASSWORD }}
+          slack_webhook_url: ${{ secrets.WEBHOOK_SLACK_MOBILE_TESTENG_RELEASES_CHANNEL }}
+          slack_webhook_url_error_channel: ${{ secrets.WEBHOOK_SLACK_MOBILE_ALERTS_IOS_CHANNEL }}

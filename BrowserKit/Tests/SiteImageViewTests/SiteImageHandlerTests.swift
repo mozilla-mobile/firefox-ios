@@ -196,7 +196,7 @@ final class SiteImageHandlerTests: XCTestCase {
 }
 
 // MARK: - MockFaviconURLHandler
-private class MockFaviconURLHandler: FaviconURLHandler {
+private final class MockFaviconURLHandler: FaviconURLHandler, @unchecked Sendable {
     var faviconURL: URL?
     var cacheKey: String?
     var getFaviconURLCalled = 0
@@ -231,7 +231,7 @@ private class MockFaviconURLHandler: FaviconURLHandler {
 }
 
 // MARK: - MockImageHandler
-private class MockImageHandler: ImageHandler {
+private final class MockImageHandler: ImageHandler, @unchecked Sendable {
     var faviconImage = UIImage()
     var heroImage: UIImage?
     var fetchFaviconCalledCount = 0

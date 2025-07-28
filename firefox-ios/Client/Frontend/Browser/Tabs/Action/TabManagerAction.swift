@@ -5,16 +5,19 @@
 import Common
 import Redux
 
-final class TabManagerAction: Action {
-    var recentTabs: [Tab]?
+struct TabManagerAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
+    let recentTabs: [Tab]?
 
     init(
         recentTabs: [Tab]? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.recentTabs = recentTabs
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

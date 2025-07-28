@@ -86,10 +86,6 @@ public struct PagingCarousel<Item, Content: View>: View {
     private func carouselItem(index: Int, item: Item, geometry: GeometryProxy) -> some View {
         content(item)
             .frame(width: itemWidth(for: geometry))
-            .environment(\.carouselPosition, CarouselPosition(
-                currentIndex: index,
-                totalItems: items.count
-            ))
             .accessibilityElement(children: .contain)
             .accessibilitySortPriority(index == selection ? 1 : 0)
             .accessibilityHidden(shouldHideItem(at: index))

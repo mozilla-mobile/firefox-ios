@@ -6,14 +6,38 @@ import Foundation
 import Common
 import UIKit
 import ComponentLibrary
+import MarkdownKit
 
-// swiftlint:disable line_length
+// swiftlint:disable all
 let dummyText = """
-<h1>This is the header</h1>
+# This is header 1
+## This is header 2
+### This is header 3
 
-<h3>The article '31 Things to Do in Barcelona With Kids' from Bridges and Balloons offers a comprehensive guide for families visiting Barcelona. Authored by Victoria, who has lived in Barcelona and visited multiple times with her children, the guide combines personal experiences with practical advice. bridgesandballoons.com Highlights from the Guide: Family-Friendly Attractions: The guide lists 31 activities suitable for children, ranging from park visits and beach outings to exploring architectural marvels like the Sagrada Familia. It emphasizes that many of Barcelona's classic tourist spots are also appealing to kids.  Accommodation Recommendations: Suggestions include family-friendly hotels like Hotel Barcelona Catedral and advice on apartment rentals, noting the city's regulations on short-term rentals. bridgesandballoons.com Transportation Tips: Insights on navigating the city with children, including the use of cable cars and open-top buses, are provided to help families plan their movements efficiently. bridgesandballoons.com Dining with Kids: The guide discusses child-friendly dining options, highlighting the abundance of tapas bars and markets like La Boqueria where families can enjoy local cuisine. Packing Advice: Practical tips on what to pack when traveling to Barcelona with children, considering the city's climate and activities, are included to assist in preparation. Overall, the guide serves as a valuable resource for families seeking to explore Barcelona, offering a blend of cultural experiences and child-friendly activities.</h3>
+**This text is bold**
+*This text is italic*
+
+### 31 Things to Do in Barcelona With Kids — tl;dr
+
+- **Family-friendly attractions:** Parks, beaches, Sagrada Família, etc. Kids still like the “adult” highlights.  
+- **Where to stay:** Family-friendly hotels (e.g. Hotel Barcelona Catedral) or regulated apartments.  
+
+1. **Getting around:** Cable cars, open-top buses, and standard transit are all kid-manageable.  
+2. **Food:** Tapas bars + markets like La Boqueria work great with kids.  
+3. **Packing tips:** Dress for the climate and activities; think sun, walking, and water play.
+
+This is a **Markdown link** that must not render:  
+[Cute Cat Image](https://picsum.photos/200/300)
+
+This is a **Markdown image** that must not render:  
+![Cute Cat Image](https://picsum.photos/200/300 "A placeholder cat")
+
+This is a **Markdown video** that must not render:  
+<video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" controls width="480"></video>
+
+Overall: cultural hits + plenty of kid breaks = happy trip.
 """
-// swiftlint: enable line_length
+// swiftlint:enable all
 
 public struct SummarizeViewModel {
     let loadingLabel: String
@@ -163,31 +187,16 @@ public class SummarizeController: UIViewController, Themeable {
             }),
             for: .touchUpInside
         )
-
-        let document = try? NSAttributedString(
-            data: Data(dummyText.utf8),
-            options: [
-                .documentType: NSAttributedString.DocumentType.html,
-                .characterEncoding: String.Encoding.utf8.rawValue,
-            ],
-            documentAttributes: nil
-        )
-        if let document {
-            let mutable = NSMutableAttributedString(attributedString: document)
-            mutable.beginEditing()
-            mutable.enumerateAttribute(.font, in: NSRange(location: 0, length: mutable.length)) { value, range, _ in
-                if let oldFont = value as? UIFont {
-                    let newDescriptor = FXFontStyles.Regular.body.scaledFont().fontDescriptor
-                        .withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits)
-                    if let newDescriptor {
-                        let newFont = UIFont(descriptor: newDescriptor, size: oldFont.pointSize)
-                        mutable.addAttribute(.font, value: newFont, range: range)
-                    }
-                }
-            }
-            mutable.endEditing()
-            summaryView.attributedText = mutable
-        }
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let baseFont = FXFontStyles.Regular.body.scaledFont()
+        let headerFont = FXFontStyles.Regular.title1.scaledFont()
+        let baseColor = theme.colors.textPrimary
+        let markdownParser = MarkdownParser(font: baseFont, color: baseColor)
+        /// NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
+        /// To keep the MVP safe, link rendering is disabled.
+        markdownParser.enabledElements =  .all.subtracting([.link, .automaticLink])
+        markdownParser.header.font = headerFont
+        summaryView.attributedText = markdownParser.parse(dummyText)
         summaryView.accessibilityIdentifier = viewModel.summarizeTextViewA11yId
         summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
 

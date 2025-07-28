@@ -14,8 +14,6 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
     @State private var secondaryActionColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
-    @Environment(\.carouselPosition)
-    private var carouselPosition
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager

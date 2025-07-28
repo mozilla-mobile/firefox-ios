@@ -5,7 +5,7 @@
 import Foundation
 
 /// The source of a favicon or hero image.
-public enum SiteResource: Codable, Hashable {
+public enum SiteResource: Codable, Hashable, Sendable {
     /// An image that may be downloaded over the network.
     /// - Parameter url: The URL of the image.
     case remoteURL(url: URL)

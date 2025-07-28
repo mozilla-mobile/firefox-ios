@@ -237,10 +237,7 @@ final class AddressToolbarContainer: UIView,
             // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
             regularToolbar.alpha = alpha
         }
-        if isSwipingTabsEnabled {
-            leftSkeletonAddressBar.alpha = alpha
-            rightSkeletonAddressBar.alpha = alpha
-        }
+        updateSkeletonAddressBarsAlpha(to: alpha)
     }
 
     private func updateModel(toolbarState: ToolbarState) {
@@ -253,6 +250,7 @@ final class AddressToolbarContainer: UIView,
 
         guard self.model != newModel else { return }
 
+        updateSkeletonAddressBarsAlpha(to: CGFloat(newModel.scrollAlpha))
         // in case we are in edit mode but overlay is not active yet we have to activate it
         // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
         if newModel.isEditing, !inOverlayMode {
@@ -312,6 +310,12 @@ final class AddressToolbarContainer: UIView,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
             animated: model.shouldAnimate
         )
+    }
+
+    private func updateSkeletonAddressBarsAlpha(to alpha: CGFloat) {
+        guard isSwipingTabsEnabled else { return }
+        leftSkeletonAddressBar.alpha = alpha
+        rightSkeletonAddressBar.alpha = alpha
     }
 
     private func setupLayout() {
@@ -393,9 +397,6 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.transform = transform
         if shouldAddNewTab {
             let percentageTransform = abs(transform.tx) / bounds.width
-            if transform == .identity {
-                addNewTabView.showHideAddTabIcon(shouldShow: false)
-            }
             UIView.animate(withDuration: UX.addNewTabFadeAnimationDuration) {
                 self.addNewTabView.showHideAddTabIcon(shouldShow:
                                                         percentageTransform > UX.addNewTabPercentageAnimationThreshold)

@@ -6,41 +6,36 @@ import Foundation
 import Shared
 import Common
 
-protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
-    func shouldDisplay(clipBoardURL url: URL)
+@MainActor
+protocol ClipboardBarDisplayHandler {
+    var clipboardToast: ButtonToast? { get set }
+    func checkIfShouldDisplayBar()
+}
 
+protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
+    @MainActor
     @available(iOS 16.0, *)
     func shouldDisplay()
 }
 
-class ClipboardBarDisplayHandler: NSObject {
-    public struct UX {
+@MainActor
+@available(iOS 16.0, *)
+final class DefaultClipboardBarDisplayHandler: ClipboardBarDisplayHandler {
+    struct UX {
         static let toastDelay = DispatchTimeInterval.milliseconds(10000)
     }
 
     weak var delegate: ClipboardBarDisplayHandlerDelegate?
-    weak var settingsDelegate: SettingsDelegate?
-    weak var tabManager: TabManager?
     private var prefs: Prefs
-    private var lastDisplayedURL: String?
     private var lastPasteBoardChangeCount: Int?
     private weak var firstTab: Tab?
     var clipboardToast: ButtonToast?
     private let windowUUID: WindowUUID
 
-    init(prefs: Prefs, tabManager: TabManager) {
+    init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
-        self.tabManager = tabManager
-        self.windowUUID = tabManager.windowUUID
+        self.windowUUID = windowUUID
 
-        super.init()
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(UIPasteboardChanged),
-            name: UIPasteboard.changedNotification,
-            object: nil
-        )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(appWillEnterForegroundNotification),
@@ -50,40 +45,8 @@ class ClipboardBarDisplayHandler: NSObject {
     }
 
     @objc
-    private func UIPasteboardChanged() {
-        // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
-        NotificationCenter.default.removeObserver(self, name: UIPasteboard.changedNotification, object: nil)
-
-        UIPasteboard.general.asyncURL { url in
-            ensureMainThread {
-                defer {
-                    NotificationCenter.default.addObserver(
-                        self,
-                        selector: #selector(self.UIPasteboardChanged),
-                        name: UIPasteboard.changedNotification,
-                        object: nil
-                    )
-                }
-
-                guard let url = url else {
-                    return
-                }
-                self.lastDisplayedURL = url.absoluteString
-            }
-        }
-    }
-
-    @objc
     private func appWillEnterForegroundNotification() {
         checkIfShouldDisplayBar()
-    }
-
-    private func shouldDisplayBar(_ copiedURL: String) -> Bool {
-        if isClipboardURLAlreadyDisplayed(copiedURL) ||
-            IntroScreenManager(prefs: prefs).shouldShowIntroScreen {
-            return false
-        }
-        return true
     }
 
     private func shouldDisplayBar(_ pasteBoardChangeCount: Int) -> Bool {
@@ -94,46 +57,20 @@ class ClipboardBarDisplayHandler: NSObject {
         return true
     }
 
-    // If we already displayed this URL on the previous session, or in an already open
-    // tab, we shouldn't display it again
-    private func isClipboardURLAlreadyDisplayed(_ clipboardURL: String) -> Bool {
-        if lastDisplayedURL == clipboardURL {
-            return true
-        }
-
-        if let url = URL(string: clipboardURL),
-           tabManager?.getTabForURL(url) != nil {
-            return true
-        }
-
-        return false
-    }
-
     func checkIfShouldDisplayBar() {
         // Clipboard bar feature needs to be enabled by users to be activated in the user settings
         guard prefs.boolForKey(PrefsKeys.ShowClipboardBar) ?? false,
               UIPasteboard.general.hasURLs
         else { return }
 
-        if #available(iOS 16.0, *) {
-            let pasteBoardChangeCount = UIPasteboard.general.changeCount
-            guard shouldDisplayBar(pasteBoardChangeCount) else { return }
+        let pasteBoardChangeCount = UIPasteboard.general.changeCount
+        guard shouldDisplayBar(pasteBoardChangeCount) else { return }
 
-            lastPasteBoardChangeCount = pasteBoardChangeCount
+        lastPasteBoardChangeCount = pasteBoardChangeCount
 
-            AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) { [weak self] in
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) {
+            Task { @MainActor [weak self] in
                 self?.delegate?.shouldDisplay()
-            }
-        } else {
-            guard
-                let url = UIPasteboard.general.url,
-                shouldDisplayBar(url.absoluteString)
-            else { return }
-
-            lastDisplayedURL = url.absoluteString
-
-            AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(windowUUID)]) { [weak self] in
-                self?.delegate?.shouldDisplay(clipBoardURL: url)
             }
         }
     }

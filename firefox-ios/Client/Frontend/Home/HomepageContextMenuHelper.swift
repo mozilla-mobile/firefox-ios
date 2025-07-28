@@ -28,6 +28,7 @@ enum BookmarkAction {
     case remove
 }
 
+@MainActor
 class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                  CanRemoveQuickActionBookmark {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate

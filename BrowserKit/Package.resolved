@@ -91,6 +91,15 @@
       }
     },
     {
+      "identity" : "markdownkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bmoliveira/MarkdownKit.git",
+      "state" : {
+        "revision" : "39ea7a3fc7e65bcafe55152592b834859be574a5",
+        "version" : "1.7.3"
+      }
+    },
+    {
       "identity" : "rust-components-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",

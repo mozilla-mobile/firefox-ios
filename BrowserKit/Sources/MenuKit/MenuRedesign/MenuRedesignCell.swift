@@ -9,6 +9,7 @@ import UIKit
 final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 16
+        static let horizontalMargin: CGFloat = 24
         static let iconSize: CGFloat = 24
         static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
@@ -34,11 +35,19 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private var iconImageView: UIImageView = .build()
 
-    private var isFirstCell = false
-    private var isLastCell = false
+    private var horizontalMargin: CGFloat {
+        if #available(iOS 26.0, *) {
+            return UX.horizontalMargin
+        } else {
+            return UX.contentMargin
+        }
+    }
 
     // MARK: - Properties
     var model: MenuElement?
+
+    private var isFirstCell = false
+    private var isLastCell = false
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -87,13 +96,13 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
         NSLayoutConstraint.activate([
-            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.contentMargin),
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalMargin),
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.contentMargin),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.contentMargin),
 
             iconImageView.leadingAnchor.constraint(equalTo: contentStackView.trailingAnchor,
                                                    constant: UX.contentMargin),
-            iconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.contentMargin),
+            iconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -horizontalMargin),
             iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             iconImageView.widthAnchor.constraint(equalToConstant: UX.iconSize),
             iconImageView.heightAnchor.constraint(equalToConstant: UX.iconSize)
@@ -101,15 +110,17 @@ final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     private func configureCornerRadiusForCellPosition() {
-        guard isFirstCell || isLastCell else { return }
-        self.clipsToBounds = true
-        layer.cornerRadius = UX.cornerRadius
-        layer.maskedCorners = {
-            var corners: CACornerMask = []
-            if isFirstCell { corners.formUnion([.layerMinXMinYCorner, .layerMaxXMinYCorner]) }
-            if isLastCell { corners.formUnion([.layerMinXMaxYCorner, .layerMaxXMaxYCorner]) }
-            return corners
-        }()
+        if #unavailable(iOS 26.0) {
+            guard isFirstCell || isLastCell else { return }
+            self.clipsToBounds = true
+            layer.cornerRadius = UX.cornerRadius
+            layer.maskedCorners = {
+                var corners: CACornerMask = []
+                if isFirstCell { corners.formUnion([.layerMinXMinYCorner, .layerMaxXMinYCorner]) }
+                if isLastCell { corners.formUnion([.layerMinXMaxYCorner, .layerMaxXMaxYCorner]) }
+                return corners
+            }()
+        }
     }
 
     // MARK: - Theme Applicable
