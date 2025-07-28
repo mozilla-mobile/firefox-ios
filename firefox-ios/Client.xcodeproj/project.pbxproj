@@ -1428,6 +1428,8 @@
 		BA073D3D2E3890BF00E27B36 /* LiteLLMClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073D3C2E3890B300E27B36 /* LiteLLMClientProtocol.swift */; };
 		BA073D3F2E38922E00E27B36 /* MockLiteLLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073D3E2E38921800E27B36 /* MockLiteLLMClient.swift */; };
 		BA073D412E38933600E27B36 /* LiteLLMSummarizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073D402E38932A00E27B36 /* LiteLLMSummarizerTests.swift */; };
+		BA073A392E37D0C300E27B36 /* SummarizerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A382E37D0BD00E27B36 /* SummarizerService.swift */; };
+		BA073A952E3807FB00E27B36 /* SummarizerCheckerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */; };
 		BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */; };
 		BA1237BC2DAE608100BB6333 /* GenericSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */; };
 		BA1237BF2DAE675B00BB6333 /* GenericImageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */; };
@@ -9252,6 +9254,8 @@
 		BA073D3C2E3890B300E27B36 /* LiteLLMClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClientProtocol.swift; sourceTree = "<group>"; };
 		BA073D3E2E38921800E27B36 /* MockLiteLLMClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLiteLLMClient.swift; sourceTree = "<group>"; };
 		BA073D402E38932A00E27B36 /* LiteLLMSummarizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMSummarizerTests.swift; sourceTree = "<group>"; };
+		BA073A382E37D0BD00E27B36 /* SummarizerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerService.swift; sourceTree = "<group>"; };
+		BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerCheckerProtocol.swift; sourceTree = "<group>"; };
 		BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NightModeAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionView.swift; sourceTree = "<group>"; };
 		BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericImageOption.swift; sourceTree = "<group>"; };
@@ -13806,6 +13810,8 @@
 				BA073D3A2E388FE900E27B36 /* LiteLLMSummarizer.swift */,
 				BA073B7C2E38502F00E27B36 /* SSEDataParserError.swift */,
 				BA073B7A2E384FCA00E27B36 /* SSEDataParser.swift */,
+				BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */,
+				BA073A382E37D0BD00E27B36 /* SummarizerService.swift */,
 				BA726E3B2E31FC6700325CC3 /* LanguageModelSessionAdapter.swift */,
 				BA726E392E31F34A00325CC3 /* MockLanguageModelSession.swift */,
 				BA073D3E2E38921800E27B36 /* MockLiteLLMClient.swift */,
@@ -17658,6 +17664,7 @@
 				8AF347DE2CADD1B200624036 /* HomepageState.swift in Sources */,
 				8A75AF9C2DE8A1CF00B2C592 /* StartAtHomeMiddleware.swift in Sources */,
 				C8DC90C92A0675E70008832B /* MarkupParsingUtility.swift in Sources */,
+				BA073A952E3807FB00E27B36 /* SummarizerCheckerProtocol.swift in Sources */,
 				CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */,
 				8A3EF8072A2FCFF700796E3A /* SentryIDSetting.swift in Sources */,
 				ED390D202CF4DE2E00A775F9 /* URLActivityItemProvider.swift in Sources */,
@@ -18193,6 +18200,7 @@
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
 				D83822001FC7961D00303C12 /* DispatchQueueHelper.swift in Sources */,
 				BA4BB99A2D7F374C006BD137 /* AppearanceSettingsView.swift in Sources */,
+				BA073A392E37D0C300E27B36 /* SummarizerService.swift in Sources */,
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
 				21F422662E315E5C004FF994 /* LegacyTabScrollController.swift in Sources */,
 				E18BAAFD28E4A44500098AE2 /* TopTabFader.swift in Sources */,
