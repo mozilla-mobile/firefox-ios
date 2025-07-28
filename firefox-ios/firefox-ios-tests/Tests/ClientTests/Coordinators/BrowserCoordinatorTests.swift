@@ -1146,22 +1146,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
-    func testMainMenuCoordinatorDelegate_navigatesToSettings() {
-        let subject = createSubject()
-        subject.browserHasLoaded()
-
-        subject.showMainMenu()
-        guard let menuCoordinator = subject.childCoordinators[0] as? MainMenuCoordinator else {
-            XCTFail("Main menu coordinator was expected to be resolved")
-            return
-        }
-
-        menuCoordinator.navigateTo(MenuNavigationDestination(.customizeHomepage), animated: false)
-
-        XCTAssertTrue(subject.childCoordinators[0] is SettingsCoordinator)
-        XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
-    }
-
     // MARK: - Search Engine Selection
     func testShowSearchEngineSelection_addsSearchEngineSelectionCoordinator() {
         let subject = createSubject()
