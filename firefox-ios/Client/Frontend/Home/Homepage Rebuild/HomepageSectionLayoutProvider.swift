@@ -504,11 +504,17 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     // It's important to update this calculation whenever a change is made to any of the calculated sections that would
     // result in it having a different height (eg changes to top/bottom insets).
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
         let collectionViewHeight = environment.container.contentSize.height
+
+        // If something went wrong with our availableContentHeight calculation in BVC, fall back to just using the actual
+        // collection view height
+        let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
+
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
-        let spacerHeight = max(0.1, collectionViewHeight - getShortcutsSectionHeight(environment: environment)
-                                                         - getStoriesSectionHeight(environment: environment)
-                                                         - getSearchBarSectionHeight(environment: environment)
+        let spacerHeight = max(0.1, availableContentHeight - getShortcutsSectionHeight(environment: environment)
+                                                           - getStoriesSectionHeight(environment: environment)
+                                                           - getSearchBarSectionHeight(environment: environment)
         )
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -538,9 +544,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         var totalHeight: CGFloat = 0
         let topSitesState = state.topSitesState
-        let rows = topSitesState.numberOfRows
+        let maxRows = topSitesState.numberOfRows
         let cols = topSitesState.numberOfTilesPerRow
-        let maxCells = rows * cols
+        let maxCells = maxRows * cols
 
         // Add header height
         totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
@@ -563,8 +569,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += rowHeights.reduce(0, +)
 
         // Add inter-row spacing
-        let rowsShown = ceil(Double(topSitesState.topSitesData.count) / Double(cols))
-        totalHeight += CGFloat(rowsShown - 1) * UX.standardSpacing
+        // Get number of actual rows shown since TopSitesSectionState::numberOfRows just gives us the user pref of max
+        // number of rows we can show.
+        // totalRows: number of rows we have enough data for
+        // presentedRows: number of rows visible in the UI
+        let totalRows = Int(ceil(Double(topSitesState.topSitesData.count) / Double(cols)))
+        let presentedRows = min(maxRows, totalRows)
+        totalHeight += CGFloat(presentedRows - 1) * UX.standardSpacing
 
         // Add section insets
         totalHeight += UX.TopSitesConstants.getBottomInset()
