@@ -11,7 +11,7 @@ protocol TabTrayThemeable {
     func applyTheme(_ theme: Theme)
 }
 
-class TabDisplayPanelViewController: UIViewController,
+final class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
