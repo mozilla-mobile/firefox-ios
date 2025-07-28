@@ -1430,6 +1430,9 @@
 		BA073D412E38933600E27B36 /* LiteLLMSummarizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073D402E38932A00E27B36 /* LiteLLMSummarizerTests.swift */; };
 		BA073A392E37D0C300E27B36 /* SummarizerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A382E37D0BD00E27B36 /* SummarizerService.swift */; };
 		BA073A952E3807FB00E27B36 /* SummarizerCheckerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */; };
+		BA073A992E38171B00E27B36 /* MockSummarizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A982E38171500E27B36 /* MockSummarizer.swift */; };
+		BA073A9B2E38188E00E27B36 /* SummarizerServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A9A2E38188700E27B36 /* SummarizerServiceTests.swift */; };
+		BA073A9D2E381E5800E27B36 /* MockSummarizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A9C2E381E4F00E27B36 /* MockSummarizationChecker.swift */; };
 		BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */; };
 		BA1237BC2DAE608100BB6333 /* GenericSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */; };
 		BA1237BF2DAE675B00BB6333 /* GenericImageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */; };
@@ -9256,6 +9259,9 @@
 		BA073D402E38932A00E27B36 /* LiteLLMSummarizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMSummarizerTests.swift; sourceTree = "<group>"; };
 		BA073A382E37D0BD00E27B36 /* SummarizerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerService.swift; sourceTree = "<group>"; };
 		BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerCheckerProtocol.swift; sourceTree = "<group>"; };
+		BA073A982E38171500E27B36 /* MockSummarizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizer.swift; sourceTree = "<group>"; };
+		BA073A9A2E38188700E27B36 /* SummarizerServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerServiceTests.swift; sourceTree = "<group>"; };
+		BA073A9C2E381E4F00E27B36 /* MockSummarizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizationChecker.swift; sourceTree = "<group>"; };
 		BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NightModeAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionView.swift; sourceTree = "<group>"; };
 		BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericImageOption.swift; sourceTree = "<group>"; };
@@ -13810,6 +13816,8 @@
 				BA073D3A2E388FE900E27B36 /* LiteLLMSummarizer.swift */,
 				BA073B7C2E38502F00E27B36 /* SSEDataParserError.swift */,
 				BA073B7A2E384FCA00E27B36 /* SSEDataParser.swift */,
+				BA073A9C2E381E4F00E27B36 /* MockSummarizationChecker.swift */,
+				BA073A982E38171500E27B36 /* MockSummarizer.swift */,
 				BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */,
 				BA073A382E37D0BD00E27B36 /* SummarizerService.swift */,
 				BA726E3B2E31FC6700325CC3 /* LanguageModelSessionAdapter.swift */,
@@ -15506,6 +15514,7 @@
 			children = (
 				BA073D402E38932A00E27B36 /* LiteLLMSummarizerTests.swift */,
 				BA073B802E38592500E27B36 /* SSEDataParserTests.swift */,
+				BA073A9A2E38188700E27B36 /* SummarizerServiceTests.swift */,
 				BAEB9EB32E28726100F9F482 /* SummarizationCheckerTests.swift */,
 				BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */,
 				EDADF7822D70D59900C39295 /* AppIconSelection */,
@@ -18171,6 +18180,7 @@
 				F637D6732D8CBB6900C5C500 /* BasicAnimationControllerDelegate.swift in Sources */,
 				8A9F4F062DC8F592004644B9 /* TabsProvider.swift in Sources */,
 				E1442FBF294782B6003680B0 /* CGRect+Extension.swift in Sources */,
+				BA073A9D2E381E5800E27B36 /* MockSummarizationChecker.swift in Sources */,
 				96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */,
 				8AB8574627D97CB00075C173 /* HomepageContextMenuProtocol.swift in Sources */,
 				0E6C1E232C909E04001A43BB /* PasswordGeneratorState.swift in Sources */,
@@ -18281,6 +18291,7 @@
 				74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */,
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
+				BA073A992E38171B00E27B36 /* MockSummarizer.swift in Sources */,
 				8A9F4EF62DC8F164004644B9 /* AutofillProvider.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
 				8A454D362CB86993009436D9 /* MerinoStoryConfiguration.swift in Sources */,
@@ -18795,6 +18806,7 @@
 				F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */,
 				ED07C0F22CCAFED1006C0627 /* SearchEngineSelectionStateTests.swift in Sources */,
 				8A13FA8F2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift in Sources */,
+				BA073A9B2E38188E00E27B36 /* SummarizerServiceTests.swift in Sources */,
 				8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */,
 				0B6AB0412DCA3CB900F03AF6 /* DocumentLoggerTests.swift in Sources */,
 				5A31275828906422001F30FA /* BookmarksDelegateMock.swift in Sources */,

@@ -27,11 +27,17 @@ final class SummarizerService {
     }
 
     /// Generates a complete summary string from the given web view's page content.
-    /// - Throws: `SummarizerError` if the content is unsuitable or extraction fails.
+    /// - Throws: `SummarizerError` if the content is unsuitable or summarization fails.
     /// - Returns: A fully summarized string for displaying.
     func summarize(from webView: WKWebView, prompt: String) async throws -> String {
         let text = try await extractSummarizableText(from: webView)
-        return try await summarizer.summarize(prompt: prompt, text: text)
+        do {
+            return try await summarizer.summarize(prompt: prompt, text: text)
+        } catch let summarizerError as SummarizerError {
+            throw summarizerError
+        } catch {
+            throw SummarizerError.unknown(error)
+        }
     }
 
     /// Streams a summary response from the web view's page content in chunks.
