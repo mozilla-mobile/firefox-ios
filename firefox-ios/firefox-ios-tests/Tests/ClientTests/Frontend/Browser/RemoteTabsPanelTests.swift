@@ -63,6 +63,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, RemoteTabsPanelActionType.refreshTabs)
     }
 
+    @MainActor
     func testNewState_setsNewStateInTableViewController() {
         let subject = createSubject()
         let newState = RemoteTabsPanelState(

@@ -8,7 +8,6 @@ import XCTest
 
 @testable import Client
 
-@MainActor
 final class RemoteTabPanelTests: XCTestCase {
     override func setUp() {
         super.setUp()

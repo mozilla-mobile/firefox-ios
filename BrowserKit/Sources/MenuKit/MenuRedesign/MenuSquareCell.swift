@@ -87,15 +87,25 @@ final class MenuSquareView: UIView, ThemeApplicable {
         backgroundContentView.addSubview(contentStackView)
         contentStackView.addArrangedSubview(icon)
         contentStackView.addArrangedSubview(titleLabel)
-        backgroundContentView.addSubview(dividerView)
 
         if #available(iOS 26.0, *) {
+            backgroundContentView.addSubview(dividerView)
             NSLayoutConstraint.activate([
                 dividerView.widthAnchor.constraint(equalToConstant: UX.dividerWidth),
                 dividerView.trailingAnchor.constraint(equalTo: backgroundContentView.trailingAnchor),
                 dividerView.topAnchor.constraint(equalTo: backgroundContentView.topAnchor),
-                dividerView.bottomAnchor.constraint(equalTo: backgroundContentView.bottomAnchor)
+                dividerView.bottomAnchor.constraint(equalTo: backgroundContentView.bottomAnchor),
+
+                contentStackView.trailingAnchor.constraint(
+                    equalTo: dividerView.leadingAnchor,
+                    constant: -UX.contentViewHorizontalMargin
+                )
             ])
+        } else {
+            contentStackView.trailingAnchor.constraint(
+                equalTo: backgroundContentView.trailingAnchor,
+                constant: -UX.contentViewHorizontalMargin
+            ).isActive = true
         }
 
         NSLayoutConstraint.activate([
@@ -111,10 +121,6 @@ final class MenuSquareView: UIView, ThemeApplicable {
             contentStackView.leadingAnchor.constraint(
                 equalTo: backgroundContentView.leadingAnchor,
                 constant: UX.contentViewHorizontalMargin
-            ),
-            contentStackView.trailingAnchor.constraint(
-                equalTo: dividerView.leadingAnchor,
-                constant: -UX.contentViewHorizontalMargin
             ),
             contentStackView.bottomAnchor.constraint(
                 lessThanOrEqualTo: backgroundContentView.bottomAnchor,

@@ -3953,7 +3953,7 @@ class BrowserViewController: UIViewController,
     }
 }
 
-extension BrowserViewController: LegacyClipboardBarDisplayHandlerDelegate {
+extension BrowserViewController: @preconcurrency LegacyClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
