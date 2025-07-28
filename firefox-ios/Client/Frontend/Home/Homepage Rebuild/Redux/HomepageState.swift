@@ -30,6 +30,7 @@ struct HomepageState: ScreenState, Equatable {
     let isZeroSearch: Bool
     let shouldTriggerImpression: Bool
     let shouldShowSpacer: Bool
+    let availableContentHeight: CGFloat
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -53,7 +54,8 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: homepageState.wallpaperState,
             isZeroSearch: homepageState.isZeroSearch,
             shouldTriggerImpression: homepageState.shouldTriggerImpression,
-            shouldShowSpacer: homepageState.shouldShowSpacer
+            shouldShowSpacer: homepageState.shouldShowSpacer,
+            availableContentHeight: homepageState.availableContentHeight
         )
     }
 
@@ -70,7 +72,8 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState(windowUUID: windowUUID),
             isZeroSearch: false,
             shouldTriggerImpression: false,
-            shouldShowSpacer: false
+            shouldShowSpacer: false,
+            availableContentHeight: 0
         )
     }
 
@@ -86,7 +89,8 @@ struct HomepageState: ScreenState, Equatable {
         wallpaperState: WallpaperState,
         isZeroSearch: Bool,
         shouldTriggerImpression: Bool,
-        shouldShowSpacer: Bool
+        shouldShowSpacer: Bool,
+        availableContentHeight: CGFloat
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -100,6 +104,7 @@ struct HomepageState: ScreenState, Equatable {
         self.isZeroSearch = isZeroSearch
         self.shouldTriggerImpression = shouldTriggerImpression
         self.shouldShowSpacer = shouldShowSpacer
+        self.availableContentHeight = availableContentHeight
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -117,6 +122,8 @@ struct HomepageState: ScreenState, Equatable {
             }
 
             return handleEmbeddedHomepageAction(state: state, action: action, isZeroSearch: isZeroSearch)
+        case HomepageActionType.availableContentHeightDidChange:
+            return handleAvailableContentHeightChangeAction(state: state, action: action)
         case GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             return handleDidTabChangeToHomepageAction(state: state, action: action)
         case HomepageMiddlewareActionType.configuredSpacer:
@@ -139,7 +146,8 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowSpacer: state.shouldShowSpacer
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
         )
     }
 
@@ -158,7 +166,30 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowSpacer: state.shouldShowSpacer
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
+        )
+    }
+
+    private static func handleAvailableContentHeightChangeAction(state: HomepageState, action: Action) -> HomepageState {
+        guard let availableContentHeight = (action as? HomepageAction)?.availableContentHeight else {
+            return defaultState(from: state)
+        }
+
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            pocketState: MerinoState.reducer(state.merinoState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            isZeroSearch: state.isZeroSearch,
+            shouldTriggerImpression: false,
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: availableContentHeight
         )
     }
 
@@ -175,7 +206,8 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: true,
-            shouldShowSpacer: state.shouldShowSpacer
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
         )
     }
 
@@ -196,7 +228,8 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowSpacer: isSpacerEnabled
+            shouldShowSpacer: isSpacerEnabled,
+            availableContentHeight: state.availableContentHeight
         )
     }
 
@@ -233,7 +266,8 @@ struct HomepageState: ScreenState, Equatable {
             wallpaperState: wallpaperState,
             isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowSpacer: state.shouldShowSpacer
+            shouldShowSpacer: state.shouldShowSpacer,
+            availableContentHeight: state.availableContentHeight
         )
     }
 

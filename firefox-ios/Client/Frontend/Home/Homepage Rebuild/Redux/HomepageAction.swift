@@ -20,6 +20,7 @@ final class HomepageAction: Action {
     let numberOfTopSitesPerRow: Int?
     let telemetryExtras: HomepageTelemetryExtras?
     let isZeroSearch: Bool?
+    let availableContentHeight: CGFloat?
 
     init(
         isSearchBarEnabled: Bool? = nil,
@@ -28,6 +29,7 @@ final class HomepageAction: Action {
         showiPadSetup: Bool? = nil,
         telemetryExtras: HomepageTelemetryExtras? = nil,
         isZeroSearch: Bool? = nil,
+        availableContentHeight: CGFloat? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
@@ -37,6 +39,7 @@ final class HomepageAction: Action {
         self.showiPadSetup = showiPadSetup
         self.telemetryExtras = telemetryExtras
         self.isZeroSearch = isZeroSearch
+        self.availableContentHeight = availableContentHeight
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -50,6 +53,7 @@ enum HomepageActionType: ActionType {
     case didSelectItem
     case embeddedHomepage
     case sectionSeen
+    case availableContentHeightDidChange
 }
 
 enum HomepageMiddlewareActionType: ActionType {

@@ -308,6 +308,14 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
+    var isStoriesRedesignEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+    }
+
+    var isHomepageSearchBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -1382,6 +1390,9 @@ class BrowserViewController: UIViewController,
         // when toolbars are hidden/shown the mask on the content view that is used for
         // toolbar translucency needs to be updated
         updateToolbarDisplay()
+
+        // Update available height for the homepage
+        dispatchAvailableContentHeightChangedAction()
     }
 
     func checkForJSAlerts() {
@@ -1681,13 +1692,19 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
-        let spacerHeight = keyboardHeight - toolBarHeight
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: keyboardHeight)
+
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
         // make sure the keyboard spacer has the right color/translucency
         overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
+    private func getKeyboardSpacerHeight(keyboardHeight: CGFloat) -> CGFloat {
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
+        let spacerHeight = keyboardHeight - toolBarHeight
+        return spacerHeight
     }
 
     fileprivate func showQueuedAlertIfAvailable() {
@@ -3010,6 +3027,45 @@ class BrowserViewController: UIViewController,
             actionType: ToolbarActionType.traitCollectionDidChange
         )
         store.dispatchLegacy(action)
+    }
+
+    private func dispatchAvailableContentHeightChangedAction() {
+        guard isStoriesRedesignEnabled, let browserViewControllerState,
+           browserViewControllerState.browserViewType == .normalHomepage,
+           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+           homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
+
+        store.dispatch(
+            HomepageAction(
+                availableContentHeight: getAvailableHomepageContentHeight(),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+    }
+
+    // Computes the height available for the homepage content to occupy when the address is not being edited.
+    // This is accomplished by taking BVC's height and subtracting the height of all of it's immediate subviews
+    // This is used to keep the homepage layout constant, such that it doesn't shift when the homepage's view size changes
+    // eg when the address bar is tapped and the keyboard is presented
+    private func getAvailableHomepageContentHeight() -> CGFloat {
+        // We only have to worry about the bottom address bar when it is part of the homepage layout (can be presented
+        // without the keyboard)
+        var addressBarHeight = isHomepageSearchBarEnabled ? 0 : overKeyboardContainer.frame.height
+
+        // The overKeyboardContainer typically just contains the bottom address bar, but when editing, also contains a
+        // keyboard-sized spacer that we must ignore (since we don't want it to affect the homepage layouts height)
+        if isBottomSearchBar && !isHomepageSearchBarEnabled {
+            let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
+            let keyboardSpacerHeight = keyboardHeight > 0 ? getKeyboardSpacerHeight(keyboardHeight: keyboardHeight) : 0
+            addressBarHeight -= keyboardSpacerHeight
+        }
+
+        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage
+        return view.frame.height - statusBarOverlay.frame.height
+                                 - bottomContentStackView.frame.height
+                                 - bottomContainer.frame.height
+                                 - addressBarHeight
     }
 
     // MARK: Opening New Tabs
