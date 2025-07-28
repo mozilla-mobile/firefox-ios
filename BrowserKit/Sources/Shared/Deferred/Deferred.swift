@@ -8,7 +8,6 @@
 
 import Foundation
 
-// TODO: Replace this with a class var
 public var DeferredDefaultQueue = DispatchQueue.global()
 
 open class Deferred<T> {
@@ -68,9 +67,7 @@ open class Deferred<T> {
             queue.async { block(value) }
         }
     }
-}
 
-extension Deferred {
     public var value: T {
         // fast path - return if already filled
         if let v = peek() {
@@ -85,9 +82,7 @@ extension Deferred {
         _ = group.wait(timeout: .distantFuture)
         return result
     }
-}
 
-extension Deferred {
     public func bindQueue<U>(_ queue: DispatchQueue, f: @escaping (T) -> Deferred<U>) -> Deferred<U> {
         let d = Deferred<U>()
         self.uponQueue(queue) {
@@ -101,9 +96,7 @@ extension Deferred {
     public func mapQueue<U>(_ queue: DispatchQueue, f: @escaping (T) -> U) -> Deferred<U> {
         return bindQueue(queue) { t in Deferred<U>(value: f(t)) }
     }
-}
 
-extension Deferred {
     public func upon(_ block: @escaping (T) ->()) {
         uponQueue(defaultQueue, block: block)
     }
@@ -115,9 +108,7 @@ extension Deferred {
     public func map<U>(_ f: @escaping (T) -> U) -> Deferred<U> {
         return mapQueue(defaultQueue, f: f)
     }
-}
 
-extension Deferred {
     public func both<U>(_ other: Deferred<U>) -> Deferred<(T,U)> {
         return self.bind { t in other.map { u in (t, u) } }
     }
@@ -143,13 +134,5 @@ public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
     }
     deferreds[0].upon(block)
 
-    return combined
-}
-
-public func any<T>(_ deferreds: [Deferred<T>]) -> Deferred<Deferred<T>> {
-    let combined = Deferred<Deferred<T>>()
-    for d in deferreds {
-        d.upon { _ in combined.fillIfUnfilled(d) }
-    }
     return combined
 }
