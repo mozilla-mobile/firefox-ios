@@ -6,6 +6,20 @@ import SwiftUI
 import MetalKit
 import Common
 
+struct GradientPalette {
+    // swiftlint:disable:next large_tuple
+    var colors: (SIMD3<Float>, SIMD3<Float>, SIMD3<Float>, SIMD3<Float>)
+
+    static let defaultColors = GradientPalette(
+        colors: (
+            SIMD3<Float>(0.996, 0.514, 0.000),
+            SIMD3<Float>(0.180, 0.506, 0.996),
+            SIMD3<Float>(0.949, 0.020, 0.004),
+            SIMD3<Float>(0.996, 0.396, 0.000)
+        )
+    )
+}
+
 private enum AnimatedGradientUX {
     static let timeIncrementPerFrame: Float = 0.0045
     static let vertexShaderFunctionName = "animatedGradientVertex"
@@ -15,6 +29,17 @@ private enum AnimatedGradientUX {
     static let previousFrameTextureIndex = 0
 }
 
+extension SIMD3 where Scalar == Float {
+    init(_ color: UIColor) {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        color.getRed(&r, green: &g, blue: &b, alpha: &a)
+        self.init(Float(r), Float(g), Float(b))
+    }
+}
+
 class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private let logger: Logger
     private let commandQueue: MTLCommandQueue
@@ -22,6 +47,11 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private var currentTime: Float = 0.0
     private var previousFrameTexture: MTLTexture?
     let metalDevice: MTLDevice
+
+    // Add a weak reference to the MTKView to trigger redraws
+    private weak var metalView: MTKView?
+
+    private var palette = GradientPalette.defaultColors
 
     init?(logger: Logger = DefaultLogger.shared, device: MTLDevice?) {
         self.logger = logger
@@ -84,6 +114,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         }
 
         super.init()
+        updatePaletteForCurrentTheme(colors: palette.colors)
 
         logger.log(
             "AnimatedGradientRenderer initialized successfully",
@@ -92,11 +123,35 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         )
     }
 
+    // Method to set the MTKView reference
+    func setMetalView(_ view: MTKView) {
+        metalView = view
+    }
+    // swiftlint:disable large_tuple
+    func updatePaletteForCurrentTheme(colors: (SIMD3<Float>, SIMD3<Float>, SIMD3<Float>, SIMD3<Float>)) {
+        palette = GradientPalette(colors: colors)
+
+        // Trigger a redraw when palette changes
+        triggerRedraw()
+    }
+    // swiftlint:enable large_tuple
+
+    private func triggerRedraw() {
+        DispatchQueue.main.async { [weak self] in
+            self?.metalView?.setNeedsDisplay()
+        }
+    }
+
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         createPreviousFrameTexture(size: size)
     }
 
     func draw(in view: MTKView) {
+        // Store reference to view if not already set
+        if metalView == nil {
+            metalView = view
+        }
+
         guard let currentDrawable = view.currentDrawable else {
             logger.log(
                 "No current drawable available",
@@ -185,6 +240,11 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
             index: AnimatedGradientUX.timeBufferIndex
         )
 
+        var currentPalette = palette
+        encoder.setFragmentBytes(&currentPalette,
+                                 length: MemoryLayout<GradientPalette>.stride,
+                                 index: 1)
+
         encoder.setFragmentTexture(
             previousFrameTexture,
             index: AnimatedGradientUX.previousFrameTextureIndex
@@ -239,6 +299,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
 
 struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
     private weak var delegate: AnimatedGradientRenderer?
+
     init(delegate: AnimatedGradientRenderer) {
         self.delegate = delegate
     }
@@ -249,10 +310,17 @@ struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
         metalView.framebufferOnly = false
         metalView.colorPixelFormat = .bgra8Unorm
         metalView.delegate = delegate
+
+        // Set the view reference in the delegate so it can trigger redraws
+        delegate?.setMetalView(metalView)
+
         return metalView
     }
 
-    func updateUIView(_ uiView: MTKView, context: Context) { }
+    func updateUIView(_ uiView: MTKView, context: Context) {
+        // Ensure the delegate still has the view reference
+        delegate?.setMetalView(uiView)
+    }
 }
 
 struct AnimatedGradientMetalView: View {
@@ -274,6 +342,13 @@ struct AnimatedGradientMetalView: View {
     var body: some View {
         if let delegate {
             AnimatedGradientMetalViewRepresentable(delegate: delegate)
+                .onAppear {
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+                    guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
         } else {
             LinearGradient(
                 gradient: Gradient(
@@ -300,6 +375,17 @@ struct AnimatedGradientMetalView: View {
             Color(color.crimsonRed),
             Color(color.burntOrange)
         ]
+
+        // Update the Metal renderer's palette
+        if let delegate = delegate {
+            let newPalette = (
+                SIMD3<Float>(color.vividOrange),
+                SIMD3<Float>(color.electricBlue),
+                SIMD3<Float>(color.crimsonRed),
+                SIMD3<Float>(color.burntOrange)
+            )
+            delegate.updatePaletteForCurrentTheme(colors: newPalette)
+        }
     }
 }
 
