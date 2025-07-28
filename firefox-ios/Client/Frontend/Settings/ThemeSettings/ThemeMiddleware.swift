@@ -27,8 +27,6 @@ final class ThemeManagerMiddleware: ThemeManagerProvider {
             self.resolveThemeSettingsViewActionType(action: action)
         } else if let action = action as? PrivateModeAction {
             self.resolvePrivateModeAction(action: action)
-        } else if let action = action as? MainMenuAction {
-            self.resolveMainMenuAction(action: action)
         }
     }
 
@@ -37,15 +35,6 @@ final class ThemeManagerMiddleware: ThemeManagerProvider {
         case PrivateModeActionType.privateModeUpdated:
             updatePrivateMode(with: action)
 
-        default:
-            break
-        }
-    }
-
-    private func resolveMainMenuAction(action: MainMenuAction) {
-        switch action.actionType {
-        case MainMenuDetailsActionType.tapToggleNightMode, MainMenuActionType.tapToggleNightMode:
-            updateNightMode()
         default:
             break
         }

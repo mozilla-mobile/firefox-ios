@@ -815,7 +815,7 @@ class TabManagerMiddleware: FeatureFlaggable {
             handleDidInstantiateViewAction(action: action)
         case MainMenuMiddlewareActionType.requestTabInfoForSiteProtectionsHeader:
             provideTabInfoForSiteProtectionsHeader(forWindow: action.windowUUID)
-        case MainMenuDetailsActionType.tapAddToBookmarks, MainMenuActionType.tapAddToBookmarks:
+        case MainMenuActionType.tapAddToBookmarks:
             guard let tabID = action.tabID else { return }
             let shareItem = createShareItem(with: tabID, and: action.windowUUID)
             addToBookmarks(shareItem)
@@ -828,13 +828,9 @@ class TabManagerMiddleware: FeatureFlaggable {
                     actionType: GeneralBrowserActionType.showToast
                 )
             )
-        case MainMenuDetailsActionType.tapAddToReadingList:
-            addToReadingList(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.tapRemoveFromReadingList:
-            removeFromReadingList(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.tapAddToShortcuts, MainMenuActionType.tapAddToShortcuts:
+        case MainMenuActionType.tapAddToShortcuts:
             addToShortcuts(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.tapRemoveFromShortcuts, MainMenuActionType.tapRemoveFromShortcuts:
+        case MainMenuActionType.tapRemoveFromShortcuts:
             removeFromShortcuts(with: action.tabID, uuid: action.windowUUID)
 
         default:
@@ -1115,47 +1111,6 @@ class TabManagerMiddleware: FeatureFlaggable {
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-    }
-
-    private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        guard let tabID = tabID,
-              let tab = tabManager.getTabForUUID(uuid: tabID),
-              let url = tab.url?.displayURL?.absoluteString
-        else { return }
-
-        profile.readingList.createRecordWithURL(
-            url,
-            title: tab.title ?? "",
-            addedBy: UIDevice.current.name
-        )
-
-        store.dispatchLegacy(
-            GeneralBrowserAction(
-                toastType: .addToReadingList,
-                windowUUID: uuid,
-                actionType: GeneralBrowserActionType.showToast
-            )
-        )
-    }
-
-    private func removeFromReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        guard let tabID = tabID,
-              let tab = tabManager.getTabForUUID(uuid: tabID),
-              let url = tab.url?.displayURL?.absoluteString,
-              let record = profile.readingList.getRecordWithURL(url).value.successValue
-        else { return }
-
-        profile.readingList.deleteRecord(record, completion: nil)
-
-        store.dispatchLegacy(
-            GeneralBrowserAction(
-                toastType: .removeFromReadingList,
-                windowUUID: uuid,
-                actionType: GeneralBrowserActionType.showToast
-            )
-        )
     }
 
     private func addToShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {

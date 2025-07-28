@@ -86,12 +86,6 @@ struct AccessibilityIdentifiers {
             static let closeButton = "MainMenu.CloseMenuButton"
         }
 
-        struct NavigationHeaderView {
-            static let backButton = "MainMenu.BackButton"
-            static let title = "MainMenu.Title"
-            static let closeButton = "MainMenu.CloseMenuButton"
-        }
-
         static let mainMenu = "MainMenu.Menu"
         static let newTab = "MainMenu.NewTab"
         static let newPrivateTab = "MainMenu.NewPrivateTab"

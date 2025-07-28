@@ -27,9 +27,7 @@ class MainMenuViewController: UIViewController,
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
-    // Based on the isMenuRedesign flag, we have two versions of the menu
     private lazy var menuRedesignContent: MenuRedesignMainView = .build()
-    private lazy var menuContent: MenuMainView = .build()
     private var hintView: ContextualHintView = .build { view in
         view.isAccessibilityElement = true
     }
@@ -53,10 +51,6 @@ class MainMenuViewController: UIViewController,
     private var isPad: Bool {
         traitCollection.verticalSizeClass == .regular &&
         !(UIDevice.current.userInterfaceIdiom == .phone)
-    }
-
-    private var isMenuRedesign: Bool {
-        return featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
     }
 
     private var isMenuDefaultBrowserBanner: Bool {
@@ -103,14 +97,8 @@ class MainMenuViewController: UIViewController,
         self.lastOrientation = UIDevice.current.orientation
         super.init(nibName: nil, bundle: nil)
 
-        if isMenuRedesign {
-            viewProvider = ContextualHintViewProvider(forHintType: .mainMenuRedesign,
-                                                      with: profile)
-        } else {
-            viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
-                                                      with: profile)
-        }
-
+        viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
+                                                  with: profile)
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
     }
@@ -140,12 +128,9 @@ class MainMenuViewController: UIViewController,
             )
         )
 
-        if isMenuRedesign {
-            setupRedesignView()
-            setupMenuOrientation()
-        } else {
-            setupView()
-        }
+        setupRedesignView()
+        setupMenuOrientation()
+
         setupTableView()
         listenForThemeChange(view)
         store.dispatchLegacy(
@@ -155,53 +140,43 @@ class MainMenuViewController: UIViewController,
             )
         )
 
-        if isMenuRedesign {
-            menuRedesignContent.siteProtectionHeader.closeButtonCallback = { [weak self] in
-                self?.dispatchCloseMenuAction()
-            }
+        menuRedesignContent.siteProtectionHeader.closeButtonCallback = { [weak self] in
+            self?.dispatchCloseMenuAction()
+        }
 
-            menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
-                let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
-                if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
-                    self?.currentCustomMenuHeight = height
-                    if #available(iOS 16.0, *) {
-                        let customDetent = UISheetPresentationController.Detent.custom { context in
-                            return height
-                        }
-                        if isExpanded {
-                            self?.sheetPresentationController?.animateChanges({
-                                self?.sheetPresentationController?.detents = [customDetent]
-                            })
-                        } else {
+        menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
+            let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
+            if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
+                self?.currentCustomMenuHeight = height
+                if #available(iOS 16.0, *) {
+                    let customDetent = UISheetPresentationController.Detent.custom { context in
+                        return height
+                    }
+                    if isExpanded {
+                        self?.sheetPresentationController?.animateChanges({
                             self?.sheetPresentationController?.detents = [customDetent]
-                        }
+                        })
+                    } else {
+                        self?.sheetPresentationController?.detents = [customDetent]
                     }
                 }
             }
+        }
 
-            menuRedesignContent.bannerButtonCallback = { [weak self] in
-                self?.dispatchDefaultBrowserAction()
-            }
+        menuRedesignContent.bannerButtonCallback = { [weak self] in
+            self?.dispatchDefaultBrowserAction()
+        }
 
-            menuRedesignContent.closeBannerButtonCallback = { [weak self] in
-                self?.profile.prefs.setBool(true, forKey: PrefsKeys.defaultBrowserBannerShown)
-            }
+        menuRedesignContent.closeBannerButtonCallback = { [weak self] in
+            self?.profile.prefs.setBool(true, forKey: PrefsKeys.defaultBrowserBannerShown)
+        }
 
-            menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
-                self?.dispatchSiteProtectionAction()
-            }
+        menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
+            self?.dispatchSiteProtectionAction()
+        }
 
-            menuRedesignContent.closeButtonCallback = { [weak self] in
-                self?.dispatchCloseMenuAction()
-            }
-        } else {
-            menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
-                self?.dispatchCloseMenuAction()
-            }
-
-            menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
-                self?.dispatchSyncSignInAction()
-            }
+        menuRedesignContent.closeButtonCallback = { [weak self] in
+            self?.dispatchCloseMenuAction()
         }
 
         setupAccessibilityIdentifiers()
@@ -216,7 +191,7 @@ class MainMenuViewController: UIViewController,
         super.viewDidAppear(animated)
         updateModalA11y()
 
-        if shouldDisplayHintView(isMenuRedesign: isMenuRedesign) {
+        if shouldDisplayHintView() {
             setupHintView()
         }
     }
@@ -270,23 +245,6 @@ class MainMenuViewController: UIViewController,
         reloadTableView(with: menuState.menuElements)
     }
 
-    private func setupView() {
-        view.addSubview(menuContent)
-
-        NSLayoutConstraint.activate([
-            menuContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            menuContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ])
-
-        let icon = UIImage(named: StandardImageIdentifiers.Large.avatarCircle)?
-            .withRenderingMode(.alwaysTemplate)
-        menuContent.setupDetails(subtitle: .MainMenu.Account.SignedOutDescription,
-                                 title: .MainMenu.Account.SignedOutTitle,
-                                 icon: icon)
-    }
-
     private func setupRedesignView() {
         if #unavailable(iOS 26.0) {
             view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
@@ -334,33 +292,18 @@ class MainMenuViewController: UIViewController,
                 hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
                 hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4)
             ])
-            if isMenuRedesign {
-                hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
-                                              constant: UX.hintViewMargin).isActive = true
-            } else {
-                hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                              constant: UX.hintViewMargin).isActive = true
-            }
+            hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                          constant: UX.hintViewMargin).isActive = true
         } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = windowScene.windows.first {
             window.addSubview(hintView)
 
             if UIScreen.main.bounds.height < UX.hintViewHeight + menuRedesignContent.frame.height {
-                if isMenuRedesign {
-                    hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
-                                                  constant: UX.hintViewMargin).isActive = true
-                } else {
-                    hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                  constant: UX.hintViewMargin).isActive = true
-                }
+                hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                              constant: UX.hintViewMargin).isActive = true
             } else {
-                if isMenuRedesign {
-                    hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
-                                                     constant: -UX.hintViewMargin).isActive = true
-                } else {
-                    hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                     constant: -UX.hintViewMargin).isActive = true
-                }
+                hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                                                 constant: -UX.hintViewMargin).isActive = true
             }
             NSLayoutConstraint.activate([
                 hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
@@ -407,18 +350,8 @@ class MainMenuViewController: UIViewController,
         isBrowserDefault = menuState.isBrowserDefault
         isPhoneLandscape = menuState.isPhoneLandscape
 
-        if let accountData = menuState.accountData {
-            updateHeaderWith(accountData: accountData, icon: menuState.accountIcon)
-            setupAccessibilityIdentifiers(mainButtonA11yLabel: accountData.title)
-        }
-
         if let siteProtectionsData = menuState.siteProtectionsData {
             updateSiteProtectionsHeaderWith(siteProtectionsData: siteProtectionsData)
-        }
-
-        if menuState.currentSubmenuView != nil {
-            coordinator?.showDetailViewController()
-            return
         }
 
         if let navigationDestination = menuState.navigationDestination {
@@ -487,25 +420,10 @@ class MainMenuViewController: UIViewController,
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        if isMenuRedesign {
-            if #unavailable(iOS 26.0) {
-                view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
-            }
-            menuRedesignContent.applyTheme(theme: theme)
-        } else {
-            view.backgroundColor = theme.colors.layer3
-            menuContent.applyTheme(theme: theme)
+        if #unavailable(iOS 26.0) {
+            view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
         }
-    }
-
-    private func updateHeaderWith(accountData: AccountData, icon: UIImage?) {
-        if !isMenuRedesign {
-            menuContent.accountHeaderView.setupDetails(subtitle: accountData.subtitle ?? "",
-                                                       title: accountData.title,
-                                                       icon: icon,
-                                                       warningIcon: accountData.warningIcon,
-                                                       theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
+        menuRedesignContent.applyTheme(theme: theme)
     }
 
     private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
@@ -561,32 +479,18 @@ class MainMenuViewController: UIViewController,
         return sheetController.selectedDetentIdentifier
     }
 
-    private func setupAccessibilityIdentifiers(
-        mainButtonA11yLabel: String = .MainMenu.Account.AccessibilityLabels.MainButton) {
-            if isMenuRedesign {
-                menuRedesignContent.setupAccessibilityIdentifiers(
-                    menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
-                    menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
-                    closeButtonA11yLabel: .MainMenu.AccessibilityLabels.CloseButton,
-                    closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
-                    siteProtectionHeaderIdentifier: AccessibilityIdentifiers.MainMenu.SiteProtectionsHeaderView.header,
-                    headerBannerCloseButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderBanner.closeButton,
-                    headerBannerCloseButtonA11yLabel: .MainMenu.AccessibilityLabels.DismissBanner)
-            } else {
-                menuContent.setupAccessibilityIdentifiers(
-                    closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
-                    closeButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
-                    mainButtonA11yLabel: mainButtonA11yLabel,
-                    mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
-                    menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
-                    menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
-            }
+    private func setupAccessibilityIdentifiers() {
+        menuRedesignContent.setupAccessibilityIdentifiers(
+            menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
+            menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
+            closeButtonA11yLabel: .MainMenu.AccessibilityLabels.CloseButton,
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
+            siteProtectionHeaderIdentifier: AccessibilityIdentifiers.MainMenu.SiteProtectionsHeaderView.header,
+            headerBannerCloseButtonA11yIdentifier: AccessibilityIdentifiers.MainMenu.HeaderBanner.closeButton,
+            headerBannerCloseButtonA11yLabel: .MainMenu.AccessibilityLabels.DismissBanner)
     }
 
     private func adjustLayout(isDeviceRotating: Bool = false) {
-        if !isMenuRedesign {
-            menuContent.accountHeaderView.adjustLayout()
-        }
         if isDeviceRotating {
             hintView.removeFromSuperview()
         } else {
@@ -606,32 +510,20 @@ class MainMenuViewController: UIViewController,
         view.layoutIfNeeded()
     }
 
-    private func shouldDisplayHintView(isMenuRedesign: Bool) -> Bool {
-        guard let viewProvider else { return false }
+    private func shouldDisplayHintView() -> Bool {
+        guard let viewProvider, !isHomepage else { return false }
 
         // Don't display CFR in landscape mode for iPhones
         if UIDevice.current.isIphoneLandscape {
             return false
         }
 
-        // Don't display CFR for fresh installs for users that never saw before the photon main menu
+        // Don't display CFR for fresh installs
         if InstallType.get() == .fresh {
-            if isMenuRedesign {
-                viewProvider.markContextualHintPresented()
-                return false
-            } else {
-                if let photonMainMenuShown = profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown),
-                   photonMainMenuShown {
-                    return viewProvider.shouldPresentContextualHint()
-                }
-                viewProvider.markContextualHintPresented()
-                return false
-            }
-        }
-
-        if isMenuRedesign, isHomepage {
+            viewProvider.markContextualHintPresented()
             return false
         }
+
         return viewProvider.shouldPresentContextualHint()
     }
 
@@ -673,10 +565,6 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - MenuTableViewDelegate
     func reloadTableView(with data: [MenuSection]) {
-        if isMenuRedesign {
-            menuRedesignContent.reloadDataView(with: data)
-        } else {
-            menuContent.reloadTableView(with: data)
-        }
+        menuRedesignContent.reloadDataView(with: data)
     }
 }

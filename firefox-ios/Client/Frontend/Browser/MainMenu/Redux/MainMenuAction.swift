@@ -12,7 +12,6 @@ struct MainMenuAction: Action {
     var tabID: TabUUID?
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
-    var detailsViewToShow: MainMenuDetailsViewType?
     var accountData: AccountData?
     var accountIcon: UIImage?
     var siteProtectionsData: SiteProtectionsData?
@@ -26,7 +25,6 @@ struct MainMenuAction: Action {
         windowUUID: WindowUUID,
         actionType: any ActionType,
         navigationDestination: MenuNavigationDestination? = nil,
-        changeMenuViewTo: MainMenuDetailsViewType? = nil,
         currentTabInfo: MainMenuTabInfo? = nil,
         tabID: TabUUID? = nil,
         accountData: AccountData? = nil,
@@ -41,7 +39,6 @@ struct MainMenuAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.navigationDestination = navigationDestination
-        self.detailsViewToShow = changeMenuViewTo
         self.currentTabInfo = currentTabInfo
         self.tabID = tabID
         self.accountData = accountData
@@ -58,7 +55,6 @@ struct MainMenuAction: Action {
 enum MainMenuActionType: ActionType {
     case tapNavigateToDestination
     case tapCloseMenu
-    case tapShowDetailsView
     case tapToggleUserAgent
     case updateCurrentTabInfo
     case tapMoreOptions
@@ -82,21 +78,4 @@ enum MainMenuMiddlewareActionType: ActionType {
     case updateBannerVisibility
     case updateMenuAppearance
     case updateMenuCells
-}
-
-enum MainMenuDetailsActionType: ActionType {
-    // Tools submenu actions
-    case tapZoom
-    case tapToggleNightMode
-    case tapReportBrokenSite
-
-    // Save submenu actions
-    case tapAddToBookmarks
-    case tapAddToReadingList
-    case tapAddToShortcuts
-    case tapBackToMainMenu
-    case tapDismissView
-    case tapEditBookmark
-    case tapRemoveFromShortcuts
-    case tapRemoveFromReadingList
 }
