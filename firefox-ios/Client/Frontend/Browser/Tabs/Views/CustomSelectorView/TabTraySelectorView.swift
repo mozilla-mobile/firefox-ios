@@ -150,7 +150,7 @@ class TabTraySelectorView: UIView,
         selectionBackgroundWidthConstraint?.isActive = true
 
         // Ensure the stack view is positioned so the selected button is centered
-        let buttonCenter = selectedButton.convert(selectedButton.bounds.center, to: self)
+        let buttonCenter = selectedButton.convert(selectedButton.bounds.center, to: containerView)
         let offset = stackView.frame.midX - buttonCenter.x
         stackViewOffsetConstraint = stackView.centerXAnchor.constraint(
             equalTo: containerView.centerXAnchor, constant: offset
@@ -289,8 +289,8 @@ class TabTraySelectorView: UIView,
         let fromButton = buttons[fromIndex]
         let toButton = buttons[toIndex]
 
-        let fromCenter = fromButton.convert(fromButton.bounds.center, to: self)
-        let toCenter = toButton.convert(toButton.bounds.center, to: self)
+        let fromCenter = fromButton.convert(fromButton.bounds.center, to: containerView)
+        let toCenter = toButton.convert(toButton.bounds.center, to: containerView)
         let interpolatedX = fromCenter.x + (toCenter.x - fromCenter.x) * progress
         let offset = stackView.frame.midX - interpolatedX
 
