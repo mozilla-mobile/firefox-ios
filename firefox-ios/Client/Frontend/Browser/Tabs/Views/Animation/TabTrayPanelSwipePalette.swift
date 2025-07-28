@@ -150,6 +150,11 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var shadowSubtle: UIColor { base.shadowSubtle }
     var shadowStrong: UIColor { base.shadowStrong }
 
+    var vividOrange: UIColor { base.vividOrange }
+    var electricBlue: UIColor { base.electricBlue }
+    var crimsonRed: UIColor { base.crimsonRed }
+    var burntOrange: UIColor { base.burntOrange }
+
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base
         self.partialOverrides = overrides
