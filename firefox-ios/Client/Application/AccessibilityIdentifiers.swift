@@ -92,8 +92,6 @@ struct AccessibilityIdentifiers {
         static let switchToDesktopSite = "MainMenu.SwitchToDesktopSite"
         static let desktopSite = "MainMenu.DesktopSite"
         static let findInPage = "MainMenu.FindInPage"
-        static let tools = "MainMenu.Tools"
-        static let save = "MainMenu.Save"
         static let bookmarks = "MainMenu.Bookmarks"
         static let history = "MainMenu.History"
         static let downloads = "MainMenu.Downloads"
