@@ -259,11 +259,11 @@ class MainMenuViewController: UIViewController,
         ])
 
         menuContent.setupDetails(title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
-                                         subtitle: .MainMenu.HeaderBanner.Subtitle,
-                                         image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
-                                         isBannerFlagEnabled: isMenuDefaultBrowserBanner,
-                                         isBrowserDefault: isBrowserDefault,
-                                         bannerShown: bannerShown)
+                                 subtitle: .MainMenu.HeaderBanner.Subtitle,
+                                 image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
+                                 isBannerFlagEnabled: isMenuDefaultBrowserBanner,
+                                 isBrowserDefault: isBrowserDefault,
+                                 bannerShown: bannerShown)
     }
 
     private func setupMenuOrientation() {
