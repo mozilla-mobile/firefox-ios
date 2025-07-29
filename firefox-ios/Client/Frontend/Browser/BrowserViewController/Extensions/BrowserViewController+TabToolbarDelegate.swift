@@ -352,6 +352,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             if let tab = self.tabManager.selectedTab {
                 self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
                 self.tabManager.removeTabWithCompletion(tab.tabUUID) {
+                    store.dispatchLegacy(
+                        GeneralBrowserAction(
+                            windowUUID: self.windowUUID,
+                            actionType: GeneralBrowserActionType.didCloseTabFromToolbar
+                        )
+                    )
                     self.updateTabCountUsingTabManager(self.tabManager)
 
                     if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
@@ -394,11 +400,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
                                     theme: currentTheme()) { isButtonTapped in
                 isButtonTapped ? self.openBookmarkEditPanel(urlString: urlString) : nil
             }
-            if isBookmarkRefactorEnabled {
-                self.show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
-            } else {
-                self.show(toast: toast)
-            }
+            show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
         case .removeBookmark:
             let viewModel = ButtonToastViewModel(labelText: message,
                                                  buttonText: .UndoString)

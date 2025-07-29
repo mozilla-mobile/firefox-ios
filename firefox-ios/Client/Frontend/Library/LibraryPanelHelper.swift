@@ -8,21 +8,37 @@ import Common
 import enum MozillaAppServices.VisitType
 
 protocol LibraryPanelDelegate: AnyObject {
+    @MainActor
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
+
+    @MainActor
     func libraryPanel(didSelectURL url: URL, visitType: VisitType)
+
+    @MainActor
     var libraryPanelWindowUUID: WindowUUID { get }
 }
 
 protocol LibraryPanel: UIViewController {
+    @MainActor
     var libraryPanelDelegate: LibraryPanelDelegate? { get set }
+
+    @MainActor
     var state: LibraryPanelMainState { get set }
+
+    @MainActor
     var bottomToolbarItems: [UIBarButtonItem] { get }
 
+    @MainActor
     func handleLeftTopButton()
+
+    @MainActor
     func handleRightTopButton()
+
+    @MainActor
     func shouldDismissOnDone() -> Bool
 }
 
+@MainActor
 extension LibraryPanel {
     var flexibleSpace: UIBarButtonItem {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

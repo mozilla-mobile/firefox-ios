@@ -6,15 +6,18 @@ import Foundation
 import Redux
 import Common
 
-final class MessageCardAction: Action {
+struct MessageCardAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let messageCardConfiguration: MessageCardConfiguration?
 
     init(messageCardConfiguration: MessageCardConfiguration? = nil,
          windowUUID: WindowUUID,
          actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.messageCardConfiguration = messageCardConfiguration
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

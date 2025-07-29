@@ -204,9 +204,6 @@ public struct PrefsKeys {
     // The guid of the bookmark folder that was most recently created or saved to by the user.
     // Used to indicate where we should save the next bookmark by default.
     public static let RecentBookmarkFolder = "RecentBookmarkFolder"
-    // Represents whether or not the bookmark refactor feature flag is enabled
-    // Used in the share extension
-    public static let IsBookmarksRefactorEnabled = "IsBookmarksRefactorEnabled"
 
     // The timestamp where the app was last opened as default browser
     public static let LastOpenedAsDefaultBrowser = "LastOpenedAsDefaultBrowser"
@@ -214,12 +211,18 @@ public struct PrefsKeys {
     // Used to only show the felt deletion alert confirmation once, used for private mode
     public static let dataClearanceAlertShown = "dataClearanceAlertShownKey"
 
+    // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
+    public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
+
+    // Used to determine if Apple Intelligence is available
+    public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
+
     public struct Usage {
         public static let profileId = "profileId"
     }
 }
 
-public protocol Prefs {
+public protocol Prefs: Sendable {
     func getBranchPrefix() -> String
     func branch(_ branch: String) -> Prefs
     func setTimestamp(_ value: Timestamp, forKey defaultName: String)
@@ -244,7 +247,7 @@ public protocol Prefs {
     func clearAll()
 }
 
-open class MockProfilePrefs: Prefs {
+open class MockProfilePrefs: Prefs, @unchecked Sendable {
     let prefix: String
 
     open func getBranchPrefix() -> String {

@@ -95,14 +95,14 @@ class AccountSyncHandler: TabEventHandler {
         for manager in tabManagers {
             // Set inactive tabs explicitly as inactive (initial state)
             for tab in manager.inactiveTabs {
-                if let remoteTab = Tab.toRemoteTab(tab, inactive: true) {
+                if let remoteTab = tab.toRemoteTab() {
                     storedTabsDict[tab.tabUUID] = remoteTab
                 }
             }
 
             // Active tabs override inactive ones if there's overlap
             for tab in manager.normalActiveTabs {
-                if let remoteTab = Tab.toRemoteTab(tab, inactive: false) {
+                if let remoteTab = tab.toRemoteTab() {
                     storedTabsDict[tab.tabUUID] = remoteTab
                 }
             }

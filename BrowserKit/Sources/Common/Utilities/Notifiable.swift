@@ -5,7 +5,7 @@
 import Foundation
 
 @objc
-public protocol NotificationProtocol {
+public protocol NotificationProtocol: Sendable {
     func post(name: NSNotification.Name, withObject object: Any?, withUserInfo info: Any?)
     func addObserver(_ observer: Any,
                      selector aSelector: Selector,
@@ -14,7 +14,7 @@ public protocol NotificationProtocol {
     @discardableResult
     func addObserver(name: NSNotification.Name?,
                      queue: OperationQueue?,
-                     using block: @escaping (Notification) -> Void) -> NSObjectProtocol?
+                     using block: @Sendable @escaping (Notification) -> Void) -> NSObjectProtocol?
     func removeObserver(_ observer: Any)
 }
 
@@ -32,7 +32,7 @@ extension NotificationCenter: NotificationProtocol {
 
     public func addObserver(name: NSNotification.Name?,
                             queue: OperationQueue?,
-                            using block: @escaping (Notification) -> Void) -> NSObjectProtocol? {
+                            using block: @Sendable @escaping (Notification) -> Void) -> NSObjectProtocol? {
         self.addObserver(forName: name,
                          object: nil,
                          queue: queue,
@@ -42,7 +42,7 @@ extension NotificationCenter: NotificationProtocol {
 
 @objc
 public protocol Notifiable {
-    var notificationCenter: NotificationProtocol { get set }
+    var notificationCenter: NotificationProtocol { get }
     func handleNotifications(_ notification: Notification)
 }
 

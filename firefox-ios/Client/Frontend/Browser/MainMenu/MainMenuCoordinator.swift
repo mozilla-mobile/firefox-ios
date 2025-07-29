@@ -6,19 +6,41 @@ import Common
 import Foundation
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
+    @MainActor
     func editBookmarkForCurrentTab()
+
+    @MainActor
     func openURLInNewTab(_ url: URL?)
+
+    @MainActor
     func openNewTab(inPrivateMode: Bool)
+
+    @MainActor
     func showLibraryPanel(_ panel: Route.HomepanelSection)
+
+    @MainActor
     func showSettings(at destination: Route.SettingsSection)
+
+    @MainActor
     func showFindInPage()
+
+    @MainActor
     func showSignInView(fxaParameters: FxASignInViewParameters?)
+
+    @MainActor
     func updateZoomPageBarVisibility()
+
+    @MainActor
     func presentSavePDFController()
+
+    @MainActor
     func presentSiteProtections()
+
+    @MainActor
     func showPrintSheet()
 
     /// Open the share sheet to share the currently selected `Tab`.
+    @MainActor
     func showShareSheetForCurrentlySelectedTab()
 }
 
@@ -37,6 +59,20 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         self.windowUUID = windowUUID
         self.profile = profile
         super.init(router: router)
+    }
+
+    func startWithNavController() {
+        let mainMenuViewController = createMainMenuViewController()
+
+        let mainMenuNavController = UINavigationController(rootViewController: mainMenuViewController)
+        mainMenuNavController.isNavigationBarHidden = true
+
+        if let sheetPresentationController = mainMenuNavController.sheetPresentationController {
+            sheetPresentationController.detents = [.medium(), .large()]
+        }
+        mainMenuNavController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
+        mainMenuNavController.sheetPresentationController?.prefersGrabberVisible = true
+        router.present(mainMenuNavController, animated: true, completion: nil)
     }
 
     func start() {
@@ -136,6 +172,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()
+
+        case .webpageSummary: break
+            // TODO(FXIOS-12688): Redirect to summary view
         }
     }
 

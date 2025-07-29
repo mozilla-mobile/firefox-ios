@@ -6,7 +6,7 @@ let package = Package(
     name: "BrowserKit",
     platforms: [
         .iOS(.v15),
-        .macOS(.v10_15)
+        .macOS(.v12)
     ],
     products: [
         .library(name: "Shared",
@@ -35,6 +35,8 @@ let package = Package(
         .library(
             name: "MenuKit",
             targets: ["MenuKit"]),
+        .library(name: "SummarizeKit",
+                 targets: ["SummarizeKit"]),
         .library(
             name: "UnifiedSearchKit",
             targets: ["UnifiedSearchKit"]),
@@ -70,6 +72,9 @@ let package = Package(
         .package(
             url: "https://github.com/swhitty/SwiftDraw",
             exact: "0.18.3"),
+        .package(
+            url: "https://github.com/bmoliveira/MarkdownKit.git", 
+            exact: "1.7.3"),
     ],
     targets: [
         .target(name: "Shared",
@@ -144,6 +149,17 @@ let package = Package(
             name: "MenuKitTests",
             dependencies: ["MenuKit"]),
         .target(
+            name: "SummarizeKit",
+            dependencies: [
+                "Common",
+                "ComponentLibrary",
+                "MarkdownKit"
+            ],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]
+        ),
+        .testTarget(name: "SummarizeKitTests",
+                    dependencies: ["SummarizeKit"]),
+        .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
@@ -164,6 +180,9 @@ let package = Package(
                 .linkedFramework("Metal"),
                 .linkedFramework("MetalKit")
             ]),
+        .testTarget(
+            name: "OnboardingKitTests",
+            dependencies: ["OnboardingKit"]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
             dependencies: ["ContentBlockingGenerator"]),

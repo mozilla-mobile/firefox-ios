@@ -7,6 +7,7 @@ import Common
 
 @testable import Client
 
+@MainActor
 class DownloadsPanelTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     override func setUp() {

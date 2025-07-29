@@ -7,7 +7,10 @@ import Redux
 import Common
 import WebKit
 
-final class PasswordGeneratorAction: Action {
+struct PasswordGeneratorAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
+
     // Used in the middlwares
     let currentFrame: WKFrameInfo?
 
@@ -21,10 +24,11 @@ final class PasswordGeneratorAction: Action {
          currentFrame: WKFrameInfo? = nil,
          password: String? = nil,
          origin: String? = nil) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.currentFrame = currentFrame
         self.password = password
         self.origin = origin
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

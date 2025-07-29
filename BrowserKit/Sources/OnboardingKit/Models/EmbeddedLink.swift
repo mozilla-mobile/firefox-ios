@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct EmbeddedLink {
+public struct EmbeddedLink: Sendable {
     let fullText: String
     let linkText: String
     let action: TosAction

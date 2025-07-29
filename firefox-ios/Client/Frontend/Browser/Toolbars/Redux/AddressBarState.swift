@@ -6,13 +6,13 @@ import Common
 import Redux
 import ToolbarKit
 
-struct AddressBarState: StateType, Equatable {
+struct AddressBarState: StateType, Sendable, Equatable {
     var windowUUID: WindowUUID
     var navigationActions: [ToolbarActionConfiguration]
     var leadingPageActions: [ToolbarActionConfiguration]
     var trailingPageActions: [ToolbarActionConfiguration]
     var browserActions: [ToolbarActionConfiguration]
-    var borderPosition: AddressToolbarBorderPosition?
+    let borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
     var lockIconImageName: String?
@@ -619,7 +619,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
-            shouldShowKeyboard: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,

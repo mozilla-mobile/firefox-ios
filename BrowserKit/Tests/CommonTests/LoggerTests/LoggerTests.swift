@@ -203,7 +203,7 @@ final class LoggerTests: XCTestCase {
     }
 
     func testCrashManagerLog_sendCrashReportsNotCalled_onInit() {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder, crashManager: crashManager)
+        _ = DefaultLogger(swiftyBeaverBuilder: beaverBuilder, crashManager: crashManager)
         XCTAssertEqual(crashManager.savedSendCrashReportsCalled, 0)
     }
 
@@ -234,7 +234,7 @@ class MockSwiftyBeaverBuilder: SwiftyBeaverBuilder {
 }
 
 // MARK: - MockSwiftyBeaver
-class MockSwiftyBeaver: SwiftyBeaverWrapper {
+final class MockSwiftyBeaver: SwiftyBeaverWrapper {
     static func logFileDirectoryPath(inDocuments: Bool) -> String? {
         return nil
     }

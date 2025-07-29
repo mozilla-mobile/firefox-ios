@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct OnboardingLinkInfoModel {
+public struct OnboardingLinkInfoModel: Sendable {
     public let title: String
     public let url: URL
 

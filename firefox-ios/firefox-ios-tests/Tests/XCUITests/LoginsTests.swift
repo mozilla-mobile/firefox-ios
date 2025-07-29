@@ -351,7 +351,10 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798598
-    func testVerifyUpdatedPasswordIsNotSaved() {
+    func testVerifyUpdatedPasswordIsNotSaved() throws {
+        guard #available(iOS 16, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
+        }
         validateChangedPasswordSavedState(isPasswordSaved: false)
     }
 
@@ -429,9 +432,12 @@ class LoginTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2798592
-    func testLoginCopyPaste() {
+    func testLoginCopyPaste() throws {
         openLoginsSettingsFromBrowserTab()
         createLoginManually()
+        guard #available(iOS 16, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 16")
+        }
         validateLoginTextFieldsCanBeCopied(indexField: 0, copiedText: "https://testweb", field: "website")
         app.buttons[passwordssQuery.AddLogin.cancelButton].waitAndTap()
         validateLoginTextFieldsCanBeCopied(indexField: 1, copiedText: "foo", field: "username")

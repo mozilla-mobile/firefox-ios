@@ -5,6 +5,7 @@
 import Shared
 
 protocol SearchBarLocationSaverProtocol {
+    @MainActor
     func saveUserSearchBarLocation(profile: Profile, userInterfaceIdiom: UIUserInterfaceIdiom)
 }
 
@@ -15,6 +16,7 @@ struct SearchBarLocationSaver: SearchBarLocationProvider, FeatureFlaggable, Sear
     /// - Parameters:
     ///   - profile: the user's profile
     ///   - userInterfaceIdiom: the interface type for the device
+    @MainActor
     func saveUserSearchBarLocation(profile: Profile,
                                    userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let isFreshInstall = profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest) == nil

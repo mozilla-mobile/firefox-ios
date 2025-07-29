@@ -43,24 +43,34 @@ final class HomepageMiddleware: FeatureFlaggable {
             )
 
         case HomepageActionType.didSelectItem:
-            guard let extras = (action as? HomepageAction)?.telemetryExtras, let type = extras.itemType else {
+            guard let extras = (action as? HomepageAction)?.telemetryExtras,
+                  let type = extras.itemType else {
                 return
             }
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: type)
 
         case HomepageActionType.sectionSeen:
-            guard let extras = (action as? HomepageAction)?.telemetryExtras, let type = extras.itemType else {
-                return
-            }
-            self.homepageTelemetry.sendSectionLabeledCounter(for: type)
+            self.handleSectionSeenAction(action: action)
 
-        case HomepageActionType.initialize, HomepageActionType.viewWillTransition,
-            ToolbarActionType.cancelEdit:
+        case HomepageActionType.initialize:
+            self.dispatchSearchBarConfigurationAction(action: action)
+            self.dispatchSpacerConfigurationAction(action: action)
+
+        case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit,
+            GeneralBrowserActionType.navigateBack, GeneralBrowserActionType.didCloseTabFromToolbar:
             self.dispatchSearchBarConfigurationAction(action: action)
 
         default:
             break
         }
+    }
+
+    private func handleSectionSeenAction(action: Action) {
+        guard let extras = (action as? HomepageAction)?.telemetryExtras,
+              let type = extras.itemType else {
+            return
+        }
+        self.homepageTelemetry.sendSectionLabeledCounter(for: type)
     }
 
     private func dispatchSearchBarConfigurationAction(action: Action) {
@@ -69,6 +79,16 @@ final class HomepageMiddleware: FeatureFlaggable {
                 isSearchBarEnabled: self.shouldShowSearchBar(),
                 windowUUID: action.windowUUID,
                 actionType: HomepageMiddlewareActionType.configuredSearchBar
+            )
+        )
+    }
+
+    private func dispatchSpacerConfigurationAction(action: Action) {
+        store.dispatchLegacy(
+            HomepageAction(
+                shouldShowSpacer: self.shouldShowSpacer(),
+                windowUUID: action.windowUUID,
+                actionType: HomepageMiddlewareActionType.configuredSpacer
             )
         )
     }
@@ -84,6 +104,10 @@ final class HomepageMiddleware: FeatureFlaggable {
             return false
         }
         return true
+    }
+
+    private func shouldShowSpacer(for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
+        return device == .phone && featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
 
     // MARK: - Notifications

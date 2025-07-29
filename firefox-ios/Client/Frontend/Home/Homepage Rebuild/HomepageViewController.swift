@@ -179,7 +179,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        collectionView?.collectionViewLayout.invalidateLayout()
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
 
@@ -238,8 +238,15 @@ final class HomepageViewController: UIViewController,
                 theme: theme
             )
         }
+
+        // We only want to proceed if content exceeds the frame (aka scrollable),
+        // otherwise we will spamming the redux action (GeneralBrowserMiddlewareAction) below
+        guard scrollView.contentSize.height > scrollView.frame.height else { return }
+
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        // The logic detects whether there is a transition across the top of the view
+        // where scrollView.contentOffset.y is zero.
         if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
             (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
@@ -535,10 +542,10 @@ final class HomepageViewController: UIViewController,
             bookmarksCell.configure(config: item, theme: currentTheme)
             return bookmarksCell
 
-        case .pocket(let story):
+        case .merino(let story):
             let isHomepageStoriesCardsEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign,
                                                                               checking: .buildOnly)
-            let cellType: ReusableCell.Type = isHomepageStoriesCardsEnabled ? StoryCell.self : PocketStandardCell.self
+            let cellType: ReusableCell.Type = isHomepageStoriesCardsEnabled ? StoryCell.self : MerinoStandardCell.self
 
             guard let storyCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
                 return UICollectionViewCell()
@@ -547,7 +554,7 @@ final class HomepageViewController: UIViewController,
             if let storyCell = storyCell as? StoryCell {
                 storyCell.configure(story: story, theme: currentTheme)
                 return storyCell
-            } else if let legacyPocketCell = storyCell as? PocketStandardCell {
+            } else if let legacyPocketCell = storyCell as? MerinoStandardCell {
                 legacyPocketCell.configure(story: story, theme: currentTheme)
                 return legacyPocketCell
             }
@@ -567,6 +574,16 @@ final class HomepageViewController: UIViewController,
             }, theme: currentTheme)
 
             return customizeHomeCell
+
+        case .spacer:
+            guard let spacerCell = collectionView?.dequeueReusableCell(
+                cellType: HomepageSpacerCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            return spacerCell
         }
     }
 
@@ -631,7 +648,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
-                state: homepageState.pocketState.sectionHeaderState,
+                state: homepageState.merinoState.sectionHeaderState,
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -743,7 +760,7 @@ final class HomepageViewController: UIViewController,
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
                     .link,
-                    url: homepageState.pocketState.footerURL,
+                    url: homepageState.merinoState.footerURL,
                     visitType: .link
                 ),
                 windowUUID: self.windowUUID,
@@ -808,7 +825,7 @@ final class HomepageViewController: UIViewController,
     private func dispatchOpenPocketAction(at index: Int, actionType: ActionType) {
         let config = OpenPocketTelemetryConfig(isZeroSearch: homepageState.isZeroSearch, position: index)
         store.dispatchLegacy(
-            PocketAction(
+            MerinoAction(
                 telemetryConfig: config,
                 windowUUID: self.windowUUID,
                 actionType: actionType
@@ -877,14 +894,14 @@ final class HomepageViewController: UIViewController,
                 visitType: .bookmark
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-        case .pocket(let story):
+        case .merino(let story):
             let destination = NavigationDestination(
                 .link,
                 url: story.url,
                 visitType: .link
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-            dispatchOpenPocketAction(at: indexPath.item, actionType: PocketActionType.tapOnHomepagePocketCell)
+            dispatchOpenPocketAction(at: indexPath.item, actionType: MerinoActionType.tapOnHomepageMerinoCell)
         default:
             return
         }

@@ -33,10 +33,10 @@ class BrowserViewController: UIViewController,
                              BrowserFrameInfoProvider,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
-                             BookmarksRefactorFeatureFlagProvider,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
+                             BrowserContentHiding,
                              BrowserStatusBarScrollDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
@@ -145,7 +145,8 @@ class BrowserViewController: UIViewController,
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
         AddressToolbarContainer(
-            isSwipingTabsEnabled: self.isSwipingTabsEnabled
+            isSwipingTabsEnabled: self.isSwipingTabsEnabled,
+            isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled
         )
     })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
@@ -191,7 +192,7 @@ class BrowserViewController: UIViewController,
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
     }
 
-    private(set) lazy var scrollController = TabScrollController(windowUUID: windowUUID)
+    private(set) lazy var scrollController = LegacyTabScrollController(windowUUID: windowUUID)
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -295,6 +296,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.toolbarSwipingTabs, checking: .buildOnly)
     }
 
+    var isMinimalAddressBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
+    }
+
     var isToolbarNavigationHintEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
     }
@@ -317,6 +322,18 @@ class BrowserViewController: UIViewController,
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+    }
+
+    var isStoriesRedesignEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+    }
+
+    var isHomepageSearchBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+    }
+
+    var isSummarizeFeatureEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -355,7 +372,6 @@ class BrowserViewController: UIViewController,
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue: DownloadQueue
-    let mainQueue: DispatchQueueInterface
     let userInitiatedQueue: DispatchQueueInterface
 
     private let bookmarksSaver: BookmarksSaver
@@ -392,7 +408,6 @@ class BrowserViewController: UIViewController,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
-        mainQueue: DispatchQueueInterface = DispatchQueue.main,
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
         self.profile = profile
@@ -411,7 +426,6 @@ class BrowserViewController: UIViewController,
         self.bookmarksHandler = profile.places
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
-        self.mainQueue = mainQueue
         self.userInitiatedQueue = userInitiatedQueue
 
         super.init(nibName: nil, bundle: nil)
@@ -523,7 +537,7 @@ class BrowserViewController: UIViewController,
         toolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
-        updateBlurViews()
+        updateToolbarDisplay()
 
         let action = GeneralBrowserMiddlewareAction(
             scrollOffset: scrollController.contentOffset,
@@ -531,6 +545,21 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatchLegacy(action)
+    }
+
+    private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
+        guard isToolbarRefactorEnabled else { return }
+
+        // move views to the front so the address toolbar shadow doesn't get clipped
+        if isBottomSearchBar {
+            overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
+            view.bringSubviewToFront(overKeyboardContainer)
+        } else {
+            header.bringSubviewToFront(addressToolbarContainer)
+            view.bringSubviewToFront(header)
+        }
+
+        updateBlurViews(scrollOffset: scrollOffset)
     }
 
     private func updateBlurViews(scrollOffset: CGFloat? = nil) {
@@ -558,18 +587,10 @@ class BrowserViewController: UIViewController,
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
-
-            // move views to the front so the address toolbar shadow doesn't get clipped
-            overKeyboardContainer.bringSubviewToFront(addressToolbarContainer)
-            view.bringSubviewToFront(overKeyboardContainer)
         } else {
             header.isClearBackground = enableBlur
             overKeyboardContainer.isClearBackground = false
             topBlurView.alpha = 1
-
-            // move views to the front so the address toolbar shadow doesn't get clipped
-            header.bringSubviewToFront(addressToolbarContainer)
-            view.bringSubviewToFront(header)
         }
 
         bottomContainer.isClearBackground = showNavToolbar && enableBlur
@@ -686,7 +707,8 @@ class BrowserViewController: UIViewController,
 
         header.setNeedsLayout()
         view.layoutSubviews()
-        updateBlurViews()
+
+        updateToolbarDisplay()
 
         if let tab = tabManager.selectedTab,
            let webView = tab.webView,
@@ -804,6 +826,25 @@ class BrowserViewController: UIViewController,
         dispatchStartAtHomeAction()
     }
 
+    // MARK: - Summarize
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        super.motionEnded(motion, with: event)
+        guard motion == .motionShake, isSummarizeFeatureEnabled else { return }
+        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return }
+        navigationHandler?.showSummarizePanel()
+    }
+
+    // MARK: - BrowserContentHiding
+    func showBrowserContent() {
+        contentContainer.isHidden = false
+        scrollController.showToolbars(animated: false)
+    }
+
+    func hideBrowserContent() {
+        contentContainer.isHidden = true
+        scrollController.hideToolbars(animated: true)
+    }
+
     // MARK: - Start At Home
     private func dispatchStartAtHomeAction() {
         let startAtHomeAction = StartAtHomeAction(
@@ -898,11 +939,7 @@ class BrowserViewController: UIViewController,
                 .removeFromReadingList:
             showToast()
         case .addBookmark(let urlString):
-            if isBookmarkRefactorEnabled {
-                showBookmarkToast(urlString: urlString, action: .add)
-            } else {
-                showToast()
-            }
+            showBookmarkToast(urlString: urlString, action: .add)
         default:
             let viewModel = ButtonToastViewModel(
                 labelText: toast.title,
@@ -973,14 +1010,23 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
         topTabsViewController?.applyTheme()
+        webPagePreview.applyTheme(theme: theme)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
         listenForThemeChange(view)
         setupAccessibleActions()
 
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs,
-                                                                tabManager: tabManager)
-        clipboardBarDisplayHandler?.delegate = self
+        if #available(iOS 16.0, *) {
+            let clipboardHandler = DefaultClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                     windowUUID: windowUUID)
+            clipboardHandler.delegate = self
+            self.clipboardBarDisplayHandler = clipboardHandler
+        } else {
+            let clipboardHandler = LegacyClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                    tabManager: tabManager)
+            clipboardHandler.delegate = self
+            self.clipboardBarDisplayHandler = clipboardHandler
+        }
 
         navigationToolbarContainer.toolbarDelegate = self
         scrollController.header = header
@@ -1131,7 +1177,7 @@ class BrowserViewController: UIViewController,
 
     @objc
     private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
-        updateBlurViews()
+        updateToolbarDisplay()
 
         store.dispatchLegacy(
             ToolbarAction(
@@ -1250,7 +1296,8 @@ class BrowserViewController: UIViewController,
             statusBarOverlay: statusBarOverlay,
             tabManager: tabManager,
             windowUUID: windowUUID,
-            screenshotHelper: screenshotHelper
+            screenshotHelper: screenshotHelper,
+            prefs: profile.prefs
         )
     }
 
@@ -1290,6 +1337,9 @@ class BrowserViewController: UIViewController,
             browserDelegate?.setHomepageVisibility(isVisible: false)
             addressBarPanGestureHandler?.homepageScreenshotToolProvider = { [weak self] in
                 return self?.browserDelegate?.homepageScreenshotTool()
+            }
+            addressBarPanGestureHandler?.newTabSettingsProvider = { [weak self] in
+                return self?.newTabSettings
             }
         }
     }
@@ -1373,7 +1423,7 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             statusBarOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             statusBarOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
+            statusBarOverlay.bottomAnchor.constraint(equalTo: header.bottomAnchor)
         ])
         NSLayoutConstraint.activate(statusBarOverlayConstraints)
 
@@ -1384,7 +1434,10 @@ class BrowserViewController: UIViewController,
 
         // when toolbars are hidden/shown the mask on the content view that is used for
         // toolbar translucency needs to be updated
-        updateBlurViews()
+        updateToolbarDisplay()
+
+        // Update available height for the homepage
+        dispatchAvailableContentHeightChangedAction()
     }
 
     func checkForJSAlerts() {
@@ -1634,7 +1687,7 @@ class BrowserViewController: UIViewController,
         }
 
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: true, isFindInPageMode: true)
+            scrollController.hideToolbars(animated: true)
         } else {
             adjustBottomSearchBarForKeyboard()
         }
@@ -1684,13 +1737,19 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
-        let spacerHeight = keyboardHeight - toolBarHeight
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: keyboardHeight)
+
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
         // make sure the keyboard spacer has the right color/translucency
         overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
+    private func getKeyboardSpacerHeight(keyboardHeight: CGFloat) -> CGFloat {
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
+        let spacerHeight = keyboardHeight - toolBarHeight
+        return spacerHeight
     }
 
     fileprivate func showQueuedAlertIfAvailable() {
@@ -1764,7 +1823,7 @@ class BrowserViewController: UIViewController,
 
         if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
-            updateBlurViews()
+            updateToolbarDisplay()
             return
         }
 
@@ -1797,7 +1856,8 @@ class BrowserViewController: UIViewController,
             // to overlay the homepage.
             browserDelegate?.setHomepageVisibility(isVisible: true)
         }
-        updateBlurViews()
+
+        updateToolbarDisplay()
     }
 
     func showEmbeddedWebview() {
@@ -1822,7 +1882,7 @@ class BrowserViewController: UIViewController,
         }
 
         browserDelegate?.show(webView: webView)
-        updateBlurViews()
+        updateToolbarDisplay()
     }
 
     // MARK: - Document Loading
@@ -2129,12 +2189,9 @@ class BrowserViewController: UIViewController,
     private func showBookmarkToast(urlString: String? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
-            if !isBookmarkRefactorEnabled {
-                showToast(urlString, title, message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
-            }
             // Get the folder title using the recent bookmark folder pref
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
-            else if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
+            if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
                 recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
                 profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { result in
                     guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
@@ -2167,20 +2224,7 @@ class BrowserViewController: UIViewController,
                   let parentGuid = bookmarkItem.parentGUID else { return }
             self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
                 guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
-
-                if self.isBookmarkRefactorEnabled {
-                    self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
-                } else {
-                    let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
-                                                                     windowUUID: self.windowUUID,
-                                                                     bookmarkNode: bookmarkItem,
-                                                                     parentBookmarkFolder: parentFolder,
-                                                                     presentedFromToast: true,
-                                                                     deleteBookmark: {})
-                    let controller: DismissableNavigationViewController
-                    controller = DismissableNavigationViewController(rootViewController: detailController)
-                    self.present(controller, animated: true, completion: nil)
-                }
+                self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
             }
         }
     }
@@ -3012,6 +3056,45 @@ class BrowserViewController: UIViewController,
             actionType: ToolbarActionType.traitCollectionDidChange
         )
         store.dispatchLegacy(action)
+    }
+
+    private func dispatchAvailableContentHeightChangedAction() {
+        guard isStoriesRedesignEnabled, let browserViewControllerState,
+           browserViewControllerState.browserViewType == .normalHomepage,
+           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+           homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
+
+        store.dispatch(
+            HomepageAction(
+                availableContentHeight: getAvailableHomepageContentHeight(),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+    }
+
+    // Computes the height available for the homepage content to occupy when the address is not being edited.
+    // This is accomplished by taking BVC's height and subtracting the height of all of it's immediate subviews
+    // This is used to keep the homepage layout constant, such that it doesn't shift when the homepage's view size changes
+    // eg when the address bar is tapped and the keyboard is presented
+    private func getAvailableHomepageContentHeight() -> CGFloat {
+        // We only have to worry about the bottom address bar when it is part of the homepage layout (can be presented
+        // without the keyboard)
+        var addressBarHeight = isHomepageSearchBarEnabled ? 0 : overKeyboardContainer.frame.height
+
+        // The overKeyboardContainer typically just contains the bottom address bar, but when editing, also contains a
+        // keyboard-sized spacer that we must ignore (since we don't want it to affect the homepage layouts height)
+        if isBottomSearchBar && !isHomepageSearchBarEnabled {
+            let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
+            let keyboardSpacerHeight = keyboardHeight > 0 ? getKeyboardSpacerHeight(keyboardHeight: keyboardHeight) : 0
+            addressBarHeight -= keyboardSpacerHeight
+        }
+
+        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage
+        return view.frame.height - statusBarOverlay.frame.height
+                                 - bottomContentStackView.frame.height
+                                 - bottomContainer.frame.height
+                                 - addressBarHeight
     }
 
     // MARK: Opening New Tabs
@@ -3870,7 +3953,7 @@ class BrowserViewController: UIViewController,
     }
 }
 
-extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
+extension BrowserViewController: @preconcurrency LegacyClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
@@ -3890,9 +3973,11 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+        show(toast: toast, duration: LegacyClipboardBarDisplayHandler.UX.toastDelay)
     }
+}
 
+extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     @available(iOS 16.0, *)
     func shouldDisplay() {
         let viewModel = ButtonToastViewModel(
@@ -3909,15 +3994,14 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+        show(toast: toast, duration: DefaultClipboardBarDisplayHandler.UX.toastDelay)
     }
 
     override func paste(itemProviders: [NSItemProvider]) {
         for provider in itemProviders where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, error in
-                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
-
-                DispatchQueue.main.async {
+            _ = provider.loadObject(ofClass: URL.self) { url, _ in
+                DispatchQueue.main.async { [weak self] in
+                    let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
                     self?.openURLInNewTab(url, isPrivate: isPrivate)
                 }
             }
@@ -4211,7 +4295,7 @@ extension BrowserViewController: HomePanelDelegate {
 
     // MARK: - BrowserStatusBarScrollDelegate
     func homepageScrollViewDidScroll(scrollOffset: CGFloat) {
-        updateBlurViews(scrollOffset: scrollOffset)
+        updateToolbarDisplay(scrollOffset: scrollOffset)
     }
 }
 
@@ -4649,7 +4733,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     /// Used to get the context menu save image in the context menu, shown from long press on webview links
-    func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
+    func getImageData(_ url: URL, success: @Sendable @escaping (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
@@ -4694,7 +4778,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        updateBlurViews()
+        updateToolbarDisplay()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
@@ -4710,7 +4794,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         cancelEditingMode()
-        updateBlurViews()
+        updateToolbarDisplay()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
@@ -4793,8 +4877,8 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && NewTabAccessors.getHomePage(profile.prefs) == .homePage
-        let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
+        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && newTabSettings == .homePage
+        let homePageURL = NewTabHomePageAccessors.getHomePage(profile.prefs)
 
         if shouldLoadCustomHomePage, let url = homePageURL {
             openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)

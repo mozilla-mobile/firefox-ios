@@ -4,7 +4,7 @@
 
 import Foundation
 
-public protocol Logger {
+public protocol Logger: Sendable {
     var crashedLastLaunch: Bool { get }
 
     func setup(sendCrashReports: Bool)

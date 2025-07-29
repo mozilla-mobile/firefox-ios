@@ -8,25 +8,30 @@ import Foundation
 import enum MozillaAppServices.VisitType
 
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
+    @MainActor
     func didFinishLibrary(from coordinator: Coordinator)
 }
 
 protocol LibraryNavigationHandler: AnyObject {
+    @MainActor
     func start(panelType: LibraryPanelType, navigationController: UINavigationController)
+
+    @MainActor
     func shareLibraryItem(url: URL, sourceView: UIView)
+
+    @MainActor
     func setNavigationBarHidden(_ value: Bool)
 }
 
 class LibraryCoordinator: BaseCoordinator,
                           LibraryPanelDelegate,
                           LibraryNavigationHandler,
-                          ParentCoordinatorDelegate,
-                          BookmarksRefactorFeatureFlagProvider {
+                          ParentCoordinatorDelegate {
     private let profile: Profile
     private let tabManager: TabManager
     private var libraryViewController: LibraryViewController?
     weak var parentCoordinator: LibraryCoordinatorDelegate?
-    override var isDismissable: Bool { false }
+    override var isDismissible: Bool { false }
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     init(
@@ -56,15 +61,9 @@ class LibraryCoordinator: BaseCoordinator,
 
     private func makeChildPanels() -> [UINavigationController] {
         let bookmarksPanel: UIViewController
-        if isBookmarkRefactorEnabled {
-            bookmarksPanel = BookmarksViewController(viewModel: BookmarksPanelViewModel(profile: profile,
-                                                                                        bookmarksHandler: profile.places),
-                                                     windowUUID: windowUUID)
-        } else {
-            bookmarksPanel = LegacyBookmarksPanel(viewModel: BookmarksPanelViewModel(profile: profile,
-                                                                                     bookmarksHandler: profile.places),
-                                                  windowUUID: windowUUID)
-        }
+        bookmarksPanel = BookmarksViewController(viewModel: BookmarksPanelViewModel(profile: profile,
+                                                                                    bookmarksHandler: profile.places),
+                                                 windowUUID: windowUUID)
         let historyPanel = HistoryPanel(profile: profile, windowUUID: windowUUID)
         let downloadsPanel = DownloadsPanel(windowUUID: windowUUID)
         let readingListPanel = ReadingListPanel(profile: profile, windowUUID: windowUUID)
@@ -126,17 +125,11 @@ class LibraryCoordinator: BaseCoordinator,
             profile: profile,
             windowUUID: windowUUID,
             libraryCoordinator: parentCoordinator,
-            libraryNavigationHandler: self,
-            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
+            libraryNavigationHandler: self
         )
         add(child: bookmarksCoordinator)
-        if isBookmarkRefactorEnabled {
-            (navigationController.topViewController as? BookmarksViewController)?
-                .bookmarkCoordinatorDelegate = bookmarksCoordinator
-        } else {
-            (navigationController.topViewController as? LegacyBookmarksPanel)?
-                .bookmarkCoordinatorDelegate = bookmarksCoordinator
-        }
+        (navigationController.topViewController as? BookmarksViewController)?
+            .bookmarkCoordinatorDelegate = bookmarksCoordinator
     }
 
     private func makeHistoryCoordinator(navigationController: UINavigationController) {

@@ -8,11 +8,17 @@ import WebKit
 import Common
 
 protocol TopTabsDelegate: AnyObject {
+    @MainActor
     func topTabsDidPressTabs()
+    @MainActor
     func topTabsDidPressNewTab(_ isPrivate: Bool)
+    @MainActor
     func topTabsDidLongPressNewTab(button: UIButton)
+    @MainActor
     func topTabsDidChangeTab()
+    @MainActor
     func topTabsDidPressPrivateMode()
+    @MainActor
     func topTabsShowCloseTabsToast()
 }
 

@@ -9,11 +9,15 @@ import Redux
 import enum MozillaAppServices.VisitType
 
 protocol RemoteTabsPanelDelegate: AnyObject {
+    @MainActor
     func presentFirefoxAccountSignIn()
+
+    @MainActor
     func presentFxAccountSettings()
 }
 
 protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
+    @MainActor
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
 }
 

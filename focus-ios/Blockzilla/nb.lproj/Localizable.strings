@@ -2,7 +2,7 @@
 "About.learnMoreButton" = "Les mer";
 
 /* Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"About.missionLabel" = "%@ er produsert av Mozilla. Vår misjon er å fremme et sunt, åpent Internett.";
+"About.missionLabel" = "%@ er produsert av Mozilla. Vår oppdrag er å fremme et sunt, åpent Internett.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Søk og surf rett i appen";

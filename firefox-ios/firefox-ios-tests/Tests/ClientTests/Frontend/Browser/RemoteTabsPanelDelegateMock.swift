@@ -4,7 +4,7 @@
 
 @testable import Client
 
-final class RemoteTabsPanelDelegateMock: RemoteTabsPanelDelegate {
+final class MockRemoteTabsPanelDelegate: RemoteTabsPanelDelegate, @unchecked Sendable {
     private(set) var presentFirefoxAccountSignInCallCount = 0
     private(set) var presentFxAccountSettingsCallCount = 0
 

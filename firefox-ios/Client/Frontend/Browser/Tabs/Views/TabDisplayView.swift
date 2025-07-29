@@ -6,6 +6,11 @@ import Common
 import Redux
 import UIKit
 
+protocol TabDisplayViewDragAndDropInteraction: AnyObject {
+    func dragAndDropStarted()
+    func dragAndDropEnded()
+}
+
 class TabDisplayView: UIView,
                       ThemeApplicable,
                       UICollectionViewDelegate,
@@ -26,6 +31,7 @@ class TabDisplayView: UIView,
     private let windowUUID: WindowUUID
     private let inactiveTabsTelemetry = InactiveTabsTelemetry()
     var theme: Theme?
+    weak var dragAndDropDelegate: TabDisplayViewDragAndDropInteraction?
 
     lazy var dataSource =
     TabDisplayDiffableDataSource(
@@ -126,10 +132,8 @@ class TabDisplayView: UIView,
         collectionView.keyboardDismissMode = .onDrag
         collectionView.dragInteractionEnabled = true
         collectionView.delegate = self
-        if !isTabTrayUIExperimentsEnabled {
-            collectionView.dragDelegate = self
-            collectionView.dropDelegate = self
-        }
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
         collectionView.collectionViewLayout = createLayout()
         collectionView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.collectionView
         return collectionView
@@ -461,5 +465,13 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         )
 
         store.dispatchLegacy(action)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+        dragAndDropDelegate?.dragAndDropStarted()
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+        dragAndDropDelegate?.dragAndDropEnded()
     }
 }

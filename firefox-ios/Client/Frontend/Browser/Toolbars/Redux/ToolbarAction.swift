@@ -6,11 +6,14 @@ import Common
 import Redux
 import ToolbarKit
 
-final class ToolbarAction: Action {
+struct ToolbarAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let toolbarPosition: SearchBarPosition?
     let toolbarLayout: ToolbarLayoutStyle?
     let isTranslucent: Bool?
     let numberOfTabs: Int?
+    let scrollAlpha: Float?
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
@@ -34,6 +37,7 @@ final class ToolbarAction: Action {
          toolbarLayout: ToolbarLayoutStyle? = nil,
          isTranslucent: Bool? = nil,
          numberOfTabs: Int? = nil,
+         scrollAlpha: Float? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
@@ -54,10 +58,13 @@ final class ToolbarAction: Action {
          shouldAnimate: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.toolbarPosition = toolbarPosition
         self.toolbarLayout = toolbarLayout
         self.isTranslucent = isTranslucent
         self.numberOfTabs = numberOfTabs
+        self.scrollAlpha = scrollAlpha
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
@@ -76,7 +83,6 @@ final class ToolbarAction: Action {
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
         self.shouldAnimate = shouldAnimate
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
@@ -84,6 +90,7 @@ enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
     case urlDidChange
+    case scrollAlphaDidChange
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged
@@ -109,7 +116,9 @@ enum ToolbarActionType: ActionType {
     case translucencyDidChange
 }
 
-class ToolbarMiddlewareAction: Action {
+struct ToolbarMiddlewareAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let buttonType: ToolbarActionConfiguration.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
@@ -121,11 +130,12 @@ class ToolbarMiddlewareAction: Action {
          scrollOffset: CGPoint? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
         self.scrollOffset = scrollOffset
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

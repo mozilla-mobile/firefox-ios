@@ -32,10 +32,13 @@ func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
 protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerNames() -> [String]?
+
+    @MainActor
     func userContentController(
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     )
+
     func prepareForDeinit()
 }
 
@@ -117,7 +120,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var readabilityResult: ReadabilityResult?
 
     var consecutiveCrashes: UInt = 0
-    let jsAlertThrottler = JSAlertThrottler()
+    let popupThrottler = PopupThrottler()
 
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
@@ -474,7 +477,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     // MARK: - Dependencies
     var profile: Profile
     private let fileManager: FileManagerProtocol
-    private let backgroundDispatchQueue: DispatchQueueInterface
     private var logger: Logger
     private let documentLogger: DocumentLogger
 
@@ -483,7 +485,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          tabCreatedTime: Date = Date(),
-         backgroundDispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background),
          fileManager: FileManagerProtocol = FileManager.default,
          logger: Logger = DefaultLogger.shared,
          documentLogger: DocumentLogger = AppContainer.shared.resolve()) {
@@ -497,7 +498,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.fileManager = fileManager
         self.logger = logger
         self.documentLogger = documentLogger
-        self.backgroundDispatchQueue = backgroundDispatchQueue
         super.init()
         self.isPrivate = isPrivate
 #if DEBUG
@@ -512,22 +512,26 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         )
     }
 
-    class func toRemoteTab(_ tab: Tab, inactive: Bool) -> RemoteTab? {
-        if tab.isPrivate {
+    func toRemoteTab() -> RemoteTab? {
+        guard !isPrivate else {
             return nil
         }
 
-        let icon = (tab.faviconURL ?? tab.pageMetadata?.faviconURL).flatMap { URL(string: $0) }
-        if let displayURL = tab.url?.displayURL, RemoteTab.shouldIncludeURL(displayURL) {
-            let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reversed())
+        let faviconURL = faviconURL ?? pageMetadata?.faviconURL
+        if let displayURL = url?.displayURL,
+           RemoteTab.shouldIncludeURL(displayURL) {
+            let filteredReversedHistory: [URL] = historyList
+                .filter(RemoteTab.shouldIncludeURL)
+                .reversed()
+
             return RemoteTab(
                 clientGUID: nil,
                 URL: displayURL,
-                title: tab.title ?? tab.displayTitle,
-                history: history,
-                lastUsed: tab.lastExecutedTime,
-                icon: icon,
-                inactive: inactive
+                title: title ?? displayTitle,
+                history: filteredReversedHistory,
+                lastUsed: lastExecutedTime,
+                icon: faviconURL?.asURL,
+                inactive: isInactive
             )
         }
 
@@ -578,24 +582,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             }
 
             configureEdgeSwipeGestureRecognizers()
-            self.webView?.addObserver(
-                self,
-                forKeyPath: KVOConstants.URL.rawValue,
-                options: .new,
-                context: nil
-            )
-            self.webView?.addObserver(
-                self,
-                forKeyPath: KVOConstants.title.rawValue,
-                options: .new,
-                context: nil
-            )
-            self.webView?.addObserver(
-                self,
-                forKeyPath: KVOConstants.hasOnlySecureContent.rawValue,
-                options: .new,
-                context: nil
-            )
+
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
                 nightMode: nightMode,
@@ -625,11 +612,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     deinit {
-        deleteDownloadedDocuments()
+        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
         webViewLoadingObserver?.invalidate()
-        webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
-        webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
-        webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
         webView?.navigationDelegate = nil
 
 #if DEBUG
@@ -663,10 +647,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         contentScriptManager.uninstall(tab: self)
         webView?.configuration.userContentController.removeAllUserScripts()
         webView?.configuration.userContentController.removeAllScriptMessageHandlers()
-
-        webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
-        webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
-        webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
 
         if let webView = webView {
             tabDelegate?.tab(self, willDeleteWebView: webView)
@@ -821,6 +801,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             guard let webView = self.webView,
                   let findInteraction = webView.findInteraction else { return }
             isFindInPageMode = findInteraction.isFindNavigatorVisible && isBottomSearchBar
+            // Restore the keyboard dismiss mode to its default behavior (.onDrag) after find-in-page mode ends,
+            // allowing normal keyboard dismissal patterns to resume for regular web browsing interactions.
+            webView.scrollView.keyboardDismissMode = .onDrag
         } else {
             isFindInPageMode = doesFindInPageBarExist && isBottomSearchBar
         }
@@ -863,25 +846,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func hasJavascriptAlertPrompt() -> Bool {
         return !alertQueue.isEmpty
-    }
-
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey: Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        guard let webView = object as? WKWebView,
-              webView == self.webView,
-              let path = keyPath else {
-            return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
-        }
-
-        if let title = self.webView?.title, !title.isEmpty,
-           path == KVOConstants.title.rawValue {
-            // `Tab.toRemoteTab` was added for FXIOS-8241
-            _ = Tab.toRemoteTab(self, inactive: false)
-        }
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
@@ -963,10 +927,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return false
     }
 
-    private func deleteDownloadedDocuments() {
-        let docsURL = temporaryDocumentsSession
+    private func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
         guard !docsURL.isEmpty else { return }
-        backgroundDispatchQueue.async { [fileManager] in
+        DispatchQueue.global(qos: .background).async { [fileManager] in
             docsURL.forEach { url in
                 try? fileManager.removeItem(at: url.key)
             }

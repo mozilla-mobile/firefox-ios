@@ -42,6 +42,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 0)
     }
 
+    @MainActor
     func testLaunchType_intro() {
         profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
         let subject = createSubject()
@@ -60,6 +61,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
+    @MainActor
     func testLaunchType_termsOfService() {
         FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
             TosFeature(status: true)
@@ -81,6 +83,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
+    @MainActor
     func testLaunchType_update() {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
@@ -101,6 +104,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
+    @MainActor
     func testLaunchType_survey() {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
@@ -172,7 +176,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         ]
 
         return OnboardingViewModel(cards: cards,
-                                   isDismissable: true)
+                                   isDismissible: true)
     }
 
     func createCard(index: Int) -> OnboardingCardInfoModel {

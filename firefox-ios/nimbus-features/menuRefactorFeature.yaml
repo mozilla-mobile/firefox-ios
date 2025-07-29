@@ -36,10 +36,11 @@ features:
           menu-hint: false
           menu-redesign: false
           menu-default-browser-banner: false
+          menu-redesign-hint: true
       - channel: developer
         value:
           enabled: true
           menu-hint: true
           menu-redesign: false
           menu-default-browser-banner: false
-          menu-redesign-hint: false
+          menu-redesign-hint: true

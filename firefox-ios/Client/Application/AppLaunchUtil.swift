@@ -9,10 +9,10 @@ import Account
 import Glean
 import MozillaAppServices
 
-final class AppLaunchUtil {
-    private var logger: Logger
+final class AppLaunchUtil: Sendable {
+    private let logger: Logger
 //    private var adjustHelper: AdjustHelper
-    private var profile: Profile
+    private let profile: Profile
     private let introScreenManager: IntroScreenManager
     private let termsOfServiceManager: TermsOfServiceManager
 
@@ -27,6 +27,7 @@ final class AppLaunchUtil {
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
     }
 
+    @MainActor
     func setUpPreLaunchDependencies() {
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
@@ -35,6 +36,11 @@ final class AppLaunchUtil {
         }
 
         DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
+        if #available(iOS 26, *) {
+            #if canImport(FoundationModels)
+                AppleIntelligenceUtil().processAvailabilityState()
+            #endif
+        }
 
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true
@@ -76,17 +82,15 @@ final class AppLaunchUtil {
         let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
         conversionValue.adNetworkAttributionUpdateConversionEvent()
 
-        // Used by share extension to determine if the bookmarks refactor feature flag is enabled
-        profile.prefs.setBool(LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksRefactor,
-                                                                                checking: .buildOnly),
-                              forKey: PrefsKeys.IsBookmarksRefactorEnabled)
-
         // Initialize app services ( including NSS ). Must be called before any other calls to rust components.
         MozillaAppServices.initialize()
 
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
+
+        // Should be done post nimbus initialization in case of experiment
+        migrateTopSitesRowNumbers()
 
         // We migrate history from browser db to places if it hasn't already
         DispatchQueue.global().async {
@@ -95,6 +99,7 @@ final class AppLaunchUtil {
 
         // Save toolbar position to user prefs
         SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+        let deviceName = UIDevice.current.name
 
         NotificationCenter.default.addObserver(
             forName: .FSReadingListAddReadingListItem,
@@ -106,7 +111,7 @@ final class AppLaunchUtil {
                 self.profile.readingList.createRecordWithURL(
                     url.absoluteString,
                     title: title,
-                    addedBy: UIDevice.current.name
+                    addedBy: deviceName
                 )
             }
         }
@@ -181,6 +186,20 @@ final class AppLaunchUtil {
         UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.Session.Last)
     }
 
+    /// Used to migrate user preferences for TopSites row numbers if the new design is
+    /// enabled from greater than two to 2. See FXIOS-12704
+    @MainActor
+    private func migrateTopSitesRowNumbers() {
+        if LegacyFeatureFlagsManager.shared
+            .isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) {
+            let defaultNumber = TopSitesRowCountSettingsController.defaultNumberOfRows
+            let userNumberOfTopSiteRows = profile.prefs.intForKey(
+                PrefsKeys.NumberOfTopSiteRows
+            ) ?? defaultNumber
+            let migratedNumber = userNumberOfTopSiteRows > 2 ? defaultNumber : userNumberOfTopSiteRows
+            profile.prefs.setInt(migratedNumber, forKey: PrefsKeys.NumberOfTopSiteRows)
+        }
+    }
     // MARK: - Application Services History Migration
 
     private func runAppServicesHistoryMigration() {

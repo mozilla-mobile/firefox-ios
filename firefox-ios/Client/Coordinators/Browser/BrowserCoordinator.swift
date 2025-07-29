@@ -9,6 +9,7 @@ import Shared
 import Storage
 import Redux
 import PDFKit
+import SummarizeKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -29,7 +30,6 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
-                          BookmarksRefactorFeatureFlagProvider,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -54,7 +54,7 @@ class BrowserCoordinator: BaseCoordinator,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
-    override var isDismissable: Bool { false }
+    override var isDismissible: Bool { false }
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -81,8 +81,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     func start(with launchType: LaunchType?) {
         router.push(browserViewController, animated: false)
-
-        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
+        let isIphone = UIDevice.current.userInterfaceIdiom == .phone
+        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         }
     }
@@ -162,10 +162,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
-        if tabManager.selectedTab?.isPrivate == true {
-            return privateHomepageViewController
+        let newTabSettings = browserViewController.newTabSettings
+        switch newTabSettings {
+        case .blankPage, .homePage:
+            return nil
+        case .topSites:
+            if tabManager.selectedTab?.isPrivate == true {
+                return privateHomepageViewController
+            }
+            return homepageViewController ?? legacyHomepageViewController
         }
-        return homepageViewController ?? legacyHomepageViewController
     }
 
     func setHomepageVisibility(isVisible: Bool) {
@@ -221,8 +227,7 @@ class BrowserCoordinator: BaseCoordinator,
             profile: profile,
             windowUUID: windowUUID,
             libraryCoordinator: self,
-            libraryNavigationHandler: nil,
-            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
+            libraryNavigationHandler: nil
         )
         add(child: bookmarksCoordinator)
         bookmarksCoordinator.start(parentFolder: parentFolder, bookmark: bookmark)
@@ -577,8 +582,18 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - MainMenuCoordinatorDelegate
 
     func showMainMenu() {
-        guard let menuNavViewController = makeMenuNavViewController() else { return }
-        present(menuNavViewController)
+        if featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly) {
+            let mainMenuCoordinator = MainMenuCoordinator(router: router,
+                                                          windowUUID: tabManager.windowUUID,
+                                                          profile: profile)
+            mainMenuCoordinator.parentCoordinator = self
+            mainMenuCoordinator.navigationHandler = self
+            add(child: mainMenuCoordinator)
+            mainMenuCoordinator.startWithNavController()
+        } else {
+            guard let menuNavViewController = makeMenuNavViewController() else { return }
+            present(menuNavViewController)
+        }
     }
 
     func openURLInNewTab(_ url: URL?) {
@@ -654,14 +669,19 @@ class BrowserCoordinator: BaseCoordinator,
                           let outputURL = pdf.createOutputURL(withFileName: selectedTab.webView?.title ?? "") else {
                         return
                     }
-                    startShareSheetCoordinator(
-                        shareType: .file(url: outputURL),
-                        shareMessage: nil,
-                        sourceView: self.browserViewController.addressToolbarContainer,
-                        sourceRect: nil,
-                        toastContainer: self.browserViewController.contentContainer,
-                        popoverArrowDirection: .any
-                    )
+                    do {
+                        try data.write(to: outputURL)
+                        startShareSheetCoordinator(
+                            shareType: .file(url: outputURL),
+                            shareMessage: nil,
+                            sourceView: self.browserViewController.addressToolbarContainer,
+                            sourceRect: nil,
+                            toastContainer: self.browserViewController.contentContainer,
+                            popoverArrowDirection: .any
+                        )
+                    } catch {
+                        self.logger.log("PDF creation failed.", level: .warning, category: .webview)
+                    }
                 case .failure(let error):
                     // TODO: FXIOS-11542 [iOS Menu Redesign] - Handle saveAsPDF Menu option, error case
                     self.logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
@@ -1050,6 +1070,33 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
+    func showSummarizePanel() {
+        let contentContainer = browserViewController.contentContainer
+        let browserFrame = browserViewController.view.frame
+        var browserScreenshot = browserViewController.view.snapshot
+        if let croppedImage = browserScreenshot.cgImage?.cropping(
+            to: CGRect(
+                x: contentContainer.frame.origin.x * browserScreenshot.scale,
+                y: contentContainer.frame.origin.y * browserScreenshot.scale,
+                width: contentContainer.frame.width * browserScreenshot.scale,
+                height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * browserScreenshot.scale
+            )) {
+            browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
+        }
+
+        guard !childCoordinators.contains(where: { $0 is SummarizeController }) else { return }
+        let coordinator = SummarizeCoordinator(
+            browserSnapshot: browserScreenshot,
+            browserSnapshotTopOffset: contentContainer.frame.origin.y,
+            browserContentHiding: browserViewController,
+            parentCoordinatorDelegate: self,
+            windowUUID: windowUUID,
+            router: router
+        )
+        add(child: coordinator)
+        coordinator.start()
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {
@@ -1202,7 +1249,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Private helpers
 
-    private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
+    nonisolated private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
               let temporaryDocument = tab.temporaryDocument,

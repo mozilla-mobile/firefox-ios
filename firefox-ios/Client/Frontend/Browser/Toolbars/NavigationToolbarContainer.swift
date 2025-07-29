@@ -8,6 +8,7 @@ import Redux
 import UIKit
 
 protocol NavigationToolbarContainerDelegate: AnyObject {
+    @MainActor
     func configureContextualHint(for: UIButton, with contextualHintType: String)
 }
 

@@ -8,15 +8,25 @@ import ToolbarKit
 import UIKit
 
 protocol AddressToolbarContainerDelegate: AnyObject {
+    @MainActor
     func searchSuggestions(searchTerm: String)
+    @MainActor
     func openBrowser(searchTerm: String)
+    @MainActor
     func openSuggestions(searchTerm: String)
+    @MainActor
     func configureContextualHint(for button: UIButton, with contextualHintType: String)
+    @MainActor
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool)
+    @MainActor
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
+    @MainActor
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
+    @MainActor
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
+    @MainActor
     func addressToolbarDidBeginDragInteraction()
+    @MainActor
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
 }
 
@@ -42,6 +52,7 @@ final class AddressToolbarContainer: UIView,
     typealias SubscriberStateType = ToolbarState
 
     private let isSwipingTabsEnabled: Bool
+    private let isMinimalAddressBarEnabled: Bool
     private var windowUUID: WindowUUID?
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
@@ -116,8 +127,9 @@ final class AddressToolbarContainer: UIView,
     /// and the Cancel button is visible (allowing the user to leave overlay mode).
     var inOverlayMode = false
 
-    init(isSwipingTabsEnabled: Bool) {
+    init(isSwipingTabsEnabled: Bool, isMinimalAddressBarEnabled: Bool) {
         self.isSwipingTabsEnabled = isSwipingTabsEnabled
+        self.isMinimalAddressBarEnabled = isMinimalAddressBarEnabled
         super.init(frame: .zero)
         setupLayout()
     }
@@ -221,12 +233,11 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - AlphaDimmable
     func updateAlphaForSubviews(_ alpha: CGFloat) {
-        // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
-        regularToolbar.alpha = alpha
-        if isSwipingTabsEnabled {
-            leftSkeletonAddressBar.alpha = alpha
-            rightSkeletonAddressBar.alpha = alpha
+        if !isMinimalAddressBarEnabled {
+            // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
+            regularToolbar.alpha = alpha
         }
+        updateSkeletonAddressBarsAlpha(to: alpha)
     }
 
     private func updateModel(toolbarState: ToolbarState) {
@@ -239,6 +250,7 @@ final class AddressToolbarContainer: UIView,
 
         guard self.model != newModel else { return }
 
+        updateSkeletonAddressBarsAlpha(to: CGFloat(newModel.scrollAlpha))
         // in case we are in edit mode but overlay is not active yet we have to activate it
         // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
         if newModel.isEditing, !inOverlayMode {
@@ -298,6 +310,12 @@ final class AddressToolbarContainer: UIView,
             isUnifiedSearchEnabled: isUnifiedSearchEnabled,
             animated: model.shouldAnimate
         )
+    }
+
+    private func updateSkeletonAddressBarsAlpha(to alpha: CGFloat) {
+        guard isSwipingTabsEnabled else { return }
+        leftSkeletonAddressBar.alpha = alpha
+        rightSkeletonAddressBar.alpha = alpha
     }
 
     private func setupLayout() {

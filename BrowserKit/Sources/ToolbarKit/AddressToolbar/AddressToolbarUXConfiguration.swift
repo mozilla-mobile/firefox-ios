@@ -12,8 +12,12 @@ public struct AddressToolbarUXConfiguration {
     let locationTextFieldTrailingPadding: CGFloat
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
+    /// Alpha value that controls element visibility during scroll-based address bar transitions.
+    /// Changes between 0 (hidden) and 1 (visible) based on scroll direction.
+    let scrollAlpha: CGFloat
 
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
+                                  scrollAlpha: CGFloat = 1.0,
                                   shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 12.0,
@@ -21,11 +25,13 @@ public struct AddressToolbarUXConfiguration {
             isLocationTextCentered: true,
             locationTextFieldTrailingPadding: 0,
             shouldBlur: shouldBlur,
-            backgroundAlpha: backgroundAlpha
+            backgroundAlpha: backgroundAlpha,
+            scrollAlpha: scrollAlpha
         )
     }
 
     public static func `default`(backgroundAlpha: CGFloat = 1.0,
+                                 scrollAlpha: CGFloat = 1.0,
                                  shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 8.0,
@@ -33,21 +39,24 @@ public struct AddressToolbarUXConfiguration {
             isLocationTextCentered: false,
             locationTextFieldTrailingPadding: 8.0,
             shouldBlur: shouldBlur,
-            backgroundAlpha: backgroundAlpha
+            backgroundAlpha: backgroundAlpha,
+            scrollAlpha: scrollAlpha
         )
     }
 
-    func addressToolbarBackgroundColor(theme: any Theme) -> UIColor {
-        var backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceLow : theme.colors.layer1
+    func addressToolbarBackgroundColor(theme: some Theme) -> UIColor {
+        let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceLow : theme.colors.layer1
         if shouldBlur {
-            backgroundColor = backgroundColor.withAlphaComponent(backgroundAlpha)
+            return backgroundColor.withAlphaComponent(backgroundAlpha)
         }
 
         return backgroundColor
     }
 
-    func locationContainerBackgroundColor(theme: any Theme) -> UIColor {
-        return isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+    func locationContainerBackgroundColor(theme: some Theme) -> UIColor {
+        guard !scrollAlpha.isZero else { return .clear }
+        let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+        return backgroundColor
     }
 
     public func locationViewVerticalPaddings(addressBarPosition: AddressToolbarPosition) -> (top: CGFloat, bottom: CGFloat) {

@@ -10,6 +10,7 @@ import ComponentLibrary
 public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     private struct UX {
         static let closeButtonSize: CGFloat = 30
+        static let closeButtonUpdatedSize: CGFloat = 40
         static let contentLabelsSpacing: CGFloat = 1
         static let horizontalContentMargin: CGFloat = 16
         static let favIconSize: CGFloat = 40
@@ -22,7 +23,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         static let protectionIconMargin: CGFloat = 2
         static let siteProtectionsMoreSettingsIcon: CGFloat = 20
         static let siteProtectionsContentSpacing: CGFloat = 4
-        static let closeButtonBackgroundAlpha: CGFloat = 0.8
+        static let backgroundAlpha: CGFloat = 0.8
     }
 
     public var closeButtonCallback: (() -> Void)?
@@ -67,8 +68,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
                                            right: UX.siteProtectionsContentHorizontalPadding)
         stack.distribution = .fill
         stack.axis = .horizontal
-        stack.layer.cornerRadius = UX.siteProtectionsContentCornerRadius
-        stack.layer.borderWidth = UX.siteProtectionsContentBorderWidth
         stack.clipsToBounds = true
         stack.spacing = UX.siteProtectionsContentSpacing
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(siteProtectionsTapped))
@@ -90,7 +89,10 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
     private var siteProtectionsMoreSettingsIcon: UIImageView = .build { imageView in
         let imageName = StandardImageIdentifiers.Large.chevronRight
-        imageView.image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+        let image = UIImage(named: imageName)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection() ?? UIImage()
+        imageView.image = image
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -101,6 +103,16 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        if #available(iOS 26.0, *) {
+            siteProtectionsContent.layer.cornerRadius = siteProtectionsContent.frame.height / 2
+        } else {
+            siteProtectionsContent.layer.cornerRadius = UX.siteProtectionsContentCornerRadius
+            siteProtectionsContent.layer.borderWidth = UX.siteProtectionsContentBorderWidth
+        }
     }
 
     private func setupViews() {
@@ -124,29 +136,49 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
             closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UX.horizontalContentMargin),
             closeButton.topAnchor.constraint(equalTo: self.topAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
 
             siteProtectionsIcon.widthAnchor.constraint(equalToConstant: UX.siteProtectionsIcon),
             siteProtectionsMoreSettingsIcon.widthAnchor.constraint(equalToConstant: UX.siteProtectionsMoreSettingsIcon),
 
             siteProtectionsContent.topAnchor.constraint(equalTo: contentLabels.bottomAnchor,
                                                         constant: UX.siteProtectionsContentTopMargin),
-            siteProtectionsContent.leadingAnchor.constraint(
-                equalTo: favicon.trailingAnchor,
-                constant: UX.horizontalContentMargin - UX.siteProtectionsContentHorizontalPadding - UX.protectionIconMargin
-            ),
             siteProtectionsContent.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
             siteProtectionsContent.bottomAnchor.constraint(equalTo: self.bottomAnchor),
         ])
-        closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
+
+        if #available(iOS 26.0, *) {
+            siteProtectionsContent.leadingAnchor.constraint(equalTo: contentLabels.leadingAnchor).isActive = true
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonUpdatedSize).isActive = true
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonUpdatedSize).isActive = true
+            closeButton.layer.cornerRadius = 0.5 * UX.closeButtonUpdatedSize
+        } else {
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize).isActive = true
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize).isActive = true
+            siteProtectionsContent.leadingAnchor.constraint(
+                equalTo: favicon.trailingAnchor,
+                constant: UX.horizontalContentMargin - UX.siteProtectionsContentHorizontalPadding - UX.protectionIconMargin
+            ).isActive = true
+            closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
+        }
     }
 
-    public func setupDetails(title: String?, subtitle: String?, image: String?, state: String, stateImage: String) {
+    public func setupDetails(
+        title: String?,
+        subtitle: String?,
+        image: String?,
+        state: String,
+        stateImage: String,
+        shouldUseRenderMode: Bool
+    ) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
         siteProtectionsLabel.text = state
-        siteProtectionsIcon.image = UIImage(named: stateImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+        let siteProtectionsImage: UIImage = if shouldUseRenderMode {
+            UIImage(named: stateImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+        } else {
+            UIImage(named: stateImage) ?? UIImage()
+        }
+        siteProtectionsIcon.image = siteProtectionsImage
 
         let image = FaviconImageViewModel(siteURLString: image,
                                           faviconCornerRadius: UX.favIconSize / 2)
@@ -175,9 +207,10 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
         closeButton.tintColor = theme.colors.iconSecondary
-        closeButton.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.closeButtonBackgroundAlpha)
+        closeButton.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
         siteProtectionsLabel.textColor = theme.colors.textSecondary
         siteProtectionsContent.layer.borderColor = theme.colors.actionSecondaryHover.cgColor
+        siteProtectionsContent.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
         siteProtectionsIcon.tintColor = theme.colors.iconSecondary
         siteProtectionsMoreSettingsIcon.tintColor = theme.colors.iconSecondary
     }

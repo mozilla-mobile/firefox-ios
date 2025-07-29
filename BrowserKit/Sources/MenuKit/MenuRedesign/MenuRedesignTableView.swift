@@ -18,7 +18,7 @@ final class MenuRedesignTableView: UIView,
         static let distanceBetweenSections: CGFloat = 16
     }
 
-    private var tableView: UITableView
+    private(set) var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
     private var isBannerVisible = false

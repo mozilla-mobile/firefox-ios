@@ -66,6 +66,10 @@ class MockBrowserViewController: BrowserViewController {
     var contextMenuConfigurationCalled = 0
     var requestMediaCapturePermissionCalled = 0
     var contextMenuDidEndForElementCalled = 0
+    override var newTabSettings: NewTabPage {
+        return overrideNewTabSettings
+    }
+    var overrideNewTabSettings: NewTabPage = .topSites
 
     override var presentedViewController: UIViewController? {
         return viewControllerToPresent
@@ -169,74 +173,6 @@ class MockBrowserViewController: BrowserViewController {
 
     override func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
         completion?()
-    }
-
-    // MARK: - WKUIDelegate
-
-    @MainActor
-    override func webView(
-        _ webView: WKWebView,
-        createWebViewWith configuration: WKWebViewConfiguration,
-        for navigationAction: WKNavigationAction,
-        windowFeatures: WKWindowFeatures
-    ) -> WKWebView? {
-        createWebViewCalled += 1
-        return nil
-    }
-
-    override func webView(
-        _ webView: WKWebView,
-        runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor () -> Void
-    ) {
-        runJavaScriptAlertPanelCalled += 1
-    }
-
-    override func webView(
-        _ webView: WKWebView,
-        runJavaScriptConfirmPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (Bool) -> Void
-    ) {
-        runJavaScriptConfirmPanelCalled += 1
-    }
-
-    override func webView(
-        _ webView: WKWebView,
-        runJavaScriptTextInputPanelWithPrompt prompt: String,
-        defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (String?) -> Void
-    ) {
-        runJavaScriptTextInputPanelCalled += 1
-    }
-
-    override func webViewDidClose(_ webView: WKWebView) {
-        webViewDidCloseCalled += 1
-    }
-
-    override func webView(
-        _ webView: WKWebView,
-        contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
-        completionHandler: @escaping @MainActor (UIContextMenuConfiguration?) -> Void
-    ) {
-        contextMenuConfigurationCalled += 1
-    }
-
-    override func webView(
-        _ webView: WKWebView,
-        requestMediaCapturePermissionFor origin: WKSecurityOrigin,
-        initiatedByFrame frame: WKFrameInfo,
-        type: WKMediaCaptureType,
-        decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
-    ) {
-        requestMediaCapturePermissionCalled += 1
-    }
-
-    override func webView(_ webView: WKWebView,
-                          contextMenuDidEndForElement elementInfo: WKContextMenuElementInfo) {
-        contextMenuDidEndForElementCalled += 1
     }
 }
 

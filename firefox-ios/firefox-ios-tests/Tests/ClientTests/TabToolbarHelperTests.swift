@@ -9,6 +9,7 @@ import XCTest
 import Common
 import Shared
 
+@MainActor
 class TabToolbarHelperTests: XCTestCase {
     let backButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.back)?
         .imageFlippedForRightToLeftLayoutDirection()

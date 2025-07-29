@@ -9,6 +9,7 @@ import SiteImageView
 import enum MozillaAppServices.VisitType
 
 protocol CollapsibleTableViewSection: AnyObject {
+    @MainActor
     func hideTableViewSection(_ section: Int)
 }
 
@@ -471,7 +472,21 @@ class RemoteTabsTableViewController: UITableViewController,
 
         self.tabCommandsFlushTimer = Timer.scheduledTimer(withTimeInterval: self.tabCommandsFlushDelay,
                                                           repeats: false) { _ in
-            self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: deviceId)
+            guard Thread.isMainThread else {
+                self.logger.log(
+                    "RemoteTabsViewController Timer callback is not being called from the main thread!",
+                    level: .fatal,
+                    category: .tabs
+                )
+                // Fallback in case main thread check fails
+                Task { @MainActor in
+                    self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: deviceId)
+                }
+                return
+            }
+            MainActor.assumeIsolated {
+                self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: deviceId)
+            }
         }
     }
 }

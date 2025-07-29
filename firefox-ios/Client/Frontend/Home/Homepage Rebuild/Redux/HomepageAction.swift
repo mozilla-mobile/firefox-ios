@@ -13,28 +13,37 @@ struct HomepageTelemetryExtras {
     let topSitesTelemetryConfig: TopSitesTelemetryConfig?
 }
 
-final class HomepageAction: Action {
+struct HomepageAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let isSearchBarEnabled: Bool?
+    let shouldShowSpacer: Bool?
     let showiPadSetup: Bool?
     let numberOfTopSitesPerRow: Int?
     let telemetryExtras: HomepageTelemetryExtras?
     let isZeroSearch: Bool?
+    let availableContentHeight: CGFloat?
 
     init(
         isSearchBarEnabled: Bool? = nil,
+        shouldShowSpacer: Bool? = nil,
         numberOfTopSitesPerRow: Int? = nil,
         showiPadSetup: Bool? = nil,
         telemetryExtras: HomepageTelemetryExtras? = nil,
         isZeroSearch: Bool? = nil,
+        availableContentHeight: CGFloat? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.isSearchBarEnabled = isSearchBarEnabled
+        self.shouldShowSpacer = shouldShowSpacer
         self.numberOfTopSitesPerRow = numberOfTopSitesPerRow
         self.showiPadSetup = showiPadSetup
         self.telemetryExtras = telemetryExtras
         self.isZeroSearch = isZeroSearch
-        super.init(windowUUID: windowUUID, actionType: actionType)
+        self.availableContentHeight = availableContentHeight
     }
 }
 
@@ -47,6 +56,7 @@ enum HomepageActionType: ActionType {
     case didSelectItem
     case embeddedHomepage
     case sectionSeen
+    case availableContentHeightDidChange
 }
 
 enum HomepageMiddlewareActionType: ActionType {
@@ -56,4 +66,5 @@ enum HomepageMiddlewareActionType: ActionType {
     case bookmarksUpdated
     case enteredForeground
     case configuredSearchBar
+    case configuredSpacer
 }

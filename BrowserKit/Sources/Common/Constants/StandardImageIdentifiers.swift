@@ -134,6 +134,7 @@ public struct StandardImageIdentifiers {
         public static let shipping = "shippingLarge"
         public static let socialMedia = "socialMediaLarge"
         public static let subtract = "subtractLarge"
+        public static let summarizer = "summarizerLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
         public static let tab = "tabLarge"

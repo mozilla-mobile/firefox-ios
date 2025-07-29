@@ -363,7 +363,7 @@ private extension ImageHandlerTests {
 }
 
 // MARK: - MockHeroImageFetcher
-private class MockHeroImageFetcher: HeroImageFetcher {
+private final class MockHeroImageFetcher: HeroImageFetcher, @unchecked Sendable {
     var image: UIImage?
     var fetchHeroImageSucceedCalled = 0
     var fetchHeroImageFailedCalled = 0
@@ -382,7 +382,7 @@ private class MockHeroImageFetcher: HeroImageFetcher {
 }
 
 // MARK: - MockSiteImageCache
-private class MockSiteImageCache: SiteImageCache {
+private final class MockSiteImageCache: SiteImageCache, @unchecked Sendable {
     var image: UIImage?
     var getImageFromCacheSucceedCalled = 0
     var getImageFromCacheFailedCalled = 0
@@ -413,7 +413,7 @@ private class MockSiteImageCache: SiteImageCache {
 }
 
 // MARK: - MockFaviconFetcher
-private class MockFaviconFetcher: FaviconFetcher {
+private final class MockFaviconFetcher: FaviconFetcher, @unchecked Sendable {
     var image: UIImage?
     var fetchImageSucceedCalled = 0
     var fetchImageFailedCalled = 0
@@ -430,7 +430,7 @@ private class MockFaviconFetcher: FaviconFetcher {
 }
 
 // MARK: - MockLetterImageGenerator
-private class MockLetterImageGenerator: LetterImageGenerator {
+private class MockLetterImageGenerator: LetterImageGenerator, @unchecked Sendable {
     var image = UIImage()
     var generateLetterImageCalled = 0
     var capturedSiteString: String?
@@ -439,5 +439,15 @@ private class MockLetterImageGenerator: LetterImageGenerator {
         generateLetterImageCalled += 1
         capturedSiteString = siteString
         return image
+    }
+
+    func generateImage(fromLetter letter: String, color: UIColor) -> UIImage {
+        // Unneeded
+        return UIImage()
+    }
+
+    func generateLetter(fromSiteString siteString: String) throws -> String {
+        // Unneeded
+        return ""
     }
 }

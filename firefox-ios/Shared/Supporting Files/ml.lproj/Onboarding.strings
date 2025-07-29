@@ -32,13 +32,13 @@
 "Onboarding.Customization.Theme.Continue.Action.v123" = "കരുതിവച്ചുിട്ടു് തുടരുക";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
-"Onboarding.Customization.Theme.Dark.Action.v123" = "ഇരുണ്ടത്";
+"Onboarding.Customization.Theme.Dark.Action.v123" = "ഇരുളിമ";
 
 /* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Description.v123" = "മികച്ച വെളിച്ചത്തിൽ വെബ് കാണുക.";
 
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
-"Onboarding.Customization.Theme.Light.Action.v123" = "വെളിച്ച അലങ്കാരം";
+"Onboarding.Customization.Theme.Light.Action.v123" = "തെളിച്ചം";
 
 /* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Skip.Action.v123" = "ഒഴിവാക്കുക";
@@ -67,11 +67,17 @@
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Customization.Toolbar.Top.Action.v123" = "മേൽഭാഗം";
 
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
+"Onboarding.IntroDescriptionPart1.v114" = "ഇൻഡി. ലാഭേച്ഛയില്ലാത്തത്. നല്ലതിനു്.";
+
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
 "Onboarding.IntroDescriptionPart2.v114" = "എല്ലാവൎക്കു് വേണ്ടിയൊരു മെച്ചപ്പെട്ട ഗോളാന്തരവല എത്തിപ്പിക്കാനുള്ള ചുമതല നമ്മൾ ഏറ്റെടുക്കുന്നു.";
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "ഒഴിവാക്കുക";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "തുടരുക";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "കീഴ്ഭാഗം";

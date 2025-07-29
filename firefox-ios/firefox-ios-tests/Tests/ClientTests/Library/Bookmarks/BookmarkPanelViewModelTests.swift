@@ -59,20 +59,6 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
         profile.reopen()
-        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        let expectation = expectation(description: "Subject reloaded")
-        subject.reloadData {
-            XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Contains the local desktop folder")
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1)
-    }
-
-    func testShouldReload_whenMobileEmptyBookmarksWithBookmarksRefactor() throws {
-        profile.reopen()
-        featureFlags.set(feature: .bookmarksRefactor, to: true, isDebug: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -81,17 +67,6 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
-    }
-
-    func testShouldReload_whenDesktopBookmarksExist() throws {
-        profile.reopen()
-        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-
-        createDesktopBookmark(subject: subject) {
-            XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
-        }
     }
 
     func testShouldReload_whenLocalDesktopFolder() {
@@ -121,7 +96,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         wait(for: [expectation], timeout: 1)
     }
 
-    func testReloadData_createsDesktopBookmarksFolder_whenBookmarksRefactor() {
+    func testReloadData_createsDesktopBookmarksFolder() {
         let bookmarksHandler = BookmarksHandlerMock()
         bookmarksHandler.bookmarksInTreeValue = 1
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: bookmarksHandler)
@@ -134,7 +109,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         wait(for: [expectation], timeout: 1)
     }
 
-    func testReloadData_doesntCreateDesktopBookmarksFolder_whenBookmarksRefactor() {
+    func testReloadData_doesntCreateDesktopBookmarksFolder() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -180,16 +155,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(index, 0)
     }
 
-    func testMoveRowAtGetNewIndex_MobileGuid_atFive() {
+    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_zeroIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: false, isDebug: true)
-        let index = subject.getNewIndex(from: 5)
-        XCTAssertEqual(index, 4)
-    }
-
-    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_zeroIndex_bookmarksRefactor() {
-        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
 
         createDesktopBookmark(subject: subject) {
             let index = subject.getNewIndex(from: 0)
@@ -197,9 +164,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_minusIndex_bookmarksRefactor() {
+    func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_minusIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
 
         createDesktopBookmark(subject: subject) {
             let index = subject.getNewIndex(from: -1)
@@ -207,17 +173,15 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_zeroIndex_bookmarksRefactor() {
+    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_zeroIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
 
         let index = subject.getNewIndex(from: 0)
         XCTAssertEqual(index, 0)
     }
 
-    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_minusIndex_bookmarksRefactor() {
+    func testMoveRowAtGetNewIndex_MobileGuid_hidingDesktopFolder_minusIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-        featureFlags.set(feature: .bookmarksRefactor, to: true)
 
         let index = subject.getNewIndex(from: -1)
         XCTAssertEqual(index, 0)
@@ -328,16 +292,29 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 }
 
 // MARK: - Mocks
-private final class MockBookmarkNode: FxBookmarkNode {
-    var type: BookmarkNodeType = .bookmark
-    var guid = "12345"
-    var parentGUID: String?
-    var position: UInt32 = 0
-    var isRoot = false
-    var title: String
+// TODO: FXIOS-12903 This is unchecked sendable because BookmarkNodeType in rust components
+private final class MockBookmarkNode: @unchecked Sendable, FxBookmarkNode {
+    let type: BookmarkNodeType
+    let guid: String
+    let parentGUID: String?
+    let position: UInt32
+    let isRoot: Bool
+    let title: String
 
-    init(title: String) {
+    init(
+        title: String,
+        type: BookmarkNodeType = .bookmark,
+        guid: String = "12345",
+        parentGUID: String? = nil,
+        position: UInt32 = 0,
+        isRoot: Bool = false
+    ) {
         self.title = title
+        self.type = type
+        self.guid = guid
+        self.parentGUID = parentGUID
+        self.position = position
+        self.isRoot = isRoot
     }
 }
 

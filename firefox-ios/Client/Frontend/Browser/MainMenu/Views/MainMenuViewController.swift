@@ -63,6 +63,10 @@ class MainMenuViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
     }
 
+    private var bannerShown: Bool {
+        profile.prefs.boolForKey(PrefsKeys.defaultBrowserBannerShown) ?? false
+    }
+
     private var hasBeenExpanded = false
     private var currentCustomMenuHeight = 0.0
     private var isBrowserDefault = false
@@ -160,7 +164,7 @@ class MainMenuViewController: UIViewController,
                 let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
                 if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
                     self?.currentCustomMenuHeight = height
-                    if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+                    if #available(iOS 16.0, *) {
                         let customDetent = UISheetPresentationController.Detent.custom { context in
                             return height
                         }
@@ -177,6 +181,10 @@ class MainMenuViewController: UIViewController,
 
             menuRedesignContent.bannerButtonCallback = { [weak self] in
                 self?.dispatchDefaultBrowserAction()
+            }
+
+            menuRedesignContent.closeBannerButtonCallback = { [weak self] in
+                self?.profile.prefs.setBool(true, forKey: PrefsKeys.defaultBrowserBannerShown)
             }
 
             menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
@@ -280,7 +288,9 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupRedesignView() {
-        view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+        if #unavailable(iOS 26.0) {
+            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+        }
         view.addSubview(menuRedesignContent)
 
         NSLayoutConstraint.activate([
@@ -294,7 +304,8 @@ class MainMenuViewController: UIViewController,
                                          subtitle: .MainMenu.HeaderBanner.Subtitle,
                                          image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
                                          isBannerFlagEnabled: isMenuDefaultBrowserBanner,
-                                         isBrowserDefault: isBrowserDefault)
+                                         isBrowserDefault: isBrowserDefault,
+                                         bannerShown: bannerShown)
     }
 
     private func setupMenuOrientation() {
@@ -423,6 +434,11 @@ class MainMenuViewController: UIViewController,
         changeDetentIfNecessary()
         removeHintViewIfNecessary()
         reloadTableView(with: menuState.menuElements)
+
+        if menuState.moreCellTapped {
+            let expandedHint = String.MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint
+            menuRedesignContent.announceAccessibility(expandedHint: expandedHint)
+        }
     }
 
     private func dispatchCloseMenuAction() {
@@ -472,7 +488,9 @@ class MainMenuViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         if isMenuRedesign {
-            view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
+            if #unavailable(iOS 26.0) {
+                view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
+            }
             menuRedesignContent.applyTheme(theme: theme)
         } else {
             view.backgroundColor = theme.colors.layer3
@@ -493,12 +511,14 @@ class MainMenuViewController: UIViewController,
     private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
         var state = String.MainMenu.SiteProtection.ProtectionsOn
         var stateImage = StandardImageIdentifiers.Small.shieldCheckmarkFill
+        var shouldUseRenderMode = false
 
         switch siteProtectionsData.state {
         case .notSecure:
             state = String.MainMenu.SiteProtection.ConnectionNotSecure
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-        case .on: break
+        case .on:
+            shouldUseRenderMode = true
         case .off:
             state = String.MainMenu.SiteProtection.ProtectionsOff
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
@@ -509,7 +529,8 @@ class MainMenuViewController: UIViewController,
             subtitle: siteProtectionsData.subtitle,
             image: siteProtectionsData.image,
             state: state,
-            stateImage: stateImage)
+            stateImage: stateImage,
+            shouldUseRenderMode: shouldUseRenderMode)
     }
 
     // MARK: - A11y
@@ -595,12 +616,17 @@ class MainMenuViewController: UIViewController,
 
         // Don't display CFR for fresh installs for users that never saw before the photon main menu
         if InstallType.get() == .fresh {
-            if let photonMainMenuShown = profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown),
-               photonMainMenuShown {
-                return viewProvider.shouldPresentContextualHint()
+            if isMenuRedesign {
+                viewProvider.markContextualHintPresented()
+                return false
+            } else {
+                if let photonMainMenuShown = profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown),
+                   photonMainMenuShown {
+                    return viewProvider.shouldPresentContextualHint()
+                }
+                viewProvider.markContextualHintPresented()
+                return false
             }
-            viewProvider.markContextualHintPresented()
-            return false
         }
 
         if isMenuRedesign, isHomepage {

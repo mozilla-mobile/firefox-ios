@@ -1048,6 +1048,11 @@ extension String {
         public struct RecentlySaved { }
 
         public struct Shortcuts {
+            public static let SectionTitle = MZLocalizedString(
+                key: "FirefoxHomepage.Shortcuts.SectionTitle.v142",
+                tableName: "FirefoxHomepage",
+                value: "Shortcuts",
+                comment: "This is the section title for the Shortcuts section on Firefox Homepage.")
             public static let Sponsored = MZLocalizedString(
                 key: "FirefoxHomepage.Shortcuts.Sponsored.v100",
                 tableName: nil,
@@ -1060,6 +1065,14 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+        }
+
+        public struct SearchBar {
+            public static let PlaceholderTitle = MZLocalizedString(
+                key: "FirefoxHomepage.SearchBar.PlaceholderTitle.v142",
+                tableName: "FirefoxHomepage",
+                value: "Search or enter address",
+                comment: "This is the placeholder text that is at the center of the search bar on the Firefox Homepage.")
         }
 
         public struct YourLibrary { }
@@ -2031,6 +2044,36 @@ extension String {
             tableName: "SearchHeaderTitle",
             value: "Google Search",
             comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This string will be used as a header for Google search results listed as suggestions.")
+    }
+}
+
+extension String {
+    public struct Summarizer {
+        public static let LoadingLabel = MZLocalizedString(
+            key: "Summarizer.Loading.Label.v142",
+            tableName: "Summarizer",
+            value: "Summarizing…",
+            comment: "When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed."
+        )
+        // TODO: - FXIOS-12899 add the correct value and key for the accessibility labels
+        public static let LoadingAccessibilityLabel = MZLocalizedString(
+            key: "", // Summarizer.Loading.Accessibility.Label.v142
+            tableName: "Summarizer",
+            value: "Loading Summary label",
+            comment: "The a11y label for the loading label"
+        )
+        public static let SummaryTextAccessibilityLabel = MZLocalizedString(
+            key: "", // Summarizer.Summary.Text.Accessibility.Label.v142
+            tableName: "Summarizer",
+            value: "Summary report text",
+            comment: "The a11y label for the summary text shown when the summarizer returns a text result."
+        )
+        public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+            key: "", // Summarizer.CloseButton.Accessibility.Label.v142
+            tableName: "Summarizer",
+            value: "Close summary button",
+            comment: "The a11y label for the close button in the summary view."
+        )
     }
 }
 
@@ -3756,12 +3799,7 @@ extension String {
 
 // MARK: - Root Bookmarks folders
 extension String {
-    public static let LegacyBookmarksFolderTitleMobile = MZLocalizedString(
-        key: "Mobile Bookmarks",
-        tableName: "Storage",
-        value: nil,
-        comment: "The legacy title of the folder that contains mobile bookmarks.")
-    public static let BookmarksFolderTitleMobile = MZLocalizedString(
+        public static let BookmarksFolderTitleMobile = MZLocalizedString(
         key: "Bookmarks",
         tableName: "Storage",
         value: nil,
@@ -3785,31 +3823,11 @@ extension String {
 
 // MARK: - Bookmark Management
 extension String {
-    public static let BookmarksFolder = MZLocalizedString(
-        key: "Bookmarks.Folder.Label",
-        tableName: nil,
-        value: "Folder",
-        comment: "The label to show the location of the folder where the bookmark is located")
-    public static let BookmarksNewBookmark = MZLocalizedString(
-        key: "Bookmarks.NewBookmark.Label",
-        tableName: nil,
-        value: "New Bookmark",
-        comment: "The button to create a new bookmark")
     public static let BookmarksNewFolder = MZLocalizedString(
         key: "Bookmarks.NewFolder.Label",
         tableName: nil,
         value: "New Folder",
         comment: "The button to create a new folder")
-    public static let BookmarksNewSeparator = MZLocalizedString(
-        key: "Bookmarks.NewSeparator.Label",
-        tableName: nil,
-        value: "New Separator",
-        comment: "The button to create a new separator")
-    public static let BookmarksEditBookmark = MZLocalizedString(
-        key: "Bookmarks.EditBookmark.Label",
-        tableName: nil,
-        value: "Edit Bookmark",
-        comment: "The button to edit a bookmark")
     public static let BookmarksEdit = MZLocalizedString(
         key: "Bookmarks.Edit.Button",
         tableName: nil,
@@ -3850,11 +3868,6 @@ extension String {
         tableName: nil,
         value: "Title",
         comment: "The label for the Title field when editing a bookmark")
-    public static let BookmarkDetailFieldURL = MZLocalizedString(
-        key: "Bookmark.DetailFieldURL.Label",
-        tableName: nil,
-        value: "URL",
-        comment: "The label for the URL field when editing a bookmark")
 }
 
 // MARK: - Clipboard Toast
@@ -4493,6 +4506,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Less",
                 comment: "On the main menu, the title for the action that will hide some menu options in the current section of the menu.")
+            public static let SummarizePage = MZLocalizedString(
+                key: "MainMenu.ToolsSection.SummarizePage.Title.v142",
+                tableName: "MainMenu",
+                value: "Summarize Page",
+                comment: "On the main menu, the title for the action that will summarize the content of the webpage.")
 
             public struct AccessibilityLabels {
                 public static let SwitchToDesktopSite = MZLocalizedString(
@@ -4550,6 +4568,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Less",
                     comment: "On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu.")
+                public static let SummarizePage = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142",
+                    tableName: "MainMenu",
+                    value: "Summarize Page",
+                    comment: "On the main menu, the accessibility label for the action that will summarize the content of the webpage.")
                 public static let CollapsedHint = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142",
                     tableName: "MainMenu",
@@ -8255,6 +8278,38 @@ extension String {
                 tableName: "MainMenu",
                 value: "Off",
                 comment: "On the main menu, a title for a label that indicate the current option/action state is off.")
+        }
+        struct v142 {
+            public static let LegacyBookmarksFolderTitleMobile = MZLocalizedString(
+                key: "Mobile Bookmarks",
+                tableName: "Storage",
+                value: nil,
+                comment: "The legacy title of the folder that contains mobile bookmarks.")
+            public static let BookmarksFolder = MZLocalizedString(
+                key: "Bookmarks.Folder.Label",
+                tableName: nil,
+                value: "Folder",
+                comment: "The label to show the location of the folder where the bookmark is located")
+            public static let BookmarksNewBookmark = MZLocalizedString(
+                key: "Bookmarks.NewBookmark.Label",
+                tableName: nil,
+                value: "New Bookmark",
+                comment: "The button to create a new bookmark")
+            public static let BookmarksNewSeparator = MZLocalizedString(
+                key: "Bookmarks.NewSeparator.Label",
+                tableName: nil,
+                value: "New Separator",
+                comment: "The button to create a new separator")
+            public static let BookmarksEditBookmark = MZLocalizedString(
+                key: "Bookmarks.EditBookmark.Label",
+                tableName: nil,
+                value: "Edit Bookmark",
+                comment: "The button to edit a bookmark")
+            public static let BookmarkDetailFieldURL = MZLocalizedString(
+                key: "Bookmark.DetailFieldURL.Label",
+                tableName: nil,
+                value: "URL",
+                comment: "The label for the URL field when editing a bookmark")
         }
     }
 }

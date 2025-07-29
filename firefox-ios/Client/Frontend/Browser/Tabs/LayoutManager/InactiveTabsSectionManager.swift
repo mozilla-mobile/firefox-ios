@@ -5,10 +5,12 @@
 import Foundation
 
 protocol InactiveTabsSectionManagerDelegate: AnyObject {
+    @MainActor
     func deleteInactiveTab(for index: Int)
 }
 
-class InactiveTabsSectionManager {
+@MainActor
+final class InactiveTabsSectionManager {
     struct UX {
         static let margin: CGFloat = 15.0
         static let headerEstimatedHeight: CGFloat = 48

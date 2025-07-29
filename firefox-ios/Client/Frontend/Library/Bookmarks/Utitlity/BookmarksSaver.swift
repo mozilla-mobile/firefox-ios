@@ -9,14 +9,16 @@ import Shared
 protocol BookmarksSaver {
     /// Saves or updates a bookmark or folder
     /// Returns a GUID when creating a bookmark or folder, or nil when updating them
+    @MainActor
     func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<GUID?, Error>
+    @MainActor
     func createBookmark(url: String, title: String?, position: UInt32?) async
     func restoreBookmarkNode(bookmarkNode: BookmarkNodeData,
                              parentFolderGUID: String,
                              completion: @escaping (GUID?) -> Void)
 }
 
-struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvider {
+struct DefaultBookmarksSaver: BookmarksSaver {
     enum SaveError: Error {
         case bookmarkTypeDontSupportSaving
         case saveOperationFailed
@@ -79,6 +81,7 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
         }
     }
 
+    @MainActor
     func createBookmark(url: String, title: String?, position: UInt32?) async {
         let bookmarkData = BookmarkItemData(guid: "",
                                             dateAdded: 0,
@@ -88,9 +91,9 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
                                             url: url,
                                             title: title ?? "")
         // Add new bookmark to the top of the folder
-        // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
+        // Save bookmark to recent bookmark folder
         let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
-        let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
+        let parentGuid = recentBookmarkFolderGuid ?? BookmarkRoots.MobileFolderGUID
         _ = await save(bookmark: bookmarkData, parentFolderGUID: parentGuid)
     }
 

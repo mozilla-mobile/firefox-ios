@@ -34,7 +34,7 @@ class URLCacheFileManagerTests: XCTestCase {
     }
 }
 
-class MockFileManager: FileManagerProtocol {
+final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     var urls = [URL(string: "firefox")!]
     var fileExists = true
     var fileExistsCalledCount = 0

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum ReaderModeState: String {
+public enum ReaderModeState: String, Sendable {
     case available = "Available"
     case unavailable = "Unavailable"
     case active = "Active"

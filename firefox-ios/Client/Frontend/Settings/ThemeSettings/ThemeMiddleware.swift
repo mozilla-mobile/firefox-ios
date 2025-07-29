@@ -15,7 +15,7 @@ protocol ThemeManagerProvider {
     func updatePrivateMode(with action: PrivateModeAction)
 }
 
-class ThemeManagerMiddleware: ThemeManagerProvider {
+final class ThemeManagerMiddleware: ThemeManagerProvider {
     var themeManager: ThemeManager
 
     init(themeManager: ThemeManager = AppContainer.shared.resolve()) {

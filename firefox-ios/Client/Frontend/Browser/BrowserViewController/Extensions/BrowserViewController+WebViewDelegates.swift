@@ -19,6 +19,12 @@ extension BrowserViewController: WKUIDelegate {
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
+        guard parentTab.popupThrottler.canShowAlert(type: .popupWindow) else {
+            logger.log("Popup window disallowed for exceeding threshold for tab.", level: .info, category: .webview)
+            return nil
+        }
+        parentTab.popupThrottler.willShowAlert(type: .popupWindow)
+
         guard !navigationAction.isInternalUnprivileged,
               shouldRequestBeOpenedAsPopup(navigationAction.request)
         else {
@@ -448,10 +454,11 @@ extension BrowserViewController: WKNavigationDelegate {
     // This is the place where we decide what to do with a new navigation action. There are a number of special schemes
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
     // method.
+    @MainActor
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
     ) {
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
@@ -667,10 +674,11 @@ extension BrowserViewController: WKNavigationDelegate {
         handleDownloadFiles(downloadHelper: downloadHelper)
     }
 
+    @MainActor
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse,
-        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
+        decisionHandler: @escaping @MainActor (WKNavigationResponsePolicy) -> Void
     ) {
         let response = navigationResponse.response
         let responseURL = response.url
@@ -1017,10 +1025,11 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    @MainActor
     func webView(
         _ webView: WKWebView,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        completionHandler: @escaping @Sendable @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
             handleServerTrust(
@@ -1053,7 +1062,7 @@ extension BrowserViewController: WKNavigationDelegate {
             challenge: challenge,
             loginsHelper: loginsHelper
         ) { res in
-            self.mainQueue.async {
+            Task { @MainActor in
                 switch res {
                 case .success(let credentials):
                     completionHandler(.useCredential, credentials.credentials)
@@ -1123,6 +1132,18 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if let tab = tabManager[webView] {
+            if tab == tabManager.selectedTab {
+                screenshotHelper.takeScreenshot(
+                    tab,
+                    windowUUID: windowUUID,
+                    screenshotBounds: CGRect(
+                        x: contentContainer.frame.origin.x,
+                        y: -contentContainer.frame.origin.y,
+                        width: view.frame.width,
+                        height: view.frame.height
+                    )
+                )
+            }
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
             // If this tab had previously crashed, wait 5 seconds before resetting
@@ -1247,8 +1268,8 @@ private extension BrowserViewController {
 
     func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
         guard let tab = tabManager.selectedTab, tab.webView === webView else { return false }
-        let canShow = tab.jsAlertThrottler.canShowAlert()
-        if canShow { tab.jsAlertThrottler.willShowJSAlert() }
+        let canShow = tab.popupThrottler.canShowAlert(type: .alert)
+        if canShow { tab.popupThrottler.willShowAlert(type: .alert) }
         return !canShow
     }
 
@@ -1264,9 +1285,10 @@ private extension BrowserViewController {
         return false
     }
 
-    func handleServerTrust(challenge: URLAuthenticationChallenge,
-                           dispatchQueue: DispatchQueueInterface,
-                           completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    func handleServerTrust(
+        challenge: URLAuthenticationChallenge,
+        dispatchQueue: DispatchQueueInterface,
+        completionHandler: @escaping @Sendable @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
         dispatchQueue.async {
             // If this is a certificate challenge, see if the certificate has previously been
@@ -1277,13 +1299,13 @@ private extension BrowserViewController {
                   let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
                   self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
             else {
-                self.mainQueue.async {
+                Task { @MainActor in
                     completionHandler(.performDefaultHandling, nil)
                 }
                 return
             }
 
-            self.mainQueue.async {
+            Task { @MainActor in
                 completionHandler(.useCredential, URLCredential(trust: trust))
             }
         }

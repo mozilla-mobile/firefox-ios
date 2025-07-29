@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public class TosFlowViewModel<ViewModel: OnboardingKit.OnboardingCardInfoModelProtocol>: ObservableObject {
+public final class TosFlowViewModel<ViewModel: OnboardingKit.OnboardingCardInfoModelProtocol>: ObservableObject {
     public let configuration: ViewModel
     public let onTermsOfServiceTap: () -> Void
     public let onPrivacyNoticeTap: () -> Void

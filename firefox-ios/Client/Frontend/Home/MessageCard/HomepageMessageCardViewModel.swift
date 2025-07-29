@@ -8,6 +8,7 @@ import Foundation
 protocol MessageSurfaceProtocol {
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage?
     func handleMessageDisplayed()
+    @MainActor
     func handleMessagePressed()
     func handleMessageDismiss()
 }
@@ -44,6 +45,7 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
         message.map(messagingManager.onMessageDisplayed)
     }
 
+    @MainActor
     func handleMessagePressed() {
         guard let message else { return }
         let uuid = (delegate as? InjectedThemeUUIDIdentifiable)?.windowUUID

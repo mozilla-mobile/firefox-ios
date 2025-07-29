@@ -9,6 +9,7 @@ import Shared
 import UIKit
 
 protocol SurveySurfaceViewControllerDelegate: AnyObject {
+    @MainActor
     func didFinish()
 }
 

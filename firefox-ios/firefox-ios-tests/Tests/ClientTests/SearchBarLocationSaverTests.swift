@@ -28,6 +28,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     // MARK: - Old Toolbar
+    @MainActor
     func test_saveSearchBarLocation_oniPhone_withFirstRun_forOldToolbar_setsNoPosition() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: false, layout: .version1)
         let subject = createSubject()
@@ -37,6 +38,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, nil)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPhone_withSecondRun_forOldToolbar_setsPositionTop() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: false, layout: .version1)
         let subject = createSubject()
@@ -47,6 +49,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, SearchBarPosition.top.rawValue)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPhone_withSecondRunAfterFullOnboarding_forOldToolbarr_keepsPosition() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: false, layout: .version1)
         let subject = createSubject()
@@ -58,6 +61,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, SearchBarPosition.bottom.rawValue)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPad_withFirstRun_forOldToolbar_setsNoPosition() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: false, layout: .version1)
         let subject = createSubject()
@@ -67,6 +71,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, nil)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPad_withSecondRun_forOldToolbar_setsPositionTop() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: false, layout: .version1)
         let subject = createSubject()
@@ -77,6 +82,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, SearchBarPosition.top.rawValue)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPad_withSecondRunAfterFullOnboarding_forOldToolbar_keepsPosition() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: false, layout: .version1)
         let subject = createSubject()
@@ -89,6 +95,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     }
 
     // MARK: - Toolbar Refactor - Version layout
+    @MainActor
     func test_saveSearchBarLocation_oniPhone_withFirstRun_forVersion1_setsNoPosition() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
@@ -98,6 +105,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, nil)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPhone_withSecondRun_forVersion1_setsPositionTop() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
@@ -108,6 +116,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, SearchBarPosition.bottom.rawValue)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPhone_withSecondRunAfterFullOnboarding_forVersion1_keepsPosition() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
@@ -119,6 +128,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, SearchBarPosition.bottom.rawValue)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPad_withFirstRun_forVersion1_setsNoPosition() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
@@ -128,6 +138,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, nil)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPad_withSecondRun_forVersion1_setsPositionTop() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()
@@ -138,6 +149,7 @@ class SearchBarLocationSaverTests: XCTestCase {
         XCTAssertEqual(searchBarPosition, SearchBarPosition.top.rawValue)
     }
 
+    @MainActor
     func test_saveSearchBarLocation_oniPad_withSecondRunAfterFullOnboarding_forVersion1_keepsPosition() async throws {
         setupNimbusToolbarLayoutTesting(isEnabled: true, layout: .version1)
         let subject = createSubject()

@@ -6,6 +6,7 @@ import Storage
 import Common
 
 class DependencyHelper {
+    @MainActor
     func bootstrapDependencies() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             // Fatal error here so we can gather info as this would cause a crash down the line anyway
@@ -38,10 +39,10 @@ class DependencyHelper {
         let microsurveyManager: MicrosurveyManager = MicrosurveySurfaceManager()
         AppContainer.shared.register(service: microsurveyManager as MicrosurveyManager)
 
-        let pocketManager: PocketManagerProvider = PocketManager(
-            pocketAPI: PocketProvider(prefs: profile.prefs)
+        let merinoManager: MerinoManagerProvider = MerinoManager(
+            merinoAPI: MerinoProvider(prefs: profile.prefs)
         )
-        AppContainer.shared.register(service: pocketManager as PocketManagerProvider)
+        AppContainer.shared.register(service: merinoManager as MerinoManagerProvider)
 
         let documentLogger = appDelegate.documentLogger
         AppContainer.shared.register(service: documentLogger)

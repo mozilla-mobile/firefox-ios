@@ -5,6 +5,7 @@
 import UIKit
 import Common
 import Redux
+import Shared
 
 final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     typealias SubscriberStateType = ToolbarState
@@ -30,8 +31,10 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     private let windowUUID: WindowUUID
     private let screenshotHelper: ScreenshotHelper?
     var homepageScreenshotToolProvider: (() -> Screenshotable?)?
+    var newTabSettingsProvider: (() -> NewTabPage?)?
     private var homepageScreenshot: UIImage?
     private var toolbarState: ToolbarState?
+    private let prefs: Prefs
 
     private var isRTL: Bool {
         return UIView.userInterfaceLayoutDirection(
@@ -47,7 +50,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         statusBarOverlay: StatusBarOverlay,
         tabManager: TabManager,
         windowUUID: WindowUUID,
-        screenshotHelper: ScreenshotHelper?
+        screenshotHelper: ScreenshotHelper?,
+        prefs: Prefs
     ) {
         self.addressToolbarContainer = addressToolbarContainer
         self.contentContainer = contentContainer
@@ -56,6 +60,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         self.windowUUID = windowUUID
         self.screenshotHelper = screenshotHelper
         self.statusBarOverlay = statusBarOverlay
+        self.prefs = prefs
         super.init()
         subscribeToRedux()
         setupGesture()
@@ -88,6 +93,17 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     func newState(state: ToolbarState) {
         toolbarState = state
         disablePanGestureIfTopAddressBar()
+
+        // While the address bar is in editing mode (for example, when the user is
+        // typing on the homepage with a keyboard), the swipe gesture
+        // that switches between tabs should be disabled. Once editing ends we can
+        // safely re-enable the gesture
+        if state.addressToolbar.isEditing {
+            disablePanGestureRecognizer()
+        } else {
+            enablePanGestureRecognizer()
+            enablePanGestureOnHomepageIfNeeded()
+        }
     }
 
     // MARK: - Pan Gesture Availability
@@ -142,7 +158,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 )
             )
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
-            if nextTab == nil {
+        case .changed:
+            if nextTab == nil, homepageScreenshot == nil {
                 let homepageScreenshotTool = homepageScreenshotToolProvider?()
                 homepageScreenshot = homepageScreenshotTool?.screenshot(bounds: CGRect(
                     x: 0.0,
@@ -151,7 +168,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                     height: webPagePreview.frame.height
                 ))
             }
-        case .changed:
             handleGestureChangedState(translation: translation, nextTab: nextTab)
         case .ended, .cancelled, .failed:
             let velocity = gesture.velocity(in: contentContainer)
@@ -161,7 +177,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     private func handleGestureChangedState(translation: CGPoint, nextTab: Tab?) {
-        webPagePreview.isHidden = false
         let shouldAddNewTab = shouldAddNewTab(translation: translation.x, nextTab: nextTab)
         applyCurrentTabTransform(translation.x, shouldAddNewTab: shouldAddNewTab)
         applyPreviewTransform(translation: translation)
@@ -173,7 +188,15 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             let translation = width * (1 - progress)
             webPagePreview.transform = CGAffineTransform(scaleX: scale, y: scale).translatedBy(x: translation, y: 0.0)
             webPagePreview.alpha = progress
-            webPagePreview.setScreenshot(homepageScreenshot)
+            let pageSetting = newTabSettingsProvider?()
+            switch pageSetting {
+            case .homePage:
+                webPagePreview.setScreenshot(url: NewTabHomePageAccessors.getHomePage(prefs))
+            case .topSites:
+                webPagePreview.setScreenshot(homepageScreenshot)
+            case nil, .blankPage:
+                webPagePreview.setScreenshot(url: nil)
+            }
         } else {
             webPagePreview.alpha = 1.0
             webPagePreview.setScreenshot(nextTab)
@@ -209,8 +232,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             webPagePreview.alpha = shouldCompleteTransition ? 1.0 : 0.0
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
         } completion: { [self] _ in
-            webPagePreview.isHidden = true
             webPagePreview.transitionDidEnd()
+            homepageScreenshot = nil
 
             if shouldCompleteTransition {
                 store.dispatchLegacy(

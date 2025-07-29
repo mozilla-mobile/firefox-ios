@@ -11,7 +11,7 @@ open class BaseCoordinator: NSObject, Coordinator {
     var childCoordinators: [Coordinator] = []
     var router: Router
     var logger: Logger
-    var isDismissable: Bool { true }
+    var isDismissible: Bool { true }
     private var mainQueue: DispatchQueueInterface
 
     init(router: Router,
@@ -50,7 +50,7 @@ open class BaseCoordinator: NSObject, Coordinator {
 
         // Dismiss any child of the matching coordinator that handles a route
         for child in matchingCoordinator.childCoordinators {
-            guard child.isDismissable else { continue }
+            guard child.isDismissible else { continue }
 
             logger.log("Dismissing child of the matching coordinator", level: .debug, category: .coordinator)
             matchingCoordinator.router.dismiss()

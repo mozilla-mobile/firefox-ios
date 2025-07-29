@@ -6,7 +6,9 @@ import Foundation
 import Redux
 import Common
 
-final class BookmarksAction: Action {
+struct BookmarksAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let bookmarks: [BookmarkConfiguration]?
     var isEnabled: Bool?
 
@@ -15,9 +17,10 @@ final class BookmarksAction: Action {
          windowUUID: WindowUUID,
          actionType: any ActionType
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.bookmarks = bookmarks
         self.isEnabled = isEnabled
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

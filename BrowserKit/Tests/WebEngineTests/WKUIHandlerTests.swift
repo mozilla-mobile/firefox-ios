@@ -8,6 +8,7 @@ import XCTest
 import Common
 @testable import WebEngine
 
+@MainActor
 final class WKUIHandlerTests: XCTestCase {
     private var sessionDelegate: MockEngineSessionDelegate!
     private var mockDecider: MockPolicyDecider!

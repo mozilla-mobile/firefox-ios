@@ -6,7 +6,9 @@ import Common
 import Foundation
 import Redux
 
-final class MainMenuAction: Action {
+struct MainMenuAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     var tabID: TabUUID?
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
@@ -18,6 +20,7 @@ final class MainMenuAction: Action {
     var isExpanded: Bool?
     var isBrowserDefault: Bool
     var isPhoneLandscape: Bool
+    var moreCellTapped: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -32,8 +35,11 @@ final class MainMenuAction: Action {
         telemetryInfo: TelemetryInfo? = nil,
         isExpanded: Bool? = nil,
         isBrowserDefault: Bool = false,
-        isPhoneLandscape: Bool = false
+        isPhoneLandscape: Bool = false,
+        moreCellTapped: Bool = false
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
         self.currentTabInfo = currentTabInfo
@@ -45,7 +51,7 @@ final class MainMenuAction: Action {
         self.isExpanded = isExpanded
         self.isBrowserDefault = isBrowserDefault
         self.isPhoneLandscape = isPhoneLandscape
-        super.init(windowUUID: windowUUID, actionType: actionType)
+        self.moreCellTapped = moreCellTapped
     }
 }
 
@@ -75,6 +81,7 @@ enum MainMenuMiddlewareActionType: ActionType {
     case updateAccountHeader
     case updateBannerVisibility
     case updateMenuAppearance
+    case updateMenuCells
 }
 
 enum MainMenuDetailsActionType: ActionType {

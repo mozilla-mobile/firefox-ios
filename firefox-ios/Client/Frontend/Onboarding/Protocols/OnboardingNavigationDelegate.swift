@@ -5,5 +5,6 @@
 import Foundation
 
 protocol OnboardingNavigationDelegate: AnyObject {
+    @MainActor
     func finishOnboardingFlow()
 }

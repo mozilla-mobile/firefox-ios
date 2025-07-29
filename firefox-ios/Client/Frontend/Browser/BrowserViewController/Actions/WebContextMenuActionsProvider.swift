@@ -117,6 +117,7 @@ class WebContextMenuActionsProvider {
         })
     }
 
+    @MainActor
     func addShare(url: URL,
                   tabManager: TabManager,
                   webView: WKWebView,
@@ -149,7 +150,7 @@ class WebContextMenuActionsProvider {
     }
 
     func addSaveImage(url: URL,
-                      getImageData: @escaping (URL, @escaping (Data) -> Void) -> Void,
+                      getImageData: @escaping (URL, @Sendable @escaping (Data) -> Void) -> Void,
                       writeToPhotoAlbum: @escaping (UIImage) -> Void) {
         actions.append(UIAction(
             title: .ContextMenuSaveImage,

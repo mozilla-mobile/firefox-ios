@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/227434803",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/227434803/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/227434803/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.44.0",
-    "id": 227434803,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/235219734",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/235219734/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/235219734/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.46.0",
+    "id": 235219734,
     "author": {
         "login": "cwzilla",
         "id": 87655586,
@@ -25,16 +25,17 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84NjmEz",
-    "tag_name": "v1.44.0",
+    "node_id": "RE_kwDOI1CID84OBSsW",
+    "tag_name": "v1.46.0",
     "target_commitish": "main",
-    "name": "v1.44.0",
+    "name": "v1.46.0",
     "draft": false,
+    "immutable": false,
     "prerelease": false,
-    "created_at": "2025-06-24T17:09:13Z",
-    "published_at": "2025-06-24T17:10:05Z",
+    "created_at": "2025-07-25T16:16:44Z",
+    "published_at": "2025-07-25T16:17:31Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.44.0",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.44.0",
-    "body": "# [Changelog]\r\n### [1.44.0]\r\n### Added\r\n- PDF\r\n  - shieldCheckmarkMedium.pdf\r\n  - shieldSlashMedium.pdf\r\n\r\n- SVG\r\n  - shield-checkmark-20.svg\r\n  - shield-slash-20.svg\r\n\r\n- XML\r\n  - ic_shield_checkmark_20.xml \r\n  - ic_shield_slash_20.xml"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.46.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.46.0",
+    "body": "# [Changelog]\r\n### [1.46.0]\r\n### Added\r\n- PDF\r\n  - otherDeviceShortcutsFillLarge.pdf\r\n  - otherDeviceShortcutsLarge.pdf\r\n\r\n- SVG\r\n  - other-device-shortcuts-24.svg\r\n  - other-device-shortcuts-fill-24.svg\r\n\r\n- XML\r\n  - ic_other_device_shortcuts_24.xml\r\n  - ic_other_device_shortcuts_fill_24.xml"
 }

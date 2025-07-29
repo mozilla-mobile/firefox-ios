@@ -5,25 +5,23 @@
 import Shared
 import Storage
 import XCTest
+import Common
 
 @testable import Client
 
 final class TopSitesManagerTests: XCTestCase {
     private var profile: MockProfile!
-    private var dispatchQueue: MockDispatchQueue?
-    private var mockNotificationCenter: MockNotificationCenter?
+    private var mockNotificationCenter: MockNotificationCenter!
     override func setUp() {
         super.setUp()
         profile = MockProfile()
-        dispatchQueue = MockDispatchQueue()
         mockNotificationCenter = MockNotificationCenter()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
-        mockNotificationCenter = nil
-        dispatchQueue = nil
         profile = nil
+        mockNotificationCenter = nil
         super.tearDown()
     }
 
@@ -349,7 +347,7 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     // MARK: Context menu actions
-    func test_unpinTopSite_callsProperMethods() throws {
+    func test_unpinTopSite_callsProperMethods() async throws {
         let mockGoogleTopSiteManager = MockGoogleTopSiteManager()
         let mockTopSiteHistoryManager = MockTopSiteHistoryManager()
         let subject = try createSubject(
@@ -357,13 +355,20 @@ final class TopSitesManagerTests: XCTestCase {
             topSiteHistoryManager: mockTopSiteHistoryManager
         )
         let site = Site.createBasicSite(url: "www.example.com", title: "Example Pinned Site")
-        subject.unpinTopSite(site)
+        let unpinnedSiteExpectation = XCTestExpectation(
+            description: "Remove top sites method is called from top site manager"
+        )
+
+        mockTopSiteHistoryManager.removePinnedSiteCalled = {
+            unpinnedSiteExpectation.fulfill()
+        }
+        await subject.unpinTopSite(site)
 
         XCTAssertEqual(mockGoogleTopSiteManager.removeGoogleTopSiteCalledCount, 1)
-        XCTAssertEqual(mockTopSiteHistoryManager.removeTopSiteCalledCount, 1)
+        await fulfillment(of: [unpinnedSiteExpectation], timeout: 1)
     }
 
-    func test_removeTopSite_callsProperMethods() throws {
+    func test_removeTopSite_callsProperMethods() async throws {
         let mockGoogleTopSiteManager = MockGoogleTopSiteManager()
         let mockTopSiteHistoryManager = MockTopSiteHistoryManager()
         let subject = try createSubject(
@@ -371,11 +376,28 @@ final class TopSitesManagerTests: XCTestCase {
             topSiteHistoryManager: mockTopSiteHistoryManager
         )
         let site = Site.createBasicSite(url: "www.example.com", title: "Example Pinned Site")
-        subject.removeTopSite(site)
+        let removePinnedSiteExpectation = XCTestExpectation(
+            description: "Remove top sites method is called from top site manager"
+        )
+
+        let postCalledExpectation = XCTestExpectation(
+            description: "Notification post method is called from top site manager"
+        )
+
+        mockTopSiteHistoryManager.removePinnedSiteCalled = {
+            removePinnedSiteExpectation.fulfill()
+        }
+
+        mockNotificationCenter.postCalled = { name in
+            guard name == .TopSitesUpdated else { return }
+            postCalledExpectation.fulfill()
+        }
+
+        await subject.removeTopSite(site)
 
         XCTAssertEqual(mockGoogleTopSiteManager.removeGoogleTopSiteCalledCount, 1)
-        XCTAssertEqual(mockTopSiteHistoryManager.removeTopSiteCalledCount, 1)
         XCTAssertEqual(mockTopSiteHistoryManager.removeDefaultTopSitesTileCalledCount, 1)
+        await fulfillment(of: [removePinnedSiteExpectation, postCalledExpectation], timeout: 1)
     }
 
     func test_pinTopSite_callsProperMethods() throws {
@@ -463,7 +485,7 @@ final class TopSitesManagerTests: XCTestCase {
         line: UInt = #line
     ) throws -> TopSitesManager {
         let mockProfile = try XCTUnwrap(injectedProfile ?? profile)
-        let mockQueue = try XCTUnwrap(dispatchQueue)
+        let mockNotificationCenter = try XCTUnwrap(mockNotificationCenter)
         let subject = TopSitesManager(
             profile: mockProfile,
             contileProvider: contileProvider,
@@ -471,8 +493,7 @@ final class TopSitesManagerTests: XCTestCase {
             googleTopSiteManager: googleTopSiteManager,
             topSiteHistoryManager: topSiteHistoryManager,
             searchEnginesManager: searchEngineManager,
-            dispatchQueue: mockQueue,
-            notification: try XCTUnwrap(mockNotificationCenter),
+            notification: mockNotificationCenter,
             maxTopSites: maxCount
         )
         trackForMemoryLeaks(subject, file: file, line: line)

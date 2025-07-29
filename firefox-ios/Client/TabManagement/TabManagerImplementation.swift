@@ -311,7 +311,7 @@ class TabManagerImplementation: NSObject,
         tab.close()
 
         // Notify of tab removal
-        ensureMainThread { [unowned self] in
+        ensureMainThread { @MainActor [unowned self] in
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !tabRestoreHasFinished) }
             TabEvent.post(.didClose, for: tab)
         }
@@ -776,7 +776,7 @@ class TabManagerImplementation: NSObject,
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
 
             // Save simple tabs, used by widget extension
-            windowManager.performMultiWindowAction(.saveSimpleTabs)
+            await windowManager.performMultiWindowAction(.saveSimpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
             await TabErrorTelemetryHelper.shared.recordTabCountAfterPreservingTabs(windowUUID)
@@ -822,6 +822,7 @@ class TabManagerImplementation: NSObject,
         saveSessionData(forTab: selectedTab)
     }
 
+    @MainActor
     func notifyCurrentTabDidFinishLoading() {
         delegates.forEach {
             $0.get()?.tabManagerTabDidFinishLoading()

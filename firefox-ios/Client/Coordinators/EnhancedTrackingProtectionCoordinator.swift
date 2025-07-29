@@ -7,11 +7,14 @@ import Foundation
 import WebKit
 
 protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
+    @MainActor
     func didFinishEnhancedTrackingProtection(from coordinator: EnhancedTrackingProtectionCoordinator)
+    @MainActor
     func settingsOpenPage(settings: Route.SettingsSection)
 }
 
 protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
+    @MainActor
     var showHasOnlySecureContentInTrackingPanel: Bool { get }
 }
 
