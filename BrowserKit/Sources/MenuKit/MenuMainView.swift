@@ -6,7 +6,7 @@ import Common
 import UIKit
 import ComponentLibrary
 
-public final class MenuRedesignMainView: UIView,
+public final class MenuMainView: UIView,
                                          ThemeApplicable {
     private struct UX {
         static let headerTopMargin: CGFloat = 24
@@ -21,7 +21,7 @@ public final class MenuRedesignMainView: UIView,
     public var closeBannerButtonCallback: (() -> Void)?
 
     // MARK: - UI Elements
-    private var tableView: MenuRedesignTableView = .build()
+    private var tableView: MenuTableView = .build()
 
     public var headerBanner: HeaderBanner = .build()
 

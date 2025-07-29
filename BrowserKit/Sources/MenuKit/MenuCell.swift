@@ -6,7 +6,7 @@ import Foundation
 import Common
 import UIKit
 
-final class MenuRedesignCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 16
         static let horizontalMargin: CGFloat = 24

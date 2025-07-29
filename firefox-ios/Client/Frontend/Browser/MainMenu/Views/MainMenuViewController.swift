@@ -27,7 +27,7 @@ class MainMenuViewController: UIViewController,
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
-    private lazy var menuRedesignContent: MenuRedesignMainView = .build()
+    private lazy var menuContent: MenuMainView = .build()
     private var hintView: ContextualHintView = .build { view in
         view.isAccessibilityElement = true
     }
@@ -128,7 +128,7 @@ class MainMenuViewController: UIViewController,
             )
         )
 
-        setupRedesignView()
+        setupView()
         setupMenuOrientation()
 
         setupTableView()
@@ -140,11 +140,11 @@ class MainMenuViewController: UIViewController,
             )
         )
 
-        menuRedesignContent.siteProtectionHeader.closeButtonCallback = { [weak self] in
+        menuContent.siteProtectionHeader.closeButtonCallback = { [weak self] in
             self?.dispatchCloseMenuAction()
         }
 
-        menuRedesignContent.onCalculatedHeight = { [weak self] height, isExpanded in
+        menuContent.onCalculatedHeight = { [weak self] height, isExpanded in
             let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
             if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
                 self?.currentCustomMenuHeight = height
@@ -163,19 +163,19 @@ class MainMenuViewController: UIViewController,
             }
         }
 
-        menuRedesignContent.bannerButtonCallback = { [weak self] in
+        menuContent.bannerButtonCallback = { [weak self] in
             self?.dispatchDefaultBrowserAction()
         }
 
-        menuRedesignContent.closeBannerButtonCallback = { [weak self] in
+        menuContent.closeBannerButtonCallback = { [weak self] in
             self?.profile.prefs.setBool(true, forKey: PrefsKeys.defaultBrowserBannerShown)
         }
 
-        menuRedesignContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
+        menuContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
             self?.dispatchSiteProtectionAction()
         }
 
-        menuRedesignContent.closeButtonCallback = { [weak self] in
+        menuContent.closeButtonCallback = { [weak self] in
             self?.dispatchCloseMenuAction()
         }
 
@@ -245,20 +245,20 @@ class MainMenuViewController: UIViewController,
         reloadTableView(with: menuState.menuElements)
     }
 
-    private func setupRedesignView() {
+    private func setupView() {
         if #unavailable(iOS 26.0) {
             view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
         }
-        view.addSubview(menuRedesignContent)
+        view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([
-            menuRedesignContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            menuRedesignContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            menuRedesignContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            menuRedesignContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            menuContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            menuContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
 
-        menuRedesignContent.setupDetails(title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
+        menuContent.setupDetails(title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
                                          subtitle: .MainMenu.HeaderBanner.Subtitle,
                                          image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
                                          isBannerFlagEnabled: isMenuDefaultBrowserBanner,
@@ -267,7 +267,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupMenuOrientation() {
-        menuRedesignContent.setupMenuMenuOrientation(isPhoneLandscape: isPhoneLandscape)
+        menuContent.setupMenuMenuOrientation(isPhoneLandscape: isPhoneLandscape)
     }
 
     private func setupHintView() {
@@ -292,17 +292,17 @@ class MainMenuViewController: UIViewController,
                 hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
                 hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4)
             ])
-            hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+            hintView.topAnchor.constraint(equalTo: menuContent.topAnchor,
                                           constant: UX.hintViewMargin).isActive = true
         } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = windowScene.windows.first {
             window.addSubview(hintView)
 
-            if UIScreen.main.bounds.height < UX.hintViewHeight + menuRedesignContent.frame.height {
-                hintView.topAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+            if UIScreen.main.bounds.height < UX.hintViewHeight + menuContent.frame.height {
+                hintView.topAnchor.constraint(equalTo: menuContent.topAnchor,
                                               constant: UX.hintViewMargin).isActive = true
             } else {
-                hintView.bottomAnchor.constraint(equalTo: menuRedesignContent.topAnchor,
+                hintView.bottomAnchor.constraint(equalTo: menuContent.topAnchor,
                                                  constant: -UX.hintViewMargin).isActive = true
             }
             NSLayoutConstraint.activate([
@@ -370,7 +370,7 @@ class MainMenuViewController: UIViewController,
 
         if menuState.moreCellTapped {
             let expandedHint = String.MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint
-            menuRedesignContent.announceAccessibility(expandedHint: expandedHint)
+            menuContent.announceAccessibility(expandedHint: expandedHint)
         }
     }
 
@@ -423,7 +423,7 @@ class MainMenuViewController: UIViewController,
         if #unavailable(iOS 26.0) {
             view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
         }
-        menuRedesignContent.applyTheme(theme: theme)
+        menuContent.applyTheme(theme: theme)
     }
 
     private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
@@ -442,7 +442,7 @@ class MainMenuViewController: UIViewController,
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
         }
 
-        menuRedesignContent.siteProtectionHeader.setupDetails(
+        menuContent.siteProtectionHeader.setupDetails(
             title: siteProtectionsData.title,
             subtitle: siteProtectionsData.subtitle,
             image: siteProtectionsData.image,
@@ -480,7 +480,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupAccessibilityIdentifiers() {
-        menuRedesignContent.setupAccessibilityIdentifiers(
+        menuContent.setupAccessibilityIdentifiers(
             menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
             menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu,
             closeButtonA11yLabel: .MainMenu.AccessibilityLabels.CloseButton,
@@ -565,6 +565,6 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - MenuTableViewDelegate
     func reloadTableView(with data: [MenuSection]) {
-        menuRedesignContent.reloadDataView(with: data)
+        menuContent.reloadDataView(with: data)
     }
 }

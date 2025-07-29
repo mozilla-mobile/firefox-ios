@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import Common
 
-final class MenuRedesignTableView: UIView,
+final class MenuTableView: UIView,
                            UITableViewDelegate,
                            UITableViewDataSource,
                            ThemeApplicable {
@@ -60,7 +60,7 @@ final class MenuRedesignTableView: UIView,
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(MenuRedesignCell.self, forCellReuseIdentifier: MenuRedesignCell.cellIdentifier)
+        tableView.register(MenuCell.self, forCellReuseIdentifier: MenuCell.cellIdentifier)
         tableView.register(MenuInfoCell.self, forCellReuseIdentifier: MenuInfoCell.cellIdentifier)
         tableView.register(MenuAccountCell.self, forCellReuseIdentifier: MenuAccountCell.cellIdentifier)
         tableView.register(MenuSquaresViewContentCell.self,
@@ -150,9 +150,9 @@ final class MenuRedesignTableView: UIView,
         }
 
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: MenuRedesignCell.cellIdentifier,
+            withIdentifier: MenuCell.cellIdentifier,
             for: indexPath
-        ) as? MenuRedesignCell else {
+        ) as? MenuCell else {
             return UITableViewCell()
         }
         if let theme {

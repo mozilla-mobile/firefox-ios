@@ -71,7 +71,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         return menuSections
     }
 
-    // MARK: - Menu Redesign Sections
+    // MARK: - Menu Sections
     // Horizontal Tabs Section
     private func getHorizontalTabsSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(
