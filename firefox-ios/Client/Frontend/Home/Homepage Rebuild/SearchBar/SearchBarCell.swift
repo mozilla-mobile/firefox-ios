@@ -14,10 +14,17 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         static let heightPadding: CGFloat = 20
         static let widthPadding: CGFloat = 16
         static let containerPadding: CGFloat = 4
+        static let contentSpacing: CGFloat = 8
+        static let searchImageSize = CGSize(width: 22, height: 22)
     }
 
     private let container: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
+    }
+
+    private lazy var contentStackView: UIStackView = .build { view in
+        view.alignment = .center
+        view.spacing = UX.contentSpacing
     }
 
     private lazy var placeholderLabel: UILabel = .build { view in
@@ -26,6 +33,11 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         view.textAlignment = .center
         view.numberOfLines = 0
         view.adjustsFontForContentSizeCategory = true
+    }
+
+    private lazy var searchImageView: UIImageView = .build { view in
+        view.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
+        view.contentMode = .scaleAspectFit
     }
 
     override init(frame: CGRect) {
@@ -42,7 +54,9 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     private func setupView() {
-        container.addSubview(placeholderLabel)
+        contentStackView.addArrangedSubview(searchImageView)
+        contentStackView.addArrangedSubview(placeholderLabel)
+        container.addSubview(contentStackView)
         contentView.addSubview(container)
 
         NSLayoutConstraint.activate([
@@ -51,10 +65,13 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.containerPadding),
             container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.containerPadding),
 
-            placeholderLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: UX.heightPadding),
-            placeholderLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -UX.heightPadding),
-            placeholderLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: UX.widthPadding),
-            placeholderLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -UX.widthPadding)
+            searchImageView.heightAnchor.constraint(equalToConstant: UX.searchImageSize.height),
+            searchImageView.widthAnchor.constraint(equalToConstant: UX.searchImageSize.width),
+
+            contentStackView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            contentStackView.topAnchor.constraint(equalTo: container.topAnchor, constant: UX.heightPadding),
+            contentStackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -UX.heightPadding),
+            contentStackView.widthAnchor.constraint(lessThanOrEqualTo: container.widthAnchor, constant: -UX.widthPadding)
         ])
     }
 
@@ -75,6 +92,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         placeholderLabel.textColor = theme.colors.textSecondary
         container.backgroundColor = theme.colors.layer2
+        searchImageView.tintColor = theme.colors.iconSecondary
         setupShadow(theme: theme)
     }
 
