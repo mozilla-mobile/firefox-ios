@@ -133,7 +133,7 @@ class FxAWebViewController: UIViewController {
         webView.load(request)
     }
 
-    private func endPairingConnectionBackgroundTask() {
+    private nonisolated func endPairingConnectionBackgroundTask() {
         UIApplication.shared.endBackgroundTask(backgroundTaskID)
         backgroundTaskID = UIBackgroundTaskIdentifier.invalid
     }
