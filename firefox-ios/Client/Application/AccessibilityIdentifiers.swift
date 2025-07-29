@@ -712,7 +712,8 @@ struct AccessibilityIdentifiers {
         static let closeSummaryButton = "closeSummaryButton"
         static let loadingLabel = "summaryLoadingLabel"
         static let summaryTextView = "summaryTextView"
-        static let tosCancelButton = "tosCancelButton"
+        static let tosCancelButton = "tosCancel"
+        static let tosCloseButton = "tosCloseButton"
         static let tosAllowButton = "tosAllowButton"
         static let tosLinkButton = "tosLinkButton"
     }

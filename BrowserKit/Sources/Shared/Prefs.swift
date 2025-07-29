@@ -58,7 +58,7 @@ public struct PrefsKeys {
     }
 
     public struct Summarizer {
-        public static let didAgreeToSTerms = "didAgreeToSTerms"
+        public static let didAgreeTermOfService = "didAgreeTermOfService"
     }
 
     public struct AppVersion {

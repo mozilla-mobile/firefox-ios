@@ -111,7 +111,6 @@ public class SummarizeController: UIViewController, Themeable {
     }
     private let closeButton: UIButton = .build {
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        $0.alpha = 0
     }
     private let tabSnapshot: UIImageView = .build {
         $0.clipsToBounds = true
@@ -270,7 +269,6 @@ public class SummarizeController: UIViewController, Themeable {
            tabSnapshot.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
            loadingLabel.alpha = 0.0
            summaryView.alpha = 1.0
-           closeButton.alpha = 1.0
            view.backgroundColor = theme.colors.layer1
         } completion: { [weak self] _ in
             guard let tabSnapshotView = self?.tabSnapshot else { return }

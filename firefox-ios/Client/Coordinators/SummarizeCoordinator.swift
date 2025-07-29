@@ -46,7 +46,7 @@ class SummarizeCoordinator: BaseCoordinator {
     }
 
     func start() {
-        if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeToSTerms) ?? false {
+        if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermOfService) ?? false {
             showSummarizeViewController()
         } else {
             showToSAlert()
@@ -83,31 +83,33 @@ class SummarizeCoordinator: BaseCoordinator {
     private func showToSAlert() {
         let tosViewModel = ToSBottomSheetViewModel(
             titleLabel: .Summarizer.ToSAlertTitleLabel,
-            descriptionLabel: .Summarizer.ToSAlertMessageLabel,
+            descriptionLabel: .Summarizer.ToSAlertMessageFirefoxLabel,
             linkButtonLabel: .Summarizer.ToSAlertLinkButtonLabel,
             linkButtonURL: URL(string: "https://www.mozilla.com"),
             allowButtonTitle: .Summarizer.ToSAlertAllowButtonLabel,
             allowButtonA11yId: AccessibilityIdentifiers.Summarizer.tosAllowButton,
+            allowButtonA11yLabel: .Summarizer.ToSAlertAllowButtonAccessibilityLabel,
             cancelButtonTitle: .Summarizer.ToSAlertCancelButtonLabel,
-            cancelButtonA11yId: AccessibilityIdentifiers.Summarizer.tosCancelButton) { [weak self] url in
+            cancelButtonA11yId: AccessibilityIdentifiers.Summarizer.tosCancelButton,
+            cancelButtonA11yLabel: .Summarizer.ToSAlertCancelButtonAccessibilityLabel) { [weak self] url in
             self?.onRequestOpenURL?(url)
             self?.dismissCoordinator()
         } onAllowButtonPressed: { [weak self] in
-            self?.prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeToSTerms)
+            self?.prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermOfService)
             self?.showSummarizeViewController()
         }
-        let tosController = BottomSheetViewController(
+        let tosController = ToSBottomSheetViewController(viewModel: tosViewModel, windowUUID: windowUUID)
+        let bottomSheetViewController = BottomSheetViewController(
             viewModel: BottomSheetViewModel(
-                animationTransitionDuration: 0.25,
-                shouldDismissForTapOutside: true,
-                closeButtonA11yLabel: .Summarizer.ToSCancelButtonAccessibilityLabel,
-                closeButtonA11yIdentifier: AccessibilityIdentifiers.Summarizer.tosCancelButton
+                closeButtonA11yLabel: .Summarizer.ToSAlertCloseButtonAccessibilityLabel,
+                closeButtonA11yIdentifier: AccessibilityIdentifiers.Summarizer.tosCloseButton
             ),
-            childViewController: ToSBottomSheetViewController(viewModel: tosViewModel, windowUUID: windowUUID),
+            childViewController: tosController,
             usingDimmedBackground: true,
             windowUUID: windowUUID
         )
-        router.present(tosController, animated: true)
+        tosController.dismissDelegate = bottomSheetViewController
+        router.present(bottomSheetViewController, animated: false)
     }
 
     private func dismissCoordinator() {

@@ -14,8 +14,10 @@ public struct ToSBottomSheetViewModel {
     let linkButtonURL: URL?
     let allowButtonTitle: String
     let allowButtonA11yId: String
+    let allowButtonA11yLabel: String
     let cancelButtonTitle: String
     let cancelButtonA11yId: String
+    let cancelButtonA11yLabel: String
     let onRequestOpenURL: ((URL?) -> Void)?
     let onAllowButtonPressed: (() -> Void)?
 
@@ -26,8 +28,10 @@ public struct ToSBottomSheetViewModel {
         linkButtonURL: URL?,
         allowButtonTitle: String,
         allowButtonA11yId: String,
+        allowButtonA11yLabel: String,
         cancelButtonTitle: String,
         cancelButtonA11yId: String,
+        cancelButtonA11yLabel: String,
         onRequestOpenURL: ((URL?) -> Void)?,
         onAllowButtonPressed: (() -> Void)?
     ) {
@@ -39,8 +43,10 @@ public struct ToSBottomSheetViewModel {
         self.onRequestOpenURL = onRequestOpenURL
         self.allowButtonTitle = allowButtonTitle
         self.allowButtonA11yId = allowButtonA11yId
+        self.allowButtonA11yLabel = allowButtonA11yLabel
         self.cancelButtonTitle = cancelButtonTitle
         self.cancelButtonA11yId = cancelButtonA11yId
+        self.cancelButtonA11yLabel = cancelButtonA11yLabel
     }
 }
 
@@ -58,6 +64,7 @@ public class ToSBottomSheetViewController: UIViewController,
     
     public var currentWindowUUID: Common.WindowUUID?
     private let viewModel: ToSBottomSheetViewModel
+    public weak var dismissDelegate: BottomSheetDismissProtocol?
 
     private let titleLabel: UILabel = .build {
         $0.textAlignment = .center
@@ -117,9 +124,11 @@ public class ToSBottomSheetViewController: UIViewController,
                 a11yIdentifier: viewModel.allowButtonA11yId
             )
         )
+        allowButton.accessibilityLabel = viewModel.allowButtonA11yLabel
         allowButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.viewModel.onAllowButtonPressed?()
-            self?.dismiss(animated: true)
+            self?.dismiss(animated: true, completion: {
+                self?.viewModel.onAllowButtonPressed?()
+            })
         }), for: .touchUpInside)
         cancelButton.configure(
             viewModel: SecondaryRoundedButtonViewModel(
@@ -127,6 +136,7 @@ public class ToSBottomSheetViewController: UIViewController,
                 a11yIdentifier: viewModel.cancelButtonA11yId
             )
         )
+        cancelButton.accessibilityLabel = viewModel.cancelButtonA11yLabel
         cancelButton.addAction(UIAction(handler: { [weak self] _ in
             self?.dismiss(animated: true)
         }), for: .touchUpInside)
@@ -156,10 +166,19 @@ public class ToSBottomSheetViewController: UIViewController,
 
     public func willDismiss() {}
 
+    override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if let dismissDelegate {
+            dismissDelegate.dismissSheetViewController(completion: completion)
+        } else {
+            super.dismiss(animated: flag, completion: completion)
+        }
+    }
+
     // MARK: - UITextViewDelegate
     public func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        dismiss(animated: true)
-        viewModel.onRequestOpenURL?(URL)
+        dismiss(animated: true) { [weak self] in
+            self?.viewModel.onRequestOpenURL?(URL)
+        }
         return false
     }
 
