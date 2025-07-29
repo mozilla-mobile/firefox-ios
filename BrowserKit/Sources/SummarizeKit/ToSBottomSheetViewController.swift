@@ -20,6 +20,7 @@ public struct ToSBottomSheetViewModel {
     let cancelButtonA11yLabel: String
     let onRequestOpenURL: ((URL?) -> Void)?
     let onAllowButtonPressed: (() -> Void)?
+    let onDismiss: (() -> Void)?
 
     public init(
         titleLabel: String,
@@ -33,7 +34,8 @@ public struct ToSBottomSheetViewModel {
         cancelButtonA11yId: String,
         cancelButtonA11yLabel: String,
         onRequestOpenURL: ((URL?) -> Void)?,
-        onAllowButtonPressed: (() -> Void)?
+        onAllowButtonPressed: (() -> Void)?,
+        onDismiss: (() -> Void)?
     ) {
         self.titleLabel = titleLabel
         self.descriptionLabel = descriptionLabel
@@ -47,6 +49,7 @@ public struct ToSBottomSheetViewModel {
         self.cancelButtonTitle = cancelButtonTitle
         self.cancelButtonA11yId = cancelButtonA11yId
         self.cancelButtonA11yLabel = cancelButtonA11yLabel
+        self.onDismiss = onDismiss
     }
 }
 
@@ -141,7 +144,9 @@ public class ToSBottomSheetViewController: UIViewController,
         )
         cancelButton.accessibilityLabel = viewModel.cancelButtonA11yLabel
         cancelButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.dismiss(animated: true)
+            self?.dismiss(animated: true, completion: {
+                self?.viewModel.onDismiss?()
+            })
         }), for: .touchUpInside)
 
         view.addSubviews(titleLabel, descriptionLabel, allowButton, cancelButton)
@@ -167,7 +172,9 @@ public class ToSBottomSheetViewController: UIViewController,
         applyTheme()
     }
 
-    public func willDismiss() {}
+    public func willDismiss() {
+        viewModel.onDismiss?()
+    }
 
     override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         if let dismissDelegate {

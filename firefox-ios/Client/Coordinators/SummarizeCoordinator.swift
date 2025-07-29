@@ -67,9 +67,8 @@ class SummarizeCoordinator: BaseCoordinator {
             tabSnapshot: browserSnapshot,
             tabSnapshotTopOffset: browserSnapshotTopOffset
         ) { [weak self] in
-            guard let self else { return }
-            parentCoordinatorDelegate?.didFinish(from: self)
-            browserContentHiding?.showBrowserContent()
+            self?.dismissCoordinator()
+            self?.browserContentHiding?.showBrowserContent()
         } onShouldShowTabSnapshot: { [weak self] in
             self?.browserContentHiding?.hideBrowserContent()
         }
@@ -97,6 +96,8 @@ class SummarizeCoordinator: BaseCoordinator {
         } onAllowButtonPressed: { [weak self] in
             self?.prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermOfService)
             self?.showSummarizeViewController()
+        } onDismiss: { [weak self] in
+            self?.dismissCoordinator()
         }
         let tosController = ToSBottomSheetViewController(viewModel: tosViewModel, windowUUID: windowUUID)
         let bottomSheetViewController = BottomSheetViewController(
