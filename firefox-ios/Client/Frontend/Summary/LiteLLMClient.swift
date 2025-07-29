@@ -81,9 +81,7 @@ public final class LiteLLMClient: @unchecked Sendable {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
-                    /// TODO(): We need bytes in URLSessionProtocol to handle streaming responses
-                    /// This is a workaround to get the raw stream data.
-                    let (asyncBytes, response) = try await URLSession.shared.bytes(for: request)
+                    let (asyncBytes, response) = try await session.bytes(for: request)
                     try validate(response: response)
 
                     // Process bytes as they arrive

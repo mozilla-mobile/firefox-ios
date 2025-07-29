@@ -11,6 +11,8 @@ protocol URLSessionProtocol: Sendable {
 
     func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse)
 
+    func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse)
+
     func dataTaskWith(_ url: URL,
                       completionHandler: @escaping DataTaskResult
     ) -> URLSessionDataTaskProtocol
@@ -21,6 +23,13 @@ protocol URLSessionProtocol: Sendable {
     ) -> URLSessionDataTaskProtocol
 }
 
+/// Default implementation for bytes(for:) (for backward compatibility)
+extension URLSessionProtocol {
+    func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse) {
+        throw URLError(.unsupportedURL)
+    }
+}
+
 extension URLSession: URLSessionProtocol {
     public func data(from url: URL) async throws -> (Data, URLResponse) {
         try await data(from: url, delegate: nil)
@@ -28,6 +37,10 @@ extension URLSession: URLSessionProtocol {
 
     public func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse) {
         try await data(for: urlRequest, delegate: nil)
+    }
+
+    public func bytes(for request: URLRequest) async throws -> (AsyncBytes, URLResponse) {
+        return try await bytes(for: request, delegate: nil)
     }
 
     func dataTaskWith(
