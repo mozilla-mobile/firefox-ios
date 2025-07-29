@@ -180,11 +180,6 @@ final class TermsOfUseViewController: UIViewController,
             setupConstraints()
             view.layoutIfNeeded()
         }
-        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            descriptionTextView.attributedText = makeAttributedDescription()
-            view.setNeedsLayout()
-            view.layoutIfNeeded()
-        }
     }
 
     func newState(state: TermsOfUseState) {
@@ -221,7 +216,7 @@ final class TermsOfUseViewController: UIViewController,
 
         if traitCollection.horizontalSizeClass == .regular {
             containerConstraints.append(contentsOf: [
-                sheetContainer.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * UX.iPadWidthMultiplier),
+                sheetContainer.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: UX.iPadWidthMultiplier),
                 sheetContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
                                                         constant: UX.sheetContainerSidePadding),
                 sheetContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor,
