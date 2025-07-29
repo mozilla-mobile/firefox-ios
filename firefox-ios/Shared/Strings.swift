@@ -2065,13 +2065,13 @@ extension String {
             key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v142",
             tableName: "Summarizer",
             value: "Firefox uses AI securely hosted on Mozilla servers to summarize pages.",
-            comment: "The message for the ToS alert that asks the user if they want to allow page summaries."
+            comment: "The message for the ToS alert that asks the user if they want to allow page summaries with Firefox AI."
         )
         public static let ToSAlertMessageAppleLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.AppleMessage.Label.v142",
             tableName: "Summarizer",
             value: "Firefox uses Apple Intelligence to summarize pages.",
-            comment: "The message for the ToS alert that asks the user if they want to allow page summaries."
+            comment: "The message for the ToS alert that asks the user if they want to allow page summaries with Apple Intelligence."
         )
         public static let ToSAlertAllowButtonLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.AllowButton.Label.v142",

@@ -57,6 +57,9 @@ public class ToSBottomSheetViewController: UIViewController,
     private struct UX {
         static let contentHorizontalPadding: CGFloat = 29.0
         static let titleLabelTopPadding: CGFloat = 30.0
+        static let descriptionLabelTopPadding: CGFloat = 20.0
+        static let allowButtonTopPadding: CGFloat = 20.0
+        static let cancelButtonTopPadding: CGFloat = 10.0
     }
     public var themeManager: any Common.ThemeManager
     public var themeObserver: (any NSObjectProtocol)?
@@ -147,15 +150,15 @@ public class ToSBottomSheetViewController: UIViewController,
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
 
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.descriptionLabelTopPadding),
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
 
-            allowButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
+            allowButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: UX.allowButtonTopPadding),
             allowButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
             allowButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
 
-            cancelButton.topAnchor.constraint(equalTo: allowButton.bottomAnchor, constant: 8),
+            cancelButton.topAnchor.constraint(equalTo: allowButton.bottomAnchor, constant: UX.cancelButtonTopPadding),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
             cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
