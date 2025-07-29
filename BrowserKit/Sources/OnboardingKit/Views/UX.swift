@@ -56,6 +56,9 @@ enum UX {
         static let verticalPadding: CGFloat = 10
         static let checkmarkFontSize: CGFloat = 20
         static let selectedColorOpacity: CGFloat = 0.8
+        static let buttonMinHeight: CGFloat = 140
+        static let textAreaMinHeight: CGFloat = 60
+        static let containerSpacing: CGFloat = 0
 
         static let radioButtonSelectedImage = "radioButtonSelected"
         static let radioButtonNotSelectedImage = "radioButtonNotSelected"
