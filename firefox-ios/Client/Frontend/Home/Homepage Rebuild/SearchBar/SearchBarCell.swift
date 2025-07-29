@@ -25,7 +25,6 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     private lazy var contentStackView: UIStackView = .build { view in
         view.alignment = .center
         view.spacing = UX.contentSpacing
-        view.distribution = .equalSpacing
     }
 
     private lazy var placeholderLabel: UILabel = .build { view in
@@ -66,8 +65,8 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.containerPadding),
             container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.containerPadding),
 
-            searchImageView.heightAnchor.constraint(equalToConstant: 22),
-            searchImageView.widthAnchor.constraint(equalToConstant: 22),
+            searchImageView.heightAnchor.constraint(equalToConstant: UX.searchImageSize.height),
+            searchImageView.widthAnchor.constraint(equalToConstant: UX.searchImageSize.width),
 
             contentStackView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             contentStackView.topAnchor.constraint(equalTo: container.topAnchor, constant: UX.heightPadding),
