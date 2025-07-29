@@ -1,10 +1,23 @@
-/* vim: set ts=2 sts=2 sw=2 et tw=80: */
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 "use strict";
-import { Readability } from "@mozilla/readability";
+import { Readability, isProbablyReaderable} from "@mozilla/readability";
+
+const ALLOWED_LANGS = ["en"];
+
+const isPageLanguageSupported = () => {
+  // Attempt to use the <html> lang attribute. 
+  // When the lang attribute is not set we get "". In that case, default to "en".
+  const rawLang = document.documentElement.lang?.trim() || "en";
+  try {
+    const locale = new Intl.Locale(rawLang);
+    return ALLOWED_LANGS.includes(locale.language);
+  } catch {
+    return true;
+  }
+}
 
 const extractContent = () => {
   const uri = {
@@ -33,17 +46,37 @@ const extractContent = () => {
 };
 
 /**
+ * Helper function to wait for document to be ready before running checks.
+ * Returns a Promise that resolves when the document is ready.
+ */
+const documentReady = () =>  new Promise(resolve => {
+  if (document.readyState !== "loading") {
+    resolve();
+  } else {
+    document.addEventListener("readystatechange", () => {
+      if (document.readyState !== "loading") {
+        resolve();
+      }
+    }, { once: true });
+  }
+});
+
+
+/**
  * Checks document summarization eligibility.
  * Returns an object with `canSummarize`, `reason`, and `wordCount`.
  * @param {number} maxWords - Maximum number of words allowed for summarization.
  * @returns {{ canSummarize: boolean, reason: string, wordCount: number }}
  */
-const checkSummarization = (maxWords = MAX_DOCUMENT_LENGTH_IN_WORDS) => {
+const checkSummarization = async (maxWords) => {
   // 0. Document should be ready before we do anything.
-  if (document.readyState === "loading") {
+  await documentReady();
+
+  // 1. Check if the page language is supported.
+  if (!isPageLanguageSupported()) {
     return {
       canSummarize: false,
-      reason: "documentNotReady",
+      reason: "documentLanguageUnsupported",
       wordCount: 0,
     };
   }
@@ -52,7 +85,7 @@ const checkSummarization = (maxWords = MAX_DOCUMENT_LENGTH_IN_WORDS) => {
   if (!isProbablyReaderable(document)) {
     return {
       canSummarize: false,
-      reason: "documentNotReadeable",
+      reason: "documentNotReadable",
       wordCount: 0,
     };
   }
@@ -69,7 +102,13 @@ const checkSummarization = (maxWords = MAX_DOCUMENT_LENGTH_IN_WORDS) => {
     };
   }
 
-  return { canSummarize: true, reason: null, wordCount };
+  return { canSummarize: true, reason: null, wordCount, textContent: text };
 };
 
-window.checkSummarization = checkSummarization;
+
+Object.defineProperty(window.__firefox__, "Summarizer", {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: Object.freeze({checkSummarization})
+});

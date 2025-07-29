@@ -6,7 +6,7 @@ import MozillaAppServices
 import Common
 import SwiftDraw
 
-protocol ASSearchEngineIconDataFetcherProtocol {
+protocol ASSearchEngineIconDataFetcherProtocol: Sendable {
     /// Accepts a list of Search Engines models and populates them with the correct
     /// icon data based on the Remote Settings `search-config-icon` records.
     /// - Parameters:
@@ -21,7 +21,7 @@ final class ASSearchEngineIconDataFetcher: ASSearchEngineIconDataFetcherProtocol
     let service: RemoteSettingsService
     let client: RemoteSettingsClient?
     let logger: Logger
-    private lazy var fallbackEngineIcon: UIImage? = UIImage(named: StandardImageIdentifiers.Large.search)
+    private let fallbackEngineIcon: UIImage? = UIImage(named: StandardImageIdentifiers.Large.search)
 
     init?(logger: Logger = DefaultLogger.shared) {
         let profile: Profile = AppContainer.shared.resolve()

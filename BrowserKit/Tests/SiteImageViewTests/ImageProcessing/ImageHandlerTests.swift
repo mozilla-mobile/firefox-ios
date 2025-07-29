@@ -363,7 +363,7 @@ private extension ImageHandlerTests {
 }
 
 // MARK: - MockHeroImageFetcher
-private class MockHeroImageFetcher: HeroImageFetcher {
+private final class MockHeroImageFetcher: HeroImageFetcher, @unchecked Sendable {
     var image: UIImage?
     var fetchHeroImageSucceedCalled = 0
     var fetchHeroImageFailedCalled = 0
@@ -382,7 +382,7 @@ private class MockHeroImageFetcher: HeroImageFetcher {
 }
 
 // MARK: - MockSiteImageCache
-private class MockSiteImageCache: SiteImageCache {
+private final class MockSiteImageCache: SiteImageCache, @unchecked Sendable {
     var image: UIImage?
     var getImageFromCacheSucceedCalled = 0
     var getImageFromCacheFailedCalled = 0
@@ -413,7 +413,7 @@ private class MockSiteImageCache: SiteImageCache {
 }
 
 // MARK: - MockFaviconFetcher
-private class MockFaviconFetcher: FaviconFetcher {
+private final class MockFaviconFetcher: FaviconFetcher, @unchecked Sendable {
     var image: UIImage?
     var fetchImageSucceedCalled = 0
     var fetchImageFailedCalled = 0

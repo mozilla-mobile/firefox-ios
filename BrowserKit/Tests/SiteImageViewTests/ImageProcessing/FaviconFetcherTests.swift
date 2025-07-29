@@ -52,7 +52,7 @@ final class FaviconFetcherTests: XCTestCase {
 }
 
 // MARK: - MockSiteImageDownloader
-private class MockSiteImageDownloader: SiteImageDownloader {
+private final class MockSiteImageDownloader: SiteImageDownloader, @unchecked Sendable {
     var logger: Logger = DefaultLogger.shared
     var timeoutDelay: Double = 10
 

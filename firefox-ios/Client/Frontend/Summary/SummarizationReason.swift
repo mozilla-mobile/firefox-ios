@@ -4,5 +4,5 @@
 
 /// Model for all the reasons summarization might be disallowed.
 public enum SummarizationReason: String, Decodable {
-    case documentNotReady, documentNotReadable, contentTooLong
+    case documentLanguageUnsupported, documentNotReadable, contentTooLong
 }

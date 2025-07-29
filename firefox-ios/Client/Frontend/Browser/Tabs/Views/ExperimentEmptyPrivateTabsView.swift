@@ -9,11 +9,13 @@ import Shared
 import ComponentLibrary
 
 protocol EmptyPrivateTabView: UIView, ThemeApplicable {
+    @MainActor
     var delegate: EmptyPrivateTabsViewDelegate? { get set }
 }
 
 // View we display when there are no private tabs created
-class ExperimentEmptyPrivateTabsView: UIView, EmptyPrivateTabView {
+class ExperimentEmptyPrivateTabsView: UIView,
+                                      EmptyPrivateTabView {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20

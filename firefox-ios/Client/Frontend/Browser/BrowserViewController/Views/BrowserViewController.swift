@@ -324,6 +324,14 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
+    var isStoriesRedesignEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
+    }
+
+    var isHomepageSearchBarEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+    }
+
     var isSummarizeFeatureEnabled: Bool {
         return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
     }
@@ -1008,9 +1016,17 @@ class BrowserViewController: UIViewController,
         listenForThemeChange(view)
         setupAccessibleActions()
 
-        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs,
-                                                                tabManager: tabManager)
-        clipboardBarDisplayHandler?.delegate = self
+        if #available(iOS 16.0, *) {
+            let clipboardHandler = DefaultClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                     windowUUID: windowUUID)
+            clipboardHandler.delegate = self
+            self.clipboardBarDisplayHandler = clipboardHandler
+        } else {
+            let clipboardHandler = LegacyClipboardBarDisplayHandler(prefs: profile.prefs,
+                                                                    tabManager: tabManager)
+            clipboardHandler.delegate = self
+            self.clipboardBarDisplayHandler = clipboardHandler
+        }
 
         navigationToolbarContainer.toolbarDelegate = self
         scrollController.header = header
@@ -1419,6 +1435,9 @@ class BrowserViewController: UIViewController,
         // when toolbars are hidden/shown the mask on the content view that is used for
         // toolbar translucency needs to be updated
         updateToolbarDisplay()
+
+        // Update available height for the homepage
+        dispatchAvailableContentHeightChangedAction()
     }
 
     func checkForJSAlerts() {
@@ -1668,7 +1687,7 @@ class BrowserViewController: UIViewController,
         }
 
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: true, isFindInPageMode: true)
+            scrollController.hideToolbars(animated: true)
         } else {
             adjustBottomSearchBarForKeyboard()
         }
@@ -1718,13 +1737,19 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
-        let spacerHeight = keyboardHeight - toolBarHeight
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: keyboardHeight)
+
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
         // make sure the keyboard spacer has the right color/translucency
         overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
+    private func getKeyboardSpacerHeight(keyboardHeight: CGFloat) -> CGFloat {
+        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let toolBarHeight = showNavToolbar ? UIConstants.BottomToolbarHeight : 0
+        let spacerHeight = keyboardHeight - toolBarHeight
+        return spacerHeight
     }
 
     fileprivate func showQueuedAlertIfAvailable() {
@@ -3033,6 +3058,45 @@ class BrowserViewController: UIViewController,
         store.dispatchLegacy(action)
     }
 
+    private func dispatchAvailableContentHeightChangedAction() {
+        guard isStoriesRedesignEnabled, let browserViewControllerState,
+           browserViewControllerState.browserViewType == .normalHomepage,
+           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+           homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
+
+        store.dispatch(
+            HomepageAction(
+                availableContentHeight: getAvailableHomepageContentHeight(),
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+    }
+
+    // Computes the height available for the homepage content to occupy when the address is not being edited.
+    // This is accomplished by taking BVC's height and subtracting the height of all of it's immediate subviews
+    // This is used to keep the homepage layout constant, such that it doesn't shift when the homepage's view size changes
+    // eg when the address bar is tapped and the keyboard is presented
+    private func getAvailableHomepageContentHeight() -> CGFloat {
+        // We only have to worry about the bottom address bar when it is part of the homepage layout (can be presented
+        // without the keyboard)
+        var addressBarHeight = isHomepageSearchBarEnabled ? 0 : overKeyboardContainer.frame.height
+
+        // The overKeyboardContainer typically just contains the bottom address bar, but when editing, also contains a
+        // keyboard-sized spacer that we must ignore (since we don't want it to affect the homepage layouts height)
+        if isBottomSearchBar && !isHomepageSearchBarEnabled {
+            let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
+            let keyboardSpacerHeight = keyboardHeight > 0 ? getKeyboardSpacerHeight(keyboardHeight: keyboardHeight) : 0
+            addressBarHeight -= keyboardSpacerHeight
+        }
+
+        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage
+        return view.frame.height - statusBarOverlay.frame.height
+                                 - bottomContentStackView.frame.height
+                                 - bottomContainer.frame.height
+                                 - addressBarHeight
+    }
+
     // MARK: Opening New Tabs
 
     /// ⚠️ !! WARNING !! ⚠️
@@ -3889,7 +3953,7 @@ class BrowserViewController: UIViewController,
     }
 }
 
-extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
+extension BrowserViewController: @preconcurrency LegacyClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
@@ -3909,9 +3973,11 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+        show(toast: toast, duration: LegacyClipboardBarDisplayHandler.UX.toastDelay)
     }
+}
 
+extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     @available(iOS 16.0, *)
     func shouldDisplay() {
         let viewModel = ButtonToastViewModel(
@@ -3928,15 +3994,14 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         clipboardBarDisplayHandler?.clipboardToast = toast
-        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+        show(toast: toast, duration: DefaultClipboardBarDisplayHandler.UX.toastDelay)
     }
 
     override func paste(itemProviders: [NSItemProvider]) {
         for provider in itemProviders where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, error in
-                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
-
-                DispatchQueue.main.async {
+            _ = provider.loadObject(ofClass: URL.self) { url, _ in
+                DispatchQueue.main.async { [weak self] in
+                    let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
                     self?.openURLInNewTab(url, isPrivate: isPrivate)
                 }
             }

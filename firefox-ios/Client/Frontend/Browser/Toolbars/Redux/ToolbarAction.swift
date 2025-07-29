@@ -6,7 +6,9 @@ import Common
 import Redux
 import ToolbarKit
 
-final class ToolbarAction: Action {
+struct ToolbarAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let toolbarPosition: SearchBarPosition?
     let toolbarLayout: ToolbarLayoutStyle?
     let isTranslucent: Bool?
@@ -56,6 +58,8 @@ final class ToolbarAction: Action {
          shouldAnimate: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.toolbarPosition = toolbarPosition
         self.toolbarLayout = toolbarLayout
         self.isTranslucent = isTranslucent
@@ -79,7 +83,6 @@ final class ToolbarAction: Action {
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
         self.shouldAnimate = shouldAnimate
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
@@ -113,7 +116,9 @@ enum ToolbarActionType: ActionType {
     case translucencyDidChange
 }
 
-final class ToolbarMiddlewareAction: Action {
+struct ToolbarMiddlewareAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let buttonType: ToolbarActionConfiguration.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
@@ -125,11 +130,12 @@ final class ToolbarMiddlewareAction: Action {
          scrollOffset: CGPoint? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
         self.scrollOffset = scrollOffset
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

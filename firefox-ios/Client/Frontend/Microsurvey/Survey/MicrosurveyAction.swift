@@ -6,14 +6,17 @@ import Foundation
 import Redux
 import Common
 
-final class MicrosurveyAction: Action {
+struct MicrosurveyAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let userSelection: String?
     let surveyId: String
 
     init(surveyId: String, userSelection: String? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.surveyId = surveyId
         self.userSelection = userSelection
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

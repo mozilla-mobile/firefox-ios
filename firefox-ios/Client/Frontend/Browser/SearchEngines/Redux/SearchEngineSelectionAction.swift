@@ -6,7 +6,9 @@ import Common
 import Foundation
 import Redux
 
-final class SearchEngineSelectionAction: Action {
+struct SearchEngineSelectionAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
     let searchEngines: [SearchEngineModel]?
     let selectedSearchEngine: SearchEngineModel?
 
@@ -16,9 +18,10 @@ final class SearchEngineSelectionAction: Action {
         searchEngines: [SearchEngineModel]? = nil,
         selectedSearchEngine: SearchEngineModel? = nil
     ) {
+        self.windowUUID = windowUUID
+        self.actionType = actionType
         self.searchEngines = searchEngines
         self.selectedSearchEngine = selectedSearchEngine
-        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 

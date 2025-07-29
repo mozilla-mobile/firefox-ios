@@ -8,7 +8,7 @@ import Common
 import Shared
 
 /// Describes public API for search engine selector wrapper for Application Services.
-protocol ASSearchEngineSelectorProtocol {
+protocol ASSearchEngineSelectorProtocol: Sendable {
     /// Fetches search engines from Remote Settings based on the current locale and region.
     /// - Parameters:
     ///   - locale: the locale (e.g. 'en-US')
@@ -37,7 +37,10 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
         do {
             engineSelector.useRemoteSettingsServer(service: service, applyEngineOverrides: false)
 
-            let deviceType: SearchDeviceType = UIDevice.current.userInterfaceIdiom == .pad ? .tablet : .smartphone
+            // Confirmed with AS team deviceType is currently unused. The UIDevice APIs are problematic for
+            // Swift 6 so for simplicity we just pass .smartphone. We can revisit this later if needed.
+            let deviceType: SearchDeviceType = .smartphone
+
             let env = SearchUserEnvironment(locale: locale,
                                             region: region,
                                             updateChannel: SearchUpdateChannel.release,
