@@ -68,6 +68,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testWithoutLaunchType_startsBrowserOnly() {
         let subject = createSubject()
         subject.start(with: nil)
+        // TODO: FXIOS-12947 - Add tests for ToU Feature implementation
         if !featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) {
             XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
             XCTAssertEqual(mockRouter.pushCalled, 1)

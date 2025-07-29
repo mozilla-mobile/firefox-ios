@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Common
 
+// TODO: FXIOS-12947 - Add tests for TermsOfUseCoordinator
 @MainActor
 protocol TermsOfUseCoordinatorDelegate: AnyObject {
     func dismissTermsFlow()
@@ -17,14 +18,17 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     private let notificationCenter: NotificationProtocol
 
     private var presentedVC: TermsOfUseViewController?
+    private let defaults: UserDefaultsInterface
 
     init(windowUUID: WindowUUID,
          router: Router,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         userDefaults: UserDefaultsInterface = UserDefaults.standard) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.defaults = userDefaults
         super.init(router: router)
     }
 
@@ -65,8 +69,6 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     }
 
     func shouldShowTermsOfUse() -> Bool {
-        let defaults = UserDefaults.standard
-
         let hasAccepted = defaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.acceptedKey)
         if hasAccepted { return false }
 

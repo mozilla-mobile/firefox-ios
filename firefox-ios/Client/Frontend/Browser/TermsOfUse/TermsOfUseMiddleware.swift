@@ -13,9 +13,12 @@ class TermsOfUseMiddleware {
         static let lastShownKey = "termsOfUseLastShownDate"
     }
     private let userDefaults: UserDefaultsInterface
+    private let logger: Logger
 
-    init(userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+    init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
+         logger: Logger = DefaultLogger.shared) {
         self.userDefaults = userDefaults
+        self.logger = logger
     }
 
     lazy var termsOfUseProvider: Middleware<AppState> = { _, action in
@@ -23,6 +26,11 @@ class TermsOfUseMiddleware {
         // because we dispatch to the main thread in the store. We will want
         // to also isolate that to the @MainActor to remove this.
         guard Thread.isMainThread else {
+            self.logger.log(
+                "Terms of Use Middleware is not being called from the main thread!",
+                level: .fatal,
+                category: .coordinator
+            )
             return
         }
 
@@ -39,7 +47,7 @@ class TermsOfUseMiddleware {
                 self.userDefaults.set(true, forKey: DefaultKeys.dismissedKey)
                 self.userDefaults.set(Date(), forKey: DefaultKeys.lastShownKey)
 
-            case TermsOfUseActionType.markShownThisLaunch, TermsOfUseActionType.remindMeLater:
+            case TermsOfUseActionType.markShownThisLaunch:
                 break
             }
         }

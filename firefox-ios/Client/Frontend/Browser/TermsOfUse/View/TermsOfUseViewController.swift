@@ -29,6 +29,9 @@ final class TermsOfUseViewController: UIViewController,
         static let springDamping: CGFloat = 0.8
         static let initialSpringVelocity: CGFloat = 1
         static let backgroundAlpha: CGFloat = 0.6
+        static let baseTextViewHeight: CGFloat = 120
+        static let largeTextViewHeight: CGFloat = 180
+        static let extraLargeTextViewHeight: CGFloat = 240
 
         static let titleFont = FXFontStyles.Regular.headline.scaledFont()
         static let descriptionFont = FXFontStyles.Regular.body.scaledFont()
@@ -43,6 +46,17 @@ final class TermsOfUseViewController: UIViewController,
     private let strings = TermsOfUseStrings()
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+
+    private var dynamicTextViewHeight: CGFloat {
+        switch traitCollection.preferredContentSizeCategory {
+        case .accessibilityMedium, .accessibilityLarge:
+            return UX.largeTextViewHeight
+        case .accessibilityExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraExtraExtraLarge:
+            return UX.extraLargeTextViewHeight
+        default:
+            return UX.baseTextViewHeight
+        }
+    }
 
     private var activeContainerConstraints: [NSLayoutConstraint] = []
 
@@ -73,32 +87,37 @@ final class TermsOfUseViewController: UIViewController,
         label.font = UX.titleFont
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var descriptionTextView: UITextView = .build { [self] textView in
         textView.isEditable = false
-        textView.isScrollEnabled = false
+        textView.isScrollEnabled = true
         textView.backgroundColor = .clear
         textView.attributedText = self.makeAttributedDescription()
+        textView.adjustsFontForContentSizeCategory = true
         textView.linkTextAttributes = [
             .foregroundColor: currentTheme().colors.textAccent,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
         textView.delegate = self
+        textView.heightAnchor.constraint(greaterThanOrEqualToConstant: dynamicTextViewHeight).isActive = true
     }
 
     private lazy var acceptButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.acceptButtonTitle, for: .normal)
         button.titleLabel?.font = UX.acceptButtonFont
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.layer.cornerRadius = UX.acceptButtonCornerRadius
-        button.heightAnchor.constraint(equalToConstant: UX.acceptButtonHeight).isActive = true
+        button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.acceptButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.acceptTapped), for: .touchUpInside)
     }
 
     private lazy var remindMeLaterButton: UIButton = .build { button in
         button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
         button.titleLabel?.font = UX.remindMeLaterFont
-        button.heightAnchor.constraint(equalToConstant: UX.remindMeLaterButtonHeight).isActive = true
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.remindMeLaterTapped), for: .touchUpInside)
     }
 
@@ -159,6 +178,11 @@ final class TermsOfUseViewController: UIViewController,
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass {
             setupConstraints()
+            view.layoutIfNeeded()
+        }
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            descriptionTextView.attributedText = makeAttributedDescription()
+            view.setNeedsLayout()
             view.layoutIfNeeded()
         }
     }

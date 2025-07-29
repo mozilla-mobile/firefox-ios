@@ -33,6 +33,7 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
 
     private lazy var backButton: UIButton = .build { button in
         button.setImage(UX.backArrowImage.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         button.imageView?.contentMode = .scaleAspectFit
         button.titleLabel?.adjustsFontSizeToFitWidth = true
