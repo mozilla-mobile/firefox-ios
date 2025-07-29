@@ -139,6 +139,8 @@ public final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
         guard let http = response as? HTTPURLResponse else {
             throw LiteLLMClientError.invalidResponse(statusCode: -1)
         }
+        // Note: We check for all 2xx success codes for completeness. Even though LiteLLM
+        // currently only returns 200 OK, this future‑proofs the client against any other 2xx responses.
         guard (200...299).contains(http.statusCode) else {
             throw LiteLLMClientError.invalidResponse(statusCode: http.statusCode)
         }
