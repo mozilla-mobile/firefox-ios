@@ -74,11 +74,9 @@ public final class SSEDataParser {
         let trimmedEvent = rawEvent.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedEvent.isEmpty else { return nil }
 
-        // Skip if not a properly formatted event line
-        guard isValidEventLine(trimmedEvent) else { return nil }
+        // Attempt to extract payload
         let payload = extractPayload(from: trimmedEvent)
-
-        guard !isDoneSignal(payload) else { return nil }
+        guard payload, !isDoneSignal(payload) else { return nil }
 
         // If it's a valid SSE event and not a done signal, attempt to decode it
         // If decoding fails, throw a decoding error.
@@ -89,12 +87,6 @@ public final class SSEDataParser {
         }
     }
 
-    /// Checks if a trimmed event line is valid by ensuring it starts with the `Constants.dataPrefix`.
-    /// A valid event line looks like: `data: {"message":"event message"}`
-    private func isValidEventLine(_ line: String) -> Bool {
-        line.hasPrefix(Constants.dataPrefix)
-    }
-
     /// Checks if the payload is the stream termination signal `Constants.doneSignal`.
     /// A valid termination signal looks like: `data: [DONE]`
     private func isDoneSignal(_ payload: String) -> Bool {
@@ -103,6 +95,13 @@ public final class SSEDataParser {
 
     /// Extracts the payload from a valid event line by removing the data prefix.
     private func extractPayload(from line: String) -> String {
+        guard isValidEventLine(line) else { return nil }
         String(line.dropFirst(Constants.dataPrefix.count))
+    }
+
+    /// Checks if a trimmed event line is valid by ensuring it starts with the `Constants.dataPrefix`.
+    /// A valid event line looks like: `data: {"message":"event message"}`
+    private func isValidEventLine(_ line: String) -> Bool {
+        line.hasPrefix(Constants.dataPrefix)
     }
 }
