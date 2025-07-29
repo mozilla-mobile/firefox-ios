@@ -58,6 +58,19 @@ class MockBrowserViewController: BrowserViewController {
 
     var viewControllerToPresent: UIViewController?
 
+    var createWebViewCalled = 0
+    var runJavaScriptAlertPanelCalled = 0
+    var runJavaScriptConfirmPanelCalled = 0
+    var runJavaScriptTextInputPanelCalled = 0
+    var webViewDidCloseCalled = 0
+    var contextMenuConfigurationCalled = 0
+    var requestMediaCapturePermissionCalled = 0
+    var contextMenuDidEndForElementCalled = 0
+    override var newTabSettings: NewTabPage {
+        return overrideNewTabSettings
+    }
+    var overrideNewTabSettings: NewTabPage = .topSites
+
     override var presentedViewController: UIViewController? {
         return viewControllerToPresent
     }
