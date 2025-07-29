@@ -37,7 +37,7 @@ class ToSBottomSheetViewControllerTests: XCTestCase {
     func testWillDismiss_callsOnDismiss() {
         let expectation = expectation(description: "onDismiss should be called")
 
-        let subject = createSubject(onDismiss:  {
+        let subject = createSubject(onDismiss: {
             expectation.fulfill()
         })
         subject.willDismiss()
