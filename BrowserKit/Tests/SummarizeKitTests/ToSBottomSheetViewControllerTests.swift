@@ -7,6 +7,7 @@ import ComponentLibrary
 import Common
 @testable import SummarizeKit
 
+@MainActor
 class ToSBottomSheetViewControllerTests: XCTestCase {
     private var dismissDelegate: MockBottomSheetDismissDelegate!
     private let url = URL(string: "https://example.com")!

@@ -15,7 +15,6 @@ final class SummarizeCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinator!
     private var prefs: MockProfilePrefs!
-    private var dismissDelegate: MockBottomSheetDismissDelegate!
     private let url = URL(string: "https://example.com")!
 
     override func setUp() {
@@ -25,7 +24,6 @@ final class SummarizeCoordinatorTests: XCTestCase {
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockParentCoordinator()
         prefs = MockProfilePrefs()
-        dismissDelegate = MockBottomSheetDismissDelegate()
         prefs.setBool(false, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
     }
 
@@ -35,7 +33,6 @@ final class SummarizeCoordinatorTests: XCTestCase {
         router = nil
         prefs = nil
         parentCoordinator = nil
-        dismissDelegate = nil
         super.tearDown()
     }
 
@@ -70,11 +67,9 @@ final class SummarizeCoordinatorTests: XCTestCase {
         let bottomSheetViewController = try XCTUnwrap(router.presentedViewController as? BottomSheetViewController)
         bottomSheetViewController.loadViewIfNeeded()
         let tosController = try XCTUnwrap(bottomSheetViewController.children.first as? ToSBottomSheetViewController)
-        tosController.dismissDelegate = dismissDelegate
 
         _ = tosController.textView(UITextView(), shouldInteractWith: url, in: .init())
 
-        XCTAssertEqual(dismissDelegate.didCallDismissSheetViewController, 1)
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         wait(for: [expectation], timeout: 1.0)
     }
@@ -123,14 +118,5 @@ final class SummarizeCoordinatorTests: XCTestCase {
                                            onRequestOpenURL: onRequestOpenURL)
         trackForMemoryLeaks(subject)
         return subject
-    }
-}
-
-class MockBottomSheetDismissDelegate: BottomSheetDismissProtocol {
-    var didCallDismissSheetViewController = 0
-
-    func dismissSheetViewController(completion: (() -> Void)?) {
-        didCallDismissSheetViewController += 1
-        completion?()
     }
 }

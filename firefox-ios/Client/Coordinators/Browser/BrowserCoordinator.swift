@@ -53,6 +53,9 @@ class BrowserCoordinator: BaseCoordinator,
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
+    private var isSummarizerFeatureEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
+    }
 
     override var isDismissible: Bool { false }
 
@@ -1071,6 +1074,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showSummarizePanel() {
+        guard isSummarizerFeatureEnabled, tabManager.selectedTab?.isFxHomeTab == false else { return }
         let contentContainer = browserViewController.contentContainer
         let browserFrame = browserViewController.view.frame
         var browserScreenshot = browserViewController.view.snapshot
