@@ -8,6 +8,18 @@ import Redux
 import Shared
 
 final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+    /// Delegate protocol for handling address bar pan gesture events.
+    /// Allows external objects to respond to swipe gesture state changes during tab switching.
+    protocol Delegate: AnyObject {
+        /// Called when the pan gesture state changes during a swipe operation.
+        /// This method is invoked continuously while the user is actively swiping between tabs.
+        func swipeGestureDidChange()
+
+        /// Called when the pan gesture ends, either by completion, cancellation, or failure.
+        /// This method is invoked once at the end of the swipe operation, regardless of outcome.
+        func swipeGestureDidEnd()
+    }
+
     typealias SubscriberStateType = ToolbarState
     // MARK: - UX Constants
     private struct UX {
@@ -32,6 +44,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     private let screenshotHelper: ScreenshotHelper?
     var homepageScreenshotToolProvider: (() -> Screenshotable?)?
     var newTabSettingsProvider: (() -> NewTabPage?)?
+    weak var delegate: AddressBarPanGestureHandler.Delegate?
     private var homepageScreenshot: UIImage?
     private var toolbarState: ToolbarState?
     private let prefs: Prefs
@@ -159,6 +172,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             )
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
         case .changed:
+            delegate?.swipeGestureDidChange()
             if nextTab == nil, homepageScreenshot == nil {
                 let homepageScreenshotTool = homepageScreenshotToolProvider?()
                 homepageScreenshot = homepageScreenshotTool?.screenshot(bounds: CGRect(
@@ -256,6 +270,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,
                                                 isHomepage: contentContainer.hasHomepage)
             }
+            delegate?.swipeGestureDidEnd()
         }
     }
 
