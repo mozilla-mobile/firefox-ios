@@ -75,8 +75,8 @@ public final class SSEDataParser {
         guard !trimmedEvent.isEmpty else { return nil }
 
         // Attempt to extract payload
-        let payload = extractPayload(from: trimmedEvent)
-        guard payload, !isDoneSignal(payload) else { return nil }
+        guard let payload = extractPayload(from: trimmedEvent),
+              !isDoneSignal(payload) else { return nil }
 
         // If it's a valid SSE event and not a done signal, attempt to decode it
         // If decoding fails, throw a decoding error.
@@ -94,9 +94,9 @@ public final class SSEDataParser {
     }
 
     /// Extracts the payload from a valid event line by removing the data prefix.
-    private func extractPayload(from line: String) -> String {
+    private func extractPayload(from line: String) -> String? {
         guard isValidEventLine(line) else { return nil }
-        String(line.dropFirst(Constants.dataPrefix.count))
+        return String(line.dropFirst(Constants.dataPrefix.count))
     }
 
     /// Checks if a trimmed event line is valid by ensuring it starts with the `Constants.dataPrefix`.
