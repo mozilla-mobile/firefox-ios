@@ -46,7 +46,7 @@ class SummarizeCoordinator: BaseCoordinator {
     }
 
     func start() {
-        if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermOfService) ?? false {
+        if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false {
             showSummarizeViewController()
         } else {
             showToSAlert()
@@ -93,7 +93,7 @@ class SummarizeCoordinator: BaseCoordinator {
             cancelButtonA11yLabel: .Summarizer.ToSAlertCancelButtonAccessibilityLabel) { [weak self] url in
             self?.onRequestOpenURL?(url)
         } onAllowButtonPressed: { [weak self] in
-            self?.prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermOfService)
+            self?.prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
             self?.router.dismiss(animated: true) {
                 self?.showSummarizeViewController()
             }

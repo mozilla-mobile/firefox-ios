@@ -26,7 +26,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         parentCoordinator = MockParentCoordinator()
         prefs = MockProfilePrefs()
         dismissDelegate = MockBottomSheetDismissDelegate()
-        prefs.setBool(false, forKey: PrefsKeys.Summarizer.didAgreeTermOfService)
+        prefs.setBool(false, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
     }
 
     override func tearDown() {
@@ -49,7 +49,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
     }
 
     func testStart_showsSummarizeController_whenTermsOfServiceAgreed() {
-        prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermOfService)
+        prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
         let subject = createSubject()
 
         subject.start()
@@ -103,7 +103,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
     }
 
     func testStart_dismissCoordinator_whenTermsOfServiceAgreed() {
-        prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermOfService)
+        prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
         let subject = createSubject()
 
         subject.start()
