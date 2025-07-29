@@ -30,7 +30,7 @@ public final class LiteLLMSummarizer: SummarizerProtocol {
     public func summarize(prompt: String, text: String) async throws -> String {
         let options = LiteLLMChatOptions(model: model, maxTokens: maxTokens, stream: false)
         // System message is used for the prompt, user message for the text.
-        let messages = [LiteLLMMessage(role: .system, content: prompt), LiteLLMMessage(role: .user, content: text)]
+        let messages = makeMessages(prompt: prompt, text: text)
         do {
             return try await client.requestChatCompletion(messages: messages, options: options)
         } catch {
@@ -48,10 +48,7 @@ public final class LiteLLMSummarizer: SummarizerProtocol {
         text: String
     ) -> AsyncThrowingStream<String, Error> {
         let options = LiteLLMChatOptions(model: model, maxTokens: maxTokens, stream: true)
-        let messages = [
-            LiteLLMMessage(role: .system, content: prompt),
-            LiteLLMMessage(role: .user, content: text)
-        ]
+        let messages = makeMessages(prompt: prompt, text: text)
 
         var stream = client.requestChatCompletionStreamed(messages: messages, options: options).makeAsyncIterator()
         return AsyncThrowingStream<String, Error>(unfolding: {
@@ -81,5 +78,13 @@ public final class LiteLLMSummarizer: SummarizerProtocol {
         case let e as LiteLLMClientError: return .unknown(e)
         default: return .unknown(error)
         }
+    }
+
+    /// Helper to build a typed message array from prompt and user message
+    private func makeMessages(prompt: String, text: String) -> [LiteLLMMessage] {
+        return [
+            LiteLLMMessage(role: .system, content: prompt),
+            LiteLLMMessage(role: .user,   content: text)
+        ]
     }
 }
