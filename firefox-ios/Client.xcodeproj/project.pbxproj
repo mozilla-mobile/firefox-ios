@@ -1423,6 +1423,7 @@
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BA073B7B2E384FD500E27B36 /* SSEDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073B7A2E384FCA00E27B36 /* SSEDataParser.swift */; };
 		BA073B7D2E38503700E27B36 /* SSEDataParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073B7C2E38502F00E27B36 /* SSEDataParserError.swift */; };
+		BA073B812E38592D00E27B36 /* SSEDataParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073B802E38592500E27B36 /* SSEDataParserTests.swift */; };
 		BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */; };
 		BA1237BC2DAE608100BB6333 /* GenericSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */; };
 		BA1237BF2DAE675B00BB6333 /* GenericImageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */; };
@@ -9243,6 +9244,7 @@
 		BA05405089CFDC6097258640 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		BA073B7A2E384FCA00E27B36 /* SSEDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEDataParser.swift; sourceTree = "<group>"; };
 		BA073B7C2E38502F00E27B36 /* SSEDataParserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEDataParserError.swift; sourceTree = "<group>"; };
+		BA073B802E38592500E27B36 /* SSEDataParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEDataParserTests.swift; sourceTree = "<group>"; };
 		BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NightModeAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionView.swift; sourceTree = "<group>"; };
 		BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericImageOption.swift; sourceTree = "<group>"; };
@@ -15488,6 +15490,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				BA073B802E38592500E27B36 /* SSEDataParserTests.swift */,
 				BAEB9EB32E28726100F9F482 /* SummarizationCheckerTests.swift */,
 				BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */,
 				EDADF7822D70D59900C39295 /* AppIconSelection */,
@@ -18823,6 +18826,7 @@
 				61E637852D03615D00E95B63 /* LabelButtonHeaderViewTests.swift in Sources */,
 				21F2A2D42B0D194A00626AEC /* TabsPanelStateTests.swift in Sources */,
 				8ACA8F7629198D6400D3075D /* GCDThrottlerTests.swift in Sources */,
+				BA073B812E38592D00E27B36 /* SSEDataParserTests.swift in Sources */,
 				217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */,
 				8A09BCC32D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift in Sources */,
 				0B7CF8872CAC1C4E00DC02F8 /* DefaultFolderHierarchyFetcherTests.swift in Sources */,
