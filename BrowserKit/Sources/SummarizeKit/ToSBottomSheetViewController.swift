@@ -61,7 +61,7 @@ public class ToSBottomSheetViewController: UIViewController,
     public var themeManager: any Common.ThemeManager
     public var themeObserver: (any NSObjectProtocol)?
     public var notificationCenter: any Common.NotificationProtocol
-    
+
     public var currentWindowUUID: Common.WindowUUID?
     private let viewModel: ToSBottomSheetViewModel
     public weak var dismissDelegate: BottomSheetDismissProtocol?
@@ -90,11 +90,11 @@ public class ToSBottomSheetViewController: UIViewController,
         self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         titleLabel.text = viewModel.titleLabel
