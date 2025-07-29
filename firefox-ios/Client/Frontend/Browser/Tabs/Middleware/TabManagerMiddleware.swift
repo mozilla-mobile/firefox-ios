@@ -11,7 +11,7 @@ import SiteImageView
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware: FeatureFlaggable {
+final class TabManagerMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -563,11 +563,7 @@ class TabManagerMiddleware: FeatureFlaggable {
             await tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
             await MainActor.run {
-                let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
-                let action = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                      windowUUID: uuid,
-                                                      actionType: TabPanelMiddlewareActionType.refreshTabs)
-                store.dispatchLegacy(action)
+                triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
 
                 if tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled {
                     let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
@@ -583,13 +579,13 @@ class TabManagerMiddleware: FeatureFlaggable {
                     }
                     addNewTabIfPrivate(uuid: uuid)
                 }
-            }
-        }
 
-        if !tabsState.isPrivateMode {
-            let dismissAction = TabTrayAction(windowUUID: uuid,
-                                              actionType: TabTrayActionType.dismissTabTray)
-            store.dispatchLegacy(dismissAction)
+                if !tabsState.isPrivateMode {
+                    let dismissAction = TabTrayAction(windowUUID: uuid,
+                                                      actionType: TabTrayActionType.dismissTabTray)
+                    store.dispatchLegacy(dismissAction)
+                }
+            }
         }
     }
 
