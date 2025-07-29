@@ -5,9 +5,9 @@
 import Foundation
 
 /// Errors produced by LiteLLMClient, with user-friendly descriptions.
-public enum LLMClientError: LocalizedError {
+public enum LiteLLMClientError: LocalizedError {
     case requestCreationFailed
-    case invalidResponse
+    case invalidResponse(statusCode: Int)
     case noContent
     case decodingFailed
     case networkError(underlying: Error)
@@ -16,8 +16,8 @@ public enum LLMClientError: LocalizedError {
         switch self {
         case .requestCreationFailed:
             return "Unable to prepare the request. Please try again later."
-        case .invalidResponse:
-            return "Received an unexpected response from the server."
+        case .invalidResponse(let statusCode):
+            return "Received an unexpected response from the server. Status code: \(statusCode)"
         case .noContent:
             return "The server returned no message."
         case .decodingFailed:
