@@ -14,6 +14,7 @@ channels:
   - release
 include:
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/appleSummarizerFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/defaultZoomFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
@@ -24,6 +25,7 @@ include:
   - nimbus-features/hntTopSitesVisualRefresh.yaml
   - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
+  - nimbus-features/hostedSummarizerFeature.yaml
   - nimbus-features/loginsVerificationEnabled.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
@@ -40,7 +42,6 @@ include:
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml
-  - nimbus-features/summarizerFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml

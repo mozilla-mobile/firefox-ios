@@ -1,0 +1,18 @@
+# The configuration for the apple summarizer feature
+features:
+  apple-summarizer-feature:
+    description: >
+      This feature enables the apple summarizer feature.
+    variables:
+      enabled:
+        description: >
+          Enables the apple summarizer feature.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true
