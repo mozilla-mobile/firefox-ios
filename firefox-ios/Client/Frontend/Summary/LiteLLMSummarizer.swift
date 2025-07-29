@@ -84,7 +84,7 @@ public final class LiteLLMSummarizer: SummarizerProtocol {
     private func makeMessages(prompt: String, text: String) -> [LiteLLMMessage] {
         return [
             LiteLLMMessage(role: .system, content: prompt),
-            LiteLLMMessage(role: .user,   content: text)
+            LiteLLMMessage(role: .user, content: text)
         ]
     }
 }
