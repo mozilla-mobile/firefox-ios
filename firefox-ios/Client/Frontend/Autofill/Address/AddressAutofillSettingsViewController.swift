@@ -161,7 +161,9 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     }
 
     deinit {
-        addressAutofillSettingsPageView.removeFromParent()
-        addressAutofillSettingsPageView.view.removeFromSuperview()
+        Task { @MainActor [addressAutofillSettingsPageView] in
+            addressAutofillSettingsPageView.removeFromParent()
+            addressAutofillSettingsPageView.view.removeFromSuperview()
+        }
     }
 }
