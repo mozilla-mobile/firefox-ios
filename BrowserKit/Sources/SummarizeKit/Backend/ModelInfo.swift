@@ -43,7 +43,6 @@ struct ModelInfo {
     ///   - useAppleModel: Feature flag to determine if the apple model should be used.
     ///   - useHostedModel: Feature flag to determine if the hosted model should be used.
     /// - Returns: A ModelInfo for the first enabled flag, or nil if none.
-    /// 
     static func getEnabledModel(useAppleModel: Bool, useHostedModel: Bool) -> ModelInfo? {
         switch (useAppleModel, useHostedModel) {
         case (true, _):
