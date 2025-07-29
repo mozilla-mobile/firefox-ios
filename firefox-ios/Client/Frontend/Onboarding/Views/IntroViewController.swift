@@ -210,8 +210,11 @@ class IntroViewController: UIViewController,
 
     func registerForNotification() {
         if !hasRegisteredForDefaultBrowserNotification {
-            setupNotifications(forObserver: self,
-                               observing: [UIApplication.didEnterBackgroundNotification])
+            startObservingNotifications(
+                withNotificationCenter: notificationCenter,
+                forObserver: self,
+                observing: [UIApplication.didEnterBackgroundNotification]
+            )
             hasRegisteredForDefaultBrowserNotification = true
         }
     }

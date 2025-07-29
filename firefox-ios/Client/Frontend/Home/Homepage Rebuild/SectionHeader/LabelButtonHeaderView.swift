@@ -52,8 +52,11 @@ class LabelButtonHeaderView: UICollectionReusableView,
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
 
     private func setupLayout() {

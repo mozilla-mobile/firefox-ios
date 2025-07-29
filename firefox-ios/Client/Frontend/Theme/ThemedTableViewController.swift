@@ -7,7 +7,7 @@ import Common
 
 class ThemedTableViewController: UITableViewController, Themeable, InjectedThemeUUIDIdentifiable {
     var themeManager: ThemeManager
-    @objc var notificationCenter: NotificationProtocol
+    var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }

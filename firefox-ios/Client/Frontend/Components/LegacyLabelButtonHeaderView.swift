@@ -71,8 +71,11 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         addSubview(stackView)
 
         setupLayout()
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
 
     private func setupLayout() {

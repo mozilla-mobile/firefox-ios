@@ -46,7 +46,11 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
     }
 
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {

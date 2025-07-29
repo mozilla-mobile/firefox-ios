@@ -101,8 +101,11 @@ class LibraryViewController: UIViewController, Themeable {
         super.viewDidLoad()
         viewSetup()
         listenForThemeChange(view)
-        setupNotifications(forObserver: self,
-                           observing: [.LibraryPanelStateDidChange, .LibraryPanelBookmarkTitleChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.LibraryPanelStateDidChange, .LibraryPanelBookmarkTitleChanged]
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {

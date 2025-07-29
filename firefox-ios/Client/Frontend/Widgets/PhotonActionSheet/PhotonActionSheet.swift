@@ -106,7 +106,8 @@ class PhotonActionSheet: UIViewController, Themeable {
 
         setupLayout()
 
-        setupNotifications(
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
             forObserver: self,
             observing: [.ProfileDidFinishSyncing,
                         .ProfileDidStartSyncing,

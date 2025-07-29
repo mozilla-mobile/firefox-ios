@@ -169,8 +169,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         listenForThemeChange(view)
         setupLayout()
 
-        setupNotifications(forObserver: self,
-                           observing: [.TabsTrayDidClose])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.TabsTrayDidClose]
+        )
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links onto the "New Tab" button.

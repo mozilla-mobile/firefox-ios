@@ -48,17 +48,23 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
     convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.init(frame: frame)
         self.notificationCenter = notificationCenter
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.borderWidth = UX.passwordFieldBorderWidth
         self.layer.cornerRadius = UX.passwordFieldCornerRadius
         self.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordField
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
         setupLayout()
     }
 
