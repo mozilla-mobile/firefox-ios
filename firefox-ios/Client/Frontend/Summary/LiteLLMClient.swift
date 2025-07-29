@@ -8,10 +8,6 @@ import Shared
 /// A lightweight client for interacting with an OpenAI style API chat completions endpoint.
 /// TODO(FXIOS-12942): Implement proper thread-safety
 final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
-    /// NOTE: OpenAI like APIs including LiteLLM don't use websockets for streaming mode
-    /// but instead use Server Sent Events (SSE) to send chunked responses.
-    private let sseParser: SSEDataParser
-
     private let apiKey: String
     private let baseURL: URL
 
@@ -22,17 +18,14 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     ///   - apiKey: Your API key for authentication.
     ///   - baseURL: Base URL of the server.
     ///   - urlSession: Custom URL session for network requests. Defaults to `URLSession.shared`.
-    ///   - sseParser: Custom SSE parser for handling streaming responses. Defaults to a new instance of `SSEDataParser`.
     init(
         apiKey: String,
         baseURL: URL,
-        urlSession: URLSessionProtocol = URLSession.shared,
-        sseParser: SSEDataParser = .init()
+        urlSession: URLSessionProtocol = URLSession.shared
     ) {
         self.apiKey = apiKey
         self.baseURL = baseURL
         self.session = urlSession
-        self.sseParser = sseParser
     }
 
     /// Sends a chat completion request in non-streaming mode.
@@ -77,7 +70,10 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
         return content
     }
 
-    private func handleStreamingRequest(request: URLRequest) -> AsyncThrowingStream<String, Error> {
+    private func handleStreamingRequest(
+        request: URLRequest,
+        sseParser: SSEDataParser = SSEDataParser()
+    ) -> AsyncThrowingStream<String, Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
