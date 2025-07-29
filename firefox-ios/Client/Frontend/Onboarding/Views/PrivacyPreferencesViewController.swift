@@ -68,7 +68,11 @@ final class PrivacyPreferencesViewController: UIViewController,
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
         setupLayout()
         setDetentSize()
         setupContentViews()

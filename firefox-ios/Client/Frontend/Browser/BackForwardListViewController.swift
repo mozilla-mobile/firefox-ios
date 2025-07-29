@@ -102,8 +102,11 @@ class BackForwardListViewController: UIViewController,
         scrollTableViewToIndex(currentRow)
         setupDismissTap()
 
-        setupNotifications(forObserver: self,
-                           observing: [UIAccessibility.reduceTransparencyStatusDidChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIAccessibility.reduceTransparencyStatusDidChangeNotification]
+        )
     }
 
     private func setupLayout() {

@@ -42,7 +42,11 @@ class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
     init(mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.mainQueue = mainQueue
 
-        setupNotifications(forObserver: self, observing: [.ReaderModeSessionChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.ReaderModeSessionChanged]
+        )
     }
 
     func register(_ webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {

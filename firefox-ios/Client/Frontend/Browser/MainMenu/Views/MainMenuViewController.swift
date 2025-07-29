@@ -99,8 +99,11 @@ class MainMenuViewController: UIViewController,
 
         viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
                                                   with: profile)
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
 
     required init?(coder: NSCoder) {

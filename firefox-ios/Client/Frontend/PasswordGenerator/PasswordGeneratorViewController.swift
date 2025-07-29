@@ -86,10 +86,13 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         self.currentFrame = currentFrame
         super.init(nibName: nil, bundle: nil)
         self.subscribeToRedux()
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged,
-                                       UIApplication.willResignActiveNotification,
-                                       UIApplication.didBecomeActiveNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged,
+                        UIApplication.willResignActiveNotification,
+                        UIApplication.didBecomeActiveNotification]
+        )
     }
 
     deinit {

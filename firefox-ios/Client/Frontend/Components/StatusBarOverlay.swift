@@ -55,16 +55,22 @@ final class StatusBarOverlay: UIView,
         self.wallpaperManager = wallpaperManager
         self.scrollDelegate = scrollDelegate
         self.toolbarHelper = toolbarHelper
-        setupNotifications(forObserver: self,
-                           observing: [.WallpaperDidChange,
-                                       .SearchBarPositionDidChange])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.WallpaperDidChange,
+                        .SearchBarPositionDidChange]
+        )
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupNotifications(forObserver: self,
-                           observing: [.WallpaperDidChange,
-                                       .SearchBarPositionDidChange])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.WallpaperDidChange,
+                        .SearchBarPositionDidChange]
+        )
     }
 
     required init?(coder: NSCoder) {

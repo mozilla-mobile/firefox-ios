@@ -107,7 +107,11 @@ final class BookmarksViewController: SiteTableViewController,
 
         bookmarksSaver = DefaultBookmarksSaver(profile: profile)
 
-        setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged, .ProfileDidFinishSyncing])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.FirefoxAccountChanged, .ProfileDidFinishSyncing]
+        )
 
         tableView.register(cellType: OneLineTableViewCell.self)
         tableView.register(cellType: SeparatorTableViewCell.self)

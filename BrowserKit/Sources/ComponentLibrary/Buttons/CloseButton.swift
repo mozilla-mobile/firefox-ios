@@ -48,7 +48,11 @@ public class CloseButton: UIButton,
     public func configure(viewModel: CloseButtonViewModel,
                           notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.notificationCenter = notificationCenter
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
 
         self.viewModel = viewModel
         accessibilityIdentifier = viewModel.a11yIdentifier

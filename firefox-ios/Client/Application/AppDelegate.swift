@@ -331,9 +331,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
 extension AppDelegate: Notifiable {
     private func addObservers() {
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
-                                                          UIApplication.willResignActiveNotification,
-                                                          UIApplication.didEnterBackgroundNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIApplication.didBecomeActiveNotification,
+                        UIApplication.willResignActiveNotification,
+                        UIApplication.didEnterBackgroundNotification]
+        )
     }
 
     /// When migrated to Scenes, these methods aren't called.

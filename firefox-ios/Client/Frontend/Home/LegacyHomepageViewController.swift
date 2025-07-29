@@ -121,10 +121,13 @@ class LegacyHomepageViewController:
             return self.getPopoverSourceRect(sourceView: popoverView)
         }
 
-        setupNotifications(forObserver: self,
-                           observing: [.HomePanelPrefsChanged,
-                                       .TabsPrivacyModeChanged,
-                                       .WallpaperDidChange])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.HomePanelPrefsChanged,
+                        .TabsPrivacyModeChanged,
+                        .WallpaperDidChange]
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {

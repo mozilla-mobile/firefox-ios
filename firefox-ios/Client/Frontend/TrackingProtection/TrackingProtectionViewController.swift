@@ -150,8 +150,11 @@ class TrackingProtectionViewController: UIViewController,
         }
         setupView()
         listenForThemeChange(view)
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
         scrollView.delegate = self
         updateViewDetails()
     }

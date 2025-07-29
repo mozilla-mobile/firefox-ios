@@ -21,8 +21,11 @@ class LegacyWallpaperBackgroundView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        setupNotifications(forObserver: self,
-                           observing: [.WallpaperDidChange])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.WallpaperDidChange]
+        )
 
         updateImageToCurrentWallpaper()
     }
