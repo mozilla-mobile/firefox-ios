@@ -67,8 +67,8 @@ class SummarizeCoordinator: BaseCoordinator {
             tabSnapshot: browserSnapshot,
             tabSnapshotTopOffset: browserSnapshotTopOffset
         ) { [weak self] in
-            self?.dismissCoordinator()
             self?.browserContentHiding?.showBrowserContent()
+            self?.dismissCoordinator()
         } onShouldShowTabSnapshot: { [weak self] in
             self?.browserContentHiding?.hideBrowserContent()
         }
@@ -92,10 +92,11 @@ class SummarizeCoordinator: BaseCoordinator {
             cancelButtonA11yId: AccessibilityIdentifiers.Summarizer.tosCancelButton,
             cancelButtonA11yLabel: .Summarizer.ToSAlertCancelButtonAccessibilityLabel) { [weak self] url in
             self?.onRequestOpenURL?(url)
-            self?.dismissCoordinator()
         } onAllowButtonPressed: { [weak self] in
             self?.prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermOfService)
-            self?.showSummarizeViewController()
+            self?.router.dismiss(animated: true) {
+                self?.showSummarizeViewController()
+            }
         } onDismiss: { [weak self] in
             self?.dismissCoordinator()
         }

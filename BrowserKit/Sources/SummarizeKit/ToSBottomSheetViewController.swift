@@ -132,9 +132,7 @@ public class ToSBottomSheetViewController: UIViewController,
         )
         allowButton.accessibilityLabel = viewModel.allowButtonA11yLabel
         allowButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.dismiss(animated: true, completion: {
-                self?.viewModel.onAllowButtonPressed?()
-            })
+            self?.viewModel.onAllowButtonPressed?()
         }), for: .touchUpInside)
         cancelButton.configure(
             viewModel: SecondaryRoundedButtonViewModel(
@@ -144,9 +142,7 @@ public class ToSBottomSheetViewController: UIViewController,
         )
         cancelButton.accessibilityLabel = viewModel.cancelButtonA11yLabel
         cancelButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.dismiss(animated: true, completion: {
-                self?.viewModel.onDismiss?()
-            })
+            self?.dismiss(animated: true)
         }), for: .touchUpInside)
 
         view.addSubviews(titleLabel, descriptionLabel, allowButton, cancelButton)
@@ -186,9 +182,8 @@ public class ToSBottomSheetViewController: UIViewController,
 
     // MARK: - UITextViewDelegate
     public func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        dismiss(animated: true) { [weak self] in
-            self?.viewModel.onRequestOpenURL?(URL)
-        }
+        viewModel.onRequestOpenURL?(URL)
+        dismiss(animated: true)
         return false
     }
 
