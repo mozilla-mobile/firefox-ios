@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		033C94F72E2FBCDD00C2382F /* TermsOfUseMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C94F62E2FBCD300C2382F /* TermsOfUseMiddlewareTests.swift */; };
 		03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */; };
 		0430A545203B372D00FDF76D /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0430A544203B372D00FDF76D /* IntegrationTests.swift */; };
 		047F9B2924E1FE1C00CD7DF7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD46F3524A1606C001B3967 /* SwiftUI.framework */; };
@@ -2466,6 +2467,7 @@
 		02C94BE0922C110AFF6944E3 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		02E547BF89DA742677E367E6 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		02FC4A06A948593BE97BC508 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/LoginManager.strings"; sourceTree = "<group>"; };
+		033C94F62E2FBCD300C2382F /* TermsOfUseMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseMiddlewareTests.swift; sourceTree = "<group>"; };
 		033D4FBDA7761FAB7C0B00B3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Storage.strings; sourceTree = "<group>"; };
 		036B499AA4BEE3FA05346002 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		03A14EF0A7BA733D9C3F2D93 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Search.strings"; sourceTree = "<group>"; };
@@ -10654,6 +10656,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		034784BA2E2690F600D04A84 /* TermsOfUse */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TermsOfUse; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -10916,6 +10919,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		033C94F32E2F839900C2382F /* TermsOfUse */ = {
+			isa = PBXGroup;
+			children = (
+				033C94F62E2FBCD300C2382F /* TermsOfUseMiddlewareTests.swift */,
+			);
+			path = TermsOfUse;
+			sourceTree = "<group>";
+		};
 		047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -14593,6 +14604,7 @@
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				034784BA2E2690F600D04A84 /* TermsOfUse */,
 				81A3F6EE2C2DAED500BDD86B /* MainMenu */,
 				1D7B78952ADF324E0011E9F2 /* Event Queue */,
 				8A1E3BE428CBBF1E003388C4 /* SearchEngines */,
@@ -15550,6 +15562,7 @@
 				8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */,
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
 				0B7B053C2D647D00007FD7AC /* TemporaryDocumentTests.swift */,
+				033C94F32E2F839900C2382F /* TermsOfUse */,
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 				8A33222027DFE64C008F809E /* TestingHelperClasses */,
 				E16941B22C4E498600FF5F4E /* Toolbar */,
@@ -16194,6 +16207,7 @@
 				E17EFC332CD16F5B00169A1F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				034784BA2E2690F600D04A84 /* TermsOfUse */,
 				ED85DD2C2DE669FF00487807 /* probes */,
 			);
 			name = Client;
@@ -18592,6 +18606,7 @@
 				431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */,
 				5AD3B6782CF650DF00AFA1FE /* DefaultBrowserUitTests.swift in Sources */,
 				213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */,
+				033C94F72E2FBCDD00C2382F /* TermsOfUseMiddlewareTests.swift in Sources */,
 				8A13FA892AD82BC8007527AB /* AppSendTabDelegateTests.swift in Sources */,
 				8A7653C228A2E57D00924ABF /* StoryDataAdaptorTests.swift in Sources */,
 				0ABCD45D2D356015005D704A /* TermsOfServiceTelemetryTests.swift in Sources */,

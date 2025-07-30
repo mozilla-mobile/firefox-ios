@@ -143,6 +143,9 @@ final class NimbusFeatureFlagLayer {
         case .tosFeature:
             return checkTosFeature(from: nimbus)
 
+        case .touFeature:
+            return checkTouFeature(from: nimbus)
+
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
 
@@ -258,6 +261,10 @@ final class NimbusFeatureFlagLayer {
     private func checkTosFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tosFeature.value()
         return config.status
+    }
+
+    private func checkTouFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.touFeature.value().status
     }
 
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
