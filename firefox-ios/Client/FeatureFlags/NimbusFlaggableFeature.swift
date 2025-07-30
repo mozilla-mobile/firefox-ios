@@ -45,7 +45,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case splashScreen
     case startAtHome
     case appleSummarizer
+    case appleSummarizerToolbarEntrypoint
     case hostedSummarizer
+    case hostedSummarizerToolbarEntrypoint
     case tabTrayUIExperiments
     case toolbarNavigationHint
     case toolbarUpdateHint
@@ -157,7 +159,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .searchEngineConsolidation,
                 .splashScreen,
                 .appleSummarizer,
+                .appleSummarizerToolbarEntrypoint,
                 .hostedSummarizer,
+                .hostedSummarizerToolbarEntrypoint,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,
                 .toolbarUpdateHint,

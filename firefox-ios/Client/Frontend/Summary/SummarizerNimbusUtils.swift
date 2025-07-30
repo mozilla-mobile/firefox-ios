@@ -20,4 +20,14 @@ struct SummarizerNimbusUtils: FeatureFlaggable {
     func isHostedSummarizerEnabled() -> Bool {
         return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
     }
+
+    func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
+        let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizerToolbarEntrypoint, checking: .buildOnly)
+        return isAppleSummarizerEnabled() && isFlagEnabled
+    }
+
+    func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
+        let isFlagEnabled = featureFlags.isFeatureEnabled(.hostedSummarizerToolbarEntrypoint, checking: .buildOnly)
+        return isHostedSummarizerEnabled() && isFlagEnabled
+    }
 }
