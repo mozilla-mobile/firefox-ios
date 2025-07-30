@@ -50,12 +50,15 @@ enum UX {
     }
 
     enum SegmentedControl {
-        static let outerVStackSpacing: CGFloat = 24
+        static let outerVStackSpacing: CGFloat = 20
         static let innerVStackSpacing: CGFloat = 6
         static let imageHeight: CGFloat = 150
         static let verticalPadding: CGFloat = 10
         static let checkmarkFontSize: CGFloat = 20
         static let selectedColorOpacity: CGFloat = 0.8
+        static let buttonMinHeight: CGFloat = 140
+        static let textAreaMinHeight: CGFloat = 60
+        static let containerSpacing: CGFloat = 0
 
         static let radioButtonSelectedImage = "radioButtonSelected"
         static let radioButtonNotSelectedImage = "radioButtonNotSelected"
