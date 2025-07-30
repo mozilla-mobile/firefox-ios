@@ -51,6 +51,7 @@ protocol OnboardingCardDelegate: AnyObject {
     func pageChanged(from cardName: String)
 }
 
+@MainActor
 extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
                                        Self: UIViewController,
                                        Self: Themeable {

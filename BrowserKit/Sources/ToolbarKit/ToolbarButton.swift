@@ -123,10 +123,6 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter?.removeObserver(self)
-    }
-
     override public func updateConfiguration() {
         guard var updatedConfiguration = configuration else { return }
 
@@ -192,6 +188,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         self.largeContentViewerInteraction = largeContentViewerInteraction
         addInteraction(largeContentViewerInteraction)
 
+        // FIXME: FXIOS-12995 Use Notifiable
         notificationCenter.addObserver(
             self,
             selector: #selector(largeContentViewerInteractionDidChange),

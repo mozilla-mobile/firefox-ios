@@ -35,7 +35,7 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     private var viewModel: CreditCardBottomSheetViewModel
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -124,23 +124,21 @@ class CreditCardBottomSheetViewController: UIViewController,
     // MARK: View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
+
         addSubviews()
         setupView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateConstraints()
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: View Setup

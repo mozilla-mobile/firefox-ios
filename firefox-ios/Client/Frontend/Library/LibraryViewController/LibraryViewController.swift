@@ -26,7 +26,7 @@ class LibraryViewController: UIViewController, Themeable {
     weak var delegate: LibraryPanelDelegate?
     weak var navigationHandler: LibraryNavigationHandler?
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var logger: Logger
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -92,15 +92,14 @@ class LibraryViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
+
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,

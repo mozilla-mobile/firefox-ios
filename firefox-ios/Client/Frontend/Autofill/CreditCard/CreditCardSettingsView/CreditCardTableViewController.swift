@@ -24,7 +24,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
 
     var viewModel: CreditCardTableViewModel
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     var didSelectCardAtIndex: ((_ creditCard: CreditCard) -> Void)?
     var lastSelectedIndex: IndexPath?
@@ -76,9 +76,11 @@ class CreditCardTableViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
 
+        // FIXME: FXIOS-12995 Use Notifiable
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didFinishAnnouncement),
@@ -111,10 +113,6 @@ class CreditCardTableViewController: UIViewController, Themeable {
 
     func reloadData() {
         tableView.reloadData()
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     @objc

@@ -16,7 +16,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     var viewModel: AddressAutofillSettingsViewModel
 
     /// Observer for theme changes.
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
 
     /// Manager responsible for handling themes.
     var themeManager: ThemeManager
@@ -84,8 +84,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        listenForThemeChange(view)
-        applyTheme()
+
         viewModel.addressListViewModel.presentToast = { [weak self] status in
             guard let self else { return }
             switch status {
@@ -108,6 +107,9 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
                 )
             }
         }
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     private func show(toast: Toast,

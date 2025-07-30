@@ -76,8 +76,4 @@ public class CloseButton: UIButton,
             break
         }
     }
-
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
 }

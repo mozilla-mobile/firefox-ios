@@ -39,7 +39,7 @@ class HistoryPanel: UIViewController,
     var keyboardState: KeyboardState?
     var chevronImage = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     var logger: Logger
 
@@ -164,6 +164,8 @@ class HistoryPanel: UIViewController,
         super.viewDidLoad()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
+
+        // FIXME: FXIOS-12995 Use Notifiable
         viewModel.historyPanelNotifications.forEach {
             NotificationCenter.default.addObserver(
                 self,
@@ -173,11 +175,13 @@ class HistoryPanel: UIViewController,
             )
         }
 
-        listenForThemeChange(view)
         handleRefreshControl()
         setupLayout()
         configureDataSource()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
+
         // Update theme of already existing view
         bottomStackView.applyTheme(theme: currentTheme())
     }

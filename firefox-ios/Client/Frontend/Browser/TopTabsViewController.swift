@@ -46,7 +46,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TopTabCell.cellIdentifier
     var profile: Profile
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
     var windowUUID: WindowUUID { tabManager.windowUUID }
@@ -166,7 +166,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
 
-        listenForThemeChange(view)
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
         setupLayout()
 
         startObservingNotifications(

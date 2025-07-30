@@ -54,7 +54,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
             observing: [.DynamicFontChanged]
         )
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.borderWidth = UX.passwordFieldBorderWidth

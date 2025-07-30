@@ -21,7 +21,7 @@ final class PrivacyPreferencesViewController: UIViewController,
     private var profile: Profile
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
-    var themeObserver: (any NSObjectProtocol)?
+    var themeListenerCancellable: Any?
     var currentWindowUUID: UUID? { windowUUID }
     var notificationCenter: NotificationProtocol
 
@@ -88,7 +88,9 @@ final class PrivacyPreferencesViewController: UIViewController,
     // MARK: - View cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewDidAppear(_ animated: Bool) {

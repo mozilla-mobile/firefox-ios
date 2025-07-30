@@ -59,7 +59,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
 
     private var viewModel: ReaderModeStyleViewModel
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -94,8 +94,9 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         updateFontSizeButtons()
         updateFontTypeButtons()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
+
         adjustLayoutForA11ySizeCategory()
     }
 

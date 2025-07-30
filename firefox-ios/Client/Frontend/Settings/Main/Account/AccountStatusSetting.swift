@@ -19,14 +19,11 @@ class AccountStatusSetting: WithAccountSetting {
         self.settingsDelegate = settingsDelegate
         super.init(settings: settings)
 
+        // FIXME: FXIOS-12995 Use Notifiable
         notificationCenter.addObserver(self,
                                        selector: #selector(updateAccount),
                                        name: .FirefoxAccountProfileChanged,
                                        object: nil)
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     @objc

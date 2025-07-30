@@ -7,8 +7,8 @@ import Common
 
 class ThemedTableViewController: UITableViewController, Themeable, InjectedThemeUUIDIdentifiable {
     var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
-    var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -36,7 +36,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
     /// Dequeues a ThemedTableViewCell for the provided IndexPath.
     ///
     /// This method could be overridden by subclasses, if subclasses of ThemedTableViewCell are needed to be dequeued.
-    /// In order to deque subclasses of ThemedTableViewCell they must be registered in the table view.
+    /// In order to dequeue subclasses of ThemedTableViewCell they must be registered in the table view.
     func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: ThemedTableViewCell.cellIdentifier,
@@ -76,8 +76,9 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
         super.viewDidLoad()
         tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(cellType: ThemedCenteredTableViewCell.self)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
-        listenForThemeChange(view)
     }
 
     func applyTheme() {
@@ -88,6 +89,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
     }
 }
 
+@MainActor
 class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
     enum BorderLocation {
         case top

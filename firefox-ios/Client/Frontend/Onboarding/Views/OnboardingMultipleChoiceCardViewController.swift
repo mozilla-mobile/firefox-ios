@@ -83,8 +83,9 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
 
         setupView()
         updateLayout()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
-        listenForThemeChange(view)
     }
 
     override func viewWillAppear(_ animated: Bool) {

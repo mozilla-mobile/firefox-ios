@@ -14,7 +14,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
 
     init(
         url: URL,
@@ -36,9 +36,9 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        listenForThemeChange(view)
         setupView()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

@@ -363,10 +363,6 @@ class TopTabDisplayManager: NSObject {
         let eventValue = TelemetryWrapper.EventValue.topTabs
         TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
-
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
 }
 
 // MARK: - UICollectionViewDataSource

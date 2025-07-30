@@ -179,7 +179,7 @@ final class TabScrollController: NSObject,
         return hasScrollableContent && voiceOverOff
     }
 
-    // If scrollview contenSize is bigger than scrollview height scroll is enabled
+    // If scrollview contentSize is bigger than scrollview height scroll is enabled
     var hasScrollableContent: Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
             contentSize.height

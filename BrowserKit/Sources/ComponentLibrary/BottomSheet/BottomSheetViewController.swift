@@ -32,6 +32,7 @@ public class BottomSheetViewController: UIViewController,
         static let animationDuration = 0.5
     }
 
+    public var themeListenerCancellable: Any?
     public var notificationCenter: NotificationProtocol
     public var themeManager: ThemeManager
     public var themeObserver: NSObjectProtocol?
@@ -103,16 +104,13 @@ public class BottomSheetViewController: UIViewController,
         contentView.addGestureRecognizer(gesture)
         gesture.delegate = self
 
-        listenForThemeChange(view)
         setupView()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
 
         contentViewBottomConstraint?.constant = childViewController.view.frame.height
         view.layoutIfNeeded()
-    }
-
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        applyTheme()
     }
 
     override public func viewDidAppear(_ animated: Bool) {

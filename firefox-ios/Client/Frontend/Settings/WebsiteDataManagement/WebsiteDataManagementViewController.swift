@@ -12,7 +12,7 @@ class WebsiteDataManagementViewController: UIViewController,
                                            UISearchBarDelegate,
                                            Themeable {
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -58,7 +58,8 @@ class WebsiteDataManagementViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

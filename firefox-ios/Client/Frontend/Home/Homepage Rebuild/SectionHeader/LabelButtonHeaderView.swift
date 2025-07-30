@@ -82,10 +82,6 @@ class LabelButtonHeaderView: UICollectionReusableView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     // MARK: - Helper functions
     override func prepareForReuse() {
         super.prepareForReuse()

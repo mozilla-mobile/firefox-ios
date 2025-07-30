@@ -218,8 +218,4 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
             break
         }
     }
-
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
 }

@@ -22,7 +22,7 @@ class ContextualHintViewController: UIViewController,
     // MARK: - Properties
     private var viewProvider: ContextualHintViewProvider
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     private let windowUUID: WindowUUID
 
@@ -54,8 +54,6 @@ class ContextualHintViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
-        listenForThemeChange(view)
-        applyTheme()
         isPresenting = true
     }
 
@@ -65,6 +63,9 @@ class ContextualHintViewController: UIViewController,
         onViewSummoned = nil
         view.setNeedsLayout()
         view.layoutIfNeeded()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewDidAppear(_ animated: Bool) {

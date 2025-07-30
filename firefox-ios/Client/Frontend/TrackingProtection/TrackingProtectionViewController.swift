@@ -44,7 +44,7 @@ class TrackingProtectionViewController: UIViewController,
                                         UIScrollViewDelegate {
     var themeManager: ThemeManager
     var profile: Profile?
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -149,7 +149,10 @@ class TrackingProtectionViewController: UIViewController,
             addGestureRecognizer()
         }
         setupView()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
+
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,

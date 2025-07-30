@@ -106,10 +106,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     // MARK: - Helpers
 
     func configure(configuration: JumpBackInSyncedTabConfiguration,

@@ -95,10 +95,6 @@ class LegacyJumpBackInCell: UICollectionViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
         websiteLabel.text = nil

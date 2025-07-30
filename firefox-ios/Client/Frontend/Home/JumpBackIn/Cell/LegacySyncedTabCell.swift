@@ -128,10 +128,6 @@ class LegacySyncedTabCell: UICollectionViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     // MARK: - Helpers
 
     func configure(viewModel: SyncedTabCellViewModel,

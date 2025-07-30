@@ -253,6 +253,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
@@ -300,6 +301,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         show(alert)
     }
 
+    @MainActor
     private func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginEntry) {
         guard new.isValid.isSuccess else { return }
 
@@ -339,6 +341,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         show(alert)
     }
 
+    @MainActor
     private func show(_ alert: SaveLoginAlert) {
         loginAlert = alert
         loginAlert?.applyTheme(theme: theme)
@@ -357,9 +360,11 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     }
 
     @objc
-    func timerDone() {
-        loginAlert?.shouldPersist = false
-        loginAlertTimer = nil
+    nonisolated func timerDone() {
+        ensureMainThread {
+            self.loginAlert?.shouldPersist = false
+            self.loginAlertTimer = nil
+        }
     }
 
     private func requestLogins(_ request: [String: Any], url: URL) {
@@ -383,6 +388,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         }
     }
 
+    @MainActor
     public static func fillLoginDetails(with tab: Tab,
                                         loginData: LoginInjectionData) {
         guard let data = try? JSONEncoder().encode(loginData),
@@ -395,11 +401,13 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
                                      object: .loginsAutofilled)
     }
 
+    @MainActor
     public static func yieldFocusBackToField(with tab: Tab) {
         let jsFocusCallback = "window.__firefox__.logins.yieldFocusBackToField()"
         tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFocusCallback)
     }
 
+    @MainActor
     public static func setUpdatedPasswordEnabled(with tab: Tab?) {
         guard let tab = tab else { return }
         let status = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.updatedPasswordManager, checking: .buildOnly)
@@ -408,6 +416,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     }
 
     // MARK: Theming System
+    @MainActor
     private func applyTheme(for views: UIView...) {
         views.forEach { view in
             if let view = view as? ThemeApplicable {

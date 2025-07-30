@@ -45,6 +45,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
         self.mainQueue = mainQueue
 
+        // FIXME: FXIOS-12995 Use Notifiable
         let notifications: [Notification.Name] = [.ShowHomepage,
                                                   .TabsTrayDidClose,
                                                   .TabsTrayDidSelectHomeTab,
@@ -62,10 +63,6 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         Task {
             await self.updateTabsAndAccountData()
         }
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: Public interface

@@ -78,7 +78,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             ThemeKeys.systemThemeIsOn: true,
             ThemeKeys.NightMode.isOn: false
         ])
-        
+
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
