@@ -332,8 +332,16 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
+    var isAppleSummarizerFeatureEnabled: Bool {
+        SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
+    }
+
+    var isHostedSummarizerFeatureEnabled: Bool {
+        SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
+    }
+
     var isSummarizeFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
+        isAppleSummarizerFeatureEnabled || isHostedSummarizerFeatureEnabled
     }
 
     // MARK: Computed vars
