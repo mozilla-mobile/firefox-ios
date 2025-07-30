@@ -21,19 +21,23 @@ public protocol Themeable: ThemeUUIDIdentifiable {
 
     /// Holds a reference to the theme changes publisher. Once deallocated, the NotificationCenter observer is removed.
     /// We use an `Any?` type here because we don't want to force a Combine import to access `Cancellable` in other files.
+    ///
+    /// Note: We can't provide a default `@objc` `nonisolated` `#selector` implementations in `Themeable` because Objective-C
+    /// protocols cannot have default implementations. That is why we use the Combine variant of adding notification
+    /// observation for `Themeable`. That way, we don't have to have the `#selector` implementation in each conforming class
+    /// and we also don't have to worry about removing observers on `deinit`. The `Cancellable` will take care of that for us
+    /// when the property deallocates with its parent class.
     @MainActor
     var themeListenerCancellable: Any? { get set }
 
-    // FIXME: change name of param? / Use UIViewController's parent view instead?? - no, bc of TabScrollController not
     /// Start listening for theme changes. Should only be called once in the view lifecycle (e.g. in `viewDidLoad()`).
     @MainActor
     func listenForThemeChanges(_ subview: UIView, withNotificationCenter notificationCenter: NotificationProtocol)
 
-    /// Applies the current theme to the current
-    /// Called when the theme updates for the registered view and all its subviews.
+    /// Called when the theme updates for the registered view and all its subviews. Applies the current theme to the
+    /// view hierarchy.
     @MainActor
     func applyTheme()
-    // FIXME: Pass in theme?
 }
 
 /// Protocol for views to identify which iPad window (UUID) the view is associated with.
@@ -55,7 +59,8 @@ extension Themeable {
     public var shouldUsePrivateOverride: Bool { return false }
     public var shouldBeInPrivateTheme: Bool { return false }
 
-    @MainActor // FIXME: Do we need subview here or can we conform to UIViewController?
+    // FIXME: Do we need subview here or can we conform to UIViewController?
+    @MainActor
     public func listenForThemeChanges(_ subview: UIView, withNotificationCenter notificationCenter: NotificationProtocol) {
         themeListenerCancellable = notificationCenter
             .publisher(for: .ThemeDidChange, object: nil)
@@ -68,7 +73,8 @@ extension Themeable {
                 print("Theme update for \(String(describing: self))")
                 self.applyTheme()
 
-            // FIXME: Why do we have to call this on subviews? Doesn't applyTheme do the entire UIViewController hierarchy?
+                // FIXME: Why do we have to call this on subviews? Doesn't applyTheme do the entire UIViewController
+                // hierarchy?
                 self.updateThemeApplicableSubviews(subview, for: self.currentWindowUUID)
             })
     }
