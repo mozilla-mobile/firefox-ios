@@ -73,7 +73,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339257
-    func testTyping() {
+    func testTyping() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -122,8 +125,11 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339260
-    func testSetFirefoxHomeAsHome() {
+    func testSetFirefoxHomeAsHome() throws {
         // Start by setting to History since FF Home is default
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -152,7 +158,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307031
-    func testSetCustomURLAsHome() {
+    func testSetCustomURLAsHome() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
