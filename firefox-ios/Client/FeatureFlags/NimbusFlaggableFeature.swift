@@ -46,8 +46,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case startAtHome
     case appleSummarizer
     case appleSummarizerToolbarEntrypoint
+    case appleSummarizerShakeGesture
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
+    case hostedSummarizerShakeGesture
     case tabTrayUIExperiments
     case toolbarNavigationHint
     case toolbarUpdateHint
@@ -160,8 +162,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .splashScreen,
                 .appleSummarizer,
                 .appleSummarizerToolbarEntrypoint,
+                .appleSummarizerShakeGesture,
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
+                .hostedSummarizerShakeGesture,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,
                 .toolbarUpdateHint,
