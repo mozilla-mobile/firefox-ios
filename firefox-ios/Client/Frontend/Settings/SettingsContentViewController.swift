@@ -142,7 +142,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
             blockPopups: true,
             isPrivate: true,
             autoPlay: .all,
-            schemeHandler: WKInternalSchemeHandler()
+            schemeHandler: InternalSchemeHandler()
         )
 
         let config = DefaultWKEngineConfigurationProvider().createConfiguration(parameters: parameters).webViewConfiguration

@@ -22,7 +22,7 @@ protocol TabTrayViewControllerDelegate: AnyObject {
     func didFinish()
 }
 
-class TabTrayViewController: UIViewController,
+final class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
                              UIPageViewControllerDataSource,
