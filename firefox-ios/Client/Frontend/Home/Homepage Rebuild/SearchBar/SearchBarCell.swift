@@ -7,7 +7,7 @@ import UIKit
 
 class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     struct UX {
-        static let shadowRadius: CGFloat = 4
+        static let shadowRadius: CGFloat = 14
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 1
         static let cornerRadius: CGFloat = 16
@@ -81,7 +81,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     func setupShadow(theme: Theme) {
         contentView.layer.shadowRadius = UX.shadowRadius
         contentView.layer.shadowOffset = UX.shadowOffset
-        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        contentView.layer.shadowColor = theme.colors.shadowStrong.cgColor
         contentView.layer.shadowOpacity = UX.shadowOpacity
     }
 }
