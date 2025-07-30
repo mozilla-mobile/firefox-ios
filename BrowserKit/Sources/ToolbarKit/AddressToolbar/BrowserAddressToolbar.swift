@@ -506,6 +506,9 @@ public class BrowserAddressToolbar: UIView,
     // MARK: - UIDragInteractionDelegate
     public func dragInteraction(_ interaction: UIDragInteraction,
                                 itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        let point = session.location(in: self)
+        // TODO: - refactor it
+        guard locationView.frame.contains(point) else { return [] }
         guard let url = droppableUrl, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
 
         toolbarDelegate?.addressToolbarDidProvideItemsForDragInteraction()

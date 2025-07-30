@@ -98,7 +98,7 @@ final class LocationView: UIView,
     }
 
     // MARK: - URL Text Field
-    private lazy var urlTextField: LocationTextField = .build { [self] urlTextField in
+    private(set) lazy var urlTextField: LocationTextField = .build { [self] urlTextField in
         urlTextField.backgroundColor = .clear
         urlTextField.font = FXFontStyles.Regular.body.scaledFont()
         urlTextField.adjustsFontForContentSizeCategory = true

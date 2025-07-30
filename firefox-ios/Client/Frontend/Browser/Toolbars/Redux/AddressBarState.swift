@@ -76,6 +76,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
+    private static let summaryAction = ToolbarActionConfiguration(
+        actionType: .summarizer,
+        iconName: StandardImageIdentifiers.Medium.sun,
+        isEnabled: true,
+        a11yLabel: .Toolbars.SummarizeButtonAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.summarizeButton)
+
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
@@ -953,17 +960,23 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         switch readerModeState {
         case .active, .available:
-            let readerModeAction = ToolbarActionConfiguration(
-                actionType: .readerMode,
-                iconName: StandardImageIdentifiers.Medium.readerView,
-                isEnabled: true,
-                isSelected: readerModeState == .active,
-                hasCustomColor: true,
-                a11yLabel: .TabLocationReaderModeAccessibilityLabel,
-                a11yHint: .TabLocationReloadAccessibilityHint,
-                a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
-                a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
-            actions.append(readerModeAction)
+            let isSummarizeFeatureEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.summarizer,
+                                                                                              checking: .buildOnly)
+            if isSummarizeFeatureEnabled {
+                actions.append(summaryAction)
+            } else {
+                let readerModeAction = ToolbarActionConfiguration(
+                    actionType: .readerMode,
+                    iconName: StandardImageIdentifiers.Medium.readerView,
+                    isEnabled: true,
+                    isSelected: readerModeState == .active,
+                    hasCustomColor: true,
+                    a11yLabel: .TabLocationReaderModeAccessibilityLabel,
+                    a11yHint: .TabLocationReloadAccessibilityHint,
+                    a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
+                    a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+                actions.append(readerModeAction)
+            }
         default: break
         }
 
