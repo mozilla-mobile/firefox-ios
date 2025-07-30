@@ -138,9 +138,13 @@ final class LegacyTabScrollController: NSObject,
                                   isMinimalAddressBarEnabled: Bool,
                                   isBottomSearchBar: Bool) -> CGFloat {
         guard let containerHeight = overKeyboardContainer?.frame.height else { return .zero }
-        // Return full height if minimal address bar is disabled or not using bottom search bar
-        // or if zoom bar is not visible.
-        guard isMinimalAddressBarEnabled && isBottomSearchBar && zoomPageBar == nil else { return containerHeight }
+        let isReaderModeActive = tab?.url?.isReaderModeURL == true
+        // Return full height if conditions aren't met for adjustment.
+        let shouldAdjustHeight = isMinimalAddressBarEnabled
+                                  && isBottomSearchBar
+                                  && zoomPageBar == nil
+                                  && !isReaderModeActive
+        guard shouldAdjustHeight else { return containerHeight }
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
         let topInset = safeAreaInsets?.top ?? .zero
@@ -633,7 +637,7 @@ private extension LegacyTabScrollController {
             self.headerTopOffset = headerOffset
             self.bottomContainerOffset = bottomContainerOffset
 
-            if isMinimalAddressBarEnabled && tab?.isFindInPageMode == false {
+            if isMinimalAddressBarEnabled && tab?.isFindInPageMode == false && tab?.url?.isReaderModeURL == false {
                 store.dispatchLegacy(
                     ToolbarAction(
                         scrollAlpha: Float(alpha),
@@ -644,8 +648,6 @@ private extension LegacyTabScrollController {
             }
 
             overKeyboardContainerOffset = overKeyboardOffset
-            overKeyboardContainer?.updateAlphaForSubviews(alpha)
-            overKeyboardContainer?.superview?.layoutIfNeeded()
 
             header?.updateAlphaForSubviews(alpha)
             header?.superview?.layoutIfNeeded()

@@ -285,6 +285,43 @@ final class TabScrollControllerTests: XCTestCase {
         XCTAssertEqual(result, containerHeight)
     }
 
+    func testOverKeyboardScrollHeight_minimalEnabledIsBottomSearchBarIsReaderModeActive_returnsContainerHeight() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+        tab.url = URL(string: "http://localhost:6571/reader-mode/page?url=https://example.com")!
+
+        let containerHeight: CGFloat = 100
+        let safeAreaInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+
+        let result = subject.overKeyboardScrollHeight(
+            with: safeAreaInsets,
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: true
+        )
+
+        XCTAssertEqual(result, containerHeight)
+    }
+
+    func testOverKeyboardScrollHeight_minimalEnabledIsBottomSearchBarIsNotReaderModeActive_returnsAdjustedHeight() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        let containerHeight: CGFloat = 100
+        let safeAreaInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.overKeyboardContainer = overKeyboardContainer
+
+        let result = subject.overKeyboardScrollHeight(
+            with: safeAreaInsets,
+            isMinimalAddressBarEnabled: true,
+            isBottomSearchBar: true
+        )
+
+        XCTAssertEqual(result, .zero)
+    }
+
     // MARK: - Setup
     private func setupTabScroll(with subject: LegacyTabScrollController) {
         tab.createWebview(configuration: .init())
