@@ -24,7 +24,8 @@ protocol URLSessionProtocol: Sendable {
 }
 
 /// Default implementation for bytes(for:) (for backward compatibility)
-/// Types should implement their own bytes(for:) method if used. Otherwise, by default, types should not be using this method.
+/// Types should implement their own bytes(for:) method if used.
+/// Otherwise, by default, types should not be using this method.
 /// Attempting to use the default one here will yield a runtime assertion failure.
 /// The throw is just to satisfy the async‑throws signature.
 extension URLSessionProtocol {
