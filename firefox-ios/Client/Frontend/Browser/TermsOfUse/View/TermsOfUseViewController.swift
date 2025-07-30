@@ -180,6 +180,11 @@ final class TermsOfUseViewController: UIViewController,
             setupConstraints()
             view.layoutIfNeeded()
         }
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            descriptionTextView.attributedText = makeAttributedDescription()
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
     }
 
     func newState(state: TermsOfUseState) {
