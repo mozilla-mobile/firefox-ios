@@ -78,14 +78,12 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     private func itemContent(item: OnboardingMultipleChoiceButtonModel<Action>, isSelected: Bool) -> some View {
         VStack(spacing: UX.SegmentedControl.containerSpacing) {
             VStack {
-                Spacer()
                 Text(item.title)
                     .font(.footnote)
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.center)
                 Spacer()
             }
-            .frame(maxWidth: .infinity, minHeight: UX.SegmentedControl.textAreaMinHeight)
 
             Rectangle()
                 .fill(Color.clear)

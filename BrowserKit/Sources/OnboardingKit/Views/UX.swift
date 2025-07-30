@@ -50,7 +50,7 @@ enum UX {
     }
 
     enum SegmentedControl {
-        static let outerVStackSpacing: CGFloat = 24
+        static let outerVStackSpacing: CGFloat = 20
         static let innerVStackSpacing: CGFloat = 6
         static let imageHeight: CGFloat = 150
         static let verticalPadding: CGFloat = 10

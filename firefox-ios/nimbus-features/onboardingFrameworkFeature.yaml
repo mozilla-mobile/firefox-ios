@@ -291,7 +291,7 @@ features:
               image: themeing
               buttons:
                 primary:
-                  title: Onboarding/Onboarding.Customization.Theme.Continue.Action.v123
+                  title: Onboarding/Onboarding.Modern.Customization.Theme.Continue.Action.v140
                   action: forward-one-card
               multiple-choice-buttons:
                 - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
