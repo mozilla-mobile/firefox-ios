@@ -62,11 +62,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     var isAppleSummarizerFeatureEnabled: Bool {
-        featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
+        SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
     }
 
     var isHostedSummarizerFeatureEnabled: Bool {
-        featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
+        SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
     }
 
     private var isSummarizerOn: Bool {

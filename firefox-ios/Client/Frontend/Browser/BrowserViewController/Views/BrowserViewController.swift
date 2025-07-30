@@ -333,11 +333,11 @@ class BrowserViewController: UIViewController,
     }
 
     var isAppleSummarizerFeatureEnabled: Bool {
-        featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
+        SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
     }
 
     var isHostedSummarizerFeatureEnabled: Bool {
-        featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
+        SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
     }
 
     var isSummarizeFeatureEnabled: Bool {

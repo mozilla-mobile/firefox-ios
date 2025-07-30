@@ -1454,6 +1454,7 @@
 		BAA0A6102E2F0FAE00033D82 /* LiteLLMStreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0A60F2E2F0F9C00033D82 /* LiteLLMStreamResponse.swift */; };
 		BAA0A6122E2F0FD500033D82 /* LiteLLMClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0A6112E2F0FCF00033D82 /* LiteLLMClientError.swift */; };
 		BAA0A6142E2F0FEB00033D82 /* LiteLLMStreamDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0A6132E2F0FE700033D82 /* LiteLLMStreamDelegate.swift */; };
+		BAB39FB02E3A4584008188EF /* SummarizerNimbusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB39FAF2E3A457C008188EF /* SummarizerNimbusUtils.swift */; };
 		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
 		BAEB9CCB2E28136300F9F482 /* LiteLLMClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */; };
 		BAEB9EB22E2869C400F9F482 /* SummarizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */; };
@@ -9274,6 +9275,7 @@
 		BAA0A6112E2F0FCF00033D82 /* LiteLLMClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClientError.swift; sourceTree = "<group>"; };
 		BAA0A6132E2F0FE700033D82 /* LiteLLMStreamDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMStreamDelegate.swift; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
+		BAB39FAF2E3A457C008188EF /* SummarizerNimbusUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerNimbusUtils.swift; sourceTree = "<group>"; };
 		BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTranslationModelsFetcher.swift; sourceTree = "<group>"; };
 		BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClientTests.swift; sourceTree = "<group>"; };
 		BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizationChecker.swift; sourceTree = "<group>"; };
@@ -13787,6 +13789,7 @@
 		BAEB9EB02E28699F00F9F482 /* Summary */ = {
 			isa = PBXGroup;
 			children = (
+				BAB39FAF2E3A457C008188EF /* SummarizerNimbusUtils.swift */,
 				BA726E3B2E31FC6700325CC3 /* LanguageModelSessionAdapter.swift */,
 				BA726E392E31F34A00325CC3 /* MockLanguageModelSession.swift */,
 				BA726E372E31F0A000325CC3 /* LanguageModelResponseStreamProtocol.swift */,
@@ -17939,6 +17942,7 @@
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				5A70EF21295E3E0B00790249 /* UnitTestSceneDelegate.swift in Sources */,
 				B2999FF72B194ADE00F0FEC1 /* FormAutofillPayloadType.swift in Sources */,
+				BAB39FB02E3A4584008188EF /* SummarizerNimbusUtils.swift in Sources */,
 				8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */,
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
 				8AE9FD262CF66301001053EE /* UnifiedAdsProvider.swift in Sources */,

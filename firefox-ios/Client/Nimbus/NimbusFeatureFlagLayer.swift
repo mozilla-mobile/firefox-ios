@@ -108,12 +108,7 @@ final class NimbusFeatureFlagLayer {
             return checkStartAtHomeFeature(for: featureID, from: nimbus) != .disabled
 
         case .appleSummarizer:
-            #if canImport(FoundationModels)
-                return AppleIntelligenceUtil().isAppleIntelligenceAvailable
-                    && checkAppleSummarizerFeature(from: nimbus)
-            #else
-                return false
-            #endif
+           return checkAppleSummarizerFeature(from: nimbus)
 
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
