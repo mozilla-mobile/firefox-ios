@@ -13,7 +13,6 @@ public protocol BottomSheetChild: UIViewController {
     func willDismiss()
 }
 
-/// Protocol followed by the bottom sheet view controller. Gives the possibility to dismiss the bottom sheet.
 public protocol BottomSheetDelegate: AnyObject {
     /// Returns the height of the `BottomSheetViewController` header including the close button.
     func getBottomSheetHeaderHeight() -> CGFloat

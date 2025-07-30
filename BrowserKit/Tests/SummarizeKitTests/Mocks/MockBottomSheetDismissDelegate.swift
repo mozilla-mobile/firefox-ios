@@ -5,15 +5,15 @@
 import Foundation
 import ComponentLibrary
 
-class MockBottomSheetDismissDelegate: BottomSheetDelegate {
-    func getBottomSheetHeaderHeight() -> CGFloat {
-        return 0.0
-    }
-
+class MockBottomSheetDismissDelegate: BottomSheetDelegate {†
     var didCallDismissSheetViewController = 0
 
     func dismissSheetViewController(completion: (() -> Void)?) {
         didCallDismissSheetViewController += 1
         completion?()
+    }
+
+    func getBottomSheetHeaderHeight() -> CGFloat {
+        return 0.0
     }
 }
