@@ -122,8 +122,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--base",
-        default="tmp/rust-components",
-        help="Branch the PR should target (default: tmp/rust-components)",
+        default="main",
+        help="Branch the PR should target (default: main)",
     )
     return parser.parse_args()
 
