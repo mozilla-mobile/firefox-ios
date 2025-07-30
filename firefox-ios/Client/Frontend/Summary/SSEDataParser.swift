@@ -90,7 +90,7 @@ final class SSEDataParser {
     /// Checks if the payload is the stream termination signal `Constants.doneSignal`.
     /// A valid termination signal looks like: `data: [DONE]`
     private func isDoneSignal(_ payload: String) -> Bool {
-        payload == Constants.doneSignal
+        return payload == Constants.doneSignal
     }
 
     /// Extracts the payload from a valid event line by removing the data prefix.
@@ -102,6 +102,6 @@ final class SSEDataParser {
     /// Checks if a trimmed event line is valid by ensuring it starts with the `Constants.dataPrefix`.
     /// A valid event line looks like: `data: {"message":"event message"}`
     private func isValidEventLine(_ line: String) -> Bool {
-        line.hasPrefix(Constants.dataPrefix)
+        return line.hasPrefix(Constants.dataPrefix)
     }
 }
