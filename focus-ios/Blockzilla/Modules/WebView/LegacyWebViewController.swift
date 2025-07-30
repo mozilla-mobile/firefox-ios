@@ -429,6 +429,12 @@ extension LegacyWebViewController: WKNavigationDelegate {
             adsTelemetryHelper.trackClickedAds(with: redirectedURL)
         }
 
+        // Bugzilla #1979804
+        if let scheme = navigationAction.request.url?.scheme, scheme.lowercased() == "fido" {
+            decisionHandler(.cancel, preferences)
+            return
+        }
+
         // If the user has asked for a specific content mode for this host, use that.
         if let hostName = navigationAction.request.url?.host, let preferredContentMode = contentModeForHost[hostName] {
             preferences.preferredContentMode = preferredContentMode
