@@ -12,6 +12,12 @@ public class CloseButton: UIButton,
     private var viewModel: CloseButtonViewModel?
     private var heightConstraint: NSLayoutConstraint?
     private var widthConstraint: NSLayoutConstraint?
+    /// Returns the updated size of the button scaled with the current dynamic font size
+    var dynamicSize: CGSize {
+        updateButtonSizeForDynamicFont()
+        return CGSize(width: widthConstraint?.constant ?? UX.closeButtonSize.width,
+                      height: heightConstraint?.constant ?? UX.closeButtonSize.height)
+    }
 
     private struct UX {
         static let closeButtonSize = CGSize(width: 30, height: 30)

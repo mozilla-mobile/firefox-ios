@@ -22,7 +22,7 @@ class ToSBottomSheetViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testTextViewShouldInteractWithURL_calssDismissDelegateAndOnRequestOpenURL() {
+    func testTextViewShouldInteractWithURL_calsDismissDelegateAndOnRequestOpenURL() {
         let expectation = XCTestExpectation(description: "onRequestOpenURL should be called")
         let subject = createSubject { url in
             XCTAssertEqual(url, self.url)
@@ -56,7 +56,7 @@ class ToSBottomSheetViewControllerTests: XCTestCase {
     func testDismiss_doesntCallDismissDelegate_whenDelegateIsNil() {
         let subject = createSubject()
 
-        subject.dismissDelegate = nil
+        subject.delegate = nil
         subject.dismiss(animated: false)
 
         XCTAssertEqual(dismissDelegate.didCallDismissSheetViewController, 0)
@@ -86,7 +86,7 @@ class ToSBottomSheetViewControllerTests: XCTestCase {
             themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
             windowUUID: .XCTestDefaultUUID
         )
-        controller.dismissDelegate = dismissDelegate
+        controller.delegate = dismissDelegate
         return controller
     }
 }

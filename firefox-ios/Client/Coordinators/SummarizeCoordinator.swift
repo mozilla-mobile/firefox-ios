@@ -82,7 +82,8 @@ class SummarizeCoordinator: BaseCoordinator {
     private func showToSAlert() {
         let tosViewModel = ToSBottomSheetViewModel(
             titleLabel: .Summarizer.ToSAlertTitleLabel,
-            descriptionLabel: .Summarizer.ToSAlertMessageFirefoxLabel,
+            descriptionLabel: String(format: String.Summarizer.ToSAlertMessageFirefoxLabel,
+                                     AppName.shortName.rawValue),
             linkButtonLabel: .Summarizer.ToSAlertLinkButtonLabel,
             linkButtonURL: URL(string: "https://www.mozilla.com"),
             allowButtonTitle: .Summarizer.ToSAlertAllowButtonLabel,
@@ -110,7 +111,7 @@ class SummarizeCoordinator: BaseCoordinator {
             usingDimmedBackground: true,
             windowUUID: windowUUID
         )
-        tosController.dismissDelegate = bottomSheetViewController
+        tosController.delegate = bottomSheetViewController
         router.present(bottomSheetViewController, animated: false)
     }
 

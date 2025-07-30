@@ -2064,14 +2064,14 @@ extension String {
         public static let ToSAlertMessageFirefoxLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v142",
             tableName: "Summarizer",
-            value: "Firefox uses AI securely hosted on Mozilla servers to summarize pages.",
-            comment: "The message for the ToS alert that asks the user if they want to allow page summaries with Firefox AI."
+            value: "%@ uses AI securely hosted on Mozilla servers to summarize pages.",
+            comment: "The message for the ToS alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox)."
         )
         public static let ToSAlertMessageAppleLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.AppleMessage.Label.v142",
             tableName: "Summarizer",
-            value: "Firefox uses Apple Intelligence to summarize pages.",
-            comment: "The message for the ToS alert that asks the user if they want to allow page summaries with Apple Intelligence."
+            value: "%@ uses %@ to summarize pages.",
+            comment: "The message for the ToS alert that asks the user if they want to allow page summaries with Apple Intelligence. The first %@ is the app name (e.g Firefox), the second %@ is the AI model used to summarize (e.g Apple Intelligence)."
         )
         public static let ToSAlertAllowButtonLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.AllowButton.Label.v142",
@@ -2095,7 +2095,7 @@ extension String {
         public static let ToSAlertCloseButtonAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.ToS.Alert.CloseButton.Accessibility.Label.v142
             tableName: "Summarizer",
-            value: "Close Term of Service Alert button",
+            value: "Close Terms of Service Alert button",
             comment: "The a11y label for the close button on the ToS alert."
         )
         public static let ToSAlertCancelButtonAccessibilityLabel = MZLocalizedString(

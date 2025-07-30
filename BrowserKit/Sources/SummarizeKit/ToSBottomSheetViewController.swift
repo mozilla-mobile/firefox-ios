@@ -56,6 +56,7 @@ public struct ToSBottomSheetViewModel {
 public class ToSBottomSheetViewController: UIViewController,
                                            UITextViewDelegate,
                                            BottomSheetChild,
+                                           Notifiable,
                                            Themeable {
     private struct UX {
         static let contentHorizontalPadding: CGFloat = 29.0
@@ -63,6 +64,7 @@ public class ToSBottomSheetViewController: UIViewController,
         static let descriptionLabelTopPadding: CGFloat = 20.0
         static let allowButtonTopPadding: CGFloat = 20.0
         static let cancelButtonTopPadding: CGFloat = 10.0
+        static let cancelButtonBottomPadding: CGFloat = 16.0
     }
     public var themeManager: any Common.ThemeManager
     public var themeObserver: (any NSObjectProtocol)?
@@ -70,19 +72,23 @@ public class ToSBottomSheetViewController: UIViewController,
 
     public var currentWindowUUID: Common.WindowUUID?
     private let viewModel: ToSBottomSheetViewModel
-    public weak var dismissDelegate: BottomSheetDismissProtocol?
+    public weak var delegate: BottomSheetDelegate?
 
     private let titleLabel: UILabel = .build {
         $0.textAlignment = .center
         $0.font = FXFontStyles.Bold.headline.scaledFont()
+        $0.numberOfLines = 0
+        $0.adjustsFontForContentSizeCategory = true
     }
     private let descriptionLabel: UITextView = .build {
         $0.textAlignment = .center
         $0.isEditable = false
         $0.isScrollEnabled = false
+        $0.adjustsFontForContentSizeCategory = true
     }
     private let allowButton: PrimaryRoundedButton = .build()
     private let cancelButton: SecondaryRoundedButton = .build()
+    private var titleLabelTopConstraint: NSLayoutConstraint?
 
     public init(
         viewModel: ToSBottomSheetViewModel,
@@ -95,14 +101,24 @@ public class ToSBottomSheetViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     override public func viewDidLoad() {
         super.viewDidLoad()
+        configure()
+        setupLayout()
+    }
+
+    private func configure() {
         titleLabel.text = viewModel.titleLabel
         titleLabel.accessibilityLabel = viewModel.titleLabel
 
@@ -144,10 +160,15 @@ public class ToSBottomSheetViewController: UIViewController,
         cancelButton.addAction(UIAction(handler: { [weak self] _ in
             self?.dismiss(animated: true)
         }), for: .touchUpInside)
+        applyTheme()
+    }
 
+    private func setupLayout() {
         view.addSubviews(titleLabel, descriptionLabel, allowButton, cancelButton)
+        titleLabelTopConstraint = titleLabel.topAnchor.constraint(equalTo: view.topAnchor,
+                                                                  constant: UX.titleLabelTopPadding)
+        titleLabelTopConstraint?.isActive = true
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.titleLabelTopPadding),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
 
@@ -162,10 +183,15 @@ public class ToSBottomSheetViewController: UIViewController,
             cancelButton.topAnchor.constraint(equalTo: allowButton.bottomAnchor, constant: UX.cancelButtonTopPadding),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
             cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
-            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                 constant: -UX.cancelButtonBottomPadding)
         ])
+        updateDynamicFontSize()
+    }
 
-        applyTheme()
+    private func updateDynamicFontSize() {
+        let bottomSheetHeaderHeight = delegate?.getBottomSheetHeaderHeight() ?? 0.0
+        titleLabelTopConstraint?.constant = bottomSheetHeaderHeight + UX.titleLabelTopPadding
     }
 
     public func willDismiss() {
@@ -173,11 +199,17 @@ public class ToSBottomSheetViewController: UIViewController,
     }
 
     override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        if let dismissDelegate {
-            dismissDelegate.dismissSheetViewController(completion: completion)
+        if let delegate {
+            delegate.dismissSheetViewController(completion: completion)
         } else {
             super.dismiss(animated: flag, completion: completion)
         }
+    }
+
+    // MARK: - Notifiable
+    public func handleNotifications(_ notification: Notification) {
+        guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
+        updateDynamicFontSize()
     }
 
     // MARK: - UITextViewDelegate
