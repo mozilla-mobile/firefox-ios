@@ -70,15 +70,15 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
         return content
     }
 
-    private func handleStreamingRequest(
-        request: URLRequest,
-        sseParser: SSEDataParser = SSEDataParser()
-    ) -> AsyncThrowingStream<String, Error> {
+    /// TODO(FXIOS-12994): Add tests for streaming requests.
+    /// Specifically, we need to test for the interaction with SSEDataParser and how it handles multiple reqeusts at a time.
+    private func handleStreamingRequest(request: URLRequest) -> AsyncThrowingStream<String, Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
                     let (asyncBytes, response) = try await session.bytes(for: request)
                     try validate(response: response)
+                    let sseParser = SSEDataParser()
 
                     // Process bytes as they arrive
                     for try await byteChunk in asyncBytes {
