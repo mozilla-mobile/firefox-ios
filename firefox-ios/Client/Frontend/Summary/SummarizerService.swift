@@ -29,10 +29,10 @@ final class SummarizerService {
     /// Generates a complete summary string from the given web view's page content.
     /// - Throws: `SummarizerError` if the content is unsuitable or summarization fails.
     /// - Returns: A fully summarized string for displaying.
-    func summarize(from webView: WKWebView, prompt: String) async throws -> String {
+    func summarize(from webView: WKWebView) async throws -> String {
         let text = try await extractSummarizableText(from: webView)
         do {
-            return try await summarizer.summarize(prompt: prompt, text: text)
+            return try await summarizer.summarize(text)
         } catch let summarizerError as SummarizerError {
             throw summarizerError
         } catch {
@@ -45,12 +45,12 @@ final class SummarizerService {
     /// - Returns: An `AsyncThrowingStream` emitting summary chunks as they arrive.
     /// - Note: Due to a Swift limitation (https://github.com/swiftlang/swift/issues/64165),
     ///   the stream must use a generic `Error` type. But all errors thrown from this method are `SummarizerError`.
-    func summarizeStreamed(from webView: WKWebView, prompt: String) -> AsyncThrowingStream<String, Error> {
+    func summarizeStreamed(from webView: WKWebView) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in
             Task {
                 do {
                     let text = try await self.extractSummarizableText(from: webView)
-                    let stream = summarizer.summarizeStreamed(prompt: prompt, text: text)
+                    let stream = summarizer.summarizeStreamed(text)
 
                     for try await chunk in stream {
                         continuation.yield(chunk)

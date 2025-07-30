@@ -16,12 +16,12 @@ final class MockSummarizer: SummarizerProtocol {
         self.shouldThrowError = shouldThrowError
     }
 
-    func summarize(prompt: String, text: String) async throws -> String {
+    func summarize(_ text: String) async throws -> String {
         if let error = shouldThrowError { throw error }
         return shouldRespond.joined(separator: " ")
     }
 
-    func summarizeStreamed(prompt: String, text: String) -> AsyncThrowingStream<String, Error> {
+    func summarizeStreamed(_ text: String) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in
             Task {
                 do {

@@ -14,7 +14,7 @@ final class SummarizerServiceTests: XCTestCase {
 
     func testSummarizerServiceReturnsSummary() async throws {
         let subject = createSubject()
-        let result = try await subject.summarize(from: mockWebView, prompt: "Summarize")
+        let result = try await subject.summarize(from: mockWebView)
         XCTAssertEqual(result, Self.mockResponse.joined(separator: " "))
     }
 
@@ -29,7 +29,7 @@ final class SummarizerServiceTests: XCTestCase {
         let subject = createSubject(checker: checker)
 
         await assertSummarizeThrows(.tooLong) {
-            _ = try await subject.summarize(from: self.mockWebView, prompt: "Summarize")
+            _ = try await subject.summarize(from: self.mockWebView)
         }
     }
 
@@ -37,7 +37,7 @@ final class SummarizerServiceTests: XCTestCase {
         let subject = createSubject()
         var streamedChunks: [String] = []
 
-        for try await chunk in subject.summarizeStreamed(from: mockWebView, prompt: "Prompt") {
+        for try await chunk in subject.summarizeStreamed(from: mockWebView) {
             streamedChunks.append(chunk)
         }
 
@@ -52,7 +52,7 @@ final class SummarizerServiceTests: XCTestCase {
         let subject = createSubject(summarizer: summarizer)
 
         await assertSummarizeThrows(.safetyBlocked) {
-            for try await _ in subject.summarizeStreamed(from: self.mockWebView, prompt: "Prompt") { }
+            for try await _ in subject.summarizeStreamed(from: self.mockWebView) { }
         }
     }
 
@@ -67,7 +67,7 @@ final class SummarizerServiceTests: XCTestCase {
         let subject = createSubject(summarizer: summarizer)
 
         await assertSummarizeThrows(.unknown(randomError)) {
-            _ = try await subject.summarize(from: self.mockWebView, prompt: "Summarize")
+            _ = try await subject.summarize(from: self.mockWebView)
         }
     }
 

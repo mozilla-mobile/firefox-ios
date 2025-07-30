@@ -9,7 +9,7 @@ import Shared
 final class LiteLLMSummarizerTests: XCTestCase {
     func testSummarizeNonStreamingSucceeds() async throws {
         let subject = createSubject(respondWith: ["hello", "world"])
-        let result = try await subject.summarize(prompt: "p", text: "t")
+        let result = try await subject.summarize("t")
         XCTAssertEqual(result, "hello world")
     }
 
@@ -17,7 +17,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 429)
         let subject = createSubject(respondWithError: rateLimitError)
         await assertSummarizeThrows(.rateLimited) {
-            _ = try await subject.summarize(prompt: "p", text: "t")
+            _ = try await subject.summarize("t")
         }
     }
 
@@ -25,7 +25,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
         await assertSummarizeThrows(.unknown(randomError)) {
-            _ = try await subject.summarize(prompt: "p", text: "t")
+            _ = try await subject.summarize("t")
         }
     }
 
@@ -34,7 +34,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         let subject = createSubject(respondWith: chunks)
 
         var received: [String] = []
-        let stream = subject.summarizeStreamed(prompt: "p", text: "t")
+        let stream = subject.summarizeStreamed("t")
         for try await chunk in stream {
             received.append(chunk)
         }
@@ -44,7 +44,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
     func testSummarizeStreamedMapsRateLimited() async throws {
         let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 429)
         let subject = createSubject(respondWithError: rateLimitError)
-        let stream = subject.summarizeStreamed(prompt: "p", text: "t")
+        let stream = subject.summarizeStreamed("t")
         await assertSummarizeThrows(.rateLimited) {
             for try await _ in stream { }
         }
@@ -53,7 +53,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
     func testSummarizeStreamedMapsUnknownError() async throws {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
-        let stream = subject.summarizeStreamed(prompt: "p", text: "t")
+        let stream = subject.summarizeStreamed("t")
         await assertSummarizeThrows(.unknown(randomError)) {
             for try await _ in stream { }
         }
@@ -72,7 +72,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         if let error {
             mockClient.respondWithError = error
         }
-        return LiteLLMSummarizer(client: mockClient, model: "model", maxTokens: 10)
+        return LiteLLMSummarizer(client: mockClient, model: "model", maxTokens: 10, prompt: "p")
     }
 
     /// Convenience method to simplify error checking in the test cases
