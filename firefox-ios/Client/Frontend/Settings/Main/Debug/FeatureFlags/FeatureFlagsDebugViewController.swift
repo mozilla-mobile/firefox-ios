@@ -217,18 +217,21 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             },
         ]
 
-        // Conditionally add the Apple Summarizer only if the LLM is supported on the device.
-        if AppleIntelligenceUtil().isAppleIntelligenceAvailable {
-            children.append(
-                FeatureFlagsBoolSetting(
-                    with: .appleSummarizer,
-                    titleText: format(string: "Apple Summarizer Feature"),
-                    statusText: format(string: "Toggle to enable the apple summarizer feature")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                }
-            )
-        }
+        // Conditionally add the Apple Summarizer only if the compile time check for the FoundationModels is true
+        // and the LLM is supported on the device.
+        #if canImport(FoundationModels)
+            if AppleIntelligenceUtil().isAppleIntelligenceAvailable {
+                children.append(
+                    FeatureFlagsBoolSetting(
+                        with: .appleSummarizer,
+                        titleText: format(string: "Apple Summarizer Feature"),
+                        statusText: format(string: "Toggle to enable the apple summarizer feature")
+                    ) { [weak self] _ in
+                        self?.reloadView()
+                    }
+                )
+            }
+        #endif
 
         return SettingSection(
             title: nil,
