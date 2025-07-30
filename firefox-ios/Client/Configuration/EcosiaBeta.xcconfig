@@ -9,6 +9,7 @@
 #include "Staging.xcconfig"
 
 MOZ_BUNDLE_DISPLAY_NAME = Ecosia Beta
+MOZ_PRODUCT_NAME = Ecosia
 MOZ_BUNDLE_ID = com.ecosia.ecosiaapp.firefox
 CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/EcosiaBeta.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_BETA

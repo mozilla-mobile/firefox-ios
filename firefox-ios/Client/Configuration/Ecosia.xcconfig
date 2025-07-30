@@ -6,6 +6,7 @@
 #include "Release.xcconfig"
 #include "Production.xcconfig"
 
+MOZ_PRODUCT_NAME = Ecosia
 MOZ_BUNDLE_DISPLAY_NAME = Ecosia
 MOZ_BUNDLE_ID = com.ecosia.ecosiaapp
 CODE_SIGN_ENTITLEMENTS = Ecosia/Entitlements/Ecosia.entitlements

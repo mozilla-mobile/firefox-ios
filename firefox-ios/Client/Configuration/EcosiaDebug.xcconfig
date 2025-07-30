@@ -10,6 +10,7 @@
 #include "Staging.xcconfig"
 
 INFOPLIST_FILE = Client/Info.plist
+MOZ_PRODUCT_NAME = Ecosia
 MOZ_BUNDLE_DISPLAY_NAME = Ecosia
 MOZ_BUNDLE_ID = com.ecosia.ecosiaapp
 INCLUDE_SETTINGS_BUNDLE = YES

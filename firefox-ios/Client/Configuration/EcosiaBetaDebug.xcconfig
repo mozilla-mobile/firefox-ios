@@ -10,6 +10,7 @@
 
 INFOPLIST_FILE = Client/Info.plist
 MOZ_BUNDLE_DISPLAY_NAME = Ecosia Beta
+MOZ_PRODUCT_NAME = Ecosia
 MOZ_BUNDLE_ID = com.ecosia.ecosiaapp.firefox
 INCLUDE_SETTINGS_BUNDLE = YES
 LEANPLUM_ENVIRONMENT = development
