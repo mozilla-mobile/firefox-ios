@@ -14,6 +14,7 @@ enum HomepageSectionType: Int, CaseIterable {
     case merino
     case customizeHome
 
+    // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143
     var title: String? {
         switch self {
         case .merino: return .FirefoxHomepage.Pocket.SectionTitle

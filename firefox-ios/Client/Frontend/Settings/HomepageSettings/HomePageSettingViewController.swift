@@ -162,6 +162,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             sectionItems.append(bookmarksSetting)
         }
 
+        // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143
         if isPocketSectionEnabled, let profile {
             let pocketSetting = BoolSetting(
                 prefs: profile.prefs,
