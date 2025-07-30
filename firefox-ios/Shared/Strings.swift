@@ -1021,6 +1021,11 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "Stories",
                 comment: "This is the title of the Stories section on Firefox Homepage.")
+            public static let TopStoriesSectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.TopStoriesSectionTitle.v140",
+                tableName: "FirefoxHomepage",
+                value: "Top Stories",
+                comment: "This is the title of the Top Stories section on Firefox Homepage.")
             public static let NumberOfMinutes = MZLocalizedString(
                 key: "FirefoxHome.Stories.Minutes.v140",
                 tableName: nil,
@@ -2202,6 +2207,11 @@ extension String {
                     tableName: "CustomizeFirefoxHome",
                     value: "Stories",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Stories recommendations section on the Firefox homepage on or off")
+                public static let TopStories = MZLocalizedString(
+                    key: "Settings.Home.Option.TopStories.v140",
+                    tableName: "CustomizeFirefoxHome",
+                    value: "Top Stories",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Top Stories recommendations section on the Firefox homepage on or off")
                 public static let Title = MZLocalizedString(
                     key: "Settings.Home.Option.Title.v101",
                     tableName: nil,
