@@ -2482,6 +2482,33 @@ extension String {
             )
         }
 
+        public struct Summarize {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Summarize.Title.v142",
+                tableName: "Settings",
+                value: "Summarize Content",
+                comment: "In the settings menu, in the General section, this is the title for the Summarize settings section."
+            )
+            public static let SummarizeContentTitle = MZLocalizedString(
+                key: "Settings.Summarize.SummarizeContentTitle.v142",
+                tableName: "Settings",
+                value: "Enable Summarize Content",
+                comment: "This is the title for the setting that toggles the Summarize Content feature under the Summarize settings section."
+            )
+            public static let ShakeGestureTitle = MZLocalizedString(
+                key: "Settings.Summarize.ShakeGestureTitle.v142",
+                tableName: "Settings",
+                value: "Enable Shake Gesture",
+                comment: "This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section."
+            )
+            public static let GesturesSectionTitle = MZLocalizedString(
+                key: "Settings.Summarize.GesturesSectionTitle.v142",
+                tableName: "Settings",
+                value: "Gestures",
+                comment: "This is the section title for the gestures features under the Summarize settings section."
+            )
+        }
+
         public struct Appearance {
             public struct PageZoom {
                 public static let SectionHeader = MZLocalizedString(
