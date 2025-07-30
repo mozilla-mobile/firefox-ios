@@ -9,7 +9,7 @@ class MockBottomSheetDismissDelegate: BottomSheetDelegate {
     func getBottomSheetHeaderHeight() -> CGFloat {
         return 0.0
     }
-    
+
     var didCallDismissSheetViewController = 0
 
     func dismissSheetViewController(completion: (() -> Void)?) {
