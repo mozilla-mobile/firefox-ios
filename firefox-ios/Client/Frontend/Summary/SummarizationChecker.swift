@@ -5,13 +5,13 @@
 import WebKit
 import Foundation
 
-public class SummarizationChecker: SummarizationCheckerProtocol {
+class SummarizationChecker: SummarizationCheckerProtocol {
     /// Calls `checkSummarization(maxWords:)` in the web page and returns a typed result.
     /// - Parameters:
     ///   - webView: The WKWebView instance with the JS already injected.
     ///   - maxWords: The maximum allowed words before summarization is disallowed.
     /// - Returns: A `SummarizationCheckResult`, even on error.
-    public func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
+    func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
         let jsCall = "return await window.__firefox__.Summarizer.checkSummarization(\(maxWords))"
         do {
             let rawResult = try await webView.callAsyncJavaScript(jsCall, contentWorld: .defaultClient)
@@ -23,7 +23,7 @@ public class SummarizationChecker: SummarizationCheckerProtocol {
     }
 
     /// Parses the raw JS evaluation result into `SummarizationCheckResult`.
-    public func parse(_ rawResult: Any) throws -> SummarizationCheckResult {
+    func parse(_ rawResult: Any) throws -> SummarizationCheckResult {
         guard JSONSerialization.isValidJSONObject(rawResult) else { throw SummarizationCheckError.invalidJSON }
         do {
             let data = try JSONSerialization.data(withJSONObject: rawResult)
