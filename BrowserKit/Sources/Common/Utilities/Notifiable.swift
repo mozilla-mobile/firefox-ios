@@ -4,9 +4,6 @@
 
 import Foundation
 
-// open func post(name aName: NSNotification.Name, object anObject: Any?)
-// open func post(name aName: NSNotification.Name, object anObject: Any?, userInfo aUserInfo: [AnyHashable : Any]? = nil)
-
 public protocol NotificationProtocol: Sendable {
     /// Posts a notification with an optional object and/or userInfo dictionary.
     nonisolated func post(name: NSNotification.Name, withObject: Any?, withUserInfo: [AnyHashable: Any]?)

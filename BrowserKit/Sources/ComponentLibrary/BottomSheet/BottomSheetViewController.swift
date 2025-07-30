@@ -32,10 +32,9 @@ public class BottomSheetViewController: UIViewController,
         static let animationDuration = 0.5
     }
 
-    public var themeListenerCancellable: Any?
     public var notificationCenter: NotificationProtocol
     public var themeManager: ThemeManager
-    public var themeObserver: NSObjectProtocol?
+    public var themeListenerCancellable: Any?
 
     private let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
