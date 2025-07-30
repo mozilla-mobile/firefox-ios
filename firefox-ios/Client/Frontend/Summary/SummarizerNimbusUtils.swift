@@ -18,6 +18,6 @@ struct SummarizerNimbusUtils: FeatureFlaggable {
     }
 
     func isHostedSummarizerEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
+        return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
     }
 }
