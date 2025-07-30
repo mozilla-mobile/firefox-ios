@@ -68,7 +68,7 @@ extension Themeable {
             // The `@MainActor` isolation is not enough to prevent crashes at the call site where a notification is posted.
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self, weak subview] notification in
-                guard let self, let subview else  { return }
+                guard let self, let subview else { return }
 
                 print("Theme update for \(String(describing: self))")
                 self.applyTheme()
