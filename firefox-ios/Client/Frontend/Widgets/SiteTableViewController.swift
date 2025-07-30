@@ -20,7 +20,7 @@ class SiteTableViewController: UIViewController,
                                Themeable {
     var themeManager: ThemeManager
     let windowManager: WindowManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let profile: Profile
     let windowUUID: WindowUUID
@@ -74,8 +74,6 @@ class SiteTableViewController: UIViewController,
         self.themeManager = themeManager
         self.windowManager = windowManager
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange(view)
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -86,6 +84,9 @@ class SiteTableViewController: UIViewController,
         super.viewDidLoad()
 
         setupView()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     deinit {

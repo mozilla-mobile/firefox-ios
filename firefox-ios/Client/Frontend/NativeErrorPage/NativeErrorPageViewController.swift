@@ -14,9 +14,9 @@ final class NativeErrorPageViewController: UIViewController,
     typealias SubscriberStateType = NativeErrorPageState
     private let windowUUID: WindowUUID
 
-    // MARK: Themable Variables
+    // MARK: Themeable Variables
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     var currentWindowUUID: UUID? {
         windowUUID
@@ -183,8 +183,10 @@ final class NativeErrorPageViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
+
         store.dispatchLegacy(NativeErrorPageAction(windowUUID: windowUUID,
                                                    actionType: NativeErrorPageActionType.errorPageLoaded))
     }

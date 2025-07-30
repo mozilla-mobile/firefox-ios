@@ -77,10 +77,6 @@ final class StatusBarOverlay: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     func resetState(isHomepage: Bool) {
         savedIsHomepage = isHomepage
         let needsNoStatusBar = needsNoStatusBar(isHomepage: isHomepage)

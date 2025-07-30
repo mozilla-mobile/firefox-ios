@@ -43,7 +43,7 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
             observing: [.DynamicFontChanged]
         )
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.header

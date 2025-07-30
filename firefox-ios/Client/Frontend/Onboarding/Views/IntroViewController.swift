@@ -29,7 +29,7 @@ class IntroViewController: UIViewController,
     var didFinishFlow: (() -> Void)?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
     var currentWindowUUID: UUID? { windowUUID }
@@ -92,12 +92,10 @@ class IntroViewController: UIViewController,
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
         populatePageController()
-    }
 
-    deinit {
-        notificationCenter.removeObserver(self)
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     // MARK: View setup

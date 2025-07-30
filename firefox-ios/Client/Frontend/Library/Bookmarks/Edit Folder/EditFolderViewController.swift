@@ -21,7 +21,7 @@ class EditFolderViewController: UIViewController,
     }
     var currentWindowUUID: WindowUUID?
     var themeManager: any ThemeManager
-    var themeObserver: (any NSObjectProtocol)?
+    var themeListenerCancellable: Any?
     var notificationCenter: any NotificationProtocol
     var onViewWillDisappear: (() -> Void)?
     var onViewWillAppear: (() -> Void)?
@@ -64,7 +64,6 @@ class EditFolderViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange(view)
     }
 
     required init?(coder: NSCoder) {
@@ -81,6 +80,9 @@ class EditFolderViewController: UIViewController,
             self?.tableView.reloadSections(IndexSet(integer: Section.parentFolder.rawValue), with: .automatic)
         }
         setupSubviews()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {

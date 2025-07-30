@@ -122,6 +122,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     deinit {
+        // FIXME: FXIOS-12995 Use Notifiable
         notificationCenter.removeObserver(self)
 
         // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
@@ -130,6 +131,7 @@ final class BookmarksViewController: SiteTableViewController,
 
     // MARK: - Lifecycle
 
+    // FIXME: FXIOS-12996 Use Themeable instead of custom theme setting
     override func viewDidLoad() {
         super.viewDidLoad()
 

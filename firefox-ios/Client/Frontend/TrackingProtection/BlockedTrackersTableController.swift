@@ -37,7 +37,7 @@ class BlockedTrackersTableViewController: UIViewController,
     var model: BlockedTrackersTableModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     let windowUUID: WindowUUID
 
     var currentWindowUUID: UUID? { return windowUUID }
@@ -57,22 +57,20 @@ class BlockedTrackersTableViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     // MARK: View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupDataSource()
         applySnapshot()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
-        listenForThemeChange(view)
         applyTheme()
     }
 

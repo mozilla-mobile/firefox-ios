@@ -36,7 +36,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     weak var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
@@ -135,7 +135,10 @@ class MainMenuViewController: UIViewController,
         setupMenuOrientation()
 
         setupTableView()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
+
         store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,

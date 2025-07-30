@@ -22,7 +22,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
 
     // MARK: - Properties
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     private var currentAccessoryView: AutofillAccessoryViewButtonItem?
     let windowUUID: WindowUUID
@@ -156,8 +156,9 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
         super.init(frame: CGRect(width: UIScreen.main.bounds.width,
                                  height: UX.toolbarHeight))
 
-        listenForThemeChange(self)
         setupLayout()
+
+        listenForThemeChanges(self, withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

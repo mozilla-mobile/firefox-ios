@@ -22,7 +22,7 @@ final class TabDisplayPanelViewController: UIViewController,
     let panelType: TabTrayPanelType
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var tabsState: TabsPanelState
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -97,13 +97,14 @@ final class TabDisplayPanelViewController: UIViewController,
         super.viewDidLoad()
         view.accessibilityLabel = .TabsTray.TabTrayViewAccessibilityLabel
         setupView()
-        listenForThemeChange(view)
-        applyTheme()
         subscribeToRedux()
 
         if !tabDisplayView.shouldHideInactiveTabs {
             InactiveTabsTelemetry().sectionShown()
         }
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {

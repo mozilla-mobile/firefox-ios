@@ -35,7 +35,7 @@ class EditAddressViewController: UIViewController,
     var model: AddressListViewModel
     private let logger: Logger
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    public var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var currentWindowUUID: WindowUUID? { model.windowUUID }
     var webView: WKWebView? { model.editAddressWebViewManager.webView }
@@ -59,8 +59,10 @@ class EditAddressViewController: UIViewController,
         super.viewDidLoad()
         setupWebView()
         setupRemoveButton()
-        listenForThemeChange(view)
         KeyboardHelper.defaultHelper.addDelegate(self)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewDidDisappear(_ animated: Bool) {

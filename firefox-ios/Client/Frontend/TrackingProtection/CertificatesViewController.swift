@@ -64,6 +64,7 @@ class CertificatesViewController: UIViewController,
     private var constraints = [NSLayoutConstraint]()
     var model: CertificatesModel
     var notificationCenter: NotificationProtocol
+    var themeListenerCancellable: Any?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
@@ -90,20 +91,17 @@ class CertificatesViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
-        listenForThemeChange(view)
-        applyTheme()
     }
 
     // MARK: View Setup

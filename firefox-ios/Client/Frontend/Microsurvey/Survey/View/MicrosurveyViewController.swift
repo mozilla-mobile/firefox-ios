@@ -16,9 +16,9 @@ final class MicrosurveyViewController: UIViewController,
                                        Notifiable {
     typealias SubscriberStateType = MicrosurveyState
 
-    // MARK: Themable Variables
+    // MARK: Themeable Variables
     var themeManager: Common.ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: Common.NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -179,7 +179,7 @@ final class MicrosurveyViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

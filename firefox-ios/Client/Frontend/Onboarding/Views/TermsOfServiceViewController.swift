@@ -31,7 +31,7 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     private let profile: Profile
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var currentWindowUUID: UUID? { windowUUID }
     var notificationCenter: NotificationProtocol
     var didFinishFlow: (() -> Void)?
@@ -103,7 +103,9 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     // MARK: - Button actions

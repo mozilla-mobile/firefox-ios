@@ -21,7 +21,7 @@ class UpdateViewController: UIViewController,
     var didFinishFlow: (() -> Void)?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
@@ -73,8 +73,9 @@ class UpdateViewController: UIViewController,
         super.viewDidLoad()
 
         setupView()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
-        listenForThemeChange(view)
     }
 
     // MARK: View setup

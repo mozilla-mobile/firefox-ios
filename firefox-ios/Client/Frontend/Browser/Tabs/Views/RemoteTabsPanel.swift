@@ -37,7 +37,7 @@ class RemoteTabsPanel: UIViewController,
     weak var remoteTabsDelegate: RemoteTabsPanelDelegate?
 
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     private let windowUUID: WindowUUID
     private var isTabTrayUIExperimentsEnabled: Bool {
@@ -96,9 +96,10 @@ class RemoteTabsPanel: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChange(view)
         setupLayout()
         subscribeToRedux()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

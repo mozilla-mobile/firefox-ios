@@ -66,7 +66,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     var model: TrackingProtectionDetailsModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -87,10 +87,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -99,7 +95,8 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

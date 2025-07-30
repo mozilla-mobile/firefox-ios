@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController,
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var logger: Logger
     var zoomManager: ZoomPageManager
     let documentLogger: DocumentLogger
@@ -1016,7 +1016,8 @@ class BrowserViewController: UIViewController,
         webPagePreview.applyTheme(theme: theme)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
-        listenForThemeChange(view)
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
         setupAccessibleActions()
 
         if #available(iOS 16.0, *) {
@@ -1082,6 +1083,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
+    // FIXME: FXIOS-12995 Use Notifiable on all of these...
     private func setupNotifications() {
         notificationCenter.addObserver(
             self,

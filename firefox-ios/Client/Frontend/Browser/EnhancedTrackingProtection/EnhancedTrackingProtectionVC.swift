@@ -56,7 +56,7 @@ protocol EnhancedTrackingProtectionMenuDelegate: AnyObject {
 
 class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -185,7 +185,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             addGestureRecognizer()
         }
         setupView()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {

@@ -11,13 +11,12 @@ import UIKit
 
 import enum MozillaAppServices.VisitType
 
-class LegacyHomepageViewController:
-    UIViewController,
-    FeatureFlaggable,
-    Themeable,
-    ContentContainable,
-    Screenshotable,
-    SearchBarLocationProvider {
+class LegacyHomepageViewController: UIViewController,
+                                    FeatureFlaggable,
+                                    Themeable,
+                                    ContentContainable,
+                                    Screenshotable,
+                                    SearchBarLocationProvider {
     // MARK: - Typealiases
 
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -56,7 +55,7 @@ class LegacyHomepageViewController:
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
 
     private var toolbarHelper: ToolbarHelperInterface
 
@@ -137,7 +136,6 @@ class LegacyHomepageViewController:
     deinit {
         jumpBackInContextualHintViewController.stopTimer()
         syncTabContextualHintViewController.stopTimer()
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - View lifecycle
@@ -158,7 +156,7 @@ class LegacyHomepageViewController:
         setupSectionsAction()
         reloadView()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

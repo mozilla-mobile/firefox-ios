@@ -78,10 +78,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         loadTopSitesData()
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     func getTopSitesData() -> [TopSite] {
         recalculateTopSiteData()
         return topSites
