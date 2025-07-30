@@ -500,6 +500,12 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // Bugzilla #1979499
+        if (url.scheme ?? "").lowercased() == "fido" {
+            decisionHandler(.cancel)
+            return
+        }
+
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
