@@ -142,6 +142,7 @@ class BrowsingPDFTests: BaseTestCase {
 
     private func longPressOnPdfLink() {
         let link = app.webViews.links.element(boundBy: 0)
+        mozWaitForElementToExist(link)
         let startCoordinate = link.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
         let endCoordinate = link.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         startCoordinate.press(forDuration: 3, thenDragTo: endCoordinate)
