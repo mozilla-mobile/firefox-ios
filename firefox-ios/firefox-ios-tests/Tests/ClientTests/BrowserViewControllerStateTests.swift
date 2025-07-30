@@ -91,6 +91,16 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigateTo, .reload)
     }
 
+    func testShowSummarizerAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = getAction(for: .showSummarizer)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .summarizer)
+    }
+
     // MARK: - Navigation Browser Action
     func test_tapOnCustomizeHomepage_navigationBrowserAction_returnsExpectedState() {
         let initialState = createSubject()

@@ -352,6 +352,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
+    func testNewState_whenSummarizeDisplayRequested() {
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            GeneralBrowserAction(windowUUID: .XCTestDefaultUUID,
+                                 actionType: GeneralBrowserActionType.showSummarizer)
+        )
+        subject.newState(state: newState)
+
+        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
+    }
+
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,

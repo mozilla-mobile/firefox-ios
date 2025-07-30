@@ -960,8 +960,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         switch readerModeState {
         case .active, .available:
-            let isSummarizeFeatureEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.summarizer,
-                                                                                              checking: .buildOnly)
+            let isSummarizeFeatureEnabled = FxNimbus.shared.features.summarizerFeature.value().enabled
             if isSummarizeFeatureEnabled {
                 actions.append(summaryAction)
             } else {

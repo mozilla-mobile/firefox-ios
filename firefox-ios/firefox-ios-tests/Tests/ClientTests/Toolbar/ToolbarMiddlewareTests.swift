@@ -525,6 +525,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
+    func testDidTapButton_tapOnSummarizerButton_dispatchesShowSummarizer() throws {
+        try didTapButton(buttonType: .summarizer, expectedActionType: .showSummarizer)
+    }
+
     func testDidTapButton_longPressOnBackButton_dispatchesShowBackForwardList() throws {
         try didLongPressButton(buttonType: .back, expectedActionType: GeneralBrowserActionType.showBackForwardList)
 
@@ -624,6 +628,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     func testDidTapButton_longPressOnReaderMode_dispatchesAddToReadingListLongPressAction() throws {
         try didLongPressButton(buttonType: .readerMode,
                                expectedActionType: GeneralBrowserActionType.addToReadingListLongPressAction)
+    }
+
+    func testDidTapButton_longPressOnSummarizer_dispatchesShowReaderModeAction() throws {
+        try didLongPressButton(buttonType: .summarizer, expectedActionType: .showReaderMode)
     }
 
     func testUrlDidChange_dispatchesBorderPositionChanged() throws {

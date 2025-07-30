@@ -14,6 +14,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     override func setUp() {
         super.setUp()
+        setIsSummarizerFeatureEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies()
     }
 
@@ -122,6 +123,26 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 0)
     }
 
+    func test_readerModeStateChangedAction_onHomepage_returnsExpectedState_whenSummarizerFeatureOn() {
+        setIsSummarizerFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 0)
+        XCTAssertEqual(newState.trailingPageActions.count, 0)
+    }
+
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
@@ -141,6 +162,30 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 2)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerMode)
         XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn() {
+        setIsSummarizerFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .summarizer)
+        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.sun)
         XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
@@ -754,6 +799,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 actionType: ToolbarActionType.urlDidChange
             )
         )
+    }
+
+    private func setIsSummarizerFeatureEnabled(enabled: Bool) {
+        FxNimbus.shared.features.summarizerFeature.with { _, _ in
+            return SummarizerFeature(enabled: enabled)
+        }
     }
 
     // MARK: Helper
