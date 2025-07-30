@@ -79,7 +79,6 @@ extension Themeable {
             })
     }
 
-    // FIXME: Why and where do we need this?
     /// Updates subviews of the `Themeable` view, which can specify whether it wants to use the
     /// base theme via `getCurrentTheme` or override the private mode theme via `resolvedTheme`
     @MainActor

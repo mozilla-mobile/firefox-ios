@@ -64,9 +64,8 @@ class CertificatesViewController: UIViewController,
     private var constraints = [NSLayoutConstraint]()
     var model: CertificatesModel
     var notificationCenter: NotificationProtocol
-    var themeListenerCancellable: Any?
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
     private let logger: Logger
