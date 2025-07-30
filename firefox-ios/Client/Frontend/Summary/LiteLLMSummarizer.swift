@@ -6,12 +6,12 @@ import Foundation
 
 /// A wrapper around `LiteLLMClient` that provides summarized output (full or streamed)
 /// and normalizes underlying errors to `SummarizeError` type.
-public final class LiteLLMSummarizer: SummarizerProtocol {
+final class LiteLLMSummarizer: SummarizerProtocol {
     private let client: LiteLLMClientProtocol
     private let model: String
     private let maxTokens: Int
 
-    public init(
+    init(
         client: LiteLLMClientProtocol,
         model: String,
         maxTokens: Int
@@ -27,7 +27,7 @@ public final class LiteLLMSummarizer: SummarizerProtocol {
     ///   - text: The text to be summarized.
     /// - Returns: A summarized string
     /// - Throws: `SummarizerError` if the request fails or if the response is invalid.
-    public func summarize(prompt: String, text: String) async throws -> String {
+    func summarize(prompt: String, text: String) async throws -> String {
         let options = LiteLLMChatOptions(model: model, maxTokens: maxTokens, stream: false)
         // System message is used for the prompt, user message for the text.
         let messages = makeMessages(prompt: prompt, text: text)
@@ -43,7 +43,7 @@ public final class LiteLLMSummarizer: SummarizerProtocol {
     ///   - prompt: Instruction prompt to guide the summarization.
     ///   - text: The text to be summarized.
     /// - Returns: An `AsyncThrowingStream` yielding chunks of the summary.
-    public func summarizeStreamed(
+    func summarizeStreamed(
         prompt: String,
         text: String
     ) -> AsyncThrowingStream<String, Error> {

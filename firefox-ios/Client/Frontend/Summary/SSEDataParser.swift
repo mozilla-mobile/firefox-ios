@@ -20,8 +20,8 @@ import Foundation
 /// 1. Each line is prefixed with `data:` (`Constants.dataPrefix`).
 /// 2. Events are separated by two newlines (`Constants.eventDelimiter`).
 /// 3. The stream ends when `[DONE]` is received (`Constants.doneSignal`).
-public final class SSEDataParser {
-    public enum Constants {
+final class SSEDataParser {
+    enum Constants {
         static let eventDelimiter = "\n\n"
         static let dataPrefix = "data: "
         static let doneSignal = "[DONE]"
@@ -32,7 +32,7 @@ public final class SSEDataParser {
     /// incomplete chunks or cases where the incoming data is split across multiple chunks.
     private var buffer = ""
 
-    public init(decoder: JSONDecoder = JSONDecoder()) {
+    init(decoder: JSONDecoder = JSONDecoder()) {
         self.decoder = decoder
     }
 
@@ -40,7 +40,7 @@ public final class SSEDataParser {
     /// - Parameter data: Raw stream data chunk
     /// - Returns: Array of successfully decoded objects
     /// - Throws: `SSEParseError` when valid-looking data fails to decode into the expected type `T`
-    public func parse<T: Decodable & Sendable>(_ data: Data) throws -> [T] {
+    func parse<T: Decodable & Sendable>(_ data: Data) throws -> [T] {
         // Convert data to string, skip if conversion fails
         guard let stringData = String(data: data, encoding: .utf8) else { throw SSEDataParserError.invalidDataEncoding }
         // Append new data to buffer
@@ -63,7 +63,7 @@ public final class SSEDataParser {
     /// Flushes the buffer, clearing any partial data.
     /// This is useful when you want to reset the parser state, e.g., after processing a complete stream.
     /// - Note: This does not affect the already processed data.
-    public func flush() {
+    func flush() {
         buffer = ""
     }
 

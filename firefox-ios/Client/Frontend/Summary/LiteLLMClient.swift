@@ -32,7 +32,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
     ///   - options: inference options as described by LiteLLMChatOptions ( includes model name, max tokens, ...).
-    public func requestChatCompletion(
+    func requestChatCompletion(
         messages: [LiteLLMMessage],
         options: LiteLLMChatOptions
     ) async throws -> String {
@@ -49,7 +49,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
     ///   - options: inference options as described by LiteLLMChatOptions ( includes model name, max tokens, ...).
-    public func requestChatCompletionStreamed(
+    func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
         options: LiteLLMChatOptions
     ) -> AsyncThrowingStream<String, Error> {
@@ -100,7 +100,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
 
     // MARK: - Helpers
 
-    public func makeRequest(
+    func makeRequest(
         messages: [LiteLLMMessage],
         options: LiteLLMChatOptions
     ) throws -> URLRequest {

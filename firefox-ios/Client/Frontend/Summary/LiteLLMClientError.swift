@@ -5,14 +5,14 @@
 import Foundation
 
 /// Errors produced by LiteLLMClient, with user-friendly descriptions.
-public enum LiteLLMClientError: LocalizedError {
+enum LiteLLMClientError: LocalizedError {
     case requestCreationFailed
     case invalidResponse(statusCode: Int)
     case noContent
     case decodingFailed
     case networkError(underlying: Error)
 
-    public var errorDescription: String {
+    var errorDescription: String {
         switch self {
         case .requestCreationFailed:
             return "Unable to prepare the request. Please try again later."

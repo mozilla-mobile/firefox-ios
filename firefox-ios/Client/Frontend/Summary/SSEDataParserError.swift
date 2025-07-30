@@ -5,7 +5,7 @@
 import Foundation
 
 /// Errors thrown during SSE (Server-Sent Events) parsing
-public enum SSEDataParserError: Error {
+enum SSEDataParserError: Error {
     /// Indicates the input data couldn't be decoded
     case invalidDataEncoding
 }
