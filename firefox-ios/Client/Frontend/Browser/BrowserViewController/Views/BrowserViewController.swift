@@ -87,7 +87,7 @@ class BrowserViewController: UIViewController,
         return addressToolbarContainer
     }
 
-    var windowUUID: WindowUUID { return tabManager.windowUUID }
+    nonisolated let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
     private var observedWebViews = WeakList<WKWebView>()
 
@@ -416,6 +416,7 @@ class BrowserViewController: UIViewController,
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
         self.tabManager = tabManager
+        self.windowUUID = tabManager.windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.crashTracker = DefaultCrashTracker()
@@ -884,7 +885,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    func unsubscribeFromRedux() {
+    nonisolated func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .browserViewController)
