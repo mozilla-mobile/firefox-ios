@@ -113,11 +113,17 @@ final class NimbusFeatureFlagLayer {
         case .appleSummarizerToolbarEntrypoint:
            return checkAppleSummarizerToolbarEntrypoint(from: nimbus)
 
+        case .appleSummarizerShakeGesture:
+           return checkAppleSummarizerShakeGesture(from: nimbus)
+
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
 
         case .hostedSummarizerToolbarEntrypoint:
            return checkHostedSummarizerToolbarEntrypoint(from: nimbus)
+
+        case .hostedSummarizerShakeGesture:
+           return checkHostedSummarizerShakeGesture(from: nimbus)
 
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
@@ -423,6 +429,7 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+    // MARK: - Summarizer Feature
     private func checkAppleSummarizerFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appleSummarizerFeature.value()
         return config.enabled
@@ -433,6 +440,10 @@ final class NimbusFeatureFlagLayer {
         return config.toolbarEntrypoint
     }
 
+    private func checkAppleSummarizerShakeGesture(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.appleSummarizerFeature.value().shakeGesture
+    }
+
     private func checkHostedSummarizerFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.hostedSummarizerFeature.value()
         return config.enabled
@@ -441,6 +452,10 @@ final class NimbusFeatureFlagLayer {
     private func checkHostedSummarizerToolbarEntrypoint(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.hostedSummarizerFeature.value()
         return config.toolbarEntrypoint
+    }
+
+    private func checkHostedSummarizerShakeGesture(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.hostedSummarizerFeature.value().shakeGesture
     }
 
     private func checkUpdatedPasswordManagerFeature(from nimbus: FxNimbus) -> Bool {

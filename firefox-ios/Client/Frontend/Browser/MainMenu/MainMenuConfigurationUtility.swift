@@ -61,16 +61,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
     }
 
-    var isAppleSummarizerFeatureEnabled: Bool {
-        SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
-    }
-
-    var isHostedSummarizerFeatureEnabled: Bool {
-        SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
-    }
-
     private var isSummarizerOn: Bool {
-        isAppleSummarizerFeatureEnabled || isHostedSummarizerFeatureEnabled
+        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
     }
 
     private var isMenuRedesignOn: Bool {
