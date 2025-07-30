@@ -5,6 +5,8 @@ import Common
 import Redux
 import Foundation
 
+// TODO: FXIOS-12947 - Add tests for TermsOfUse Feature and use profile.prefs
+// instead of User Defaults
 @MainActor
 class TermsOfUseMiddleware {
     struct DefaultKeys {
