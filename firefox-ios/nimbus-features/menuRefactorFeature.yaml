@@ -32,15 +32,15 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
           menu-hint: false
-          menu-redesign: false
-          menu-default-browser-banner: false
+          menu-redesign: true
+          menu-default-browser-banner: true
           menu-redesign-hint: true
       - channel: developer
         value:
           enabled: true
           menu-hint: true
-          menu-redesign: false
-          menu-default-browser-banner: false
+          menu-redesign: true
+          menu-default-browser-banner: true
           menu-redesign-hint: true
