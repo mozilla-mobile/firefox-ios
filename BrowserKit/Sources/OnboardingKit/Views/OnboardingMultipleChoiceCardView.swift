@@ -72,19 +72,18 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
                     }
-                    Spacer()
-                    primaryButton
                 }
             }
-            .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-            .padding(UX.CardView.verticalPadding * scale)
-            .background(
-                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                    .fill(cardBackgroundColor)
-                    .accessibilityHidden(true)
-            )
-            .padding(.top, UX.CardView.cardTopPadding)
+            primaryButton
         }
+        .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
+        .padding(UX.CardView.verticalPadding * scale)
+        .background(
+            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                .fill(cardBackgroundColor)
+                .accessibilityHidden(true)
+        )
+        .padding(.top, UX.CardView.cardTopPadding)
     }
 
     var titleView: some View {
