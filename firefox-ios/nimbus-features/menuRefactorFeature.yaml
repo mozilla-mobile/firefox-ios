@@ -22,11 +22,11 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
-          menu-default-browser-banner: false
+          enabled: true
+          menu-default-browser-banner: true
           menu-redesign-hint: true
       - channel: developer
         value:
           enabled: true
-          menu-default-browser-banner: false
+          menu-default-browser-banner: true
           menu-redesign-hint: true
