@@ -166,7 +166,7 @@ final class MicrosurveyViewController: UIViewController,
         })
     }
 
-    func unsubscribeFromRedux() {
+    nonisolated func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .microsurvey)
@@ -194,7 +194,6 @@ final class MicrosurveyViewController: UIViewController,
 
     deinit {
         unsubscribeFromRedux()
-        tableView.removeFromSuperview()
     }
 
     private func configureUI() {
