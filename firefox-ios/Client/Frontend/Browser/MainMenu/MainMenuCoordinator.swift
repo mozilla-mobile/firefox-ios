@@ -32,6 +32,13 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
 
     @MainActor
     func showPrintSheet()
+
+    /// Open the share sheet to share the currently selected `Tab`.
+    @MainActor
+    func showShareSheetForCurrentlySelectedTab()
+
+    @MainActor
+    func showSummarizePanel()
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -136,13 +143,14 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             navigationHandler?.updateZoomPageBarVisibility()
 
         case .siteProtections:
-            self.navigationHandler?.presentSiteProtections()
+            navigationHandler?.presentSiteProtections()
 
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()
 
-        case .webpageSummary: break
-            // TODO(FXIOS-12688): Redirect to summary view
+        case .webpageSummary:
+            dismissMenuModal(animated: true)
+            navigationHandler?.showSummarizePanel()
         }
     }
 

@@ -69,7 +69,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var didTapButton = false
     var buttonTappedFinishFlow: (() -> Void)?
-    weak var dismissDelegate: BottomSheetDismissProtocol?
+    weak var dismissDelegate: BottomSheetDelegate?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 

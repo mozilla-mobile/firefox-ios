@@ -13,13 +13,13 @@ public struct BottomSheetViewModel {
         public static let shadowOpacity: Float = 0.3
     }
 
-    public var cornerRadius: CGFloat
-    public var animationTransitionDuration: TimeInterval
-    public var backgroundColor: UIColor
-    public var shouldDismissForTapOutside: Bool
-    public var shadowOpacity: Float
-    public var closeButtonA11yLabel: String
-    public var closeButtonA11yIdentifier: String
+    let cornerRadius: CGFloat
+    let backgroundColor: UIColor
+    let animationTransitionDuration: TimeInterval
+    let shouldDismissForTapOutside: Bool
+    let shadowOpacity: Float
+    let closeButtonA11yLabel: String
+    let closeButtonA11yIdentifier: String
 
     public init(
         cornerRadius: CGFloat = BottomSheetViewModel.UX.cornerRadius,
