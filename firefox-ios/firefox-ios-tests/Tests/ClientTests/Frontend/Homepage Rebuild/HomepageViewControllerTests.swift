@@ -47,26 +47,13 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 0)
+        XCTAssertEqual(mockNotificationCenter?.addPublisherCount, 0)
 
         sut.loadViewIfNeeded()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.addPublisherCount, 1)
         XCTAssertEqual(mockNotificationCenter?.observers, [.ThemeDidChange])
-    }
-
-    // MARK: - Deinit State
-    func testDeinit_callsAppropriateNotificationCenterMethods() {
-        var sut: HomepageViewController? = createSubject()
-
-        XCTAssertNotNil(sut)
-        XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 0)
-
-        sut = nil
-
-        XCTAssertNil(sut)
-        XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 1)
     }
 
     func test_scrollViewDidScroll_updatesStatusBarScrollDelegate() {
