@@ -110,9 +110,6 @@ public class SummarizeController: UIViewController, Themeable {
         $0.numberOfLines = 0
     }
     private let closeButton: UIButton = .build {
-        if #available(iOS 26, *) {
-            $0.configuration = .glass()
-        }
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
     }
     private let tabSnapshot: UIImageView = .build {
