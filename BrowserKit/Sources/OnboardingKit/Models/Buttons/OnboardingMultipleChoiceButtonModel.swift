@@ -13,11 +13,12 @@ public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction
     func image(isSelected: Bool) -> UIImage? {
         let finalImageID = isSelected ? "\(imageID)Selected" : imageID
 
-        if let image = UIImage(named: finalImageID, in: Bundle.main, compatibleWith: nil) {
-            return image // Load from main bundle if available
+        // Load from package's bundle bundle if available
+        if let image = UIImage(named: finalImageID, in: Bundle.module, compatibleWith: nil) {
+            return image
         }
-        // Fallback to the package's bundle
-        return UIImage(named: finalImageID, in: Bundle.module, compatibleWith: nil)
+        // Fallback to the main bundle
+        return UIImage(named: finalImageID, in: Bundle.main, compatibleWith: nil)
     }
 
     public init(title: String, action: OnboardingMultipleChoiceActionType, imageID: String) {

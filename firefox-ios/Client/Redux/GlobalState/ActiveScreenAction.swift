@@ -23,6 +23,7 @@ enum AppScreen {
     case tabPeek
     case mainMenu
     case microsurvey
+    case termsOfUse
     case trackingProtection
     case toolbar
     case searchEngineSelection

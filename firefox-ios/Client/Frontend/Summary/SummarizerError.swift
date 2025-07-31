@@ -2,11 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-/// We need these compile time checks so the app can be built with pre‑iOS 26 SDKs.
-/// Once our BR workflow switches to 26, we can remove them,
-/// as the runtime @available checks will be enough.
-#if canImport(FoundationModels)
-import FoundationModels
 import Foundation
 
 /// Error types for summarization flows, mapping underlying model errors to user‑friendly cases.
@@ -36,8 +31,16 @@ enum SummarizerError: Error, LocalizedError, Sendable {
         case .unknown: return ""
         }
     }
+}
 
-    /// Initialize from a specific generation error type. 
+/// We need these compile time checks so the app can be built with pre‑iOS 26 SDKs.
+/// Once our BR workflow switches to 26, we can remove them,
+/// as the runtime @available checks will be enough.
+#if canImport(FoundationModels)
+import FoundationModels
+
+extension SummarizerError {
+    /// Initialize from `LanguageModelSession.GenerationError`.
     @available(iOS 26, *)
     init(_ error: LanguageModelSession.GenerationError) {
         switch error {
@@ -47,8 +50,8 @@ enum SummarizerError: Error, LocalizedError, Sendable {
         case .guardrailViolation: self = .safetyBlocked
         case .unsupportedLanguageOrLocale: self = .unsupportedLanguage
         case .unsupportedGuide,
-             .decodingFailure,
-             .assetsUnavailable:
+                .decodingFailure,
+                .assetsUnavailable:
             self = .unknown(error)
         @unknown default:
             self = .unknown(error)

@@ -6,7 +6,7 @@
 	<string>$(LITE_LLM_API_KEY)</string>
 	<key>LiteLLMAPIEndpoint</key>
 	<string>$(LITE_LLM_API_ENDPOINT)</string>
-	<key> LiteLLMAPIModel</key>
+	<key>LiteLLMAPIModel</key>
 	<string>$(LITE_LLM_API_MODEL)</string>
 	<key>SKAdNetworkItems</key>
 	<array>

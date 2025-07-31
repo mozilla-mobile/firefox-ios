@@ -26,8 +26,8 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack {
+        VStack(alignment: .leading, spacing: UX.SegmentedControl.containerSpacing) {
+            HStack(alignment: .top, spacing: UX.SegmentedControl.containerSpacing) {
                 ForEach(Array(items.enumerated()), id: \.element.action) { index, item in
                     Button {
                         withAnimation(.easeInOut) {
@@ -42,7 +42,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
                             itemContent(item: item, isSelected: isSelected)
                         }
                         .padding(.vertical, UX.SegmentedControl.verticalPadding)
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, minHeight: UX.SegmentedControl.buttonMinHeight, alignment: .top)
                     }
                     .buttonStyle(PlainButtonStyle())
                     .accessibilityElement()
@@ -76,10 +76,19 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     }
 
     private func itemContent(item: OnboardingMultipleChoiceButtonModel<Action>, isSelected: Bool) -> some View {
-        VStack(spacing: UX.SegmentedControl.innerVStackSpacing) {
-            Text(item.title)
-                .font(.footnote)
-                .foregroundColor(.primary)
+        VStack(spacing: UX.SegmentedControl.containerSpacing) {
+            VStack {
+                Text(item.title)
+                    .font(.footnote)
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.center)
+                Spacer()
+            }
+
+            Rectangle()
+                .fill(Color.clear)
+                .frame(height: UX.SegmentedControl.innerVStackSpacing)
+
             Image(
                 isSelected
                 ? UX.SegmentedControl.radioButtonSelectedImage

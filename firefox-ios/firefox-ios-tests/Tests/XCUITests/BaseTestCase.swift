@@ -37,6 +37,7 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.SkipETPCoverSheet,
                            LaunchArguments.StageServer,
                            LaunchArguments.SkipDefaultBrowserOnboarding,
+                           LaunchArguments.SkipTermsOfUse,
                            LaunchArguments.DeviceName,
                            "\(LaunchArguments.ServerPort)\(serverPort)",
                            LaunchArguments.SkipContextualHints,

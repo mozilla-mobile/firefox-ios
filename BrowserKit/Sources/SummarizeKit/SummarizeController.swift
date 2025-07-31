@@ -129,6 +129,7 @@ public class SummarizeController: UIViewController, Themeable {
             bottom: UX.tabSnapshotFinalPositionBottomPadding,
             right: 0.0
         )
+        $0.isEditable = false
     }
 
     public init(

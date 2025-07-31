@@ -333,7 +333,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isSummarizeFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
+        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
     }
 
     // MARK: Computed vars
