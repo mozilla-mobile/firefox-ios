@@ -17,7 +17,7 @@ struct MerinoTestData {
                 title: "iOS Team's Favourite Dog with Funny Toofs",
                 excerpt: "A little goes a long way with especially tough cuts—like this juicy London broil.",
                 topic: Optional("food"),
-                publisher: "Bon Appétit",
+                publisher: "Merino Mock Stories",
                 isTimeSensitive: false,
                 imageUrl: "https://img-getpocket.cdn.mozilla.net/direct?url=https://pocket-image-cache.com/1200x/filters:format(jpg):extract_focal()/https%253A%252F%252Fs3.amazonaws.com%252Fpocket-syndicated-images%252Farticles%252F1923%252F1571076802_GettyImages-626006674.jpg&resize=w450",
                 iconUrl: nil,
