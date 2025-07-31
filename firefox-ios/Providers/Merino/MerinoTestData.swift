@@ -13,13 +13,13 @@ struct MerinoTestData {
             MozillaAppServices.RecommendationDataItem(
                 corpusItemId: "3533e87e-4997-40d9-b9fb-d1cb0251f7a2",
                 scheduledCorpusItemId: "e2acfa3e-5796-4dfd-97e0-789534b255fc",
-                url: "https://getpocket.com/explore/item/the-key-to-tender-meat-baking-soda?utm_source=firefox-newtab-en-us",
-                title: "Test stories",
+                url: "https://www.istockphoto.com/photos/funny-dog-teeth",
+                title: "iOS Team's Favourite Dog with Funny Toofs",
                 excerpt: "A little goes a long way with especially tough cuts—like this juicy London broil.",
                 topic: Optional("food"),
-                publisher: "Bon Appétit",
+                publisher: "Merino Mock Stories",
                 isTimeSensitive: false,
-                imageUrl: "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/488b9813-362a-4f2f-8913-c6809bb13b13.jpeg",
+                imageUrl: "https://img-getpocket.cdn.mozilla.net/direct?url=https://pocket-image-cache.com/1200x/filters:format(jpg):extract_focal()/https%253A%252F%252Fs3.amazonaws.com%252Fpocket-syndicated-images%252Farticles%252F1923%252F1571076802_GettyImages-626006674.jpg&resize=w450",
                 iconUrl: nil,
                 tileId: 5001967569054564,
                 receivedRank: 0
