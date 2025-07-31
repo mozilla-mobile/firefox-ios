@@ -17,6 +17,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
         super.setUp()
         mockProfile = MockProfile()
         mockTabManager = MockTabManager()
+        DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 

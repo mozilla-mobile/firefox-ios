@@ -44,12 +44,14 @@ class MultiWindowTests: IpadOnlyTestCase {
         let newTab = AccessibilityIdentifiers.MainMenu.newTab
         // A new tab is opened in the same window
         app.links[topSites].firstMatch.waitAndTap()
+        waitUntilPageLoad()
         app.buttons[settingsMenuButton].firstMatch.waitAndTap()
         app.cells[newTab].firstMatch.waitAndTap()
         let tabButtonSecondWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 0)
         XCTAssertEqual(tabButtonSecondWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
         // A new tab is opened in the same window
         app.links.matching(identifier: topSites).element(boundBy: 7).waitAndTap()
+        waitUntilPageLoad()
         app.buttons[settingsMenuButton].firstMatch.waitAndTap()
         app.cells[newTab].firstMatch.waitAndTap()
         let tabButtonFirstWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 1)

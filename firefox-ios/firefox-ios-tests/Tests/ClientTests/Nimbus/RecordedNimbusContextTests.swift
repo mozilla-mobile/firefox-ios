@@ -23,7 +23,8 @@ class RecordedNimbusContextTests: XCTestCase {
             isFirstRun: true,
             isDefaultBrowser: true,
             isBottomToolbarUser: true,
-            hasEnabledTipsNotifications: true
+            hasEnabledTipsNotifications: true,
+            isAppleIntelligenceAvailable: true
         )
         try validateEventQueries(recordedContext: recordedContext)
     }
@@ -33,7 +34,8 @@ class RecordedNimbusContextTests: XCTestCase {
             isFirstRun: true,
             isDefaultBrowser: true,
             isBottomToolbarUser: true,
-            hasEnabledTipsNotifications: true
+            hasEnabledTipsNotifications: true,
+            isAppleIntelligenceAvailable: true
         )
         recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
         let jsonString = recordedContext.toJson()
@@ -58,6 +60,10 @@ class RecordedNimbusContextTests: XCTestCase {
             json?.removeValue(forKey: "has_enabled_tips_notifications") as? Bool,
             recordedContext.hasEnabledTipsNotifications
         )
+        XCTAssertEqual(
+            json?.removeValue(forKey: "is_apple_intelligence_available") as? Bool,
+            recordedContext.isAppleIntelligenceAvailable
+        )
 
         var events = json?.removeValue(forKey: "events") as? [String: Double]
         XCTAssertNotNil(events)
@@ -72,7 +78,8 @@ class RecordedNimbusContextTests: XCTestCase {
             isFirstRun: true,
             isDefaultBrowser: true,
             isBottomToolbarUser: true,
-            hasEnabledTipsNotifications: true
+            hasEnabledTipsNotifications: true,
+            isAppleIntelligenceAvailable: true
         )
 
         var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
@@ -112,7 +119,8 @@ class RecordedNimbusContextTests: XCTestCase {
             isFirstRun: true,
             isDefaultBrowser: true,
             isBottomToolbarUser: true,
-            hasEnabledTipsNotifications: true
+            hasEnabledTipsNotifications: true,
+            isAppleIntelligenceAvailable: true
         )
         let eventQueries = recordedContext.getEventQueries()
 

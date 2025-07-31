@@ -335,7 +335,7 @@ final class HomepageViewController: UIViewController,
     // MARK: - Theming
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
     }
 
     // MARK: - Layout

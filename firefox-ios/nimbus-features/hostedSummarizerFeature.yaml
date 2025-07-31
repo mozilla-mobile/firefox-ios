@@ -1,0 +1,32 @@
+# The configuration for the hosted summarizer feature
+features:
+  hosted-summarizer-feature:
+    description: >
+      This feature enables the hosted summarizer feature.
+    variables:
+      enabled:
+        description: >
+          Enables the hosted summarizer feature.
+        type: Boolean
+        default: false
+      toolbarEntrypoint:
+        description: >
+          Enables the toolbar entrypoint for the summarizer feature.
+        type: Boolean
+        default: false
+      shakeGesture:
+        description: >
+          Enables the shake gesture for the summarizer feature.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+          toolbarEntrypoint: true
+          shakeGesture: true
+      - channel: developer
+        value:
+          enabled: true
+          toolbarEntrypoint: true
+          shakeGesture: true

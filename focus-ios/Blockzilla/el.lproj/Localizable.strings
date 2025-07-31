@@ -212,13 +212,13 @@
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Ορισμός ως προεπιλογή";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
-"Onboarding.History.Description" = "Διαγράψτε το ιστορικό περιήγησης, τους κωδικούς πρόσβασης, τα cookie σας και αποτρέψτε την καταγραφή από ανεπιθύμητες διαφημίσεις με ένα μόνο πάτημα!";
+"Onboarding.History.Description" = "Διαγράψτε το ιστορικό περιήγησης, τα συνθηματικά, τα cookie σας και αποτρέψτε την καταγραφή από ανεπιθύμητες διαφημίσεις με ένα μόνο πάτημα!";
 
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "Το ιστορικό σας δεν σας ακολουθεί";
 
 /* Text for a label that indicates the description of incognito section from onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Onboarding.Incognito.Description" = "Το %@ είναι ένα ιδιωτικό πρόγραμμα περιήγησης με προστασία από καταγραφή και φραγή περιεχομένου.";
+"Onboarding.Incognito.Description" = "Το %@ είναι μια ιδιωτική εφαρμογή περιήγησης με προστασία από καταγραφή και φραγή περιεχομένου.";
 
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Κάτι παραπάνω από απλή ανωνυμία";
@@ -320,7 +320,7 @@
 "Settings.darkTheme" = "Σκουρόχρωμο";
 
 /* Description associated with the Crash Reports toggle on settings screen */
-"Settings.detailTextCrashReports.V2" = "Αυτό μας επιτρέπει να διαγνώσουμε και να διορθώσουμε προβλήματα με το πρόγραμμα περιήγησης.";
+"Settings.detailTextCrashReports.V2" = "Αυτό μας επιτρέπει να διαγνώσουμε και να διορθώσουμε προβλήματα με την εφαρμογή περιήγησης.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "Το %@ θα στέλνει όσα πληκτρολογείτε στη γραμμή διευθύνσεων στη μηχανή αναζήτησής σας.";
@@ -497,7 +497,7 @@
 "ShareMenu.ShareOpenChrome" = "Άνοιγμα στο Chrome";
 
 /* Text for the share menu option when a user wants to open the current website in the default browser. */
-"ShareMenu.ShareOpenDefaultBrowser" = "Άνοιγμα στο προεπιλεγμένο πρόγραμμα περιήγησης";
+"ShareMenu.ShareOpenDefaultBrowser" = "Άνοιγμα στην προεπιλεγμένη εφαρμογή περιήγησης";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Άνοιγμα στο Firefox";

@@ -214,6 +214,9 @@ public struct PrefsKeys {
     // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
     public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
 
+    // Used to determine if Apple Intelligence is available
+    public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
+
     public struct Usage {
         public static let profileId = "profileId"
     }

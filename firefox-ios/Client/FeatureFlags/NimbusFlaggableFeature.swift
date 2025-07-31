@@ -44,7 +44,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case searchEngineConsolidation
     case splashScreen
     case startAtHome
-    case summarizer
+    case appleSummarizer
+    case appleSummarizerToolbarEntrypoint
+    case appleSummarizerShakeGesture
+    case hostedSummarizer
+    case hostedSummarizerToolbarEntrypoint
+    case hostedSummarizerShakeGesture
     case tabTrayUIExperiments
     case toolbarNavigationHint
     case toolbarUpdateHint
@@ -54,6 +59,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarTranslucency
     case toolbarMinimalAddressBar
     case tosFeature
+    case touFeature
     case trackingProtectionRefactor
     case unifiedAds
     case unifiedSearch
@@ -84,7 +90,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .trackingProtectionRefactor,
                 .pdfRefactor,
                 .downloadLiveActivities,
-                .summarizer,
+                .appleSummarizer,
+                .hostedSummarizer,
+                .touFeature,
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
@@ -152,7 +160,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
                 .splashScreen,
-                .summarizer,
+                .appleSummarizer,
+                .appleSummarizerToolbarEntrypoint,
+                .appleSummarizerShakeGesture,
+                .hostedSummarizer,
+                .hostedSummarizerToolbarEntrypoint,
+                .hostedSummarizerShakeGesture,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,
                 .toolbarUpdateHint,
@@ -162,6 +175,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarTranslucency,
                 .toolbarMinimalAddressBar,
                 .tosFeature,
+                .touFeature,
                 .trackingProtectionRefactor,
                 .unifiedAds,
                 .unifiedSearch,
