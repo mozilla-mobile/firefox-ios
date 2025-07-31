@@ -53,6 +53,9 @@ class BrowserCoordinator: BaseCoordinator,
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
+    private var isSummarizerFeatureEnabled: Bool {
+        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+    }
 
     override var isDismissible: Bool { false }
 
@@ -587,7 +590,7 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - MainMenuCoordinatorDelegate
 
     func showMainMenu() {
-        if featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
             let mainMenuCoordinator = MainMenuCoordinator(router: router,
                                                           windowUUID: tabManager.windowUUID,
                                                           profile: profile)
@@ -1076,6 +1079,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showSummarizePanel() {
+        guard isSummarizerFeatureEnabled, tabManager.selectedTab?.isFxHomeTab == false else { return }
         let contentContainer = browserViewController.contentContainer
         let browserFrame = browserViewController.view.frame
         var browserScreenshot = browserViewController.view.snapshot
@@ -1095,9 +1099,12 @@ class BrowserCoordinator: BaseCoordinator,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,
             browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
+            prefs: profile.prefs,
             windowUUID: windowUUID,
-            router: router
-        )
+            router: router) { [weak self] url in
+            guard let url else { return }
+            self?.openURLinNewTab(url)
+        }
         add(child: coordinator)
         coordinator.start()
     }

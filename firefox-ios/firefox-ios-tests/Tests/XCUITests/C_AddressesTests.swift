@@ -428,10 +428,13 @@ class O_AddressesTests: BaseTestCase {
         // Go to a webpage, and select night mode on and off, check options
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
-        validateNightModeOnOff()
-        navigator.nowAt(SettingsScreen)
+        navigator.goto(SettingsScreen)
+        navigator.goto(DisplaySettings)
+        navigator.performAction(Action.SelectDarkTheme)
         navigator.goto(BrowserTab)
-        validateNightModeOnOff()
+        navigator.goto(SettingsScreen)
+        navigator.goto(DisplaySettings)
+        navigator.performAction(Action.SelectLightTheme)
         navigator.nowAt(SettingsScreen)
         navigator.goto(BrowserTab)
     }

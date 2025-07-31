@@ -86,20 +86,12 @@ struct AccessibilityIdentifiers {
             static let closeButton = "MainMenu.CloseMenuButton"
         }
 
-        struct NavigationHeaderView {
-            static let backButton = "MainMenu.BackButton"
-            static let title = "MainMenu.Title"
-            static let closeButton = "MainMenu.CloseMenuButton"
-        }
-
         static let mainMenu = "MainMenu.Menu"
         static let newTab = "MainMenu.NewTab"
         static let newPrivateTab = "MainMenu.NewPrivateTab"
         static let switchToDesktopSite = "MainMenu.SwitchToDesktopSite"
         static let desktopSite = "MainMenu.DesktopSite"
         static let findInPage = "MainMenu.FindInPage"
-        static let tools = "MainMenu.Tools"
-        static let save = "MainMenu.Save"
         static let bookmarks = "MainMenu.Bookmarks"
         static let history = "MainMenu.History"
         static let downloads = "MainMenu.Downloads"
@@ -720,9 +712,15 @@ struct AccessibilityIdentifiers {
     }
 
     struct Summarizer {
-        static let closeButton = "closeButton"
+        static let closeSummaryButton = "closeSummaryButton"
         static let loadingLabel = "summaryLoadingLabel"
         static let summaryTextView = "summaryTextView"
+        static let tosTitleLabel = "tosTitleLabel"
+        static let tosDescriptionText = "tosDescriptionText"
+        static let tosCancelButton = "tosCancel"
+        static let tosCloseButton = "tosCloseButton"
+        static let tosAllowButton = "tosAllowButton"
+        static let tosLinkButton = "tosLinkButton"
     }
 
     struct ShareTo {

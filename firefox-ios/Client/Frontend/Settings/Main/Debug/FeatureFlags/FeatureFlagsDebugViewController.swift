@@ -104,7 +104,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             },
             FeatureFlagsBoolSetting(
                 with: .menuRefactor,
-                titleText: format(string: "Menu Redesign"),
+                titleText: format(string: "Menu Refactor"),
                 statusText: format(string: "Toggle to use the menu redesign")
             ) { [weak self] _ in
                 self?.reloadView()

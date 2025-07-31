@@ -97,6 +97,7 @@ class BrowsingPDFTests: BaseTestCase {
     func testPinPDFtoTopSites() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
+        navigator.goto(BrowserTabMenuMore)
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         let pinnedItem = app
@@ -129,7 +130,8 @@ class BrowsingPDFTests: BaseTestCase {
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
-        navigator.performAction(Action.BookmarkThreeDots)
+        navigator.goto(BrowserTabMenu)
+        navigator.performAction(Action.Bookmark)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
         waitForElementsToExist(

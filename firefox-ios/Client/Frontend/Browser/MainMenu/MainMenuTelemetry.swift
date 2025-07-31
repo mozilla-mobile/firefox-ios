@@ -17,16 +17,6 @@ struct MainMenuTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.mainMenuOptionSelected, extras: extra)
     }
 
-    func saveSubmenuOptionTapped(with isHomepage: Bool, and option: String) {
-        let extra = GleanMetrics.AppMenu.SaveMenuOptionSelectedExtra(isHomepage: isHomepage, option: option)
-        gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.saveMenuOptionSelected, extras: extra)
-    }
-
-    func toolsSubmenuOptionTapped(with isHomepage: Bool, and option: String) {
-        let extra = GleanMetrics.AppMenu.ToolsMenuOptionSelectedExtra(isHomepage: isHomepage, option: option)
-        gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.toolsMenuOptionSelected, extras: extra)
-    }
-
     func closeButtonTapped(isHomepage: Bool) {
         let extra = GleanMetrics.AppMenu.CloseButtonExtra(isHomepage: isHomepage)
         gleanWrapper.recordEvent(for: GleanMetrics.AppMenu.closeButton, extras: extra)

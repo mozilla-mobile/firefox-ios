@@ -30,8 +30,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case loginsVerificationEnabled
     case menuDefaultBrowserBanner
     case menuRefactor
-    case menuRefactorHint
-    case menuRedesign
     case menuRedesignHint
     case microsurvey
     case modernOnboardingUI
@@ -147,8 +145,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .loginsVerificationEnabled,
                 .menuDefaultBrowserBanner,
                 .menuRefactor,
-                .menuRefactorHint,
-                .menuRedesign,
                 .menuRedesignHint,
                 .microsurvey,
                 .modernOnboardingUI,

@@ -53,9 +53,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
     private func getTitleCopyFor(_ hint: ContextualHintType) -> String {
         switch hint {
         case .mainMenu:
-            return CFRStrings.MainMenu.NewMenu.Title
-
-        case .mainMenuRedesign:
             return CFRStrings.MainMenu.MenuRedesign.Title
 
         case .toolbarUpdate:
@@ -82,9 +79,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.SyncedTab
 
         case .mainMenu:
-            descriptionCopy = CFRStrings.MainMenu.NewMenu.Body
-
-        case .mainMenuRedesign:
             descriptionCopy = CFRStrings.MainMenu.MenuRedesign.Body
 
         case .navigation:
@@ -106,8 +100,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .inactiveTabs:
             actionCopy = CFRStrings.TabsTray.InactiveTabs.Action
         case .mainMenu:
-            actionCopy = ""
-        case .mainMenuRedesign:
             actionCopy = ""
         case .jumpBackIn,
                 .jumpBackInSyncedTab:
