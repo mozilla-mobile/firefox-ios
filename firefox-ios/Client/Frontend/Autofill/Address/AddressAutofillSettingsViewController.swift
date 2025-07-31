@@ -33,7 +33,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     // MARK: Views
 
     /// Hosting controller for the empty state view in address autofill settings.
-    var addressAutofillSettingsPageView: UIHostingController<AddressAutofillSettingsView>
+    unowned var addressAutofillSettingsPageView: UIHostingController<AddressAutofillSettingsView>
 
     private lazy var addAddressButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
@@ -67,7 +67,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
         let addressAutofillSettingsVC = AddressAutofillSettingsView(
             windowUUID: windowUUID,
             toggleModel: viewModel.toggleModel,
-            addressListViewModel: viewModel.addressListViewModel)
+            addressListViewModel: viewModel.addressL    istViewModel)
         self.addressAutofillSettingsPageView = UIHostingController(rootView: addressAutofillSettingsVC)
 
         super.init(nibName: nil, bundle: nil)
@@ -158,12 +158,5 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     @objc
     func addAddress() {
         self.viewModel.addressListViewModel.addAddressButtonTap()
-    }
-
-    deinit {
-        Task { @MainActor [addressAutofillSettingsPageView] in
-            addressAutofillSettingsPageView.removeFromParent()
-            addressAutofillSettingsPageView.view.removeFromSuperview()
-        }
     }
 }
