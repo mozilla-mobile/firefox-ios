@@ -16,6 +16,9 @@
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.AccessibilityLabels.CloseButton.142" = "ປິດເມນູ";
 
+/* The accessibility label for the dismiss button, for header banner, on top of the menu. */
+"MainMenu.AccessibilityLabels.DismissBanner.142" = "ປິດປ້າຍໂຄສະນາ";
+
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "ໃຊ້ບໍ່ໄດ້";
 
@@ -57,6 +60,12 @@
 
 /* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
 "MainMenu.DesktopSiteOn.Title.v142" = "ເປີດ";
+
+/* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
+"MainMenu.HeaderBanner.Subtitle.v142" = "ໃຊ້ເວລາວິນາທີ. ປ່ຽນໄດ້ທຸກເວລາ.";
+
+/* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
+"MainMenu.HeaderBanner.Title.v142" = "ເຮັດໃຫ້ %@ ເປັນຄ່າເລີ່ມຕົ້ນຂອງທ່ານ";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "ປິດ";
@@ -319,8 +328,14 @@
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "ແທັບໃຫມ່";
 
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "ພັບລົງ";
+
 /* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "ໂຫມດຫນ້າຈໍເດັກສທັອບ";
+
+/* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
+"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "ຂະຫຍາຍ";
 
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "ຄົ້ນຫາໃນຫນ້ານີ້";
@@ -328,14 +343,23 @@
 /* On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.LessOptions.v141" = "ສະແດງນ້ອຍລົງ";
 
+/* On the main menu, the accessibility label for a group of items in menu. (items like Downloads, History, Passwords...) */
+"MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142" = "ຄັງ";
+
 /* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "ສະແດງເພີ່ມອີກ";
+
+/* On the main menu, the accessibility label for the action that will open the page zoom tool. */
+"MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "ຊູມໜ້າເວັບ";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "ບັນທຶກ";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "ບັນທຶກເມນູຍ່ອຍ";
+
+/* On the main menu, the accessibility label for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142" = "ສະຫຼຸບໜ້າ";
 
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "ສະຫຼັບໄປຫາເວັບໄຊເດັສທັອບ";
@@ -348,6 +372,9 @@
 
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "ເມນູຍ່ອຍເຄື່ອງມື";
+
+/* On the main menu, the accessibility label for the action that will switch dark mode to on or off. */
+"MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "ເວັບໄຊທໃນໂຫມດມືດ";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
 "MainMenu.ToolsSection.DesktopSite.Title.v141" = "ໂຫມດຫນ້າຈໍເດັກສທັອບ";
@@ -366,6 +393,9 @@
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "ບັນທຶກ";
+
+/* On the main menu, the title for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.SummarizePage.Title.v142" = "ສະຫຼຸບໜ້າ";
 
 /* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "ສະຫຼັບໄປຫາເວັບໄຊເດັສທັອບ";

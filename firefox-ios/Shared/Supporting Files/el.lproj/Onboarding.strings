@@ -8,13 +8,13 @@
 "DefaultBrowserPopup.FirstLabel.v114" = "1. Μεταβείτε στις *Ρυθμίσεις*";
 
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.SecondLabel.v114" = "2. Πατήστε *Προεπιλεγμένο πρόγραμμα περιήγησης εφαρμογών*";
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Πατήστε *Προεπιλεγμένη εφαρμογή περιήγησης*";
 
 /* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. %@ is the app name (e.g. Firefox). The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. Επιλέξτε *%@*";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
-"DefaultBrowserPopup.Title.v114" = "Αλλαγή κύριου προγράμματος περιήγησης";
+"DefaultBrowserPopup.Title.v114" = "Αλλαγή κύριας εφαρμογής περιήγησης";
 
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "Προσαρμογή του %@";
@@ -89,7 +89,7 @@
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Πάνω";
 
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
-"Onboarding.Modern.Sync.Description.v140" = "Λάβετε τους σελιδοδείκτες, το ιστορικό και τους κωδικούς πρόσβασής σας σε κάθε συσκευή.";
+"Onboarding.Modern.Sync.Description.v140" = "Λάβετε τους σελιδοδείκτες, το ιστορικό και τα συνθηματικά σας σε κάθε συσκευή.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "Έναρξη συγχρονισμού";
@@ -107,7 +107,7 @@
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Διαχείριση";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
-"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Για τη βελτίωση του προγράμματος περιήγησης, το %1$@ στέλνει διαγνωστικά δεδομένα και δεδομένα αλληλεπίδρασης στη %2$@. %3$@";
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Για τη βελτίωση της εφαρμογής περιήγησης, το %1$@ στέλνει διαγνωστικά δεδομένα και δεδομένα αλληλεπίδρασης στη %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "Το %1$@ νοιάζεται για το απόρρητό σας. Διαβάστε περισσότερα στη %2$@ μας.";
@@ -119,7 +119,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Μάθετε περισσότερα";
 
 /* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
-"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Οι αναφορές κατάρρευσης μάς επιτρέπουν να διαγνώζουμε και να διορθώνουμε προβλήματα στο πρόγραμμα περιήγησης. %@";
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Οι αναφορές καταρρεύσεων μάς επιτρέπουν να διαγνώσουμε και να διορθώσουμε προβλήματα με την εφαρμογή περιήγησης. %@";
 
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Αυτόματη αποστολή αναφορών κατάρρευσης";
@@ -173,7 +173,7 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Ενεργοποίηση ειδοποιήσεων";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Sync.Description.v123" = "Το %@ κρυπτογραφεί τους κωδικούς πρόσβασής σας, τους σελιδοδείκτες σας και πολλά άλλα όταν κάνετε συγχρονισμό.";
+"Onboarding.Sync.Description.v123" = "Το %@ κρυπτογραφεί τα συνθηματικά σας, τους σελιδοδείκτες σας και πολλά άλλα όταν κάνετε συγχρονισμό.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "Σύνδεση";
@@ -197,13 +197,13 @@
 "Onboarding.TermsOfService.ManageLink.v135" = "Διαχείριση";
 
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
-"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Για τη βελτίωση του προγράμματος περιήγησης, το %1$@ στέλνει δεδομένα διάγνωσης και αλληλεπίδρασης στη %2$@. %3$@";
+"Onboarding.TermsOfService.ManagePreferenceAgreement.v135" = "Για τη βελτίωση της εφαρμογής περιήγησης, το %1$@ στέλνει διαγνωστικά δεδομένα και δεδομένα αλληλεπίδρασης στη %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "Το %1$@ νοιάζεται για το απόρρητό σας. Διαβάστε περισσότερα στη %2$@ μας";
+"Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "Το %1$@ νοιάζεται για το απόρρητό σας. Διαβάστε περισσότερα στη %2$@ μας.";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "Πολιτική Απορρήτου.";
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "Σημείωση απορρήτου";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "Μάθετε περισσότερα.";
@@ -212,7 +212,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Μάθετε περισσότερα";
 
 /* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
-"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Οι αναφορές κατάρρευσης μάς επιτρέπουν να διαγνώσουμε και να διορθώσουμε προβλήματα με το πρόγραμμα περιήγησης. %@";
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Οι αναφορές καταρρεύσεων μάς επιτρέπουν να διαγνώσουμε και να διορθώσουμε προβλήματα με την εφαρμογή περιήγησης. %@";
 
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Αυτόματη αποστολή αναφορών κατάρρευσης";
@@ -233,13 +233,13 @@
 "Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Συνεχίζοντας, συμφωνείτε με τους %@";
 
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "Όροι υπηρεσίας %@.";
+"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "Όρους υπηρεσίας του %@.";
 
 /* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "Καλώς ορίσατε στο %@";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "Όροι χρήσης %@.";
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "Όρους χρήσης του %@.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Κλασική ταπετσαρία";
@@ -269,10 +269,10 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Έξοδος από το καλωσόρισμα στο %@";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "Το πρόγραμμα περιήγησης του μη κερδοσκοπικού μας οργανισμού σταματά τις εταιρείες από το να σας ακολουθούν κρυφά σε όλο το διαδίκτυο.";
+"Onboarding.Welcome.Description.TreatementA.v120" = "Η εφαρμογή περιήγησης του μη κερδοσκοπικού μας οργανισμού σταματά τις εταιρείες από το να σας ακολουθούν κρυφά σε όλο το διαδίκτυο.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
-"Onboarding.Welcome.Description.v120" = "Το πρόγραμμα περιήγησης του μη κερδοσκοπικού μας οργανισμού σταματά τις εταιρείες από το να σας ακολουθούν κρυφά σε όλο το διαδίκτυο.";
+"Onboarding.Welcome.Description.v120" = "Η εφαρμογή περιήγησης του μη κερδοσκοπικού μας οργανισμού σταματά τις εταιρείες από το να σας ακολουθούν κρυφά σε όλο το διαδίκτυο.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Μάθετε περισσότερα στη Σημείωση απορρήτου μας";

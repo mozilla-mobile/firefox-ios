@@ -5,11 +5,11 @@
 "SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "Προσθήκη συνδέσμου λήψης του %1$@ στις κοινοποιήσεις μέσω %2$@";
 
 /* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. */
-"SentFromFirefox.SocialShare.ShareMessageA.Title.v134" = "%1$@ Απεστάλη από το %2$@ 🦊 Δοκιμάστε το πρόγραμμα περιήγησης για κινητές συσκευές: %3$@";
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v134" = "%1$@ Απεστάλη από το %2$@ 🦊 Δοκιμάστε την εφαρμογή περιήγησης για κινητές συσκευές: %3$@";
 
 /* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. The '
 ' symbols denote empty lines separating the first link parameter from the rest of the text. */
-"SentFromFirefox.SocialShare.ShareMessageA.Title.v137" = "%1$@\n\nΑπεστάλη από το %2$@ 🦊 Δοκιμάστε το πρόγραμμα περιήγησης για κινητές συσκευές: %3$@";
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v137" = "%1$@\n\nΑπεστάλη από το %2$@ 🦊 Δοκιμάστε την εφαρμογή περιήγησης για κινητές συσκευές: %3$@";
 
 /* When a user shares a link to social media, this is the shared text they'll see in the social media app. %1$@  is the shared website's URL. %2$@ is the app name (e.g. Firefox). %3$@ is the link to download the app. */
 "SentFromFirefox.SocialShare.ShareMessageB.Title.v134" = "%1$@ Απεστάλη από το %2$@ 🦊 %3$@";

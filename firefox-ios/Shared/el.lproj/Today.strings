@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Κλείσιμο ιδιωτικών καρτελών";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Προσθήκη συντομεύσεων Firefox στην αρχική οθόνη.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Προσθέστε τις συντομεύσεις του Firefox στην οθόνη Αφετηρίας σας.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Μετάβαση στον αντιγραμμένο σύνδεσμο";
@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Ιδιωτική αναζήτηση";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Προσθέστε μια συντόμευση Firefox στην αρχική οθόνη. Αφού προσθέσετε το γραφικό στοιχείο, πατήστε παρατεταμένα για επεξεργασία και επιλογή διαφορετικής συντόμευσης.";
+"TodayWidget.QuickActionGalleryDescription" = "Προσθέστε μια συντόμευση του Firefox στην οθόνη Αφετηρίας σας. Αφού προσθέσετε το widget, αγγίξτε το παρατεταμένα για να το επεξεργαστείτε και να επιλέξετε κάποια άλλη συντόμευση.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Γρήγορες ενέργειες";
@@ -38,7 +38,7 @@
 "TodayWidget.QuickActionsGalleryTitleV2" = "Συντομεύσεις Firefox";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescriptionV2" = "Προσθήκη συντομεύσεων για ανοικτές καρτέλες.";
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Προσθέστε συντομεύσεις για τις ανοικτές καρτέλες σας.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Γρήγορη προβολή";
@@ -50,7 +50,7 @@
 "TodayWidget.SearchInPrivateTabLabelV2" = "Αναζήτηση σε ιδιωτική καρτέλα";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "Προσθήκη συντομεύσεων για συχνές και πρόσφατες σελίδες.";
+"TodayWidget.TopSitesGalleryDescription" = "Προσθέστε συντομεύσεις για τους συχνούς και τους πρόσφατους ιστοτόπους.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Δημοφιλείς σελίδες";

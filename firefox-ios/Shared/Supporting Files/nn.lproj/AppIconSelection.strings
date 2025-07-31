@@ -104,7 +104,7 @@
 "Settings.AppIconSelection.Errors.SelectErrorConfirmation.v136" = "OK";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the message displayed when the app fails to set the user's selected app icon. */
-"Settings.AppIconSelection.Errors.SelectErrorMessage.v136" = "Beklagar, det oppsto ein feil ved endring av app-ikonet ditt.";
+"Settings.AppIconSelection.Errors.SelectErrorMessage.v136" = "Beklagar, det oppstod ein feil ved endring av app-ikonet ditt.";
 
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the title displayed at the top of the screen. */
 "Settings.AppIconSelection.ScreenTitle.v136" = "App-ikon";

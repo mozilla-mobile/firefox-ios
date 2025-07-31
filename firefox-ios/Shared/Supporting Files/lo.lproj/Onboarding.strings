@@ -76,6 +76,9 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "ຂ້າມ";
 
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "ສືບຕໍ່";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "ປຸ່ມກົດ";
 
@@ -121,11 +124,17 @@
 /* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "ສົ່ງລາຍງານການຂັດຂ້ອງໂດຍອັດຕະໂນມັດ";
 
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "ຂໍ້​ມູນ​ກ່ຽວ​ກັບ​ອຸ​ປະ​ກອນ​ຂອງ​ທ່ານ, ການ​ຕັ້ງ​ຄ່າ​ຮາດ​ແວ, ແລະ ​ວິ​ທີ​ທີ່​ທ່ານ​ນໍາ​ໃຊ້ %1$@ ຊ່ວຍ​ປັບ​ປຸງ​ຄຸນ​ສົມ​ບັດ, ປະ​ສິດ​ທິ​ພາບ, ແລະ​ ຄວາມ​ສະຖຽນ​ສໍາ​ລັບ​ທຸກ​ຄົນ. %2$@";
+
 /* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "ສົ່ງຂໍ້ມູນດ້ານວິຊາການ ແລະ ການໂຕ້ຕອບຫາ %@";
 
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "ຊ່ວຍພວກເຮົາເຮັດໃຫ້ %@ ດີຂຶ້ນ";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "ໂຫຼດເວັບໄຊໄວ\nການປ້ອງກັນການຕິດຕາມອັດຕະໂນມັດ\nຊິງຄ໌ຢູ່ໃນທຸກອຸປະກອນຂອງທ່ານ";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "ເມື່ອດຳເນີນການຕໍ ຖືວ່າທ່ານໄດ້ຍອມຮັບ %@";
@@ -138,6 +147,9 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "ຕັ້ງໃຫ້ເປັນບຣາວເຊີຫລັກ";
+
+/* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Welcome.Description.v140" = "ທາງເລືອກຫນຶ່ງປົກປ້ອງທ່ານຢູ່ທົ່ວທຸກແຫ່ງທີ່ທ່ານໄປຢູ່ໃນເວັບ. ທ່ານສາມາດປ່ຽນມັນໄດ້ໃນພາຍຫຼັງ.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Modern.Welcome.Skip.v140" = "ບໍ່ແມ່ນຕອນນີ້";
