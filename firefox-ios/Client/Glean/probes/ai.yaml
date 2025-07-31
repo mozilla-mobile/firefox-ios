@@ -127,3 +127,29 @@ ai.summarize:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+
+user.ai.summarize:
+  summarization_enabled:
+    type: boolean
+    description: |
+      Records if the user has summarization enabled.
+    bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    #TODO(Issam): Add PR number when available
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  shake_gesture_enabled:
+    type: boolean
+    description: |
+      Records if the user has shake to summarize option enabled
+    bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    #TODO(Issam): Add PR number when available
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
