@@ -184,7 +184,7 @@ final class NativeErrorPageViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         store.dispatchLegacy(NativeErrorPageAction(windowUUID: windowUUID,

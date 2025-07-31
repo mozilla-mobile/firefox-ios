@@ -186,7 +186,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
         }
         setupView()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

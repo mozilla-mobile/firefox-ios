@@ -1016,7 +1016,7 @@ class BrowserViewController: UIViewController,
         webPagePreview.applyTheme(theme: theme)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
         setupAccessibleActions()
 

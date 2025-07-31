@@ -59,7 +59,7 @@ class WebsiteDataManagementViewController: UIViewController,
         super.viewDidLoad()
         setupView()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

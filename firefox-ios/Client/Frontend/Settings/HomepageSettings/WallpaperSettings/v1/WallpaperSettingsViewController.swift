@@ -72,7 +72,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
             observing: [UIContentSizeCategory.didChangeNotification]
         )
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

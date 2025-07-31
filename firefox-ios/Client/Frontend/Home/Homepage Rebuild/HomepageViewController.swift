@@ -144,7 +144,7 @@ final class HomepageViewController: UIViewController,
             )
         )
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         addTapGestureRecognizerToDismissKeyboard()

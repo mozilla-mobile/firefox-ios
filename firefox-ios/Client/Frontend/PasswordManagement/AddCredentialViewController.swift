@@ -92,7 +92,7 @@ class AddCredentialViewController: UIViewController, Themeable {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

@@ -101,7 +101,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         updateUIForState()
         handleButtonTapIfSelected()
 
-        listenForThemeChanges(self, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

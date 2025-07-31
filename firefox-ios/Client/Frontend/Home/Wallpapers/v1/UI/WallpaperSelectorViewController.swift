@@ -79,7 +79,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
         super.viewDidLoad()
         setupView()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

@@ -289,7 +289,7 @@ final class TabTrayViewController: UIViewController,
         subscribeToRedux()
         updateToolbarItems()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

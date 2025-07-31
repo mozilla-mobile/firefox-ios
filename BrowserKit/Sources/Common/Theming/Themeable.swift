@@ -31,7 +31,7 @@ public protocol Themeable: ThemeUUIDIdentifiable {
 
     /// Start listening for theme changes. Should only be called once in the view lifecycle (e.g. in `viewDidLoad()`).
     @MainActor
-    func listenForThemeChanges(_ subview: UIView, withNotificationCenter notificationCenter: NotificationProtocol)
+    func listenForThemeChanges(withNotificationCenter notificationCenter: NotificationProtocol)
 
     /// Called when the theme updates for the registered view and all its subviews. Applies the current theme to the
     /// view hierarchy.
@@ -57,26 +57,6 @@ public protocol InjectedThemeUUIDIdentifiable: AnyObject {
 extension Themeable {
     public var shouldUsePrivateOverride: Bool { return false }
     public var shouldBeInPrivateTheme: Bool { return false }
-
-    // FIXME: Do we need subview here or can we conform to UIViewController?
-    @MainActor
-    public func listenForThemeChanges(_ subview: UIView, withNotificationCenter notificationCenter: NotificationProtocol) {
-        themeListenerCancellable = notificationCenter
-            .publisher(for: .ThemeDidChange, object: nil)
-            // NOTE: In case theme updates are ever posted on a background thread, we **MUST** ensure the main queue here.
-            // The `@MainActor` isolation is not enough to prevent crashes at the call site where a notification is posted.
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self, weak subview] notification in
-                guard let self, let subview else { return }
-
-                print("Theme update for \(String(describing: self))")
-                self.applyTheme()
-
-                // FIXME: Why do we have to call this on subviews? Doesn't applyTheme do the entire UIViewController
-                // hierarchy?
-                self.updateThemeApplicableSubviews(subview, for: self.currentWindowUUID)
-            })
-    }
 
     /// Updates subviews of the `Themeable` view, which can specify whether it wants to use the
     /// base theme via `getCurrentTheme` or override the private mode theme via `resolvedTheme`
@@ -106,5 +86,43 @@ extension Themeable {
             return childView as? T
         }
         return firstLevelSubviews + secondLevelSubviews
+    }
+}
+
+extension Themeable where Self: UIViewController {
+    @MainActor
+    public func listenForThemeChanges(withNotificationCenter notificationCenter: NotificationProtocol) {
+        themeListenerCancellable = notificationCenter
+            .publisher(for: .ThemeDidChange, object: nil)
+            // NOTE: In case theme updates are ever posted on a background thread, we **MUST** ensure the main queue here.
+            // The `@MainActor` isolation is not enough to prevent crashes at the call site where a notification is posted.
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] notification in
+                guard let self else { return }
+
+                print("Theme update for \(String(describing: self))")
+                self.applyTheme()
+
+                self.updateThemeApplicableSubviews(self.view, for: self.currentWindowUUID)
+            })
+    }
+}
+
+extension Themeable where Self: UIView {
+    @MainActor
+    public func listenForThemeChanges(withNotificationCenter notificationCenter: NotificationProtocol) {
+        themeListenerCancellable = notificationCenter
+            .publisher(for: .ThemeDidChange, object: nil)
+            // NOTE: In case theme updates are ever posted on a background thread, we **MUST** ensure the main queue here.
+            // The `@MainActor` isolation is not enough to prevent crashes at the call site where a notification is posted.
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] notification in
+                guard let self else { return }
+
+                print("Theme update for \(String(describing: self))")
+                self.applyTheme()
+
+                self.updateThemeApplicableSubviews(self, for: self.currentWindowUUID)
+            })
     }
 }

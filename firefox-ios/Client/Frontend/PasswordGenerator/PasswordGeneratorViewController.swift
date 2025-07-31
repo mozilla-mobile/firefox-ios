@@ -108,7 +108,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         super.viewDidLoad()
         configureUsePasswordButton()
         setupView()
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             UIAccessibility.post(notification: .screenChanged, argument: self.header)

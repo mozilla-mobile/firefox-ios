@@ -118,7 +118,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
         initialViewSetup()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

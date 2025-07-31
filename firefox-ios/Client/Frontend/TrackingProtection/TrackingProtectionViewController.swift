@@ -150,7 +150,7 @@ class TrackingProtectionViewController: UIViewController,
         }
         setupView()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         startObservingNotifications(

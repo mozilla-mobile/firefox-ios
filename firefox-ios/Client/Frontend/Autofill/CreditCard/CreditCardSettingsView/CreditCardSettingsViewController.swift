@@ -76,7 +76,7 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
         super.viewDidLoad()
         viewSetup()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

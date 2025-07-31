@@ -77,7 +77,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
         super.viewDidLoad()
         viewSetup()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         // FIXME: FXIOS-12995 Use Notifiable

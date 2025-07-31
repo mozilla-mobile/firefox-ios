@@ -105,7 +105,7 @@ public class BottomSheetViewController: UIViewController,
 
         setupView()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         contentViewBottomConstraint?.constant = childViewController.view.frame.height

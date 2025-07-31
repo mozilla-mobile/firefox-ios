@@ -73,7 +73,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
         ])
         title = .RecentlyClosedTabsPanelTitle
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

@@ -113,7 +113,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         setupView()
         updateContent()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

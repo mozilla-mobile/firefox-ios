@@ -61,7 +61,7 @@ class EditAddressViewController: UIViewController,
         setupRemoveButton()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

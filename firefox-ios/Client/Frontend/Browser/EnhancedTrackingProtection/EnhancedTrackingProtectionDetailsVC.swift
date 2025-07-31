@@ -77,7 +77,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
     }
 
     override func viewWillAppear(_ animated: Bool) {
