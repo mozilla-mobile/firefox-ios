@@ -9,5 +9,5 @@ struct FoundationModelsConfig {
     /// 3000 words was computed by assuming an average of 1.3 tokens per word.
     /// Given the foundation model’s 4,096 token context window, this brings us to approx. 3000 words.
     static let maxWords = 3_000
-    static let prompt = SummarizerPrompts.appleSummarizerPrompt
+    static let instructions = SummarizerModelInstructions.appleInstructions
 }

@@ -38,5 +38,5 @@ struct LiteLLMConfig {
     /// `maxTokens` is used to instruct the hosted model on the maximum number of tokens to generate.
     /// 2000 tokens is a reasonable limit for most summaries.
     static let maxTokens = 2_000
-    static let prompt = SummarizerPrompts.defaultPrompt
+    static let instructions = SummarizerModelInstructions.defaultInstructions
 }
