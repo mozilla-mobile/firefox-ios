@@ -84,7 +84,7 @@ class SummarizeCoordinator: BaseCoordinator {
             titleLabel: .Summarizer.ToSAlertTitleLabel,
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.tosTitleLabel,
             descriptionText: String(format: String.Summarizer.ToSAlertMessageFirefoxLabel,
-                                     AppName.shortName.rawValue),
+                                    AppName.shortName.rawValue),
             descriptionTextA11yId: AccessibilityIdentifiers.Summarizer.tosDescriptionText,
             linkButtonLabel: .Summarizer.ToSAlertLinkButtonLabel,
             linkButtonURL: URL(string: "https://www.mozilla.com"),
