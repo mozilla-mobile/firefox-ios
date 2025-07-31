@@ -431,7 +431,6 @@
 		39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */; };
 		39D056382665235700FBEE59 /* initial_experiments.json in Resources */ = {isa = PBXBuildFile; fileRef = 3964F5FB2656D2B500065278 /* initial_experiments.json */; };
 		39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */; };
-		39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */; };
 		39EB469A1E26DDB4006346E8 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39EF434E260A73950011E22E /* Experiments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF434D260A73950011E22E /* Experiments.swift */; };
 		39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39F4C0F92045D87400746155 /* FocusHelper.js */; };
@@ -3219,7 +3218,6 @@
 		39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMessagingTriggerTests.swift; sourceTree = "<group>"; };
 		39DB4F1AA7B4688949522C99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		39DD4C8BA7FCE677AFDACC2D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
-		39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducerTests.swift; sourceTree = "<group>"; };
 		39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxScreenGraph.swift; sourceTree = "<group>"; };
 		39EF434D260A73950011E22E /* Experiments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experiments.swift; sourceTree = "<group>"; };
 		39F4C0F92045D87400746155 /* FocusHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = FocusHelper.js; sourceTree = "<group>"; };
@@ -15241,7 +15239,6 @@
 			isa = PBXGroup;
 			children = (
 				3B4AA24A1D8B8C4C00A2E008 /* ArrayExtensionTests.swift */,
-				39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */,
 				C8C1880E287608BF00BF3735 /* DateExtensionsTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
 				E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */,
@@ -17511,7 +17508,6 @@
 				0B1C58D12CE5019A00F498F0 /* UserAgentTests.swift in Sources */,
 				28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */,
 				0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */,
-				39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */,
 				E4E7EB6D1C4AED5E0094275D /* SupportUtilsTests.swift in Sources */,
 				C8C1880F287608BF00BF3735 /* DateExtensionsTests.swift in Sources */,
 				E4E25CCB1CA99E7400D0F088 /* HexExtensionsTests.swift in Sources */,
