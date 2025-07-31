@@ -6,21 +6,56 @@ import XCTest
 import MappaMundi
 
 func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
+    map.addScreenState(BrowserTabMenuMore) { screenState in
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.zoom],
+            to: PageZoom)
+        // Add To Shortcuts
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.addToShortcuts],
+            forAction: Action.PinToTopSitesPAM
+        )
+        screenState.dismissOnUse = true
+        screenState.backAction = cancelBackAction(for: app)
+    }
+
     map.addScreenState(BrowserTabMenu) { screenState in
         sleep(1)
 
+        // Bookmarks
+        screenState.tap(app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
+        // History
+        screenState.tap(
+            app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.history],
+            to: LibraryPanel_History)
+        // Downloads
+        screenState.tap(
+            app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads],
+            to: LibraryPanel_Downloads
+        )
+        // More Options
+        screenState.tap(
+            app.tables.cells["MainMenu.MoreLess"],
+            to: BrowserTabMenuMore)
         // Tracking Protections (TODO)
-        // Bookmark Page (TODO)
+
         // Find In Page
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.findInPage],
             to: FindInPage)
-        // Desktop Site (TODO)
-        // Page Zoom (TODO)
+        // Desktop Site
+        screenState.tap(app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.switchToDesktopSite], to: RequestDesktopSite)
+        screenState.tap(app.tables.cells.staticTexts["Switch to Mobile Site"], to: RequestMobileSite)
+
+        // Bookmark this page
+        screenState.tap(
+            app.tables.cells["MainMenu.BookmarkPage"],
+            forAction: Action.Bookmark
+        )
         // Web Site Dark Mode (TODO)
-        // Add To Shortcuts (TODO)
         // Save As PDF (TODO)
         // Print (TODO)
+        // Turn on night mode
         // Sign In (if unauthenticated)
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.MainMenu.signIn],
