@@ -432,6 +432,10 @@ final class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    func pressedSummarize() {
+        /// TODO: FXIOS-12645 Add Summarize Settings View Controller
+    }
+
     // MARK: AccountSettingsDelegate
 
     func pressedConnectSetting() {

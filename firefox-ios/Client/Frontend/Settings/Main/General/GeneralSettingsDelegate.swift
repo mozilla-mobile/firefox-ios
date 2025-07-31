@@ -31,5 +31,8 @@ protocol GeneralSettingsDelegate: AnyObject {
     func pressedBrowsing()
 
     @MainActor
+    func pressedSummarize()
+
+    @MainActor
     func pressedAutoFillsPasswords()
 }

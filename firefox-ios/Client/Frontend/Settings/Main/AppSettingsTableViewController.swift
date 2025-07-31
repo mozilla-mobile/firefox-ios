@@ -363,6 +363,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
+        if SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled {
+            generalSettings.append(SummarizeSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         generalSettings += [
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
