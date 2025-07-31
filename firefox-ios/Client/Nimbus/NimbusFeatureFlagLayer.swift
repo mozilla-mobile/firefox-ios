@@ -65,12 +65,6 @@ final class NimbusFeatureFlagLayer {
         case .menuRefactor:
             return checkMenuRefactor(from: nimbus)
 
-        case .menuRefactorHint:
-            return checkMenuRefactorHint(from: nimbus)
-
-        case .menuRedesign:
-            return checkMenuRedesign(from: nimbus)
-
         case .menuRedesignHint:
             return checkMenuRedesignHint(from: nimbus)
 
@@ -389,16 +383,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.menuRefactorFeature.value().enabled
-    }
-
-    private func checkMenuRefactorHint(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuHint
-    }
-
-    private func checkMenuRedesign(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuRedesign
     }
 
     private func checkMenuRedesignHint(from nimbus: FxNimbus) -> Bool {

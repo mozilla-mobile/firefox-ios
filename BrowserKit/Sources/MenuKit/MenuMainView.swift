@@ -7,82 +7,215 @@ import UIKit
 import ComponentLibrary
 
 public final class MenuMainView: UIView,
-                                 ThemeApplicable {
+                                         ThemeApplicable {
     private struct UX {
-        static let headerTopMargin: CGFloat = 15
+        static let headerTopMargin: CGFloat = 24
+        static let horizontalMargin: CGFloat = 16
+        static let closeButtonSize: CGFloat = 30
+        static let headerTopMarginWithButton: CGFloat = 8
     }
+
+    public var closeButtonCallback: (() -> Void)?
+    public var onCalculatedHeight: ((CGFloat, _ isExpanded: Bool) -> Void)?
+    public var bannerButtonCallback: (() -> Void)?
+    public var closeBannerButtonCallback: (() -> Void)?
 
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
-    public var accountHeaderView: HeaderView = .build()
+
+    public var headerBanner: HeaderBanner = .build()
+
+    public var siteProtectionHeader: MenuSiteProtectionsHeader = .build()
+
+    private var viewConstraints: [NSLayoutConstraint] = []
 
     // MARK: - Properties
+    // If default browser banner sub flag is enabled
+    private var isMenuDefaultBrowserBanner = false
+    // If FF is the default browser
+    private var isBrowserDefault = false
+    // If banner was already shown
+    private var bannerShown = false
+    // If banner is currently visible
+    private var isBannerVisible = false
 
-    // MARK: - Initializers
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-        handleUpdateHeaderLineView()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var isPhoneLandscape = false
+    private var menuData: [MenuSection] = []
 
     // MARK: - UI Setup
-    private func setupView() {
-        accountHeaderView.updateHeaderLineView(isHidden: true)
-        self.addSubview(accountHeaderView)
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        updateMenuHeight(for: menuData)
+    }
+
+    private func setupView(with data: [MenuSection], isHeaderBanner: Bool = true) {
+        self.removeConstraints(viewConstraints)
+        viewConstraints.removeAll()
         self.addSubview(tableView)
+        if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
+            self.siteProtectionHeader.removeFromSuperview()
+            if isHeaderBanner, isMenuDefaultBrowserBanner, !isBrowserDefault, !bannerShown {
+                isBannerVisible = true
+                self.addSubview(headerBanner)
+                viewConstraints.append(contentsOf: [
+                    headerBanner.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
+                    headerBanner.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                    headerBanner.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 
-        NSLayoutConstraint.activate([
-            accountHeaderView.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
-            accountHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            accountHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                    tableView.topAnchor.constraint(equalTo: headerBanner.bottomAnchor,
+                                                   constant: UX.headerTopMarginWithButton),
+                    tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                    tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                    tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+                ])
+            } else {
+                isBannerVisible = false
+                headerBanner.removeFromSuperview()
+                viewConstraints.append(contentsOf: [
+                    tableView.topAnchor.constraint(equalTo: self.topAnchor,
+                                                   constant: UX.headerTopMarginWithButton),
+                    tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                    tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                    tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+                ])
+            }
+        } else if !data.isEmpty {
+            isBannerVisible = false
+            headerBanner.removeFromSuperview()
+            self.addSubview(siteProtectionHeader)
+            viewConstraints.append(contentsOf: [
+                siteProtectionHeader.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
+                siteProtectionHeader.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                siteProtectionHeader.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 
-            tableView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ])
+                tableView.topAnchor.constraint(equalTo: siteProtectionHeader.bottomAnchor,
+                                               constant: UX.headerTopMarginWithButton),
+                tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            ])
+        }
+        NSLayoutConstraint.activate(viewConstraints)
     }
 
-    public func setupDetails(subtitle: String, title: String, icon: UIImage?) {
-        accountHeaderView.setupDetails(subtitle: subtitle,
-                                       title: title,
-                                       icon: icon)
+    public func setupAccessibilityIdentifiers(menuA11yId: String,
+                                              menuA11yLabel: String,
+                                              closeButtonA11yLabel: String,
+                                              closeButtonA11yIdentifier: String,
+                                              siteProtectionHeaderIdentifier: String,
+                                              headerBannerCloseButtonA11yIdentifier: String,
+                                              headerBannerCloseButtonA11yLabel: String) {
+        headerBanner.setupAccessibility(closeButtonA11yLabel: headerBannerCloseButtonA11yLabel,
+                                        closeButtonA11yId: headerBannerCloseButtonA11yIdentifier)
+        siteProtectionHeader.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
+                                                closeButtonA11yId: closeButtonA11yIdentifier)
+        siteProtectionHeader.accessibilityIdentifier = siteProtectionHeaderIdentifier
     }
 
-    public func setupAccessibilityIdentifiers(closeButtonA11yLabel: String,
-                                              closeButtonA11yId: String,
-                                              mainButtonA11yLabel: String,
-                                              mainButtonA11yId: String,
-                                              menuA11yId: String,
-                                              menuA11yLabel: String) {
-        accountHeaderView.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
-                                             closeButtonA11yId: closeButtonA11yId,
-                                             mainButtonA11yLabel: mainButtonA11yLabel,
-                                             mainButtonA11yId: mainButtonA11yId)
-        tableView.setupAccessibilityIdentifiers(menuA11yId: menuA11yId, menuA11yLabel: menuA11yLabel)
+    public func setupDetails(title: String,
+                             subtitle: String,
+                             image: UIImage?,
+                             isBannerFlagEnabled: Bool,
+                             isBrowserDefault: Bool,
+                             bannerShown: Bool) {
+        headerBanner.setupDetails(title: title, subtitle: subtitle, image: image)
+        isMenuDefaultBrowserBanner = isBannerFlagEnabled
+        self.isBrowserDefault = isBrowserDefault
+        self.bannerShown = bannerShown
     }
 
-    private func handleUpdateHeaderLineView() {
-        tableView.updateHeaderLineView = { [weak self] isHidden in
-            guard let self else { return }
-            self.accountHeaderView.updateHeaderLineView(isHidden: isHidden)
+    public func setupMenuMenuOrientation(isPhoneLandscape: Bool) {
+        self.isPhoneLandscape = isPhoneLandscape
+    }
+
+    public func announceAccessibility(expandedHint: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            UIAccessibility.post(notification: .announcement, argument: expandedHint)
+
+            guard let section = self?.menuData.first,
+               let optionalElementIndex = section.options.firstIndex(where: { $0.isOptional }),
+               let firstCell = self?.tableView.tableView.visibleCells[optionalElementIndex]
+            else { return }
+
+            UIAccessibility.post(notification: .layoutChanged, argument: firstCell)
         }
     }
 
     // MARK: - Interface
-    public func reloadTableView(with data: [MenuSection]) {
-        tableView.reloadTableView(with: data)
+    public func reloadDataView(with data: [MenuSection]) {
+        setupView(with: data)
+        tableView.reloadTableView(with: data, isBannerVisible: isBannerVisible)
+        handleBannerCallback(with: data)
+        menuData = data
+    }
+
+    private func updateMenuHeight(for data: [MenuSection]) {
+        let expandedSection = data.first(where: { $0.isExpanded ?? false })
+        let isExpanded = expandedSection?.isExpanded ?? false
+
+        // To avoid a glitch when expand the menu, we should not handle this action under DispatchQueue.main.async
+        if isExpanded {
+            let height = tableView.tableViewContentSize + UX.headerTopMargin
+            onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
+            layoutIfNeeded()
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
+                    let tableViewHeight = tableView.tableViewContentSize
+                    let height = isBannerVisible ? tableViewHeight + UX.headerTopMargin : tableViewHeight
+                    self.setHeightForHomepageMenu(height: height, isExpanded: isExpanded)
+                } else {
+                    onCalculatedHeight?(tableView.tableViewContentSize +
+                                        UX.headerTopMargin +
+                                        siteProtectionHeader.frame.height,
+                                        isExpanded)
+                }
+                layoutIfNeeded()
+            }
+        }
+    }
+
+    private func setHeightForHomepageMenu(height: CGFloat, isExpanded: Bool) {
+        if isMenuDefaultBrowserBanner {
+            let headerBannerHeight = headerBanner.frame.height
+            let calculatedHeight = isBannerVisible ? height + headerBannerHeight : height
+            self.onCalculatedHeight?(calculatedHeight, isExpanded)
+        } else {
+            self.onCalculatedHeight?(height, isExpanded)
+        }
+    }
+
+    private func handleBannerCallback(with data: [MenuSection]) {
+        headerBanner.closeButtonCallback = { [weak self] in
+            self?.setupView(with: data, isHeaderBanner: false)
+            self?.bannerShown = true
+            self?.isBannerVisible = false
+            self?.tableView.reloadData(isBannerVisible: self?.isBannerVisible ?? false)
+            self?.updateMenuHeight(for: self?.menuData ?? [])
+            self?.closeBannerButtonCallback?()
+        }
+        headerBanner.bannerButtonCallback = { [weak self] in
+            self?.bannerButtonTapped()
+        }
+    }
+
+    // MARK: - Callbacks
+    @objc
+    private func closeTapped() {
+        closeButtonCallback?()
+    }
+
+    @objc
+    private func bannerButtonTapped() {
+        bannerButtonCallback?()
     }
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = .clear
         tableView.applyTheme(theme: theme)
-        accountHeaderView.applyTheme(theme: theme)
-        accountHeaderView.setIconTheme(with: theme)
+        siteProtectionHeader.applyTheme(theme: theme)
+        headerBanner.applyTheme(theme: theme)
     }
 }

@@ -5,7 +5,7 @@
 import XCTest
 class NightModeTests: BaseTestCase {
     private func checkNightModeOn() {
-        navigator.goto(ToolsBrowserTabMenu)
+        // navigator.goto(ToolsBrowserTabMenu)
         mozWaitForElementToExist(app.tables.cells["MainMenu.NightModeOn"])
         XCTAssertTrue(app.tables.cells["MainMenu.NightModeOn"].label == "Turn off Night Mode")
         // Turn off night mode
@@ -13,7 +13,7 @@ class NightModeTests: BaseTestCase {
     }
 
     private func checkNightModeOff() {
-        navigator.goto(ToolsBrowserTabMenu)
+        // navigator.goto(ToolsBrowserTabMenu)
         mozWaitForElementToExist(app.tables.cells["MainMenu.NightModeOn"])
         XCTAssertTrue(app.tables.cells["MainMenu.NightModeOn"].label == "Turn on Night Mode")
     }

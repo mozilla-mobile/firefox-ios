@@ -10,12 +10,6 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func editBookmarkForCurrentTab()
 
     @MainActor
-    func openURLInNewTab(_ url: URL?)
-
-    @MainActor
-    func openNewTab(inPrivateMode: Bool)
-
-    @MainActor
     func showLibraryPanel(_ panel: Route.HomepanelSection)
 
     @MainActor
@@ -85,13 +79,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         )
     }
 
-    func showDetailViewController() {
-        router.push(
-            createMainMenuDetailViewController(),
-            animated: true
-        )
-    }
-
     func dismissDetailViewController() {
         router.popViewController(animated: true)
     }
@@ -120,9 +107,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         case .bookmarks:
             navigationHandler?.showLibraryPanel(.bookmarks)
 
-        case .customizeHomepage:
-            navigationHandler?.showSettings(at: .homePage)
-
         case .downloads:
             navigationHandler?.showLibraryPanel(.downloads)
 
@@ -132,17 +116,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         case .findInPage:
             navigationHandler?.showFindInPage()
 
-        case .goToURL:
-            navigationHandler?.openURLInNewTab(destination.url)
-
         case .history:
             navigationHandler?.showLibraryPanel(.history)
-
-        case .newTab:
-            navigationHandler?.openNewTab(inPrivateMode: false)
-
-        case .newPrivateTab:
-            navigationHandler?.openNewTab(inPrivateMode: true)
 
         case .passwords:
             navigationHandler?.showSettings(at: .password)
@@ -158,13 +133,10 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             )
             navigationHandler?.showSignInView(fxaParameters: fxaParameters)
 
-        case .printSheet, .printSheetV2:
+        case .printSheetV2:
             navigationHandler?.showPrintSheet()
 
-        case .shareSheet:
-            navigationHandler?.showShareSheetForCurrentlySelectedTab()
-
-        case .saveAsPDF, .saveAsPDFV2:
+        case .saveAsPDFV2:
             navigationHandler?.presentSavePDFController()
 
         case .zoom:
@@ -188,11 +160,5 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID, profile: profile)
         mainMenuViewController.coordinator = self
         return mainMenuViewController
-    }
-
-    private func createMainMenuDetailViewController() -> MainMenuDetailsViewController {
-        let detailVC = MainMenuDetailsViewController(windowUUID: windowUUID)
-        detailVC.coordinator = self
-        return detailVC
     }
 }

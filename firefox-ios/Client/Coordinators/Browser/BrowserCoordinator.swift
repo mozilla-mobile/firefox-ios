@@ -590,7 +590,7 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - MainMenuCoordinatorDelegate
 
     func showMainMenu() {
-        if featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
             let mainMenuCoordinator = MainMenuCoordinator(router: router,
                                                           windowUUID: tabManager.windowUUID,
                                                           profile: profile)
