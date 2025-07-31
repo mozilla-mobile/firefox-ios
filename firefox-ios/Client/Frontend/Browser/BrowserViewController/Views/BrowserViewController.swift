@@ -1294,6 +1294,7 @@ class BrowserViewController: UIViewController,
             screenshotHelper: screenshotHelper,
             prefs: profile.prefs
         )
+        addressBarPanGestureHandler?.delegate = self
     }
 
     func addSubviews() {

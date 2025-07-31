@@ -1830,6 +1830,7 @@
 		DF8C6DD72A52EED1007FAAF2 /* ClientSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */; };
 		DFACBF7F277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF7E277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift */; };
 		DFACBF85277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF84277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift */; };
+		DFBAE93C2E38E3C000078687 /* BrowserViewController+AddressBarPanGestureHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFBAE93B2E38E3C000078687 /* BrowserViewController+AddressBarPanGestureHandlerDelegate.swift */; };
 		E11C0E3D2CEF328B00D884D3 /* TermsOfServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11C0E3C2CEF328B00D884D3 /* TermsOfServiceManager.swift */; };
 		E127313C28B6AD99006F39D2 /* WallpaperSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313A28B6AD99006F39D2 /* WallpaperSettingsViewController.swift */; };
 		E127313D28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313B28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift */; };
@@ -10164,6 +10165,7 @@
 		DF8C6DD62A52EED1007FAAF2 /* ClientSyncManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientSyncManagerTests.swift; sourceTree = "<group>"; };
 		DFACBF7E277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWallpaperBackgroundView.swift; sourceTree = "<group>"; };
 		DFACBF84277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesRowCountSettingsController.swift; sourceTree = "<group>"; };
+		DFBAE93B2E38E3C000078687 /* BrowserViewController+AddressBarPanGestureHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+AddressBarPanGestureHandlerDelegate.swift"; sourceTree = "<group>"; };
 		DFD6456AA6B9F19B62C14026 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		DFE8447DBAB67C2A5B61E4D0 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E00742CA84A2A2D0DD19B0AE /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -12292,6 +12294,7 @@
 				C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */,
 				434E733625EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift */,
 				DAE6DF1A29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift */,
+				DFBAE93B2E38E3C000078687 /* BrowserViewController+AddressBarPanGestureHandlerDelegate.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -18424,6 +18427,7 @@
 				E18EA57128AD46D3003F97FC /* WallpaperCollectionType.swift in Sources */,
 				C84655E42887394B00861B4A /* WallpaperMetadata.swift in Sources */,
 				8AB8572E27D94A1A0075C173 /* UXSizeClass.swift in Sources */,
+				DFBAE93C2E38E3C000078687 /* BrowserViewController+AddressBarPanGestureHandlerDelegate.swift in Sources */,
 				965C3C8F29313A1B006499ED /* AppSessionManager.swift in Sources */,
 				ED07C0EF2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift in Sources */,
 				45D5EDA729269F7500311934 /* DataObserver.swift in Sources */,
