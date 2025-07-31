@@ -117,12 +117,14 @@ public class SummarizeController: UIViewController, Themeable {
         $0.alpha = 0
     }
     private let closeButton: UIButton = .build {
+        #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
-        } else {
+        }
+        #else
             $0.configuration = .filled()
             $0.configuration?.cornerStyle = .capsule
-        }
+        #endif
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
         $0.alpha = 0.0
     }

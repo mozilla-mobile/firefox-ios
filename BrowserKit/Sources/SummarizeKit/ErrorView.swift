@@ -32,12 +32,14 @@ class ErrorView: UIView,
         $0.textAlignment = .center
     }
     private let actionButton: UIButton = .build {
+        #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
-        } else {
+        }
+        #else
             $0.configuration = .filled()
             $0.configuration?.cornerStyle = .capsule
-        }
+        #endif
         $0.configuration?.contentInsets = UX.actionButtonInsets
     }
 
