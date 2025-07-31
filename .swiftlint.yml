@@ -85,6 +85,7 @@ only_rules: # Only enforce these rules, ignore all others
   - accessibility_trait_for_button
   - force_cast
   - closure_body_length
+  - function_body_length
   - implicitly_unwrapped_optional
 
 # These rules were originally opted into. Disabling for now to get
@@ -104,6 +105,10 @@ line_length:
 closure_body_length:
   warning: 34
   error: 34
+
+function_body_length:
+  warning: 363
+  error: 363
 
 file_header:
   required_string: |
