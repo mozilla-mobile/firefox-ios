@@ -87,6 +87,9 @@ class PhotonActionSheet: UIViewController, Themeable {
     }
 
     deinit {
+        tableView.dataSource = nil
+        tableView.delegate = nil
+        tableView.removeFromSuperview()
         notificationCenter.removeObserver(self)
     }
 
