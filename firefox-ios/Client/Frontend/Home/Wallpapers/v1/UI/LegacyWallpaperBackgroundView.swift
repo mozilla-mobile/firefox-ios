@@ -35,10 +35,6 @@ class LegacyWallpaperBackgroundView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     private func setupView() {
         backgroundColor = .clear
         addSubview(pictureView)

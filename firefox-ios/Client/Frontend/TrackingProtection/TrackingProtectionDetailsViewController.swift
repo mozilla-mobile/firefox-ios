@@ -90,14 +90,14 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+
+        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
-
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
-        applyTheme()
     }
 
     private func setupView() {
