@@ -5,7 +5,7 @@
 import Foundation
 import ComponentLibrary
 
-class MockBottomSheetDismissDelegate: BottomSheetDelegate {†
+class MockBottomSheetDismissDelegate: BottomSheetDelegate {
     var didCallDismissSheetViewController = 0
 
     func dismissSheetViewController(completion: (() -> Void)?) {
