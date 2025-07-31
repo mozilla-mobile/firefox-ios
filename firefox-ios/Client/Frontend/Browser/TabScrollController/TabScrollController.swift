@@ -197,11 +197,19 @@ final class TabScrollController: NSObject,
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init()
+        setupNotifications()
     }
 
     func traitCollectionDidChange() {
         removePullRefreshControl()
         configureRefreshControl()
+    }
+
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillTerminate(_:)),
+                                               name: UIApplication.willTerminateNotification,
+                                               object: nil)
     }
 
     private func handleOnTabContentLoading() {
@@ -210,6 +218,13 @@ final class TabScrollController: NSObject,
         } else {
             configureRefreshControl()
         }
+    }
+
+    @objc
+    private func applicationWillTerminate(_ notification: Notification) {
+        // Ensures that we immediately de-register KVO observations for content size changes in
+        // webviews if the app is about to terminate.
+        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
     }
 
     func handlePan(_ gesture: UIPanGestureRecognizer) {
