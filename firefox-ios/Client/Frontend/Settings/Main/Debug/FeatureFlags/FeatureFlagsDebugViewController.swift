@@ -146,6 +146,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageShortcutsLibrary,
+                titleText: format(string: "Shortcuts Library"),
+                statusText: format(string: "Toggle to enable the homepage shortcuts library")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageStoriesRedesign,
                 titleText: format(string: "Stories Redesign"),
                 statusText: format(string: "Toggle to enable homepage stories section redesign")
