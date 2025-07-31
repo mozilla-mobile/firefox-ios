@@ -9,7 +9,8 @@ import Common
 
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
-                                       Themeable {
+                                       Themeable,
+                                       TabScrollControllerProtocol {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -55,12 +56,12 @@ final class LegacyTabScrollController: NSObject,
     }
 
     // Top toolbar UI and Constraints
-    weak var header: BaseAlphaStackView?
+    private weak var header: BaseAlphaStackView?
     var headerTopConstraint: Constraint?
 
     // Bottom toolbar UI and Constraints
-    weak var overKeyboardContainer: BaseAlphaStackView?
-    weak var bottomContainer: BaseAlphaStackView?
+    private weak var overKeyboardContainer: BaseAlphaStackView?
+    private weak var bottomContainer: BaseAlphaStackView?
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
 
@@ -237,6 +238,14 @@ final class LegacyTabScrollController: NSObject,
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange, queue: .main) { [weak self] _ in
             self?.applyTheme()
         }
+    }
+
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView,
+                               bottomContainer: BaseAlphaStackView,
+                               headerContainer: BaseAlphaStackView) {
+        self.overKeyboardContainer = overKeyboardContainer
+        self.bottomContainer = bottomContainer
+        self.header = headerContainer
     }
 
     private func handleOnTabContentLoading() {
