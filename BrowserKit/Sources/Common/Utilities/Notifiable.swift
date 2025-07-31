@@ -9,7 +9,7 @@ public protocol NotificationProtocol: Sendable {
     nonisolated func post(name: NSNotification.Name, withObject: Any?, withUserInfo: [AnyHashable: Any]?)
 
     /// Adds an observer.
-    /// **NOTE**: Do not call this method directly. Use the `Notifiable` helper method `stopObservingNotifications` instead.
+    /// **NOTE**: Do not call this method directly. Use the `Notifiable` helper method `startObservingNotifications` instead.
     ///
     /// Our `Notifiable` protocol relies on this method to provide default implementations.
     nonisolated func addObserver(
