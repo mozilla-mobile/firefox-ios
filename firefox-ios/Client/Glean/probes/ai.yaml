@@ -22,7 +22,7 @@ $tags:
 # Add your new metrics and/or events here.
 
 ai.summarize:
-  summarization_started:
+  started:
     type: event
     description: |
       Recoded when the user initiates the summarization.
@@ -44,7 +44,7 @@ ai.summarize:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  summarization_completed:
+  completed:
     type: event
     description: |
       Recorded when the result of the summarization is displayed to the user.
@@ -82,7 +82,7 @@ ai.summarize:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  summarization_closed:
+  closed:
       type: event
       description: |
         Recorded when the user cancels or closes the summarization at any point.
@@ -94,11 +94,11 @@ ai.summarize:
       notification_emails:
         - fx-ios-data-stewards@mozilla.com
       expires: "2026-01-01"
-  summarization_time:
+  duration:
     type: timing_distribution
     time_unit: millisecond
     description: |
-      Records the total time for generating the summary and showing it to the user.
+      Records the total duration taken for generating the summary and showing it to the user.
       Starts when the user triggers summarization.
       Ends when user sees the result or an error.
     bugs:
@@ -109,8 +109,7 @@ ai.summarize:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-
-  summarization_consent_displayed:
+  consent_displayed:
     type: event
     description: |
       Recorded when the user is shown the Terms of Service consent dialogue.
