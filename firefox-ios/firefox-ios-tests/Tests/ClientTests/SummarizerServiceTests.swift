@@ -15,7 +15,7 @@ final class SummarizerServiceTests: XCTestCase {
     func testSummarizerServiceReturnsSummary() async throws {
         let subject = createSubject()
         let result = try await subject.summarize(from: mockWebView)
-        XCTAssertEqual(result, Self.mockResponse.joined(separator: " "))
+        XCTAssertEqual(result, "Summarized content")
     }
 
     func testSummarizerServiceThrowsWhenContentTooLong() async {
@@ -41,7 +41,7 @@ final class SummarizerServiceTests: XCTestCase {
             streamedChunks.append(chunk)
         }
 
-        XCTAssertEqual(streamedChunks, Self.mockResponse)
+        XCTAssertEqual(streamedChunks, ["Summarized", "content"] )
     }
 
     func testSummarizerServiceThrowsWhenSummarizerFails() async {
