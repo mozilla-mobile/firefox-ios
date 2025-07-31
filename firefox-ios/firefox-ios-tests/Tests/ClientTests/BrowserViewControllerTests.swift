@@ -23,6 +23,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() {
         super.setUp()
         setIsSwipingTabsEnabled(false)
+        setIsAppleSummarizerEnabled(false)
+        setIsHostedSummarizerEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
@@ -233,8 +235,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Shake motion
-    func testMotionEnded_withShakeGesture_showSummarizePanel() {
+    func testMotionEnded_withShakeGesture_whenTabIsHomepageDoesntShowSummarize() {
+        setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
+        tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID, isHomePage: true)
+        subject.motionEnded(.motionShake, with: nil)
+
+        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 0)
+    }
+
+    func testMotionEnded_withShakeGesture_whenTabIsWebViewShowsSummarize_withSummarizeFeatureEnabled() {
+        setIsHostedSummarizerEnabled(true)
+        let subject = createSubject()
+        tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
 
         XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
@@ -366,6 +379,18 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(swipingTabs: isEnabled)
+        }
+    }
+
+    private func setIsAppleSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.appleSummarizerFeature.with { _, _ in
+            return AppleSummarizerFeature(enabled: isEnabled)
+        }
+    }
+
+    private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled)
         }
     }
 

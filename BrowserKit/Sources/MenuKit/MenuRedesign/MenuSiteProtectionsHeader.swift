@@ -10,7 +10,6 @@ import ComponentLibrary
 public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     private struct UX {
         static let closeButtonSize: CGFloat = 30
-        static let closeButtonUpdatedSize: CGFloat = 40
         static let contentLabelsSpacing: CGFloat = 1
         static let horizontalContentMargin: CGFloat = 16
         static let favIconSize: CGFloat = 40
@@ -144,22 +143,16 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
                                                         constant: UX.siteProtectionsContentTopMargin),
             siteProtectionsContent.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
             siteProtectionsContent.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-        ])
 
-        if #available(iOS 26.0, *) {
-            siteProtectionsContent.leadingAnchor.constraint(equalTo: contentLabels.leadingAnchor).isActive = true
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonUpdatedSize).isActive = true
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonUpdatedSize).isActive = true
-            closeButton.layer.cornerRadius = 0.5 * UX.closeButtonUpdatedSize
-        } else {
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize).isActive = true
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize).isActive = true
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
             siteProtectionsContent.leadingAnchor.constraint(
                 equalTo: favicon.trailingAnchor,
                 constant: UX.horizontalContentMargin - UX.siteProtectionsContentHorizontalPadding - UX.protectionIconMargin
-            ).isActive = true
-            closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
-        }
+            )
+        ])
+
+        closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
     }
 
     public func setupDetails(

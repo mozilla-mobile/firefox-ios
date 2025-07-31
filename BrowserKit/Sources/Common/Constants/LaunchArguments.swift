@@ -12,6 +12,7 @@ public struct LaunchArguments {
     public static let SkipETPCoverSheet = "FIREFOX_SKIP_ETP_COVER_SHEET"
     public static let SkipContextualHints = "FIREFOX_SKIP_CONTEXTUAL_HINTS"
     public static let SkipSponsoredShortcuts = "FIREFOX_SKIP_SPONSORED_SHORTCUTS"
+    public static let SkipTermsOfUse = "FIREFOX_SKIP_TERMS_OF_USE"
     public static let ClearProfile = "FIREFOX_CLEAR_PROFILE"
     public static let StageServer = "FIREFOX_USE_STAGE_SERVER"
     public static let FxAChinaServer = "FIREFOX_USE_FXA_CHINA_SERVER"

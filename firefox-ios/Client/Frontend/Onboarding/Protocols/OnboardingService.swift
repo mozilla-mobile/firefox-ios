@@ -143,8 +143,14 @@ final class OnboardingService: FeatureFlaggable {
         from cardName: String
     ) {
         switch action {
-        case .themeDark, .themeLight, .themeSystemDefault:
-            return
+        case .themeDark:
+            themeManager.setSystemTheme(isOn: false)
+            themeManager.setManualTheme(to: .dark)
+        case .themeLight:
+            themeManager.setSystemTheme(isOn: false)
+            themeManager.setManualTheme(to: .light)
+        case .themeSystemDefault:
+            themeManager.setSystemTheme(isOn: true)
         case .toolbarBottom:
             featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
             let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.bottom]

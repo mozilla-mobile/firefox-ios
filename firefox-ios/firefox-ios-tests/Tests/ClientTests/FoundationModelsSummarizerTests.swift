@@ -114,6 +114,8 @@ final class FoundationModelsSummarizerTests: XCTestCase {
     }
 }
 
+#endif
+
 /// NOTE: Conforming Equatable to make checks in tests simpler.
 extension SummarizerError: @retroactive Equatable {
     public static func == (lhs: SummarizerError, rhs: SummarizerError) -> Bool {
@@ -135,5 +137,3 @@ extension SummarizerError: @retroactive Equatable {
         }
     }
 }
-
-#endif
