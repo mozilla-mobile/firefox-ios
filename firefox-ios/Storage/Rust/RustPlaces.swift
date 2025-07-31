@@ -51,7 +51,7 @@ public protocol BookmarksHandler {
         completion: @escaping (Result<Void, any Error>) -> Void
     )
 
-    func isBookmarked(url: String, completion: @escaping (Result<Bool, Error>) -> Void)
+    func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
 }
 
 public class RustPlaces: BookmarksHandler {
@@ -324,7 +324,7 @@ public class RustPlaces: BookmarksHandler {
         }
     }
 
-    public func isBookmarked(url: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
         isBookmarked(url: url).upon { result in
             if let value = result.successValue {
                 completion(.success(value))
