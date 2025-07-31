@@ -14,6 +14,7 @@ enum SummarizerError: Error, LocalizedError, Sendable {
     case unsupportedLanguage
     case invalidResponse
     case cancelled
+    case noContent
     case unknown(Error)
 
     var errorDescription: String? { userMessage }
@@ -28,7 +29,18 @@ enum SummarizerError: Error, LocalizedError, Sendable {
         case .unsupportedLanguage: return ""
         case .cancelled: return ""
         case .invalidResponse: return ""
+        case .noContent: return ""
         case .unknown: return ""
+        }
+    }
+
+    /// Maps from summarization checker reasons
+    init(reason: SummarizationReason?) {
+        switch reason {
+        case .contentTooLong: self = .tooLong
+        case .documentLanguageUnsupported: self = .unsupportedLanguage
+        case .documentNotReadable: self = .cancelled
+        case nil: self = .invalidResponse
         }
     }
 }

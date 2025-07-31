@@ -10,27 +10,29 @@ final class LiteLLMSummarizer: SummarizerProtocol {
     private let client: LiteLLMClientProtocol
     private let model: String
     private let maxTokens: Int
+    private let modelInstructions: String
 
     init(
         client: LiteLLMClientProtocol,
         model: String,
-        maxTokens: Int
+        maxTokens: Int,
+        modelInstructions: String
     ) {
         self.client = client
         self.model = model
         self.maxTokens = maxTokens
+        self.modelInstructions = modelInstructions
     }
 
-    /// Generates a full summary of the given text using the provided prompt.
+    /// Generates a full summary of the given `contentToSummarize` using the provided `modelInstructions`.
     /// - Parameters:
-    ///   - prompt: Instruction prompt to guide the summarization.
-    ///   - text: The text to be summarized.
+    ///   - contentToSummarize: The text to be summarized.
     /// - Returns: A summarized string
     /// - Throws: `SummarizerError` if the request fails or if the response is invalid.
-    func summarize(prompt: String, text: String) async throws -> String {
+    func summarize(_ contentToSummarize: String) async throws -> String {
         let options = LiteLLMChatOptions(model: model, maxTokens: maxTokens, stream: false)
-        // System message is used for the prompt, user message for the text.
-        let messages = makeMessages(prompt: prompt, text: text)
+        // System message is used for the `modelInstructions`, user message for the `contentToSummarize`.
+        let messages = makeMessages(modelInstructions: modelInstructions, contentToSummarize: contentToSummarize)
         do {
             return try await client.requestChatCompletion(messages: messages, options: options)
         } catch {
@@ -38,17 +40,13 @@ final class LiteLLMSummarizer: SummarizerProtocol {
         }
     }
 
-    /// Streams a summary of the given text chunk-by-chunk using the provided prompt.
+    /// Streams a summary of the given `contentToSummarize` chunk-by-chunk using the provided `modelInstructions.
     /// - Parameters:
-    ///   - prompt: Instruction prompt to guide the summarization.
-    ///   - text: The text to be summarized.
+    ///   - contentToSummarize: The text to be summarized.
     /// - Returns: An `AsyncThrowingStream` yielding chunks of the summary.
-    func summarizeStreamed(
-        prompt: String,
-        text: String
-    ) -> AsyncThrowingStream<String, Error> {
+    func summarizeStreamed(_ contentToSummarize: String) -> AsyncThrowingStream<String, Error> {
         let options = LiteLLMChatOptions(model: model, maxTokens: maxTokens, stream: true)
-        let messages = makeMessages(prompt: prompt, text: text)
+        let messages = makeMessages(modelInstructions: modelInstructions, contentToSummarize: contentToSummarize)
 
         var stream = client.requestChatCompletionStreamed(messages: messages, options: options).makeAsyncIterator()
         return AsyncThrowingStream<String, Error>(unfolding: {
@@ -79,11 +77,11 @@ final class LiteLLMSummarizer: SummarizerProtocol {
         }
     }
 
-    /// Helper to build a typed message array from prompt and user message
-    private func makeMessages(prompt: String, text: String) -> [LiteLLMMessage] {
+    /// Helper to build a typed message array from `modelInstructions and `contentToSummarize`.
+    private func makeMessages(modelInstructions: String, contentToSummarize: String) -> [LiteLLMMessage] {
         return [
-            LiteLLMMessage(role: .system, content: prompt),
-            LiteLLMMessage(role: .user, content: text)
+            LiteLLMMessage(role: .system, content: modelInstructions),
+            LiteLLMMessage(role: .user, content: contentToSummarize)
         ]
     }
 }

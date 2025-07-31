@@ -18,7 +18,7 @@ import Foundation
 final class FoundationModelsSummarizerTests: XCTestCase {
     func testSummarizerRespondNonStreaming() async throws {
         let subject = createSubject(respondWith: ["hello", "world"])
-        let result = try await subject.summarize(prompt: "p", text: "t")
+        let result = try await subject.summarize("t")
         XCTAssertEqual(result, "hello world")
     }
 
@@ -27,7 +27,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         let subject = createSubject(respondWithError: rateLimitError)
 
         await assertSummarizeThrows(.rateLimited) {
-            _ = try await subject.summarize(prompt: "p", text: "t")
+            _ = try await subject.summarize("t")
         }
     }
 
@@ -36,7 +36,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         let subject = createSubject(respondWithError: randomError)
 
         await assertSummarizeThrows(.unknown(randomError)) {
-            _ = try await subject.summarize(prompt: "p", text: "t")
+            _ = try await subject.summarize("t")
         }
     }
 
@@ -46,7 +46,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
 
         var receivedChunks: [String] = []
         var index = 0
-        let stream = subject.summarizeStreamed(prompt: "p", text: "t")
+        let stream = subject.summarizeStreamed("t")
         for try await chunk in  stream {
             XCTAssertEqual(
                 chunk,
@@ -63,7 +63,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
     func testSummarizerRespondStreamingThrowsGuardViolation() async throws {
         let guardViolationError = LanguageModelSession.GenerationError.guardrailViolation(.init(debugDescription: "context"))
         let subject = createSubject(respondWithError: guardViolationError)
-        let stream = subject.summarizeStreamed(prompt: "p", text: "t")
+        let stream = subject.summarizeStreamed("t")
 
         await assertSummarizeThrows(.safetyBlocked) {
             // Consume the stream but do nothing
@@ -74,7 +74,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
     func testSummarizerRespondStreamingThrowsUnknown() async throws {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
-        let stream = subject.summarizeStreamed(prompt: "p", text: "t")
+        let stream = subject.summarizeStreamed("t")
 
         await assertSummarizeThrows(.unknown(randomError)) {
             // Consume the stream but do nothing
@@ -93,7 +93,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         if let error {
             mockSession.respondWithError = error
         }
-        return FoundationModelsSummarizer(makeSession: { _ in mockSession })
+        return FoundationModelsSummarizer(makeSession: { _ in mockSession }, modelInstructions: "p")
     }
 
     /// Convenience method to simplify error checking in the test cases
