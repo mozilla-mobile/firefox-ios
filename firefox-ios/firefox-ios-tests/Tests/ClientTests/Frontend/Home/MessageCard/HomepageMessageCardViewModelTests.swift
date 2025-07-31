@@ -104,6 +104,7 @@ class HomepageMessageCardViewModelTests: XCTestCase {
         XCTAssertEqual(dismissClosureCalled, 1)
     }
 
+    @MainActor
     func testConfigureCallsMethod() throws {
         let subject = createSubject()
         let cell = SpyHomepageMessageCardCell(frame: .zero)

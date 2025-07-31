@@ -16,23 +16,29 @@ import Foundation
 /// for the difference in flows that the two onboarding paths represent.
 protocol OnboardingCardDelegate: AnyObject {
     // These methods must be implemented by the object
+    @MainActor
     func handleBottomButtonActions(for action: OnboardingActions,
                                    from cardName: String,
                                    isPrimaryButton: Bool)
+    @MainActor
     func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction,
                                            from cardName: String)
+    @MainActor
     func sendCardViewTelemetry(from cardName: String)
 
     // Implemented by default for code sharing
+    @MainActor
     func presentPrivacyPolicy(windowUUID: WindowUUID,
                               from cardName: String,
                               selector: Selector?,
                               completion: (() -> Void)?,
                               referringPage: ReferringPage)
+    @MainActor
     func presentDefaultBrowserPopup(windowUUID: WindowUUID,
                                     from name: String,
                                     completionIfLastCard: (() -> Void)?)
 
+    @MainActor
     func presentSignToSync(
         windowUUID: WindowUUID,
         with fxaOptions: FxALaunchParams,
@@ -43,19 +49,21 @@ protocol OnboardingCardDelegate: AnyObject {
         qrCodeNavigationHandler: QRCodeNavigationHandler?
     )
 
+    @MainActor
     func advance(
         numberOfPages: Int,
         from cardName: String,
         completionIfLastCard completion: (() -> Void)?
     )
+    @MainActor
     func pageChanged(from cardName: String)
 }
 
-@MainActor
 extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
                                        Self: UIViewController,
                                        Self: Themeable {
     // MARK: - Privacy Policy
+    @MainActor
     func presentPrivacyPolicy(
         windowUUID: WindowUUID,
         from cardName: String,
@@ -84,6 +92,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Default Browser Popup
+    @MainActor
     func presentDefaultBrowserPopup(
         windowUUID: WindowUUID,
         from name: String,
@@ -125,6 +134,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Sync sign in
+    @MainActor
     func presentSignToSync(
         windowUUID: WindowUUID,
         with fxaOptions: FxALaunchParams,
@@ -156,6 +166,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Page helpers
+    @MainActor
     func advance(
         numberOfPages: Int,
         from cardName: String,
@@ -171,6 +182,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
 
     // Extra step to make sure pageControl.currentPage is the right index card
     // because UIPageViewControllerDataSource call fails
+    @MainActor
     func pageChanged(from cardName: String) {
         guard let cardIndex = viewModel.availableCards
             .firstIndex(where: { $0.viewModel.name == cardName }),

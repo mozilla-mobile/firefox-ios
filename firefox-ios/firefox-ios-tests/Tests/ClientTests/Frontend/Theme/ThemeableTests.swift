@@ -6,23 +6,24 @@ import XCTest
 import Common
 @testable import Shared
 
-class ThemableTests: XCTestCaseRootViewController {
+@MainActor
+class ThemeableTests: XCTestCaseRootViewController {
     private var tableViewDelegate: TestsTableView!
-    private var testThemable: TestsThemeable!
+    private var testThemeable: TestsThemeable!
     private var mockThemeManager: MockThemeManager!
 
     override func setUp() {
         super.setUp()
         mockThemeManager = MockThemeManager()
         tableViewDelegate = TestsTableView()
-        testThemable = TestsThemeable()
-        testThemable.themeManager = mockThemeManager
+        testThemeable = TestsThemeable()
+        testThemeable.themeManager = mockThemeManager
     }
 
     override func tearDown() {
         mockThemeManager = nil
         tableViewDelegate = nil
-        testThemable = nil
+        testThemeable = nil
         super.tearDown()
     }
 
@@ -30,7 +31,7 @@ class ThemableTests: XCTestCaseRootViewController {
 
     func testGetAllSubviews_noSubviews() {
         let subject = UIView()
-        let result = testThemable.getAllSubviews(for: subject, ofType: UIView.self)
+        let result = testThemeable.getAllSubviews(for: subject, ofType: UIView.self)
         XCTAssertEqual(result.count, 0, "No subviews")
     }
 
@@ -39,7 +40,7 @@ class ThemableTests: XCTestCaseRootViewController {
         let subject = UIView()
         subject.addSubviews(subview1, subview2)
 
-        let result = testThemable.getAllSubviews(for: subject, ofType: UIView.self)
+        let result = testThemeable.getAllSubviews(for: subject, ofType: UIView.self)
         XCTAssertEqual(result.count, 2, "Two subviews")
     }
 
@@ -51,7 +52,7 @@ class ThemableTests: XCTestCaseRootViewController {
         let subject = UIView()
         subject.addSubviews(subview1, subview2)
 
-        let result = testThemable.getAllSubviews(for: subject, ofType: UIView.self)
+        let result = testThemeable.getAllSubviews(for: subject, ofType: UIView.self)
         XCTAssertEqual(result.count, 4, "Four subviews")
     }
 
@@ -63,40 +64,40 @@ class ThemableTests: XCTestCaseRootViewController {
 
         loadViewForTesting()
 
-        let result = testThemable.getAllSubviews(for: tableView, ofType: UITableViewCell.self)
+        let result = testThemeable.getAllSubviews(for: tableView, ofType: UITableViewCell.self)
         XCTAssertEqual(result.count, 3, "Retrieving three UITableViewCell in tableview")
     }
 
     // MARK: - updateThemeApplicableSubviews
     func test_updateThemeApplicableSubviews_withDefault_returnsProperTheme() {
-        testThemable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
+        testThemeable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
 
         XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 1)
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 0)
     }
 
     func test_updateThemeApplicableSubviews_withPrivateThemeOverrides_returnsProperTheme() {
-        testThemable.shouldUsePrivateOverride = true
-        testThemable.shouldBeInPrivateTheme = true
-        testThemable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
+        testThemeable.shouldUsePrivateOverride = true
+        testThemeable.shouldBeInPrivateTheme = true
+        testThemeable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
 
         XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 0)
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
     }
 
     func test_updateThemeApplicableSubviews_withPrivateThemeOverrides_forceNoPrivateTheme_returnsProperTheme() {
-        testThemable.shouldUsePrivateOverride = true
-        testThemable.shouldBeInPrivateTheme = false
-        testThemable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
+        testThemeable.shouldUsePrivateOverride = true
+        testThemeable.shouldBeInPrivateTheme = false
+        testThemeable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
 
         XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 0)
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 1)
     }
 
     func test_updateThemeApplicableSubviews_withDefault_forcePrivateTheme_returnsProperTheme() {
-        testThemable.shouldUsePrivateOverride = false
-        testThemable.shouldBeInPrivateTheme = true
-        testThemable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
+        testThemeable.shouldUsePrivateOverride = false
+        testThemeable.shouldBeInPrivateTheme = true
+        testThemeable.updateThemeApplicableSubviews(UIView(), for: .XCTestDefaultUUID)
 
         XCTAssertEqual(mockThemeManager.getCurrentThemeCallCount, 1)
         XCTAssertEqual(mockThemeManager.resolvedThemeCalledCount, 0)
@@ -124,7 +125,7 @@ class TestsTableView: NSObject, UITableViewDataSource, UITableViewDelegate {
 // MARK: - TestsThemeable
 class TestsThemeable: UIViewController, Themeable {
     var themeManager: ThemeManager = MockThemeManager()
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     func applyTheme() {}
