@@ -14,8 +14,8 @@ struct LiteLLMConfig {
 
     /// Fetches a non-empty String for the given key, or returns nil if missing/empty.
     private static func fetchValue(for key: InfoKey) -> String? {
-        let value = Bundle.main.object(forInfoDictionaryKey: key.rawValue)
-        guard let value = value as? String, !value.isEmpty else { return nil }
+        let value = Bundle.main.object(forInfoDictionaryKey: key.rawValue) as? String
+        guard let value, !value.isEmpty else { return nil }
         return value
     }
 
