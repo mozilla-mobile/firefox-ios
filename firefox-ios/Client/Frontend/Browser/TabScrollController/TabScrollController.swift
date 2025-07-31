@@ -212,13 +212,6 @@ final class TabScrollController: NSObject,
         }
     }
 
-    @objc
-    private func applicationWillTerminate(_ notification: Notification) {
-        // Ensures that we immediately de-register KVO observations for content size changes in
-        // webviews if the app is about to terminate.
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
-    }
-
     func handlePan(_ gesture: UIPanGestureRecognizer) {
         guard !tabIsLoading() else { return }
 
