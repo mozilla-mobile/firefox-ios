@@ -78,6 +78,78 @@ public struct SummarizeViewModel {
     }
 }
 
+public struct ErrorViewModel {
+    let title: String
+    let titleA11yId: String
+    let actionButtonLabel: String
+    let actionButtonA11yId: String
+}
+
+class ErrorView: UIView,
+                 ThemeApplicable {
+    private struct UX {
+        static let labelHorizontalPadding: CGFloat = 44.0
+        static let actionButtonTopPadding: CGFloat = 32.0
+        static let actionButtonInsets = NSDirectionalEdgeInsets(
+            top: 12.0,
+            leading: 32.0,
+            bottom: 12.0,
+            trailing: 32.0
+        )
+    }
+    private let label: UILabel = .build {
+        $0.adjustsFontForContentSizeCategory = true
+        $0.font = FXFontStyles.Regular.body.scaledFont()
+        $0.numberOfLines = 0
+        $0.textAlignment = .center
+    }
+    private let actionButton: UIButton = .build {
+        $0.configuration = .filled()
+        $0.configuration?.cornerStyle = .capsule
+        $0.configuration?.contentInsets = UX.actionButtonInsets
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setup() {
+        addSubviews(label, actionButton)
+
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: topAnchor),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.labelHorizontalPadding),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.labelHorizontalPadding),
+
+            actionButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: UX.actionButtonTopPadding),
+            actionButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            actionButton.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+            actionButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
+            actionButton.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+
+    func configure(viewModel: ErrorViewModel) {
+        label.text = viewModel.title
+        label.accessibilityIdentifier = viewModel.titleA11yId
+        actionButton.configuration?.title = viewModel.actionButtonLabel
+        actionButton.accessibilityIdentifier = viewModel.actionButtonA11yId
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: any Theme) {
+        label.textColor = theme.colors.textOnDark
+        actionButton.configuration?.baseForegroundColor = theme.colors.textPrimary
+        actionButton.tintColor = theme.colors.actionTabActive
+    }
+}
+
 public class SummarizeController: UIViewController, Themeable {
     private struct UX {
         static let tabSnapshotInitialTransformPercentage: CGFloat = 0.5
@@ -108,6 +180,9 @@ public class SummarizeController: UIViewController, Themeable {
         $0.font = FXFontStyles.Regular.body.scaledFont()
         $0.alpha = 0
         $0.numberOfLines = 0
+    }
+    private let errorView: ErrorView = .build {
+        $0.alpha = 0
     }
     private let closeButton: UIButton = .build {
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
@@ -167,7 +242,15 @@ public class SummarizeController: UIViewController, Themeable {
     }
 
     private func setupSubviews() {
-        view.addSubviews(tabSnapshot, gradient, closeButton, summaryView, loadingLabel)
+        errorView.configure(
+            viewModel: .init(
+                title: "This is an error please reach oiyt to the team",
+                titleA11yId: "",
+                actionButtonLabel: "Continue",
+                actionButtonA11yId: ""
+            )
+        )
+        view.addSubviews(tabSnapshot, gradient, closeButton, summaryView, loadingLabel, errorView)
 
         loadingLabel.text = viewModel.loadingLabel
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
@@ -212,6 +295,12 @@ public class SummarizeController: UIViewController, Themeable {
             loadingLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor,
                                                    constant: -UX.summaryLabelHorizontalPadding),
 
+            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            errorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            errorView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor),
+            errorView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor),
+
             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
                                                  constant: UX.closeButtonEdgePadding),
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -235,6 +324,7 @@ public class SummarizeController: UIViewController, Themeable {
         let frameHeight = view.frame.height
         loadingLabel.transform = CGAffineTransform(translationX: 0.0, y: frameHeight * 0.25)
         loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.1))
+        errorView.transform = CGAffineTransform(translationX: 0.0, y: frameHeight * 0.25)
 
         let transformAnimation = CABasicAnimation(keyPath: "transform.translation.y")
         transformAnimation.fromValue = 0
@@ -250,12 +340,13 @@ public class SummarizeController: UIViewController, Themeable {
 
         UIView.animate(withDuration: UX.initialTransformAnimationDuration, delay: 0.0, options: [], animations: {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
-            self.loadingLabel.alpha = 1.0
+//            self.loadingLabel.alpha = 1.0
+            self.errorView.alpha = 1.0
         }) { _ in
             // TODO: - FXIOS-12858 replace this demo code with the actual backend API
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                self.showSummary()
-            }
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+//                self.showSummary()
+//            }
         }
     }
 
@@ -343,5 +434,6 @@ public class SummarizeController: UIViewController, Themeable {
         view.backgroundColor = .clear
         closeButton.tintColor = theme.colors.textPrimary
         gradient.applyTheme(theme: theme)
+        errorView.applyTheme(theme: theme)
     }
 }
