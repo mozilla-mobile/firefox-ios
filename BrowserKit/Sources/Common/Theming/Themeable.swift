@@ -81,7 +81,7 @@ extension Themeable {
     /// Updates subviews of the `Themeable` view, which can specify whether it wants to use the
     /// base theme via `getCurrentTheme` or override the private mode theme via `resolvedTheme`
     @MainActor
-    private func updateThemeApplicableSubviews(_ view: UIView, for window: WindowUUID?) {
+    public func updateThemeApplicableSubviews(_ view: UIView, for window: WindowUUID?) {
         assert(Thread.isMainThread)
 
         guard let uuid = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID ?? window else { return }

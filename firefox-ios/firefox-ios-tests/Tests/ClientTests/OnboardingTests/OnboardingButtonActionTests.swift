@@ -7,8 +7,9 @@ import Common
 
 @testable import Client
 
+@MainActor
 class OnboardingButtonActionTests: XCTestCase {
-    var mockDelegate: MockOnboardinCardDelegateController!
+    var mockDelegate: MockOnboardingCardDelegateController!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -135,7 +136,7 @@ class OnboardingButtonActionTests: XCTestCase {
             imageID: ImageIdentifiers.Onboarding.HeaderImages.syncv106,
             instructionsPopup: nil)
 
-        mockDelegate = MockOnboardinCardDelegateController()
+        mockDelegate = MockOnboardingCardDelegateController()
         let subject = OnboardingBasicCardViewController(
             viewModel: mockInfoModel,
             delegate: mockDelegate,

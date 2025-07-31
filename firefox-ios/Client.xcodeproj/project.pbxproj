@@ -930,7 +930,7 @@
 		8A454D412CB9B8AA009436D9 /* TopSitesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D402CB9B8AA009436D9 /* TopSitesAction.swift */; };
 		8A454D432CB9B8F5009436D9 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D422CB9B8F5009436D9 /* TopSitesManager.swift */; };
 		8A454D462CB9C83F009436D9 /* TopSitesMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D452CB9C83F009436D9 /* TopSitesMiddleware.swift */; };
-		8A456B6B2DC4F91000056533 /* ThemableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4B828F9DD8700B75884 /* ThemableTests.swift */; };
+		8A456B6B2DC4F91000056533 /* ThemeableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4B828F9DD8700B75884 /* ThemeableTests.swift */; };
 		8A456B6D2DC4FD8300056533 /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A456B6C2DC4FD7E00056533 /* MockThemeManager.swift */; };
 		8A456B6E2DC50F9400056533 /* MockLoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB893A52C73AFBA00DAEED7 /* MockLoginProvider.swift */; };
 		8A456B6F2DC50F9400056533 /* MockLoginProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB893A52C73AFBA00DAEED7 /* MockLoginProvider.swift */; };
@@ -8564,7 +8564,7 @@
 		8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifier.swift; sourceTree = "<group>"; };
 		8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifierTests.swift; sourceTree = "<group>"; };
 		8A967E412D30418A00B1017D /* TelemetryDebugMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryDebugMessage.swift; sourceTree = "<group>"; };
-		8A96C4B828F9DD8700B75884 /* ThemableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemableTests.swift; sourceTree = "<group>"; };
+		8A96C4B828F9DD8700B75884 /* ThemeableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeableTests.swift; sourceTree = "<group>"; };
 		8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseRootViewController.swift; sourceTree = "<group>"; };
 		8A97E6E92C58487900F94793 /* AddressLocaleFeatureValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressLocaleFeatureValidator.swift; sourceTree = "<group>"; };
 		8A97E6ED2C584AC300F94793 /* AddressLocaleFeatureValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressLocaleFeatureValidatorTests.swift; sourceTree = "<group>"; };
@@ -13258,7 +13258,7 @@
 			isa = PBXGroup;
 			children = (
 				8A456B6C2DC4FD7E00056533 /* MockThemeManager.swift */,
-				8A96C4B828F9DD8700B75884 /* ThemableTests.swift */,
+				8A96C4B828F9DD8700B75884 /* ThemeableTests.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -17478,7 +17478,7 @@
 				C8C1880F287608BF00BF3735 /* DateExtensionsTests.swift in Sources */,
 				E4E25CCB1CA99E7400D0F088 /* HexExtensionsTests.swift in Sources */,
 				8A456B6D2DC4FD8300056533 /* MockThemeManager.swift in Sources */,
-				8A456B6B2DC4F91000056533 /* ThemableTests.swift in Sources */,
+				8A456B6B2DC4F91000056533 /* ThemeableTests.swift in Sources */,
 				28532BE91C471FFB000072D9 /* ResultTests.swift in Sources */,
 				E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */,
 				5A29212A295CAA1700242235 /* XCTestCaseRootViewController.swift in Sources */,
