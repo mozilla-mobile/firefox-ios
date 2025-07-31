@@ -40,7 +40,7 @@ final class TermsOfUseViewController: UIViewController,
     weak var coordinator: TermsOfUseCoordinatorDelegate?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    public var themeListenerCancellable: Any?
+    var themeListenerCancellable: Any?
     private let strings = TermsOfUseStrings()
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
