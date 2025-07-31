@@ -233,7 +233,8 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - AlphaDimmable
     func updateAlphaForSubviews(_ alpha: CGFloat) {
-        if !isMinimalAddressBarEnabled {
+        let isReaderModeActive = state?.addressToolbar.readerModeState == .active
+        if !isMinimalAddressBarEnabled || isReaderModeActive {
             // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
             regularToolbar.alpha = alpha
         }
