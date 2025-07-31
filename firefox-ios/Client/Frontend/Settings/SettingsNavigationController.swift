@@ -44,7 +44,7 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         modalPresentationStyle = .overFullScreen
         modalPresentationCapturesStatusBarAppearance = true
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

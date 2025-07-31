@@ -108,7 +108,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
             }
         }
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

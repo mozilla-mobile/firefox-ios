@@ -81,7 +81,7 @@ class EditFolderViewController: UIViewController,
         }
         setupSubviews()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

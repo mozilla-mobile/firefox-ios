@@ -124,7 +124,7 @@ public class ToSBottomSheetViewController: UIViewController,
         configure()
         setupLayout()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

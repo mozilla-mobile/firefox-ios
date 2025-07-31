@@ -77,7 +77,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
         tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(cellType: ThemedCenteredTableViewCell.self)
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

@@ -249,7 +249,7 @@ class ReadingListPanel: UITableViewController,
         tableView.tableFooterView = UIView()
         tableView.dragDelegate = self
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

@@ -140,7 +140,7 @@ final class TermsOfUseViewController: UIViewController,
                             TermsOfUseStrings.termsOfUseHasOpenedNotification)
         setupUI()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         subscribeToRedux()

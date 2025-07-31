@@ -103,7 +103,7 @@ final class TabDisplayPanelViewController: UIViewController,
             InactiveTabsTelemetry().sectionShown()
         }
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

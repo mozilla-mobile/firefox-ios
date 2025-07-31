@@ -107,7 +107,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         setupView()
         updateLayout()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

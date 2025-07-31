@@ -90,7 +90,7 @@ class EditBookmarkViewController: UIViewController,
         dataSource.defaultRowAnimation = .fade
         reloadTableViewData()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

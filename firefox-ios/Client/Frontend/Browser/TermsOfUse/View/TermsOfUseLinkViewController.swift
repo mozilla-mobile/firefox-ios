@@ -76,7 +76,7 @@ final class TermsOfUseLinkViewController: UIViewController,
         super.viewDidLoad()
         setupViews()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         webView.load(URLRequest(url: url))

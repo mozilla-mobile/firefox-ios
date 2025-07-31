@@ -84,7 +84,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         setupView()
         updateLayout()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

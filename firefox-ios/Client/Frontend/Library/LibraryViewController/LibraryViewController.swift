@@ -97,7 +97,7 @@ class LibraryViewController: UIViewController, Themeable {
         super.viewDidLoad()
         viewSetup()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         startObservingNotifications(

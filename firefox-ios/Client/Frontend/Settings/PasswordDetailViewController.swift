@@ -89,7 +89,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         tableView.estimatedRowHeight = 44.0
         tableView.separatorInset = .zero
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

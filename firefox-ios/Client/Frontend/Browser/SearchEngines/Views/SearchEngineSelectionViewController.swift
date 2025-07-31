@@ -61,7 +61,7 @@ class SearchEngineSelectionViewController: UIViewController,
 
         setupView()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         store.dispatchLegacy(

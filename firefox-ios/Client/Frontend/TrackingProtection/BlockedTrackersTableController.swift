@@ -64,7 +64,7 @@ class BlockedTrackersTableViewController: UIViewController,
         setupDataSource()
         applySnapshot()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

@@ -99,7 +99,7 @@ class RemoteTabsPanel: UIViewController,
         setupLayout()
         subscribeToRedux()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

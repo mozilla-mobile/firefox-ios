@@ -156,7 +156,7 @@ class LegacyHomepageViewController: UIViewController,
         setupSectionsAction()
         reloadView()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

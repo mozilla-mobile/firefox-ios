@@ -20,7 +20,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
 
-        listenForThemeChanges(view, withNotificationCenter: NotificationCenter.default)
+        listenForThemeChanges(withNotificationCenter: NotificationCenter.default)
         applyTheme()
     }
 

@@ -93,7 +93,7 @@ class IntroViewController: UIViewController,
         super.viewDidLoad()
         populatePageController()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

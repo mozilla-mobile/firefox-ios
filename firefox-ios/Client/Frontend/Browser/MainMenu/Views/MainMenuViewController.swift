@@ -136,7 +136,7 @@ class MainMenuViewController: UIViewController,
 
         setupTableView()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         store.dispatchLegacy(

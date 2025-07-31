@@ -64,7 +64,7 @@ class ContextualHintViewController: UIViewController,
         view.setNeedsLayout()
         view.layoutIfNeeded()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

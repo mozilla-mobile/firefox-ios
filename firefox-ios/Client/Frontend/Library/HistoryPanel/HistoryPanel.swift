@@ -179,7 +179,7 @@ class HistoryPanel: UIViewController,
         setupLayout()
         configureDataSource()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         // Update theme of already existing view

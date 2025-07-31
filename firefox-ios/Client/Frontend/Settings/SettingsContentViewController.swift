@@ -133,7 +133,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
 
         startLoading()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

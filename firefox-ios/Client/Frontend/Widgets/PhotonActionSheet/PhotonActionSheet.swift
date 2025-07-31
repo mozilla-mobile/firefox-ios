@@ -112,7 +112,7 @@ class PhotonActionSheet: UIViewController, Themeable {
                         UIAccessibility.reduceTransparencyStatusDidChangeNotification]
         )
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

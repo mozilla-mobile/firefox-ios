@@ -172,7 +172,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         accessibilityLabel = "FxASingin.navBar"
         setupLayout()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

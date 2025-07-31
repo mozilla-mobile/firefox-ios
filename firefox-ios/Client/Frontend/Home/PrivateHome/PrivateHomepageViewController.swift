@@ -112,7 +112,7 @@ final class PrivateHomepageViewController: UIViewController,
         setupLayout()
         setupDismissKeyboard()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

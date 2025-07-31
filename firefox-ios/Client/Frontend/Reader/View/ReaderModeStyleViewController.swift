@@ -94,7 +94,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         updateFontSizeButtons()
         updateFontTypeButtons()
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         adjustLayoutForA11ySizeCategory()

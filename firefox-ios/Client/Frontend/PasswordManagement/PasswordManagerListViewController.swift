@@ -124,7 +124,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
         selectionButton.isHidden = true
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         KeyboardHelper.defaultHelper.addDelegate(self)

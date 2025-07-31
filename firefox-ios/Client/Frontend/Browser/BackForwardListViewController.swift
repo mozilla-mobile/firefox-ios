@@ -97,7 +97,7 @@ class BackForwardListViewController: UIViewController,
         super.viewDidLoad()
 
         setupLayout()
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         scrollTableViewToIndex(currentRow)

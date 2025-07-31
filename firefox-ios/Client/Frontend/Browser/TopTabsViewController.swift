@@ -166,7 +166,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
 
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
         setupLayout()
 
