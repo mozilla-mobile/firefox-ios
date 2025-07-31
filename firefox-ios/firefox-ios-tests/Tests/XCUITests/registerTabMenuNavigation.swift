@@ -44,7 +44,10 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
             app.tables.cells[AccessibilityIdentifiers.MainMenu.findInPage],
             to: FindInPage)
         // Desktop Site
-        screenState.tap(app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.switchToDesktopSite], to: RequestDesktopSite)
+        screenState.tap(
+            app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.switchToDesktopSite],
+            to: RequestDesktopSite
+        )
         screenState.tap(app.tables.cells.staticTexts["Switch to Mobile Site"], to: RequestMobileSite)
 
         // Bookmark this page
