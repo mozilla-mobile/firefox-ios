@@ -332,10 +332,6 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
-    var isSummarizeFeatureEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
-    }
-
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
