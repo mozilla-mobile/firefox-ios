@@ -673,6 +673,10 @@ struct AccessibilityIdentifiers {
             static let blockImages = "NoImageModeStatus"
         }
 
+        struct Summarize {
+            static let title = "SummarizeSettings"
+        }
+
         struct Theme {
             static let title = "DisplayThemeOption"
         }

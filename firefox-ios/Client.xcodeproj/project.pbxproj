@@ -1465,6 +1465,7 @@
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
 		BC0723522E33D7A6005BAC05 /* AppleIntelligenceUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0723512E33D7A2005BAC05 /* AppleIntelligenceUtilTests.swift */; };
 		BC8E91DC2E32953C00434FD0 /* AppleIntelligenceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */; };
+		BCBE058C2E3A8720004B6039 /* SummarizeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */; };
 		BCFB141D2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json in Resources */ = {isa = PBXBuildFile; fileRef = BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */; };
 		BCFB141F2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json in Resources */ = {isa = PBXBuildFile; fileRef = BCFB141E2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
@@ -9301,6 +9302,7 @@
 		BC4B49618B8FC822D4D0FCC2 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BC81442AA84F635F3067A2C5 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceUtil.swift; sourceTree = "<group>"; };
+		BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeSetting.swift; sourceTree = "<group>"; };
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feltPrivacySimplifiedUIOff.json; sourceTree = "<group>"; };
 		BCFB141E2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = feltPrivacySimplifiedUIOn.json; sourceTree = "<group>"; };
@@ -12773,6 +12775,7 @@
 		8A5D1CA22A30D661005AD35C /* General */ = {
 			isa = PBXGroup;
 			children = (
+				BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */,
 				8ADED55D2D667A7700345293 /* BrowsingSetting.swift */,
 				8A15AB722D5FDB24008BB03C /* AutoplaySetting.swift */,
 				8A093D7E2A4B3E7D0099ABA5 /* GeneralSettingsDelegate.swift */,
@@ -18349,6 +18352,7 @@
 				5A2918CB2B522338002B197E /* GeneralBrowserAction.swift in Sources */,
 				8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */,
 				8ADED55C2D6679D500345293 /* BrowsingSettingsViewController.swift in Sources */,
+				BCBE058C2E3A8720004B6039 /* SummarizeSetting.swift in Sources */,
 				E1442FD5294782D9003680B0 /* UIView+SnapKit.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */,
