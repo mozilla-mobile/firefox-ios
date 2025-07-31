@@ -152,7 +152,7 @@ class ShareMenuTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
-        navigator.goto(ToolsBrowserTabMenu)
+        // navigator.goto(ToolsBrowserTabMenu)
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
         if #available(iOS 16, *) {
@@ -167,7 +167,7 @@ class ShareMenuTests: BaseTestCase {
         // Open a website in the browser
         navigator.openURL(url)
         waitUntilPageLoad()
-        navigator.goto(ToolsBrowserTabMenu)
+        // navigator.goto(ToolsBrowserTabMenu)
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
         if #available(iOS 16, *) {

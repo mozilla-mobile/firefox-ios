@@ -6,31 +6,19 @@ import Foundation
 
 enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case bookmarks
-    case customizeHomepage
     case defaultBrowser
     case downloads
     case editBookmark
     case findInPage
-    case goToURL
     case history
-    case newTab
-    case newPrivateTab
     case passwords
     case settings
     case siteProtections
     case syncSignIn
-    case printSheet
     case printSheetV2
-    case shareSheet
-    case saveAsPDF
     case saveAsPDFV2
     case webpageSummary
     case zoom
-}
-
-enum MainMenuDetailsViewType {
-    case tools
-    case save
 }
 
 struct MenuNavigationDestination: Equatable {

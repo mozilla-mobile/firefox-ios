@@ -434,7 +434,7 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(SaveBrowserTabMenu)
+        // navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
 
         // Close all tabs so that the search result does not include

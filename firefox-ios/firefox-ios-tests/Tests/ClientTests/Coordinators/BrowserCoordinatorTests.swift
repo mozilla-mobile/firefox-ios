@@ -1129,7 +1129,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        if !featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
+            XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        }
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
     }
 
@@ -1146,22 +1148,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         menuCoordinator.dismissMenuModal(animated: false)
 
         XCTAssertTrue(subject.childCoordinators.isEmpty)
-    }
-
-    func testMainMenuCoordinatorDelegate_navigatesToSettings() {
-        let subject = createSubject()
-        subject.browserHasLoaded()
-
-        subject.showMainMenu()
-        guard let menuCoordinator = subject.childCoordinators[0] as? MainMenuCoordinator else {
-            XCTFail("Main menu coordinator was expected to be resolved")
-            return
-        }
-
-        menuCoordinator.navigateTo(MenuNavigationDestination(.customizeHomepage), animated: false)
-
-        XCTAssertTrue(subject.childCoordinators[0] is SettingsCoordinator)
-        XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
     }
 
     // MARK: - Search Engine Selection

@@ -243,7 +243,7 @@ class BaseTestCase: XCTestCase {
         )
         app.buttons["Save"].tapIfExists()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(SaveBrowserTabMenu)
+        // navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
     }
 

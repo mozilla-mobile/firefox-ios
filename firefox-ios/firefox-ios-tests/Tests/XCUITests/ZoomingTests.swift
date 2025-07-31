@@ -179,6 +179,7 @@ class ZoomingTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         // Tap on the hamburger menu -> Tap on Zoom
         navigator.goto(BrowserTabMenu)
+        navigator.goto(BrowserTabMenuMore)
         navigator.goto(PageZoom)
         // The zoom bar is displayed
         waitForElementsToExist(
