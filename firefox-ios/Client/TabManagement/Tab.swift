@@ -614,6 +614,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     deinit {
         deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
         webViewLoadingObserver?.invalidate()
+        webView?.navigationDelegate = nil
 
 #if DEBUG
         debugTabCount -= 1
