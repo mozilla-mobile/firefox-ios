@@ -1419,6 +1419,11 @@
 		B2FEA68F2B460D9E0058E616 /* AddressAutofillSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEA68E2B460D9E0058E616 /* AddressAutofillSettingsViewModel.swift */; };
 		B2FEA6912B4661BE0058E616 /* AddressAutofillToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FEA6902B4661BE0058E616 /* AddressAutofillToggle.swift */; };
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
+		BA073A392E37D0C300E27B36 /* SummarizerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A382E37D0BD00E27B36 /* SummarizerService.swift */; };
+		BA073A952E3807FB00E27B36 /* SummarizerCheckerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */; };
+		BA073A992E38171B00E27B36 /* MockSummarizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A982E38171500E27B36 /* MockSummarizer.swift */; };
+		BA073A9B2E38188E00E27B36 /* SummarizerServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A9A2E38188700E27B36 /* SummarizerServiceTests.swift */; };
+		BA073A9D2E381E5800E27B36 /* MockSummarizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A9C2E381E4F00E27B36 /* MockSummarizationChecker.swift */; };
 		BA073B7B2E384FD500E27B36 /* SSEDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073B7A2E384FCA00E27B36 /* SSEDataParser.swift */; };
 		BA073B7D2E38503700E27B36 /* SSEDataParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073B7C2E38502F00E27B36 /* SSEDataParserError.swift */; };
 		BA073B812E38592D00E27B36 /* SSEDataParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073B802E38592500E27B36 /* SSEDataParserTests.swift */; };
@@ -1426,11 +1431,6 @@
 		BA073D3D2E3890BF00E27B36 /* LiteLLMClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073D3C2E3890B300E27B36 /* LiteLLMClientProtocol.swift */; };
 		BA073D3F2E38922E00E27B36 /* MockLiteLLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073D3E2E38921800E27B36 /* MockLiteLLMClient.swift */; };
 		BA073D412E38933600E27B36 /* LiteLLMSummarizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073D402E38932A00E27B36 /* LiteLLMSummarizerTests.swift */; };
-		BA073A392E37D0C300E27B36 /* SummarizerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A382E37D0BD00E27B36 /* SummarizerService.swift */; };
-		BA073A952E3807FB00E27B36 /* SummarizerCheckerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */; };
-		BA073A992E38171B00E27B36 /* MockSummarizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A982E38171500E27B36 /* MockSummarizer.swift */; };
-		BA073A9B2E38188E00E27B36 /* SummarizerServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A9A2E38188700E27B36 /* SummarizerServiceTests.swift */; };
-		BA073A9D2E381E5800E27B36 /* MockSummarizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA073A9C2E381E4F00E27B36 /* MockSummarizationChecker.swift */; };
 		BA1237BA2DAE55EA00BB6333 /* NightModeAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */; };
 		BA1237BC2DAE608100BB6333 /* GenericSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */; };
 		BA1237BF2DAE675B00BB6333 /* GenericImageOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */; };
@@ -1464,6 +1464,9 @@
 		BAA0A6102E2F0FAE00033D82 /* LiteLLMStreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0A60F2E2F0F9C00033D82 /* LiteLLMStreamResponse.swift */; };
 		BAA0A6122E2F0FD500033D82 /* LiteLLMClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0A6112E2F0FCF00033D82 /* LiteLLMClientError.swift */; };
 		BAB39FB02E3A4584008188EF /* SummarizerNimbusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB39FAF2E3A457C008188EF /* SummarizerNimbusUtils.swift */; };
+		BABCC7E62E3BBE8100B2A38F /* LiteLLMConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABCC7E52E3BBE7C00B2A38F /* LiteLLMConfig.swift */; };
+		BABCC7E82E3BBE8E00B2A38F /* FoundationModelsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABCC7E72E3BBE8500B2A38F /* FoundationModelsConfig.swift */; };
+		BABCC7EC2E3BBF2B00B2A38F /* SummarizerInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABCC7EB2E3BBF2300B2A38F /* SummarizerInstructions.swift */; };
 		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
 		BAEB9CCB2E28136300F9F482 /* LiteLLMClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */; };
 		BAEB9EB22E2869C400F9F482 /* SummarizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */; };
@@ -9275,6 +9278,11 @@
 		B9D74DA988462CC14EF29D8B /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/Menu.strings; sourceTree = "<group>"; };
 		B9F246E38F80F257C59CEC4A /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		BA05405089CFDC6097258640 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
+		BA073A382E37D0BD00E27B36 /* SummarizerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerService.swift; sourceTree = "<group>"; };
+		BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerCheckerProtocol.swift; sourceTree = "<group>"; };
+		BA073A982E38171500E27B36 /* MockSummarizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizer.swift; sourceTree = "<group>"; };
+		BA073A9A2E38188700E27B36 /* SummarizerServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerServiceTests.swift; sourceTree = "<group>"; };
+		BA073A9C2E381E4F00E27B36 /* MockSummarizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizationChecker.swift; sourceTree = "<group>"; };
 		BA073B7A2E384FCA00E27B36 /* SSEDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEDataParser.swift; sourceTree = "<group>"; };
 		BA073B7C2E38502F00E27B36 /* SSEDataParserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEDataParserError.swift; sourceTree = "<group>"; };
 		BA073B802E38592500E27B36 /* SSEDataParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEDataParserTests.swift; sourceTree = "<group>"; };
@@ -9282,11 +9290,6 @@
 		BA073D3C2E3890B300E27B36 /* LiteLLMClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClientProtocol.swift; sourceTree = "<group>"; };
 		BA073D3E2E38921800E27B36 /* MockLiteLLMClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLiteLLMClient.swift; sourceTree = "<group>"; };
 		BA073D402E38932A00E27B36 /* LiteLLMSummarizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMSummarizerTests.swift; sourceTree = "<group>"; };
-		BA073A382E37D0BD00E27B36 /* SummarizerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerService.swift; sourceTree = "<group>"; };
-		BA073A942E3807F200E27B36 /* SummarizerCheckerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerCheckerProtocol.swift; sourceTree = "<group>"; };
-		BA073A982E38171500E27B36 /* MockSummarizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizer.swift; sourceTree = "<group>"; };
-		BA073A9A2E38188700E27B36 /* SummarizerServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerServiceTests.swift; sourceTree = "<group>"; };
-		BA073A9C2E381E4F00E27B36 /* MockSummarizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizationChecker.swift; sourceTree = "<group>"; };
 		BA1237B72DAE54BB00BB6333 /* NightModeAllFramesAtDocumentStart.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NightModeAllFramesAtDocumentStart.js; sourceTree = "<group>"; };
 		BA1237BB2DAE607B00BB6333 /* GenericSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSectionView.swift; sourceTree = "<group>"; };
 		BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericImageOption.swift; sourceTree = "<group>"; };
@@ -9323,6 +9326,9 @@
 		BAA0A6112E2F0FCF00033D82 /* LiteLLMClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClientError.swift; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		BAB39FAF2E3A457C008188EF /* SummarizerNimbusUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerNimbusUtils.swift; sourceTree = "<group>"; };
+		BABCC7E52E3BBE7C00B2A38F /* LiteLLMConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMConfig.swift; sourceTree = "<group>"; };
+		BABCC7E72E3BBE8500B2A38F /* FoundationModelsConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationModelsConfig.swift; sourceTree = "<group>"; };
+		BABCC7EB2E3BBF2300B2A38F /* SummarizerInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerInstructions.swift; sourceTree = "<group>"; };
 		BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTranslationModelsFetcher.swift; sourceTree = "<group>"; };
 		BAEB9CCA2E28135B00F9F482 /* LiteLLMClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteLLMClientTests.swift; sourceTree = "<group>"; };
 		BAEB9EB12E2869BE00F9F482 /* SummarizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizationChecker.swift; sourceTree = "<group>"; };
@@ -13839,6 +13845,9 @@
 		BAEB9EB02E28699F00F9F482 /* Summary */ = {
 			isa = PBXGroup;
 			children = (
+				BABCC7EB2E3BBF2300B2A38F /* SummarizerInstructions.swift */,
+				BABCC7E72E3BBE8500B2A38F /* FoundationModelsConfig.swift */,
+				BABCC7E52E3BBE7C00B2A38F /* LiteLLMConfig.swift */,
 				BAB39FAF2E3A457C008188EF /* SummarizerNimbusUtils.swift */,
 				BA073D3C2E3890B300E27B36 /* LiteLLMClientProtocol.swift */,
 				BA073D3A2E388FE900E27B36 /* LiteLLMSummarizer.swift */,
@@ -18038,6 +18047,7 @@
 				8C2447EA2DFADF6300BD2C91 /* OnboardingServiceDelegate.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearchParser.swift in Sources */,
 				8A13FA8D2AD834FA007527AB /* BackgroundTabLoader.swift in Sources */,
+				BABCC7E62E3BBE8100B2A38F /* LiteLLMConfig.swift in Sources */,
 				D04CD74B216CF86B004FF5B0 /* DevicePickerViewController.swift in Sources */,
 				C8DC90BD2A06699E0008832B /* MarkupNode.swift in Sources */,
 				E63ED8E11BFD25580097D08E /* PasswordManagerListViewController.swift in Sources */,
@@ -18152,6 +18162,7 @@
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */,
 				5AD3B67E2CF665B400AFA1FE /* UIApplicationInterface.swift in Sources */,
+				BABCC7EC2E3BBF2B00B2A38F /* SummarizerInstructions.swift in Sources */,
 				435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */,
 				0A44ABAC2D6DC2520034FA86 /* ThemedLearnMoreTableViewCell.swift in Sources */,
 				C855728429AEA3C300AF32B0 /* SurveySurfaceViewModel.swift in Sources */,
@@ -18551,6 +18562,7 @@
 				8A7653BF28A2C92600924ABF /* StoryStandardCellViewModel.swift in Sources */,
 				2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */,
 				2142B12D2D9F1284003AA82F /* ZoomPageBar.swift in Sources */,
+				BABCC7E82E3BBE8E00B2A38F /* FoundationModelsConfig.swift in Sources */,
 				0B8BF3752CA2EFC000E9812D /* EditBookmarkCell.swift in Sources */,
 				8A5D1CAE2A30D71A005AD35C /* ThemeSetting.swift in Sources */,
 				1BE7A4902C636AC800460798 /* URLSession+sharedMPTCP.swift in Sources */,
