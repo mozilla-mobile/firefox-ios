@@ -67,7 +67,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
         let addressAutofillSettingsVC = AddressAutofillSettingsView(
             windowUUID: windowUUID,
             toggleModel: viewModel.toggleModel,
-            addressListViewModel: viewModel.addressL    istViewModel)
+            addressListViewModel: viewModel.addressListViewModel)
         self.addressAutofillSettingsPageView = UIHostingController(rootView: addressAutofillSettingsVC)
 
         super.init(nibName: nil, bundle: nil)
