@@ -760,11 +760,18 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func didLoadTabPeek(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
-        profile.places.isBookmarked(url: tab?.url?.absoluteString ?? "") >>== { isBookmarked in
+        let urlString = tab?.url?.absoluteString ?? ""
+
+        profile.places.isBookmarked(url: urlString) { isBookmarkedResult in
+            guard case .success(let isBookmarked) = isBookmarkedResult else {
+                return
+            }
+
             var canBeSaved = true
             if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
                 canBeSaved = false
             }
+
             let browserProfile = self.profile as? BrowserProfile
             browserProfile?.tabs.getClientGUIDs { (result, error) in
                 let model = TabPeekModel(canTabBeSaved: canBeSaved,

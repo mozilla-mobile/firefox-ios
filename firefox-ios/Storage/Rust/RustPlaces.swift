@@ -50,6 +50,8 @@ public protocol BookmarksHandler {
         url: String?,
         completion: @escaping (Result<Void, any Error>) -> Void
     )
+
+    func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
 }
 
 public class RustPlaces: BookmarksHandler {
@@ -319,6 +321,16 @@ public class RustPlaces: BookmarksHandler {
             }
 
             return deferMaybe(!bookmarks.isEmpty)
+        }
+    }
+
+    public func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
+        isBookmarked(url: url).upon { result in
+            if let value = result.successValue {
+                completion(.success(value))
+            } else if let error = result.failureValue {
+                completion(.failure(error))
+            }
         }
     }
 
