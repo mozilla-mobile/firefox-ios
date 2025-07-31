@@ -82,7 +82,6 @@ final class TabScrollController: NSObject,
     private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
-    
 
     weak var delegate: TabScrollControllerDelegate?
 
@@ -101,10 +100,8 @@ final class TabScrollController: NSObject,
     private var headerTopOffset: CGFloat = 0 {
         didSet {
             headerTopConstraint?.update(offset: headerTopOffset)
-//            header?.superview?.setNeedsLayout()
         }
     }
-     //{ header?.frame.height ?? 0 }
 
     /// Calculates the header offset based on device type and toolbar visibility.
     ///
@@ -131,14 +128,12 @@ final class TabScrollController: NSObject,
     private var overKeyboardContainerOffset: CGFloat = 0 {
         didSet {
             overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
-//            overKeyboardContainer?.superview?.setNeedsLayout()
         }
     }
 
     private var bottomContainerOffset: CGFloat = 0 {
         didSet {
             bottomContainerConstraint?.update(offset: bottomContainerOffset)
-//            bottomContainer?.superview?.setNeedsLayout()
         }
     }
 
@@ -148,15 +143,24 @@ final class TabScrollController: NSObject,
     ///   - isMinimalAddressBarEnabled: Whether minimal address bar feature is enabled.
     ///   - isBottomSearchBar: Whether search bar is set to the bottom.
     /// - Returns: The calculated scroll height.
-    private func overKeyboardScrollHeight(overKeyboardContainer: BaseAlphaStackView,
-                                          safeAreaInsets: UIEdgeInsets?,
-                                          isMinimalAddressBarEnabled: Bool) -> CGFloat {
+    func overKeyboardScrollHeight(overKeyboardContainer: BaseAlphaStackView,
+                                  safeAreaInsets: UIEdgeInsets?,
+                                  isMinimalAddressBarEnabled: Bool) -> CGFloat {
         let containerHeight = overKeyboardContainer.frame.height
-        // Return full height if minimal address bar is disabled or not using bottom search bar
-        // or if zoom bar is not visible.
-        guard isMinimalAddressBarEnabled && isBottomSearchBar && zoomPageBar == nil else { return containerHeight }
+
+        let isReaderModeActive = tab?.url?.isReaderModeURL == true
+
+        // Return full height if conditions aren't met for adjustment.
+        let shouldAdjustHeight = isMinimalAddressBarEnabled
+                                  && isBottomSearchBar
+                                  && zoomPageBar == nil
+                                  && !isReaderModeActive
+
+        guard shouldAdjustHeight else { return containerHeight }
+
         // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
         let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
+
         let topInset = safeAreaInsets?.top ?? .zero
 
         return hasHomeIndicator ? .zero : containerHeight - topInset
@@ -177,19 +181,6 @@ final class TabScrollController: NSObject,
             overKeyboardScrollHeight = 0
         }
     }
-
-//    private var overKeyboardScrollHeight: CGFloat {
-//        return overKeyboardScrollHeight(
-//            with: UIWindow.keyWindow?.safeAreaInsets,
-//            isMinimalAddressBarEnabled: isMinimalAddressBarEnabled,
-//            isBottomSearchBar: isBottomSearchBar
-//        )
-//    }
-//
-//    private var bottomContainerScrollHeight: CGFloat {
-//        let bottomContainerHeight = bottomContainer?.frame.height ?? 0
-//        return bottomContainerHeight
-//    }
 
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
@@ -701,9 +692,6 @@ private extension TabScrollController {
             }
 
             overKeyboardContainerOffset = overKeyboardOffset
-
-//            header?.updateAlphaForSubviews(alpha)
-//            header?.superview?.layoutIfNeeded()
 
             zoomPageBar?.updateAlphaForSubviews(alpha)
             zoomPageBar?.superview?.layoutIfNeeded()
