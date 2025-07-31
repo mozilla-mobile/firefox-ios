@@ -9,7 +9,6 @@ import Common
 
 final class TabScrollController: NSObject,
                                  SearchBarLocationProvider,
-                                 Themeable,
                                  UIScrollViewDelegate {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
@@ -168,8 +167,6 @@ final class TabScrollController: NSObject,
     private var isAnimatingToolbar = false
     private var shouldRespondToScroll = false
 
-    var themeManager: any ThemeManager
-    var themeObserver: (any NSObjectProtocol)?
     var notificationCenter: any NotificationProtocol
     var currentWindowUUID: WindowUUID? {
         return windowUUID
@@ -191,15 +188,11 @@ final class TabScrollController: NSObject,
     deinit {
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
-        guard let themeObserver else { return }
-        notificationCenter.removeObserver(themeObserver)
     }
 
     init(windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
-        self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.logger = logger
@@ -217,11 +210,6 @@ final class TabScrollController: NSObject,
                                                selector: #selector(applicationWillTerminate(_:)),
                                                name: UIApplication.willTerminateNotification,
                                                object: nil)
-        // need to add this manually otherwise listenForThemeChanges(view) will retain the view in memory
-        // causing memory leaks
-        themeObserver = notificationCenter.addObserver(name: .ThemeDidChange, queue: .main) { [weak self] _ in
-            self?.applyTheme()
-        }
     }
 
     private func handleOnTabContentLoading() {
@@ -390,13 +378,6 @@ final class TabScrollController: NSObject,
         tab?.webView?.addPullRefresh { [weak self] in
             self?.reload()
         }
-        applyTheme()
-    }
-
-    // MARK: - Themeable
-
-    func applyTheme() {
-        tab?.webView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     // MARK: - UIScrollViewDelegate
