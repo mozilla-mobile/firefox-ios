@@ -9,6 +9,7 @@ final class MockNotificationCenter: NotificationProtocol, @unchecked Sendable {
     var postCalled: (NSNotification.Name) -> Void = { _ in }
     var postCallCount = 0
     var addObserverCallCount = 0
+    var addPublisherCount = 0
     var removeObserverCallCount = 0
     var observers: [NSNotification.Name] = []
 
@@ -47,6 +48,9 @@ final class MockNotificationCenter: NotificationProtocol, @unchecked Sendable {
     }
 
     func publisher(for name: Notification.Name, object: AnyObject?) -> NotificationCenter.Publisher {
+        addPublisherCount += 1
+        observers.append(name)
+
         // Temporary because we probably can't create a `NotificationCenter.Publisher`, possibly we can rewrite `Notifiable`
         // to abstract this logic a bit more if you need to test with this method.
         return NotificationCenter.default.publisher(for: Notification.Name("FakeNotification"))

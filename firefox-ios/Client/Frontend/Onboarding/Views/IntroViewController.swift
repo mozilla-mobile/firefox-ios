@@ -82,7 +82,6 @@ class IntroViewController: UIViewController,
 
         self.viewModel.setupViewControllerDelegates(with: self, for: windowUUID)
         setupLayout()
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {
