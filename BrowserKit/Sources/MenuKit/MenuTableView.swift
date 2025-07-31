@@ -9,6 +9,7 @@ import Common
 final class MenuTableView: UIView,
                            UITableViewDelegate,
                            UITableViewDataSource,
+                           UIScrollViewDelegate,
                            ThemeApplicable {
     private struct UX {
         static let topPadding: CGFloat = 24
@@ -22,6 +23,7 @@ final class MenuTableView: UIView,
     private var menuData: [MenuSection]
     private var theme: Theme?
     private var isBannerVisible = false
+    private var isHomepage = false
 
     public var tableViewContentSize: CGFloat {
         tableView.contentSize.height
@@ -33,6 +35,7 @@ final class MenuTableView: UIView,
         tableView.sectionFooterHeight = 0
         menuData = []
         super.init(frame: .zero)
+        tableView.delegate = self
         setupView()
     }
 
@@ -82,6 +85,7 @@ final class MenuTableView: UIView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
         if let menuSection = menuData.first(where: { $0.isHomepage }), menuSection.isHomepage {
+            self.isHomepage = true
             let topPadding = isBannerVisible ? UX.topPaddingWithBanner : UX.topPadding
             return section == 0 ? topPadding : UX.distanceBetweenSections
         }
@@ -190,6 +194,13 @@ final class MenuTableView: UIView,
             return headerView
         }
         return nil
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if isHomepage, !UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
+            scrollView.contentOffset = .zero
+            scrollView.showsVerticalScrollIndicator = false
+        }
     }
 
     func reloadTableView(with data: [MenuSection], isBannerVisible: Bool) {
