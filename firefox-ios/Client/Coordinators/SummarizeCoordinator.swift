@@ -80,11 +80,16 @@ class SummarizeCoordinator: BaseCoordinator {
     }
 
     private func showToSAlert() {
+        let descriptionText: String  = if SummarizerNimbusUtils.shared.isAppleSummarizerToolbarEndpointEnabled() {
+            String(format: String.Summarizer.ToSAlertMessageAppleLabel, AppName.shortName.rawValue)
+        } else {
+            String(format: String.Summarizer.ToSAlertMessageFirefoxLabel, AppName.shortName.rawValue)
+        }
+
         let tosViewModel = ToSBottomSheetViewModel(
             titleLabel: .Summarizer.ToSAlertTitleLabel,
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.tosTitleLabel,
-            descriptionText: String(format: String.Summarizer.ToSAlertMessageFirefoxLabel,
-                                    AppName.shortName.rawValue),
+            descriptionText: descriptionText,
             descriptionTextA11yId: AccessibilityIdentifiers.Summarizer.tosDescriptionText,
             linkButtonLabel: .Summarizer.ToSAlertLinkButtonLabel,
             linkButtonURL: URL(string: "https://www.mozilla.com"),

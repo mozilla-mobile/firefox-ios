@@ -93,6 +93,9 @@ public class SummarizeController: UIViewController, Themeable {
         static let closeButtonEdgePadding: CGFloat = 16.0
         static let tabSnapshotBringToFrontAnimationDuration: CGFloat = 0.25
         static let tabSnapshotCornerRadius: CGFloat = 32.0
+        static let tabSnapshotShadowRadius: CGFloat = 64.0
+        static let tabSnapshotShadowOffset = CGSize(width: 0.0, height: -10.0)
+        static let tabSnapshotShadowOpacity: Float = 1.0
     }
 
     private let viewModel: SummarizeViewModel
@@ -116,12 +119,22 @@ public class SummarizeController: UIViewController, Themeable {
     private let closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
+        } else {
+            $0.configuration = .filled()
+            $0.configuration?.cornerStyle = .capsule
         }
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        $0.alpha = 0.0
     }
     private let tabSnapshot: UIImageView = .build {
         $0.clipsToBounds = true
         $0.contentMode = .top
+    }
+    private let tabSnapshotContainer: UIView = .build {
+        $0.layer.masksToBounds = false
+        $0.layer.shadowOffset = UX.tabSnapshotShadowOffset
+        $0.layer.shadowOpacity = UX.tabSnapshotShadowOpacity
+        $0.layer.shadowRadius = UX.tabSnapshotShadowRadius
     }
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
     private lazy var gradient = AnimatedGradientOutlineView(frame: view.bounds)
@@ -162,7 +175,8 @@ public class SummarizeController: UIViewController, Themeable {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        setupSubviews()
+        configure()
+        setupLayout()
 
         applyTheme()
     }
@@ -170,16 +184,18 @@ public class SummarizeController: UIViewController, Themeable {
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let impact = UIImpactFeedbackGenerator(style: .medium)
+        impact.prepare()
+        impact.impactOccurred()
         gradient.startAnimating { [weak self] in
+            self?.closeButton.alpha = 1.0
             self?.view.backgroundColor = theme.colors.layerSummary
             self?.viewModel.onShouldShowTabSnapshot()
             self?.embedSnapshot()
         }
     }
 
-    private func setupSubviews() {
-        view.addSubviews(tabSnapshot, gradient, closeButton, summaryView, loadingLabel, errorView)
-
+    private func configure() {
         loadingLabel.text = viewModel.loadingLabel
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
@@ -191,7 +207,7 @@ public class SummarizeController: UIViewController, Themeable {
         closeButton.addAction(
             UIAction(handler: { [weak self] _ in
                 UIView.animate(withDuration: UX.panEndAnimationDuration) {
-                    self?.tabSnapshot.transform = .identity
+                    self?.tabSnapshotContainer.transform = .identity
                     self?.tabSnapshot.layer.cornerRadius = 0.0
                 } completion: { _ in
                     self?.dismiss(animated: true)
@@ -211,8 +227,13 @@ public class SummarizeController: UIViewController, Themeable {
         summaryView.attributedText = markdownParser.parse(dummyText)
         summaryView.accessibilityIdentifier = viewModel.summarizeTextViewA11yId
         summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
+    }
 
-        tabSnapshotTopConstraint = tabSnapshot.topAnchor.constraint(equalTo: view.topAnchor)
+    private func setupLayout() {
+        view.addSubviews(tabSnapshotContainer, gradient, closeButton, summaryView, loadingLabel, errorView)
+        tabSnapshotContainer.addSubview(tabSnapshot)
+        tabSnapshot.pinToSuperview()
+        tabSnapshotTopConstraint = tabSnapshotContainer.topAnchor.constraint(equalTo: view.topAnchor)
         tabSnapshotTopConstraint?.isActive = true
 
         let topHalfBoundGuide = UILayoutGuide()
@@ -250,9 +271,9 @@ public class SummarizeController: UIViewController, Themeable {
             summaryView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.summaryViewEdgePadding),
             summaryView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-            tabSnapshot.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tabSnapshot.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tabSnapshot.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tabSnapshotContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tabSnapshotContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tabSnapshotContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
@@ -269,9 +290,9 @@ public class SummarizeController: UIViewController, Themeable {
         transformAnimation.duration = UX.initialTransformAnimationDuration
         transformAnimation.timingFunction = UX.initialTransformTimingCurve
         transformAnimation.fillMode = .forwards
-        tabSnapshot.layer.add(transformAnimation, forKey: "translation")
-        tabSnapshot.transform = CGAffineTransform(translationX: 0.0,
-                                                  y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
+        tabSnapshotContainer.layer.add(transformAnimation, forKey: "translation")
+        tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0,
+                                                           y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
 
         gradient.animatePositionChange(animationCurve: UX.initialTransformTimingCurve)
 
@@ -287,20 +308,23 @@ public class SummarizeController: UIViewController, Themeable {
     }
 
     private func showSummary() {
+        let impact = UIImpactFeedbackGenerator(style: .medium)
+        impact.prepare()
+        impact.impactOccurred()
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        tabSnapshot.isUserInteractionEnabled = true
-        tabSnapshot.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan)))
+        tabSnapshotContainer.isUserInteractionEnabled = true
+        tabSnapshotContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan)))
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
            gradient.alpha = 0.0
-           tabSnapshot.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
+           tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
            loadingLabel.alpha = 0.0
            summaryView.alpha = 1.0
            view.backgroundColor = theme.colors.layer1
         } completion: { [weak self] _ in
-            guard let tabSnapshotView = self?.tabSnapshot else { return }
+            guard let tabSnapshotView = self?.tabSnapshotContainer else { return }
             UIView.animate(withDuration: UX.tabSnapshotBringToFrontAnimationDuration) {
                 self?.view.bringSubviewToFront(tabSnapshotView)
             }
@@ -332,7 +356,7 @@ public class SummarizeController: UIViewController, Themeable {
     }
 
     private func handleTabPanChanged(tabSnapshotTransform: CGAffineTransform, translationY: CGFloat) {
-        tabSnapshot.transform = tabSnapshotTransform.translatedBy(x: 0.0, y: translationY)
+        tabSnapshotContainer.transform = tabSnapshotTransform.translatedBy(x: 0.0, y: translationY)
         if translationY < 0 {
             let percentage = 1 - abs(translationY) / view.frame.height
             summaryView.alpha = percentage
@@ -346,7 +370,7 @@ public class SummarizeController: UIViewController, Themeable {
                                  || panVelocityY > UX.panCloseSummaryVelocityThreshold
         if shouldCloseSummary {
             UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
-                tabSnapshot.transform = .identity
+                tabSnapshotContainer.transform = .identity
                 tabSnapshot.layer.cornerRadius = 0.0
             } completion: { [weak self] _ in
                 self?.dismiss(animated: true)
@@ -355,7 +379,7 @@ public class SummarizeController: UIViewController, Themeable {
             UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
                 summaryView.alpha = 1.0
                 summaryView.transform = .identity
-                tabSnapshot.transform = tabSnapshotTransform
+                tabSnapshotContainer.transform = tabSnapshotTransform
             }
         }
     }
@@ -367,7 +391,12 @@ public class SummarizeController: UIViewController, Themeable {
         summaryView.textColor = theme.colors.textPrimary
         summaryView.backgroundColor = .clear
         view.backgroundColor = .clear
-        closeButton.tintColor = theme.colors.textPrimary
+        loadingLabel.textColor = theme.colors.textOnDark
+        tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
+        if #unavailable(iOS 26) {
+            closeButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
+        }
+        closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         gradient.applyTheme(theme: theme)
         errorView.applyTheme(theme: theme)
     }
