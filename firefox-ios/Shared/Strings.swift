@@ -2138,8 +2138,8 @@ extension String {
         public static let ToSAlertMessageAppleLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.AppleMessage.Label.v142",
             tableName: "Summarizer",
-            value: "%@ uses %@ to summarize pages.",
-            comment: "The message for the ToS alert that asks the user if they want to allow page summaries with Apple Intelligence. The first %@ is the app name (e.g Firefox), the second %@ is the AI model used to summarize (e.g Apple Intelligence)."
+            value: "%@ uses Apple Intelligence to summarize pages.",
+            comment: "The message for the ToS alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox)."
         )
         public static let ToSAlertAllowButtonLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.AllowButton.Label.v142",

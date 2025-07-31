@@ -28,14 +28,6 @@ public enum MozillaName: String, CustomStringConvertible {
     }
 }
 
-public enum AppleIntelligenceName: String, CustomStringConvertible {
-    case shortName = "Apple Intelligence"
-
-    public var description: String {
-        return self.rawValue
-    }
-}
-
 public enum KVOConstants: String {
     case loading
     case estimatedProgress

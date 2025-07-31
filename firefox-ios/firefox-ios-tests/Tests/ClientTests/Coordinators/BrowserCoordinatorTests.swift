@@ -30,7 +30,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         self.tabManager = mockTabManager
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
-        setIsSummarizerEnabled(false)
+        setIsAppleSummarizerEnabled(false)
+        setIsHostedSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         profile = MockProfile()
@@ -560,7 +561,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     // MARK: - Summarize Panel
     @MainActor
     func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() {
-        setIsSummarizerEnabled(true)
+        setIsHostedSummarizerEnabled(true)
         let subject = createSubject()
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: windowUUID)
         subject.browserViewController = browserViewController
@@ -573,7 +574,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     @MainActor
     func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
-        setIsSummarizerEnabled(true)
+        setIsHostedSummarizerEnabled(true)
         let subject = createSubject()
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
         subject.browserViewController = browserViewController
@@ -1310,9 +1311,15 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    private func setIsSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.summarizerFeature.with { _, _ in
-            return SummarizerFeature(enabled: isEnabled)
+    private func setIsAppleSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.appleSummarizerFeature.with { _, _ in
+            return AppleSummarizerFeature(enabled: isEnabled)
+        }
+    }
+
+    private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled)
         }
     }
 

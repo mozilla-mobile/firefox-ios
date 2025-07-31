@@ -9,7 +9,9 @@ import Common
 
 public struct ToSBottomSheetViewModel {
     let titleLabel: String
-    let descriptionLabel: String
+    let titleLabelA11yId: String
+    let descriptionText: String
+    let descriptionTextA11yId: String
     let linkButtonLabel: String
     let linkButtonURL: URL?
     let allowButtonTitle: String
@@ -24,7 +26,9 @@ public struct ToSBottomSheetViewModel {
 
     public init(
         titleLabel: String,
-        descriptionLabel: String,
+        titleLabelA11yId: String,
+        descriptionText: String,
+        descriptionTextA11yId: String,
         linkButtonLabel: String,
         linkButtonURL: URL?,
         allowButtonTitle: String,
@@ -38,7 +42,9 @@ public struct ToSBottomSheetViewModel {
         onDismiss: (() -> Void)?
     ) {
         self.titleLabel = titleLabel
-        self.descriptionLabel = descriptionLabel
+        self.titleLabelA11yId = titleLabelA11yId
+        self.descriptionText = descriptionText
+        self.descriptionTextA11yId = descriptionTextA11yId
         self.linkButtonLabel = linkButtonLabel
         self.linkButtonURL = linkButtonURL
         self.onAllowButtonPressed = onAllowButtonPressed
@@ -80,7 +86,7 @@ public class ToSBottomSheetViewController: UIViewController,
         $0.numberOfLines = 0
         $0.adjustsFontForContentSizeCategory = true
     }
-    private let descriptionLabel: UITextView = .build {
+    private let descriptionTextView: UITextView = .build {
         $0.textAlignment = .center
         $0.isEditable = false
         $0.isScrollEnabled = false
@@ -108,21 +114,19 @@ public class ToSBottomSheetViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     override public func viewDidLoad() {
         super.viewDidLoad()
         configure()
         setupLayout()
+        listenForThemeChange(view)
     }
 
     private func configure() {
         titleLabel.text = viewModel.titleLabel
         titleLabel.accessibilityLabel = viewModel.titleLabel
+        titleLabel.accessibilityIdentifier = viewModel.titleLabelA11yId
 
-        let description = NSMutableAttributedString(string: "\(viewModel.descriptionLabel) \(viewModel.linkButtonLabel)")
+        let description = NSMutableAttributedString(string: "\(viewModel.descriptionText) \(viewModel.linkButtonLabel)")
         let fullTextRange = NSRange(location: 0, length: description.length)
         let linkTextRange = (description.string as NSString).range(of: viewModel.linkButtonLabel)
         description.addAttributes(
@@ -137,8 +141,9 @@ public class ToSBottomSheetViewController: UIViewController,
         paragraphStyle.alignment = .center
         description.addAttribute(.paragraphStyle, value: paragraphStyle, range: fullTextRange)
 
-        descriptionLabel.delegate = self
-        descriptionLabel.attributedText = description
+        descriptionTextView.delegate = self
+        descriptionTextView.attributedText = description
+        descriptionTextView.accessibilityIdentifier = viewModel.descriptionTextA11yId
 
         allowButton.configure(
             viewModel: PrimaryRoundedButtonViewModel(
@@ -164,7 +169,7 @@ public class ToSBottomSheetViewController: UIViewController,
     }
 
     private func setupLayout() {
-        view.addSubviews(titleLabel, descriptionLabel, allowButton, cancelButton)
+        view.addSubviews(titleLabel, descriptionTextView, allowButton, cancelButton)
         titleLabelTopConstraint = titleLabel.topAnchor.constraint(equalTo: view.topAnchor,
                                                                   constant: UX.titleLabelTopPadding)
         titleLabelTopConstraint?.isActive = true
@@ -172,11 +177,11 @@ public class ToSBottomSheetViewController: UIViewController,
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
 
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.descriptionLabelTopPadding),
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
-            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
+            descriptionTextView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.descriptionLabelTopPadding),
+            descriptionTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
+            descriptionTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
 
-            allowButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: UX.allowButtonTopPadding),
+            allowButton.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: UX.allowButtonTopPadding),
             allowButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalPadding),
             allowButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalPadding),
 
@@ -222,8 +227,8 @@ public class ToSBottomSheetViewController: UIViewController,
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         titleLabel.textColor = theme.colors.textPrimary
-        descriptionLabel.textColor = theme.colors.textSecondary
-        descriptionLabel.backgroundColor = .clear
+        descriptionTextView.textColor = theme.colors.textSecondary
+        descriptionTextView.backgroundColor = .clear
         allowButton.applyTheme(theme: theme)
         cancelButton.applyTheme(theme: theme)
     }
