@@ -12,8 +12,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     /// Allows external objects to respond to swipe gesture state changes during tab switching.
     protocol Delegate: AnyObject {
         /// Called when the pan gesture state changes during a swipe operation.
-        /// This method is invoked continuously while the user is actively swiping between tabs.
-        func swipeGestureDidChange()
+        /// This method is invoked once when the user began swiping between tabs.
+        func swipeGestureDidBegin()
 
         /// Called when the pan gesture ends, either by completion, cancellation, or failure.
         /// This method is invoked once at the end of the swipe operation, regardless of outcome.
@@ -171,8 +171,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 )
             )
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
+            delegate?.swipeGestureDidBegin()
         case .changed:
-            delegate?.swipeGestureDidChange()
             if nextTab == nil, homepageScreenshot == nil {
                 let homepageScreenshotTool = homepageScreenshotToolProvider?()
                 homepageScreenshot = homepageScreenshotTool?.screenshot(bounds: CGRect(

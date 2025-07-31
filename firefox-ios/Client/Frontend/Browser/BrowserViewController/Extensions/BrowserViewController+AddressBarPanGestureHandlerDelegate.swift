@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 extension BrowserViewController: AddressBarPanGestureHandler.Delegate {
-    func swipeGestureDidChange() {
+    func swipeGestureDidBegin() {
         updateZoomPageBarVisibility(visible: false)
         readerModeBar?.isHidden = true
     }
