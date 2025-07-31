@@ -1,5 +1,5 @@
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Description.v108" = "Ορίζοντας το Firefox ως προεπιλεγμένο πρόγραμμα περιήγησης, υποστηρίζετε ένα ανοικτό και προσβάσιμο διαδίκτυο.";
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ορίζοντας το Firefox ως προεπιλεγμένη εφαρμογή περιήγησης, υποστηρίζετε ένα ανοικτό και προσβάσιμο διαδίκτυο.";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Προεπιλογή για ένα καλύτερο διαδίκτυο";
@@ -11,7 +11,7 @@
 "DefaultBrowserCard.Description" = "Ρύθμιση του Firefox για αυτόματο άνοιγμα συνδέσμων από ιστοτόπους, email και μηνύματα.";
 
 /* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.NextLevel.Description.v108" = "Επιλέξτε το Firefox ως το προεπιλεγμένο πρόγραμμα περιήγησής σας για αυτόματη ταχύτητα, ασφάλεια και ιδιωτικότητα.";
+"DefaultBrowserCard.NextLevel.Description.v108" = "Επιλέξτε το Firefox ως την προεπιλεγμένη εφαρμογή περιήγησής σας για περισσότερη ταχύτητα, ασφάλεια και ιδιωτικότητα.";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Βελτίωση καθημερινής περιήγησης";
@@ -23,7 +23,7 @@
 "DefaultBrowserCard.PeaceOfMind.Title.v108" = "Το Firefox προστατεύει το απόρρητό σας";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "Αλλαγή κύριου προγράμματος περιήγησης";
+"DefaultBrowserCard.Title" = "Αλλαγή κύριας εφαρμογής περιήγησης";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "Μετάβαση στις ρυθμίσεις";
@@ -32,13 +32,13 @@
 "DefaultBrowserOnboarding.Description1" = "1. Μεταβείτε στις Ρυθμίσεις";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. Πατήστε «Προεπιλεγμένο πρόγραμμα περιήγησης εφαρμογών»";
+"DefaultBrowserOnboarding.Description2" = "2. Πατήστε «Προεπιλεγμένη εφαρμογή περιήγησης»";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Επιλέξτε το Firefox";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "Προεπιλεγμένο πρόγραμμα περιήγησης εφαρμογών";
+"DefaultBrowserOnboarding.Screenshot" = "Προεπιλεγμένη εφαρμογή περιήγησης";
 
 /* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
 "DefaultBrowserOnboarding.SkipButton" = "Θα το κάνω αργότερα";

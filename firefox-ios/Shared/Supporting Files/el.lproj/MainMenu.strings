@@ -1,5 +1,5 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
-"ContextualHints.MainMenu.MenuRedesign.Body.v142" = "Σελιδοδείκτες, ιστορικό και ρυθμίσεις: όλα στη διάθεσή σας.";
+"ContextualHints.MainMenu.MenuRedesign.Body.v142" = "Σελιδοδείκτες, ιστορικό και ρυθμίσεις, όλα στη διάθεσή σας.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.MenuRedesign.Title.v142" = "Νέο μενού, χωρίς περιττά στοιχεία";
@@ -32,16 +32,16 @@
 "MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "Κλείσιμο";
 
 /* The accessibility label for the sign in button in the Main menu header view. */
-"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Συνδεθείτε για να συγχρονίστε κωδικούς πρόσβασης, καρτέλες και πολλά άλλα";
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Συνδεθείτε για να συγχρονίσετε συνθηματικά, καρτέλες και πολλά άλλα";
 
 /* On the main menu, when the user is signed in. */
 "MainMenu.Account.SignedIn.Description.v141" = "Διαχειριστείτε τα αντίγραφα ασφαλείας και τον συγχρονισμό";
 
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
-"MainMenu.Account.SignedOut.Description.v131" = "Συγχρονίστε κωδικούς πρόσβασης, καρτέλες και πολλά άλλα";
+"MainMenu.Account.SignedOut.Description.v131" = "Συγχρονίστε συνθηματικά, καρτέλες και πολλά άλλα";
 
 /* On the main menu, when the user is signed out. The description for the sign in action */
-"MainMenu.Account.SignedOut.Description.v141" = "Συγχρονίστε σελιδοδείκτες, κωδικούς πρόσβασης, καρτέλες και πολλά άλλα";
+"MainMenu.Account.SignedOut.Description.v141" = "Συγχρονίστε σελιδοδείκτες, συνθηματικά, καρτέλες και πολλά άλλα";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Σύνδεση";
@@ -83,7 +83,7 @@
 "MainMenu.PanelLinkSection.AccessibilityLabels.History.v132" = "Ιστορικό";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. */
-"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Κωδικοί πρόσβασης";
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Συνθηματικά";
 
 /* On the main menu, the title for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Σελιδοδείκτες";
@@ -95,7 +95,7 @@
 "MainMenu.PanelLinkSection.History.Title.v131" = "Ιστορικό";
 
 /* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
-"MainMenu.PanelLinkSection.Passwords.Title.v131" = "Κωδικοί πρόσβασης";
+"MainMenu.PanelLinkSection.Passwords.Title.v131" = "Συνθηματικά";
 
 /* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
 "MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Προσαρμογή αρχικής σελίδας";
@@ -134,7 +134,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Αρχική";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Προσθήκη στην αρχική οθόνη";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Προσθήκη στην οθόνη Αφετηρίας";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Συντόμευση";
@@ -173,7 +173,7 @@
 "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Αρχική";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
-"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Προσθήκη στην αρχική οθόνη";
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Προσθήκη στην οθόνη Αφετηρίας";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
 "MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Συντόμευση";
@@ -358,6 +358,9 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "Υπομενού αποθήκευσης";
 
+/* On the main menu, the accessibility label for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142" = "Σύνοψη σελίδας";
+
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Εναλλαγή στην έκδοση υπολογιστή";
 
@@ -390,6 +393,9 @@
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Αποθήκευση";
+
+/* On the main menu, the title for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.SummarizePage.Title.v142" = "Σύνοψη σελίδας";
 
 /* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "Εναλλαγή στην έκδοση υπολογιστή";

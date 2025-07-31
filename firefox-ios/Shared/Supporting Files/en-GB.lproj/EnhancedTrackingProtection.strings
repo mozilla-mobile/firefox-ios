@@ -44,7 +44,7 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Clear";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. %@ is the currently visited website. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Removing cookies and site data for %@ might log you out of web sites and clear shopping carts.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Removing cookies and site data for %@ might log you out of web sites and clear shopping baskets.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Clear cookies and site data";

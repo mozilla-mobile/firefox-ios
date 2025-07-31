@@ -10,6 +10,9 @@
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.AccessibilityLabels.CloseButton.142" = "Mdel umuɣ";
 
+/* The accessibility label for the dismiss button, for header banner, on top of the menu. */
+"MainMenu.AccessibilityLabels.DismissBanner.142" = "Mdel aɣarrac";
+
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
 "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Asenɣes n tafat";
 
@@ -51,6 +54,9 @@
 
 /* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
 "MainMenu.HeaderBanner.Subtitle.v142" = "Kra n tsinin kan. Beddel sya ɣer da";
+
+/* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
+"MainMenu.HeaderBanner.Title.v142" = "Err %@ d amezwer";
 
 /* On the main menu, a title for a label that indicate the current option/action state is off. */
 "MainMenu.Off.Title.v141" = "Yensa";
