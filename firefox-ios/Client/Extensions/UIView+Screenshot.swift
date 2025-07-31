@@ -5,8 +5,10 @@
 import UIKit
 
 protocol Screenshotable {
+    @MainActor
     func screenshot(quality: CGFloat) -> UIImage?
 
+    @MainActor
     func screenshot(bounds: CGRect) -> UIImage?
 }
 
