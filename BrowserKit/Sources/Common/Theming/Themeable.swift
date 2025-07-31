@@ -6,8 +6,7 @@ import UIKit
 import Combine
 
 public protocol Themeable: ThemeUUIDIdentifiable {
-    /// Whether we should override private theme whether we want to force the theme to be private or not private. Going
-    /// against the basic theme set up.
+    /// Whether we should override / force the theme to be private or not private. Goes against the basic theme set up.
     nonisolated var shouldUsePrivateOverride: Bool { get }
 
     /// Determines if we want views to be in private theme or not.
