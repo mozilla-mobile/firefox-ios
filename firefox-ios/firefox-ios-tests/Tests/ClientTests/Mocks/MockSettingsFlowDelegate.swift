@@ -13,7 +13,6 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
                                 AboutSettingsDelegate,
                                 SupportSettingsDelegate,
                                 BrowsingSettingsDelegate {
-
     var showDevicePassCodeCalled = 0
     var showCreditCardSettingsCalled = 0
     var didFinishShowingSettingsCalled = 0
@@ -71,9 +70,9 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedBrowsing() {}
 
-    func pressedSummarize() { }
+    func pressedSummarize() {}
 
-    func pressedAutoFillsPasswords() { }
+    func pressedAutoFillsPasswords() {}
 
     // MARK: BrowsingSettingsDelegate
 
