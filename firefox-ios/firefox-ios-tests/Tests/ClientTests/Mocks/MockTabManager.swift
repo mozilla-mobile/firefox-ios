@@ -91,7 +91,7 @@ class MockTabManager: TabManager {
 
     func removeTabs(_ tabs: [Tab]) {}
 
-    func removeTab(_ tabUUID: Client.TabUUID, inGroup: Client.TabRemovalGroup?) async {}
+    func removeTab(_ tabUUID: TabUUID, inGroup: TabRemovalGroup?) async {}
 
     func removeAllTabs(isPrivateMode: Bool) async {}
 
