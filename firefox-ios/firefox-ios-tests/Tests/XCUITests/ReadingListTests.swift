@@ -198,7 +198,9 @@ class ReadingListTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306999
-    func testAddToReadingListFromBrowserTabMenu() {
+    func testAddToReadingListFromBrowserTabMenu() throws {
+        throw XCTSkip("Skipping. The option add to reading list is not available on the new menu")
+        /*
         app.launch()
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
@@ -214,6 +216,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
+         */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307000
