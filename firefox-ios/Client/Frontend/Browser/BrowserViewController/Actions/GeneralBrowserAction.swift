@@ -54,6 +54,7 @@ enum GeneralBrowserActionType: ActionType {
     case showReloadLongPressAction
     case showMenu
     case showLocationViewLongPressActionSheet
+    case showSummarizer
     case stopLoadingWebsite
     case reloadWebsite
     case reloadWebsiteNoCache

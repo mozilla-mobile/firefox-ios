@@ -254,6 +254,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.clearData)
             store.dispatchLegacy(action)
+        case .summarizer:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showSummarizer)
+            store.dispatchLegacy(action)
         default:
             break
         }
@@ -296,6 +300,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .readerMode:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.addToReadingListLongPressAction)
+            store.dispatchLegacy(action)
+        case .summarizer:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showReaderMode)
             store.dispatchLegacy(action)
         default:
             break
