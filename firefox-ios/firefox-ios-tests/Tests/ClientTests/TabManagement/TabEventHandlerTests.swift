@@ -87,7 +87,7 @@ class TabEventHandlerTests: XCTestCase {
     }
 }
 
-class DummyHandler: TabEventHandler {
+final class DummyHandler: TabEventHandler, @unchecked Sendable {
     // This is not how this should be written in production — the handler shouldn't be keeping track
     // of individual tab state.
     var isFocused: Bool?
