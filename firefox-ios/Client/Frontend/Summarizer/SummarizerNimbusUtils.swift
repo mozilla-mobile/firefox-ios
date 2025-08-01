@@ -38,7 +38,7 @@ struct SummarizerNimbusUtils: FeatureFlaggable {
         #endif
     }
 
-    private func isHostedSummarizerEnabled() -> Bool {
+    func isHostedSummarizerEnabled() -> Bool {
         return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
     }
 
