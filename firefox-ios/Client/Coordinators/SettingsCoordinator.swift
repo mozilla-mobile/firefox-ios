@@ -433,7 +433,11 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedSummarize() {
-        /// TODO: FXIOS-12645 Add Summarize Settings View Controller
+        let viewController = SummarizeSettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID
+        )
+        router.push(viewController)
     }
 
     // MARK: AccountSettingsDelegate
