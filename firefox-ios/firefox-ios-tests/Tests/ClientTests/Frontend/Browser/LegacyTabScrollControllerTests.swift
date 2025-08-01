@@ -9,7 +9,7 @@ import Shared
 
 @testable import Client
 
-final class TabScrollControllerTests: XCTestCase {
+final class LegacyTabScrollControllerTests: XCTestCase {
     var tab: Tab!
     var mockProfile: MockProfile!
     var mockGesture: UIPanGestureRecognizerMock!
@@ -17,6 +17,7 @@ final class TabScrollControllerTests: XCTestCase {
 
     var header: BaseAlphaStackView = .build()
     var overKeyboardContainer: BaseAlphaStackView = .build()
+    var bottomContainer: BaseAlphaStackView = .build()
 
     override func setUp() {
         super.setUp()
@@ -66,7 +67,6 @@ final class TabScrollControllerTests: XCTestCase {
         // Force call to showToolbars like clicking on top bar area
         subject.showToolbars(animated: true)
         XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.visible)
-        XCTAssertEqual(subject.header?.alpha, 1)
     }
 
     func testScrollDidEndDragging_ScrollingUp() {
@@ -79,7 +79,6 @@ final class TabScrollControllerTests: XCTestCase {
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
 
         XCTAssertEqual(subject.toolbarState, LegacyTabScrollController.ToolbarState.visible)
-        XCTAssertEqual(subject.header?.alpha, 1)
     }
 
     func testScrollDidEndDragging_ScrollingDown() {
@@ -143,7 +142,6 @@ final class TabScrollControllerTests: XCTestCase {
 
         let containerHeight: CGFloat = 100
         overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
 
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
         let result = subject.overKeyboardScrollHeight(
@@ -158,10 +156,6 @@ final class TabScrollControllerTests: XCTestCase {
     func testOverKeyboardScrollHeight_minimalEnabledWithHomeIndicator_returnsZero() {
         let subject = createSubject()
         setupTabScroll(with: subject)
-
-        let containerHeight: CGFloat = 100
-        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
 
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
         let result = subject.overKeyboardScrollHeight(
@@ -179,8 +173,6 @@ final class TabScrollControllerTests: XCTestCase {
 
         let containerHeight: CGFloat = 100
         let topInset: CGFloat = 20
-        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
 
         let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         let result = subject.overKeyboardScrollHeight(
@@ -196,8 +188,7 @@ final class TabScrollControllerTests: XCTestCase {
     func testOverKeyboardScrollHeight_nilContainer_returnsZero() {
         let subject = createSubject()
         setupTabScroll(with: subject)
-
-        subject.overKeyboardContainer = nil
+        setupToolbarViews(with: subject, overKeyboardContainer: nil)
 
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
         let result = subject.overKeyboardScrollHeight(
@@ -214,8 +205,6 @@ final class TabScrollControllerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let containerHeight: CGFloat = 100
-        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
 
         let result = subject.overKeyboardScrollHeight(
             with: nil,
@@ -231,9 +220,6 @@ final class TabScrollControllerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let containerHeight: CGFloat = 100
-        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
-
         let result = subject.overKeyboardScrollHeight(
             with: UIEdgeInsets.zero,
             isMinimalAddressBarEnabled: true,
@@ -249,9 +235,6 @@ final class TabScrollControllerTests: XCTestCase {
 
         let containerHeight: CGFloat = 100
         let topInset: CGFloat = 20
-
-        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
 
         let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         let result = subject.overKeyboardScrollHeight(
@@ -271,7 +254,6 @@ final class TabScrollControllerTests: XCTestCase {
         let topInset: CGFloat = 20
 
         overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
         let zoomPageBar = ZoomPageBar(zoomManager: ZoomPageManager(windowUUID: windowUUID))
         subject.zoomPageBar = zoomPageBar
 
@@ -292,8 +274,6 @@ final class TabScrollControllerTests: XCTestCase {
 
         let containerHeight: CGFloat = 100
         let safeAreaInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
 
         let result = subject.overKeyboardScrollHeight(
             with: safeAreaInsets,
@@ -308,10 +288,7 @@ final class TabScrollControllerTests: XCTestCase {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
-        let containerHeight: CGFloat = 100
         let safeAreaInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
-        overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
-        subject.overKeyboardContainer = overKeyboardContainer
 
         let result = subject.overKeyboardScrollHeight(
             with: safeAreaInsets,
@@ -329,12 +306,21 @@ final class TabScrollControllerTests: XCTestCase {
         tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.delegate = subject
         subject.tab = tab
-        subject.header = header
     }
 
     private func createSubject() -> LegacyTabScrollController {
         let subject = LegacyTabScrollController(windowUUID: .XCTestDefaultUUID)
+        setupToolbarViews(with: subject, overKeyboardContainer: overKeyboardContainer)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setupToolbarViews(with subject: LegacyTabScrollController,
+                                   overKeyboardContainer: BaseAlphaStackView?) {
+        let containerHeight: CGFloat = 100
+        overKeyboardContainer?.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
+        subject.configureToolbarViews(overKeyboardContainer: overKeyboardContainer,
+                                      bottomContainer: bottomContainer,
+                                      headerContainer: header)
     }
 }
