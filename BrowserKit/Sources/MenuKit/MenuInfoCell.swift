@@ -6,7 +6,7 @@ import Foundation
 import Common
 import UIKit
 
-final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
+public final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 16
         static let horizontalMargin: CGFloat = 24
@@ -63,12 +63,12 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         infoLabelView.layer.cornerRadius = infoLabelView.frame.height / 2
     }
 
-    override func prepareForReuse() {
+    override public func prepareForReuse() {
         super.prepareForReuse()
         infoLabelView.text = nil
     }
@@ -110,7 +110,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     // MARK: - Theme Applicable
-    func applyTheme(theme: Theme) {
+    public func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
         if model.isActive {

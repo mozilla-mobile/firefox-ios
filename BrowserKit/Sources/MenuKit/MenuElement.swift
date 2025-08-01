@@ -5,7 +5,7 @@
 import UIKit
 
 public struct MenuElement: Equatable {
-    let title: String
+    public let title: String
     let description: String?
     let iconName: String
     let iconImage: UIImage?

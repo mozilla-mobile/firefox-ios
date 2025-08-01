@@ -6,11 +6,11 @@ import Foundation
 import UIKit
 import Common
 
-final class MenuTableView: UIView,
-                           UITableViewDelegate,
-                           UITableViewDataSource,
-                           UIScrollViewDelegate,
-                           ThemeApplicable {
+public final class MenuTableView: UIView,
+                                  UITableViewDelegate,
+                                  UITableViewDataSource,
+                                  UIScrollViewDelegate,
+                                  ThemeApplicable {
     private struct UX {
         static let topPadding: CGFloat = 24
         static let menuSiteTopPadding: CGFloat = 12
@@ -19,7 +19,7 @@ final class MenuTableView: UIView,
         static let distanceBetweenSections: CGFloat = 16
     }
 
-    private(set) var tableView: UITableView
+    public var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
     private var isBannerVisible = false
@@ -76,11 +76,11 @@ final class MenuTableView: UIView,
     }
 
     // MARK: - UITableView Methods
-    func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return menuData.count
     }
 
-    func tableView(
+    public func tableView(
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
@@ -92,7 +92,7 @@ final class MenuTableView: UIView,
         return section == 0 ? UX.menuSiteTopPadding : UX.distanceBetweenSections
     }
 
-    func tableView(
+    public func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
@@ -105,7 +105,7 @@ final class MenuTableView: UIView,
         }
     }
 
-    func tableView(
+    public func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
@@ -169,7 +169,7 @@ final class MenuTableView: UIView,
         return cell
     }
 
-    func tableView(
+    public func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
@@ -184,7 +184,7 @@ final class MenuTableView: UIView,
         }
     }
 
-    func tableView(
+    public func tableView(
         _ tableView: UITableView,
         viewForHeaderInSection section: Int
     ) -> UIView? {
@@ -196,14 +196,14 @@ final class MenuTableView: UIView,
         return nil
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if isHomepage, !UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
             scrollView.contentOffset = .zero
             scrollView.showsVerticalScrollIndicator = false
         }
     }
 
-    func reloadTableView(with data: [MenuSection], isBannerVisible: Bool) {
+    public func reloadTableView(with data: [MenuSection], isBannerVisible: Bool) {
         menuData = data
         self.isBannerVisible = isBannerVisible
         tableView.reloadData()
@@ -215,7 +215,7 @@ final class MenuTableView: UIView,
     }
 
     // MARK: - Theme Applicable
-    func applyTheme(theme: Theme) {
+    public func applyTheme(theme: Theme) {
         self.theme = theme
         backgroundColor = .clear
         tableView.backgroundColor = .clear
