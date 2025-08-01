@@ -192,6 +192,7 @@ struct AccessibilityIdentifiers {
         }
 
         struct MoreButtons {
+            static let shortcuts = "shortcutsSectionMoreButton"
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
