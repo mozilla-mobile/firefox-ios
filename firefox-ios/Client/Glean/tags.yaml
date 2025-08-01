@@ -18,6 +18,9 @@ $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
 Addresses:
   description: Corresponds to the collection, storage, and autofilling of addresses.
 
+Ai:
+  description: Corresponds to features leveraging artificial intelligence, such as web content summarization and translation.
+
 AppIcon:
   description: Corresponds to interactions with the app icon on the iOS home screen (e.g. long press menu).
 
