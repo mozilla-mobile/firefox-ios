@@ -37,15 +37,21 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
     convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.init(frame: frame)
         self.notificationCenter = notificationCenter
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.header
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
         setupLayout()
     }
 

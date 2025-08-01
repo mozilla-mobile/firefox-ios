@@ -59,7 +59,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
 
     private var viewModel: ReaderModeStyleViewModel
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -75,7 +75,11 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
 
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -90,8 +94,9 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
         updateFontSizeButtons()
         updateFontTypeButtons()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+
         adjustLayoutForA11ySizeCategory()
     }
 

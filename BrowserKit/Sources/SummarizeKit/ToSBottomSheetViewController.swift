@@ -73,7 +73,7 @@ public class ToSBottomSheetViewController: UIViewController,
         static let cancelButtonBottomPadding: CGFloat = 16.0
     }
     public var themeManager: any Common.ThemeManager
-    public var themeObserver: (any NSObjectProtocol)?
+    public var themeListenerCancellable: Any?
     public var notificationCenter: any Common.NotificationProtocol
 
     public var currentWindowUUID: Common.WindowUUID?
@@ -107,7 +107,12 @@ public class ToSBottomSheetViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -118,7 +123,9 @@ public class ToSBottomSheetViewController: UIViewController,
         super.viewDidLoad()
         configure()
         setupLayout()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     private func configure() {

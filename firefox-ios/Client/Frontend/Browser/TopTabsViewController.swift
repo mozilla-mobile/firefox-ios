@@ -46,7 +46,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TopTabCell.cellIdentifier
     var profile: Profile
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
     var windowUUID: WindowUUID { tabManager.windowUUID }
@@ -166,11 +166,15 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
         setupLayout()
 
-        setupNotifications(forObserver: self,
-                           observing: [.TabsTrayDidClose])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.TabsTrayDidClose]
+        )
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links onto the "New Tab" button.

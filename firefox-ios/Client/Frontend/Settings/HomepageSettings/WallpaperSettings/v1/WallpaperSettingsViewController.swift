@@ -17,7 +17,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     private var viewModel: WallpaperSettingsViewModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     private var logger: Logger
     weak var settingsDelegate: SettingsDelegate?
     let windowUUID: WindowUUID
@@ -66,10 +66,14 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
-        setupNotifications(forObserver: self,
-                           observing: [UIContentSizeCategory.didChangeNotification])
-        listenForThemeChange(view)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

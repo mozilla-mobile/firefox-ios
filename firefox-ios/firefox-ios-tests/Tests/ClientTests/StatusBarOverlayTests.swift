@@ -8,6 +8,7 @@ import Common
 import Shared
 import XCTest
 
+@MainActor
 class StatusBarOverlayTests: XCTestCase {
     private var profile: MockProfile!
     private var wallpaperManager: WallpaperManagerMock!

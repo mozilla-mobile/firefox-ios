@@ -7,7 +7,8 @@ import Common
 
 @testable import Client
 
-class MockOnboardinCardDelegateController: UIViewController,
+@MainActor
+class MockOnboardingCardDelegateController: UIViewController,
                                            OnboardingCardDelegate,
                                            OnboardingViewControllerProtocol,
                                            Themeable {
@@ -24,7 +25,7 @@ class MockOnboardinCardDelegateController: UIViewController,
             with: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)))
     var didFinishFlow: (() -> Void)?
     var themeManager: ThemeManager = AppContainer.shared.resolve()
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     func applyTheme() { }
 

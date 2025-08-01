@@ -37,7 +37,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     private let deepLinkParams: FxALaunchParams
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -168,11 +168,12 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
         title = .Settings.Sync.SignInView.Title
         accessibilityLabel = "FxASingin.navBar"
-
         setupLayout()
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {

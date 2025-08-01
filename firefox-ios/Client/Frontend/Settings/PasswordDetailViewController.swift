@@ -15,7 +15,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     }
 
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -57,6 +57,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
+        // FIXME: FXIOS-12995 Use Notifiable
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(dismissAlertController),
                                                name: UIApplication.didEnterBackgroundNotification,
@@ -88,8 +89,8 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         tableView.estimatedRowHeight = 44.0
         tableView.separatorInset = .zero
 
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
-        listenForThemeChange(view)
     }
 
     override func viewWillAppear(_ animated: Bool) {

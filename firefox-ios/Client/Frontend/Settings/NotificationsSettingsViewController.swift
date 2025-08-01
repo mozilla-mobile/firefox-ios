@@ -161,7 +161,11 @@ final class NotificationsSettingsViewController: SettingsTableViewController, Fe
 
 extension NotificationsSettingsViewController: Notifiable {
     func addObservers() {
-        setupNotifications(forObserver: self, observing: [UIApplication.willEnterForegroundNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIApplication.willEnterForegroundNotification]
+        )
     }
 
     func handleNotifications(_ notification: Notification) {

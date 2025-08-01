@@ -41,7 +41,7 @@ class BackForwardListViewController: UIViewController,
 
     // MARK: - Theme
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
     lazy var tableView: UITableView = .build { tableView in
@@ -96,14 +96,18 @@ class BackForwardListViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChange(view)
         setupLayout()
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+
         scrollTableViewToIndex(currentRow)
         setupDismissTap()
 
-        setupNotifications(forObserver: self,
-                           observing: [UIAccessibility.reduceTransparencyStatusDidChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIAccessibility.reduceTransparencyStatusDidChangeNotification]
+        )
     }
 
     private func setupLayout() {

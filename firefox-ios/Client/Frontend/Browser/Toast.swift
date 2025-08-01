@@ -43,7 +43,11 @@ class Toast: UIView, ThemeApplicable, Notifiable {
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
         adjustLayoutForA11ySizeCategory()
     }
 

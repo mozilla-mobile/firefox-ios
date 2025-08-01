@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class IntroViewControllerTests: XCTestCase {
     var mockNotificationCenter: MockNotificationCenter!
 
@@ -37,11 +38,8 @@ class IntroViewControllerTests: XCTestCase {
     func testSubjectRegistersForNotification() {
         XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 0)
         let subject = createSubject()
-
-        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 1)
         subject.registerForNotification()
-
-        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 2)
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 1)
     }
 
     func testViewMoving_MovesToNextCard_ifSetDefaultBrowserCard() {

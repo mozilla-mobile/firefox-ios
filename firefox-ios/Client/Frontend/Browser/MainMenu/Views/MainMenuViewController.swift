@@ -36,7 +36,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     weak var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
@@ -99,8 +99,11 @@ class MainMenuViewController: UIViewController,
 
         viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
                                                   with: profile)
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -132,7 +135,10 @@ class MainMenuViewController: UIViewController,
         setupMenuOrientation()
 
         setupTableView()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
+
         store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,

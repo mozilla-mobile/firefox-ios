@@ -21,7 +21,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -133,8 +133,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
 
         startLoading()
 
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
-        listenForThemeChange(view)
     }
 
     func makeWebView() -> WKWebView {

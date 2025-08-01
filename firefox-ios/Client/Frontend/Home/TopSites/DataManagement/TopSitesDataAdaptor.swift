@@ -65,18 +65,17 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         self.searchEnginesManager = searchEnginesManager
         self.dispatchGroup = dispatchGroup
 
-        setupNotifications(forObserver: self,
-                           observing: [.FirefoxAccountChanged,
-                                       .PrivateDataClearedHistory,
-                                       .ProfileDidFinishSyncing,
-                                       .TopSitesUpdated,
-                                       .DefaultSearchEngineUpdated])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.FirefoxAccountChanged,
+                        .PrivateDataClearedHistory,
+                        .ProfileDidFinishSyncing,
+                        .TopSitesUpdated,
+                        .DefaultSearchEngineUpdated]
+        )
 
         loadTopSitesData()
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     func getTopSitesData() -> [TopSite] {

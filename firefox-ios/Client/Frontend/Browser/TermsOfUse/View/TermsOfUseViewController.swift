@@ -42,7 +42,7 @@ final class TermsOfUseViewController: UIViewController,
     weak var coordinator: TermsOfUseCoordinatorDelegate?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     private let strings = TermsOfUseStrings()
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -139,8 +139,10 @@ final class TermsOfUseViewController: UIViewController,
         UIAccessibility.post(notification: .announcement, argument:
                             TermsOfUseStrings.termsOfUseHasOpenedNotification)
         setupUI()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+
         subscribeToRedux()
     }
 

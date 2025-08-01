@@ -18,7 +18,7 @@ class EditBookmarkViewController: UIViewController,
 
     var currentWindowUUID: WindowUUID?
     var themeManager: any ThemeManager
-    var themeObserver: (any NSObjectProtocol)?
+    var themeListenerCancellable: Any?
     var notificationCenter: any NotificationProtocol
     private var theme: any Theme {
         return themeManager.getCurrentTheme(for: currentWindowUUID)
@@ -67,7 +67,6 @@ class EditBookmarkViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange(view)
     }
 
     required init?(coder: NSCoder) {
@@ -90,6 +89,9 @@ class EditBookmarkViewController: UIViewController,
 
         dataSource.defaultRowAnimation = .fade
         reloadTableViewData()
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {

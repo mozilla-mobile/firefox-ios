@@ -160,7 +160,8 @@ class TabManagerImplementation: NSObject,
 
         GlobalTabEventHandlers.configure(with: profile)
 
-        setupNotifications(
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
             forObserver: self,
             observing: [
                 UIApplication.willResignActiveNotification,

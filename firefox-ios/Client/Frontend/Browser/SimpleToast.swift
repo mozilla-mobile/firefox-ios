@@ -5,6 +5,7 @@
 import Common
 import Foundation
 
+@MainActor
 struct SimpleToast: ThemeApplicable {
     struct UX {
         static let labelPadding: CGFloat = 16

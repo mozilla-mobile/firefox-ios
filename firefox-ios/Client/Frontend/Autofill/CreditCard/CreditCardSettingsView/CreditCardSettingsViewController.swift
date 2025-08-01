@@ -11,7 +11,7 @@ import struct MozillaAppServices.CreditCard
 
 class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePresentationControllerDelegate, Themeable {
     var viewModel: CreditCardSettingsViewModel
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
 
@@ -75,7 +75,8 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
@@ -151,10 +152,6 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
     func applyTheme() {
         let theme = currentTheme()
         view.backgroundColor = theme.colors.layer1
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Private helpers

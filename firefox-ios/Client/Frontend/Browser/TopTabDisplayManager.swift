@@ -192,7 +192,11 @@ class TopTabDisplayManager: NSObject {
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper)
 
         super.init()
-        setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DidTapUndoCloseAllTabToast]
+        )
         tabManager.addDelegate(self)
         self.dataStore.removeAll()
         getTabs { [weak self] tabsToDisplay in
@@ -358,10 +362,6 @@ class TopTabDisplayManager: NSObject {
     ) {
         let eventValue = TelemetryWrapper.EventValue.topTabs
         TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 }
 

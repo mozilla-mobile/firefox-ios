@@ -104,7 +104,11 @@ public class BrowserAddressToolbar: UIView,
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
         adjustHeightConstraintForA11ySizeCategory()
         setupDragInteraction()
     }

@@ -71,8 +71,11 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         addSubview(stackView)
 
         setupLayout()
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
 
     private func setupLayout() {
@@ -100,10 +103,6 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Helper functions
