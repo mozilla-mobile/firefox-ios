@@ -10,7 +10,8 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
     init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
         super.init(style: .grouped, windowUUID: windowUUID)
-        self.title = .Settings.Summarize.Title
+        // TODO: FXIOS-12992 - Add Strings when ready
+        self.title = "Summarize Content"
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -26,12 +27,14 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
     }
 
     private var summarizeContentSettingSection: SettingSection {
+        // TODO: FXIOS-12992 - Add Strings when ready
+        let titleText = "Enable Summarize Content"
         let summarizeContentSetting = BoolSetting(
             prefs: prefs,
             theme: theme,
             prefKey: PrefsKeys.Summarizer.summarizeContentFeature,
             defaultValue: true,
-            titleText: .Settings.Summarize.SummarizeContentTitle
+            titleText: titleText
         )
         return SettingSection(title: nil, children: [summarizeContentSetting])
     }

@@ -20,9 +20,11 @@ class SummarizeSetting: Setting {
          settingsDelegate: GeneralSettingsDelegate?) {
         self.settingsDelegate = settingsDelegate
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
+        // TODO: FXIOS-12992 - Add Strings when ready
+        let settingTitle = "Summarize Content"
         super.init(
             title: NSAttributedString(
-                string: .Settings.Summarize.Title,
+                string: settingTitle,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
