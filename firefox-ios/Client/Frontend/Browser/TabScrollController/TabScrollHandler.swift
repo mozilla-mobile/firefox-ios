@@ -7,7 +7,7 @@ import SnapKit
 import Shared
 import Common
 
-protocol TabScrollControllerDelegate: AnyObject {
+protocol TabScrollHandlerDelegate: AnyObject {
     func startAnimatingToolbar(state: ToolbarState)
     func showToolbar()
     func hideToolbar()
