@@ -30,7 +30,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             return SummarizerService(summarizer: llmSummarizer, maxWords: LiteLLMConfig.maxWords)
         }
         #else
-        guard !isHostedSummarizerEnabled,
+        guard isHostedSummarizerEnabled,
               let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
               let model = LiteLLMConfig.apiModel,
               let key = LiteLLMConfig.apiKey else { return nil }
