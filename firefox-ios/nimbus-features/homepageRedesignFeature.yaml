@@ -29,13 +29,13 @@ features:
       - channel: beta
         value:
           enabled: false
-          search-bar: false
+          search-bar: true
           shortcuts-library: false
-          stories-redesign: false
+          stories-redesign: true
     
       - channel: developer
         value:
           enabled: false
-          search-bar: false
+          search-bar: true
           shortcuts-library: false
-          stories-redesign: false
+          stories-redesign: true
