@@ -825,7 +825,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        guard motion == .motionShake else { return }
+        guard motion == .motionShake, SummarizerNimbusUtils(profile: profile).isShakeEnabled else { return }
         navigationHandler?.showSummarizePanel()
     }
 
