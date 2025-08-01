@@ -5,13 +5,15 @@
 import WebKit
 import Foundation
 
-class SummarizationChecker: SummarizationCheckerProtocol {
+public class SummarizationChecker: SummarizationCheckerProtocol {
+    public init() {}
+
     /// Calls `checkSummarization(maxWords:)` in the web page and returns a typed result.
     /// - Parameters:
     ///   - webView: The WKWebView instance with the JS already injected.
     ///   - maxWords: The maximum allowed words before summarization is disallowed.
     /// - Returns: A `SummarizationCheckResult`, even on error.
-    func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
+    public func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
         let jsCall = "return await window.__firefox__.Summarizer.checkSummarization(\(maxWords))"
         do {
             let rawResult = try await webView.callAsyncJavaScript(jsCall, contentWorld: .defaultClient)

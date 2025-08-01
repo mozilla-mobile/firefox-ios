@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+@testable import SummarizeKit
 
 final class MockSummarizer: SummarizerProtocol {
     /// If set, both `summarize` and `summarizeStreamed` will throw this error.

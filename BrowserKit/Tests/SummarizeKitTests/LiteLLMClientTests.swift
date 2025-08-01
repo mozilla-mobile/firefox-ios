@@ -1,10 +1,10 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
-@testable import Client
+
 import XCTest
 import Common
-import Shared
+@testable import SummarizeKit
 
 final class LiteLLMClientTests: XCTestCase {
     private static let mockAPIEndpoint = "https://test-api-url.com"
@@ -93,7 +93,7 @@ final class LiteLLMClientTests: XCTestCase {
         )
         let urlRequest = try subject.makeRequest(messages: Self.mockMessages, options: options)
 
-        XCTAssertEqual(urlRequest.httpMethod, HTTPMethod.post.rawValue)
+        XCTAssertEqual(urlRequest.httpMethod, LiteLLMClient.postMethod)
         XCTAssertEqual(urlRequest.url?.absoluteString, "\(Self.mockAPIEndpoint)/chat/completions")
 
         let headers = try XCTUnwrap(urlRequest.allHTTPHeaderFields, "Expected headers to be non‑nil")

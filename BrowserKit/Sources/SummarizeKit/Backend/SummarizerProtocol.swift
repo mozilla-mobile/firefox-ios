@@ -4,7 +4,7 @@
 
 /// Unified interface for all summary backends.
 /// All implementations ( local models, litellm, ... ) must conform to this.
-protocol SummarizerProtocol {
+public protocol SummarizerProtocol {
     func summarize(_ contentToSummarize: String) async throws -> String
     func summarizeStreamed(_ contentToSummarize: String) -> AsyncThrowingStream<String, Error>
 }

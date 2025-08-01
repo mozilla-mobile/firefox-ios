@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Shared
 
 /// A lightweight client for interacting with an OpenAI style API chat completions endpoint.
 /// TODO(FXIOS-12942): Implement proper thread-safety
@@ -11,7 +10,8 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     private let apiKey: String
     private let baseURL: URL
 
-    private let session: URLSessionProtocol
+    private let session: URLSession
+    static let postMethod = "POST"
 
     /// Initializes the client.
     /// - Parameters:
@@ -21,7 +21,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     init(
         apiKey: String,
         baseURL: URL,
-        urlSession: URLSessionProtocol = URLSession.shared
+        urlSession: URLSession = URLSession.shared
     ) {
         self.apiKey = apiKey
         self.baseURL = baseURL
@@ -63,7 +63,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     }
 
     private func handleNonStreamingRequest(request: URLRequest) async throws -> String {
-        let (data, response) = try await session.data(from: request)
+        let (data, response) = try await session.data(for: request)
         try validate(response: response)
         let decodedResponse = try JSONDecoder().decode(LiteLLMResponse.self, from: data)
         guard let content = decodedResponse.choices.first?.message?.content else { throw LiteLLMClientError.noContent }
@@ -106,7 +106,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     ) throws -> URLRequest {
         let endpoint = baseURL.appendingPathComponent("chat/completions")
         var request = URLRequest(url: endpoint)
-        request.httpMethod = HTTPMethod.post.rawValue
+        request.httpMethod = Self.postMethod
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
