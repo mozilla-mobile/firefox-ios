@@ -14,6 +14,11 @@ features:
           If true, enables the search bar feature on homepage for users.
         type: Boolean
         default: false
+      shortcuts-library:
+        description: >
+          If true, enables the shortcuts library feature, accessible from the homepage
+        type: Boolean
+        default: false
       stories-redesign:
         description: >
           If true, enables the stories section redesign on homepage, which also includes the removal of other sections (i.e. jump back in, bookmarks)
@@ -25,10 +30,12 @@ features:
         value:
           enabled: false
           search-bar: false
+          show-all-shortcuts: false
           stories-redesign: false
     
       - channel: developer
         value:
           enabled: false
           search-bar: false
+          shortcuts-library: false
           stories-redesign: false

@@ -18,6 +18,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.title], to: BrowsingSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Summarize.title], to: SummarizeSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.AutofillsPasswords.title],
                         to: AutofillPasswordSettings)
@@ -66,6 +67,10 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Browsing.autoPlay], to: AutoplaySettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: MailAppSettings)
 
+        screenState.backAction = navigationControllerBackAction(for: app)
+    }
+
+    map.addScreenState(SummarizeSettings) { screenState in
         screenState.backAction = navigationControllerBackAction(for: app)
     }
 

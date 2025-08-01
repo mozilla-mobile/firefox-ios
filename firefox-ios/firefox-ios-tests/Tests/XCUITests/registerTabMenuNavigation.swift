@@ -15,13 +15,20 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
             app.tables.cells[AccessibilityIdentifiers.MainMenu.addToShortcuts],
             forAction: Action.PinToTopSitesPAM
         )
+        // Web Site Dark Mode
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
+            forAction: Action.ToggleNightMode
+        )
+        // Save As PDF (TODO)
+        // Print (TODO)
+        // Turn on night mode
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction(for: app)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
         sleep(1)
-
         // Bookmarks
         screenState.tap(app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
         // History
@@ -56,13 +63,9 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
             app.tables.cells["MainMenu.BookmarkPage"],
             forAction: Action.Bookmark
         )
-        // Web Site Dark Mode (TODO)
-        // Save As PDF (TODO)
-        // Print (TODO)
-        // Turn on night mode
         // Sign In (if unauthenticated)
         screenState.tap(
-            app.buttons[AccessibilityIdentifiers.MainMenu.signIn],
+            app.cells[AccessibilityIdentifiers.MainMenu.signIn],
             to: Intro_FxASignin,
             if: "fxaUsername == nil")
         // Signed in (TODO)

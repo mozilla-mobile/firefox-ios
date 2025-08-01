@@ -675,6 +675,7 @@ struct AccessibilityIdentifiers {
 
         struct Summarize {
             static let title = "SummarizeSettings"
+            static let summarizeContentSwitch = "summarizeContentFeature"
         }
 
         struct Theme {

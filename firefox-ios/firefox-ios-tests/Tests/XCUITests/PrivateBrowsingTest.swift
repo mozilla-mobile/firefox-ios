@@ -380,7 +380,9 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307003
-    func testHamburgerMenuNewPrivateTab_tabTrayExperimentOff() {
+    func testHamburgerMenuNewPrivateTab_tabTrayExperimentOff() throws {
+        throw XCTSkip("Skipping. The option to open new private tab is not available on the new menu")
+        /*
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -404,11 +406,13 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
             navigator.goto(TabTray)
             let numTab = app.otherElements[tabsTray].cells.count
             XCTAssertEqual(2, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-        }
+        }*/
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307003
-    func testHamburgerMenuNewPrivateTab_tabTrayExperimentOn() {
+    func testHamburgerMenuNewPrivateTab_tabTrayExperimentOn() throws {
+        throw XCTSkip("Skipping. The option to open new private tab is not available on the new menu")
+        /*
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -431,7 +435,7 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
             navigator.goto(TabTray)
             let numTab = app.otherElements[tabsTray].cells.count
             XCTAssertEqual(2, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-        }
+        }*/
     }
 }
 
