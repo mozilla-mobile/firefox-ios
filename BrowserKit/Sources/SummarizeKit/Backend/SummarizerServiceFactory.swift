@@ -5,7 +5,7 @@
 import Foundation
 
 public protocol SummarizerServiceFactory {
-    func make(isAppleSummarizerEnabled: Bool) -> SummarizerService?
+    func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService?
 }
 
 public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
