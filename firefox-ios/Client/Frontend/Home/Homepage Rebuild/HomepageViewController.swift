@@ -336,7 +336,7 @@ final class HomepageViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-        view.backgroundColor = isToolbarRefactorEnabled ? theme.colors.layer3 : theme.colors.layer1
+        view.backgroundColor = isToolbarRefactorEnabled ? theme.colors.layerSurfaceLow : theme.colors.layer1
     }
 
     // MARK: - Layout
