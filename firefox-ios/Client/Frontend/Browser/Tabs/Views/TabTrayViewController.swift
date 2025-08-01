@@ -501,10 +501,8 @@ final class TabTrayViewController: UIViewController,
                                                            constant: -UX.segmentedControlHorizontalSpacing),
 
                 experimentSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
-                experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                                  constant: UX.segmentedControlHorizontalSpacing),
-                experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                                   constant: -UX.segmentedControlHorizontalSpacing),
+                experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 experimentSegmentControl.heightAnchor.constraint(equalToConstant: UX.segmentedControlMinHeight)
             ])
         } else {
@@ -721,8 +719,7 @@ final class TabTrayViewController: UIViewController,
 
         if let scrollView = pageVC.view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView {
             scrollView.delegate = self
-            // TODO: FXIOS-12431 - Uncomment this when the tab tray selector view is swipable
-//            scrollView.isScrollEnabled = false
+            scrollView.isScrollEnabled = false
         }
 
         self.pageViewController = pageVC
