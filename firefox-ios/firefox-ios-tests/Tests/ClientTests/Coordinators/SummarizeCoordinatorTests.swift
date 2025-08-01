@@ -111,7 +111,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         let subject = SummarizeCoordinator(browserSnapshot: UIImage(),
                                            browserSnapshotTopOffset: 0.0,
                                            webView: MockTabWebView(tab: MockTab(profile: MockProfile(),
-                                                                                windowUUID: .XCTestDefaultUUID))
+                                                                                windowUUID: .XCTestDefaultUUID)),
                                            browserContentHiding: browserViewController,
                                            parentCoordinatorDelegate: parentCoordinator,
                                            prefs: prefs,
