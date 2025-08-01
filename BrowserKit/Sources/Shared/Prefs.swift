@@ -60,6 +60,7 @@ public struct PrefsKeys {
     public struct Summarizer {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
         public static let summarizeContentFeature = "summarizeContentFeature"
+        public static let shakeGestureEnabled = "shakeGestureEnabledKey"
     }
 
     public struct AppVersion {
