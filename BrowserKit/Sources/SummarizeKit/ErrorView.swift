@@ -32,6 +32,7 @@ class ErrorView: UIView,
         $0.textAlignment = .center
     }
     private let actionButton: UIButton = .build {
+        // This checks for Xcode 26 sdk availability thus we can compile on older Xcode version too
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()

@@ -80,7 +80,7 @@ class SummarizeCoordinator: BaseCoordinator {
     }
 
     private func showToSAlert() {
-        let descriptionText: String  = if SummarizerNimbusUtils.shared.isAppleSummarizerToolbarEndpointEnabled() {
+        let descriptionText: String  = if SummarizerNimbusUtils.shared.isAppleSummarizerEnabled() {
             String(format: String.Summarizer.ToSAlertMessageAppleLabel, AppName.shortName.rawValue)
         } else {
             String(format: String.Summarizer.ToSAlertMessageFirefoxLabel, AppName.shortName.rawValue)

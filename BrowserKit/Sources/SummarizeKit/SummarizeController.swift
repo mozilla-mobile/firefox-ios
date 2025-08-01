@@ -117,6 +117,7 @@ public class SummarizeController: UIViewController, Themeable {
         $0.alpha = 0
     }
     private let closeButton: UIButton = .build {
+        // This checks for Xcode 26 sdk availability thus we can compile on older Xcode version too
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
