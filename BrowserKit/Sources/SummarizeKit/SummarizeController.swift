@@ -118,7 +118,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         super.viewDidLoad()
         configure()
         setupLayout()
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
