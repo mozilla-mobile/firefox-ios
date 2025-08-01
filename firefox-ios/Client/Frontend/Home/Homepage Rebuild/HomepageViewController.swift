@@ -553,7 +553,7 @@ final class HomepageViewController: UIViewController,
             if let storyCell = storyCell as? StoryCell {
                 let position = indexPath.item + 1
                 let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
-                let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection) ?? 0
+                let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection) 
                 storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
                 return storyCell
             } else if let legacyPocketCell = storyCell as? MerinoStandardCell {
