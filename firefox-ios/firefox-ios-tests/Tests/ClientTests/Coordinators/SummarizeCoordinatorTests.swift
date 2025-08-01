@@ -20,7 +20,7 @@ class MockSummarizer: SummarizerProtocol {
 }
 
 class MockSummarizerServiceFactory: SummarizerServiceFactory {
-    func make(isAppleSummarizerEnabled: Bool) -> SummarizerService? {
+    func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService? {
         return SummarizerService(summarizer: MockSummarizer(), maxWords: 10)
     }
 }
