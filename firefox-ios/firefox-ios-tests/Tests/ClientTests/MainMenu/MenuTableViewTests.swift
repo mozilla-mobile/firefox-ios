@@ -33,7 +33,7 @@ final class MenuTableViewTests: XCTestCase {
             a11yLabel: "",
             a11yHint: "",
             a11yId: "",
-            action: nil,
+            action: nil
         )
         let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
         menuView.reloadTableView(with: [section], isBannerVisible: false)
@@ -54,7 +54,7 @@ final class MenuTableViewTests: XCTestCase {
             a11yLabel: "",
             a11yHint: "",
             a11yId: "",
-            action: nil,
+            action: nil
         )
         let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
         menuView.reloadTableView(with: [section], isBannerVisible: false)
@@ -72,7 +72,7 @@ final class MenuTableViewTests: XCTestCase {
             a11yLabel: "",
             a11yHint: "",
             a11yId: "",
-            action: nil,
+            action: nil
         )
         let section = MenuSection(isHorizontalTabsSection: true, isExpanded: true, options: [option])
         menuView.reloadTableView(with: [section], isBannerVisible: false)
