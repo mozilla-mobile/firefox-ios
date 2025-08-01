@@ -577,6 +577,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     @MainActor
     func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
         setIsHostedSummarizerEnabled(true)
+        let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.selectedTab = tab
