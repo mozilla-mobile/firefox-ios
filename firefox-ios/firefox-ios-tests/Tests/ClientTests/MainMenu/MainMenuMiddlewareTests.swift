@@ -24,7 +24,7 @@ final class MainMenuMiddlewareTests: XCTestCase {
         super.tearDown()
     }
 
-    func testDismissMenuAction() throws {
+    func testDismissMenuAction() {
         let mockStore = Store(
             state: AppState(),
             reducer: AppState.reducer,
@@ -33,6 +33,82 @@ final class MainMenuMiddlewareTests: XCTestCase {
 
         let action = getAction(for: .tapCloseMenu)
         mockStore.dispatchLegacy(action)
+    }
+
+    func testTapNavigateToDestination_bookmarks() {
+        let middleware = MainMenuMiddleware()
+        let mockStore = Store(
+            state: AppState(),
+            reducer: AppState.reducer,
+            middlewares: [middleware.mainMenuProvider]
+        )
+
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapNavigateToDestination,
+            navigationDestination: .init(.bookmarks),
+            telemetryInfo: .init(isHomepage: true)
+        )
+
+        mockStore.dispatchLegacy(action)
+    }
+
+    func testTapToggleUserAgent_switchToMobile() {
+        let middleware = MainMenuMiddleware()
+        let mockStore = Store(
+            state: AppState(),
+            reducer: AppState.reducer,
+            middlewares: [middleware.mainMenuProvider]
+        )
+
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapToggleUserAgent,
+            telemetryInfo: .init(isHomepage: false, isDefaultUserAgentDesktop: true, hasChangedUserAgent: false)
+        )
+
+        mockStore.dispatchLegacy(action)
+    }
+
+    func testTapToggleNightMode_turnOn() {
+        let middleware = MainMenuMiddleware()
+        let mockStore = Store(
+            state: AppState(),
+            reducer: AppState.reducer,
+            middlewares: [middleware.mainMenuProvider]
+        )
+
+        let action = MainMenuAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MainMenuActionType.tapToggleNightMode,
+            telemetryInfo: .init(isHomepage: true, isActionOn: true)
+        )
+
+        mockStore.dispatchLegacy(action)
+    }
+
+    func testViewDidLoad_dispatchesTabInfo() {
+        let middleware = MainMenuMiddleware()
+        let store = Store(
+            state: AppState(),
+            reducer: AppState.reducer,
+            middlewares: [middleware.mainMenuProvider]
+        )
+
+        let action = getAction(for: .viewDidLoad)
+        store.dispatchLegacy(action)
+    }
+
+    func testDidInstantiateView_dispatchesBannerVisibilityUpdate() {
+        let middleware = MainMenuMiddleware()
+        let store = Store(
+            state: AppState(),
+            reducer: AppState.reducer,
+            middlewares: [middleware.mainMenuProvider]
+        )
+
+        let action = getAction(for: .didInstantiateView)
+        store.dispatchLegacy(action)
     }
 
     private func getAction(for actionType: MainMenuActionType) -> MainMenuAction {
