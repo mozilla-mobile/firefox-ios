@@ -10,7 +10,7 @@ import Common
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
                                        Themeable,
-                                       TabScrollHandler {
+                                       TabScrollHandlerProtocol {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -240,9 +240,9 @@ final class LegacyTabScrollController: NSObject,
         }
     }
 
-    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView,
-                               bottomContainer: BaseAlphaStackView,
-                               headerContainer: BaseAlphaStackView) {
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
+                               bottomContainer: BaseAlphaStackView?,
+                               headerContainer: BaseAlphaStackView?) {
         self.overKeyboardContainer = overKeyboardContainer
         self.bottomContainer = bottomContainer
         self.header = headerContainer
@@ -523,28 +523,35 @@ private extension LegacyTabScrollController {
 
     /// Updates the state of the toolbar based on the scroll positions of various UI components.
     ///
-    /// The function evaluates the current offsets of three UI containers:
-    /// - `bottomContainerOffset` compared to `bottomContainerScrollHeight`
-    /// - `overKeyboardContainerOffset` compared to `overKeyboardScrollHeight`
-    /// - `headerTopOffset` compared to `-topScrollHeight`
-    ///
     /// Based on their states, it sets the toolbar state to one of the following:
     /// - `.collapsed`: All containers are fully collapsed (scrolled to their maximum).
     /// - `.visible`: Toolbars are currently showing (`toolbarsShowing == true`).
     /// - `.animating`: In transition or partially visible state.
     func updateToolbarState() {
-        // Checks if bottom containers are fully collapsed based on their offsets
-        let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
-        let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
-
-        // top container
-        let headerContainerIsCollapsed = headerTopOffset == -headerHeight
-
-        if headerContainerIsCollapsed && (bottomContainerCollapsed && overKeyboardContainerCollapsed) {
+        if isToolbarCollapsed() {
             setToolbarState(state: .collapsed)
         } else if toolbarsShowing {
             setToolbarState(state: .visible)
         }
+    }
+
+    /// The function evaluates the current offsets of three UI containers:
+    /// - `bottomContainerOffset` compared to `bottomContainerScrollHeight`
+    /// - `overKeyboardContainerOffset` compared to `overKeyboardScrollHeight`
+    /// - `headerTopOffset` compared to `-topScrollHeight`
+    /// - Returns: `true` if the toolbar is collapsed checks if isBottomSearchBar, `false`.
+    func isToolbarCollapsed() -> Bool {
+        guard !isBottomSearchBar else {
+            // Checks if bottom containers are fully collapsed based on their offsets
+            let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
+            let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
+            return bottomContainerCollapsed && overKeyboardContainerCollapsed
+        }
+
+        // top container
+        let headerContainerIsCollapsed = headerTopOffset == -headerHeight
+
+        return headerContainerIsCollapsed
     }
 
     func setToolbarState(state: ToolbarState) {

@@ -13,15 +13,15 @@ protocol TabScrollControllerDelegate: AnyObject {
     func hideToolbar()
 }
 
-protocol TabScrollHandler: AnyObject {
-    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView,
-                               bottomContainer: BaseAlphaStackView,
-                               headerContainer: BaseAlphaStackView)
+protocol TabScrollHandlerProtocol: AnyObject {
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
+                               bottomContainer: BaseAlphaStackView?,
+                               headerContainer: BaseAlphaStackView?)
 }
 
-final class TabScrollController: NSObject,
+final class TabScrollHandler: NSObject,
                                  SearchBarLocationProvider,
-                                 TabScrollHandler,
+                                 TabScrollHandlerProtocol,
                                  UIScrollViewDelegate {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
@@ -165,15 +165,16 @@ final class TabScrollController: NSObject,
         return hasHomeIndicator ? .zero : containerHeight - topInset
     }
 
-    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView,
-                               bottomContainer: BaseAlphaStackView,
-                               headerContainer: BaseAlphaStackView) {
-        if isBottomSearchBar {
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
+                               bottomContainer: BaseAlphaStackView?,
+                               headerContainer: BaseAlphaStackView? ) {
+        if let overKeyboardContainer = overKeyboardContainer,
+                let bottomContainer = bottomContainer, isBottomSearchBar {
             bottomContainerScrollHeight = bottomContainer.frame.height
             overKeyboardScrollHeight = overKeyboardScrollHeight(overKeyboardContainer: overKeyboardContainer,
                                                                 safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
             headerHeight = 0
-        } else {
+        } else if let headerContainer = headerContainer {
             headerHeight = headerContainer.frame.height
             bottomContainerScrollHeight = 0
             overKeyboardScrollHeight = 0
@@ -186,7 +187,6 @@ final class TabScrollController: NSObject,
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
-    private var shouldRespondToScroll = false
 
     var notificationCenter: any NotificationProtocol
     var currentWindowUUID: WindowUUID? {
@@ -275,11 +275,9 @@ final class TabScrollController: NSObject,
                                        delta: CGFloat) -> Bool {
         guard shouldUpdateUIWhenScrolling else { return false }
 
-//        let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
-//        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
-//        shouldRespondToScroll = isSignificantScroll || isFastEnough
-//        return shouldRespondToScroll
-        return true
+        let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
+        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
+        return isSignificantScroll || isFastEnough
     }
 
     /// Updates the current scroll direction based on the scroll delta.
@@ -488,7 +486,6 @@ final class TabScrollController: NSObject,
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         if toolbarState == .collapsed {
             showToolbars(animated: true)
-            return false
         }
         return true
     }
@@ -496,7 +493,7 @@ final class TabScrollController: NSObject,
 
 // MARK: - Private
 
-private extension TabScrollController {
+private extension TabScrollHandler {
     // Duration for hiding bottom containers is taken from overKeyboard since it's longer to hide
     // That way we ensure animation has proper timing
     var showDurationRatio: CGFloat {
@@ -568,30 +565,35 @@ private extension TabScrollController {
 
     /// Updates the state of the toolbar based on the scroll positions of various UI components.
     ///
-    /// The function evaluates the current offsets of three UI containers:
-    /// - `bottomContainerOffset` compared to `bottomContainerScrollHeight`
-    /// - `overKeyboardContainerOffset` compared to `overKeyboardScrollHeight`
-    /// - `headerTopOffset` compared to `-topScrollHeight`
-    ///
     /// Based on their states, it sets the toolbar state to one of the following:
     /// - `.collapsed`: All containers are fully collapsed (scrolled to their maximum).
     /// - `.visible`: Toolbars are currently showing (`toolbarsShowing == true`).
     /// - `.animating`: In transition or partially visible state.
     func updateToolbarState() {
-        // Checks if bottom containers are fully collapsed based on their offsets
-        let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
-        let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
+        if isToolbarCollapsed() {
+            setToolbarState(state: .collapsed)
+        } else if toolbarsShowing {
+            setToolbarState(state: .visible)
+        }
+    }
+
+    /// The function evaluates the current offsets of three UI containers:
+    /// - `bottomContainerOffset` compared to `bottomContainerScrollHeight`
+    /// - `overKeyboardContainerOffset` compared to `overKeyboardScrollHeight`
+    /// - `headerTopOffset` compared to `-topScrollHeight`
+    /// - Returns: `true` if the toolbar is collapsed checks if isBottomSearchBar, `false`.
+    func isToolbarCollapsed() -> Bool {
+        guard !isBottomSearchBar else {
+            // Checks if bottom containers are fully collapsed based on their offsets
+            let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
+            let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
+            return bottomContainerCollapsed && overKeyboardContainerCollapsed
+        }
 
         // top container
         let headerContainerIsCollapsed = headerTopOffset == -headerHeight
 
-        if headerContainerIsCollapsed && (bottomContainerCollapsed && overKeyboardContainerCollapsed) {
-            setToolbarState(state: .collapsed)
-            hideToolbars(animated: true)
-        } else if toolbarsShowing {
-            setToolbarState(state: .visible)
-            showToolbars(animated: true)
-        }
+        return headerContainerIsCollapsed
     }
 
     func setToolbarState(state: ToolbarState) {
