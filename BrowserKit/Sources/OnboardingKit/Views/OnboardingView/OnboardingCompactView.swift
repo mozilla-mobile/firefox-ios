@@ -25,7 +25,7 @@ struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     var body: some View {
         ZStack {
-            AnimatedGradientMetalView()
+            AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 PagingCarousel(

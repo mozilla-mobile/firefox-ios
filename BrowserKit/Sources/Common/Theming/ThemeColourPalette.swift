@@ -104,4 +104,10 @@ public protocol ThemeColourPalette {
     var shadowSubtle: UIColor { get }
     var shadowDefault: UIColor { get }
     var shadowStrong: UIColor { get }
+
+    // MARK: - Gradient
+    var vividOrange: UIColor { get }
+    var electricBlue: UIColor { get }
+    var crimsonRed: UIColor { get }
+    var burntOrange: UIColor { get }
 }

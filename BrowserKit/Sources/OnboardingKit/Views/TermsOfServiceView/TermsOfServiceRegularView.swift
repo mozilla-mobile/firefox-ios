@@ -33,7 +33,7 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
 
     public var body: some View {
         ZStack {
-            AnimatedGradientMetalView()
+            AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                 .ignoresSafeArea()
                 .accessibilityHidden(true)
 
