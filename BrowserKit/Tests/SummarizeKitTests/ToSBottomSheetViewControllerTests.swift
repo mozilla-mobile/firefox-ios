@@ -70,7 +70,9 @@ class ToSBottomSheetViewControllerTests: XCTestCase {
         let controller = ToSBottomSheetViewController(
             viewModel: .init(
                 titleLabel: "",
-                descriptionLabel: "",
+                titleLabelA11yId: "",
+                descriptionText: "",
+                descriptionTextA11yId: "",
                 linkButtonLabel: "",
                 linkButtonURL: nil,
                 allowButtonTitle: "",

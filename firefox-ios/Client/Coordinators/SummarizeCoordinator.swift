@@ -8,6 +8,7 @@ import Common
 import ComponentLibrary
 import UIKit
 import Shared
+import WebKit
 
 /// Conforming types can show and hide the browser content together with its toolbars.
 protocol BrowserContentHiding: AnyObject {
@@ -21,6 +22,8 @@ class SummarizeCoordinator: BaseCoordinator {
     private let browserSnapshotTopOffset: CGFloat
     private weak var browserContentHiding: BrowserContentHiding?
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
+    private let webView: WKWebView
+    private let summarizerServiceFactory: SummarizerServiceFactory
     private let windowUUID: WindowUUID
     private let prefs: Prefs
     private let onRequestOpenURL: ((URL?) -> Void)?
@@ -28,6 +31,8 @@ class SummarizeCoordinator: BaseCoordinator {
     init(
         browserSnapshot: UIImage,
         browserSnapshotTopOffset: CGFloat,
+        webView: WKWebView,
+        summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
         browserContentHiding: BrowserContentHiding,
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
         prefs: Prefs,
@@ -37,11 +42,13 @@ class SummarizeCoordinator: BaseCoordinator {
     ) {
         self.browserSnapshot = browserSnapshot
         self.browserSnapshotTopOffset = browserSnapshotTopOffset
+        self.webView = webView
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.browserContentHiding = browserContentHiding
         self.windowUUID = windowUUID
         self.prefs = prefs
         self.onRequestOpenURL = onRequestOpenURL
+        self.summarizerServiceFactory = summarizerServiceFactory
         super.init(router: router)
     }
 
@@ -54,6 +61,20 @@ class SummarizeCoordinator: BaseCoordinator {
     }
 
     private func showSummarizeViewController() {
+        let isAppleSummarizerEnabled = SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
+        guard let service = summarizerServiceFactory.make(isAppleSummarizerEnabled: isAppleSummarizerEnabled) else { return }
+
+        let errorModel = LocalizedErrorsViewModel(
+            rateLimitedMessage: .Summarizer.RateLimitedErrorMessage,
+            unsafeContentMessage: .Summarizer.UnsafeWebsiteErrorMessage,
+            summarizationNotAvailableMessage: .Summarizer.UnsupportedContentErrorMessage,
+            pageStillLoadingMessage: .Summarizer.MissingPageContentErrorMessage,
+            genericErrorMessage: .Summarizer.UnknownErrorMessage,
+            errorLabelA11yId: AccessibilityIdentifiers.Summarizer.errorLabel,
+            errorButtonA11yId: AccessibilityIdentifiers.Summarizer.errorButton,
+            retryButtonLabel: .Summarizer.RetryButtonLabel,
+            closeButtonLabel: .Summarizer.CloseButtonLabel
+        )
         let model = SummarizeViewModel(
             loadingLabel: .Summarizer.LoadingLabel,
             loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
@@ -65,7 +86,8 @@ class SummarizeCoordinator: BaseCoordinator {
                 a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeSummaryButton
             ),
             tabSnapshot: browserSnapshot,
-            tabSnapshotTopOffset: browserSnapshotTopOffset
+            tabSnapshotTopOffset: browserSnapshotTopOffset,
+            errorMessages: errorModel
         ) { [weak self] in
             self?.browserContentHiding?.showBrowserContent()
             self?.dismissCoordinator()
@@ -73,7 +95,12 @@ class SummarizeCoordinator: BaseCoordinator {
             self?.browserContentHiding?.hideBrowserContent()
         }
 
-        let controller = SummarizeController(windowUUID: windowUUID, viewModel: model)
+        let controller = SummarizeController(
+            windowUUID: windowUUID,
+            viewModel: model,
+            summarizerService: service,
+            webView: webView
+        )
         controller.modalTransitionStyle = .crossDissolve
         controller.modalPresentationStyle = .overFullScreen
         router.present(controller, animated: true)

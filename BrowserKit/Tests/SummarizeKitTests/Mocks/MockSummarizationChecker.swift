@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+@testable import SummarizeKit
 
 final class MockSummarizationChecker: SummarizationCheckerProtocol {
     var canSummarize: Bool

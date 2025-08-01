@@ -2123,6 +2123,49 @@ extension String {
             value: "Summarizing…",
             comment: "When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed."
         )
+        public static let RateLimitedErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.RateLimited.Message.v142",
+            tableName: "Summarizer",
+            value: "Can’t handle this one at the moment. Try again later!",
+            comment: "The error message displayed when the summarizer encounters a rate limit while summarizing a page."
+        )
+        public static let UnsafeWebsiteErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.UnsafeWebsite.Message.v142",
+            tableName: "Summarizer",
+            value: "Limited content detected. This page may be restricted or mostly visual.",
+            comment: "The error message displayed when the summarizer encounters unsafe content while summarizing a page."
+        )
+        public static let UnsupportedContentErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.UnsupportedContent.Message.v142",
+            tableName: "Summarizer",
+            value: "This website doesn’t allow content summarization. Try a different page.",
+            comment: "The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long)."
+        )
+        public static let MissingPageContentErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.MissingPageContent.Message.v142",
+            tableName: "Summarizer",
+            value: "Page is still loading. Wait for it to finish, then hit summarize.",
+            comment: "The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading)."
+        )
+        // TODO: correct label ?
+        public static let UnknownErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.Unknown.Message.v142",
+            tableName: "Summarizer",
+            value: "Error summarizing page. Try again later.",
+            comment: "The error message displayed when the summarizer encounters an unknown error while summarizing a page."
+        )
+        public static let RetryButtonLabel = MZLocalizedString(
+            key: "Summarizer.RetryButton.Label.v142",
+            tableName: "Summarizer",
+            value: "Retry",
+            comment: "The label for the error button that allows the user to retry summarizing the page."
+        )
+        public static let CloseButtonLabel = MZLocalizedString(
+            key: "Summarizer.CloseButton.Label.v142",
+            tableName: "Summarizer",
+            value: "Close",
+            comment: "The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried."
+        )
         public static let ToSAlertTitleLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.Title.Label.v142",
             tableName: "Summarizer",

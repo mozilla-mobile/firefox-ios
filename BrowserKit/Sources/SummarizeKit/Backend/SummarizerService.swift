@@ -7,7 +7,7 @@ import WebKit
 
 /// A service that handles checking if a web page can be summarized and
 /// delegates summarization to the provided summarizer backend.
-final class SummarizerService {
+public final class SummarizerService {
     private let summarizer: SummarizerProtocol
     private let checker: SummarizationCheckerProtocol
     /// The maximum number of words allowed before rejecting summarization.
@@ -16,7 +16,7 @@ final class SummarizerService {
     /// See UserScripts/MainFrame/AtDocumentStart/Summarizer.js for more context on how this is enforced.
     private let maxWords: Int
 
-    init(
+    public init(
         summarizer: SummarizerProtocol,
         checker: SummarizationCheckerProtocol = SummarizationChecker(),
         maxWords: Int
@@ -30,8 +30,8 @@ final class SummarizerService {
     /// - Throws: `SummarizerError` if the content is unsuitable or summarization fails.
     /// - Returns: A fully summarized string for displaying.
     func summarize(from webView: WKWebView) async throws -> String {
-        let text = try await extractSummarizableText(from: webView)
         do {
+            let text = try await extractSummarizableText(from: webView)
             return try await summarizer.summarize(text)
         } catch let summarizerError as SummarizerError {
             throw summarizerError

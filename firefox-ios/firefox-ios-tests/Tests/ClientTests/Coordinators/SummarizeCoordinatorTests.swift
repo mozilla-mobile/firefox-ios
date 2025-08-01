@@ -9,6 +9,22 @@ import Shared
 import ComponentLibrary
 @testable import Client
 
+class MockSummarizer: SummarizerProtocol {
+    func summarize(_ contentToSummarize: String) async throws -> String {
+        return ""
+    }
+
+    func summarizeStreamed(_ contentToSummarize: String) -> AsyncThrowingStream<String, any Error> {
+        return .init { _ in }
+    }
+}
+
+class MockSummarizerServiceFactory: SummarizerServiceFactory {
+    func make(isAppleSummarizerEnabled: Bool) -> SummarizerService? {
+        return SummarizerService(summarizer: MockSummarizer(), maxWords: 10)
+    }
+}
+
 @MainActor
 final class SummarizeCoordinatorTests: XCTestCase {
     private var browserViewController: MockBrowserViewController!
@@ -19,6 +35,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        setIsHostedSummarizerEnabled(true)
         DependencyHelperMock().bootstrapDependencies()
         browserViewController = MockBrowserViewController(profile: MockProfile(), tabManager: MockTabManager())
         router = MockRouter(navigationController: MockNavigationController())
@@ -107,9 +124,18 @@ final class SummarizeCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
+    private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled)
+        }
+    }
+
     private func createSubject(onRequestOpenURL: ((URL?) -> Void)? = nil) -> SummarizeCoordinator {
         let subject = SummarizeCoordinator(browserSnapshot: UIImage(),
                                            browserSnapshotTopOffset: 0.0,
+                                           webView: MockTabWebView(tab: MockTab(profile: MockProfile(),
+                                                                                windowUUID: .XCTestDefaultUUID)),
+                                           summarizerServiceFactory: MockSummarizerServiceFactory(),
                                            browserContentHiding: browserViewController,
                                            parentCoordinatorDelegate: parentCoordinator,
                                            prefs: prefs,

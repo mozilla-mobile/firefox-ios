@@ -1078,8 +1078,10 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-    func showSummarizePanel() {
-        guard isSummarizerOn, tabManager.selectedTab?.isFxHomeTab == false else { return }
+  func showSummarizePanel() {
+        guard isSummarizerOn,
+              tabManager.selectedTab?.isFxHomeTab == false,
+              let webView = tabManager.selectedTab?.webView else { return }
         let contentContainer = browserViewController.contentContainer
         let browserFrame = browserViewController.view.frame
         var browserScreenshot = browserViewController.view.snapshot
@@ -1097,6 +1099,7 @@ class BrowserCoordinator: BaseCoordinator,
         let coordinator = SummarizeCoordinator(
             browserSnapshot: browserScreenshot,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,
+            webView: webView,
             browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
             prefs: profile.prefs,
