@@ -84,8 +84,6 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
                 String(position),
                 String(totalCount)
             )
-        } else {
-            accessibilityHint = nil
         }
 
         let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL?.absoluteString ?? "",
