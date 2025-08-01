@@ -743,6 +743,16 @@ public struct JsonEngineUrl {
      * its locale is not present in the map.
      */
     public var displayNameMap: [String: String]?
+    /**
+     * Indicates the date until which the URL is considered new
+     * (format: YYYY-MM-DD).
+     */
+    public var isNewUntil: String?
+    /**
+     * Whether the engine's partner code should be excluded from telemetry when
+     * this URL is visited.
+     */
+    public var excludePartnerCodeFromTelemetry: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -770,12 +780,22 @@ public struct JsonEngineUrl {
          * name. Since brand names can be localized, this is a map rather than a
          * URL. The client will fall back to the special locale code "default" when
          * its locale is not present in the map.
-         */displayNameMap: [String: String]?) {
+         */displayNameMap: [String: String]?, 
+        /**
+         * Indicates the date until which the URL is considered new
+         * (format: YYYY-MM-DD).
+         */isNewUntil: String?, 
+        /**
+         * Whether the engine's partner code should be excluded from telemetry when
+         * this URL is visited.
+         */excludePartnerCodeFromTelemetry: Bool) {
         self.base = base
         self.method = method
         self.params = params
         self.searchTermParamName = searchTermParamName
         self.displayNameMap = displayNameMap
+        self.isNewUntil = isNewUntil
+        self.excludePartnerCodeFromTelemetry = excludePartnerCodeFromTelemetry
     }
 }
 
@@ -801,6 +821,12 @@ extension JsonEngineUrl: Equatable, Hashable {
         if lhs.displayNameMap != rhs.displayNameMap {
             return false
         }
+        if lhs.isNewUntil != rhs.isNewUntil {
+            return false
+        }
+        if lhs.excludePartnerCodeFromTelemetry != rhs.excludePartnerCodeFromTelemetry {
+            return false
+        }
         return true
     }
 
@@ -810,6 +836,8 @@ extension JsonEngineUrl: Equatable, Hashable {
         hasher.combine(params)
         hasher.combine(searchTermParamName)
         hasher.combine(displayNameMap)
+        hasher.combine(isNewUntil)
+        hasher.combine(excludePartnerCodeFromTelemetry)
     }
 }
 
@@ -826,7 +854,9 @@ public struct FfiConverterTypeJSONEngineUrl: FfiConverterRustBuffer {
                 method: FfiConverterOptionTypeJSONEngineMethod.read(from: &buf), 
                 params: FfiConverterOptionSequenceTypeSearchUrlParam.read(from: &buf), 
                 searchTermParamName: FfiConverterOptionString.read(from: &buf), 
-                displayNameMap: FfiConverterOptionDictionaryStringString.read(from: &buf)
+                displayNameMap: FfiConverterOptionDictionaryStringString.read(from: &buf), 
+                isNewUntil: FfiConverterOptionString.read(from: &buf), 
+                excludePartnerCodeFromTelemetry: FfiConverterBool.read(from: &buf)
         )
     }
 
@@ -836,6 +866,8 @@ public struct FfiConverterTypeJSONEngineUrl: FfiConverterRustBuffer {
         FfiConverterOptionSequenceTypeSearchUrlParam.write(value.params, into: &buf)
         FfiConverterOptionString.write(value.searchTermParamName, into: &buf)
         FfiConverterOptionDictionaryStringString.write(value.displayNameMap, into: &buf)
+        FfiConverterOptionString.write(value.isNewUntil, into: &buf)
+        FfiConverterBool.write(value.excludePartnerCodeFromTelemetry, into: &buf)
     }
 }
 
@@ -1403,6 +1435,16 @@ public struct SearchEngineUrl {
      * corresponds to a brand name distinct from the engine's brand name.
      */
     public var displayName: String?
+    /**
+     * Indicates the date until which the URL is considered new
+     * (format: YYYY-MM-DD).
+     */
+    public var isNewUntil: String?
+    /**
+     * Whether the engine's partner code should be excluded from telemetry when
+     * this URL is visited.
+     */
+    public var excludePartnerCodeFromTelemetry: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -1427,12 +1469,22 @@ public struct SearchEngineUrl {
         /**
          * The display name of the URL, if any. This is useful if the URL
          * corresponds to a brand name distinct from the engine's brand name.
-         */displayName: String? = nil) {
+         */displayName: String? = nil, 
+        /**
+         * Indicates the date until which the URL is considered new
+         * (format: YYYY-MM-DD).
+         */isNewUntil: String? = nil, 
+        /**
+         * Whether the engine's partner code should be excluded from telemetry when
+         * this URL is visited.
+         */excludePartnerCodeFromTelemetry: Bool = false) {
         self.base = base
         self.method = method
         self.params = params
         self.searchTermParamName = searchTermParamName
         self.displayName = displayName
+        self.isNewUntil = isNewUntil
+        self.excludePartnerCodeFromTelemetry = excludePartnerCodeFromTelemetry
     }
 }
 
@@ -1458,6 +1510,12 @@ extension SearchEngineUrl: Equatable, Hashable {
         if lhs.displayName != rhs.displayName {
             return false
         }
+        if lhs.isNewUntil != rhs.isNewUntil {
+            return false
+        }
+        if lhs.excludePartnerCodeFromTelemetry != rhs.excludePartnerCodeFromTelemetry {
+            return false
+        }
         return true
     }
 
@@ -1467,6 +1525,8 @@ extension SearchEngineUrl: Equatable, Hashable {
         hasher.combine(params)
         hasher.combine(searchTermParamName)
         hasher.combine(displayName)
+        hasher.combine(isNewUntil)
+        hasher.combine(excludePartnerCodeFromTelemetry)
     }
 }
 
@@ -1483,7 +1543,9 @@ public struct FfiConverterTypeSearchEngineUrl: FfiConverterRustBuffer {
                 method: FfiConverterString.read(from: &buf), 
                 params: FfiConverterSequenceTypeSearchUrlParam.read(from: &buf), 
                 searchTermParamName: FfiConverterOptionString.read(from: &buf), 
-                displayName: FfiConverterOptionString.read(from: &buf)
+                displayName: FfiConverterOptionString.read(from: &buf), 
+                isNewUntil: FfiConverterOptionString.read(from: &buf), 
+                excludePartnerCodeFromTelemetry: FfiConverterBool.read(from: &buf)
         )
     }
 
@@ -1493,6 +1555,8 @@ public struct FfiConverterTypeSearchEngineUrl: FfiConverterRustBuffer {
         FfiConverterSequenceTypeSearchUrlParam.write(value.params, into: &buf)
         FfiConverterOptionString.write(value.searchTermParamName, into: &buf)
         FfiConverterOptionString.write(value.displayName, into: &buf)
+        FfiConverterOptionString.write(value.isNewUntil, into: &buf)
+        FfiConverterBool.write(value.excludePartnerCodeFromTelemetry, into: &buf)
     }
 }
 
