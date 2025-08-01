@@ -22,12 +22,14 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
     }
 
     @MainActor
-    func test_generateSettings_hasExpectedSections() {
+    func test_generateSettings_withDefault_hasExpectedSections() {
         let subject = createSubject()
         let sections = subject.generateSettings()
-        XCTAssertEqual(sections.count, 1)
+        XCTAssertEqual(sections.count, 2)
         XCTAssertEqual(sections.first?.title, nil)
         XCTAssertEqual(sections.first?.children.count, 1)
+        XCTAssertEqual(sections.last?.title?.string, "Gestures")
+        XCTAssertEqual(sections.last?.children.count, 1)
     }
 
     // MARK: - Helper
