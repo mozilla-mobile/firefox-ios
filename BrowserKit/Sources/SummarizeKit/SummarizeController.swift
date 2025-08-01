@@ -117,7 +117,7 @@ public class SummarizeController: UIViewController, Themeable {
         super.viewDidLoad()
         configure()
         setupLayout()
-        listenForThemeChanges(view, withNotificationCenter: notificationCenter)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
