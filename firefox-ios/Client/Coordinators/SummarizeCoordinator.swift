@@ -62,7 +62,10 @@ class SummarizeCoordinator: BaseCoordinator {
 
     private func showSummarizeViewController() {
         let isAppleSummarizerEnabled = SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
-        guard let service = summarizerServiceFactory.make(isAppleSummarizerEnabled: isAppleSummarizerEnabled) else { return }
+        let isHostedSummarizerEnabled = SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
+        guard let service = summarizerServiceFactory.make(
+            isAppleSummarizerEnabled: isAppleSummarizerEnabled,
+            isHostedSummarizerEnabled: isHostedSummarizerEnabled) else { return }
 
         let errorModel = LocalizedErrorsViewModel(
             rateLimitedMessage: .Summarizer.RateLimitedErrorMessage,

@@ -5,13 +5,13 @@
 import Foundation
 
 public protocol SummarizerServiceFactory {
-    func make(isAppleSummarizerEnabled: Bool) -> SummarizerService?
+    func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService?
 }
 
 public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
     public init() {}
 
-    public func make(isAppleSummarizerEnabled: Bool) -> SummarizerService? {
+    public func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService? {
         #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
             let applSummarizer = FoundationModelsSummarizer(modelInstructions: FoundationModelsConfig.instructions)
@@ -30,7 +30,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             return SummarizerService(summarizer: llmSummarizer, maxWords: LiteLLMConfig.maxWords)
         }
         #else
-        guard !isAppleSummarizerEnabled,
+        guard isHostedSummarizerEnabled,
               let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
               let model = LiteLLMConfig.apiModel,
               let key = LiteLLMConfig.apiKey else { return nil }
