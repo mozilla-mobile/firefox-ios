@@ -12,7 +12,7 @@ struct SummarizerNimbusUtils: FeatureFlaggable {
         return isAppleSummarizerEnabled() || isHostedSummarizerEnabled()
     }
 
-    private func isAppleSummarizerEnabled() -> Bool {
+    func isAppleSummarizerEnabled() -> Bool {
         #if canImport(FoundationModels)
             let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
             return AppleIntelligenceUtil().isAppleIntelligenceAvailable && isFlagEnabled
@@ -21,7 +21,7 @@ struct SummarizerNimbusUtils: FeatureFlaggable {
         #endif
     }
 
-    private func isHostedSummarizerEnabled() -> Bool {
+    func isHostedSummarizerEnabled() -> Bool {
         return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
     }
 
