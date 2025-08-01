@@ -212,6 +212,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090305
     func testOpenNewTabFromMenuHidesSearchBar_homepageSearchBarExperimentOn() throws {
+        throw XCTSkip("Skipping. The option to open new tab is not available on the new menu")
+        /*
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
@@ -231,6 +233,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+         */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090306
@@ -327,6 +330,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090309
     func testOpenNewTabFromMenuFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() throws {
+        throw XCTSkip("Skipping. The option to open new tab is not available on the new menu")
+        /*
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
@@ -346,6 +351,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+         */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090310
@@ -527,6 +533,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090316
     func testOpenNewTabFromMenuForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() throws {
+        throw XCTSkip("Skipping. The option to open new tab is not available on the new menu")
+        /*
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
@@ -547,6 +555,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+         */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090317
@@ -621,6 +630,8 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090320
     func testOpenNewTabFromMenuFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() throws {
+        throw XCTSkip("Skipping. The option to open new tab is not available on the new menu")
+        /*
         addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
@@ -642,6 +653,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+         */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090321
