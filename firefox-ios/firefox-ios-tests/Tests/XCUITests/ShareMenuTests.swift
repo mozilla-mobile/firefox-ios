@@ -7,6 +7,11 @@ import Foundation
 let pdfUrl = "https://storage.googleapis.com/mobile_test_assets/public/lorem_ipsum.pdf"
 
 class ShareMenuTests: BaseTestCase {
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        throw XCTSkip("Skipping all ShareMenuTests. The option is not available on the new menu")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2863631
     func testShareNormalWebsiteTabViaReminders() {
         // Coudn't find a way to tap on reminders on iOS 16
