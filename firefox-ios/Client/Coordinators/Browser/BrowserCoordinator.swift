@@ -53,8 +53,8 @@ class BrowserCoordinator: BaseCoordinator,
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
-    private var isSummarizerFeatureEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+    private var isSummarizerOn: Bool {
+        return SummarizerNimbusUtils.shared.isSummarizeFeatureToggledOn
     }
 
     override var isDismissible: Bool { false }
@@ -1079,7 +1079,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showSummarizePanel() {
-        guard isSummarizerFeatureEnabled, tabManager.selectedTab?.isFxHomeTab == false else { return }
+        guard isSummarizerOn, tabManager.selectedTab?.isFxHomeTab == false else { return }
         let contentContainer = browserViewController.contentContainer
         let browserFrame = browserViewController.view.frame
         var browserScreenshot = browserViewController.view.snapshot

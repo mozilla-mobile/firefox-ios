@@ -242,6 +242,64 @@ class SettingsTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
     }
 
+    func testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
+        app.launch()
+        validateSummarizeContentUI()
+        // Repeat steps for dark mode
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(NewTabScreen)
+        switchThemeToDarkOrLight(theme: "Dark")
+        validateSummarizeContentUI()
+        navigator.nowAt(SettingsScreen)
+        app.buttons["Done"].waitAndTap()
+        // Repeat steps in landscape
+        XCUIDevice.shared.orientation = .landscapeLeft
+        validateSummarizeContentUI()
+        app.buttons["Done"].waitAndTap()
+    }
+
+    func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launch()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        let table = app.tables.element(boundBy: 0)
+        mozWaitForElementToExist(table)
+        let summarizeSettings = table.cells[AccessibilityIdentifiers.Settings.Summarize.title]
+        mozWaitForElementToNotExist(summarizeSettings)
+    }
+
+    func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
+        app.launch()
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.goto(BrowserTabMenu)
+        let summarizeContentMenuOption = app.tables.cells[AccessibilityIdentifiers.MainMenu.summarizePage]
+        mozWaitForElementToExist(summarizeContentMenuOption)
+        navigator.goto(SettingsScreen)
+        let table = app.tables.element(boundBy: 0)
+        mozWaitForElementToExist(table)
+        navigator.goto(SummarizeSettings)
+        let settingsQuery = AccessibilityIdentifiers.Settings.self
+        let summarizeContentSwitch = app.switches[settingsQuery.Summarize.summarizeContentSwitch]
+        summarizeContentSwitch.tap()
+        XCTAssertEqual(summarizeContentSwitch.value as? String,
+                       "0",
+                       "Summarize content - toggle is enabled by default")
+        navigator.goto(BrowserTabMenu)
+        mozWaitForElementToNotExist(summarizeContentMenuOption)
+
+        navigator.goto(SummarizeSettings)
+        summarizeContentSwitch.tap()
+
+        XCTAssertEqual(summarizeContentSwitch.value as? String,
+                       "1",
+                       "Summarize content - toggle is enabled by default")
+        navigator.goto(BrowserTabMenu)
+        mozWaitForElementToExist(summarizeContentMenuOption)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2951992
     func testAutofillPasswordSettingsOptionSubtitles() {
         app.launch()
@@ -365,6 +423,31 @@ class SettingsTests: FeatureFlaggedTestBase {
         XCTAssertEqual(app.switches[settingsQuery.BlockExternal.title].value as? String,
                        "0",
                        "Block Opening External Apps - toggle is not disabled by default")
+        navigator.goto(SettingsScreen)
+    }
+
+    private func validateSummarizeContentUI() {
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        let table = app.tables.element(boundBy: 0)
+        mozWaitForElementToExist(table)
+        let generalSection = table.staticTexts["GENERAL"]
+        let summarizeSettings = table.cells[AccessibilityIdentifiers.Settings.Summarize.title]
+        XCTAssertTrue(summarizeSettings.isBelow(element: generalSection))
+
+        // Navigate to the Browsing settings screen
+        navigator.goto(SummarizeSettings)
+
+        let settingsQuery = AccessibilityIdentifiers.Settings.self
+        let summarizeContentSwitch = app.switches[settingsQuery.Summarize.summarizeContentSwitch]
+        waitForElementsToExist(
+            [
+                summarizeContentSwitch
+            ]
+        )
+        XCTAssertEqual(summarizeContentSwitch.value as? String,
+                       "1",
+                       "Summarize content - toggle is enabled by default")
         navigator.goto(SettingsScreen)
     }
 
