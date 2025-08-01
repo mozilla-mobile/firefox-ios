@@ -563,7 +563,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() {
         setIsHostedSummarizerEnabled(true)
         let subject = createSubject()
-        tabManager.selectedTab = MockTab(profile: profile, windowUUID: windowUUID)
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
         subject.showSummarizePanel()
