@@ -13,7 +13,7 @@ protocol TabScrollControllerDelegate: AnyObject {
     func hideToolbar()
 }
 
-protocol TabScrollControllerProtocol: AnyObject {
+protocol TabScrollHandler: AnyObject {
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView,
                                bottomContainer: BaseAlphaStackView,
                                headerContainer: BaseAlphaStackView)
@@ -21,7 +21,7 @@ protocol TabScrollControllerProtocol: AnyObject {
 
 final class TabScrollController: NSObject,
                                  SearchBarLocationProvider,
-                                 TabScrollControllerProtocol,
+                                 TabScrollHandler,
                                  UIScrollViewDelegate {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
@@ -144,8 +144,7 @@ final class TabScrollController: NSObject,
     ///   - isBottomSearchBar: Whether search bar is set to the bottom.
     /// - Returns: The calculated scroll height.
     func overKeyboardScrollHeight(overKeyboardContainer: BaseAlphaStackView,
-                                  safeAreaInsets: UIEdgeInsets?,
-                                  isMinimalAddressBarEnabled: Bool) -> CGFloat {
+                                  safeAreaInsets: UIEdgeInsets?) -> CGFloat {
         let containerHeight = overKeyboardContainer.frame.height
 
         let isReaderModeActive = tab?.url?.isReaderModeURL == true
@@ -172,8 +171,7 @@ final class TabScrollController: NSObject,
         if isBottomSearchBar {
             bottomContainerScrollHeight = bottomContainer.frame.height
             overKeyboardScrollHeight = overKeyboardScrollHeight(overKeyboardContainer: overKeyboardContainer,
-                                                                safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets,
-                                                                isMinimalAddressBarEnabled: isMinimalAddressBarEnabled)
+                                                                safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
             headerHeight = 0
         } else {
             headerHeight = headerContainer.frame.height
@@ -437,7 +435,7 @@ final class TabScrollController: NSObject,
         let velocity = gesture.velocity(in: containerView)
         handleScroll(for: translation, velocity: velocity)
 
-//        guard isAnimatingToolbar else { return }
+        guard isAnimatingToolbar else { return }
 
         if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
             setOffset(y: contentOffsetBeforeAnimation.y + headerHeight, for: scrollView)
@@ -619,7 +617,6 @@ private extension TabScrollController {
             overKeyboardContainerOffset = clamp(offset: overKeyboardUpdatedOffset, min: 0, max: overKeyboardScrollHeight)
         }
 
-//        header?.updateAlphaForSubviews(scrollAlpha)
         zoomPageBar?.updateAlphaForSubviews(scrollAlpha)
     }
 

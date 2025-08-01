@@ -10,7 +10,7 @@ import Common
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
                                        Themeable,
-                                       TabScrollControllerProtocol {
+                                       TabScrollHandler {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
