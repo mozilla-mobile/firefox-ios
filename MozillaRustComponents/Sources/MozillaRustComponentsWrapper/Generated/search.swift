@@ -735,6 +735,24 @@ public struct JsonEngineUrl {
      * is included in the base.
      */
     public var searchTermParamName: String?
+    /**
+     * A map from locale codes to display names of the URL. This is useful if
+     * the URL corresponds to a brand name distinct from the engine's brand
+     * name. Since brand names can be localized, this is a map rather than a
+     * URL. The client will fall back to the special locale code "default" when
+     * its locale is not present in the map.
+     */
+    public var displayNameMap: [String: String]?
+    /**
+     * Indicates the date until which the URL is considered new
+     * (format: YYYY-MM-DD).
+     */
+    public var isNewUntil: String?
+    /**
+     * Whether the engine's partner code should be excluded from telemetry when
+     * this URL is visited.
+     */
+    public var excludePartnerCodeFromTelemetry: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -755,11 +773,29 @@ public struct JsonEngineUrl {
          * The name of the query parameter for the search term. Automatically
          * appended to the end of the query. This may be skipped if `{searchTerms}`
          * is included in the base.
-         */searchTermParamName: String?) {
+         */searchTermParamName: String?, 
+        /**
+         * A map from locale codes to display names of the URL. This is useful if
+         * the URL corresponds to a brand name distinct from the engine's brand
+         * name. Since brand names can be localized, this is a map rather than a
+         * URL. The client will fall back to the special locale code "default" when
+         * its locale is not present in the map.
+         */displayNameMap: [String: String]?, 
+        /**
+         * Indicates the date until which the URL is considered new
+         * (format: YYYY-MM-DD).
+         */isNewUntil: String?, 
+        /**
+         * Whether the engine's partner code should be excluded from telemetry when
+         * this URL is visited.
+         */excludePartnerCodeFromTelemetry: Bool) {
         self.base = base
         self.method = method
         self.params = params
         self.searchTermParamName = searchTermParamName
+        self.displayNameMap = displayNameMap
+        self.isNewUntil = isNewUntil
+        self.excludePartnerCodeFromTelemetry = excludePartnerCodeFromTelemetry
     }
 }
 
@@ -782,6 +818,15 @@ extension JsonEngineUrl: Equatable, Hashable {
         if lhs.searchTermParamName != rhs.searchTermParamName {
             return false
         }
+        if lhs.displayNameMap != rhs.displayNameMap {
+            return false
+        }
+        if lhs.isNewUntil != rhs.isNewUntil {
+            return false
+        }
+        if lhs.excludePartnerCodeFromTelemetry != rhs.excludePartnerCodeFromTelemetry {
+            return false
+        }
         return true
     }
 
@@ -790,6 +835,9 @@ extension JsonEngineUrl: Equatable, Hashable {
         hasher.combine(method)
         hasher.combine(params)
         hasher.combine(searchTermParamName)
+        hasher.combine(displayNameMap)
+        hasher.combine(isNewUntil)
+        hasher.combine(excludePartnerCodeFromTelemetry)
     }
 }
 
@@ -805,7 +853,10 @@ public struct FfiConverterTypeJSONEngineUrl: FfiConverterRustBuffer {
                 base: FfiConverterOptionString.read(from: &buf), 
                 method: FfiConverterOptionTypeJSONEngineMethod.read(from: &buf), 
                 params: FfiConverterOptionSequenceTypeSearchUrlParam.read(from: &buf), 
-                searchTermParamName: FfiConverterOptionString.read(from: &buf)
+                searchTermParamName: FfiConverterOptionString.read(from: &buf), 
+                displayNameMap: FfiConverterOptionDictionaryStringString.read(from: &buf), 
+                isNewUntil: FfiConverterOptionString.read(from: &buf), 
+                excludePartnerCodeFromTelemetry: FfiConverterBool.read(from: &buf)
         )
     }
 
@@ -814,6 +865,9 @@ public struct FfiConverterTypeJSONEngineUrl: FfiConverterRustBuffer {
         FfiConverterOptionTypeJSONEngineMethod.write(value.method, into: &buf)
         FfiConverterOptionSequenceTypeSearchUrlParam.write(value.params, into: &buf)
         FfiConverterOptionString.write(value.searchTermParamName, into: &buf)
+        FfiConverterOptionDictionaryStringString.write(value.displayNameMap, into: &buf)
+        FfiConverterOptionString.write(value.isNewUntil, into: &buf)
+        FfiConverterBool.write(value.excludePartnerCodeFromTelemetry, into: &buf)
     }
 }
 
@@ -853,6 +907,10 @@ public struct JsonEngineUrls {
      * The URL of the search engine homepage.
      */
     public var searchForm: JsonEngineUrl?
+    /**
+     * The URL to use for visual searches.
+     */
+    public var visualSearch: JsonEngineUrl?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -868,11 +926,15 @@ public struct JsonEngineUrls {
          */trending: JsonEngineUrl?, 
         /**
          * The URL of the search engine homepage.
-         */searchForm: JsonEngineUrl?) {
+         */searchForm: JsonEngineUrl?, 
+        /**
+         * The URL to use for visual searches.
+         */visualSearch: JsonEngineUrl?) {
         self.search = search
         self.suggestions = suggestions
         self.trending = trending
         self.searchForm = searchForm
+        self.visualSearch = visualSearch
     }
 }
 
@@ -895,6 +957,9 @@ extension JsonEngineUrls: Equatable, Hashable {
         if lhs.searchForm != rhs.searchForm {
             return false
         }
+        if lhs.visualSearch != rhs.visualSearch {
+            return false
+        }
         return true
     }
 
@@ -903,6 +968,7 @@ extension JsonEngineUrls: Equatable, Hashable {
         hasher.combine(suggestions)
         hasher.combine(trending)
         hasher.combine(searchForm)
+        hasher.combine(visualSearch)
     }
 }
 
@@ -918,7 +984,8 @@ public struct FfiConverterTypeJSONEngineUrls: FfiConverterRustBuffer {
                 search: FfiConverterOptionTypeJSONEngineUrl.read(from: &buf), 
                 suggestions: FfiConverterOptionTypeJSONEngineUrl.read(from: &buf), 
                 trending: FfiConverterOptionTypeJSONEngineUrl.read(from: &buf), 
-                searchForm: FfiConverterOptionTypeJSONEngineUrl.read(from: &buf)
+                searchForm: FfiConverterOptionTypeJSONEngineUrl.read(from: &buf), 
+                visualSearch: FfiConverterOptionTypeJSONEngineUrl.read(from: &buf)
         )
     }
 
@@ -927,6 +994,7 @@ public struct FfiConverterTypeJSONEngineUrls: FfiConverterRustBuffer {
         FfiConverterOptionTypeJSONEngineUrl.write(value.suggestions, into: &buf)
         FfiConverterOptionTypeJSONEngineUrl.write(value.trending, into: &buf)
         FfiConverterOptionTypeJSONEngineUrl.write(value.searchForm, into: &buf)
+        FfiConverterOptionTypeJSONEngineUrl.write(value.visualSearch, into: &buf)
     }
 }
 
@@ -1107,6 +1175,11 @@ public struct SearchEngineDefinition {
      */
     public var identifier: String
     /**
+     * Indicates the date until which the engine variant or subvariant is considered new
+     * (format: YYYY-MM-DD).
+     */
+    public var isNewUntil: String?
+    /**
      * The user visible name of the search engine.
      */
     public var name: String
@@ -1166,6 +1239,10 @@ public struct SearchEngineDefinition {
          * also used to form the base telemetry id and may be extended by telemetrySuffix.
          */identifier: String, 
         /**
+         * Indicates the date until which the engine variant or subvariant is considered new
+         * (format: YYYY-MM-DD).
+         */isNewUntil: String?, 
+        /**
          * The user visible name of the search engine.
          */name: String, 
         /**
@@ -1199,6 +1276,7 @@ public struct SearchEngineDefinition {
         self.charset = charset
         self.classification = classification
         self.identifier = identifier
+        self.isNewUntil = isNewUntil
         self.name = name
         self.optional = optional
         self.partnerCode = partnerCode
@@ -1226,6 +1304,9 @@ extension SearchEngineDefinition: Equatable, Hashable {
             return false
         }
         if lhs.identifier != rhs.identifier {
+            return false
+        }
+        if lhs.isNewUntil != rhs.isNewUntil {
             return false
         }
         if lhs.name != rhs.name {
@@ -1257,6 +1338,7 @@ extension SearchEngineDefinition: Equatable, Hashable {
         hasher.combine(charset)
         hasher.combine(classification)
         hasher.combine(identifier)
+        hasher.combine(isNewUntil)
         hasher.combine(name)
         hasher.combine(optional)
         hasher.combine(partnerCode)
@@ -1280,6 +1362,7 @@ public struct FfiConverterTypeSearchEngineDefinition: FfiConverterRustBuffer {
                 charset: FfiConverterString.read(from: &buf), 
                 classification: FfiConverterTypeSearchEngineClassification.read(from: &buf), 
                 identifier: FfiConverterString.read(from: &buf), 
+                isNewUntil: FfiConverterOptionString.read(from: &buf), 
                 name: FfiConverterString.read(from: &buf), 
                 optional: FfiConverterBool.read(from: &buf), 
                 partnerCode: FfiConverterString.read(from: &buf), 
@@ -1295,6 +1378,7 @@ public struct FfiConverterTypeSearchEngineDefinition: FfiConverterRustBuffer {
         FfiConverterString.write(value.charset, into: &buf)
         FfiConverterTypeSearchEngineClassification.write(value.classification, into: &buf)
         FfiConverterString.write(value.identifier, into: &buf)
+        FfiConverterOptionString.write(value.isNewUntil, into: &buf)
         FfiConverterString.write(value.name, into: &buf)
         FfiConverterBool.write(value.optional, into: &buf)
         FfiConverterString.write(value.partnerCode, into: &buf)
@@ -1346,6 +1430,21 @@ public struct SearchEngineUrl {
      * is included in the base.
      */
     public var searchTermParamName: String?
+    /**
+     * The display name of the URL, if any. This is useful if the URL
+     * corresponds to a brand name distinct from the engine's brand name.
+     */
+    public var displayName: String?
+    /**
+     * Indicates the date until which the URL is considered new
+     * (format: YYYY-MM-DD).
+     */
+    public var isNewUntil: String?
+    /**
+     * Whether the engine's partner code should be excluded from telemetry when
+     * this URL is visited.
+     */
+    public var excludePartnerCodeFromTelemetry: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -1366,11 +1465,26 @@ public struct SearchEngineUrl {
          * The name of the query parameter for the search term. Automatically
          * appended to the end of the query. This may be skipped if `{searchTerms}`
          * is included in the base.
-         */searchTermParamName: String?) {
+         */searchTermParamName: String?, 
+        /**
+         * The display name of the URL, if any. This is useful if the URL
+         * corresponds to a brand name distinct from the engine's brand name.
+         */displayName: String? = nil, 
+        /**
+         * Indicates the date until which the URL is considered new
+         * (format: YYYY-MM-DD).
+         */isNewUntil: String? = nil, 
+        /**
+         * Whether the engine's partner code should be excluded from telemetry when
+         * this URL is visited.
+         */excludePartnerCodeFromTelemetry: Bool = false) {
         self.base = base
         self.method = method
         self.params = params
         self.searchTermParamName = searchTermParamName
+        self.displayName = displayName
+        self.isNewUntil = isNewUntil
+        self.excludePartnerCodeFromTelemetry = excludePartnerCodeFromTelemetry
     }
 }
 
@@ -1393,6 +1507,15 @@ extension SearchEngineUrl: Equatable, Hashable {
         if lhs.searchTermParamName != rhs.searchTermParamName {
             return false
         }
+        if lhs.displayName != rhs.displayName {
+            return false
+        }
+        if lhs.isNewUntil != rhs.isNewUntil {
+            return false
+        }
+        if lhs.excludePartnerCodeFromTelemetry != rhs.excludePartnerCodeFromTelemetry {
+            return false
+        }
         return true
     }
 
@@ -1401,6 +1524,9 @@ extension SearchEngineUrl: Equatable, Hashable {
         hasher.combine(method)
         hasher.combine(params)
         hasher.combine(searchTermParamName)
+        hasher.combine(displayName)
+        hasher.combine(isNewUntil)
+        hasher.combine(excludePartnerCodeFromTelemetry)
     }
 }
 
@@ -1416,7 +1542,10 @@ public struct FfiConverterTypeSearchEngineUrl: FfiConverterRustBuffer {
                 base: FfiConverterString.read(from: &buf), 
                 method: FfiConverterString.read(from: &buf), 
                 params: FfiConverterSequenceTypeSearchUrlParam.read(from: &buf), 
-                searchTermParamName: FfiConverterOptionString.read(from: &buf)
+                searchTermParamName: FfiConverterOptionString.read(from: &buf), 
+                displayName: FfiConverterOptionString.read(from: &buf), 
+                isNewUntil: FfiConverterOptionString.read(from: &buf), 
+                excludePartnerCodeFromTelemetry: FfiConverterBool.read(from: &buf)
         )
     }
 
@@ -1425,6 +1554,9 @@ public struct FfiConverterTypeSearchEngineUrl: FfiConverterRustBuffer {
         FfiConverterString.write(value.method, into: &buf)
         FfiConverterSequenceTypeSearchUrlParam.write(value.params, into: &buf)
         FfiConverterOptionString.write(value.searchTermParamName, into: &buf)
+        FfiConverterOptionString.write(value.displayName, into: &buf)
+        FfiConverterOptionString.write(value.isNewUntil, into: &buf)
+        FfiConverterBool.write(value.excludePartnerCodeFromTelemetry, into: &buf)
     }
 }
 
@@ -1464,6 +1596,10 @@ public struct SearchEngineUrls {
      * The URL of the search engine homepage.
      */
     public var searchForm: SearchEngineUrl?
+    /**
+     * The URL to use for visual searches.
+     */
+    public var visualSearch: SearchEngineUrl?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -1479,11 +1615,15 @@ public struct SearchEngineUrls {
          */trending: SearchEngineUrl?, 
         /**
          * The URL of the search engine homepage.
-         */searchForm: SearchEngineUrl?) {
+         */searchForm: SearchEngineUrl?, 
+        /**
+         * The URL to use for visual searches.
+         */visualSearch: SearchEngineUrl?) {
         self.search = search
         self.suggestions = suggestions
         self.trending = trending
         self.searchForm = searchForm
+        self.visualSearch = visualSearch
     }
 }
 
@@ -1506,6 +1646,9 @@ extension SearchEngineUrls: Equatable, Hashable {
         if lhs.searchForm != rhs.searchForm {
             return false
         }
+        if lhs.visualSearch != rhs.visualSearch {
+            return false
+        }
         return true
     }
 
@@ -1514,6 +1657,7 @@ extension SearchEngineUrls: Equatable, Hashable {
         hasher.combine(suggestions)
         hasher.combine(trending)
         hasher.combine(searchForm)
+        hasher.combine(visualSearch)
     }
 }
 
@@ -1529,7 +1673,8 @@ public struct FfiConverterTypeSearchEngineUrls: FfiConverterRustBuffer {
                 search: FfiConverterTypeSearchEngineUrl.read(from: &buf), 
                 suggestions: FfiConverterOptionTypeSearchEngineUrl.read(from: &buf), 
                 trending: FfiConverterOptionTypeSearchEngineUrl.read(from: &buf), 
-                searchForm: FfiConverterOptionTypeSearchEngineUrl.read(from: &buf)
+                searchForm: FfiConverterOptionTypeSearchEngineUrl.read(from: &buf), 
+                visualSearch: FfiConverterOptionTypeSearchEngineUrl.read(from: &buf)
         )
     }
 
@@ -1538,6 +1683,7 @@ public struct FfiConverterTypeSearchEngineUrls: FfiConverterRustBuffer {
         FfiConverterOptionTypeSearchEngineUrl.write(value.suggestions, into: &buf)
         FfiConverterOptionTypeSearchEngineUrl.write(value.trending, into: &buf)
         FfiConverterOptionTypeSearchEngineUrl.write(value.searchForm, into: &buf)
+        FfiConverterOptionTypeSearchEngineUrl.write(value.visualSearch, into: &buf)
     }
 }
 
@@ -2477,6 +2623,30 @@ fileprivate struct FfiConverterOptionSequenceTypeSearchUrlParam: FfiConverterRus
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionDictionaryStringString: FfiConverterRustBuffer {
+    typealias SwiftType = [String: String]?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterDictionaryStringString.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterDictionaryStringString.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
     typealias SwiftType = [String]
 
@@ -2546,6 +2716,32 @@ fileprivate struct FfiConverterSequenceTypeSearchUrlParam: FfiConverterRustBuffe
             seq.append(try FfiConverterTypeSearchUrlParam.read(from: &buf))
         }
         return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterDictionaryStringString: FfiConverterRustBuffer {
+    public static func write(_ value: [String: String], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for (key, value) in value {
+            FfiConverterString.write(key, into: &buf)
+            FfiConverterString.write(value, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: String] {
+        let len: Int32 = try readInt(&buf)
+        var dict = [String: String]()
+        dict.reserveCapacity(Int(len))
+        for _ in 0..<len {
+            let key = try FfiConverterString.read(from: &buf)
+            let value = try FfiConverterString.read(from: &buf)
+            dict[key] = value
+        }
+        return dict
     }
 }
 

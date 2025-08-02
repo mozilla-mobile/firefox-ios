@@ -38,7 +38,15 @@ open class LoginsStorage {
     /// use in the iOS logins verification process.
     open func deleteUndecryptableRecordsForRemoteReplacement() throws {
         return try queue.sync {
-            try self.store.deleteUndecryptableRecordsForRemoteReplacement()
+            let result = try self.store.deleteUndecryptableRecordsForRemoteReplacement()
+
+            if result.localDeleted > 0 {
+                GleanMetrics.LoginsStore.localUndecryptableDeleted.add(Int32(result.localDeleted))
+            }
+
+            if result.mirrorDeleted > 0 {
+                GleanMetrics.LoginsStore.mirrorUndecryptableDeleted.add(Int32(result.mirrorDeleted))
+            }
         }
     }
 

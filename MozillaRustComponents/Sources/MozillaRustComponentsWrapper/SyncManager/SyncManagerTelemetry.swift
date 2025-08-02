@@ -308,7 +308,7 @@ private func recordFailureReason(reason: FailureReason,
 }
 
 class BaseGleanSyncPing {
-    public static let MILLIS_PER_SEC: Int64 = 1000
+    static let MILLIS_PER_SEC: Int64 = 1000
 
     var uid: String
     var startedAt: Date
