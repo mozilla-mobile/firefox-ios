@@ -6561,7 +6561,7 @@ extension String {
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
 
         public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
-            key: "Toolbar.NewTab.Button.v130",
+            key: "Toolbar.NewTab.Button.v142",
             tableName: "Toolbar",
             value: "Summarize page",
             comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")

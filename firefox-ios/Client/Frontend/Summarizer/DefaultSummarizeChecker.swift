@@ -6,21 +6,7 @@ import Foundation
 import WebKit
 import SummarizeKit
 
-class DefaultSummarizationChecker: SummarizationCheckerProtocol {
-    private let checker: SummarizationCheckerProtocol
-    private let nimbusUtility: SummarizerNimbusUtils
-
-    init(checker: SummarizationCheckerProtocol = SummarizationChecker(),
-         nimbusUtility: SummarizerNimbusUtils = .shared) {
-        self.checker = checker
-        self.nimbusUtility = nimbusUtility
-    }
-
-    func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
-        guard nimbusUtility.isSummarizeFeatureEnabled else { return .failure(.invalidJSON) }
-        return await checker.check(on: webView, maxWords: maxWords)
-    }
-
+extension SummarizationChecker {
     /// Query the max allowed words to summarize for the active experiment.
     static func maxWords(nimbusUtility: SummarizerNimbusUtils = .shared) -> Int {
         if nimbusUtility.isAppleSummarizerEnabled() {

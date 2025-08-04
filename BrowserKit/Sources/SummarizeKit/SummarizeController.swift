@@ -27,6 +27,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         static let tabSnapshotShadowRadius: CGFloat = 64.0
         static let tabSnapshotShadowOffset = CGSize(width: 0.0, height: -10.0)
         static let tabSnapshotShadowOpacity: Float = 1.0
+        static let tabSnapshotTranslationKeyPath = "transform.translation.y"
     }
 
     private let viewModel: SummarizeViewModel
@@ -111,10 +112,6 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        print("FF: i'm going away SummarizeController")
     }
 
     override public func viewDidLoad() {
@@ -243,7 +240,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         let frameHeight = view.frame.height
         loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.1))
 
-        let transformAnimation = CABasicAnimation(keyPath: "transform.translation.y")
+        let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
         transformAnimation.fromValue = 0
         transformAnimation.toValue = frameHeight / 2
         transformAnimation.duration = UX.initialTransformAnimationDuration
@@ -389,7 +386,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         guard flag,
               let animation = anim as? CABasicAnimation,
-              animation.keyPath == "transform.translation.y" else { return }
+              animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
         summarize()
     }
 

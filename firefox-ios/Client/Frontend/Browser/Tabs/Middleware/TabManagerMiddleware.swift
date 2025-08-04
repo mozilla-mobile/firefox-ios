@@ -30,7 +30,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
-         summarizationChecker: SummarizationCheckerProtocol = DefaultSummarizationChecker(),
+         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
@@ -879,7 +879,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
             Task {
                 let canSummarize: Bool = if let webView = selectedTab.webView {
                     await self?.summarizationChecker.check(on: webView,
-                                                           maxWords: DefaultSummarizationChecker.maxWords()).canSummarize
+                                                           maxWords: SummarizationChecker.maxWords()).canSummarize
                     ?? false
                 } else {
                     false

@@ -333,6 +333,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
+    var isSummarizerEnabled: Bool {
+        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -401,7 +405,7 @@ class BrowserViewController: UIViewController,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
-        summarizationChecker: SummarizationCheckerProtocol = DefaultSummarizationChecker(),
+        summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
         appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
@@ -2513,9 +2517,9 @@ class BrowserViewController: UIViewController,
         if isToolbarRefactorEnabled {
             Task {
                 var summaryState: SummarizationCheckResult?
-                if let webView = tab?.webView {
+                if let webView = tab?.webView, isSummarizerEnabled {
                     summaryState = await summarizationChecker.check(on: webView,
-                                                                    maxWords: DefaultSummarizationChecker.maxWords())
+                                                                    maxWords: SummarizationChecker.maxWords())
                 }
                 let action = ToolbarAction(
                     summaryState: summaryState,

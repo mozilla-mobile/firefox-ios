@@ -52,10 +52,6 @@ class SummarizeCoordinator: BaseCoordinator {
         super.init(router: router)
     }
 
-    deinit {
-        print("FF: Summarize coordinator goings")
-    }
-
     func start() {
         if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false {
             showSummarizeViewController()
