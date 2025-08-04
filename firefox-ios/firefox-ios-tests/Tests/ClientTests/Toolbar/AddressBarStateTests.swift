@@ -15,6 +15,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     override func setUp() {
         super.setUp()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         setIsHostedSummarizerFeatureEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies()
     }
