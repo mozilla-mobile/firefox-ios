@@ -125,6 +125,9 @@ extension SummarizerError: @retroactive Equatable {
              (.safetyBlocked, .safetyBlocked),
              (.unsupportedLanguage, .unsupportedLanguage),
              (.invalidResponse, .invalidResponse),
+             (.unableToExtractContent, .unableToExtractContent),
+             (.invalidChunk, .invalidChunk),
+             (.noContent, .noContent),
              (.cancelled, .cancelled):
             return true
 

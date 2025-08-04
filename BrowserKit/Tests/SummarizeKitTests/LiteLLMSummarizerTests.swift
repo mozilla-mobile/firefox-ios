@@ -20,6 +20,14 @@ final class LiteLLMSummarizerTests: XCTestCase {
         }
     }
 
+    func testSummarizeNonStreamingMapsInvalidResponse() async throws {
+        let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 502)
+        let subject = createSubject(respondWithError: rateLimitError)
+        await assertSummarizeThrows(.invalidResponse(statusCode: 502)) {
+            _ = try await subject.summarize("t")
+        }
+    }
+
     func testSummarizeNonStreamingMapsUnknownError() async throws {
         let randomError = NSError(domain: "Random error", code: 1)
         let subject = createSubject(respondWithError: randomError)
@@ -45,6 +53,15 @@ final class LiteLLMSummarizerTests: XCTestCase {
         let subject = createSubject(respondWithError: rateLimitError)
         let stream = subject.summarizeStreamed("t")
         await assertSummarizeThrows(.rateLimited) {
+            for try await _ in stream { }
+        }
+    }
+
+    func testSummarizeStreamedMapsInvalidResponse() async throws {
+        let rateLimitError = LiteLLMClientError.invalidResponse(statusCode: 567)
+        let subject = createSubject(respondWithError: rateLimitError)
+        let stream = subject.summarizeStreamed("t")
+        await assertSummarizeThrows(.invalidResponse(statusCode: 567)) {
             for try await _ in stream { }
         }
     }

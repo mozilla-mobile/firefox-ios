@@ -70,7 +70,7 @@ final class LiteLLMSummarizer: SummarizerProtocol {
         case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 429:
             return .rateLimited
         case LiteLLMClientError.invalidResponse(let statusCode):
-            return .unknown(LiteLLMClientError.invalidResponse(statusCode: statusCode))
+            return .invalidResponse(statusCode: statusCode)
         case is CancellationError: return .cancelled
         case let e as LiteLLMClientError: return .unknown(e)
         default: return .unknown(error)

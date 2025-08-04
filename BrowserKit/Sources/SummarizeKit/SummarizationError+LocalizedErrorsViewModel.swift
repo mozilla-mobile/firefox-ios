@@ -7,7 +7,10 @@ import Foundation
 extension SummarizerError {
     var shouldRetrySummarizing: Bool {
         return switch self {
-        case .busy, .noContent, .invalidResponse:
+        case .busy,
+             .noContent,
+             .invalidResponse,
+             .invalidChunk:
             true
         default:
             false
@@ -20,11 +23,14 @@ extension SummarizerError {
             localizedErrors.rateLimitedMessage
         case .safetyBlocked:
             localizedErrors.unsafeContentMessage
-        case .unsupportedLanguage, .invalidResponse, .tooLong:
+        case .unsupportedLanguage,
+             .invalidResponse,
+             .tooLong,
+             .unableToExtractContent:
             localizedErrors.summarizationNotAvailableMessage
         case .noContent, .busy:
             localizedErrors.pageStillLoadingMessage
-        case .unknown, .cancelled:
+        case .unknown, .cancelled, .invalidChunk:
             localizedErrors.genericErrorMessage
         }
     }
