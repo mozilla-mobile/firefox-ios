@@ -1024,9 +1024,9 @@ class BrowserViewController: UIViewController,
         }
 
         navigationToolbarContainer.toolbarDelegate = self
-        scrollController.header = header
-        scrollController.overKeyboardContainer = overKeyboardContainer
-        scrollController.bottomContainer = bottomContainer
+        scrollController.configureToolbarViews(overKeyboardContainer: overKeyboardContainer,
+                                               bottomContainer: bottomContainer,
+                                               headerContainer: header)
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links into the view from other apps.
