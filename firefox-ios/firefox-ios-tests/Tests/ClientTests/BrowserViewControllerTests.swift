@@ -24,7 +24,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() {
         super.setUp()
         setIsSwipingTabsEnabled(false)
-        setIsAppleSummarizerEnabled(false)
+        setIsHostedSummarizerEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
@@ -187,7 +187,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testUpdateReaderModeState_whenSummarizeFeatureOn_returnsSuccessSummariseState() throws {
-        setIsAppleSummarizerEnabled(true)
+        setIsHostedSummarizerEnabled(true)
         let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
@@ -205,7 +205,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testUpdateReaderModeState_whenSummarizeFeatureOn_returnsSummarizeStateNilForNilWebView() throws {
-        setIsAppleSummarizerEnabled(true)
+        setIsHostedSummarizerEnabled(true)
         let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
@@ -439,9 +439,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    private func setIsAppleSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.appleSummarizerFeature.with { _, _ in
-            return AppleSummarizerFeature(enabled: isEnabled)
+    private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled)
         }
     }
 
