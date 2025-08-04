@@ -32,7 +32,7 @@ ai.summarize:
         type: string
         description: |
           Describes the action used to trigger summarization.
-          Options are listed in the SummarizerTrigger enum.
+          Options are listed in the `SummarizerTrigger` enum.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
     #TODO(Issam): Add PR number when available
@@ -105,17 +105,17 @@ ai.summarize:
         type: string
         description: |
           Describes the type of connection used during summarization.
-          Options are listed in the SummarizerTelemetry.ConnectionTypeExtra enum.
+          Options are listed in the `DeviceInfo.ConnectionType` enum.
       model:
         type: string
         description: |
           Describes the LLM used to summarize the text.
-          Options are listed in the SummarizerTelemetry.ModelExtra enum.
+          Options are listed in the `SummarizerModel` enum.
       error_message:
         type: string
         description: |
           Describes the error message when summarization fails.
-          Options are listed in the SummarizerTelemetry.ErrorMessageExtra enum.
+          Options are listed in the `SummarizerError.telemetryDescription`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
     #TODO(Issam): Add PR number when available
