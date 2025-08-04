@@ -201,7 +201,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation])
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertEqual(action.summaryState, MockSummarizationChecker.success)
+        XCTAssertEqual(action.canSummarize, true)
     }
 
     func testUpdateReaderModeState_whenSummarizeFeatureOn_returnsSummarizeStateNilForNilWebView() throws {
@@ -218,7 +218,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation])
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertNil(action.summaryState)
+        XCTAssertNil(action.canSummarize)
     }
 
     func testUpdateReaderModeState_whenSummarizeFeatureOff_returnsSummarizeStateNil() throws {
@@ -234,7 +234,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation])
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertNil(action.summaryState)
+        XCTAssertNil(action.canSummarize)
     }
 
     // MARK: - Handle PDF

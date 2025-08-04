@@ -5,7 +5,6 @@
 import Common
 import Redux
 import ToolbarKit
-import SummarizeKit
 
 struct ToolbarAction: Action {
     let windowUUID: WindowUUID
@@ -23,7 +22,7 @@ struct ToolbarAction: Action {
     let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
-    let summaryState: SummarizationCheckResult?
+    let canSummarize: Bool?
     let readerModeState: ReaderModeState?
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
@@ -48,7 +47,7 @@ struct ToolbarAction: Action {
          isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
-         summaryState: SummarizationCheckResult? = nil,
+         canSummarize: Bool? = nil,
          readerModeState: ReaderModeState? = nil,
          addressBorderPosition: AddressToolbarBorderPosition = .none,
          displayNavBorder: Bool? = nil,
@@ -86,7 +85,7 @@ struct ToolbarAction: Action {
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
         self.shouldAnimate = shouldAnimate
-        self.summaryState = summaryState
+        self.canSummarize = canSummarize
     }
 }
 

@@ -181,7 +181,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(
             urlDidChangeState,
             ToolbarAction(
-                summaryState: MockSummarizationChecker.success,
+                canSummarize: true,
                 readerModeState: .available,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.readerModeStateChanged
@@ -209,7 +209,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(
             urlDidChangeState,
             ToolbarAction(
-                summaryState: MockSummarizationChecker.success,
+                canSummarize: true,
                 readerModeState: .active,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.readerModeStateChanged

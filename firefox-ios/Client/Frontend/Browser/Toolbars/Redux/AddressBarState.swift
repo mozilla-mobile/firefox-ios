@@ -24,7 +24,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     var shouldSelectSearchTerm: Bool
     var isLoading: Bool
     let readerModeState: ReaderModeState?
-    let summaryState: SummarizationCheckResult?
+    let canSummarize: Bool?
     let didStartTyping: Bool
     let isEmptySearch: Bool
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
@@ -103,7 +103,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
-            summaryState: nil,
+            canSummarize: nil,
             didStartTyping: false,
             isEmptySearch: true,
             alternativeSearchEngine: nil
@@ -126,7 +126,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
          shouldSelectSearchTerm: Bool,
          isLoading: Bool,
          readerModeState: ReaderModeState?,
-         summaryState: SummarizationCheckResult?,
+         canSummarize: Bool?,
          didStartTyping: Bool,
          isEmptySearch: Bool,
          alternativeSearchEngine: SearchEngineModel?) {
@@ -149,7 +149,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.didStartTyping = didStartTyping
         self.isEmptySearch = isEmptySearch
         self.alternativeSearchEngine = alternativeSearchEngine
-        self.summaryState = summaryState
+        self.canSummarize = canSummarize
     }
 
     // swiftlint:disable:next closure_body_length
@@ -254,7 +254,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
-            summaryState: nil,
+            canSummarize: nil,
             didStartTyping: false,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -281,7 +281,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -313,7 +313,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: toolbarAction.readerModeState,
-            summaryState: toolbarAction.summaryState,
+            canSummarize: toolbarAction.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -346,7 +346,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: toolbarAction.isLoading ?? state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -382,7 +382,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -415,7 +415,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -448,7 +448,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -481,7 +481,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -508,7 +508,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -540,7 +540,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -574,7 +574,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: true,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -615,7 +615,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -647,7 +647,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -675,7 +675,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -705,7 +705,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -735,7 +735,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: true,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -765,7 +765,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: true,
             isEmptySearch: false,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -792,7 +792,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: false,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -819,7 +819,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: true,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -848,7 +848,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: selectedSearchEngine
@@ -875,7 +875,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: nil
@@ -900,7 +900,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
-            summaryState: state.summaryState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -979,7 +979,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
-        let summaryState = isReaderModeAction ? action.summaryState : addressBarState.summaryState
+        let canSummarize = isReaderModeAction ? action.canSummarize : addressBarState.canSummarize
         let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
 
         guard !hasEmptySearchField, // When the search field is empty we show no actions
@@ -987,7 +987,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         else { return actions }
 
         let isSummarizeFeatureEnabled = SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
-        if isSummarizeFeatureEnabled && summaryState?.canSummarize == true, readerModeState != .active {
+        if isSummarizeFeatureEnabled && canSummarize == true, readerModeState != .active {
             actions.append(summaryAction)
         } else if readerModeState == .active || readerModeState == .available {
             let readerModeAction = ToolbarActionConfiguration(

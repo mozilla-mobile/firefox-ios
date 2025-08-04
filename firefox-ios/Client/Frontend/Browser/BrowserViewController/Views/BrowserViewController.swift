@@ -2522,7 +2522,7 @@ class BrowserViewController: UIViewController,
                                                                     maxWords: SummarizationChecker.maxWords())
                 }
                 let action = ToolbarAction(
-                    summaryState: summaryState,
+                    canSummarize: summaryState?.canSummarize,
                     readerModeState: readerModeState,
                     windowUUID: windowUUID,
                     actionType: ToolbarActionType.readerModeStateChanged

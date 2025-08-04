@@ -140,7 +140,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                shouldSelectSearchTerm: true,
                                isLoading: false,
                                readerModeState: nil,
-                               summaryState: nil,
+                               canSummarize: nil,
                                didStartTyping: false,
                                isEmptySearch: true,
                                alternativeSearchEngine: withSearchEngine)
