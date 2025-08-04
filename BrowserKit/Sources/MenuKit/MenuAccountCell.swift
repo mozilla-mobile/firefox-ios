@@ -14,7 +14,7 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
         static let cornerRadius: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.8
+        static let backgroundAlpha: CGFloat = 0.85
     }
 
     // MARK: - UI Elements
@@ -147,7 +147,7 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         guard let model else { return }
-        backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+        backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
         if let needsReAuth = model.needsReAuth, needsReAuth {
             descriptionLabel.textColor = theme.colors.textCritical
         } else if model.iconImage != nil {
