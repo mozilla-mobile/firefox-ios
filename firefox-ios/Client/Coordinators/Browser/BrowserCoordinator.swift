@@ -1103,9 +1103,9 @@ class BrowserCoordinator: BaseCoordinator,
             webView: webView,
             browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
+            trigger: trigger,
             prefs: profile.prefs,
             windowUUID: windowUUID,
-            trigger: trigger,
             router: router) { [weak self] url in
             guard let url else { return }
             self?.openURLinNewTab(url)

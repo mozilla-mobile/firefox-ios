@@ -50,7 +50,7 @@ public enum SummarizerError: Error, LocalizedError, Sendable {
         }
     }
 
-    var errorDescription: String? { userMessage }
+    public var errorDescription: String? { userMessage }
 
     // TODO(FXIOS-12934): Localize these strings
     var userMessage: String {

@@ -116,7 +116,6 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             viewModel: model,
             summarizerService: service,
             webView: webView,
-            trigger: trigger,
             onSummaryDisplayed: { [weak self] in
                 self?.summarizerTelemetry.summarizationDisplayed()
             }

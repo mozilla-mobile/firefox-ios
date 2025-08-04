@@ -298,7 +298,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             let summarizerTelemetry = SummarizerTelemetry()
             summarizerTelemetry.summarizationEnabled(SummarizerNimbusUtils.shared.isSummarizeFeatureToggledOn)
             summarizerTelemetry.summarizationShakeGestureEnabled(SummarizerNimbusUtils.shared.isShakeEnabled)
-
         }
     }
 }

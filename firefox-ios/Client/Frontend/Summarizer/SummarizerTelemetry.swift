@@ -29,7 +29,13 @@ class SummarizerTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.AiSummarize.summarizationStarted, extras: summarizationStartedExtra)
     }
 
-    func summarizationCompleted(lengthChars: Int32, lengthWords: Int32, modelName: String, outcome: Bool, errorMessage: String? = nil) {
+    func summarizationCompleted(
+        lengthChars: Int32,
+        lengthWords: Int32,
+        modelName: String,
+        outcome: Bool,
+        errorMessage: String? = nil
+) {
         let summarizationCompletedExtra = GleanMetrics.AiSummarize.SummarizationCompletedExtra(
             connectionType: DeviceInfo.connectionType().rawValue,
             errorMessage: errorMessage,
@@ -73,7 +79,8 @@ class SummarizerTelemetry {
     }
 
     func summarizationConsentDisplayed(_ userAgreed: Bool) {
-        let summarizationConsentDisplayedExtra = GleanMetrics.AiSummarize.SummarizationConsentDisplayedExtra(agreed: userAgreed)
+        let summarizationConsentDisplayedExtra =
+            GleanMetrics.AiSummarize.SummarizationConsentDisplayedExtra(agreed: userAgreed)
         gleanWrapper.recordEvent(for: GleanMetrics.AiSummarize.summarizationConsentDisplayed,
                                  extras: summarizationConsentDisplayedExtra)
     }
