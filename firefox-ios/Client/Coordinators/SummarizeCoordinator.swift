@@ -122,7 +122,7 @@ class SummarizeCoordinator: BaseCoordinator {
             descriptionText: descriptionText,
             descriptionTextA11yId: AccessibilityIdentifiers.Summarizer.tosDescriptionText,
             linkButtonLabel: .Summarizer.ToSAlertLinkButtonLabel,
-            linkButtonURL: URL(string: "https://www.mozilla.com"),
+            linkButtonURL: SupportUtils.URLForTopic("summarize-pages-ios"),
             allowButtonTitle: .Summarizer.ToSAlertAllowButtonLabel,
             allowButtonA11yId: AccessibilityIdentifiers.Summarizer.tosAllowButton,
             allowButtonA11yLabel: .Summarizer.ToSAlertAllowButtonAccessibilityLabel,
