@@ -288,12 +288,24 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Shake motion
-    func testMotionEnded_withShakeGesture_showsSummaryPanel() {
+    func testMotionEnded_withShakeGestureEnabled_showsSummaryPanel() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
+        setupSummarizedShakeGestureForTesting(isEnabled: true)
         let subject = createSubject()
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
 
         XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
+    }
+
+    func testMotionEnded_withShakeGestureDisabled_doesNotShowSummaryPanel() {
+        profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
+        setupSummarizedShakeGestureForTesting(isEnabled: false)
+        let subject = createSubject()
+        tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        subject.motionEnded(.motionShake, with: nil)
+
+        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 0)
     }
 
     func testMotionEnded_withGestureNotShake_doesntShowSummarizePanel() {
@@ -442,6 +454,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature(enabled: isEnabled)
+        }
+    }
+    
+    private func setupSummarizedShakeGestureForTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
         }
     }
 
