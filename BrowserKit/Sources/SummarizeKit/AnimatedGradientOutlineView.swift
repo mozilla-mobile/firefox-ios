@@ -86,8 +86,8 @@ class AnimatedGradientOutlineView: UIView,
         onAnimationEnd?()
     }
 
-    func animatePositionChange(animationCurve: CAMediaTimingFunction, completion: (() -> Void)? = nil) {
-        fadeLayer.animateFadeDown(completion: completion)
+    func animatePositionChange(animationCurve: CAMediaTimingFunction) {
+        fadeLayer.animateFadeDown()
         let startPointAnimation = CABasicAnimation(keyPath: UX.startPointKeyPath)
         startPointAnimation.fromValue = CGPoint.topCenter
         startPointAnimation.toValue = UX.startPointFinalAnimationValue
