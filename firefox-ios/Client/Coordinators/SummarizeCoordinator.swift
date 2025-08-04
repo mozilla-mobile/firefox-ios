@@ -7,6 +7,8 @@ import SummarizeKit
 import Common
 import ComponentLibrary
 import UIKit
+import Shared
+import WebKit
 
 /// Conforming types can show and hide the browser content together with its toolbars.
 protocol BrowserContentHiding: AnyObject {
@@ -20,25 +22,62 @@ class SummarizeCoordinator: BaseCoordinator {
     private let browserSnapshotTopOffset: CGFloat
     private weak var browserContentHiding: BrowserContentHiding?
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
+    private let webView: WKWebView
+    private let summarizerServiceFactory: SummarizerServiceFactory
     private let windowUUID: WindowUUID
+    private let prefs: Prefs
+    private let onRequestOpenURL: ((URL?) -> Void)?
 
     init(
         browserSnapshot: UIImage,
         browserSnapshotTopOffset: CGFloat,
+        webView: WKWebView,
+        summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
         browserContentHiding: BrowserContentHiding,
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
+        prefs: Prefs,
         windowUUID: WindowUUID,
-        router: Router
+        router: Router,
+        onRequestOpenURL: ((URL?) -> Void)?
     ) {
         self.browserSnapshot = browserSnapshot
         self.browserSnapshotTopOffset = browserSnapshotTopOffset
+        self.webView = webView
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.browserContentHiding = browserContentHiding
         self.windowUUID = windowUUID
+        self.prefs = prefs
+        self.onRequestOpenURL = onRequestOpenURL
+        self.summarizerServiceFactory = summarizerServiceFactory
         super.init(router: router)
     }
 
     func start() {
+        if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false {
+            showSummarizeViewController()
+        } else {
+            showToSAlert()
+        }
+    }
+
+    private func showSummarizeViewController() {
+        let isAppleSummarizerEnabled = SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
+        let isHostedSummarizerEnabled = SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
+        guard let service = summarizerServiceFactory.make(
+            isAppleSummarizerEnabled: isAppleSummarizerEnabled,
+            isHostedSummarizerEnabled: isHostedSummarizerEnabled) else { return }
+
+        let errorModel = LocalizedErrorsViewModel(
+            rateLimitedMessage: .Summarizer.RateLimitedErrorMessage,
+            unsafeContentMessage: .Summarizer.UnsafeWebsiteErrorMessage,
+            summarizationNotAvailableMessage: .Summarizer.UnsupportedContentErrorMessage,
+            pageStillLoadingMessage: .Summarizer.MissingPageContentErrorMessage,
+            genericErrorMessage: .Summarizer.UnknownErrorMessage,
+            errorLabelA11yId: AccessibilityIdentifiers.Summarizer.errorLabel,
+            errorButtonA11yId: AccessibilityIdentifiers.Summarizer.errorButton,
+            retryButtonLabel: .Summarizer.RetryButtonLabel,
+            closeButtonLabel: .Summarizer.CloseButtonLabel
+        )
         let model = SummarizeViewModel(
             loadingLabel: .Summarizer.LoadingLabel,
             loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
@@ -47,20 +86,73 @@ class SummarizeCoordinator: BaseCoordinator {
             summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: .Summarizer.CloseButtonAccessibilityLabel,
-                a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeButton
+                a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeSummaryButton
             ),
             tabSnapshot: browserSnapshot,
-            tabSnapshotTopOffset: browserSnapshotTopOffset) { [weak self] in
-                guard let self else { return }
-                parentCoordinatorDelegate?.didFinish(from: self)
-                browserContentHiding?.showBrowserContent()
+            tabSnapshotTopOffset: browserSnapshotTopOffset,
+            errorMessages: errorModel
+        ) { [weak self] in
+            self?.browserContentHiding?.showBrowserContent()
+            self?.dismissCoordinator()
         } onShouldShowTabSnapshot: { [weak self] in
             self?.browserContentHiding?.hideBrowserContent()
         }
 
-        let controller = SummarizeController(windowUUID: windowUUID, viewModel: model)
+        let controller = SummarizeController(
+            windowUUID: windowUUID,
+            viewModel: model,
+            summarizerService: service,
+            webView: webView
+        )
         controller.modalTransitionStyle = .crossDissolve
         controller.modalPresentationStyle = .overFullScreen
         router.present(controller, animated: true)
+    }
+
+    private func showToSAlert() {
+        let descriptionText: String  = if SummarizerNimbusUtils.shared.isAppleSummarizerEnabled() {
+            String(format: String.Summarizer.ToSAlertMessageAppleLabel, AppName.shortName.rawValue)
+        } else {
+            String(format: String.Summarizer.ToSAlertMessageFirefoxLabel, AppName.shortName.rawValue)
+        }
+
+        let tosViewModel = ToSBottomSheetViewModel(
+            titleLabel: .Summarizer.ToSAlertTitleLabel,
+            titleLabelA11yId: AccessibilityIdentifiers.Summarizer.tosTitleLabel,
+            descriptionText: descriptionText,
+            descriptionTextA11yId: AccessibilityIdentifiers.Summarizer.tosDescriptionText,
+            linkButtonLabel: .Summarizer.ToSAlertLinkButtonLabel,
+            linkButtonURL: URL(string: "https://www.mozilla.com"),
+            allowButtonTitle: .Summarizer.ToSAlertAllowButtonLabel,
+            allowButtonA11yId: AccessibilityIdentifiers.Summarizer.tosAllowButton,
+            allowButtonA11yLabel: .Summarizer.ToSAlertAllowButtonAccessibilityLabel,
+            cancelButtonTitle: .Summarizer.ToSAlertCancelButtonLabel,
+            cancelButtonA11yId: AccessibilityIdentifiers.Summarizer.tosCancelButton,
+            cancelButtonA11yLabel: .Summarizer.ToSAlertCancelButtonAccessibilityLabel) { [weak self] url in
+            self?.onRequestOpenURL?(url)
+        } onAllowButtonPressed: { [weak self] in
+            self?.prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
+            self?.router.dismiss(animated: true) {
+                self?.showSummarizeViewController()
+            }
+        } onDismiss: { [weak self] in
+            self?.dismissCoordinator()
+        }
+        let tosController = ToSBottomSheetViewController(viewModel: tosViewModel, windowUUID: windowUUID)
+        let bottomSheetViewController = BottomSheetViewController(
+            viewModel: BottomSheetViewModel(
+                closeButtonA11yLabel: .Summarizer.ToSAlertCloseButtonAccessibilityLabel,
+                closeButtonA11yIdentifier: AccessibilityIdentifiers.Summarizer.tosCloseButton
+            ),
+            childViewController: tosController,
+            usingDimmedBackground: true,
+            windowUUID: windowUUID
+        )
+        tosController.delegate = bottomSheetViewController
+        router.present(bottomSheetViewController, animated: false)
+    }
+
+    private func dismissCoordinator() {
+        parentCoordinatorDelegate?.didFinish(from: self)
     }
 }

@@ -166,28 +166,9 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
 
     map.addScreenAction(TestActions.LoadURL, transitionTo: WebPageLoading)
 
-    map.addScreenState(ToolsBrowserTabMenu) { screenState in
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
-            forAction: TestActions.ToggleNightMode,
-            transitionTo: BrowserTabMenu
-        ) { userState in
-            userState.nightMode = !userState.nightMode
-        }
-
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
-            forAction: TestActions.ToggleNighModeOff,
-            transitionTo: BrowserTabMenu
-        ) { userState in
-            userState.nightMode = !userState.nightMode
-        }
-    }
-
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.dismissOnUse = true
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
-        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.tools], to: ToolsBrowserTabMenu)
 
         screenState.backAction = {
             if isTablet {

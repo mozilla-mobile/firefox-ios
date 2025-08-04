@@ -87,20 +87,12 @@ struct AccessibilityIdentifiers {
             static let closeButton = "MainMenu.CloseMenuButton"
         }
 
-        struct NavigationHeaderView {
-            static let backButton = "MainMenu.BackButton"
-            static let title = "MainMenu.Title"
-            static let closeButton = "MainMenu.CloseMenuButton"
-        }
-
         static let mainMenu = "MainMenu.Menu"
         static let newTab = "MainMenu.NewTab"
         static let newPrivateTab = "MainMenu.NewPrivateTab"
         static let switchToDesktopSite = "MainMenu.SwitchToDesktopSite"
         static let desktopSite = "MainMenu.DesktopSite"
         static let findInPage = "MainMenu.FindInPage"
-        static let tools = "MainMenu.Tools"
-        static let save = "MainMenu.Save"
         static let bookmarks = "MainMenu.Bookmarks"
         static let history = "MainMenu.History"
         static let downloads = "MainMenu.Downloads"
@@ -201,6 +193,7 @@ struct AccessibilityIdentifiers {
         }
 
         struct MoreButtons {
+            static let shortcuts = "shortcutsSectionMoreButton"
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
@@ -268,6 +261,17 @@ struct AccessibilityIdentifiers {
             static let submitButton = "Microsurvey.Survey.SubmitButton"
             static let radioButton = "Microsurvey.Survey.RadioButton"
         }
+    }
+
+    struct TermsOfUse {
+        static let logo = "TermsOfUse.Logo"
+        static let title = "TermsOfUse.Title"
+        static let description = "TermsOfUse.Description"
+        static let acceptButton = "TermsOfUse.AcceptButton"
+        static let remindMeLaterButton = "TermsOfUse.RemindMeLaterButton"
+        static let linkTermsOfUse = "TermsOfUse.Link.TermsOfUse"
+        static let linkPrivacyNotice = "TermsOfUse.Link.PrivacyNotice"
+        static let linkLearnMore = "TermsOfUse.Link.LearnMore"
     }
 
     struct PrivateMode {
@@ -671,6 +675,11 @@ struct AccessibilityIdentifiers {
             static let blockImages = "NoImageModeStatus"
         }
 
+        struct Summarize {
+            static let title = "SummarizeSettings"
+            static let summarizeContentSwitch = "summarizeContentFeature"
+        }
+
         struct Theme {
             static let title = "DisplayThemeOption"
         }
@@ -710,9 +719,17 @@ struct AccessibilityIdentifiers {
     }
 
     struct Summarizer {
-        static let closeButton = "closeButton"
+        static let closeSummaryButton = "closeSummaryButton"
         static let loadingLabel = "summaryLoadingLabel"
         static let summaryTextView = "summaryTextView"
+        static let errorLabel = "errorLabel"
+        static let errorButton = "errorButton"
+        static let tosTitleLabel = "tosTitleLabel"
+        static let tosDescriptionText = "tosDescriptionText"
+        static let tosCancelButton = "tosCancel"
+        static let tosCloseButton = "tosCloseButton"
+        static let tosAllowButton = "tosAllowButton"
+        static let tosLinkButton = "tosLinkButton"
     }
 
     struct ShareTo {

@@ -432,6 +432,14 @@ final class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    func pressedSummarize() {
+        let viewController = SummarizeSettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID
+        )
+        router.push(viewController)
+    }
+
     // MARK: AccountSettingsDelegate
 
     func pressedConnectSetting() {

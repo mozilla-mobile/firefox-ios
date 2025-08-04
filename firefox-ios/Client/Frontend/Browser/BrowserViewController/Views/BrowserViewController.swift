@@ -332,10 +332,6 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
-    var isSummarizeFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
-    }
-
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -829,8 +825,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        guard motion == .motionShake, isSummarizeFeatureEnabled else { return }
-        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return }
+        guard motion == .motionShake else { return }
         navigationHandler?.showSummarizePanel()
     }
 
@@ -1299,6 +1294,7 @@ class BrowserViewController: UIViewController,
             screenshotHelper: screenshotHelper,
             prefs: profile.prefs
         )
+        addressBarPanGestureHandler?.delegate = self
     }
 
     func addSubviews() {

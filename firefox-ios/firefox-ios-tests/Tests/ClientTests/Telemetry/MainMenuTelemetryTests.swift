@@ -45,44 +45,6 @@ final class MainMenuTelemetryTests: XCTestCase {
         XCTAssertEqual(savedExtras.isHomepage, true)
     }
 
-    func testRecordMainMenuWhenSaveSubmenuOptionTappedThenGleanIsCalled() throws {
-        subject?.saveSubmenuOptionTapped(with: true, and: "test_option")
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.SaveMenuOptionSelectedExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.SaveMenuOptionSelectedExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.saveMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.option, "test_option")
-        XCTAssertEqual(savedExtras.isHomepage, true)
-    }
-
-    func testRecordMainMenuWhenToolsSubmenuOptionTappedThenGleanIsCalled() throws {
-        subject?.toolsSubmenuOptionTapped(with: true, and: "test_option")
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.ToolsMenuOptionSelectedExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.ToolsMenuOptionSelectedExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.AppMenu.toolsMenuOptionSelected)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.option, "test_option")
-        XCTAssertEqual(savedExtras.isHomepage, true)
-    }
-
     func testRecordMainMenuWhenCloseButtonTappedThenGleanIsCalled() throws {
         subject?.closeButtonTapped(isHomepage: true)
 

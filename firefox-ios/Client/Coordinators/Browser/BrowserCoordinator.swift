@@ -53,6 +53,9 @@ class BrowserCoordinator: BaseCoordinator,
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
+    private var isSummarizerOn: Bool {
+        return SummarizerNimbusUtils.shared.isSummarizeFeatureToggledOn
+    }
 
     override var isDismissible: Bool { false }
 
@@ -84,6 +87,8 @@ class BrowserCoordinator: BaseCoordinator,
         let isIphone = UIDevice.current.userInterfaceIdiom == .phone
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
+        } else {
+            showTermsOfUse()
         }
     }
 
@@ -102,7 +107,9 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
-        router.dismiss(animated: true, completion: nil)
+        router.dismiss(animated: true, completion: { [weak self] in
+            self?.showTermsOfUse()
+        })
         remove(child: coordinator)
 
         // Once launch is done, we check for any saved Route
@@ -136,6 +143,7 @@ class BrowserCoordinator: BaseCoordinator,
         guard browserViewController.embedContent(legacyHomepageViewController) else { return }
         self.legacyHomepageViewController = legacyHomepageViewController
         legacyHomepageViewController.scrollToTop()
+        showTermsOfUse()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
     }
@@ -159,6 +167,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+        showTermsOfUse()
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
@@ -392,7 +401,6 @@ class BrowserCoordinator: BaseCoordinator,
             }
         }
     }
-
     private func showIntroOnboarding() {
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
@@ -582,7 +590,7 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - MainMenuCoordinatorDelegate
 
     func showMainMenu() {
-        if featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
             let mainMenuCoordinator = MainMenuCoordinator(router: router,
                                                           windowUUID: tabManager.windowUUID,
                                                           profile: profile)
@@ -1070,7 +1078,10 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-    func showSummarizePanel() {
+  func showSummarizePanel() {
+        guard isSummarizerOn,
+              tabManager.selectedTab?.isFxHomeTab == false,
+              let webView = tabManager.selectedTab?.webView else { return }
         let contentContainer = browserViewController.contentContainer
         let browserFrame = browserViewController.view.frame
         var browserScreenshot = browserViewController.view.snapshot
@@ -1088,11 +1099,15 @@ class BrowserCoordinator: BaseCoordinator,
         let coordinator = SummarizeCoordinator(
             browserSnapshot: browserScreenshot,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,
+            webView: webView,
             browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
+            prefs: profile.prefs,
             windowUUID: windowUUID,
-            router: router
-        )
+            router: router) { [weak self] url in
+            guard let url else { return }
+            self?.openURLinNewTab(url)
+        }
         add(child: coordinator)
         coordinator.start()
     }
@@ -1140,6 +1155,26 @@ class BrowserCoordinator: BaseCoordinator,
     private func setiPadLayoutDetents(for controller: UIViewController) {
         guard controller.shouldUseiPadSetup() else { return }
         controller.sheetPresentationController?.selectedDetentIdentifier = .large
+    }
+
+    // MARK: - Terms of Use
+    // Terms Of Use Bottom Sheet should appear on every app launch on homepage or on current tab,
+    // until user accepts terms of use.
+    func showTermsOfUse() {
+        let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
+
+        let router = DefaultRouter(navigationController: presenter.navigationController ?? UINavigationController())
+
+        let coordinator = TermsOfUseCoordinator(
+            windowUUID: windowUUID,
+            router: router,
+            themeManager: AppContainer.shared.resolve(),
+            notificationCenter: NotificationCenter.default
+        )
+        guard coordinator.shouldShowTermsOfUse() else { return }
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        coordinator.start()
     }
 
     // MARK: - Password Generator

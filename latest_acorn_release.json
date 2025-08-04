@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/235219734",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/235219734/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/235219734/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.46.0",
-    "id": 235219734,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/236679089",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/236679089/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/236679089/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.47.1",
+    "id": 236679089,
     "author": {
         "login": "cwzilla",
         "id": 87655586,
@@ -25,17 +25,17 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84OBSsW",
-    "tag_name": "v1.46.0",
+    "node_id": "RE_kwDOI1CID84OG2-x",
+    "tag_name": "v1.47.1",
     "target_commitish": "main",
-    "name": "v1.46.0",
+    "name": "v1.47.1",
     "draft": false,
     "immutable": false,
     "prerelease": false,
-    "created_at": "2025-07-25T16:16:44Z",
-    "published_at": "2025-07-25T16:17:31Z",
+    "created_at": "2025-07-31T19:10:12Z",
+    "published_at": "2025-07-31T19:10:55Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.46.0",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.46.0",
-    "body": "# [Changelog]\r\n### [1.46.0]\r\n### Added\r\n- PDF\r\n  - otherDeviceShortcutsFillLarge.pdf\r\n  - otherDeviceShortcutsLarge.pdf\r\n\r\n- SVG\r\n  - other-device-shortcuts-24.svg\r\n  - other-device-shortcuts-fill-24.svg\r\n\r\n- XML\r\n  - ic_other_device_shortcuts_24.xml\r\n  - ic_other_device_shortcuts_fill_24.xml"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.47.1",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.47.1",
+    "body": "# [Changelog]\r\n### [1.47.1]\r\n### Changed\r\n- PDF\r\n  - otherDeviceShortcutsLarge.pdf\r\n\r\n- SVG\r\n  - other-device-shortcuts-24.svg\r\n\r\n- XML\r\n  - ic_other_device_shortcuts_24.xml\r\n\r\n### Removed\r\n- PDF\r\n  - otherDeviceShortcutsFillLarge.pdf\r\n\r\n- SVG\r\n  - other-device-shortcuts-fill-24.svg\r\n\r\n- XML\r\n  - ic_other_device_shortcuts_fill_24.xml"
 }

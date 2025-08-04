@@ -20,19 +20,6 @@ extension MerinoStoriesProviding {
 }
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
-    private static let SupportedLocales = [
-        "de_DE",
-        "de_AT",
-        "de_CH",
-        "en_CA",
-        "en_US",
-        "en_GB",
-        "en_ZA",
-        "es_ES",
-        "fr_FR",
-        "it_IT",
-    ]
-
     private let prefs: Prefs
     private var logger: Logger
 
@@ -134,9 +121,8 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         }
     }
 
-    // Returns nil if the locale is not supported
     static func islocaleSupported(_ locale: String) -> Bool {
-        return MerinoProvider.SupportedLocales.contains(locale)
+        return allCuratedRecommendationLocales().contains(locale.replacingOccurrences(of: "_", with: "-"))
     }
 
     private var shouldUseMockData: Bool {
@@ -144,22 +130,8 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     }
 
     private func iOSToMerinoLocale(from locale: String) -> CuratedRecommendationLocale? {
-        switch locale {
-        case "en": return .en
-        case "en_CA": return .enCa
-        case "en_GB": return .enGb
-        case "en_US": return .enUs
-        case "de": return .de
-        case "de_DE": return .deDe
-        case "de_AT": return .deAt
-        case "de_CH": return .deCh
-        case "fr": return .fr
-        case "fr_FR": return .frFr
-        case "es": return .es
-        case "es_ES": return .esEs
-        case "it": return .it
-        case "it_IT": return .itIt
-        default: return nil
-        }
+        return curatedRecommendationLocaleFromString(
+            locale: locale.replacingOccurrences(of: "_", with: "-")
+        )
     }
 }

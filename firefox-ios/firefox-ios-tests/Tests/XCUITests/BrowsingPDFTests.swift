@@ -97,6 +97,7 @@ class BrowsingPDFTests: BaseTestCase {
     func testPinPDFtoTopSites() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
+        navigator.goto(BrowserTabMenuMore)
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         let pinnedItem = app
@@ -129,7 +130,8 @@ class BrowsingPDFTests: BaseTestCase {
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
-        navigator.performAction(Action.BookmarkThreeDots)
+        navigator.goto(BrowserTabMenu)
+        navigator.performAction(Action.Bookmark)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
         waitForElementsToExist(
@@ -142,6 +144,7 @@ class BrowsingPDFTests: BaseTestCase {
 
     private func longPressOnPdfLink() {
         let link = app.webViews.links.element(boundBy: 0)
+        mozWaitForElementToExist(link)
         let startCoordinate = link.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
         let endCoordinate = link.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         startCoordinate.press(forDuration: 3, thenDragTo: endCoordinate)

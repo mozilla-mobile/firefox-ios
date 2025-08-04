@@ -60,7 +60,7 @@ class LoginTest: BaseTestCase {
     private func openLoginsSettingsFromBrowserTab() {
         waitForExistence(app.buttons["TabToolbar.menuButton"])
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
+        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
         navigator.goto(LoginsSettings)
 
         unlockLoginsView()

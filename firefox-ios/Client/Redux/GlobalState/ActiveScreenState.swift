@@ -10,7 +10,6 @@ enum AppScreenState: Equatable {
     case browserViewController(BrowserViewControllerState)
     case homepage(HomepageState)
     case mainMenu(MainMenuState)
-    case mainMenuDetails(MainMenuDetailsState)
     case microsurvey(MicrosurveyState)
     case onboardingViewController(OnboardingViewControllerState)
     case remoteTabsPanel(RemoteTabsPanelState)
@@ -18,6 +17,7 @@ enum AppScreenState: Equatable {
     case tabPeek(TabPeekState)
     case tabsTray(TabTrayState)
     case themeSettings(ThemeSettingsState)
+    case termsOfUse(TermsOfUseState)
     case trackingProtection(TrackingProtectionState)
     case toolbar(ToolbarState)
     case searchEngineSelection(SearchEngineSelectionState)
@@ -32,8 +32,6 @@ enum AppScreenState: Equatable {
             return .homepage(HomepageState.reducer(state, action))
         case .mainMenu(let state):
             return .mainMenu(MainMenuState.reducer(state, action))
-        case .mainMenuDetails(let state):
-            return .mainMenuDetails(MainMenuDetailsState.reducer(state, action))
         case .microsurvey(let state):
             return .microsurvey(MicrosurveyState.reducer(state, action))
         case .onboardingViewController(let state):
@@ -44,8 +42,8 @@ enum AppScreenState: Equatable {
             return .tabPeek(TabPeekState.reducer(state, action))
         case .tabsTray(let state):
             return .tabsTray(TabTrayState.reducer(state, action))
-        case .tabsPanel(let state):
-            return .tabsPanel(TabsPanelState.reducer(state, action))
+        case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
+        case .termsOfUse(let state): return .termsOfUse(TermsOfUseState.reducer(state, action))
         case .themeSettings(let state):
             return .themeSettings(ThemeSettingsState.reducer(state, action))
         case .trackingProtection(let state):
@@ -67,7 +65,6 @@ enum AppScreenState: Equatable {
         case .browserViewController: return .browserViewController
         case .homepage: return .homepage
         case .mainMenu: return .mainMenu
-        case .mainMenuDetails: return .mainMenuDetails
         case .microsurvey: return .microsurvey
         case .onboardingViewController: return .onboardingViewController
         case .remoteTabsPanel: return .remoteTabsPanel
@@ -75,6 +72,7 @@ enum AppScreenState: Equatable {
         case .tabPeek: return .tabPeek
         case .tabsTray: return .tabsTray
         case .themeSettings: return .themeSettings
+        case .termsOfUse: return .termsOfUse
         case .trackingProtection: return .trackingProtection
         case .toolbar: return .toolbar
         case .searchEngineSelection: return .searchEngineSelection
@@ -88,7 +86,6 @@ enum AppScreenState: Equatable {
         case .browserViewController(let state): return state.windowUUID
         case .homepage(let state): return state.windowUUID
         case .mainMenu(let state): return state.windowUUID
-        case .mainMenuDetails(let state): return state.windowUUID
         case .microsurvey(let state): return state.windowUUID
         case .onboardingViewController(let state): return state.windowUUID
         case .remoteTabsPanel(let state): return state.windowUUID
@@ -96,6 +93,7 @@ enum AppScreenState: Equatable {
         case .tabPeek(let state): return state.windowUUID
         case .tabsTray(let state): return state.windowUUID
         case .themeSettings(let state): return state.windowUUID
+        case .termsOfUse(let state): return state.windowUUID
         case .trackingProtection(let state): return state.windowUUID
         case .toolbar(let state): return state.windowUUID
         case .searchEngineSelection(let state): return state.windowUUID
@@ -145,8 +143,6 @@ struct ActiveScreensState: Equatable {
                 screens.append(.homepage(HomepageState(windowUUID: uuid)))
             case .mainMenu:
                 screens.append(.mainMenu(MainMenuState(windowUUID: uuid)))
-            case .mainMenuDetails:
-                screens.append(.mainMenuDetails(MainMenuDetailsState(windowUUID: uuid)))
             case .microsurvey:
                 screens.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
             case .onboardingViewController:
@@ -161,6 +157,8 @@ struct ActiveScreensState: Equatable {
                 screens.append(.tabPeek(TabPeekState(windowUUID: uuid)))
             case .themeSettings:
                 screens.append(.themeSettings(ThemeSettingsState(windowUUID: uuid)))
+            case .termsOfUse:
+                screens.append(.termsOfUse(TermsOfUseState(windowUUID: uuid)))
             case .trackingProtection:
                 screens.append(.trackingProtection(TrackingProtectionState(windowUUID: uuid)))
             case .toolbar:

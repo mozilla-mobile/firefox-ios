@@ -17,6 +17,7 @@ struct TabTraySelectorUX {
     static let horizontalInsets: CGFloat = 10
     static let fontScaleDelta: CGFloat = 0.055
     static let stackViewLeadingTrailingPadding: CGFloat = 8
+    static let containerHorizontalSpacing: CGFloat = 16
 }
 
 class TabTraySelectorView: UIView,
@@ -30,6 +31,8 @@ class TabTraySelectorView: UIView,
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
     private var stackViewOffsetConstraint: NSLayoutConstraint?
     private let edgeFadeGradientLayer = CAGradientLayer()
+
+    private lazy var containerView: UIView = .build()
 
     private lazy var selectionBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = TabTraySelectorUX.cornerRadius
@@ -72,9 +75,10 @@ class TabTraySelectorView: UIView,
     }
 
     private func setup() {
-        addSubview(selectionBackgroundView)
-        addSubview(stackView)
-        layer.mask = edgeFadeGradientLayer
+        addSubview(containerView)
+        containerView.addSubview(selectionBackgroundView)
+        containerView.addSubview(stackView)
+        containerView.layer.mask = edgeFadeGradientLayer
 
         for (index, title) in buttonTitles.enumerated() {
             let button = createButton(with: index, title: title)
@@ -84,13 +88,22 @@ class TabTraySelectorView: UIView,
         }
 
         NSLayoutConstraint.activate([
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                   constant: TabTraySelectorUX.containerHorizontalSpacing),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                    constant: -TabTraySelectorUX.containerHorizontalSpacing),
+
+            stackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             selectionBackgroundView.heightAnchor.constraint(equalTo: stackView.heightAnchor),
             selectionBackgroundView.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
-            selectionBackgroundView.centerXAnchor.constraint(equalTo: centerXAnchor)
+            selectionBackgroundView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
         ])
 
-        applyInitalConstraints()
+        applyInitialConstraints()
+        addSwipeGestureRecognizer(direction: .right)
+        addSwipeGestureRecognizer(direction: .left)
         applyTheme(theme: theme)
     }
 
@@ -125,7 +138,7 @@ class TabTraySelectorView: UIView,
         return button
     }
 
-    private func applyInitalConstraints() {
+    private func applyInitialConstraints() {
         guard buttons.indices.contains(selectedIndex) else { return }
         layoutIfNeeded()
 
@@ -137,10 +150,10 @@ class TabTraySelectorView: UIView,
         selectionBackgroundWidthConstraint?.isActive = true
 
         // Ensure the stack view is positioned so the selected button is centered
-        let buttonCenter = selectedButton.convert(selectedButton.bounds.center, to: self)
+        let buttonCenter = selectedButton.convert(selectedButton.bounds.center, to: containerView)
         let offset = stackView.frame.midX - buttonCenter.x
         stackViewOffsetConstraint = stackView.centerXAnchor.constraint(
-            equalTo: centerXAnchor, constant: offset
+            equalTo: containerView.centerXAnchor, constant: offset
         )
         stackViewOffsetConstraint?.isActive = true
     }
@@ -159,6 +172,31 @@ class TabTraySelectorView: UIView,
         let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
         let horizontalInsets = TabTraySelectorUX.horizontalInsets * 2
         button.widthAnchor.constraint(equalToConstant: boldWidth + horizontalInsets).isActive = true
+    }
+
+    // MARK: - Gesture Recognizers
+    private func addSwipeGestureRecognizer(direction: UISwipeGestureRecognizer.Direction) {
+        let gestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        gestureRecognizer.direction = direction
+        addGestureRecognizer(gestureRecognizer)
+    }
+
+    @objc
+    private func handleSwipeGesture(_ recognizer: UISwipeGestureRecognizer) {
+        switch recognizer.direction {
+        case .left:
+            let index = selectedIndex + 1
+            if buttons.indices.contains(index) {
+                sectionSelected(buttons[index])
+            }
+        case .right:
+            let index = selectedIndex - 1
+            if buttons.indices.contains(index) {
+                sectionSelected(buttons[index])
+            }
+        default:
+            break
+        }
     }
 
     @objc
@@ -251,14 +289,14 @@ class TabTraySelectorView: UIView,
         let fromButton = buttons[fromIndex]
         let toButton = buttons[toIndex]
 
-        let fromCenter = fromButton.convert(fromButton.bounds.center, to: self)
-        let toCenter = toButton.convert(toButton.bounds.center, to: self)
+        let fromCenter = fromButton.convert(fromButton.bounds.center, to: containerView)
+        let toCenter = toButton.convert(toButton.bounds.center, to: containerView)
         let interpolatedX = fromCenter.x + (toCenter.x - fromCenter.x) * progress
         let offset = stackView.frame.midX - interpolatedX
 
         stackViewOffsetConstraint?.isActive = false
         stackViewOffsetConstraint = stackView.centerXAnchor.constraint(
-            equalTo: centerXAnchor, constant: offset
+            equalTo: containerView.centerXAnchor, constant: offset
         )
         stackViewOffsetConstraint?.isActive = true
 
@@ -271,7 +309,7 @@ class TabTraySelectorView: UIView,
     }
 
     private func updateEdgeFadeMask() {
-        edgeFadeGradientLayer.frame = bounds
+        edgeFadeGradientLayer.frame = containerView.bounds
         edgeFadeGradientLayer.colors = [UIColor.clear.cgColor,
                                         UIColor.black.cgColor,
                                         UIColor.black.cgColor,

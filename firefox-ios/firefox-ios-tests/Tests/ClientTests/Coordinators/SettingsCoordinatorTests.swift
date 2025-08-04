@@ -383,6 +383,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is UIHostingController<AppearanceSettingsView>)
     }
 
+    func testGeneralSettingsDelegate_pushedSummarizeSettings() {
+        let subject = createSubject()
+
+        subject.pressedSummarize()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is SummarizeSettingsViewController)
+    }
+
     // MARK: - BrowsingSettingsDelegate
 
     func testBrowsingSettingsDelegate_pushedMailApp() {

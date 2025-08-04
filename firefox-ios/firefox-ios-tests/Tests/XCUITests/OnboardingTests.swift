@@ -14,7 +14,8 @@ class OnboardingTests: BaseTestCase {
     override func setUp() {
         launchArguments = [LaunchArguments.ClearProfile,
                            LaunchArguments.DisableAnimations,
-                           LaunchArguments.SkipSplashScreenExperiment]
+                           LaunchArguments.SkipSplashScreenExperiment,
+                           LaunchArguments.SkipTermsOfUse]
         currentScreen = 0
         super.setUp()
     }
@@ -207,7 +208,9 @@ class OnboardingTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306815
-    func testWhatsNewPage() {
+    func testWhatsNewPage() throws {
+        throw XCTSkip("Skipping. The option whats new page is not available on the new menu")
+        /*
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].waitAndTap()
         // Dismiss new changes pop up if exists
         app.buttons["Close"].tapIfExists()
@@ -239,6 +242,7 @@ class OnboardingTests: BaseTestCase {
                 app.staticTexts["Get the most recent version"]
             ]
         )
+         */
     }
 
     // TOOLBAR THEME

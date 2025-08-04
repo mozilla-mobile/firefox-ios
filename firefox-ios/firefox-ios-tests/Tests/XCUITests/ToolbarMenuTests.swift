@@ -48,9 +48,9 @@ class ToolbarMenuTests: BaseTestCase {
             )
         }
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
+        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
         validateMenuOptions()
-        app.buttons["MainMenu.CloseMenuButton"].waitAndTap()
+        app.otherElements["PopoverDismissRegion"].firstMatch.tap()
         XCUIDevice.shared.orientation = .landscapeLeft
         waitForElementsToExist(
             [
@@ -71,22 +71,20 @@ class ToolbarMenuTests: BaseTestCase {
             "Menu button is not below the pocket cells area"
         )
         hamburgerMenu.waitAndTap()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
+        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
         validateMenuOptions()
-        app.buttons["MainMenu.CloseMenuButton"].waitAndTap()
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
+        app.otherElements["PopoverDismissRegion"].firstMatch.tap()
+        mozWaitForElementToNotExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
     }
 
     private func validateMenuOptions() {
         waitForElementsToExist(
             [
-                app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.newPrivateTab],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.downloads],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.passwords]
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.settings],
+                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.bookmarks],
+                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.history],
+                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads],
+                app.cells[AccessibilityIdentifiers.MainMenu.signIn]
             ]
         )
     }

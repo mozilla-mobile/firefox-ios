@@ -23,7 +23,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() {
         super.setUp()
         setIsSwipingTabsEnabled(false)
-        setIsSummarizerEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
@@ -234,17 +233,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Shake motion
-    func testMotionEnded_withShakeGesture_whenTabIsHomepageDoesntShowSummarize() {
-        setIsSummarizerEnabled(true)
-        let subject = createSubject()
-        tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID, isHomePage: true)
-        subject.motionEnded(.motionShake, with: nil)
-
-        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 0)
-    }
-
-    func testMotionEnded_withShakeGesture_whenTabIsWebViewShowsSummarize_withSummarizeFeatureEnabled() {
-        setIsSummarizerEnabled(true)
+    func testMotionEnded_withShakeGesture_showsSummaryPanel() {
         let subject = createSubject()
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
@@ -252,14 +241,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
     }
 
-    func testMotionEnded_withShakeGesture_whenTabIsWebViewShowsSummarize_withSummarizeFeatureDisabled() {
+    func testMotionEnded_withGestureNotShake_doesntShowSummarizePanel() {
         let subject = createSubject()
-        tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        subject.motionEnded(.motionShake, with: nil)
+
+        subject.motionEnded(.remoteControlBeginSeekingBackward, with: nil)
 
         XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 0)
     }
-
     // MARK: - Zero Search State
 
     func test_tapOnHomepageSearchBarAction_withBVCState_triggersGeneralBrowserAction() throws {
@@ -392,12 +380,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(swipingTabs: isEnabled)
-        }
-    }
-
-    private func setIsSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.summarizerFeature.with { _, _ in
-            return SummarizerFeature(enabled: isEnabled)
         }
     }
 

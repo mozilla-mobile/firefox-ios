@@ -41,7 +41,7 @@
 "Bookmarks.Menu.EditBookmarkSave.v135" = "Αποθήκευση";
 
 /* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
-"Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Αποθήκευση σε";
+"Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Αποθηκευση σε";
 
 /* Label on the top of the `Edit Bookmarks` screen. */
 "Bookmarks.Menu.EditBookmarkTitle.v131" = "Επεξεργασία σελιδοδείκτη";
