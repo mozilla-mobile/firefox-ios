@@ -2486,27 +2486,46 @@ extension String {
             public static let Title = MZLocalizedString(
                 key: "Settings.Summarize.Title.v142",
                 tableName: "Settings",
-                value: "Summarize Content",
+                value: "Page Summaries",
                 comment: "In the settings menu, in the General section, this is the title for the Summarize settings section."
             )
+
             public static let SummarizeContentTitle = MZLocalizedString(
                 key: "Settings.Summarize.SummarizeContentTitle.v142",
                 tableName: "Settings",
-                value: "Enable Summarize Content",
-                comment: "This is the title for the setting that toggles the Summarize Content feature under the Summarize settings section."
+                value: "Summarize Pages",
+                comment: "This is the title for the setting that toggles the Summarize feature under the Summarize settings section."
             )
-            public static let ShakeGestureTitle = MZLocalizedString(
-                key: "Settings.Summarize.ShakeGestureTitle.v142",
-                tableName: "Settings",
-                value: "Enable Shake Gesture",
-                comment: "This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section."
-            )
-            public static let GesturesSectionTitle = MZLocalizedString(
+
+            public static let FooterTitle = MZLocalizedString(
                 key: "Settings.Summarize.GesturesSectionTitle.v142",
                 tableName: "Settings",
-                value: "Gestures",
-                comment: "This is the section title for the gestures features under the Summarize settings section."
+                value: "Request to summarize pages from the app menu and address bar.",
+                comment: "This is the footer text for the general summarize toggle setting under the Summarize settings section."
             )
+
+            public struct GesturesSection {
+                public static let GesturesSectionTitle = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSection.Title.v142",
+                    tableName: "Settings",
+                    value: "Gestures",
+                    comment: "This is the section title for the gestures features under the Summarize settings section."
+                )
+
+                public static let ShakeGestureTitle = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSection.ShakeGestureTitle.v142",
+                    tableName: "Settings",
+                    value: "Shake to Summarize",
+                    comment: "This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section."
+                )
+
+                public static let FooterTitle = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSectionTitle.v142",
+                    tableName: "Settings",
+                    value: "Shake your device from side to side to summarize a page.",
+                    comment: "This is the footer text for the gestures features under the Summarize settings section."
+                )
+            }
         }
 
         public struct Appearance {
