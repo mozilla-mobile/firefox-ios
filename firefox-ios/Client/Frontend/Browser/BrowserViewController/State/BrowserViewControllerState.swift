@@ -161,7 +161,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             NavigationBrowserActionType.tapOnOpenInNewTab,
             NavigationBrowserActionType.tapOnSettingsSection,
             NavigationBrowserActionType.tapOnShareSheet,
-            NavigationBrowserActionType.tapOnHomepageSearchBar:
+            NavigationBrowserActionType.tapOnHomepageSearchBar,
+            NavigationBrowserActionType.tapOnShortcutsShowAllButton:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,

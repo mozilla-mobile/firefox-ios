@@ -1361,6 +1361,7 @@ class BrowserViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
         if !isDeeplinkOptimizationRefactorEnabled {
@@ -2693,6 +2694,8 @@ class BrowserViewController: UIViewController,
             )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
             configureZeroSearchView()
+        case .shortcutsLibrary:
+            navigationHandler?.showShortcutsLibrary()
         }
     }
 

@@ -621,6 +621,9 @@ final class HomepageViewController: UIViewController,
         case .topSites(let textColor, _):
             sectionLabelCell.configure(
                 state: homepageState.topSitesState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToShortcutsLibrary()
+                },
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -808,6 +811,16 @@ final class HomepageViewController: UIViewController,
                 navigationDestination: NavigationDestination(.bookmarksPanel),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnBookmarksShowMoreButton
+            )
+        )
+    }
+
+    private func navigateToShortcutsLibrary() {
+        store.dispatchLegacy(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.shortcutsLibrary),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShortcutsShowAllButton
             )
         )
     }
