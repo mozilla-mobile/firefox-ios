@@ -17,7 +17,7 @@ protocol BrowserContentHiding: AnyObject {
     func hideBrowserContent()
 }
 
-class SummarizeCoordinator: BaseCoordinator {
+class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
     private let browserSnapshot: UIImage
     private let browserSnapshotTopOffset: CGFloat
     private weak var browserContentHiding: BrowserContentHiding?
@@ -26,7 +26,9 @@ class SummarizeCoordinator: BaseCoordinator {
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizerServiceFactory: SummarizerServiceFactory
     private let windowUUID: WindowUUID
+    private let trigger: SummarizerTrigger
     private let prefs: Prefs
+    private let summarizerTelemetry: SummarizerTelemetry
     private let onRequestOpenURL: ((URL?) -> Void)?
 
     init(
@@ -37,9 +39,11 @@ class SummarizeCoordinator: BaseCoordinator {
         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
         browserContentHiding: BrowserContentHiding,
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
+        trigger: SummarizerTrigger,
         prefs: Prefs,
         windowUUID: WindowUUID,
         router: Router,
+        gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         onRequestOpenURL: ((URL?) -> Void)?
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
@@ -49,14 +53,17 @@ class SummarizeCoordinator: BaseCoordinator {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.browserContentHiding = browserContentHiding
         self.windowUUID = windowUUID
+        self.trigger = trigger
         self.prefs = prefs
         self.onRequestOpenURL = onRequestOpenURL
         self.summarizerServiceFactory = summarizerServiceFactory
+        self.summarizerTelemetry = SummarizerTelemetry(gleanWrapper: gleanWrapper)
         super.init(router: router)
     }
 
     func start() {
         if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false {
+            summarizerTelemetry.summarizationRequested(trigger: trigger)
             showSummarizeViewController()
         } else {
             showToSAlert()
@@ -69,6 +76,8 @@ class SummarizeCoordinator: BaseCoordinator {
         guard let service = summarizerServiceFactory.make(
             isAppleSummarizerEnabled: isAppleSummarizerEnabled,
             isHostedSummarizerEnabled: isHostedSummarizerEnabled) else { return }
+
+        service.summarizerLifecycle = self
 
         let errorModel = LocalizedErrorsViewModel(
             rateLimitedMessage: .Summarizer.RateLimitedErrorMessage,
@@ -95,6 +104,7 @@ class SummarizeCoordinator: BaseCoordinator {
             tabSnapshotTopOffset: browserSnapshotTopOffset,
             errorMessages: errorModel
         ) { [weak self] in
+            self?.summarizerTelemetry.summarizationClosed()
             self?.browserContentHiding?.showBrowserContent()
             self?.dismissCoordinator()
         } onShouldShowTabSnapshot: { [weak self] in
@@ -105,8 +115,13 @@ class SummarizeCoordinator: BaseCoordinator {
             windowUUID: windowUUID,
             viewModel: model,
             summarizerService: service,
-            webView: webView
+            webView: webView,
+            trigger: trigger,
+            onSummaryDisplayed: { [weak self] in
+                self?.summarizerTelemetry.summarizationDisplayed()
+            }
         )
+
         controller.modalTransitionStyle = .crossDissolve
         controller.modalPresentationStyle = .overFullScreen
         router.present(controller, animated: true)
@@ -157,5 +172,33 @@ class SummarizeCoordinator: BaseCoordinator {
 
     private func dismissCoordinator() {
         parentCoordinatorDelegate?.didFinish(from: self)
+    }
+
+    // MARK: –– SummarizerServiceLifecycle callbacks
+
+    func summarizerServiceDidStart(_ text: String) {
+        summarizerTelemetry.summarizationStarted(
+            lengthWords: text.numberOfWords,
+            lengthChars: Int32(text.count),
+        )
+    }
+
+    func summarizerServiceDidComplete(_ summary: String, modelName: SummarizerModel) {
+        summarizerTelemetry.summarizationCompleted(
+            lengthChars: Int32(summary.count),
+            lengthWords: summary.numberOfWords,
+            modelName: modelName.rawValue,
+            outcome: true
+        )
+    }
+
+    func summarizerServiceDidFail(_ error: SummarizerError, modelName: SummarizerModel) {
+        summarizerTelemetry.summarizationCompleted(
+            lengthChars: 0,
+            lengthWords: 0,
+            modelName: modelName.rawValue,
+            outcome: false,
+            errorMessage: error.telemetryDescription
+        )
     }
 }
