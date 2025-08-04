@@ -9,7 +9,7 @@ import ComponentLibrary
 import MarkdownKit
 import WebKit
 
-public class SummarizeController: UIViewController, Themeable {
+public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
     private struct UX {
         static let tabSnapshotInitialTransformPercentage: CGFloat = 0.5
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
@@ -113,6 +113,10 @@ public class SummarizeController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        print("FF: i'm going away SummarizeController")
+    }
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -131,7 +135,6 @@ public class SummarizeController: UIViewController, Themeable {
             self?.view.backgroundColor = theme.colors.layerSummary
             self?.viewModel.onShouldShowTabSnapshot()
             self?.embedSnapshot()
-            self?.summarize()
         }
     }
 
@@ -246,6 +249,7 @@ public class SummarizeController: UIViewController, Themeable {
         transformAnimation.duration = UX.initialTransformAnimationDuration
         transformAnimation.timingFunction = UX.initialTransformTimingCurve
         transformAnimation.fillMode = .forwards
+        transformAnimation.delegate = self
         tabSnapshotContainer.layer.add(transformAnimation, forKey: "translation")
         tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0,
                                                            y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
@@ -381,8 +385,15 @@ public class SummarizeController: UIViewController, Themeable {
         }
     }
 
-    // MARK: - Themeable
+    // MARK: - CAAnimationDelegate
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        guard flag,
+              let animation = anim as? CABasicAnimation,
+              animation.keyPath == "transform.translation.y" else { return }
+        summarize()
+    }
 
+    // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         summaryView.textColor = theme.colors.textPrimary

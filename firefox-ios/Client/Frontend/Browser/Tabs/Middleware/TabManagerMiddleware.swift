@@ -8,6 +8,7 @@ import Shared
 import Storage
 import Account
 import SiteImageView
+import SummarizeKit
 
 import enum MozillaAppServices.BookmarkRoots
 
@@ -18,6 +19,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
+    private let summarizationChecker: SummarizationCheckerProtocol
     private let tabsPanelTelemetry: TabsPanelTelemetry
 
     private var isTabTrayUIExperimentsEnabled: Bool {
@@ -28,10 +30,12 @@ final class TabManagerMiddleware: FeatureFlaggable {
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         summarizationChecker: SummarizationCheckerProtocol = DefaultSummarizationChecker(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.profile = profile
+        self.summarizationChecker = summarizationChecker
         self.logger = logger
         self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
@@ -871,28 +875,38 @@ final class TabManagerMiddleware: FeatureFlaggable {
             return
         }
 
-        fetchProfileTabInfo(for: selectedTab.url) { profileTabInfo in
-            store.dispatchLegacy(
-                MainMenuAction(
-                    windowUUID: windowUUID,
-                    actionType: MainMenuActionType.updateCurrentTabInfo,
-                    currentTabInfo: MainMenuTabInfo(
-                        tabID: selectedTab.tabUUID,
-                        url: selectedTab.url,
-                        canonicalURL: selectedTab.canonicalURL?.displayURL,
-                        isHomepage: selectedTab.isFxHomeTab,
-                        isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
-                        hasChangedUserAgent: selectedTab.changedUserAgent,
-                        zoomLevel: selectedTab.pageZoom,
-                        readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
-                        isBookmarked: profileTabInfo.isBookmarked,
-                        isInReadingList: profileTabInfo.isInReadingList,
-                        isPinned: profileTabInfo.isPinned,
-                        accountData: accountData,
-                        accountProfileImage: profileImage
+        fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
+            Task {
+                let canSummarize: Bool = if let webView = selectedTab.webView {
+                    await self?.summarizationChecker.check(on: webView,
+                                                           maxWords: DefaultSummarizationChecker.maxWords()).canSummarize
+                    ?? false
+                } else {
+                    false
+                }
+                store.dispatchLegacy(
+                    MainMenuAction(
+                        windowUUID: windowUUID,
+                        actionType: MainMenuActionType.updateCurrentTabInfo,
+                        currentTabInfo: MainMenuTabInfo(
+                            tabID: selectedTab.tabUUID,
+                            url: selectedTab.url,
+                            canonicalURL: selectedTab.canonicalURL?.displayURL,
+                            isHomepage: selectedTab.isFxHomeTab,
+                            isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
+                            hasChangedUserAgent: selectedTab.changedUserAgent,
+                            zoomLevel: selectedTab.pageZoom,
+                            readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                            summaryIsAvailable: canSummarize,
+                            isBookmarked: profileTabInfo.isBookmarked,
+                            isInReadingList: profileTabInfo.isInReadingList,
+                            isPinned: profileTabInfo.isPinned,
+                            accountData: accountData,
+                            accountProfileImage: profileImage
+                        )
                     )
                 )
-            )
+            }
         }
     }
 

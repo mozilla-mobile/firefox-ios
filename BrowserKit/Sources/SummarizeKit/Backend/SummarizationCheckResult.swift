@@ -4,14 +4,14 @@
 
 /// Model for the JS `checkSummarization()` result
 /// See UserScripts/MainFrame/AtDocumentStart/Summarizer.js for more context
-public struct SummarizationCheckResult: Decodable {
+public struct SummarizationCheckResult: Decodable, Equatable {
     public let canSummarize: Bool
     public let reason: SummarizationReason?
     public let wordCount: Int
     public let textContent: String?
 
     /// Convenience initializer for constructing a failure result.
-    static func failure(_ error: SummarizationCheckError) -> SummarizationCheckResult {
+    public static func failure(_ error: SummarizationCheckError) -> SummarizationCheckResult {
         SummarizationCheckResult(canSummarize: false, reason: nil, wordCount: 0, textContent: nil)
     }
 }

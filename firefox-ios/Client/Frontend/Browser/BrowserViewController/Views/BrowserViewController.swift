@@ -15,6 +15,7 @@ import Common
 import Redux
 import WebEngine
 import WidgetKit
+import SummarizeKit
 import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
@@ -352,6 +353,7 @@ class BrowserViewController: UIViewController,
     private var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
+    private let summarizationChecker: SummarizationCheckerProtocol
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
@@ -399,6 +401,7 @@ class BrowserViewController: UIViewController,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
+        summarizationChecker: SummarizationCheckerProtocol = DefaultSummarizationChecker(),
         appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
@@ -415,6 +418,7 @@ class BrowserViewController: UIViewController,
         self.downloadQueue = downloadQueue
         self.appStartupTelemetry = appStartupTelemetry
         self.logger = logger
+        self.summarizationChecker = summarizationChecker
         self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
         self.searchEnginesManager = searchEnginesManager
@@ -2507,12 +2511,20 @@ class BrowserViewController: UIViewController,
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
-            let action = ToolbarAction(
-                readerModeState: readerModeState,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-            store.dispatchLegacy(action)
+            Task {
+                var summaryState: SummarizationCheckResult?
+                if let webView = tab?.webView {
+                    summaryState = await summarizationChecker.check(on: webView,
+                                                                    maxWords: DefaultSummarizationChecker.maxWords())
+                }
+                let action = ToolbarAction(
+                    summaryState: summaryState,
+                    readerModeState: readerModeState,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.readerModeStateChanged
+                )
+                store.dispatchLegacy(action)
+            }
         } else {
             legacyUrlBar?.updateReaderModeState(readerModeState)
         }
