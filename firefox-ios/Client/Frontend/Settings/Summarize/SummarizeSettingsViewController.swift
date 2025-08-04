@@ -10,8 +10,7 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
     init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
         super.init(style: .grouped, windowUUID: windowUUID)
-        // TODO: FXIOS-12992 - Add Strings when ready
-        self.title = "Summarize Content"
+        self.title = .Settings.Summarize.Title
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,20 +28,18 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
         // Shows and hides the gesture section
         // based on the summarize feature being enabled
         // and shake gesture feature flag is true
-        guard summarizeContentEnabled && shakeFeatureFlag else { return [summarizeContentSection] }
+        guard summarizeContentEnabled && shakeFeatureFlag else { return [summarizeSection] }
 
-        return [summarizeContentSection, gesturesSection]
+        return [summarizeSection, gesturesSection]
     }
 
-    private var summarizeContentSection: SettingSection {
-        // TODO: FXIOS-12992 - Add Strings when ready
-        let titleText = "Enable Summarize Content"
+    private var summarizeSection: SettingSection {
         let summarizeContentSetting = BoolSetting(
             prefs: prefs,
             theme: theme,
             prefKey: PrefsKeys.Summarizer.summarizeContentFeature,
             defaultValue: true,
-            titleText: titleText
+            titleText: .Settings.Summarize.SummarizePagesTitle
         ) { [weak self] isOn in
             guard let self else { return }
             // Reload sections to hide and show gesture section
@@ -54,18 +51,20 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
     }
 
     private var gesturesSection: SettingSection {
-        // TODO: FXIOS-12992 - Add Strings when ready
-        let titleText = "Enable Shake Gesture"
-        let sectionTitle = "Gestures"
         let shakeGestureSetting = BoolSetting(
             prefs: prefs,
             theme: theme,
             prefKey: PrefsKeys.Summarizer.shakeGestureEnabled,
             defaultValue: true,
-            titleText: titleText
+            titleText: .Settings.Summarize.GesturesSection.ShakeGestureTitle
         )
         return SettingSection(
-            title: NSAttributedString(string: sectionTitle),
+            title: NSAttributedString(
+                string: .Settings.Summarize.GesturesSection.Title
+            ),
+            footerTitle: NSAttributedString(
+                string: .Settings.Summarize.GesturesSection.FooterTitle
+            ),
             children: [shakeGestureSetting]
         )
     }
