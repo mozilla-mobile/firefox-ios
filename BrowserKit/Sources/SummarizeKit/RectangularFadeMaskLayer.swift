@@ -23,7 +23,6 @@ class RectangularFadeMaskLayer: CALayer {
     private let horizontal = CAGradientLayer()
     private let vertical = CAGradientLayer()
     private let maskLayer = CALayer()
-    private var fadeAnimationCompletion: (() -> Void)?
 
     override init() {
         super.init()
@@ -77,7 +76,6 @@ class RectangularFadeMaskLayer: CALayer {
 
     /// Animates the fade layer down by moving the clear area from the center to the bottom of the layer's bound.
     func animateFadeDown() {
-        fadeAnimationCompletion = completion
         let animation = CABasicAnimation(keyPath: UX.colorsKeyPath)
         animation.fromValue = vertical.colors
         animation.toValue = [
