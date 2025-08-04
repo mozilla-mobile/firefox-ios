@@ -10,6 +10,8 @@ import ComponentLibrary
 @testable import Client
 
 class MockSummarizer: SummarizerProtocol {
+    var modelName: SummarizerModel = .appleSummarizer
+
     func summarize(_ contentToSummarize: String) async throws -> String {
         return ""
     }
@@ -144,6 +146,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
                                            parentCoordinatorDelegate: parentCoordinator,
                                            prefs: prefs,
                                            windowUUID: .XCTestDefaultUUID,
+                                           trigger: trigger,
                                            router: router,
                                            onRequestOpenURL: onRequestOpenURL)
         trackForMemoryLeaks(subject)
