@@ -292,6 +292,14 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         let startAtHomeOption: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption.rawValue)
+
+        // Record summarizer user preferences
+        if SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled {
+            let summarizerTelemetry = SummarizerTelemetry()
+            summarizerTelemetry.summarizationEnabled(SummarizerNimbusUtils.shared.isSummarizeFeatureToggledOn)
+            summarizerTelemetry.summarizationShakeGestureEnabled(SummarizerNimbusUtils.shared.isShakeEnabled)
+
+        }
     }
 }
 
