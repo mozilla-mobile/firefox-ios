@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Common
 
+@MainActor
 protocol TabToolbarProtocol: AnyObject {
     var tabToolbarDelegate: TabToolbarDelegate? { get set }
 
