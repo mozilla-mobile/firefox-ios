@@ -18,7 +18,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         static let closeButtonVerticalMargin: CGFloat = 8
         static let foxImageHeight: CGFloat = 53
         static let foxImageWidth: CGFloat = 77
-        static let backgroundAlpha: CGFloat = 0.8
+        static let backgroundAlpha: CGFloat = 0.85
         static let labelsVerticalMargin: CGFloat = 8
         static let crossLarge = StandardImageIdentifiers.Large.cross
     }
@@ -144,7 +144,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
     }
 
     public func applyTheme(theme: Theme) {
-        headerView.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+        headerView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
         headerLabelsContainer.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary

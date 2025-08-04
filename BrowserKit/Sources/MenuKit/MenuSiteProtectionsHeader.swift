@@ -22,7 +22,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         static let protectionIconMargin: CGFloat = 2
         static let siteProtectionsMoreSettingsIcon: CGFloat = 20
         static let siteProtectionsContentSpacing: CGFloat = 4
-        static let backgroundAlpha: CGFloat = 0.8
+        static let backgroundAlpha: CGFloat = 0.85
     }
 
     public var closeButtonCallback: (() -> Void)?
@@ -200,10 +200,14 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
         closeButton.tintColor = theme.colors.iconSecondary
-        closeButton.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+        closeButton.backgroundColor = theme.colors.actionCloseButton.withAlphaComponent(UX.backgroundAlpha)
         siteProtectionsLabel.textColor = theme.colors.textSecondary
         siteProtectionsContent.layer.borderColor = theme.colors.actionSecondaryHover.cgColor
-        siteProtectionsContent.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+        if #available(iOS 26.0, *) {
+            siteProtectionsContent.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
+        } else {
+            siteProtectionsContent.backgroundColor = .clear
+        }
         siteProtectionsIcon.tintColor = theme.colors.iconSecondary
         siteProtectionsMoreSettingsIcon.tintColor = theme.colors.iconSecondary
     }

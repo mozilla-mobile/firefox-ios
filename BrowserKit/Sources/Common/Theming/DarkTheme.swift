@@ -91,6 +91,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var actionInformation: UIColor = FXColors.Blue60
     var actionTabActive: UIColor = FXColors.DarkGrey30
     var actionTabInactive: UIColor = FXColors.DarkGrey80
+    var actionCloseButton: UIColor = FXColors.DarkGrey30
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05
