@@ -69,7 +69,7 @@ final class FoundationModelsSummarizer: SummarizerProtocol {
                /// When `next()` returns nil, the underlying stream has no more data
                /// returning nil in turn ends the AsyncThrowingStream
                guard let chunk = try await responseStream.next() else { return nil }
-               guard let stringChunk = chunk as? String else { throw SummarizerError.invalidResponse }
+               guard let stringChunk = chunk as? String else { throw SummarizerError.invalidChunk }
                return stringChunk
            } catch {
                throw self.mapError(error)
