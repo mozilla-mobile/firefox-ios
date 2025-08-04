@@ -456,7 +456,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
             return HostedSummarizerFeature(enabled: isEnabled)
         }
     }
-    
+
     private func setupSummarizedShakeGestureForTesting(isEnabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
