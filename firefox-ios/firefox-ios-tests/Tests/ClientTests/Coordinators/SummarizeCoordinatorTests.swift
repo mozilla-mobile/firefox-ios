@@ -136,7 +136,9 @@ final class SummarizeCoordinatorTests: XCTestCase {
         }
     }
 
-    private func createSubject(onRequestOpenURL: ((URL?) -> Void)? = nil) -> SummarizeCoordinator {
+    private func createSubject(
+        onRequestOpenURL: ((URL?) -> Void)? = nil,
+        trigger: SummarizerTrigger = .mainMenu) -> SummarizeCoordinator {
         let subject = SummarizeCoordinator(browserSnapshot: UIImage(),
                                            browserSnapshotTopOffset: 0.0,
                                            webView: MockTabWebView(tab: MockTab(profile: MockProfile(),
@@ -144,9 +146,9 @@ final class SummarizeCoordinatorTests: XCTestCase {
                                            summarizerServiceFactory: MockSummarizerServiceFactory(),
                                            browserContentHiding: browserViewController,
                                            parentCoordinatorDelegate: parentCoordinator,
+                                           trigger: trigger,
                                            prefs: prefs,
                                            windowUUID: .XCTestDefaultUUID,
-                                           trigger: trigger,
                                            router: router,
                                            onRequestOpenURL: onRequestOpenURL)
         trackForMemoryLeaks(subject)
