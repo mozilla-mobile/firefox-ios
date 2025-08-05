@@ -180,7 +180,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
     func summarizerServiceDidStart(_ text: String) {
         summarizerTelemetry.summarizationStarted(
             lengthWords: text.numberOfWords,
-            lengthChars: Int32(text.count),
+            lengthChars: Int32(text.count)
         )
     }
 
