@@ -27,15 +27,32 @@ struct AppleIntelligenceUtil {
         userDefaults.bool(forKey: PrefsKeys.appleIntelligenceAvailable)
     }
 
+    var cannotUseAppleIntelligence: Bool {
+        userDefaults.bool(forKey: PrefsKeys.cannotRunAppleIntelligence)
+    }
+
     @available(iOS 26.0, *)
     func processAvailabilityState(_ model: LanguageModelProtocol = SystemLanguageModel.default) {
         let isAvailable = checkAppleIntelligenceAvailability(with: model)
+        let cannotUseAppleIntelligence = checkCannotUseAppleIntelligenceModel()
         userDefaults.set(isAvailable, forKey: PrefsKeys.appleIntelligenceAvailable)
+        userDefaults.set(cannotUseAppleIntelligence, forKey: PrefsKeys.cannotRunAppleIntelligence)
     }
 
     @available(iOS 26, *)
     private func checkAppleIntelligenceAvailability(with model: LanguageModelProtocol) -> Bool {
         return model.isAvailable
+    }
+
+    @available(iOS 26.0, *)
+    private func checkCannotUseAppleIntelligenceModel() -> Bool {
+        let model = SystemLanguageModel.default
+        switch model.availability {
+        case .available, .unavailable(.appleIntelligenceNotEnabled), .unavailable(.modelNotReady):
+            return false
+        case .unavailable(.deviceNotEligible), .unavailable:
+            return true
+        }
     }
 }
 #endif
