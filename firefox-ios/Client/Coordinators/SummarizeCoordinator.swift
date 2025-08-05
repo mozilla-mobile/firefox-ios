@@ -149,10 +149,12 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             self?.onRequestOpenURL?(url)
         } onAllowButtonPressed: { [weak self] in
             self?.prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
+            self?.summarizerTelemetry.summarizationConsentDisplayed(true)
             self?.router.dismiss(animated: true) {
                 self?.showSummarizeViewController()
             }
         } onDismiss: { [weak self] in
+            self?.summarizerTelemetry.summarizationConsentDisplayed(false)
             self?.dismissCoordinator()
         }
         let tosController = ToSBottomSheetViewController(viewModel: tosViewModel, windowUUID: windowUUID)
