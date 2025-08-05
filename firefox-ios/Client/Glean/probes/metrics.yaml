@@ -3588,6 +3588,8 @@ nimbus_system:
           type: boolean
         is_apple_intelligence_available:
           type: boolean
+        cannot_use_apple_intelligence:
+          type: boolean
     description: |
       The Nimbus context object that is recorded to Glean
     bugs:
