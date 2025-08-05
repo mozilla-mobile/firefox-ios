@@ -13,12 +13,10 @@ public protocol SummarizerServiceFactory {
 
 public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
     public init() {}
-    
+
     public func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService? {
-        let maxWords = Self.maxWords(
-            isAppleSummarizerEnabled: isAppleSummarizerEnabled,
-            isHostedSummarizerEnabled: isHostedSummarizerEnabled
-        )
+        let maxWords = maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
+                                isHostedSummarizerEnabled: isHostedSummarizerEnabled)
         #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
             let applSummarizer = FoundationModelsSummarizer(modelInstructions: FoundationModelsConfig.instructions)
