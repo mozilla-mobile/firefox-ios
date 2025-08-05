@@ -43,7 +43,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     private var constraints = [NSLayoutConstraint]()
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -90,14 +90,12 @@ class PhotonActionSheet: UIViewController, Themeable {
         tableView.dataSource = nil
         tableView.delegate = nil
         tableView.removeFromSuperview()
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - View cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
         view.addSubview(tableView)
         view.accessibilityIdentifier = AccessibilityIdentifiers.Photon.view
 
@@ -106,12 +104,16 @@ class PhotonActionSheet: UIViewController, Themeable {
 
         setupLayout()
 
-        setupNotifications(
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
             forObserver: self,
             observing: [.ProfileDidFinishSyncing,
                         .ProfileDidStartSyncing,
                         UIAccessibility.reduceTransparencyStatusDidChangeNotification]
         )
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewDidDisappear(_ animated: Bool) {

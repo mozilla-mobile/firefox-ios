@@ -52,8 +52,11 @@ class LabelButtonHeaderView: UICollectionReusableView,
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
 
     private func setupLayout() {
@@ -77,10 +80,6 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Helper functions

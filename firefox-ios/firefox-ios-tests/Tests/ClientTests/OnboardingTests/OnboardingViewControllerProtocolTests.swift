@@ -6,6 +6,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class OnboardingViewControllerProtocolTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingTestingConfigUtility!
     typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder

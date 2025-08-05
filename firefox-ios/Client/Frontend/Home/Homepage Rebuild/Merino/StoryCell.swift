@@ -50,7 +50,11 @@ class StoryCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable,
 
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
         setupLayout()
     }
 

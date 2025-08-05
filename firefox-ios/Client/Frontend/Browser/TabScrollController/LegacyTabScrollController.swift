@@ -9,7 +9,6 @@ import Common
 
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
-                                       Themeable,
                                        TabScrollHandlerProtocol {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
@@ -184,8 +183,6 @@ final class LegacyTabScrollController: NSObject,
     private var isAnimatingToolbar = false
     private var shouldRespondToScroll = false
 
-    var themeManager: any ThemeManager
-    var themeObserver: (any NSObjectProtocol)?
     var notificationCenter: any NotificationProtocol
     var currentWindowUUID: WindowUUID? {
         return windowUUID
@@ -198,7 +195,7 @@ final class LegacyTabScrollController: NSObject,
         return hasScrollableContent && voiceOverOff
     }
 
-    // If scrollview contenSize is bigger than scrollview height scroll is enabled
+    // If scrollview contentSize is bigger than scrollview height scroll is enabled
     var hasScrollableContent: Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
             contentSize.height
@@ -207,15 +204,11 @@ final class LegacyTabScrollController: NSObject,
     deinit {
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
-        guard let themeObserver else { return }
-        notificationCenter.removeObserver(themeObserver)
     }
 
     init(windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
-        self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.logger = logger
@@ -233,11 +226,6 @@ final class LegacyTabScrollController: NSObject,
                                                selector: #selector(applicationWillTerminate(_:)),
                                                name: UIApplication.willTerminateNotification,
                                                object: nil)
-        // need to add this manually otherwise listenForThemeChanges(view) will retain the view in memory
-        // causing memory leaks
-        themeObserver = notificationCenter.addObserver(name: .ThemeDidChange, queue: .main) { [weak self] _ in
-            self?.applyTheme()
-        }
     }
 
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
@@ -423,13 +411,6 @@ final class LegacyTabScrollController: NSObject,
         tab?.webView?.addPullRefresh { [weak self] in
             self?.reload()
         }
-        applyTheme()
-    }
-
-    // MARK: - Themeable
-
-    func applyTheme() {
-        tab?.webView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 }
 

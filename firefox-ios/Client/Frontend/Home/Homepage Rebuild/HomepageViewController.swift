@@ -22,9 +22,9 @@ final class HomepageViewController: UIViewController,
     // MARK: - ContentContainable variables
     var contentType: ContentType = .homepage
 
-    // MARK: - Themable variables
+    // MARK: - Themeable variables
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
     let windowUUID: WindowUUID
@@ -120,7 +120,6 @@ final class HomepageViewController: UIViewController,
 
     deinit {
         unsubscribeFromRedux()
-        notificationCenter.removeObserver(self)
     }
 
     func stopCFRsTimer() {
@@ -145,8 +144,9 @@ final class HomepageViewController: UIViewController,
             )
         )
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+
         addTapGestureRecognizerToDismissKeyboard()
     }
 

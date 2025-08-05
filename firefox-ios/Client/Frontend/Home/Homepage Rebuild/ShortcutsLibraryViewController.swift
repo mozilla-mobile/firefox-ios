@@ -10,7 +10,7 @@ class ShortcutsLibraryViewController: UIViewController, Themeable {
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
     init(windowUUID: WindowUUID,
@@ -28,10 +28,12 @@ class ShortcutsLibraryViewController: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
-        applyTheme()
         title = .FirefoxHomepage.Shortcuts.Library.Title
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
