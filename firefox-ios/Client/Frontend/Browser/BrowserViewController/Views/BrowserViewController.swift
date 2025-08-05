@@ -357,7 +357,6 @@ class BrowserViewController: UIViewController,
     private var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
-    private let summarizationChecker: SummarizationCheckerProtocol
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
@@ -405,7 +404,6 @@ class BrowserViewController: UIViewController,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
-        summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
         appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
@@ -422,7 +420,6 @@ class BrowserViewController: UIViewController,
         self.downloadQueue = downloadQueue
         self.appStartupTelemetry = appStartupTelemetry
         self.logger = logger
-        self.summarizationChecker = summarizationChecker
         self.documentLogger = documentLogger
         self.appAuthenticator = appAuthenticator
         self.searchEnginesManager = searchEnginesManager
@@ -2515,14 +2512,15 @@ class BrowserViewController: UIViewController,
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
-            Task {
-                var summaryState: SummarizationCheckResult?
-                if let webView = tab?.webView, isSummarizerEnabled {
-                    summaryState = await summarizationChecker.check(on: webView,
-                                                                    maxWords: SummarizationChecker.maxWords())
-                }
+            if isSummarizerEnabled {
+                let action = ToolbarMiddlewareAction(
+                    readerModeState: readerModeState,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.loadSummaryState
+                )
+                store.dispatchLegacy(action)
+            } else {
                 let action = ToolbarAction(
-                    canSummarize: summaryState?.canSummarize,
                     readerModeState: readerModeState,
                     windowUUID: windowUUID,
                     actionType: ToolbarActionType.readerModeStateChanged

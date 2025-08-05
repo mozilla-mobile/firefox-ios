@@ -5,6 +5,7 @@
 import Common
 import Redux
 import ToolbarKit
+import SummarizeKit
 
 final class ToolbarMiddleware: FeatureFlaggable {
     private let manager: ToolbarManager
@@ -12,13 +13,28 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let windowManager: WindowManager
     private let logger: Logger
     private let toolbarTelemetry: ToolbarTelemetry
+    private let summarizationChecker: SummarizationCheckerProtocol
+    private let summarizerServiceFactory: SummarizerServiceFactory
+    private var isSummarizerEnabled: Bool {
+        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+    }
+    private var isAppleSummarizerEnabled: Bool {
+        return SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
+    }
+    private var isHostedSummaryEnabled: Bool {
+        return SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
+    }
 
     init(manager: ToolbarManager = DefaultToolbarManager(),
          toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
          toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry(),
+         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
+         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.manager = manager
+        self.summarizationChecker = summarizationChecker
+        self.summarizerServiceFactory = summarizerServiceFactory
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
         self.windowManager = windowManager
@@ -110,6 +126,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didStartDragInteraction:
             toolbarTelemetry.dragInteractionStarted()
 
+        case ToolbarMiddlewareActionType.loadSummaryState:
+            checkPageCanSummarize(action: action)
+
         default:
             break
         }
@@ -124,7 +143,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 actionType: SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine
             )
             store.dispatchLegacy(action)
-
         default:
             break
         }
@@ -398,6 +416,27 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.toolbarPositionChanged)
         store.dispatchLegacy(toolbarAction)
+    }
+
+    private func checkPageCanSummarize(action: ToolbarMiddlewareAction) {
+        guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView,
+              isSummarizerEnabled else { return }
+        let maxWords = summarizerServiceFactory.maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
+                                                         isHostedSummarizerEnabled: isHostedSummaryEnabled)
+        Task {
+            let result = await summarizationChecker.check(
+                on: webView,
+                maxWords: maxWords
+            )
+            store.dispatchLegacy(
+                ToolbarAction(
+                    canSummarize: result.canSummarize,
+                    readerModeState: action.readerModeState,
+                    windowUUID: action.windowUUID,
+                    actionType: ToolbarActionType.readerModeStateChanged
+                )
+            )
+        }
     }
 
     // MARK: - Helper

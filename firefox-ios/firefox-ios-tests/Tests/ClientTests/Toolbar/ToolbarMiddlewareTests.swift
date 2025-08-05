@@ -15,22 +15,32 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var toolbarManager: ToolbarManager!
     var mockGleanWrapper: MockGleanWrapper!
+    var summarizationChecker: MockSummarizationChecker!
+    var windowManager: MockWindowManager!
+    var tabManager: MockTabManager!
 
     override func setUp() {
         super.setUp()
-
+        setIsHostedSummaryEnabled(false)
         mockGleanWrapper = MockGleanWrapper()
+        summarizationChecker = MockSummarizationChecker()
 
-        let mockTabManager = MockTabManager()
-        DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
+        tabManager = MockTabManager()
+        windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
+        DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
+                                                     injectedTabManager: tabManager)
         toolbarManager = DefaultToolbarManager()
 
         // We must reset the global mock store prior to each test
         setupStore()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
         mockGleanWrapper = nil
+        summarizationChecker = nil
+        tabManager = nil
+        windowManager = nil
         DependencyHelperMock().reset()
         resetStore()
         super.tearDown()
@@ -103,6 +113,40 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
+    }
+
+    func testLoadSummary_whenWebViewIsNil_doesntDispatchToolbarAction() {
+        setIsHostedSummaryEnabled(true)
+        let subject = createSubject(manager: toolbarManager)
+
+        let action = ToolbarMiddlewareAction(readerModeState: .active,
+                                             windowUUID: .XCTestDefaultUUID,
+                                             actionType: ToolbarMiddlewareActionType.loadSummaryState)
+        subject.toolbarProvider(mockStore.state, action)
+
+        XCTAssertNil(mockStore.dispatchedActions.first as? ToolbarAction)
+    }
+
+    func testLoadSummary_dispatchesToolbarAction() throws {
+        setIsHostedSummaryEnabled(true)
+        let expectation = XCTestExpectation(description: "Store should dispatch an action")
+        let subject = createSubject(manager: toolbarManager)
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
+
+        let action = ToolbarMiddlewareAction(readerModeState: .active,
+                                             windowUUID: .XCTestDefaultUUID,
+                                             actionType: ToolbarMiddlewareActionType.loadSummaryState)
+        summarizationChecker.overrideResponse = MockSummarizationChecker.success
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.toolbarProvider(mockStore.state, action)
+        wait(for: [expectation])
+
+        let result = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertTrue(result.canSummarize)
     }
 
     // MARK: - MicrosurveyPromptMiddlewareAction
@@ -721,8 +765,12 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
     private func createSubject(manager: ToolbarManager) -> ToolbarMiddleware {
-        return ToolbarMiddleware(manager: manager,
-                                 toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper))
+        return ToolbarMiddleware(
+            manager: manager,
+            toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
+            summarizationChecker: summarizationChecker,
+            windowManager: windowManager
+        )
     }
 
     private func didTapButton(buttonType: ToolbarActionConfiguration.ActionType,
@@ -770,6 +818,12 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, dispatchedActionsCount)
         XCTAssertEqual(firstActionType, ToolbarActionType.cancelEdit)
         XCTAssertEqual(secondActionType, GeneralBrowserActionType.leaveOverlay)
+    }
+
+    private func setIsHostedSummaryEnabled(_ isEnabled: Bool) {
+        return FxNimbus.shared.features.hostedSummarizerFeature.with { _,_ in
+            return HostedSummarizerFeature(enabled: isEnabled)
+        }
     }
 
     func setupEditingAppState() -> AppState {

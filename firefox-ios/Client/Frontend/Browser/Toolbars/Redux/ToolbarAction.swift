@@ -22,7 +22,7 @@ struct ToolbarAction: Action {
     let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
-    let canSummarize: Bool?
+    let canSummarize: Bool
     let readerModeState: ReaderModeState?
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
@@ -47,7 +47,7 @@ struct ToolbarAction: Action {
          isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
-         canSummarize: Bool? = nil,
+         canSummarize: Bool = false,
          readerModeState: ReaderModeState? = nil,
          addressBorderPosition: AddressToolbarBorderPosition = .none,
          displayNavBorder: Bool? = nil,
@@ -126,17 +126,20 @@ struct ToolbarMiddlewareAction: Action {
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
     let scrollOffset: CGPoint?
+    let readerModeState: ReaderModeState?
 
     init(buttonType: ToolbarActionConfiguration.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          scrollOffset: CGPoint? = nil,
+         readerModeState: ReaderModeState? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
+        self.readerModeState = readerModeState
         self.gestureType = gestureType
         self.scrollOffset = scrollOffset
     }
@@ -148,4 +151,5 @@ enum ToolbarMiddlewareActionType: ActionType {
     case urlDidChange
     case didClearSearch
     case didStartDragInteraction
+    case loadSummaryState
 }

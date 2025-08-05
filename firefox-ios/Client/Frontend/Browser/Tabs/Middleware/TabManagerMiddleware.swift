@@ -20,16 +20,27 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
     private let summarizationChecker: SummarizationCheckerProtocol
+    private let summarizerServiceFactory: SummarizerServiceFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
+    private var isSummarizerEnabled: Bool {
+        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+    }
+    private var isAppleSummarizerEnabled: Bool {
+        return SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
+    }
+    private var isHostedSummaryEnabled: Bool {
+        return SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
          summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
@@ -37,6 +48,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         self.profile = profile
         self.summarizationChecker = summarizationChecker
         self.logger = logger
+        self.summarizerServiceFactory = summarizerServiceFactory
         self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
@@ -874,37 +886,34 @@ final class TabManagerMiddleware: FeatureFlaggable {
             )
             return
         }
-
+        let isSummarizerEnabled = isSummarizerEnabled
+        let maxWords = summarizerServiceFactory.maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
+                                                         isHostedSummarizerEnabled: isHostedSummaryEnabled)
         fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
-            Task {
-                let canSummarize: Bool = if let webView = selectedTab.webView {
-                    await self?.summarizationChecker.check(on: webView,
-                                                           maxWords: SummarizationChecker.maxWords()).canSummarize
-                    ?? false
-                } else {
-                    false
-                }
-                store.dispatchLegacy(
-                    MainMenuAction(
+            if isSummarizerEnabled {
+                Task {
+                    let canSummarize: Bool = if let webView = selectedTab.webView {
+                        await self?.summarizationChecker.check(on: webView,
+                                                               maxWords: maxWords).canSummarize
+                        ?? false
+                    } else {
+                        false
+                    }
+                    self?.dispatchTabInfo(
+                        info: profileTabInfo,
+                        selectedTab: selectedTab,
                         windowUUID: windowUUID,
-                        actionType: MainMenuActionType.updateCurrentTabInfo,
-                        currentTabInfo: MainMenuTabInfo(
-                            tabID: selectedTab.tabUUID,
-                            url: selectedTab.url,
-                            canonicalURL: selectedTab.canonicalURL?.displayURL,
-                            isHomepage: selectedTab.isFxHomeTab,
-                            isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
-                            hasChangedUserAgent: selectedTab.changedUserAgent,
-                            zoomLevel: selectedTab.pageZoom,
-                            readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
-                            summaryIsAvailable: canSummarize,
-                            isBookmarked: profileTabInfo.isBookmarked,
-                            isInReadingList: profileTabInfo.isInReadingList,
-                            isPinned: profileTabInfo.isPinned,
-                            accountData: accountData,
-                            accountProfileImage: profileImage
-                        )
+                        accountData: accountData,
+                        canSummarize: canSummarize
                     )
+                }
+            } else {
+                self?.dispatchTabInfo(
+                    info: profileTabInfo,
+                    selectedTab: selectedTab,
+                    windowUUID: windowUUID,
+                    accountData: accountData,
+                    canSummarize: false
                 )
             }
         }
@@ -959,6 +968,38 @@ final class TabManagerMiddleware: FeatureFlaggable {
                 )
             )
         }
+    }
+
+    private func dispatchTabInfo(
+        info: ProfileTabInfo,
+        selectedTab: Tab,
+        windowUUID: WindowUUID,
+        accountData: AccountData,
+        canSummarize: Bool,
+        profileImage: UIImage? = nil
+    ) {
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.updateCurrentTabInfo,
+                currentTabInfo: MainMenuTabInfo(
+                    tabID: selectedTab.tabUUID,
+                    url: selectedTab.url,
+                    canonicalURL: selectedTab.canonicalURL?.displayURL,
+                    isHomepage: selectedTab.isFxHomeTab,
+                    isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
+                    hasChangedUserAgent: selectedTab.changedUserAgent,
+                    zoomLevel: selectedTab.pageZoom,
+                    readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                    summaryIsAvailable: canSummarize,
+                    isBookmarked: info.isBookmarked,
+                    isInReadingList: info.isInReadingList,
+                    isPinned: info.isPinned,
+                    accountData: accountData,
+                    accountProfileImage: profileImage
+                )
+            )
+        )
     }
 
     private func handleDidInstantiateViewAction(action: MainMenuAction) {

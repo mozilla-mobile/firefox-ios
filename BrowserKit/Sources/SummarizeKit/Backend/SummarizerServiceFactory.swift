@@ -6,16 +6,23 @@ import Foundation
 
 public protocol SummarizerServiceFactory {
     func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService?
+
+    /// Returns the max words that the summarizer Service can handle.
+    func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int
 }
 
 public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
     public init() {}
-
+    
     public func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService? {
+        let maxWords = Self.maxWords(
+            isAppleSummarizerEnabled: isAppleSummarizerEnabled,
+            isHostedSummarizerEnabled: isHostedSummarizerEnabled
+        )
         #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
             let applSummarizer = FoundationModelsSummarizer(modelInstructions: FoundationModelsConfig.instructions)
-            return SummarizerService(summarizer: applSummarizer, maxWords: FoundationModelsConfig.maxWords)
+            return SummarizerService(summarizer: applSummarizer, maxWords: maxWords)
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
                   let model = LiteLLMConfig.apiModel,
@@ -27,7 +34,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
                 maxTokens: LiteLLMConfig.maxTokens,
                 modelInstructions: LiteLLMConfig.instructions
             )
-            return SummarizerService(summarizer: llmSummarizer, maxWords: LiteLLMConfig.maxWords)
+            return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         }
         #else
         guard isHostedSummarizerEnabled,
@@ -41,7 +48,17 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             maxTokens: LiteLLMConfig.maxTokens,
             modelInstructions: LiteLLMConfig.instructions
         )
-        return SummarizerService(summarizer: llmSummarizer, maxWords: LiteLLMConfig.maxWords)
+        return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         #endif
+    }
+
+    public func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int {
+        if isAppleSummarizerEnabled {
+            return FoundationModelsConfig.maxWords
+        }
+        if isHostedSummarizerEnabled {
+            return LiteLLMConfig.maxWords
+        }
+        return 0
     }
 }

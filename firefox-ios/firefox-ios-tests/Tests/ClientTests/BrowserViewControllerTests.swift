@@ -19,7 +19,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var appStartupTelemetry: MockAppStartupTelemetry!
     var appState: AppState!
-    var summarizationChecker: MockSummarizationChecker!
 
     override func setUp() {
         super.setUp()
@@ -33,7 +32,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
 
-        summarizationChecker = MockSummarizationChecker()
         profile = MockProfile()
         tabManager = MockTabManager()
         browserCoordinator = MockBrowserCoordinator()
@@ -46,7 +44,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         TelemetryContextualIdentifier.clearUserDefaults()
         profile.shutdown()
         profile = nil
-        summarizationChecker = nil
         tabManager = nil
         appStartupTelemetry = nil
         Glean.shared.resetGlean(clearStores: true)
@@ -154,7 +151,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(subject.toolbar.privateModeBadge.badge.isHidden)
     }
 
-    @MainActor
     func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {
         let subject = createSubject()
         let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
@@ -186,31 +182,28 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(browserCoordinator.showHomepageCalled, 1)
     }
 
-    func testUpdateReaderModeState_whenSummarizeFeatureOn_returnsSuccessSummariseState() throws {
+    func testUpdateReaderModeState_whenSummarizeFeatureOn_dispatchesToolbarMiddlewareAction() throws {
         setIsHostedSummarizerEnabled(true)
         let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
 
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
         subject.updateReaderModeState(for: tab, readerModeState: .active)
         wait(for: [expectation])
 
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertEqual(action.canSummarize, true)
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(action.readerModeState, .active)
     }
 
-    func testUpdateReaderModeState_whenSummarizeFeatureOn_returnsSummarizeStateNilForNilWebView() throws {
-        setIsHostedSummarizerEnabled(true)
+    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesToolbarAction() throws {
         let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
 
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
@@ -218,23 +211,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation])
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertNil(action.canSummarize)
-    }
-
-    func testUpdateReaderModeState_whenSummarizeFeatureOff_returnsSummarizeStateNil() throws {
-        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-        let subject = createSubject()
-        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-        subject.updateReaderModeState(for: tab, readerModeState: .active)
-        wait(for: [expectation])
-
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertNil(action.canSummarize)
+        XCTAssertEqual(action.readerModeState, .active)
     }
 
     // MARK: - Handle PDF
@@ -423,7 +400,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
-                                            summarizationChecker: summarizationChecker,
                                             appStartupTelemetry: appStartupTelemetry)
         screenshotHelper = MockScreenshotHelper(controller: subject)
         subject.screenshotHelper = screenshotHelper
