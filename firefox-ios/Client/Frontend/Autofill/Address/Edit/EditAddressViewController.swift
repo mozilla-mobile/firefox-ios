@@ -35,7 +35,7 @@ class EditAddressViewController: UIViewController,
     var model: AddressListViewModel
     private let logger: Logger
     var themeManager: ThemeManager
-    public var themeListenerCancellable: Any?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var currentWindowUUID: WindowUUID? { model.windowUUID }
     var webView: WKWebView? { model.editAddressWebViewManager.webView }

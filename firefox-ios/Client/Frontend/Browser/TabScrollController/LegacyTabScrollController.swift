@@ -9,7 +9,6 @@ import Common
 
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
-                                       Themeable,
                                        TabScrollHandlerProtocol {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200

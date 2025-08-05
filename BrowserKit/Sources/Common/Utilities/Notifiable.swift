@@ -97,9 +97,9 @@ public extension Notifiable {
 
     /// Deregisters a notification observer for the given notifications.
     ///
-    /// It is not necessary to call this on `deinit`. Your observer is automatically cleaned up once it is deallocated. You
-    /// only need to call this if you want to stop observing a notification during the lifetime of your observer.
-    func stopObservingNotifications(
+    /// It is not necessary to call this on `deinit`. Your theme observer is automatically cleaned up once it is deallocated.
+    /// You only need to call this if you want to stop observing a notification during the lifetime of your observer.
+    private func stopObservingNotifications(
         withNotificationCenter notificationCenter: NotificationProtocol,
         forObserver observer: Any,
         observing notifications: [Notification.Name]
