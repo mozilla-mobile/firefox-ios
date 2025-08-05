@@ -9,6 +9,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2287278f
     // Smoketest
     func testLoadReaderContent() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
@@ -34,6 +36,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306991
     // Smoketest
     func testAddToReadingList() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
         // Navigate to reading list
@@ -266,6 +270,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306893
     // Smoketest
     func testReadingList() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_ReadingList)
@@ -333,6 +339,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306993
     // Smoketest
     func testAddToReaderListOptions() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         addContentToReaderView()
         // Check that Settings layouts options are shown
