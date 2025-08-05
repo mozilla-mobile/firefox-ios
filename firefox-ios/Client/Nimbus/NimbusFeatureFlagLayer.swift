@@ -131,6 +131,9 @@ final class NimbusFeatureFlagLayer {
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
+        case .tabTrayTranslucency:
+            return checkTabTrayTranslucencyFeature(from: nimbus)
+
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
 
@@ -222,6 +225,11 @@ final class NimbusFeatureFlagLayer {
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homepageRebuildFeature.value()
         return config.enabled
+    }
+
+    private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayUiExperiments.value()
+        return config.translucency
     }
 
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
