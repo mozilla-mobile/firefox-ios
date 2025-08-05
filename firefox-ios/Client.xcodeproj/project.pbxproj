@@ -16,8 +16,6 @@
 		047F9B3224E1FE1F00CD7DF7 /* WidgetKitExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		047F9B3E24E1FF4000CD7DF7 /* SearchQuickLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047F9B3A24E1FF4000CD7DF7 /* SearchQuickLinks.swift */; };
 		047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047F9B3C24E1FF4000CD7DF7 /* ImageButtonWithLabel.swift */; };
-		0A0D007A2E30C2310021DD05 /* MenuTableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D00792E30C2210021DD05 /* MenuTableViewTests.swift */; };
-		0A0DFE682E2F93510021DD05 /* MenuMainViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0DFE672E2F93380021DD05 /* MenuMainViewTests.swift */; };
 		0A3F57F92CEDD4CA0051B001 /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F57F82CEDD4CA0051B001 /* TermsOfServiceViewController.swift */; };
 		0A44ABAC2D6DC2520034FA86 /* ThemedLearnMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A44ABAB2D6DC2410034FA86 /* ThemedLearnMoreTableViewCell.swift */; };
 		0A49784A2C53E63200B1E82A /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4978492C53E63200B1E82A /* TrackingProtectionViewController.swift */; };
@@ -2530,8 +2528,6 @@
 		09BE46439BC761BEB09F9DD1 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		09D94B5E8CF4C06397168F78 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = "my.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		09F14D989587092C60A0078F /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Shared.strings; sourceTree = "<group>"; };
-		0A0D00792E30C2210021DD05 /* MenuTableViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewTests.swift; sourceTree = "<group>"; };
-		0A0DFE672E2F93380021DD05 /* MenuMainViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuMainViewTests.swift; sourceTree = "<group>"; };
 		0A3A4A9EB784F7903FB13B7A /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		0A3F57F82CEDD4CA0051B001 /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
 		0A44ABAB2D6DC2410034FA86 /* ThemedLearnMoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedLearnMoreTableViewCell.swift; sourceTree = "<group>"; };
@@ -12410,8 +12406,6 @@
 			isa = PBXGroup;
 			children = (
 				0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */,
-				0A0D00792E30C2210021DD05 /* MenuTableViewTests.swift */,
-				0A0DFE672E2F93380021DD05 /* MenuMainViewTests.swift */,
 				81DAB2F22C88F14400F4BE98 /* MainMenuCoordinatorTests.swift */,
 				81DAB2F62C89004D00F4BE98 /* MainMenuMiddlewareTests.swift */,
 				81DAB2F82C8901AC00F4BE98 /* MainMenuStateTests.swift */,
@@ -18702,7 +18696,6 @@
 				213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */,
 				033C94F72E2FBCDD00C2382F /* TermsOfUseMiddlewareTests.swift in Sources */,
 				8A13FA892AD82BC8007527AB /* AppSendTabDelegateTests.swift in Sources */,
-				0A0D007A2E30C2310021DD05 /* MenuTableViewTests.swift in Sources */,
 				8A7653C228A2E57D00924ABF /* StoryDataAdaptorTests.swift in Sources */,
 				0ABCD45D2D356015005D704A /* TermsOfServiceTelemetryTests.swift in Sources */,
 				C8CD80D42A1E268C0097C3AE /* MockGleanPlumbEvaluationUtility.swift in Sources */,
@@ -18729,7 +18722,6 @@
 				8A2F21C62DEDC17900C9F4DE /* StartAtHomeMiddlewareTests.swift in Sources */,
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
-				0A0DFE682E2F93510021DD05 /* MenuMainViewTests.swift in Sources */,
 				81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */,
 				C7F051582D9F098200EC52C0 /* ContextMenuTelemetryTests.swift in Sources */,
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,

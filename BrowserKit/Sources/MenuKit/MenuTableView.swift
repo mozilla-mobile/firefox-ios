@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import Common
 
-public final class MenuTableView: UIView,
+final class MenuTableView: UIView,
                                   UITableViewDelegate,
                                   UITableViewDataSource,
                                   UIScrollViewDelegate,
@@ -76,11 +76,11 @@ public final class MenuTableView: UIView,
     }
 
     // MARK: - UITableView Methods
-    public func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return menuData.count
     }
 
-    public func tableView(
+    func tableView(
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
@@ -92,7 +92,7 @@ public final class MenuTableView: UIView,
         return section == 0 ? UX.menuSiteTopPadding : UX.distanceBetweenSections
     }
 
-    public func tableView(
+    func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
@@ -105,7 +105,7 @@ public final class MenuTableView: UIView,
         }
     }
 
-    public func tableView(
+    func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
@@ -169,7 +169,7 @@ public final class MenuTableView: UIView,
         return cell
     }
 
-    public func tableView(
+    func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
@@ -184,7 +184,7 @@ public final class MenuTableView: UIView,
         }
     }
 
-    public func tableView(
+    func tableView(
         _ tableView: UITableView,
         viewForHeaderInSection section: Int
     ) -> UIView? {
@@ -196,7 +196,7 @@ public final class MenuTableView: UIView,
         return nil
     }
 
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if isHomepage, !UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
             scrollView.contentOffset = .zero
             scrollView.showsVerticalScrollIndicator = false
@@ -215,7 +215,7 @@ public final class MenuTableView: UIView,
     }
 
     // MARK: - Theme Applicable
-    public func applyTheme(theme: Theme) {
+    func applyTheme(theme: Theme) {
         self.theme = theme
         backgroundColor = .clear
         tableView.backgroundColor = .clear

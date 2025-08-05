@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-public final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentViewSpacing: CGFloat = 16
         static let backgroundAlpha: CGFloat = 0.8
@@ -37,7 +37,7 @@ public final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, Th
 
     // We override this method, for handling taps on MenuSquareView views
     // This may be a temporary fix
-    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if self.isHidden || self.alpha.isZero || !self.isUserInteractionEnabled {
             return nil
         }
@@ -89,7 +89,7 @@ public final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, Th
     }
 
     // MARK: - Theme Applicable
-    public func applyTheme(theme: Theme) {
+    func applyTheme(theme: Theme) {
         self.theme = theme
         backgroundColor = .clear
         if #available(iOS 26.0, *) {

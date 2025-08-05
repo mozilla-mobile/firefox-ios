@@ -3,8 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import MenuKit
-@testable import Client
+@testable import MenuKit
 
 final class MenuMainViewTests: XCTestCase {
     var menuView: MenuMainView!
