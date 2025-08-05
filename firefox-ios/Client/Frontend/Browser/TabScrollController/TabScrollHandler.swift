@@ -7,12 +7,6 @@ import SnapKit
 import Shared
 import Common
 
-protocol TabScrollHandlerDelegate: AnyObject {
-    func startAnimatingToolbar(state: ToolbarState)
-    func showToolbar()
-    func hideToolbar()
-}
-
 protocol TabScrollHandlerProtocol: AnyObject {
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
                                bottomContainer: BaseAlphaStackView?,
@@ -23,6 +17,12 @@ final class TabScrollHandler: NSObject,
                                  SearchBarLocationProvider,
                                  TabScrollHandlerProtocol,
                                  UIScrollViewDelegate {
+    protocol Delegate: AnyObject {
+        func startAnimatingToolbar(state: ToolbarState)
+        func showToolbar()
+        func hideToolbar()
+    }
+
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -83,7 +83,7 @@ final class TabScrollHandler: NSObject,
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
-    weak var delegate: TabScrollControllerDelegate?
+    private weak var delegate: TabScrollHandler.Delegate?
 
     private let windowUUID: WindowUUID
     private let logger: Logger
@@ -214,7 +214,7 @@ final class TabScrollHandler: NSObject,
     init(windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         delegate: TabScrollControllerDelegate? = nil) {
+         delegate: TabScrollHandler.Delegate? = nil) {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.logger = logger

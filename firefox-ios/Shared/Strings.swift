@@ -2482,6 +2482,45 @@ extension String {
             )
         }
 
+        public struct Summarize {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Summarize.Title.v142",
+                tableName: "Settings",
+                value: "Page Summaries",
+                comment: "In the settings menu, in the General section, this is the title for the Summarize settings section."
+            )
+
+            public static let SummarizePagesTitle = MZLocalizedString(
+                key: "Settings.Summarize.SummarizePagesTitle.v142",
+                tableName: "Settings",
+                value: "Summarize Pages",
+                comment: "This is the title for the setting that toggles the Summarize feature under the Summarize settings section."
+            )
+
+            public struct GesturesSection {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSection.Title.v142",
+                    tableName: "Settings",
+                    value: "Gestures",
+                    comment: "This is the section title for the gestures features under the Summarize settings section."
+                )
+
+                public static let ShakeGestureTitle = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSection.ShakeGestureTitle.v142",
+                    tableName: "Settings",
+                    value: "Shake to Summarize",
+                    comment: "This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section."
+                )
+
+                public static let FooterTitle = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSection.FooterTitle.v142",
+                    tableName: "Settings",
+                    value: "Shake your device from side to side to summarize a page.",
+                    comment: "This is the footer text for the gestures features under the Summarize settings section."
+                )
+            }
+        }
+
         public struct Appearance {
             public struct PageZoom {
                 public static let SectionHeader = MZLocalizedString(

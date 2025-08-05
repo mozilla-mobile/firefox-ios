@@ -12,7 +12,9 @@ enum SummarizerError: Error, LocalizedError, Sendable {
     case busy
     case safetyBlocked
     case unsupportedLanguage
-    case invalidResponse
+    case invalidResponse(statusCode: Int)
+    case unableToExtractContent
+    case invalidChunk
     case cancelled
     case noContent
     case unknown(Error)
@@ -30,6 +32,8 @@ enum SummarizerError: Error, LocalizedError, Sendable {
         case .cancelled: return ""
         case .invalidResponse: return ""
         case .noContent: return ""
+        case .invalidChunk: return ""
+        case .unableToExtractContent: return ""
         case .unknown: return ""
         }
     }
@@ -40,7 +44,7 @@ enum SummarizerError: Error, LocalizedError, Sendable {
         case .contentTooLong: self = .tooLong
         case .documentLanguageUnsupported: self = .unsupportedLanguage
         case .documentNotReadable: self = .cancelled
-        case nil: self = .invalidResponse
+        case nil: self = .unableToExtractContent
         }
     }
 }
