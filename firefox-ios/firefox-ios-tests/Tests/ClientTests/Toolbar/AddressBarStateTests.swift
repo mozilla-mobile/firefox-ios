@@ -837,7 +837,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     private func setIsHostedSummarizerFeatureEnabled(enabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: enabled)
+            return HostedSummarizerFeature(enabled: enabled, toolbarEntrypoint: enabled)
         }
     }
 
