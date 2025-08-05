@@ -47,7 +47,13 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
             self.settings = self.generateSettings()
             self.tableView.reloadData()
         }
-        return SettingSection(title: nil, children: [summarizeContentSetting])
+        return SettingSection(
+            title: nil,
+            footerTitle: NSAttributedString(
+                string: .Settings.Summarize.FooterTitle
+            ),
+            children: [summarizeContentSetting]
+        )
     }
 
     private var gesturesSection: SettingSection {
