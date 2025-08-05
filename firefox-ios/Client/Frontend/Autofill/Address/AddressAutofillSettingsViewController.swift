@@ -33,7 +33,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     // MARK: Views
 
     /// Hosting controller for the empty state view in address autofill settings.
-    unowned var addressAutofillSettingsPageView: UIHostingController<AddressAutofillSettingsView>
+    var addressAutofillSettingsPageView: UIHostingController<AddressAutofillSettingsView>
 
     private lazy var addAddressButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
