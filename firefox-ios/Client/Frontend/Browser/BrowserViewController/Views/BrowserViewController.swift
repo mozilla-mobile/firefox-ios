@@ -333,8 +333,8 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
-    var isSummarizerEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+    var isSummarizerToolbarFeatureEnabled: Bool {
+        return summarizerNimbusUtils.isToolbarButtonEnabled
     }
 
     // MARK: Computed vars
@@ -357,6 +357,7 @@ class BrowserViewController: UIViewController,
     private var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
@@ -406,11 +407,13 @@ class BrowserViewController: UIViewController,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
@@ -830,7 +833,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        guard motion == .motionShake, SummarizerNimbusUtils(profile: profile).isShakeEnabled else { return }
+        guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled else { return }
         navigationHandler?.showSummarizePanel()
     }
 
@@ -2512,7 +2515,7 @@ class BrowserViewController: UIViewController,
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
-            if isSummarizerEnabled {
+            if isSummarizerToolbarFeatureEnabled {
                 let action = ToolbarMiddlewareAction(
                     readerModeState: readerModeState,
                     windowUUID: windowUUID,

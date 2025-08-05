@@ -24,7 +24,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     var shouldSelectSearchTerm: Bool
     var isLoading: Bool
     let readerModeState: ReaderModeState?
-    let canSummarize: Bool?
+    let canSummarize: Bool
     let didStartTyping: Bool
     let isEmptySearch: Bool
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
@@ -103,7 +103,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
-            canSummarize: nil,
+            canSummarize: false,
             didStartTyping: false,
             isEmptySearch: true,
             alternativeSearchEngine: nil
@@ -126,7 +126,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
          shouldSelectSearchTerm: Bool,
          isLoading: Bool,
          readerModeState: ReaderModeState?,
-         canSummarize: Bool?,
+         canSummarize: Bool,
          didStartTyping: Bool,
          isEmptySearch: Bool,
          alternativeSearchEngine: SearchEngineModel?) {
@@ -254,7 +254,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
-            canSummarize: nil,
+            canSummarize: false,
             didStartTyping: false,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -986,7 +986,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
               !isEditing
         else { return actions }
 
-        let isSummarizeFeatureEnabled = SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+        let isSummarizeFeatureEnabled = DefaultSummarizerNimbusUtils().isToolbarButtonEnabled
         if isSummarizeFeatureEnabled && canSummarize == true, readerModeState != .active {
             actions.append(summaryAction)
         } else if readerModeState == .active || readerModeState == .available {

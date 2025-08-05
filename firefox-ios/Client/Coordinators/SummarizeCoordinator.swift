@@ -23,6 +23,7 @@ class SummarizeCoordinator: BaseCoordinator {
     private weak var browserContentHiding: BrowserContentHiding?
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let webView: WKWebView
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizerServiceFactory: SummarizerServiceFactory
     private let windowUUID: WindowUUID
     private let prefs: Prefs
@@ -32,6 +33,7 @@ class SummarizeCoordinator: BaseCoordinator {
         browserSnapshot: UIImage,
         browserSnapshotTopOffset: CGFloat,
         webView: WKWebView,
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
         browserContentHiding: BrowserContentHiding,
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
@@ -40,6 +42,7 @@ class SummarizeCoordinator: BaseCoordinator {
         router: Router,
         onRequestOpenURL: ((URL?) -> Void)?
     ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.browserSnapshot = browserSnapshot
         self.browserSnapshotTopOffset = browserSnapshotTopOffset
         self.webView = webView
@@ -61,8 +64,8 @@ class SummarizeCoordinator: BaseCoordinator {
     }
 
     private func showSummarizeViewController() {
-        let isAppleSummarizerEnabled = SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
-        let isHostedSummarizerEnabled = SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
+        let isAppleSummarizerEnabled = summarizerNimbusUtils.isAppleSummarizerEnabled()
+        let isHostedSummarizerEnabled = summarizerNimbusUtils.isHostedSummarizerEnabled()
         guard let service = summarizerServiceFactory.make(
             isAppleSummarizerEnabled: isAppleSummarizerEnabled,
             isHostedSummarizerEnabled: isHostedSummarizerEnabled) else { return }
@@ -110,7 +113,7 @@ class SummarizeCoordinator: BaseCoordinator {
     }
 
     private func showToSAlert() {
-        let descriptionText: String  = if SummarizerNimbusUtils.shared.isAppleSummarizerEnabled() {
+        let descriptionText: String  = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
             String(format: String.Summarizer.ToSAlertMessageAppleLabel, AppName.shortName.rawValue)
         } else {
             String(format: String.Summarizer.ToSAlertMessageFirefoxLabel, AppName.shortName.rawValue)

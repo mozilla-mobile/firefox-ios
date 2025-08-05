@@ -19,6 +19,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizationChecker: SummarizationCheckerProtocol
     private let summarizerServiceFactory: SummarizerServiceFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
@@ -28,23 +29,25 @@ final class TabManagerMiddleware: FeatureFlaggable {
         && UIDevice.current.userInterfaceIdiom != .pad
     }
     private var isSummarizerEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+        return summarizerNimbusUtils.isSummarizeFeatureEnabled
     }
     private var isAppleSummarizerEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
+        return summarizerNimbusUtils.isAppleSummarizerEnabled()
     }
     private var isHostedSummaryEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
+        return summarizerNimbusUtils.isHostedSummarizerEnabled()
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
          summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtility
         self.profile = profile
         self.summarizationChecker = summarizationChecker
         self.logger = logger

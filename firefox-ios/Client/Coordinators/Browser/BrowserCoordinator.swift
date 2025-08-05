@@ -48,13 +48,14 @@ class BrowserCoordinator: BaseCoordinator,
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
     private var isSummarizerOn: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureToggledOn
+        return summarizerNimbusUtils.isSummarizeFeatureEnabled
     }
 
     override var isDismissible: Bool { false }
@@ -65,8 +66,10 @@ class BrowserCoordinator: BaseCoordinator,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager

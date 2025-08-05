@@ -13,25 +13,28 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let windowManager: WindowManager
     private let logger: Logger
     private let toolbarTelemetry: ToolbarTelemetry
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizationChecker: SummarizationCheckerProtocol
     private let summarizerServiceFactory: SummarizerServiceFactory
     private var isSummarizerEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+        return summarizerNimbusUtils.isSummarizeFeatureEnabled
     }
     private var isAppleSummarizerEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isAppleSummarizerEnabled()
+        return summarizerNimbusUtils.isAppleSummarizerEnabled()
     }
     private var isHostedSummaryEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isHostedSummarizerEnabled()
+        return summarizerNimbusUtils.isHostedSummarizerEnabled()
     }
 
     init(manager: ToolbarManager = DefaultToolbarManager(),
          toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
          toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry(),
+         summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
          summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.manager = manager
         self.summarizationChecker = summarizationChecker
         self.summarizerServiceFactory = summarizerServiceFactory
