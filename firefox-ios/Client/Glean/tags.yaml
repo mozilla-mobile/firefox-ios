@@ -10,7 +10,7 @@
 
 ---
 $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
-  
+
 ###############################################################################
 # Please add your tags alphabetically.
 ###############################################################################
@@ -71,6 +71,9 @@ ReaderMode:
 
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
+
+Summarizer:
+  description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
 
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.
