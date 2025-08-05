@@ -35,9 +35,8 @@ ai.summarize:
           Options are listed in the `SummarizerTrigger` enum.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-    #TODO(Issam): Add PR number when available
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -75,9 +74,8 @@ ai.summarize:
           The length of the text to be summarized, in words.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-    #TODO(Issam): Add PR number when available
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -118,9 +116,8 @@ ai.summarize:
           Options are listed in the `SummarizerError.telemetryDescription`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-    #TODO(Issam): Add PR number when available
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -132,9 +129,8 @@ ai.summarize:
       Recorded when the result of the summarization is displayed to the user.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-    #TODO(Issam): Add PR number when available
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -146,9 +142,8 @@ ai.summarize:
         Recorded when the user cancels or closes the summarization at any point.
       bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-      #TODO(Issam): Add PR number when available
       data_reviews:
-        - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+        - https://github.com/mozilla-mobile/firefox-ios/pull/28453
       notification_emails:
         - fx-ios-data-stewards@mozilla.com
       expires: "2026-01-01"
@@ -161,9 +156,8 @@ ai.summarize:
       Ends when user sees the result or an error.
     bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-    #TODO(Issam): Add PR number when available
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -180,9 +174,8 @@ ai.summarize:
           Describes whether the user accepted the summarization terms of service.
     bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-    #TODO(Issam): Add PR number when available
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -196,9 +189,8 @@ user.ai.summarize:
       Records if the user has summarization enabled.
     bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-    #TODO(Issam): Add PR number when available
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -208,9 +200,8 @@ user.ai.summarize:
       Records if the user has shake to summarize option enabled
     bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/27783
-    #TODO(Issam): Add PR number when available
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
