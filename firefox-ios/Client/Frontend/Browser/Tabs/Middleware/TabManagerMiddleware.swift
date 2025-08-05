@@ -904,7 +904,8 @@ final class TabManagerMiddleware: FeatureFlaggable {
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
-                        canSummarize: canSummarize
+                        canSummarize: canSummarize,
+                        profileImage: profileImage
                     )
                 }
             } else {
@@ -913,7 +914,8 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     selectedTab: selectedTab,
                     windowUUID: windowUUID,
                     accountData: accountData,
-                    canSummarize: false
+                    canSummarize: false,
+                    profileImage: profileImage
                 )
             }
         }
@@ -976,7 +978,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         windowUUID: WindowUUID,
         accountData: AccountData,
         canSummarize: Bool,
-        profileImage: UIImage? = nil
+        profileImage: UIImage?
     ) {
         store.dispatchLegacy(
             MainMenuAction(
