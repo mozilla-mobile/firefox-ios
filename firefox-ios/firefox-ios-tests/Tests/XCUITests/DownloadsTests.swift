@@ -226,8 +226,7 @@ class DownloadsTests: FeatureFlaggedTestBase {
         navigator.openURL(testBLOBURL)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Download Text"])
-        app.webViews.links["Download Text"].press(forDuration: 1)
-        app.buttons["Download Link"].waitAndTap()
+        app.webViews.links["Download Text"].tap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306903
