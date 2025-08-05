@@ -5,7 +5,7 @@
 import Foundation
 
 /// A simple wrapper for fetching LiteLLM configuration values from Info.plist.
-struct LiteLLMConfig {
+public struct LiteLLMConfig {
     private enum InfoKey: String {
         case apiKey      = "LiteLLMAPIKey"
         case apiEndpoint = "LiteLLMAPIEndpoint"
@@ -34,7 +34,7 @@ struct LiteLLMConfig {
     /// `maxWords` limits the number of words in the input text.
     /// While the hosted model has a very large context window (128k),
     /// It's limited to 5000 words due to performance and budget constraints.
-    static let maxWords = 5_000
+    public static let maxWords = 5_000
     /// `maxTokens` is used to instruct the hosted model on the maximum number of tokens to generate.
     /// 2000 tokens is a reasonable limit for most summaries.
     static let maxTokens = 2_000

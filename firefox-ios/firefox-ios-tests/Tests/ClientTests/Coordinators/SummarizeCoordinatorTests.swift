@@ -23,6 +23,10 @@ class MockSummarizerServiceFactory: SummarizerServiceFactory {
     func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService? {
         return SummarizerService(summarizer: MockSummarizer(), maxWords: 10)
     }
+
+    func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int {
+        return 0
+    }
 }
 
 @MainActor

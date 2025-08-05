@@ -7,8 +7,15 @@ import Shared
 
 final class SummarizeSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     let prefs: Prefs
-    init(prefs: Prefs, windowUUID: WindowUUID) {
+    private let nimbusUtils: SummarizerNimbusUtils
+
+    init(
+        prefs: Prefs,
+        summarizeNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
+        windowUUID: WindowUUID
+    ) {
         self.prefs = prefs
+        self.nimbusUtils = summarizeNimbusUtils
         super.init(style: .grouped, windowUUID: windowUUID)
         self.title = .Settings.Summarize.Title
     }
@@ -23,7 +30,7 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
 
     override func generateSettings() -> [SettingSection] {
         let summarizeContentEnabled = prefs.boolForKey(PrefsKeys.Summarizer.summarizeContentFeature) ?? true
-        let shakeFeatureFlag = SummarizerNimbusUtils.shared.isShakeGestureFeatureFlagEnabled()
+        let shakeFeatureFlag = nimbusUtils.isShakeGestureFeatureFlagEnabled()
 
         // Shows and hides the gesture section
         // based on the summarize feature being enabled

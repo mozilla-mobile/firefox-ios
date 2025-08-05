@@ -9,7 +9,7 @@ import ComponentLibrary
 import MarkdownKit
 import WebKit
 
-public class SummarizeController: UIViewController, Themeable {
+public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
     private struct UX {
         static let tabSnapshotInitialTransformPercentage: CGFloat = 0.5
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
@@ -27,6 +27,7 @@ public class SummarizeController: UIViewController, Themeable {
         static let tabSnapshotShadowRadius: CGFloat = 64.0
         static let tabSnapshotShadowOffset = CGSize(width: 0.0, height: -10.0)
         static let tabSnapshotShadowOpacity: Float = 1.0
+        static let tabSnapshotTranslationKeyPath = "transform.translation.y"
     }
 
     private let viewModel: SummarizeViewModel
@@ -131,7 +132,6 @@ public class SummarizeController: UIViewController, Themeable {
             self?.view.backgroundColor = theme.colors.layerSummary
             self?.viewModel.onShouldShowTabSnapshot()
             self?.embedSnapshot()
-            self?.summarize()
         }
     }
 
@@ -240,12 +240,13 @@ public class SummarizeController: UIViewController, Themeable {
         let frameHeight = view.frame.height
         loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.1))
 
-        let transformAnimation = CABasicAnimation(keyPath: "transform.translation.y")
+        let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
         transformAnimation.fromValue = 0
         transformAnimation.toValue = frameHeight / 2
         transformAnimation.duration = UX.initialTransformAnimationDuration
         transformAnimation.timingFunction = UX.initialTransformTimingCurve
         transformAnimation.fillMode = .forwards
+        transformAnimation.delegate = self
         tabSnapshotContainer.layer.add(transformAnimation, forKey: "translation")
         tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0,
                                                            y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
@@ -381,8 +382,15 @@ public class SummarizeController: UIViewController, Themeable {
         }
     }
 
-    // MARK: - Themeable
+    // MARK: - CAAnimationDelegate
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        guard flag,
+              let animation = anim as? CABasicAnimation,
+              animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
+        summarize()
+    }
 
+    // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         summaryView.textColor = theme.colors.textPrimary

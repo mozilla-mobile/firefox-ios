@@ -15,6 +15,7 @@ import Common
 import Redux
 import WebEngine
 import WidgetKit
+import SummarizeKit
 import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
@@ -332,6 +333,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
+    var isSummarizerToolbarFeatureEnabled: Bool {
+        return summarizerNimbusUtils.isToolbarButtonEnabled
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -352,6 +357,7 @@ class BrowserViewController: UIViewController,
     private var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
@@ -401,11 +407,13 @@ class BrowserViewController: UIViewController,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
@@ -825,7 +833,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        guard motion == .motionShake, SummarizerNimbusUtils(profile: profile).isShakeEnabled else { return }
+        guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled else { return }
         navigationHandler?.showSummarizePanel()
     }
 
@@ -2507,12 +2515,21 @@ class BrowserViewController: UIViewController,
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
-            let action = ToolbarAction(
-                readerModeState: readerModeState,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-            store.dispatchLegacy(action)
+            if isSummarizerToolbarFeatureEnabled {
+                let action = ToolbarMiddlewareAction(
+                    readerModeState: readerModeState,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.loadSummaryState
+                )
+                store.dispatchLegacy(action)
+            } else {
+                let action = ToolbarAction(
+                    readerModeState: readerModeState,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.readerModeStateChanged
+                )
+                store.dispatchLegacy(action)
+            }
         } else {
             legacyUrlBar?.updateReaderModeState(readerModeState)
         }
@@ -2738,6 +2755,8 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
+        case .summarizer:
+            navigationHandler?.showSummarizePanel()
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
