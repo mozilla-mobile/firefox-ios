@@ -2497,6 +2497,13 @@ extension String {
                 comment: "This is the title for the setting that toggles the Summarize feature under the Summarize settings section."
             )
 
+            public static let FooterTitle = MZLocalizedString(
+                key: "Settings.Summarize.FooterTitle.v142",
+                tableName: "Settings",
+                value: "Provides access to summarize pages.",
+                comment: "This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section."
+            )
+
             public struct GesturesSection {
                 public static let Title = MZLocalizedString(
                     key: "Settings.Summarize.GesturesSection.Title.v142",
