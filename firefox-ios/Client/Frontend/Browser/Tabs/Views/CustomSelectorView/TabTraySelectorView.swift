@@ -18,6 +18,7 @@ struct TabTraySelectorUX {
     static let fontScaleDelta: CGFloat = 0.055
     static let stackViewLeadingTrailingPadding: CGFloat = 8
     static let containerHorizontalSpacing: CGFloat = 16
+    static let topSpacing: CGFloat = 8
 }
 
 class TabTraySelectorView: UIView,
@@ -88,7 +89,8 @@ class TabTraySelectorView: UIView,
         }
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor,
+                                               constant: TabTraySelectorUX.topSpacing),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                    constant: TabTraySelectorUX.containerHorizontalSpacing),

@@ -44,9 +44,8 @@ final class TabTrayViewController: UIViewController,
             static let undoDuration = DispatchTimeInterval.seconds(3)
         }
         static let fixedSpaceWidth: CGFloat = 32
-        static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
-        static let segmentedControlMinHeight: CGFloat = 45
+        static let segmentedControlMinHeight: CGFloat = 53
     }
 
     // MARK: Theme
@@ -486,8 +485,7 @@ final class TabTrayViewController: UIViewController,
                 panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
                 panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panelContainer.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor,
-                                                       constant: -UX.segmentedControlTopSpacing),
+                panelContainer.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor),
 
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -632,8 +630,7 @@ final class TabTrayViewController: UIViewController,
                                                        constant: Toast.UX.toastSidePadding),
                         toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                         constant: -Toast.UX.toastSidePadding),
-                        toast.bottomAnchor.constraint(equalTo: self.segmentedControl.topAnchor,
-                                                      constant: -UX.segmentedControlTopSpacing)
+                        toast.bottomAnchor.constraint(equalTo: self.segmentedControl.topAnchor)
                     ]
                 } else {
                     [
