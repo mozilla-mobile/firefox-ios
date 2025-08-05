@@ -353,6 +353,20 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
+    // MARK: - Shortcuts Library
+
+    func test_tapOnShortcutsShowAllButton_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnShortcutsShowAllButton, destination: .shortcutsLibrary)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .shortcutsLibrary)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)

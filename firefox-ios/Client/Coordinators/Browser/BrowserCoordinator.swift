@@ -1115,6 +1115,11 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
     }
 
+    func showShortcutsLibrary() {
+        let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
+        router.push(shortcutsLibraryViewController)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {

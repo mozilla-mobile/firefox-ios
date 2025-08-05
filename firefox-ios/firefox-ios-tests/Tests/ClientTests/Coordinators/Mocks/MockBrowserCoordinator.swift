@@ -45,6 +45,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showWebViewCalled = 0
     var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
+    var showShortcutsLibraryCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -196,5 +197,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showNativeErrorPage(overlayManager: any Client.OverlayModeManager) {
         showNativeErrorPageCalled += 1
+    }
+
+    func showShortcutsLibrary() {
+        showShortcutsLibraryCalled += 1
     }
 }

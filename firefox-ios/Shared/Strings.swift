@@ -1070,6 +1070,13 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+            public struct Library {
+                public static let Title = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.Library.Title.v143",
+                    tableName: "FirefoxHomepage",
+                    value: "Shortcuts",
+                    comment: "This is the navigation title for the Shortcuts Library view")
+            }
         }
 
         public struct SearchBar {
