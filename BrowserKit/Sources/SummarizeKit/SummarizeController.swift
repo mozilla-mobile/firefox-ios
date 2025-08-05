@@ -314,6 +314,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         )
         loadingLabel.alpha = 0.0
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) { [self] in
+            self.onSummaryDisplayed()
             errorView.alpha = 1.0
         }
     }
