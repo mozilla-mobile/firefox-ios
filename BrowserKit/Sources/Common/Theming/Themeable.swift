@@ -91,17 +91,14 @@ extension Themeable {
     @MainActor
     fileprivate func themeListenerFactory(
         withNotificationCenter notificationCenter: NotificationProtocol,
-        themeUpdateClosure: @MainActor @escaping () -> Void
+        themeUpdateClosure: @MainActor @escaping (NotificationCenter.Publisher.Output) -> Void
     ) -> AnyCancellable {
         return notificationCenter
             .publisher(for: .ThemeDidChange, object: nil)
             // NOTE: In case theme updates are ever posted on a background thread, we **MUST** ensure the main queue here.
             // The `@MainActor` isolation is not enough to prevent crashes at the call site where a notification is posted.
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { notification in
-                print("Theme update for \(String(describing: self))")
-                themeUpdateClosure()
-            })
+            .sink(receiveValue: themeUpdateClosure)
     }
 }
 
@@ -110,8 +107,10 @@ extension Themeable where Self: UIViewController {
     public func listenForThemeChanges(withNotificationCenter notificationCenter: NotificationProtocol) {
         themeListenerCancellable = themeListenerFactory(
             withNotificationCenter: notificationCenter,
-            themeUpdateClosure: { [weak self] in
+            themeUpdateClosure: { [weak self] notification in
                 guard let self else { return }
+
+                print("Theme update for \(String(describing: self))")
 
                 self.applyTheme()
                 self.updateThemeApplicableSubviews(self.view, for: self.currentWindowUUID)
@@ -125,8 +124,10 @@ extension Themeable where Self: UIView {
     public func listenForThemeChanges(withNotificationCenter notificationCenter: NotificationProtocol) {
         themeListenerCancellable = themeListenerFactory(
             withNotificationCenter: notificationCenter,
-            themeUpdateClosure: { [weak self] in
+            themeUpdateClosure: { [weak self] notification in
                 guard let self else { return }
+
+                print("Theme update for \(String(describing: self))")
 
                 self.applyTheme()
                 self.updateThemeApplicableSubviews(self, for: self.currentWindowUUID)
