@@ -55,17 +55,19 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
     @ViewBuilder
     private func cardContent(scale: CGFloat, geometry: GeometryProxy) -> some View {
         VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
-            ContentFittingScrollView {
-                VStack(spacing: UX.CardView.spacing * scale) {
-                    Spacer()
-                    titleView
-                    Spacer()
-                    imageView(scale: scale)
-                    Spacer()
-                    bodyView
-                    Spacer()
-                    primaryButton
+            VStack {
+                ContentFittingScrollView {
+                    VStack(spacing: UX.CardView.spacing * scale) {
+                        Spacer()
+                        titleView
+                        Spacer()
+                        imageView(scale: scale)
+                        Spacer()
+                        bodyView
+                        Spacer()
+                    }
                 }
+                primaryButton
             }
             .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
             .padding(UX.CardView.verticalPadding * scale)
@@ -108,7 +110,6 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
-            .alignmentGuide(.descriptionAlignment) { dimensions in dimensions[.bottom] }
     }
 
     var primaryButton: some View {
