@@ -10,6 +10,7 @@ import SwiftUI
 
 import struct MozillaAppServices.VisitTransitionSet
 
+@MainActor
 class HistoryPanelViewModel: FeatureFlaggable {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
@@ -46,7 +47,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     // MARK: - Properties
 
     private let profile: Profile
-    private var logger: Logger
+    private let logger: Logger
     // Request limit and offset
     private let queryFetchLimit = 100
     // Is not intended to be use in prod code, only on test
@@ -92,7 +93,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     /// Begin the process of fetching history data. A prefetch also triggers this.
-    func reloadData(completion: @escaping (Bool) -> Void) {
+    func reloadData(completion: @Sendable @escaping (Bool) -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         guard !profile.isShutdown, !isFetchInProgress else {
             completion(false)
@@ -104,18 +105,16 @@ class HistoryPanelViewModel: FeatureFlaggable {
         }
 
         fetchData { [weak self] fetchedSites in
-            DispatchQueue.global().async {
-                guard let self = self,
-                      !fetchedSites.isEmpty else {
-                    completion(false)
-                    return
-                }
-
-                self.currentFetchOffset += self.queryFetchLimit
-                self.createGroupedSites(sites: fetchedSites)
-                self.buildVisibleSections()
-                completion(true)
+            guard let self,
+                  !fetchedSites.isEmpty else {
+                completion(false)
+                return
             }
+
+            self.currentFetchOffset += self.queryFetchLimit
+            self.createGroupedSites(sites: fetchedSites)
+            self.buildVisibleSections()
+            completion(true)
         }
     }
 
@@ -135,6 +134,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
             matchingSearchQuery: term,
             limit: searchQueryFetchLimit
         ).uponQueue(.main) { result in
+            // FIXME: Check here is always main thread
             self.isFetchInProgress = false
 
             guard result.isSuccess else {
@@ -147,6 +147,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
                 completion(false)
                 return
             }
+
             if let result = result.successValue {
                 self.searchResultSites = result.map { Site.createBasicSite(url: $0.url, title: $0.title) }
                 completion(!result.isEmpty)
@@ -208,7 +209,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     // MARK: - Private helpers
 
-    private func fetchData(completion: @escaping (([Site]) -> Void)) {
+    private func fetchData(completion: @MainActor @escaping ([Site]) -> Void) {
         guard !isFetchInProgress else {
             completion([])
             return
@@ -221,7 +222,10 @@ class HistoryPanelViewModel: FeatureFlaggable {
             offset: currentFetchOffset,
             excludedTypes: VisitTransitionSet(0)
         ).upon { [weak self] result in
-            completion(result.successValue?.asArray() ?? [])
+            DispatchQueue.main.async {
+                // FIXME: Add ticket for main actor warnings after Storage is fully on Swift 6
+                completion(result.successValue?.asArray() ?? [])
+            }
 
             // Force 100ms delay between resolution of the last batch of results
             // and the next time `fetchData()` can be called.
