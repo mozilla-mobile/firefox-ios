@@ -5,5 +5,6 @@
 import Common
 
 protocol PrivateModeUI {
+    @MainActor
     func applyUIMode(isPrivate: Bool, theme: Theme)
 }
