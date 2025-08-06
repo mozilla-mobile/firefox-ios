@@ -964,6 +964,7 @@ open class BrowserSchema: Schema {
                self.prepopulateRootFolders(db)
     }
 
+    // swiftlint:disable:next function_body_length
     public func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
         let to = self.version
         if from == to {
