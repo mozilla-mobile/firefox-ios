@@ -127,7 +127,7 @@ ai.summarize:
   summarization_displayed:
     type: event
     description: |
-      Recorded when the result of the result of the summarization is displayed to the user.
+      Recorded when the result of the summarization is displayed to the user.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
     data_reviews:
