@@ -333,6 +333,14 @@ extension String {
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
 
+        public struct Summarize {
+            public static let Description = MZLocalizedString(
+                key: "ContextualHints.Summarize.Description.v142",
+                tableName: "Summarize",
+                value: "Tap to summarize this page. Touch and hold for Reader View.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the summarize button on the new toolbar layout.")
+        }
+
         public struct FeltDeletion {
             public static let Body = MZLocalizedString(
                 key: "ContextualHints.FeltDeletion.Body.v122",

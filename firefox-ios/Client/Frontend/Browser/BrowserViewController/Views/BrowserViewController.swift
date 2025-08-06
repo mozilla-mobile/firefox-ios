@@ -244,6 +244,11 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
     }()
 
+    private(set) lazy var summarizeToolbarEntryContextHintVC: ContextualHintViewController = {
+        let summarizeViewProvider = ContextualHintViewProvider(forHintType: .summarizeToolbarEntry, with: profile)
+        return ContextualHintViewController(with: summarizeViewProvider, windowUUID: windowUUID)
+    }()
+
     // MARK: Telemetry Variables
 
     private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
@@ -1569,6 +1574,9 @@ class BrowserViewController: UIViewController,
             }
             if navigationContextHintVC.isPresenting {
                 navigationContextHintVC.dismiss(animated: true)
+            }
+            if summarizeToolbarEntryContextHintVC.isPresenting {
+                summarizeToolbarEntryContextHintVC.dismiss(animated: true)
             }
         }
 
@@ -3910,6 +3918,8 @@ class BrowserViewController: UIViewController,
             configureDataClearanceContextualHint(button)
         case ContextualHintType.navigation.rawValue:
             configureNavigationContextualHint(button)
+        case ContextualHintType.summarizeToolbarEntry.rawValue:
+            configureSummarizeToolbarEntryContextualHint(for: button)
         default:
             return
         }
