@@ -199,7 +199,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             lengthWords: 0,
             modelName: modelName.rawValue,
             outcome: false,
-            errorMessage: error.telemetryDescription
+            errorType: error.telemetryDescription
         )
     }
 }

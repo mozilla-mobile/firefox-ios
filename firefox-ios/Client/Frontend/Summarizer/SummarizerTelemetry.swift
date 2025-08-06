@@ -34,11 +34,11 @@ class SummarizerTelemetry {
         lengthWords: Int32,
         modelName: String,
         outcome: Bool,
-        errorMessage: String? = nil
+        errorType: String? = nil
     ) {
         let summarizationCompletedExtra = GleanMetrics.AiSummarize.SummarizationCompletedExtra(
             connectionType: DeviceInfo.connectionType().rawValue,
-            errorMessage: errorMessage,
+            errorType: errorType,
             lengthChars: lengthChars,
             lengthWords: lengthWords,
             model: modelName,

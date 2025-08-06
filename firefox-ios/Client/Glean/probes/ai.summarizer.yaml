@@ -110,10 +110,10 @@ ai.summarize:
         description: |
           Describes the LLM used to summarize the text.
           Options are listed in the `SummarizerModel` enum.
-      error_message:
+      error_type:
         type: string
         description: |
-          Describes the error message when summarization fails.
+          Describes the error type when summarization fails.
           Options are listed in the `SummarizerError.telemetryDescription`.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/27783
