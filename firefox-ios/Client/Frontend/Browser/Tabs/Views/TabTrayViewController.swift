@@ -62,12 +62,17 @@ final class TabTrayViewController: UIViewController,
     var childPanelThemes: [Theme]?
     weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
+    private var tabTrayUtils: TabTrayUtils
 
     private lazy var panelContainer: UIView = .build { _ in }
     private var pageViewController: UIPageViewController?
     private weak var pageScrollView: UIScrollView?
     private var swipeFromIndex: Int?
     private lazy var themeAnimator = TabTrayThemeAnimator()
+
+    private let blurView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    }
 
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
@@ -263,11 +268,13 @@ final class TabTrayViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
 
     init(panelType: TabTrayPanelType,
+         tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tabTrayState = TabTrayState(windowUUID: windowUUID, panelType: panelType)
+        self.tabTrayUtils = tabTrayUtils
         self.themeManager = themeManager
         self.logger = logger
         self.notificationCenter = notificationCenter
@@ -437,6 +444,8 @@ final class TabTrayViewController: UIViewController,
             let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
             navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
         }
+
+        setupToolBarAppearance(theme: theme)
     }
 
     func applyTheme(fromIndex: Int, toIndex: Int, progress: CGFloat) {
@@ -455,6 +464,23 @@ final class TabTrayViewController: UIViewController,
         panelContainer.backgroundColor = swipeTheme.colors.layer3
 
         experimentSegmentControl.applyTheme(theme: swipeTheme)
+        setupToolBarAppearance(theme: swipeTheme)
+    }
+
+    private func setupToolBarAppearance(theme: Theme) {
+        let backgroundAlpha = tabTrayUtils.backgroundAlpha()
+        let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+
+        let standardAppearance = UIToolbarAppearance()
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.backgroundColor = color
+        standardAppearance.backgroundEffect = nil
+        standardAppearance.shadowColor = color
+        navigationController?.toolbar.standardAppearance = standardAppearance
+        navigationController?.toolbar.compactAppearance = standardAppearance
+        navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
+        navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
+        navigationController?.toolbar.tintColor = theme.colors.actionPrimary
     }
 
     // MARK: Private
@@ -472,6 +498,7 @@ final class TabTrayViewController: UIViewController,
         updateTitle()
         view.addSubviews(containerView)
         if isTabTrayUIExperimentsEnabled {
+            containerView.addSubview(panelContainer)
             containerView.addSubview(segmentedControl)
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
             // Out of simplicity for the experiment, turn off a11y for the old segmented control
@@ -481,13 +508,11 @@ final class TabTrayViewController: UIViewController,
             containerView.addSubview(experimentSegmentControl)
             experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
 
-            containerView.addSubview(panelContainer)
-
             NSLayoutConstraint.activate([
                 panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
                 panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panelContainer.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor),
+                panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -505,6 +530,8 @@ final class TabTrayViewController: UIViewController,
                 experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 experimentSegmentControl.heightAnchor.constraint(equalToConstant: UX.segmentedControlHeight)
             ])
+
+            setupBlurView()
         } else {
             view.addSubview(navigationToolbar)
             navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
@@ -520,6 +547,19 @@ final class TabTrayViewController: UIViewController,
                 containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         }
+    }
+
+    private func setupBlurView() {
+        guard tabTrayUtils.isTabTrayUIExperimentsEnabled, tabTrayUtils.isTabTrayTranslucencyEnabled else { return }
+
+        containerView.insertSubview(blurView, belowSubview: experimentSegmentControl)
+
+        NSLayoutConstraint.activate([
+            blurView.topAnchor.constraint(equalTo: experimentSegmentControl.topAnchor),
+            blurView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            blurView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
     }
 
     private func updateTitle() {

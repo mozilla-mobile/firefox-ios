@@ -1,0 +1,44 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+
+protocol TabTrayUtils {
+    var isTabTrayUIExperimentsEnabled: Bool { get }
+    var isTabTrayTranslucencyEnabled: Bool { get }
+    var isReduceTransparencyEnabled: Bool { get }
+
+    func shouldBlur() -> Bool
+    func backgroundAlpha() -> CGFloat
+}
+
+/// Tiny utility to simplify checking for availability of the summarizers
+struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
+    private enum UX {
+        static let backgroundAlphaForBlur: CGFloat = 0.85
+    }
+
+    var isTabTrayUIExperimentsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        && UIDevice.current.userInterfaceIdiom != .pad
+    }
+
+    var isTabTrayTranslucencyEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabTrayTranslucency, checking: .buildOnly)
+    }
+
+    var isReduceTransparencyEnabled: Bool {
+        UIAccessibility.isReduceTransparencyEnabled
+    }
+
+    func shouldBlur() -> Bool {
+        return isTabTrayUIExperimentsEnabled && isTabTrayTranslucencyEnabled && !isReduceTransparencyEnabled
+    }
+
+    func backgroundAlpha() -> CGFloat {
+        guard shouldBlur() else { return 1.0 }
+
+        return UX.backgroundAlphaForBlur
+    }
+}
