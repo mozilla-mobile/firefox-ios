@@ -12,7 +12,7 @@ class TermsOfUseMiddleware {
     struct DefaultKeys {
         static let acceptedKey = "termsOfUseAccepted"
         static let dismissedKey = "termsOfUseDismissed"
-        static let lastShownKey = "termsOfUseLastShownDate"
+        static let dismissedWithoutAcceptDate = "termsOfUseDismissedWithoutAcceptDate"
     }
     private let userDefaults: UserDefaultsInterface
     private let logger: Logger
@@ -47,7 +47,7 @@ class TermsOfUseMiddleware {
 
             case TermsOfUseActionType.markDismissed:
                 self.userDefaults.set(true, forKey: DefaultKeys.dismissedKey)
-                self.userDefaults.set(Date(), forKey: DefaultKeys.lastShownKey)
+                self.userDefaults.set(Date(), forKey: DefaultKeys.dismissedWithoutAcceptDate)
 
             case TermsOfUseActionType.markShownThisLaunch:
                 break

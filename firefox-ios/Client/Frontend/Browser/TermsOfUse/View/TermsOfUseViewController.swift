@@ -285,6 +285,7 @@ final class TermsOfUseViewController: UIViewController,
         // Only dismiss the view if the tap occurred outside the visible sheetContainer.
         // This prevents dismissing the Terms of Use sheet when interacting with its content.
         if !sheetContainer.frame.contains(sender.location(in: view)) {
+            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
             coordinator?.dismissTermsFlow()
         }
     }
@@ -296,6 +297,7 @@ final class TermsOfUseViewController: UIViewController,
             sheetContainer.transform = CGAffineTransform(translationX: 0, y: translation.y)
         case .ended:
             if translation.y > UX.panDismissDistance || gesture.velocity(in: view).y > UX.panDismissVelocity {
+                store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
                 dismiss(animated: true)
             } else {
                 UIView.animate(withDuration: UX.animationDuration,
