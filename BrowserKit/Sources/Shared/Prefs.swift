@@ -138,6 +138,7 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case toolbarUpdateKey = "ContextualHintToolbarUpdate"
+        case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }
 
     // Firefox settings
