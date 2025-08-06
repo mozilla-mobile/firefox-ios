@@ -45,7 +45,7 @@ final class TabTrayViewController: UIViewController,
         }
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlHorizontalSpacing: CGFloat = 16
-        static let segmentedControlMinHeight: CGFloat = 53
+        static let segmentedControlHeight: CGFloat = 53
     }
 
     // MARK: Theme
@@ -503,7 +503,7 @@ final class TabTrayViewController: UIViewController,
                 experimentSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
                 experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                experimentSegmentControl.heightAnchor.constraint(equalToConstant: UX.segmentedControlMinHeight)
+                experimentSegmentControl.heightAnchor.constraint(equalToConstant: UX.segmentedControlHeight)
             ])
         } else {
             view.addSubview(navigationToolbar)
