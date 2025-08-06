@@ -3,42 +3,51 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import XCTest
 @testable import Client
+import Common
+import Shared
 // TODO: FXIOS-12947 - Add tests for TermsOfUseState and Coordinator
 
 @MainActor
 final class TermsOfUseMiddlewareTests: XCTestCase {
-    private var userDefaults: MockUserDefaults!
+    private var profile: MockProfile!
     private var middleware: TermsOfUseMiddleware!
 
     override func setUp() {
         super.setUp()
-        userDefaults = MockUserDefaults()
-        middleware = TermsOfUseMiddleware(userDefaults: userDefaults)
+        DependencyHelperMock().bootstrapDependencies()
+        profile = MockProfile()
+        middleware = TermsOfUseMiddleware(profile: profile)
     }
 
     override func tearDown() {
-        middleware = nil
-        userDefaults = nil
         super.tearDown()
+        profile = nil
+        middleware = nil
+        AppContainer.shared.reset()
     }
 
-     func testMiddleware_markAccepted_updatesUserDefaults() {
+     func testMiddleware_markAccepted_updatesPrefs() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markAccepted)
         middleware.termsOfUseProvider(AppState(), action)
-        XCTAssertTrue(userDefaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.acceptedKey))
-        XCTAssertFalse(userDefaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedKey))
+        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseAccepted), 1)
     }
-    func testMiddleware_markDismissed_updatesUserDefaultsWithDate() {
+    func testMiddleware_markDismissed_updatesPrefsWithDate() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markDismissed)
         middleware.termsOfUseProvider(AppState(), action)
-        XCTAssertTrue(userDefaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedKey))
-        XCTAssertNotNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedWithoutAcceptDate))
+        let dismissedDate: Date? = profile.prefs.objectForKey(PrefsKeys.TermsOfUseDismissedDate)
+        XCTAssertNotNil(dismissedDate)
+
+        if let date = dismissedDate {
+            let todaysDate = Calendar.current.startOfDay(for: Date())
+            XCTAssertEqual(date, todaysDate)
+        }
     }
-    func testMiddleware_markShownThisLaunch_doesNotWriteToUserDefaults() {
+    func testMiddleware_markShownThisLaunch_doesNotWriteToPrefs() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markShownThisLaunch)
         middleware.termsOfUseProvider(AppState(), action)
-        XCTAssertNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.acceptedKey))
-        XCTAssertNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedKey))
-        XCTAssertNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedWithoutAcceptDate))
+
+        XCTAssertNil(profile.prefs.intForKey(PrefsKeys.TermsOfUseAccepted))
+        let dismissedDate: Date? = profile.prefs.objectForKey(PrefsKeys.TermsOfUseDismissedDate)
+        XCTAssertNil(dismissedDate)
     }
 }

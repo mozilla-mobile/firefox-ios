@@ -84,7 +84,7 @@ class UITestAppDelegate: AppDelegate {
         }
 
         if launchArguments.contains(LaunchArguments.SkipTermsOfUse) {
-            UserDefaults.standard.set(true, forKey: "termsOfUseAccepted")
+            profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfUseAccepted)
         }
 
         // Skip the intro when requested by for example tests or automation
