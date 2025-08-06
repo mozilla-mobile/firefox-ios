@@ -27,9 +27,12 @@ class BookmarksDataAdaptorImplementation: BookmarksDataAdaptor, Notifiable {
         self.notificationCenter = notificationCenter
         self.bookmarksHandler = bookmarksHandler
 
-        setupNotifications(forObserver: self,
-                           observing: [.BookmarksUpdated,
-                                       .RustPlacesOpened])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.BookmarksUpdated,
+                        .RustPlacesOpened]
+        )
 
         getBookmarks()
     }

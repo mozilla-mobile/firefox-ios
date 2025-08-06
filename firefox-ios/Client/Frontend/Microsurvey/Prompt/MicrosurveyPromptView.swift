@@ -118,8 +118,11 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         super.init(frame: .zero)
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
         configure(with: state)
         setupView()
         guard !inOverlayMode else { return }

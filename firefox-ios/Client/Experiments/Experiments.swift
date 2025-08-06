@@ -209,6 +209,15 @@ enum Experiments {
         #endif
     }
 
+    private static func cannotUseAppleIntelligence() -> Bool {
+        guard #available(iOS 26, *) else { return true }
+        #if canImport(FoundationModels)
+            return AppleIntelligenceUtil().cannotUseAppleIntelligence
+        #else
+            return true
+        #endif
+    }
+
     private static func buildNimbus(dbPath: String,
                                     errorReporter: @escaping NimbusErrorReporter,
                                     initialExperiments: URL?,
@@ -224,7 +233,8 @@ enum Experiments {
             isDefaultBrowser: isDefaultBrowser(),
             isBottomToolbarUser: isBottomToolbarUser(),
             hasEnabledTipsNotifications: hasEnabledTipsNotifications(),
-            isAppleIntelligenceAvailable: isAppleIntelligenceAvailable()
+            isAppleIntelligenceAvailable: isAppleIntelligenceAvailable(),
+            cannotUseAppleIntelligence: cannotUseAppleIntelligence()
         )
 
         return NimbusBuilder(dbPath: dbPath)

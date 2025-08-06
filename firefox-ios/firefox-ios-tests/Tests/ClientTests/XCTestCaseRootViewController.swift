@@ -4,6 +4,7 @@
 
 import XCTest
 
+@MainActor
 class XCTestCaseRootViewController: XCTestCase {
     var rootViewController: UIViewController!
     var window: UIWindow!

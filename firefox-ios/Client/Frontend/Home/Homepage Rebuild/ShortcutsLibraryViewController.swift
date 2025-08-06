@@ -2,48 +2,47 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import UIKit
+import Foundation
 import Common
 
-class SettingsViewController: UIViewController, Themeable {
+class ShortcutsLibraryViewController: UIViewController, Themeable {
+    // MARK: - Properties
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
-    weak var settingsDelegate: SettingsDelegate?
-
-    var profile: Profile?
-    var tabManager: TabManager?
-    let windowUUID: WindowUUID
-
-    var currentWindowUUID: UUID? { return windowUUID }
-
     init(windowUUID: WindowUUID,
-         profile: Profile? = nil,
-         tabManager: TabManager? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
-        self.profile = profile
-        self.tabManager = tabManager
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("not implemented")
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = .FirefoxHomepage.Shortcuts.Library.Title
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+
+    // MARK: - Themeable
+
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
     }
 }

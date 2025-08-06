@@ -15,6 +15,7 @@ import Common
 import Redux
 import WebEngine
 import WidgetKit
+import SummarizeKit
 import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
@@ -92,7 +93,7 @@ class BrowserViewController: UIViewController,
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var logger: Logger
     var zoomManager: ZoomPageManager
     let documentLogger: DocumentLogger
@@ -332,6 +333,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
+    var isSummarizerToolbarFeatureEnabled: Bool {
+        return summarizerNimbusUtils.isToolbarButtonEnabled
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -352,6 +357,7 @@ class BrowserViewController: UIViewController,
     private var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
@@ -401,11 +407,13 @@ class BrowserViewController: UIViewController,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
@@ -825,7 +833,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        guard motion == .motionShake, SummarizerNimbusUtils(profile: profile).isShakeEnabled else { return }
+        guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled else { return }
         navigationHandler?.showSummarizePanel()
     }
 
@@ -1008,7 +1016,8 @@ class BrowserViewController: UIViewController,
         webPagePreview.applyTheme(theme: theme)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
         setupAccessibleActions()
 
         if #available(iOS 16.0, *) {
@@ -1074,6 +1083,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
+    // FIXME: FXIOS-12995 Use Notifiable on all of these...
     private func setupNotifications() {
         notificationCenter.addObserver(
             self,
@@ -1361,6 +1371,7 @@ class BrowserViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
         if !isDeeplinkOptimizationRefactorEnabled {
@@ -2507,12 +2518,21 @@ class BrowserViewController: UIViewController,
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
-            let action = ToolbarAction(
-                readerModeState: readerModeState,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-            store.dispatchLegacy(action)
+            if isSummarizerToolbarFeatureEnabled {
+                let action = ToolbarMiddlewareAction(
+                    readerModeState: readerModeState,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.loadSummaryState
+                )
+                store.dispatchLegacy(action)
+            } else {
+                let action = ToolbarAction(
+                    readerModeState: readerModeState,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.readerModeStateChanged
+                )
+                store.dispatchLegacy(action)
+            }
         } else {
             legacyUrlBar?.updateReaderModeState(readerModeState)
         }
@@ -2693,6 +2713,8 @@ class BrowserViewController: UIViewController,
             )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
             configureZeroSearchView()
+        case .shortcutsLibrary:
+            navigationHandler?.showShortcutsLibrary()
         }
     }
 
@@ -2738,6 +2760,8 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
+        case .summarizer:
+            navigationHandler?.showSummarizePanel()
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
@@ -3151,10 +3175,14 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            openBlankNewTab(
-                focusLocationField: options?.contains(.focusLocationField) == true,
-                isPrivate: isPrivate
-            )
+            if let isHomepage = tabManager.selectedTab?.isFxHomeTab, isHomepage {
+                focusLocationTextField(forTab: tabManager.selectedTab)
+            } else {
+                openBlankNewTab(
+                    focusLocationField: options?.contains(.focusLocationField) == true,
+                    isPrivate: isPrivate
+                )
+            }
         }
     }
 
@@ -3241,7 +3269,7 @@ class BrowserViewController: UIViewController,
     }
 
     func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) {
             // Without a delay, the text field fails to become first responder
             // Check that the newly created tab is still selected.
             // This let's the user spam the Cmd+T button without lots of responder changes.

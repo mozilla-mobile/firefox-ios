@@ -30,7 +30,7 @@ features:
         value:
           enabled: false
           search-bar: false
-          show-all-shortcuts: false
+          shortcuts-library: false
           stories-redesign: false
     
       - channel: developer

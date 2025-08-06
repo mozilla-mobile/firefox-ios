@@ -23,15 +23,13 @@ final class TermsOfUseViewController: UIViewController,
         static let grabberHeight: CGFloat = 5
         static let grabberTopPadding: CGFloat = 8
         static let iPadWidthMultiplier: CGFloat = 0.6
+        static let textViewHeightMultiplier: CGFloat = 0.4
         static let panDismissDistance: CGFloat = 100
         static let panDismissVelocity: CGFloat = 800
         static let animationDuration: TimeInterval = 0.25
         static let springDamping: CGFloat = 0.8
         static let initialSpringVelocity: CGFloat = 1
         static let backgroundAlpha: CGFloat = 0.6
-        static let baseTextViewHeight: CGFloat = 120
-        static let largeTextViewHeight: CGFloat = 180
-        static let extraLargeTextViewHeight: CGFloat = 240
 
         static let titleFont = FXFontStyles.Regular.headline.scaledFont()
         static let descriptionFont = FXFontStyles.Regular.body.scaledFont()
@@ -42,23 +40,13 @@ final class TermsOfUseViewController: UIViewController,
     weak var coordinator: TermsOfUseCoordinatorDelegate?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     private let strings = TermsOfUseStrings()
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
-    private var dynamicTextViewHeight: CGFloat {
-        switch traitCollection.preferredContentSizeCategory {
-        case .accessibilityMedium, .accessibilityLarge:
-            return UX.largeTextViewHeight
-        case .accessibilityExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraExtraExtraLarge:
-            return UX.extraLargeTextViewHeight
-        default:
-            return UX.baseTextViewHeight
-        }
-    }
-
     private var activeContainerConstraints: [NSLayoutConstraint] = []
+    private var textViewHeightConstraint: NSLayoutConstraint?
 
     private var sheetContainer: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
@@ -80,6 +68,7 @@ final class TermsOfUseViewController: UIViewController,
         imageView.contentMode = .scaleAspectFit
         imageView.heightAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.logo
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -88,11 +77,12 @@ final class TermsOfUseViewController: UIViewController,
         label.textAlignment = .center
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.title
     }
 
     private lazy var descriptionTextView: UITextView = .build { [self] textView in
         textView.isEditable = false
-        textView.isScrollEnabled = true
+        textView.isScrollEnabled = false
         textView.backgroundColor = .clear
         textView.attributedText = self.makeAttributedDescription()
         textView.adjustsFontForContentSizeCategory = true
@@ -100,8 +90,8 @@ final class TermsOfUseViewController: UIViewController,
             .foregroundColor: currentTheme().colors.textAccent,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
+        textView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.description
         textView.delegate = self
-        textView.heightAnchor.constraint(greaterThanOrEqualToConstant: dynamicTextViewHeight).isActive = true
     }
 
     private lazy var acceptButton: UIButton = .build { button in
@@ -109,6 +99,7 @@ final class TermsOfUseViewController: UIViewController,
         button.titleLabel?.font = UX.acceptButtonFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.layer.cornerRadius = UX.acceptButtonCornerRadius
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.acceptButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.acceptButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.acceptTapped), for: .touchUpInside)
     }
@@ -117,6 +108,7 @@ final class TermsOfUseViewController: UIViewController,
         button.setTitle(TermsOfUseStrings.remindMeLaterButtonTitle, for: .normal)
         button.titleLabel?.font = UX.remindMeLaterFont
         button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.remindMeLaterButton
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.remindMeLaterButtonHeight).isActive = true
         button.addTarget(self, action: #selector(self.remindMeLaterTapped), for: .touchUpInside)
     }
@@ -139,8 +131,10 @@ final class TermsOfUseViewController: UIViewController,
         UIAccessibility.post(notification: .announcement, argument:
                             TermsOfUseStrings.termsOfUseHasOpenedNotification)
         setupUI()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+
         subscribeToRedux()
     }
 
@@ -181,6 +175,7 @@ final class TermsOfUseViewController: UIViewController,
             view.layoutIfNeeded()
         }
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            configureTextViewScrolling()
             descriptionTextView.attributedText = makeAttributedDescription()
             view.setNeedsLayout()
             view.layoutIfNeeded()
@@ -199,6 +194,7 @@ final class TermsOfUseViewController: UIViewController,
         sheetContainer.addSubview(stackView)
         addStackSubviews()
         setupConstraints()
+        configureTextViewScrolling()
         setupDismissGesture()
         setupPanGesture()
     }
@@ -289,6 +285,7 @@ final class TermsOfUseViewController: UIViewController,
         // Only dismiss the view if the tap occurred outside the visible sheetContainer.
         // This prevents dismissing the Terms of Use sheet when interacting with its content.
         if !sheetContainer.frame.contains(sender.location(in: view)) {
+            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
             coordinator?.dismissTermsFlow()
         }
     }
@@ -300,6 +297,7 @@ final class TermsOfUseViewController: UIViewController,
             sheetContainer.transform = CGAffineTransform(translationX: 0, y: translation.y)
         case .ended:
             if translation.y > UX.panDismissDistance || gesture.velocity(in: view).y > UX.panDismissVelocity {
+                store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
                 dismiss(animated: true)
             } else {
                 UIView.animate(withDuration: UX.animationDuration,
@@ -335,6 +333,23 @@ final class TermsOfUseViewController: UIViewController,
 
     private func currentTheme() -> Theme {
         themeManager.getCurrentTheme(for: currentWindowUUID)
+    }
+
+    private func configureTextViewScrolling() {
+        if let existingConstraint = textViewHeightConstraint {
+            existingConstraint.isActive = false
+        }
+        switch traitCollection.preferredContentSizeCategory {
+        case .accessibilityExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraExtraExtraLarge:
+            descriptionTextView.isScrollEnabled = true
+            textViewHeightConstraint = descriptionTextView.heightAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.heightAnchor,
+                multiplier: UX.textViewHeightMultiplier)
+            textViewHeightConstraint?.isActive = true
+
+        default:
+            descriptionTextView.isScrollEnabled = false
+        }
     }
 
     // MARK: TextView Delegate

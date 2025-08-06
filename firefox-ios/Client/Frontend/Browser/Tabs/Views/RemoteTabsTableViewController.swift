@@ -34,7 +34,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     weak var remoteTabsPanel: RemoteTabsPanel?
     let windowUUID: WindowUUID
@@ -86,9 +86,9 @@ class RemoteTabsTableViewController: UITableViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupLayout()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

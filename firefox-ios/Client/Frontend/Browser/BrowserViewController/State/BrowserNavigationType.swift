@@ -14,6 +14,7 @@ enum BrowserNavigationDestination: Equatable {
     case tabTray(TabTrayPanelType)
     case bookmarksPanel
     case zeroSearch
+    case shortcutsLibrary
 
     // Webpage views
     case link

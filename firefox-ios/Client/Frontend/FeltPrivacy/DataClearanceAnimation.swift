@@ -8,6 +8,7 @@ import SwiftUI
 
 // Animation for when the user confirms they want to delete their data through the data clearance flow in private mode
 // There are different animations depending on the orientation of the device
+@MainActor
 struct DataClearanceAnimation {
     enum AnimationType {
         case phonePortrait

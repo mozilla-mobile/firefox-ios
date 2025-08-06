@@ -19,6 +19,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
     private var presentedVC: TermsOfUseViewController?
     private let defaults: UserDefaultsInterface
+    private let daysSinceDismissedTerms = 5
 
     init(windowUUID: WindowUUID,
          router: Router,
@@ -69,16 +70,13 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     }
 
     func shouldShowTermsOfUse() -> Bool {
-        let hasAccepted = defaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.acceptedKey)
-        if hasAccepted { return false }
-
         let isFeatureEnabled = featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
-        if !isFeatureEnabled { return false }
+        // 1. If feature is disabled, do not show.
+        guard isFeatureEnabled else { return false }
 
-        if let lastShown = defaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.lastShownKey) as? Date {
-            let days = Calendar.current.dateComponents([.day], from: lastShown, to: Date()).day ?? 0
-            if days >= 3 { return true }
-        }
+        let hasAccepted = defaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.acceptedKey)
+        // 2. If user has accepted, do not show again.
+        guard !hasAccepted else { return false }
 
         let didShowThisLaunch = store.state.screenState(
             TermsOfUseState.self,
@@ -86,6 +84,19 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             window: windowUUID
         )?.didShowThisLaunch ?? false
 
-        return !didShowThisLaunch
+        // 3. If not shown this launch, show it.
+        guard didShowThisLaunch else { return true }
+
+        // 4. If shown this launch, show it if enough time has passed since dismissal.
+        guard let dismissedWithoutAcceptDate = defaults.object(forKey:
+                TermsOfUseMiddleware.DefaultKeys.dismissedWithoutAcceptDate) as? Date else { return false }
+
+        let daysSinceDismissal = Calendar.current.dateComponents(
+            [.day],
+            from: dismissedWithoutAcceptDate,
+            to: Date()
+        ).day ?? 0
+
+        return daysSinceDismissal >= daysSinceDismissedTerms
     }
 }

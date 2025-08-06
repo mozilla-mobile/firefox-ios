@@ -1070,6 +1070,13 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+            public struct Library {
+                public static let Title = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.Library.Title.v143",
+                    tableName: "FirefoxHomepage",
+                    value: "Shortcuts",
+                    comment: "This is the navigation title for the Shortcuts Library view")
+            }
         }
 
         public struct SearchBar {
@@ -2495,6 +2502,13 @@ extension String {
                 tableName: "Settings",
                 value: "Summarize Pages",
                 comment: "This is the title for the setting that toggles the Summarize feature under the Summarize settings section."
+            )
+
+            public static let FooterTitle = MZLocalizedString(
+                key: "Settings.Summarize.FooterTitle.v142",
+                tableName: "Settings",
+                value: "Provides access to summarize pages.",
+                comment: "This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section."
             )
 
             public struct GesturesSection {
@@ -6598,6 +6612,12 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
+
+        public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.NewTab.Button.v142",
+            tableName: "Toolbar",
+            value: "Summarize page",
+            comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
 
         public static let TabsButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.Tabs.Button.A11y.Label.v135",

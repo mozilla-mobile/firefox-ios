@@ -41,6 +41,7 @@ final class MainMenuStateTests: XCTestCase {
             hasChangedUserAgent: true,
             zoomLevel: 1.0,
             readerModeIsAvailable: false,
+            summaryIsAvailable: false,
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,

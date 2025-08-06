@@ -50,7 +50,7 @@ final class TabTrayViewController: UIViewController,
 
     // MARK: Theme
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
     // MARK: Child panel and navigation
@@ -286,8 +286,10 @@ final class TabTrayViewController: UIViewController,
         super.viewDidLoad()
         setupView()
         subscribeToRedux()
-        listenForThemeChange(view)
         updateToolbarItems()
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {

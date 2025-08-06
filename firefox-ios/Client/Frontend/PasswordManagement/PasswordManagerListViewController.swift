@@ -13,7 +13,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     static let loginsSettingsSection = 0
 
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
     private let viewModel: PasswordManagerViewModel
@@ -54,7 +54,6 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange(view)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -88,6 +87,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         // No need to hide the navigation bar on iPad to make room, and hiding makes the search bar too close to the top
         searchController.hidesNavigationBarDuringPresentation = UIDevice.current.userInterfaceIdiom != .pad
 
+        // FIXME: FXIOS-12995 Use Notifiable
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
                                        selector: #selector(remoteLoginsDidChange),
@@ -124,6 +124,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
         selectionButton.isHidden = true
 
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
         KeyboardHelper.defaultHelper.addDelegate(self)

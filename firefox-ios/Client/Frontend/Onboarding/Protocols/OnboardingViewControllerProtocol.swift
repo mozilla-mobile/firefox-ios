@@ -4,6 +4,7 @@
 
 import Foundation
 
+@MainActor
 protocol OnboardingViewControllerProtocol {
     var pageController: UIPageViewController { get }
     var pageControl: UIPageControl { get }

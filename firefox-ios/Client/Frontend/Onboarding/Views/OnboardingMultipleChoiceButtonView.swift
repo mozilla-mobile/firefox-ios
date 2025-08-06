@@ -74,7 +74,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     let windowUUID: WindowUUID
     var viewModel: OnboardingMultipleChoiceButtonViewModel
     var themeManager: Common.ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: Common.NotificationProtocol
     weak var buttonActionDelegate: OnboardingCardDelegate?
     weak var stateUpdateDelegate: OnboardingMultipleChoiceSelectionDelegate?
@@ -100,6 +100,9 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         setupLayout()
         updateUIForState()
         handleButtonTapIfSelected()
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
