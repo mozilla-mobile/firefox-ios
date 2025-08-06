@@ -23,6 +23,7 @@ class MainMenuViewController: UIViewController,
         static let hintViewMargin: CGFloat = 20
         static let backgroundAlpha: CGFloat = 0.85
         static let menuHeightTolerance: CGFloat = 30
+        static let topMarginCFR: CGFloat = 100
     }
     typealias SubscriberStateType = MainMenuState
 
@@ -304,7 +305,9 @@ class MainMenuViewController: UIViewController,
                   let window = windowScene.windows.first {
             window.addSubview(hintView)
 
-            if UIScreen.main.bounds.height < UX.hintViewHeight + menuContent.frame.height {
+            let contentHeight =  UX.hintViewHeight + menuContent.frame.height + UX.hintViewMargin
+            let safeHeight = UIScreen.main.bounds.height - UX.topMarginCFR
+            if safeHeight < contentHeight {
                 hintView.topAnchor.constraint(equalTo: menuContent.topAnchor,
                                               constant: UX.hintViewMargin).isActive = true
             } else {
