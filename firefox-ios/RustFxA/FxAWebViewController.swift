@@ -108,7 +108,9 @@ class FxAWebViewController: UIViewController {
 
     deinit {
         webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
-        endPairingConnectionBackgroundTask()
+        Task { @MainActor [backgroundTaskID] in
+            UIApplication.shared.endBackgroundTask(backgroundTaskID)
+        }
     }
 
     // MARK: Background task
@@ -133,7 +135,7 @@ class FxAWebViewController: UIViewController {
         webView.load(request)
     }
 
-    private nonisolated func endPairingConnectionBackgroundTask() {
+    private func endPairingConnectionBackgroundTask() {
         UIApplication.shared.endBackgroundTask(backgroundTaskID)
         backgroundTaskID = UIBackgroundTaskIdentifier.invalid
     }
