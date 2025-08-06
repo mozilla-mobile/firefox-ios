@@ -32,13 +32,13 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markDismissed)
         middleware.termsOfUseProvider(AppState(), action)
         XCTAssertTrue(userDefaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedKey))
-        XCTAssertNotNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.lastShownKey))
+        XCTAssertNotNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedWithoutAcceptDate))
     }
     func testMiddleware_markShownThisLaunch_doesNotWriteToUserDefaults() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markShownThisLaunch)
         middleware.termsOfUseProvider(AppState(), action)
         XCTAssertNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.acceptedKey))
         XCTAssertNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedKey))
-        XCTAssertNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.lastShownKey))
+        XCTAssertNil(userDefaults.object(forKey: TermsOfUseMiddleware.DefaultKeys.dismissedWithoutAcceptDate))
     }
 }

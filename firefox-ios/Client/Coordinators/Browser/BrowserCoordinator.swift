@@ -146,7 +146,6 @@ class BrowserCoordinator: BaseCoordinator,
         guard browserViewController.embedContent(legacyHomepageViewController) else { return }
         self.legacyHomepageViewController = legacyHomepageViewController
         legacyHomepageViewController.scrollToTop()
-        showTermsOfUse()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
     }
@@ -170,7 +169,6 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
-        showTermsOfUse()
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
