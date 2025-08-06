@@ -3175,10 +3175,14 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            openBlankNewTab(
-                focusLocationField: options?.contains(.focusLocationField) == true,
-                isPrivate: isPrivate
-            )
+            if let isHomepage = tabManager.selectedTab?.isFxHomeTab, isHomepage {
+                focusLocationTextField(forTab: tabManager.selectedTab)
+            } else {
+                openBlankNewTab(
+                    focusLocationField: options?.contains(.focusLocationField) == true,
+                    isPrivate: isPrivate
+                )
+            }
         }
     }
 
@@ -3265,7 +3269,7 @@ class BrowserViewController: UIViewController,
     }
 
     func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) {
             // Without a delay, the text field fails to become first responder
             // Check that the newly created tab is still selected.
             // This let's the user spam the Cmd+T button without lots of responder changes.
