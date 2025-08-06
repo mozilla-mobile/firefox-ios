@@ -36,6 +36,8 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
         self.notificationCenter = notificationCenter
         self.navigationHandler = navigationHandler
         super.init(router: router)
+
+        // FIXME: FXIOS-12995 Use Notifiable
         self.notificationCenter.addObserver(
             self,
             selector: #selector(openClearHistory),
@@ -62,9 +64,5 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
 
     func shareLibraryItem(url: URL, sourceView: UIView) {
         navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 }

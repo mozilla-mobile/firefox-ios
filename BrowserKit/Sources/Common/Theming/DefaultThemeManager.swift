@@ -79,9 +79,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             ThemeKeys.NightMode.isOn: false
         ])
 
-        setupNotifications(forObserver: self,
-                           observing: [UIScreen.brightnessDidChangeNotification,
-                                       UIApplication.didBecomeActiveNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIScreen.brightnessDidChangeNotification,
+                        UIApplication.didBecomeActiveNotification]
+        )
     }
 
     // MARK: - Themeing general functions

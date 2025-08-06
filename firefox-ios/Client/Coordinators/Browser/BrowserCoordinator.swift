@@ -48,13 +48,14 @@ class BrowserCoordinator: BaseCoordinator,
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
-    private var isSummarizerFeatureEnabled: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled
+    private var isSummarizerOn: Bool {
+        return summarizerNimbusUtils.isSummarizeFeatureEnabled
     }
 
     override var isDismissible: Bool { false }
@@ -65,8 +66,10 @@ class BrowserCoordinator: BaseCoordinator,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -1078,8 +1081,10 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-    func showSummarizePanel() {
-        guard isSummarizerFeatureEnabled, tabManager.selectedTab?.isFxHomeTab == false else { return }
+  func showSummarizePanel() {
+        guard isSummarizerOn,
+              tabManager.selectedTab?.isFxHomeTab == false,
+              let webView = tabManager.selectedTab?.webView else { return }
         let contentContainer = browserViewController.contentContainer
         let browserFrame = browserViewController.view.frame
         var browserScreenshot = browserViewController.view.snapshot
@@ -1097,6 +1102,7 @@ class BrowserCoordinator: BaseCoordinator,
         let coordinator = SummarizeCoordinator(
             browserSnapshot: browserScreenshot,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,
+            webView: webView,
             browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
             prefs: profile.prefs,
@@ -1107,6 +1113,11 @@ class BrowserCoordinator: BaseCoordinator,
         }
         add(child: coordinator)
         coordinator.start()
+    }
+
+    func showShortcutsLibrary() {
+        let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
+        router.push(shortcutsLibraryViewController)
     }
 
     // MARK: Microsurvey

@@ -13,6 +13,7 @@ protocol PhotonActionSheetProtocol {
     var themeManager: ThemeManager { get }
 }
 
+@MainActor
 extension PhotonActionSheetProtocol {
     typealias PresentableVC = UIViewController & UIPopoverPresentationControllerDelegate
 

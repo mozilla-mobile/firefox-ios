@@ -139,9 +139,13 @@ class SearchViewController: SiteTableViewController,
             searchEngineContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        setupNotifications(forObserver: self, observing: [.DynamicFontChanged,
-                                                          .SearchSettingsChanged,
-                                                          .SponsoredAndNonSponsoredSuggestionsChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged,
+                        .SearchSettingsChanged,
+                        .SponsoredAndNonSponsoredSuggestionsChanged]
+        )
     }
 
     func dynamicFontChanged(_ notification: Notification) {

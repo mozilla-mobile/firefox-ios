@@ -31,7 +31,11 @@ final class StoryDataAdaptorImplementation: StoryDataAdaptor, FeatureFlaggable, 
         self.merinoAPI = merinoAPI
         self.notificationCenter = notificationCenter
         self.storyProvider = StoryProvider(merinoAPI: merinoAPI)
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIApplication.didBecomeActiveNotification]
+        )
 
         Task { [weak self] in
             await self?.updateMerinoSites()

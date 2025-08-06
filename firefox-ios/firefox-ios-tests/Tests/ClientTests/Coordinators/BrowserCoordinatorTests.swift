@@ -563,7 +563,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() {
         setIsHostedSummarizerEnabled(true)
         let subject = createSubject()
-        tabManager.selectedTab = MockTab(profile: profile, windowUUID: windowUUID)
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
         subject.showSummarizePanel()
@@ -576,7 +578,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
         setIsHostedSummarizerEnabled(true)
         let subject = createSubject()
-        tabManager.selectedTab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
+        let tab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
         subject.showSummarizePanel()
@@ -595,6 +599,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertNil(subject.childCoordinators.first(where: {
             $0 is SummarizeCoordinator
         }))
+    }
+
+    // MARK: - Shortcuts Library
+
+    func testShowShortcutsLibrary_showsShortcutsLibrary() throws {
+        let subject = createSubject()
+
+        subject.showShortcutsLibrary()
+
+        XCTAssertNotNil(mockRouter.pushedViewController as? ShortcutsLibraryViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
     // MARK: - ParentCoordinatorDelegate

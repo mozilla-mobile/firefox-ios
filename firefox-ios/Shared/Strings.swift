@@ -1070,6 +1070,13 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+            public struct Library {
+                public static let Title = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.Library.Title.v143",
+                    tableName: "FirefoxHomepage",
+                    value: "Shortcuts",
+                    comment: "This is the navigation title for the Shortcuts Library view")
+            }
         }
 
         public struct SearchBar {
@@ -2123,6 +2130,49 @@ extension String {
             value: "Summarizing…",
             comment: "When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed."
         )
+        public static let RateLimitedErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.RateLimited.Message.v142",
+            tableName: "Summarizer",
+            value: "Can’t handle this one at the moment. Try again later!",
+            comment: "The error message displayed when the summarizer encounters a rate limit while summarizing a page."
+        )
+        public static let UnsafeWebsiteErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.UnsafeWebsite.Message.v142",
+            tableName: "Summarizer",
+            value: "Limited content detected. This page may be restricted or mostly visual.",
+            comment: "The error message displayed when the summarizer encounters unsafe content while summarizing a page."
+        )
+        public static let UnsupportedContentErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.UnsupportedContent.Message.v142",
+            tableName: "Summarizer",
+            value: "This website doesn’t allow content summarization. Try a different page.",
+            comment: "The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long)."
+        )
+        public static let MissingPageContentErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.MissingPageContent.Message.v142",
+            tableName: "Summarizer",
+            value: "Page is still loading. Wait for it to finish, then hit summarize.",
+            comment: "The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading)."
+        )
+        // TODO: correct label ?
+        public static let UnknownErrorMessage = MZLocalizedString(
+            key: "Summarizer.Error.Unknown.Message.v142",
+            tableName: "Summarizer",
+            value: "Error summarizing page. Try again later.",
+            comment: "The error message displayed when the summarizer encounters an unknown error while summarizing a page."
+        )
+        public static let RetryButtonLabel = MZLocalizedString(
+            key: "Summarizer.RetryButton.Label.v142",
+            tableName: "Summarizer",
+            value: "Retry",
+            comment: "The label for the error button that allows the user to retry summarizing the page."
+        )
+        public static let CloseButtonLabel = MZLocalizedString(
+            key: "Summarizer.CloseButton.Label.v142",
+            tableName: "Summarizer",
+            value: "Close",
+            comment: "The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried."
+        )
         public static let ToSAlertTitleLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.Title.Label.v142",
             tableName: "Summarizer",
@@ -2437,6 +2487,52 @@ extension String {
                 value: "Media",
                 comment: "This is the title for Media customization under the Browsing settings section."
             )
+        }
+
+        public struct Summarize {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Summarize.Title.v142",
+                tableName: "Settings",
+                value: "Page Summaries",
+                comment: "In the settings menu, in the General section, this is the title for the Summarize settings section."
+            )
+
+            public static let SummarizePagesTitle = MZLocalizedString(
+                key: "Settings.Summarize.SummarizePagesTitle.v142",
+                tableName: "Settings",
+                value: "Summarize Pages",
+                comment: "This is the title for the setting that toggles the Summarize feature under the Summarize settings section."
+            )
+
+            public static let FooterTitle = MZLocalizedString(
+                key: "Settings.Summarize.FooterTitle.v142",
+                tableName: "Settings",
+                value: "Provides access to summarize pages.",
+                comment: "This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section."
+            )
+
+            public struct GesturesSection {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSection.Title.v142",
+                    tableName: "Settings",
+                    value: "Gestures",
+                    comment: "This is the section title for the gestures features under the Summarize settings section."
+                )
+
+                public static let ShakeGestureTitle = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSection.ShakeGestureTitle.v142",
+                    tableName: "Settings",
+                    value: "Shake to Summarize",
+                    comment: "This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section."
+                )
+
+                public static let FooterTitle = MZLocalizedString(
+                    key: "Settings.Summarize.GesturesSection.FooterTitle.v142",
+                    tableName: "Settings",
+                    value: "Shake your device from side to side to summarize a page.",
+                    comment: "This is the footer text for the gestures features under the Summarize settings section."
+                )
+            }
         }
 
         public struct Appearance {
@@ -6516,6 +6612,12 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
+
+        public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.NewTab.Button.v142",
+            tableName: "Toolbar",
+            value: "Summarize page",
+            comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
 
         public static let TabsButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.Tabs.Button.A11y.Label.v135",

@@ -15,7 +15,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
         static let contentViewBottomMargin: CGFloat = 8
         static let contentViewHorizontalMargin: CGFloat = 4
         static let cornerRadius: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.8
+        static let backgroundAlpha: CGFloat = 0.85
         static let hyphenationFactor: Float = 1.0
         static let dividerWidth: CGFloat = 0.5
     }
@@ -158,7 +158,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
             backgroundContentView.backgroundColor = .clear
             dividerView.backgroundColor = shouldShowDivider ? theme.colors.borderPrimary : .clear
         } else {
-            backgroundContentView.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+            backgroundContentView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
         }
         icon.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textSecondary

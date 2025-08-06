@@ -29,7 +29,7 @@ class IntroViewController: UIViewController,
     var didFinishFlow: (() -> Void)?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
     var currentWindowUUID: UUID? { windowUUID }
@@ -82,7 +82,6 @@ class IntroViewController: UIViewController,
 
         self.viewModel.setupViewControllerDelegates(with: self, for: windowUUID)
         setupLayout()
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {
@@ -92,12 +91,10 @@ class IntroViewController: UIViewController,
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
         populatePageController()
-    }
 
-    deinit {
-        notificationCenter.removeObserver(self)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     // MARK: View setup
@@ -210,8 +207,11 @@ class IntroViewController: UIViewController,
 
     func registerForNotification() {
         if !hasRegisteredForDefaultBrowserNotification {
-            setupNotifications(forObserver: self,
-                               observing: [UIApplication.didEnterBackgroundNotification])
+            startObservingNotifications(
+                withNotificationCenter: notificationCenter,
+                forObserver: self,
+                observing: [UIApplication.didEnterBackgroundNotification]
+            )
             hasRegisteredForDefaultBrowserNotification = true
         }
     }

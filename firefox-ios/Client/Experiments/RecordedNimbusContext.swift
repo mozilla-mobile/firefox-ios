@@ -45,6 +45,7 @@ class RecordedNimbusContext: RecordedContext {
     var isBottomToolbarUser: Bool
     var hasEnabledTipsNotifications: Bool
     var isAppleIntelligenceAvailable: Bool
+    var cannotUseAppleIntelligence: Bool
     var appVersion: String?
     var region: String?
     var language: String?
@@ -62,6 +63,7 @@ class RecordedNimbusContext: RecordedContext {
          isBottomToolbarUser: Bool,
          hasEnabledTipsNotifications: Bool,
          isAppleIntelligenceAvailable: Bool,
+         cannotUseAppleIntelligence: Bool,
          eventQueries: [String: String] = RecordedNimbusContext.EVENT_QUERIES,
          isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
          bundle: Bundle = Bundle.main,
@@ -76,6 +78,7 @@ class RecordedNimbusContext: RecordedContext {
         self.isBottomToolbarUser = isBottomToolbarUser
         self.hasEnabledTipsNotifications = hasEnabledTipsNotifications
         self.isAppleIntelligenceAvailable = isAppleIntelligenceAvailable
+        self.cannotUseAppleIntelligence = cannotUseAppleIntelligence
 
         let info = bundle.infoDictionary ?? [:]
         appVersion = info["CFBundleShortVersionString"] as? String
@@ -145,7 +148,8 @@ class RecordedNimbusContext: RecordedContext {
                 isDefaultBrowser: isDefaultBrowser,
                 isBottomToolbarUser: isBottomToolbarUser,
                 hasEnabledTipsNotifications: hasEnabledTipsNotifications,
-                isAppleIntelligenceAvailable: isAppleIntelligenceAvailable
+                isAppleIntelligenceAvailable: isAppleIntelligenceAvailable,
+                cannotUseAppleIntelligence: cannotUseAppleIntelligence
             )
         )
         GleanMetrics.Pings.shared.nimbus.submit()
@@ -188,7 +192,8 @@ class RecordedNimbusContext: RecordedContext {
             "is_default_browser": isDefaultBrowser,
             "is_bottom_toolbar_user": isBottomToolbarUser,
             "has_enabled_tips_notifications": hasEnabledTipsNotifications,
-            "is_apple_intelligence_available": isAppleIntelligenceAvailable
+            "is_apple_intelligence_available": isAppleIntelligenceAvailable,
+            "cannot_use_apple_intelligence": cannotUseAppleIntelligence
         ]),
             let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
         else {

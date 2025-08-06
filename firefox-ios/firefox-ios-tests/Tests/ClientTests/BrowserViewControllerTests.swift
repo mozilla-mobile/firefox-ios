@@ -23,6 +23,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     override func setUp() {
         super.setUp()
         setIsSwipingTabsEnabled(false)
+        setIsHostedSummarizerEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         // Due to changes allow certain custom pings to implement their own opt-out
@@ -150,7 +151,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(subject.toolbar.privateModeBadge.badge.isHidden)
     }
 
-    @MainActor
     func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {
         let subject = createSubject()
         let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
@@ -180,6 +180,38 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.loadViewIfNeeded()
 
         XCTAssertEqual(browserCoordinator.showHomepageCalled, 1)
+    }
+
+    func testUpdateReaderModeState_whenSummarizeFeatureOn_dispatchesToolbarMiddlewareAction() throws {
+        setIsHostedSummarizerEnabled(true)
+        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.updateReaderModeState(for: tab, readerModeState: .active)
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+        XCTAssertEqual(action.readerModeState, .active)
+    }
+
+    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesToolbarAction() throws {
+        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.updateReaderModeState(for: tab, readerModeState: .active)
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertEqual(action.readerModeState, .active)
     }
 
     // MARK: - Handle PDF
@@ -233,12 +265,24 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Shake motion
-    func testMotionEnded_withShakeGesture_showsSummaryPanel() {
+    func testMotionEnded_withShakeGestureEnabled_showsSummaryPanel() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
+        setupSummarizedShakeGestureForTesting(isEnabled: true)
         let subject = createSubject()
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
 
         XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
+    }
+
+    func testMotionEnded_withShakeGestureDisabled_doesNotShowSummaryPanel() {
+        profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
+        setupSummarizedShakeGestureForTesting(isEnabled: false)
+        let subject = createSubject()
+        tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        subject.motionEnded(.motionShake, with: nil)
+
+        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 0)
     }
 
     func testMotionEnded_withGestureNotShake_doesntShowSummarizePanel() {
@@ -340,6 +384,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
+    func testNewState_whenSummarizeDisplayRequested() {
+        let subject = createSubject()
+
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
+            GeneralBrowserAction(windowUUID: .XCTestDefaultUUID,
+                                 actionType: GeneralBrowserActionType.showSummarizer)
+        )
+        subject.newState(state: newState)
+
+        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
+    }
+
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
@@ -367,6 +424,18 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(swipingTabs: isEnabled)
+        }
+    }
+
+    private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled)
+        }
+    }
+
+    private func setupSummarizedShakeGestureForTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
         }
     }
 

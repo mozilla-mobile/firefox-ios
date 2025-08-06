@@ -9,7 +9,7 @@ import Common
 
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
-                                       Themeable {
+                                       TabScrollHandlerProtocol {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -55,12 +55,12 @@ final class LegacyTabScrollController: NSObject,
     }
 
     // Top toolbar UI and Constraints
-    weak var header: BaseAlphaStackView?
+    private weak var header: BaseAlphaStackView?
     var headerTopConstraint: Constraint?
 
     // Bottom toolbar UI and Constraints
-    weak var overKeyboardContainer: BaseAlphaStackView?
-    weak var bottomContainer: BaseAlphaStackView?
+    private weak var overKeyboardContainer: BaseAlphaStackView?
+    private weak var bottomContainer: BaseAlphaStackView?
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
 
@@ -183,8 +183,6 @@ final class LegacyTabScrollController: NSObject,
     private var isAnimatingToolbar = false
     private var shouldRespondToScroll = false
 
-    var themeManager: any ThemeManager
-    var themeObserver: (any NSObjectProtocol)?
     var notificationCenter: any NotificationProtocol
     var currentWindowUUID: WindowUUID? {
         return windowUUID
@@ -197,7 +195,7 @@ final class LegacyTabScrollController: NSObject,
         return hasScrollableContent && voiceOverOff
     }
 
-    // If scrollview contenSize is bigger than scrollview height scroll is enabled
+    // If scrollview contentSize is bigger than scrollview height scroll is enabled
     var hasScrollableContent: Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
             contentSize.height
@@ -206,15 +204,11 @@ final class LegacyTabScrollController: NSObject,
     deinit {
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
-        guard let themeObserver else { return }
-        notificationCenter.removeObserver(themeObserver)
     }
 
     init(windowUUID: WindowUUID,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
-        self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.logger = logger
@@ -232,11 +226,14 @@ final class LegacyTabScrollController: NSObject,
                                                selector: #selector(applicationWillTerminate(_:)),
                                                name: UIApplication.willTerminateNotification,
                                                object: nil)
-        // need to add this manually otherwise listenForThemeChanges(view) will retain the view in memory
-        // causing memory leaks
-        themeObserver = notificationCenter.addObserver(name: .ThemeDidChange, queue: .main) { [weak self] _ in
-            self?.applyTheme()
-        }
+    }
+
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
+                               bottomContainer: BaseAlphaStackView?,
+                               headerContainer: BaseAlphaStackView?) {
+        self.overKeyboardContainer = overKeyboardContainer
+        self.bottomContainer = bottomContainer
+        self.header = headerContainer
     }
 
     private func handleOnTabContentLoading() {
@@ -414,13 +411,6 @@ final class LegacyTabScrollController: NSObject,
         tab?.webView?.addPullRefresh { [weak self] in
             self?.reload()
         }
-        applyTheme()
-    }
-
-    // MARK: - Themeable
-
-    func applyTheme() {
-        tab?.webView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 }
 
@@ -514,28 +504,35 @@ private extension LegacyTabScrollController {
 
     /// Updates the state of the toolbar based on the scroll positions of various UI components.
     ///
-    /// The function evaluates the current offsets of three UI containers:
-    /// - `bottomContainerOffset` compared to `bottomContainerScrollHeight`
-    /// - `overKeyboardContainerOffset` compared to `overKeyboardScrollHeight`
-    /// - `headerTopOffset` compared to `-topScrollHeight`
-    ///
     /// Based on their states, it sets the toolbar state to one of the following:
     /// - `.collapsed`: All containers are fully collapsed (scrolled to their maximum).
     /// - `.visible`: Toolbars are currently showing (`toolbarsShowing == true`).
     /// - `.animating`: In transition or partially visible state.
     func updateToolbarState() {
-        // Checks if bottom containers are fully collapsed based on their offsets
-        let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
-        let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
-
-        // top container
-        let headerContainerIsCollapsed = headerTopOffset == -headerHeight
-
-        if headerContainerIsCollapsed && (bottomContainerCollapsed && overKeyboardContainerCollapsed) {
+        if isToolbarCollapsed() {
             setToolbarState(state: .collapsed)
         } else if toolbarsShowing {
             setToolbarState(state: .visible)
         }
+    }
+
+    /// The function evaluates the current offsets of three UI containers:
+    /// - `bottomContainerOffset` compared to `bottomContainerScrollHeight`
+    /// - `overKeyboardContainerOffset` compared to `overKeyboardScrollHeight`
+    /// - `headerTopOffset` compared to `-topScrollHeight`
+    /// - Returns: `true` if the toolbar is collapsed checks if isBottomSearchBar, `false`.
+    func isToolbarCollapsed() -> Bool {
+        guard !isBottomSearchBar else {
+            // Checks if bottom containers are fully collapsed based on their offsets
+            let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
+            let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
+            return bottomContainerCollapsed && overKeyboardContainerCollapsed
+        }
+
+        // top container
+        let headerContainerIsCollapsed = headerTopOffset == -headerHeight
+
+        return headerContainerIsCollapsed
     }
 
     func setToolbarState(state: ToolbarState) {

@@ -20,7 +20,7 @@ enum AddCredentialField: Int {
 
 class AddCredentialViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -92,8 +92,8 @@ class AddCredentialViewController: UIViewController, Themeable {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
-        listenForThemeChange(view)
     }
 
     override func viewWillAppear(_ animated: Bool) {

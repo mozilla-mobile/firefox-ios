@@ -68,6 +68,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     private var hasAppearedBefore = false
     private let searchEnginesManager: SearchEnginesManagerProvider
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -86,9 +87,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         logger: Logger = DefaultLogger.shared,
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve()
     ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
         self.logger = logger
@@ -363,7 +366,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
-        if SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled {
+        if summarizerNimbusUtils.isSummarizeFeatureEnabled {
             generalSettings.append(SummarizeSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 

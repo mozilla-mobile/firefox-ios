@@ -23,6 +23,7 @@ struct AccessibilityIdentifiers {
         static let readerModeButton = "TabLocationView.readerModeButton"
         static let reloadButton = "TabLocationView.reloadButton"
         static let shareButton = "TabLocationView.shareButton"
+        static let summarizeButton = "TabLocationView.summarizeButton"
         static let backButton = "TabToolbar.backButton"
         static let fireButton = "TabToolbar.fireButton"
         static let forwardButton = "TabToolbar.forwardButton"
@@ -192,6 +193,7 @@ struct AccessibilityIdentifiers {
         }
 
         struct MoreButtons {
+            static let shortcuts = "shortcutsSectionMoreButton"
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
@@ -675,6 +677,8 @@ struct AccessibilityIdentifiers {
 
         struct Summarize {
             static let title = "SummarizeSettings"
+            static let summarizeContentSwitch = "summarizeContentFeature"
+            static let shakeGestureSwitch = "shakeGestureEnabledKey"
         }
 
         struct Theme {
@@ -719,6 +723,8 @@ struct AccessibilityIdentifiers {
         static let closeSummaryButton = "closeSummaryButton"
         static let loadingLabel = "summaryLoadingLabel"
         static let summaryTextView = "summaryTextView"
+        static let errorLabel = "errorLabel"
+        static let errorButton = "errorButton"
         static let tosTitleLabel = "tosTitleLabel"
         static let tosDescriptionText = "tosDescriptionText"
         static let tosCancelButton = "tosCancel"

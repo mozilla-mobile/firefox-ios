@@ -59,6 +59,8 @@ public struct PrefsKeys {
 
     public struct Summarizer {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
+        public static let summarizeContentFeature = "summarizeContentFeature"
+        public static let shakeGestureEnabled = "shakeGestureEnabledKey"
     }
 
     public struct AppVersion {
@@ -218,8 +220,11 @@ public struct PrefsKeys {
     // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
     public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
 
+    // MARK: - Apple Intelligence
     // Used to determine if Apple Intelligence is available
     public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
+    // Used to determine if cannot run the Apple Intelligence model
+    public static let cannotRunAppleIntelligence = "cannotRunAppleIntelligenceKey"
 
     public struct Usage {
         public static let profileId = "profileId"

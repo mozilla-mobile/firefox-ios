@@ -7,78 +7,9 @@ import Common
 import UIKit
 import ComponentLibrary
 import MarkdownKit
+import WebKit
 
-// swiftlint:disable all
-let dummyText = """
-# This is header 1
-## This is header 2
-### This is header 3
-
-**This text is bold**
-*This text is italic*
-
-### 31 Things to Do in Barcelona With Kids — tl;dr
-
-- **Family-friendly attractions:** Parks, beaches, Sagrada Família, etc. Kids still like the “adult” highlights.  
-- **Where to stay:** Family-friendly hotels (e.g. Hotel Barcelona Catedral) or regulated apartments.  
-
-1. **Getting around:** Cable cars, open-top buses, and standard transit are all kid-manageable.  
-2. **Food:** Tapas bars + markets like La Boqueria work great with kids.  
-3. **Packing tips:** Dress for the climate and activities; think sun, walking, and water play.
-
-This is a **Markdown link** that must not render:  
-[Cute Cat Image](https://picsum.photos/200/300)
-
-This is a **Markdown image** that must not render:  
-![Cute Cat Image](https://picsum.photos/200/300 "A placeholder cat")
-
-This is a **Markdown video** that must not render:  
-<video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" controls width="480"></video>
-
-Overall: cultural hits + plenty of kid breaks = happy trip.
-"""
-// swiftlint:enable all
-
-public struct SummarizeViewModel {
-    let loadingLabel: String
-    let loadingA11yLabel: String
-    let loadingA11yId: String
-    let summarizeTextViewA11yLabel: String
-    let summarizeTextViewA11yId: String
-
-    let closeButtonModel: CloseButtonViewModel
-    let tabSnapshot: UIImage
-    let tabSnapshotTopOffset: CGFloat
-
-    let onDismiss: @MainActor () -> Void
-    let onShouldShowTabSnapshot: @MainActor () -> Void
-
-    public init(
-        loadingLabel: String,
-        loadingA11yLabel: String,
-        loadingA11yId: String,
-        summarizeTextViewA11yLabel: String,
-        summarizeTextViewA11yId: String,
-        closeButtonModel: CloseButtonViewModel,
-        tabSnapshot: UIImage,
-        tabSnapshotTopOffset: CGFloat,
-        onDismiss: @escaping @MainActor () -> Void,
-        onShouldShowTabSnapshot: @escaping @MainActor () -> Void
-    ) {
-        self.loadingLabel = loadingLabel
-        self.loadingA11yLabel = loadingA11yLabel
-        self.loadingA11yId = loadingA11yId
-        self.summarizeTextViewA11yLabel = summarizeTextViewA11yLabel
-        self.summarizeTextViewA11yId = summarizeTextViewA11yId
-        self.closeButtonModel = closeButtonModel
-        self.tabSnapshot = tabSnapshot
-        self.onDismiss = onDismiss
-        self.onShouldShowTabSnapshot = onShouldShowTabSnapshot
-        self.tabSnapshotTopOffset = tabSnapshotTopOffset
-    }
-}
-
-public class SummarizeController: UIViewController, Themeable {
+public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
     private struct UX {
         static let tabSnapshotInitialTransformPercentage: CGFloat = 0.5
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
@@ -96,13 +27,16 @@ public class SummarizeController: UIViewController, Themeable {
         static let tabSnapshotShadowRadius: CGFloat = 64.0
         static let tabSnapshotShadowOffset = CGSize(width: 0.0, height: -10.0)
         static let tabSnapshotShadowOpacity: Float = 1.0
+        static let tabSnapshotTranslationKeyPath = "transform.translation.y"
     }
 
     private let viewModel: SummarizeViewModel
+    private let summarizerService: SummarizerService
+    private let webView: WKWebView
 
     // MARK: - Themeable
     public let themeManager: any Common.ThemeManager
-    public var themeObserver: (any NSObjectProtocol)?
+    public var themeListenerCancellable: Any?
     public var notificationCenter: any Common.NotificationProtocol
     public let currentWindowUUID: Common.WindowUUID?
 
@@ -162,6 +96,8 @@ public class SummarizeController: UIViewController, Themeable {
     public init(
         windowUUID: WindowUUID,
         viewModel: SummarizeViewModel,
+        summarizerService: SummarizerService,
+        webView: WKWebView,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
@@ -169,6 +105,8 @@ public class SummarizeController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.viewModel = viewModel
+        self.summarizerService = summarizerService
+        self.webView = webView
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -180,7 +118,7 @@ public class SummarizeController: UIViewController, Themeable {
         super.viewDidLoad()
         configure()
         setupLayout()
-
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
@@ -195,6 +133,32 @@ public class SummarizeController: UIViewController, Themeable {
             self?.view.backgroundColor = theme.colors.layerSummary
             self?.viewModel.onShouldShowTabSnapshot()
             self?.embedSnapshot()
+        }
+    }
+
+    private func summarize() {
+        loadingLabel.alpha = 1.0
+        errorView.alpha = 0.0
+        Task { [weak self] in
+            await self?.summarizeTask()
+        }
+    }
+
+    private func summarizeTask() async {
+        do {
+            let summary = try await summarizerService.summarize(from: webView)
+            await MainActor.run {
+                showSummary(summary)
+            }
+        } catch {
+            let summaryError: SummarizerError = if let error = error as? SummarizerError {
+                error
+            } else {
+                .unknown(error)
+            }
+            await MainActor.run {
+                showError(summaryError)
+            }
         }
     }
 
@@ -218,16 +182,6 @@ public class SummarizeController: UIViewController, Themeable {
             }),
             for: .touchUpInside
         )
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        let baseFont = FXFontStyles.Regular.body.scaledFont()
-        let headerFont = FXFontStyles.Regular.title1.scaledFont()
-        let baseColor = theme.colors.textPrimary
-        let markdownParser = MarkdownParser(font: baseFont, color: baseColor)
-        /// NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
-        /// To keep the MVP safe, link rendering is disabled.
-        markdownParser.enabledElements =  .all.subtracting([.link, .automaticLink])
-        markdownParser.header.font = headerFont
-        summaryView.attributedText = markdownParser.parse(dummyText)
         summaryView.accessibilityIdentifier = viewModel.summarizeTextViewA11yId
         summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
     }
@@ -287,30 +241,26 @@ public class SummarizeController: UIViewController, Themeable {
         let frameHeight = view.frame.height
         loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.1))
 
-        let transformAnimation = CABasicAnimation(keyPath: "transform.translation.y")
+        let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
         transformAnimation.fromValue = 0
         transformAnimation.toValue = frameHeight / 2
         transformAnimation.duration = UX.initialTransformAnimationDuration
         transformAnimation.timingFunction = UX.initialTransformTimingCurve
         transformAnimation.fillMode = .forwards
+        transformAnimation.delegate = self
         tabSnapshotContainer.layer.add(transformAnimation, forKey: "translation")
         tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0,
                                                            y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
 
         gradient.animatePositionChange(animationCurve: UX.initialTransformTimingCurve)
 
-        UIView.animate(withDuration: UX.initialTransformAnimationDuration, delay: 0.0, options: [], animations: {
+        UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
             self.loadingLabel.alpha = 1.0
-        }) { _ in
-            // TODO: - FXIOS-12858 replace this demo code with the actual backend API
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                self.showSummary()
-            }
         }
     }
 
-    private func showSummary() {
+    private func showSummary(_ summary: String) {
         let impact = UIImpactFeedbackGenerator(style: .medium)
         impact.prepare()
         impact.impactOccurred()
@@ -320,12 +270,14 @@ public class SummarizeController: UIViewController, Themeable {
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
+        summaryView.attributedText = makeMarkdownParser(baseColor: theme.colors.textPrimary).parse(summary)
+
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
-           gradient.alpha = 0.0
-           tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
-           loadingLabel.alpha = 0.0
-           summaryView.alpha = 1.0
-           view.backgroundColor = theme.colors.layer1
+            gradient.alpha = 0.0
+            tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
+            loadingLabel.alpha = 0.0
+            summaryView.alpha = 1.0
+            view.backgroundColor = theme.colors.layer1
         } completion: { [weak self] _ in
             guard let tabSnapshotView = self?.tabSnapshotContainer else { return }
             UIView.animate(withDuration: UX.tabSnapshotBringToFrontAnimationDuration) {
@@ -334,9 +286,58 @@ public class SummarizeController: UIViewController, Themeable {
         }
     }
 
+    private func showError(_ error: SummarizerError) {
+        let actionButtonLabel: String = if error.shouldRetrySummarizing {
+            viewModel.errorMessages.retryButtonLabel
+        } else {
+            viewModel.errorMessages.closeButtonLabel
+        }
+        errorView.configure(
+            viewModel: ErrorViewModel(
+                title: error.description(for: viewModel.errorMessages),
+                titleA11yId: viewModel.errorMessages.errorLabelA11yId,
+                actionButtonLabel: actionButtonLabel,
+                actionButtonA11yId: viewModel.errorMessages.errorButtonA11yId,
+                actionButtonCallback: { [weak self] in
+                    if error.shouldRetrySummarizing {
+                        self?.summarize()
+                    } else {
+                        self?.dismissSummary()
+                    }
+                }
+            )
+        )
+        loadingLabel.alpha = 0.0
+        UIView.animate(withDuration: UX.initialTransformAnimationDuration) { [self] in
+            errorView.alpha = 1.0
+        }
+    }
+
+    private func dismissSummary() {
+        UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
+            errorView.alpha = 0.0
+            loadingLabel.alpha = 0.0
+            tabSnapshotContainer.transform = .identity
+            tabSnapshot.layer.cornerRadius = 0.0
+        } completion: { [weak self] _ in
+            self?.dismiss(animated: true)
+        }
+    }
+
     override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         viewModel.onDismiss()
         super.dismiss(animated: flag, completion: completion)
+    }
+
+    private func makeMarkdownParser(baseColor: UIColor) -> MarkdownParser {
+        let baseFont = FXFontStyles.Regular.body.scaledFont()
+        let headerFont = FXFontStyles.Regular.title1.scaledFont()
+        let markdownParser = MarkdownParser(font: baseFont, color: baseColor)
+        /// NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
+        /// To keep the MVP safe, link rendering is disabled.
+        markdownParser.enabledElements =  .all.subtracting([.link, .automaticLink])
+        markdownParser.header.font = headerFont
+        return markdownParser
     }
 
     // MARK: - PanGesture
@@ -372,12 +373,7 @@ public class SummarizeController: UIViewController, Themeable {
         let shouldCloseSummary = abs(translationY) > view.frame.height * UX.panCloseSummaryHeightPercentageThreshold
                                  || panVelocityY > UX.panCloseSummaryVelocityThreshold
         if shouldCloseSummary {
-            UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
-                tabSnapshotContainer.transform = .identity
-                tabSnapshot.layer.cornerRadius = 0.0
-            } completion: { [weak self] _ in
-                self?.dismiss(animated: true)
-            }
+            dismissSummary()
         } else {
             UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
                 summaryView.alpha = 1.0
@@ -387,8 +383,15 @@ public class SummarizeController: UIViewController, Themeable {
         }
     }
 
-    // MARK: - Themeable
+    // MARK: - CAAnimationDelegate
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        guard flag,
+              let animation = anim as? CABasicAnimation,
+              animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
+        summarize()
+    }
 
+    // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         summaryView.textColor = theme.colors.textPrimary

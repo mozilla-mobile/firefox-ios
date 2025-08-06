@@ -8,7 +8,7 @@ import Common
 final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentViewSpacing: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.8
+        static let backgroundAlpha: CGFloat = 0.85
     }
 
     private var contentStackView: UIStackView = .build { stack in
@@ -93,7 +93,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         self.theme = theme
         backgroundColor = .clear
         if #available(iOS 26.0, *) {
-            contentStackView.backgroundColor = theme.colors.layer2.withAlphaComponent(UX.backgroundAlpha)
+            contentStackView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
         } else {
             contentStackView.backgroundColor = .clear
         }

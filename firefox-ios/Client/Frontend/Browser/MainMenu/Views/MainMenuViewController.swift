@@ -21,8 +21,9 @@ class MainMenuViewController: UIViewController,
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
-        static let backgroundAlpha: CGFloat = 0.8
+        static let backgroundAlpha: CGFloat = 0.85
         static let menuHeightTolerance: CGFloat = 30
+        static let topMarginCFR: CGFloat = 100
     }
     typealias SubscriberStateType = MainMenuState
 
@@ -36,7 +37,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     weak var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
@@ -99,8 +100,11 @@ class MainMenuViewController: UIViewController,
 
         viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
                                                   with: profile)
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -132,7 +136,10 @@ class MainMenuViewController: UIViewController,
         setupMenuOrientation()
 
         setupTableView()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
+
         store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: self.windowUUID,
@@ -298,7 +305,9 @@ class MainMenuViewController: UIViewController,
                   let window = windowScene.windows.first {
             window.addSubview(hintView)
 
-            if UIScreen.main.bounds.height < UX.hintViewHeight + menuContent.frame.height {
+            let contentHeight =  UX.hintViewHeight + menuContent.frame.height + UX.hintViewMargin
+            let safeHeight = UIScreen.main.bounds.height - UX.topMarginCFR
+            if safeHeight < contentHeight {
                 hintView.topAnchor.constraint(equalTo: menuContent.topAnchor,
                                               constant: UX.hintViewMargin).isActive = true
             } else {
@@ -421,7 +430,7 @@ class MainMenuViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         if #unavailable(iOS 26.0) {
-            view.backgroundColor = theme.colors.layer3.withAlphaComponent(UX.backgroundAlpha)
+            view.backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(UX.backgroundAlpha)
         }
         menuContent.applyTheme(theme: theme)
     }

@@ -65,6 +65,7 @@ public protocol ThemeColourPalette {
     var actionInformation: UIColor { get }
     var actionTabActive: UIColor { get }
     var actionTabInactive: UIColor { get }
+    var actionCloseButton: UIColor { get }
 
     // MARK: - Text
     var textPrimary: UIColor { get }

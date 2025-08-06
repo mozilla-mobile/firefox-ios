@@ -11,6 +11,7 @@ struct ErrorViewModel {
     let titleA11yId: String
     let actionButtonLabel: String
     let actionButtonA11yId: String
+    let actionButtonCallback: () -> Void
 }
 
 class ErrorView: UIView,
@@ -77,6 +78,9 @@ class ErrorView: UIView,
         label.accessibilityIdentifier = viewModel.titleA11yId
         actionButton.configuration?.title = viewModel.actionButtonLabel
         actionButton.accessibilityIdentifier = viewModel.actionButtonA11yId
+        actionButton.addAction(UIAction(handler: { _ in
+            viewModel.actionButtonCallback()
+        }), for: .touchUpInside)
     }
 
     // MARK: - ThemeApplicable

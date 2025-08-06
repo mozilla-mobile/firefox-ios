@@ -6,6 +6,7 @@ import Common
 import UIKit
 
 // Puts a backdrop (i.e. dark highlight) circle on the badged button.
+@MainActor
 class BadgeWithBackdrop: ThemeApplicable {
     struct UX {
         static let backdropAlpha: CGFloat = 0.05
@@ -16,7 +17,7 @@ class BadgeWithBackdrop: ThemeApplicable {
 
     // MARK: - Variables
     var backdrop: UIView
-    var badge: ToolbarBadge
+    let badge: ToolbarBadge
     private let backdropCircleSize: CGFloat
     private let isPrivateBadge: Bool
 

@@ -21,8 +21,11 @@ class LegacyWallpaperBackgroundView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        setupNotifications(forObserver: self,
-                           observing: [.WallpaperDidChange])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.WallpaperDidChange]
+        )
 
         updateImageToCurrentWallpaper()
     }
@@ -30,10 +33,6 @@ class LegacyWallpaperBackgroundView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     private func setupView() {
