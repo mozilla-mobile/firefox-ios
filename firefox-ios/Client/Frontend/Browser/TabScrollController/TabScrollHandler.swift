@@ -52,6 +52,9 @@ final class TabScrollHandler: NSObject,
         var isExpanded: Bool { self == .expanded }
         var isCollapsed: Bool { self == .collapsed }
 
+        /// Updates toolbar display state using move semantics for better performance.
+        /// `consuming` takes ownership to avoid copying, `consume` transfers ownership.
+        /// Performance: Eliminates defensive copying for faster updates.
         mutating func update(displayState: consuming ToolbarDisplayState) {
             guard self != displayState else { return }
             self = consume displayState
