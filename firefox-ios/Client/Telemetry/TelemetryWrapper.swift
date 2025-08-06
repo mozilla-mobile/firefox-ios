@@ -294,10 +294,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption.rawValue)
 
         // Record summarizer user preferences
-        if SummarizerNimbusUtils.shared.isSummarizeFeatureEnabled {
+        let summarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+        if summarizerNimbusUtils.isSummarizeFeatureEnabled {
             let summarizerTelemetry = SummarizerTelemetry()
-            summarizerTelemetry.summarizationEnabled(SummarizerNimbusUtils.shared.isSummarizeFeatureToggledOn)
-            summarizerTelemetry.summarizationShakeGestureEnabled(SummarizerNimbusUtils.shared.isShakeEnabled)
+            summarizerTelemetry.summarizationEnabled(summarizerNimbusUtils.isSummarizeFeatureEnabled)
+            summarizerTelemetry.summarizationShakeGestureEnabled(summarizerNimbusUtils.isShakeGestureEnabled)
         }
     }
 }

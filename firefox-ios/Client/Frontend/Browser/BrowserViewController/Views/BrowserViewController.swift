@@ -2771,7 +2771,7 @@ class BrowserViewController: UIViewController,
         case .dataClearance:
             didTapOnDataClearance()
         case .summarizer:
-            navigationHandler?.showSummarizePanel()
+            navigationHandler?.showSummarizePanel(.toolbarIcon)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
