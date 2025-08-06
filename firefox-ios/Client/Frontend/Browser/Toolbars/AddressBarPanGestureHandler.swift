@@ -7,7 +7,8 @@ import Common
 import Redux
 import Shared
 
-final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+@MainActor
+final class AddressBarPanGestureHandler: NSObject, @MainActor StoreSubscriber {
     /// Delegate protocol for handling address bar pan gesture events.
     /// Allows external objects to respond to swipe gesture state changes during tab switching.
     protocol Delegate: AnyObject {
@@ -79,10 +80,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         setupGesture()
     }
 
-    deinit {
-        unsubscribeFromRedux()
-    }
-
     private func setupGesture() {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addressToolbarContainer.addGestureRecognizer(gesture)
@@ -97,10 +94,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 return ToolbarState(appState: appState, uuid: uuid)
             })
         })
-    }
-
-    private func unsubscribeFromRedux() {
-        store.unsubscribe(self)
     }
 
     func newState(state: ToolbarState) {
