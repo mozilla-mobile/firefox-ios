@@ -37,6 +37,6 @@ public extension String {
     var numberOfWords: Int32 {
         let words = components(separatedBy: CharacterSet.whitespacesAndNewlines)
         let filteredWords = words.filter { !$0.isEmpty }
-        return Int32(filteredWords.count)
+        return Int32(clamping: filteredWords.count)
     }
 }
