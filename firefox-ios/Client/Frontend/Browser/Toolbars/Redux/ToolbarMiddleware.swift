@@ -16,8 +16,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizationChecker: SummarizationCheckerProtocol
     private let summarizerServiceFactory: SummarizerServiceFactory
-    private var isSummarizerEnabled: Bool {
-        return summarizerNimbusUtils.isSummarizeFeatureEnabled
+    private var isSummarizerOn: Bool {
+        return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
     private var isAppleSummarizerEnabled: Bool {
         return summarizerNimbusUtils.isAppleSummarizerEnabled()
@@ -423,7 +423,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     private func checkPageCanSummarize(action: ToolbarMiddlewareAction) {
         guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView,
-              isSummarizerEnabled else { return }
+              isSummarizerOn
+        else { return }
         let maxWords = summarizerServiceFactory.maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
                                                          isHostedSummarizerEnabled: isHostedSummaryEnabled)
         Task {

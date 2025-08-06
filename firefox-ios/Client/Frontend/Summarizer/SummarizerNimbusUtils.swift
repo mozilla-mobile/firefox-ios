@@ -7,6 +7,12 @@ import Common
 import Shared
 
 protocol SummarizerNimbusUtils {
+    /// Determines if the Summarize feature should be shown,
+    /// based on both feature availability and the user's settings.
+    var isSummarizeFeatureToggledOn: Bool { get }
+    /// Determines whether the Summarize feature is available,
+    /// regardless of the user's settings.
+    /// (i.e. we want to show the settings toggle to enable or disable summarize with this flag)
     var isSummarizeFeatureEnabled: Bool { get }
     var isShakeGestureEnabled: Bool { get }
     var isToolbarButtonEnabled: Bool { get }
@@ -20,19 +26,29 @@ protocol SummarizerNimbusUtils {
 struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     let prefs: Prefs
 
+    /// Determines if the Summarize feature should be shown,
+    /// based on both feature availability and the user's settings.
+    var isSummarizeFeatureToggledOn: Bool {
+        return isSummarizeFeatureEnabled && didUserEnableSummarizeFeature
+    }
+
+    /// Determines whether the Summarize feature is available,
+    /// regardless of the user's settings.
+    /// (i.e. we want to show the settings toggle to enable or disable summarize with this flag)
     var isSummarizeFeatureEnabled: Bool {
-        let isFeatureEnabled = isAppleSummarizerEnabled() || isHostedSummarizerEnabled()
-        return isFeatureEnabled && didUserEnableSummarizeFeature
+        return isAppleSummarizerEnabled() || isHostedSummarizerEnabled()
     }
 
     var isToolbarButtonEnabled: Bool {
-        return isHostedSummarizerToolbarEndpointEnabled() || isAppleSummarizerToolbarEndpointEnabled()
+        let summarizeFeatureOn = isSummarizeFeatureToggledOn
+        let isToolbarFeatureEnabled = isHostedSummarizerToolbarEndpointEnabled() || isAppleSummarizerToolbarEndpointEnabled()
+        return summarizeFeatureOn && isToolbarFeatureEnabled
     }
 
     /// Takes into consideration that summarize feature is on,
     /// shake feature flag is enabled, and user setting for shake is enabled
     var isShakeGestureEnabled: Bool {
-        let summarizeFeatureOn = isSummarizeFeatureEnabled
+        let summarizeFeatureOn = isSummarizeFeatureToggledOn
         let isShakeFlagEnabled = isShakeGestureFeatureFlagEnabled()
         let userSettingEnabled = didUserEnableShakeGestureFeature
         return summarizeFeatureOn && isShakeFlagEnabled && userSettingEnabled

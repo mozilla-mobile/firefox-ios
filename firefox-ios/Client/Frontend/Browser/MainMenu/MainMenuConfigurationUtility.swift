@@ -34,7 +34,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     private var isSummarizerOn: Bool {
-        return DefaultSummarizerNimbusUtils().isSummarizeFeatureEnabled
+        return DefaultSummarizerNimbusUtils().isSummarizeFeatureToggledOn
     }
 
     private var isDefaultZoomEnabled: Bool {
