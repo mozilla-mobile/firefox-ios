@@ -177,8 +177,11 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
             )
         )
 
+    product = "focus" if "focus" in parameters["shipping_phase"] else "firefox"
     parameters["version"] = version_string
-    parameters["head_tag"] = "firefox-v{}".format(version_string)
+    parameters["head_tag"] = "{}-v{}".format(
+        "focus/klar" if product == "focus" else product, version_string
+    )
     parameters["next_version"] = input["next_version"]
 
     release_type = "release"
@@ -186,6 +189,7 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
     if version.is_beta:
         release_type = "beta"
 
+    parameters["product_type"] = product
     parameters["release_type"] = release_type
     parameters["tasks_for"] = "action"
     parameters["pull_request_number"] = None

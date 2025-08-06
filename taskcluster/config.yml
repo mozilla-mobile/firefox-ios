@@ -59,3 +59,9 @@ release-promotion:
             target-tasks-method: push
         ship:
             target-tasks-method: ship
+        promote_focus:
+            target-tasks-method: promote_focus
+        push_focus:
+            target-tasks-method: push_focus
+        ship_focus:
+            target-tasks-method: ship_focus
