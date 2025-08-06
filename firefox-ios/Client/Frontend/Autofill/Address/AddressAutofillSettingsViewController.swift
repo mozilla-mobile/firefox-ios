@@ -161,9 +161,4 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     func addAddress() {
         self.viewModel.addressListViewModel.addAddressButtonTap()
     }
-
-    deinit {
-        addressAutofillSettingsPageView.removeFromParent()
-        addressAutofillSettingsPageView.view.removeFromSuperview()
-    }
 }

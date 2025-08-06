@@ -110,7 +110,7 @@ class SearchEngineSelectionViewController: UIViewController,
         })
     }
 
-    func unsubscribeFromRedux() {
+    nonisolated func unsubscribeFromRedux() {
         store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,
