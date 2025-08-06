@@ -54,6 +54,9 @@ public class SummarizeController: UIViewController, Themeable {
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
+        } else {
+            $0.configuration = .filled()
+            $0.configuration?.cornerStyle = .capsule
         }
         #else
             $0.configuration = .filled()
