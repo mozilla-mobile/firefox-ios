@@ -31,5 +31,6 @@ release_type: release
 repository_type: git
 shipping_phase: ship
 target_tasks_method: ship
+product_type: firefox
 tasks_for: action
 version: '137.0'

@@ -284,6 +284,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
     func testRecentlySaved_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()

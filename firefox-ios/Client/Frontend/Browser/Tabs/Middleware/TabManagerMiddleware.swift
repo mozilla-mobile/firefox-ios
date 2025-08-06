@@ -29,7 +29,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         && UIDevice.current.userInterfaceIdiom != .pad
     }
     private var isSummarizerEnabled: Bool {
-        return summarizerNimbusUtils.isSummarizeFeatureEnabled
+        return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
     private var isAppleSummarizerEnabled: Bool {
         return summarizerNimbusUtils.isAppleSummarizerEnabled()

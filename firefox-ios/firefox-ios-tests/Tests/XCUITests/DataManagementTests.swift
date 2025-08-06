@@ -97,7 +97,7 @@ class DataManagementTests: BaseTestCase {
         app.typeText("mozilla")
         mozWaitForElementToExist(app.tables["Search results"])
         let expectedSearchResults = app.tables["Search results"].cells.count
-        XCTAssertEqual(expectedSearchResults-1, 1)
+        XCTAssertEqual(expectedSearchResults, 1)
         app.buttons["Cancel"].waitAndTap()
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
         if #available(iOS 17, *) {

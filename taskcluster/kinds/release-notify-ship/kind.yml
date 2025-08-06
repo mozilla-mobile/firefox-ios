@@ -32,6 +32,9 @@ tasks:
       unique-kinds: false
       copy-attributes: true
       with-attributes:
+        product-type:
+          - firefox
+          - focus
         release-type:
           - beta
           - release

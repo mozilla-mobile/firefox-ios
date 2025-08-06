@@ -47,6 +47,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         case .toolbarUpdate:
             hintTypeShouldBePresented = canToolbarUpdateCFRBePresented
+        case .summarizeToolbarEntry:
+            hintTypeShouldBePresented = true
         }
 
         return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)

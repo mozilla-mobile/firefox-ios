@@ -55,7 +55,7 @@ class BrowserCoordinator: BaseCoordinator,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
     private var isSummarizerOn: Bool {
-        return summarizerNimbusUtils.isSummarizeFeatureEnabled
+        return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
 
     override var isDismissible: Bool { false }
