@@ -1575,7 +1575,9 @@ class BrowserViewController: UIViewController,
             if navigationContextHintVC.isPresenting {
                 navigationContextHintVC.dismiss(animated: true)
             }
-            if summarizeToolbarEntryContextHintVC.isPresenting {
+            // isPresenting is nil when going from landscape to portrait
+            // In general we want to dismiss when changing layout on iPhone
+            if summarizeToolbarEntryContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
                 summarizeToolbarEntryContextHintVC.dismiss(animated: true)
             }
         }
