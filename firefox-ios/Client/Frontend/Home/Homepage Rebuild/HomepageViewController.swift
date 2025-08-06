@@ -962,6 +962,7 @@ final class HomepageViewController: UIViewController,
                 )
                 return
             }
+            collectionView.layoutIfNeeded()
             for indexPath in collectionView.indexPathsForVisibleItems {
                 guard let section = dataSource?.sectionIdentifier(for: indexPath.section),
                       let item = dataSource?.itemIdentifier(for: indexPath) else { continue }
