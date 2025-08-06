@@ -7,9 +7,10 @@ import Foundation
 let sendLinkMsg1 = "You are not signed in to your account."
 let sendLinkMsg2 = "Please open Firefox, go to Settings and sign in to continue."
 
-class ShareToolbarTests: BaseTestCase {
+class ShareToolbarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864270
     func testShareNormalWebsiteTabReminders() {
+        app.launch()
         if #available(iOS 17, *) {
             tapToolbarShareButtonAndSelectOption(option: "Reminders")
             // The URL of the website is added in a new reminder
@@ -24,12 +25,14 @@ class ShareToolbarTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864279
     func testShareNormalWebsitePrint() {
+        app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Print")
         validatePrintLayout()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864277
     func testShareNormalWebsiteSendLinkToDevice() {
+        app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Send Link to Device")
         // If not signed in, the browser prompts you to sign in
         waitForElementsToExist(
@@ -42,18 +45,23 @@ class ShareToolbarTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864278
     func testShareNormalWebsiteMarkup() {
+        app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Markup")
         validateMarkupTool()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864276
     func testShareNormalWebsiteCopyUrl() {
+        app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Copy")
         openNewTabAndValidateURLisPaste(url: url_3)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864301
     func testShareWebsiteReaderModeReminders() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launch()
         if #available(iOS 17, *) {
             reachReaderModeShareMenuLayoutAndSelectOption(option: "Reminders")
             // The URL of the website is added in a new reminder
@@ -68,18 +76,27 @@ class ShareToolbarTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864310
     func testShareWebsiteReaderModePrint() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Print")
         validatePrintLayout()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864307
     func testShareWebsiteReaderModeCopy() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Copy")
         openNewTabAndValidateURLisPaste(url: "test-mozilla-book.html")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864308
     func testShareWebsiteReaderModeSendLink() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Send Link to Device")
         // If not signed in, the browser prompts you to sign in
         waitForElementsToExist(
@@ -92,24 +109,30 @@ class ShareToolbarTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864309
     func testShareWebsiteReaderModeMarkup() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
+        app.launch()
         reachReaderModeShareMenuLayoutAndSelectOption(option: "Markup")
         validateMarkupTool()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864293
     func testSharePdfFilePrint() {
+        app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Print", url: pdfUrl)
         validatePrintLayout()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864292
     func testSharePdfFileMarkup() {
+        app.launch()
         tapToolbarShareButtonAndSelectOption(option: "Markup", url: pdfUrl)
         validateMarkupTool()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864294
     func testSharePdfFileSaveToFile() {
+        app.launch()
         if #available(iOS 17, *) {
             tapToolbarShareButtonAndSelectOption(option: "Save to Files", url: pdfUrl)
             if !iPad() {
