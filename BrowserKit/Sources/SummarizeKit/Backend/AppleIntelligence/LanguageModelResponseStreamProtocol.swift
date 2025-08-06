@@ -16,9 +16,9 @@ import Foundation
 @available(iOS 26, *)
 protocol LanguageModelResponseStreamProtocol: AsyncSequence where Element == String {}
 
-@available(iOS 26, *)
-extension LanguageModelSession.ResponseStream: LanguageModelResponseStreamProtocol
-    where Content == String {}
+// @available(iOS 26, *)
+// extension LanguageModelSession.ResponseStream: LanguageModelResponseStreamProtocol
+//     where Content == String {}
 
 extension AsyncThrowingStream: LanguageModelResponseStreamProtocol
     where Element == String {}

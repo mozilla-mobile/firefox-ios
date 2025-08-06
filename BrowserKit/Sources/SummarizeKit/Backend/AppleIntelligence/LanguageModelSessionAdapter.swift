@@ -36,7 +36,8 @@ final class LanguageModelSessionAdapter: LanguageModelSessionProtocol {
         to prompt: Prompt,
         options: GenerationOptions
     ) -> any LanguageModelResponseStreamProtocol {
-        realSession.streamResponse(to: prompt, options: options)
+        // realSession.streamResponse(to: prompt, options: options)
+        return AsyncThrowingStream<String, Error> { $0.finish() }
     }
 }
 
