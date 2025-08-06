@@ -26,7 +26,9 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     var isToolbarButtonEnabled: Bool {
-        return isHostedSummarizerToolbarEndpointEnabled() || isAppleSummarizerToolbarEndpointEnabled()
+        let summarizeFeatureOn = isSummarizeFeatureEnabled
+        let isToolbarFeatureEnabled = isHostedSummarizerToolbarEndpointEnabled() || isAppleSummarizerToolbarEndpointEnabled()
+        return summarizeFeatureOn && isToolbarFeatureEnabled
     }
 
     /// Takes into consideration that summarize feature is on,
