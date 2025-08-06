@@ -186,7 +186,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
 
     func summarizerServiceDidComplete(_ summary: String, modelName: SummarizerModel) {
         summarizerTelemetry.summarizationCompleted(
-            lengthChars: Int32(summary.count),
+            lengthChars: Int32(clamping: summary.count),
             lengthWords: summary.numberOfWords,
             modelName: modelName.rawValue,
             outcome: true
