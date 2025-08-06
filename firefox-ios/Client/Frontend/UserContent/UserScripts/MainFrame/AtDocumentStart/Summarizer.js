@@ -42,7 +42,11 @@ const extractContent = () => {
   const doc = new DOMParser().parseFromString(clean, "text/html");
   const readability = new Readability(uri, doc);
   const readabilityResult = readability.parse();
-  return readabilityResult.textContent ?? readabilityResult.content;
+  const rawContent = readabilityResult.textContent ?? readabilityResult.content;
+  return rawContent
+    .trim()
+    // Replace duplicate whitespace with either a single newline or space
+    .replace(/(\s*\n\s*)|\s{2,}/g, (_, newline) => (newline ? "\n" : " "));
 };
 
 /**
