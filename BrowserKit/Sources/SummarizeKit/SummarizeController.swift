@@ -34,6 +34,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     private let summarizerService: SummarizerService
     private let webView: WKWebView
 
+    private let onSummaryDisplayed: () -> Void
+
     // MARK: - Themeable
     public let themeManager: any Common.ThemeManager
     public var themeListenerCancellable: Any?
@@ -99,7 +101,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         summarizerService: SummarizerService,
         webView: WKWebView,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        onSummaryDisplayed: @escaping () -> Void
     ) {
         self.currentWindowUUID = windowUUID
         self.notificationCenter = notificationCenter
@@ -107,6 +110,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         self.viewModel = viewModel
         self.summarizerService = summarizerService
         self.webView = webView
+        self.onSummaryDisplayed = onSummaryDisplayed
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -281,6 +285,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         } completion: { [weak self] _ in
             guard let tabSnapshotView = self?.tabSnapshotContainer else { return }
             UIView.animate(withDuration: UX.tabSnapshotBringToFrontAnimationDuration) {
+                self?.onSummaryDisplayed()
                 self?.view.bringSubviewToFront(tabSnapshotView)
             }
         }
@@ -309,6 +314,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         )
         loadingLabel.alpha = 0.0
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) { [self] in
+            self.onSummaryDisplayed()
             errorView.alpha = 1.0
         }
     }

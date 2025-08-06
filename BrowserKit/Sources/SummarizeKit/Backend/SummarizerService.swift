@@ -16,6 +16,9 @@ public final class SummarizerService {
     /// See UserScripts/MainFrame/AtDocumentStart/Summarizer.js for more context on how this is enforced.
     private let maxWords: Int
 
+    /// Lifecycle delegate for “started / completed / failed” callbacks.
+    public weak var summarizerLifecycle: SummarizerServiceLifecycle?
+
     public init(
         summarizer: SummarizerProtocol,
         checker: SummarizationCheckerProtocol = SummarizationChecker(),
@@ -32,11 +35,17 @@ public final class SummarizerService {
     func summarize(from webView: WKWebView) async throws -> String {
         do {
             let text = try await extractSummarizableText(from: webView)
-            return try await summarizer.summarize(text)
+            summarizerLifecycle?.summarizerServiceDidStart(text)
+            let summary = try await summarizer.summarize(text)
+            summarizerLifecycle?.summarizerServiceDidComplete(summary, modelName: summarizer.modelName)
+            return summary
         } catch let summarizerError as SummarizerError {
+            summarizerLifecycle?.summarizerServiceDidFail(summarizerError, modelName: summarizer.modelName)
             throw summarizerError
         } catch {
-            throw SummarizerError.unknown(error)
+            let summarizerError = SummarizerError.unknown(error)
+            summarizerLifecycle?.summarizerServiceDidFail(summarizerError, modelName: summarizer.modelName)
+            throw summarizerError
         }
     }
 
@@ -50,16 +59,23 @@ public final class SummarizerService {
             Task {
                 do {
                     let text = try await self.extractSummarizableText(from: webView)
+                    summarizerLifecycle?.summarizerServiceDidStart(text)
                     let stream = summarizer.summarizeStreamed(text)
+                    var summary = ""
 
                     for try await chunk in stream {
+                        summary += chunk
                         continuation.yield(chunk)
                     }
+                    summarizerLifecycle?.summarizerServiceDidComplete(summary, modelName: summarizer.modelName)
                     continuation.finish()
                 } catch let summarizerError as SummarizerError {
+                    summarizerLifecycle?.summarizerServiceDidFail(summarizerError, modelName: summarizer.modelName)
                     continuation.finish(throwing: summarizerError)
                 } catch {
-                    continuation.finish(throwing: SummarizerError.unknown(error))
+                    let summarizerError = SummarizerError.unknown(error)
+                    summarizerLifecycle?.summarizerServiceDidFail(summarizerError, modelName: summarizer.modelName)
+                    continuation.finish(throwing: summarizerError)
                 }
             }
         }

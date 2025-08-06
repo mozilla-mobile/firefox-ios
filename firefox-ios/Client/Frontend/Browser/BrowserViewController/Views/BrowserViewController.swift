@@ -839,7 +839,7 @@ class BrowserViewController: UIViewController,
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
         guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled else { return }
-        navigationHandler?.showSummarizePanel()
+        navigationHandler?.showSummarizePanel(.shakeGesture)
     }
 
     // MARK: - BrowserContentHiding
@@ -2771,7 +2771,7 @@ class BrowserViewController: UIViewController,
         case .dataClearance:
             didTapOnDataClearance()
         case .summarizer:
-            navigationHandler?.showSummarizePanel()
+            navigationHandler?.showSummarizePanel(.toolbarIcon)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)

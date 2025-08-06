@@ -6,6 +6,8 @@ import Foundation
 @testable import SummarizeKit
 
 final class MockSummarizer: SummarizerProtocol {
+    var modelName: SummarizerModel = .appleSummarizer
+
     /// If set, both `summarize` and `summarizeStreamed` will throw this error.
     var shouldThrowError: Error?
     /// The response content, split into chunks.
