@@ -753,6 +753,15 @@ public struct JsonEngineUrl {
      * this URL is visited.
      */
     public var excludePartnerCodeFromTelemetry: Bool
+    /**
+     * If this URL performs searches only for certain MIME types, they should
+     * be listed here. If this value is `None`, then it's assumed the content
+     * type is irrelevant. This field is intended to be used for URLs like
+     * visual search, which might support certain image types and not others.
+     * Consumers can use it to determine whether search UI corresponding to the
+     * URL should be shown to the user in a given context.
+     */
+    public var acceptedContentTypes: [String]?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -788,7 +797,15 @@ public struct JsonEngineUrl {
         /**
          * Whether the engine's partner code should be excluded from telemetry when
          * this URL is visited.
-         */excludePartnerCodeFromTelemetry: Bool) {
+         */excludePartnerCodeFromTelemetry: Bool, 
+        /**
+         * If this URL performs searches only for certain MIME types, they should
+         * be listed here. If this value is `None`, then it's assumed the content
+         * type is irrelevant. This field is intended to be used for URLs like
+         * visual search, which might support certain image types and not others.
+         * Consumers can use it to determine whether search UI corresponding to the
+         * URL should be shown to the user in a given context.
+         */acceptedContentTypes: [String]?) {
         self.base = base
         self.method = method
         self.params = params
@@ -796,6 +813,7 @@ public struct JsonEngineUrl {
         self.displayNameMap = displayNameMap
         self.isNewUntil = isNewUntil
         self.excludePartnerCodeFromTelemetry = excludePartnerCodeFromTelemetry
+        self.acceptedContentTypes = acceptedContentTypes
     }
 }
 
@@ -827,6 +845,9 @@ extension JsonEngineUrl: Equatable, Hashable {
         if lhs.excludePartnerCodeFromTelemetry != rhs.excludePartnerCodeFromTelemetry {
             return false
         }
+        if lhs.acceptedContentTypes != rhs.acceptedContentTypes {
+            return false
+        }
         return true
     }
 
@@ -838,6 +859,7 @@ extension JsonEngineUrl: Equatable, Hashable {
         hasher.combine(displayNameMap)
         hasher.combine(isNewUntil)
         hasher.combine(excludePartnerCodeFromTelemetry)
+        hasher.combine(acceptedContentTypes)
     }
 }
 
@@ -856,7 +878,8 @@ public struct FfiConverterTypeJSONEngineUrl: FfiConverterRustBuffer {
                 searchTermParamName: FfiConverterOptionString.read(from: &buf), 
                 displayNameMap: FfiConverterOptionDictionaryStringString.read(from: &buf), 
                 isNewUntil: FfiConverterOptionString.read(from: &buf), 
-                excludePartnerCodeFromTelemetry: FfiConverterBool.read(from: &buf)
+                excludePartnerCodeFromTelemetry: FfiConverterBool.read(from: &buf), 
+                acceptedContentTypes: FfiConverterOptionSequenceString.read(from: &buf)
         )
     }
 
@@ -868,6 +891,7 @@ public struct FfiConverterTypeJSONEngineUrl: FfiConverterRustBuffer {
         FfiConverterOptionDictionaryStringString.write(value.displayNameMap, into: &buf)
         FfiConverterOptionString.write(value.isNewUntil, into: &buf)
         FfiConverterBool.write(value.excludePartnerCodeFromTelemetry, into: &buf)
+        FfiConverterOptionSequenceString.write(value.acceptedContentTypes, into: &buf)
     }
 }
 
@@ -1445,6 +1469,15 @@ public struct SearchEngineUrl {
      * this URL is visited.
      */
     public var excludePartnerCodeFromTelemetry: Bool
+    /**
+     * If this URL performs searches only for certain MIME types, they should
+     * be listed here. If `None`, it's assumed the content type is text or not
+     * relevant. This field is intended to be used for URLs like visual search,
+     * which might support certain image types and not others. Consumers can
+     * use it to determine whether search UI corresponding to the URL should be
+     * shown to the user in a given context.
+     */
+    public var acceptedContentTypes: [String]?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -1477,7 +1510,15 @@ public struct SearchEngineUrl {
         /**
          * Whether the engine's partner code should be excluded from telemetry when
          * this URL is visited.
-         */excludePartnerCodeFromTelemetry: Bool = false) {
+         */excludePartnerCodeFromTelemetry: Bool = false, 
+        /**
+         * If this URL performs searches only for certain MIME types, they should
+         * be listed here. If `None`, it's assumed the content type is text or not
+         * relevant. This field is intended to be used for URLs like visual search,
+         * which might support certain image types and not others. Consumers can
+         * use it to determine whether search UI corresponding to the URL should be
+         * shown to the user in a given context.
+         */acceptedContentTypes: [String]? = nil) {
         self.base = base
         self.method = method
         self.params = params
@@ -1485,6 +1526,7 @@ public struct SearchEngineUrl {
         self.displayName = displayName
         self.isNewUntil = isNewUntil
         self.excludePartnerCodeFromTelemetry = excludePartnerCodeFromTelemetry
+        self.acceptedContentTypes = acceptedContentTypes
     }
 }
 
@@ -1516,6 +1558,9 @@ extension SearchEngineUrl: Equatable, Hashable {
         if lhs.excludePartnerCodeFromTelemetry != rhs.excludePartnerCodeFromTelemetry {
             return false
         }
+        if lhs.acceptedContentTypes != rhs.acceptedContentTypes {
+            return false
+        }
         return true
     }
 
@@ -1527,6 +1572,7 @@ extension SearchEngineUrl: Equatable, Hashable {
         hasher.combine(displayName)
         hasher.combine(isNewUntil)
         hasher.combine(excludePartnerCodeFromTelemetry)
+        hasher.combine(acceptedContentTypes)
     }
 }
 
@@ -1545,7 +1591,8 @@ public struct FfiConverterTypeSearchEngineUrl: FfiConverterRustBuffer {
                 searchTermParamName: FfiConverterOptionString.read(from: &buf), 
                 displayName: FfiConverterOptionString.read(from: &buf), 
                 isNewUntil: FfiConverterOptionString.read(from: &buf), 
-                excludePartnerCodeFromTelemetry: FfiConverterBool.read(from: &buf)
+                excludePartnerCodeFromTelemetry: FfiConverterBool.read(from: &buf), 
+                acceptedContentTypes: FfiConverterOptionSequenceString.read(from: &buf)
         )
     }
 
@@ -1557,6 +1604,7 @@ public struct FfiConverterTypeSearchEngineUrl: FfiConverterRustBuffer {
         FfiConverterOptionString.write(value.displayName, into: &buf)
         FfiConverterOptionString.write(value.isNewUntil, into: &buf)
         FfiConverterBool.write(value.excludePartnerCodeFromTelemetry, into: &buf)
+        FfiConverterOptionSequenceString.write(value.acceptedContentTypes, into: &buf)
     }
 }
 
@@ -2591,6 +2639,30 @@ fileprivate struct FfiConverterOptionTypeJSONEngineMethod: FfiConverterRustBuffe
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterTypeJSONEngineMethod.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionSequenceString: FfiConverterRustBuffer {
+    typealias SwiftType = [String]?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterSequenceString.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterSequenceString.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
