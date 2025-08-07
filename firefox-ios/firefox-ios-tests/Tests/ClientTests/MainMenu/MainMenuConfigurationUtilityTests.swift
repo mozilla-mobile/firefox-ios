@@ -14,11 +14,13 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         configUtility = MainMenuConfigurationUtility()
     }
 
     override func tearDown() {
         super.tearDown()
+        DependencyHelperMock().reset()
         configUtility = nil
     }
 
