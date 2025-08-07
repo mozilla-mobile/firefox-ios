@@ -96,6 +96,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             String(format: .Summarizer.HostedBrandLabel, AppName.shortName.rawValue)
         }
         let model = SummarizeViewModel(
+            titleLabelA11yId: AccessibilityIdentifiers.Summarizer.titleLabel,
             loadingLabel: .Summarizer.LoadingLabel,
             loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
             loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel,
