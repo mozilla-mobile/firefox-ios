@@ -448,12 +448,6 @@ class BrowserViewController: UIViewController,
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
-        
-        if isTabScrollRefactoringEnabled {
-            scrollController = TabScrollHandler(windowUUID: windowUUID)
-        } else {
-            scrollController = LegacyTabScrollController(windowUUID: windowUUID)
-        }
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -1686,7 +1680,9 @@ class BrowserViewController: UIViewController,
                 // if we don't have the URL bar at the top then header height is 0
                 make.height.equalTo(0)
             } else {
-                scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                if let scrollController = scrollController as? LegacyTabScrollProvider {
+                    scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                }
                 make.left.right.equalTo(view)
             }
         }
@@ -1711,8 +1707,10 @@ class BrowserViewController: UIViewController,
             }
         }
 
+        let legacyScrollController = scrollController as? LegacyTabScrollProvider
         overKeyboardContainer.snp.remakeConstraints { make in
-            scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+            legacyScrollController?.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+            
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
             } else if !isBottomSearchBar {
@@ -1722,7 +1720,7 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.snp.remakeConstraints { make in
-            scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            legacyScrollController?.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
             make.leading.trailing.equalTo(view)
         }
 
