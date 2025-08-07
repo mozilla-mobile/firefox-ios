@@ -6,7 +6,6 @@ import Foundation
 import Common
 import UIKit
 import ComponentLibrary
-import MarkdownKit
 import WebKit
 import Down
 
