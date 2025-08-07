@@ -656,7 +656,6 @@
 		5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */; };
 		5AA75A652A46274A00533F8D /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75A622A46272000533F8D /* MockThemeManager.swift */; };
 		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
-		5AC40329291AFBDB002BF91C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
 		5AC7110729F822E60011ED11 /* MockTabSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */; };
 		5AD3B6742CF625B000AFA1FE /* DefaultBrowserUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B6732CF625A300AFA1FE /* DefaultBrowserUtil.swift */; };
 		5AD3B6782CF650DF00AFA1FE /* DefaultBrowserUitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B6772CF650D000AFA1FE /* DefaultBrowserUitTests.swift */; };
@@ -1779,7 +1778,6 @@
 		D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */; };
 		D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */; };
 		D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */; };
-		D83822001FC7961D00303C12 /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
 		D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */; };
 		D87F84AC20B891160091F2DA /* TopTabDisplayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87F84AB20B891160091F2DA /* TopTabDisplayManager.swift */; };
 		D88C01B722B29EC200936951 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
@@ -10060,7 +10058,6 @@
 		D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabContentSettingsViewController.swift; sourceTree = "<group>"; };
 		D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiriSettingsViewController.swift; sourceTree = "<group>"; };
 		D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSearchPrefsTests.swift; sourceTree = "<group>"; };
-		D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueHelper.swift; sourceTree = "<group>"; };
 		D84C455F8028E9B48004E77F /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		D87F84AB20B891160091F2DA /* TopTabDisplayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabDisplayManager.swift; sourceTree = "<group>"; };
@@ -11720,7 +11717,6 @@
 				2165B2C12860C2F4004C0786 /* AdjustTelemetryHelper.swift */,
 				8AABBD002A001ADF0089941E /* ApplicationHelper.swift */,
 				962F39492672D57A006BDA2A /* BookmarkItemsHelper.swift */,
-				D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */,
 				96A5F73729928B3700234E5F /* GeneralizedImageFetcher.swift */,
 				8A7A26E429D4C0A800EA76F1 /* IntroScreenManager.swift */,
 				DA27EEDA28BADF4700DD6F5D /* MenuBuilderHelper.swift */,
@@ -12301,13 +12297,6 @@
 				D3A994951A3686BD008AD1AC /* BrowserViewController.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		818756162BB4616700DCD1F3 /* Actions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Actions;
 			sourceTree = "<group>";
 		};
 		818756172BB4616B00DCD1F3 /* Views */ = {
@@ -14276,7 +14265,6 @@
 		C8BD875D2A0C23F500CD803A /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				818756162BB4616700DCD1F3 /* Actions */,
 				818756172BB4616B00DCD1F3 /* Views */,
 				818756182BB4617600DCD1F3 /* State */,
 				C88E7A532A0552F10072E638 /* Models */,
@@ -17516,7 +17504,6 @@
 				F80DF74B270CB9CA00E4C37D /* AppAuthenticator.swift in Sources */,
 				F8B7109F2ABE38970029726E /* RustErrors.swift in Sources */,
 				F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */,
-				5AC40329291AFBDB002BF91C /* DispatchQueueHelper.swift in Sources */,
 				C8CE389C265E71E00009B09E /* CredentialListViewController.swift in Sources */,
 				8A9F4F0A2DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */,
 				C8CE38B9265E71FE0009B09E /* EmptyPlaceholderCell.swift in Sources */,
@@ -18136,7 +18123,6 @@
 				E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */,
 				0A7693692C81F2A300103A6D /* TrackingProtectionConnectionDetailsView.swift in Sources */,
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
-				D83822001FC7961D00303C12 /* DispatchQueueHelper.swift in Sources */,
 				BA4BB99A2D7F374C006BD137 /* AppearanceSettingsView.swift in Sources */,
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
 				21F422662E315E5C004FF994 /* LegacyTabScrollController.swift in Sources */,

@@ -110,8 +110,6 @@ extension Themeable where Self: UIViewController {
             themeUpdateClosure: { [weak self] notification in
                 guard let self else { return }
 
-                print("Theme update for \(String(describing: self))")
-
                 self.applyTheme()
                 self.updateThemeApplicableSubviews(self.view, for: self.currentWindowUUID)
             }
@@ -126,8 +124,6 @@ extension Themeable where Self: UIView {
             withNotificationCenter: notificationCenter,
             themeUpdateClosure: { [weak self] notification in
                 guard let self else { return }
-
-                print("Theme update for \(String(describing: self))")
 
                 self.applyTheme()
                 self.updateThemeApplicableSubviews(self, for: self.currentWindowUUID)
