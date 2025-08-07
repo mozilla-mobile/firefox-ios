@@ -173,12 +173,12 @@ let package = Package(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],
             resources: [
-                .process("Shaders")
+//                .process("Shaders")
             ],
             swiftSettings: [.unsafeFlags(["-enable-testing"])],
             linkerSettings: [
-                .linkedFramework("Metal"),
-                .linkedFramework("MetalKit")
+//                .linkedFramework("Metal"),
+//                .linkedFramework("MetalKit")
             ]),
         .testTarget(
             name: "OnboardingKitTests",
