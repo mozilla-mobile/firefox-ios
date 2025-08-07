@@ -5,22 +5,20 @@
 import XCTest
 @testable import MenuKit
 
-final class MenuTableViewTests: XCTestCase {
-    var menuView: MenuTableView!
+final class MenuTableViewHelperTests: XCTestCase {
+    var tableView: UITableView!
+    var helper: MenuTableViewHelper!
 
     override func setUp() {
         super.setUp()
-        menuView = MenuTableView()
+        tableView = UITableView()
+        helper = MenuTableViewHelper(tableView: tableView)
     }
 
     override func tearDown() {
-        menuView = nil
+        tableView = nil
+        helper = nil
         super.tearDown()
-    }
-
-    func testTableView_isSetUpCorrectly() {
-        XCTAssertNotNil(menuView)
-        XCTAssertTrue(menuView.subviews.contains { $0 is UITableView })
     }
 
     func testReload_withMenuData() {
@@ -35,11 +33,11 @@ final class MenuTableViewTests: XCTestCase {
             action: nil
         )
         let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
-        menuView.reloadTableView(with: [section], isBannerVisible: false)
+        helper.updateData([section], theme: nil, isBannerVisible: false)
+        helper.reload()
 
-        XCTAssertEqual(menuView.tableViewContentSize > 0, true)
-        XCTAssertEqual(menuView.tableView.numberOfSections, 1)
-        XCTAssertEqual(menuView.tableView(menuView.tableView, numberOfRowsInSection: 0), 1)
+        XCTAssertEqual(tableView.contentSize.height > 0, true)
+        XCTAssertEqual(tableView.numberOfSections, 1)
     }
 
     func testCellForRow_shouldReturnAccountCellType() {
@@ -55,10 +53,13 @@ final class MenuTableViewTests: XCTestCase {
             a11yId: "",
             action: nil
         )
-        let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
-        menuView.reloadTableView(with: [section], isBannerVisible: false)
 
-        let cell = menuView.tableView(menuView.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        tableView.register(MenuAccountCell.self, forCellReuseIdentifier: MenuAccountCell.cellIdentifier)
+        let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
+        helper.updateData([section], theme: nil, isBannerVisible: false)
+        helper.reload()
+
+        let cell = helper.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuAccountCell)
     }
 
@@ -73,10 +74,14 @@ final class MenuTableViewTests: XCTestCase {
             a11yId: "",
             action: nil
         )
-        let section = MenuSection(isHorizontalTabsSection: true, isExpanded: true, options: [option])
-        menuView.reloadTableView(with: [section], isBannerVisible: false)
 
-        let cell = menuView.tableView(menuView.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        tableView.register(MenuSquaresViewContentCell.self,
+                           forCellReuseIdentifier: MenuSquaresViewContentCell.cellIdentifier)
+        let section = MenuSection(isHorizontalTabsSection: true, isExpanded: true, options: [option])
+        helper.updateData([section], theme: nil, isBannerVisible: false)
+        helper.reload()
+
+        let cell = helper.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuSquaresViewContentCell)
     }
 
@@ -92,10 +97,13 @@ final class MenuTableViewTests: XCTestCase {
             infoTitle: "Title Test",
             action: nil
         )
-        let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
-        menuView.reloadTableView(with: [section], isBannerVisible: false)
 
-        let cell = menuView.tableView(menuView.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        tableView.register(MenuInfoCell.self, forCellReuseIdentifier: MenuInfoCell.cellIdentifier)
+        let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
+        helper.updateData([section], theme: nil, isBannerVisible: false)
+        helper.reload()
+
+        let cell = helper.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuInfoCell)
     }
 
@@ -110,10 +118,13 @@ final class MenuTableViewTests: XCTestCase {
             a11yId: "",
             action: nil
         )
-        let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
-        menuView.reloadTableView(with: [section], isBannerVisible: false)
 
-        let cell = menuView.tableView(menuView.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        tableView.register(MenuCell.self, forCellReuseIdentifier: MenuCell.cellIdentifier)
+        let section = MenuSection(isHorizontalTabsSection: false, isExpanded: true, options: [option])
+        helper.updateData([section], theme: nil, isBannerVisible: false)
+        helper.reload()
+
+        let cell = helper.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuCell)
     }
 }
