@@ -755,7 +755,7 @@ open class BrowserProfile: Profile,
         default: "phone"
         }
         return RemoteSettingsContext(
-            channel: appInfo.buildChannel?.rawValue ?? "release",
+            channel: appInfo.buildChannel.rawValue,
             appVersion: AppInfo.appVersion,
             appId: AppInfo.bundleIdentifier,
             /// `Locale.current.identifier` uses an underscore (e.g. “en_US”), which is not supported by RS.

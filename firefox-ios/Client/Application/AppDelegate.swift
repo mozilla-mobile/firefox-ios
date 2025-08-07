@@ -66,10 +66,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         startRecordingStartupOpenURLTime()
-        // Configure app information for BrowserKit, needed for logger
-        BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
-                                               nightlyAppVersion: AppConstants.nightlyAppVersion,
-                                               sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
         // Set-up Rust network stack. Note that this has to be called
         // before any Application Services component gets used.
