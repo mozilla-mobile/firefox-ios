@@ -54,7 +54,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     private let titleLabel: UILabel = .build {
         let isFontInAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
         $0.numberOfLines = isFontInAccessibilityCategory ? 2 : 3
-        $0.font = FXFontStyles.Regular.title1.scaledFont()
+        $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.adjustsFontForContentSizeCategory = true
         $0.showsLargeContentViewer = true
         $0.isUserInteractionEnabled = true
