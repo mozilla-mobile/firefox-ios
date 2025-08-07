@@ -284,9 +284,10 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         let brandedSummary = """
         ###### *\(viewModel.brandLabel)*
-        
+
         \(summary)
         """
+
         summaryView.attributedText = parse(markdown: brandedSummary)
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             gradient.alpha = 0.0
