@@ -53,7 +53,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     // MARK: - UI properties
     private let titleLabel: UILabel = .build {
         let isFontInAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
-        $0.numberOfLines = isFontInAccessibilityCategory ? 2 : 4
+        $0.numberOfLines = isFontInAccessibilityCategory ? 2 : 3
         $0.font = FXFontStyles.Regular.title1.scaledFont()
         $0.adjustsFontForContentSizeCategory = true
         $0.showsLargeContentViewer = true
@@ -379,7 +379,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func parse(markdown: String) -> NSAttributedString? {
-        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textPrimary
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let textColor = theme.colors.textPrimary
         let parser = Down(markdownString: markdown)
         return try? parser.toAttributedString(
             styler: CustomStyler(
@@ -409,7 +410,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
                         quoteStripe: textColor,
                         thematicBreak: textColor,
                         listItemPrefix: textColor,
-                        codeBlockBackground: textColor
+                        codeBlockBackground: .clear
                     )
                 )
             )
@@ -472,7 +473,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
         DispatchQueue.main.async { [weak self] in
             let isFontInAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
-            self?.titleLabel.numberOfLines = isFontInAccessibilityCategory ? 2 : 0
+            self?.titleLabel.numberOfLines = isFontInAccessibilityCategory ? 2 : 3
         }
     }
 
