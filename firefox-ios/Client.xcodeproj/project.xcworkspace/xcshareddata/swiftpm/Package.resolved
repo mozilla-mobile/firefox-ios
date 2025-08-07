@@ -1,5 +1,5 @@
 {
-  "originHash" : "07e754f1a18a49a28fa0ad66be53519032b34c7e4d4236ec0ca15a4b6f7bab82",
+  "originHash" : "b1d3d8248618ee0b9328b70113d5ffde4b1075d6dc5d75aaa2717907e7fbbb3a",
   "pins" : [
     {
       "identity" : "a-star",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
         "version" : "7.1.1"
+      }
+    },
+    {
+      "identity" : "down",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/johnxnguyen/Down.git",
+      "state" : {
+        "revision" : "f34b166be1f1db4aa8f573067e901d72f2a6be57",
+        "version" : "0.11.0"
       }
     },
     {
@@ -89,15 +98,6 @@
       "state" : {
         "branch" : "master",
         "revision" : "f56a6e483163a761adc8cd25c337db0ed1eac524"
-      }
-    },
-    {
-      "identity" : "markdownkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/bmoliveira/MarkdownKit.git",
-      "state" : {
-        "revision" : "39ea7a3fc7e65bcafe55152592b834859be574a5",
-        "version" : "1.7.3"
       }
     },
     {

@@ -90,10 +90,16 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             retryButtonLabel: .Summarizer.RetryButtonLabel,
             closeButtonLabel: .Summarizer.CloseButtonLabel
         )
+        let brandLabel: String = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
+            .Summarizer.AppleBrandLabel
+        } else {
+            String(format: .Summarizer.HostedBrandLabel, AppName.shortName.rawValue)
+        }
         let model = SummarizeViewModel(
             loadingLabel: .Summarizer.LoadingLabel,
             loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
             loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel,
+            brandLabel: brandLabel,
             summarizeTextViewA11yLabel: .Summarizer.SummaryTextAccessibilityLabel,
             summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
             closeButtonModel: CloseButtonViewModel(
