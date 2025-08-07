@@ -13,6 +13,8 @@ class CustomStyler: DownStyler {
     // NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
     // To keep the MVP safe, link rendering is disabled.
     override func style(link str: NSMutableAttributedString, title: String?, url: String?) {}
+
+    override func style(image str: NSMutableAttributedString, title: String?, url: String?) {}
 }
 
 public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
@@ -281,7 +283,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
         let brandedSummary = """
-        ###### *\(viewModel.brandLabel)* \n
+        ###### *\(viewModel.brandLabel)*
+        
         \(summary)
         """
         summaryView.attributedText = parse(markdown: brandedSummary)
