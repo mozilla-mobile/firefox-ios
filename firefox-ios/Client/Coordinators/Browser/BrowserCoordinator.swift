@@ -1176,7 +1176,8 @@ class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             router: router,
             themeManager: AppContainer.shared.resolve(),
-            notificationCenter: NotificationCenter.default
+            notificationCenter: NotificationCenter.default,
+            prefs: profile.prefs
         )
         guard coordinator.shouldShowTermsOfUse() else { return }
         coordinator.parentCoordinator = self
