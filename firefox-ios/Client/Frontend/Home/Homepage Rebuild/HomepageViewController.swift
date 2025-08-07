@@ -179,7 +179,6 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        collectionView?.collectionViewLayout.invalidateLayout()
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
 
@@ -962,7 +961,6 @@ final class HomepageViewController: UIViewController,
                 )
                 return
             }
-            collectionView.layoutIfNeeded()
             for indexPath in collectionView.indexPathsForVisibleItems {
                 guard let section = dataSource?.sectionIdentifier(for: indexPath.section),
                       let item = dataSource?.itemIdentifier(for: indexPath) else { continue }

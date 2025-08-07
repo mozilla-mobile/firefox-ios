@@ -246,8 +246,12 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         let populatedState = await getPopulatedCollectionViewState(from: initialState)
 
-        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
+        // reload the collectionView so that it's content is visible
         subject.loadViewIfNeeded()
+        subject.newState(state: populatedState)
+        subject.view.layoutIfNeeded()
+
         subject.newState(state: populatedState)
 
         subject.viewDidAppear(false)
@@ -292,8 +296,12 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         let populatedState = await getPopulatedCollectionViewState(from: initialState)
 
-        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
+        // reload the collectionView so that it's content is visible
         subject.loadViewIfNeeded()
+        subject.newState(state: populatedState)
+        subject.view.layoutIfNeeded()
+
         subject.newState(state: populatedState)
 
         subject.scrollViewDidEndDecelerating(UIScrollView())
@@ -319,8 +327,12 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             )
         )
 
-        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
+        // reload the collectionView so that it's content is visible
         subject.loadViewIfNeeded()
+        subject.newState(state: newState)
+        subject.view.layoutIfNeeded()
+
         subject.newState(state: newState)
 
         XCTAssertTrue(newState.shouldTriggerImpression)
@@ -343,6 +355,12 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         let populatedState = await getPopulatedCollectionViewState(from: initialState)
 
+        // Need to call loadViewIfNeeded to load the view, newState to populate the datasource, and layoutIfNeeded to
+        // reload the collectionView so that it's content is visible
+        subject.loadViewIfNeeded()
+        subject.newState(state: populatedState)
+        subject.view.layoutIfNeeded()
+
         let newState = HomepageState.reducer(
             populatedState,
             GeneralBrowserAction(
@@ -351,8 +369,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             )
         )
 
-        // Need to call loadViewIfNeeded and newState to populate the datasource
-        subject.loadViewIfNeeded()
         subject.newState(state: newState)
 
         XCTAssertTrue(newState.shouldTriggerImpression)
@@ -363,6 +379,31 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_newState_forTriggeringImpression_withNoVisibleSections_doesNotTriggersHomepageAction() throws {
+        setIsStoriesRedesignEnabled(isEnabled: true)
+        let subject = createSubject()
+        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
+
+        subject.loadViewIfNeeded()
+
+        let newState = HomepageState.reducer(
+            initialState,
+            GeneralBrowserAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+            )
+        )
+        subject.newState(state: newState)
+
+        XCTAssertTrue(newState.shouldTriggerImpression)
+        XCTAssertTrue(mockThrottler.didCallThrottle)
+        let homepageActions = mockStore.dispatchedActions.compactMap { $0 as? HomepageAction }
+        let sectionSeenAction = homepageActions.first(where: {
+            ($0.actionType as? HomepageActionType) == .sectionSeen
+        })
+        XCTAssertNil(sectionSeenAction)
     }
 
     func test_newState_didSelectedTabChangeToHomepageAction_forScrollToTop_setsCollectionViewOffsetToZero() {
