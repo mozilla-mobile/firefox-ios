@@ -9,6 +9,10 @@ import Common
 
 @MainActor
 protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
+    var headerTopConstraint: Constraint? { get set }
+    var overKeyboardContainerConstraint: Constraint? { get set }
+    var bottomContainerConstraint: Constraint? { get set }
+
     func updateMinimumZoom()
     func setMinimumZoom()
     func resetZoomState()

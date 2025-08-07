@@ -8,10 +8,6 @@ import Shared
 import Common
 
 protocol TabScrollHandlerProtocol: AnyObject {
-    var headerTopConstraint: Constraint? { get set }
-    var overKeyboardContainerConstraint: Constraint? { get set }
-    var bottomContainerConstraint: Constraint? { get set }
-
     var zoomPageBar: ZoomPageBar? { get set }
     var tab: Tab? { get set }
     var contentOffset: CGPoint { get }
@@ -93,14 +89,14 @@ final class TabScrollHandler: NSObject,
         }
     }
 
-    // Toolbar  Constraints
-    var headerTopConstraint: Constraint?
-    var overKeyboardContainerConstraint: Constraint?
-    var bottomContainerConstraint: Constraint?
-
+    // Toolbar height and offset
     private var overKeyboardScrollHeight: CGFloat = 0
     private var bottomContainerScrollHeight: CGFloat = 0
     private var headerHeight: CGFloat = 0
+    private var headerTopOffset: CGFloat = 0
+    private var overKeyboardContainerOffset: CGFloat = 0
+    private var bottomContainerOffset: CGFloat = 0
+
     weak var zoomPageBar: ZoomPageBar?
     private var observedScrollViews = WeakList<UIScrollView>()
 
@@ -117,13 +113,6 @@ final class TabScrollHandler: NSObject,
     private var isZoomedOut = false
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
-
-    // Top Toolbar offset updates related constraints
-    private var headerTopOffset: CGFloat = 0 {
-        didSet {
-            headerTopConstraint?.update(offset: headerTopOffset)
-        }
-    }
 
     /// Calculates the header offset based on device type and toolbar visibility.
     ///
@@ -144,19 +133,6 @@ final class TabScrollHandler: NSObject,
             return baseOffset
         }
         return baseOffset + UX.heightOffset
-    }
-
-    // Bottom toolbar offset updates related constraints
-    private var overKeyboardContainerOffset: CGFloat = 0 {
-        didSet {
-            overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
-        }
-    }
-
-    private var bottomContainerOffset: CGFloat = 0 {
-        didSet {
-            bottomContainerConstraint?.update(offset: bottomContainerOffset)
-        }
     }
 
     /// Helper method for testing overKeyboardScrollHeight behavior.
