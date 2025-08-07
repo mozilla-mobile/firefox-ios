@@ -46,7 +46,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markShownThisLaunch)
         middleware.termsOfUseProvider(AppState(), action)
 
-        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) != true)
+        XCTAssertFalse(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == false)
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNil(dismissedTimestamp)
     }
