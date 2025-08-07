@@ -17,7 +17,7 @@ class CustomStyler: DownStyler {
     override func style(image str: NSMutableAttributedString, title: String?, url: String?) {}
 }
 
-public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
+public class SummarizeController: UIViewController, Themeable, Notifiable, CAAnimationDelegate {
     private struct UX {
         static let tabSnapshotInitialTransformPercentage: CGFloat = 0.5
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
@@ -52,8 +52,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
     // MARK: - UI properties
     private let titleLabel: UILabel = .build {
-        $0.alpha = 0
-        $0.numberOfLines = 2
+        let isFontInAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+        $0.numberOfLines = isFontInAccessibilityCategory ? 2 : 4
         $0.font = FXFontStyles.Regular.title1.scaledFont()
         $0.adjustsFontForContentSizeCategory = true
         $0.showsLargeContentViewer = true
@@ -146,6 +146,11 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         view.backgroundColor = .clear
         applyTheme()
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
     }
 
     override public func viewWillAppear(_ animated: Bool) {
@@ -386,7 +391,10 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                         heading4: FXFontStyles.Regular.headline.scaledFont(),
                         heading5: FXFontStyles.Regular.caption1.scaledFont(),
                         heading6: FXFontStyles.Regular.caption2.scaledFont(),
-                        body: FXFontStyles.Regular.body.scaledFont()),
+                        body: FXFontStyles.Regular.body.scaledFont(),
+                        code: FXFontStyles.Regular.body.monospacedFont(),
+                        listItemPrefix: FXFontStyles.Regular.body.scaledFont()
+                    ),
                     colors: StaticColorCollection(
                         heading1: textColor,
                         heading2: textColor,
@@ -457,6 +465,15 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
               let animation = anim as? CABasicAnimation,
               animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
         summarize()
+    }
+
+    // MARK: - Notifiable
+    public nonisolated func handleNotifications(_ notification: Notification) {
+        guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
+        DispatchQueue.main.async { [weak self] in
+            let isFontInAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+            self?.titleLabel.numberOfLines = isFontInAccessibilityCategory ? 2 : 0
+        }
     }
 
     // MARK: - Themeable
