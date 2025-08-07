@@ -29,6 +29,7 @@ enum AppScreen {
     case searchEngineSelection
     case passwordGenerator
     case nativeErrorPage
+    case shortcutsLibrary
 }
 
 enum ScreenActionType: ActionType {

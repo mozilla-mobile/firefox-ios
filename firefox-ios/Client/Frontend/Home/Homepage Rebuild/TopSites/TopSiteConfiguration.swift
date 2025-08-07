@@ -5,7 +5,7 @@
 import Foundation
 import Storage
 
-/// Top site UI class, used in the homepage top site section
+/// Top site UI class, used in the homepage top site section and shortcuts library
 struct TopSiteConfiguration: Hashable, Equatable, CustomStringConvertible, CustomDebugStringConvertible {
     let site: Site
     var title: String
