@@ -75,7 +75,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         // 1. If feature is disabled, do not show.
         guard isFeatureEnabled else { return false }
 
-        let hasAccepted = prefs.intForKey(PrefsKeys.TermsOfUseAccepted) == 1
+        let hasAccepted = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
         // 2. If user has accepted, do not show again.
         guard !hasAccepted else { return false }
 

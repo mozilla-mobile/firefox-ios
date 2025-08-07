@@ -36,7 +36,7 @@ class TermsOfUseMiddleware {
 
             switch type {
             case TermsOfUseActionType.markAccepted:
-                self.prefs.setInt(1, forKey: PrefsKeys.TermsOfUseAccepted)
+                self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
 
             case TermsOfUseActionType.markDismissed:
                 let todaysDate = Calendar.current.startOfDay(for: Date())

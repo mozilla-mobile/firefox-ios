@@ -29,7 +29,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
      func testMiddleware_markAccepted_updatesPrefs() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markAccepted)
         middleware.termsOfUseProvider(AppState(), action)
-        XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseAccepted), 1)
+        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true)
     }
     func testMiddleware_markDismissed_updatesPrefsWithDate() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markDismissed)
@@ -46,7 +46,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markShownThisLaunch)
         middleware.termsOfUseProvider(AppState(), action)
 
-        XCTAssertNil(profile.prefs.intForKey(PrefsKeys.TermsOfUseAccepted))
+        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) != true)
         let dismissedDate: Date? = profile.prefs.objectForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNil(dismissedDate)
     }
