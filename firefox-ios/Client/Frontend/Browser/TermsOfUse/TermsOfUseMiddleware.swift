@@ -39,8 +39,7 @@ class TermsOfUseMiddleware {
                 self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
 
             case TermsOfUseActionType.markDismissed:
-                let todaysDate = Calendar.current.startOfDay(for: Date())
-                self.prefs.setObject(todaysDate, forKey: PrefsKeys.TermsOfUseDismissedDate)
+                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
 
             case TermsOfUseActionType.markShownThisLaunch:
                 break

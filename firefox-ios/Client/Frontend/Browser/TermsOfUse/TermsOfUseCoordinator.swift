@@ -89,9 +89,10 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         guard didShowThisLaunch else { return true }
 
         // 4. If shown this launch, show it if enough time has passed since dismissal.
-        guard let dismissedWithoutAcceptDate: Date = prefs.objectForKey(PrefsKeys.TermsOfUseDismissedDate)
+        guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         else { return false }
 
+        let dismissedWithoutAcceptDate = Date.fromTimestamp(dismissedTimestamp)
         let daysSinceDismissal = Calendar.current.dateComponents(
             [.day],
             from: dismissedWithoutAcceptDate,

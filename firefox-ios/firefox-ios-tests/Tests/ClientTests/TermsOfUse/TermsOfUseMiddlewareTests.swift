@@ -34,12 +34,12 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
     func testMiddleware_markDismissed_updatesPrefsWithDate() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markDismissed)
         middleware.termsOfUseProvider(AppState(), action)
-        let dismissedDate: Date? = profile.prefs.objectForKey(PrefsKeys.TermsOfUseDismissedDate)
-        XCTAssertNotNil(dismissedDate)
+        let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
+        XCTAssertNotNil(dismissedTimestamp)
 
-        if let date = dismissedDate {
-            let todaysDate = Calendar.current.startOfDay(for: Date())
-            XCTAssertEqual(date, todaysDate)
+        if let timestamp = dismissedTimestamp {
+            let dismissedDate = Date.fromTimestamp(timestamp)
+            XCTAssertTrue(Calendar.current.isDate(dismissedDate, inSameDayAs: Date()))
         }
     }
     func testMiddleware_markShownThisLaunch_doesNotWriteToPrefs() {
@@ -47,7 +47,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         middleware.termsOfUseProvider(AppState(), action)
 
         XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) != true)
-        let dismissedDate: Date? = profile.prefs.objectForKey(PrefsKeys.TermsOfUseDismissedDate)
-        XCTAssertNil(dismissedDate)
+        let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
+        XCTAssertNil(dismissedTimestamp)
     }
 }
