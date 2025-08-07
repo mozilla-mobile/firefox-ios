@@ -83,8 +83,14 @@ public struct DefaultTabFileManager: TabFileManager {
     public func windowDataDirectory(isBackup: Bool) -> URL? {
         let containerID = BrowserKitInformation.shared.sharedContainerIdentifier
         let pathInfo = isBackup ? PathInfo.backup : PathInfo.primary
-        guard let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID) else {
-            logger.log("Failed to get the window data container URL", level: .warning, category: .tabs)
+        guard !containerID.isEmpty,
+              let containerURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: containerID) else {
+            logger.log(
+                "Failed to get the window data container URL",
+                level: .fatal,
+                category: .tabs
+            )
+            assertionFailure("containerID should not be nil")
             return nil
         }
         let appendedURL = containerURL.appendingPathComponent(PathInfo.rootDirectory)
