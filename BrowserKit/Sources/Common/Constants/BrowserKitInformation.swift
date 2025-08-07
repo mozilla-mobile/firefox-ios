@@ -5,20 +5,12 @@
 import Foundation
 
 // Contains application information necessary for BrowserKit functionalities.
-// BrowserKit should stay agnostic of the application it's used in, and so the
-// client should pass down this information on setup of the application.
-public class BrowserKitInformation {
-    public static let shared = BrowserKitInformation()
+public struct BrowserKitInformation: Sendable {
+    public static let shared = BrowserKitInformation(buildChannel: AppConstants.buildChannel,
+                                                     nightlyAppVersion: AppConstants.nightlyAppVersion,
+                                                     sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
-    public var buildChannel: AppBuildChannel?
-    public var nightlyAppVersion: String?
-    public var sharedContainerIdentifier: String?
-
-    public func configure(buildChannel: AppBuildChannel,
-                          nightlyAppVersion: String,
-                          sharedContainerIdentifier: String) {
-        self.buildChannel = buildChannel
-        self.nightlyAppVersion = nightlyAppVersion
-        self.sharedContainerIdentifier = sharedContainerIdentifier
-    }
+    public let buildChannel: AppBuildChannel
+    public let nightlyAppVersion: String
+    public let sharedContainerIdentifier: String
 }
