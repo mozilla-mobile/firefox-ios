@@ -12898,7 +12898,6 @@
 				8AD3AFC22D143EF000CFC887 /* HomepageDimensionImplementation.swift */,
 				8AA0A6642CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift */,
 				8AF347DC2CADD0E100624036 /* Redux */,
-				C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */,
 			);
 			path = "Homepage Rebuild";
 			sourceTree = "<group>";
@@ -13851,6 +13850,14 @@
 				0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */,
 			);
 			path = ThemedTableViewCells;
+			sourceTree = "<group>";
+		};
+		C714D27C2E45388D00FC02E6 /* ShortcutsLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */,
+			);
+			path = ShortcutsLibrary;
 			sourceTree = "<group>";
 		};
 		C80C11F228B3CD3E0062922A /* MockTests */ = {
@@ -15666,6 +15673,7 @@
 				F84B21F51A0910F600AAB793 /* Reader */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
 				D3972BF01C22412B00035B87 /* Share */,
+				C714D27C2E45388D00FC02E6 /* ShortcutsLibrary */,
 				C855728029AE7EF900AF32B0 /* SurveySurface */,
 				8AD40FB827BAD1DD00672675 /* TabContentsScripts */,
 				EB9A179720E69A7E00B12184 /* Theme */,
