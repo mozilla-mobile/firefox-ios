@@ -58,3 +58,57 @@ open class AppInfo {
         return baseBundleIdentifier
     }
 }
+
+extension AppInfo {
+    public static var displayName: String {
+        guard let displayName = applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String else {
+            fatalError("CFBundleDisplayName not found in info.plist")
+        }
+        return displayName
+    }
+
+    public static var majorAppVersion: String {
+        return appVersion.components(separatedBy: ".").first!
+    }
+
+    /// The port for the internal webserver, tests can change this
+    /// Please be aware that we needed to migrate this webserverPort in WebEngine.WKEngineInfo
+    /// due to Shared target issues in #17721. This webserverPort needs to be deleted with
+    /// FXIOS-7960 once the WebEngine package is integrated in Firefox iOS
+    public static var webserverPort = 6571
+
+    /// Return the keychain access group.
+    public static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
+        var bundleIdentifier = baseBundleIdentifier
+        if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
+            // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
+            // This can be removed when we are able to fix the app group in the developer portal
+            bundleIdentifier = "org.mozilla.ios.Fennec.enterprise"
+        }
+        return prefix + "." + bundleIdentifier
+    }
+
+    public static let debugPrefIsChinaEdition = "debugPrefIsChinaEdition"
+
+    public static var isChinaEdition: Bool {
+        if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
+            return true
+        }
+        return Locale.current.identifier == "zh_CN"
+    }
+
+    // The App Store page identifier for the Firefox iOS application
+    public static let appStoreId = "id989804926"
+
+    /// Return the shared container identifier (also known as the app group) to be used with for example background
+    /// http requests. It is the base bundle identifier with a "group." prefix.
+    public static var sharedContainerIdentifier: String {
+        var bundleIdentifier = baseBundleIdentifier
+        if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
+            // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
+            // This can be removed when we are able to fix the app group in the developer portal
+            bundleIdentifier = "org.mozilla.ios.Fennec.enterprise"
+        }
+        return "group." + bundleIdentifier
+    }
+}
