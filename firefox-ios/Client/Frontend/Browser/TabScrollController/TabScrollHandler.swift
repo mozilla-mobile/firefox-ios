@@ -8,9 +8,23 @@ import Shared
 import Common
 
 protocol TabScrollHandlerProtocol: AnyObject {
+    var headerTopConstraint: Constraint? { get set }
+    var overKeyboardContainerConstraint: Constraint? { get set }
+    var bottomContainerConstraint: Constraint? { get set }
+
+    var zoomPageBar: ZoomPageBar? { get set }
+    var tab: Tab? { get set }
+    var contentOffset: CGPoint { get }
+
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
                                bottomContainer: BaseAlphaStackView?,
                                headerContainer: BaseAlphaStackView?)
+    func showToolbars(animated: Bool)
+    func hideToolbars(animated: Bool)
+    func configureRefreshControl()
+    func beginObserving(scrollView: UIScrollView)
+    func stopObserving(scrollView: UIScrollView)
+    func traitCollectionDidChange()
 }
 
 final class TabScrollHandler: NSObject,
@@ -79,10 +93,8 @@ final class TabScrollHandler: NSObject,
         }
     }
 
-    // Top toolbar UI and Constraints
+    // Toolbar  Constraints
     var headerTopConstraint: Constraint?
-
-    // Bottom toolbar UI and Constraints
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
 
@@ -175,21 +187,6 @@ final class TabScrollHandler: NSObject,
         return hasHomeIndicator ? .zero : containerHeight - topInset
     }
 
-    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
-                               bottomContainer: BaseAlphaStackView?,
-                               headerContainer: BaseAlphaStackView? ) {
-        if let overKeyboardContainer, let bottomContainer, isBottomSearchBar {
-            bottomContainerScrollHeight = bottomContainer.frame.height
-            overKeyboardScrollHeight = overKeyboardScrollHeight(overKeyboardContainer: overKeyboardContainer,
-                                                                safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
-            headerHeight = 0
-        } else if let headerContainer {
-            headerHeight = headerContainer.frame.height
-            bottomContainerScrollHeight = 0
-            overKeyboardScrollHeight = 0
-        }
-    }
-
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
@@ -237,6 +234,49 @@ final class TabScrollHandler: NSObject,
         configureRefreshControl()
     }
 
+    /// Helper method for testing overKeyboardScrollHeight behavior.
+    /// - Parameters:
+    ///   - safeAreaInsets: The safe area insets to use (nil treated as .zero).
+    ///   - isMinimalAddressBarEnabled: Whether minimal address bar feature is enabled.
+    ///   - isBottomSearchBar: Whether search bar is set to the bottom.
+    /// - Returns: The calculated scroll height.
+    private func calculateOverKeyboardScrollHeight(overKeyboardContainer: BaseAlphaStackView,
+                                                   safeAreaInsets: UIEdgeInsets?) -> CGFloat {
+        let containerHeight = overKeyboardContainer.frame.height
+
+        let isReaderModeActive = tab?.url?.isReaderModeURL == true
+
+        // Return full height if conditions aren't met for adjustment.
+        let shouldAdjustHeight = isMinimalAddressBarEnabled
+                                  && isBottomSearchBar
+                                  && zoomPageBar == nil
+                                  && !isReaderModeActive
+
+        guard shouldAdjustHeight else { return containerHeight }
+
+        // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
+        let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
+
+        let topInset = safeAreaInsets?.top ?? .zero
+
+        return hasHomeIndicator ? .zero : containerHeight - topInset
+    }
+
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
+                               bottomContainer: BaseAlphaStackView?,
+                               headerContainer: BaseAlphaStackView? ) {
+        if let overKeyboardContainer, let bottomContainer, isBottomSearchBar {
+            bottomContainerScrollHeight = bottomContainer.frame.height
+            overKeyboardScrollHeight = calculateOverKeyboardScrollHeight(overKeyboardContainer: overKeyboardContainer,
+                                                                         safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
+            headerHeight = 0
+        } else if let headerContainer {
+            headerHeight = headerContainer.frame.height
+            bottomContainerScrollHeight = 0
+            overKeyboardScrollHeight = 0
+        }
+    }
+
     private func setupNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationWillTerminate(_:)),
@@ -265,7 +305,7 @@ final class TabScrollHandler: NSObject,
         tab?.shouldScrollToTop = false
 
         let delta = lastPanTranslation - translation.y
-        setScrollDirection(delta)
+        scrollDirection = delta > 0 ? .down : .up
 
         guard shouldRespondToScroll(for: velocity, delta: delta) else { return }
 
@@ -287,16 +327,6 @@ final class TabScrollHandler: NSObject,
         let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
         let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
         return isSignificantScroll || isFastEnough
-    }
-
-    /// Updates the current scroll direction based on the scroll delta.
-    ///
-    /// - Parameter delta: The change in vertical scroll position.
-    /// This is the inverse of the user's drag gesture. For example:
-    /// - If the user drags **up**, the content moves **down** (delta > 0), so the scroll direction is `.down`.
-    /// - If the user drags **down**, the content moves **up** (delta < 0), so the scroll direction is `.up`.
-    private func setScrollDirection(_ delta: CGFloat) {
-        scrollDirection = delta > 0 ? .down : .up
     }
 
     func showToolbars(animated: Bool) {

@@ -1112,7 +1112,9 @@ extension BrowserViewController: WKNavigationDelegate {
         // TODO: content blocking hasn't really changed, can we improve code clarity here? [FXIOS-10091]
         tab.contentBlocker?.notifyContentBlockingChanged()
 
-        self.scrollController.resetZoomState()
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.resetZoomState()
+        }
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)

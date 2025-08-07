@@ -193,7 +193,13 @@ class BrowserViewController: UIViewController,
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
     }
 
-    private(set) lazy var scrollController = LegacyTabScrollController(windowUUID: windowUUID)
+    private(set) lazy var scrollController: TabScrollHandlerProtocol = {
+        if isTabScrollRefactoringEnabled {
+            return TabScrollHandler(windowUUID: windowUUID)
+        } else {
+            return LegacyTabScrollController(windowUUID: windowUUID)
+        }
+    }()
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -342,6 +348,11 @@ class BrowserViewController: UIViewController,
         return summarizerNimbusUtils.isToolbarButtonEnabled
     }
 
+    // TODO: Add proper feature flag mechanism
+    var isTabScrollRefactoringEnabled: Bool {
+        return true
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -437,6 +448,12 @@ class BrowserViewController: UIViewController,
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
+        
+        if isTabScrollRefactoringEnabled {
+            scrollController = TabScrollHandler(windowUUID: windowUUID)
+        } else {
+            scrollController = LegacyTabScrollController(windowUUID: windowUUID)
+        }
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -548,13 +565,15 @@ class BrowserViewController: UIViewController,
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
-
-        let action = GeneralBrowserMiddlewareAction(
-            scrollOffset: scrollController.contentOffset,
-            toolbarPosition: newSearchBarPosition,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-        store.dispatchLegacy(action)
+        
+        if let legacyController = scrollController as? LegacyTabScrollProvider {
+            let action = GeneralBrowserMiddlewareAction(
+                scrollOffset: legacyController.contentOffset,
+                toolbarPosition: newSearchBarPosition,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
+            store.dispatchLegacy(action)
+        }
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
@@ -1545,17 +1564,19 @@ class BrowserViewController: UIViewController,
         super.viewWillTransition(to: size, with: coordinator)
 
         dismissVisibleMenus()
+        let legacyScrollController = scrollController as? LegacyTabScrollProvider
 
         coordinator.animate(alongsideTransition: { [self] context in
-            scrollController.updateMinimumZoom()
+            legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = displayedPopoverController {
                 updateDisplayedPopoverProperties?()
                 present(popover, animated: true, completion: nil)
             }
         }, completion: { _ in
-            self.scrollController.traitCollectionDidChange()
-            self.scrollController.setMinimumZoom()
+            legacyScrollController?.traitCollectionDidChange()
+            legacyScrollController?.setMinimumZoom()
+            
         })
         microsurvey?.setNeedsUpdateConstraints()
         webPagePreview.invalidateScreenshotData()
