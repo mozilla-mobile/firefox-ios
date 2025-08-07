@@ -18,7 +18,7 @@ enum MetadataKeys: String {
 /*
  * Value types representing a page's metadata
  */
-public struct PageMetadata: Hashable, Equatable {
+public struct PageMetadata: Hashable, Equatable, Sendable {
     public let id: Int?
     public let siteURL: String
     public let mediaURL: String?
