@@ -415,6 +415,32 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
     }
 
+    func testWillNavigateAway_withValidTab_takesScreenshotAsynchronously() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let expectation = XCTestExpectation(description: "Screenshot should be taken asynchronously")
+
+        screenshotHelper.onTakeScreenshot = {
+            expectation.fulfill()
+        }
+
+        subject.willNavigateAway(from: tab)
+
+        // Screenshot should not be taken immediately due to async dispatch
+        XCTAssertFalse(screenshotHelper.takeScreenshotCalled)
+
+        wait(for: [expectation], timeout: 2.0)
+        XCTAssertTrue(screenshotHelper.takeScreenshotCalled)
+    }
+
+    func testWillNavigateAway_withNilTab_doesNotTakeScreenshot() {
+        let subject = createSubject()
+
+        subject.willNavigateAway(from: nil)
+
+        XCTAssertFalse(screenshotHelper.takeScreenshotCalled)
+    }
+
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
@@ -522,11 +548,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
 class MockScreenshotHelper: ScreenshotHelper {
     var takeScreenshotCalled = false
+    var onTakeScreenshot: (() -> Void)?
 
     override func takeScreenshot(_ tab: Tab,
                                  windowUUID: WindowUUID,
                                  screenshotBounds: CGRect) {
         takeScreenshotCalled = true
+        onTakeScreenshot?()
     }
 }
 
