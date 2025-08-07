@@ -559,7 +559,7 @@ class BrowserViewController: UIViewController,
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
-        
+
         if let legacyController = scrollController as? LegacyTabScrollProvider {
             let action = GeneralBrowserMiddlewareAction(
                 scrollOffset: legacyController.contentOffset,
@@ -1570,7 +1570,6 @@ class BrowserViewController: UIViewController,
         }, completion: { _ in
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
-            
         })
         microsurvey?.setNeedsUpdateConstraints()
         webPagePreview.invalidateScreenshotData()
@@ -1682,6 +1681,8 @@ class BrowserViewController: UIViewController,
             } else {
                 if let scrollController = scrollController as? LegacyTabScrollProvider {
                     scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                } else {
+                    make.top.equalTo(view.safeArea.top)
                 }
                 make.left.right.equalTo(view)
             }
@@ -1707,10 +1708,13 @@ class BrowserViewController: UIViewController,
             }
         }
 
-        let legacyScrollController = scrollController as? LegacyTabScrollProvider
         overKeyboardContainer.snp.remakeConstraints { make in
-            legacyScrollController?.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-            
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+            } else {
+                make.bottom.equalTo(bottomContainer.snp.top)
+            }
+
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
             } else if !isBottomSearchBar {
@@ -1720,7 +1724,11 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.snp.remakeConstraints { make in
-            legacyScrollController?.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            } else {
+                make.bottom.equalTo(view.snp.bottom)
+            }
             make.leading.trailing.equalTo(view)
         }
 
