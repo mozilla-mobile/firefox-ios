@@ -13,6 +13,9 @@ protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     var overKeyboardContainerConstraint: Constraint? { get set }
     var bottomContainerConstraint: Constraint? { get set }
 
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
+                               bottomContainer: BaseAlphaStackView?,
+                               headerContainer: BaseAlphaStackView?)
     func updateMinimumZoom()
     func setMinimumZoom()
     func resetZoomState()
