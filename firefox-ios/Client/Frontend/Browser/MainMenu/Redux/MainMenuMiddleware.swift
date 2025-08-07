@@ -32,9 +32,10 @@ final class MainMenuMiddleware: FeatureFlaggable {
     }
 
     private let logger: Logger
-    private let telemetry = MainMenuTelemetry()
+    private let telemetry: MainMenuTelemetry
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(telemetry: MainMenuTelemetry = MainMenuTelemetry(), logger: Logger = DefaultLogger.shared) {
+        self.telemetry = telemetry
         self.logger = logger
     }
 

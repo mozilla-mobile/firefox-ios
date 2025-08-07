@@ -11812,6 +11812,8 @@
 				5FDE66022D94528A003961DC /* A11ySettingsTests.swift */,
 				E143BF642CE36FF800A1D2D9 /* A11yTabTrayTests.swift */,
 				8A94DB8E2E0F0E780005FE69 /* HomepageSearchBarTests.swift */,
+                211FD2742DF38106003F60EF /* CookiePersistenceUITests.swift */,
+                211FD2742DF38106003F60EF /* CookiePersistenceTests.swift */,
 				3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */,
 				0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */,
 				0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */,

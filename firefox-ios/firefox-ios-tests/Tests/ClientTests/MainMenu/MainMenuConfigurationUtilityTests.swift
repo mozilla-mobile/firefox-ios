@@ -17,6 +17,11 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         configUtility = MainMenuConfigurationUtility()
     }
 
+    override func tearDown() {
+        super.tearDown()
+        configUtility = nil
+    }
+
     func testGenerateMenuElements_returnsHomepageSections_whenIsHomepageTrue() {
         let sections = configUtility.generateMenuElements(with: getTabInfo(isHomepage: true), and: windowUUID)
 
@@ -59,6 +64,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             hasChangedUserAgent: false,
             zoomLevel: 0,
             readerModeIsAvailable: false,
+            summaryIsAvailable: false,
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,

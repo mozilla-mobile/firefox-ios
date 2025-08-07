@@ -6,11 +6,7 @@ import Foundation
 import UIKit
 import Common
 
-final class MenuTableView: UIView,
-                                  UITableViewDelegate,
-                                  UITableViewDataSource,
-                                  UIScrollViewDelegate,
-                                  ThemeApplicable {
+final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ThemeApplicable {
     private struct UX {
         static let topPadding: CGFloat = 24
         static let menuSiteTopPadding: CGFloat = 12
