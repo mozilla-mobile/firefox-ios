@@ -51,6 +51,15 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     public let currentWindowUUID: Common.WindowUUID?
 
     // MARK: - UI properties
+    private let titleLabel: UILabel = .build {
+        $0.alpha = 0
+        $0.numberOfLines = 2
+        $0.font = FXFontStyles.Regular.title1.scaledFont()
+        $0.adjustsFontForContentSizeCategory = true
+        $0.showsLargeContentViewer = true
+        $0.isUserInteractionEnabled = true
+        $0.addInteraction(UILargeContentViewerInteraction())
+    }
     private let loadingLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.body.scaledFont()
         $0.alpha = 0
@@ -65,6 +74,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
+        } else {
+            $0.configuration = .filled()
+            $0.configuration?.cornerStyle = .capsule
         }
         #else
             $0.configuration = .filled()
@@ -95,6 +107,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             bottom: UX.tabSnapshotFinalPositionBottomPadding,
             right: 0.0
         )
+        $0.adjustsFontForContentSizeCategory = true
         $0.isEditable = false
     }
 
@@ -131,6 +144,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         configure()
         setupLayout()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
+        view.backgroundColor = .clear
         applyTheme()
     }
 
@@ -175,6 +189,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func configure() {
+        titleLabel.accessibilityIdentifier = viewModel.titleLabelA11yId
         loadingLabel.text = viewModel.loadingLabel
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
@@ -199,11 +214,12 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func setupLayout() {
-        view.addSubviews(tabSnapshotContainer, gradient, closeButton, summaryView, loadingLabel, errorView)
+        view.addSubviews(tabSnapshotContainer, gradient, titleLabel, closeButton, summaryView, loadingLabel, errorView)
         tabSnapshotContainer.addSubview(tabSnapshot)
         tabSnapshot.pinToSuperview()
         tabSnapshotTopConstraint = tabSnapshotContainer.topAnchor.constraint(equalTo: view.topAnchor)
         tabSnapshotTopConstraint?.isActive = true
+        closeButton.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         let topHalfBoundGuide = UILayoutGuide()
         view.addLayoutGuide(topHalfBoundGuide)
@@ -230,6 +246,13 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             errorView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor),
             errorView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor),
 
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                            constant: UX.closeButtonEdgePadding),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+                                                 constant: -UX.summaryViewEdgePadding),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: UX.summaryViewEdgePadding),
+
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                   constant: -UX.closeButtonEdgePadding),
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -237,7 +260,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
             summaryView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.summaryViewEdgePadding),
             summaryView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.summaryViewEdgePadding),
-            summaryView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: UX.summaryViewEdgePadding),
+            summaryView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.summaryViewEdgePadding),
             summaryView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
             tabSnapshotContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -287,13 +310,15 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         \(summary)
         """
-
+        titleLabel.text = webView.title
+        titleLabel.largeContentTitle = webView.title
         summaryView.attributedText = parse(markdown: brandedSummary)
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             gradient.alpha = 0.0
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
             loadingLabel.alpha = 0.0
             summaryView.alpha = 1.0
+            titleLabel.alpha = 1.0
             view.backgroundColor = theme.colors.layer1
         } completion: { [weak self] _ in
             guard let tabSnapshotView = self?.tabSnapshotContainer else { return }
@@ -349,19 +374,38 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func parse(markdown: String) -> NSAttributedString? {
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textPrimary
         let parser = Down(markdownString: markdown)
-        return try? parser.toAttributedString(styler: CustomStyler(configuration: DownStylerConfiguration(
-            fonts: StaticFontCollection(
-                heading1: FXFontStyles.Regular.title1.scaledFont(),
-                heading2: FXFontStyles.Regular.title2.scaledFont(),
-                heading3: FXFontStyles.Regular.title3.scaledFont(),
-                heading4: FXFontStyles.Regular.headline.scaledFont(),
-                heading5: FXFontStyles.Regular.caption1.scaledFont(),
-                heading6: FXFontStyles.Regular.caption2.scaledFont(),
-                body: FXFontStyles.Regular.body.scaledFont()),
-            colors: StaticColorCollection(body: theme.colors.textPrimary, link: theme.colors.textPrimary)
-        )))
+        return try? parser.toAttributedString(
+            styler: CustomStyler(
+                configuration: DownStylerConfiguration(
+                    fonts: StaticFontCollection(
+                        heading1: FXFontStyles.Regular.title1.scaledFont(),
+                        heading2: FXFontStyles.Regular.title2.scaledFont(),
+                        heading3: FXFontStyles.Regular.title3.scaledFont(),
+                        heading4: FXFontStyles.Regular.headline.scaledFont(),
+                        heading5: FXFontStyles.Regular.caption1.scaledFont(),
+                        heading6: FXFontStyles.Regular.caption2.scaledFont(),
+                        body: FXFontStyles.Regular.body.scaledFont()),
+                    colors: StaticColorCollection(
+                        heading1: textColor,
+                        heading2: textColor,
+                        heading3: textColor,
+                        heading4: textColor,
+                        heading5: textColor,
+                        heading6: textColor,
+                        body: textColor,
+                        code: textColor,
+                        link: textColor,
+                        quote: textColor,
+                        quoteStripe: textColor,
+                        thematicBreak: textColor,
+                        listItemPrefix: textColor,
+                        codeBlockBackground: textColor
+                    )
+                )
+            )
+        )
     }
 
     // MARK: - PanGesture
@@ -418,9 +462,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        summaryView.textColor = theme.colors.textPrimary
         summaryView.backgroundColor = .clear
-        view.backgroundColor = .clear
+        titleLabel.textColor = theme.colors.textPrimary
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         if #unavailable(iOS 26) {
