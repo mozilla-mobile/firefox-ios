@@ -2162,7 +2162,6 @@ extension String {
             value: "Page is still loading. Wait for it to finish, then hit summarize.",
             comment: "The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading)."
         )
-        // TODO: correct label ?
         public static let UnknownErrorMessage = MZLocalizedString(
             key: "Summarizer.Error.Unknown.Message.v142",
             tableName: "Summarizer",
@@ -2180,6 +2179,18 @@ extension String {
             tableName: "Summarizer",
             value: "Close",
             comment: "The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried."
+        )
+        public static let HostedBrandLabel = MZLocalizedString(
+            key: "Summarizer.HostedBrand.Label.v142",
+            tableName: "Summarizer",
+            value: "Summarized by %@",
+            comment: "The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox)."
+        )
+        public static let AppleBrandLabel = MZLocalizedString(
+            key: "Summarizer.AppleBrand.Label.v142",
+            tableName: "Summarizer",
+            value: "Summarized by Apple Intelligence",
+            comment: "The label displayed in the summary report when the summary was generated using Apple Intelligence."
         )
         public static let ToSAlertTitleLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.Title.Label.v142",

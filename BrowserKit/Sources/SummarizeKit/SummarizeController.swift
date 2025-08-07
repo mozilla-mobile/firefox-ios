@@ -8,6 +8,13 @@ import UIKit
 import ComponentLibrary
 import MarkdownKit
 import WebKit
+import Down
+
+class CustomStyler: DownStyler {
+    // NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
+    // To keep the MVP safe, link rendering is disabled.
+    override func style(link str: NSMutableAttributedString, title: String?, url: String?) {}
+}
 
 public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
     private struct UX {
@@ -274,8 +281,11 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
-        summaryView.attributedText = makeMarkdownParser(baseColor: theme.colors.textPrimary).parse(summary)
-
+        let brandedSummary = """
+        ###### *\(viewModel.brandLabel)* \n
+        \(summary)
+        """
+        summaryView.attributedText = parse(markdown: brandedSummary)
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             gradient.alpha = 0.0
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
@@ -335,15 +345,20 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         super.dismiss(animated: flag, completion: completion)
     }
 
-    private func makeMarkdownParser(baseColor: UIColor) -> MarkdownParser {
-        let baseFont = FXFontStyles.Regular.body.scaledFont()
-        let headerFont = FXFontStyles.Regular.title1.scaledFont()
-        let markdownParser = MarkdownParser(font: baseFont, color: baseColor)
-        /// NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
-        /// To keep the MVP safe, link rendering is disabled.
-        markdownParser.enabledElements =  .all.subtracting([.link, .automaticLink])
-        markdownParser.header.font = headerFont
-        return markdownParser
+    private func parse(markdown: String) -> NSAttributedString? {
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        let parser = Down(markdownString: markdown)
+        return try? parser.toAttributedString(styler: CustomStyler(configuration: DownStylerConfiguration(
+            fonts: StaticFontCollection(
+                heading1: FXFontStyles.Regular.title1.scaledFont(),
+                heading2: FXFontStyles.Regular.title2.scaledFont(),
+                heading3: FXFontStyles.Regular.title3.scaledFont(),
+                heading4: FXFontStyles.Regular.headline.scaledFont(),
+                heading5: FXFontStyles.Regular.caption1.scaledFont(),
+                heading6: FXFontStyles.Regular.caption2.scaledFont(),
+                body: FXFontStyles.Regular.body.scaledFont()),
+            colors: StaticColorCollection(body: theme.colors.textPrimary, link: theme.colors.textPrimary)
+        )))
     }
 
     // MARK: - PanGesture
