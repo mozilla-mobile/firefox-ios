@@ -70,6 +70,7 @@ enum GeneralBrowserActionType: ActionType {
     case enteredZeroSearchScreen
     case didUnhideToolbar
     case didCloseTabFromToolbar
+    case shakeMotionEnded
 }
 
 struct GeneralBrowserMiddlewareAction: Action {

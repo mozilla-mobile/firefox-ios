@@ -265,24 +265,39 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Shake motion
-    func testMotionEnded_withShakeGestureEnabled_showsSummaryPanel() {
+    func testMotionEnded_withShakeGestureEnabled_showsSummaryPanel() throws {
         profile.prefs.setBool(true, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
         setupSummarizedShakeGestureForTesting(isEnabled: true)
         let subject = createSubject()
+        let expectation = XCTestExpectation(description: "General browser action is dispatched")
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
+        wait(for: [expectation], timeout: 1)
 
-        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.shakeMotionEnded)
     }
 
     func testMotionEnded_withShakeGestureDisabled_doesNotShowSummaryPanel() {
         profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
         setupSummarizedShakeGestureForTesting(isEnabled: false)
         let subject = createSubject()
+        let expectation = XCTestExpectation(description: "General browser action is dispatched")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
+        wait(for: [expectation], timeout: 1)
 
-        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 0)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
     func testMotionEnded_withGestureNotShake_doesntShowSummarizePanel() {

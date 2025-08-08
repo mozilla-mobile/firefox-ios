@@ -840,7 +840,12 @@ class BrowserViewController: UIViewController,
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
         guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled else { return }
-        navigationHandler?.showSummarizePanel(.shakeGesture)
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.shakeMotionEnded
+            )
+        )
     }
 
     // MARK: - BrowserContentHiding
@@ -2714,6 +2719,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
+        case .summarizer:
+            navigationHandler?.showSummarizePanel(.shakeGesture)
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
         case .zeroSearch:
