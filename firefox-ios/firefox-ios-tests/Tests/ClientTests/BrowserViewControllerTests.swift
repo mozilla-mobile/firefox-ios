@@ -275,7 +275,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         }
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
-        wait(for: [expectation])
+        wait(for: [expectation], timeout: 1)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
@@ -288,10 +288,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
         setupSummarizedShakeGestureForTesting(isEnabled: false)
         let subject = createSubject()
+        let expectation = XCTestExpectation(description: "General browser action is dispatched")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
+        wait(for: [expectation], timeout: 1)
 
-        XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 0)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
     func testMotionEnded_withGestureNotShake_doesntShowSummarizePanel() {
