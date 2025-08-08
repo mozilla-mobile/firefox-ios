@@ -131,4 +131,10 @@ private struct DarkColourPalette: ThemeColourPalette {
     var shadowSubtle: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.10)
     var shadowDefault: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.12)
     var shadowStrong: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.16)
+
+    // MARK: - Gradient
+    var vividOrange: UIColor = FXColors.Yellow80
+    var electricBlue: UIColor = FXColors.Blue80
+    var crimsonRed: UIColor = FXColors.Red80
+    var burntOrange: UIColor = FXColors.Orange80
 }
