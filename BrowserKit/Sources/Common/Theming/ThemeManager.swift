@@ -4,6 +4,7 @@
 
 import UIKit
 
+@MainActor
 public protocol ThemeManager {
     // Current theme
     func getCurrentTheme(for window: WindowUUID?) -> Theme
