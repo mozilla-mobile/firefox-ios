@@ -133,7 +133,7 @@ final class WindowManagerImplementation: WindowManager {
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
         guard let tabManager = window(for: windowUUID)?.tabManager else {
             assertionFailure("Tab Manager unavailable for requested UUID: \(windowUUID). This is a client error.")
-            logger.log("No tab manager for window UUID.", level: .fatal, category: .window)
+            logger.log("No tab manager for window UUID: \(windowUUID)", level: .fatal, category: .window)
             return windows.first!.value.tabManager!
         }
 
@@ -324,6 +324,7 @@ final class WindowManagerImplementation: WindowManager {
     private func window(for windowUUID: WindowUUID, createIfNeeded: Bool = false) -> AppWindowInfo? {
         let windowInfo = windows[windowUUID]
         if windowInfo == nil && createIfNeeded {
+            logger.log("Created new app window info for window UUID: \(windowUUID)", level: .info, category: .window)
             return AppWindowInfo(tabManager: nil)
         }
         return windowInfo
