@@ -55,8 +55,8 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
     }
 
     private static func handleRetrievedUpdatedSitesAction(action: Action, state: Self) -> ShortcutsLibraryState {
-        guard let shortcutsLibraryAction = action as? ShortcutsLibraryAction,
-              let sites = shortcutsLibraryAction.topSites
+        guard let topSitesAction = action as? TopSitesAction,
+              let sites = topSitesAction.topSites
         else {
             return defaultState(from: state)
         }
