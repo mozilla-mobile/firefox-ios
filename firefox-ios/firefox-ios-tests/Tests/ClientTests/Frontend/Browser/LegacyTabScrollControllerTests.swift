@@ -9,6 +9,7 @@ import Shared
 
 @testable import Client
 
+@MainActor
 final class LegacyTabScrollControllerTests: XCTestCase {
     var tab: Tab!
     var mockProfile: MockProfile!
@@ -144,7 +145,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: containerHeight)
 
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: safeAreaInsets,
             isMinimalAddressBarEnabled: false,
             isBottomSearchBar: true
@@ -158,7 +159,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0)
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: safeAreaInsets,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: true
@@ -175,7 +176,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         let topInset: CGFloat = 20
 
         let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: safeAreaInsets,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: true
@@ -191,7 +192,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         setupToolbarViews(with: subject, overKeyboardContainer: nil)
 
         let safeAreaInsets = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: safeAreaInsets,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: true
@@ -206,7 +207,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
 
         let containerHeight: CGFloat = 100
 
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: nil,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: true
@@ -220,7 +221,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let containerHeight: CGFloat = 100
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: UIEdgeInsets.zero,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: true
@@ -237,7 +238,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         let topInset: CGFloat = 20
 
         let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: safeAreaInsets,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: false
@@ -258,7 +259,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         subject.zoomPageBar = zoomPageBar
 
         let safeAreaInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: safeAreaInsets,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: true
@@ -275,7 +276,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         let containerHeight: CGFloat = 100
         let safeAreaInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
 
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: safeAreaInsets,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: true
@@ -290,7 +291,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
 
         let safeAreaInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
 
-        let result = subject.overKeyboardScrollHeight(
+        let result = subject.calculateOverKeyboardScrollHeight(
             with: safeAreaInsets,
             isMinimalAddressBarEnabled: true,
             isBottomSearchBar: true
