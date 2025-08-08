@@ -27,14 +27,11 @@ class SyncNowSetting: WithAccountSetting {
         self.notificationCenter = notificationCenter
         super.init(settings: settings)
 
+        // FIXME: FXIOS-12995 Use Notifiable
         notificationCenter.addObserver(self,
                                        selector: #selector(stopRotateSyncIcon),
                                        name: .ProfileDidFinishSyncing,
                                        object: nil)
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     private lazy var timestampFormatter: DateFormatter = {

@@ -34,7 +34,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     private var isSummarizerOn: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureToggledOn
+        return DefaultSummarizerNimbusUtils().isSummarizeFeatureToggledOn
     }
 
     private var isDefaultZoomEnabled: Bool {
@@ -232,7 +232,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             ),
         ]
         // Conditionally add the Summarizer item if the feature is enabled
-        if isSummarizerOn {
+        if isSummarizerOn, tabInfo.summaryIsAvailable {
             options.append(configureSummarizerItem(with: uuid, tabInfo: tabInfo))
         }
         options.append(configureUserAgentItemV2(with: uuid, tabInfo: tabInfo))

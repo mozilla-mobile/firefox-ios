@@ -16,9 +16,12 @@ import Foundation
 @available(iOS 26, *)
 protocol LanguageModelResponseStreamProtocol: AsyncSequence where Element == String {}
 
-@available(iOS 26, *)
-extension LanguageModelSession.ResponseStream: LanguageModelResponseStreamProtocol
-    where Content == String {}
+// TODO(FXIOS-FXIOS-13088): The API changed between beta 4 and 5, so this now breaks when building.
+// To avoid any future issues, this is commented out until we get the stable API.
+// This is unused in the current implementation. We only use non-streaming responses.
+// @available(iOS 26, *)
+// extension LanguageModelSession.ResponseStream: LanguageModelResponseStreamProtocol
+//     where Content == String {}
 
 extension AsyncThrowingStream: LanguageModelResponseStreamProtocol
     where Element == String {}

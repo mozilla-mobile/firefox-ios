@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import WebKit
+import SummarizeKit
 
 @testable import Client
 
@@ -45,6 +46,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showWebViewCalled = 0
     var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
+    var showShortcutsLibraryCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -147,7 +149,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         removeDocumentLoadingCalled += 1
     }
 
-    func showSummarizePanel() {
+    func showSummarizePanel(_ trigger: SummarizerTrigger) {
         showSummarizePanelCalled += 1
     }
 
@@ -196,5 +198,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showNativeErrorPage(overlayManager: any Client.OverlayModeManager) {
         showNativeErrorPageCalled += 1
+    }
+
+    func showShortcutsLibrary() {
+        showShortcutsLibraryCalled += 1
     }
 }

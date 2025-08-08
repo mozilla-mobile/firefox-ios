@@ -80,7 +80,7 @@ let middlewares = [
     BookmarksMiddleware().bookmarksProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
     StartAtHomeMiddleware().startAtHomeProvider,
-    TermsOfUseMiddleware().termsOfUseProvider,
+    TermsOfUseMiddleware().termsOfUseProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

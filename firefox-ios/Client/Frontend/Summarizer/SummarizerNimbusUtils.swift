@@ -6,12 +6,26 @@ import Foundation
 import Common
 import Shared
 
-/// Tiny utility to simplify checking for availability of the summarizers
-struct SummarizerNimbusUtils: FeatureFlaggable {
-    let prefs: Prefs
-    static let shared = SummarizerNimbusUtils()
+protocol SummarizerNimbusUtils {
+    /// Determines if the Summarize feature should be shown,
+    /// based on both feature availability and the user's settings.
+    var isSummarizeFeatureToggledOn: Bool { get }
+    /// Determines whether the Summarize feature is available,
+    /// regardless of the user's settings.
+    /// (i.e. we want to show the settings toggle to enable or disable summarize with this flag)
+    var isSummarizeFeatureEnabled: Bool { get }
+    var isShakeGestureEnabled: Bool { get }
+    var isToolbarButtonEnabled: Bool { get }
 
-    /// Takes into consideration if summarizer is available and user setting for summarizing content is on.
+    func isAppleSummarizerEnabled() -> Bool
+    func isHostedSummarizerEnabled() -> Bool
+    func isShakeGestureFeatureFlagEnabled() -> Bool
+}
+
+/// Tiny utility to simplify checking for availability of the summarizers
+struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
+    let prefs: Prefs
+
     var isSummarizeFeatureToggledOn: Bool {
         return isSummarizeFeatureEnabled && didUserEnableSummarizeFeature
     }
@@ -20,9 +34,15 @@ struct SummarizerNimbusUtils: FeatureFlaggable {
         return isAppleSummarizerEnabled() || isHostedSummarizerEnabled()
     }
 
+    var isToolbarButtonEnabled: Bool {
+        let summarizeFeatureOn = isSummarizeFeatureToggledOn
+        let isToolbarFeatureEnabled = isHostedSummarizerToolbarEndpointEnabled() || isAppleSummarizerToolbarEndpointEnabled()
+        return summarizeFeatureOn && isToolbarFeatureEnabled
+    }
+
     /// Takes into consideration that summarize feature is on,
     /// shake feature flag is enabled, and user setting for shake is enabled
-    var isShakeEnabled: Bool {
+    var isShakeGestureEnabled: Bool {
         let summarizeFeatureOn = isSummarizeFeatureToggledOn
         let isShakeFlagEnabled = isShakeGestureFeatureFlagEnabled()
         let userSettingEnabled = didUserEnableShakeGestureFeature
@@ -56,12 +76,12 @@ struct SummarizerNimbusUtils: FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
     }
 
-    func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
+    private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
         let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizerToolbarEntrypoint, checking: .buildOnly)
         return isAppleSummarizerEnabled() && isFlagEnabled
     }
 
-    func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
+    private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
         let isFlagEnabled = featureFlags.isFeatureEnabled(.hostedSummarizerToolbarEntrypoint, checking: .buildOnly)
         return isHostedSummarizerEnabled() && isFlagEnabled
     }

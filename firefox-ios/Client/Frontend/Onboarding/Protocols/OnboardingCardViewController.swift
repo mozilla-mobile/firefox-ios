@@ -96,7 +96,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     // MARK: - Themeable
     var themeManager: Common.ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: Common.NotificationProtocol
 
     var viewModel: OnboardingCardInfoModelProtocol
@@ -159,5 +159,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         secondaryButton.applyTheme(theme: currentTheme())
     }
 
+    // FIXME: FXIOS-12996 Use Themeable
     func applyTheme() { }
 }

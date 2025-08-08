@@ -73,8 +73,8 @@ let package = Package(
             url: "https://github.com/swhitty/SwiftDraw",
             exact: "0.18.3"),
         .package(
-            url: "https://github.com/bmoliveira/MarkdownKit.git", 
-            exact: "1.7.3"),
+            url: "https://github.com/johnxnguyen/Down.git",
+            exact: "0.11.0"),
     ],
     targets: [
         .target(name: "Shared",
@@ -153,7 +153,7 @@ let package = Package(
             dependencies: [
                 "Common",
                 "ComponentLibrary",
-                "MarkdownKit"
+                "Down"
             ],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]
         ),

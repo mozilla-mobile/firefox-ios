@@ -268,7 +268,7 @@ class SearchTelemetry {
         let nChars = Int32(searchQuery.count)
 
         let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
-        let nWords = numberOfWords(in: searchQuery)
+        let nWords = searchQuery.numberOfWords
 
         let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
         let nResults = Int32(numberOfSearchResults())
@@ -314,7 +314,7 @@ class SearchTelemetry {
         let nChars = Int32(searchQuery.count)
 
         let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
-        let nWords = numberOfWords(in: searchQuery)
+        let nWords = searchQuery.numberOfWords
 
         let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
         let nResults = Int32(numberOfSearchResults())
@@ -374,7 +374,7 @@ class SearchTelemetry {
         let nChars = Int32(searchQuery.count)
 
         let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
-        let nWords = numberOfWords(in: searchQuery)
+        let nWords = searchQuery.numberOfWords
 
         let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
         let nResults = Int32(numberOfSearchResults())
@@ -416,12 +416,6 @@ class SearchTelemetry {
         } else if searchQuery.count - savedQuery.count > 1 {
             interactionType = .pasted
         }
-    }
-
-    func numberOfWords(in string: String) -> Int32 {
-        let words = string.components(separatedBy: CharacterSet.whitespacesAndNewlines)
-        let filteredWords = words.filter { !$0.isEmpty }
-        return Int32(filteredWords.count)
     }
 
     func numberOfSearchResults() -> Int {

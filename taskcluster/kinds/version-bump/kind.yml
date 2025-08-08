@@ -21,6 +21,8 @@ tasks:
       unique-kinds: false
       copy-attributes: true
       with-attributes:
+        product-type:
+          - firefox
         release-type:
           - beta
           - release

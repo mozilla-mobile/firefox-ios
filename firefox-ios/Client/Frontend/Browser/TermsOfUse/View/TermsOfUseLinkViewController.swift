@@ -8,7 +8,10 @@ import Shared
 import WebKit
 import Redux
 
-final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigationDelegate, StoreSubscriber {
+final class TermsOfUseLinkViewController: UIViewController,
+                                          Themeable,
+                                          WKNavigationDelegate,
+                                          StoreSubscriber {
     weak var coordinator: TermsOfUseCoordinatorDelegate?
 
     typealias StoreSubscriberStateType = TermsOfUseState
@@ -25,7 +28,7 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
 
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
 
     private lazy var header: UIView = .build { view in
         view.backgroundColor = self.currentTheme().colors.layer1
@@ -71,9 +74,11 @@ final class TermsOfUseLinkViewController: UIViewController, Themeable, WKNavigat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
         setupViews()
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+
         webView.load(URLRequest(url: url))
         subscribeToRedux()
     }

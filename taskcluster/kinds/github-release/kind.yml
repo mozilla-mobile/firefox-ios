@@ -19,12 +19,18 @@ tasks:
         group-by: filtered-build-type
         unique-kinds: false
         copy-attributes: true
+        set-name: false
+        with-attributes:
+          product-type:
+            - firefox
       run-on-tasks-for: []
       treeherder:
         symbol: gh-r
         tier: 1
         kind: build
         platform: ios/opt
+      attributes:
+        product-type: firefox
       worker-type: github
       shipping-phase: ship
       worker:
@@ -58,3 +64,41 @@ tasks:
               by-release-type:
                 release: "This is a staging release of firefox-iOS v{version}. It should not be used."
                 beta: "This is a staging beta of firefox-iOS v{version}. It should not be used."
+
+    publish-focus:
+      description: Create a Github release
+      from-deps:
+        group-by: filtered-build-type
+        unique-kinds: false
+        copy-attributes: true
+        set-name: false
+        with-attributes:
+          product-type:
+            - focus
+      attributes:
+        product-type: focus
+        release-type: release
+      run-on-tasks-for: []
+      treeherder:
+        symbol: gh-rf
+        tier: 1
+        kind: build
+        platform: ios/opt
+      worker-type: github
+      shipping-phase: ship
+      worker:
+        action: release
+        git-tag: "{head_tag}"
+        is-prerelease: false
+        github-project:
+          by-level:
+            '3': firefox-ios
+            default: staging-firefox-ios
+        release-name:
+          by-level:
+            '3': "Focus/Klar v{version}"
+            default: "Staging Focus/Klar v{version}"
+        release-body:
+          by-level:
+            '3': "This is our official v{version} release of Focus/Klar."
+            default: "This is a staging release of Focus/Klar v{version}. It should not be used."

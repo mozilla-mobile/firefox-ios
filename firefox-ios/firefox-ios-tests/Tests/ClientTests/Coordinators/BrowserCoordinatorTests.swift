@@ -568,7 +568,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel()
+        subject.showSummarizePanel(.mainMenu)
 
         let childCoordinator = subject.childCoordinators.first
         XCTAssertTrue(childCoordinator is SummarizeCoordinator)
@@ -583,7 +583,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel()
+        subject.showSummarizePanel(.mainMenu)
 
         XCTAssertNil(subject.childCoordinators.first(where: {
             $0 is SummarizeCoordinator
@@ -595,10 +595,21 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel()
+        subject.showSummarizePanel(.mainMenu)
         XCTAssertNil(subject.childCoordinators.first(where: {
             $0 is SummarizeCoordinator
         }))
+    }
+
+    // MARK: - Shortcuts Library
+
+    func testShowShortcutsLibrary_showsShortcutsLibrary() throws {
+        let subject = createSubject()
+
+        subject.showShortcutsLibrary()
+
+        XCTAssertNotNil(mockRouter.pushedViewController as? ShortcutsLibraryViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
     // MARK: - ParentCoordinatorDelegate

@@ -48,13 +48,14 @@ class BrowserCoordinator: BaseCoordinator,
     private let screenshotService: ScreenshotService
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
     private var isSummarizerOn: Bool {
-        return SummarizerNimbusUtils.shared.isSummarizeFeatureToggledOn
+        return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
 
     override var isDismissible: Bool { false }
@@ -65,8 +66,10 @@ class BrowserCoordinator: BaseCoordinator,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
         self.tabManager = tabManager
@@ -143,7 +146,6 @@ class BrowserCoordinator: BaseCoordinator,
         guard browserViewController.embedContent(legacyHomepageViewController) else { return }
         self.legacyHomepageViewController = legacyHomepageViewController
         legacyHomepageViewController.scrollToTop()
-        showTermsOfUse()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
     }
@@ -167,7 +169,6 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
-        showTermsOfUse()
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
@@ -1078,7 +1079,7 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-  func showSummarizePanel() {
+  func showSummarizePanel(_ trigger: SummarizerTrigger) {
         guard isSummarizerOn,
               tabManager.selectedTab?.isFxHomeTab == false,
               let webView = tabManager.selectedTab?.webView else { return }
@@ -1102,6 +1103,7 @@ class BrowserCoordinator: BaseCoordinator,
             webView: webView,
             browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
+            trigger: trigger,
             prefs: profile.prefs,
             windowUUID: windowUUID,
             router: router) { [weak self] url in
@@ -1110,6 +1112,11 @@ class BrowserCoordinator: BaseCoordinator,
         }
         add(child: coordinator)
         coordinator.start()
+    }
+
+    func showShortcutsLibrary() {
+        let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
+        router.push(shortcutsLibraryViewController)
     }
 
     // MARK: Microsurvey
@@ -1169,7 +1176,8 @@ class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             router: router,
             themeManager: AppContainer.shared.resolve(),
-            notificationCenter: NotificationCenter.default
+            notificationCenter: NotificationCenter.default,
+            prefs: profile.prefs
         )
         guard coordinator.shouldShowTermsOfUse() else { return }
         coordinator.parentCoordinator = self

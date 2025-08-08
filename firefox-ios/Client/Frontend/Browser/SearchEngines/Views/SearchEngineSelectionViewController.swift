@@ -15,7 +15,7 @@ class SearchEngineSelectionViewController: UIViewController,
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var currentWindowUUID: UUID? { return windowUUID }
 
     weak var coordinator: SearchEngineSelectionCoordinator?
@@ -60,7 +60,9 @@ class SearchEngineSelectionViewController: UIViewController,
         popoverPresentationController?.delegate = self // For iPad setup
 
         setupView()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
 
         store.dispatchLegacy(
             SearchEngineSelectionAction(
@@ -108,7 +110,7 @@ class SearchEngineSelectionViewController: UIViewController,
         })
     }
 
-    func unsubscribeFromRedux() {
+    nonisolated func unsubscribeFromRedux() {
         store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,

@@ -11,12 +11,14 @@ import XCTest
 final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockProfile: MockProfile!
     private var mockWindowManager: MockWindowManager!
+    private var summarizationChecker: MockSummarizationChecker!
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var appState: AppState!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        setIsHostedSummaryEnabled(false)
         mockProfile = MockProfile()
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
@@ -24,14 +26,17 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
                 recentlyAccessedNormalTabs: [createTab(profile: mockProfile)]
             )
         )
+        summarizationChecker = MockSummarizationChecker()
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
         setupStore()
         appState = setupAppState()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() {
         mockProfile = nil
         mockWindowManager = nil
+        summarizationChecker = nil
         DependencyHelperMock().reset()
         resetStore()
         super.tearDown()
@@ -280,9 +285,91 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(selectedTab?.url?.absoluteString, "www.mozilla.org")
     }
 
+    func testTabPanelProvider_dispatchesMainMenuAction_withSummaryIsAvailableTrue() throws {
+        setIsHostedSummaryEnabled(true)
+        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
+        let subject = createSubject()
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        mockTabManager?.selectedTab = tab
+        summarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabsPanelProvider(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, true)
+    }
+
+    func testTabPanelProvider_dispatchesMainMenuAction_withSummaryIsAvailableFalse_whenWebViewNil() throws {
+        setIsHostedSummaryEnabled(true)
+        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
+        let subject = createSubject()
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        mockTabManager?.selectedTab = tab
+        summarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabsPanelProvider(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, false)
+    }
+
+    func testTabPanelProvider_dispatchesMainMenuAction_withSummaryIsAvailableFalse_whenSummarizeFeatureOff() throws {
+        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
+        let subject = createSubject()
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        mockTabManager?.selectedTab = tab
+        summarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabsPanelProvider(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, false)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> TabManagerMiddleware {
-        return TabManagerMiddleware(profile: mockProfile, windowManager: mockWindowManager)
+        return TabManagerMiddleware(
+            profile: mockProfile,
+            windowManager: mockWindowManager,
+            summarizationChecker: summarizationChecker
+        )
     }
 
     private func createTab(
@@ -295,6 +382,12 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
             tab.url = URL(string: urlString)!
         }
         return tab
+    }
+
+    private func setIsHostedSummaryEnabled(_ isEnabled: Bool) {
+        return FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled)
+        }
     }
 
     // MARK: StoreTestUtility

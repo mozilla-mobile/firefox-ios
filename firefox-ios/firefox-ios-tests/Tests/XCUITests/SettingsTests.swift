@@ -283,7 +283,12 @@ class SettingsTests: FeatureFlaggedTestBase {
         navigator.goto(SummarizeSettings)
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         let summarizeContentSwitch = app.switches[settingsQuery.Summarize.summarizeContentSwitch]
+        let gesturesSectionTitle = app.tables.staticTexts["GESTURES"]
+        let shakeGestureSwitch = app.switches[settingsQuery.Summarize.shakeGestureSwitch]
+        waitForElementsToExist([gesturesSectionTitle, shakeGestureSwitch])
         summarizeContentSwitch.tap()
+        mozWaitForElementToNotExist(gesturesSectionTitle)
+        mozWaitForElementToNotExist(shakeGestureSwitch)
         XCTAssertEqual(summarizeContentSwitch.value as? String,
                        "0",
                        "Summarize content - toggle is enabled by default")
@@ -292,7 +297,7 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         navigator.goto(SummarizeSettings)
         summarizeContentSwitch.tap()
-
+        waitForElementsToExist([gesturesSectionTitle, shakeGestureSwitch])
         XCTAssertEqual(summarizeContentSwitch.value as? String,
                        "1",
                        "Summarize content - toggle is enabled by default")
@@ -440,14 +445,20 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         let summarizeContentSwitch = app.switches[settingsQuery.Summarize.summarizeContentSwitch]
+        let shakeGestureSwitch = app.switches[settingsQuery.Summarize.shakeGestureSwitch]
         waitForElementsToExist(
             [
-                summarizeContentSwitch
+                summarizeContentSwitch,
+                app.tables.staticTexts["GESTURES"],
+                shakeGestureSwitch,
             ]
         )
         XCTAssertEqual(summarizeContentSwitch.value as? String,
                        "1",
                        "Summarize content - toggle is enabled by default")
+        XCTAssertEqual(shakeGestureSwitch.value as? String,
+                       "1",
+                       "Shake gesture - toggle is enabled by default")
         navigator.goto(SettingsScreen)
     }
 

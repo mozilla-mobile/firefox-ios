@@ -10,9 +10,10 @@ import Common
  * Handles screenshots for a given tab, including pages with non-webview content.
  */
 class ScreenshotHelper {
-    fileprivate weak var controller: BrowserViewController?
+    private weak var controller: BrowserViewController?
     private let logger: Logger
 
+    @MainActor
     private var isIpad: Bool {
         // An additional check for horizontalSizeClass is needed since for iPad in multi windows state
         // the smallest window possible has horizontalSizeClass equal to compact, thus behave like an iPhone.
@@ -37,6 +38,7 @@ class ScreenshotHelper {
     /// The tool used to take a screenshot for a Tab depends on the contentType.
     /// For the homepage, the controller is used to generate the screenshot.
     /// For WebView content, the screenshot is captured directly from the view using takeSnapshot.
+    @MainActor
     func takeScreenshot(_ tab: Tab,
                         windowUUID: WindowUUID,
                         screenshotBounds: CGRect,

@@ -22,6 +22,8 @@ public struct PrefsKeys {
     public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
+    public static let TermsOfUseAccepted = "TermsOfUseAccepted"
+    public static let TermsOfUseDismissedDate = "TermsOfUseDismissedDate"
     public static let HomePageTab = "HomePageTab"
     public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
     public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
@@ -138,6 +140,7 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case toolbarUpdateKey = "ContextualHintToolbarUpdate"
+        case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }
 
     // Firefox settings
@@ -220,8 +223,11 @@ public struct PrefsKeys {
     // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
     public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"
 
+    // MARK: - Apple Intelligence
     // Used to determine if Apple Intelligence is available
     public static let appleIntelligenceAvailable = "appleIntelligenceAvailableKey"
+    // Used to determine if cannot run the Apple Intelligence model
+    public static let cannotRunAppleIntelligence = "cannotRunAppleIntelligenceKey"
 
     public struct Usage {
         public static let profileId = "profileId"

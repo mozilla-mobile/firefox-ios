@@ -14,11 +14,11 @@ protocol TabScrollHandlerProtocol: AnyObject {
 }
 
 final class TabScrollHandler: NSObject,
-                                 SearchBarLocationProvider,
-                                 TabScrollHandlerProtocol,
-                                 UIScrollViewDelegate {
+                              SearchBarLocationProvider,
+                              TabScrollHandlerProtocol,
+                              UIScrollViewDelegate {
     protocol Delegate: AnyObject {
-        func startAnimatingToolbar(state: ToolbarState)
+        func startAnimatingToolbar(displayState: ToolbarDisplayState)
         func showToolbar()
         func hideToolbar()
     }
@@ -42,9 +42,23 @@ final class TabScrollHandler: NSObject,
         case down
     }
 
-    enum ToolbarState {
+    enum ToolbarDisplayState {
         case collapsed
-        case visible
+        case expanded
+        case transitioning
+
+        init() { self = .expanded }
+
+        var isExpanded: Bool { self == .expanded }
+        var isCollapsed: Bool { self == .collapsed }
+
+        /// Updates toolbar display state using move semantics for better performance.
+        /// `consuming` takes ownership to avoid copying, `consume` transfers ownership.
+        /// Performance: Eliminates defensive copying for faster updates.
+        mutating func update(displayState: consuming ToolbarDisplayState) {
+            guard self != displayState else { return }
+            self = consume displayState
+        }
     }
 
     weak var tab: Tab? {
@@ -81,16 +95,12 @@ final class TabScrollHandler: NSObject,
     private var lastPanTranslation: CGFloat = 0
     private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
-    var toolbarState: ToolbarState = .visible
+    var toolbarDisplayState = ToolbarDisplayState()
 
     private weak var delegate: TabScrollHandler.Delegate?
 
     private let windowUUID: WindowUUID
     private let logger: Logger
-
-    private var toolbarsShowing: Bool {
-        return toolbarState == .visible
-    }
 
     private var isZoomedOut = false
     private var lastZoomedScale: CGFloat = 0
@@ -168,13 +178,12 @@ final class TabScrollHandler: NSObject,
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
                                bottomContainer: BaseAlphaStackView?,
                                headerContainer: BaseAlphaStackView? ) {
-        if let overKeyboardContainer = overKeyboardContainer,
-                let bottomContainer = bottomContainer, isBottomSearchBar {
+        if let overKeyboardContainer, let bottomContainer, isBottomSearchBar {
             bottomContainerScrollHeight = bottomContainer.frame.height
             overKeyboardScrollHeight = overKeyboardScrollHeight(overKeyboardContainer: overKeyboardContainer,
                                                                 safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
             headerHeight = 0
-        } else if let headerContainer = headerContainer {
+        } else if let headerContainer {
             headerHeight = headerContainer.frame.height
             bottomContainerScrollHeight = 0
             overKeyboardScrollHeight = 0
@@ -200,7 +209,7 @@ final class TabScrollHandler: NSObject,
         return hasScrollableContent && voiceOverOff
     }
 
-    // If scrollview contenSize is bigger than scrollview height scroll is enabled
+    // If scrollview contentSize is bigger than scrollview height scroll is enabled
     var hasScrollableContent: Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
             contentSize.height
@@ -261,7 +270,7 @@ final class TabScrollHandler: NSObject,
         guard shouldRespondToScroll(for: velocity, delta: delta) else { return }
 
         updateToolbarOffset(for: delta)
-        updateToolbarState()
+        updateToolbarDisplayState()
     }
 
     /// Determines whether a scroll gesture is significant enough to trigger UI changes,
@@ -287,17 +296,11 @@ final class TabScrollHandler: NSObject,
     /// - If the user drags **up**, the content moves **down** (delta > 0), so the scroll direction is `.down`.
     /// - If the user drags **down**, the content moves **up** (delta < 0), so the scroll direction is `.up`.
     private func setScrollDirection(_ delta: CGFloat) {
-        if delta > 0 {
-            scrollDirection = .down
-        } else if delta < 0 {
-            scrollDirection = .up
-        }
+        scrollDirection = delta > 0 ? .down : .up
     }
 
     func showToolbars(animated: Bool) {
-        guard toolbarState != .visible else { return }
-
-        toolbarState = .visible
+        toolbarDisplayState.update(displayState: .expanded)
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * showDurationRatio)
         animateToolbarsWithOffsets(
@@ -311,9 +314,7 @@ final class TabScrollHandler: NSObject,
     }
 
     func hideToolbars(animated: Bool) {
-        guard toolbarState != .collapsed else { return }
-
-        toolbarState = .collapsed
+        toolbarDisplayState.update(displayState: .collapsed)
 
         let actualDuration = TimeInterval(UX.toolbarBaseAnimationDuration * hideDurationRation)
         animateToolbarsWithOffsets(
@@ -355,7 +356,7 @@ final class TabScrollHandler: NSObject,
         context: UnsafeMutableRawPointer?
     ) {
         if keyPath == "contentSize" {
-            guard shouldUpdateUIWhenScrolling, toolbarsShowing else { return }
+            guard shouldUpdateUIWhenScrolling, toolbarDisplayState.isExpanded else { return }
 
             showToolbars(animated: true)
         }
@@ -484,9 +485,7 @@ final class TabScrollHandler: NSObject,
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        if toolbarState == .collapsed {
-            showToolbars(animated: true)
-        }
+        if toolbarDisplayState.isCollapsed { showToolbars(animated: true) }
         return true
     }
 }
@@ -563,17 +562,19 @@ private extension TabScrollHandler {
         return isMaxContentOffset && contentIsScrollable
     }
 
-    /// Updates the state of the toolbar based on the scroll positions of various UI components.
+    /// Updates the display state of the toolbar based on the scroll positions of various UI components.
     ///
-    /// Based on their states, it sets the toolbar state to one of the following:
+    /// Based on their states, it sets the toolbar display  state to one of the following:
     /// - `.collapsed`: All containers are fully collapsed (scrolled to their maximum).
-    /// - `.visible`: Toolbars are currently showing (`toolbarsShowing == true`).
-    /// - `.animating`: In transition or partially visible state.
-    func updateToolbarState() {
+    /// - `.expanded`: Toolbar is currently fully expanded (`toolbarDisplayState.isExpanded == true`).
+    /// - `.transitioning`: In transition or partially expanded state.
+    func updateToolbarDisplayState() {
         if isToolbarCollapsed() {
-            setToolbarState(state: .collapsed)
-        } else if toolbarsShowing {
-            setToolbarState(state: .visible)
+            toolbarDisplayState.update(displayState: .collapsed)
+        } else if toolbarDisplayState.isExpanded {
+            toolbarDisplayState.update(displayState: .expanded)
+        } else {
+            toolbarDisplayState.update(displayState: .transitioning)
         }
     }
 
@@ -594,12 +595,6 @@ private extension TabScrollHandler {
         let headerContainerIsCollapsed = headerTopOffset == -headerHeight
 
         return headerContainerIsCollapsed
-    }
-
-    func setToolbarState(state: ToolbarState) {
-        guard toolbarState != state else { return }
-
-        toolbarState = state
     }
 
     func updateToolbarOffset(for delta: CGFloat) {

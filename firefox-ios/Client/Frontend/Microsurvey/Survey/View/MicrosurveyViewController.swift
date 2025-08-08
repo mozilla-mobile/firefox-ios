@@ -16,9 +16,9 @@ final class MicrosurveyViewController: UIViewController,
                                        Notifiable {
     typealias SubscriberStateType = MicrosurveyState
 
-    // MARK: Themable Variables
+    // MARK: Themeable Variables
     var themeManager: Common.ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: Common.NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -135,8 +135,11 @@ final class MicrosurveyViewController: UIViewController,
         microsurveyState = MicrosurveyState(windowUUID: windowUUID)
         self.model = model
         super.init(nibName: nil, bundle: nil)
-        setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.DynamicFontChanged]
+        )
 
         subscribeToRedux()
         configureUI()
@@ -166,7 +169,7 @@ final class MicrosurveyViewController: UIViewController,
         })
     }
 
-    func unsubscribeFromRedux() {
+    nonisolated func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .microsurvey)
@@ -176,7 +179,7 @@ final class MicrosurveyViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
@@ -194,7 +197,6 @@ final class MicrosurveyViewController: UIViewController,
 
     deinit {
         unsubscribeFromRedux()
-        tableView.removeFromSuperview()
     }
 
     private func configureUI() {

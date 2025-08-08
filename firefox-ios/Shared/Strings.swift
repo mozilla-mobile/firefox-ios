@@ -333,6 +333,14 @@ extension String {
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
 
+        public struct Summarize {
+            public static let Description = MZLocalizedString(
+                key: "ContextualHints.Summarize.Description.v142",
+                tableName: "Summarize",
+                value: "Tap to summarize this page. Touch and hold for Reader View.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the summarize button on the new toolbar layout.")
+        }
+
         public struct FeltDeletion {
             public static let Body = MZLocalizedString(
                 key: "ContextualHints.FeltDeletion.Body.v122",
@@ -1070,6 +1078,13 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+            public struct Library {
+                public static let Title = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.Library.Title.v143",
+                    tableName: "FirefoxHomepage",
+                    value: "Shortcuts",
+                    comment: "This is the navigation title for the Shortcuts Library view")
+            }
         }
 
         public struct SearchBar {
@@ -2147,7 +2162,6 @@ extension String {
             value: "Page is still loading. Wait for it to finish, then hit summarize.",
             comment: "The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading)."
         )
-        // TODO: correct label ?
         public static let UnknownErrorMessage = MZLocalizedString(
             key: "Summarizer.Error.Unknown.Message.v142",
             tableName: "Summarizer",
@@ -2165,6 +2179,18 @@ extension String {
             tableName: "Summarizer",
             value: "Close",
             comment: "The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried."
+        )
+        public static let HostedBrandLabel = MZLocalizedString(
+            key: "Summarizer.HostedBrand.Label.v142",
+            tableName: "Summarizer",
+            value: "Summarized by %@",
+            comment: "The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox)."
+        )
+        public static let AppleBrandLabel = MZLocalizedString(
+            key: "Summarizer.AppleBrand.Label.v142",
+            tableName: "Summarizer",
+            value: "Summarized by Apple Intelligence",
+            comment: "The label displayed in the summary report when the summary was generated using Apple Intelligence."
         )
         public static let ToSAlertTitleLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.Title.Label.v142",
@@ -2495,6 +2521,13 @@ extension String {
                 tableName: "Settings",
                 value: "Summarize Pages",
                 comment: "This is the title for the setting that toggles the Summarize feature under the Summarize settings section."
+            )
+
+            public static let FooterTitle = MZLocalizedString(
+                key: "Settings.Summarize.FooterTitle.v142",
+                tableName: "Settings",
+                value: "Provides access to summarize pages.",
+                comment: "This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section."
             )
 
             public struct GesturesSection {
@@ -6598,6 +6631,12 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
+
+        public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.NewTab.Button.v142",
+            tableName: "Toolbar",
+            value: "Summarize page",
+            comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
 
         public static let TabsButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.Tabs.Button.A11y.Label.v135",

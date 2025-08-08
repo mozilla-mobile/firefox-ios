@@ -6,7 +6,7 @@ import Foundation
 
 /// Error types for summarization flows, mapping underlying model errors to user‑friendly cases.
 /// The UI layer will rely on userMessage to display appropriate messages.
-enum SummarizerError: Error, LocalizedError, Sendable {
+public enum SummarizerError: Error, LocalizedError, Sendable {
     case tooLong
     case rateLimited
     case busy
@@ -19,7 +19,36 @@ enum SummarizerError: Error, LocalizedError, Sendable {
     case noContent
     case unknown(Error)
 
-    var errorDescription: String? { userMessage }
+    /// Returns a telemetry-safe string describing how the summarizer failed.
+    ///
+    /// We need insights into failures while carefully limiting
+    /// what gets sent over to telemetry. Therefore:
+    /// - For known cases: plain tokens like `tooLong` or `rateLimited`.
+    /// - For invalid HTTP responses: we include the status code.
+    /// - For unknown errors:
+    ///   - `NSError`: domain + code.
+    ///   - Swift `Error`: the type name only.
+    /// This intentionally never uses `description`, `localizedDescription`,
+    /// or any raw serialization of the error
+    public var telemetryDescription: String {
+        switch self {
+        case .tooLong: return "tooLong"
+        case .rateLimited: return "rateLimited"
+        case .busy: return "busy"
+        case .safetyBlocked: return "safetyBlocked"
+        case .unsupportedLanguage: return "unsupportedLanguage"
+        case .invalidResponse(let statusCode): return "invalidResponse(statusCode: \(statusCode))"
+        case .unableToExtractContent: return "unableToExtractContent"
+        case .invalidChunk: return "invalidChunk"
+        case .cancelled: return "cancelled"
+        case .noContent: return "noContent"
+        case .unknown(let error):
+            if let nsError = error as NSError? {
+                return "unknown(domain: \(nsError.domain), code: \(nsError.code))"
+            }
+            return "unknown(type: \(String(describing: type(of: error))))"
+        }
+    }
 
     // TODO(FXIOS-12934): Localize these strings
     var userMessage: String {

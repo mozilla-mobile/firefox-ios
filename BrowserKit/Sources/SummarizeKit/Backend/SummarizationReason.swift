@@ -3,6 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// Model for all the reasons summarization might be disallowed.
-public enum SummarizationReason: String, Decodable {
+public enum SummarizationReason: String, Decodable, Sendable {
     case documentLanguageUnsupported, documentNotReadable, contentTooLong
 }

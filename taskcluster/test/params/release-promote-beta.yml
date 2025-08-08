@@ -31,6 +31,7 @@ release_type: beta
 repository_type: git
 shipping_phase: promote
 target_tasks_method: promote
+product_type: firefox
 tasks_for: action
 version: '137.0b1'
 

@@ -1,0 +1,208 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - Ai
+  - Summarizer
+
+###############################################################################
+# Documentation
+###############################################################################
+
+# Add your new metrics and/or events here.
+
+ai.summarize:
+  summarization_requested:
+    type: event
+    description: |
+      Recorded the instant the user initiates the summarization.
+      (e.g. taps menu button, toolbar icon or shakes the device)
+    extra_keys:
+      trigger:
+        type: string
+        description: |
+          Describes the action used to trigger summarization.
+          Options are listed in the `SummarizerTrigger` enum.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    no_lint:
+      - COMMON_PREFIX
+  summarization_started:
+    type: event
+    description: |
+      Recorded when the summarizer service starts processing the page's text content.
+    extra_keys:
+      # NOTE on why we need to record both lengths in char and words.
+      # We capture both chars and words since one alone can mislead when trying to estimate the number of tokens.
+      # Usually we use these estimates:
+      #   - tokens ≈ chars ÷ 4 (works poorly for sentences with many tiny words)
+      #   - tokens ≈ words × 1.33 (fails with bigger words)
+      # Examples:
+      # 1. `supercalifragilisticexpialidocious`
+      #     - 34 chars, 1 word.
+      #     - Token count: 10.
+      #     - Word-based estimate: 1.33 tokens.
+      # 2. `A man sat on a mat, ate a fig, got a hat, saw a cat, ran a lap,
+      #    met a lad, had a nap, fed a rat, dug a pit, hid a bat`
+      #     - 117 chars, 32 words.
+      #     - Token count: 42.
+      #     - Char-based estimate: 29.25 tokens.
+      # For more context on how tokenizers works see:
+      #     https://simonwillison.net/2023/Jun/8/gpt-tokenizers/
+      length_chars:
+        type: quantity
+        description: |
+          The length of the text to be summarized, in characters.
+      length_words:
+        type: quantity
+        description: |
+          The length of the text to be summarized, in words.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    no_lint:
+      - COMMON_PREFIX
+  summarization_completed:
+    type: event
+    description: |
+      Recorded when the summarizer service returns the summary or errors out.
+    extra_keys:
+      outcome:
+        type: boolean
+        description: |
+          Describes the outcome of the summarization task.
+          True if the summarization was successful, false otherwise.
+      length_chars:
+        type: quantity
+        description: |
+          The length of the summarized text, in characters.
+      length_words:
+        type: quantity
+        description: |
+          The length of the summarized text, in words.
+      connection_type:
+        type: string
+        description: |
+          Describes the type of connection used during summarization.
+          Options are listed in the `DeviceInfo.ConnectionType` enum.
+      model:
+        type: string
+        description: |
+          Describes the LLM used to summarize the text.
+          Options are listed in the `SummarizerModel` enum.
+      error_type:
+        type: string
+        description: |
+          Describes the error type when summarization fails.
+          Options are listed in the `SummarizerError.telemetryDescription`.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    no_lint:
+      - COMMON_PREFIX
+  summarization_displayed:
+    type: event
+    description: |
+      Recorded when the result of the summarization is displayed to the user.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    no_lint:
+      - COMMON_PREFIX
+  summarization_closed:
+      type: event
+      description: |
+        Recorded when the user cancels or closes the summarization at any point.
+      bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+      data_reviews:
+        - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+      notification_emails:
+        - fx-ios-data-stewards@mozilla.com
+      expires: "2026-01-01"
+  summarization_time:
+    type: timing_distribution
+    time_unit: millisecond
+    description: |
+      Records the total time for generating the summary and showing it to the user.
+      Starts when the user triggers summarization.
+      Ends when user sees the result or an error.
+    bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    no_lint:
+      - COMMON_PREFIX
+  summarization_consent_displayed:
+    type: event
+    description: |
+      Recorded when the user is shown the Terms of Service consent dialogue.
+    extra_keys:
+      agreed:
+        type: boolean
+        description: |
+          Describes whether the user accepted the summarization terms of service.
+    bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    no_lint:
+      - COMMON_PREFIX
+
+user.ai.summarize:
+  summarization_enabled:
+    type: boolean
+    description: |
+      Records if the user has summarization enabled.
+    bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  shake_gesture_enabled:
+    type: boolean
+    description: |
+      Records if the user has shake to summarize option enabled
+    bugs:
+    - https://github.com/mozilla-mobile/firefox-ios/issues/27783
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28453
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
