@@ -1409,18 +1409,40 @@ class BrowserViewController: UIViewController,
     }
 
     func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
-        if let tab {
+        guard let tab else {
+            // No tab, call completion immediately
+            completion?()
+            return
+        }
+
+        let screenshotHelper = self.screenshotHelper
+        let windowUUID = self.windowUUID
+
+        let screenshotBounds = CGRect(
+            x: contentContainer.frame.origin.x,
+            y: -contentContainer.frame.origin.y,
+            width: view.frame.width,
+            height: view.frame.height
+        )
+
+        let takeScreenshot = {
             screenshotHelper.takeScreenshot(
                 tab,
                 windowUUID: windowUUID,
-                screenshotBounds: CGRect(
-                    x: contentContainer.frame.origin.x,
-                    y: -contentContainer.frame.origin.y,
-                    width: view.frame.width,
-                    height: view.frame.height
-                ),
-                completion: completion
+                screenshotBounds: screenshotBounds
             )
+        }
+
+        if let completion {
+            // For non-blocking navigation (e.g., opening the tab tray), call completion immediately
+            // and take screenshot asynchronously
+            completion()
+            DispatchQueue.main.async {
+                takeScreenshot()
+            }
+        } else {
+            // For synchronous calls, take the screenshot immediately.
+            takeScreenshot()
         }
     }
 

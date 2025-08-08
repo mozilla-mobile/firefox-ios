@@ -396,6 +396,45 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(browserCoordinator.showSummarizePanelCalled, 1)
     }
+    
+    func testWillNavigateAway_withoutCompletion_takesScreenshotSynchronously() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+
+        subject.willNavigateAway(from: tab, completion: nil)
+
+        XCTAssertTrue(screenshotHelper.takeScreenshotCalled)
+    }
+
+    func testWillNavigateAway_withCompletion_takesScreenshotAsynchronously() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let expectation = XCTestExpectation(description: "Screenshot should be taken asynchronously")
+        screenshotHelper.screenshotExpectation = expectation
+
+        var completionCalled = false
+        subject.willNavigateAway(from: tab) {
+            completionCalled = true
+        }
+
+        XCTAssertTrue(completionCalled)
+        XCTAssertFalse(screenshotHelper.takeScreenshotCalled)
+
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertTrue(screenshotHelper.takeScreenshotCalled)
+    }
+
+    func testWillNavigateAway_withNilTab_completesImmediatelyWithoutScreenshot() {
+        let subject = createSubject()
+
+        var completionCalled = false
+        subject.willNavigateAway(from: nil) {
+            completionCalled = true
+        }
+
+        XCTAssertTrue(completionCalled)
+        XCTAssertFalse(screenshotHelper.takeScreenshotCalled)
+    }
 
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
@@ -504,12 +543,14 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
 class MockScreenshotHelper: ScreenshotHelper {
     var takeScreenshotCalled = false
+    var screenshotExpectation: XCTestExpectation?
 
     override func takeScreenshot(_ tab: Tab,
                                  windowUUID: WindowUUID,
                                  screenshotBounds: CGRect,
                                  completion: (() -> Void)? = nil) {
         takeScreenshotCalled = true
+        screenshotExpectation?.fulfill()
     }
 }
 
