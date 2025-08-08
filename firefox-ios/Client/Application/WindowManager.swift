@@ -131,13 +131,24 @@ final class WindowManagerImplementation: WindowManager {
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
-        guard let tabManager = window(for: windowUUID)?.tabManager else {
-            assertionFailure("Tab Manager unavailable for requested UUID: \(windowUUID). This is a client error.")
-            logger.log("No tab manager for window UUID: \(windowUUID)", level: .fatal, category: .window)
+        func unsafeAnyTabManager() -> TabManager {
+            // This is unsafe, but is the best fallback we have to try to handle non-fatally (but may crash anyway)
             return windows.first!.value.tabManager!
         }
 
-        return tabManager
+        guard let window = window(for: windowUUID) else {
+            assertionFailure("No window for UUID: \(windowUUID). This is a client error.")
+            logger.log("No window for UUID: \(windowUUID)", level: .fatal, category: .window)
+            return unsafeAnyTabManager()
+        }
+
+        guard let manager = window.tabManager else {
+            assertionFailure("Window alive, but no TabManager for UUID: \(windowUUID). This is a client error.")
+            logger.log("Window alive, but no TabManager for UUID: \(windowUUID)", level: .fatal, category: .window)
+            return unsafeAnyTabManager()
+        }
+
+        return manager
     }
 
     func allWindowTabManagers() -> [TabManager] {
