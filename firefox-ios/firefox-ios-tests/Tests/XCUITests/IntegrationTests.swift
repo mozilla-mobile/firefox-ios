@@ -328,6 +328,7 @@ class IntegrationTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
 
         navigator.nowAt(SettingsScreen)
+        app.swipeDown()
         mozWaitForElementToExist(app.staticTexts["GENERAL"])
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"])
         mozWaitForElementToExist(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
