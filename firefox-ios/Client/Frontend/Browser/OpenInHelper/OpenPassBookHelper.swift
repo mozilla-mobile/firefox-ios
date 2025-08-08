@@ -38,6 +38,7 @@ final class OpenPassBookHelper: @unchecked Sendable {
         self.logger = logger
     }
 
+    @MainActor
     static func shouldOpenWithPassBook(mimeType: String, forceDownload: Bool = false) -> Bool {
         return mimeType == MIMEType.Passbook && PKAddPassesViewController.canAddPasses() && !forceDownload
     }
