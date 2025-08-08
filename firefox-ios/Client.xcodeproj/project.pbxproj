@@ -1492,6 +1492,7 @@
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
 		C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */; };
 		C710FDB72DCBDBEF0046475F /* TopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */; };
+		C714D8362E468D8200FC02E6 /* homepageRedesignOff.json in Resources */ = {isa = PBXBuildFile; fileRef = C714D8352E468D6900FC02E6 /* homepageRedesignOff.json */; };
 		C743CB1D2DF201D50069CB23 /* StoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C743CB1C2DF201D50069CB23 /* StoryCell.swift */; };
 		C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */; };
 		C796E22A2E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */; };
@@ -9399,6 +9400,7 @@
 		C6C94C1CB6286845DEAF8EDD /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCell.swift; sourceTree = "<group>"; };
+		C714D8352E468D6900FC02E6 /* homepageRedesignOff.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = homepageRedesignOff.json; sourceTree = "<group>"; };
 		C7354071A05454E7FF3C70D8 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		C743CB1C2DF201D50069CB23 /* StoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCell.swift; sourceTree = "<group>"; };
 		C7664A29B78A808DC314353C /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Search.strings; sourceTree = "<group>"; };
@@ -14893,6 +14895,7 @@
 				BCFB141E2E1FFECC0005D46B /* feltPrivacySimplifiedUIOn.json */,
 				B184D4B72E1D4E1500549CAC /* storiesRedesignOn.json */,
 				B184D4B52E1D4C2B00549CAC /* storiesRedesignOff.json */,
+				C714D8352E468D6900FC02E6 /* homepageRedesignOff.json */,
 				8A94DB942E0F16E60005FE69 /* homepageSearchBarOff.json */,
 				8A94DB952E0F16E70005FE69 /* homepageSearchBarOn.json */,
 				8A3709E22DC1290E004B9350 /* defaultEnabledOn.json */,
@@ -16783,6 +16786,7 @@
 				8A1F6C2F2BC5A62400DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
 				8A1A93592B757C7C0069C190 /* landscape.json in Resources */,
 				E4CD9F5B1A71506C00318571 /* Reader.css in Resources */,
+				C714D8362E468D8200FC02E6 /* homepageRedesignOff.json in Resources */,
 				5FACA10C2D099A9E00B289BC /* AccessibilityTestPlan.xctestplan in Resources */,
 				D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */,
 				BCFB141D2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json in Resources */,
