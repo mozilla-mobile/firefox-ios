@@ -63,6 +63,9 @@ public enum LoggerCategory: String {
     /// Related to showing the share sheet from multiple places in the app.
     case shareSheet
 
+    /// Related to the shortcuts library
+    case shortcutsLibrary
+
     /// Related to storage (keychain, SQL database, store of different types, etc).
     case storage
 
