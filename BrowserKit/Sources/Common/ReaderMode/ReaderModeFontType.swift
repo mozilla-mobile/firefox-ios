@@ -29,6 +29,7 @@ public enum ReaderModeFontType: String, Sendable {
         }
     }
 
+    @MainActor
     public init(type: String) {
         let font = ReaderModeFontType(rawValue: type)
         let isBoldFontEnabled = UIAccessibility.isBoldTextEnabled
