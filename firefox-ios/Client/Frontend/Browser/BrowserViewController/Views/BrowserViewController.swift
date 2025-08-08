@@ -350,7 +350,7 @@ class BrowserViewController: UIViewController,
 
     // TODO: Add proper feature flag mechanism
     var isTabScrollRefactoringEnabled: Bool {
-        return true
+        return false
     }
 
     // MARK: Computed vars
