@@ -447,7 +447,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        logger.log("BVC deallocating", level: .info, category: .lifecycle)
+        logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
         unsubscribeFromRedux()
         observedWebViews.forEach({ stopObserving(webView: $0) })
     }
@@ -822,6 +822,11 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
+        let allWindowUUIDs = (AppContainer.shared.resolve() as WindowManager).windows.keys.map { $0.uuidString.prefix(4) }
+        logger.log("BrowserDidBecomeActive. UUID = \(windowUUID.uuidString.prefix(4)). All windows: \(allWindowUUIDs)",
+                   level: .info,
+                   category: .lifecycle)
+
         NightModeHelper.cleanNightModeDefaults()
 
         // Update lock icon without redrawing the whole locationView
@@ -857,6 +862,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Start At Home
     private func dispatchStartAtHomeAction() {
         let startAtHomeAction = StartAtHomeAction(
+            tabManager: tabManager,
             windowUUID: windowUUID,
             actionType: StartAtHomeActionType.didBrowserBecomeActive
         )

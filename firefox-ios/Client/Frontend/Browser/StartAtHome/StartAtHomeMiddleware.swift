@@ -38,7 +38,19 @@ final class StartAtHomeMiddleware {
         MainActor.assumeIsolated {
             switch action.actionType {
             case StartAtHomeActionType.didBrowserBecomeActive:
-                let shouldStartAtHome = self.startAtHomeCheck(windowUUID: action.windowUUID)
+                guard let action = action as? StartAtHomeAction,
+                      let tabManager = action.tabManager else {
+                    self.logger.log(
+                        "Start at Home action does not have proper setup.",
+                        level: .warning,
+                        category: .tabs
+                    )
+                    return
+                }
+                let shouldStartAtHome = self.startAtHomeCheck(
+                    windowUUID: action.windowUUID,
+                    tabManager: tabManager
+                )
                 store.dispatchLegacy(
                     StartAtHomeAction(
                         shouldStartAtHome: shouldStartAtHome,
@@ -51,13 +63,12 @@ final class StartAtHomeMiddleware {
         }
     }
 
-    private func tabManager(for uuid: WindowUUID) -> TabManager {
+    private func fetchTabManager(for uuid: WindowUUID) -> TabManager {
         guard uuid != .unavailable else {
             assertionFailure()
             logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
             return windowManager.allWindowTabManagers().first!
         }
-
         return windowManager.tabManager(for: uuid)
     }
 
@@ -67,8 +78,9 @@ final class StartAtHomeMiddleware {
     ///
     /// - Returns: `true` if a homepage tab was selected and displayed, `false` otherwise.
     @MainActor
-    private func startAtHomeCheck(windowUUID: WindowUUID) -> Bool {
-        let tabManager = tabManager(for: windowUUID)
+    private func startAtHomeCheck(windowUUID: WindowUUID, tabManager: TabManager) -> Bool {
+        let fetchedTabManager = fetchTabManager(for: windowUUID)
+        logger.log("Fetching tab manager from window manager \(fetchedTabManager.windowUUID)", level: .info, category: .window)
         let startAtHomeManager = StartAtHomeHelper(
             prefs: prefs,
             isRestoringTabs: !tabManager.tabRestoreHasFinished
