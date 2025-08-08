@@ -249,6 +249,7 @@ final class AppLaunchUtil: Sendable {
         }
     }
 
+    @MainActor
     private func setMenuItems() {
         let webViewModel = MenuHelperWebViewModel(searchTitle: .MenuHelperSearchWithFirefox,
                                                   findInPageTitle: .MenuHelperFindInPage)
