@@ -24,7 +24,3 @@ struct ShortcutsLibraryAction: Action {
 enum ShortcutsLibraryActionType: ActionType {
     case initialize
 }
-
-enum ShortcutsLibraryMiddlewareActionType: ActionType {
-    case retrievedUpdatedSites
-}
