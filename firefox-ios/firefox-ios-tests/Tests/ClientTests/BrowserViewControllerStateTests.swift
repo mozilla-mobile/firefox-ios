@@ -270,6 +270,21 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.shouldStartAtHome)
     }
 
+    // MARK: - Summarizer
+    func test_configuredSummarizer_summarizerAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = SummarizeAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: SummarizeMiddlewareActionType.configuredSummarizer
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .summarizer)
+        XCTAssertEqual(newState.navigationDestination?.url, nil)
+    }
+
     // MARK: - Zero Search State
 
     func test_tapOnHomepageSearchBar_navigationBrowserAction_returnsExpectedState() {

@@ -34,6 +34,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case readerModeLongPressAction
         case dataClearance
         case passwordGenerator
+        // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
         case summarizer
     }
 
