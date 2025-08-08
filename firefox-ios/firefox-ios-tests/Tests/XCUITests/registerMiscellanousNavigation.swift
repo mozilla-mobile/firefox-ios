@@ -19,6 +19,10 @@ func registerMiscellanousNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
         screenState.tap(app.buttons[AccessibilityIdentifiers.ZoomPageBar.doneButton], to: BrowserTab)
     }
 
+    map.addScreenState(PrintPage) { screenState in
+        screenState.tap(app.navigationBars.buttons["Cancel"], to: BrowserTab)
+    }
+
     map.addScreenState(ReloadLongPressMenu) { screenState in
         screenState.backAction = cancelBackAction(for: app)
         screenState.dismissOnUse = true
