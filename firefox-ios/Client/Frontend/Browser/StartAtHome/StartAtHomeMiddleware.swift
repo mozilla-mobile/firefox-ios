@@ -63,13 +63,12 @@ final class StartAtHomeMiddleware {
         }
     }
 
-    private func tabManager(for uuid: WindowUUID) -> TabManager {
+    private func fetchTabManager(for uuid: WindowUUID) -> TabManager {
         guard uuid != .unavailable else {
             assertionFailure()
             logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
             return windowManager.allWindowTabManagers().first!
         }
-
         return windowManager.tabManager(for: uuid)
     }
 
@@ -80,6 +79,8 @@ final class StartAtHomeMiddleware {
     /// - Returns: `true` if a homepage tab was selected and displayed, `false` otherwise.
     @MainActor
     private func startAtHomeCheck(windowUUID: WindowUUID, tabManager: TabManager) -> Bool {
+        let fetchedTabManager = fetchTabManager(for: windowUUID)
+        logger.log("Fetching tab manager from window manager \(fetchedTabManager.windowUUID)", level: .info, category: .window)
         let startAtHomeManager = StartAtHomeHelper(
             prefs: prefs,
             isRestoringTabs: !tabManager.tabRestoreHasFinished
