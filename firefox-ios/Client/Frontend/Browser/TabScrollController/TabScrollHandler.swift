@@ -454,9 +454,9 @@ private extension TabScrollHandler {
     func updateToolbarDisplayState(for delta: CGFloat) {
         guard !toolbarDisplayState.isAnimating else { return }
 
-        if scrollDirection == .down && !toolbarDisplayState.isExpanded {
+        if scrollDirection == .down && !toolbarDisplayState.isCollapsed {
             hideToolbars(animated: true)
-        } else if scrollDirection == .up && !toolbarDisplayState.isCollapsed {
+        } else if scrollDirection == .up && !toolbarDisplayState.isExpanded {
             showToolbars(animated: true)
         } else {
             lastValidState = toolbarDisplayState
