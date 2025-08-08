@@ -36,6 +36,7 @@ public enum ReaderModeFontSize: Int {
         return self == ReaderModeFontSize.size13
     }
 
+    @MainActor
     public static var defaultSize: ReaderModeFontSize {
         switch UIApplication.shared.preferredContentSizeCategory {
         case .extraSmall:
