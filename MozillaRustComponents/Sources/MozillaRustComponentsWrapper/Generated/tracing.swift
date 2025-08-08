@@ -439,6 +439,182 @@ fileprivate struct FfiConverterString: FfiConverter {
 }
 
 
+
+
+public protocol EventSink: AnyObject {
+    
+    func onEvent(event: TracingEvent) 
+    
+}
+open class EventSinkImpl: EventSink, @unchecked Sendable {
+    fileprivate let pointer: UnsafeMutableRawPointer!
+
+    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoPointer {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noPointer: NoPointer) {
+        self.pointer = nil
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
+        return try! rustCall { uniffi_tracing_support_fn_clone_eventsink(self.pointer, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        guard let pointer = pointer else {
+            return
+        }
+
+        try! rustCall { uniffi_tracing_support_fn_free_eventsink(pointer, $0) }
+    }
+
+    
+
+    
+open func onEvent(event: TracingEvent)  {try! rustCall() {
+    uniffi_tracing_support_fn_method_eventsink_on_event(self.uniffiClonePointer(),
+        FfiConverterTypeTracingEvent_lower(event),$0
+    )
+}
+}
+    
+
+}
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceEventSink {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // This creates 1-element array, since this seems to be the only way to construct a const
+    // pointer that we can pass to the Rust code.
+    static let vtable: [UniffiVTableCallbackInterfaceEventSink] = [UniffiVTableCallbackInterfaceEventSink(
+        onEvent: { (
+            uniffiHandle: UInt64,
+            event: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeEventSink.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.onEvent(
+                     event: try FfiConverterTypeTracingEvent_lift(event)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            let result = try? FfiConverterTypeEventSink.handleMap.remove(handle: uniffiHandle)
+            if result == nil {
+                print("Uniffi callback interface EventSink: handle missing in uniffiFree")
+            }
+        }
+    )]
+}
+
+private func uniffiCallbackInitEventSink() {
+    uniffi_tracing_support_fn_init_callback_vtable_eventsink(UniffiCallbackInterfaceEventSink.vtable)
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeEventSink: FfiConverter {
+    fileprivate static let handleMap = UniffiHandleMap<EventSink>()
+
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = EventSink
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> EventSink {
+        return EventSinkImpl(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: EventSink) -> UnsafeMutableRawPointer {
+        guard let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: handleMap.insert(obj: value))) else {
+            fatalError("Cast to UnsafeMutableRawPointer failed")
+        }
+        return ptr
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EventSink {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if (ptr == nil) {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: EventSink, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEventSink_lift(_ pointer: UnsafeMutableRawPointer) throws -> EventSink {
+    return try FfiConverterTypeEventSink.lift(pointer)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEventSink_lower(_ value: EventSink) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeEventSink.lower(value)
+}
+
+
+
+
 public struct TracingEvent {
     public var level: TracingLevel
     public var target: String
@@ -621,128 +797,6 @@ extension TracingLevel: Equatable, Hashable {}
 
 
 
-
-
-public protocol EventSink: AnyObject {
-    
-    func onEvent(event: TracingEvent) 
-    
-}
-// Magic number for the Rust proxy to call using the same mechanism as every other method,
-// to free the callback once it's dropped by Rust.
-private let IDX_CALLBACK_FREE: Int32 = 0
-// Callback return codes
-private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
-private let UNIFFI_CALLBACK_ERROR: Int32 = 1
-private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
-
-// Put the implementation in a struct so we don't pollute the top-level namespace
-fileprivate struct UniffiCallbackInterfaceEventSink {
-
-    // Create the VTable using a series of closures.
-    // Swift automatically converts these into C callback functions.
-    //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceEventSink] = [UniffiVTableCallbackInterfaceEventSink(
-        onEvent: { (
-            uniffiHandle: UInt64,
-            event: RustBuffer,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceEventSink.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.onEvent(
-                     event: try FfiConverterTypeTracingEvent_lift(event)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterCallbackInterfaceEventSink.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface EventSink: handle missing in uniffiFree")
-            }
-        }
-    )]
-}
-
-private func uniffiCallbackInitEventSink() {
-    uniffi_tracing_support_fn_init_callback_vtable_eventsink(UniffiCallbackInterfaceEventSink.vtable)
-}
-
-// FfiConverter protocol for callback interfaces
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterCallbackInterfaceEventSink {
-    fileprivate static let handleMap = UniffiHandleMap<EventSink>()
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-extension FfiConverterCallbackInterfaceEventSink : FfiConverter {
-    typealias SwiftType = EventSink
-    typealias FfiType = UInt64
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func lift(_ handle: UInt64) throws -> SwiftType {
-        try handleMap.get(handle: handle)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        let handle: UInt64 = try readInt(&buf)
-        return try lift(handle)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func lower(_ v: SwiftType) -> UInt64 {
-        return handleMap.insert(obj: v)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(v))
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterCallbackInterfaceEventSink_lift(_ handle: UInt64) throws -> EventSink {
-    return try FfiConverterCallbackInterfaceEventSink.lift(handle)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterCallbackInterfaceEventSink_lower(_ v: EventSink) -> UInt64 {
-    return FfiConverterCallbackInterfaceEventSink.lower(v)
-}
-
-
 /**
  * Typealias from the type name used in the UDL file to the builtin type.  This
  * is needed because the UDL type name is used in function/method signatures.
@@ -789,13 +843,36 @@ public func registerEventSink(target: String, level: TracingLevel, sink: EventSi
     uniffi_tracing_support_fn_func_register_event_sink(
         FfiConverterString.lower(target),
         FfiConverterTypeTracingLevel_lower(level),
-        FfiConverterCallbackInterfaceEventSink_lower(sink),$0
+        FfiConverterTypeEventSink_lower(sink),$0
+    )
+}
+}
+/**
+ * Register an event sink that will receive events based on a minimum level
+ *
+ * If an event's level is at least `level`, then the event will be sent to this sink.
+ * If so, sinks registered with `register_event_sink` will be skiped.
+ *
+ * There can only be 1 min-level sink registered at once.
+ */
+public func registerMinLevelEventSink(level: TracingLevel, sink: EventSink)  {try! rustCall() {
+    uniffi_tracing_support_fn_func_register_min_level_event_sink(
+        FfiConverterTypeTracingLevel_lower(level),
+        FfiConverterTypeEventSink_lower(sink),$0
     )
 }
 }
 public func unregisterEventSink(target: String)  {try! rustCall() {
     uniffi_tracing_support_fn_func_unregister_event_sink(
         FfiConverterString.lower(target),$0
+    )
+}
+}
+/**
+ * Remove the sink registered with [register_min_level_event_sink], if any.
+ */
+public func unregisterMinLevelEventSink()  {try! rustCall() {
+    uniffi_tracing_support_fn_func_unregister_min_level_event_sink($0
     )
 }
 }
@@ -815,10 +892,16 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_tracing_support_checksum_func_register_event_sink() != 21336) {
+    if (uniffi_tracing_support_checksum_func_register_event_sink() != 52621) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_tracing_support_checksum_func_register_min_level_event_sink() != 21899) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tracing_support_checksum_func_unregister_event_sink() != 40761) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_tracing_support_checksum_func_unregister_min_level_event_sink() != 40850) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tracing_support_checksum_method_eventsink_on_event() != 39979) {
