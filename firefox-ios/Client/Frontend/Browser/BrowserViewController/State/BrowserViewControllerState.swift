@@ -134,6 +134,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return reduceStateForStartAtHomeAction(action: action, state: state)
         } else if let action = action as? ToolbarMiddlewareAction {
             return reduceStateForToolbarAction(action: action, state: state)
+        } else if let action = action as? SummarizeAction {
+            return reduceStateForSummarizeAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -184,6 +186,25 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         switch action.actionType {
         case StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted:
             return resolveStateForStartAtHome(action: action, state: state)
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
+    // MARK: - Summarize Action
+    static func reduceStateForSummarizeAction(
+        action: SummarizeAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case SummarizeMiddlewareActionType.configuredSummarizer:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.summarizer)
+            )
         default:
             return defaultState(from: state, action: action)
         }

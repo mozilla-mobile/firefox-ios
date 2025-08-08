@@ -1438,6 +1438,8 @@
 		BACE70062DC110CA00E6102C /* ASTranslationModelsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACE70052DC110C700E6102C /* ASTranslationModelsFetcher.swift */; };
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
 		BC0723522E33D7A6005BAC05 /* AppleIntelligenceUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0723512E33D7A2005BAC05 /* AppleIntelligenceUtilTests.swift */; };
+		BC129A2D2E452082004A6875 /* SummarizeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC129A2C2E45207F004A6875 /* SummarizeMiddleware.swift */; };
+		BC129A2F2E455900004A6875 /* SummarizeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC129A2E2E4558FD004A6875 /* SummarizeAction.swift */; };
 		BC8E91DC2E32953C00434FD0 /* AppleIntelligenceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */; };
 		BCBE058C2E3A8720004B6039 /* SummarizeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */; };
 		BCBE09BF2E3BAE2A004B6039 /* SummarizeSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBE09BE2E3BAE22004B6039 /* SummarizeSettingsViewControllerTests.swift */; };
@@ -9277,6 +9279,8 @@
 		BBF04862A944340C80C053E0 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerTests.swift; sourceTree = "<group>"; };
 		BC0723512E33D7A2005BAC05 /* AppleIntelligenceUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceUtilTests.swift; sourceTree = "<group>"; };
+		BC129A2C2E45207F004A6875 /* SummarizeMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeMiddleware.swift; sourceTree = "<group>"; };
+		BC129A2E2E4558FD004A6875 /* SummarizeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeAction.swift; sourceTree = "<group>"; };
 		BC4B49618B8FC822D4D0FCC2 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BC81442AA84F635F3067A2C5 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceUtil.swift; sourceTree = "<group>"; };
@@ -10958,6 +10962,8 @@
 		0B78DC6C2E3C9CDA00804872 /* Summarizer */ = {
 			isa = PBXGroup;
 			children = (
+				BC129A2E2E4558FD004A6875 /* SummarizeAction.swift */,
+				BC129A2C2E45207F004A6875 /* SummarizeMiddleware.swift */,
 				BA7CB0F02E4174A40052124B /* SummarizerTelemetry.swift */,
 				0B78DC6D2E3C9CE800804872 /* SummarizerNimbusUtils.swift */,
 			);
@@ -18143,6 +18149,7 @@
 				E1CEC2022A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift in Sources */,
 				C2D71B972A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift in Sources */,
 				2122EE552DDCFD8C00D42716 /* PageZoomSettingsViewModel.swift in Sources */,
+				BC129A2D2E452082004A6875 /* SummarizeMiddleware.swift in Sources */,
 				8A83B7462A264FA0002FF9AC /* SettingsCoordinator.swift in Sources */,
 				619FE8932CE6595B004F83E2 /* WallpaperMiddleware.swift in Sources */,
 				8A5435562D53CB6800501214 /* JumpBackInAction.swift in Sources */,
@@ -18301,6 +18308,7 @@
 				ED6F82C32D6E539200FC1098 /* UIColor+Color.swift in Sources */,
 				1D2F68AD2ACB266300524B92 /* RemoteTabsPanelState.swift in Sources */,
 				8A9AC465276CEC4E0047F5B0 /* LegacyJumpBackInCell.swift in Sources */,
+				BC129A2F2E455900004A6875 /* SummarizeAction.swift in Sources */,
 				8CE1E4322B8C76AE0026530B /* LoginStorage.swift in Sources */,
 				BA7CB0F12E4174AC0052124B /* SummarizerTelemetry.swift in Sources */,
 				4347B398298D6D7B0045F677 /* CreditCardTableViewModel.swift in Sources */,
