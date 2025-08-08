@@ -46,6 +46,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
     lazy var topSitesProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case HomepageActionType.initialize,
+            ShortcutsLibraryActionType.initialize,
             HomepageMiddlewareActionType.topSitesUpdated,
             TopSitesActionType.toggleShowSponsoredSettings:
             Task { @MainActor in
