@@ -902,6 +902,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Start At Home
     private func dispatchStartAtHomeAction() {
         let startAtHomeAction = StartAtHomeAction(
+            tabManager: tabManager,
             windowUUID: windowUUID,
             actionType: StartAtHomeActionType.didBrowserBecomeActive
         )
