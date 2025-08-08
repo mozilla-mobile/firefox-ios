@@ -5,6 +5,7 @@
 import UIKit
 
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
+@MainActor
 public final class DefaultThemeManager: ThemeManager, Notifiable {
     // These have been carried over from the legacy system to maintain backwards compatibility
     enum ThemeKeys {
@@ -113,6 +114,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         applyThemeUpdatesToWindows()
     }
 
+    @MainActor
     public func getUserManualTheme() -> ThemeType {
         guard let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
               let savedTheme = ThemeType(rawValue: savedThemeDescription)
@@ -127,6 +129,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         applyThemeUpdatesToWindows()
     }
 
+    @MainActor
     private func getThemeTypeBasedOnSystem() -> ThemeType {
         return UIScreen.main.traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
     }
@@ -235,7 +238,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         switch notification.name {
         case UIScreen.brightnessDidChangeNotification,
             UIApplication.didBecomeActiveNotification:
-            applyThemeUpdatesToWindows()
+            ensureMainThread {
+                self.applyThemeUpdatesToWindows()
+            }
         default:
             return
         }
