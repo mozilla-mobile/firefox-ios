@@ -1060,7 +1060,7 @@ extension String {
                 key: "FirefoxHomepage.Stories.PositionAccessibilityHint.v143",
                 tableName: "FirefoxHomepage",
                 value: "%@ of %@",
-                comment: "On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder is the current position; the second placeholder is the total story count. Example: '1 of 5'")
+                comment: "On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5'")
         }
 
         public struct RecentlySaved { }
