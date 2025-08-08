@@ -447,7 +447,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        logger.log("BVC deallocating", level: .info, category: .lifecycle)
+        logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
         unsubscribeFromRedux()
         observedWebViews.forEach({ stopObserving(webView: $0) })
     }
