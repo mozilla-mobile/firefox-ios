@@ -7,7 +7,6 @@ import SnapKit
 import Shared
 import Common
 
-@MainActor
 protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     var headerTopConstraint: Constraint? { get set }
     var overKeyboardContainerConstraint: Constraint? { get set }
