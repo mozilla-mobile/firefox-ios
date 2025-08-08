@@ -99,7 +99,7 @@ final class CuratedRecommendationCache: CuratedRecommendationsCacheProtocol {
         do {
             let data = try JSONEncoder().encode(
                 CachedRecommendations(
-                    recommendations: recommendations.map { CachableRecommendationItem.init(from: $0) },
+                    recommendations: recommendations.map { CachableRecommendationItem(from: $0) },
                     lastUpdated: Date()
                 )
             )
