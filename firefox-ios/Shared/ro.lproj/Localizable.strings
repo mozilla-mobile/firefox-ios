@@ -16,6 +16,24 @@
 /* About settings section title */
 "About" = "Despre";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Adaugă la comenzi rapide";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Fixează";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Anulează fixarea";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Salt la fila aceasta";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "File: %d";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Salvate recent";
+
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Vizitate recent";
 
@@ -42,6 +60,9 @@
 
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Adresă și căutare";
+
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Adaugă în lista de lectură";
 
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "Trimite mereu";
