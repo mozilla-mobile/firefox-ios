@@ -53,12 +53,19 @@ struct CachableRecommendationItem: Codable {
     }
 }
 
-struct CachedRecommendations: Codable {
+private struct CachedRecommendations: Codable {
     let recommendations: [CachableRecommendationItem]
     let lastUpdated: Date
 }
 
-final class CuratedRecommendationCache {
+protocol CuratedRecommendationsCacheProtocol {
+    func save(_ recommendations: [RecommendationDataItem])
+    func loadRecommendations() -> [RecommendationDataItem]?
+    func lastUpdatedDate() -> Date?
+    func clearCache()
+}
+
+final class CuratedRecommendationCache: CuratedRecommendationsCacheProtocol {
     private let logger: Logger
     private let fileManager: FileManagerProtocol
     private let fileName = "curated_recommendations_cache.json"
@@ -106,7 +113,15 @@ final class CuratedRecommendationCache {
         }
     }
 
-    func load() -> CachedRecommendations? {
+    func loadRecommendations() -> [RecommendationDataItem]? {
+        return load()?.recommendations.map { $0.toModel() }
+    }
+
+    func lastUpdatedDate() -> Date? {
+        return load()?.lastUpdated
+    }
+
+    private func load() -> CachedRecommendations? {
         guard let cacheURL = cacheURL else {
             logger.log(
                 "The cache URL for Merino could not be constructed",
@@ -127,14 +142,6 @@ final class CuratedRecommendationCache {
             )
             return nil
         }
-    }
-
-    func loadRecommendations() -> [RecommendationDataItem]? {
-        return load()?.recommendations.map { $0.toModel() }
-    }
-
-    func lastUpdatedDate() -> Date? {
-        return load()?.lastUpdated
     }
 
     func clearCache() {
