@@ -16,6 +16,14 @@ public protocol FileManagerProtocol: Sendable {
                          attributes: [FileAttributeKey: Any]?) throws
     func contentsOfDirectoryAtPath(_ path: String,
                                    withFilenamePrefix prefix: String) throws -> [String]
+
+    func contents(atPath path: String) -> Data?
+    func contentsOfDirectory(at url: URL,
+                             includingPropertiesForKeys keys: [URLResourceKey]?,
+                             options mask: FileManager.DirectoryEnumerationOptions) throws -> [URL]
+    func createFile(atPath path: String,
+                    contents data: Data?,
+                    attributes attr: [FileAttributeKey: Any]?) -> Bool
 }
 
 // PR #28007: The Foundation FileManager is protected by a lock and marked @unchecked Sendable.

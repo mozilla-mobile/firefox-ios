@@ -7,12 +7,12 @@ import Common
 
 /// Responsible for providing the required file paths on the disk.
 struct WallpaperFilePathProvider {
-    private var fileManager: FileManagerInterface
+    private var fileManager: FileManagerProtocol
     private var logger: Logger
     public let metadataKey = "metadata"
     public let thumbnailsKey = "thumbnails"
 
-    init(with fileManager: FileManagerInterface,
+    init(with fileManager: FileManagerProtocol,
          logger: Logger = DefaultLogger.shared) {
         self.fileManager = fileManager
         self.logger = logger

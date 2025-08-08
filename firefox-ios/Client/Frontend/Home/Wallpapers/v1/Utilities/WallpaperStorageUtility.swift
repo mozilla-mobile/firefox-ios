@@ -20,13 +20,13 @@ protocol WallpaperStorageProtocol {
 /// Responsible for writing or deleting wallpaper data to/from memory.
 struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, WallpaperStorageProtocol {
     private var userDefaults: UserDefaultsInterface
-    private var fileManager: FileManagerInterface
+    private var fileManager: FileManagerProtocol
     private var logger: Logger
 
     // MARK: - Initializer
     init(
         with userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        and fileManager: FileManagerInterface = FileManager.default,
+        and fileManager: FileManagerProtocol = FileManager.default,
         logger: Logger = DefaultLogger.shared
     ) {
         self.userDefaults = userDefaults
