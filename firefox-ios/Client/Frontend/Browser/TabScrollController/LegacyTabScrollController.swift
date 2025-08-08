@@ -279,7 +279,7 @@ final class LegacyTabScrollController: NSObject,
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
             let delta = lastPanTranslation - translation.y
-            setScrollDirection(delta)
+            scrollDirection = delta > 0 ? .down : .up
 
             guard shouldRespondToScrollGesture(gesture, delta: delta, in: containerView) else {
                 return
@@ -309,20 +309,6 @@ final class LegacyTabScrollController: NSObject,
         let isFastEnough = abs(velocity) > UX.minimumScrollVelocity
         shouldRespondToScroll = isSignificantScroll || isFastEnough
         return shouldRespondToScroll
-    }
-
-    /// Updates the current scroll direction based on the scroll delta.
-    ///
-    /// - Parameter delta: The change in vertical scroll position.
-    /// This is the inverse of the user's drag gesture. For example:
-    /// - If the user drags **up**, the content moves **down** (delta > 0), so the scroll direction is `.down`.
-    /// - If the user drags **down**, the content moves **up** (delta < 0), so the scroll direction is `.up`.
-    private func setScrollDirection(_ delta: CGFloat) {
-        if delta > 0 {
-            scrollDirection = .down
-        } else if delta < 0 {
-            scrollDirection = .up
-        }
     }
 
     func showToolbars(animated: Bool) {
