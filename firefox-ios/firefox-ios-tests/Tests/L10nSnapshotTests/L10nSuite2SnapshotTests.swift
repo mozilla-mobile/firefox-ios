@@ -121,8 +121,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.cells["Search"])
         app.cells["Search"].swipeUp()
-        app.cells["Autofills & Passwords"].waitAndTap(timeout: 15)
-        app.cells["Passwords"].waitAndTap(timeout: 15)
+        app.cells["AutofillsPasswordsSettings"].waitAndTap(timeout: 15)
+        app.cells["Logins"].waitAndTap(timeout: 15)
 
         // Press continue button on the password onboarding if it's shown
         if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
