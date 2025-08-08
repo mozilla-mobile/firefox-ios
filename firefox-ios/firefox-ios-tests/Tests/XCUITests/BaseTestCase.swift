@@ -99,6 +99,10 @@ class BaseTestCase: XCTestCase {
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
         }
+
+        // FXIOS-13129: Remove these arguments once we migrate existing tests to support homepage redesign
+        app.launchArguments.append("\(LaunchArguments.LoadExperiment)\("homepageRedesignOff")")
+        app.launchArguments.append("\(LaunchArguments.ExperimentFeatureName)\("homepage-redesign-feature")")
     }
 
     override func setUp() {

@@ -12,9 +12,6 @@ class FeatureFlaggedTestBase: BaseTestCase {
     override func setUpApp() {
         // Important: `app.launch()` must be called explicitly in each test case.
         setUpLaunchArguments()
-
-        // FXIOS-13129: Remove these arguments once we migrate existing tests to support homepage redesign
-        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
     }
 
     /// Adds experiment data and feature flag information to the app's launch arguments.
