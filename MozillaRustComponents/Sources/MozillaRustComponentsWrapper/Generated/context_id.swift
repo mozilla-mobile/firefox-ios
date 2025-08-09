@@ -395,7 +395,13 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
-
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -500,7 +506,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 /**
  * Top-level API for the context_id component
  */
-public protocol ContextIdComponentProtocol: AnyObject {
+public protocol ContextIdComponentProtocol: AnyObject, Sendable {
     
     /**
      * Regenerate the context ID.
@@ -536,6 +542,9 @@ open class ContextIdComponent: ContextIdComponentProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -673,7 +682,7 @@ public func FfiConverterTypeContextIDComponent_lower(_ value: ContextIdComponent
 
 
 
-public enum ApiError {
+public enum ApiError: Swift.Error {
 
     
     
@@ -738,6 +747,7 @@ extension ApiError: Equatable, Hashable {}
 
 
 
+
 extension ApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
@@ -748,20 +758,16 @@ extension ApiError: Foundation.LocalizedError {
 
 
 
-public protocol ContextIdCallback: AnyObject {
+
+
+public protocol ContextIdCallback: AnyObject, Sendable {
     
     func persist(contextId: String, creationDate: Int64) 
     
     func rotated(oldContextId: String) 
     
 }
-// Magic number for the Rust proxy to call using the same mechanism as every other method,
-// to free the callback once it's dropped by Rust.
-private let IDX_CALLBACK_FREE: Int32 = 0
-// Callback return codes
-private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
-private let UNIFFI_CALLBACK_ERROR: Int32 = 1
-private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
 
 // Put the implementation in a struct so we don't pollute the top-level namespace
 fileprivate struct UniffiCallbackInterfaceContextIdCallback {

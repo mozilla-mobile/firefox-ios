@@ -513,7 +513,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
-public protocol CuratedRecommendationsClientProtocol: AnyObject {
+public protocol CuratedRecommendationsClientProtocol: AnyObject, Sendable {
     
     func getCuratedRecommendations(request: CuratedRecommendationsRequest) throws  -> CuratedRecommendationsResponse
     
@@ -532,6 +532,9 @@ open class CuratedRecommendationsClient: CuratedRecommendationsClientProtocol, @
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -2318,7 +2321,10 @@ extension CuratedRecommendationLocale: Equatable, Hashable {}
 
 
 
-public enum CuratedRecommendationsApiError {
+
+
+
+public enum CuratedRecommendationsApiError: Swift.Error {
 
     
     
@@ -2395,11 +2401,14 @@ extension CuratedRecommendationsApiError: Equatable, Hashable {}
 
 
 
+
 extension CuratedRecommendationsApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 #if swift(>=5.8)
@@ -2589,6 +2598,30 @@ fileprivate struct FfiConverterOptionTypeInterestPicker: FfiConverterRustBuffer 
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterTypeInterestPicker.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionTypeCuratedRecommendationLocale: FfiConverterRustBuffer {
+    typealias SwiftType = CuratedRecommendationLocale?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeCuratedRecommendationLocale.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeCuratedRecommendationLocale.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -2816,6 +2849,28 @@ fileprivate struct FfiConverterSequenceTypeTile: FfiConverterRustBuffer {
         return seq
     }
 }
+/**
+ * Returns a list of all supported locale strings that map to `CuratedRecommendationLocale` variants.
+ */
+public func allCuratedRecommendationLocales() -> [String]  {
+    return try!  FfiConverterSequenceString.lift(try! rustCall() {
+    uniffi_merino_fn_func_all_curated_recommendation_locales($0
+    )
+})
+}
+/**
+ * Parses a serialized locale string (e.g. `"en-US"`) into a `CuratedRecommendationLocale` enum variant.
+ *
+ *
+ * Returns `None` if the string does not match any known locale.
+ */
+public func curatedRecommendationLocaleFromString(locale: String) -> CuratedRecommendationLocale?  {
+    return try!  FfiConverterOptionTypeCuratedRecommendationLocale.lift(try! rustCall() {
+    uniffi_merino_fn_func_curated_recommendation_locale_from_string(
+        FfiConverterString.lower(locale),$0
+    )
+})
+}
 
 private enum InitializationResult {
     case ok
@@ -2831,6 +2886,12 @@ private let initializationResult: InitializationResult = {
     let scaffolding_contract_version = ffi_merino_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
+    }
+    if (uniffi_merino_checksum_func_all_curated_recommendation_locales() != 53330) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_func_curated_recommendation_locale_from_string() != 17864) {
+        return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 49968) {
         return InitializationResult.apiChecksumMismatch

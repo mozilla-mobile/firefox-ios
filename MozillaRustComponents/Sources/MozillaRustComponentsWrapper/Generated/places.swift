@@ -545,7 +545,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
-public protocol PlacesApiProtocol: AnyObject {
+public protocol PlacesApiProtocol: AnyObject, Sendable {
     
     func bookmarksReset() throws 
     
@@ -574,6 +574,9 @@ open class PlacesApi: PlacesApiProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -715,7 +718,7 @@ public func FfiConverterTypePlacesApi_lower(_ value: PlacesApi) -> UnsafeMutable
 
 
 
-public protocol PlacesConnectionProtocol: AnyObject {
+public protocol PlacesConnectionProtocol: AnyObject, Sendable {
     
     /**
      * `url` is a `string` and not a `URL` because `accept_result`
@@ -861,6 +864,9 @@ open class PlacesConnection: PlacesConnectionProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1335,7 +1341,7 @@ public func FfiConverterTypePlacesConnection_lower(_ value: PlacesConnection) ->
 
 
 
-public protocol SqlInterruptHandleProtocol: AnyObject {
+public protocol SqlInterruptHandleProtocol: AnyObject, Sendable {
     
     func interrupt() 
     
@@ -1354,6 +1360,9 @@ open class SqlInterruptHandle: SqlInterruptHandleProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -3429,6 +3438,9 @@ extension BookmarkItem: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3499,6 +3511,9 @@ public func FfiConverterTypeBookmarkPosition_lower(_ value: BookmarkPosition) ->
 
 
 extension BookmarkPosition: Equatable, Hashable {}
+
+
+
 
 
 
@@ -3576,6 +3591,9 @@ extension ConnectionType: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
@@ -3646,6 +3664,9 @@ public func FfiConverterTypeDocumentType_lower(_ value: DocumentType) -> RustBuf
 
 
 extension DocumentType: Equatable, Hashable {}
+
+
+
 
 
 
@@ -3726,6 +3747,9 @@ extension FrecencyThresholdOption: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3800,6 +3824,9 @@ public func FfiConverterTypeHistoryMetadataPageMissingBehavior_lower(_ value: Hi
 
 
 extension HistoryMetadataPageMissingBehavior: Equatable, Hashable {}
+
+
+
 
 
 
@@ -3887,7 +3914,10 @@ extension InsertableBookmarkItem: Equatable, Hashable {}
 
 
 
-public enum PlacesApiError {
+
+
+
+public enum PlacesApiError: Swift.Error {
 
     
     
@@ -4002,11 +4032,14 @@ extension PlacesApiError: Equatable, Hashable {}
 
 
 
+
 extension PlacesApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -4139,6 +4172,9 @@ public func FfiConverterTypeVisitType_lower(_ value: VisitType) -> RustBuffer {
 
 
 extension VisitType: Equatable, Hashable {}
+
+
+
 
 
 

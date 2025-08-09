@@ -481,7 +481,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
-public protocol RemoteCommandStoreProtocol: AnyObject {
+public protocol RemoteCommandStoreProtocol: AnyObject, Sendable {
     
     /**
      * Add a new command, after which it will be pending. Returns false if the command is already active.
@@ -524,6 +524,9 @@ open class RemoteCommandStore: RemoteCommandStoreProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -681,7 +684,7 @@ public func FfiConverterTypeRemoteCommandStore_lower(_ value: RemoteCommandStore
  * It's only actually used in desktop, but it's fine to expose this everywhere.
  * NOTE: all timestamps here are milliseconds.
  */
-public protocol TabsBridgedEngineProtocol: AnyObject {
+public protocol TabsBridgedEngineProtocol: AnyObject, Sendable {
     
     func apply() throws  -> [String]
     
@@ -729,6 +732,9 @@ open class TabsBridgedEngine: TabsBridgedEngineProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -911,7 +917,7 @@ public func FfiConverterTypeTabsBridgedEngine_lower(_ value: TabsBridgedEngine) 
 
 
 
-public protocol TabsStoreProtocol: AnyObject {
+public protocol TabsStoreProtocol: AnyObject, Sendable {
     
     func bridgedEngine()  -> TabsBridgedEngine
     
@@ -940,6 +946,9 @@ open class TabsStore: TabsStoreProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1434,7 +1443,10 @@ extension RemoteCommand: Equatable, Hashable {}
 
 
 
-public enum TabsApiError {
+
+
+
+public enum TabsApiError: Swift.Error {
 
     
     
@@ -1519,11 +1531,14 @@ extension TabsApiError: Equatable, Hashable {}
 
 
 
+
 extension TabsApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 #if swift(>=5.8)
