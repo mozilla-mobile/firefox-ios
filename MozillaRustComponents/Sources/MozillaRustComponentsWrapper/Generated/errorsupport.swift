@@ -395,7 +395,13 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
-
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -464,7 +470,7 @@ fileprivate struct FfiConverterString: FfiConverter {
  * interface, then calls `set_application_error_reporter()` to setup a global
  * ApplicationErrorReporter.
  */
-public protocol ApplicationErrorReporter: AnyObject {
+public protocol ApplicationErrorReporter: AnyObject, Sendable {
     
     /**
      * Send an error report to a Sentry-like error reporting system
@@ -479,13 +485,7 @@ public protocol ApplicationErrorReporter: AnyObject {
     func reportBreadcrumb(message: String, module: String, line: UInt32, column: UInt32) 
     
 }
-// Magic number for the Rust proxy to call using the same mechanism as every other method,
-// to free the callback once it's dropped by Rust.
-private let IDX_CALLBACK_FREE: Int32 = 0
-// Callback return codes
-private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
-private let UNIFFI_CALLBACK_ERROR: Int32 = 1
-private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
 
 // Put the implementation in a struct so we don't pollute the top-level namespace
 fileprivate struct UniffiCallbackInterfaceApplicationErrorReporter {

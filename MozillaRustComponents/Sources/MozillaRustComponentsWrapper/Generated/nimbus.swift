@@ -395,7 +395,13 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
-
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -513,7 +519,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
-public protocol NimbusClientProtocol: AnyObject {
+public protocol NimbusClientProtocol: AnyObject, Sendable {
     
     /**
      * Advances what the event store thinks is now.
@@ -706,6 +712,9 @@ open class NimbusClient: NimbusClientProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1135,7 +1144,7 @@ public func FfiConverterTypeNimbusClient_lower(_ value: NimbusClient) -> UnsafeM
 
 
 
-public protocol NimbusStringHelperProtocol: AnyObject {
+public protocol NimbusStringHelperProtocol: AnyObject, Sendable {
     
     /**
      * Generates an optional UUID to be passed into the `string_format` method.
@@ -1164,6 +1173,9 @@ open class NimbusStringHelper: NimbusStringHelperProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1282,7 +1294,7 @@ public func FfiConverterTypeNimbusStringHelper_lower(_ value: NimbusStringHelper
 
 
 
-public protocol NimbusTargetingHelperProtocol: AnyObject {
+public protocol NimbusTargetingHelperProtocol: AnyObject, Sendable {
     
     /**
      * Execute the given jexl expression and evaluate against the existing targeting parameters and context passed to
@@ -1305,6 +1317,9 @@ open class NimbusTargetingHelper: NimbusTargetingHelperProtocol, @unchecked Send
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1410,7 +1425,7 @@ public func FfiConverterTypeNimbusTargetingHelper_lower(_ value: NimbusTargeting
 
 
 
-public protocol RecordedContext: AnyObject {
+public protocol RecordedContext: AnyObject, Sendable {
     
     func getEventQueries()  -> [String: String]
     
@@ -1435,6 +1450,9 @@ open class RecordedContextImpl: RecordedContext, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1499,13 +1517,7 @@ open func toJson() -> JsonObject  {
     
 
 }
-// Magic number for the Rust proxy to call using the same mechanism as every other method,
-// to free the callback once it's dropped by Rust.
-private let IDX_CALLBACK_FREE: Int32 = 0
-// Callback return codes
-private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
-private let UNIFFI_CALLBACK_ERROR: Int32 = 1
-private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
 
 // Put the implementation in a struct so we don't pollute the top-level namespace
 fileprivate struct UniffiCallbackInterfaceRecordedContext {
@@ -2876,7 +2888,10 @@ extension EnrollmentChangeEventType: Equatable, Hashable {}
 
 
 
-public enum NimbusError {
+
+
+
+public enum NimbusError: Swift.Error {
 
     
     
@@ -3141,11 +3156,14 @@ extension NimbusError: Equatable, Hashable {}
 
 
 
+
 extension NimbusError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -3212,6 +3230,9 @@ public func FfiConverterTypePrefBranch_lower(_ value: PrefBranch) -> RustBuffer 
 
 
 extension PrefBranch: Equatable, Hashable {}
+
+
+
 
 
 
@@ -3285,7 +3306,10 @@ extension PrefUnenrollReason: Equatable, Hashable {}
 
 
 
-public protocol GeckoPrefHandler: AnyObject {
+
+
+
+public protocol GeckoPrefHandler: AnyObject, Sendable {
     
     func getPrefsWithState()  -> [String: [String: GeckoPrefState]]
     
@@ -3425,7 +3449,7 @@ public func FfiConverterCallbackInterfaceGeckoPrefHandler_lower(_ v: GeckoPrefHa
 
 
 
-public protocol MetricsHandler: AnyObject {
+public protocol MetricsHandler: AnyObject, Sendable {
     
     func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef]) 
     

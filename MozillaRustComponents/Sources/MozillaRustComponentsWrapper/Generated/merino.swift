@@ -513,7 +513,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
-public protocol CuratedRecommendationsClientProtocol: AnyObject {
+public protocol CuratedRecommendationsClientProtocol: AnyObject, Sendable {
     
     func getCuratedRecommendations(request: CuratedRecommendationsRequest) throws  -> CuratedRecommendationsResponse
     
@@ -532,6 +532,9 @@ open class CuratedRecommendationsClient: CuratedRecommendationsClientProtocol, @
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -2318,7 +2321,10 @@ extension CuratedRecommendationLocale: Equatable, Hashable {}
 
 
 
-public enum CuratedRecommendationsApiError {
+
+
+
+public enum CuratedRecommendationsApiError: Swift.Error {
 
     
     
@@ -2395,11 +2401,14 @@ extension CuratedRecommendationsApiError: Equatable, Hashable {}
 
 
 
+
 extension CuratedRecommendationsApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 #if swift(>=5.8)

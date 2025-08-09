@@ -593,7 +593,7 @@ fileprivate struct FfiConverterData: FfiConverterRustBuffer {
  * later, while a desktop on a fast link might download the entire dataset
  * on the first launch.
  */
-public protocol SuggestStoreProtocol: AnyObject {
+public protocol SuggestStoreProtocol: AnyObject, Sendable {
     
     /**
      * Return whether any suggestions have been dismissed.
@@ -751,6 +751,9 @@ open class SuggestStore: SuggestStoreProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1061,7 +1064,7 @@ public func FfiConverterTypeSuggestStore_lower(_ value: SuggestStore) -> UnsafeM
  * Using a builder is preferred to calling the constructor directly since it's harder to confuse
  * the data_path and cache_path strings.
  */
-public protocol SuggestStoreBuilderProtocol: AnyObject {
+public protocol SuggestStoreBuilderProtocol: AnyObject, Sendable {
     
     func build() throws  -> SuggestStore
     
@@ -1108,6 +1111,9 @@ open class SuggestStoreBuilder: SuggestStoreBuilderProtocol, @unchecked Sendable
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -2547,6 +2553,9 @@ extension AmpMatchingStrategy: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
@@ -2621,6 +2630,9 @@ public func FfiConverterTypeGeonameMatchType_lower(_ value: GeonameMatchType) ->
 
 
 extension GeonameMatchType: Equatable, Hashable {}
+
+
+
 
 
 
@@ -2724,6 +2736,9 @@ extension GeonameType: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -2812,11 +2827,14 @@ extension InterruptKind: Equatable, Hashable {}
 
 
 
+
+
+
 /**
  * The error type for all Suggest component operations. These errors are
  * exposed to your application, which should handle them as needed.
  */
-public enum SuggestApiError {
+public enum SuggestApiError: Swift.Error {
 
     
     
@@ -2913,11 +2931,14 @@ extension SuggestApiError: Equatable, Hashable {}
 
 
 
+
 extension SuggestApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -2995,6 +3016,9 @@ public func FfiConverterTypeSuggestProviderConfig_lower(_ value: SuggestProvider
 
 
 extension SuggestProviderConfig: Equatable, Hashable {}
+
+
+
 
 
 
@@ -3188,6 +3212,9 @@ extension Suggestion: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3302,6 +3329,9 @@ extension SuggestionProvider: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3369,6 +3399,9 @@ public func FfiConverterTypeYelpSubjectType_lower(_ value: YelpSubjectType) -> R
 
 
 extension YelpSubjectType: Equatable, Hashable {}
+
+
+
 
 
 

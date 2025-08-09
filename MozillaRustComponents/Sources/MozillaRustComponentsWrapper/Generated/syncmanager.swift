@@ -503,7 +503,7 @@ fileprivate struct FfiConverterTimestamp: FfiConverterRustBuffer {
 
 
 
-public protocol SyncManagerProtocol: AnyObject {
+public protocol SyncManagerProtocol: AnyObject, Sendable {
     
     /**
      * Disconnect engines from sync, deleting/resetting the sync-related data
@@ -535,6 +535,9 @@ open class SyncManager: SyncManagerProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1253,6 +1256,9 @@ extension ServiceStatus: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
@@ -1324,7 +1330,10 @@ extension SyncEngineSelection: Equatable, Hashable {}
 
 
 
-public enum SyncManagerError {
+
+
+
+public enum SyncManagerError: Swift.Error {
 
     
     
@@ -1453,11 +1462,14 @@ extension SyncManagerError: Equatable, Hashable {}
 
 
 
+
 extension SyncManagerError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -1552,6 +1564,9 @@ public func FfiConverterTypeSyncReason_lower(_ value: SyncReason) -> RustBuffer 
 
 
 extension SyncReason: Equatable, Hashable {}
+
+
+
 
 
 

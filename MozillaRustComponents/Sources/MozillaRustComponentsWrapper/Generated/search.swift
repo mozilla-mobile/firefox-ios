@@ -486,7 +486,7 @@ fileprivate struct FfiConverterString: FfiConverter {
  * search engines and returns the applicable engines depending
  * on their region + locale.
  */
-public protocol SearchEngineSelectorProtocol: AnyObject {
+public protocol SearchEngineSelectorProtocol: AnyObject, Sendable {
     
     /**
      * Clears the search configuration from memory if it is known that it is
@@ -546,6 +546,9 @@ open class SearchEngineSelector: SearchEngineSelectorProtocol, @unchecked Sendab
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -2118,7 +2121,10 @@ extension JsonEngineMethod: Equatable, Hashable {}
 
 
 
-public enum SearchApiError {
+
+
+
+public enum SearchApiError: Swift.Error {
 
     
     
@@ -2183,11 +2189,14 @@ extension SearchApiError: Equatable, Hashable {}
 
 
 
+
 extension SearchApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -2281,6 +2290,9 @@ extension SearchApplicationName: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
@@ -2355,6 +2367,9 @@ extension SearchDeviceType: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -2422,6 +2437,9 @@ public func FfiConverterTypeSearchEngineClassification_lower(_ value: SearchEngi
 
 
 extension SearchEngineClassification: Equatable, Hashable {}
+
+
+
 
 
 
@@ -2521,6 +2539,9 @@ public func FfiConverterTypeSearchUpdateChannel_lower(_ value: SearchUpdateChann
 
 
 extension SearchUpdateChannel: Equatable, Hashable {}
+
+
+
 
 
 

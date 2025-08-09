@@ -395,7 +395,13 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
-
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -515,7 +521,7 @@ fileprivate struct FfiConverterData: FfiConverterRustBuffer {
 
 
 
-public protocol EncryptorDecryptor: AnyObject {
+public protocol EncryptorDecryptor: AnyObject, Sendable {
     
     func decrypt(ciphertext: Data) throws  -> Data
     
@@ -536,6 +542,9 @@ open class EncryptorDecryptorImpl: EncryptorDecryptor, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -589,13 +598,7 @@ open func encrypt(cleartext: Data)throws  -> Data  {
     
 
 }
-// Magic number for the Rust proxy to call using the same mechanism as every other method,
-// to free the callback once it's dropped by Rust.
-private let IDX_CALLBACK_FREE: Int32 = 0
-// Callback return codes
-private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
-private let UNIFFI_CALLBACK_ERROR: Int32 = 1
-private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
 
 // Put the implementation in a struct so we don't pollute the top-level namespace
 fileprivate struct UniffiCallbackInterfaceEncryptorDecryptor {
@@ -728,7 +731,7 @@ public func FfiConverterTypeEncryptorDecryptor_lower(_ value: EncryptorDecryptor
 
 
 
-public protocol KeyManager: AnyObject {
+public protocol KeyManager: AnyObject, Sendable {
     
     func getKey() throws  -> Data
     
@@ -747,6 +750,9 @@ open class KeyManagerImpl: KeyManager, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -897,7 +903,7 @@ public func FfiConverterTypeKeyManager_lower(_ value: KeyManager) -> UnsafeMutab
 
 
 
-public protocol LoginStoreProtocol: AnyObject {
+public protocol LoginStoreProtocol: AnyObject, Sendable {
     
     func add(login: LoginEntry) throws  -> Login
     
@@ -993,6 +999,9 @@ open class LoginStore: LoginStoreProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1314,7 +1323,7 @@ public func FfiConverterTypeLoginStore_lower(_ value: LoginStore) -> UnsafeMutab
 
 
 
-public protocol ManagedEncryptorDecryptorProtocol: AnyObject {
+public protocol ManagedEncryptorDecryptorProtocol: AnyObject, Sendable {
     
 }
 open class ManagedEncryptorDecryptor: ManagedEncryptorDecryptorProtocol, @unchecked Sendable {
@@ -1331,6 +1340,9 @@ open class ManagedEncryptorDecryptor: ManagedEncryptorDecryptorProtocol, @unchec
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1432,7 +1444,7 @@ public func FfiConverterTypeManagedEncryptorDecryptor_lower(_ value: ManagedEncr
 
 
 
-public protocol StaticKeyManagerProtocol: AnyObject {
+public protocol StaticKeyManagerProtocol: AnyObject, Sendable {
     
 }
 open class StaticKeyManager: StaticKeyManagerProtocol, @unchecked Sendable {
@@ -1449,6 +1461,9 @@ open class StaticKeyManager: StaticKeyManagerProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -2136,6 +2151,9 @@ extension BulkResultEntry: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
@@ -2204,10 +2222,13 @@ extension LoginOrErrorMessage: Equatable, Hashable {}
 
 
 
+
+
+
 /**
  * These are the errors returned by our public API.
  */
-public enum LoginsApiError {
+public enum LoginsApiError: Swift.Error {
 
     
     
@@ -2418,11 +2439,14 @@ extension LoginsApiError: Equatable, Hashable {}
 
 
 
+
 extension LoginsApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 #if swift(>=5.8)

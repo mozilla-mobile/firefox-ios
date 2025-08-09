@@ -481,7 +481,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
-public protocol RelayClientProtocol: AnyObject {
+public protocol RelayClientProtocol: AnyObject, Sendable {
     
     func acceptTerms() throws 
     
@@ -504,6 +504,9 @@ open class RelayClient: RelayClientProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -825,7 +828,7 @@ public func FfiConverterTypeRelayAddress_lower(_ value: RelayAddress) -> RustBuf
 }
 
 
-public enum RelayApiError {
+public enum RelayApiError: Swift.Error {
 
     
     
@@ -910,11 +913,14 @@ extension RelayApiError: Equatable, Hashable {}
 
 
 
+
 extension RelayApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 #if swift(>=5.8)

@@ -505,7 +505,7 @@ fileprivate struct FfiConverterString: FfiConverter {
  * interact with the [`autopush server`](https:///autopush.readthedocs.io/en/latest/)
  * and persists state representing subscriptions.
  */
-public protocol PushManagerProtocol: AnyObject {
+public protocol PushManagerProtocol: AnyObject, Sendable {
     
     /**
      * Decrypts a raw push message.
@@ -652,6 +652,9 @@ open class PushManager: PushManagerProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1477,11 +1480,14 @@ extension BridgeType: Equatable, Hashable {}
 
 
 
+
+
+
 /**
  * The main Error returned from the Push component, each
  * variant describes a different error
  */
-public enum PushApiError {
+public enum PushApiError: Swift.Error {
 
     
     
@@ -1562,11 +1568,14 @@ extension PushApiError: Equatable, Hashable {}
 
 
 
+
 extension PushApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -1638,6 +1647,9 @@ public func FfiConverterTypePushHttpProtocol_lower(_ value: PushHttpProtocol) ->
 
 
 extension PushHttpProtocol: Equatable, Hashable {}
+
+
+
 
 
 
