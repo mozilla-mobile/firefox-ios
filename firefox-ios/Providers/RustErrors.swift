@@ -29,7 +29,8 @@ private class AppServicesErrorReport: Error, CustomCrashReport {
 
 /// The `FirefoxIOSErrorReporter` class contains the callbacks A-S uses to report Sentry errors and
 /// breadcrumbs. These functions are not intended to be explicitly called in this repo.
-private class FirefoxIOSErrorReporter: ApplicationErrorReporter {
+/// TODO(FXIOS-12942): Implement proper thread-safety
+private final class FirefoxIOSErrorReporter: ApplicationErrorReporter, @unchecked Sendable {
     var logger: Logger
 
     init(logger: Logger) {
@@ -48,7 +49,8 @@ private class FirefoxIOSErrorReporter: ApplicationErrorReporter {
 }
 
 /// The `ForwardOnLog` class exists to support the rust-log-forwarder `setLogger` function.
-internal class ForwardOnLog: AppServicesLogger {
+/// TODO(FXIOS-12942): Implement proper thread-safety
+internal final class ForwardOnLog: AppServicesLogger, @unchecked Sendable {
     var logger: Logger
 
     init(logger: Logger) {
