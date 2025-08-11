@@ -311,7 +311,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
         let brandedSummary = """
-        ###### *\(viewModel.brandLabel)*
+        ###### \(viewModel.brandLabel)
 
         \(summary)
         """
