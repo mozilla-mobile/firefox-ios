@@ -6,6 +6,7 @@ import XCTest
 import Common
 @testable import Client
 
+@MainActor
 class ReaderModeStyleTests: XCTestCase {
     var themeManager: ThemeManager!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
@@ -114,9 +115,10 @@ class ReaderModeStyleTests: XCTestCase {
         XCTAssertEqual(theme, .dark, "Expected dark theme if App theme is dark")
     }
 
+    @MainActor
     func test_preferredColorTheme_changesFromLightToDark() {
         themeManager.setManualTheme(to: .dark)
-        var readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
+        let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
                                               theme: .light,
                                               fontType: .sansSerif,
                                               fontSize: .size1)
@@ -226,8 +228,8 @@ extension ReaderModeFontSize: @retroactive Comparable {
     }
 }
 
-extension ReaderModeStyle: @retroactive Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+extension ReaderModeStyle: @retroactive @MainActor Equatable {
+    public static func == (lhs: ReaderModeStyle, rhs: ReaderModeStyle) -> Bool {
         lhs.fontSize == rhs.fontSize && lhs.fontType == rhs.fontType && lhs.theme == rhs.theme
     }
 }

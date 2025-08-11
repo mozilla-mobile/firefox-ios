@@ -36,6 +36,7 @@ final class WKEngineTests: XCTestCase {
         XCTAssertNotNil(session)
     }
 
+    @MainActor
     func testWarmEngineCallsSetupEngine() async {
         let subject = await createSubject()
         subject.warmEngine()
@@ -44,6 +45,7 @@ final class WKEngineTests: XCTestCase {
         XCTAssertEqual(webServerUtil.setUpWebServerCalled, 1)
     }
 
+    @MainActor
     func testWarmEngineAfterIdle() async {
         let subject = await createSubject()
         subject.idleEngine()
