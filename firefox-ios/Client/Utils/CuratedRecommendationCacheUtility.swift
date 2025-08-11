@@ -65,25 +65,29 @@ protocol CuratedRecommendationsCacheProtocol {
     func clearCache()
 }
 
-final class CuratedRecommendationCache: CuratedRecommendationsCacheProtocol {
+final class CuratedRecommendationCacheUtility: CuratedRecommendationsCacheProtocol {
     private let logger: Logger
     private let fileManager: FileManagerProtocol
-    private let fileName = "curated_recommendations_cache.json"
+    private let cacheFileName = "curated_recommendations_cache.json"
+    private let injectedURL: URL?
 
     private var cacheURL: URL? {
+        if let injectedURL = injectedURL { return injectedURL }
         guard let documentDirectory = fileManager.urls(
             for: .cachesDirectory,
             in: .userDomainMask
         ).first else { return nil }
-        return documentDirectory.appendingPathComponent(fileName)
+        return documentDirectory.appendingPathComponent(cacheFileName)
     }
 
     init(
+        fileManager: FileManagerProtocol = FileManager.default,
         logger: Logger = DefaultLogger.shared,
-        fileManager: FileManagerProtocol = FileManager.default
+        withCustomCacheURL injectedURL: URL? = nil
     ) {
         self.logger = logger
         self.fileManager = fileManager
+        self.injectedURL = injectedURL
     }
 
     func save(_ recommendations: [RecommendationDataItem]) {
