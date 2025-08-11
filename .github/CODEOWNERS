@@ -11,7 +11,6 @@
 /firefox-ios/Client/Assets/RemoteSettingsData/ @nbhasin2 @issammani @mattreaganmozilla
 /MozillaRustComponents/ @issammani
 
-
 # When someone opens a pull request that only modifies those folders / files, 
 # only @mozilla-mobile/fxios-automation and not the global
 # owners will be requested for a review.
