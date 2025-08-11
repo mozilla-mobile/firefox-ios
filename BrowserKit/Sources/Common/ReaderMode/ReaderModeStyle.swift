@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 @MainActor
-final public class ReaderModeStyle {
+public final class ReaderModeStyle {
     let windowUUID: WindowUUID?
     public var theme: ReaderModeTheme
     public var fontType: ReaderModeFontType
