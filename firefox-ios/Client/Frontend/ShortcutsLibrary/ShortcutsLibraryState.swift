@@ -7,7 +7,7 @@ import Redux
 
 struct ShortcutsLibraryState: ScreenState, Equatable {
     var windowUUID: WindowUUID
-    let topSitesData: [TopSiteConfiguration]
+    let shortcuts: [TopSiteConfiguration]
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let shortcutsLibraryState = store.state.screenState(
@@ -21,23 +21,23 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
 
         self.init(
             windowUUID: shortcutsLibraryState.windowUUID,
-            topSitesData: shortcutsLibraryState.topSitesData
+            shortcuts: shortcutsLibraryState.shortcuts
         )
     }
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            topSitesData: []
+            shortcuts: []
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        topSitesData: [TopSiteConfiguration]
+        shortcuts: [TopSiteConfiguration]
     ) {
         self.windowUUID = windowUUID
-        self.topSitesData = topSitesData
+        self.shortcuts = shortcuts
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -63,14 +63,14 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
 
         return ShortcutsLibraryState(
             windowUUID: state.windowUUID,
-            topSitesData: sites
+            shortcuts: sites
         )
     }
 
     static func defaultState(from state: ShortcutsLibraryState) -> ShortcutsLibraryState {
         return ShortcutsLibraryState(
             windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData
+            shortcuts: state.shortcuts
         )
     }
 }

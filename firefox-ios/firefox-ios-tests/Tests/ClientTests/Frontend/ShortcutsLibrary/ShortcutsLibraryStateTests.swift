@@ -23,14 +23,14 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(initialState.topSitesData, [])
+        XCTAssertEqual(initialState.shortcuts, [])
     }
 
     func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = shortcutsLibraryReducer()
 
-        let exampleTopSite = TopSiteConfiguration(
+        let exampleShortcut = TopSiteConfiguration(
             site: Site.createBasicSite(
                 url: "https://www.example.com",
                 title: "hello",
@@ -41,18 +41,18 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             TopSitesAction(
-                topSites: [exampleTopSite],
+                topSites: [exampleShortcut],
                 windowUUID: .XCTestDefaultUUID,
                 actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.topSitesData.count, 1)
-        XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, ["hello"])
+        XCTAssertEqual(newState.shortcuts.count, 1)
+        XCTAssertEqual(newState.shortcuts.compactMap { $0.title }, ["hello"])
     }
 
-    func test_retrievedUpdatedStoriesAction_returnsDefaultState() throws {
+    func test_retrievedUpdatedStoriesAction_withEmptyShortcuts_returnsDefaultState() throws {
         let initialState = createSubject()
         let reducer = shortcutsLibraryReducer()
 
@@ -68,8 +68,8 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
 
         XCTAssertEqual(newState, defaultState(with: initialState))
-        XCTAssertEqual(newState.topSitesData.count, 0)
-        XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, [])
+        XCTAssertEqual(newState.shortcuts.count, 0)
+        XCTAssertEqual(newState.shortcuts.compactMap { $0.title }, [])
     }
 
     // MARK: - Private
