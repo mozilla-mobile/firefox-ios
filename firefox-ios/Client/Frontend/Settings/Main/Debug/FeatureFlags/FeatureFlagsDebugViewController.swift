@@ -82,6 +82,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageDiscoverMoreExperience,
+                titleText: format(string: "HNT Discover More V1 Experience"),
+                statusText: format(string: "Toggle to enable the Discover More experince")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepageDiscoverMoreButton,
+                titleText: format(string: "HNT Stories Discover More Button"),
+                statusText: format(string: "Toggle to enable the homepage stories Discover More button")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageRebuild,
                 titleText: format(string: "Homepage Rebuild"),
                 statusText: format(string: "Toggle to use the homepage rebuild")
@@ -149,20 +163,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .homepageShortcutsLibrary,
                 titleText: format(string: "Shortcuts Library"),
                 statusText: format(string: "Toggle to enable the homepage shortcuts library")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .homepageDiscoverMoreButton,
-                titleText: format(string: "Discover More Button"),
-                statusText: format(string: "Toggle to enable the homepage stories Discover More button")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .homepageDiscoverMoreExperience,
-                titleText: format(string: "Discover More V1 Experience"),
-                statusText: format(string: "Toggle to enable the Discover More experince")
             ) { [weak self] _ in
                 self?.reloadView()
             },
