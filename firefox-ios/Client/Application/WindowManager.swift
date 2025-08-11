@@ -133,6 +133,9 @@ final class WindowManagerImplementation: WindowManager {
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
         func unsafeAnyTabManager() -> TabManager {
             // This is unsafe, but is the best fallback we have to try to handle non-fatally (but may crash anyway)
+            if let tabManager = windows.first?.value.tabManager {
+                logger.log("Unsafe tab manager with windowUUID: \(tabManager.windowUUID)", level: .fatal, category: .window)
+            }
             return windows.first!.value.tabManager!
         }
 
