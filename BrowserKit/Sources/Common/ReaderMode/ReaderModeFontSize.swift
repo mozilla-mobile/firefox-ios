@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-public enum ReaderModeFontSize: Int {
+public enum ReaderModeFontSize: Int, Sendable {
     case size1 = 1
     case size2 = 2
     case size3 = 3
