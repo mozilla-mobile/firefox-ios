@@ -6,7 +6,10 @@ import Common
 import Foundation
 import MozillaAppServices
 
-struct CachableRecommendationItem: Codable {
+/// This exists because `RecommendationDataItem` is an Application-Services object and
+/// UNIFFI cannot mark things as Codable. So this exists merely as a placeholder until
+/// that functionality is added in.
+private struct CachableRecommendationItem: Codable {
     let corpusItemId: String
     let scheduledCorpusItemId: String
     let url: String

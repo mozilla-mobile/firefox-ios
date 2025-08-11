@@ -8,28 +8,16 @@ import MozillaAppServices
 @testable import Client
 
 final class CuratedRecommendationCacheUtilityTests: XCTestCase {
-    var cache: CuratedRecommendationCacheUtility!
     var testFileURL: URL!
 
-    override func setUp() {
-        super.setUp()
-
-        // Create unique test file in temporary directory
-        let tempDir = FileManager.default.temporaryDirectory
-        testFileURL = tempDir.appendingPathComponent("test_curated_recommendations_cache.json")
-
-        // Inject cache with overridden file path (via subclassing or init)
-        cache = CuratedRecommendationCacheUtility(withCustomCacheURL: testFileURL)
-        cache.clearCache()
-    }
-
     override func tearDown() {
-        cache.clearCache()
         try? FileManager.default.removeItem(at: testFileURL)
+        testFileURL = nil
         super.tearDown()
     }
 
     func testSaveAndLoadRecommendations() {
+        let cache = createCache()
         let recs = generateFakeDataWith(numberOfItems: 2)
 
         cache.save(recs)
@@ -40,6 +28,7 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
     }
 
     func testLastUpdatedIsSet() {
+        let cache = createCache()
         let recs = generateFakeDataWith(numberOfItems: 1)
         cache.save(recs)
 
@@ -49,6 +38,7 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
     }
 
     func testOverwriteCache() {
+        let cache = createCache()
         let recs = generateFakeDataWith(numberOfItems: 1)
         cache.save(recs)
 
@@ -61,6 +51,7 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
     }
 
     func testClearCache() {
+        let cache = createCache()
         let recs = generateFakeDataWith(numberOfItems: 1)
         cache.save(recs)
         cache.clearCache()
@@ -70,6 +61,7 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
     }
 
     func testLoadFromEmptyReturnsNil() {
+        let cache = createCache()
         XCTAssertNil(cache.loadRecommendations())
         XCTAssertNil(cache.lastUpdatedDate())
     }
@@ -92,5 +84,15 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
             ))
         }
         return data
+    }
+
+    private func createCache() -> CuratedRecommendationCacheUtility {
+        let tempDir = FileManager.default.temporaryDirectory
+        testFileURL = tempDir.appendingPathComponent("test_curated_recommendations_cache.json")
+
+        let cache = CuratedRecommendationCacheUtility(withCustomCacheURL: testFileURL)
+        trackForMemoryLeaks(cache)
+
+        return cache
     }
 }
