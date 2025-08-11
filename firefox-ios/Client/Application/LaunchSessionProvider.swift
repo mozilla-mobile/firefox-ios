@@ -27,8 +27,12 @@ class LaunchSessionProvider: LaunchSessionProviderProtocol, Notifiable {
     }
 
     func addObservers() {
-        setupNotifications(forObserver: self, observing: [UIApplication.willResignActiveNotification,
-                                                          UIScene.willDeactivateNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIApplication.willResignActiveNotification,
+                        UIScene.willDeactivateNotification]
+        )
     }
 
     func handleNotifications(_ notification: Notification) {

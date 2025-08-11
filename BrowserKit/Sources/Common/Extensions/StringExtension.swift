@@ -22,4 +22,21 @@ public extension String {
         }
         return trimmed
     }
+
+    /// Calculates the approximate number of words in the given string.
+    ///
+    /// This function splits the input string on whitespace and newline characters,
+    /// filters out any empty segments (e.g., from multiple consecutive spaces or line breaks),
+    /// and returns the count of the resulting non-empty components as an Int32.
+    ///
+    /// Note: This simple, whitespace-based approach is only an approximation;
+    /// for example, "I'm" is counted as a single word. This is sufficient for our use cases
+    /// (search suggestions and summarizer telemetry). If more linguistically accurate
+    /// tokenization is ever required (e.g., handling punctuation and contractions),
+    /// we can experiment with using NSLinguisticTagger or a regex-based tokenizer.
+    var numberOfWords: Int32 {
+        let words = components(separatedBy: CharacterSet.whitespacesAndNewlines)
+        let filteredWords = words.filter { !$0.isEmpty }
+        return Int32(clamping: filteredWords.count)
+    }
 }

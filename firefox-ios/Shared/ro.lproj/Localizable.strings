@@ -32,7 +32,7 @@
 "Added page to Reading List" = "Pagină adăugată în lista de lectură";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Dismiss" = "Ok";
+"AddPass.Error.Dismiss" = "OK";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Message" = "A apărut o eroare la adăugarea parolei în Wallet. Te rugăm să încerci din nou mai târziu.";

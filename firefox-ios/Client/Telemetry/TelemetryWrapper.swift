@@ -292,6 +292,14 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         let startAtHomeOption: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption.rawValue)
+
+        // Record summarizer user preferences
+        let summarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+        if summarizerNimbusUtils.isSummarizeFeatureEnabled {
+            let summarizerTelemetry = SummarizerTelemetry()
+            summarizerTelemetry.summarizationEnabled(summarizerNimbusUtils.isSummarizeFeatureToggledOn)
+            summarizerTelemetry.summarizationShakeGestureEnabled(summarizerNimbusUtils.isShakeGestureEnabled)
+        }
     }
 }
 
@@ -752,6 +760,7 @@ extension TelemetryWrapper {
         gleanRecordEvent(category: category, method: method, object: object, value: value, extras: extras)
     }
 
+    // swiftlint:disable:next function_body_length
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
         switch (category, method, object, value, extras) {
         // MARK: Bookmarks

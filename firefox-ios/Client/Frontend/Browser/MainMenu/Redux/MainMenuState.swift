@@ -38,18 +38,15 @@ struct SiteProtectionsData: Equatable {
 struct TelemetryInfo: Equatable {
     let isHomepage: Bool
     let isActionOn: Bool?
-    let submenuType: MainMenuDetailsViewType?
     let isDefaultUserAgentDesktop: Bool?
     let hasChangedUserAgent: Bool?
 
     init(isHomepage: Bool,
          isActionOn: Bool? = nil,
-         submenuType: MainMenuDetailsViewType? = nil,
          isDefaultUserAgentDesktop: Bool? = nil,
          hasChangedUserAgent: Bool? = nil) {
         self.isHomepage = isHomepage
         self.isActionOn = isActionOn
-        self.submenuType = submenuType
         self.isDefaultUserAgentDesktop = isDefaultUserAgentDesktop
         self.hasChangedUserAgent = hasChangedUserAgent
     }
@@ -64,6 +61,7 @@ struct MainMenuTabInfo: Equatable {
     let hasChangedUserAgent: Bool
     let zoomLevel: CGFloat
     let readerModeIsAvailable: Bool
+    let summaryIsAvailable: Bool
     let isBookmarked: Bool
     let isInReadingList: Bool
     let isPinned: Bool
@@ -85,9 +83,8 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
 
     let siteProtectionsData: SiteProtectionsData?
 
-    let navigationDestination: MenuNavigationDestination?
-    let currentTabInfo: MainMenuTabInfo?
-    let currentSubmenuView: MainMenuDetailsViewType?
+    var navigationDestination: MenuNavigationDestination?
+    var currentTabInfo: MainMenuTabInfo?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
 
@@ -105,7 +102,6 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             windowUUID: mainMenuState.windowUUID,
             menuElements: mainMenuState.menuElements,
             currentTabInfo: mainMenuState.currentTabInfo,
-            submenuDestination: mainMenuState.currentSubmenuView,
             navigationDestination: mainMenuState.navigationDestination,
             shouldDismiss: mainMenuState.shouldDismiss,
             accountData: mainMenuState.accountData,
@@ -122,7 +118,6 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             windowUUID: windowUUID,
             menuElements: [],
             currentTabInfo: nil,
-            submenuDestination: nil,
             navigationDestination: nil,
             shouldDismiss: false,
             accountData: nil,
@@ -138,7 +133,6 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
         currentTabInfo: MainMenuTabInfo?,
-        submenuDestination: MainMenuDetailsViewType? = nil,
         navigationDestination: MenuNavigationDestination? = nil,
         shouldDismiss: Bool = false,
         accountData: AccountData?,
@@ -150,7 +144,6 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
-        self.currentSubmenuView = submenuDestination
         self.currentTabInfo = currentTabInfo
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
@@ -187,8 +180,6 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             return handleUpdateCurrentTabInfoAction(state: state, action: action)
         case MainMenuActionType.tapMoreOptions:
             return handleShowMoreOptions(state: state, action: action)
-        case MainMenuActionType.tapShowDetailsView:
-            return handleTapShowDetailsViewAction(state: state, action: action)
         case MainMenuActionType.tapNavigateToDestination:
             return handleTapNavigateToDestinationAction(state: state, action: action)
         case MainMenuActionType.tapToggleUserAgent,
@@ -310,7 +301,6 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             windowUUID: state.windowUUID,
             menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
-                for: state.currentSubmenuView,
                 and: state.windowUUID
             ),
             currentTabInfo: currentTabInfo,
@@ -333,7 +323,6 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             windowUUID: state.windowUUID,
             menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
-                for: state.currentSubmenuView,
                 and: state.windowUUID,
                 isExpanded: !isExpanded
             ),
@@ -344,23 +333,6 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
             moreCellTapped: true
-        )
-    }
-
-    private static func handleTapShowDetailsViewAction(state: MainMenuState, action: Action) -> MainMenuState {
-        guard let action = action as? MainMenuAction else { return defaultState(from: state) }
-
-        return MainMenuState(
-            windowUUID: state.windowUUID,
-            menuElements: state.menuElements,
-            currentTabInfo: state.currentTabInfo,
-            submenuDestination: action.detailsViewToShow,
-            accountData: state.accountData,
-            accountIcon: state.accountIcon,
-            siteProtectionsData: state.siteProtectionsData,
-            isBrowserDefault: state.isBrowserDefault,
-            isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
         )
     }
 

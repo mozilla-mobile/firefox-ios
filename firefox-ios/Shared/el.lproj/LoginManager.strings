@@ -26,10 +26,10 @@
 "DeleteLoginAlert.Message.Local.v122" = "Δεν μπορείτε να αναιρέσετε αυτήν την ενέργεια.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
-"DeleteLoginAlert.Message.Synced.v122" = "Αυτή η ενέργεια θα αφαιρέσει τον κωδικό πρόσβασης από όλες τις συγχρονισμένες συσκευές σας.";
+"DeleteLoginAlert.Message.Synced.v122" = "Αυτή η ενέργεια θα αφαιρέσει το συνθηματικό από όλες τις συγχρονισμένες συσκευές σας.";
 
 /* Title for the prompt that appears when the user deletes a login. */
-"DeleteLoginsAlert.Title.v122" = "Αφαίρεση κωδικού πρόσβασης;";
+"DeleteLoginsAlert.Title.v122" = "Αφαίρεση συνθηματικού;";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Από-επιλογή όλων";
@@ -41,7 +41,7 @@
 "Hide" = "Απόκρυψη";
 
 /* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
-"LoginList.DeleteToast.v135" = "Ο κωδικός πρόσβασης αφαιρέθηκε";
+"LoginList.DeleteToast.v135" = "Το συνθηματικό αφαιρέθηκε";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
 "Logins will be permanently removed." = "Οι συνδέσεις θα αφαιρεθούν οριστικά.";
@@ -56,13 +56,13 @@
 "No logins found" = "Δεν βρέθηκαν συνδέσεις";
 
 /* Label displayed when no logins are found after searching. */
-"NoLoginsFound.Title.v122" = "Δεν βρέθηκαν κωδικοί πρόσβασης";
+"NoLoginsFound.Title.v122" = "Δεν βρέθηκαν συνθηματικά";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Άνοιγμα και συμπλήρωση";
 
 /* Label displayed above the password row in Login Detail View. */
-"Password" = "Κωδικός πρόσβασης";
+"Password" = "Συνθηματικό";
 
 /* Reveal password text selection menu item */
 "Reveal" = "Αποκάλυψη";

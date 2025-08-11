@@ -15,6 +15,7 @@ import Common
 import Redux
 import WebEngine
 import WidgetKit
+import SummarizeKit
 import ActivityKit
 
 import class MozillaAppServices.BookmarkFolderData
@@ -86,13 +87,13 @@ class BrowserViewController: UIViewController,
         return addressToolbarContainer
     }
 
-    var windowUUID: WindowUUID { return tabManager.windowUUID }
+    nonisolated let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
     private var observedWebViews = WeakList<WKWebView>()
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var logger: Logger
     var zoomManager: ZoomPageManager
     let documentLogger: DocumentLogger
@@ -192,7 +193,7 @@ class BrowserViewController: UIViewController,
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
     }
 
-    private(set) lazy var scrollController = TabScrollController(windowUUID: windowUUID)
+    private(set) lazy var scrollController = LegacyTabScrollController(windowUUID: windowUUID)
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -241,6 +242,11 @@ class BrowserViewController: UIViewController,
     private(set) lazy var toolbarUpdateContextHintVC: ContextualHintViewController = {
         let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarUpdate, with: profile)
         return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
+    }()
+
+    private(set) lazy var summarizeToolbarEntryContextHintVC: ContextualHintViewController = {
+        let summarizeViewProvider = ContextualHintViewProvider(forHintType: .summarizeToolbarEntry, with: profile)
+        return ContextualHintViewController(with: summarizeViewProvider, windowUUID: windowUUID)
     }()
 
     // MARK: Telemetry Variables
@@ -332,8 +338,8 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
     }
 
-    var isSummarizeFeatureEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.summarizer, checking: .buildOnly)
+    var isSummarizerToolbarFeatureEnabled: Bool {
+        return summarizerNimbusUtils.isToolbarButtonEnabled
     }
 
     // MARK: Computed vars
@@ -356,6 +362,7 @@ class BrowserViewController: UIViewController,
     private var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
@@ -405,13 +412,16 @@ class BrowserViewController: UIViewController,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         appStartupTelemetry: AppStartupTelemetry = DefaultAppStartupTelemetry(),
         logger: Logger = DefaultLogger.shared,
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
     ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
         self.tabManager = tabManager
+        self.windowUUID = tabManager.windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.crashTracker = DefaultCrashTracker()
@@ -829,9 +839,8 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        guard motion == .motionShake, isSummarizeFeatureEnabled else { return }
-        guard let selectedTab = tabManager.selectedTab, !selectedTab.isFxHomeTab else { return }
-        navigationHandler?.showSummarizePanel()
+        guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled else { return }
+        navigationHandler?.showSummarizePanel(.shakeGesture)
     }
 
     // MARK: - BrowserContentHiding
@@ -881,7 +890,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    func unsubscribeFromRedux() {
+    nonisolated func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .browserViewController)
@@ -1013,7 +1022,8 @@ class BrowserViewController: UIViewController,
         webPagePreview.applyTheme(theme: theme)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
         setupAccessibleActions()
 
         if #available(iOS 16.0, *) {
@@ -1029,9 +1039,9 @@ class BrowserViewController: UIViewController,
         }
 
         navigationToolbarContainer.toolbarDelegate = self
-        scrollController.header = header
-        scrollController.overKeyboardContainer = overKeyboardContainer
-        scrollController.bottomContainer = bottomContainer
+        scrollController.configureToolbarViews(overKeyboardContainer: overKeyboardContainer,
+                                               bottomContainer: bottomContainer,
+                                               headerContainer: header)
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links into the view from other apps.
@@ -1079,6 +1089,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
+    // FIXME: FXIOS-12995 Use Notifiable on all of these...
     private func setupNotifications() {
         notificationCenter.addObserver(
             self,
@@ -1299,6 +1310,7 @@ class BrowserViewController: UIViewController,
             screenshotHelper: screenshotHelper,
             prefs: profile.prefs
         )
+        addressBarPanGestureHandler?.delegate = self
     }
 
     func addSubviews() {
@@ -1365,6 +1377,7 @@ class BrowserViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
 
         // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
         if !isDeeplinkOptimizationRefactorEnabled {
@@ -1562,6 +1575,11 @@ class BrowserViewController: UIViewController,
             }
             if navigationContextHintVC.isPresenting {
                 navigationContextHintVC.dismiss(animated: true)
+            }
+            // isPresenting is nil when going from landscape to portrait
+            // In general we want to dismiss when changing layout on iPhone
+            if summarizeToolbarEntryContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
+                summarizeToolbarEntryContextHintVC.dismiss(animated: true)
             }
         }
 
@@ -2511,12 +2529,21 @@ class BrowserViewController: UIViewController,
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
-            let action = ToolbarAction(
-                readerModeState: readerModeState,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.readerModeStateChanged
-            )
-            store.dispatchLegacy(action)
+            if isSummarizerToolbarFeatureEnabled {
+                let action = ToolbarMiddlewareAction(
+                    readerModeState: readerModeState,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.loadSummaryState
+                )
+                store.dispatchLegacy(action)
+            } else {
+                let action = ToolbarAction(
+                    readerModeState: readerModeState,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.readerModeStateChanged
+                )
+                store.dispatchLegacy(action)
+            }
         } else {
             legacyUrlBar?.updateReaderModeState(readerModeState)
         }
@@ -2697,6 +2724,8 @@ class BrowserViewController: UIViewController,
             )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
             configureZeroSearchView()
+        case .shortcutsLibrary:
+            navigationHandler?.showShortcutsLibrary()
         }
     }
 
@@ -2742,6 +2771,8 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
+        case .summarizer:
+            navigationHandler?.showSummarizePanel(.toolbarIcon)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
@@ -3155,10 +3186,14 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            openBlankNewTab(
-                focusLocationField: options?.contains(.focusLocationField) == true,
-                isPrivate: isPrivate
-            )
+            if let isHomepage = tabManager.selectedTab?.isFxHomeTab, isHomepage {
+                focusLocationTextField(forTab: tabManager.selectedTab)
+            } else {
+                openBlankNewTab(
+                    focusLocationField: options?.contains(.focusLocationField) == true,
+                    isPrivate: isPrivate
+                )
+            }
         }
     }
 
@@ -3245,7 +3280,7 @@ class BrowserViewController: UIViewController,
     }
 
     func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) {
             // Without a delay, the text field fails to become first responder
             // Check that the newly created tab is still selected.
             // This let's the user spam the Cmd+T button without lots of responder changes.
@@ -3886,6 +3921,8 @@ class BrowserViewController: UIViewController,
             configureDataClearanceContextualHint(button)
         case ContextualHintType.navigation.rawValue:
             configureNavigationContextualHint(button)
+        case ContextualHintType.summarizeToolbarEntry.rawValue:
+            configureSummarizeToolbarEntryContextualHint(for: button)
         default:
             return
         }

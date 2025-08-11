@@ -37,6 +37,7 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.SkipETPCoverSheet,
                            LaunchArguments.StageServer,
                            LaunchArguments.SkipDefaultBrowserOnboarding,
+                           LaunchArguments.SkipTermsOfUse,
                            LaunchArguments.DeviceName,
                            "\(LaunchArguments.ServerPort)\(serverPort)",
                            LaunchArguments.SkipContextualHints,
@@ -242,7 +243,7 @@ class BaseTestCase: XCTestCase {
         )
         app.buttons["Save"].tapIfExists()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(SaveBrowserTabMenu)
+        // navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
     }
 

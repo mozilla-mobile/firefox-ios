@@ -827,7 +827,7 @@
 "Menu.TrackingProtectionCrossSiteTrackers.Title" = "Trình theo dõi chéo trang web";
 
 /* The title that shows the number of cryptomining scripts blocked */
-"Menu.TrackingProtectionCryptominersBlocked.Title" = "Tiền điện tử";
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Trình đào tiền điện tử";
 
 /* Description of content trackers. */
 "Menu.TrackingProtectionDescription.ContentTrackers" = "Trang web có thể tải bên ngoài quảng cáo, video và nội dung khác có chứa trình theo dõi ẩn. Chặn điều này có thể làm cho các trang web tải nhanh hơn, nhưng một số nút, biểu mẫu và trường đăng nhập có thể không hoạt động.";
@@ -836,7 +836,7 @@
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Những cookie này theo bạn từ trang này sang trang khác để thu thập dữ liệu về những gì bạn làm trực tuyến. Chúng được đặt bởi các bên thứ ba như nhà quảng cáo và công ty phân tích.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "Tiền điện tử bí mật sử dụng sức mạnh tính toán của hệ thống của bạn để khai thác tiền kỹ thuật số. Các tập lệnh mã hóa làm cạn kiệt pin của bạn, làm chậm máy tính của bạn và có thể tăng hóa đơn năng lượng của bạn.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Trình đào tiền điện tử bí mật sử dụng sức mạnh tính toán của hệ thống của bạn để khai thác tiền kỹ thuật số. Các tập lệnh mã hóa làm cạn kiệt pin của bạn, làm chậm máy tính của bạn và có thể tăng hóa đơn năng lượng của bạn.";
 
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "Các cài đặt trên trình duyệt và máy tính của bạn là duy nhất. Dấu vân tay thu thập nhiều cài đặt duy nhất này để tạo hồ sơ về bạn, có thể được sử dụng để theo dõi bạn khi bạn duyệt.";

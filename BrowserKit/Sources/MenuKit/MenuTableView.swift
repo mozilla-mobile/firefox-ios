@@ -9,18 +9,25 @@ import Common
 final class MenuTableView: UIView,
                            UITableViewDelegate,
                            UITableViewDataSource,
+                           UIScrollViewDelegate,
                            ThemeApplicable {
     private struct UX {
-        static let topPadding: CGFloat = 12
+        static let topPadding: CGFloat = 24
+        static let menuSiteTopPadding: CGFloat = 12
+        static let topPaddingWithBanner: CGFloat = 8
         static let tableViewMargin: CGFloat = 16
-        static let distanceBetweenSections: CGFloat = 32
+        static let distanceBetweenSections: CGFloat = 16
     }
 
-    private var tableView: UITableView
+    private(set) var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
+    private var isBannerVisible = false
+    private var isHomepage = false
 
-    var updateHeaderLineView: ((_ isHidden: Bool) -> Void)?
+    public var tableViewContentSize: CGFloat {
+        tableView.contentSize.height
+    }
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -28,6 +35,7 @@ final class MenuTableView: UIView,
         tableView.sectionFooterHeight = 0
         menuData = []
         super.init(frame: .zero)
+        tableView.delegate = self
         setupView()
     }
 
@@ -55,10 +63,11 @@ final class MenuTableView: UIView,
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(
-            MenuCell.self,
-            forCellReuseIdentifier: MenuCell.cellIdentifier
-        )
+        tableView.register(MenuCell.self, forCellReuseIdentifier: MenuCell.cellIdentifier)
+        tableView.register(MenuInfoCell.self, forCellReuseIdentifier: MenuInfoCell.cellIdentifier)
+        tableView.register(MenuAccountCell.self, forCellReuseIdentifier: MenuAccountCell.cellIdentifier)
+        tableView.register(MenuSquaresViewContentCell.self,
+                           forCellReuseIdentifier: MenuSquaresViewContentCell.cellIdentifier)
     }
 
     func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
@@ -75,29 +84,88 @@ final class MenuTableView: UIView,
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
-        return section == 0 ? UX.topPadding : UX.distanceBetweenSections
+        if let menuSection = menuData.first(where: { $0.isHomepage }), menuSection.isHomepage {
+            self.isHomepage = true
+            let topPadding = isBannerVisible ? UX.topPaddingWithBanner : UX.topPadding
+            return section == 0 ? topPadding : UX.distanceBetweenSections
+        }
+        return section == 0 ? UX.menuSiteTopPadding : UX.distanceBetweenSections
     }
 
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return menuData[section].options.count
+        if menuData[section].isHorizontalTabsSection {
+            return 1
+        } else if let isExpanded = menuData[section].isExpanded, isExpanded {
+            return menuData[section].options.count
+        } else {
+            return menuData[section].options.count(where: { !$0.isOptional })
+        }
     }
 
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
+        if menuData[indexPath.section].isHorizontalTabsSection {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: MenuSquaresViewContentCell.cellIdentifier,
+                for: indexPath) as? MenuSquaresViewContentCell else {
+                return UITableViewCell()
+            }
+            if let theme { cell.applyTheme(theme: theme) }
+            cell.reloadData(with: menuData, and: menuData[indexPath.section].groupA11yLabel)
+            return cell
+        }
+
+        let rowOption = menuData[indexPath.section].options[indexPath.row]
+
+        if rowOption.iconImage != nil || rowOption.needsReAuth != nil {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: MenuAccountCell.cellIdentifier,
+                for: indexPath
+            ) as? MenuAccountCell else {
+                return UITableViewCell()
+            }
+            if let theme {
+                let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
+                let isFirst = indexPath.row == 0
+                let isLast = indexPath.row == numberOfRows - 1
+                cell.configureCellWith(model: rowOption, theme: theme, isFirstCell: isFirst, isLastCell: isLast)
+                cell.applyTheme(theme: theme)
+            }
+            return cell
+        }
+
+        if rowOption.infoTitle != nil {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: MenuInfoCell.cellIdentifier,
+                for: indexPath
+            ) as? MenuInfoCell else {
+                return UITableViewCell()
+            }
+            if let theme {
+                cell.configureCellWith(model: rowOption)
+                cell.applyTheme(theme: theme)
+            }
+            return cell
+        }
+
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: MenuCell.cellIdentifier,
             for: indexPath
         ) as? MenuCell else {
             return UITableViewCell()
         }
-
-        cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
-        if let theme { cell.applyTheme(theme: theme) }
+        if let theme {
+            let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
+            let isFirst = indexPath.row == 0
+            let isLast = indexPath.row == numberOfRows - 1
+            cell.configureCellWith(model: rowOption, theme: theme, isFirstCell: isFirst, isLastCell: isLast)
+            cell.applyTheme(theme: theme)
+        }
         return cell
     }
 
@@ -106,9 +174,13 @@ final class MenuTableView: UIView,
         didSelectRowAt indexPath: IndexPath
     ) {
         tableView.deselectRow(at: indexPath, animated: false)
+        let section = menuData[indexPath.section]
 
-        if let action = menuData[indexPath.section].options[indexPath.row].action {
-            action()
+        // We handle the actions for horizontalTabs, in MenuSquaresViewContentCell
+        if !section.isHorizontalTabsSection {
+            if let action = section.options[indexPath.row].action {
+                action()
+            }
         }
     }
 
@@ -124,17 +196,22 @@ final class MenuTableView: UIView,
         return nil
     }
 
-    func reloadTableView(with data: [MenuSection]) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if isHomepage, !UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
+            scrollView.contentOffset = .zero
+            scrollView.showsVerticalScrollIndicator = false
+        }
+    }
+
+    func reloadTableView(with data: [MenuSection], isBannerVisible: Bool) {
         menuData = data
+        self.isBannerVisible = isBannerVisible
         tableView.reloadData()
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y >= UX.topPadding {
-            updateHeaderLineView?(false)
-        } else {
-            updateHeaderLineView?(true)
-        }
+    func reloadData(isBannerVisible: Bool) {
+        self.isBannerVisible = isBannerVisible
+        tableView.reloadData()
     }
 
     // MARK: - Theme Applicable

@@ -6789,7 +6789,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-06-07T15:17:54Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-07-16T15:22:08Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7003,7 +7003,7 @@ arab
 // https://www.iana.org/domains/root/db/aramco.html
 aramco
 
-// archi : Identity Digital Limited
+// archi : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/archi.html
 archi
 
@@ -7183,7 +7183,7 @@ best
 // https://www.iana.org/domains/root/db/bestbuy.html
 bestbuy
 
-// bet : Identity Digital Limited
+// bet : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/bet.html
 bet
 
@@ -7211,11 +7211,11 @@ bing
 // https://www.iana.org/domains/root/db/bingo.html
 bingo
 
-// bio : Identity Digital Limited
+// bio : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/bio.html
 bio
 
-// black : Identity Digital Limited
+// black : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/black.html
 black
 
@@ -7235,7 +7235,7 @@ blog
 // https://www.iana.org/domains/root/db/bloomberg.html
 bloomberg
 
-// blue : Identity Digital Limited
+// blue : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/blue.html
 blue
 
@@ -7563,7 +7563,7 @@ claims
 // https://www.iana.org/domains/root/db/cleaning.html
 cleaning
 
-// click : Internet Naming Company LLC
+// click : Waterford Limited
 // https://www.iana.org/domains/root/db/click.html
 click
 
@@ -8331,7 +8331,7 @@ glass
 // https://www.iana.org/domains/root/db/gle.html
 gle
 
-// global : Identity Digital Limited
+// global : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/global.html
 global
 
@@ -8407,7 +8407,7 @@ graphics
 // https://www.iana.org/domains/root/db/gratis.html
 gratis
 
-// green : Identity Digital Limited
+// green : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/green.html
 green
 
@@ -8815,7 +8815,7 @@ kia
 // https://www.iana.org/domains/root/db/kids.html
 kids
 
-// kim : Identity Digital Limited
+// kim : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/kim.html
 kim
 
@@ -8943,7 +8943,7 @@ lego
 // https://www.iana.org/domains/root/db/lexus.html
 lexus
 
-// lgbt : Identity Digital Limited
+// lgbt : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/lgbt.html
 lgbt
 
@@ -8999,7 +8999,7 @@ live
 // https://www.iana.org/domains/root/db/living.html
 living
 
-// llc : Identity Digital Limited
+// llc : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/llc.html
 llc
 
@@ -9035,7 +9035,7 @@ london
 // https://www.iana.org/domains/root/db/lotte.html
 lotte
 
-// lotto : Identity Digital Limited
+// lotto : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/lotto.html
 lotto
 
@@ -9479,7 +9479,7 @@ oracle
 // https://www.iana.org/domains/root/db/orange.html
 orange
 
-// organic : Identity Digital Limited
+// organic : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/organic.html
 organic
 
@@ -9539,7 +9539,7 @@ pay
 // https://www.iana.org/domains/root/db/pccw.html
 pccw
 
-// pet : Identity Digital Limited
+// pet : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/pet.html
 pet
 
@@ -9603,7 +9603,7 @@ pin
 // https://www.iana.org/domains/root/db/ping.html
 ping
 
-// pink : Identity Digital Limited
+// pink : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/pink.html
 pink
 
@@ -9643,7 +9643,7 @@ pnc
 // https://www.iana.org/domains/root/db/pohl.html
 pohl
 
-// poker : Identity Digital Limited
+// poker : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/poker.html
 poker
 
@@ -9683,7 +9683,7 @@ prof
 // https://www.iana.org/domains/root/db/progressive.html
 progressive
 
-// promo : Identity Digital Limited
+// promo : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/promo.html
 promo
 
@@ -9755,7 +9755,7 @@ realty
 // https://www.iana.org/domains/root/db/recipes.html
 recipes
 
-// red : Identity Digital Limited
+// red : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/red.html
 red
 
@@ -10071,7 +10071,7 @@ shell
 // https://www.iana.org/domains/root/db/shia.html
 shia
 
-// shiksha : Identity Digital Limited
+// shiksha : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/shiksha.html
 shiksha
 
@@ -10111,7 +10111,7 @@ singles
 // https://www.iana.org/domains/root/db/site.html
 site
 
-// ski : Identity Digital Limited
+// ski : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/ski.html
 ski
 
@@ -10683,7 +10683,7 @@ wanggou
 // https://www.iana.org/domains/root/db/watch.html
 watch
 
-// watches : Identity Digital Limited
+// watches : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/watches.html
 watches
 
@@ -10863,7 +10863,7 @@ xin
 // https://www.iana.org/domains/root/db/xn--5tzm5g.html
 网站
 
-// xn--6frz82g : Identity Digital Limited
+// xn--6frz82g : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/xn--6frz82g.html
 移动
 
@@ -11428,7 +11428,7 @@ cloudfront.net
 
 // Amazon Cognito
 // Submitted by AWS Security <psl-maintainers@amazon.com>
-// Reference: eb4652f0-20f0-43f5-b323-e6cc6ae02ad7
+// Reference: e7c02dc1-02f4-4a23-bde3-a8527c830127
 auth.af-south-1.amazoncognito.com
 auth.ap-east-1.amazoncognito.com
 auth.ap-northeast-1.amazoncognito.com
@@ -11441,6 +11441,7 @@ auth.ap-southeast-2.amazoncognito.com
 auth.ap-southeast-3.amazoncognito.com
 auth.ap-southeast-4.amazoncognito.com
 auth.ap-southeast-5.amazoncognito.com
+auth.ap-southeast-7.amazoncognito.com
 auth.ca-central-1.amazoncognito.com
 auth.ca-west-1.amazoncognito.com
 auth.eu-central-1.amazoncognito.com
@@ -11454,6 +11455,7 @@ auth.eu-west-3.amazoncognito.com
 auth.il-central-1.amazoncognito.com
 auth.me-central-1.amazoncognito.com
 auth.me-south-1.amazoncognito.com
+auth.mx-central-1.amazoncognito.com
 auth.sa-east-1.amazoncognito.com
 auth.us-east-1.amazoncognito.com
 auth-fips.us-east-1.amazoncognito.com
@@ -11579,9 +11581,41 @@ emrstudio-prod.us-west-2.amazonaws.com
 
 // Amazon Managed Workflows for Apache Airflow
 // Submitted by AWS Security <psl-maintainers@amazon.com>
-// Reference: f5ea5d0a-ec6a-4f23-ac1c-553fbff13f5c
+// Reference: 2f697e23-58d6-4b97-be6b-77a26e811dad
+*.airflow.af-south-1.on.aws
+*.airflow.ap-east-1.on.aws
+*.airflow.ap-northeast-1.on.aws
+*.airflow.ap-northeast-2.on.aws
+*.airflow.ap-northeast-3.on.aws
+*.airflow.ap-south-1.on.aws
+*.airflow.ap-south-2.on.aws
+*.airflow.ap-southeast-1.on.aws
+*.airflow.ap-southeast-2.on.aws
+*.airflow.ap-southeast-3.on.aws
+*.airflow.ap-southeast-4.on.aws
+*.airflow.ap-southeast-5.on.aws
+*.airflow.ca-central-1.on.aws
+*.airflow.ca-west-1.on.aws
+*.airflow.eu-central-1.on.aws
+*.airflow.eu-central-2.on.aws
+*.airflow.eu-north-1.on.aws
+*.airflow.eu-south-1.on.aws
+*.airflow.eu-south-2.on.aws
+*.airflow.eu-west-1.on.aws
+*.airflow.eu-west-2.on.aws
+*.airflow.eu-west-3.on.aws
+*.airflow.il-central-1.on.aws
+*.airflow.me-central-1.on.aws
+*.airflow.me-south-1.on.aws
+*.airflow.sa-east-1.on.aws
+*.airflow.us-east-1.on.aws
+*.airflow.us-east-2.on.aws
+*.airflow.us-west-1.on.aws
+*.airflow.us-west-2.on.aws
 *.cn-north-1.airflow.amazonaws.com.cn
 *.cn-northwest-1.airflow.amazonaws.com.cn
+*.airflow.cn-north-1.on.amazonwebservices.com.cn
+*.airflow.cn-northwest-1.on.amazonwebservices.com.cn
 *.af-south-1.airflow.amazonaws.com
 *.ap-east-1.airflow.amazonaws.com
 *.ap-northeast-1.airflow.amazonaws.com
@@ -11593,6 +11627,7 @@ emrstudio-prod.us-west-2.amazonaws.com
 *.ap-southeast-2.airflow.amazonaws.com
 *.ap-southeast-3.airflow.amazonaws.com
 *.ap-southeast-4.airflow.amazonaws.com
+*.ap-southeast-5.airflow.amazonaws.com
 *.ca-central-1.airflow.amazonaws.com
 *.ca-west-1.airflow.amazonaws.com
 *.eu-central-1.airflow.amazonaws.com
@@ -12170,16 +12205,43 @@ awsglobalaccelerator.com
 
 // AWS Transfer Family web apps
 // Submitted by AWS Security <psl-maintainers@amazon.com>
-// Reference: 67e9cfe6-ac57-49c7-b197-6652711c8e8d
+// Reference: 57a658c4-8899-410c-aa24-5b01e4a178d2
+transfer-webapp.af-south-1.on.aws
+transfer-webapp.ap-east-1.on.aws
 transfer-webapp.ap-northeast-1.on.aws
+transfer-webapp.ap-northeast-2.on.aws
+transfer-webapp.ap-northeast-3.on.aws
+transfer-webapp.ap-south-1.on.aws
+transfer-webapp.ap-south-2.on.aws
 transfer-webapp.ap-southeast-1.on.aws
 transfer-webapp.ap-southeast-2.on.aws
+transfer-webapp.ap-southeast-3.on.aws
+transfer-webapp.ap-southeast-4.on.aws
+transfer-webapp.ap-southeast-5.on.aws
+transfer-webapp.ca-central-1.on.aws
+transfer-webapp.ca-west-1.on.aws
 transfer-webapp.eu-central-1.on.aws
+transfer-webapp.eu-central-2.on.aws
 transfer-webapp.eu-north-1.on.aws
+transfer-webapp.eu-south-1.on.aws
+transfer-webapp.eu-south-2.on.aws
 transfer-webapp.eu-west-1.on.aws
+transfer-webapp.eu-west-2.on.aws
+transfer-webapp.eu-west-3.on.aws
+transfer-webapp.il-central-1.on.aws
+transfer-webapp.me-central-1.on.aws
+transfer-webapp.me-south-1.on.aws
+transfer-webapp.sa-east-1.on.aws
 transfer-webapp.us-east-1.on.aws
 transfer-webapp.us-east-2.on.aws
+transfer-webapp.us-gov-east-1.on.aws
+transfer-webapp-fips.us-gov-east-1.on.aws
+transfer-webapp.us-gov-west-1.on.aws
+transfer-webapp-fips.us-gov-west-1.on.aws
+transfer-webapp.us-west-1.on.aws
 transfer-webapp.us-west-2.on.aws
+transfer-webapp.cn-north-1.on.amazonwebservices.com.cn
+transfer-webapp.cn-northwest-1.on.amazonwebservices.com.cn
 
 // eero
 // Submitted by Yue Kang <eero-dynamic-dns@amazon.com>
@@ -14190,6 +14252,8 @@ servers.run
 // Submitted by Fabian Hedin <security@lovable.dev>
 lovable.app
 lovableproject.com
+lovable.run
+lovable.sh
 
 // LubMAN UMCS Sp. z o.o : https://lubman.pl/
 // Submitted by Ireneusz Maliszewski <ireneusz.maliszewski@lubman.pl>
@@ -14664,6 +14728,10 @@ is-local.org
 // Open Social : https://www.getopensocial.com/
 // Submitted by Alexander Varwijk <security@getopensocial.com>
 opensocial.site
+
+// OpenAI : https://openai.com
+// Submitted by Thomas Shadwell <security@openai.com>
+*.oaiusercontent.com
 
 // OpenCraft GmbH : http://opencraft.com/
 // Submitted by Sven Marnach <sven@opencraft.com>
@@ -15611,7 +15679,6 @@ pro.typeform.com
 
 // Uberspace : https://uberspace.de
 // Submitted by Moritz Werner <mwerner@jonaspasche.com>
-*.uberspace.de
 uber.space
 
 // UDR Limited : http://www.udr.hk.com
@@ -15665,8 +15732,8 @@ dnsupdate.info
 // Submitted by Gavin Brown <gavin.brown@centralnic.com>
 us.org
 
-// V.UA Domain Administrator : https://domain.v.ua/
-// Submitted by Serhii Rostilo <sergey@rostilo.kiev.ua>
+// V.UA Domain Registry: https://www.v.ua/
+// Submitted by Serhii Rostilo <admin@v.ua>
 v.ua
 
 // Val Town, Inc : https://val.town/
@@ -15753,10 +15820,11 @@ box.ca
 // Submitted by Kidd Hustle <kiddhustle@wiardweb.com>
 pages.wiardweb.com
 
-// Wikimedia Labs : https://wikitech.wikimedia.org
-// Submitted by Arturo Borrero Gonzalez <aborrero@wikimedia.org>
+// Wikimedia Foundation : https://wikitech.wikimedia.org
+// Submitted by Timo Tijhof <noc@wikimedia.org>
 toolforge.org
 wmcloud.org
+beta.wmcloud.org
 wmflabs.org
 
 // William Harrison : https://wharrison.com.au

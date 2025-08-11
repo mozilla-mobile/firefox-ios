@@ -550,16 +550,10 @@ class NavigationTest: FeatureFlaggedTestBase {
         navigator.goto(BrowserTabMenu)
         waitForElementsToExist(
             [
-                app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.newPrivateTab],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.downloads],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.passwords],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.customizeHomepage],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.whatsNew],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.getHelp],
+                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.bookmarks],
+                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.history],
+                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads],
+                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.passwords],
                 app.tables.cells[AccessibilityIdentifiers.MainMenu.settings]
             ]
         )

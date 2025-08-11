@@ -186,7 +186,8 @@ class TabLocationView: UIView, FeatureFlaggable {
         self.windowUUID = windowUUID
         self.logger = logger
         super.init(frame: .zero)
-        setupNotifications(
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
             forObserver: self,
             observing: [
                 .TrackingProtectionViewControllerDidDismiss,

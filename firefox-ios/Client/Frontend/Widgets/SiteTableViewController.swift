@@ -20,7 +20,7 @@ class SiteTableViewController: UIViewController,
                                Themeable {
     var themeManager: ThemeManager
     let windowManager: WindowManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let profile: Profile
     let windowUUID: WindowUUID
@@ -74,8 +74,6 @@ class SiteTableViewController: UIViewController,
         self.themeManager = themeManager
         self.windowManager = windowManager
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange(view)
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -86,13 +84,9 @@ class SiteTableViewController: UIViewController,
         super.viewDidLoad()
 
         setupView()
-    }
 
-    deinit {
-        // The view might outlive this view controller thanks to animations;
-        // explicitly nil out its references to us to avoid crashes. Bug 1218826.
-        tableView.dataSource = nil
-        tableView.delegate = nil
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {

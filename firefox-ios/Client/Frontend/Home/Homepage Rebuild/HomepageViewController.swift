@@ -22,9 +22,9 @@ final class HomepageViewController: UIViewController,
     // MARK: - ContentContainable variables
     var contentType: ContentType = .homepage
 
-    // MARK: - Themable variables
+    // MARK: - Themeable variables
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
     let windowUUID: WindowUUID
@@ -120,7 +120,6 @@ final class HomepageViewController: UIViewController,
 
     deinit {
         unsubscribeFromRedux()
-        notificationCenter.removeObserver(self)
     }
 
     func stopCFRsTimer() {
@@ -145,8 +144,9 @@ final class HomepageViewController: UIViewController,
             )
         )
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+
         addTapGestureRecognizerToDismissKeyboard()
     }
 
@@ -621,6 +621,9 @@ final class HomepageViewController: UIViewController,
         case .topSites(let textColor, _):
             sectionLabelCell.configure(
                 state: homepageState.topSitesState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToShortcutsLibrary()
+                },
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -808,6 +811,16 @@ final class HomepageViewController: UIViewController,
                 navigationDestination: NavigationDestination(.bookmarksPanel),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnBookmarksShowMoreButton
+            )
+        )
+    }
+
+    private func navigateToShortcutsLibrary() {
+        store.dispatchLegacy(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.shortcutsLibrary),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShortcutsShowAllButton
             )
         )
     }

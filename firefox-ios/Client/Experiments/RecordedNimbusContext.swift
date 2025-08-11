@@ -26,7 +26,8 @@ extension Int32? {
     }
 }
 
-class RecordedNimbusContext: RecordedContext {
+/// TODO(FXIOS-12942): Implement proper thread-safety
+final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
     /**
      * The following constants are string constants of the keys that appear in the [EVENT_QUERIES] map.
      */
@@ -44,6 +45,8 @@ class RecordedNimbusContext: RecordedContext {
     var isDefaultBrowser: Bool
     var isBottomToolbarUser: Bool
     var hasEnabledTipsNotifications: Bool
+    var isAppleIntelligenceAvailable: Bool
+    var cannotUseAppleIntelligence: Bool
     var appVersion: String?
     var region: String?
     var language: String?
@@ -60,6 +63,8 @@ class RecordedNimbusContext: RecordedContext {
          isDefaultBrowser: Bool,
          isBottomToolbarUser: Bool,
          hasEnabledTipsNotifications: Bool,
+         isAppleIntelligenceAvailable: Bool,
+         cannotUseAppleIntelligence: Bool,
          eventQueries: [String: String] = RecordedNimbusContext.EVENT_QUERIES,
          isPhone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
          bundle: Bundle = Bundle.main,
@@ -73,6 +78,8 @@ class RecordedNimbusContext: RecordedContext {
         self.isDefaultBrowser = isDefaultBrowser
         self.isBottomToolbarUser = isBottomToolbarUser
         self.hasEnabledTipsNotifications = hasEnabledTipsNotifications
+        self.isAppleIntelligenceAvailable = isAppleIntelligenceAvailable
+        self.cannotUseAppleIntelligence = cannotUseAppleIntelligence
 
         let info = bundle.infoDictionary ?? [:]
         appVersion = info["CFBundleShortVersionString"] as? String
@@ -141,7 +148,9 @@ class RecordedNimbusContext: RecordedContext {
                 region: region,
                 isDefaultBrowser: isDefaultBrowser,
                 isBottomToolbarUser: isBottomToolbarUser,
-                hasEnabledTipsNotifications: hasEnabledTipsNotifications
+                hasEnabledTipsNotifications: hasEnabledTipsNotifications,
+                isAppleIntelligenceAvailable: isAppleIntelligenceAvailable,
+                cannotUseAppleIntelligence: cannotUseAppleIntelligence
             )
         )
         GleanMetrics.Pings.shared.nimbus.submit()
@@ -184,6 +193,8 @@ class RecordedNimbusContext: RecordedContext {
             "is_default_browser": isDefaultBrowser,
             "is_bottom_toolbar_user": isBottomToolbarUser,
             "has_enabled_tips_notifications": hasEnabledTipsNotifications,
+            "is_apple_intelligence_available": isAppleIntelligenceAvailable,
+            "cannot_use_apple_intelligence": cannotUseAppleIntelligence
         ]),
             let jsonString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
         else {

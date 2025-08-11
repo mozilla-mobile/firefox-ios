@@ -22,7 +22,7 @@ protocol TabTrayViewControllerDelegate: AnyObject {
     func didFinish()
 }
 
-class TabTrayViewController: UIViewController,
+final class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
                              UIPageViewControllerDataSource,
@@ -51,7 +51,7 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Theme
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
     // MARK: Child panel and navigation
@@ -287,8 +287,10 @@ class TabTrayViewController: UIViewController,
         super.viewDidLoad()
         setupView()
         subscribeToRedux()
-        listenForThemeChange(view)
         updateToolbarItems()
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {
@@ -501,10 +503,8 @@ class TabTrayViewController: UIViewController,
                                                            constant: -UX.segmentedControlHorizontalSpacing),
 
                 experimentSegmentControl.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor),
-                experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                                  constant: UX.segmentedControlHorizontalSpacing),
-                experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                                   constant: -UX.segmentedControlHorizontalSpacing),
+                experimentSegmentControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 experimentSegmentControl.heightAnchor.constraint(equalToConstant: UX.segmentedControlMinHeight)
             ])
         } else {
@@ -721,8 +721,7 @@ class TabTrayViewController: UIViewController,
 
         if let scrollView = pageVC.view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView {
             scrollView.delegate = self
-            // TODO: FXIOS-12431 - Uncomment this when the tab tray selector view is swipable
-//            scrollView.isScrollEnabled = false
+            scrollView.isScrollEnabled = false
         }
 
         self.pageViewController = pageVC

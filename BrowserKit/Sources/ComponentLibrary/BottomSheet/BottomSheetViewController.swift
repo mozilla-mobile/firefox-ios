@@ -13,13 +13,15 @@ public protocol BottomSheetChild: UIViewController {
     func willDismiss()
 }
 
-/// Protocol followed by the bottom sheet view controller. Gives the possibility to dismiss the bottom sheet.
-public protocol BottomSheetDismissProtocol: AnyObject {
+public protocol BottomSheetDelegate: AnyObject {
+    /// Returns the height of the `BottomSheetViewController` header including the close button.
+    func getBottomSheetHeaderHeight() -> CGFloat
+
     func dismissSheetViewController(completion: (() -> Void)?)
 }
 
 public class BottomSheetViewController: UIViewController,
-                                        BottomSheetDismissProtocol,
+                                        BottomSheetDelegate,
                                         Themeable,
                                         UIGestureRecognizerDelegate {
     private struct UX {
@@ -32,7 +34,7 @@ public class BottomSheetViewController: UIViewController,
 
     public var notificationCenter: NotificationProtocol
     public var themeManager: ThemeManager
-    public var themeObserver: NSObjectProtocol?
+    public var themeListenerCancellable: Any?
 
     private let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
@@ -101,16 +103,13 @@ public class BottomSheetViewController: UIViewController,
         contentView.addGestureRecognizer(gesture)
         gesture.delegate = self
 
-        listenForThemeChange(view)
         setupView()
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
 
         contentViewBottomConstraint?.constant = childViewController.view.frame.height
         view.layoutIfNeeded()
-    }
-
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        applyTheme()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -284,6 +283,12 @@ public class BottomSheetViewController: UIViewController,
     }
 
     // MARK: - BottomSheetDismissProtocol
+
+    public func getBottomSheetHeaderHeight() -> CGFloat {
+        // this is a little work around to have `BottomSheetChild` being able to adjust for dynamic font size change
+        // since modifying the constraints is going to break the UI of other bottom sheet child.
+        return closeButton.dynamicSize.height
+    }
 
     public func dismissSheetViewController(completion: (() -> Void)? = nil) {
         childViewController.willDismiss()

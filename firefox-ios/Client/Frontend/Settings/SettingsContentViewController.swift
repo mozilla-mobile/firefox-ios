@@ -21,7 +21,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -133,8 +133,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
 
         startLoading()
 
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
-        listenForThemeChange(view)
     }
 
     func makeWebView() -> WKWebView {
@@ -142,7 +142,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
             blockPopups: true,
             isPrivate: true,
             autoPlay: .all,
-            schemeHandler: WKInternalSchemeHandler()
+            schemeHandler: InternalSchemeHandler()
         )
 
         let config = DefaultWKEngineConfigurationProvider().createConfiguration(parameters: parameters).webViewConfiguration

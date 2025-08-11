@@ -11,7 +11,7 @@ protocol TabTrayThemeable {
     func applyTheme(_ theme: Theme)
 }
 
-class TabDisplayPanelViewController: UIViewController,
+final class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
@@ -22,7 +22,7 @@ class TabDisplayPanelViewController: UIViewController,
     let panelType: TabTrayPanelType
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var tabsState: TabsPanelState
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -97,13 +97,14 @@ class TabDisplayPanelViewController: UIViewController,
         super.viewDidLoad()
         view.accessibilityLabel = .TabsTray.TabTrayViewAccessibilityLabel
         setupView()
-        listenForThemeChange(view)
-        applyTheme()
         subscribeToRedux()
 
         if !tabDisplayView.shouldHideInactiveTabs {
             InactiveTabsTelemetry().sectionShown()
         }
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {

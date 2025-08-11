@@ -12,6 +12,12 @@ public class CloseButton: UIButton,
     private var viewModel: CloseButtonViewModel?
     private var heightConstraint: NSLayoutConstraint?
     private var widthConstraint: NSLayoutConstraint?
+    /// Returns the updated size of the button scaled with the current dynamic font size
+    var dynamicSize: CGSize {
+        updateButtonSizeForDynamicFont()
+        return CGSize(width: widthConstraint?.constant ?? UX.closeButtonSize.width,
+                      height: heightConstraint?.constant ?? UX.closeButtonSize.height)
+    }
 
     private struct UX {
         static let closeButtonSize = CGSize(width: 30, height: 30)
@@ -42,7 +48,11 @@ public class CloseButton: UIButton,
     public func configure(viewModel: CloseButtonViewModel,
                           notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.notificationCenter = notificationCenter
-        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
 
         self.viewModel = viewModel
         accessibilityIdentifier = viewModel.a11yIdentifier
@@ -61,13 +71,11 @@ public class CloseButton: UIButton,
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            updateButtonSizeForDynamicFont()
+            ensureMainThread {
+                self.updateButtonSizeForDynamicFont()
+            }
         default:
             break
         }
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 }

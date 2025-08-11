@@ -3,10 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import XCTest
 
 let pdfUrl = "https://storage.googleapis.com/mobile_test_assets/public/lorem_ipsum.pdf"
 
 class ShareMenuTests: BaseTestCase {
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        throw XCTSkip("Skipping all ShareMenuTests. The option is not available on the new menu")
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2863631
     func testShareNormalWebsiteTabViaReminders() {
         // Coudn't find a way to tap on reminders on iOS 16
@@ -152,7 +158,7 @@ class ShareMenuTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
-        navigator.goto(ToolsBrowserTabMenu)
+        // navigator.goto(ToolsBrowserTabMenu)
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
         if #available(iOS 16, *) {
@@ -167,7 +173,7 @@ class ShareMenuTests: BaseTestCase {
         // Open a website in the browser
         navigator.openURL(url)
         waitUntilPageLoad()
-        navigator.goto(ToolsBrowserTabMenu)
+        // navigator.goto(ToolsBrowserTabMenu)
         // Tap the Share button in the menu
         navigator.performAction(Action.ShareBrowserTabMenuOption)
         if #available(iOS 16, *) {

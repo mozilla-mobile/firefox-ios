@@ -17,10 +17,10 @@ enum ContextualHintType: String {
     case jumpBackInSyncedTab = "JumpBackInSyncedTab"
     case inactiveTabs = "InactiveTabs"
     case mainMenu = "MainMenu"
-    case mainMenuRedesign = "MainMenuRedesign"
     case dataClearance = "DataClearance"
     case navigation = "Navigation"
     case toolbarUpdate = "ToolbarUpdate"
+    case summarizeToolbarEntry = "SummarizeToolbarEntry"
 }
 
 class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {

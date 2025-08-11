@@ -40,8 +40,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         case .jumpBackInSyncedTab:
             hintTypeShouldBePresented = canPresentJumpBackInSyncedTab
         case .mainMenu:
-            hintTypeShouldBePresented = canMenuCFRBePresented
-        case .mainMenuRedesign:
             hintTypeShouldBePresented = canMenuRedesignCFRBePresented
         case .inactiveTabs:
             hintTypeShouldBePresented = true
@@ -49,6 +47,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         case .toolbarUpdate:
             hintTypeShouldBePresented = canToolbarUpdateCFRBePresented
+        case .summarizeToolbarEntry:
+            hintTypeShouldBePresented = true
         }
 
         return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)
@@ -60,14 +60,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         guard overlayState != nil else { return false }
 
         return overlayState?.inOverlayMode ?? false
-    }
-
-    /// Determine if the CFR for Menu is presentable.
-    ///
-    /// It's presentable on these conditions:
-    /// - menu-hint flag is enabled
-    private var canMenuCFRBePresented: Bool {
-        return featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) ? true : false
     }
 
     /// Determine if the CFR for Menu Redesign is presentable.

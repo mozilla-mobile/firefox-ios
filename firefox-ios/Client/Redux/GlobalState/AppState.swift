@@ -22,12 +22,12 @@ struct AppState: StateType {
                 case (.browserViewController(let state), .browserViewController): return state as? S
                 case (.homepage(let state), .homepage): return state as? S
                 case (.mainMenu(let state), .mainMenu): return state as? S
-                case (.mainMenuDetails(let state), .mainMenuDetails): return state as? S
                 case (.microsurvey(let state), .microsurvey): return state as? S
                 case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
                 case (.tabsPanel(let state), .tabsPanel): return state as? S
                 case (.tabPeek(let state), .tabPeek): return state as? S
                 case (.tabsTray(let state), .tabsTray): return state as? S
+                case (.termsOfUse(let state), .termsOfUse): return state as? S
                 case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
                 case (.searchEngineSelection(let state), .searchEngineSelection): return state as? S
@@ -80,6 +80,7 @@ let middlewares = [
     BookmarksMiddleware().bookmarksProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
     StartAtHomeMiddleware().startAtHomeProvider,
+    TermsOfUseMiddleware().termsOfUseProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

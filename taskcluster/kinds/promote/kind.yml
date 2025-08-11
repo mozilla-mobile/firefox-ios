@@ -35,6 +35,7 @@ tasks:
               - API_BITRISE_SCHEME: Firefox
       attributes:
         build-type: release
+        product-type: firefox
     beta:
       description: Start a beta build
       bitrise:
@@ -43,3 +44,28 @@ tasks:
               - API_BITRISE_SCHEME: FirefoxBeta
       attributes:
         build-type: beta
+        product-type: firefox
+    focus:
+      description: Start a focus build
+      bitrise:
+        workflows:
+          - release_promotion_promote_focus:
+            - API_BITRISE_SCHEME: Focus
+      attributes:
+        build-type: release
+        product-type: focus
+        product-variant: focus
+      treeherder:
+        symbol: Bf
+    klar:
+      description: Start a klar build
+      bitrise:
+        workflows:
+          - release_promotion_promote_focus:
+            - API_BITRISE_SCHEME: Klar
+      attributes:
+        build-type: release
+        product-type: focus
+        product-variant: klar
+      treeherder:
+        symbol: Bk

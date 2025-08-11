@@ -19,7 +19,10 @@ struct TopSitesSectionState: StateType, Equatable {
 
     let sectionHeaderState = SectionHeaderConfiguration(
         title: .FirefoxHomepage.Shortcuts.SectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites
+        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
+        isButtonHidden: !LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageShortcutsLibrary, checking: .buildOnly),
+        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.shortcuts,
+        buttonTitle: .BookmarksSavedShowAllText
     )
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {

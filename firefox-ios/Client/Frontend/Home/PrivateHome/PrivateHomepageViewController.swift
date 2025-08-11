@@ -38,7 +38,7 @@ final class PrivateHomepageViewController: UIViewController,
 
     // MARK: Theming Variables
     var themeManager: Common.ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: Common.NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -112,7 +112,7 @@ final class PrivateHomepageViewController: UIViewController,
         setupLayout()
         setupDismissKeyboard()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

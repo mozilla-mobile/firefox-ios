@@ -71,7 +71,7 @@ features:
           toolbar_update_hint: false
           swiping_tabs: true
           translucency: true
-          minimal_address_bar: false
+          minimal_address_bar: true
           layout: version1
 
 enums:

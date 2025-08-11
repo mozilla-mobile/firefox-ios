@@ -220,23 +220,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 
     @MainActor
-    func testWebViewDecidePolicyForNavigationAction_cancelLoading_whenLoadingLocalPDFurlPreviouslyDeleted() {
-        let subject = createSubject()
-        let tab = createTab()
-
-        let pdfURL = URL(string: "file://test.pdf")!
-        let sourceURL = URL(string: "https://www.example.com")!
-        tab.restoreTemporaryDocumentSession([pdfURL: sourceURL])
-        tabManager.tabs = [tab]
-
-        subject.webView(tab.webView!,
-                        decidePolicyFor: MockNavigationAction(url: pdfURL,
-                                                              type: .other)) { policy in
-            XCTAssertEqual(policy, .cancel)
-        }
-    }
-
-    @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenLoadingLocalPDFurlPreviouslyDownloaded() {
         let subject = createSubject()
         let tab = createTab()

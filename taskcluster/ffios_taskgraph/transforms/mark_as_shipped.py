@@ -17,6 +17,7 @@ def resolve_keys(config, tasks):
                 item_name=task["name"],
                 **{
                     "release-type": task["attributes"]["release-type"],
+                    "product-type": task["attributes"]["product-type"],
                     "level": config.params["level"],
                 }
             )
@@ -26,8 +27,12 @@ def resolve_keys(config, tasks):
 @transforms.add
 def add_release_name(config, tasks):
     for task in tasks:
-        product = "Firefox-ios" # Shipit capitalizes the product names
+        product = "{}-ios".format(
+            task["attributes"]["product-type"].capitalize()
+        )  # Shipit capitalizes the product names
         version = config.params.get("version", "[UNKNOWN]")
         build_number = config.params.get("build_number", 1)
-        task.setdefault("worker", {})["release-name"] = f"{product}-{version}-build{build_number}"
+        task.setdefault("worker", {})[
+            "release-name"
+        ] = f"{product}-{version}-build{build_number}"
         yield task

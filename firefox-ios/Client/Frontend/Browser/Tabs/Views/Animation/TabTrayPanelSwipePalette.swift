@@ -122,6 +122,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var actionInformation: UIColor { base.actionInformation }
     var actionTabActive: UIColor { base.actionTabActive }
     var actionTabInactive: UIColor { base.actionTabInactive }
+    var actionCloseButton: UIColor { base.actionCloseButton }
 
     var textSecondary: UIColor { base.textSecondary }
     var textDisabled: UIColor { base.textDisabled }

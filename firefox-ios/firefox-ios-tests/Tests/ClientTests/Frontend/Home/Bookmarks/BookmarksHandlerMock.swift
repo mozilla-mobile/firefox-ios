@@ -70,4 +70,8 @@ final class BookmarksHandlerMock: BookmarksHandler {
     func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
         completion(.success(bookmarksInTreeValue))
     }
+
+    func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
+        completion(.success(true))
+    }
 }

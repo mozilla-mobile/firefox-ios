@@ -8,31 +8,50 @@ import Shared
 import Storage
 import Account
 import SiteImageView
+import SummarizeKit
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware: FeatureFlaggable {
+final class TabManagerMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
+    private let summarizationChecker: SummarizationCheckerProtocol
+    private let summarizerServiceFactory: SummarizerServiceFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
+    private var isSummarizerEnabled: Bool {
+        return summarizerNimbusUtils.isSummarizeFeatureToggledOn
+    }
+    private var isAppleSummarizerEnabled: Bool {
+        return summarizerNimbusUtils.isAppleSummarizerEnabled()
+    }
+    private var isHostedSummaryEnabled: Bool {
+        return summarizerNimbusUtils.isHostedSummarizerEnabled()
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
+         summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
+         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
+         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtility
         self.profile = profile
+        self.summarizationChecker = summarizationChecker
         self.logger = logger
+        self.summarizerServiceFactory = summarizerServiceFactory
         self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
@@ -563,11 +582,7 @@ class TabManagerMiddleware: FeatureFlaggable {
             await tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
             await MainActor.run {
-                let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
-                let action = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                      windowUUID: uuid,
-                                                      actionType: TabPanelMiddlewareActionType.refreshTabs)
-                store.dispatchLegacy(action)
+                triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
 
                 if tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled {
                     let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
@@ -583,13 +598,13 @@ class TabManagerMiddleware: FeatureFlaggable {
                     }
                     addNewTabIfPrivate(uuid: uuid)
                 }
-            }
-        }
 
-        if !tabsState.isPrivateMode {
-            let dismissAction = TabTrayAction(windowUUID: uuid,
-                                              actionType: TabTrayActionType.dismissTabTray)
-            store.dispatchLegacy(dismissAction)
+                if !tabsState.isPrivateMode {
+                    let dismissAction = TabTrayAction(windowUUID: uuid,
+                                                      actionType: TabTrayActionType.dismissTabTray)
+                    store.dispatchLegacy(dismissAction)
+                }
+            }
         }
     }
 
@@ -764,11 +779,18 @@ class TabManagerMiddleware: FeatureFlaggable {
     private func didLoadTabPeek(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
-        profile.places.isBookmarked(url: tab?.url?.absoluteString ?? "") >>== { isBookmarked in
+        let urlString = tab?.url?.absoluteString ?? ""
+
+        profile.places.isBookmarked(url: urlString) { isBookmarkedResult in
+            guard case .success(let isBookmarked) = isBookmarkedResult else {
+                return
+            }
+
             var canBeSaved = true
             if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
                 canBeSaved = false
             }
+
             let browserProfile = self.profile as? BrowserProfile
             browserProfile?.tabs.getClientGUIDs { (result, error) in
                 let model = TabPeekModel(canTabBeSaved: canBeSaved,
@@ -815,7 +837,7 @@ class TabManagerMiddleware: FeatureFlaggable {
             handleDidInstantiateViewAction(action: action)
         case MainMenuMiddlewareActionType.requestTabInfoForSiteProtectionsHeader:
             provideTabInfoForSiteProtectionsHeader(forWindow: action.windowUUID)
-        case MainMenuDetailsActionType.tapAddToBookmarks, MainMenuActionType.tapAddToBookmarks:
+        case MainMenuActionType.tapAddToBookmarks:
             guard let tabID = action.tabID else { return }
             let shareItem = createShareItem(with: tabID, and: action.windowUUID)
             addToBookmarks(shareItem)
@@ -828,13 +850,9 @@ class TabManagerMiddleware: FeatureFlaggable {
                     actionType: GeneralBrowserActionType.showToast
                 )
             )
-        case MainMenuDetailsActionType.tapAddToReadingList:
-            addToReadingList(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.tapRemoveFromReadingList:
-            removeFromReadingList(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.tapAddToShortcuts, MainMenuActionType.tapAddToShortcuts:
+        case MainMenuActionType.tapAddToShortcuts:
             addToShortcuts(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.tapRemoveFromShortcuts, MainMenuActionType.tapRemoveFromShortcuts:
+        case MainMenuActionType.tapRemoveFromShortcuts:
             removeFromShortcuts(with: action.tabID, uuid: action.windowUUID)
 
         default:
@@ -871,29 +889,38 @@ class TabManagerMiddleware: FeatureFlaggable {
             )
             return
         }
-
-        fetchProfileTabInfo(for: selectedTab.url) { profileTabInfo in
-            store.dispatchLegacy(
-                MainMenuAction(
-                    windowUUID: windowUUID,
-                    actionType: MainMenuActionType.updateCurrentTabInfo,
-                    currentTabInfo: MainMenuTabInfo(
-                        tabID: selectedTab.tabUUID,
-                        url: selectedTab.url,
-                        canonicalURL: selectedTab.canonicalURL?.displayURL,
-                        isHomepage: selectedTab.isFxHomeTab,
-                        isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
-                        hasChangedUserAgent: selectedTab.changedUserAgent,
-                        zoomLevel: selectedTab.pageZoom,
-                        readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
-                        isBookmarked: profileTabInfo.isBookmarked,
-                        isInReadingList: profileTabInfo.isInReadingList,
-                        isPinned: profileTabInfo.isPinned,
+        let isSummarizerEnabled = isSummarizerEnabled
+        let maxWords = summarizerServiceFactory.maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
+                                                         isHostedSummarizerEnabled: isHostedSummaryEnabled)
+        fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
+            if isSummarizerEnabled {
+                Task {
+                    let canSummarize: Bool = if let webView = selectedTab.webView {
+                        await self?.summarizationChecker.check(on: webView,
+                                                               maxWords: maxWords).canSummarize
+                        ?? false
+                    } else {
+                        false
+                    }
+                    self?.dispatchTabInfo(
+                        info: profileTabInfo,
+                        selectedTab: selectedTab,
+                        windowUUID: windowUUID,
                         accountData: accountData,
-                        accountProfileImage: profileImage
+                        canSummarize: canSummarize,
+                        profileImage: profileImage
                     )
+                }
+            } else {
+                self?.dispatchTabInfo(
+                    info: profileTabInfo,
+                    selectedTab: selectedTab,
+                    windowUUID: windowUUID,
+                    accountData: accountData,
+                    canSummarize: false,
+                    profileImage: profileImage
                 )
-            )
+            }
         }
     }
 
@@ -946,6 +973,38 @@ class TabManagerMiddleware: FeatureFlaggable {
                 )
             )
         }
+    }
+
+    private func dispatchTabInfo(
+        info: ProfileTabInfo,
+        selectedTab: Tab,
+        windowUUID: WindowUUID,
+        accountData: AccountData,
+        canSummarize: Bool,
+        profileImage: UIImage?
+    ) {
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.updateCurrentTabInfo,
+                currentTabInfo: MainMenuTabInfo(
+                    tabID: selectedTab.tabUUID,
+                    url: selectedTab.url,
+                    canonicalURL: selectedTab.canonicalURL?.displayURL,
+                    isHomepage: selectedTab.isFxHomeTab,
+                    isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
+                    hasChangedUserAgent: selectedTab.changedUserAgent,
+                    zoomLevel: selectedTab.pageZoom,
+                    readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                    summaryIsAvailable: canSummarize,
+                    isBookmarked: info.isBookmarked,
+                    isInReadingList: info.isInReadingList,
+                    isPinned: info.isPinned,
+                    accountData: accountData,
+                    accountProfileImage: profileImage
+                )
+            )
+        )
     }
 
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
@@ -1115,47 +1174,6 @@ class TabManagerMiddleware: FeatureFlaggable {
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-    }
-
-    private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        guard let tabID = tabID,
-              let tab = tabManager.getTabForUUID(uuid: tabID),
-              let url = tab.url?.displayURL?.absoluteString
-        else { return }
-
-        profile.readingList.createRecordWithURL(
-            url,
-            title: tab.title ?? "",
-            addedBy: UIDevice.current.name
-        )
-
-        store.dispatchLegacy(
-            GeneralBrowserAction(
-                toastType: .addToReadingList,
-                windowUUID: uuid,
-                actionType: GeneralBrowserActionType.showToast
-            )
-        )
-    }
-
-    private func removeFromReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        guard let tabID = tabID,
-              let tab = tabManager.getTabForUUID(uuid: tabID),
-              let url = tab.url?.displayURL?.absoluteString,
-              let record = profile.readingList.getRecordWithURL(url).value.successValue
-        else { return }
-
-        profile.readingList.deleteRecord(record, completion: nil)
-
-        store.dispatchLegacy(
-            GeneralBrowserAction(
-                toastType: .removeFromReadingList,
-                windowUUID: uuid,
-                actionType: GeneralBrowserActionType.showToast
-            )
-        )
     }
 
     private func addToShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {

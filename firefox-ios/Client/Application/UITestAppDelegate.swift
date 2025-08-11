@@ -83,6 +83,10 @@ class UITestAppDelegate: AppDelegate {
             profile.prefs.setBool(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)
         }
 
+        if launchArguments.contains(LaunchArguments.SkipTermsOfUse) {
+            profile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
+        }
+
         // Skip the intro when requested by for example tests or automation
         if launchArguments.contains(LaunchArguments.SkipIntro) {
             IntroScreenManager(prefs: profile.prefs).didSeeIntroScreen()

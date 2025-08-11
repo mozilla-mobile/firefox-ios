@@ -6,100 +6,69 @@ import XCTest
 import MappaMundi
 
 func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
-    map.addScreenState(ToolsBrowserTabMenu) { screenState in
-        // Zoom
+    map.addScreenState(BrowserTabMenuMore) { screenState in
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.zoom],
             to: PageZoom)
-        // Turn on night mode
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
-            forAction: Action.ToggleNightMode,
-            transitionTo: BrowserTab
-        ) { userState in
-            userState.nightMode = !userState.nightMode
-        }
-        // Report broken site (TODO)
-        // Share
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.share],
-            forAction: Action.ShareBrowserTabMenuOption
-        ) { userState in
-        }
-
-        screenState.dismissOnUse = true
-        screenState.backAction = navigationControllerBackAction(for: app)
-    }
-
-    map.addScreenState(SaveBrowserTabMenu) { screenState in
-        // Bookmark this page
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarkThisPage],
-            forAction: Action.BookmarkThreeDots
-        )
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarkThisPage],
-            forAction: Action.Bookmark
-        )
-        // Add to shortcuts
-        // No Copy link available (Action.CopyAddressPAM)
+        // Add To Shortcuts
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.addToShortcuts],
             forAction: Action.PinToTopSitesPAM
         )
+        // Web Site Dark Mode
         screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.saveToReadingList],
-            forAction: Action.AddToReadingListBrowserTabMenu
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
+            forAction: Action.ToggleNightMode
         )
-
+        // Save As PDF (TODO)
+        // Print (TODO)
+        // Turn on night mode
         screenState.dismissOnUse = true
-        screenState.backAction = navigationControllerBackAction(for: app)
+        screenState.backAction = cancelBackAction(for: app)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
         sleep(1)
-
-        // Sign In (if unauthenticated)
-        screenState.tap(
-            app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton],
-            to: Intro_FxASignin,
-            if: "fxaUsername == nil")
-        // Signed in (TODO)
-        // New tab
-        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab], to: NewTabScreen)
-        // New private tab (TODO: Action.OpenPrivateTabLongPressTabsButton
-        // Switch to Desktop/Mobile Site
-        // The cell's identifier is the same for desktop and mobile, so I use static
-        // texts for the RequestMobileSite case
-        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.switchToDesktopSite], to: RequestDesktopSite)
-        screenState.tap(app.tables.cells.staticTexts["Switch to Mobile Site"], to: RequestMobileSite)
-        // Find in Page...
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.findInPage],
-            to: FindInPage)
-        // Tools (Zoom, NightMode, Report, Share)
-        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.tools], to: ToolsBrowserTabMenu)
-        // Save (Add Bookmark, Shortcut)
-        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.save], to: SaveBrowserTabMenu)
         // Bookmarks
-        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
+        screenState.tap(app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
         // History
         screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
+            app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.history],
             to: LibraryPanel_History)
         // Downloads
         screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.downloads],
+            app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads],
             to: LibraryPanel_Downloads
         )
-        // Passwords (TODO)
-        // Customize Homepage (TODO)
-        // New in Firefox
+        // More Options
         screenState.tap(
-            app.otherElements.cells["MainMenu.WhatsNew"],
-            forAction: Action.OpenWhatsNewPage
+            app.tables.cells["MainMenu.MoreLess"],
+            to: BrowserTabMenuMore)
+        // Tracking Protections (TODO)
+
+        // Find In Page
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.findInPage],
+            to: FindInPage)
+        // Desktop Site
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.desktopSite],
+            to: RequestDesktopSite
         )
-        // Get Help (TODO: Actions to open support.mozilla.org)
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.desktopSite],
+                        to: RequestMobileSite)
+
+        // Bookmark this page
+        screenState.tap(
+            app.tables.cells["MainMenu.BookmarkPage"],
+            forAction: Action.Bookmark
+        )
+        // Sign In (if unauthenticated)
+        screenState.tap(
+            app.cells[AccessibilityIdentifiers.MainMenu.signIn],
+            to: Intro_FxASignin,
+            if: "fxaUsername == nil")
+        // Signed in (TODO)
         // SettingsScreen
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings], to: SettingsScreen)
 

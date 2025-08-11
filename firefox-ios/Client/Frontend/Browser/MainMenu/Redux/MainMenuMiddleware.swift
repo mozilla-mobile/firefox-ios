@@ -9,48 +9,30 @@ import Shared
 
 final class MainMenuMiddleware: FeatureFlaggable {
     private enum TelemetryAction {
-        static let newTab = "new_tab"
-        static let newPrivateTab = "new_private_tab"
         static let findInPage = "find_in_page"
         static let bookmarks = "bookmarks"
         static let history = "history"
         static let downloads = "downloads"
         static let passwords = "passwords"
         static let settings = "settings"
-        static let customizeHomepage = "customize_homepage"
-        static let getHelp = "get_help"
-        static let newInFirefox = "new_in_firefox"
-        static let tools = "tools"
-        static let save = "save"
         static let print = "print"
-        static let share = "share"
         static let saveAsPDF = "save_as_PDF"
         static let switchToDesktopSite = "switch_to_desktop_site"
         static let switchToMobileSite = "switch_to_mobile_site"
-        static let readerViewTurnOn = "reader_view_turn_on"
-        static let readerViewTurnOff = "reader_view_turn_off"
         static let signInAccount = "sign_in_account"
         static let zoom = "zoom"
-        static let reportBrokenSite = "report_broken_site"
         static let bookmarkThisPage = "bookmark_this_page"
         static let editBookmark = "edit_bookmark"
         static let addToShortcuts = "add_to_shortcuts"
         static let removeFromShortcuts = "remove_from_shortcuts"
-        static let saveToReadingList = "save_to_reading_list"
-        static let removeFromReadingList = "remove_from_reading_list"
         static let nightModeTurnOn = "night_mode_turn_on"
         static let nightModeTurnOff = "night_mode_turn_off"
-        static let back = "back"
         static let siteProtections = "site_protections"
         static let defaultBrowserSettings = "default_browser_settings"
     }
 
     private let logger: Logger
     private let telemetry = MainMenuTelemetry()
-
-    private var isMenuRedesignOn: Bool {
-        featureFlags.isFeatureEnabled(.menuRedesign, checking: .buildOnly)
-    }
 
     init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
@@ -81,17 +63,11 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuActionType.tapNavigateToDestination:
             handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
 
-        case MainMenuActionType.tapShowDetailsView:
-            handleTapShowDetailsViewAction(action: action, isHomepage: isHomepage)
-
         case MainMenuActionType.tapToggleUserAgent:
             handleTapToggleUserAgentAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapCloseMenu:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
-
-        case GeneralBrowserActionType.showReaderMode:
-            handleShowReaderModeAction(action: action)
 
         case MainMenuActionType.didInstantiateView:
             handleDidInstantiateViewAction(action: action)
@@ -105,56 +81,23 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuActionType.menuDismissed:
             telemetry.menuDismissed(isHomepage: isHomepage)
 
-        case MainMenuDetailsActionType.tapZoom:
-            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.zoom)
-
         case MainMenuActionType.tapZoom:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.zoom)
-
-        case MainMenuDetailsActionType.tapReportBrokenSite:
-            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.reportBrokenSite)
-
-        case MainMenuDetailsActionType.tapAddToBookmarks:
-            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.bookmarkThisPage)
 
         case MainMenuActionType.tapAddToBookmarks:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.bookmarkThisPage)
 
-        case MainMenuDetailsActionType.tapEditBookmark:
-            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
-
         case MainMenuActionType.tapEditBookmark:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
-
-        case MainMenuDetailsActionType.tapAddToShortcuts:
-            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.addToShortcuts)
 
         case MainMenuActionType.tapAddToShortcuts:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.addToShortcuts)
 
-        case MainMenuDetailsActionType.tapRemoveFromShortcuts:
-            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromShortcuts)
-
         case MainMenuActionType.tapRemoveFromShortcuts:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromShortcuts)
 
-        case MainMenuDetailsActionType.tapAddToReadingList:
-            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.saveToReadingList)
-
-        case MainMenuDetailsActionType.tapRemoveFromReadingList:
-            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.removeFromReadingList)
-
-        case MainMenuDetailsActionType.tapToggleNightMode:
-            handleTapToggleNightModeAction(action: action, isHomepage: isHomepage)
-
         case MainMenuActionType.tapToggleNightMode:
             handleTapToggleWebSiteDarkModeAction(action: action, isHomepage: isHomepage)
-
-        case MainMenuDetailsActionType.tapBackToMainMenu:
-            handleTapBackToMainMenuAction(action: action, isHomepage: isHomepage)
-
-        case MainMenuDetailsActionType.tapDismissView:
-            telemetry.closeButtonTapped(isHomepage: isHomepage)
 
         default: break
         }
@@ -165,14 +108,6 @@ final class MainMenuMiddleware: FeatureFlaggable {
         handleTelemetryFor(for: destination,
                            isHomepage: isHomepage,
                            and: action.navigationDestination?.url)
-    }
-
-    private func handleTapShowDetailsViewAction(action: MainMenuAction, isHomepage: Bool) {
-        if action.detailsViewToShow == .tools {
-            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.tools)
-        } else if action.detailsViewToShow == .save {
-            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.save)
-        }
     }
 
     private func handleTapToggleUserAgentAction(action: MainMenuAction, isHomepage: Bool) {
@@ -188,33 +123,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
         }
     }
 
-    private func handleShowReaderModeAction(action: MainMenuAction) {
-        guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
-        let option = isActionOn ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
-        telemetry.toolsSubmenuOptionTapped(with: false, and: option)
-    }
-
     @MainActor
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
-        if !isMenuRedesignOn {
-            guard let accountData = getAccountData() else {
-                dispatchUpdateAccountHeader(action: action)
-                return
-            }
-            if let iconURL = accountData.iconURL {
-                GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                    guard let self else { return }
-                    self.dispatchUpdateAccountHeader(
-                        accountData: accountData,
-                        action: action,
-                        icon: image)
-                }
-            } else {
-                dispatchUpdateAccountHeader(accountData: accountData, action: action)
-            }
-        } else {
-            dispatchUpdateBannerVisibility(action: action)
-        }
+        dispatchUpdateBannerVisibility(action: action)
     }
 
     @MainActor
@@ -268,25 +179,10 @@ final class MainMenuMiddleware: FeatureFlaggable {
         )
     }
 
-    private func handleTapToggleNightModeAction(action: MainMenuAction, isHomepage: Bool) {
-        guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
-        let option = isActionOn ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
-        telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: option)
-    }
-
     private func handleTapToggleWebSiteDarkModeAction(action: MainMenuAction, isHomepage: Bool) {
         guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
         let option = isActionOn ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
         telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
-    }
-
-    private func handleTapBackToMainMenuAction(action: MainMenuAction, isHomepage: Bool) {
-        guard let submenuType = action.telemetryInfo?.submenuType else { return }
-        if submenuType == .save {
-            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
-        } else {
-            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
-        }
     }
 
     private func getAccountData() -> AccountData? {
@@ -319,12 +215,6 @@ final class MainMenuMiddleware: FeatureFlaggable {
                                     isHomepage: Bool,
                                     and urlToVisit: URL?) {
         switch navigationDestination {
-        case .newTab:
-            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.newTab)
-
-        case .newPrivateTab:
-            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.newPrivateTab)
-
         case .findInPage:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.findInPage)
 
@@ -343,27 +233,8 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case .settings:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.settings)
 
-        case .customizeHomepage:
-            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.customizeHomepage)
-
-        case .goToURL:
-            if urlToVisit == SupportUtils.URLForGetHelp {
-                telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.getHelp)
-            } else if urlToVisit == SupportUtils.URLForWhatsNew {
-                telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.newInFirefox)
-            }
-
-        case .printSheet:
-            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
-
         case .printSheetV2:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
-
-        case .shareSheet:
-            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.share)
-
-        case .saveAsPDF:
-            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.saveAsPDF)
 
         case .saveAsPDFV2:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.saveAsPDF)
@@ -372,10 +243,10 @@ final class MainMenuMiddleware: FeatureFlaggable {
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.signInAccount)
 
         case .editBookmark:
-            self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
+            self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
 
         case .zoom:
-            self.telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.zoom)
+            self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.zoom)
 
         case .siteProtections:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.siteProtections)

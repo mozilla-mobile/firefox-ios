@@ -173,7 +173,7 @@ class ReadingListPanel: UITableViewController,
     var state: LibraryPanelMainState
     var bottomToolbarItems = [UIBarButtonItem]()
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -200,6 +200,7 @@ class ReadingListPanel: UITableViewController,
         self.state = .readingList
         super.init(nibName: nil, bundle: nil)
 
+        // FIXME: FXIOS-12995 Use Notifiable
         [ Notification.Name.FirefoxAccountChanged,
           Notification.Name.DynamicFontChanged,
           Notification.Name.DatabaseWasReopened ].forEach {
@@ -248,8 +249,8 @@ class ReadingListPanel: UITableViewController,
         tableView.tableFooterView = UIView()
         tableView.dragDelegate = self
 
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
-        listenForThemeChange(view)
     }
 
     private func currentTheme() -> Theme {

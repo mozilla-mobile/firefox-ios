@@ -30,6 +30,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         self.tabManager = mockTabManager
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        setIsAppleSummarizerEnabled(false)
+        setIsHostedSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         profile = MockProfile()
@@ -68,10 +70,12 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testWithoutLaunchType_startsBrowserOnly() {
         let subject = createSubject()
         subject.start(with: nil)
-
-        XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-        XCTAssertTrue(subject.childCoordinators.isEmpty)
+        // TODO: FXIOS-12947 - Add tests for ToU Feature implementation
+        if !featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) {
+            XCTAssertNotNil(mockRouter.pushedViewController as? BrowserViewController)
+            XCTAssertEqual(mockRouter.pushCalled, 1)
+            XCTAssertTrue(subject.childCoordinators.isEmpty)
+        }
     }
 
     func testWithLaunchType_startsLaunchCoordinator() {
@@ -554,15 +558,58 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(browserViewController.removeDocumentLoadingViewCalled, 1)
     }
 
+    // MARK: - Summarize Panel
     @MainActor
-    func testShowSummarizePanel() {
+    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() {
+        setIsHostedSummarizerEnabled(true)
         let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel()
+        subject.showSummarizePanel(.mainMenu)
 
         let childCoordinator = subject.childCoordinators.first
         XCTAssertTrue(childCoordinator is SummarizeCoordinator)
+    }
+
+    @MainActor
+    func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
+        setIsHostedSummarizerEnabled(true)
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
+        subject.browserViewController = browserViewController
+
+        subject.showSummarizePanel(.mainMenu)
+
+        XCTAssertNil(subject.childCoordinators.first(where: {
+            $0 is SummarizeCoordinator
+        }))
+    }
+
+    @MainActor
+    func testShowSummarizePanel_whenSummarizeFeatureIsDisabled_doesntShowPanel() {
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.showSummarizePanel(.mainMenu)
+        XCTAssertNil(subject.childCoordinators.first(where: {
+            $0 is SummarizeCoordinator
+        }))
+    }
+
+    // MARK: - Shortcuts Library
+
+    func testShowShortcutsLibrary_showsShortcutsLibrary() throws {
+        let subject = createSubject()
+
+        subject.showShortcutsLibrary()
+
+        XCTAssertNotNil(mockRouter.pushedViewController as? ShortcutsLibraryViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
     // MARK: - ParentCoordinatorDelegate
@@ -1127,7 +1174,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        if !featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
+            XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        }
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
     }
 
@@ -1144,22 +1193,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         menuCoordinator.dismissMenuModal(animated: false)
 
         XCTAssertTrue(subject.childCoordinators.isEmpty)
-    }
-
-    func testMainMenuCoordinatorDelegate_navigatesToSettings() {
-        let subject = createSubject()
-        subject.browserHasLoaded()
-
-        subject.showMainMenu()
-        guard let menuCoordinator = subject.childCoordinators[0] as? MainMenuCoordinator else {
-            XCTFail("Main menu coordinator was expected to be resolved")
-            return
-        }
-
-        menuCoordinator.navigateTo(MenuNavigationDestination(.customizeHomepage), animated: false)
-
-        XCTAssertTrue(subject.childCoordinators[0] is SettingsCoordinator)
-        XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
     }
 
     // MARK: - Search Engine Selection
@@ -1276,6 +1309,18 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private func setIsDeeplinkOptimizationRefactorEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.deeplinkOptimizationRefactorFeature.with { _, _ in
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
+        }
+    }
+
+    private func setIsAppleSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.appleSummarizerFeature.with { _, _ in
+            return AppleSummarizerFeature(enabled: isEnabled)
+        }
+    }
+
+    private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled)
         }
     }
 

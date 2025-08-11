@@ -73,7 +73,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339257
-    func testTyping() {
+    func testTyping() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -123,36 +126,33 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339260
     func testSetFirefoxHomeAsHome() {
-        // Start by setting to History since FF Home is default
+        // Go to homepage settings
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        enterWebPageAsHomepage(text: websiteUrl1)
+        // Firefox home and custom URL options are displayed
+        // Firefox Home is selected by default
+        mozWaitForElementToExist(app.tables.cells["HomeAsFirefoxHome"])
+        mozWaitForElementToExist(app.tables.cells["HomeAsCustomURL"])
+        XCTAssertTrue(app.tables.cells["HomeAsFirefoxHome"].isSelected, "Firefox Home is not selected by default")
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
+        // Add a new tab
         navigator.performAction(Action.GoToHomePage)
-        waitUntilPageLoad()
+        // A new tab with Firefox homepage is added
+        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "mozilla.org")
-
-        // Now after setting History, make sure FF home is set
-        navigator.goto(SettingsScreen)
-        navigator.goto(NewTabSettings)
-        navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
-        navigator.nowAt(HomeSettings)
-        navigator.goto(SettingsScreen)
-        navigator.goto(HomePanelsScreen)
-        mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.collectionViews.links.staticTexts
-            .elementContainingText("Mozilla - Internet for people").exists)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307031
-    func testSetCustomURLAsHome() {
+    func testSetCustomURLAsHome() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Skipping test based on https://github.com/mozilla-mobile/firefox-ios/issues/28117.")
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -284,6 +284,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
     func testRecentlySaved_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()

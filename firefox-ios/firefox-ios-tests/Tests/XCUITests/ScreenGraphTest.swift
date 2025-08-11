@@ -77,19 +77,18 @@ extension ScreenGraphTest {
         XCTAssertTrue(navigator.userState.nightMode)
 
         navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
+        navigator.goto(BrowserTabMenuMore)
+        XCTAssertEqual(navigator.screenState, BrowserTabMenuMore)
 
         // Nothing should happen here, because night mode is already on.
         navigator.toggleOn(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
-        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
+        XCTAssertEqual(navigator.screenState, BrowserTabMenuMore)
 
-        navigator.nowAt(BrowserTabMenu)
         // Switch night mode off.
         navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNighModeOff)
         XCTAssertFalse(navigator.userState.nightMode)
-        XCTAssertEqual(navigator.screenState, BrowserTabMenu)
+        XCTAssertEqual(navigator.screenState, BrowserTabMenuMore)
     }
 }
 
@@ -111,8 +110,8 @@ class TestUserState: MMUserState {
 let WebPageLoading = "WebPageLoading"
 
 private class TestActions {
-    static let ToggleNightMode = StandardImageIdentifiers.Large.nightMode
-    static let ToggleNighModeOff = "MainMenu.NightModeOn"
+    static let ToggleNightMode = "ToggleNightMode"
+    static let ToggleNighModeOff = "ToggleNightModeOff"
     static let LoadURL = "LoadURL"
     static let LoadURLByTyping = "LoadURLByTyping"
     static let LoadURLByPasting = "LoadURLByPasting"
@@ -156,6 +155,17 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
             app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].waitAndTap()
         }
     }
+    map.addScreenState(BrowserTabMenuMore) { screenState in
+        // Web Site Dark Mode
+        screenState.gesture(forAction: TestActions.ToggleNightMode) { userState in
+            userState.nightMode = true
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode].tap()
+        }
+        screenState.gesture(forAction: TestActions.ToggleNighModeOff) { userState in
+            userState.nightMode = false
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode].tap()
+        }
+    }
 
     map.addScreenState(URLBarOpen) { screenState in
         screenState.gesture(forAction: TestActions.LoadURLByTyping, TestActions.LoadURL) { userState in
@@ -166,28 +176,14 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
 
     map.addScreenAction(TestActions.LoadURL, transitionTo: WebPageLoading)
 
-    map.addScreenState(ToolsBrowserTabMenu) { screenState in
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
-            forAction: TestActions.ToggleNightMode,
-            transitionTo: BrowserTabMenu
-        ) { userState in
-            userState.nightMode = !userState.nightMode
-        }
-
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
-            forAction: TestActions.ToggleNighModeOff,
-            transitionTo: BrowserTabMenu
-        ) { userState in
-            userState.nightMode = !userState.nightMode
-        }
-    }
-
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.dismissOnUse = true
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
-        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.tools], to: ToolsBrowserTabMenu)
+
+        // More Options
+        screenState.tap(
+            app.tables.cells["MainMenu.MoreLess"],
+            to: BrowserTabMenuMore)
 
         screenState.backAction = {
             if isTablet {

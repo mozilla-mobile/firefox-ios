@@ -1166,6 +1166,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     private var isPDFRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
     }
+    private var theme: Theme?
 
     override var hasOnlySecureContent: Bool {
         // When PDF refactor enabled we show the online URL for a local PDF so secure content should be true
@@ -1289,6 +1290,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
         ])
         refresh.startObservingContentScroll()
         pullRefresh = refresh
+        guard let theme else { return }
+        refresh.applyTheme(theme: theme)
     }
 
     func removePullRefresh() {
@@ -1306,6 +1309,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     /// Updates the `background-color` of the webview to match
     /// the theme if the webview is showing "about:blank" (nil).
     func applyTheme(theme: Theme) {
+        self.theme = theme
         backgroundColor = theme.colors.layer1
         pullRefresh?.applyTheme(theme: theme)
         if url == nil {

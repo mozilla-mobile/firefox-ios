@@ -4,18 +4,30 @@
 
 import XCTest
 class NightModeTests: BaseTestCase {
+    var nightModeOnCell: XCUIElement {
+        app.tables.cells["MainMenu.NightModeOn"]
+    }
+
     private func checkNightModeOn() {
-        navigator.goto(ToolsBrowserTabMenu)
-        mozWaitForElementToExist(app.tables.cells["MainMenu.NightModeOn"])
-        XCTAssertTrue(app.tables.cells["MainMenu.NightModeOn"].label == "Turn off Night Mode")
+        mozWaitForElementToExist(nightModeOnCell)
+        XCTAssertTrue(nightModeOnCell.label == "Website Dark Mode")
+        if !iPad() {
+            mozWaitForElementToExist(app.tables.staticTexts["On"])
+        } else {
+            mozWaitForElementToExist(app.tables.staticTexts.matching(identifier: "On").element(boundBy: 1))
+        }
         // Turn off night mode
-        app.tables.cells["MainMenu.NightModeOn"].waitAndTap()
+        nightModeOnCell.waitAndTap()
     }
 
     private func checkNightModeOff() {
-        navigator.goto(ToolsBrowserTabMenu)
-        mozWaitForElementToExist(app.tables.cells["MainMenu.NightModeOn"])
-        XCTAssertTrue(app.tables.cells["MainMenu.NightModeOn"].label == "Turn on Night Mode")
+        mozWaitForElementToExist(nightModeOnCell)
+        XCTAssertTrue(nightModeOnCell.label == "Website Dark Mode")
+        if !iPad() {
+            mozWaitForElementToExist(app.tables.staticTexts.matching(identifier: "Off").element(boundBy: 1))
+        } else {
+            mozWaitForElementToExist(app.tables.staticTexts["Off"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307056
@@ -25,15 +37,16 @@ class NightModeTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url1))
         waitUntilPageLoad()
         // turn on the night mode
+        navigator.goto(BrowserTabMenuMore)
         navigator.performAction(Action.ToggleNightMode)
         navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(BrowserTabMenuMore)
         // checking night mode on or off
         checkNightModeOn()
 
         // checking night mode on or off
         navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(BrowserTabMenuMore)
         checkNightModeOff()
     }
 }

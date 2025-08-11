@@ -25,13 +25,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageRebuild
     case homepageRedesign
     case homepageSearchBar
+    case homepageShortcutsLibrary
     case homepageStoriesRedesign
     case inactiveTabs
     case loginsVerificationEnabled
     case menuDefaultBrowserBanner
     case menuRefactor
-    case menuRefactorHint
-    case menuRedesign
     case menuRedesignHint
     case microsurvey
     case modernOnboardingUI
@@ -44,7 +43,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case searchEngineConsolidation
     case splashScreen
     case startAtHome
-    case summarizer
+    case appleSummarizer
+    case appleSummarizerToolbarEntrypoint
+    case appleSummarizerShakeGesture
+    case hostedSummarizer
+    case hostedSummarizerToolbarEntrypoint
+    case hostedSummarizerShakeGesture
     case tabTrayUIExperiments
     case toolbarNavigationHint
     case toolbarUpdateHint
@@ -54,6 +58,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarTranslucency
     case toolbarMinimalAddressBar
     case tosFeature
+    case touFeature
     case trackingProtectionRefactor
     case unifiedAds
     case unifiedSearch
@@ -71,6 +76,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .homepageRebuild,
                 .homepageStoriesRedesign,
                 .homepageSearchBar,
+                .homepageShortcutsLibrary,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
@@ -84,7 +90,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .trackingProtectionRefactor,
                 .pdfRefactor,
                 .downloadLiveActivities,
-                .summarizer,
+                .appleSummarizer,
+                .hostedSummarizer,
+                .touFeature,
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,
@@ -135,12 +143,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageRebuild,
                 .homepageRedesign,
                 .homepageSearchBar,
+                .homepageShortcutsLibrary,
                 .homepageStoriesRedesign,
                 .loginsVerificationEnabled,
                 .menuDefaultBrowserBanner,
                 .menuRefactor,
-                .menuRefactorHint,
-                .menuRedesign,
                 .menuRedesignHint,
                 .microsurvey,
                 .modernOnboardingUI,
@@ -152,7 +159,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
                 .splashScreen,
-                .summarizer,
+                .appleSummarizer,
+                .appleSummarizerToolbarEntrypoint,
+                .appleSummarizerShakeGesture,
+                .hostedSummarizer,
+                .hostedSummarizerToolbarEntrypoint,
+                .hostedSummarizerShakeGesture,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,
                 .toolbarUpdateHint,
@@ -162,6 +174,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarTranslucency,
                 .toolbarMinimalAddressBar,
                 .tosFeature,
+                .touFeature,
                 .trackingProtectionRefactor,
                 .unifiedAds,
                 .unifiedSearch,

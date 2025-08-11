@@ -7,7 +7,20 @@ import Common
 import Redux
 import Shared
 
+@MainActor
 final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
+    /// Delegate protocol for handling address bar pan gesture events.
+    /// Allows external objects to respond to swipe gesture state changes during tab switching.
+    protocol Delegate: AnyObject {
+        /// Called when the pan gesture begins during a swipe operation.
+        /// This method is invoked once when the user starts swiping between tabs.
+        func swipeGestureDidBegin()
+
+        /// Called when the pan gesture ends, either by completion, cancellation, or failure.
+        /// This method is invoked once at the end of the swipe operation, regardless of outcome.
+        func swipeGestureDidEnd()
+    }
+
     typealias SubscriberStateType = ToolbarState
     // MARK: - UX Constants
     private struct UX {
@@ -32,6 +45,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     private let screenshotHelper: ScreenshotHelper?
     var homepageScreenshotToolProvider: (() -> Screenshotable?)?
     var newTabSettingsProvider: (() -> NewTabPage?)?
+    weak var delegate: AddressBarPanGestureHandler.Delegate?
     private var homepageScreenshot: UIImage?
     private var toolbarState: ToolbarState?
     private let prefs: Prefs
@@ -86,7 +100,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         })
     }
 
-    private func unsubscribeFromRedux() {
+    nonisolated private func unsubscribeFromRedux() {
         store.unsubscribe(self)
     }
 
@@ -158,6 +172,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 )
             )
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
+            delegate?.swipeGestureDidBegin()
         case .changed:
             if nextTab == nil, homepageScreenshot == nil {
                 let homepageScreenshotTool = homepageScreenshotToolProvider?()
@@ -256,6 +271,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,
                                                 isHomepage: contentContainer.hasHomepage)
             }
+            delegate?.swipeGestureDidEnd()
         }
     }
 

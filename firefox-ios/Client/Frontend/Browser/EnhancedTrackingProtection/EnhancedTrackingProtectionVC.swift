@@ -56,7 +56,7 @@ protocol EnhancedTrackingProtectionMenuDelegate: AnyObject {
 
 class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
+    var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -185,7 +185,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             addGestureRecognizer()
         }
         setupView()
-        listenForThemeChange(view)
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {
@@ -277,6 +279,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     private func setupConnectionStatusView() {
         connectionView.addSubviews(connectionImage, connectionLabel, connectionDetailArrow, connectionButton)
         view.addSubview(connectionView)
+        setupConnectionAccessibilityConfiguration()
 
         let connectionConstraints = [
             connectionView.leadingAnchor.constraint(
@@ -431,6 +434,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
         siteDomainLabel.text = viewModel.websiteTitle
         connectionLabel.text = viewModel.connectionStatusString
+        connectionButton.accessibilityLabel = viewModel.connectionStatusString
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
         toggleLabel.text = .TrackingProtectionEnableTitle
         toggleStatusLabel.text = toggleSwitch.isOn ? .ETPOn : .ETPOff
@@ -501,6 +505,15 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
                 }
             }
         }
+    }
+
+    private func setupConnectionAccessibilityConfiguration() {
+        connectionView.isAccessibilityElement = false
+        connectionImage.isAccessibilityElement = false
+        connectionLabel.isAccessibilityElement = false
+        connectionDetailArrow.isAccessibilityElement = false
+        connectionButton.isAccessibilityElement = true
+        connectionButton.accessibilityTraits = .button
     }
 
     private func currentTheme() -> Theme {

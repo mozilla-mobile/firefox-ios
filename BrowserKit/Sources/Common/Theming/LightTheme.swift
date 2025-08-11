@@ -80,6 +80,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var actionInformation: UIColor = FXColors.Blue50
     var actionTabActive: UIColor = FXColors.White
     var actionTabInactive: UIColor = FXColors.LightGrey20
+    var actionCloseButton: UIColor = FXColors.White
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.DarkGrey90

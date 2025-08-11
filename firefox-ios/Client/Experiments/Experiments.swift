@@ -200,6 +200,24 @@ enum Experiments {
         return prefsReader.hasEnabledTipsNotifications()
     }
 
+    private static func isAppleIntelligenceAvailable() -> Bool {
+        guard #available(iOS 26, *) else { return false }
+        #if canImport(FoundationModels)
+            return AppleIntelligenceUtil().isAppleIntelligenceAvailable
+        #else
+            return false
+        #endif
+    }
+
+    private static func cannotUseAppleIntelligence() -> Bool {
+        guard #available(iOS 26, *) else { return true }
+        #if canImport(FoundationModels)
+            return AppleIntelligenceUtil().cannotUseAppleIntelligence
+        #else
+            return true
+        #endif
+    }
+
     private static func buildNimbus(dbPath: String,
                                     errorReporter: @escaping NimbusErrorReporter,
                                     initialExperiments: URL?,
@@ -214,7 +232,9 @@ enum Experiments {
             isFirstRun: isFirstRun,
             isDefaultBrowser: isDefaultBrowser(),
             isBottomToolbarUser: isBottomToolbarUser(),
-            hasEnabledTipsNotifications: hasEnabledTipsNotifications()
+            hasEnabledTipsNotifications: hasEnabledTipsNotifications(),
+            isAppleIntelligenceAvailable: isAppleIntelligenceAvailable(),
+            cannotUseAppleIntelligence: cannotUseAppleIntelligence()
         )
 
         return NimbusBuilder(dbPath: dbPath)
