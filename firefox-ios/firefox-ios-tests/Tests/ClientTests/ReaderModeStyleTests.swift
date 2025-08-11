@@ -165,7 +165,7 @@ class ReaderModeStyleTests: XCTestCase {
         XCTAssertEqual(viewModel.readerModeStyle.theme, theme)
         XCTAssertTrue(viewModel.isUsingUserDefinedColor)
         XCTAssertTrue(mockDelegate.didCallConfigureStyle)
-        XCTAssertEqual(mockDelegate.receivedStyle, viewModel.readerModeStyle)
+        XCTAssertTrue(mockDelegate.receivedStyle === viewModel.readerModeStyle)
         XCTAssertEqual(mockDelegate.receivedIsUsingUserDefinedColor, true)
     }
 
@@ -187,7 +187,7 @@ class ReaderModeStyleTests: XCTestCase {
         XCTAssertEqual(viewModel.readerModeStyle.fontSize, ReaderModeFontSize.defaultSize)
 
         XCTAssertTrue(mockDelegate.didCallConfigureStyle)
-        XCTAssertEqual(mockDelegate.receivedStyle, viewModel.readerModeStyle)
+        XCTAssertTrue(mockDelegate.receivedStyle === viewModel.readerModeStyle)
         XCTAssertEqual(mockDelegate.receivedIsUsingUserDefinedColor, viewModel.isUsingUserDefinedColor)
     }
 
@@ -201,7 +201,7 @@ class ReaderModeStyleTests: XCTestCase {
 
         XCTAssertEqual(viewModel.readerModeStyle.fontType, fontType)
         XCTAssertTrue(mockDelegate.didCallConfigureStyle)
-        XCTAssertEqual(mockDelegate.receivedStyle, viewModel.readerModeStyle)
+        XCTAssertTrue(mockDelegate.receivedStyle === viewModel.readerModeStyle)
         XCTAssertEqual(mockDelegate.receivedIsUsingUserDefinedColor, viewModel.isUsingUserDefinedColor)
     }
 }
@@ -225,11 +225,5 @@ class MockDelegate: ReaderModeStyleViewModelDelegate {
 extension ReaderModeFontSize: @retroactive Comparable {
     public static func < (lhs: ReaderModeFontSize, rhs: ReaderModeFontSize) -> Bool {
         lhs.rawValue < rhs.rawValue
-    }
-}
-
-extension ReaderModeStyle: @retroactive @MainActor Equatable {
-    public static func == (lhs: ReaderModeStyle, rhs: ReaderModeStyle) -> Bool {
-        lhs.fontSize == rhs.fontSize && lhs.fontType == rhs.fontType && lhs.theme == rhs.theme
     }
 }
