@@ -4,8 +4,8 @@ set -e
 
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
-THRESHOLD_UNIT_TEST=20
-THRESHOLD_XCUITEST=20
+THRESHOLD_UNIT_TEST=21
+THRESHOLD_XCUITEST=21
 
 WARNINGS=$(grep -E -v 'SourcePackages/checkouts' "$BUILD_LOG_FILE" \
   | grep -E '^[^ ]+:[0-9]+:[0-9]+: warning:' \
