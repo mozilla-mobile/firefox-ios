@@ -9,18 +9,15 @@ struct StartAtHomeAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let shouldStartAtHome: Bool?
-    let tabManager: TabManager?
 
     init(
         shouldStartAtHome: Bool? = nil,
-        tabManager: TabManager? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.shouldStartAtHome = shouldStartAtHome
-        self.tabManager = tabManager
     }
 }
 
