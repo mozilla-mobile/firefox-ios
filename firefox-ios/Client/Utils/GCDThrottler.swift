@@ -16,7 +16,7 @@ class GCDThrottler: ThrottleProtocol {
 
     private let threshold: Double
     private var queue: DispatchQueueInterface
-    private var lastExecutationTime = Date.distantPast
+    private var lastExecutionTime = Date.distantPast
 
     init(seconds delay: Double? = nil,
          on queue: DispatchQueueInterface = DispatchQueue.main) {
@@ -25,9 +25,9 @@ class GCDThrottler: ThrottleProtocol {
     }
 
     // This debounces; the task will not happen unless a duration of delay passes since the function was called
-    func throttle(completion: @escaping () -> Void) {
-        guard lastExecutationTime.timeIntervalSinceNow < -threshold else { return }
-        lastExecutationTime = Date()
+    func throttle(completion: @escaping @Sendable () -> Void) {
+        guard lastExecutionTime.timeIntervalSinceNow < -threshold else { return }
+        lastExecutionTime = Date()
         queue.async(execute: completion)
     }
 }
