@@ -29,7 +29,7 @@ final class ShortcutsLibraryDiffableDataSource:
     }
 
     private func getShortcuts(with state: ShortcutsLibraryState) -> [ShortcutsLibraryDiffableDataSource.Item]? {
-        let shortcuts: [Item] = state.topSitesData.compactMap { .shortcut($0) }
+        let shortcuts: [Item] = state.shortcuts.compactMap { .shortcut($0) }
         guard !shortcuts.isEmpty else { return nil }
         return shortcuts
     }

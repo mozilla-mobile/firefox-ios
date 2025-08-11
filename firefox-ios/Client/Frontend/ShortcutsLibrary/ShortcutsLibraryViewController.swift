@@ -96,9 +96,7 @@ class ShortcutsLibraryViewController: UIViewController,
     func newState(state: ShortcutsLibraryState) {
         self.shortcutsLibraryState = state
 
-        dataSource?.updateSnapshot(
-            state: state,
-        )
+        dataSource?.updateSnapshot(state: state)
     }
 
     func unsubscribeFromRedux() {
