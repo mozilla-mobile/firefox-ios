@@ -150,8 +150,8 @@ class DevicePickerViewController: UITableViewController {
         }
 
         MainActor.assumeIsolated {
-            if let obj = notification {
-                NotificationCenter.default.removeObserver(obj)
+            if let notification = notification {
+                NotificationCenter.default.removeObserver(notification)
             }
         }
     }
