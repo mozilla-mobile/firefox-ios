@@ -19,9 +19,9 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         configUtility = nil
+        super.tearDown()
     }
 
     func testGenerateMenuElements_returnsHomepageSections_whenIsHomepageTrue() {
