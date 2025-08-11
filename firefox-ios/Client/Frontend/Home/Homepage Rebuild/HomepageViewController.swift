@@ -322,7 +322,7 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    func unsubscribeFromRedux() {
+    nonisolated func unsubscribeFromRedux() {
         let action = ScreenAction(
             windowUUID: windowUUID,
             actionType: ScreenActionType.closeScreen,
