@@ -236,11 +236,13 @@ final class TabScrollHandler: NSObject,
 
     func showToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .expanded)
+        lastValidState = toolbarDisplayState
         delegate?.showToolbar()
     }
 
     func hideToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .collapsed)
+        lastValidState = toolbarDisplayState
         delegate?.hideToolbar()
     }
 
@@ -458,7 +460,6 @@ private extension TabScrollHandler {
         } else if scrollDirection == .up && !toolbarDisplayState.isExpanded {
             showToolbars(animated: true)
         } else {
-            lastValidState = toolbarDisplayState
             toolbarDisplayState.update(displayState: .transitioning)
         }
     }
