@@ -153,6 +153,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageDiscoverMoreButton,
+                titleText: format(string: "Discover More Button"),
+                statusText: format(string: "Toggle to enable the homepage stories Discover More button")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepageDiscoverMoreExperience,
+                titleText: format(string: "Discover More V1 Experience"),
+                statusText: format(string: "Toggle to enable the Discover More experince")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageStoriesRedesign,
                 titleText: format(string: "Stories Redesign"),
                 statusText: format(string: "Toggle to enable homepage stories section redesign")
