@@ -6,8 +6,12 @@ import Foundation
 import UIKit
 import Common
 
-final class MenuTableView: UIView, ThemeApplicable {
-    private struct UX {
+final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ThemeApplicable {
+    struct UX {
+        static let topPadding: CGFloat = 24
+        static let menuSiteTopPadding: CGFloat = 12
+        static let topPaddingWithBanner: CGFloat = 8
+        static let distanceBetweenSections: CGFloat = 16
         static let tableViewMargin: CGFloat = 16
     }
 
@@ -26,6 +30,8 @@ final class MenuTableView: UIView, ThemeApplicable {
         tableView.sectionFooterHeight = 0
         tableHelper = MenuTableViewHelper(tableView: tableView)
         super.init(frame: .zero)
+        tableView.delegate = self
+        tableView.dataSource = self
         setupView()
     }
 
@@ -64,6 +70,55 @@ final class MenuTableView: UIView, ThemeApplicable {
     func reloadData(isBannerVisible: Bool) {
         tableHelper.updateData([], theme: theme, isBannerVisible: isBannerVisible)
         tableHelper.reload()
+    }
+
+    // MARK: - UITableViewDataSource
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return tableHelper.menuDataCount()
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        return tableHelper.numberOfRowsInSection(section)
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        return tableHelper.cellForRowAt(tableView, indexPath)
+    }
+
+    // MARK: - UITableViewDelegate
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        tableHelper.didSelectRowAt(tableView, indexPath)
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
+        return tableHelper.calculateHeightForHeaderInSection(section)
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        viewForHeaderInSection section: Int
+    ) -> UIView? {
+        return tableHelper.viewForHeaderInSection(section)
+    }
+
+    // MARK: - UIScrollViewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if tableHelper.isHomepage, !UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
+            scrollView.contentOffset = .zero
+            scrollView.showsVerticalScrollIndicator = false
+        }
     }
 
     // MARK: - Theme Applicable

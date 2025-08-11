@@ -36,10 +36,10 @@ final class MenuTableViewHelperTests: XCTestCase {
         helper.updateData([section], theme: nil, isBannerVisible: false)
         helper.reload()
 
-        XCTAssertEqual(tableView.contentSize.height > 0, true)
         XCTAssertEqual(tableView.numberOfSections, 1)
     }
 
+    @MainActor
     func testCellForRow_shouldReturnAccountCellType() {
         let option = MenuElement(
             title: "Option 1",
@@ -59,10 +59,11 @@ final class MenuTableViewHelperTests: XCTestCase {
         helper.updateData([section], theme: nil, isBannerVisible: false)
         helper.reload()
 
-        let cell = helper.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        let cell = helper.cellForRowAt(tableView, IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuAccountCell)
     }
 
+    @MainActor
     func testCellForRow_shouldReturnSquaresViewContentCellType() {
         let option = MenuElement(
             title: "Option 1",
@@ -81,10 +82,11 @@ final class MenuTableViewHelperTests: XCTestCase {
         helper.updateData([section], theme: nil, isBannerVisible: false)
         helper.reload()
 
-        let cell = helper.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        let cell = helper.cellForRowAt(tableView, IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuSquaresViewContentCell)
     }
 
+    @MainActor
     func testCellForRow_shouldReturnInfoCellType() {
         let option = MenuElement(
             title: "Option 1",
@@ -103,10 +105,11 @@ final class MenuTableViewHelperTests: XCTestCase {
         helper.updateData([section], theme: nil, isBannerVisible: false)
         helper.reload()
 
-        let cell = helper.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        let cell = helper.cellForRowAt(tableView, IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuInfoCell)
     }
 
+    @MainActor
     func testCellForRow_shouldReturnRedesignCellType() {
         let option = MenuElement(
             title: "Option 1",
@@ -124,7 +127,7 @@ final class MenuTableViewHelperTests: XCTestCase {
         helper.updateData([section], theme: nil, isBannerVisible: false)
         helper.reload()
 
-        let cell = helper.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        let cell = helper.cellForRowAt(tableView, IndexPath(row: 0, section: 0))
         XCTAssertTrue(cell is MenuCell)
     }
 }

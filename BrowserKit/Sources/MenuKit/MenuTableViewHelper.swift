@@ -5,25 +5,16 @@
 import UIKit
 import Common
 
-final class MenuTableViewHelper: NSObject, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
-    private struct UX {
-        static let topPadding: CGFloat = 24
-        static let menuSiteTopPadding: CGFloat = 12
-        static let topPaddingWithBanner: CGFloat = 8
-        static let distanceBetweenSections: CGFloat = 16
-    }
-
+final class MenuTableViewHelper: NSObject {
     private weak var tableView: UITableView?
     private var menuData: [MenuSection] = []
     private var theme: Theme?
     private var isBannerVisible = false
-    private var isHomepage = false
+    var isHomepage = false
 
     init(tableView: UITableView) {
         self.tableView = tableView
         super.init()
-        self.tableView?.delegate = self
-        self.tableView?.dataSource = self
     }
 
     func updateData(_ data: [MenuSection], theme: Theme?, isBannerVisible: Bool) {
@@ -36,15 +27,11 @@ final class MenuTableViewHelper: NSObject, UITableViewDelegate, UITableViewDataS
         tableView?.reloadData()
     }
 
-    // MARK: - UITableViewDataSource
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return menuData.count
+    func menuDataCount() -> Int {
+        menuData.count
     }
 
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
+    func numberOfRowsInSection(_ section: Int) -> Int {
         if menuData[section].isHorizontalTabsSection {
             return 1
         } else if let isExpanded = menuData[section].isExpanded, isExpanded {
@@ -54,10 +41,17 @@ final class MenuTableViewHelper: NSObject, UITableViewDelegate, UITableViewDataS
         }
     }
 
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
+    func calculateHeightForHeaderInSection(_ section: Int) -> CGFloat {
+        if let menuSection = menuData.first(where: { $0.isHomepage }), menuSection.isHomepage {
+            self.isHomepage = true
+            let topPadding = isBannerVisible ? MenuTableView.UX.topPaddingWithBanner : MenuTableView.UX.topPadding
+            return section == 0 ? topPadding : MenuTableView.UX.distanceBetweenSections
+        }
+        return section == 0 ? MenuTableView.UX.menuSiteTopPadding : MenuTableView.UX.distanceBetweenSections
+    }
+
+    @MainActor
+    func cellForRowAt(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
         if menuData[indexPath.section].isHorizontalTabsSection {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: MenuSquaresViewContentCell.cellIdentifier,
@@ -118,11 +112,7 @@ final class MenuTableViewHelper: NSObject, UITableViewDelegate, UITableViewDataS
         return cell
     }
 
-    // MARK: - UITableViewDelegate
-    func tableView(
-        _ tableView: UITableView,
-        didSelectRowAt indexPath: IndexPath
-    ) {
+    func didSelectRowAt(_ tableView: UITableView, _ indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let section = menuData[indexPath.section]
 
@@ -134,35 +124,12 @@ final class MenuTableViewHelper: NSObject, UITableViewDelegate, UITableViewDataS
         }
     }
 
-    func tableView(
-        _ tableView: UITableView,
-        heightForHeaderInSection section: Int
-    ) -> CGFloat {
-        if let menuSection = menuData.first(where: { $0.isHomepage }), menuSection.isHomepage {
-            self.isHomepage = true
-            let topPadding = isBannerVisible ? UX.topPaddingWithBanner : UX.topPadding
-            return section == 0 ? topPadding : UX.distanceBetweenSections
-        }
-        return section == 0 ? UX.menuSiteTopPadding : UX.distanceBetweenSections
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        viewForHeaderInSection section: Int
-    ) -> UIView? {
+    func viewForHeaderInSection(_ section: Int) -> UIView? {
         if section == 0 {
             let headerView = UIView()
             headerView.backgroundColor = .clear
             return headerView
         }
         return nil
-    }
-
-    // MARK: - UIScrollViewDelegate
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if isHomepage, !UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {
-            scrollView.contentOffset = .zero
-            scrollView.showsVerticalScrollIndicator = false
-        }
     }
 }
