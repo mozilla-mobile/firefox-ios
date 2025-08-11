@@ -20,6 +20,7 @@ protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     func resetZoomState()
 }
 
+@MainActor
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
                                        LegacyTabScrollProvider {
@@ -216,7 +217,11 @@ final class LegacyTabScrollController: NSObject,
 
     deinit {
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        observedScrollViews.forEach { scrollview in
+            ensureMainThread { [weak self] in
+                self?.stopObserving(scrollView: scrollview)
+            }
+        }
     }
 
     init(windowUUID: WindowUUID,
@@ -249,6 +254,7 @@ final class LegacyTabScrollController: NSObject,
         self.headerContainer = headerContainer
     }
 
+    @MainActor
     private func handleOnTabContentLoading() {
         if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
             removePullRefreshControl()
@@ -371,14 +377,15 @@ final class LegacyTabScrollController: NSObject,
         context: UnsafeMutableRawPointer?
     ) {
         if keyPath == "contentSize" {
-            guard shouldUpdateUIWhenScrolling, toolbarsShowing else { return }
+            ensureMainThread { [weak self] in
+                guard let self, self.shouldUpdateUIWhenScrolling, self.toolbarsShowing else { return }
 
-            showToolbars(animated: true)
+                self.showToolbars(animated: true)
+            }
         }
     }
 
     // MARK: - Zoom
-
     func updateMinimumZoom() {
         guard let scrollView = scrollView else { return }
 

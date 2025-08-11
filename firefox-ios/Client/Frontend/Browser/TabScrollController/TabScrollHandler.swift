@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Common
 
+@MainActor
 protocol TabScrollHandlerProtocol: AnyObject {
     var zoomPageBar: ZoomPageBar? { get set }
     var tab: Tab? { get set }
@@ -290,9 +291,11 @@ final class TabScrollHandler: NSObject,
         context: UnsafeMutableRawPointer?
     ) {
         if keyPath == "contentSize" {
-            guard shouldUpdateUIWhenScrolling, toolbarDisplayState.isExpanded else { return }
-
-            showToolbars(animated: true)
+            ensureMainThread { [weak self] in
+                guard let self, shouldUpdateUIWhenScrolling, toolbarDisplayState.isExpanded else { return }
+                
+                showToolbars(animated: true)
+            }
         }
     }
 
