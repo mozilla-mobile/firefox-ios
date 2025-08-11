@@ -151,10 +151,10 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var shadowSubtle: UIColor { base.shadowSubtle }
     var shadowStrong: UIColor { base.shadowStrong }
 
-    var vividOrange: UIColor { base.vividOrange }
-    var electricBlue: UIColor { base.electricBlue }
-    var crimsonRed: UIColor { base.crimsonRed }
-    var burntOrange: UIColor { base.burntOrange }
+    var gradientOnboardingStop1: UIColor { base.gradientOnboardingStop1 }
+    var gradientOnboardingStop2: UIColor { base.gradientOnboardingStop2 }
+    var gradientOnboardingStop3: UIColor { base.gradientOnboardingStop3 }
+    var gradientOnboardingStop4: UIColor { base.gradientOnboardingStop4 }
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base

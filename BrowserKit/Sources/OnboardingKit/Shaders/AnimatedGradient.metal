@@ -19,10 +19,10 @@ struct GradientControlPoint {
 
 // MARK: - Gradient Palette Struct
 struct GradientPalette {
-    float3 vividOrange;
-    float3 electricBlue;
-    float3 crimsonRed;
-    float3 burntOrange;
+    float3 gradientOnboardingStop1;
+    float3 gradientOnboardingStop2;
+    float3 gradientOnboardingStop3;
+    float3 gradientOnboardingStop4;
 };
 
 // MARK: - Utility Functions
@@ -140,10 +140,10 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
     const float kFourthPointAnimationSpeed = 1.1f;
 
     // Use colors from Swift
-    const half3 kVividOrange  = half3(palette.vividOrange);
-    const half3 kElectricBlue = half3(palette.electricBlue);
-    const half3 kCrimsonRed   = half3(palette.crimsonRed);
-    const half3 kBurntOrange  = half3(palette.burntOrange);
+    const half3 kGradientOnboardingStop1  = half3(palette.gradientOnboardingStop1);
+    const half3 kGradientOnboardingStop2 = half3(palette.gradientOnboardingStop2);
+    const half3 kGradientOnboardingStop3   = half3(palette.gradientOnboardingStop3);
+    const half3 kGradientOnboardingStop4  = half3(palette.gradientOnboardingStop4);
 
     // Define base positions for gradient control points
     const float2 firstControlPointBase = float2(0.2f, 0.3f);
@@ -185,10 +185,10 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
         const float normalizedFourthInfluence = fourthPointInfluence / totalInfluence;
 
         // Blend colors based on normalized influence weights
-        blendedGradientColor = normalizedFirstInfluence * kVividOrange +
-                              normalizedSecondInfluence * kElectricBlue +
-                              normalizedThirdInfluence * kCrimsonRed +
-                              normalizedFourthInfluence * kBurntOrange;
+        blendedGradientColor = normalizedFirstInfluence * kGradientOnboardingStop1 +
+                              normalizedSecondInfluence * kGradientOnboardingStop2 +
+                              normalizedThirdInfluence * kGradientOnboardingStop3 +
+                              normalizedFourthInfluence * kGradientOnboardingStop4;
     }
 
     // Sample previous frame for motion blur effect

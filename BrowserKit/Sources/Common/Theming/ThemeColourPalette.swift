@@ -107,8 +107,8 @@ public protocol ThemeColourPalette {
     var shadowStrong: UIColor { get }
 
     // MARK: - Gradient
-    var vividOrange: UIColor { get }
-    var electricBlue: UIColor { get }
-    var crimsonRed: UIColor { get }
-    var burntOrange: UIColor { get }
+    var gradientOnboardingStop1: UIColor { get }
+    var gradientOnboardingStop2: UIColor { get }
+    var gradientOnboardingStop3: UIColor { get }
+    var gradientOnboardingStop4: UIColor { get }
 }

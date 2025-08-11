@@ -7,16 +7,16 @@ import MetalKit
 import Common
 
 struct GradientPalette {
-    var vividOrange: SIMD3<Float>
-    var electricBlue: SIMD3<Float>
-    var crimsonRed: SIMD3<Float>
-    var burntOrange: SIMD3<Float>
+    var gradientOnboardingStop1: SIMD3<Float>
+    var gradientOnboardingStop2: SIMD3<Float>
+    var gradientOnboardingStop3: SIMD3<Float>
+    var gradientOnboardingStop4: SIMD3<Float>
 
     static let defaultColors = GradientPalette(
-        vividOrange: SIMD3<Float>(0.996, 0.514, 0.000),
-        electricBlue: SIMD3<Float>(0.180, 0.506, 0.996),
-        crimsonRed: SIMD3<Float>(0.949, 0.020, 0.004),
-        burntOrange: SIMD3<Float>(0.996, 0.396, 0.000)
+        gradientOnboardingStop1: SIMD3<Float>(0.996, 0.514, 0.000),
+        gradientOnboardingStop2: SIMD3<Float>(0.180, 0.506, 0.996),
+        gradientOnboardingStop3: SIMD3<Float>(0.949, 0.020, 0.004),
+        gradientOnboardingStop4: SIMD3<Float>(0.996, 0.396, 0.000)
     )
 }
 
@@ -370,18 +370,18 @@ struct AnimatedGradientMetalView: View {
     private func applyTheme(theme: Theme) {
         let color = theme.colors
         gradientColors = [
-            Color(color.vividOrange),
-            Color(color.electricBlue),
-            Color(color.crimsonRed),
-            Color(color.burntOrange)
+            Color(color.gradientOnboardingStop1),
+            Color(color.gradientOnboardingStop2),
+            Color(color.gradientOnboardingStop3),
+            Color(color.gradientOnboardingStop4)
         ]
 
         delegate?.updatePaletteForCurrentTheme(
             palette: GradientPalette(
-                vividOrange: SIMD3<Float>(color.vividOrange),
-                electricBlue: SIMD3<Float>(color.electricBlue),
-                crimsonRed: SIMD3<Float>(color.crimsonRed),
-                burntOrange: SIMD3<Float>(color.burntOrange)
+                gradientOnboardingStop1: SIMD3<Float>(color.gradientOnboardingStop1),
+                gradientOnboardingStop2: SIMD3<Float>(color.gradientOnboardingStop2),
+                gradientOnboardingStop3: SIMD3<Float>(color.gradientOnboardingStop3),
+                gradientOnboardingStop4: SIMD3<Float>(color.gradientOnboardingStop4)
             )
         )
     }
