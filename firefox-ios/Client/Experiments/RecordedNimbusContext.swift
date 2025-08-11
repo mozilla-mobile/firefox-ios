@@ -26,7 +26,8 @@ extension Int32? {
     }
 }
 
-class RecordedNimbusContext: RecordedContext {
+/// TODO(FXIOS-12942): Implement proper thread-safety
+final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
     /**
      * The following constants are string constants of the keys that appear in the [EVENT_QUERIES] map.
      */

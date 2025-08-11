@@ -71,7 +71,9 @@ public class CloseButton: UIButton,
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            updateButtonSizeForDynamicFont()
+            ensureMainThread {
+                self.updateButtonSizeForDynamicFont()
+            }
         default:
             break
         }
