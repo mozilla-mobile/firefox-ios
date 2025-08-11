@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import MozillaAppServices
 
 @testable import Client
 
@@ -29,22 +30,18 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
     }
 
     func testSaveAndLoadRecommendations() {
-        let recs = [
-            CuratedRecommendation(id: "1", title: "Rec One"),
-            CuratedRecommendation(id: "2", title: "Rec Two")
-        ]
+        let recs = generateFakeDataWith(numberOfItems: 2)
 
         cache.save(recs)
 
         let loaded = cache.loadRecommendations()
         XCTAssertEqual(loaded?.count, 2)
-        XCTAssertEqual(loaded?.first?.title, "Rec One")
+        XCTAssertEqual(loaded?.first?.title, "Title 1")
     }
 
     func testLastUpdatedIsSet() {
-        cache.save([
-            CuratedRecommendation(id: "1", title: "Test")
-        ])
+        let recs = generateFakeDataWith(numberOfItems: 1)
+        cache.save(recs)
 
         let lastUpdated = cache.lastUpdatedDate()
         XCTAssertNotNil(lastUpdated)
@@ -52,32 +49,48 @@ final class CuratedRecommendationCacheUtilityTests: XCTestCase {
     }
 
     func testOverwriteCache() {
-        cache.save([
-            CuratedRecommendation(id: "1", title: "Old")
-        ])
-        cache.save([
-            CuratedRecommendation(id: "2", title: "New")
-        ])
+        let recs = generateFakeDataWith(numberOfItems: 1)
+        cache.save(recs)
+
+        let new_recs = generateFakeDataWith(numberOfItems: 2)
+        cache.save(new_recs)
 
         let loaded = cache.loadRecommendations()
-        XCTAssertEqual(loaded?.count, 1)
-        XCTAssertEqual(loaded?.first?.title, "New")
+        XCTAssertEqual(loaded?.count, 2)
+        XCTAssertEqual(loaded?.last?.title, "Title 2")
     }
 
     func testClearCache() {
-        cache.save([
-            CuratedRecommendation(id: "1", title: "To be cleared")
-        ])
+        let recs = generateFakeDataWith(numberOfItems: 1)
+        cache.save(recs)
         cache.clearCache()
 
         XCTAssertNil(cache.loadRecommendations())
-        XCTAssertNil(cache.lastUpdated())
+        XCTAssertNil(cache.lastUpdatedDate())
     }
 
     func testLoadFromEmptyReturnsNil() {
         XCTAssertNil(cache.loadRecommendations())
-        XCTAssertNil(cache.lastUpdated())
+        XCTAssertNil(cache.lastUpdatedDate())
     }
 
-    private func fakeData() -> [Re]
+    private func generateFakeDataWith(numberOfItems: Int) -> [RecommendationDataItem] {
+        var data = [RecommendationDataItem]()
+        for index in 1...numberOfItems {
+            data.append(RecommendationDataItem(
+                corpusItemId: "\(index)",
+                scheduledCorpusItemId: "\(index)",
+                url: "https://example\(index).com",
+                title: "Title \(index)",
+                excerpt: "Excerpt \(index)",
+                publisher: "Publisher \(index)",
+                isTimeSensitive: false,
+                imageUrl: "https://example\(index).com",
+                iconUrl: "https://example\(index).com",
+                tileId: Int64(index),
+                receivedRank: Int64(index)
+            ))
+        }
+        return data
+    }
 }

@@ -16,7 +16,6 @@ public protocol FileManagerProtocol: Sendable {
                          attributes: [FileAttributeKey: Any]?) throws
     func contentsOfDirectoryAtPath(_ path: String,
                                    withFilenamePrefix prefix: String) throws -> [String]
-
     func contents(atPath path: String) -> Data?
     func contentsOfDirectory(at url: URL,
                              includingPropertiesForKeys keys: [URLResourceKey]?,
