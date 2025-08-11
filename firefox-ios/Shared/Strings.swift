@@ -2220,13 +2220,13 @@ extension String {
             key: "Summarizer.ToS.Alert.CancelButton.Label.v142",
             tableName: "Summarizer",
             value: "Cancel",
-            comment: "The label for the cancel button on the ToS alert."
+            comment: "The label for the cancel button on the Terms of Service alert for the summarizer."
         )
         public static let ToSAlertLinkButtonLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.CancelButton.Label.v142",
+            key: "Summarizer.ToS.Alert.LearnMoreButton.Label.v142",
             tableName: "Summarizer",
             value: "Learn more",
-            comment: "The label for the learn more link button on the ToS alert."
+            comment: "The label for the learn more link button on the Terms of Service alert for the summarizer."
         )
         // TODO: - FXIOS-12899 add the correct value and key for the accessibility labels
         public static let ToSAlertCloseButtonAccessibilityLabel = MZLocalizedString(
