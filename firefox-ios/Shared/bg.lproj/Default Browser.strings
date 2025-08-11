@@ -1,3 +1,6 @@
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Научете как";
 
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox блокира средно 3000 тракера на потребител всеки месец. Направете ни четец по подразбиране за ваша сигурност.";
+
