@@ -122,9 +122,6 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     deinit {
-        // FIXME: FXIOS-12995 Use Notifiable
-        notificationCenter.removeObserver(self)
-
         // FXIOS-11315: Necessary to prevent BookmarksFolderEmptyStateView from being retained in memory
         a11yEmptyStateScrollView.removeFromSuperview()
     }

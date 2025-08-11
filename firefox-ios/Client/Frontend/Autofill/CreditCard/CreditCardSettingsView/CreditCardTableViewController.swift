@@ -8,7 +8,7 @@ import UIKit
 
 import struct MozillaAppServices.CreditCard
 
-class CreditCardTableViewController: UIViewController, Themeable {
+final class CreditCardTableViewController: UIViewController, Themeable, Notifiable {
     // MARK: UX constants
     struct UX {
         static let toggleSwitchContainerHeight: CGFloat = 40
@@ -80,12 +80,11 @@ class CreditCardTableViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(didFinishAnnouncement),
-            name: UIAccessibility.announcementDidFinishNotification,
-            object: nil)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIAccessibility.announcementDidFinishNotification]
+        )
     }
 
     private func viewSetup() {
@@ -209,5 +208,14 @@ extension CreditCardTableViewController: UITableViewDelegate,
         hostingCell.isAccessibilityElement = true
         hostingCell.accessibilityIdentifier = "creditCardCell_\(indexPath.row)"
         return hostingCell
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIAccessibility.announcementDidFinishNotification:
+            didFinishAnnouncement(notification: notification)
+        default: break
+        }
     }
 }

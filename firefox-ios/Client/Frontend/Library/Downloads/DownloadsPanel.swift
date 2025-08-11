@@ -6,11 +6,12 @@ import UIKit
 import Shared
 import Common
 
-class DownloadsPanel: UIViewController,
-                      UITableViewDelegate,
-                      UITableViewDataSource,
-                      LibraryPanel,
-                      Themeable {
+final class DownloadsPanel: UIViewController,
+                            UITableViewDelegate,
+                            UITableViewDataSource,
+                            LibraryPanel,
+                            Themeable,
+                            Notifiable {
     private struct UX {
         static let welcomeScreenTopPadding: CGFloat = 120
         static let welcomeScreenPadding: CGFloat = 15
@@ -61,16 +62,7 @@ class DownloadsPanel: UIViewController,
         self.state = .downloads
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
-
-        // FIXME: FXIOS-12995 Use Notifiable
-        events.forEach {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(notificationReceived),
-                name: $0,
-                object: nil
-            )
-        }
+        startObservingNotifications(withNotificationCenter: notificationCenter, forObserver: self, observing: events)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -108,8 +100,8 @@ class DownloadsPanel: UIViewController,
         tableView.delegate = nil
     }
 
-    @objc
-    func notificationReceived(_ notification: Notification) {
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
 

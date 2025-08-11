@@ -9,7 +9,7 @@ import Common
 
 import struct MozillaAppServices.LoginEntry
 
-class PasswordManagerListViewController: SensitiveViewController, Themeable {
+final class PasswordManagerListViewController: SensitiveViewController, Themeable, Notifiable {
     static let loginsSettingsSection = 0
 
     var themeManager: ThemeManager
@@ -87,16 +87,14 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         // No need to hide the navigation bar on iPad to make room, and hiding makes the search bar too close to the top
         searchController.hidesNavigationBarDuringPresentation = UIDevice.current.userInterfaceIdiom != .pad
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self,
-                                       selector: #selector(remoteLoginsDidChange),
-                                       name: .DataRemoteLoginChangesWereApplied,
-                                       object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(dismissAlertController),
-                                       name: UIApplication.didEnterBackgroundNotification,
-                                       object: nil)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                UIApplication.didEnterBackgroundNotification,
+                .DataRemoteLoginChangesWereApplied
+            ]
+        )
 
         setupDefaultNavButtons()
         view.addSubview(tableView)
@@ -230,6 +228,15 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
                                      method: .tap,
                                      object: .loginsManagementLoginsTapped)
     }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didEnterBackgroundNotification: dismissAlertController()
+        case .DataRemoteLoginChangesWereApplied: remoteLoginsDidChange()
+        default: break
+        }
+    }
 }
 
 extension PasswordManagerListViewController: UISearchResultsUpdating {
@@ -254,14 +261,12 @@ extension PasswordManagerListViewController: UISearchControllerDelegate {
 
 // MARK: - Selectors
 private extension PasswordManagerListViewController {
-    @objc
     func remoteLoginsDidChange() {
         DispatchQueue.main.async {
             self.loadLogins()
         }
     }
 
-    @objc
     func dismissAlertController() {
         self.deleteAlert?.dismiss(animated: false, completion: nil)
         navigationController?.view.endEditing(true)

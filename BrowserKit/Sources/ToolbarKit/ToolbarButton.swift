@@ -10,7 +10,7 @@ public enum ToolbarButtonGesture {
     case longPress
 }
 
-class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
+class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate, Notifiable {
     private struct UX {
         static let verticalInset: CGFloat = 10
         static let horizontalInset: CGFloat = 10
@@ -32,7 +32,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
 
     private var longPressRecognizer: UILongPressGestureRecognizer?
     private var onLongPress: ((UIButton) -> Void)?
-    private var notificationCenter: NotificationProtocol?
+    private var notificationCenter = NotificationCenter.default
     private var largeContentViewerInteraction: UILargeContentViewerInteraction?
 
     private var isTextButton = false
@@ -40,6 +40,11 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UILargeContentViewerInteraction.enabledStatusDidChangeNotification]
+        )
 
         configuration = UIButton.Configuration.plain()
         configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
@@ -49,17 +54,14 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
-    open func configure(
-        element: ToolbarElement,
-        notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    open func configure(element: ToolbarElement) {
         guard var config = configuration else { return }
         removeLongPressGestureRecognizer()
-        configureLongPressGestureRecognizerIfNeeded(for: element, notificationCenter: notificationCenter)
+        configureLongPressGestureRecognizerIfNeeded(for: element)
         configureCustomA11yActionIfNeeded(for: element)
         isSelected = element.isSelected
         isTextButton = element.title != nil
         hasCustomColor = element.hasCustomColor
-        self.notificationCenter = notificationCenter
 
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.title ?? element.a11yLabel,
@@ -171,8 +173,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         ])
     }
 
-    private func configureLongPressGestureRecognizerIfNeeded(for element: ToolbarElement,
-                                                             notificationCenter: NotificationProtocol) {
+    private func configureLongPressGestureRecognizerIfNeeded(for element: ToolbarElement) {
         guard element.onLongPress != nil else { return }
         onLongPress = element.onLongPress
         let longPressRecognizer = UILongPressGestureRecognizer(
@@ -187,14 +188,6 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         let largeContentViewerInteraction = UILargeContentViewerInteraction()
         self.largeContentViewerInteraction = largeContentViewerInteraction
         addInteraction(largeContentViewerInteraction)
-
-        // FIXME: FXIOS-12995 Use Notifiable
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(largeContentViewerInteractionDidChange),
-            name: UILargeContentViewerInteraction.enabledStatusDidChangeNotification,
-            object: nil
-        )
     }
 
     private func configureCustomA11yActionIfNeeded(for element: ToolbarElement) {
@@ -270,6 +263,15 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
 
         layoutIfNeeded()
         setNeedsUpdateConfiguration()
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UILargeContentViewerInteraction.enabledStatusDidChangeNotification:
+            largeContentViewerInteractionDidChange()
+        default: break
+        }
     }
 
     // MARK: - UIGestureRecognizerDelegate

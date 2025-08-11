@@ -38,7 +38,8 @@ class BrowserViewController: UIViewController,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserContentHiding,
-                             BrowserStatusBarScrollDelegate {
+                             BrowserStatusBarScrollDelegate,
+                             Notifiable {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
@@ -1094,90 +1095,49 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    // FIXME: FXIOS-12995 Use Notifiable on all of these...
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willResignActiveNotification: appWillResignActiveNotification()
+        case UIApplication.didBecomeActiveNotification: appDidBecomeActiveNotification()
+        case UIApplication.didEnterBackgroundNotification: appDidEnterBackgroundNotification()
+        case UIScene.didEnterBackgroundNotification: sceneDidEnterBackgroundNotification(notification: notification)
+        case UIScene.didActivateNotification: sceneDidActivateNotification()
+        case UIAccessibility.announcementDidFinishNotification: didFinishAnnouncement(notification: notification)
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification: onReduceTransparencyStatusDidChange(notification)
+        case .FirefoxAccountStateChange: appMenuBadgeUpdate()
+        case .SearchBarPositionDidChange: searchBarPositionDidChange(notification: notification)
+        case .DidTapUndoCloseAllTabToast: didTapUndoCloseAllTabToast(notification: notification)
+        case .PendingBlobDownloadAddedToQueue: didAddPendingBlobDownloadToQueue()
+        case .SearchSettingsDidUpdateDefaultSearchEngine: updateForDefaultSearchEngineDidChange(notification)
+        case .PageZoomLevelUpdated: handlePageZoomLevelUpdated(notification)
+        case .RemoteTabNotificationTapped: openRecentlyClosedTabs()
+        case .StopDownloads: onStopDownloads(notification)
+        default: break
+        }
+    }
+
     private func setupNotifications() {
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appWillResignActiveNotification),
-            name: UIApplication.willResignActiveNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appDidBecomeActiveNotification),
-            name: UIApplication.didBecomeActiveNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appDidEnterBackgroundNotification),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(sceneDidEnterBackgroundNotification),
-            name: UIScene.didEnterBackgroundNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(sceneDidActivateNotification),
-            name: UIScene.didActivateNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(appMenuBadgeUpdate),
-            name: .FirefoxAccountStateChange,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(searchBarPositionDidChange),
-            name: .SearchBarPositionDidChange,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(didTapUndoCloseAllTabToast),
-            name: .DidTapUndoCloseAllTabToast,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(didFinishAnnouncement),
-            name: UIAccessibility.announcementDidFinishNotification,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(didAddPendingBlobDownloadToQueue),
-            name: .PendingBlobDownloadAddedToQueue,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(updateForDefaultSearchEngineDidChange),
-            name: .SearchSettingsDidUpdateDefaultSearchEngine,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(handlePageZoomLevelUpdated),
-            name: .PageZoomLevelUpdated,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(handlePageZoomSettingsChanged),
-            name: .PageZoomSettingsChanged,
-            object: nil)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(openRecentlyClosedTabs),
-            name: .RemoteTabNotificationTapped,
-            object: nil
-        )
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(onStopDownloads(_:)),
-            name: .StopDownloads,
-            object: nil
-        )
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(onReduceTransparencyStatusDidChange(_:)),
-            name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                UIApplication.willResignActiveNotification,
+                UIApplication.didBecomeActiveNotification,
+                UIApplication.didEnterBackgroundNotification,
+                UIScene.didEnterBackgroundNotification,
+                UIScene.didActivateNotification,
+                UIAccessibility.announcementDidFinishNotification,
+                UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+                .FirefoxAccountStateChange,
+                .SearchBarPositionDidChange,
+                .DidTapUndoCloseAllTabToast,
+                .PendingBlobDownloadAddedToQueue,
+                .SearchSettingsDidUpdateDefaultSearchEngine,
+                .PageZoomLevelUpdated,
+                .RemoteTabNotificationTapped,
+                .StopDownloads
+            ]
         )
     }
 

@@ -26,7 +26,7 @@ private struct ReadingListTableViewCellUX {
     static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 }
 
-class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
+final class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     var title = "Example" {
         didSet {
             titleLabel.text = title
@@ -164,9 +164,10 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
 }
 
-class ReadingListPanel: UITableViewController,
-                        LibraryPanel,
-                        Themeable {
+final class ReadingListPanel: UITableViewController,
+                              LibraryPanel,
+                              Themeable,
+                              Notifiable {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var navigationHandler: ReadingListNavigationHandler?
     let profile: Profile
@@ -200,17 +201,15 @@ class ReadingListPanel: UITableViewController,
         self.state = .readingList
         super.init(nibName: nil, bundle: nil)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        [ Notification.Name.FirefoxAccountChanged,
-          Notification.Name.DynamicFontChanged,
-          Notification.Name.DatabaseWasReopened ].forEach {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(notificationReceived),
-                name: $0,
-                object: nil
-            )
-        }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                .FirefoxAccountChanged,
+                .DynamicFontChanged,
+                .DatabaseWasReopened
+            ]
+        )
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -257,8 +256,8 @@ class ReadingListPanel: UITableViewController,
         return themeManager.getCurrentTheme(for: windowUUID)
     }
 
-    @objc
-    func notificationReceived(_ notification: Notification) {
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .DynamicFontChanged:
             refreshReadingList()
@@ -266,9 +265,7 @@ class ReadingListPanel: UITableViewController,
             if let dbName = notification.object as? String, dbName == "ReadingList.db" {
                 refreshReadingList()
             }
-        default:
-            // no need to do anything at all
-            break
+        default: break
         }
     }
 

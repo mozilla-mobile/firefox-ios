@@ -9,7 +9,7 @@ import Common
 
 import struct MozillaAppServices.LoginEntry
 
-class PasswordDetailViewController: SensitiveViewController, Themeable {
+final class PasswordDetailViewController: SensitiveViewController, Themeable, Notifiable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
     }
@@ -57,11 +57,11 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(dismissAlertController),
-                                               name: UIApplication.didEnterBackgroundNotification,
-                                               object: nil)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIApplication.didEnterBackgroundNotification]
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -288,6 +288,14 @@ extension PasswordDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRows
     }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didEnterBackgroundNotification: dismissAlertController()
+        default: break
+        }
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -333,7 +341,6 @@ extension PasswordDetailViewController: KeyboardHelperDelegate {
 
 // MARK: - Selectors
 extension PasswordDetailViewController {
-    @objc
     func dismissAlertController() {
         deleteAlert?.dismiss(animated: false, completion: nil)
     }

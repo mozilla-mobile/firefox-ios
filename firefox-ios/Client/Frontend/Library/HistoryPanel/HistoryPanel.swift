@@ -10,10 +10,11 @@ import Common
 import SiteImageView
 
 @objcMembers
-class HistoryPanel: UIViewController,
-                    LibraryPanel,
-                    LibraryPanelContextMenu,
-                    Themeable {
+final class HistoryPanel: UIViewController,
+                          LibraryPanel,
+                          LibraryPanelContextMenu,
+                          Themeable,
+                          Notifiable {
     struct UX {
         static let WelcomeScreenItemWidth = 170
         static let IconSize = 23
@@ -152,6 +153,11 @@ class HistoryPanel: UIViewController,
         self.logger = logger
         self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: viewModel.historyPanelNotifications
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -164,16 +170,6 @@ class HistoryPanel: UIViewController,
         super.viewDidLoad()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
-
-        // FIXME: FXIOS-12995 Use Notifiable
-        viewModel.historyPanelNotifications.forEach {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(handleNotifications),
-                name: $0,
-                object: nil
-            )
-        }
 
         handleRefreshControl()
         setupLayout()
@@ -327,41 +323,42 @@ class HistoryPanel: UIViewController,
         )
     }
 
+    // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
-            viewModel.removeAllData()
-            fetchDataAndUpdateLayout(animating: true)
-
-            if profile.hasSyncableAccount() {
-                resyncHistory()
-            }
-            break
-        case .DynamicFontChanged:
-            if emptyStateOverlayView.superview != nil {
-                emptyStateOverlayView.removeFromSuperview()
-            }
-            emptyStateOverlayView = createEmptyStateOverlayView()
-            resyncHistory()
-            break
-        case .DatabaseWasReopened:
-            if let dbName = notification.object as? String, dbName == "browser.db" {
+        Task { @MainActor in
+            switch notification.name {
+            case .FirefoxAccountChanged, .PrivateDataClearedHistory:
+                viewModel.removeAllData()
                 fetchDataAndUpdateLayout(animating: true)
-            }
-        case .OpenClearRecentHistory:
-            if viewModel.isSearchInProgress {
-                exitSearchState()
-            }
 
-            showClearRecentHistory()
-            break
-        case .OpenRecentlyClosedTabs:
-            historyCoordinatorDelegate?.showRecentlyClosedTab()
-            applySnapshot(animatingDifferences: true)
-            break
-        default:
-            // no need to do anything at all
-            break
+                if profile.hasSyncableAccount() {
+                    resyncHistory()
+                }
+                break
+            case .DynamicFontChanged:
+                if emptyStateOverlayView.superview != nil {
+                    emptyStateOverlayView.removeFromSuperview()
+                }
+                emptyStateOverlayView = createEmptyStateOverlayView()
+                resyncHistory()
+                break
+            case .DatabaseWasReopened:
+                if let dbName = notification.object as? String, dbName == "browser.db" {
+                    fetchDataAndUpdateLayout(animating: true)
+                }
+            case .OpenClearRecentHistory:
+                if viewModel.isSearchInProgress {
+                    exitSearchState()
+                }
+
+                showClearRecentHistory()
+                break
+            case .OpenRecentlyClosedTabs:
+                historyCoordinatorDelegate?.showRecentlyClosedTab()
+                applySnapshot(animatingDifferences: true)
+                break
+            default: break
+            }
         }
     }
 
