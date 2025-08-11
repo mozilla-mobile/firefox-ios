@@ -159,7 +159,7 @@ class ShortcutsLibraryViewController: UIViewController,
 
         dataSource = ShortcutsLibraryDiffableDataSource(
             collectionView: collectionView
-        ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
+        ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
             return UICollectionViewCell()
         }
     }
