@@ -117,11 +117,9 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
             // NOTE(FXIOS-13068): We usually shouldn't be tweaking these parameters,
             // but we have encountered weird issues where mistral would return text with repeated words.
             // This is being investigated in FXIOS-13068. For now, we are setting
-            //  `top_p`, `temperature`, and `frequency_penalty` explicitely as part of the request.
+            //  `top_p`, `temperature` explicitely as part of the request.
             "top_p": 0.01,
-            "temperature": 0.1,
-            "frequency_penalty": 1.2,
-            "allowed_openai_params": ["frequency_penalty"]
+            "temperature": 0.1
         ]
 
         if options.stream {
