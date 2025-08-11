@@ -130,7 +130,22 @@ final class TabScrollHandler: NSObject,
 
     deinit {
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        // KVO observation removal directly requires self so we can not use the apple
+        // recommended work around here.
+        guard Thread.isMainThread else {
+            logger.log(
+                "TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        }
     }
 
     init(windowUUID: WindowUUID,
