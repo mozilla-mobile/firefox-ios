@@ -199,7 +199,7 @@ public extension LoginEntry {
     }
 }
 
-public class LoginRecordError: MaybeErrorType {
+public final class LoginRecordError: MaybeErrorType {
     public let description: String
     public init(description: String) {
         self.description = description
@@ -209,18 +209,18 @@ public class LoginRecordError: MaybeErrorType {
 /// This is a protocol followed by RustLogins to provide an alternative to using `Deferred` in that code
 /// Its part of a long term effort to remove `Deferred` usage inside the application and is a work in progress.
 protocol LoginsProtocol {
-    func getLogin(id: String, completionHandler: @escaping (Result<Login?, Error>) -> Void)
+    func getLogin(id: String, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
     func getLoginsFor(
         protectionSpace: URLProtectionSpace,
         withUsername username: String?,
-        completionHandler: @escaping (Result<[Login], Error>) -> Void)
-    func addLogin(login: LoginEntry, completionHandler: @escaping (Result<Login?, Error>) -> Void)
-    func listLogins(completionHandler: @escaping (Result<[Login], Error>) -> Void)
-    func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<Login?, Error>) -> Void)
-    func use(login: Login, completionHandler: @escaping (Result<Login?, Error>) -> Void)
-    func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<[Login], Error>) -> Void)
-    func deleteLogins(ids: [String], completionHandler: @escaping ([Result<Bool?, Error>]) -> Void)
-    func deleteLogin(id: String, completionHandler: @escaping (Result<Bool?, Error>) -> Void)
+        completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void)
+    func addLogin(login: LoginEntry, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
+    func listLogins(completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void)
+    func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
+    func use(login: Login, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
+    func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void)
+    func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void)
+    func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Bool?, Error>) -> Void)
 }
 
 /// TODO(FXIOS-12942): Implement proper thread-safety
@@ -316,7 +316,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
     //
     // NOTE: This function is for a very specific purpose and should not be used for general
     // purposes.
-    public func verifyLogins(completionHandler: @escaping (Bool) -> Void) {
+    public func verifyLogins(completionHandler: @escaping @Sendable (Bool) -> Void) {
         queue.async {
             guard self.isOpen else {
                 self.logger.log("Logins verification failed as database is closed",
@@ -346,7 +346,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    public func getLogin(id: String, completionHandler: @escaping (Result<Login?, Error>) -> Void) {
+    public func getLogin(id: String, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
@@ -363,53 +363,10 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    public func getLogin(id: String) -> Deferred<Maybe<Login?>> {
-        let deferred = Deferred<Maybe<Login?>>()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            do {
-                let record = try self.storage?.get(id: id)
-                deferred.fill(Maybe(success: record))
-            } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
-            }
-        }
-
-        return deferred
-    }
-
-    public func searchLoginsWithQuery(_ query: String?) -> Deferred<Maybe<Cursor<Login>>> {
-        return listLogins().bind { result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
-            }
-
-            guard let records = result.successValue else {
-                return deferMaybe(ArrayCursor(data: []))
-            }
-
-            guard let query = query?.lowercased(), !query.isEmpty else {
-                return deferMaybe(ArrayCursor(data: records))
-            }
-
-            let filteredRecords = records.filter {
-                let username = $0.username
-                return $0.origin.lowercased().contains(query) || username.lowercased().contains(query)
-            }
-            return deferMaybe(ArrayCursor(data: filteredRecords))
-        }
-    }
-
     public func getLoginsFor(
         protectionSpace: URLProtectionSpace,
         withUsername username: String?,
-        completionHandler: @escaping (Result<[Login], Error>) -> Void) {
+        completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void) {
         listLogins { result in
             switch result {
             case .success(let records):
@@ -436,7 +393,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
 
     public func searchLoginsWithQuery(
         _ query: String?,
-        completionHandler: @escaping (Result<[Login], Error>) -> Void) {
+        completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void) {
             listLogins { result in
                 switch result {
                 case .success(let logins):
@@ -459,38 +416,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
         }
 
-    public func getLoginsForProtectionSpace(
-        _ protectionSpace: URLProtectionSpace,
-        withUsername username: String? = nil
-    ) -> Deferred<Maybe<Cursor<Login>>> {
-        return listLogins().bind { result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
-            }
-
-            guard let records = result.successValue else {
-                return deferMaybe(ArrayCursor(data: []))
-            }
-
-            let filteredRecords: [Login]
-            if let username = username {
-                filteredRecords = records.filter {
-                    return $0.username == username && (
-                        $0.origin == protectionSpace.urlString() ||
-                        $0.origin == protectionSpace.host
-                    )
-                }
-            } else {
-                filteredRecords = records.filter {
-                    return $0.origin == protectionSpace.urlString() ||
-                    $0.origin == protectionSpace.host
-                }
-            }
-            return deferMaybe(ArrayCursor(data: filteredRecords))
-        }
-    }
-
-    public func hasLogins(completionHandler: @escaping (Result<Bool, Error>) -> Void) {
+    public func hasLogins(completionHandler: @escaping @Sendable (Result<Bool, Error>) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
@@ -522,6 +448,23 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         return deferred
     }
 
+    public func listLogins(completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                let records = try self.storage?.list()
+                completionHandler(.success(records ?? []))
+            } catch let err as NSError {
+                completionHandler(.failure(err))
+            }
+        }
+    }
+
     public func listLogins() -> Deferred<Maybe<[Login]>> {
         let deferred = Deferred<Maybe<[Login]>>()
 
@@ -543,53 +486,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         return deferred
     }
 
-    public func listLogins(completionHandler: @escaping (Result<[Login], Error>) -> Void) {
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                completionHandler(.failure(error))
-                return
-            }
-
-            do {
-                let records = try self.storage?.list()
-                completionHandler(.success(records ?? []))
-            } catch let err as NSError {
-                completionHandler(.failure(err))
-            }
-        }
-    }
-
-    public func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
-        let deferred = Deferred<Maybe<String>>()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            self.getStoredKey { result in
-                switch result {
-                case .success:
-                    do {
-                        let id = try self.storage?.add(login: login).id
-                        deferred.fill(Maybe(success: id!))
-                    } catch let err as NSError {
-                        deferred.fill(Maybe(failure: err))
-                    }
-                case .failure(let err):
-                    deferred.fill(Maybe(failure: err))
-                }
-            }
-        }
-
-        return deferred
-    }
-
-    public func addLogin(login: LoginEntry, completionHandler: @escaping (Result<Login?, Error>) -> Void) {
+    public func addLogin(login: LoginEntry, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
@@ -613,28 +510,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    public func use(login: Login) -> Success {
-        let deferred = Success()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            do {
-                try self.storage?.touch(id: login.id)
-                deferred.fill(Maybe(success: ()))
-            } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
-            }
-        }
-
-        return deferred
-    }
-
-    public func use(login: Login, completionHandler: @escaping (Result<Login?, Error>) -> Void) {
+    public func use(login: Login, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
@@ -651,38 +527,10 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    public func updateLogin(id: String, login: LoginEntry) -> Success {
-        let deferred = Success()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            self.getStoredKey { result in
-                switch result {
-                case .success:
-                    do {
-                        _ = try self.storage?.update(id: id, login: login)
-                        deferred.fill(Maybe(success: ()))
-                    } catch let err as NSError {
-                        deferred.fill(Maybe(failure: err))
-                    }
-                case .failure(let err):
-                    deferred.fill(Maybe(failure: err))
-                }
-            }
-        }
-
-        return deferred
-    }
-
     public func updateLogin(
         id: String,
         login: LoginEntry,
-        completionHandler: @escaping (Result<Login?, Error>) -> Void) {
+        completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void) {
             queue.async {
                 guard self.isOpen else {
                     let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
@@ -706,10 +554,10 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
             }
         }
 
-    public func deleteLogins(ids: [String], completionHandler: @escaping ([Result<Bool?, Error>]) -> Void) {
-        var results: [Result<Bool?, Error>] = []
+    public func deleteLogins(ids: [String], completionHandler: @escaping @Sendable ([Result<Bool?, Error>]) -> Void) {
         for id in ids {
             deleteLogin(id: id) { result in
+                var results: [Result<Bool?, Error>] = []
                 results.append(result)
                 if results.count == ids.count {
                     completionHandler(results)
@@ -718,7 +566,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    public func deleteLogin(id: String, completionHandler: @escaping (Result<Bool?, Error>) -> Void) {
+    public func deleteLogin(id: String, completionHandler: @escaping @Sendable (Result<Bool?, Error>) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
@@ -733,31 +581,6 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
                 completionHandler(.failure(err))
             }
         }
-    }
-
-    public func deleteLogins(ids: [String]) -> Deferred<[Maybe<Bool>]> {
-        return all(ids.map { deleteLogin(id: $0) })
-    }
-
-    public func deleteLogin(id: String) -> Deferred<Maybe<Bool>> {
-        let deferred = Deferred<Maybe<Bool>>()
-
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
-                return
-            }
-
-            do {
-                let existed = try self.storage?.delete(id: id)
-                deferred.fill(Maybe(success: existed!))
-            } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
-            }
-        }
-
-        return deferred
     }
 
     public func wipeLocalEngine() -> Success {
