@@ -7,6 +7,7 @@ import Foundation
 import GCDWebServers
 
 protocol WKReaderModeHandlersProtocol {
+    @MainActor
     func register(_ webServer: WKEngineWebServerProtocol,
                   readerModeConfiguration: ReaderModeConfiguration)
 }
@@ -37,11 +38,8 @@ public struct ReaderModeConfiguration {
 class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var readerModeCache: ReaderModeCache = DiskReaderModeCache()
-    private let mainQueue: DispatchQueueInterface
 
-    init(mainQueue: DispatchQueueInterface = DispatchQueue.main) {
-        self.mainQueue = mainQueue
-
+    init() {
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
@@ -49,13 +47,8 @@ class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
         )
     }
 
+    @MainActor
     func register(_ webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
-        mainQueue.ensureMainThread { [weak self] in
-            self?.register(webServer: webServer, readerModeConfiguration: readerModeConfiguration)
-        }
-    }
-
-    private func register(webServer: WKEngineWebServerProtocol, readerModeConfiguration: ReaderModeConfiguration) {
         // Register our fonts and css, which we want to expose to web content that we present in the WebView
         webServer.registerMainBundleResourcesOfType("otf", module: "reader-mode/fonts")
         webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
@@ -96,6 +89,7 @@ class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
         return GCDWebServerResponse(statusCode: status)
     }
 
+    @MainActor
     private func handleReaderModePage(request: GCDWebServerRequest?,
                                       readerModeConfiguration: ReaderModeConfiguration,
                                       readerModeStyle: ReaderModeStyle) -> GCDWebServerResponse? {
@@ -156,6 +150,7 @@ class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
         }
     }
 
+    @MainActor
     private func generateHtmlFor(readabilityResult: ReadabilityResult,
                                  style: ReaderModeStyle,
                                  readerModeConfiguration: ReaderModeConfiguration) -> GCDWebServerDataResponse? {

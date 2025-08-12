@@ -45,8 +45,16 @@ class DependencyHelperMock {
         let appSessionProvider: AppSessionProvider = AppSessionManager()
         AppContainer.shared.register(service: appSessionProvider as AppSessionProvider)
 
-        let themeManager: ThemeManager = MockThemeManager()
-        AppContainer.shared.register(service: themeManager as ThemeManager)
+        // FIXME: FXIOS-13151 We need to handle main actor synchronized state in this setup method used across all unit tests
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
+            }
+        } else {
+            DispatchQueue.main.sync {
+                AppContainer.shared.register(service: MockThemeManager() as ThemeManager)
+            }
+        }
 
         let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)

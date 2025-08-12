@@ -59,6 +59,7 @@ public class WKEngine: Engine {
         return session
     }
 
+    @MainActor
     public func warmEngine() {
         shutdownWebServerTimer?.cancel()
         shutdownWebServerTimer = nil
