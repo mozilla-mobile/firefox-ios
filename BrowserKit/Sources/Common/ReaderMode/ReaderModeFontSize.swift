@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-public enum ReaderModeFontSize: Int {
+public enum ReaderModeFontSize: Int, Sendable {
     case size1 = 1
     case size2 = 2
     case size3 = 3
@@ -36,6 +36,7 @@ public enum ReaderModeFontSize: Int {
         return self == ReaderModeFontSize.size13
     }
 
+    @MainActor
     public static var defaultSize: ReaderModeFontSize {
         switch UIApplication.shared.preferredContentSizeCategory {
         case .extraSmall:

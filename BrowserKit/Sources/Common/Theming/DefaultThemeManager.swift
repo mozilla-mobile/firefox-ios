@@ -5,6 +5,7 @@
 import UIKit
 
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
+@MainActor
 public final class DefaultThemeManager: ThemeManager, Notifiable {
     // These have been carried over from the legacy system to maintain backwards compatibility
     enum ThemeKeys {
@@ -27,7 +28,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var windows: [WindowUUID: UIWindow] = [:]
     private var privateBrowsingState: [WindowUUID: Bool] = [:]
     private var allWindowUUIDs: [WindowUUID] { return Array(windows.keys) }
-    public var notificationCenter: NotificationProtocol
+    public let notificationCenter: NotificationProtocol
 
     private var userDefaults: UserDefaultsInterface
     private var mainQueue: DispatchQueueInterface
@@ -87,7 +88,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         )
     }
 
-    // MARK: - Themeing general functions
+    // MARK: - Theming general functions
+    @MainActor
     public func getCurrentTheme(for window: WindowUUID?) -> Theme {
         guard let window else {
             assertionFailure("Attempt to get the theme for a nil window UUID.")
@@ -101,9 +103,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return shouldShowPrivateTheme ? PrivateModeTheme() : getThemeFrom(type: determineUserTheme())
     }
 
+    @MainActor
     public func applyThemeUpdatesToWindows() {
-        allWindowUUIDs.forEach {
-            applyThemeChanges(for: $0, using: determineThemeType(for: $0))
+        allWindowUUIDs.forEach { windowUUID in
+            applyThemeChanges(for: windowUUID, using: determineThemeType(for: windowUUID))
         }
     }
 
@@ -182,6 +185,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
+    @MainActor
     private func applyThemeChanges(for window: WindowUUID, using newTheme: ThemeType) {
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
@@ -190,13 +194,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         notifyCurrentThemeDidChange(for: window)
     }
 
+    @MainActor
     private func notifyCurrentThemeDidChange(for window: WindowUUID) {
-        mainQueue.ensureMainThread { [weak self] in
-            self?.notificationCenter.post(
-                name: .ThemeDidChange,
-                withUserInfo: window.userInfo
-            )
-        }
+        notificationCenter.post(
+            name: .ThemeDidChange,
+            withUserInfo: window.userInfo
+        )
     }
 
     private func determineThemeType(for window: WindowUUID) -> ThemeType {
@@ -235,7 +238,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         switch notification.name {
         case UIScreen.brightnessDidChangeNotification,
             UIApplication.didBecomeActiveNotification:
-            applyThemeUpdatesToWindows()
+            ensureMainThread {
+                self.applyThemeUpdatesToWindows()
+            }
         default:
             return
         }
@@ -246,6 +251,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     /// - .dark if migration conditions are met and NightMode is active.
     /// - nil otherwise.
     /// NOTE(FXIOS-11655): This code will be removed once the new appearance menu experiment ends.
+    @MainActor
     private func migratedTheme() -> ThemeType? {
         if isNewAppearanceMenuOn && !hasMigratedToNewAppearanceMenu {
             // Mark that migration has been performed to avoid repeating the process.

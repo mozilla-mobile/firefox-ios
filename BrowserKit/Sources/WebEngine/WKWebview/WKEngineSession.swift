@@ -368,6 +368,7 @@ class WKEngineSession: NSObject,
         )
     }
 
+    @MainActor
     func setReaderMode(style: ReaderModeStyle, namespace: ReaderModeInfo) {
         webView.evaluateJavascriptInDefaultContentWorld(
             "\(namespace.rawValue).setStyle(\(style.encode()))"
