@@ -41,8 +41,7 @@ class ScreenshotHelper {
     @MainActor
     func takeScreenshot(_ tab: Tab,
                         windowUUID: WindowUUID,
-                        screenshotBounds: CGRect,
-                        completion: (() -> Void)? = nil) {
+                        screenshotBounds: CGRect) {
         guard let webView = tab.webView else {
             logger.log("Tab Snapshot Error",
                        level: .debug,
@@ -83,7 +82,6 @@ class ScreenshotHelper {
                             ScreenshotActionType.screenshotTaken
                     )
                 )
-                completion?()
             }
             // Handle error page screenshots
         } else if isNativeErrorPage {
@@ -99,7 +97,6 @@ class ScreenshotHelper {
                             ScreenshotActionType.screenshotTaken
                     )
                 )
-                completion?()
             }
             // Handle webview screenshots
         } else {
@@ -126,7 +123,6 @@ class ScreenshotHelper {
                                 ScreenshotActionType.screenshotTaken
                         )
                     )
-                    completion?()
                 } else if let error = error {
                     self.logger.log("Tab Snapshot Error",
                                     level: .debug,
