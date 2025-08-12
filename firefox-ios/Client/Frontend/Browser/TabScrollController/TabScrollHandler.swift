@@ -136,11 +136,11 @@ final class TabScrollHandler: NSObject,
         // recommended work around here.
         guard Thread.isMainThread else {
             logger.log(
-                "TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.",
+                "TabScrollHandler was not deallocated on the main thread. KVOs were not cleaned up.",
                 level: .fatal,
                 category: .lifecycle
             )
-            assertionFailure("TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.")
+            assertionFailure("TabScrollHandler was not deallocated on the main thread. KVOs were not cleaned up.")
             return
         }
 
