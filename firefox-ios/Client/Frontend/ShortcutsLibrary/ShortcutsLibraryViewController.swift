@@ -137,7 +137,7 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
 
         collectionView.backgroundColor = .lightGray
         collectionView.delegate = self
@@ -145,6 +145,17 @@ class ShortcutsLibraryViewController: UIViewController,
         self.collectionView = collectionView
 
         view.addSubview(collectionView)
+    }
+
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment)
+            -> NSCollectionLayoutSection? in
+            let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(for: environment.traitCollection,
+                                                                                    numberOfTilesPerRow: 4)
+            section.contentInsets.top = UX.shortcutsSectionTopInset
+            return section
+        }
+        return layout
     }
 
     private func configureDataSource() {

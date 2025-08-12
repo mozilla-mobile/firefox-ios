@@ -35,7 +35,7 @@ struct TopSitesSectionState: StateType, Equatable {
             windowUUID: windowUUID,
             topSitesData: [],
             numberOfRows: numberOfRows,
-            numberOfTilesPerRow: HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards,
+            numberOfTilesPerRow: TopSitesSectionLayoutProvider.UX.minCards,
             shouldShowSection: shouldShowSection
         )
     }

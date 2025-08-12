@@ -94,7 +94,7 @@ struct HomepageDimensionCalculator {
     /// - Parameter leadingInset: padding for top site section
     /// - Parameter cellWidth: width of individual top site tiles
     static func numberOfTopSitesPerRow(availableWidth: CGFloat, leadingInset: CGFloat) -> Int {
-        let cellWidth = HomepageSectionLayoutProvider.UX.TopSitesConstants.cellEstimatedSize.width
+        let cellWidth = TopSitesSectionLayoutProvider.UX.estimatedCellSize.width
         var availableWidth = availableWidth - leadingInset * 2
         var numberOfTiles = 0
 
@@ -102,7 +102,7 @@ struct HomepageDimensionCalculator {
             numberOfTiles += 1
             availableWidth = availableWidth - cellWidth - HomepageSectionLayoutProvider.UX.standardSpacing
         }
-        let minCardsConstant = HomepageSectionLayoutProvider.UX.TopSitesConstants.minCards
+        let minCardsConstant = TopSitesSectionLayoutProvider.UX.minCards
         let tilesPerRowCount = numberOfTiles < minCardsConstant ? minCardsConstant : numberOfTiles
 
         return tilesPerRowCount
