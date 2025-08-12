@@ -11,7 +11,8 @@ extension CGPoint {
     static let bottomCenter = CGPoint(x: 0.5, y: 1.0)
 }
 
-/// This adds the layer on
+/// A CALayer subclass that creates a rectangular fading mask
+/// using two CAGradientLayers (horizontal and vertical).
 final class RectangularFadeMaskLayer: CALayer {
     private struct UX {
         static let defaultEdgeFade: CGFloat = 50.0

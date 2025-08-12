@@ -157,7 +157,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         let impact = UIImpactFeedbackGenerator(style: .medium)
         impact.prepare()
         impact.impactOccurred()
