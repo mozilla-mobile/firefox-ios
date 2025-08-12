@@ -138,7 +138,7 @@ class CreditCardBottomSheetViewModel {
 
     // MARK: Save Credit Card
     public func saveCreditCard(with decryptedCard: UnencryptedCreditCardFields?,
-                               completion: @escaping (CreditCard?, Error?) -> Void) {
+                               completion: @escaping @Sendable (CreditCard?, Error?) -> Void) {
         guard let decryptedCard = decryptedCard else {
             completion(
                 nil,
