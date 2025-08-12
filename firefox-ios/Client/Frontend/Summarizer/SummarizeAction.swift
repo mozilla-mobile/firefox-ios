@@ -9,13 +9,16 @@ import WebKit
 struct SummarizeAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
+    let instructions: String?
 
     init(
         windowUUID: WindowUUID,
-        actionType: any ActionType
+        actionType: any ActionType,
+        instructions: String? = nil
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
+        self.instructions = instructions
     }
 }
 
