@@ -23,6 +23,8 @@ final class ShortcutsLibraryDiffableDataSource:
         }
     }
 
+    private let maxShortcutsToShow = 16
+
     func updateSnapshot(state: ShortcutsLibraryState) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
 
@@ -37,6 +39,6 @@ final class ShortcutsLibraryDiffableDataSource:
     private func getShortcuts(with state: ShortcutsLibraryState) -> [ShortcutsLibraryDiffableDataSource.Item]? {
         let shortcuts: [Item] = state.shortcuts.compactMap { .shortcut($0) }
         guard !shortcuts.isEmpty else { return nil }
-        return shortcuts
+        return Array(shortcuts.prefix(maxShortcutsToShow))
     }
 }
