@@ -112,7 +112,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func removeDocumentLoading()
 
     @MainActor
-    func showSummarizePanel(_ trigger: SummarizerTrigger)
+    func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?)
 
     @MainActor
     func showShortcutsLibrary()

@@ -1079,7 +1079,7 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-  func showSummarizePanel(_ trigger: SummarizerTrigger) {
+  func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?) {
         guard isSummarizerOn,
               tabManager.selectedTab?.isFxHomeTab == false,
               let webView = tabManager.selectedTab?.webView else { return }
@@ -1106,6 +1106,7 @@ class BrowserCoordinator: BaseCoordinator,
             trigger: trigger,
             prefs: profile.prefs,
             windowUUID: windowUUID,
+            instructions: instructions,
             router: router) { [weak self] url in
             guard let url else { return }
             self?.openURLinNewTab(url)
