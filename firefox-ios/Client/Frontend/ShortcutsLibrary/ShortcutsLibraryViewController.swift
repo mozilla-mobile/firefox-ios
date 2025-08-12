@@ -161,10 +161,15 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment)
+        let layout = UICollectionViewCompositionalLayout { [weak self ](sectionIndex, environment)
             -> NSCollectionLayoutSection? in
-            let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(for: environment.traitCollection,
-                                                                                    numberOfTilesPerRow: 4)
+            guard let self else { return nil }
+            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+            let numberOfTilesPerRow = homepageState?.topSitesState.numberOfTilesPerRow ?? 4
+            let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(
+                for: environment.traitCollection,
+                numberOfTilesPerRow: numberOfTilesPerRow
+            )
             section.contentInsets.top = UX.shortcutsSectionTopInset
             return section
         }
