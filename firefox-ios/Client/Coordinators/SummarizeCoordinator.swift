@@ -29,6 +29,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
     private let trigger: SummarizerTrigger
     private let prefs: Prefs
     private let summarizerTelemetry: SummarizerTelemetry
+    private let instructions: String?
     private let onRequestOpenURL: ((URL?) -> Void)?
 
     init(
@@ -42,6 +43,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         trigger: SummarizerTrigger,
         prefs: Prefs,
         windowUUID: WindowUUID,
+        instructions: String? = nil,
         router: Router,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         onRequestOpenURL: ((URL?) -> Void)?
@@ -58,6 +60,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         self.onRequestOpenURL = onRequestOpenURL
         self.summarizerServiceFactory = summarizerServiceFactory
         self.summarizerTelemetry = SummarizerTelemetry(gleanWrapper: gleanWrapper)
+        self.instructions = instructions
         super.init(router: router)
     }
 
@@ -75,7 +78,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         let isHostedSummarizerEnabled = summarizerNimbusUtils.isHostedSummarizerEnabled()
         guard let service = summarizerServiceFactory.make(
             isAppleSummarizerEnabled: isAppleSummarizerEnabled,
-            isHostedSummarizerEnabled: isHostedSummarizerEnabled) else { return }
+            isHostedSummarizerEnabled: isHostedSummarizerEnabled, instructions: instructions) else { return }
 
         service.summarizerLifecycle = self
 
