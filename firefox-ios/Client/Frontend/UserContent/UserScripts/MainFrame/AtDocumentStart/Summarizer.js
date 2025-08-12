@@ -68,6 +68,15 @@ const documentReady = () =>  new Promise(resolve => {
   }
 });
 
+/**
+ * Count the number of words in a text string.
+ * @param {string} text
+ * @returns {number}
+ */
+const countWords = (text) => {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+};
+
 
 /**
  * Checks document summarization eligibility.
@@ -100,18 +109,19 @@ const checkSummarization = async (maxWords) => {
   // 2. If it's a recipe return jsonld instead
   const recipe = findRecipeJSONLD();
   if (recipe) {
+    const recipeString = JSON.stringify(recipe);
     return {
       canSummarize: true,
       reason: null,
-      wordCount: 0,
-      textContent: JSON.stringify(recipe),
+      wordCount: countWords(recipeString),
+      textContent: recipeString,
       contentType: CONTENT_TYPES.recipe,
     };
   }
 
   // 3. Extract and count words
   const text = extractContent();
-  const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+  const wordCount = countWords(text);
 
   if (wordCount > maxWords) {
     return {
