@@ -152,7 +152,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             observing: [UIContentSizeCategory.didChangeNotification]
         )
     }
-    
+
     private lazy var backgroundGradient = CAGradientLayer()
 
     override public func viewWillAppear(_ animated: Bool) {
@@ -161,18 +161,18 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         let impact = UIImpactFeedbackGenerator(style: .medium)
         impact.prepare()
         impact.impactOccurred()
-         
+
         gradient.startAnimating { [weak self] in
             guard let self else { return }
             self.closeButton.alpha = 1.0
 //            self?.view.backgroundColor = theme.colors.layerSummary
             self.view.layer.insertSublayer(backgroundGradient, at: 0)
-        
+
             self.viewModel.onShouldShowTabSnapshot()
             self.embedSnapshot()
         }
     }
-    
+
     private func summarize() {
         loadingLabel.alpha = 1.0
         errorView.alpha = 0.0
