@@ -2748,8 +2748,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
-        case .summarizer:
-            navigationHandler?.showSummarizePanel(.shakeGesture)
+        case .summarizer(let instructions):
+            navigationHandler?.showSummarizePanel(.shakeGesture, instructions: instructions)
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
         case .zeroSearch:
@@ -2807,8 +2807,8 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
-        case .summarizer:
-            navigationHandler?.showSummarizePanel(.toolbarIcon)
+        case .summarizer(let instructions):
+            navigationHandler?.showSummarizePanel(.toolbarIcon, instructions: instructions)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
