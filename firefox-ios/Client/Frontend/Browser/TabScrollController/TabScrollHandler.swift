@@ -284,7 +284,7 @@ final class TabScrollHandler: NSObject,
         scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
     }
 
-    override func observeValue(
+    override nonisolated func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
         change: [NSKeyValueChangeKey: Any]?,
