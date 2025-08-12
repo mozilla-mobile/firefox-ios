@@ -97,6 +97,7 @@ class ReaderMode: TabContentScript {
         }
     }
 
+    @MainActor
     lazy var style = ReaderModeStyle.defaultStyle(for: tab?.windowUUID) {
         didSet {
             if state == ReaderModeState.active {

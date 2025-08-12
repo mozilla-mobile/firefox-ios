@@ -9,6 +9,7 @@ import Common
 
 @testable import Client
 
+@MainActor
 final class AddressListViewModelTests: XCTestCase {
     var viewModel: AddressListViewModel!
     var mockProfile: MockProfile!
