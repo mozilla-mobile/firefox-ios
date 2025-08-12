@@ -429,6 +429,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.nowAt(HomeSettings)
         navigator.goto(NewTabScreen)
         addWebsiteToShortcut(website: url_3)
+
+        // FXIOS-13152: iOS 15/16 may crash upon adding the second shortcut
         if #available(iOS 17, *) {
             addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
