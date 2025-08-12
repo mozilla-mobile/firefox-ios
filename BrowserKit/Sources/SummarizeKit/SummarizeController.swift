@@ -152,6 +152,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             observing: [UIContentSizeCategory.didChangeNotification]
         )
     }
+    
+    private lazy var backgroundGradient = CAGradientLayer()
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -159,14 +161,18 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         let impact = UIImpactFeedbackGenerator(style: .medium)
         impact.prepare()
         impact.impactOccurred()
+         
         gradient.startAnimating { [weak self] in
-            self?.closeButton.alpha = 1.0
-            self?.view.backgroundColor = theme.colors.layerSummary
-            self?.viewModel.onShouldShowTabSnapshot()
-            self?.embedSnapshot()
+            guard let self else { return }
+            self.closeButton.alpha = 1.0
+//            self?.view.backgroundColor = theme.colors.layerSummary
+            self.view.layer.insertSublayer(backgroundGradient, at: 0)
+        
+            self.viewModel.onShouldShowTabSnapshot()
+            self.embedSnapshot()
         }
     }
-
+    
     private func summarize() {
         loadingLabel.alpha = 1.0
         errorView.alpha = 0.0
@@ -219,6 +225,11 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func setupLayout() {
+        backgroundGradient.frame = view.bounds
+        backgroundGradient.locations = [0.0, 1.0]
+        backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)   // top-center
+        backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)     // bottom-center
+
         view.addSubviews(tabSnapshotContainer, gradient, titleLabel, closeButton, summaryView, loadingLabel, errorView)
         tabSnapshotContainer.addSubview(tabSnapshot)
         tabSnapshot.pinToSuperview()
@@ -279,7 +290,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         tabSnapshotTopConstraint?.constant = viewModel.tabSnapshotTopOffset
 
         let frameHeight = view.frame.height
-        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.1))
+        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.5))
 
         let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
         transformAnimation.fromValue = 0
@@ -320,6 +331,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         summaryView.attributedText = parse(markdown: brandedSummary)
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             gradient.alpha = 0.0
+            backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
             loadingLabel.alpha = 0.0
             summaryView.alpha = 1.0
@@ -490,5 +502,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         gradient.applyTheme(theme: theme)
         errorView.applyTheme(theme: theme)
+        backgroundGradient.colors = theme.colors.layerSummary.cgColors
     }
 }
