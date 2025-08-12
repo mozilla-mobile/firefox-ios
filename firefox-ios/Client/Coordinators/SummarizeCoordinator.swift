@@ -101,6 +101,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
             loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel,
             brandLabel: brandLabel,
+            summaryNote: .Summarizer.FootnoteLabel,
             summarizeTextViewA11yLabel: .Summarizer.SummaryTextAccessibilityLabel,
             summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
             closeButtonModel: CloseButtonViewModel(

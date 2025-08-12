@@ -314,6 +314,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         ###### \(viewModel.brandLabel)
 
         \(summary)
+
+        ##### \(viewModel.summaryNote)
         """
         titleLabel.text = webView.title
         titleLabel.largeContentTitle = webView.title
@@ -379,40 +381,53 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func parse(markdown: String) -> NSAttributedString? {
+        let parser = Down(markdownString: markdown)
+
+        // Apply custom paragraph styling with centering to header level 5 (######)
+        let centeredParagraphStyle = NSMutableParagraphStyle()
+        centeredParagraphStyle.alignment = .center
+        centeredParagraphStyle.paragraphSpacingBefore = 16
+
+        var configuration = configuration
+        var paragraphStyles = StaticParagraphStyleCollection()
+        paragraphStyles.heading5 = centeredParagraphStyle
+        configuration.paragraphStyles = paragraphStyles
+
+        return try? parser.toAttributedString(
+            styler: CustomStyler(configuration: configuration)
+        )
+    }
+
+    private var configuration: DownStylerConfiguration {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         let textColor = theme.colors.textPrimary
-        let parser = Down(markdownString: markdown)
-        return try? parser.toAttributedString(
-            styler: CustomStyler(
-                configuration: DownStylerConfiguration(
-                    fonts: StaticFontCollection(
-                        heading1: FXFontStyles.Regular.title1.scaledFont(),
-                        heading2: FXFontStyles.Regular.title2.scaledFont(),
-                        heading3: FXFontStyles.Regular.title3.scaledFont(),
-                        heading4: FXFontStyles.Regular.headline.scaledFont(),
-                        heading5: FXFontStyles.Regular.caption1.scaledFont(),
-                        heading6: FXFontStyles.Regular.caption2.scaledFont(),
-                        body: FXFontStyles.Regular.body.scaledFont(),
-                        code: FXFontStyles.Regular.body.monospacedFont(),
-                        listItemPrefix: FXFontStyles.Regular.body.scaledFont()
-                    ),
-                    colors: StaticColorCollection(
-                        heading1: textColor,
-                        heading2: textColor,
-                        heading3: textColor,
-                        heading4: textColor,
-                        heading5: textColor,
-                        heading6: textColor,
-                        body: textColor,
-                        code: textColor,
-                        link: textColor,
-                        quote: textColor,
-                        quoteStripe: textColor,
-                        thematicBreak: textColor,
-                        listItemPrefix: textColor,
-                        codeBlockBackground: .clear
-                    )
-                )
+        return DownStylerConfiguration(
+            fonts: StaticFontCollection(
+                heading1: FXFontStyles.Regular.title1.scaledFont(),
+                heading2: FXFontStyles.Regular.title2.scaledFont(),
+                heading3: FXFontStyles.Regular.title3.scaledFont(),
+                heading4: FXFontStyles.Regular.headline.scaledFont(),
+                heading5: FXFontStyles.Regular.footnote.scaledFont(),
+                heading6: FXFontStyles.Regular.caption2.scaledFont(),
+                body: FXFontStyles.Regular.body.scaledFont(),
+                code: FXFontStyles.Regular.body.monospacedFont(),
+                listItemPrefix: FXFontStyles.Regular.body.scaledFont()
+            ),
+            colors: StaticColorCollection(
+                heading1: textColor,
+                heading2: textColor,
+                heading3: textColor,
+                heading4: textColor,
+                heading5: theme.colors.textSecondary,
+                heading6: textColor,
+                body: textColor,
+                code: textColor,
+                link: textColor,
+                quote: textColor,
+                quoteStripe: textColor,
+                thematicBreak: textColor,
+                listItemPrefix: textColor,
+                codeBlockBackground: .clear
             )
         )
     }
