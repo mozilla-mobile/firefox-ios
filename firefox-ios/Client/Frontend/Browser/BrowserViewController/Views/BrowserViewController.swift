@@ -348,9 +348,8 @@ class BrowserViewController: UIViewController,
         return summarizerNimbusUtils.isToolbarButtonEnabled
     }
 
-    // TODO: Add proper feature flag mechanism
     var isTabScrollRefactoringEnabled: Bool {
-        return false
+        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
     // MARK: Computed vars

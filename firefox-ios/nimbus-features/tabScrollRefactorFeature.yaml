@@ -1,0 +1,18 @@
+# The configuration for the tabScrollRefactorFeature feature
+features:
+  tab-scroll-refactor-feature:
+    description: >
+        The feature flag to manage the rollout of tab scroll refactor feature.
+    variables:
+      enabled:
+        description: >
+          If true, tab scroll new implementation is used to show and hide toolbar views reacting to user scroll
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+            enabled: false
+      - channel: developer
+        value:
+            enabled: false
