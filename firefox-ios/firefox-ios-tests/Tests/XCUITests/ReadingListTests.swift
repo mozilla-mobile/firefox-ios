@@ -323,38 +323,36 @@ class ReadingListTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            navigator.goto(BrowserTabMenu)
-            app.swipeUp()
+        if #available(iOS 16, *) {
+            navigator.goto(LibraryPanel_ReadingList)
+            // Swipe the article left
+            // The article has been marked as Read
+            mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, read"))
+            savedToReadingList.swipeLeft()
+            // Two options are revealed
+            waitForElementsToExist(
+                [
+                    app.tables.cells.buttons.staticTexts["Mark as  Unread"],
+                    app.tables.cells.buttons.staticTexts["Remove"]
+                ]
+            )
+            // Tap 'Mark as Unread'
+            app.tables.cells.buttons.staticTexts["Mark as  Unread"].tap(force: true)
+            // The article has been marked as Unread
+            mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, unread"))
+            // Swipe te article left and tap 'Remove'
+            savedToReadingList.swipeLeft()
+            app.tables.cells.buttons.staticTexts["Remove"].tap(force: true)
+            // The article is deleted from the Reading List
+            checkReadingListNumberOfItems(items: 0)
+            waitForElementsToExist(
+                [
+                    app.staticTexts[emptyReadingList1],
+                    app.staticTexts[emptyReadingList2],
+                    app.staticTexts[emptyReadingList3]
+                ]
+            )
         }
-        navigator.goto(LibraryPanel_ReadingList)
-        // Swipe the article left
-        // The article has been marked as Read
-        mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, read"))
-        savedToReadingList.swipeLeft()
-        // Two options are revealed
-        waitForElementsToExist(
-            [
-                app.tables.cells.buttons.staticTexts["Mark as  Unread"],
-                app.tables.cells.buttons.staticTexts["Remove"]
-            ]
-        )
-        // Tap 'Mark as Unread'
-        app.tables.cells.buttons.staticTexts["Mark as  Unread"].tap(force: true)
-        // The article has been marked as Unread
-        mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, unread"))
-        // Swipe te article left and tap 'Remove'
-        savedToReadingList.swipeLeft()
-        app.tables.cells.buttons.staticTexts["Remove"].tap(force: true)
-        // The article is deleted from the Reading List
-        checkReadingListNumberOfItems(items: 0)
-        waitForElementsToExist(
-            [
-                app.staticTexts[emptyReadingList1],
-                app.staticTexts[emptyReadingList2],
-                app.staticTexts[emptyReadingList3]
-            ]
-        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306993
