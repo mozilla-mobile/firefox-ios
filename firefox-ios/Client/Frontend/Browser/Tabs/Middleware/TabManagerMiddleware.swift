@@ -890,24 +890,19 @@ final class TabManagerMiddleware: FeatureFlaggable {
             return
         }
         let isSummarizerEnabled = isSummarizerEnabled
-        let maxWords = summarizerServiceFactory.maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
-                                                         isHostedSummarizerEnabled: isHostedSummaryEnabled)
         fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
             if isSummarizerEnabled {
                 Task {
-                    let canSummarize: Bool = if let webView = selectedTab.webView {
-                        await self?.summarizationChecker.check(on: webView,
-                                                               maxWords: maxWords).canSummarize
-                        ?? false
-                    } else {
-                        false
-                    }
+                    let summarizeMiddleware = SummarizerMiddleware()
+                    let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
+                    let instructions = summarizeMiddleware.getInstructions(for: summarizationCheckResult?.contentType ?? .generic)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
-                        canSummarize: canSummarize,
+                        canSummarize: summarizationCheckResult?.canSummarize ?? false,
+                        summarizerInstructions: instructions,
                         profileImage: profileImage
                     )
                 }
@@ -981,6 +976,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         windowUUID: WindowUUID,
         accountData: AccountData,
         canSummarize: Bool,
+        summarizerInstructions: String? = nil,
         profileImage: UIImage?
     ) {
         store.dispatchLegacy(
@@ -997,6 +993,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     zoomLevel: selectedTab.pageZoom,
                     readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
                     summaryIsAvailable: canSummarize,
+                    summarizerInstructions: summarizerInstructions,
                     isBookmarked: info.isBookmarked,
                     isInReadingList: info.isInReadingList,
                     isPinned: info.isPinned,

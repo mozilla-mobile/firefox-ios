@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum MainMenuNavigationDestination: Equatable, CaseIterable {
+enum MainMenuNavigationDestination: Equatable {
     case bookmarks
     case defaultBrowser
     case downloads
@@ -17,7 +17,7 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case syncSignIn
     case printSheetV2
     case saveAsPDFV2
-    case webpageSummary
+    case webpageSummary(instructions: String)
     case zoom
 }
 

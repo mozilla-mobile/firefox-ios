@@ -373,8 +373,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.webpageSummary),
-                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            navigationDestination: MenuNavigationDestination(.webpageSummary(instructions: tabInfo.summarizerInstructions ?? "")),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage),
                         )
                     )
                 }
