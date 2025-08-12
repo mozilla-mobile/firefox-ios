@@ -293,7 +293,7 @@ final class TabScrollHandler: NSObject,
         if keyPath == "contentSize" {
             ensureMainThread { [weak self] in
                 guard let self, shouldUpdateUIWhenScrolling, toolbarDisplayState.isExpanded else { return }
-                
+
                 showToolbars(animated: true)
             }
         }
