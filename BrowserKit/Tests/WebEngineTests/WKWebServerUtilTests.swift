@@ -20,6 +20,7 @@ final class WKWebServerUtilTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testSetupWebServerGivenIsRunningThenDoesntStart() {
         let subject = createSubject()
 
@@ -30,6 +31,7 @@ final class WKWebServerUtilTests: XCTestCase {
         XCTAssertEqual(webServer.addTestHandlerCalled, 1)
     }
 
+    @MainActor
     func testSetupWebServerGivenIsNotRunningThenStart() {
         webServer.isRunning = true
         let subject = createSubject()

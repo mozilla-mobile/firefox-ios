@@ -8,13 +8,14 @@ import Common
 // MARK: - ReaderModeStyleViewModelDelegate
 
 protocol ReaderModeStyleViewModelDelegate: AnyObject {
+    @MainActor
     func readerModeStyleViewModel(_ readerModeStyleViewModel: ReaderModeStyleViewModel,
                                   didConfigureStyle style: ReaderModeStyle,
                                   isUsingUserDefinedColor: Bool)
 }
 
 // MARK: - ReaderModeStyleViewModel
-
+@MainActor
 class ReaderModeStyleViewModel {
     public init(windowUUID: WindowUUID,
                 isBottomPresented: Bool,

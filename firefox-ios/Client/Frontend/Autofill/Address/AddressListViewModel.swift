@@ -8,6 +8,7 @@ import Storage
 import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
+@MainActor
 final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
