@@ -123,7 +123,7 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
                 app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
             ]
         )
-        
+
         navigator.goto(BrowserTabMenu)
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
