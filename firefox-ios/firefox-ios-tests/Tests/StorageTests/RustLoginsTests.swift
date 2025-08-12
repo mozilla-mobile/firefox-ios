@@ -43,7 +43,7 @@ class RustLoginsTests: XCTestCase {
             case .success(let login):
                 XCTAssertNotNil(login)
             case .failure:
-                XCTFail("login did not appropriately work every time.")
+                XCTFail("Add login failed")
             }
             expectation.fulfill()
         }
@@ -56,7 +56,7 @@ class RustLoginsTests: XCTestCase {
                 XCTAssertNotNil(logins)
                 XCTAssertEqual(logins.count, 1)
             case .failure:
-                XCTFail("login did not appropriately work every time.")
+                XCTFail("List logins failed")
             }
             listLoginsExpectation.fulfill()
         }
@@ -76,11 +76,11 @@ class RustLoginsTests: XCTestCase {
                         XCTAssertEqual(fetchedLogin!.id, login!.id)
                         expectation.fulfill()
                     case .failure:
-                        XCTFail("login did not appropriately work every time.")
+                        XCTFail("Get login failed")
                     }
                 }
             case .failure:
-                XCTFail("login did not appropriately work every time.")
+                XCTFail("Add login failed")
             }
         }
 
@@ -141,15 +141,15 @@ class RustLoginsTests: XCTestCase {
                                 XCTAssertNil(login)
                                 expectation.fulfill()
                             case .failure:
-                                XCTFail("get login failed")
+                                XCTFail("Get login failed")
                             }
                         }
                     case .failure:
-                        XCTFail("delete login failed")
+                        XCTFail("Delete login failed")
                     }
                 }
             case .failure:
-                XCTFail("add login failed")
+                XCTFail("Add login failed")
             }
         }
     }
