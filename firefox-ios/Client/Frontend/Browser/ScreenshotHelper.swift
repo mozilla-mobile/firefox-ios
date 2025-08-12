@@ -33,7 +33,6 @@ class ScreenshotHelper {
     ///    - tab: The tab which needs to be screenshotted
     ///    - windowUUID: the id of the window in which the screenshot is made
     ///    - screenshotBounds: the rect that is used to clip the screenshot to the preferred size
-    ///    - completion: an optional closure called once the screenshot is made
     ///
     /// The tool used to take a screenshot for a Tab depends on the contentType.
     /// For the homepage, the controller is used to generate the screenshot.

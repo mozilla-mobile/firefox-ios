@@ -522,8 +522,7 @@ class MockScreenshotHelper: ScreenshotHelper {
 
     override func takeScreenshot(_ tab: Tab,
                                  windowUUID: WindowUUID,
-                                 screenshotBounds: CGRect,
-                                 completion: (() -> Void)? = nil) {
+                                 screenshotBounds: CGRect) {
         takeScreenshotCalled = true
     }
 }
