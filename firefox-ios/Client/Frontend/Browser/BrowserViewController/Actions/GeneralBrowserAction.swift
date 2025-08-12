@@ -17,6 +17,7 @@ struct GeneralBrowserAction: Action {
     let buttonTapped: UIButton?
     let isNativeErrorPage: Bool?
     let frame: WKFrameInfo?
+    let summarizerInstructions: String?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
@@ -24,6 +25,7 @@ struct GeneralBrowserAction: Action {
          buttonTapped: UIButton? = nil,
          isNativeErrorPage: Bool? = nil,
          frame: WKFrameInfo? = nil,
+         summarizerInstructions: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -35,10 +37,11 @@ struct GeneralBrowserAction: Action {
         self.showOverlay = showOverlay
         self.isNativeErrorPage = isNativeErrorPage
         self.frame = frame
+        self.summarizerInstructions = summarizerInstructions
     }
 }
 
-enum GeneralBrowserActionType: ActionType {
+enum GeneralBrowserActionType: ActionType, Equatable {
     case showToast
     case showOverlay
     case leaveOverlay
@@ -54,7 +57,7 @@ enum GeneralBrowserActionType: ActionType {
     case showReloadLongPressAction
     case showMenu
     case showLocationViewLongPressActionSheet
-    case showSummarizer(instructions: String)
+    case showSummarizer
     case stopLoadingWebsite
     case reloadWebsite
     case reloadWebsiteNoCache
