@@ -322,6 +322,11 @@ class ReadingListTests: FeatureFlaggedTestBase {
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
         // Swipe the article left
         // The article has been marked as Read

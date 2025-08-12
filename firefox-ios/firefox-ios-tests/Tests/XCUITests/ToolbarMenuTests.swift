@@ -48,33 +48,40 @@ class ToolbarMenuTests: BaseTestCase {
             )
         }
         navigator.goto(BrowserTabMenu)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+        }
         mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
         validateMenuOptions()
-        app.otherElements["PopoverDismissRegion"].firstMatch.tap()
-        XCUIDevice.shared.orientation = .landscapeLeft
-        waitForElementsToExist(
-            [
-                hamburgerMenu,
-                firstPocketCell,
-                backButton,
-                forwardButton,
-                searchField,
-                tabsButton
-            ]
-        )
-        XCTAssertTrue(
-            hamburgerMenu.isLeftOf(rightElement: tabsButton),
-            "Menu button is not on the left side of tabs button"
-        )
-        XCTAssertTrue(
-            hamburgerMenu.isAbove(element: firstPocketCell),
-            "Menu button is not below the pocket cells area"
-        )
-        hamburgerMenu.waitAndTap()
-        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
-        validateMenuOptions()
-        app.otherElements["PopoverDismissRegion"].firstMatch.tap()
-        mozWaitForElementToNotExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
+        // issue 28629: menu not available in landscape mode (iOS 15 only)
+        if #available(iOS 16, *) {
+            app.otherElements["PopoverDismissRegion"].firstMatch.tap()
+            XCUIDevice.shared.orientation = .landscapeLeft
+            waitForElementsToExist(
+                [
+                    hamburgerMenu,
+                    firstPocketCell,
+                    backButton,
+                    forwardButton,
+                    searchField,
+                    tabsButton
+                ]
+            )
+            XCTAssertTrue(
+                hamburgerMenu.isLeftOf(rightElement: tabsButton),
+                "Menu button is not on the left side of tabs button"
+            )
+            XCTAssertTrue(
+                hamburgerMenu.isAbove(element: firstPocketCell),
+                "Menu button is not below the pocket cells area"
+            )
+            hamburgerMenu.waitAndTap()
+            mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
+            validateMenuOptions()
+            app.otherElements["PopoverDismissRegion"].firstMatch.tap()
+            mozWaitForElementToNotExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
+        }
     }
 
     private func validateMenuOptions() {

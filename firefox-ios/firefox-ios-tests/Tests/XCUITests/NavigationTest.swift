@@ -483,6 +483,10 @@ class NavigationTest: FeatureFlaggedTestBase {
 
         // Now disable the Browsing -> Block PopUps option
         navigator.goto(BrowserTabMenu)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+        }
         navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
 

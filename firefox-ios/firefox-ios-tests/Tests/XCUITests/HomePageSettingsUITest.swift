@@ -289,43 +289,46 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         app.launch()
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()
-        addContentToReaderView()
-        if iPad() {
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-        } else {
-            navigator.performAction(Action.GoToHomePage)
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
-        }
-        mozWaitForElementToExist(app.staticTexts["Bookmarks"])
-        navigator.performAction(Action.ToggleRecentlySaved)
-        if !iPad() {
-            navigator.performAction(Action.ClickSearchButton)
-            mozWaitForElementToNotExist(
-                app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
-            )
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-            navigator.performAction(Action.CloseURLBarOpen)
-        } else {
+        // iOS 15 does not have the Reader View button available (when experiment Off)
+        if #available(iOS 16, *) {
+            addContentToReaderView()
+            if iPad() {
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+                app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            } else {
+                navigator.performAction(Action.GoToHomePage)
+                app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+            }
+            mozWaitForElementToExist(app.staticTexts["Bookmarks"])
+            navigator.performAction(Action.ToggleRecentlySaved)
+            if !iPad() {
+                navigator.performAction(Action.ClickSearchButton)
+                mozWaitForElementToNotExist(
+                    app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
+                )
+                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+                navigator.performAction(Action.CloseURLBarOpen)
+            } else {
+                navigator.nowAt(HomeSettings)
+                navigator.performAction(Action.OpenNewTabFromTabTray)
+            }
+            navigator.nowAt(NewTabScreen)
+            navigator.performAction(Action.ToggleRecentlySaved)
             navigator.nowAt(HomeSettings)
             navigator.performAction(Action.OpenNewTabFromTabTray)
+            checkBookmarks()
+            app.scrollViews
+                .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
+                .staticTexts[urlExampleLabel].waitAndTap()
+            navigator.nowAt(BrowserTab)
+            waitForTabsButton()
+            unbookmark(url: urlLabelExample_3)
+            removeContentFromReaderView()
+            navigator.nowAt(LibraryPanel_ReadingList)
+            navigator.performAction(Action.CloseReadingListPanel)
+            navigator.goto(NewTabScreen)
+            checkBookmarksUpdated()
         }
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.ToggleRecentlySaved)
-        navigator.nowAt(HomeSettings)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        checkBookmarks()
-        app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
-            .staticTexts[urlExampleLabel].waitAndTap()
-        navigator.nowAt(BrowserTab)
-        waitForTabsButton()
-        unbookmark(url: urlLabelExample_3)
-        removeContentFromReaderView()
-        navigator.nowAt(LibraryPanel_ReadingList)
-        navigator.performAction(Action.CloseReadingListPanel)
-        navigator.goto(NewTabScreen)
-        checkBookmarksUpdated()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306871
