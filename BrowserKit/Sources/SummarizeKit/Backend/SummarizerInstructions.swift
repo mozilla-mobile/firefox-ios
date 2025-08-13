@@ -16,11 +16,9 @@ public enum SummarizerModelInstructions {
         switch (contentType, summarizerType) {
         case (.generic, .appleSummarizer):
             return appleInstructions
-        case (.recipe, .appleSummarizer):
-            return appleRecipeInstructions
         case (.generic, .liteLLMSummarizer):
             return defaultInstructions
-        case (.recipe, .liteLLMSummarizer):
+        case (.recipe, _):
             return defaultRecipeInstructions
         }
     }
@@ -51,42 +49,8 @@ public enum SummarizerModelInstructions {
     Bold critical details (numbers, warnings, key terms).
     Do not include any introductions, follow-ups, questions, or closing statements.
     """.replacingOccurrences(of: "\n", with: " ")
-    
+
     private static let defaultRecipeInstructions = """
-    You are an expert at creating mobile-optimized recipe summaries.
-    Format exactly as shown below. Do not add any closing phrases. 
-    If a field is null or empty, omit that line.
-
-    **Servings:** {servings}
-
-    **Total Time:** {convert total_time to human-readable format}
-
-    **Prep Time:** {convert prep_time to human-readable format}
-
-    **Cook Time:** {convert cook_time to human-readable format}
-
-    ## Ingredients
-    - {ingredient 1}
-    - {ingredient 2}
-    - {ingredient 3}
-
-    ## Instructions
-    1. {step 1}
-    2. {step 2}
-    3. {step 3}
-
-    ## Tips
-    - {tip 1}
-    - {tip 2}
-
-    ## Nutrition
-    - Calories: {calories}
-    - Protein: {protein}g
-    - Carbs: {carbs}g
-    - Fat: {fat}g
-    """
-
-    static let appleRecipeInstructions = """
     You are an expert at creating mobile-optimized recipe summaries.
     Format exactly as shown below. Do not add any closing phrases. 
     If a field is null or empty, omit that line.

@@ -41,7 +41,7 @@ struct GeneralBrowserAction: Action {
     }
 }
 
-enum GeneralBrowserActionType: ActionType, Equatable {
+enum GeneralBrowserActionType: ActionType {
     case showToast
     case showOverlay
     case leaveOverlay
