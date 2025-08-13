@@ -23,7 +23,7 @@ public enum SummarizerModelInstructions {
         }
     }
 
-    public static let  defaultInstructions = """
+    private static let  defaultInstructions = """
     You are an expert at creating mobile-optimized summaries. Process:
     Step 1: Identify the type of content.
     Step 2: Based on content type, prioritize:
@@ -55,7 +55,7 @@ public enum SummarizerModelInstructions {
     Format exactly as shown below. Do not add any closing phrases.
     If a field is null or empty, omit that line.
 
-    **Servings:** {servings}
+    **🍽️ Servings:** {servings}
 
     **Total Time:** {convert total_time to human-readable format}
 
@@ -63,21 +63,21 @@ public enum SummarizerModelInstructions {
 
     **Cook Time:** {convert cook_time to human-readable format}
 
-    ## Ingredients
+    ## 🛒 Ingredients
     - {ingredient 1}
     - {ingredient 2}
     - {ingredient 3}
 
-    ## Instructions
+    ## 🍳 Instructions
     1. {step 1}
     2. {step 2}
     3. {step 3}
 
-    ## Tips
+    ## 💡 Tips
     - {tip 1}
     - {tip 2}
 
-    ## Nutrition
+    ## 🥗 Nutrition
     - Calories: {calories}
     - Protein: {protein}g
     - Carbs: {carbs}g
