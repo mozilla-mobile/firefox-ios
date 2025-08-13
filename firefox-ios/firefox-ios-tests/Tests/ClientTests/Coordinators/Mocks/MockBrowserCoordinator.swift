@@ -154,7 +154,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showSummarizePanelCalled += 1
     }
 
-    func showTermsOfUse() {
+    func showTermsOfUse(context: TriggerContext) {
         showTermsOfUseCalled += 1
     }
 
