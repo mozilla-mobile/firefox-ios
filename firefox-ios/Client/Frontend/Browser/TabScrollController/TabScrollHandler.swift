@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Common
 
+@MainActor
 protocol TabScrollHandlerProtocol: AnyObject {
     var zoomPageBar: ZoomPageBar? { get set }
     var tab: Tab? { get set }
