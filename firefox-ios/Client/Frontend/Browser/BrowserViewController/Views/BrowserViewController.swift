@@ -819,6 +819,7 @@ class BrowserViewController: UIViewController,
 
     @objc
     func appDidBecomeActiveNotification() {
+        processAppleIntelligenceState()
         privacyWindowHelper.removeWindow()
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
@@ -827,6 +828,14 @@ class BrowserViewController: UIViewController,
         }
 
         browserDidBecomeActive()
+    }
+
+    private func processAppleIntelligenceState() {
+        if #available(iOS 26, *) {
+            #if canImport(FoundationModels)
+                AppleIntelligenceUtil().processAvailabilityState()
+            #endif
+        }
     }
 
     func browserDidBecomeActive() {
