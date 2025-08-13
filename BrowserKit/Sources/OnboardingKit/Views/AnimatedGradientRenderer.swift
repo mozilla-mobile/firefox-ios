@@ -6,6 +6,20 @@ import SwiftUI
 import MetalKit
 import Common
 
+struct GradientPalette {
+    var gradientOnboardingStop1: SIMD3<Float>
+    var gradientOnboardingStop2: SIMD3<Float>
+    var gradientOnboardingStop3: SIMD3<Float>
+    var gradientOnboardingStop4: SIMD3<Float>
+
+    static let defaultColors = GradientPalette(
+        gradientOnboardingStop1: SIMD3<Float>(0.996, 0.514, 0.000),
+        gradientOnboardingStop2: SIMD3<Float>(0.180, 0.506, 0.996),
+        gradientOnboardingStop3: SIMD3<Float>(0.949, 0.020, 0.004),
+        gradientOnboardingStop4: SIMD3<Float>(0.996, 0.396, 0.000)
+    )
+}
+
 private enum AnimatedGradientUX {
     static let timeIncrementPerFrame: Float = 0.0045
     static let vertexShaderFunctionName = "animatedGradientVertex"
@@ -15,6 +29,17 @@ private enum AnimatedGradientUX {
     static let previousFrameTextureIndex = 0
 }
 
+extension SIMD3 where Scalar == Float {
+    init(_ color: UIColor) {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        color.getRed(&r, green: &g, blue: &b, alpha: &a)
+        self.init(Float(r), Float(g), Float(b))
+    }
+}
+
 class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private let logger: Logger
     private let commandQueue: MTLCommandQueue
@@ -22,6 +47,11 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private var currentTime: Float = 0.0
     private var previousFrameTexture: MTLTexture?
     let metalDevice: MTLDevice
+
+    // Add a weak reference to the MTKView to trigger redraws
+    private weak var metalView: MTKView?
+
+    private var palette = GradientPalette.defaultColors
 
     init?(logger: Logger = DefaultLogger.shared, device: MTLDevice?) {
         self.logger = logger
@@ -84,6 +114,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         }
 
         super.init()
+        updatePaletteForCurrentTheme(palette: palette)
 
         logger.log(
             "AnimatedGradientRenderer initialized successfully",
@@ -92,11 +123,35 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         )
     }
 
+    // Method to set the MTKView reference
+    func setMetalView(_ view: MTKView) {
+        metalView = view
+    }
+    // swiftlint:disable large_tuple
+    func updatePaletteForCurrentTheme(palette: GradientPalette) {
+        self.palette = palette
+
+        // Trigger a redraw when palette changes
+        triggerRedraw()
+    }
+    // swiftlint:enable large_tuple
+
+    private func triggerRedraw() {
+        DispatchQueue.main.async { [weak self] in
+            self?.metalView?.setNeedsDisplay()
+        }
+    }
+
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         createPreviousFrameTexture(size: size)
     }
 
     func draw(in view: MTKView) {
+        // Store reference to view if not already set
+        if metalView == nil {
+            metalView = view
+        }
+
         guard let currentDrawable = view.currentDrawable else {
             logger.log(
                 "No current drawable available",
@@ -185,6 +240,11 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
             index: AnimatedGradientUX.timeBufferIndex
         )
 
+        var currentPalette = palette
+        encoder.setFragmentBytes(&currentPalette,
+                                 length: MemoryLayout<GradientPalette>.stride,
+                                 index: 1)
+
         encoder.setFragmentTexture(
             previousFrameTexture,
             index: AnimatedGradientUX.previousFrameTextureIndex
@@ -239,6 +299,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
 
 struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
     private weak var delegate: AnimatedGradientRenderer?
+
     init(delegate: AnimatedGradientRenderer) {
         self.delegate = delegate
     }
@@ -249,41 +310,89 @@ struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
         metalView.framebufferOnly = false
         metalView.colorPixelFormat = .bgra8Unorm
         metalView.delegate = delegate
+
+        // Set the view reference in the delegate so it can trigger redraws
+        delegate?.setMetalView(metalView)
+
         return metalView
     }
 
-    func updateUIView(_ uiView: MTKView, context: Context) { }
+    func updateUIView(_ uiView: MTKView, context: Context) {
+        // Ensure the delegate still has the view reference
+        delegate?.setMetalView(uiView)
+    }
 }
 
 struct AnimatedGradientMetalView: View {
+    @State private var gradientColors: [Color] = []
     @State private var delegate: AnimatedGradientRenderer?
-    init(metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice()) {
-        delegate = AnimatedGradientRenderer(device: metalDevice)
+    let windowUUID: WindowUUID
+    var themeManager: ThemeManager
+
+    init(
+        metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice(),
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager
+    ) {
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
+        _delegate = State(initialValue: AnimatedGradientRenderer(device: metalDevice))
     }
 
     var body: some View {
         if let delegate {
             AnimatedGradientMetalViewRepresentable(delegate: delegate)
+                .onAppear {
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+                    guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
         } else {
             LinearGradient(
                 gradient: Gradient(
-                    colors: [
-                        UX.CardView.vividOrange,
-                        UX.CardView.electricBlue,
-                        UX.CardView.crimsonRed,
-                        UX.CardView.burntOrange
-                    ]
+                    colors: gradientColors
                 ),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
+            .onAppear {
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
         }
+    }
+
+    private func applyTheme(theme: Theme) {
+        let color = theme.colors
+        gradientColors = [
+            Color(color.gradientOnboardingStop1),
+            Color(color.gradientOnboardingStop2),
+            Color(color.gradientOnboardingStop3),
+            Color(color.gradientOnboardingStop4)
+        ]
+
+        delegate?.updatePaletteForCurrentTheme(
+            palette: GradientPalette(
+                gradientOnboardingStop1: SIMD3<Float>(color.gradientOnboardingStop1),
+                gradientOnboardingStop2: SIMD3<Float>(color.gradientOnboardingStop2),
+                gradientOnboardingStop3: SIMD3<Float>(color.gradientOnboardingStop3),
+                gradientOnboardingStop4: SIMD3<Float>(color.gradientOnboardingStop4)
+            )
+        )
     }
 }
 
 struct AnimatedGradientMetalView_Previews: PreviewProvider {
     static var previews: some View {
-        AnimatedGradientMetalView()
-            .ignoresSafeArea(.all)
+        AnimatedGradientMetalView(
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+        )
+        .ignoresSafeArea(.all)
     }
 }

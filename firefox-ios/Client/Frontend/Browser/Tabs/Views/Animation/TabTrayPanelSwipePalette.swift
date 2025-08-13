@@ -151,6 +151,11 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var shadowStrong: UIColor { base.shadowStrong }
     var shadowBorder: UIColor { base.shadowBorder }
 
+    var gradientOnboardingStop1: UIColor { base.gradientOnboardingStop1 }
+    var gradientOnboardingStop2: UIColor { base.gradientOnboardingStop2 }
+    var gradientOnboardingStop3: UIColor { base.gradientOnboardingStop3 }
+    var gradientOnboardingStop4: UIColor { base.gradientOnboardingStop4 }
+
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base
         self.partialOverrides = overrides

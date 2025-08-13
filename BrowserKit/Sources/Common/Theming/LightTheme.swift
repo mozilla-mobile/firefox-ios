@@ -118,5 +118,12 @@ private struct LightColourPalette: ThemeColourPalette {
     var shadowSubtle: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.10)
     var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.12)
     var shadowStrong: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.16)
+
+    // MARK: - Gradient
+    var gradientOnboardingStop1: UIColor = FXColors.Yellow50
+    var gradientOnboardingStop2: UIColor = FXColors.Blue50
+    var gradientOnboardingStop3: UIColor = FXColors.Red60
+    var gradientOnboardingStop4: UIColor = FXColors.Orange50
+
     var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
 }

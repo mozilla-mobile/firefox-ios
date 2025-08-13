@@ -104,5 +104,12 @@ public protocol ThemeColourPalette {
     var shadowSubtle: UIColor { get }
     var shadowDefault: UIColor { get }
     var shadowStrong: UIColor { get }
+
+    // MARK: - Gradient
+    var gradientOnboardingStop1: UIColor { get }
+    var gradientOnboardingStop2: UIColor { get }
+    var gradientOnboardingStop3: UIColor { get }
+    var gradientOnboardingStop4: UIColor { get }
+
     var shadowBorder: UIColor { get }
 }
