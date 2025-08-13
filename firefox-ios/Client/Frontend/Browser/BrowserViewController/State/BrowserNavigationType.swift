@@ -15,7 +15,7 @@ enum BrowserNavigationDestination: Equatable {
     case bookmarksPanel
     case zeroSearch
     case shortcutsLibrary
-    case summarizer
+    case summarizer(instructions: String?)
 
     // Webpage views
     case link

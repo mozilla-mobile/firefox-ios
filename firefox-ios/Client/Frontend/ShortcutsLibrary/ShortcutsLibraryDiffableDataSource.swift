@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import Common
 
 typealias ShortcutsLibrarySection = ShortcutsLibraryDiffableDataSource.Section
 typealias ShortcutsLibraryItem = ShortcutsLibraryDiffableDataSource.Item
@@ -15,7 +15,15 @@ final class ShortcutsLibraryDiffableDataSource:
 
     enum Item: Hashable {
         case shortcut(TopSiteConfiguration)
+
+        static var cellTypes: [ReusableCell.Type] {
+            return [
+                TopSiteCell.self,
+            ]
+        }
     }
+
+    private let maxShortcutsToShow = 16
 
     func updateSnapshot(state: ShortcutsLibraryState) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
@@ -31,6 +39,6 @@ final class ShortcutsLibraryDiffableDataSource:
     private func getShortcuts(with state: ShortcutsLibraryState) -> [ShortcutsLibraryDiffableDataSource.Item]? {
         let shortcuts: [Item] = state.shortcuts.compactMap { .shortcut($0) }
         guard !shortcuts.isEmpty else { return nil }
-        return shortcuts
+        return Array(shortcuts.prefix(maxShortcutsToShow))
     }
 }

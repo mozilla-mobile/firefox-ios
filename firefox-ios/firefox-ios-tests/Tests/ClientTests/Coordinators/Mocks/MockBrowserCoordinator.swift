@@ -150,7 +150,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         removeDocumentLoadingCalled += 1
     }
 
-    func showSummarizePanel(_ trigger: SummarizerTrigger) {
+    func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?) {
         showSummarizePanelCalled += 1
     }
 

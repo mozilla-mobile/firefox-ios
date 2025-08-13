@@ -67,6 +67,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             zoomLevel: 0,
             readerModeIsAvailable: false,
             summaryIsAvailable: false,
+            summarizerInstructions: "Test instructions",
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,

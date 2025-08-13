@@ -348,9 +348,8 @@ class BrowserViewController: UIViewController,
         return summarizerNimbusUtils.isToolbarButtonEnabled
     }
 
-    // TODO: Add proper feature flag mechanism
     var isTabScrollRefactoringEnabled: Bool {
-        return false
+        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -820,6 +819,7 @@ class BrowserViewController: UIViewController,
 
     @objc
     func appDidBecomeActiveNotification() {
+        processAppleIntelligenceState()
         privacyWindowHelper.removeWindow()
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
@@ -831,6 +831,14 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
 
         browserDidBecomeActive()
+    }
+
+    private func processAppleIntelligenceState() {
+        if #available(iOS 26, *) {
+            #if canImport(FoundationModels)
+                AppleIntelligenceUtil().processAvailabilityState()
+            #endif
+        }
     }
 
     func browserDidBecomeActive() {
@@ -1431,7 +1439,7 @@ class BrowserViewController: UIViewController,
         AppEventQueue.signal(event: .browserIsReady)
     }
 
-    func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
+    func willNavigateAway(from tab: Tab?) {
         if let tab {
             screenshotHelper.takeScreenshot(
                 tab,
@@ -1441,8 +1449,7 @@ class BrowserViewController: UIViewController,
                     y: -contentContainer.frame.origin.y,
                     width: view.frame.width,
                     height: view.frame.height
-                ),
-                completion: completion
+                )
             )
         }
     }
@@ -2751,8 +2758,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
-        case .summarizer:
-            navigationHandler?.showSummarizePanel(.shakeGesture)
+        case .summarizer(let instructions):
+            navigationHandler?.showSummarizePanel(.shakeGesture, instructions: instructions)
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
         case .zeroSearch:
@@ -2810,8 +2817,8 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
-        case .summarizer:
-            navigationHandler?.showSummarizePanel(.toolbarIcon)
+        case .summarizer(let instructions):
+            navigationHandler?.showSummarizePanel(.toolbarIcon, instructions: instructions)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)

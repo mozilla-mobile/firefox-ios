@@ -2243,26 +2243,26 @@ extension String {
         public static let ToSAlertCloseButtonAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.ToS.Alert.CloseButton.Accessibility.Label.v142
             tableName: "Summarizer",
-            value: "Close Terms of Service Alert button",
+            value: "Close Summarization button",
             comment: "The a11y label for the close button on the Terms of Service alert."
         )
         public static let ToSAlertCancelButtonAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.ToS.Alert.CancelButton.Accessibility.Label.v142
             tableName: "Summarizer",
-            value: "Deny Term of Service button",
+            value: "Cancel Summarize",
             comment: "The a11y label for the cancel button on the Terms of Service alert."
         )
         public static let ToSAlertAllowButtonAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.ToS.Alert.AllowButton.Accessibility.Label.v142
             tableName: "Summarizer",
-            value: "Agree to Term of Service button",
+            value: "Allow Summarize",
             comment: "The a11y label for the allow button on the Terms of Service alert."
         )
         public static let LoadingAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.Loading.Accessibility.Label.v142
             tableName: "Summarizer",
-            value: "Loading Summary label",
-            comment: "The a11y label for the loading label"
+            value: "Summarizing",
+            comment: "The a11y label for the loading label on the summarize loading screen."
         )
         public static let SummaryTextAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.Summary.Text.Accessibility.Label.v142

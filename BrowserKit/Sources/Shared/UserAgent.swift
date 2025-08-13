@@ -7,7 +7,7 @@ import WebKit
 import UIKit
 
 open class UserAgent {
-    public static let uaBitSafari = "Safari/605.1.15"
+    public static let uaBitSafari = "Safari/604.1"
     public static let uaBitMobile = "Mobile/15E148"
     public static let uaBitFx = "FxiOS/\(AppInfo.appVersion)"
     public static let product = "Mozilla/5.0"
@@ -98,10 +98,12 @@ public enum UserAgentPlatform {
 
 struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
-    private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+    private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
     static let customMobileUAForDomain = [
-        "disneyplus.com": customDesktopUA
+        "epic.com": safariMobileUA,
+        "athenahealth.com": safariMobileUA,
+        "ehealthontario.ca": safariMobileUA
     ]
 
     static let customDesktopUAForDomain = [
@@ -175,6 +177,6 @@ public struct UserAgentBuilder {
             systemInfo: "(Macintosh; Intel Mac OS X 10_15_7)",
             platform: UserAgent.platform,
             platformDetails: UserAgent.platformDetails,
-            extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+            extensions: "Version/17.7 Safari/605.1.15")
     }
 }

@@ -4,8 +4,11 @@
 
 "use strict";
 import { Readability, isProbablyReaderable} from "@mozilla/readability";
+import { findRecipeJSONLD } from "./JSONLD";
 
 const ALLOWED_LANGS = ["en"];
+
+const CONTENT_TYPES = {generic: "generic", recipe: "recipe"};
 
 const isPageLanguageSupported = () => {
   // Attempt to use the <html> lang attribute. 
@@ -65,6 +68,15 @@ const documentReady = () =>  new Promise(resolve => {
   }
 });
 
+/**
+ * Count the number of words in a text string.
+ * @param {string} text
+ * @returns {number}
+ */
+const countWords = (text) => {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+};
+
 
 /**
  * Checks document summarization eligibility.
@@ -94,9 +106,22 @@ const checkSummarization = async (maxWords) => {
     };
   }
 
-  // 2. Extract and count words
+  // 2. If it's a recipe return jsonld instead
+  const recipe = findRecipeJSONLD();
+  if (recipe) {
+    const recipeString = JSON.stringify(recipe);
+    return {
+      canSummarize: true,
+      reason: null,
+      wordCount: countWords(recipeString),
+      textContent: recipeString,
+      contentType: CONTENT_TYPES.recipe,
+    };
+  }
+
+  // 3. Extract and count words
   const text = extractContent();
-  const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+  const wordCount = countWords(text);
 
   if (wordCount > maxWords) {
     return {
@@ -106,7 +131,13 @@ const checkSummarization = async (maxWords) => {
     };
   }
 
-  return { canSummarize: true, reason: null, wordCount, textContent: text };
+  return { 
+    canSummarize: true, 
+    reason: null, 
+    wordCount, 
+    textContent: text,
+    contentType: CONTENT_TYPES.generic
+  };
 };
 
 

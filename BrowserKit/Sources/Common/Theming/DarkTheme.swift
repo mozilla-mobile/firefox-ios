@@ -56,11 +56,9 @@ private struct DarkColourPalette: ThemeColourPalette {
     ])
     var layerSurfaceLow = FXColors.DarkGrey60
     var layerSurfaceMedium = FXColors.DarkGrey80
-    var layerSummary: UIColor = FXColors.Pink50
-    var layerSummaryGradient = Gradient(colors: [
-        FXColors.Orange50,
-        FXColors.Pink50,
-        FXColors.Blue10
+    var layerSummary = Gradient(colors: [
+        FXColors.Red70,
+        FXColors.Orange50
     ])
 
     // MARK: - Ratings
@@ -131,4 +129,12 @@ private struct DarkColourPalette: ThemeColourPalette {
     var shadowSubtle: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.10)
     var shadowDefault: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.12)
     var shadowStrong: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.16)
+
+    // MARK: - Gradient
+    var gradientOnboardingStop1: UIColor = FXColors.Yellow50
+    var gradientOnboardingStop2: UIColor = FXColors.Blue50
+    var gradientOnboardingStop3: UIColor = FXColors.Red60
+    var gradientOnboardingStop4: UIColor = FXColors.Orange50
+
+    var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
 }
