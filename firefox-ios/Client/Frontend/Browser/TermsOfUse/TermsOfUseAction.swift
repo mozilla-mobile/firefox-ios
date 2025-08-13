@@ -16,5 +16,5 @@ struct TermsOfUseAction: Action {
 enum TermsOfUseActionType: ActionType {
     case markAccepted
     case markDismissed
-    case markFirstShown
+    case markShown
 }

@@ -11,7 +11,7 @@ enum TriggerContext {
 }
 
 @MainActor
-protocol TermsOfUseTriggerDelegate: AnyObject {
+protocol TermsOfUseDelegate: AnyObject {
     func showTermsOfUse(context: TriggerContext)
 }
 
@@ -31,7 +31,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
     private var presentedVC: TermsOfUseViewController?
     private let prefs: Prefs
-    private let hoursSinceDismissedTerms = 120 // 5 days = 120 hours
+    private let hoursSinceDismissedTerms = 120 // 120 hours (5 days)
 
     init(windowUUID: WindowUUID,
          router: Router,

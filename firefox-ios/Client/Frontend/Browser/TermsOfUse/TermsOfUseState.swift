@@ -36,10 +36,10 @@ struct TermsOfUseState: ScreenState, Equatable {
             return TermsOfUseState(windowUUID: state.windowUUID,
                                    hasAccepted: state.hasAccepted,
                                    wasDismissed: true)
-        case .markFirstShown:
+        case .markShown:
             return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: state.hasAccepted,
-                                   wasDismissed: state.wasDismissed)
+                                   hasAccepted: false,
+                                   wasDismissed: false)
         }
     }
 }

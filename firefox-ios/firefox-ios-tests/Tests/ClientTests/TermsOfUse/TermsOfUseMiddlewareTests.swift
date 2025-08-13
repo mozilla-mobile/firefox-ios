@@ -42,8 +42,8 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
             XCTAssertTrue(Calendar.current.isDate(dismissedDate, inSameDayAs: Date()))
         }
     }
-    func testMiddleware_markFirstShown_setsFirstShownPref() {
-        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markFirstShown)
+    func testMiddleware_markShown_setsFirstShownPref() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markShown)
         middleware.termsOfUseProvider(AppState(), action)
 
         // Should set the first shown preference

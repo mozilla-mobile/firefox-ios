@@ -79,7 +79,6 @@ class BrowserViewController: UIViewController,
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
     weak var fullscreenDelegate: FullscreenDelegate?
-    weak var termsOfUseTriggerDelegate: TermsOfUseTriggerDelegate?
 
     var urlBarView: (URLBarViewProtocol & TopBottomInterchangeable & Autocompletable) {
         if !isToolbarRefactorEnabled, let legacyUrlBar {
@@ -829,7 +828,7 @@ class BrowserViewController: UIViewController,
         }
 
         // Trigger Terms of Use check when app becomes active from background (warm start)
-        termsOfUseTriggerDelegate?.showTermsOfUse(context: .appBecameActive)
+        navigationHandler?.showTermsOfUse(context: .appBecameActive)
 
         browserDidBecomeActive()
     }

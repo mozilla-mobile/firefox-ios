@@ -30,7 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
-                          TermsOfUseTriggerDelegate,
+                          TermsOfUseDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -83,7 +83,6 @@ class BrowserCoordinator: BaseCoordinator,
 
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
-        browserViewController.termsOfUseTriggerDelegate = self
         tabManager.addDelegate(self)
     }
 
@@ -93,8 +92,7 @@ class BrowserCoordinator: BaseCoordinator,
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         } else {
-            // Check Terms of Use on app launch
-            showTermsOfUse(context: .appLaunch)
+            showTermsOfUse()
         }
     }
 
@@ -165,7 +163,7 @@ class BrowserCoordinator: BaseCoordinator,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
         )
-        homepageController.termsOfUseTriggerDelegate = self
+        homepageController.termsOfUseDelegate = self
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -313,7 +311,7 @@ class BrowserCoordinator: BaseCoordinator,
             legacyHomepageViewController.libraryPanelDelegate = libraryPanelDelegate
             legacyHomepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             legacyHomepageViewController.browserNavigationHandler = self
-            legacyHomepageViewController.termsOfUseTriggerDelegate = self
+            legacyHomepageViewController.termsOfUseDelegate = self
 
             return legacyHomepageViewController
         }

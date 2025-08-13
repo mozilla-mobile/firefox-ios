@@ -29,7 +29,7 @@ final class HomepageViewController: UIViewController,
 
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
-    weak var termsOfUseTriggerDelegate: TermsOfUseTriggerDelegate?
+    weak var termsOfUseDelegate: TermsOfUseDelegate?
 
     // MARK: - Layout variables
     var statusBarFrame: CGRect? {
@@ -166,9 +166,9 @@ final class HomepageViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         trackVisibleItemImpressions()
-
-        // Check Terms of Use for homepage
-        termsOfUseTriggerDelegate?.showTermsOfUse(context: .homepageOpened)
+        Task { @MainActor in
+            termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {

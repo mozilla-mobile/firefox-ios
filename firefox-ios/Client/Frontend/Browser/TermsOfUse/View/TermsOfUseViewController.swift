@@ -140,7 +140,7 @@ final class TermsOfUseViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markFirstShown))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markShown))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -298,7 +298,7 @@ final class TermsOfUseViewController: UIViewController,
         case .ended:
             if translation.y > UX.panDismissDistance || gesture.velocity(in: view).y > UX.panDismissVelocity {
                 store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
-                dismiss(animated: true)
+                coordinator?.dismissTermsFlow()
             } else {
                 UIView.animate(withDuration: UX.animationDuration,
                                delay: 0,
