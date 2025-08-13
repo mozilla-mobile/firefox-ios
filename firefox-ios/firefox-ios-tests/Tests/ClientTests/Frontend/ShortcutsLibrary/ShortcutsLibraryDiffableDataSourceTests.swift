@@ -40,13 +40,13 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfSections, 0)
     }
 
-    func test_updateSnapshot_withValidState_returnShortcuts() throws {
+    func test_updateSnapshot_withValidState_returnsShortcuts() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = ShortcutsLibraryState.reducer(
             ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
             TopSitesAction(
-                topSites: createSites(count: 30),
+                topSites: createSites(count: 10),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
             )
@@ -55,7 +55,27 @@ final class ShortcutsLibraryDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: state)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .shortcuts), 30)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .shortcuts), 10)
+        let expectedSections: [ShortcutsLibraryDiffableDataSource.Section] = [.shortcuts]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    func test_updateSnapshot_withValidState_returnsMaxShortcuts() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = ShortcutsLibraryState.reducer(
+            ShortcutsLibraryState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                topSites: createSites(count: 20),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: state)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .shortcuts), 16)
         let expectedSections: [ShortcutsLibraryDiffableDataSource.Section] = [.shortcuts]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
