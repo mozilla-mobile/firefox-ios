@@ -895,7 +895,8 @@ final class TabManagerMiddleware: FeatureFlaggable {
                 Task {
                     let summarizeMiddleware = SummarizerMiddleware()
                     let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
-                    let instructions = summarizeMiddleware.getInstructions(for: summarizationCheckResult?.contentType ?? .generic)
+                    let contentType = summarizationCheckResult?.contentType ?? .generic
+                    let instructions = summarizeMiddleware.getInstructions(for: contentType)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,

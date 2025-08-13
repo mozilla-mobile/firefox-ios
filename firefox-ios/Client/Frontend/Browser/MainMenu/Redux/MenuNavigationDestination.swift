@@ -20,9 +20,11 @@ enum MainMenuNavigationDestination: Equatable {
     case webpageSummary(instructions: String)
     case zoom
 
-    /// NOTE: This is only used in tests. Right now, we have three entrypoints for the summarizer and it's difficult to find a way
-    /// to pas custom configs to the summarizers from all three. In FXIOS-xxxx, we will clean all this up and have one action/middleware to deal with this.
-    /// Once that happens we can strip the associated value for `webpageSummary` and revert to using CaseIterable on the enum.
+    /// NOTE: This is only used in tests. Right now, we have three entrypoints for the summarizer and 
+    /// it's difficult to find a way to pass custom configs to the summarizers from all three. 
+    /// In FXIOS-xxxx, we will clean all this up and have one action/middleware to deal with this.
+    /// Once that happens we can strip the associated value for `webpageSummary` and 
+    /// revert to using CaseIterable on the enum.
     public static var allCasesForTests: [MainMenuNavigationDestination] {
         [
             .bookmarks,

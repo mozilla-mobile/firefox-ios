@@ -78,7 +78,8 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         let isHostedSummarizerEnabled = summarizerNimbusUtils.isHostedSummarizerEnabled()
         guard let service = summarizerServiceFactory.make(
             isAppleSummarizerEnabled: isAppleSummarizerEnabled,
-            isHostedSummarizerEnabled: isHostedSummarizerEnabled, instructions: instructions) else { return }
+            isHostedSummarizerEnabled: isHostedSummarizerEnabled,
+            instructions: instructions) else { return }
 
         service.summarizerLifecycle = self
 

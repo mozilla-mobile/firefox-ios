@@ -14,7 +14,9 @@ public protocol SummarizerServiceFactory {
 public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
     public init() {}
 
-    public func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool, instructions: String?) -> SummarizerService? {
+    public func make(isAppleSummarizerEnabled: Bool,
+                     isHostedSummarizerEnabled: Bool,
+                     instructions: String?) -> SummarizerService? {
         let maxWords = maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
                                 isHostedSummarizerEnabled: isHostedSummarizerEnabled)
         #if canImport(FoundationModels)

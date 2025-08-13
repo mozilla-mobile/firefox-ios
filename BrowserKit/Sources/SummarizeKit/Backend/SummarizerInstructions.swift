@@ -52,7 +52,7 @@ public enum SummarizerModelInstructions {
 
     private static let defaultRecipeInstructions = """
     You are an expert at creating mobile-optimized recipe summaries.
-    Format exactly as shown below. Do not add any closing phrases. 
+    Format exactly as shown below. Do not add any closing phrases.
     If a field is null or empty, omit that line.
 
     **Servings:** {servings}
