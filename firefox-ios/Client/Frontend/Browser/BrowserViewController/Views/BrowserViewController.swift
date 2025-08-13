@@ -348,9 +348,8 @@ class BrowserViewController: UIViewController,
         return summarizerNimbusUtils.isToolbarButtonEnabled
     }
 
-    // TODO: Add proper feature flag mechanism
     var isTabScrollRefactoringEnabled: Bool {
-        return false
+        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -1428,7 +1427,7 @@ class BrowserViewController: UIViewController,
         AppEventQueue.signal(event: .browserIsReady)
     }
 
-    func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
+    func willNavigateAway(from tab: Tab?) {
         if let tab {
             screenshotHelper.takeScreenshot(
                 tab,
@@ -1438,8 +1437,7 @@ class BrowserViewController: UIViewController,
                     y: -contentContainer.frame.origin.y,
                     width: view.frame.width,
                     height: view.frame.height
-                ),
-                completion: completion
+                )
             )
         }
     }

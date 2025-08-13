@@ -45,11 +45,9 @@ private struct LightColourPalette: ThemeColourPalette {
     ])
     var layerSurfaceLow = FXColors.LightGrey20
     var layerSurfaceMedium = FXColors.White
-    var layerSummary: UIColor = FXColors.Pink50
-    var layerSummaryGradient = Gradient(colors: [
-        FXColors.Orange50,
-        FXColors.Pink50,
-        FXColors.Blue10
+    var layerSummary = Gradient(colors: [
+        FXColors.Red70,
+        FXColors.Orange50
     ])
 
     // MARK: - Ratings
@@ -126,4 +124,6 @@ private struct LightColourPalette: ThemeColourPalette {
     var gradientOnboardingStop2: UIColor = FXColors.Blue50
     var gradientOnboardingStop3: UIColor = FXColors.Red60
     var gradientOnboardingStop4: UIColor = FXColors.Orange50
+
+    var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
 }

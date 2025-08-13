@@ -171,9 +171,7 @@ class MockBrowserViewController: BrowserViewController {
         removeDocumentLoadingViewCalled += 1
     }
 
-    override func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
-        completion?()
-    }
+    override func willNavigateAway(from tab: Tab?) {}
 }
 
 class MockContentContainer: ContentContainer {
