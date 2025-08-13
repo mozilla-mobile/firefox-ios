@@ -140,7 +140,7 @@ final class TermsOfUseViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markShownThisLaunch))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markFirstShown))
     }
 
     override func viewDidDisappear(_ animated: Bool) {

@@ -41,8 +41,8 @@ class TermsOfUseMiddleware {
             case TermsOfUseActionType.markDismissed:
                 self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
 
-            case TermsOfUseActionType.markShownThisLaunch:
-                break
+            case TermsOfUseActionType.markFirstShown:
+                self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
             }
         }
     }

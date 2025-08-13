@@ -30,6 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
+                          TermsOfUseTriggerDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -82,6 +83,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
+        browserViewController.termsOfUseTriggerDelegate = self
         tabManager.addDelegate(self)
     }
 
@@ -91,7 +93,8 @@ class BrowserCoordinator: BaseCoordinator,
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
         } else {
-            showTermsOfUse()
+            // Check Terms of Use on app launch
+            showTermsOfUse(context: .appLaunch)
         }
     }
 
@@ -162,6 +165,7 @@ class BrowserCoordinator: BaseCoordinator,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
         )
+        homepageController.termsOfUseTriggerDelegate = self
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -309,6 +313,7 @@ class BrowserCoordinator: BaseCoordinator,
             legacyHomepageViewController.libraryPanelDelegate = libraryPanelDelegate
             legacyHomepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             legacyHomepageViewController.browserNavigationHandler = self
+            legacyHomepageViewController.termsOfUseTriggerDelegate = self
 
             return legacyHomepageViewController
         }
@@ -1165,9 +1170,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Terms of Use
-    // Terms Of Use Bottom Sheet should appear on every app launch on homepage or on current tab,
-    // until user accepts terms of use.
-    func showTermsOfUse() {
+
+    func showTermsOfUse(context: TriggerContext = .appLaunch) {
         let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
 
         let router = DefaultRouter(navigationController: presenter.navigationController ?? UINavigationController())
@@ -1179,10 +1183,10 @@ class BrowserCoordinator: BaseCoordinator,
             notificationCenter: NotificationCenter.default,
             prefs: profile.prefs
         )
-        guard coordinator.shouldShowTermsOfUse() else { return }
+        guard coordinator.shouldShowTermsOfUse(context: context) else { return }
         coordinator.parentCoordinator = self
         add(child: coordinator)
-        coordinator.start()
+        coordinator.start(context: context)
     }
 
     // MARK: - Password Generator

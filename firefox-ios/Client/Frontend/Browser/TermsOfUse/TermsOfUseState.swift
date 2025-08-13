@@ -9,19 +9,13 @@ struct TermsOfUseState: ScreenState, Equatable {
     let windowUUID: WindowUUID
     var hasAccepted: Bool
     var wasDismissed: Bool
-    var lastShownDate: Date?
-    var didShowThisLaunch: Bool
 
     init(windowUUID: WindowUUID,
          hasAccepted: Bool = false,
-         wasDismissed: Bool = false,
-         lastShownDate: Date? = nil,
-         didShowThisLaunch: Bool = false) {
+         wasDismissed: Bool = false) {
         self.windowUUID = windowUUID
         self.hasAccepted = hasAccepted
         self.wasDismissed = wasDismissed
-        self.lastShownDate = lastShownDate
-        self.didShowThisLaunch = didShowThisLaunch
     }
 
     static func defaultState(from state: TermsOfUseState) -> TermsOfUseState {
@@ -37,21 +31,15 @@ struct TermsOfUseState: ScreenState, Equatable {
         case .markAccepted:
             return TermsOfUseState(windowUUID: state.windowUUID,
                                    hasAccepted: true,
-                                   wasDismissed: false,
-                                   lastShownDate: state.lastShownDate,
-                                   didShowThisLaunch: state.didShowThisLaunch)
+                                   wasDismissed: false)
         case .markDismissed:
             return TermsOfUseState(windowUUID: state.windowUUID,
                                    hasAccepted: state.hasAccepted,
-                                   wasDismissed: true,
-                                   lastShownDate: Date(),
-                                   didShowThisLaunch: state.didShowThisLaunch)
-        case .markShownThisLaunch:
+                                   wasDismissed: true)
+        case .markFirstShown:
             return TermsOfUseState(windowUUID: state.windowUUID,
                                    hasAccepted: state.hasAccepted,
-                                   wasDismissed: state.wasDismissed,
-                                   lastShownDate: state.lastShownDate,
-                                   didShowThisLaunch: true)
+                                   wasDismissed: state.wasDismissed)
         }
     }
 }

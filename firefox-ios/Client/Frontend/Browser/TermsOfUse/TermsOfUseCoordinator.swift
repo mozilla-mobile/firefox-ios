@@ -4,6 +4,17 @@
 import Common
 import Shared
 
+enum TriggerContext {
+    case appLaunch
+    case homepageOpened
+    case appBecameActive
+}
+
+@MainActor
+protocol TermsOfUseTriggerDelegate: AnyObject {
+    func showTermsOfUse(context: TriggerContext)
+}
+
 // TODO: FXIOS-12947 - Add tests for TermsOfUseCoordinator
 @MainActor
 protocol TermsOfUseCoordinatorDelegate: AnyObject {
@@ -20,7 +31,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
     private var presentedVC: TermsOfUseViewController?
     private let prefs: Prefs
-    private let daysSinceDismissedTerms = 5
+    private let hoursSinceDismissedTerms = 120 // 5 days = 120 hours
 
     init(windowUUID: WindowUUID,
          router: Router,
@@ -34,8 +45,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         super.init(router: router)
     }
 
-    func start() {
-        guard shouldShowTermsOfUse() else {
+    func start(context: TriggerContext = .appLaunch) {
+        guard shouldShowTermsOfUse(context: context) else {
             parentCoordinator?.didFinish(from: self)
             return
         }
@@ -70,35 +81,43 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         presentedVC?.present(linkVC, animated: true)
     }
 
-    func shouldShowTermsOfUse() -> Bool {
-        let isFeatureEnabled = featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
-        // 1. If feature is disabled, do not show.
-        guard isFeatureEnabled else { return false }
+    func shouldShowTermsOfUse(context: TriggerContext = .appLaunch) -> Bool {
+        // 1. Feature must be enabled
+        guard featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) else { return false }
 
-        let hasAccepted = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
-        // 2. If user has accepted, do not show again.
-        guard !hasAccepted else { return false }
+        // 2. If user has already accepted (onboarding or bottom sheet), never show again
+        let hasAcceptedTermsOfUse = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
+        let hasAcceptedTermsOfService = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
+        guard !hasAcceptedTermsOfUse && !hasAcceptedTermsOfService else { return false }
 
-        let didShowThisLaunch = store.state.screenState(
-            TermsOfUseState.self,
-            for: .termsOfUse,
-            window: windowUUID
-        )?.didShowThisLaunch ?? false
+        // 3. Check if this is the first time we're showing it
+        let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
 
-        // 3. If not shown this launch, show it.
-        guard didShowThisLaunch else { return true }
+        if !hasShownFirstTime {
+            // FIRST TIME: Show on fresh install or next app open for existing users
+            // (Show regardless of context - homepage or app becoming active)
+            return true
+        }
 
-        // 4. If shown this launch, show it if enough time has passed since dismissal.
-        guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
-        else { return false }
+        // 4. Already shown before - check if user dismissed and 120 hours passed
+        guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) else {
+            // Already shown but no dismissal record - don't show
+            return false
+        }
 
-        let dismissedWithoutAcceptDate = Date.fromTimestamp(dismissedTimestamp)
-        let daysSinceDismissal = Calendar.current.dateComponents(
-            [.day],
-            from: dismissedWithoutAcceptDate,
+        // 5. Calculate time since dismissal
+        let dismissedDate = Date.fromTimestamp(dismissedTimestamp)
+        let hoursSinceDismissal = Calendar.current.dateComponents(
+            [.hour],
+            from: dismissedDate,
             to: Date()
-        ).day ?? 0
+        ).hour ?? 0
 
-        return daysSinceDismissal >= daysSinceDismissedTerms
+        // 6. Must wait 120 hours since dismissal
+        guard hoursSinceDismissal >= hoursSinceDismissedTerms else { return false }
+
+        // 7. After 120 hours: show on any trigger context (homepage, app becomes active, or app launch)
+        // whichever comes first
+        return true
     }
 }
