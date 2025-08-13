@@ -276,9 +276,17 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.clearData)
             store.dispatchLegacy(action)
         case .summarizer:
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showSummarizer)
-            store.dispatchLegacy(action)
+            Task {
+                guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
+                let summarizeMiddleware = SummarizerMiddleware()
+                let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
+                let contentType = summarizationCheckResult?.contentType ?? .generic
+                let instructions = summarizeMiddleware.getInstructions(for: contentType)
+                let action = GeneralBrowserAction(summarizerInstructions: instructions,
+                                                  windowUUID: action.windowUUID,
+                                                  actionType: GeneralBrowserActionType.showSummarizer)
+                store.dispatchLegacy(action)
+            }
         default:
             break
         }

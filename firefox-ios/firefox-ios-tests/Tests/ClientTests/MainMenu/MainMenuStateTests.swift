@@ -42,6 +42,7 @@ final class MainMenuStateTests: XCTestCase {
             zoomLevel: 1.0,
             readerModeIsAvailable: false,
             summaryIsAvailable: false,
+            summarizerInstructions: "Test instructions",
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,
@@ -69,7 +70,7 @@ final class MainMenuStateTests: XCTestCase {
 
         XCTAssertNil(initialState.navigationDestination)
 
-        MainMenuNavigationDestination.allCases.forEach { destination in
+        MainMenuNavigationDestination.allCasesForTests.forEach { destination in
             let newState = reducer(
                 initialState,
                 MainMenuAction(

@@ -98,7 +98,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getAction(for: .showSummarizer)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.displayView, .summarizer)
+        XCTAssertEqual(newState.displayView, .summarizer(instructions: ""))
     }
 
     // MARK: - Navigation Browser Action
@@ -277,11 +277,12 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let action = SummarizeAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: SummarizeMiddlewareActionType.configuredSummarizer
+            actionType: SummarizeMiddlewareActionType.configuredSummarizer,
+            instructions: "Test instructions"
         )
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .summarizer)
+        XCTAssertEqual(newState.navigationDestination?.destination, .summarizer(instructions: "Test instructions"))
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
