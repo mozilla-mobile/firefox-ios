@@ -8,6 +8,7 @@ import UIKit
 import ComponentLibrary
 import WebKit
 import Down
+import SwiftUI
 
 class CustomStyler: DownStyler {
     // NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
@@ -97,6 +98,32 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
     private lazy var gradient = AnimatedGradientOutlineView(frame: view.bounds)
+    private lazy var backgroundGradient = CAGradientLayer()
+
+    /// Border overlay when loading the summary report
+    private lazy var borderOverlayHostingController: UIHostingController<BorderView> = {
+        let host = UIHostingController(rootView: BorderView(theme: themeManager.getCurrentTheme(for: currentWindowUUID)))
+        addChild(host)
+        host.view.translatesAutoresizingMaskIntoConstraints = false
+        host.view.backgroundColor = .clear
+        host.view.isUserInteractionEnabled = false
+        return host
+    }()
+
+    private func removeBorderOverlayView() {
+        borderOverlayHostingController.willMove(toParent: nil)
+        borderOverlayHostingController.view.removeFromSuperview()
+        borderOverlayHostingController.removeFromParent()
+    }
+
+    /// Background gradient when loading summarizer
+    private func setupLoadingBackgroundGradient() {
+        backgroundGradient.frame = view.bounds
+        backgroundGradient.locations = [0.0, 1.0]
+        backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+        backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+    }
+
     private let summaryView: UITextView = .build {
         $0.font = FXFontStyles.Regular.headline.scaledFont()
         $0.alpha = 0.0
@@ -152,8 +179,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             observing: [UIContentSizeCategory.didChangeNotification]
         )
     }
-
-    private lazy var backgroundGradient = CAGradientLayer()
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -221,16 +246,18 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
     }
 
-    private func setupBackgroundGradient() {
-        backgroundGradient.frame = view.bounds
-        backgroundGradient.locations = [0.0, 1.0]
-        backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)
-        backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
-    }
-
     private func setupLayout() {
-        setupBackgroundGradient()
-        view.addSubviews(tabSnapshotContainer, gradient, titleLabel, closeButton, summaryView, loadingLabel, errorView)
+        setupLoadingBackgroundGradient()
+        view.addSubviews(
+            tabSnapshotContainer,
+            borderOverlayHostingController.view,
+            gradient,
+            titleLabel,
+            closeButton,
+            summaryView,
+            loadingLabel,
+            errorView
+        )
         tabSnapshotContainer.addSubview(tabSnapshot)
         tabSnapshot.pinToSuperview()
         tabSnapshotTopConstraint = tabSnapshotContainer.topAnchor.constraint(equalTo: view.topAnchor)
@@ -281,8 +308,16 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
 
             tabSnapshotContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tabSnapshotContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tabSnapshotContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tabSnapshotContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            borderOverlayHostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            borderOverlayHostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            borderOverlayHostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            borderOverlayHostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        /// Notify the hosting controller that it has been moved to the current view controller.
+        borderOverlayHostingController.didMove(toParent: self)
     }
 
     private func embedSnapshot() {
@@ -333,6 +368,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         summaryView.attributedText = parse(markdown: brandedSummary)
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             gradient.alpha = 0.0
+            removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
             loadingLabel.alpha = 0.0

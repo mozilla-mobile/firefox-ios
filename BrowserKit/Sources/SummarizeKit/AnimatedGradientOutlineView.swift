@@ -107,6 +107,6 @@ class AnimatedGradientOutlineView: UIView,
     }
 
     func applyTheme(theme: any Theme) {
-        gradientLayer.colors = [theme.colors.shadowBorder.cgColor, theme.colors.shadowBorder.cgColor]
+        gradientLayer.colors = [UIColor.clear, UIColor.clear]
     }
 }
