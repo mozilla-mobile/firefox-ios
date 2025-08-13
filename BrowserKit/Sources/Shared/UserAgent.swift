@@ -98,10 +98,12 @@ public enum UserAgentPlatform {
 
 struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
-    private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+    private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
     static let customMobileUAForDomain = [
-        "disneyplus.com": customDesktopUA
+        "epic.com": safariMobileUA,
+        "athenahealth.com": safariMobileUA,
+        "ehealthontario.ca": safariMobileUA
     ]
 
     static let customDesktopUAForDomain = [
