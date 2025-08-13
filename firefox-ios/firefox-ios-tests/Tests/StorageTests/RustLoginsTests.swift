@@ -11,6 +11,12 @@ import XCTest
 class RustLoginsTests: XCTestCase {
     var files: FileAccessor!
     var logins: RustLogins!
+    let login = LoginEntry(fromJSONDict: [
+        "hostname": "https://example.com",
+        "formSubmitUrl": "https://example.com",
+        "username": "username",
+        "password": "password"
+    ])
 
     override func setUp() {
         super.setUp()
@@ -30,84 +36,122 @@ class RustLoginsTests: XCTestCase {
         }
     }
 
-    func addLogin() -> Deferred<Maybe<String>> {
-        let login = LoginEntry(fromJSONDict: [
-            "hostname": "https://example.com",
-            "formSubmitUrl": "https://example.com",
-            "username": "username",
-            "password": "password"
-        ])
-        return logins.addLogin(login: login)
-    }
-
     func testListLogins() {
-        let listResult1 = logins.listLogins().value
-        XCTAssertTrue(listResult1.isSuccess)
-        XCTAssertNotNil(listResult1.successValue)
-        XCTAssertEqual(listResult1.successValue!.count, 0)
-        let addResult = addLogin().value
-        XCTAssertTrue(addResult.isSuccess)
-        XCTAssertNotNil(addResult.successValue)
-        let listResult2 = logins.listLogins().value
-        XCTAssertTrue(listResult2.isSuccess)
-        XCTAssertNotNil(listResult2.successValue)
-        XCTAssertEqual(listResult2.successValue!.count, 1)
+        let expectation = XCTestExpectation(description: "addLogin")
+        logins.addLogin(login: login) { result in
+            switch result {
+            case .success(let login):
+                XCTAssertNotNil(login)
+            case .failure:
+                XCTFail("Add login failed")
+            }
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation])
+        let listLoginsExpectation = XCTestExpectation(description: "listLogins")
+        logins.listLogins { result in
+            switch result {
+            case .success(let logins):
+                XCTAssertNotNil(logins)
+                XCTAssertEqual(logins.count, 1)
+            case .failure:
+                XCTFail("List logins failed")
+            }
+            listLoginsExpectation.fulfill()
+        }
+        wait(for: [listLoginsExpectation])
     }
 
     func testAddLogin() {
-        let addResult = addLogin().value
-        XCTAssertTrue(addResult.isSuccess)
-        XCTAssertNotNil(addResult.successValue)
-        let getResult = logins.getLogin(id: addResult.successValue!).value
-        XCTAssertTrue(getResult.isSuccess)
-        XCTAssertNotNil(getResult.successValue!)
-        XCTAssertEqual(getResult.successValue!!.id, addResult.successValue!)
+        let expectation = XCTestExpectation(description: "addLogin")
+        logins.addLogin(login: login) { result in
+            switch result {
+            case .success(let login):
+                XCTAssertNotNil(login)
+                self.logins.getLogin(id: login!.id) { result in
+                    switch result {
+                    case .success(let fetchedLogin):
+                        XCTAssertNotNil(fetchedLogin)
+                        XCTAssertEqual(fetchedLogin!.id, login!.id)
+                        expectation.fulfill()
+                    case .failure:
+                        XCTFail("Get login failed")
+                    }
+                }
+            case .failure:
+                XCTFail("Add login failed")
+            }
+        }
+
+        wait(for: [expectation])
     }
 
     func testUpdateLogin() {
-        let addResult = addLogin().value
-        XCTAssertTrue(addResult.isSuccess)
-        XCTAssertNotNil(addResult.successValue)
-        let getResult1 = logins.getLogin(id: addResult.successValue!).value
-        XCTAssertTrue(getResult1.isSuccess)
-        XCTAssertNotNil(getResult1.successValue!)
-        let login = getResult1.successValue!
-        XCTAssertEqual(login!.id, addResult.successValue!)
+        let expectation = XCTestExpectation(description: "addLogin")
 
-        let updatedLogin = LoginEntry(
-                origin: login!.hostname,
-                httpRealm: login!.httpRealm,
-                formActionOrigin: login!.formSubmitUrl,
-                usernameField: login!.usernameField,
-                passwordField: login!.passwordField,
-                password: "password2",
-                username: ""
-        )
-
-        let updateResult = logins.updateLogin(id: login!.id, login: updatedLogin).value
-        XCTAssertTrue(updateResult.isSuccess)
-        let getResult2 = logins.getLogin(id: login!.id).value
-        XCTAssertTrue(getResult2.isSuccess)
-        XCTAssertNotNil(getResult2.successValue!)
-        let password = getResult2.successValue!!.password
-        XCTAssertEqual(password, "password2")
+        logins.addLogin(login: login) { result in
+            switch result {
+            case .success(let addedLogin):
+                XCTAssertNotNil(addedLogin)
+                let updatedLogin = LoginEntry(
+                        origin: addedLogin!.hostname,
+                        httpRealm: addedLogin!.httpRealm,
+                        formActionOrigin: addedLogin!.formSubmitUrl,
+                        usernameField: addedLogin!.usernameField,
+                        passwordField: addedLogin!.passwordField,
+                        password: "password2",
+                        username: ""
+                )
+                self.logins.updateLogin(id: addedLogin!.id, login: updatedLogin) { result in
+                    switch result {
+                    case .success(let updateLogin):
+                        self.logins.getLogin(id: updateLogin!.id) { result in
+                            switch result {
+                            case .success(let login):
+                                XCTAssertEqual(updateLogin!.id, login?.id)
+                                expectation.fulfill()
+                            case .failure:
+                                XCTFail("Call to get login failed")
+                            }
+                        }
+                    case .failure:
+                        XCTFail("Call to update login failed")
+                    }
+                }
+            case .failure:
+                XCTFail("Call to add login failed")
+            }
+        }
+        wait(for: [expectation])
     }
 
     func testDeleteLogin() {
-        let addResult = addLogin().value
-        XCTAssertTrue(addResult.isSuccess)
-        XCTAssertNotNil(addResult.successValue)
-        let getResult1 = logins.getLogin(id: addResult.successValue!).value
-        XCTAssertTrue(getResult1.isSuccess)
-        XCTAssertNotNil(getResult1.successValue!)
-        let login = getResult1.successValue!
-        XCTAssertEqual(login!.id, addResult.successValue!)
-        let deleteResult = logins.deleteLogin(id: login!.id).value
-        XCTAssertTrue(deleteResult.isSuccess)
-        XCTAssertNotNil(deleteResult.successValue!)
-        XCTAssertTrue(deleteResult.successValue!)
-        let getResult2 = logins.getLogin(id: login!.id).value
-        XCTAssertTrue(getResult2.isSuccess)
-        XCTAssertNil(getResult2.successValue!)
+        let expectation = XCTestExpectation(description: "addLogin")
+        logins.addLogin(login: login) { result in
+            switch result {
+            case .success(let login):
+                XCTAssertNotNil(login)
+                self.logins.deleteLogin(id: login!.id) { result in
+                    switch result {
+                    case .success:
+                        self.logins.getLogin(id: login!.id) { result in
+                            switch result {
+                            case .success(let login):
+                                XCTAssertNil(login)
+                                expectation.fulfill()
+                            case .failure:
+                                XCTFail("Get login failed")
+                            }
+                        }
+                    case .failure:
+                        XCTFail("Delete login failed")
+                    }
+                }
+            case .failure:
+                XCTFail("Add login failed")
+            }
+        }
+        wait(for: [expectation])
     }
 }
