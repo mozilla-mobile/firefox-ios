@@ -8,9 +8,13 @@ public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {
     public init() {}
 
     public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) async -> SummarizerConfig? {
-        return SummarizerConfig(
-            instructions: "Inst 1",
-            options: ["temperature": 0.1, "maxTokens": 1]
-        )
+        switch (contentType, summarizer) {
+        case (.generic, .appleSummarizer):
+            return SummarizerConfig(instructions: SummarizerModelInstructions.appleInstructions, options: ["temperature": 0.1])
+        case (.generic, .liteLLMSummarizer):
+            return SummarizerConfig(instructions: SummarizerModelInstructions.defaultInstructions, options: ["temperature": 0.1, "top_p": 0.01])
+        case (.recipe, _):
+            return SummarizerConfig(instructions: SummarizerModelInstructions.defaultRecipeInstructions, options: ["temperature": 0.1])
+        }
     }
 }

@@ -9,21 +9,7 @@
 /// because tokenizers may treat newlines as distinct tokens, whereas spaces are merged more efficiently.
 /// For more context on how tokenizers handle newlines vs spaces, see: https://simonwillison.net/2023/Jun/8/gpt-tokenizers/
 public enum SummarizerModelInstructions {
-    public static func getInstructions(
-        for contentType: SummarizationContentType,
-        summarizerType: SummarizerModel
-    ) -> String {
-        switch (contentType, summarizerType) {
-        case (.generic, .appleSummarizer):
-            return appleInstructions
-        case (.generic, .liteLLMSummarizer):
-            return defaultInstructions
-        case (.recipe, _):
-            return defaultRecipeInstructions
-        }
-    }
-
-    private static let  defaultInstructions = """
+    static let  defaultInstructions = """
     You are an expert at creating mobile-optimized summaries. Process:
     Step 1: Identify the type of content.
     Step 2: Based on content type, prioritize:
@@ -36,7 +22,7 @@ public enum SummarizerModelInstructions {
     Bold critical details (numbers, warnings, key terms).
     """.replacingOccurrences(of: "\n", with: " ")
 
-    private static let appleInstructions = """
+    static let appleInstructions = """
     You are an expert at creating mobile-optimized summaries. Process:
     Step 1: Identify the type of content.
     Step 2: Based on content type, prioritize:
@@ -50,7 +36,7 @@ public enum SummarizerModelInstructions {
     Do not include any introductions, follow-ups, questions, or closing statements.
     """.replacingOccurrences(of: "\n", with: " ")
 
-    private static let defaultRecipeInstructions = """
+    static let defaultRecipeInstructions = """
     You are an expert at creating mobile-optimized recipe summaries.
     Format exactly as shown below. Do not add any closing phrases.
     If a field is null or empty, omit that line.
