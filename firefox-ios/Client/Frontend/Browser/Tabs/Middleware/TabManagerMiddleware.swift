@@ -93,9 +93,6 @@ final class TabManagerMiddleware: FeatureFlaggable {
     }
 
     private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {
-        guard let tabsState = state.screenState(TabsPanelState.self,
-                                                for: .tabsPanel,
-                                                window: action.windowUUID) else { return }
         // TODO: FXIOS-12101 this should be removed once we figure out screenshots
         guard windowManager.windows[action.windowUUID]?.tabManager != nil else {
             logger.log("Tab manager does not exist for this window, bailing from taking a screenshot.", level: .fatal, category: .tabs, extra: ["windowUUID": "\(action.windowUUID)"])
@@ -104,6 +101,10 @@ final class TabManagerMiddleware: FeatureFlaggable {
 
         let manager = tabManager(for: action.windowUUID)
         manager.tabDidSetScreenshot(action.tab)
+
+        guard let tabsState = state.screenState(TabsPanelState.self,
+                                                for: .tabsPanel,
+                                                window: action.windowUUID) else { return }
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
