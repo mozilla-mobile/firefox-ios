@@ -87,7 +87,6 @@ final class TabScrollHandler: NSObject,
     }
 
     weak var zoomPageBar: ZoomPageBar?
-    private var observedScrollViews = WeakList<UIScrollView>()
 
     private var lastPanTranslation: CGFloat = 0
     private var lastContentOffsetY: CGFloat = 0
@@ -96,7 +95,6 @@ final class TabScrollHandler: NSObject,
     var lastValidState: ToolbarDisplayState = .expanded
 
     private weak var delegate: TabScrollHandler.Delegate?
-
     private let windowUUID: WindowUUID
     private let logger: Logger
 
@@ -110,7 +108,6 @@ final class TabScrollHandler: NSObject,
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     private var contentOffsetBeforeAnimation = CGPoint.zero
 
-    var notificationCenter: any NotificationProtocol
     var currentWindowUUID: WindowUUID? {
         return windowUUID
     }
@@ -128,21 +125,13 @@ final class TabScrollHandler: NSObject,
             contentSize.height
     }
 
-    deinit {
-        logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
-    }
-
     init(windowUUID: WindowUUID,
-         notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
          delegate: TabScrollHandler.Delegate? = nil) {
         self.windowUUID = windowUUID
-        self.notificationCenter = notificationCenter
         self.logger = logger
         self.delegate = delegate
         super.init()
-        setupNotifications()
     }
 
     func traitCollectionDidChange() {
@@ -183,26 +172,12 @@ final class TabScrollHandler: NSObject,
                                headerContainer: BaseAlphaStackView? ) {
     }
 
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationWillTerminate(_:)),
-                                               name: UIApplication.willTerminateNotification,
-                                               object: nil)
-    }
-
     private func handleOnTabContentLoading() {
         if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
             removePullRefreshControl()
         } else {
             configureRefreshControl()
         }
-    }
-
-    @objc
-    private func applicationWillTerminate(_ notification: Notification) {
-        // Ensures that we immediately de-register KVO observations for content size changes in
-        // webviews if the app is about to terminate.
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
     }
 
     func handleScroll(for translation: CGPoint, velocity: CGPoint) {
@@ -248,38 +223,11 @@ final class TabScrollHandler: NSObject,
 
     // MARK: - ScrollView observation
 
-    func beginObserving(scrollView: UIScrollView) {
-        guard !observedScrollViews.contains(scrollView) else {
-            logger.log("Duplicate observance of scroll view", level: .warning, category: .webview)
-            return
-        }
+    // Not needed anymore
+    func beginObserving(scrollView: UIScrollView) {}
 
-        observedScrollViews.insert(scrollView)
-        scrollView.addObserver(self, forKeyPath: KVOConstants.contentSize.rawValue, options: .new, context: nil)
-    }
-
-    func stopObserving(scrollView: UIScrollView) {
-        guard observedScrollViews.contains(scrollView) else {
-            logger.log("Duplicate KVO de-registration for scroll view", level: .warning, category: .webview)
-            return
-        }
-
-        observedScrollViews.remove(scrollView)
-        scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
-    }
-
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey: Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == "contentSize" {
-            guard shouldUpdateUIWhenScrolling, toolbarDisplayState.isExpanded else { return }
-
-            showToolbars(animated: true)
-        }
-    }
+    // Not needed anymore
+    func stopObserving(scrollView: UIScrollView) {}
 
     // MARK: - Zoom
 
