@@ -9,6 +9,7 @@ import Shared
 
 @testable import Client
 
+@MainActor
 final class TabScrollHandlerTests: XCTestCase {
     var tab: Tab!
     var mockProfile: MockProfile!
