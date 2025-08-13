@@ -491,20 +491,17 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     private func didAddPendingBlobDownloadToQueue() {
         pendingDownloadWebView = nil
     }
 
     /// If user manually opens the keyboard and presses undo, the app switches to the last
     /// open tab, and because of that we need to leave overlay state
-    @objc
     func didTapUndoCloseAllTabToast(notification: Notification) {
         guard windowUUID == notification.windowUUID else { return }
         overlayManager.switchTab(shouldCancelLoading: true)
     }
 
-    @objc
     func didFinishAnnouncement(notification: Notification) {
         if let userInfo = notification.userInfo,
             let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
@@ -519,7 +516,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
@@ -622,7 +618,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     fileprivate func appMenuBadgeUpdate() {
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = isActionNeeded
@@ -737,7 +732,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     func appDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
@@ -758,7 +752,6 @@ class BrowserViewController: UIViewController,
         scrollController.showToolbars(animated: true)
     }
 
-    @objc
     func sceneDidEnterBackgroundNotification(notification: Notification) {
         // Ensure the notification is for the current window scene
         guard let currentWindowScene = view.window?.windowScene,
@@ -769,12 +762,10 @@ class BrowserViewController: UIViewController,
         privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
-    @objc
     func sceneDidActivateNotification() {
         privacyWindowHelper.removeWindow()
     }
 
-    @objc
     func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
@@ -806,7 +797,6 @@ class BrowserViewController: UIViewController,
         return self.presentedViewController == nil || presentedViewController is PhotonActionSheet
     }
 
-    @objc
     func appDidBecomeActiveNotification() {
         privacyWindowHelper.removeWindow()
 
@@ -1096,6 +1086,7 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Notifiable
+    @MainActor
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willResignActiveNotification: appWillResignActiveNotification()
@@ -1111,6 +1102,7 @@ class BrowserViewController: UIViewController,
         case .PendingBlobDownloadAddedToQueue: didAddPendingBlobDownloadToQueue()
         case .SearchSettingsDidUpdateDefaultSearchEngine: updateForDefaultSearchEngineDidChange(notification)
         case .PageZoomLevelUpdated: handlePageZoomLevelUpdated(notification)
+        case .PageZoomSettingsChanged: handlePageZoomSettingsChanged(notification)
         case .RemoteTabNotificationTapped: openRecentlyClosedTabs()
         case .StopDownloads: onStopDownloads(notification)
         default: break
@@ -1135,13 +1127,13 @@ class BrowserViewController: UIViewController,
                 .PendingBlobDownloadAddedToQueue,
                 .SearchSettingsDidUpdateDefaultSearchEngine,
                 .PageZoomLevelUpdated,
+                .PageZoomSettingsChanged,
                 .RemoteTabNotificationTapped,
                 .StopDownloads
             ]
         )
     }
 
-    @objc
     private func onStopDownloads(_ notification: Notification) {
         ensureMainThread {
             guard let notiWindowUUID = notification.userInfo?["windowUUID"] as? String,
@@ -1151,7 +1143,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    @objc
     private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
         updateToolbarDisplay()
 
@@ -3691,13 +3682,11 @@ class BrowserViewController: UIViewController,
 
     // MARK: Page Zoom
 
-    @objc
     func handlePageZoomSettingsChanged(_ notification: Notification) {
         zoomManager.updateZoomChangedInOtherWindow()
         zoomPageBar?.updateZoomLabel(zoomValue: zoomManager.getZoomLevel())
     }
 
-    @objc
     func handlePageZoomLevelUpdated(_ notification: Notification) {
         guard let uuid = notification.windowUUID,
               let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel,
@@ -4289,7 +4278,6 @@ extension BrowserViewController: HomePanelDelegate {
         showBookmarkToast(urlString: urlString, action: action)
     }
 
-    @objc
     func openRecentlyClosedTabs() {
         DispatchQueue.main.async {
             self.navigationHandler?.show(homepanelSection: .history)
@@ -4334,7 +4322,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
         self.present(navController, animated: true, completion: nil)
     }
 
-    @objc
     func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
         // Update search icon when the search engine changes
         if isToolbarRefactorEnabled {

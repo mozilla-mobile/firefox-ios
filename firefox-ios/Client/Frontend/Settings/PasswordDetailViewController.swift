@@ -124,6 +124,14 @@ final class PasswordDetailViewController: SensitiveViewController, Themeable, No
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
     }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == UIApplication.didEnterBackgroundNotification else { return }
+        Task { @MainActor in
+            deleteAlert?.dismiss(animated: false)
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -288,14 +296,6 @@ extension PasswordDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRows
     }
-
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.didEnterBackgroundNotification: dismissAlertController()
-        default: break
-        }
-    }
 }
 
 // MARK: - UITableViewDelegate
@@ -341,10 +341,6 @@ extension PasswordDetailViewController: KeyboardHelperDelegate {
 
 // MARK: - Selectors
 extension PasswordDetailViewController {
-    func dismissAlertController() {
-        deleteAlert?.dismiss(animated: false, completion: nil)
-    }
-
     func deleteLogin() {
         viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in

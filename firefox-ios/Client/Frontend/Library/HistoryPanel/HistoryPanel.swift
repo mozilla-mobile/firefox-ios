@@ -325,8 +325,10 @@ final class HistoryPanel: UIViewController,
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+        let notificationDBname = notification.object as? String
         Task { @MainActor in
-            switch notification.name {
+            switch notificationName {
             case .FirefoxAccountChanged, .PrivateDataClearedHistory:
                 viewModel.removeAllData()
                 fetchDataAndUpdateLayout(animating: true)
@@ -343,7 +345,7 @@ final class HistoryPanel: UIViewController,
                 resyncHistory()
                 break
             case .DatabaseWasReopened:
-                if let dbName = notification.object as? String, dbName == "browser.db" {
+                if let dbName = notificationDBname, dbName == "browser.db" {
                     fetchDataAndUpdateLayout(animating: true)
                 }
             case .OpenClearRecentHistory:

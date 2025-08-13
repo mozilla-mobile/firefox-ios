@@ -231,10 +231,13 @@ final class PasswordManagerListViewController: SensitiveViewController, Themeabl
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.didEnterBackgroundNotification: dismissAlertController()
-        case .DataRemoteLoginChangesWereApplied: remoteLoginsDidChange()
-        default: break
+        let notificationName = notification.name
+        Task { @MainActor in
+            switch notificationName {
+            case UIApplication.didEnterBackgroundNotification: dismissAlertController()
+            case .DataRemoteLoginChangesWereApplied: remoteLoginsDidChange()
+            default: break
+            }
         }
     }
 }

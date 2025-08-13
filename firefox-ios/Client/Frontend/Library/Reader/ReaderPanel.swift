@@ -258,14 +258,18 @@ final class ReadingListPanel: UITableViewController,
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .DynamicFontChanged:
-            refreshReadingList()
-        case .DatabaseWasReopened:
-            if let dbName = notification.object as? String, dbName == "ReadingList.db" {
+        let notificationName = notification.name
+        let notificationDBname = notification.object as? String
+        Task { @MainActor in
+            switch notificationName {
+            case .FirefoxAccountChanged, .DynamicFontChanged:
                 refreshReadingList()
+            case .DatabaseWasReopened:
+                if let dbName = notificationDBname, dbName == "ReadingList.db" {
+                    refreshReadingList()
+                }
+            default: break
             }
-        default: break
         }
     }
 

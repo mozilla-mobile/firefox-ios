@@ -11,9 +11,10 @@ import SiteImageView
 import MozillaAppServices
 
 final class BookmarksViewController: SiteTableViewController,
-                               LibraryPanel,
-                               CanRemoveQuickActionBookmark,
-                               UITableViewDropDelegate {
+                                     LibraryPanel,
+                                     CanRemoveQuickActionBookmark,
+                                     UITableViewDropDelegate,
+                                     Notifiable {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -629,6 +630,18 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         updateEmptyState(animated: false)
     }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
+            Task { @MainActor in
+                reloadData()
+            }
+        default:
+            break
+        }
+    }
 }
 
 // MARK: - LibraryPanelContextMenu
@@ -727,18 +740,6 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: bookmarkCoordinatorDelegate))
 
         return actions
-    }
-}
-
-// MARK: - Notifiable
-extension BookmarksViewController: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
-            reloadData()
-        default:
-            break
-        }
     }
 }
 

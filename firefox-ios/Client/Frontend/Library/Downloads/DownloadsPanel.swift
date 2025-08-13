@@ -102,24 +102,26 @@ final class DownloadsPanel: UIViewController,
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+        let notificationWindowUUID = notification.windowUUID
+
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-
-            switch notification.name {
+            switch notificationName {
             case .FileDidDownload, .PrivateDataClearedDownloadedFiles:
-                self.reloadData()
+                reloadData()
             case .DynamicFontChanged:
-                self.reloadData()
-                if self.emptyStateOverlayView.superview != nil {
-                    self.emptyStateOverlayView.removeFromSuperview()
+                reloadData()
+                if emptyStateOverlayView.superview != nil {
+                    emptyStateOverlayView.removeFromSuperview()
                 }
-                self.emptyStateOverlayView = self.createEmptyStateOverlayView()
+                emptyStateOverlayView = createEmptyStateOverlayView()
                 break
             case .DownloadPanelFileWasDeleted:
-                guard let uuid = notification.windowUUID,
-                      uuid != self.windowUUID else { return }
+                guard let uuid = notificationWindowUUID,
+                      uuid != windowUUID else { return }
                 // If another window's download panel has deleted a file, ensure we refresh our table
-                self.reloadData()
+                reloadData()
             default:
                 break
             }

@@ -100,9 +100,7 @@ final class AccountStatusSetting: WithAccountSetting, Notifiable {
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .FirefoxAccountProfileChanged: updateAccount(notification: notification)
-        default: break
-        }
+        guard notification.name == .FirefoxAccountProfileChanged else { return }
+        updateAccount(notification: notification)
     }
 }

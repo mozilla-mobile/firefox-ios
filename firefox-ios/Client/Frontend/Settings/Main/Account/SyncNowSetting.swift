@@ -276,9 +276,7 @@ final class SyncNowSetting: WithAccountSetting, Notifiable {
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .ProfileDidFinishSyncing: stopRotateSyncIcon()
-        default: break
-        }
+        guard notification.name == .ProfileDidFinishSyncing else { return }
+        stopRotateSyncIcon()
     }
 }

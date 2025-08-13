@@ -175,14 +175,16 @@ final actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureF
 
     // MARK: - Notifiable
     nonisolated func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+        let notificationWindowUUID = notification.windowUUID
         Task { @MainActor in
-            switch notification.name {
+            switch notificationName {
             case .ShowHomepage,
                     .TabDataUpdated,
                     .TabsTrayDidClose,
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
-                guard let uuid = notification.windowUUID,
+                guard let uuid = notificationWindowUUID,
                     await uuid == windowUUID
                 else { return }
                 await updateTabsData()

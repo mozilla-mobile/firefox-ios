@@ -240,7 +240,6 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate, Not
         }
     }
 
-    @objc
     private func largeContentViewerInteractionDidChange() {
         setMinimumPressDuration()
     }
@@ -269,7 +268,9 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate, Not
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UILargeContentViewerInteraction.enabledStatusDidChangeNotification:
-            largeContentViewerInteractionDidChange()
+            Task { @MainActor in
+                largeContentViewerInteractionDidChange()
+            }
         default: break
         }
     }

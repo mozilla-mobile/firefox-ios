@@ -114,20 +114,25 @@ final class CreditCardTableViewController: UIViewController, Themeable, Notifiab
         tableView.reloadData()
     }
 
-    @objc
-    func didFinishAnnouncement(notification: Notification) {
-        if let userInfo = notification.userInfo,
-           let announcementText =  userInfo[UIAccessibility.announcementStringValueUserInfoKey] as? String {
-            let saveSuccessMessage: String = .CreditCard.SnackBar.SavedCardLabel
-            let updateSuccessMessage: String = .CreditCard.SnackBar.UpdatedCardLabel
-            let removeCardMessage: String = .CreditCard.SnackBar.RemovedCardLabel
-            if announcementText == saveSuccessMessage
-                || announcementText == updateSuccessMessage
-                || announcementText == removeCardMessage {
-                if let lastIndex = lastSelectedIndex, let lastSelectedCell = tableView.cellForRow(at: lastIndex) {
-                    UIAccessibility.post(notification: .layoutChanged, argument: lastSelectedCell)
-                }
-            }
+    @MainActor
+    func didFinishAnnouncement(text: String) {
+        let saveSuccessMessage: String = .CreditCard.SnackBar.SavedCardLabel
+        let updateSuccessMessage: String = .CreditCard.SnackBar.UpdatedCardLabel
+        let removeCardMessage: String = .CreditCard.SnackBar.RemovedCardLabel
+
+        if [saveSuccessMessage, updateSuccessMessage, removeCardMessage].contains(text),
+           let lastIndex = lastSelectedIndex,
+           let lastSelectedCell = tableView.cellForRow(at: lastIndex) {
+            UIAccessibility.post(notification: .layoutChanged, argument: lastSelectedCell)
+        }
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == UIAccessibility.announcementDidFinishNotification,
+        let text = notification.userInfo?[UIAccessibility.announcementStringValueUserInfoKey] as? String else { return }
+        Task { @MainActor in
+            didFinishAnnouncement(text: text)
         }
     }
 }
@@ -208,14 +213,5 @@ extension CreditCardTableViewController: UITableViewDelegate,
         hostingCell.isAccessibilityElement = true
         hostingCell.accessibilityIdentifier = "creditCardCell_\(indexPath.row)"
         return hostingCell
-    }
-
-    // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIAccessibility.announcementDidFinishNotification:
-            didFinishAnnouncement(notification: notification)
-        default: break
-        }
     }
 }
