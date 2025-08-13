@@ -107,6 +107,7 @@ class AnimatedGradientOutlineView: UIView,
     }
 
     func applyTheme(theme: any Theme) {
+        // TODO: FXIOS-13178 Clear for now, but eventually should remove
         gradientLayer.colors = [UIColor.clear, UIColor.clear]
     }
 }
