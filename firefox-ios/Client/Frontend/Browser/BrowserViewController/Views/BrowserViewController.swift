@@ -174,7 +174,7 @@ class BrowserViewController: UIViewController,
     }
 
     // BottomContainer stack view contains toolbar
-    private lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
+    lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
 
     // Alert content that appears on top of the content
     // ex: Find In Page, SnackBar from LoginsHelper
@@ -195,7 +195,7 @@ class BrowserViewController: UIViewController,
 
     private(set) lazy var scrollController: TabScrollHandlerProtocol = {
         if isTabScrollRefactoringEnabled {
-            return TabScrollHandler(windowUUID: windowUUID)
+            return TabScrollHandler(windowUUID: windowUUID, delegate: self)
         } else {
             return LegacyTabScrollController(windowUUID: windowUUID)
         }
@@ -1754,7 +1754,7 @@ class BrowserViewController: UIViewController,
         super.updateViewConstraints()
     }
 
-    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+    func adjustBottomContentStackView(_ remake: ConstraintMaker) {
         remake.left.equalTo(view.safeArea.left)
         remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
