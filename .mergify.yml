@@ -32,8 +32,10 @@ pull_request_rules:
     conditions:
       - author=github-actions[bot]
       - check-success=Bitrise
-      - files=Client.xcodeproj/project.pbxproj
-      - files=Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+      - files=firefox-ios/Client.xcodeproj/project.pbxproj
+      - files=firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+      - files=focus-ios/Blockzilla.xcodeproj/project.pbxproj
+      - files=focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     actions:
       review:
         type: APPROVE
