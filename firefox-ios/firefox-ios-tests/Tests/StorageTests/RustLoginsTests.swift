@@ -152,5 +152,6 @@ class RustLoginsTests: XCTestCase {
                 XCTFail("Add login failed")
             }
         }
+        wait(for: [expectation])
     }
 }
