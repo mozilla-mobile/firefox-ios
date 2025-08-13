@@ -1511,6 +1511,7 @@
 		C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */; };
 		C7F051582D9F098200EC52C0 /* ContextMenuTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */; };
 		C7F051692DB2F38000EC52C0 /* ContextMenuPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051682DB2F38000EC52C0 /* ContextMenuPreviewViewController.swift */; };
+		C7FA9AE62E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA9AE52E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift */; };
 		C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80685D026A0C93900DCD895 /* UserResearch.swift */; };
 		C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */; };
 		C80C11EE28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11ED28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift */; };
@@ -9445,6 +9446,7 @@
 		C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuTelemetry.swift; sourceTree = "<group>"; };
 		C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuTelemetryTests.swift; sourceTree = "<group>"; };
 		C7F051682DB2F38000EC52C0 /* ContextMenuPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPreviewViewController.swift; sourceTree = "<group>"; };
+		C7FA9AE52E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSectionLayoutProvider.swift; sourceTree = "<group>"; };
 		C80685D026A0C93900DCD895 /* UserResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResearch.swift; sourceTree = "<group>"; };
 		C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagManagerTests.swift; sourceTree = "<group>"; };
 		C80C11ED28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataTrackerTests.swift; sourceTree = "<group>"; };
@@ -12909,6 +12911,7 @@
 		8A7D08E12CAAF79F0035999C /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
+				C7FA9B672E4B9A13004F2CA1 /* Layout */,
 				8A7C125F2E01DB0600F2D7FA /* SearchBar */,
 				8A9E04172D4D07E30022ED90 /* Bookmark */,
 				8A6E63CD2D4A7FA60040D355 /* SectionHeader */,
@@ -12921,7 +12924,6 @@
 				8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */,
 				8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */,
 				8AD3AFC22D143EF000CFC887 /* HomepageDimensionImplementation.swift */,
-				8AA0A6642CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift */,
 				8AF347DC2CADD0E100624036 /* Redux */,
 			);
 			path = "Homepage Rebuild";
@@ -13895,6 +13897,15 @@
 				C714D7B52E4673A300FC02E6 /* ShortcutsLibraryDiffableDataSourceTests.swift */,
 			);
 			path = ShortcutsLibrary;
+			sourceTree = "<group>";
+		};
+		C7FA9B672E4B9A13004F2CA1 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				8AA0A6642CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift */,
+				C7FA9AE52E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift */,
+			);
+			path = Layout;
 			sourceTree = "<group>";
 		};
 		C80C11F228B3CD3E0062922A /* MockTests */ = {
@@ -18318,6 +18329,7 @@
 				AB9CBC022C53B64C00102610 /* TrackingProtectionAction.swift in Sources */,
 				0E456F152C541CB300EE93BF /* PasswordGeneratorViewController.swift in Sources */,
 				213BF7532AC21D1B00C53A64 /* TabDisplayPanelViewController.swift in Sources */,
+				C7FA9AE62E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift in Sources */,
 				434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */,
 				C88E7A5B2A0553510072E638 /* OnboardingLinkInfoModel.swift in Sources */,
 				2137785F297F3B1B00D01309 /* DownloadsPanelViewModel.swift in Sources */,

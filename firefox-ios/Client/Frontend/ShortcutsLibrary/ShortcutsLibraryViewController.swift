@@ -8,12 +8,21 @@ import Redux
 
 class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
+                                      FeatureFlaggable,
                                       StoreSubscriber,
                                       Themeable {
+    struct UX {
+        static let shortcutsSectionTopInset: CGFloat = 24
+    }
+
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: ShortcutsLibraryDiffableDataSource?
     private var shortcutsLibraryState: ShortcutsLibraryState
+
+    private var currentTheme: Theme {
+        themeManager.getCurrentTheme(for: windowUUID)
+    }
 
     // MARK: - Private constants
     private let logger: Logger
@@ -111,7 +120,7 @@ class ShortcutsLibraryViewController: UIViewController,
     // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
     }
 
     // MARK: - Setup + Layout
@@ -137,14 +146,34 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     private func configureCollectionView() {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
 
-        collectionView.backgroundColor = .lightGray
+        ShortcutsLibraryItem.cellTypes.forEach {
+            collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
+        }
+
+        collectionView.backgroundColor = .clear
         collectionView.delegate = self
 
         self.collectionView = collectionView
 
         view.addSubview(collectionView)
+    }
+
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { [weak self ](sectionIndex, environment)
+            -> NSCollectionLayoutSection? in
+            guard let self else { return nil }
+            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+            let numberOfTilesPerRow = homepageState?.topSitesState.numberOfTilesPerRow ?? 4
+            let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(
+                for: environment.traitCollection,
+                numberOfTilesPerRow: numberOfTilesPerRow
+            )
+            section.contentInsets.top = UX.shortcutsSectionTopInset
+            return section
+        }
+        return layout
     }
 
     private func configureDataSource() {
@@ -159,7 +188,32 @@ class ShortcutsLibraryViewController: UIViewController,
 
         dataSource = ShortcutsLibraryDiffableDataSource(
             collectionView: collectionView
-        ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+        ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
+            return self?.configureCell(for: item, at: indexPath)
+        }
+    }
+
+    private func configureCell(
+        for item: ShortcutsLibraryItem,
+        at indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        switch item {
+        case .shortcut(let site):
+            let isTopSitesRefreshEnabled = featureFlags.isFeatureEnabled(.hntTopSitesVisualRefresh, checking: .buildOnly)
+            let cellType: ReusableCell.Type = isTopSitesRefreshEnabled ? TopSiteCell.self : LegacyTopSiteCell.self
+
+            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
+                return UICollectionViewCell()
+            }
+
+            if let topSiteCell = topSiteCell as? TopSiteCell {
+                topSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: nil)
+                return topSiteCell
+            } else if let legacyTopSiteCell = topSiteCell as? LegacyTopSiteCell {
+                legacyTopSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: nil)
+                return legacyTopSiteCell
+            }
+
             return UICollectionViewCell()
         }
     }
