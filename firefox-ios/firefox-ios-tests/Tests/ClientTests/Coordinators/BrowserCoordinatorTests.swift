@@ -292,6 +292,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertNotNil(screenshotService.screenshotableView)
     }
 
+    func testShowWebview_popsShortcutLibrary() {
+        let webview = WKWebView()
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showShortcutsLibrary()
+
+        subject.show(webView: webview)
+
+        XCTAssertEqual(mockRouter.popViewControllerCalled, 1)
+    }
+
     // MARK: - BrowserNavigationHandler
 
     func testShowSettings() throws {
