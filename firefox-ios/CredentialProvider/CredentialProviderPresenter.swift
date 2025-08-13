@@ -8,7 +8,10 @@ import AuthenticationServices
 
 let CredentialProviderAuthenticationDelay = 0.25
 
-final class CredentialProviderPresenter {
+// TODO: FXIOS-13149 this class is marked as unchecked sendable because
+// of a weak view reference. This follow up ticket is to see if this
+// actually makes sense.
+final class CredentialProviderPresenter: @unchecked Sendable {
     weak var view: CredentialProviderViewProtocol?
     public let profile: Profile
     private let appAuthenticator: AppAuthenticator
@@ -34,7 +37,6 @@ final class CredentialProviderPresenter {
 
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
         let maxRetries = 3
-        var currentRetry = 0
 
         guard profile.logins.reopenIfClosed() == nil else {
             cancel(with: .failed)
@@ -43,7 +45,7 @@ final class CredentialProviderPresenter {
 
         guard let id = credentialIdentity.recordIdentifier else { return }
 
-        func attemptProvision() {
+        func attemptProvision(currentRetry: Int) {
             profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
                 switch result {
                 case .failure:
@@ -54,14 +56,14 @@ final class CredentialProviderPresenter {
                             withSelectedCredential: passwordCredential)
                     } else {
                         if currentRetry < maxRetries {
-                            currentRetry += 1
+                            let updatedRetry = currentRetry + 1
                             self?.logger.log(
-                                "Failed to retrieve credentials. Will retry. Retry #\(currentRetry)",
+                                "Failed to retrieve credentials. Will retry. Retry #\(updatedRetry)",
                                 level: .warning,
                                 category: .autofill
                             )
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                attemptProvision()
+                                attemptProvision(currentRetry: updatedRetry)
                             }
                         } else {
                             self?.logger.log(
@@ -76,7 +78,7 @@ final class CredentialProviderPresenter {
             })
         }
 
-        attemptProvision()
+        attemptProvision(currentRetry: 0)
     }
 
     func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
@@ -99,8 +101,9 @@ final class CredentialProviderPresenter {
                             sortedLogins.insert(element, at: 0)
                         }
                     }
-                    let dataSource = sortedLogins.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
+
                     DispatchQueue.main.async {
+                        let dataSource = sortedLogins.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
                         self?.view?.show(itemList: dataSource)
                     }
                 }
