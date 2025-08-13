@@ -94,8 +94,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerGradientURL: Gradient { base.layerGradientURL }
     var layerSurfaceLow: UIColor { base.layerSurfaceLow }
     var layerSurfaceMedium: UIColor { base.layerSurfaceMedium }
-    var layerSummary: UIColor { base.layerSummary }
-    var layerSummaryGradient: Gradient { base.layerSummaryGradient }
+    var layerSummary: Gradient { base.layerSummary }
 
     var layerRatingA: UIColor { base.layerRatingA }
     var layerRatingASubdued: UIColor { base.layerRatingASubdued }
@@ -150,6 +149,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
 
     var shadowSubtle: UIColor { base.shadowSubtle }
     var shadowStrong: UIColor { base.shadowStrong }
+    var shadowBorder: UIColor { base.shadowBorder }
 
     init(base: ThemeColourPalette, overrides: PartialOverrides) {
         self.base = base

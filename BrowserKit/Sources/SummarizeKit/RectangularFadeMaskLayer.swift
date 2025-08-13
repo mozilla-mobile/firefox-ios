@@ -11,9 +11,11 @@ extension CGPoint {
     static let bottomCenter = CGPoint(x: 0.5, y: 1.0)
 }
 
-class RectangularFadeMaskLayer: CALayer {
+/// A CALayer subclass that creates a rectangular fading mask
+/// using two CAGradientLayers (horizontal and vertical).
+final class RectangularFadeMaskLayer: CALayer {
     private struct UX {
-        static let defaultEdgeFade: CGFloat = 130.0
+        static let defaultEdgeFade: CGFloat = 50.0
         static let fadeDownAnimationDuration: CFTimeInterval = 0.5
         static let filterMode = "multiplyBlendMode"
         static let colorsKeyPath = "colors"
@@ -72,21 +74,5 @@ class RectangularFadeMaskLayer: CALayer {
             1.0
         ]
         maskLayer.frame = bounds
-    }
-
-    /// Animates the fade layer down by moving the clear area from the center to the bottom of the layer's bound.
-    func animateFadeDown() {
-        let animation = CABasicAnimation(keyPath: UX.colorsKeyPath)
-        animation.fromValue = vertical.colors
-        animation.toValue = [
-            UIColor.white.cgColor,
-            UIColor.white.cgColor,
-            UIColor.clear.cgColor,
-            UIColor.white.cgColor,
-        ]
-        animation.duration = UX.fadeDownAnimationDuration
-        animation.fillMode = .forwards
-        animation.isRemovedOnCompletion = false
-        vertical.add(animation, forKey: UX.fadeDownAnimationKey)
     }
 }
