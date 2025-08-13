@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Common
 
+@MainActor
 protocol TabScrollHandlerProtocol: AnyObject {
     var zoomPageBar: ZoomPageBar? { get set }
     var tab: Tab? { get set }
@@ -135,11 +136,11 @@ final class TabScrollHandler: NSObject,
         // recommended work around here.
         guard Thread.isMainThread else {
             logger.log(
-                "TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.",
+                "TabScrollHandler was not deallocated on the main thread. KVOs were not cleaned up.",
                 level: .fatal,
                 category: .lifecycle
             )
-            assertionFailure("TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.")
+            assertionFailure("TabScrollHandler was not deallocated on the main thread. KVOs were not cleaned up.")
             return
         }
 
@@ -283,16 +284,18 @@ final class TabScrollHandler: NSObject,
         scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
     }
 
-    override func observeValue(
+    override nonisolated func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
         change: [NSKeyValueChangeKey: Any]?,
         context: UnsafeMutableRawPointer?
     ) {
         if keyPath == "contentSize" {
-            guard shouldUpdateUIWhenScrolling, toolbarDisplayState.isExpanded else { return }
+            ensureMainThread { [weak self] in
+                guard let self, shouldUpdateUIWhenScrolling, toolbarDisplayState.isExpanded else { return }
 
-            showToolbars(animated: true)
+                showToolbars(animated: true)
+            }
         }
     }
 
