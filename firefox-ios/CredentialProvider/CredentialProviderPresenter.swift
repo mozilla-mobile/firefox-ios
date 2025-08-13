@@ -37,7 +37,6 @@ final class CredentialProviderPresenter: @unchecked Sendable {
 
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
         let maxRetries = 3
-        let currentRetry = 0
 
         guard profile.logins.reopenIfClosed() == nil else {
             cancel(with: .failed)
@@ -79,7 +78,7 @@ final class CredentialProviderPresenter: @unchecked Sendable {
             })
         }
 
-        attemptProvision(currentRetry: currentRetry)
+        attemptProvision(currentRetry: 0)
     }
 
     func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {

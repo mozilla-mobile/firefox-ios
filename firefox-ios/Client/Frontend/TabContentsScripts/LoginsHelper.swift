@@ -32,7 +32,7 @@ struct LoginItem: Codable {
     var hostname: String
 }
 
-// TODO: FXIOS Make LoginsHelper actually sendable
+// TODO: FXIOS-13180 Make LoginsHelper actually sendable
 class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
     private weak var tab: Tab?
     private let profile: Profile
