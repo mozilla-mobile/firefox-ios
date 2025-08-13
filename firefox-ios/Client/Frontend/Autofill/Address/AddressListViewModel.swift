@@ -102,13 +102,13 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     func fetchAddresses() {
         // Assuming profile is a class-level variable
         addressProvider.listAllAddresses { [weak self] storedAddresses, error in
-            ensureMainThread { [weak self] in
-                guard let self else { return }
+            guard let self else { return }
+            ensureMainThread {
                 if let addresses = storedAddresses {
                     self.addresses = addresses
-                    showSection = !addresses.isEmpty
+                    self.showSection = !addresses.isEmpty
                 } else if let error = error {
-                    logger.log(
+                    self.logger.log(
                         "Error fetching addresses",
                         level: .warning,
                         category: .autofill,
