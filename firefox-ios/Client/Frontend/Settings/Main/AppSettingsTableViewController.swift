@@ -523,7 +523,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         parentCoordinator?.openDebugTestTabs(count: 50)
     }
 
-    // Adds 20 random shortcuts to the top sites / shortcuts library
+    /// Adds 20 random shortcuts to the top sites / shortcuts library
     func pressedAddShortcuts() {
         guard let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt"),
               let fileContents = try? String(contentsOfFile: filePath, encoding: .utf8) else { return }
