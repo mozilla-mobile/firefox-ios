@@ -7,7 +7,7 @@
 public struct UserSummarizerConfigSource: SummarizerConfigSourceProtocol {
     public init() {}
 
-    public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) async -> SummarizerConfig? {
+    public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {
         return nil
     }
 }

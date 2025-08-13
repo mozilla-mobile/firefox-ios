@@ -4,5 +4,5 @@
 
 /// An interface that defines the contract for loading summarizer configurations from various sources.
 public protocol SummarizerConfigSourceProtocol {
-    func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) async -> SummarizerConfig?
+    func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig?
 }

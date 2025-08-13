@@ -9,7 +9,7 @@ public final class MockSummarizerConfigSource: SummarizerConfigSourceProtocol {
         self.configToReturn = configToReturn
     }
 
-    public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) async -> SummarizerConfig? {
+    public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {
         return configToReturn
     }
 }

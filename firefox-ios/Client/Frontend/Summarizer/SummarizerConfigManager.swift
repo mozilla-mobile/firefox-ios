@@ -22,11 +22,11 @@ class SummarizerConfigManager {
         self.sources = sources
     }
 
-    func getConfig(_ summarizer: SummarizerModel, contentType: SummarizationContentType) async -> SummarizerConfig {
+    func getConfig(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig {
         var mergedConfig = SummarizerConfig(instructions: "", options: [:])
         // Merge configs in reverse order (so higher priority overrides lower)
         for source in sources.reversed() {
-            if let config = await source.load(summarizer, contentType: contentType) {
+            if let config = source.load(summarizer, contentType: contentType) {
                 mergedConfig = config.merging(with: mergedConfig)
             }
         }

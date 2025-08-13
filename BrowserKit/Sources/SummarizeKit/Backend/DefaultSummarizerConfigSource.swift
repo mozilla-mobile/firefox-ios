@@ -7,7 +7,7 @@
 public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {
     public init() {}
 
-    public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) async -> SummarizerConfig? {
+    public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {
         switch (contentType, summarizer) {
         case (.generic, .appleSummarizer):
             return SummarizerConfig(instructions: SummarizerModelInstructions.appleInstructions, options: ["temperature": 0.1])
