@@ -1,0 +1,27 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+/// A configuration container for a summarizer.
+public struct SummarizerConfig {
+    public let instructions: String
+    /// NOTE: options is intentionally untyped to allow for flexibility in the configuration.
+    /// There are two main reasons for this the hosted model that is using the OpenAI-like API has a lot of
+    /// different parameters that can be tuned, and we want to allow for easy experimentation with these parameters.
+    /// The Apple foundation model is a new API that may introduce additional parameters or change existing ones.
+    /// Options can include things like temperature, max tokens, and other model-specific settings.
+    public let options: [String: Any]
+
+    public init(instructions: String, options: [String: Any]) {
+        self.instructions = instructions
+        self.options = options
+    }
+
+    /// Returns a new config by merging the current config with another config.
+    /// The current config takes precedence over the other config.
+    public func merging(with other: SummarizerConfig) -> SummarizerConfig {
+        let mergedInstructions = self.instructions.isEmpty ? other.instructions : self.instructions
+        let mergedOptions = self.options.merging(other.options) { current, _ in current }
+        return SummarizerConfig(instructions: mergedInstructions, options: mergedOptions)
+    }
+}
