@@ -32,6 +32,8 @@ class MockDebugSettingsDelegate: DebugSettingsDelegate {
 
     func pressedDebugFeatureFlags() {}
 
+    func pressedAddShortcuts() {}
+
     func askedToShow(alert: AlertController) {
         askedToShowAlertCalled += 1
     }
