@@ -593,7 +593,7 @@ fileprivate struct FfiConverterData: FfiConverterRustBuffer {
  * later, while a desktop on a fast link might download the entire dataset
  * on the first launch.
  */
-public protocol SuggestStoreProtocol: AnyObject {
+public protocol SuggestStoreProtocol: AnyObject, Sendable {
     
     /**
      * Return whether any suggestions have been dismissed.
@@ -751,6 +751,9 @@ open class SuggestStore: SuggestStoreProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1061,7 +1064,7 @@ public func FfiConverterTypeSuggestStore_lower(_ value: SuggestStore) -> UnsafeM
  * Using a builder is preferred to calling the constructor directly since it's harder to confuse
  * the data_path and cache_path strings.
  */
-public protocol SuggestStoreBuilderProtocol: AnyObject {
+public protocol SuggestStoreBuilderProtocol: AnyObject, Sendable {
     
     func build() throws  -> SuggestStore
     
@@ -1108,6 +1111,9 @@ open class SuggestStoreBuilder: SuggestStoreBuilderProtocol, @unchecked Sendable
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -2547,6 +2553,9 @@ extension AmpMatchingStrategy: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
@@ -2621,6 +2630,9 @@ public func FfiConverterTypeGeonameMatchType_lower(_ value: GeonameMatchType) ->
 
 
 extension GeonameMatchType: Equatable, Hashable {}
+
+
+
 
 
 
@@ -2724,6 +2736,9 @@ extension GeonameType: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -2812,11 +2827,14 @@ extension InterruptKind: Equatable, Hashable {}
 
 
 
+
+
+
 /**
  * The error type for all Suggest component operations. These errors are
  * exposed to your application, which should handle them as needed.
  */
-public enum SuggestApiError {
+public enum SuggestApiError: Swift.Error {
 
     
     
@@ -2913,11 +2931,14 @@ extension SuggestApiError: Equatable, Hashable {}
 
 
 
+
 extension SuggestApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 // Note that we don't yet support `indirect` for enums.
@@ -2998,6 +3019,9 @@ extension SuggestProviderConfig: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3006,7 +3030,7 @@ extension SuggestProviderConfig: Equatable, Hashable {}
 
 public enum Suggestion {
     
-    case amp(title: String, url: String, rawUrl: String, icon: Data?, iconMimetype: String?, fullKeyword: String, blockId: Int64, advertiser: String, iabCategory: String, impressionUrl: String, clickUrl: String, rawClickUrl: String, score: Double, ftsMatchInfo: FtsMatchInfo?
+    case amp(title: String, url: String, rawUrl: String, icon: Data?, iconMimetype: String?, fullKeyword: String, blockId: Int64, advertiser: String, iabCategory: String, categories: [Int32], impressionUrl: String, clickUrl: String, rawClickUrl: String, score: Double, ftsMatchInfo: FtsMatchInfo?
     )
     case wikipedia(title: String, url: String, icon: Data?, iconMimetype: String?, fullKeyword: String
     )
@@ -3045,7 +3069,7 @@ public struct FfiConverterTypeSuggestion: FfiConverterRustBuffer {
         let variant: Int32 = try readInt(&buf)
         switch variant {
         
-        case 1: return .amp(title: try FfiConverterString.read(from: &buf), url: try FfiConverterString.read(from: &buf), rawUrl: try FfiConverterString.read(from: &buf), icon: try FfiConverterOptionData.read(from: &buf), iconMimetype: try FfiConverterOptionString.read(from: &buf), fullKeyword: try FfiConverterString.read(from: &buf), blockId: try FfiConverterInt64.read(from: &buf), advertiser: try FfiConverterString.read(from: &buf), iabCategory: try FfiConverterString.read(from: &buf), impressionUrl: try FfiConverterString.read(from: &buf), clickUrl: try FfiConverterString.read(from: &buf), rawClickUrl: try FfiConverterString.read(from: &buf), score: try FfiConverterDouble.read(from: &buf), ftsMatchInfo: try FfiConverterOptionTypeFtsMatchInfo.read(from: &buf)
+        case 1: return .amp(title: try FfiConverterString.read(from: &buf), url: try FfiConverterString.read(from: &buf), rawUrl: try FfiConverterString.read(from: &buf), icon: try FfiConverterOptionData.read(from: &buf), iconMimetype: try FfiConverterOptionString.read(from: &buf), fullKeyword: try FfiConverterString.read(from: &buf), blockId: try FfiConverterInt64.read(from: &buf), advertiser: try FfiConverterString.read(from: &buf), iabCategory: try FfiConverterString.read(from: &buf), categories: try FfiConverterSequenceInt32.read(from: &buf), impressionUrl: try FfiConverterString.read(from: &buf), clickUrl: try FfiConverterString.read(from: &buf), rawClickUrl: try FfiConverterString.read(from: &buf), score: try FfiConverterDouble.read(from: &buf), ftsMatchInfo: try FfiConverterOptionTypeFtsMatchInfo.read(from: &buf)
         )
         
         case 2: return .wikipedia(title: try FfiConverterString.read(from: &buf), url: try FfiConverterString.read(from: &buf), icon: try FfiConverterOptionData.read(from: &buf), iconMimetype: try FfiConverterOptionString.read(from: &buf), fullKeyword: try FfiConverterString.read(from: &buf)
@@ -3077,7 +3101,7 @@ public struct FfiConverterTypeSuggestion: FfiConverterRustBuffer {
         switch value {
         
         
-        case let .amp(title,url,rawUrl,icon,iconMimetype,fullKeyword,blockId,advertiser,iabCategory,impressionUrl,clickUrl,rawClickUrl,score,ftsMatchInfo):
+        case let .amp(title,url,rawUrl,icon,iconMimetype,fullKeyword,blockId,advertiser,iabCategory,categories,impressionUrl,clickUrl,rawClickUrl,score,ftsMatchInfo):
             writeInt(&buf, Int32(1))
             FfiConverterString.write(title, into: &buf)
             FfiConverterString.write(url, into: &buf)
@@ -3088,6 +3112,7 @@ public struct FfiConverterTypeSuggestion: FfiConverterRustBuffer {
             FfiConverterInt64.write(blockId, into: &buf)
             FfiConverterString.write(advertiser, into: &buf)
             FfiConverterString.write(iabCategory, into: &buf)
+            FfiConverterSequenceInt32.write(categories, into: &buf)
             FfiConverterString.write(impressionUrl, into: &buf)
             FfiConverterString.write(clickUrl, into: &buf)
             FfiConverterString.write(rawClickUrl, into: &buf)
@@ -3185,6 +3210,9 @@ public func FfiConverterTypeSuggestion_lower(_ value: Suggestion) -> RustBuffer 
 
 
 extension Suggestion: Equatable, Hashable {}
+
+
+
 
 
 
@@ -3302,6 +3330,9 @@ extension SuggestionProvider: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -3369,6 +3400,9 @@ public func FfiConverterTypeYelpSubjectType_lower(_ value: YelpSubjectType) -> R
 
 
 extension YelpSubjectType: Equatable, Hashable {}
+
+
+
 
 
 
@@ -3705,6 +3739,31 @@ fileprivate struct FfiConverterOptionTypeJsonValue: FfiConverterRustBuffer {
         case 1: return try FfiConverterTypeJsonValue.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceInt32: FfiConverterRustBuffer {
+    typealias SwiftType = [Int32]
+
+    public static func write(_ value: [Int32], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterInt32.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [Int32] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [Int32]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterInt32.read(from: &buf))
+        }
+        return seq
     }
 }
 
