@@ -57,6 +57,7 @@ class JSPromptAlertController: UIAlertController {
 }
 
 protocol JSAlertInfo {
+    @MainActor
     func alertController() -> JSPromptAlertController
     func cancel()
     func handleAlertDismissal(_ result: Any?)
@@ -199,6 +200,7 @@ extension TextInputAlert: JavaScriptAlertProtocol {
 /// Show a title for a JavaScript Panel (alert) based on the WKFrameInfo. On iOS9 we will use the new securityOrigin
 /// and on iOS 8 we will fall back to the request URL. If the request URL is nil, which happens for JavaScript pages,
 /// we fall back to "JavaScript" as a title.
+@MainActor
 private func titleForJavaScriptPanelInitiatedByFrame(_ frame: WKFrameInfo) -> String {
     var title = "\(frame.securityOrigin.`protocol`)://\(frame.securityOrigin.host)"
     if frame.securityOrigin.port != 0 {

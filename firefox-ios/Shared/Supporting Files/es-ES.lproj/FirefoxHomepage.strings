@@ -16,6 +16,9 @@
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "No dejar rastro en este dispositivo";
 
+/* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
+"FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Buscar o escribir dirección";
+
 /* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
 "FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "Fijado: %@";
 
