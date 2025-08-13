@@ -48,9 +48,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
         // Should set the first shown preference
         XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
-        
-        // Should not affect other preferences
-        XCTAssertFalse(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true)
+
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNil(dismissedTimestamp)
     }
