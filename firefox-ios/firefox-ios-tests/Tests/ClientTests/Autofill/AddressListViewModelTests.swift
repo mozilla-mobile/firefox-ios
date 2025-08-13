@@ -279,14 +279,14 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
 
     func deleteAddress(
         id: String,
-        completion: @escaping (Result<Void, any Error>) -> Void
+        completion: @escaping @Sendable (Result<Void, any Error>) -> Void
     ) {
         deleteAddressesCalled = true
     }
 
     func addAddress(
         address: UpdatableAddressFields,
-        completion: @escaping (Result<Address, Error>) -> Void
+        completion: @escaping @Sendable (Result<Address, Error>) -> Void
     ) {
         if let result = mockSaveAddressResult {
             completion(result)
@@ -296,14 +296,14 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
     func updateAddress(
         id: String,
         address: MozillaAppServices.UpdatableAddressFields,
-        completion: @escaping (Result<Void, any Error>) -> Void
+        completion: @escaping @Sendable (Result<Void, any Error>) -> Void
     ) {
         if let result = mockEditAddressResult {
             completion(result)
         }
     }
 
-    func listAllAddresses(completion: @escaping ([Address]?, Error?) -> Void) {
+    func listAllAddresses(completion: @escaping @Sendable ([Address]?, Error?) -> Void) {
         listAllAddressesCalled = true
         if let result = mockListAllAddressesResult {
             switch result {
