@@ -95,6 +95,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         $0.layer.shadowOffset = UX.tabSnapshotShadowOffset
         $0.layer.shadowOpacity = UX.tabSnapshotShadowOpacity
         $0.layer.shadowRadius = UX.tabSnapshotShadowRadius
+        $0.isUserInteractionEnabled = true
+        $0.isAccessibilityElement = true
     }
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
     private lazy var gradient = AnimatedGradientOutlineView(frame: view.bounds)
@@ -227,18 +229,16 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
 
+        tabSnapshotContainer.accessibilityIdentifier = viewModel.loadingA11yId
+        tabSnapshotContainer.accessibilityLabel = viewModel.loadingA11yLabel
+
         closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
         closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
         closeButton.setImage(UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
                              for: .normal)
         closeButton.addAction(
             UIAction(handler: { [weak self] _ in
-                UIView.animate(withDuration: UX.panEndAnimationDuration) {
-                    self?.tabSnapshotContainer.transform = .identity
-                    self?.tabSnapshot.layer.cornerRadius = 0.0
-                } completion: { _ in
-                    self?.dismiss(animated: true)
-                }
+                self?.triggerDismissingAnimation()
             }),
             for: .touchUpInside
         )
@@ -247,6 +247,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func setupLayout() {
+        gradient.isUserInteractionEnabled = false
         setupLoadingBackgroundGradient()
         view.addSubviews(
             tabSnapshotContainer,
@@ -351,8 +352,9 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         impact.prepare()
         impact.impactOccurred()
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        tabSnapshotContainer.isUserInteractionEnabled = true
-        tabSnapshotContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan)))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.onTabSnapshotPan))
+        self.tabSnapshotContainer.addGestureRecognizer(panGesture)
+
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
@@ -499,6 +501,20 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         }
     }
 
+    @objc
+    private func onTabSnapshotTap(_ gesture: UITapGestureRecognizer) {
+        triggerDismissingAnimation()
+    }
+
+    private func triggerDismissingAnimation() {
+        UIView.animate(withDuration: UX.panEndAnimationDuration) { [weak self] in
+            self?.tabSnapshotContainer.transform = .identity
+            self?.tabSnapshot.layer.cornerRadius = 0.0
+        } completion: { [weak self] _ in
+            self?.dismiss(animated: true)
+        }
+    }
+
     private func handleTabPanChanged(tabSnapshotTransform: CGAffineTransform, translationY: CGFloat) {
         tabSnapshotContainer.transform = tabSnapshotTransform.translatedBy(x: 0.0, y: translationY)
         if translationY < 0 {
@@ -528,6 +544,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         guard flag,
               let animation = anim as? CABasicAnimation,
               animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
+        tabSnapshotContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTabSnapshotTap)))
         summarize()
     }
 
