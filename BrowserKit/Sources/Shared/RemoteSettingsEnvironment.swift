@@ -5,7 +5,7 @@
 import enum MozillaAppServices.RemoteSettingsServer
 
 /// NOTE: It would much cleaner to use RemoteSettingsServer if it had a public initializer.
-/// TODO(FXIOS-xxxx): Add public initializer from rawValue to RemoteSettingsServer.
+/// TODO(FXIOS-13189): Add public initializer from rawValue to RemoteSettingsServer.
 public enum RemoteSettingsEnvironment: String {
     case prod
     case stage
