@@ -988,7 +988,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         else { return actions }
 
         let isSummarizeFeatureForToolbarOn = DefaultSummarizerNimbusUtils().isToolbarButtonEnabled
-        if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active {
+        if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active, !UIWindow.isLandscape {
             actions.append(summaryAction)
         } else if readerModeState == .active || readerModeState == .available {
             let readerModeAction = ToolbarActionConfiguration(
