@@ -266,4 +266,19 @@ class MenuBuilderHelper {
         builder.insertSibling(toolsMenu, afterMenu: MenuIdentifiers.bookmarks)
         builder.insertChild(windowMenu, atStartOfMenu: .window)
     }
+
+    private func makeApplicationMenu() -> UIMenu {
+        return UIMenu(
+            options: .displayInline,
+            children: [
+                UIKeyCommand(
+                    title: .AppSettingsTitle,
+                    action: #selector(BrowserViewController.openSettingsKeyCommand),
+                    input: ",",
+                    modifierFlags: .command,
+                    discoverabilityTitle: .AppSettingsTitle
+                )
+            ]
+        )
+    }
 }
