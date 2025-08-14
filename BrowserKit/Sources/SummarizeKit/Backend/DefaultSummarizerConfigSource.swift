@@ -7,8 +7,8 @@
 public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {
     public init() {}
 
-    static let appleBaseOptions: [String: AnyHashable] = [ "temperature": 0.1 ]
-    static let liteLLMBaseOptions: [String: AnyHashable] = [
+    private static let appleBaseOptions: [String: AnyHashable] = [ "temperature": 0.1 ]
+    private static let liteLLMBaseOptions: [String: AnyHashable] = [
         "temperature": 0.1,
         "top_p": 0.01,
         "max_tokens": LiteLLMConfig.maxTokens,

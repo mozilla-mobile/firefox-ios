@@ -6,9 +6,10 @@
 public struct SummarizerConfig: Equatable {
     public let instructions: String
     /// NOTE: options is intentionally untyped to allow for flexibility in the configuration.
-    /// There are two main reasons for this the hosted model that is using the OpenAI-like API has a lot of
-    /// different parameters that can be tuned, and we want to allow for easy experimentation with these parameters.
-    /// The Apple foundation model is a new API that may introduce additional parameters or change existing ones.
+    /// There are two main reasons for this. 
+    /// 1. The hosted model that is using an OpenAI-like API that has a lot of different parameters that can be tuned, 
+    ///    and we want to allow for easy experimentation with these parameters.
+    /// 2. The Apple foundation model is a new API that may introduce additional parameters or change existing ones.
     /// Options can include things like temperature, max tokens, and other model-specific settings.
     public let options: [String: AnyHashable]
     public static let defaultConfig =

@@ -6,7 +6,7 @@ import SummarizeKit
 /// An implementation of the SummarizerConfigSourceProtocol that retrieves configurations from remote settings.
 /// NOTE: This file should be under SummarizeKit near the other source implementations.
 /// Since all of RS classes are in Client, we can't move it there yet.
-/// TODO(FXIOS-xxxx): Move all the needed RS typedefs to BrowserKit so we can move this file to SummarizeKit.
+/// TODO(FXIOS-13186): Move all the needed RS typedefs to BrowserKit so we can move this file to SummarizeKit.
 struct RemoteSummarizerConfigSource: SummarizerConfigSourceProtocol {
     func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {
         return ASSummarizerRemoteConfig()?.fetchSummarizerConfig(summarizer, for: contentType)
