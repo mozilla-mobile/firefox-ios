@@ -134,7 +134,7 @@ class MenuBuilderHelper {
         builder.replace(menu: .find, with: makeFindMenu())
         builder.remove(menu: .font)
         builder.insertChild(makeViewMenu(), atStartOfMenu: .view)
-        builder.insertSibling(historyMenu, afterMenu: .view)
+        builder.insertSibling(makeHistoryMenu(), afterMenu: .view)
         builder.insertSibling(bookmarksMenu, afterMenu: MenuIdentifiers.history)
         builder.insertSibling(toolsMenu, afterMenu: MenuIdentifiers.bookmarks)
         builder.insertChild(windowMenu, atStartOfMenu: .window)
