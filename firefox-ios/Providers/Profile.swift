@@ -696,10 +696,11 @@ open class BrowserProfile: Profile,
     }()
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
-        let useStaging = prefs.boolForKey(PrefsKeys.RemoteSettings.useQAStagingServerForRemoteSettings) == true
-        let server = useStaging ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-        let bucketName = (server == .prod ? "main" : "main-preview")
-        let config = RemoteSettingsConfig2(server: server,
+        let remoteSettingsEnvironmentKey = prefs.stringForKey(PrefsKeys.RemoteSettings.remoteSettingsEnvironment) ?? ""
+        let remoteSettingsEnvironment = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
+        let remoteSettingsServer = remoteSettingsEnvironment.toRemoteSettingsServer()
+        let bucketName = (remoteSettingsServer == .prod ? "main" : "main-preview")
+        let config = RemoteSettingsConfig2(server: remoteSettingsServer,
                                            bucketName: bucketName,
                                            appContext: remoteSettingsAppContext())
 
