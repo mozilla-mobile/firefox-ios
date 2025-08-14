@@ -214,7 +214,7 @@ class EditAddressViewController: UIViewController,
             title: String.Addresses.Settings.Edit.RemoveButtonTitle,
             style: .destructive,
             handler: { [weak self] _ in
-                self?.model.removeConfimationButtonTap()
+                self?.model.removeConfirmationButtonTap()
             }
         ))
 

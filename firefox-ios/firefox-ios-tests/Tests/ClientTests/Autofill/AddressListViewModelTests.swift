@@ -104,19 +104,18 @@ final class AddressListViewModelTests: XCTestCase {
 
         viewModel
             .$addresses
-        // Drop first to ignore the initial value
-            .dropFirst()
             .sink { value in
                 XCTAssertEqual(value, addresses)
+                print("\(value)")
                 addressesExpectation.fulfill()
             }
             .store(in: &cancellables)
 
         viewModel
             .$showSection
-            .dropFirst()
             .sink { value in
                 XCTAssertTrue(value)
+                print("\(value)")
                 showSectionExpectation.fulfill()
             }
             .store(in: &cancellables)
@@ -196,7 +195,7 @@ final class AddressListViewModelTests: XCTestCase {
             .store(in: &cancellables)
     }
 
-    func testTapSaveAddressScreenDismissScreenAndCallesAddressFetching() {
+    func testTapSaveAddressScreenDismissScreenAndCallsAddressFetching() {
         let address = dummyAddresses[0]
         mockAutofill.mockSaveAddressResult = .success(address)
         viewModel.saveAction = { completion in
@@ -213,7 +212,7 @@ final class AddressListViewModelTests: XCTestCase {
                 email: "john.doe@example.com"
             ))
         }
-        let dismissSectionAddExpectation = XCTestExpectation(description: "Dimiss add section")
+        let dismissSectionAddExpectation = XCTestExpectation(description: "Dismiss add section")
         let newAddressesSectionExpectation = XCTestExpectation(description: "New address loaded")
 
         viewModel.addAddressButtonTap()
@@ -238,7 +237,7 @@ final class AddressListViewModelTests: XCTestCase {
             .store(in: &cancellables)
     }
 
-    func testTappingOnAddressAndTapCancelDissmissesEditScreen() {
+    func testTappingOnAddressAndTapCancelDismissesEditScreen() {
         let address = dummyAddresses[0]
 
         viewModel.addressTapped(address)
@@ -263,7 +262,7 @@ final class AddressListViewModelTests: XCTestCase {
         viewModel.editButtonTap()
         XCTAssertTrue(viewModel.isEditMode)
 
-        viewModel.removeConfimationButtonTap()
+        viewModel.removeConfirmationButtonTap()
         XCTAssertTrue(mockAutofill.deleteAddressesCalled)
     }
 }

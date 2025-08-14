@@ -276,7 +276,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
         ))
     }
 
-    func removeConfimationButtonTap() {
+    func removeConfirmationButtonTap() {
         if case .edit(let address) = destination {
             removeLocal(address: address)
         }
