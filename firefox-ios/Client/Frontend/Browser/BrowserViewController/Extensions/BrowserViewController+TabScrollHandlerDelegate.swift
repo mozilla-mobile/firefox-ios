@@ -2,45 +2,44 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import SnapKit
+
 extension BrowserViewController: TabScrollHandler.Delegate {
     // TODO: Add bounce effect logic afterwards
     func startAnimatingToolbar(displayState: TabScrollHandler.ToolbarDisplayState) {}
+
     func showToolbar() {
-        overKeyboardContainer.snp.remakeConstraints { make in
-            make.bottom.equalTo(bottomContainer.snp.top)
-            if !isBottomSearchBar, zoomPageBar != nil {
-                make.height.greaterThanOrEqualTo(0)
-            } else if !isBottomSearchBar {
-                make.height.equalTo(0)
-            }
-            make.leading.trailing.equalTo(view)
-        }
-
-        bottomContainer.snp.remakeConstraints { make in
-            make.bottom.equalTo(view.snp.bottom)
-            make.leading.trailing.equalTo(view)
-        }
-
-        bottomContentStackView.snp.remakeConstraints { remake in
-            adjustBottomContentStackView(remake)
+        if isBottomSearchBar {
+            updateBottomToolbar(bottomContainerOffset: 0,
+                                overKeyboardContainerOffset: 0)
+        } else {
+            updateTopToolbar(topOffset: 0, alpha: 1)
         }
     }
 
     func hideToolbar() {
-        bottomContainer.snp.remakeConstraints { make in
-            make.top.equalTo(view.snp.bottom)
-            make.height.equalTo(0)
-            make.leading.trailing.equalTo(view)
+        if isBottomSearchBar {
+            updateBottomToolbar(bottomContainerOffset: bottomContainer.frame.height,
+                                overKeyboardContainerOffset: overKeyboardContainer.frame.height)
+        } else {
+            updateTopToolbar(topOffset: -header.frame.height, alpha: 0)
         }
+    }
 
-        overKeyboardContainer.snp.remakeConstraints { make in
-            make.bottom.equalTo(bottomContainer.snp.top)
-            make.height.equalTo(0)
-            make.leading.trailing.equalTo(view)
-        }
+    // MARK: - Helper private functions
 
-        bottomContentStackView.snp.remakeConstraints { remake in
-            adjustBottomContentStackView(remake)
-        }
+    private func updateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
+        headerTopConstraint?.update(offset: topOffset)
+        header.superview?.setNeedsLayout()
+
+        header.updateAlphaForSubviews(0)
+    }
+
+    private func updateBottomToolbar(bottomContainerOffset: CGFloat, overKeyboardContainerOffset: CGFloat) {
+        overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
+        overKeyboardContainer.superview?.setNeedsLayout()
+
+        bottomContainerConstraint?.update(offset: bottomContainerOffset)
+        bottomContainer.superview?.setNeedsLayout()
     }
 }

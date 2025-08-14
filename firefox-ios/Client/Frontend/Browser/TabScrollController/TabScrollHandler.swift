@@ -301,12 +301,6 @@ final class TabScrollHandler: NSObject,
         let translation = gesture.translation(in: containerView)
         let velocity = gesture.velocity(in: containerView)
         handleScroll(for: translation, velocity: velocity)
-
-        // TODO: Do we need this?
-//        if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
-//            setOffset(y: contentOffsetBeforeAnimation.y + headerHeight, for: scrollView)
-//            contentOffsetBeforeAnimation.y = 0
-//        }
     }
 
     /// Sends a scroll action to update the new toolbar border visibility based on scroll position changes.
