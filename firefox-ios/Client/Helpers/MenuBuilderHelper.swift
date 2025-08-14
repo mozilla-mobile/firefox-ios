@@ -12,29 +12,6 @@ class MenuBuilderHelper {
     }
 
     func mainMenu(for builder: UIMenuBuilder) {
-        let findMenu = UIMenu(
-            options: .displayInline,
-            children: [
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.Find,
-                    action: #selector(BrowserViewController.findInPageKeyCommand),
-                    input: "f",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.Find
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.FindAgain,
-                    action: #selector(BrowserViewController.findInPageAgainKeyCommand),
-                    input: "g",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.FindAgain
-                ),
-            ]
-        )
-        findMenu.children.forEach {
-            ($0 as? UIKeyCommand)?.wantsPriorityOverSystemBehavior = true
-        }
-
         var viewMenuChildren: [UIMenuElement] = [
             UIKeyCommand(
                 title: .KeyboardShortcuts.ZoomIn,
