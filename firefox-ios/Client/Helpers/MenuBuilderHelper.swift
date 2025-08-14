@@ -64,7 +64,7 @@ class MenuBuilderHelper {
         builder.insertSibling(makeHistoryMenu(), afterMenu: .view)
         builder.insertSibling(makeBookmarksMenu(), afterMenu: MenuIdentifiers.history)
         builder.insertSibling(makeToolsMenu(), afterMenu: MenuIdentifiers.bookmarks)
-        builder.insertChild(windowMenu, atStartOfMenu: .window)
+        builder.insertChild(makeWindowMenu(), atStartOfMenu: .window)
     }
 
     private func makeApplicationMenu() -> UIMenu {
