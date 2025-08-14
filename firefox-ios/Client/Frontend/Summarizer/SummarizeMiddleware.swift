@@ -38,15 +38,12 @@ final class SummarizerMiddleware {
         }
     }
 
-    func getInstructions(for contentType: SummarizationContentType) -> String {
+    func getConfig(for contentType: SummarizationContentType) -> SummarizerConfig {
         let summarizerType: SummarizerModel =
             summarizerNimbusUtils.isAppleSummarizerEnabled()
                 ? .appleSummarizer
                 : .liteLLMSummarizer
-        return SummarizerModelInstructions.getInstructions(
-            for: contentType,
-            summarizerType: summarizerType
-        )
+        return SummarizerConfigManager().getConfig(summarizerType, contentType: contentType)
     }
 
     func checkSummarizationResult(_ tab: Tab) async -> SummarizationCheckResult? {
@@ -66,12 +63,11 @@ final class SummarizerMiddleware {
         guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
         let result = await checkSummarizationResult(tab)
         guard result?.canSummarize == true, let contentType = result?.contentType else { return }
-        let instructions = getInstructions(for: contentType)
         store.dispatchLegacy(
             SummarizeAction(
                 windowUUID: action.windowUUID,
                 actionType: SummarizeMiddlewareActionType.configuredSummarizer,
-                instructions: instructions
+                summarizerConfig: getConfig(for: contentType)
             )
         )
     }

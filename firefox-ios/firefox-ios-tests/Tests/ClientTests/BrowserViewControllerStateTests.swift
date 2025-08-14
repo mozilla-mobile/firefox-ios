@@ -4,6 +4,7 @@
 
 import Redux
 import XCTest
+import SummarizeKit
 
 @testable import Client
 
@@ -98,7 +99,9 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getAction(for: .showSummarizer)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.displayView, .summarizer(instructions: ""))
+        guard case .summarizer = newState.displayView else {
+            return XCTFail("Expected .summarizer")
+        }
     }
 
     // MARK: - Navigation Browser Action
@@ -278,11 +281,11 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = SummarizeAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: SummarizeMiddlewareActionType.configuredSummarizer,
-            instructions: "Test instructions"
+            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:])
         )
         let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.navigationDestination?.destination, .summarizer(instructions: "Test instructions"))
+        let config = SummarizerConfig(instructions: "Test instructions", options: [:])
+        XCTAssertEqual(newState.navigationDestination?.destination, .summarizer(config: config))
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 

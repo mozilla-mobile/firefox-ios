@@ -8,22 +8,13 @@ import Foundation
 /// and normalizes underlying errors to `SummarizeError` type.
 final class LiteLLMSummarizer: SummarizerProtocol {
     private let client: LiteLLMClientProtocol
-    private let model: String
-    private let maxTokens: Int
-    private let modelInstructions: String
+    private let config: SummarizerConfig
 
     public let modelName: SummarizerModel = .liteLLMSummarizer
 
-    init(
-        client: LiteLLMClientProtocol,
-        model: String,
-        maxTokens: Int,
-        modelInstructions: String
-    ) {
+    init(client: LiteLLMClientProtocol, config: SummarizerConfig) {
         self.client = client
-        self.model = model
-        self.maxTokens = maxTokens
-        self.modelInstructions = modelInstructions
+        self.config = config
     }
 
     /// Generates a full summary of the given `contentToSummarize` using the provided `modelInstructions`.
@@ -32,11 +23,10 @@ final class LiteLLMSummarizer: SummarizerProtocol {
     /// - Returns: A summarized string
     /// - Throws: `SummarizerError` if the request fails or if the response is invalid.
     func summarize(_ contentToSummarize: String) async throws -> String {
-        let options = LiteLLMChatOptions(model: model, maxTokens: maxTokens, stream: false)
         // System message is used for the `modelInstructions`, user message for the `contentToSummarize`.
-        let messages = makeMessages(modelInstructions: modelInstructions, contentToSummarize: contentToSummarize)
+        let messages = makeMessages(modelInstructions: config.instructions, contentToSummarize: contentToSummarize)
         do {
-            return try await client.requestChatCompletion(messages: messages, options: options)
+            return try await client.requestChatCompletion(messages: messages, config: config)
         } catch {
             throw mapError(error)
         }
@@ -47,10 +37,9 @@ final class LiteLLMSummarizer: SummarizerProtocol {
     ///   - contentToSummarize: The text to be summarized.
     /// - Returns: An `AsyncThrowingStream` yielding chunks of the summary.
     func summarizeStreamed(_ contentToSummarize: String) -> AsyncThrowingStream<String, Error> {
-        let options = LiteLLMChatOptions(model: model, maxTokens: maxTokens, stream: true)
-        let messages = makeMessages(modelInstructions: modelInstructions, contentToSummarize: contentToSummarize)
+        let messages = makeMessages(modelInstructions: config.instructions, contentToSummarize: contentToSummarize)
 
-        var stream = client.requestChatCompletionStreamed(messages: messages, options: options).makeAsyncIterator()
+        var stream = client.requestChatCompletionStreamed(messages: messages, config: config).makeAsyncIterator()
         return AsyncThrowingStream<String, Error>(unfolding: {
            do {
                /// When `next()` returns nil, the underlying stream has no more data

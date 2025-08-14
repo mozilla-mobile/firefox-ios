@@ -13,7 +13,7 @@ final class MockLiteLLMClient: LiteLLMClientProtocol {
 
     func requestChatCompletion(
         messages: [LiteLLMMessage],
-        options: LiteLLMChatOptions
+        config: SummarizerConfig
     ) async throws -> String {
         if let error = respondWithError { throw error }
         return respondWith.joined(separator: " ")
@@ -21,7 +21,7 @@ final class MockLiteLLMClient: LiteLLMClientProtocol {
 
     func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
-        options: LiteLLMChatOptions
+        config: SummarizerConfig
     ) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream<String, Error> { continuation in
             if let error = respondWithError {

@@ -24,7 +24,8 @@ final class MockSummarizationChecker: SummarizationCheckerProtocol {
             canSummarize: canSummarize,
             reason: reason,
             wordCount: wordCount,
-            textContent: textContent
+            textContent: textContent,
+            contentType: .generic
         )
     }
 }

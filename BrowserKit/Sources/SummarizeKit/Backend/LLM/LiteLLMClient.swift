@@ -31,14 +31,14 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     /// Sends a chat completion request in non-streaming mode.
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
-    ///   - options: inference options as described by LiteLLMChatOptions ( includes model name, max tokens, ...).
+    ///   - config: inference options ( includes model name, max tokens, temperature...).
     func requestChatCompletion(
         messages: [LiteLLMMessage],
-        options: LiteLLMChatOptions
+        config: SummarizerConfig
     ) async throws -> String {
         let request: URLRequest
         do {
-            request = try makeRequest(messages: messages, options: options)
+            request = try makeRequest(messages: messages, config: config)
         } catch {
             throw LiteLLMClientError.requestCreationFailed
         }
@@ -48,14 +48,14 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     /// Sends a chat completion request in streaming mode.
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
-    ///   - options: inference options as described by LiteLLMChatOptions ( includes model name, max tokens, ...).
+    ///   - config: inference options ( includes model name, max tokens, ...).
     func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
-        options: LiteLLMChatOptions
+        config: SummarizerConfig
     ) -> AsyncThrowingStream<String, Error> {
         let request: URLRequest
         do {
-            request = try makeRequest(messages: messages, options: options)
+            request = try makeRequest(messages: messages, config: config)
         } catch {
             return AsyncThrowingStream<String, Error>(unfolding: { throw LiteLLMClientError.requestCreationFailed })
         }
@@ -102,7 +102,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
 
     func makeRequest(
         messages: [LiteLLMMessage],
-        options: LiteLLMChatOptions
+        config: SummarizerConfig
     ) throws -> URLRequest {
         let endpoint = baseURL.appendingPathComponent("chat/completions")
         var request = URLRequest(url: endpoint)
@@ -110,19 +110,11 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
-        var payload: [String: Any] = [
-            "model": options.model,
-            "messages": messages.map { ["role": $0.role.rawValue, "content": $0.content] },
-            "max_tokens": options.maxTokens,
-            // NOTE(FXIOS-13068): We usually shouldn't be tweaking these parameters,
-            // but we have encountered weird issues where mistral would return text with repeated words.
-            // This is being investigated in FXIOS-13068. For now, we are setting
-            //  `top_p`, `temperature` explicitely as part of the request.
-            "top_p": 0.01,
-            "temperature": 0.1
-        ]
+        // config.options is the base value for the payload
+        var payload = config.options.compactMapValues { $0 }
+        payload["messages"] = messages.map { ["role": $0.role.rawValue, "content": $0.content] }
 
-        if options.stream {
+        if let stream = config.options["stream"] as? Bool, stream {
             request.addValue("text/event-stream", forHTTPHeaderField: "Accept")
             request.addValue("keep-alive", forHTTPHeaderField: "Connection")
             payload["stream"] = true

@@ -88,7 +88,7 @@ final class LiteLLMSummarizerTests: XCTestCase {
         if let error {
             mockClient.respondWithError = error
         }
-        return LiteLLMSummarizer(client: mockClient, model: "model", maxTokens: 10, modelInstructions: "p")
+        return LiteLLMSummarizer(client: mockClient, config: SummarizerConfig(instructions: "instructions", options: [:]))
     }
 
     /// Convenience method to simplify error checking in the test cases
