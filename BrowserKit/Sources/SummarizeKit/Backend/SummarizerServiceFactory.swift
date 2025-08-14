@@ -5,7 +5,9 @@
 import Foundation
 
 public protocol SummarizerServiceFactory {
-    func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool, config: SummarizerConfig?) -> SummarizerService?
+    func make(isAppleSummarizerEnabled: Bool,
+              isHostedSummarizerEnabled: Bool,
+              config: SummarizerConfig?) -> SummarizerService?
 
     /// Returns the max words that the summarizer Service can handle.
     func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int

@@ -25,7 +25,10 @@ public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {
         case (.generic, .liteLLMSummarizer):
             return .init(instructions: SummarizerModelInstructions.defaultInstructions, options: Self.liteLLMBaseOptions)
         case (.recipe, .liteLLMSummarizer):
-            return .init(instructions: SummarizerModelInstructions.defaultRecipeInstructions, options: Self.liteLLMBaseOptions)
+            return .init(
+                instructions: SummarizerModelInstructions.defaultRecipeInstructions,
+                options: Self.liteLLMBaseOptions
+            )
         }
     }
 }

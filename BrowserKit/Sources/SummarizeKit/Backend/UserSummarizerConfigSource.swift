@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// A user-specific implementation of the SummarizerConfigSourceProtocol that retrieves configurations from user settings.
-/// NOTE: This returns nil for now until we implement a UI in the settings menu for user to customize the summarization options.
+/// NOTE: This is a no-op for now until a UI in settings is implemented for users to customize model options.
 public struct UserSummarizerConfigSource: SummarizerConfigSourceProtocol {
     public init() {}
 
