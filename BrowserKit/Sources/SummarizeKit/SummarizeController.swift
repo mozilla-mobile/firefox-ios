@@ -440,12 +440,12 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         bodyStyle.paragraphSpacing = 8
 
         let heading6Style = NSMutableParagraphStyle()
-        heading6Style.paragraphSpacing = 8
-        heading6Style.paragraphSpacingBefore = 16
+        heading6Style.paragraphSpacing = 16
+        heading6Style.paragraphSpacingBefore = 0
 
         let heading2Style = NSMutableParagraphStyle()
-        heading2Style.paragraphSpacing = 32
-        heading2Style.paragraphSpacingBefore = 0
+        heading2Style.paragraphSpacing = 16
+        heading2Style.paragraphSpacingBefore = 8
 
         var configuration = configuration
         var paragraphStyles = StaticParagraphStyleCollection()
