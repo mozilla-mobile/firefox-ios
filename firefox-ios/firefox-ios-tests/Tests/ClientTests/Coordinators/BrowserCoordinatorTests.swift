@@ -8,6 +8,7 @@ import MozillaAppServices
 import WebKit
 import XCTest
 import GCDWebServers
+import SummarizeKit
 
 @testable import Client
 
@@ -568,7 +569,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel(.mainMenu, instructions: "Test instructions")
+        subject.showSummarizePanel(.mainMenu, config: SummarizerConfig(instructions: "Test instructions", options: [:]))
 
         let childCoordinator = subject.childCoordinators.first
         XCTAssertTrue(childCoordinator is SummarizeCoordinator)
@@ -583,7 +584,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel(.mainMenu, instructions: "Test instructions")
+        subject.showSummarizePanel(.mainMenu, config: SummarizerConfig(instructions: "Test instructions", options: [:]))
 
         XCTAssertNil(subject.childCoordinators.first(where: {
             $0 is SummarizeCoordinator
@@ -595,7 +596,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel(.mainMenu, instructions: "Test instructions")
+        subject.showSummarizePanel(.mainMenu, config: SummarizerConfig(instructions: "Test instructions", options: [:]))
         XCTAssertNil(subject.childCoordinators.first(where: {
             $0 is SummarizeCoordinator
         }))

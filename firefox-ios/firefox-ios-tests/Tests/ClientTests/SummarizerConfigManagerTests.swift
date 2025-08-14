@@ -9,7 +9,7 @@ import XCTest
 final class SummarizerConfigManagerTests: XCTestCase {
     func testReturnsEmptyConfigWhenNoSourcesProvided() async {
         let subject = createSubject(sources: [])
-        let config = await subject.getConfig(.appleSummarizer, contentType: .generic)
+        let config = subject.getConfig(.appleSummarizer, contentType: .generic)
         XCTAssertEqual(config.instructions, "")
         XCTAssertTrue(config.options.isEmpty)
     }
@@ -27,7 +27,7 @@ final class SummarizerConfigManagerTests: XCTestCase {
         ]
 
         let subject = createSubject(sources: mockSources)
-        let config = await subject.getConfig(.appleSummarizer, contentType: .generic)
+        let config = subject.getConfig(.appleSummarizer, contentType: .generic)
         XCTAssertEqual(config.instructions, "")
         XCTAssertTrue(config.options.isEmpty)
     }
@@ -45,7 +45,7 @@ final class SummarizerConfigManagerTests: XCTestCase {
         ]
 
         let subject = createSubject(sources: mockSources)
-        let config = await subject.getConfig(.liteLLMSummarizer, contentType: .recipe)
+        let config = subject.getConfig(.liteLLMSummarizer, contentType: .recipe)
         XCTAssertEqual(config.instructions, "Instructions")
         XCTAssertTrue(config.options.isEmpty)
     }
@@ -67,7 +67,7 @@ final class SummarizerConfigManagerTests: XCTestCase {
         ]
 
         let subject = createSubject(sources: mockSources)
-        let config = await subject.getConfig(.appleSummarizer, contentType: .generic)
+        let config = subject.getConfig(.appleSummarizer, contentType: .generic)
 
         // Highest priority instructions
         XCTAssertEqual(config.instructions, "Instructions 1")
@@ -92,7 +92,7 @@ final class SummarizerConfigManagerTests: XCTestCase {
         ]
 
         let subject = createSubject(sources: mockSources)
-        let config = await subject.getConfig(.liteLLMSummarizer, contentType: .recipe)
+        let config = subject.getConfig(.liteLLMSummarizer, contentType: .recipe)
 
         XCTAssertEqual(config.instructions, "Instructions 2")
         XCTAssertEqual(config.options["topP"] as? Int, 2)

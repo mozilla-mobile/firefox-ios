@@ -5,6 +5,7 @@
 import XCTest
 import Common
 import Shared
+import SummarizeKit
 
 @testable import Client
 
@@ -67,7 +68,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             zoomLevel: 0,
             readerModeIsAvailable: false,
             summaryIsAvailable: false,
-            summarizerInstructions: "Test instructions",
+            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,
