@@ -221,11 +221,15 @@ class BrowserViewController: UIViewController,
     }
 
     private let bottomBlurView: UIVisualEffectView = .build { view in
-        view.effect = if #available(iOS 26.0, *) {
-            UIGlassEffect(style: .regular)
-        } else {
-            UIBlurEffect(style: .systemUltraThinMaterial)
-        }
+#if canImport(FoundationModels)
+    view.effect = if #available(iOS 26.0, *) {
+        UIGlassEffect(style: .regular)
+    } else {
+        UIBlurEffect(style: .systemUltraThinMaterial)
+    }
+#else
+    view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+#endif
     }
 
     // background view is placed behind content view so view scrolled to top or bottom shows
