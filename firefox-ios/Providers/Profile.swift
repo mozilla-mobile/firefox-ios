@@ -696,10 +696,11 @@ open class BrowserProfile: Profile,
     }()
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
-        let useStaging = prefs.boolForKey(PrefsKeys.RemoteSettings.useQAStagingServerForRemoteSettings) == true
-        let server = useStaging ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-        let bucketName = (server == .prod ? "main" : "main-preview")
-        let config = RemoteSettingsConfig2(server: server,
+        let remoteSettingsEnvironmentKey = prefs.stringForKey(PrefsKeys.RemoteSettings.remoteSettingsEnvironment) ?? ""
+        let remoteSettingsEnvironment = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
+        let remoteSettingsServer = remoteSettingsEnvironment.toRemoteSettingsServer()
+        let bucketName = (remoteSettingsServer == .prod ? "main" : "main-preview")
+        let config = RemoteSettingsConfig2(server: remoteSettingsServer,
                                            bucketName: bucketName,
                                            appContext: remoteSettingsAppContext())
 
@@ -852,5 +853,17 @@ open class BrowserProfile: Profile,
 
     class NoAccountError: MaybeErrorType {
         var description = "No account."
+    }
+}
+
+extension RemoteSettingsEnvironment {
+    /// NOTE: It would much cleaner to use RemoteSettingsServer if it had a public initializer.
+    /// TODO(FXIOS-13189): Add public initializer from rawValue to RemoteSettingsServer.
+    public func toRemoteSettingsServer() -> RemoteSettingsServer {
+        switch self {
+        case .prod: return .prod
+        case .stage: return .stage
+        case .dev: return .dev
+        }
     }
 }
