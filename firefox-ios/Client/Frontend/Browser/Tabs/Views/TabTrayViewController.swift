@@ -475,7 +475,7 @@ final class TabTrayViewController: UIViewController,
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = color
         standardAppearance.backgroundEffect = nil
-        standardAppearance.shadowColor = color
+        standardAppearance.shadowColor = .clear
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
         navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
