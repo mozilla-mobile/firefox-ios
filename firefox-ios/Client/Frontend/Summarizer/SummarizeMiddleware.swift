@@ -62,7 +62,8 @@ final class SummarizerMiddleware {
     private func dispatchSummarizeConfigurationAction(for action: Action) async {
         guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
         let result = await checkSummarizationResult(tab)
-        guard result?.canSummarize == true, let contentType = result?.contentType else { return }
+        let contentType = result?.contentType ?? .generic
+        guard result?.canSummarize == true else { return }
         store.dispatchLegacy(
             SummarizeAction(
                 windowUUID: action.windowUUID,
