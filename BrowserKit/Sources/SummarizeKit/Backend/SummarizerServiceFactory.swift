@@ -5,7 +5,7 @@
 import Foundation
 
 public protocol SummarizerServiceFactory {
-    func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool, instructions: String?) -> SummarizerService?
+    func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool, config: SummarizerConfig?) -> SummarizerService?
 
     /// Returns the max words that the summarizer Service can handle.
     func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int
@@ -16,25 +16,24 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
 
     public func make(isAppleSummarizerEnabled: Bool,
                      isHostedSummarizerEnabled: Bool,
-                     instructions: String?) -> SummarizerService? {
+                     config: SummarizerConfig?) -> SummarizerService? {
         let maxWords = maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
                                 isHostedSummarizerEnabled: isHostedSummarizerEnabled)
+        let config = config ?? SummarizerConfig.defaultConfig
         #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
-            let chosenInstructions: String = instructions ?? FoundationModelsConfig.instructions
-            let applSummarizer = FoundationModelsSummarizer(modelInstructions: chosenInstructions)
+            let applSummarizer = FoundationModelsSummarizer(config: config)
             return SummarizerService(summarizer: applSummarizer, maxWords: maxWords)
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
                   let model = LiteLLMConfig.apiModel,
                   let key = LiteLLMConfig.apiKey else { return nil }
             let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
-            let chosenInstructions: String = instructions ?? LiteLLMConfig.instructions
             let llmSummarizer = LiteLLMSummarizer(
                 client: llmClient,
                 model: model,
                 maxTokens: LiteLLMConfig.maxTokens,
-                modelInstructions: chosenInstructions
+                config: config
             )
             return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         }
@@ -44,12 +43,11 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
               let model = LiteLLMConfig.apiModel,
               let key = LiteLLMConfig.apiKey else { return nil }
         let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
-        let chosenInstructions: String = instructions ?? LiteLLMConfig.instructions
         let llmSummarizer = LiteLLMSummarizer(
             client: llmClient,
             model: model,
             maxTokens: LiteLLMConfig.maxTokens,
-            modelInstructions: chosenInstructions
+            config: config
         )
         return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         #endif

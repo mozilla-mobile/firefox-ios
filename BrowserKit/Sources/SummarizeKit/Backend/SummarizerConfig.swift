@@ -11,6 +11,8 @@ public struct SummarizerConfig: Equatable {
     /// The Apple foundation model is a new API that may introduce additional parameters or change existing ones.
     /// Options can include things like temperature, max tokens, and other model-specific settings.
     public let options: [String: AnyHashable]
+    public static let defaultConfig =
+        SummarizerConfig(instructions: SummarizerModelInstructions.defaultInstructions, options: [:])
 
     public init(instructions: String, options: [String: AnyHashable]) {
         self.instructions = instructions
