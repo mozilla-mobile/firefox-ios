@@ -12,50 +12,6 @@ class MenuBuilderHelper {
     }
 
     func mainMenu(for builder: UIMenuBuilder) {
-        let windowMenu = UIMenu(
-            title: .KeyboardShortcuts.Sections.Window,
-            options: .displayInline,
-            children: [
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.ShowNextTab,
-                    action: #selector(BrowserViewController.nextTabKeyCommand),
-                    input: "\t",
-                    modifierFlags: [.control],
-                    discoverabilityTitle: .KeyboardShortcuts.ShowNextTab
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.ShowPreviousTab,
-                    action: #selector(BrowserViewController.previousTabKeyCommand),
-                    input: "\t",
-                    modifierFlags: [.control, .shift],
-                    discoverabilityTitle: .KeyboardShortcuts.ShowPreviousTab
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.ShowTabTray,
-                    action: #selector(BrowserViewController.showTabTrayKeyCommand),
-                    input: "\t",
-                    modifierFlags: [.command, .alternate],
-                    discoverabilityTitle: .KeyboardShortcuts.ShowTabTray
-                ),
-                UIKeyCommand(
-                    action: #selector(BrowserViewController.selectFirstTab),
-                    input: "1",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.ShowFirstTab
-                ),
-                UIKeyCommand(
-                    action: #selector(BrowserViewController.selectLastTab),
-                    input: "9",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.ShowLastTab
-                ),
-            ]
-        )
-
-        windowMenu.children.forEach {
-            ($0 as? UIKeyCommand)?.wantsPriorityOverSystemBehavior = true
-        }
-
         builder.insertChild(makeApplicationMenu(), atStartOfMenu: .application)
         builder.insertChild(makeFileMenu(), atStartOfMenu: .file)
         builder.replace(menu: .find, with: makeFindMenu())
