@@ -855,3 +855,15 @@ open class BrowserProfile: Profile,
         var description = "No account."
     }
 }
+
+extension RemoteSettingsEnvironment {
+    /// NOTE: It would much cleaner to use RemoteSettingsServer if it had a public initializer.
+    /// TODO(FXIOS-13189): Add public initializer from rawValue to RemoteSettingsServer.
+    public func toRemoteSettingsServer() -> RemoteSettingsServer {
+        switch self {
+        case .prod: return .prod
+        case .stage: return .stage
+        case .dev: return .dev
+        }
+    }
+}
