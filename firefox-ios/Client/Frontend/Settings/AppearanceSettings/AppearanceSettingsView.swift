@@ -42,44 +42,34 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
 
     private struct UX {
         static let spacing: CGFloat = 24
+        static let cornerRadius: CGFloat = 24
+    }
+
+    private var shouldUseNewStyle: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
     }
 
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: shouldUseNewStyle ? UX.spacing : 0) {
                 // Section for selecting the browser theme.
-                GenericSectionView(theme: currentTheme,
-                                   title: String.BrowserThemeSectionHeader,
-                                   identifier: AccessibilityIdentifiers.Settings.Appearance.browserThemeSectionTitle) {
-                    ThemeSelectionView(theme: currentTheme,
-                                       selectedThemeOption: themeOption,
-                                       onThemeSelected: updateBrowserTheme)
-                }
+                browserThemeSection()
+
                 // Section for toggling website appearance (e.g., dark mode).
-                GenericSectionView(theme: currentTheme,
-                                   title: String.WebsiteAppearanceSectionHeader,
-                                   description: String.WebsiteDarkModeDescription,
-                                   identifier: AccessibilityIdentifiers.Settings.Appearance.websiteAppearanceSectionTitle) {
-                    DarkModeToggleView(theme: currentTheme,
-                                       isEnabled: NightModeHelper.isActivated(),
-                                       onChange: setWebsiteDarkMode)
-                }
+                websiteAppearanceSection()
+
                 if shouldShowPageZoom {
-                    GenericSectionView(theme: currentTheme,
-                                       title: .Settings.Appearance.PageZoom.SectionHeader,
-                                       identifier: .Settings.Appearance.PageZoom.SectionHeader) {
-                        GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
-                                            image: .chevronRightLarge,
-                                            theme: currentTheme) {
-                            delegate?.pressedPageZoom()
-                        }
-                    }
+                    pageZoomSection()
                 }
                 Spacer()
             }
+            .applyPaddingForSectionIfAvailable(spacing: UX.spacing, shouldUseNewStyle)
         }
-        .padding(.top, UX.spacing)
-        .frame(maxWidth: .infinity)
+        .applyPaddingForViewIfAvailable(spacing: UX.spacing, shouldUseNewStyle)
         .background(viewBackground)
         .onAppear {
             currentTheme = themeManager.getCurrentTheme(for: windowUUID)
@@ -87,6 +77,51 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             currentTheme = themeManager.getCurrentTheme(for: windowUUID)
+        }
+    }
+
+    private func browserThemeSection() -> some View {
+        GenericSectionView(theme: currentTheme,
+                           title: String.BrowserThemeSectionHeader,
+                           identifier: AccessibilityIdentifiers.Settings.Appearance.browserThemeSectionTitle,
+                           shouldUseDivider: !shouldUseNewStyle) {
+            ThemeSelectionView(theme: currentTheme,
+                               selectedThemeOption: themeOption,
+                               onThemeSelected: updateBrowserTheme)
+            .applyNewStyleForSectionIfAvailable(theme: currentTheme,
+                                                cornerRadius: UX.cornerRadius,
+                                                shouldUseNewStyle)
+        }
+    }
+
+    private func websiteAppearanceSection() -> some View {
+        GenericSectionView(theme: currentTheme,
+                           title: String.WebsiteAppearanceSectionHeader,
+                           description: String.WebsiteDarkModeDescription,
+                           identifier: AccessibilityIdentifiers.Settings.Appearance.websiteAppearanceSectionTitle,
+                           shouldUseDivider: !shouldUseNewStyle) {
+            DarkModeToggleView(theme: currentTheme,
+                               isEnabled: NightModeHelper.isActivated(),
+                               onChange: setWebsiteDarkMode)
+            .applyNewStyleForSectionIfAvailable(theme: currentTheme,
+                                                cornerRadius: UX.cornerRadius,
+                                                shouldUseNewStyle)
+        }
+    }
+
+    private func pageZoomSection() -> some View {
+        GenericSectionView(theme: currentTheme,
+                           title: .Settings.Appearance.PageZoom.SectionHeader,
+                           identifier: .Settings.Appearance.PageZoom.SectionHeader,
+                           shouldUseDivider: !shouldUseNewStyle) {
+            GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
+                                image: .chevronRightLarge,
+                                theme: currentTheme) {
+                delegate?.pressedPageZoom()
+            }
+            .applyNewStyleForSectionIfAvailable(theme: currentTheme,
+                                                cornerRadius: UX.cornerRadius,
+                                                shouldUseNewStyle)
         }
     }
 
@@ -108,6 +143,44 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             // TODO(FXIOS-11584): Add telemetry here
         } else {
             // TODO(FXIOS-11584): Add telemetry here
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func applyNewStyleForSectionIfAvailable(theme: Theme?, cornerRadius: CGFloat, _ shouldUseNewStyle: Bool) -> some View {
+        if shouldUseNewStyle {
+            self
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(Color(theme?.colors.layer2 ?? UIColor.clear))
+                )
+        } else {
+            self
+        }
+    }
+
+    @ViewBuilder
+    func applyPaddingForSectionIfAvailable(spacing: CGFloat, _ shouldUseNewStyle: Bool) -> some View {
+        if shouldUseNewStyle {
+            self
+                .padding(.top, spacing)
+                .padding(.horizontal, spacing / 2)
+        } else {
+            self
+        }
+    }
+
+    @ViewBuilder
+    func applyPaddingForViewIfAvailable(spacing: CGFloat, _ shouldUseNewStyle: Bool) -> some View {
+        if shouldUseNewStyle {
+            self
+        } else {
+            self
+                .padding(.top, spacing)
+                .frame(maxWidth: .infinity)
         }
     }
 }

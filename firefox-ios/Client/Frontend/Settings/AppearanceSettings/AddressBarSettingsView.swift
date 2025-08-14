@@ -18,6 +18,14 @@ struct AddressBarSettingsView: View {
 
     @State private var currentTheme: Theme?
 
+    private var shouldUseNewStyle: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     private var addressBarPosition: SearchBarPosition {
         LegacyFeatureFlagsManager.shared.getCustomState(for: .searchBarPosition) ?? .bottom
     }
@@ -28,22 +36,27 @@ struct AddressBarSettingsView: View {
 
     private struct UX {
         static let spacing: CGFloat = 24
+        static let cornerRadius: CGFloat = 24
     }
 
     var body: some View {
         VStack {
             GenericSectionView(theme: currentTheme,
                                title: .Settings.AddressBar.AddressBarSectionTitle,
-                               identifier: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting) {
+                               identifier: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting,
+                               shouldUseDivider: !shouldUseNewStyle) {
                 AddressBarSelectionView(
                     theme: currentTheme,
                     selectedAddressBarPosition: addressBarPosition,
                     onSelected: viewModel.saveSearchBarPosition)
+                .applyNewStyleForSectionIfAvailable(theme: currentTheme,
+                                                    cornerRadius: UX.cornerRadius,
+                                                    shouldUseNewStyle)
             }
             Spacer()
         }
-        .padding(.top, UX.spacing)
-        .frame(maxWidth: .infinity)
+        .applyPaddingForSectionIfAvailable(spacing: UX.spacing, shouldUseNewStyle)
+        .applyPaddingForViewIfAvailable(spacing: UX.spacing, shouldUseNewStyle)
         .background(viewBackground)
         .onAppear {
             currentTheme = themeManager.getCurrentTheme(for: windowUUID)

@@ -64,7 +64,11 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
     }
 
     private func setupLayout() {
-        separatorInset = .zero
+        if #available(iOS 26.0, *) {
+            separatorInset = UIEdgeInsets(top: 0, left: UX.horizontalMargin, bottom: 0, right: UX.horizontalMargin)
+        } else {
+            separatorInset = .zero
+        }
         selectionStyle = .none
         contentView.addSubview(labelsStackView)
         contentView.addSubview(learnMoreButton)
