@@ -90,22 +90,17 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         let hasAcceptedTermsOfService = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
         guard !hasAcceptedTermsOfUse && !hasAcceptedTermsOfService else { return false }
 
-        // 3. Check if this is the first time we're showing it
+        // 3. Check if this is the first time it is shown
+        // Show on fresh install or next app open for existing users
         let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
+        guard hasShownFirstTime else { return true }
 
-        if !hasShownFirstTime {
-            // FIRST TIME: Show on fresh install or next app open for existing users
-            // (Show regardless of context - homepage or app becoming active)
-            return true
-        }
-
-        // 4. Already shown before - check if user dismissed and 120 hours passed
+        // 4. Check if user dismissed and 120 hours passed
         guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) else {
             // Already shown but no dismissal record - don't show
             return false
         }
 
-        // 5. Calculate time since dismissal
         let dismissedDate = Date.fromTimestamp(dismissedTimestamp)
         let hoursSinceDismissal = Calendar.current.dateComponents(
             [.hour],
@@ -113,11 +108,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             to: Date()
         ).hour ?? 0
 
-        // 6. Must wait 120 hours since dismissal
-        guard hoursSinceDismissal >= hoursSinceDismissedTerms else { return false }
-
-        // 7. After 120 hours: show on any trigger context (homepage, app becomes active, or app launch)
-        // whichever comes first
-        return true
+        // 5. After 120 hours: show on any trigger context
+        return hoursSinceDismissal >= hoursSinceDismissedTerms
     }
 }

@@ -826,10 +826,7 @@ class BrowserViewController: UIViewController,
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
             scrollController.showToolbars(animated: false)
         }
-
-        // Trigger Terms of Use check when app becomes active from background (warm start)
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
-
         browserDidBecomeActive()
     }
 
