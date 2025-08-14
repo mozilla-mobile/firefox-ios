@@ -9,9 +9,6 @@ import SummarizeKit
 /// TODO(FXIOS-xxxx): Move all the needed RS typedefs to BrowserKit so we can move this file to SummarizeKit.
 struct RemoteSummarizerConfigSource: SummarizerConfigSourceProtocol {
     func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {
-        return SummarizerConfig(
-            instructions: "Inst 5",
-            options: [:]
-        )
+        return ASSummarizerRemoteConfig()?.fetchSummarizerConfig(summarizer, for: contentType)
     }
 }
