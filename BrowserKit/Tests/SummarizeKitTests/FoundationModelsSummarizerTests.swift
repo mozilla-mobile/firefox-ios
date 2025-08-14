@@ -92,7 +92,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
         if let error {
             mockSession.respondWithError = error
         }
-        return FoundationModelsSummarizer(makeSession: { _ in mockSession }, modelInstructions: "p")
+        return FoundationModelsSummarizer(makeSession: { _ in mockSession }, config: SummarizerConfig(instructions: "instructions", options: [:]))
     }
 
     /// Convenience method to simplify error checking in the test cases
