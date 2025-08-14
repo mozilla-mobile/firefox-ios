@@ -161,14 +161,12 @@ final class HomepageViewController: UIViewController,
                 actionType: HomepageActionType.viewWillAppear
             )
         )
+        termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         trackVisibleItemImpressions()
-        Task { @MainActor in
-            termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
-        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
