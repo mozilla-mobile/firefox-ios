@@ -4,7 +4,8 @@
 
 import Foundation
 
-open class CancellableDeferred<T>: Deferred<T> {
+// TODO: FXIOS-13184 Remove deferred code or validate it is sendable
+open class CancellableDeferred<T>: Deferred<T>, @unchecked Sendable {
     public var dispatchWorkItem: DispatchWorkItem?
 
     internal var _running = false
