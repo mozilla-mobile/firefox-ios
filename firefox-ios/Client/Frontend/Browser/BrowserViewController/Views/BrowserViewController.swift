@@ -226,7 +226,7 @@ class BrowserViewController: UIViewController,
                 let glassEffect = UIGlassEffect(style: .regular)
                 glassEffect.isInteractive = true
                 // NOTE: this is a hack, in theory we need to actually change the icon color based on the glass effect
-                glassEffect.tintColor = self.themeManager.getCurrentTheme(for: self.windowUUID).colors.layer3
+                glassEffect.tintColor = self.themeManager.getCurrentTheme(for: self.windowUUID).colors.layer1
                 view.effect = glassEffect
             } else {
                 view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
@@ -3805,6 +3805,20 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         zeroSearchDimmingView.backgroundColor = currentTheme.colors.layerScrim.withAlphaComponent(0.70)
+
+        #if canImport(FoundationModels)
+            if #available(iOS 26.0, *) {
+                let glassEffect = UIGlassEffect(style: .regular)
+                glassEffect.isInteractive = true
+                // NOTE: this is a hack, in theory we need to actually change the icon color based on the glass effect
+                glassEffect.tintColor = self.themeManager.getCurrentTheme(for: self.windowUUID).colors.layer1
+                bottomBlurView.effect = glassEffect
+            } else {
+                bottomBlurView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+            }
+        #else
+            bottomBlurView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
 
         if isToolbarRefactorEnabled {
             // to make sure on homepage with bottom search bar the status bar is hidden
