@@ -78,11 +78,6 @@ final class TabTrayViewController: UIViewController,
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
 
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
-    }
-
     // MARK: - Redux state
     var tabTrayState: TabTrayState
     lazy var layout: TabTrayLayoutType = {
@@ -341,7 +336,7 @@ final class TabTrayViewController: UIViewController,
         case .compact:
             navigationItem.leftBarButtonItem = nil
             navigationItem.titleView = nil
-            if isTabTrayUIExperimentsEnabled {
+            if tabTrayUtils.shouldDisplayExperimentUI() {
                 navigationController?.setNavigationBarHidden(true, animated: false)
                 navigationItem.rightBarButtonItems = nil
             } else {
@@ -504,7 +499,7 @@ final class TabTrayViewController: UIViewController,
         navigationItem.titleView = nil
         updateTitle()
         view.addSubviews(containerView)
-        if isTabTrayUIExperimentsEnabled {
+        if tabTrayUtils.shouldDisplayExperimentUI() {
             containerView.addSubview(panelContainer)
             containerView.addSubview(segmentedControl)
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
@@ -577,7 +572,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func updateTitle() {
-        if !isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
+        if !tabTrayUtils.shouldDisplayExperimentUI(), !self.isRegularLayout {
             navigationItem.title = tabTrayState.navigationTitle
         }
     }
@@ -608,7 +603,7 @@ final class TabTrayViewController: UIViewController,
 
         let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
         var toolbarItems: [UIBarButtonItem]
-        if isTabTrayUIExperimentsEnabled {
+        if tabTrayUtils.shouldDisplayExperimentUI() {
             toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
         } else {
             toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
@@ -680,7 +675,7 @@ final class TabTrayViewController: UIViewController,
             toast.showToast(viewController: self,
                             delay: UX.Toast.undoDelay,
                             duration: UX.Toast.undoDuration) { toast in
-                if self.isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
+                if self.tabTrayUtils.shouldDisplayExperimentUI(), !self.isRegularLayout {
                     [
                         toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                        constant: Toast.UX.toastSidePadding),
@@ -717,7 +712,7 @@ final class TabTrayViewController: UIViewController,
         updateTitle()
         updateLayout()
 
-        if !isTabTrayUIExperimentsEnabled {
+        if !tabTrayUtils.shouldDisplayExperimentUI() {
             hideCurrentPanel()
             showPanel(currentPanel)
             navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
@@ -945,7 +940,7 @@ final class TabTrayViewController: UIViewController,
     func didSelectSection(panelType: TabTrayPanelType) {
         guard tabTrayState.selectedPanel != panelType else { return }
 
-        if isTabTrayUIExperimentsEnabled {
+        if tabTrayUtils.shouldDisplayExperimentUI() {
             let targetIndex = TabTrayPanelType.getExperimentConvert(index: panelType.rawValue).rawValue
             guard let targetVC = childPanelControllers[safe: targetIndex],
                   let currentVC = pageViewController?.viewControllers?.first as? UINavigationController,
@@ -1023,7 +1018,7 @@ final class TabTrayViewController: UIViewController,
     // MARK: - UIScrollViewDelegate
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard isTabTrayUIExperimentsEnabled,
+        guard tabTrayUtils.shouldDisplayExperimentUI(),
               let fromIndex = swipeFromIndex,
               let width = scrollView.superview?.bounds.width else { return }
 

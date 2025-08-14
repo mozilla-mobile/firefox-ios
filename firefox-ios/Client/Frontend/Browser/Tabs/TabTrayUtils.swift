@@ -9,6 +9,7 @@ protocol TabTrayUtils {
     var isTabTrayTranslucencyEnabled: Bool { get }
     var isReduceTransparencyEnabled: Bool { get }
 
+    func shouldDisplayExperimentUI() -> Bool
     func shouldBlur() -> Bool
     func backgroundAlpha() -> CGFloat
 }
@@ -21,7 +22,6 @@ struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
 
     var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var isTabTrayTranslucencyEnabled: Bool {
@@ -30,6 +30,10 @@ struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
 
     var isReduceTransparencyEnabled: Bool {
         UIAccessibility.isReduceTransparencyEnabled
+    }
+
+    func shouldDisplayExperimentUI() -> Bool {
+        return isTabTrayUIExperimentsEnabled && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     func shouldBlur() -> Bool {
