@@ -338,7 +338,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
         if #available(iOS 26.0, *) {
             // So that the separator line goes all the way to the left edge.
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+            cell.separatorInset = UIEdgeInsets(top: 0, left: UX.horizontalMargin, bottom: 0, right: UX.horizontalMargin)
         } else {
             // So that the separator line goes all the way to the left edge.
             cell.separatorInset = .zero
