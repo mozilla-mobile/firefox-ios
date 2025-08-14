@@ -282,4 +282,28 @@ class MenuBuilderHelper {
             ]
         )
     }
+
+    private func makeBookmarksMenu() -> UIMenu {
+        return UIMenu(
+            title: .KeyboardShortcuts.Sections.Bookmarks,
+            identifier: MenuIdentifiers.bookmarks,
+            options: .displayInline,
+            children: [
+                UIKeyCommand(
+                    title: .KeyboardShortcuts.ShowBookmarks,
+                    action: #selector(BrowserViewController.showBookmarksKeyCommand),
+                    input: "o",
+                    modifierFlags: [.command, .shift],
+                    discoverabilityTitle: .KeyboardShortcuts.ShowBookmarks
+                ),
+                UIKeyCommand(
+                    title: .KeyboardShortcuts.AddBookmark,
+                    action: #selector(BrowserViewController.addBookmarkKeyCommand),
+                    input: "d",
+                    modifierFlags: .command,
+                    discoverabilityTitle: .KeyboardShortcuts.AddBookmark
+                )
+            ]
+        )
+    }
 }
