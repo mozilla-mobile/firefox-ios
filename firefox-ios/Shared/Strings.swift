@@ -2212,7 +2212,7 @@ extension String {
         public static let ToSAlertMessageFirefoxLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v142",
             tableName: "Summarizer",
-            value: "%@ uses AI securely hosted on Mozilla servers to summarize pages.",
+            value: "%@ uses cloud-based AI to summarize pages, and returns those summaries to your device.",
             comment: "The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox)."
         )
         public static let ToSAlertMessageAppleLabel = MZLocalizedString(
