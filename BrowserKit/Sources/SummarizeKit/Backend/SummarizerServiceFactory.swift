@@ -26,29 +26,19 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             return SummarizerService(summarizer: applSummarizer, maxWords: maxWords)
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
-                  let model = LiteLLMConfig.apiModel,
+                  let model = config.options["model"] as? String, !model.isEmpty,
                   let key = LiteLLMConfig.apiKey else { return nil }
             let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
-            let llmSummarizer = LiteLLMSummarizer(
-                client: llmClient,
-                model: model,
-                maxTokens: LiteLLMConfig.maxTokens,
-                config: config
-            )
+            let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
             return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         }
         #else
         guard isHostedSummarizerEnabled,
               let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
-              let model = LiteLLMConfig.apiModel,
+              let model = config.options["model"] as? String, !model.isEmpty,
               let key = LiteLLMConfig.apiKey else { return nil }
         let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
-        let llmSummarizer = LiteLLMSummarizer(
-            client: llmClient,
-            model: model,
-            maxTokens: LiteLLMConfig.maxTokens,
-            config: config
-        )
+        let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
         return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         #endif
     }
