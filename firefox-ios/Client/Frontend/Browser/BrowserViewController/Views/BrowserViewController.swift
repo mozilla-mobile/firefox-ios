@@ -220,13 +220,17 @@ class BrowserViewController: UIViewController,
         view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
 
-    private let bottomBlurView: UIVisualEffectView = .build { view in
+    private lazy var bottomBlurView: UIVisualEffectView = .build { view in
 		#if canImport(FoundationModels)
-		    view.effect = if #available(iOS 26.0, *) {
-		        UIGlassEffect(style: .regular)
-		    } else {
-		        UIBlurEffect(style: .systemUltraThinMaterial)
-		    }
+            if #available(iOS 26.0, *) {
+                let glassEffect = UIGlassEffect(style: .regular)
+                glassEffect.isInteractive = true
+                // NOTE: this is a hack, in theory we need to actually change the icon color based on the glass effect
+                glassEffect.tintColor = self.themeManager.getCurrentTheme(for: self.windowUUID).colors.layer3
+                view.effect = glassEffect
+            } else {
+                view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+            }
 		#else
 		    view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
 		#endif
