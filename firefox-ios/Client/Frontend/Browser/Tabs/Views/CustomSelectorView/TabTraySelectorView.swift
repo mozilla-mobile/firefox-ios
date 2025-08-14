@@ -34,9 +34,7 @@ class TabTraySelectorView: UIView,
     private var stackViewOffsetConstraint: NSLayoutConstraint?
     private let edgeFadeGradientLayer = CAGradientLayer()
 
-    private var isTabTrayTranslucencyEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayTranslucency, checking: .buildOnly)
-    }
+    private var tabTrayUtils: TabTrayUtils
 
     private lazy var containerView: UIView = .build()
 
@@ -53,10 +51,12 @@ class TabTraySelectorView: UIView,
 
     init(selectedIndex: Int,
          theme: Theme,
-         buttonTitles: [String]) {
+         buttonTitles: [String],
+         tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()) {
         self.selectedIndex = selectedIndex
         self.theme = theme
         self.buttonTitles = buttonTitles
+        self.tabTrayUtils = tabTrayUtils
         super.init(frame: .zero)
         setup()
     }
@@ -331,7 +331,7 @@ class TabTraySelectorView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
 
-        let backgroundAlpha: CGFloat = isTabTrayTranslucencyEnabled ? 0.85 : 1
+        let backgroundAlpha: CGFloat = tabTrayUtils.backgroundAlpha()
         backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
         selectionBackgroundView.backgroundColor = theme.colors.layer3
 

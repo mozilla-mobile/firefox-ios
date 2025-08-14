@@ -23,16 +23,17 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 }
 
 final class TabTrayViewController: UIViewController,
-                             TabTrayController,
-                             UIToolbarDelegate,
-                             UIPageViewControllerDataSource,
-                             UIPageViewControllerDelegate,
-                             UIScrollViewDelegate,
-                             StoreSubscriber,
-                             FeatureFlaggable,
-                             TabTraySelectorDelegate,
-                             TabTrayAnimationDelegate,
-                             TabDisplayViewDragAndDropInteraction {
+                                   TabTrayController,
+                                   UIToolbarDelegate,
+                                   UIPageViewControllerDataSource,
+                                   UIPageViewControllerDelegate,
+                                   UIScrollViewDelegate,
+                                   StoreSubscriber,
+                                   FeatureFlaggable,
+                                   TabTraySelectorDelegate,
+                                   TabTrayAnimationDelegate,
+                                   TabDisplayViewDragAndDropInteraction,
+                                   Notifiable {
     typealias SubscriberStateType = TabTrayState
     private struct UX {
         struct NavigationMenu {
@@ -294,6 +295,12 @@ final class TabTrayViewController: UIViewController,
         setupView()
         subscribeToRedux()
         updateToolbarItems()
+
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIAccessibility.reduceTransparencyStatusDidChangeNotification]
+        )
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
@@ -560,6 +567,13 @@ final class TabTrayViewController: UIViewController,
             blurView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             blurView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
+
+        updateBlurView()
+    }
+
+    private func updateBlurView() {
+        blurView.isHidden = !tabTrayUtils.shouldBlur()
+        applyTheme()
     }
 
     private func updateTitle() {
@@ -1045,5 +1059,14 @@ final class TabTrayViewController: UIViewController,
 
     func dragAndDropEnded() {
         pageScrollView?.isScrollEnabled = true
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            updateBlurView()
+        default: break
+        }
     }
 }
