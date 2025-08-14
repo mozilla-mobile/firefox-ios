@@ -82,6 +82,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         actionType: .summarizer,
         iconName: StandardImageIdentifiers.Medium.lightning,
         isEnabled: true,
+        hasCustomColor: true,
         contextualHintType: ContextualHintType.summarizeToolbarEntry.rawValue,
         a11yLabel: .Toolbars.SummarizeButtonAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.summarizeButton)

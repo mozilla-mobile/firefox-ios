@@ -436,9 +436,23 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         centeredParagraphStyle.alignment = .center
         centeredParagraphStyle.paragraphSpacingBefore = 16
 
+        let bodyStyle = NSMutableParagraphStyle()
+        bodyStyle.paragraphSpacing = 8
+
+        let heading6Style = NSMutableParagraphStyle()
+        heading6Style.paragraphSpacing = 8
+        heading6Style.paragraphSpacingBefore = 16
+
+        let heading2Style = NSMutableParagraphStyle()
+        heading2Style.paragraphSpacing = 32
+        heading2Style.paragraphSpacingBefore = 0
+
         var configuration = configuration
         var paragraphStyles = StaticParagraphStyleCollection()
         paragraphStyles.heading5 = centeredParagraphStyle
+        paragraphStyles.heading6 = heading6Style
+        paragraphStyles.heading2 = heading2Style
+        paragraphStyles.body = bodyStyle
         configuration.paragraphStyles = paragraphStyles
 
         return try? parser.toAttributedString(
@@ -476,6 +490,10 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
                 thematicBreak: textColor,
                 listItemPrefix: textColor,
                 codeBlockBackground: .clear
+            ),
+            listItemOptions: ListItemOptions(
+                spacingAbove: 2,
+                spacingBelow: 4
             )
         )
     }
