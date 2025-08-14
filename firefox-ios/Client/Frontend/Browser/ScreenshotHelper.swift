@@ -9,7 +9,7 @@ import Common
 /**
  * Handles screenshots for a given tab, including pages with non-webview content.
  */
-final class ScreenshotHelper {
+class ScreenshotHelper {
     private weak var controller: BrowserViewController?
     private let logger: Logger
 
