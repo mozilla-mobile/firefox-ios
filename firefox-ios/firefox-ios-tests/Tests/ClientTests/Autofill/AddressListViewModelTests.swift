@@ -106,7 +106,6 @@ final class AddressListViewModelTests: XCTestCase {
             .$addresses
             .sink { value in
                 XCTAssertEqual(value, addresses)
-                print("\(value)")
                 addressesExpectation.fulfill()
             }
             .store(in: &cancellables)
@@ -115,7 +114,6 @@ final class AddressListViewModelTests: XCTestCase {
             .$showSection
             .sink { value in
                 XCTAssertTrue(value)
-                print("\(value)")
                 showSectionExpectation.fulfill()
             }
             .store(in: &cancellables)
