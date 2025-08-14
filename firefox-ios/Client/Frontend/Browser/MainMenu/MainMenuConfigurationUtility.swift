@@ -369,12 +369,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.summarizePage,
                 action: {
-                    let instructions = tabInfo.summarizerInstructions ?? ""
                     store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.webpageSummary(instructions: instructions)),
+                            navigationDestination: MenuNavigationDestination(.webpageSummary(config: tabInfo.summarizerConfig)),
                             telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )

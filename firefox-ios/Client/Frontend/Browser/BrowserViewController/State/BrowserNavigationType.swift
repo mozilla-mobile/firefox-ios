@@ -4,6 +4,7 @@
 
 import Foundation
 import enum MozillaAppServices.VisitType
+import SummarizeKit
 
 /// View types that the browser coordinator can navigate to
 enum BrowserNavigationDestination: Equatable {
@@ -15,7 +16,7 @@ enum BrowserNavigationDestination: Equatable {
     case bookmarksPanel
     case zeroSearch
     case shortcutsLibrary
-    case summarizer(instructions: String?)
+    case summarizer(config: SummarizerConfig)
 
     // Webpage views
     case link

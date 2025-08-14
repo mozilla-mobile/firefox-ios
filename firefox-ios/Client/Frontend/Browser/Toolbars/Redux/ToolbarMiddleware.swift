@@ -281,8 +281,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 let summarizeMiddleware = SummarizerMiddleware()
                 let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
                 let contentType = summarizationCheckResult?.contentType ?? .generic
-                let instructions = summarizeMiddleware.getInstructions(for: contentType)
-                let action = GeneralBrowserAction(summarizerInstructions: instructions,
+                let action = GeneralBrowserAction(summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
                                                   windowUUID: action.windowUUID,
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatchLegacy(action)

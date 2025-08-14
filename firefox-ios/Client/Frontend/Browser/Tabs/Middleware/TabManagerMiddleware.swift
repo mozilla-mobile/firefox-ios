@@ -896,14 +896,13 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     let summarizeMiddleware = SummarizerMiddleware()
                     let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
                     let contentType = summarizationCheckResult?.contentType ?? .generic
-                    let instructions = summarizeMiddleware.getInstructions(for: contentType)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
                         canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                        summarizerInstructions: instructions,
+                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
                         profileImage: profileImage
                     )
                 }
@@ -977,7 +976,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         windowUUID: WindowUUID,
         accountData: AccountData,
         canSummarize: Bool,
-        summarizerInstructions: String? = nil,
+        summarizerConfig: SummarizerConfig? = nil,
         profileImage: UIImage?
     ) {
         store.dispatchLegacy(
@@ -994,7 +993,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     zoomLevel: selectedTab.pageZoom,
                     readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
                     summaryIsAvailable: canSummarize,
-                    summarizerInstructions: summarizerInstructions,
+                    summarizerConfig: summarizerConfig,
                     isBookmarked: info.isBookmarked,
                     isInReadingList: info.isInReadingList,
                     isPinned: info.isPinned,
