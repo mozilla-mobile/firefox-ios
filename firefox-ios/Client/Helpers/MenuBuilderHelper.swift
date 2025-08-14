@@ -12,28 +12,6 @@ class MenuBuilderHelper {
     }
 
     func mainMenu(for builder: UIMenuBuilder) {
-        let bookmarksMenu = UIMenu(
-            title: .KeyboardShortcuts.Sections.Bookmarks,
-            identifier: MenuIdentifiers.bookmarks,
-            options: .displayInline,
-            children: [
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.ShowBookmarks,
-                    action: #selector(BrowserViewController.showBookmarksKeyCommand),
-                    input: "o",
-                    modifierFlags: [.command, .shift],
-                    discoverabilityTitle: .KeyboardShortcuts.ShowBookmarks
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.AddBookmark,
-                    action: #selector(BrowserViewController.addBookmarkKeyCommand),
-                    input: "d",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.AddBookmark
-                )
-            ]
-        )
-
         let toolsMenu = UIMenu(
             title: .KeyboardShortcuts.Sections.Tools,
             identifier: MenuIdentifiers.tools,
