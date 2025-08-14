@@ -284,4 +284,21 @@ class MenuBuilderHelper {
             ]
         )
     }
+
+    private func makeToolsMenu() -> UIMenu {
+        return UIMenu(
+            title: .KeyboardShortcuts.Sections.Tools,
+            identifier: MenuIdentifiers.tools,
+            options: .displayInline,
+            children: [
+                UIKeyCommand(
+                    title: .KeyboardShortcuts.ShowDownloads,
+                    action: #selector(BrowserViewController.showDownloadsKeyCommand),
+                    input: "j",
+                    modifierFlags: .command,
+                    discoverabilityTitle: .KeyboardShortcuts.ShowDownloads
+                )
+            ]
+        )
+    }
 }
