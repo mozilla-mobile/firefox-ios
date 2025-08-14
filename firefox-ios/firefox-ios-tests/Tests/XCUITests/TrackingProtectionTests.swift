@@ -86,6 +86,11 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
         navigator.back()
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(TrackingProtectionSettings)
 
         // Make sure ETP is enabled by default
@@ -118,7 +123,12 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
                 app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
             ]
         )
+
         navigator.goto(BrowserTabMenu)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+        }
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.tables.cells["NewTab"])
         app.tables.cells["NewTab"].swipeUp()
@@ -137,6 +147,11 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
         navigator.back()
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(TrackingProtectionSettings)
 
         // Make sure ETP is enabled by default
@@ -170,6 +185,10 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
             ]
         )
         navigator.goto(BrowserTabMenu)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+        }
         navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.tables.cells["NewTab"])
         app.tables.cells["NewTab"].swipeUp()

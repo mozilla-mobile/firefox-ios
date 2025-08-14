@@ -40,7 +40,9 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
             .staticTexts.firstMatch.waitAndTap()
-        openNewTabAndValidateURLisPaste(url: "https://")
+        if #available(iOS 16, *) {
+            openNewTabAndValidateURLisPaste(url: "https://")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2864380

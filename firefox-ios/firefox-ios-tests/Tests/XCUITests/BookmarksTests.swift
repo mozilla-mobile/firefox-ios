@@ -505,6 +505,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         bookmark()
         navigator.nowAt(NewTabScreen)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(HomeSettings)
         let bookmarksToggle = app.tables.cells.switches["Bookmarks"]
         mozWaitForElementToExist(bookmarksToggle)
@@ -518,6 +523,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         mozWaitForElementToNotExist(app.cells["BookmarksCell"])
         navigator.nowAt(BrowserTab)
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+        }
         navigator.goto(HomeSettings)
         mozWaitForElementToExist(bookmarksToggle)
         if bookmarksToggle.value! as? String == "0" {

@@ -429,33 +429,29 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.nowAt(HomeSettings)
         navigator.goto(NewTabScreen)
         addWebsiteToShortcut(website: url_3)
+        addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
 
-        // FXIOS-13152: iOS 15/16 may crash upon adding the second shortcut
-        if #available(iOS 17, *) {
-            addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        // Verify shortcuts are displayed on the homepage
+        let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let firstWebsite = itemCell.staticTexts["Example Domain"]
+        let secondWebsite = itemCell.staticTexts["Internet for people, not profit — Mozilla"]
+        mozWaitForElementToExist(firstWebsite)
+        mozWaitForElementToExist(secondWebsite)
 
-            // Verify shortcuts are displayed on the homepage
-            let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-            let firstWebsite = itemCell.staticTexts["Example Domain"]
-            let secondWebsite = itemCell.staticTexts["Internet for people, not profit — Mozilla"]
-            mozWaitForElementToExist(firstWebsite)
-            mozWaitForElementToExist(secondWebsite)
+        // Disable shortcuts toggle
+        navigator.goto(HomeSettings)
+        navigator.performAction(Action.SelectShortcuts)
+        shortCutSwitch.waitAndTap()
 
-            // Disable shortcuts toggle
-            navigator.goto(HomeSettings)
-            navigator.performAction(Action.SelectShortcuts)
-            shortCutSwitch.waitAndTap()
-
-            // Verify shortcuts are not displayed on the homepage
-            navigator.nowAt(Shortcuts)
-            navigator.goto(HomeSettings)
-            navigator.nowAt(HomeSettings)
-            navigator.goto(BrowserTab)
-            mozWaitForElementToNotExist(itemCell)
-            mozWaitForElementToNotExist(firstWebsite)
-            mozWaitForElementToNotExist(secondWebsite)
-        }
+        // Verify shortcuts are not displayed on the homepage
+        navigator.nowAt(Shortcuts)
+        navigator.goto(HomeSettings)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(BrowserTab)
+        mozWaitForElementToNotExist(itemCell)
+        mozWaitForElementToNotExist(firstWebsite)
+        mozWaitForElementToNotExist(secondWebsite)
     }
 
     private func addWebsiteToShortcut(website: String) {
