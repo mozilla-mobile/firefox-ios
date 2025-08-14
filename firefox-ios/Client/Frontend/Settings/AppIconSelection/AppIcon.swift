@@ -66,23 +66,6 @@ enum AppIcon: String, CaseIterable {
     /// A version of the app icon with a gradient background, purple fading to blue fading to green.
     case northernLights
 
-//    // TODO: FXIOS-11579 We are waiting to see if we can use hand-drawn icon alternatives.
-//    // MARK: Hand-drawn icons. Order alphabetically.
-//    /// An artsy app icon of a person hugging the Firefox logo. Has a light orange background in all modes.
-//    case hug
-//
-//    /// An artsy app icon which has a fox sleeping on the globe.
-//    case lazy
-//
-//    /// A pixelated version of the regular app icon.
-//    case pixelated
-//
-//    /// A pride fox logo.
-//    case pride
-//
-//    /// The retro Firefox app icon.
-//    case retro
-
     /// The name of the asset to display in the app selection.
     var displayName: String {
         switch self {
@@ -124,18 +107,6 @@ enum AppIcon: String, CaseIterable {
             return .Settings.AppIconSelection.AppIconNames.Midnight
         case .northernLights:
             return .Settings.AppIconSelection.AppIconNames.NorthernLights
-//        // MARK: Hand Drawn
-//        // TODO: FXIOS-11579 We are waiting to see if we can use hand-drawn icon alternatives.
-//        case .hug:
-//            return .Settings.AppIconSelection.AppIconNames.Hug
-//        case .lazy:
-//            return .Settings.AppIconSelection.AppIconNames.Lazy
-//        case .pixelated:
-//            return .Settings.AppIconSelection.AppIconNames.Pixelated
-//        case .pride:
-//            return .Settings.AppIconSelection.AppIconNames.Pride
-//        case .retro:
-//            return .Settings.AppIconSelection.AppIconNames.Retro
         }
     }
 
@@ -184,18 +155,6 @@ enum AppIcon: String, CaseIterable {
             return "appIconAlternate_gradient_midnight"
         case .northernLights:
             return "appIconAlternate_gradient_northernLights"
-//        // MARK: Hand Drawn
-//        // TODO: FXIOS-11579 We are waiting to see if we can use hand-drawn icon alternatives.
-//        case .hug:
-//            return "appIconAlternate_hug"
-//        case .lazy:
-//            return "appIconAlternate_lazy"
-//        case .pixelated:
-//            return "appIconAlternate_pixelated"
-//        case .pride:
-//            return "appIconAlternate_pride"
-//        case .retro:
-//            return "appIconAlternate_retro"
         }
     }
 
@@ -240,18 +199,6 @@ enum AppIcon: String, CaseIterable {
             return "AppIcon_Alt_Gradient_Midnight"
         case .northernLights:
             return "AppIcon_Alt_Gradient_NorthernLights"
-//        // MARK: Hand Drawn
-//        // TODO: FXIOS-11579 We are waiting to see if we can use hand-drawn icon alternatives.
-//        case .hug:
-//            return "AppIcon_Alt_Hug"
-//        case .lazy:
-//            return "AppIcon_Alt_Lazy"
-//        case .pixelated:
-//            return "AppIcon_Alt_Pixelated"
-//        case .pride:
-//            return "AppIcon_Alt_Pride"
-//        case .retro:
-//            return "AppIcon_Alt_Retro"
         }
     }
 
