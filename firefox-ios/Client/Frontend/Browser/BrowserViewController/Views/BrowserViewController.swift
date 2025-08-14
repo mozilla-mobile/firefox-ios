@@ -860,7 +860,7 @@ class BrowserViewController: UIViewController,
     // MARK: - Summarize
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
-        guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled, !UIWindow.isLandscape else { return }
+        guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled else { return }
         store.dispatch(
             GeneralBrowserAction(
                 windowUUID: windowUUID,
