@@ -38,7 +38,7 @@ final class AddressToolbarContainerModel: Equatable {
 
     var addressToolbarConfig: AddressToolbarConfiguration {
         let term = searchTerm ?? searchTermFromURL(url)
-        let backgroundAlpha = toolbarHelper.backgroundAlpha()
+        let backgroundAlpha =  toolbarHelper.glassEffectAlpha
         let shouldBlur = toolbarHelper.shouldBlur()
         let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
                                                                          scrollAlpha: CGFloat(scrollAlpha),
@@ -108,7 +108,7 @@ final class AddressToolbarContainerModel: Equatable {
         with url: URL?,
         isReaderModeAvailableOrActive: Bool?
     ) -> AddressToolbarConfiguration {
-        let backgroundAlpha = toolbarHelper.backgroundAlpha()
+        let backgroundAlpha = toolbarHelper.glassEffectAlpha
         let shouldBlur = toolbarHelper.shouldBlur()
         let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
                                                                          shouldBlur: shouldBlur)

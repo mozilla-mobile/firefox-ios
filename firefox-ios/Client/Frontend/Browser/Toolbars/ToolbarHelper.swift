@@ -9,6 +9,7 @@ protocol ToolbarHelperInterface {
     var isToolbarRefactorEnabled: Bool { get }
     var isToolbarTranslucencyEnabled: Bool { get }
     var isReduceTransparencyEnabled: Bool { get }
+    var glassEffectAlpha: CGFloat { get }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
     func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
@@ -31,6 +32,11 @@ final class ToolbarHelper: ToolbarHelperInterface {
 
     var isReduceTransparencyEnabled: Bool {
         UIAccessibility.isReduceTransparencyEnabled
+    }
+
+    var glassEffectAlpha: CGFloat {
+        guard shouldBlur() else { return 1 }
+        if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
     }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
