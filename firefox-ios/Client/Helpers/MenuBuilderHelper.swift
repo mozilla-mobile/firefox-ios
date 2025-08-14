@@ -12,50 +12,6 @@ class MenuBuilderHelper {
     }
 
     func mainMenu(for builder: UIMenuBuilder) {
-        let newPrivateTab = UICommandAlternate(
-            title: .KeyboardShortcuts.NewPrivateTab,
-            action: #selector(BrowserViewController.newPrivateTabKeyCommand),
-            modifierFlags: [.shift]
-        )
-
-        let fileMenu = UIMenu(
-            options: .displayInline,
-            children: [
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.NewTab,
-                    action: #selector(BrowserViewController.newTabKeyCommand),
-                    input: "t",
-                    modifierFlags: .command,
-                    alternates: [newPrivateTab],
-                    discoverabilityTitle: .KeyboardShortcuts.NewTab
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.NewPrivateTab,
-                    action: #selector(BrowserViewController.newPrivateTabKeyCommand),
-                    input: "p",
-                    modifierFlags: [.command, .shift],
-                    discoverabilityTitle: .KeyboardShortcuts.NewPrivateTab
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.SelectLocationBar,
-                    action: #selector(BrowserViewController.selectLocationBarKeyCommand),
-                    input: "l",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.SelectLocationBar
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.CloseCurrentTab,
-                    action: #selector(BrowserViewController.closeTabKeyCommand),
-                    input: "w",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.CloseCurrentTab
-                ),
-            ]
-        )
-        fileMenu.children.forEach {
-            ($0 as? UIKeyCommand)?.wantsPriorityOverSystemBehavior = true
-        }
-
         let findMenu = UIMenu(
             options: .displayInline,
             children: [
