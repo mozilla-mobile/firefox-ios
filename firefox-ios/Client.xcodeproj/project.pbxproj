@@ -2018,6 +2018,8 @@
 		ED07C0F52CCB020B006C0627 /* SearchEngineSelectionMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0F32CCB0200006C0627 /* SearchEngineSelectionMiddlewareTests.swift */; };
 		ED232EA02DFA3BF30046DA47 /* UserTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED232E9F2DFA3BF00046DA47 /* UserTelemetry.swift */; };
 		ED26BFD72DE5260700FB2B3F /* glean_index.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ED26BFD62DE5260700FB2B3F /* glean_index.yaml */; };
+		ED287B752E4D4C0500527204 /* AppIcon_LiquidGlass_Default.icon in Resources */ = {isa = PBXBuildFile; fileRef = ED287B722E4D4C0500527204 /* AppIcon_LiquidGlass_Default.icon */; };
+		ED287B762E4D4C0500527204 /* AppIcon_LiquidGlass_Alt_DarkPurple.icon in Resources */ = {isa = PBXBuildFile; fileRef = ED287B712E4D4C0500527204 /* AppIcon_LiquidGlass_Alt_DarkPurple.icon */; };
 		ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */; };
 		ED33E3572D0A4CE9002265A7 /* URLActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */; };
 		ED371A682CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED371A672CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift */; };
@@ -10460,6 +10462,8 @@
 		ED232E9F2DFA3BF00046DA47 /* UserTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTelemetry.swift; sourceTree = "<group>"; };
 		ED264785844AD63AD616A882 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		ED26BFD62DE5260700FB2B3F /* glean_index.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = glean_index.yaml; sourceTree = "<group>"; };
+		ED287B712E4D4C0500527204 /* AppIcon_LiquidGlass_Alt_DarkPurple.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_LiquidGlass_Alt_DarkPurple.icon; sourceTree = "<group>"; };
+		ED287B722E4D4C0500527204 /* AppIcon_LiquidGlass_Default.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_LiquidGlass_Default.icon; sourceTree = "<group>"; };
 		ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollBehaviorModel.swift; sourceTree = "<group>"; };
 		ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLActivityItemProviderTests.swift; sourceTree = "<group>"; };
 		ED364EECB95B96AB639A82DE /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -15333,6 +15337,15 @@
 			path = Redux;
 			sourceTree = "<group>";
 		};
+		ED287B732E4D4C0500527204 /* LiquidGlassAppIcons */ = {
+			isa = PBXGroup;
+			children = (
+				ED287B712E4D4C0500527204 /* AppIcon_LiquidGlass_Alt_DarkPurple.icon */,
+				ED287B722E4D4C0500527204 /* AppIcon_LiquidGlass_Default.icon */,
+			);
+			path = LiquidGlassAppIcons;
+			sourceTree = "<group>";
+		};
 		ED371A692CB885B20099F3C8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -15655,6 +15668,7 @@
 		F84B21EB1A0910F600AAB793 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				ED287B732E4D4C0500527204 /* LiquidGlassAppIcons */,
 				0BD049CF2DFC4B7900614E61 /* Debug */,
 				E699220D1B94E3EF007C480D /* About */,
 				D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */,
@@ -16874,6 +16888,8 @@
 				8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */,
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
 				0BF7FE422E09620900FD016A /* swipingTabsOn.json in Resources */,
+				ED287B752E4D4C0500527204 /* AppIcon_LiquidGlass_Default.icon in Resources */,
+				ED287B762E4D4C0500527204 /* AppIcon_LiquidGlass_Alt_DarkPurple.icon in Resources */,
 				8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */,
 				1D91C1862CF11EA500B24960 /* disconnect-block-social.json in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
