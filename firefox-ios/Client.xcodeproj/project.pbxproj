@@ -29096,7 +29096,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Alt_Color_Blue AppIcon_Alt_Color_Cyan AppIcon_Alt_Color_Green AppIcon_Alt_Color_Orange AppIcon_Alt_Color_Pink AppIcon_Alt_Color_Purple AppIcon_Alt_Color_Red AppIcon_Alt_Color_Yellow AppIcon_Alt_Gradient_BlueHour AppIcon_Alt_Gradient_GoldenHour AppIcon_Alt_Gradient_Twilight AppIcon_Alt_Gradient_Sunset AppIcon_Alt_Gradient_Sunrise AppIcon_Alt_Gradient_NorthernLights AppIcon_Alt_Gradient_Midnight AppIcon_Alt_Gradient_Midday AppIcon_Alt_DarkPurple";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
