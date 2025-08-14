@@ -30,6 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
+                          TermsOfUseDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -162,6 +163,7 @@ class BrowserCoordinator: BaseCoordinator,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
         )
+        homepageController.termsOfUseDelegate = self
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -309,6 +311,7 @@ class BrowserCoordinator: BaseCoordinator,
             legacyHomepageViewController.libraryPanelDelegate = libraryPanelDelegate
             legacyHomepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             legacyHomepageViewController.browserNavigationHandler = self
+            legacyHomepageViewController.termsOfUseDelegate = self
 
             return legacyHomepageViewController
         }
@@ -1167,9 +1170,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Terms of Use
-    // Terms Of Use Bottom Sheet should appear on every app launch on homepage or on current tab,
-    // until user accepts terms of use.
-    func showTermsOfUse() {
+
+    func showTermsOfUse(context: TriggerContext = .appLaunch) {
         let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
 
         let router = DefaultRouter(navigationController: presenter.navigationController ?? UINavigationController())
@@ -1181,10 +1183,10 @@ class BrowserCoordinator: BaseCoordinator,
             notificationCenter: NotificationCenter.default,
             prefs: profile.prefs
         )
-        guard coordinator.shouldShowTermsOfUse() else { return }
+        guard coordinator.shouldShowTermsOfUse(context: context) else { return }
         coordinator.parentCoordinator = self
         add(child: coordinator)
-        coordinator.start()
+        coordinator.start(context: context)
     }
 
     // MARK: - Password Generator

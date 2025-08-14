@@ -29,6 +29,7 @@ final class HomepageViewController: UIViewController,
 
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
+    weak var termsOfUseDelegate: TermsOfUseDelegate?
 
     // MARK: - Layout variables
     var statusBarFrame: CGRect? {
@@ -160,6 +161,7 @@ final class HomepageViewController: UIViewController,
                 actionType: HomepageActionType.viewWillAppear
             )
         )
+        termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
     }
 
     override func viewDidAppear(_ animated: Bool) {

@@ -116,6 +116,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func showShortcutsLibrary()
+
+    @MainActor
+    func showTermsOfUse(context: TriggerContext)
 }
 
 extension BrowserNavigationHandler {

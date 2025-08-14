@@ -42,11 +42,13 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
             XCTAssertTrue(Calendar.current.isDate(dismissedDate, inSameDayAs: Date()))
         }
     }
-    func testMiddleware_markShownThisLaunch_doesNotWriteToPrefs() {
-        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markShownThisLaunch)
+    func testMiddleware_markShown_setsFirstShownPref() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markShown)
         middleware.termsOfUseProvider(AppState(), action)
 
-        XCTAssertFalse(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == false)
+        // Should set the first shown preference
+        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) == true)
+
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNil(dismissedTimestamp)
     }

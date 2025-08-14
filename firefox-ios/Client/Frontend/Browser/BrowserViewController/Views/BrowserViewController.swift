@@ -826,7 +826,7 @@ class BrowserViewController: UIViewController,
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
             scrollController.showToolbars(animated: false)
         }
-
+        navigationHandler?.showTermsOfUse(context: .appBecameActive)
         browserDidBecomeActive()
     }
 

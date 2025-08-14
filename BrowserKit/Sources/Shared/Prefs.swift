@@ -23,6 +23,7 @@ public struct PrefsKeys {
     public static let IntroSeen = "IntroViewControllerSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
     public static let TermsOfUseAccepted = "TermsOfUseAccepted"
+    public static let TermsOfUseFirstShown = "TermsOfUseFirstShown"
     public static let TermsOfUseDismissedDate = "TermsOfUseDismissedDate"
     public static let HomePageTab = "HomePageTab"
     public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
