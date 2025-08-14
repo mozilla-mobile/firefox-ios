@@ -18,19 +18,6 @@ class MenuBuilderHelper {
             modifierFlags: [.shift]
         )
 
-        let applicationMenu = UIMenu(
-            options: .displayInline,
-            children: [
-                UIKeyCommand(
-                    title: .AppSettingsTitle,
-                    action: #selector(BrowserViewController.openSettingsKeyCommand),
-                    input: ",",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .AppSettingsTitle
-                )
-            ]
-        )
-
         let fileMenu = UIMenu(
             options: .displayInline,
             children: [
