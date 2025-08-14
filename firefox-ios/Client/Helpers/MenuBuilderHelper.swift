@@ -99,7 +99,7 @@ class MenuBuilderHelper {
         builder.remove(menu: .font)
         builder.insertChild(makeViewMenu(), atStartOfMenu: .view)
         builder.insertSibling(makeHistoryMenu(), afterMenu: .view)
-        builder.insertSibling(bookmarksMenu, afterMenu: MenuIdentifiers.history)
+        builder.insertSibling(makeBookmarksMenu(), afterMenu: MenuIdentifiers.history)
         builder.insertSibling(toolsMenu, afterMenu: MenuIdentifiers.bookmarks)
         builder.insertChild(windowMenu, atStartOfMenu: .window)
     }
