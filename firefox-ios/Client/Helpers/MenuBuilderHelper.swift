@@ -256,7 +256,7 @@ class MenuBuilderHelper {
             ($0 as? UIKeyCommand)?.wantsPriorityOverSystemBehavior = true
         }
 
-        builder.insertChild(applicationMenu, atStartOfMenu: .application)
+        builder.insertChild(makeApplicationMenu(), atStartOfMenu: .application)
         builder.insertChild(fileMenu, atStartOfMenu: .file)
         builder.replace(menu: .find, with: findMenu)
         builder.remove(menu: .font)
