@@ -201,7 +201,7 @@ class MenuBuilderHelper {
 
         builder.insertChild(makeApplicationMenu(), atStartOfMenu: .application)
         builder.insertChild(makeFileMenu(), atStartOfMenu: .file)
-        builder.replace(menu: .find, with: findMenu)
+        builder.replace(menu: .find, with: makeFindMenu())
         builder.remove(menu: .font)
         builder.insertChild(viewMenu, atStartOfMenu: .view)
         builder.insertSibling(historyMenu, afterMenu: .view)
