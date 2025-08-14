@@ -229,7 +229,7 @@ class CreditCardInputViewModel: ObservableObject {
         }
     }
 
-    public func saveCreditCard(completion: @escaping (CreditCard?, Error?) -> Void) {
+    public func saveCreditCard(completion: @escaping @Sendable (CreditCard?, Error?) -> Void) {
         guard let plainCreditCard = getDisplayedCCValues() else {
             completion(nil, InputVMError.unableToSaveCC)
             return
@@ -239,7 +239,7 @@ class CreditCardInputViewModel: ObservableObject {
                                completion: completion)
     }
 
-    func updateCreditCard(completion: @escaping (Bool?, Error?) -> Void) {
+    func updateCreditCard(completion: @escaping @Sendable (Bool?, Error?) -> Void) {
         guard let creditCard = creditCard,
               let plainCreditCard = getDisplayedCCValues() else {
             completion(true, InputVMError.unableToUpdateCC)

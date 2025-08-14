@@ -159,26 +159,30 @@ struct CreditCardInputView: View {
                 // Update existing card
                 if viewModel.state == .edit {
                     viewModel.updateCreditCard { _, error in
-                        guard let error = error else {
-                            viewModel.dismiss?(.updatedCard, true)
-                            return
+                        ensureMainThread {
+                            guard let error = error else {
+                                viewModel.dismiss?(.updatedCard, true)
+                                return
+                            }
+                            viewModel.logger?.log("Unable to update card with error: \(error)",
+                                                  level: .fatal,
+                                                  category: .autofill)
+                            viewModel.dismiss?(.none, false)
                         }
-                        viewModel.logger?.log("Unable to update card with error: \(error)",
-                                              level: .fatal,
-                                              category: .autofill)
-                        viewModel.dismiss?(.none, false)
                     }
                 } else {
                     // Save new card
                     viewModel.saveCreditCard { _, error in
-                        guard let error = error else {
-                            viewModel.dismiss?(.savedCard, true)
-                            return
+                        ensureMainThread {
+                            guard let error = error else {
+                                viewModel.dismiss?(.savedCard, true)
+                                return
+                            }
+                            viewModel.logger?.log("Unable to save credit card with error: \(error)",
+                                                  level: .fatal,
+                                                  category: .autofill)
+                            viewModel.dismiss?(.savedCard, false)
                         }
-                        viewModel.logger?.log("Unable to save credit card with error: \(error)",
-                                              level: .fatal,
-                                              category: .autofill)
-                        viewModel.dismiss?(.savedCard, false)
                     }
                 }
             }

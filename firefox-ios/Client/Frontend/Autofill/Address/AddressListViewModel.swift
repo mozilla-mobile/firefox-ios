@@ -103,8 +103,8 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     func fetchAddresses() {
         // Assuming profile is a class-level variable
         addressProvider.listAllAddresses { [weak self] storedAddresses, error in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
+            guard let self else { return }
+            ensureMainThread {
                 if let addresses = storedAddresses {
                     self.addresses = addresses
                     self.showSection = !addresses.isEmpty
@@ -166,8 +166,8 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     }
 
     private func updateLocal(id: String, updatedAddress: UpdatableAddressFields) {
-        self.addressProvider.updateAddress(id: id, address: updatedAddress) { [weak self] result in
-            DispatchQueue.main.async {
+        addressProvider.updateAddress(id: id, address: updatedAddress) { [weak self] result in
+            ensureMainThread { [weak self] in
                 switch result {
                 case .success:
                     self?.presentToast?(.updated)
@@ -220,11 +220,12 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     }
 
     private func saveLocal(address: UpdatableAddressFields) {
-        self.addressProvider.addAddress(address: address) { [weak self] result in
-            DispatchQueue.main.async {
+        addressProvider.addAddress(address: address) { [weak self] result in
+            guard let self else { return }
+            ensureMainThread {
                 switch result {
                 case .failure:
-                    self?.presentToast?(
+                    self.presentToast?(
                         .error(
                             .save(action: { [weak self] in
                                 self?.destination = .add(
@@ -251,8 +252,8 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                     )
                 default: break
                 }
-                self?.destination = nil
-                self?.fetchAddresses()
+                self.destination = nil
+                self.fetchAddresses()
             }
         }
     }
@@ -277,7 +278,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
         ))
     }
 
-    func removeConfimationButtonTap() {
+    func removeConfirmationButtonTap() {
         if case .edit(let address) = destination {
             removeLocal(address: address)
         }
@@ -286,7 +287,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     private func removeLocal(address: Address) {
         addressProvider.deleteAddress(id: address.id) { [weak self] result in
             guard let self else { return }
-            DispatchQueue.main.async {
+            ensureMainThread {
                 switch result {
                 case .failure:
                     self.presentToast?(
