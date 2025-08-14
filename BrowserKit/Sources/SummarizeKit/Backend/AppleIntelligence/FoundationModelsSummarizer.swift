@@ -16,6 +16,8 @@ import Foundation
 final class FoundationModelsSummarizer: SummarizerProtocol {
     typealias SessionFactory = (String) -> LanguageModelSessionProtocol
 
+    public let modelName: SummarizerModel = .appleSummarizer
+
     private let makeSession: SessionFactory
     private let modelInstructions: String
 

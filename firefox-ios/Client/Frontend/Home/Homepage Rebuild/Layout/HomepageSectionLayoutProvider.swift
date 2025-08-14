@@ -83,8 +83,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         struct TopSitesConstants {
-            static let cellEstimatedSize = CGSize(width: 85, height: 94)
-            static let minCards = 4
             static let redesignedTopSitesBottomSpacingLandscape: CGFloat = 16
 
             @MainActor
@@ -300,24 +298,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         for traitCollection: UITraitCollection,
         numberOfTilesPerRow: Int
     ) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0 / CGFloat(numberOfTilesPerRow)),
-            heightDimension: .estimated(UX.TopSitesConstants.cellEstimatedSize.height)
-        )
-
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.TopSitesConstants.cellEstimatedSize.height)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitem: item,
-            count: numberOfTilesPerRow
-        )
-        group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.standardSpacing)
-        let section = NSCollectionLayoutSection(group: group)
+        let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(for: traitCollection,
+                                                                                numberOfTilesPerRow: numberOfTilesPerRow)
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -329,16 +311,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             alignment: .top
         )
         section.boundarySupplementaryItems = [header]
+
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         let bottomInset = isStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
                                                    : UX.spacingBetweenSections - UX.interGroupSpacing
-        section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
-            leading: leadingInset,
-            bottom: bottomInset,
-            trailing: leadingInset
-        )
-        section.interGroupSpacing = UX.standardSpacing
+        section.contentInsets.top = 0
+        section.contentInsets.bottom = bottomInset
 
         return section
     }

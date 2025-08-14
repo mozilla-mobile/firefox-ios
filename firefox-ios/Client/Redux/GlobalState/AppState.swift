@@ -34,6 +34,7 @@ struct AppState: StateType {
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
                 case (.passwordGenerator(let state), .passwordGenerator): return state as? S
                 case (.nativeErrorPage(let state), .nativeErrorPage): return state as? S
+                case (.shortcutsLibrary(let state), .shortcutsLibrary): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -80,7 +81,8 @@ let middlewares = [
     BookmarksMiddleware().bookmarksProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
     StartAtHomeMiddleware().startAtHomeProvider,
-    TermsOfUseMiddleware().termsOfUseProvider,
+    SummarizerMiddleware().summarizerProvider,
+    TermsOfUseMiddleware().termsOfUseProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

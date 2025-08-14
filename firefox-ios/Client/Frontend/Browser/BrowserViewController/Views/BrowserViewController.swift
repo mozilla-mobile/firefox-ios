@@ -87,7 +87,7 @@ class BrowserViewController: UIViewController,
         return addressToolbarContainer
     }
 
-    var windowUUID: WindowUUID { return tabManager.windowUUID }
+    nonisolated let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
     private var observedWebViews = WeakList<WKWebView>()
 
@@ -193,7 +193,13 @@ class BrowserViewController: UIViewController,
         topTouchArea.addTarget(self, action: #selector(self.tappedTopArea), for: .touchUpInside)
     }
 
-    private(set) lazy var scrollController = LegacyTabScrollController(windowUUID: windowUUID)
+    private(set) lazy var scrollController: TabScrollHandlerProtocol = {
+        if isTabScrollRefactoringEnabled {
+            return TabScrollHandler(windowUUID: windowUUID)
+        } else {
+            return LegacyTabScrollController(windowUUID: windowUUID)
+        }
+    }()
 
     // Window helper used for displaying an opaque background for private tabs.
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
@@ -342,6 +348,10 @@ class BrowserViewController: UIViewController,
         return summarizerNimbusUtils.isToolbarButtonEnabled
     }
 
+    var isTabScrollRefactoringEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -421,6 +431,7 @@ class BrowserViewController: UIViewController,
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
         self.tabManager = tabManager
+        self.windowUUID = tabManager.windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.crashTracker = DefaultCrashTracker()
@@ -548,12 +559,14 @@ class BrowserViewController: UIViewController,
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
 
-        let action = GeneralBrowserMiddlewareAction(
-            scrollOffset: scrollController.contentOffset,
-            toolbarPosition: newSearchBarPosition,
-            windowUUID: windowUUID,
-            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-        store.dispatchLegacy(action)
+        if let legacyController = scrollController as? LegacyTabScrollProvider {
+            let action = GeneralBrowserMiddlewareAction(
+                scrollOffset: legacyController.contentOffset,
+                toolbarPosition: newSearchBarPosition,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
+            store.dispatchLegacy(action)
+        }
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
@@ -806,6 +819,7 @@ class BrowserViewController: UIViewController,
 
     @objc
     func appDidBecomeActiveNotification() {
+        processAppleIntelligenceState()
         privacyWindowHelper.removeWindow()
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
@@ -814,6 +828,14 @@ class BrowserViewController: UIViewController,
         }
 
         browserDidBecomeActive()
+    }
+
+    private func processAppleIntelligenceState() {
+        if #available(iOS 26, *) {
+            #if canImport(FoundationModels)
+                AppleIntelligenceUtil().processAvailabilityState()
+            #endif
+        }
     }
 
     func browserDidBecomeActive() {
@@ -839,7 +861,12 @@ class BrowserViewController: UIViewController,
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         super.motionEnded(motion, with: event)
         guard motion == .motionShake, summarizerNimbusUtils.isShakeGestureEnabled else { return }
-        navigationHandler?.showSummarizePanel()
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.shakeMotionEnded
+            )
+        )
     }
 
     // MARK: - BrowserContentHiding
@@ -889,7 +916,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    func unsubscribeFromRedux() {
+    nonisolated func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .browserViewController)
@@ -1038,9 +1065,11 @@ class BrowserViewController: UIViewController,
         }
 
         navigationToolbarContainer.toolbarDelegate = self
-        scrollController.configureToolbarViews(overKeyboardContainer: overKeyboardContainer,
-                                               bottomContainer: bottomContainer,
-                                               headerContainer: header)
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.configureToolbarViews(overKeyboardContainer: overKeyboardContainer,
+                                                   bottomContainer: bottomContainer,
+                                                   headerContainer: header)
+        }
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links into the view from other apps.
@@ -1407,7 +1436,7 @@ class BrowserViewController: UIViewController,
         AppEventQueue.signal(event: .browserIsReady)
     }
 
-    func willNavigateAway(from tab: Tab?, completion: (() -> Void)? = nil) {
+    func willNavigateAway(from tab: Tab?) {
         if let tab {
             screenshotHelper.takeScreenshot(
                 tab,
@@ -1417,8 +1446,7 @@ class BrowserViewController: UIViewController,
                     y: -contentContainer.frame.origin.y,
                     width: view.frame.width,
                     height: view.frame.height
-                ),
-                completion: completion
+                )
             )
         }
     }
@@ -1539,17 +1567,18 @@ class BrowserViewController: UIViewController,
         super.viewWillTransition(to: size, with: coordinator)
 
         dismissVisibleMenus()
+        let legacyScrollController = scrollController as? LegacyTabScrollProvider
 
         coordinator.animate(alongsideTransition: { [self] context in
-            scrollController.updateMinimumZoom()
+            legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = displayedPopoverController {
                 updateDisplayedPopoverProperties?()
                 present(popover, animated: true, completion: nil)
             }
         }, completion: { _ in
-            self.scrollController.traitCollectionDidChange()
-            self.scrollController.setMinimumZoom()
+            legacyScrollController?.traitCollectionDidChange()
+            legacyScrollController?.setMinimumZoom()
         })
         microsurvey?.setNeedsUpdateConstraints()
         webPagePreview.invalidateScreenshotData()
@@ -1659,7 +1688,11 @@ class BrowserViewController: UIViewController,
                 // if we don't have the URL bar at the top then header height is 0
                 make.height.equalTo(0)
             } else {
-                scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                if let scrollController = scrollController as? LegacyTabScrollProvider {
+                    scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
+                } else {
+                    make.top.equalTo(view.safeArea.top)
+                }
                 make.left.right.equalTo(view)
             }
         }
@@ -1685,7 +1718,12 @@ class BrowserViewController: UIViewController,
         }
 
         overKeyboardContainer.snp.remakeConstraints { make in
-            scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+            } else {
+                make.bottom.equalTo(bottomContainer.snp.top)
+            }
+
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
             } else if !isBottomSearchBar {
@@ -1695,7 +1733,11 @@ class BrowserViewController: UIViewController,
         }
 
         bottomContainer.snp.remakeConstraints { make in
-            scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+            } else {
+                make.bottom.equalTo(view.snp.bottom)
+            }
             make.leading.trailing.equalTo(view)
         }
 
@@ -2713,6 +2755,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
+        case .summarizer(let instructions):
+            navigationHandler?.showSummarizePanel(.shakeGesture, instructions: instructions)
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
         case .zeroSearch:
@@ -2770,8 +2814,8 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
-        case .summarizer:
-            navigationHandler?.showSummarizePanel()
+        case .summarizer(let instructions):
+            navigationHandler?.showSummarizePanel(.toolbarIcon, instructions: instructions)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)

@@ -568,7 +568,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel()
+        subject.showSummarizePanel(.mainMenu, instructions: "Test instructions")
 
         let childCoordinator = subject.childCoordinators.first
         XCTAssertTrue(childCoordinator is SummarizeCoordinator)
@@ -583,7 +583,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel()
+        subject.showSummarizePanel(.mainMenu, instructions: "Test instructions")
 
         XCTAssertNil(subject.childCoordinators.first(where: {
             $0 is SummarizeCoordinator
@@ -595,7 +595,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject()
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel()
+        subject.showSummarizePanel(.mainMenu, instructions: "Test instructions")
         XCTAssertNil(subject.childCoordinators.first(where: {
             $0 is SummarizeCoordinator
         }))

@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import WebKit
+import SummarizeKit
 
 @testable import Client
 
@@ -148,7 +149,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         removeDocumentLoadingCalled += 1
     }
 
-    func showSummarizePanel() {
+    func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?) {
         showSummarizePanelCalled += 1
     }
 

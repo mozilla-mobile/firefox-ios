@@ -50,7 +50,7 @@ final class UserAgentBuilderTests: XCTestCase {
     func testDefaultDesktopUserAgent() {
         let builder = UserAgentBuilder.defaultDesktopUserAgent()
         let systemInfo = "(Macintosh; Intel Mac OS X 10_15_7)"
-        let extensions = "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)"
+        let extensions = "Version/17.7 Safari/605.1.15"
         let testAgent = "\(UserAgent.product) \(systemInfo) \(UserAgent.platform) \(UserAgent.platformDetails) \(extensions)"
         XCTAssertEqual(builder.userAgent(), testAgent)
     }

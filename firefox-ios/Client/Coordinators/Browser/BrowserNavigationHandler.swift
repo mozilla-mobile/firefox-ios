@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import WebKit
+import SummarizeKit
 
 import struct MozillaAppServices.CreditCard
 import enum MozillaAppServices.VisitType
@@ -111,7 +112,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func removeDocumentLoading()
 
     @MainActor
-    func showSummarizePanel()
+    func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?)
 
     @MainActor
     func showShortcutsLibrary()

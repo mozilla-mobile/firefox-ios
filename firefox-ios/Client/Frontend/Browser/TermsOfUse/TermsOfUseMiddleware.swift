@@ -3,23 +3,17 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Common
 import Redux
-import Foundation
+import Shared
 
-// TODO: FXIOS-12947 - Add tests for TermsOfUse Feature and use profile.prefs
-// instead of User Defaults
+// TODO: FXIOS-12947 - Add tests for TermsOfUse Feature
 @MainActor
 class TermsOfUseMiddleware {
-    struct DefaultKeys {
-        static let acceptedKey = "termsOfUseAccepted"
-        static let dismissedKey = "termsOfUseDismissed"
-        static let dismissedWithoutAcceptDate = "termsOfUseDismissedWithoutAcceptDate"
-    }
-    private let userDefaults: UserDefaultsInterface
+    private let prefs: Prefs
     private let logger: Logger
 
-    init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
+    init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
-        self.userDefaults = userDefaults
+        self.prefs = profile.prefs
         self.logger = logger
     }
 
@@ -42,12 +36,10 @@ class TermsOfUseMiddleware {
 
             switch type {
             case TermsOfUseActionType.markAccepted:
-                self.userDefaults.set(true, forKey: DefaultKeys.acceptedKey)
-                self.userDefaults.set(false, forKey: DefaultKeys.dismissedKey)
+                self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
 
             case TermsOfUseActionType.markDismissed:
-                self.userDefaults.set(true, forKey: DefaultKeys.dismissedKey)
-                self.userDefaults.set(Date(), forKey: DefaultKeys.dismissedWithoutAcceptDate)
+                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
 
             case TermsOfUseActionType.markShownThisLaunch:
                 break

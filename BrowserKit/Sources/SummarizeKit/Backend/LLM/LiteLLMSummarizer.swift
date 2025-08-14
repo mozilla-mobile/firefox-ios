@@ -12,6 +12,8 @@ final class LiteLLMSummarizer: SummarizerProtocol {
     private let maxTokens: Int
     private let modelInstructions: String
 
+    public let modelName: SummarizerModel = .liteLLMSummarizer
+
     init(
         client: LiteLLMClientProtocol,
         model: String,

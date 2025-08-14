@@ -34,7 +34,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case readerModeLongPressAction
         case dataClearance
         case passwordGenerator
-        case summarizer
+        // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
+        case summarizer(instructions: String)
     }
 
     let windowUUID: WindowUUID
@@ -134,6 +135,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return reduceStateForStartAtHomeAction(action: action, state: state)
         } else if let action = action as? ToolbarMiddlewareAction {
             return reduceStateForToolbarAction(action: action, state: state)
+        } else if let action = action as? SummarizeAction {
+            return reduceStateForSummarizeAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -184,6 +187,25 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         switch action.actionType {
         case StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted:
             return resolveStateForStartAtHome(action: action, state: state)
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
+    // MARK: - Summarize Action
+    static func reduceStateForSummarizeAction(
+        action: SummarizeAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case SummarizeMiddlewareActionType.configuredSummarizer:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.summarizer(instructions: action.instructions))
+            )
         default:
             return defaultState(from: state, action: action)
         }
@@ -449,7 +471,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                displayView: .summarizer,
+                displayView: .summarizer(instructions: action.summarizerInstructions ?? ""),
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return defaultState(from: state, action: action)

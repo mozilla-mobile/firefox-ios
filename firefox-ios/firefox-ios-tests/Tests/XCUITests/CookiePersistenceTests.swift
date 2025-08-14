@@ -23,7 +23,6 @@ final class CookiePersistenceTests: BaseTestCase {
         // Open URL for Cookie login
         openCookieSite()
         let webview = app.webViews.firstMatch
-        mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
 
         // Tap on Log in
@@ -35,7 +34,6 @@ final class CookiePersistenceTests: BaseTestCase {
         relaunchApp()
 
         openCookieSite()
-        mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])
         mozWaitForElementToExist(webview.staticTexts["LOGGED_IN"])
     }
 
@@ -43,7 +41,6 @@ final class CookiePersistenceTests: BaseTestCase {
         // Open URL for Cookie login
         openCookieSite()
         let webview = app.webViews.firstMatch
-        mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
 
         // Tap on Log in
@@ -66,7 +63,6 @@ final class CookiePersistenceTests: BaseTestCase {
         // Open a new tab for cookie website and check login status
         navigator.nowAt(NewTabScreen)
         openCookieSite()
-        mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])
         mozWaitForElementToExist(webview.staticTexts["LOGGED_IN"])
     }
 
@@ -85,5 +81,10 @@ final class CookiePersistenceTests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-cookie-store.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
+        let webview = app.webViews.firstMatch
+        mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])
+        mozWaitForElementToExist(webview.textFields.firstMatch)
+        mozWaitForElementToExist(webview.buttons["Login"])
+        mozWaitForElementToExist(webview.buttons["Logout"])
     }
 }

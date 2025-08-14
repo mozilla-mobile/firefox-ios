@@ -42,11 +42,6 @@ enum UX {
         static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
         static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
         static let secondaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
-
-        static let vividOrange = Color(UIColor(colorString: "FE8300"))
-        static let electricBlue = Color(UIColor(colorString: "2E81FE"))
-        static let crimsonRed = Color(UIColor(colorString: "F20501"))
-        static let burntOrange = Color(UIColor(colorString: "FE6500"))
     }
 
     enum SegmentedControl {

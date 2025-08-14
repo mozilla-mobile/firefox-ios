@@ -113,7 +113,13 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
         var payload: [String: Any] = [
             "model": options.model,
             "messages": messages.map { ["role": $0.role.rawValue, "content": $0.content] },
-            "max_tokens": options.maxTokens
+            "max_tokens": options.maxTokens,
+            // NOTE(FXIOS-13068): We usually shouldn't be tweaking these parameters,
+            // but we have encountered weird issues where mistral would return text with repeated words.
+            // This is being investigated in FXIOS-13068. For now, we are setting
+            //  `top_p`, `temperature` explicitely as part of the request.
+            "top_p": 0.01,
+            "temperature": 0.1
         ]
 
         if options.stream {

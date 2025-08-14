@@ -6,22 +6,26 @@ import SummarizeKit
 import WebKit
 
 class MockSummarizationChecker: SummarizationCheckerProtocol {
+    var checkCalledCount = 0
     static let success = SummarizationCheckResult(
         canSummarize: true,
         reason: nil,
         wordCount: 0,
-        textContent: ""
+        textContent: "",
+        contentType: .generic
     )
     static let failure = SummarizationCheckResult(
         canSummarize: false,
         reason: .contentTooLong,
         wordCount: 0,
-        textContent: ""
+        textContent: "",
+        contentType: nil
     )
 
     var overrideResponse: SummarizationCheckResult?
 
     func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult {
+        checkCalledCount += 1
         return overrideResponse ?? Self.success
     }
 }

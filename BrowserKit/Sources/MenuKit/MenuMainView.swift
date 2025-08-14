@@ -6,8 +6,7 @@ import Common
 import UIKit
 import ComponentLibrary
 
-public final class MenuMainView: UIView,
-                                         ThemeApplicable {
+public final class MenuMainView: UIView, ThemeApplicable {
     private struct UX {
         static let headerTopMargin: CGFloat = 24
         static let horizontalMargin: CGFloat = 16

@@ -4,6 +4,7 @@
 
 import Foundation
 import QuickLook
+import Common
 
 final class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
     private var previewItem = NSURL()

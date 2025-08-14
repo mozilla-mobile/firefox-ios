@@ -464,17 +464,6 @@ class HistoryPanel: UIViewController,
 
                 // FXIOS-10996 Temporary check for duplicates to help diagnose history panel crashes
                 if sectionData.count > sectionDataUniqued.count {
-                    let numberOfDuplicates = sectionData.count - sectionDataUniqued.count
-                    logger.log(
-                        "Duplicates found in HistoryPanel applySnapshot method",
-                        level: .fatal,
-                        category: .library,
-                        extra: [
-                            "section": "\(section)",
-                            "numberOfDuplicates": "\(numberOfDuplicates)"
-                        ]
-                    )
-
                     // If you crash here, please record your steps in ticket FXIOS-10996. Diagnose if possible as you
                     // have stumbled upon one of our rare Sentry crashes that is probably dependent on your unique
                     // browsing history state.

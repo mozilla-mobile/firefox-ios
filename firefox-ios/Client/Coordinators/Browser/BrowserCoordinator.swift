@@ -1042,15 +1042,16 @@ class BrowserCoordinator: BaseCoordinator,
     private func present(_ viewController: UIViewController,
                          customTransition: UIViewControllerTransitioningDelegate,
                          style: UIModalPresentationStyle) {
-        browserViewController.willNavigateAway(from: tabManager.selectedTab) { [weak self] in
-            if !UIAccessibility.isReduceMotionEnabled {
-                self?.router.present(viewController,
-                                     animated: true,
-                                     customTransition: customTransition,
-                                     presentationStyle: style)
-            } else {
-                self?.router.present(viewController)
-            }
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
+        if !UIAccessibility.isReduceMotionEnabled {
+            router.present(
+                viewController,
+                animated: true,
+                customTransition: customTransition,
+                presentationStyle: style
+            )
+        } else {
+            router.present(viewController)
         }
     }
 
@@ -1079,7 +1080,7 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-  func showSummarizePanel() {
+  func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?) {
         guard isSummarizerOn,
               tabManager.selectedTab?.isFxHomeTab == false,
               let webView = tabManager.selectedTab?.webView else { return }
@@ -1103,8 +1104,10 @@ class BrowserCoordinator: BaseCoordinator,
             webView: webView,
             browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
+            trigger: trigger,
             prefs: profile.prefs,
             windowUUID: windowUUID,
+            instructions: instructions,
             router: router) { [weak self] url in
             guard let url else { return }
             self?.openURLinNewTab(url)
@@ -1175,7 +1178,8 @@ class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             router: router,
             themeManager: AppContainer.shared.resolve(),
-            notificationCenter: NotificationCenter.default
+            notificationCenter: NotificationCenter.default,
+            prefs: profile.prefs
         )
         guard coordinator.shouldShowTermsOfUse() else { return }
         coordinator.parentCoordinator = self

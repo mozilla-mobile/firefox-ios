@@ -5,6 +5,18 @@
 import XCTest
 
 class DisplaySettingTests: BaseTestCase {
+    override func setUp() {
+        // Fresh install the app
+        // removeApp() does not work on iOS 15 and 16 intermittently
+        if name.contains("testCheckDisplaySettingsDefault") {
+            if #available(iOS 17, *) {
+                removeApp()
+            }
+        }
+        // The app is correctly installed
+        super.setUp()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2337485
     func testCheckDisplaySettingsDefault() {
         navigator.nowAt(NewTabScreen)

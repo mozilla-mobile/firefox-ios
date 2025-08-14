@@ -56,6 +56,9 @@ final class NimbusFeatureFlagLayer {
         case .homepageStoriesRedesign:
             return checkHomepageStoriesRedesignFeature(from: nimbus)
 
+        case .homepageDiscoverMoreButton, .homepageDiscoverMoreExperience:
+            return checkHomepageDiscoverMoreFeature(for: featureID, from: nimbus)
+
         case .homepageRebuild:
             return checkHomepageFeature(from: nimbus)
 
@@ -133,6 +136,9 @@ final class NimbusFeatureFlagLayer {
 
         case .tabTrayTranslucency:
             return checkTabTrayTranslucencyFeature(from: nimbus)
+
+        case .tabScrollRefactorFeature:
+            return checkTabScrollRefactorFeature(from: nimbus)
 
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
@@ -222,6 +228,22 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.homepageRedesignFeature.value().storiesRedesign
     }
 
+    private func checkHomepageDiscoverMoreFeature(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus
+    ) -> Bool {
+        let feature = nimbus.features.homepageRedesignFeature.value().discoverMoreFeatureConfiguration
+
+        switch featureID {
+        case .homepageDiscoverMoreButton:
+            return feature.showDiscoverMoreButton
+        case .homepageDiscoverMoreExperience:
+            return feature.discoverMoreV1Experience
+        default:
+            return false
+        }
+    }
+
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homepageRebuildFeature.value()
         return config.enabled
@@ -230,6 +252,10 @@ final class NimbusFeatureFlagLayer {
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.translucency
+    }
+
+    private func checkTabScrollRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.tabScrollRefactorFeature.value().enabled
     }
 
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {

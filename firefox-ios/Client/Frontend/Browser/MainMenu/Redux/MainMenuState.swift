@@ -62,6 +62,7 @@ struct MainMenuTabInfo: Equatable {
     let zoomLevel: CGFloat
     let readerModeIsAvailable: Bool
     let summaryIsAvailable: Bool
+    let summarizerInstructions: String?
     let isBookmarked: Bool
     let isInReadingList: Bool
     let isPinned: Bool

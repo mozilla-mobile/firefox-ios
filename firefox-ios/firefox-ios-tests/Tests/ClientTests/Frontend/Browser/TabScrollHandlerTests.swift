@@ -34,42 +34,43 @@ final class TabScrollHandlerTests: XCTestCase {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
-        let translation = CGPoint(x: 0, y: 100)
+        let translation = CGPoint(x: 0, y: -100)
         let velocity = CGPoint(x: 10, y: 10)
         subject.handleScroll(for: translation, velocity: velocity)
-        XCTAssertEqual(subject.toolbarState, TabScrollHandler.ToolbarState.collapsed)
+        XCTAssertEqual(subject.toolbarDisplayState, .collapsed)
     }
 
     func testHandlePan_ScrollingDownWithTranslation() {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
-        let translation = CGPoint(x: 0, y: -100)
+        let translation = CGPoint(x: 0, y: 100)
         let velocity = CGPoint(x: 10, y: 10)
         subject.handleScroll(for: translation, velocity: velocity)
-
-        XCTAssertEqual(subject.toolbarState, TabScrollHandler.ToolbarState.visible)
+        subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
+        XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
 
     func testHandlePan_ScrollingUpWithVelocity() {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
-        let translation = CGPoint(x: 0, y: 10)
+        let translation = CGPoint(x: 0, y: -10)
         let velocity = CGPoint(x: 10, y: 110)
         subject.handleScroll(for: translation, velocity: velocity)
-        XCTAssertEqual(subject.toolbarState, TabScrollHandler.ToolbarState.collapsed)
+        subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
+        XCTAssertEqual(subject.toolbarDisplayState, .collapsed)
     }
 
     func testHandlePan_ScrollingDownWithVelocity() {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
-        let translation = CGPoint(x: 0, y: -10)
+        let translation = CGPoint(x: 0, y: 10)
         let velocity = CGPoint(x: 10, y: 110)
         subject.handleScroll(for: translation, velocity: velocity)
-
-        XCTAssertEqual(subject.toolbarState, TabScrollHandler.ToolbarState.visible)
+        subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
+        XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
 
     func testHandlePan_ToolbarVisible_ScrollingUp() {
@@ -79,8 +80,8 @@ final class TabScrollHandlerTests: XCTestCase {
         let translation = CGPoint(x: 0, y: 10)
         let velocity = CGPoint(x: 10, y: 10)
         subject.handleScroll(for: translation, velocity: velocity)
-
-        XCTAssertEqual(subject.toolbarState, TabScrollHandler.ToolbarState.visible)
+        subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
+        XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
 
     func testHandlePan_ToolbarVisible_ScrollingDown() {
@@ -90,8 +91,8 @@ final class TabScrollHandlerTests: XCTestCase {
         let translation = CGPoint(x: 0, y: -10)
         let velocity = CGPoint(x: 10, y: 10)
         subject.handleScroll(for: translation, velocity: velocity)
-
-        XCTAssertEqual(subject.toolbarState, TabScrollHandler.ToolbarState.visible)
+        subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
+        XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
 
     func testShowToolbar_AfterHidingWithScroll() {
@@ -105,7 +106,7 @@ final class TabScrollHandlerTests: XCTestCase {
 
         // Force call to showToolbars like clicking on top bar area
         subject.showToolbars(animated: true)
-        XCTAssertEqual(subject.toolbarState, TabScrollHandler.ToolbarState.visible)
+        XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
 
     func testShouldScrollToTop_AfterHidingBar() {
@@ -121,7 +122,22 @@ final class TabScrollHandlerTests: XCTestCase {
         let velocity = CGPoint(x: 10, y: 80)
         subject.handleScroll(for: translation, velocity: velocity)
         XCTAssertTrue(subject.scrollViewShouldScrollToTop(scrollView))
-        XCTAssertEqual(subject.toolbarState, TabScrollHandler.ToolbarState.visible)
+        subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
+        XCTAssertEqual(subject.toolbarDisplayState, .expanded)
+    }
+
+    func testToolbarDisplayState_TransitioningFromCollapsed() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        subject.hideToolbars(animated: true)
+        XCTAssertEqual(subject.toolbarDisplayState, .collapsed)
+
+        let translation = CGPoint(x: 0, y: -30)
+        let velocity = CGPoint(x: 0, y: 110)
+        subject.handleScroll(for: translation, velocity: velocity)
+
+        XCTAssertEqual(subject.toolbarDisplayState, .transitioning)
     }
 
     // MARK: - Setup

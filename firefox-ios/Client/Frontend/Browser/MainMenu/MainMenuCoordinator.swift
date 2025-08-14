@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import SummarizeKit
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
     @MainActor
@@ -38,7 +39,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showShareSheetForCurrentlySelectedTab()
 
     @MainActor
-    func showSummarizePanel()
+    func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?)
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -148,9 +149,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()
 
-        case .webpageSummary:
+        case .webpageSummary(let instructions):
             dismissMenuModal(animated: true)
-            navigationHandler?.showSummarizePanel()
+            navigationHandler?.showSummarizePanel(.mainMenu, instructions: instructions)
         }
     }
 

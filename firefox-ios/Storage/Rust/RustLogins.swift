@@ -223,7 +223,8 @@ protocol LoginsProtocol {
     func deleteLogin(id: String, completionHandler: @escaping (Result<Bool?, Error>) -> Void)
 }
 
-public class RustLogins: LoginsProtocol, KeyManager {
+/// TODO(FXIOS-12942): Implement proper thread-safety
+public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
     let perFieldDatabasePath: String
 
     let queue: DispatchQueue

@@ -10,13 +10,16 @@
 
 ---
 $schema: moz://mozilla.org/schemas/glean/tags/1-0-0
-  
+
 ###############################################################################
 # Please add your tags alphabetically.
 ###############################################################################
 
 Addresses:
   description: Corresponds to the collection, storage, and autofilling of addresses.
+
+Ai:
+  description: Corresponds to features leveraging artificial intelligence, such as web content summarization and translation.
 
 AppIcon:
   description: Corresponds to interactions with the app icon on the iOS home screen (e.g. long press menu).
@@ -68,6 +71,9 @@ ReaderMode:
 
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
+
+Summarizer:
+  description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
 
 Settings:
   description: Corresponds to all the options encompassed in the app's settings screens.

@@ -179,7 +179,6 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        collectionView?.collectionViewLayout.invalidateLayout()
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
 
@@ -552,7 +551,10 @@ final class HomepageViewController: UIViewController,
             }
 
             if let storyCell = storyCell as? StoryCell {
-                storyCell.configure(story: story, theme: currentTheme)
+                let position = indexPath.item + 1
+                let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
+                let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
+                storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
                 return storyCell
             } else if let legacyPocketCell = storyCell as? MerinoStandardCell {
                 legacyPocketCell.configure(story: story, theme: currentTheme)

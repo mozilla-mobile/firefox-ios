@@ -12,7 +12,7 @@ class AnimatedGradientOutlineView: UIView,
         static let positionChangeAnimationDuration: CFTimeInterval = 1.25
         static let startPointFinalAnimationValue = CGPoint(x: 1.0, y: 0.3)
         static let endPointFinalAnimationValue = CGPoint(x: 0.0, y: 0.8)
-        static let colorsLocation = [NSNumber(0.0), NSNumber(0.8), NSNumber(1.0)]
+        static let colorsLocation = [NSNumber(0.0), NSNumber(1.0)]
         static let colorsKeyPath = "colors"
         static let initialAnimationDuration = 1.0
         static let startPointKeyPath = "startPoint"
@@ -87,7 +87,6 @@ class AnimatedGradientOutlineView: UIView,
     }
 
     func animatePositionChange(animationCurve: CAMediaTimingFunction) {
-        fadeLayer.animateFadeDown()
         let startPointAnimation = CABasicAnimation(keyPath: UX.startPointKeyPath)
         startPointAnimation.fromValue = CGPoint.topCenter
         startPointAnimation.toValue = UX.startPointFinalAnimationValue
@@ -108,6 +107,7 @@ class AnimatedGradientOutlineView: UIView,
     }
 
     func applyTheme(theme: any Theme) {
-        gradientLayer.colors = theme.colors.layerSummaryGradient.cgColors
+        // TODO: FXIOS-13178 Clear for now, but eventually should remove
+        gradientLayer.colors = [UIColor.clear, UIColor.clear]
     }
 }

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Common
+import Shared
 
 // TODO: FXIOS-12947 - Add tests for TermsOfUseCoordinator
 @MainActor
@@ -18,18 +19,18 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     private let notificationCenter: NotificationProtocol
 
     private var presentedVC: TermsOfUseViewController?
-    private let defaults: UserDefaultsInterface
+    private let prefs: Prefs
     private let daysSinceDismissedTerms = 5
 
     init(windowUUID: WindowUUID,
          router: Router,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+         prefs: Prefs) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.defaults = userDefaults
+        self.prefs = prefs
         super.init(router: router)
     }
 
@@ -74,7 +75,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         // 1. If feature is disabled, do not show.
         guard isFeatureEnabled else { return false }
 
-        let hasAccepted = defaults.bool(forKey: TermsOfUseMiddleware.DefaultKeys.acceptedKey)
+        let hasAccepted = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
         // 2. If user has accepted, do not show again.
         guard !hasAccepted else { return false }
 
@@ -88,9 +89,10 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         guard didShowThisLaunch else { return true }
 
         // 4. If shown this launch, show it if enough time has passed since dismissal.
-        guard let dismissedWithoutAcceptDate = defaults.object(forKey:
-                TermsOfUseMiddleware.DefaultKeys.dismissedWithoutAcceptDate) as? Date else { return false }
+        guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
+        else { return false }
 
+        let dismissedWithoutAcceptDate = Date.fromTimestamp(dismissedTimestamp)
         let daysSinceDismissal = Calendar.current.dateComponents(
             [.day],
             from: dismissedWithoutAcceptDate,
