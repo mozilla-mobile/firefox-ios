@@ -13,9 +13,8 @@
       "blur-material" : 0.5,
       "layers" : [
         {
-          "hidden" : false,
-          "image-name" : "alt-top.svg",
-          "name" : "alt-top"
+          "image-name" : "nightly-1.svg",
+          "name" : "nightly-1"
         }
       ],
       "name" : "Group",
@@ -51,8 +50,8 @@
       "layers" : [
         {
           "hidden" : false,
-          "image-name" : "b-mid.svg",
-          "name" : "b-mid"
+          "image-name" : "nightly-2.svg",
+          "name" : "nightly-2"
         }
       ],
       "position" : {
@@ -85,11 +84,11 @@
       "hidden" : false,
       "layers" : [
         {
-          "hidden" : false,
-          "image-name" : "orb.svg",
-          "name" : "orb"
+          "image-name" : "nightly-3.svg",
+          "name" : "nightly-3"
         }
       ],
+      "name" : "Group",
       "position" : {
         "scale" : 1.7,
         "translation-in-points" : [
@@ -121,9 +120,8 @@
     {
       "layers" : [
         {
-          "hidden" : false,
-          "image-name" : "alt-tail.svg",
-          "name" : "alt-tail"
+          "image-name" : "nightly-4.svg",
+          "name" : "nightly-4"
         }
       ],
       "position" : {
