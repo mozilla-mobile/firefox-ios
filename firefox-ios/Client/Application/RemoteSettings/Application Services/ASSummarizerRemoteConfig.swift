@@ -48,7 +48,7 @@ final class ASSummarizerRemoteConfig: Sendable {
     }
 
     private func getRecords() -> [SummarizerModelConfig] {
-        guard let records = rsClient?.getRecords() else { return [] }
+        guard let records = rsClient?.getRecords(syncIfEmpty: true) else { return [] }
         let decoder = JSONDecoder()
         return records.compactMap { record in
             guard let data = record.fields.data(using: .utf8) else { return nil }

@@ -7,7 +7,7 @@ import SummarizeKit
 /// A wrapper to Manage the configuration sources for the summarizer. 
 /// This class is responsible for loading and merging configurations from multiple sources.
 /// We should never access the sources directly.
-class SummarizerConfigManager {
+final class SummarizerConfigManager {
     /// The order of sources determines their priority.
     /// User overrides take precedence, followed by remote config, and then defaults.
     static let defaultSources: [SummarizerConfigSourceProtocol] = [
@@ -23,13 +23,11 @@ class SummarizerConfigManager {
     }
 
     func getConfig(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig {
-        var mergedConfig = SummarizerConfig(instructions: "", options: [:])
+        let initialConfig = SummarizerConfig(instructions: "", options: [:])
         // Merge configs in reverse order (so higher priority overrides lower)
-        for source in sources.reversed() {
-            if let config = source.load(summarizer, contentType: contentType) {
-                mergedConfig = config.merging(with: mergedConfig)
-            }
-        }
-        return mergedConfig
+        // $0.merging(with: $1) means "merge $0 into $1" so the result will prioritize $0's values.
+        return sources
+            .compactMap { $0.load(summarizer, contentType: contentType) }
+            .reduce(initialConfig) { $0.merging(with: $1) }
     }
 }
