@@ -27,3 +27,18 @@ public struct SummarizerConfig: Equatable {
         return SummarizerConfig(instructions: mergedInstructions, options: mergedOptions)
     }
 }
+
+#if canImport(FoundationModels)
+import FoundationModels
+
+@available(iOS 26, *)
+extension SummarizerConfig {
+    func toGenerationOptions() -> GenerationOptions {
+        return GenerationOptions(
+            sampling: options["sampling"] as? GenerationOptions.SamplingMode,
+            temperature: options["temperature"] as? Double,
+            maximumResponseTokens: options["maximumResponseTokens"] as? Int
+        )
+    }
+}
+#endif
