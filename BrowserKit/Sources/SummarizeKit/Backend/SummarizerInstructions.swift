@@ -41,7 +41,7 @@ public enum SummarizerModelInstructions {
     Format exactly as shown below. Do not add any closing phrases.
     If a field is null or empty, omit that line.
 
-    **🍽️ Servings:** {servings}
+    **Servings:** {servings}
 
     **Total Time:** {convert total_time to human-readable format}
 
@@ -49,17 +49,17 @@ public enum SummarizerModelInstructions {
 
     **Cook Time:** {convert cook_time to human-readable format}
 
-    ## 🛒 Ingredients
+    ## 🥕 Ingredients
     - {ingredient 1}
     - {ingredient 2}
     - {ingredient 3}
 
-    ## 🍳 Instructions
+    ## 📋 Instructions
     1. {step 1}
     2. {step 2}
     3. {step 3}
 
-    ## 💡 Tips
+    ## ⭐️ Tips
     - {tip 1}
     - {tip 2}
 
