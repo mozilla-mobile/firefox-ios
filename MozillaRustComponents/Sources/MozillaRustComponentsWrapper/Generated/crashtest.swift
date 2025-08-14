@@ -442,7 +442,7 @@ fileprivate struct FfiConverterString: FfiConverter {
 /**
  * An error that can be returned from Rust code.
  */
-public enum CrashTestError {
+public enum CrashTestError: Swift.Error {
 
     
     
@@ -507,11 +507,14 @@ extension CrashTestError: Equatable, Hashable {}
 
 
 
+
 extension CrashTestError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 /**
  * Trigger a hard abort inside the Rust code.

@@ -395,7 +395,29 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterUInt64: FfiConverterPrimitive {
+    typealias FfiType = UInt64
+    typealias SwiftType = UInt64
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt64 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -499,7 +521,7 @@ fileprivate struct FfiConverterData: FfiConverterRustBuffer {
 
 
 
-public protocol EncryptorDecryptor: AnyObject {
+public protocol EncryptorDecryptor: AnyObject, Sendable {
     
     func decrypt(ciphertext: Data) throws  -> Data
     
@@ -520,6 +542,9 @@ open class EncryptorDecryptorImpl: EncryptorDecryptor, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -573,13 +598,7 @@ open func encrypt(cleartext: Data)throws  -> Data  {
     
 
 }
-// Magic number for the Rust proxy to call using the same mechanism as every other method,
-// to free the callback once it's dropped by Rust.
-private let IDX_CALLBACK_FREE: Int32 = 0
-// Callback return codes
-private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
-private let UNIFFI_CALLBACK_ERROR: Int32 = 1
-private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
 
 // Put the implementation in a struct so we don't pollute the top-level namespace
 fileprivate struct UniffiCallbackInterfaceEncryptorDecryptor {
@@ -712,7 +731,7 @@ public func FfiConverterTypeEncryptorDecryptor_lower(_ value: EncryptorDecryptor
 
 
 
-public protocol KeyManager: AnyObject {
+public protocol KeyManager: AnyObject, Sendable {
     
     func getKey() throws  -> Data
     
@@ -731,6 +750,9 @@ open class KeyManagerImpl: KeyManager, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -881,7 +903,7 @@ public func FfiConverterTypeKeyManager_lower(_ value: KeyManager) -> UnsafeMutab
 
 
 
-public protocol LoginStoreProtocol: AnyObject {
+public protocol LoginStoreProtocol: AnyObject, Sendable {
     
     func add(login: LoginEntry) throws  -> Login
     
@@ -911,7 +933,7 @@ public protocol LoginStoreProtocol: AnyObject {
      * NB: This function was created to unblock iOS logins users who are unable to sync logins and should not be used
      * outside of this use case.
      */
-    func deleteUndecryptableRecordsForRemoteReplacement() throws 
+    func deleteUndecryptableRecordsForRemoteReplacement() throws  -> LoginsDeletionMetrics
     
     func findLoginToUpdate(look: LoginEntry) throws  -> Login?
     
@@ -940,6 +962,8 @@ public protocol LoginStoreProtocol: AnyObject {
     func runMaintenance() throws 
     
     func setCheckpoint(checkpoint: String) throws 
+    
+    func shutdown() 
     
     func touch(id: String) throws 
     
@@ -975,6 +999,9 @@ open class LoginStore: LoginStoreProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1106,10 +1133,11 @@ open func deleteMany(ids: [String])throws  -> [Bool]  {
      * NB: This function was created to unblock iOS logins users who are unable to sync logins and should not be used
      * outside of this use case.
      */
-open func deleteUndecryptableRecordsForRemoteReplacement()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
+open func deleteUndecryptableRecordsForRemoteReplacement()throws  -> LoginsDeletionMetrics  {
+    return try  FfiConverterTypeLoginsDeletionMetrics_lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_delete_undecryptable_records_for_remote_replacement(self.uniffiClonePointer(),$0
     )
-}
+})
 }
     
 open func findLoginToUpdate(look: LoginEntry)throws  -> Login?  {
@@ -1192,6 +1220,12 @@ open func runMaintenance()throws   {try rustCallWithError(FfiConverterTypeLogins
 open func setCheckpoint(checkpoint: String)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_set_checkpoint(self.uniffiClonePointer(),
         FfiConverterString.lower(checkpoint),$0
+    )
+}
+}
+    
+open func shutdown()  {try! rustCall() {
+    uniffi_logins_fn_method_loginstore_shutdown(self.uniffiClonePointer(),$0
     )
 }
 }
@@ -1289,7 +1323,7 @@ public func FfiConverterTypeLoginStore_lower(_ value: LoginStore) -> UnsafeMutab
 
 
 
-public protocol ManagedEncryptorDecryptorProtocol: AnyObject {
+public protocol ManagedEncryptorDecryptorProtocol: AnyObject, Sendable {
     
 }
 open class ManagedEncryptorDecryptor: ManagedEncryptorDecryptorProtocol, @unchecked Sendable {
@@ -1306,6 +1340,9 @@ open class ManagedEncryptorDecryptor: ManagedEncryptorDecryptorProtocol, @unchec
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1407,7 +1444,7 @@ public func FfiConverterTypeManagedEncryptorDecryptor_lower(_ value: ManagedEncr
 
 
 
-public protocol StaticKeyManagerProtocol: AnyObject {
+public protocol StaticKeyManagerProtocol: AnyObject, Sendable {
     
 }
 open class StaticKeyManager: StaticKeyManagerProtocol, @unchecked Sendable {
@@ -1424,6 +1461,9 @@ open class StaticKeyManager: StaticKeyManagerProtocol, @unchecked Sendable {
     // TODO: We'd like this to be `private` but for Swifty reasons,
     // we can't implement `FfiConverter` without making this `required` and we can't
     // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
     required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
         self.pointer = pointer
     }
@@ -1961,6 +2001,80 @@ public func FfiConverterTypeLoginMeta_lower(_ value: LoginMeta) -> RustBuffer {
     return FfiConverterTypeLoginMeta.lower(value)
 }
 
+
+/**
+ * Metrics tracking deletion of logins that cannot be decrypted, see `delete_undecryptable_records_for_remote_replacement`
+ * for more details
+ */
+public struct LoginsDeletionMetrics {
+    public var localDeleted: UInt64
+    public var mirrorDeleted: UInt64
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(localDeleted: UInt64, mirrorDeleted: UInt64) {
+        self.localDeleted = localDeleted
+        self.mirrorDeleted = mirrorDeleted
+    }
+}
+
+#if compiler(>=6)
+extension LoginsDeletionMetrics: Sendable {}
+#endif
+
+
+extension LoginsDeletionMetrics: Equatable, Hashable {
+    public static func ==(lhs: LoginsDeletionMetrics, rhs: LoginsDeletionMetrics) -> Bool {
+        if lhs.localDeleted != rhs.localDeleted {
+            return false
+        }
+        if lhs.mirrorDeleted != rhs.mirrorDeleted {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(localDeleted)
+        hasher.combine(mirrorDeleted)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeLoginsDeletionMetrics: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> LoginsDeletionMetrics {
+        return
+            try LoginsDeletionMetrics(
+                localDeleted: FfiConverterUInt64.read(from: &buf), 
+                mirrorDeleted: FfiConverterUInt64.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: LoginsDeletionMetrics, into buf: inout [UInt8]) {
+        FfiConverterUInt64.write(value.localDeleted, into: &buf)
+        FfiConverterUInt64.write(value.mirrorDeleted, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLoginsDeletionMetrics_lift(_ buf: RustBuffer) throws -> LoginsDeletionMetrics {
+    return try FfiConverterTypeLoginsDeletionMetrics.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeLoginsDeletionMetrics_lower(_ value: LoginsDeletionMetrics) -> RustBuffer {
+    return FfiConverterTypeLoginsDeletionMetrics.lower(value)
+}
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
@@ -2037,6 +2151,9 @@ extension BulkResultEntry: Equatable, Hashable {}
 
 
 
+
+
+
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
@@ -2105,10 +2222,13 @@ extension LoginOrErrorMessage: Equatable, Hashable {}
 
 
 
+
+
+
 /**
  * These are the errors returned by our public API.
  */
-public enum LoginsApiError {
+public enum LoginsApiError: Swift.Error {
 
     
     
@@ -2319,11 +2439,14 @@ extension LoginsApiError: Equatable, Hashable {}
 
 
 
+
 extension LoginsApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
 }
+
+
 
 
 #if swift(>=5.8)
@@ -2665,7 +2788,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_delete_many() != 14564) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_logins_checksum_method_loginstore_delete_undecryptable_records_for_remote_replacement() != 23503) {
+    if (uniffi_logins_checksum_method_loginstore_delete_undecryptable_records_for_remote_replacement() != 50136) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_find_login_to_update() != 62416) {
@@ -2699,6 +2822,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_set_checkpoint() != 62504) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_logins_checksum_method_loginstore_shutdown() != 40399) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_touch() != 37362) {
