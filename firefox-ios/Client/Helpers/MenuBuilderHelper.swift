@@ -12,42 +12,6 @@ class MenuBuilderHelper {
     }
 
     func mainMenu(for builder: UIMenuBuilder) {
-        let historyMenu = UIMenu(
-            title: .KeyboardShortcuts.Sections.History,
-            identifier: MenuIdentifiers.history,
-            options: .displayInline,
-            children: [
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.ShowHistory,
-                    action: #selector(BrowserViewController.showHistoryKeyCommand),
-                    input: "y",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.ShowHistory
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.Back,
-                    action: #selector(BrowserViewController.goBackKeyCommand),
-                    input: "[",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.Back
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.Forward,
-                    action: #selector(BrowserViewController.goForwardKeyCommand),
-                    input: "]",
-                    modifierFlags: .command,
-                    discoverabilityTitle: .KeyboardShortcuts.Forward
-                ),
-                UIKeyCommand(
-                    title: .KeyboardShortcuts.ClearRecentHistory,
-                    action: #selector(BrowserViewController.openClearHistoryPanelKeyCommand),
-                    input: "\u{8}",
-                    modifierFlags: [.command, .shift],
-                    discoverabilityTitle: .KeyboardShortcuts.ClearRecentHistory
-                )
-            ]
-        )
-
         let bookmarksMenu = UIMenu(
             title: .KeyboardShortcuts.Sections.Bookmarks,
             identifier: MenuIdentifiers.bookmarks,
