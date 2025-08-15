@@ -1290,7 +1290,7 @@ workflows:
         - export_development_team: 43AQ936H96
         - distribution_method: app-store
         - configuration: FirefoxBeta
-        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS (26.0)'
     - deploy-to-bitrise-io@2.9.2: {}
     - deploy-to-itunesconnect-application-loader@1.3:
         inputs:
