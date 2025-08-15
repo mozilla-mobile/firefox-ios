@@ -787,22 +787,26 @@ final class TabManagerMiddleware: FeatureFlaggable {
                 return
             }
 
-            var canBeSaved = true
+            let canBeSaved: Bool
             if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
                 canBeSaved = false
+            } else {
+                canBeSaved = true
             }
 
             let browserProfile = self.profile as? BrowserProfile
             browserProfile?.tabs.getClientGUIDs { (result, error) in
-                let model = TabPeekModel(canTabBeSaved: canBeSaved,
-                                         canCopyURL: !(tab?.isFxHomeTab ?? false),
-                                         isSyncEnabled: !(result?.isEmpty ?? true),
-                                         screenshot: tab?.screenshot ?? UIImage(),
-                                         accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                let action = TabPeekAction(tabPeekModel: model,
-                                           windowUUID: uuid,
-                                           actionType: TabPeekActionType.loadTabPeek)
-                store.dispatchLegacy(action)
+                ensureMainThread {
+                    let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                             canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                             isSyncEnabled: !(result?.isEmpty ?? true),
+                                             screenshot: tab?.screenshot ?? UIImage(),
+                                             accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
+                    let action = TabPeekAction(tabPeekModel: model,
+                                               windowUUID: uuid,
+                                               actionType: TabPeekActionType.loadTabPeek)
+                    store.dispatchLegacy(action)
+                }
             }
         }
     }
