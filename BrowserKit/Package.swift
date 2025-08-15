@@ -126,7 +126,10 @@ let package = Package(
         .target(
             name: "Redux",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .testTarget(
             name: "ReduxTests",
             dependencies: ["Redux"]),
