@@ -13,9 +13,10 @@
       "blur-material" : 0.5,
       "layers" : [
         {
+          "glass" : true,
           "hidden" : false,
-          "image-name" : "alt-top.svg",
-          "name" : "alt-top"
+          "image-name" : "beta-1.svg",
+          "name" : "beta-1"
         }
       ],
       "name" : "Group",
@@ -43,16 +44,15 @@
       ],
       "translucency" : {
         "enabled" : true,
-        "value" : 0.7
+        "value" : 0.25
       }
     },
     {
       "blur-material" : 0.5,
       "layers" : [
         {
-          "hidden" : false,
-          "image-name" : "b-mid.svg",
-          "name" : "b-mid"
+          "image-name" : "beta-2 3.svg",
+          "name" : "beta-2 3"
         }
       ],
       "position" : {
@@ -85,11 +85,11 @@
       "hidden" : false,
       "layers" : [
         {
-          "hidden" : false,
-          "image-name" : "orb.svg",
-          "name" : "orb"
+          "image-name" : "beta-3.svg",
+          "name" : "beta-3"
         }
       ],
+      "name" : "Group",
       "position" : {
         "scale" : 1.7,
         "translation-in-points" : [
@@ -121,9 +121,14 @@
     {
       "layers" : [
         {
-          "hidden" : false,
-          "image-name" : "alt-tail.svg",
-          "name" : "alt-tail"
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "automatic"
+            }
+          ],
+          "image-name" : "beta-4 2.svg",
+          "name" : "beta-4 2"
         }
       ],
       "position" : {
