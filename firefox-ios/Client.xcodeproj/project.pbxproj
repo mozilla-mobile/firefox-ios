@@ -1445,6 +1445,7 @@
 		BC129A2F2E455900004A6875 /* SummarizeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC129A2E2E4558FD004A6875 /* SummarizeAction.swift */; };
 		BC129A322E461F96004A6875 /* SummarizerMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC129A312E461F91004A6875 /* SummarizerMiddlewareTests.swift */; };
 		BC8E91DC2E32953C00434FD0 /* AppleIntelligenceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */; };
+		BCB769192E4F80650046AA37 /* StylingViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB769182E4F805C0046AA37 /* StylingViewModifiers.swift */; };
 		BCBE058C2E3A8720004B6039 /* SummarizeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */; };
 		BCBE09BF2E3BAE2A004B6039 /* SummarizeSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBE09BE2E3BAE22004B6039 /* SummarizeSettingsViewControllerTests.swift */; };
 		BCFB141D2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json in Resources */ = {isa = PBXBuildFile; fileRef = BCFB141C2E1FFEC00005D46B /* feltPrivacySimplifiedUIOff.json */; };
@@ -9318,6 +9319,7 @@
 		BC4B49618B8FC822D4D0FCC2 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BC81442AA84F635F3067A2C5 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		BC8E91DB2E32953C00434FD0 /* AppleIntelligenceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceUtil.swift; sourceTree = "<group>"; };
+		BCB769182E4F805C0046AA37 /* StylingViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StylingViewModifiers.swift; sourceTree = "<group>"; };
 		BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeSetting.swift; sourceTree = "<group>"; };
 		BCBE09BE2E3BAE22004B6039 /* SummarizeSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizeSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		BCD04CE4A62EAA4DF96DE812 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Storage.strings"; sourceTree = "<group>"; };
@@ -13825,6 +13827,7 @@
 		BA4BB9962D7F371F006BD137 /* AppearanceSettings */ = {
 			isa = PBXGroup;
 			children = (
+				BCB769182E4F805C0046AA37 /* StylingViewModifiers.swift */,
 				214099602DCBF4DB004881E1 /* Zoom */,
 				BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */,
 				BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */,
@@ -17973,6 +17976,7 @@
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				8AC0B1C02D1D935C004237FD /* ContextMenuConfiguration.swift in Sources */,
+				BCB769192E4F80650046AA37 /* StylingViewModifiers.swift in Sources */,
 				BD011FB82D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift in Sources */,
 				E19B38B328A42D5E00D8C541 /* WallpaperCollectionViewCell.swift in Sources */,
 				C7FA9E1E2E4BD4D1004F2CA1 /* AddShortcutsSetting.swift in Sources */,
