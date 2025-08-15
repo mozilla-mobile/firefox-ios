@@ -321,7 +321,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isMinimalAddressBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
+        return false
     }
 
     var isToolbarNavigationHintEnabled: Bool {
