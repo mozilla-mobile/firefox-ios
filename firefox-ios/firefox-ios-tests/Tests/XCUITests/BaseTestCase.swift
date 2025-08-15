@@ -71,7 +71,11 @@ class BaseTestCase: XCTestCase {
         if icon.exists {
             icon.press(forDuration: 1.5)
             springboard.buttons["Remove App"].waitAndTap()
+            mozWaitForElementToNotExist(springboard.buttons["Remove App"])
+            mozWaitForElementToExist(springboard.alerts.firstMatch)
             springboard.alerts.buttons["Delete App"].waitAndTap()
+            mozWaitForElementToNotExist(springboard.alerts.buttons["Delete App"])
+            mozWaitForElementToExist(springboard.alerts.firstMatch)
             springboard.alerts.buttons["Delete"].waitAndTap()
         }
     }
