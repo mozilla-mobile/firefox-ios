@@ -8,7 +8,7 @@ import Foundation
 import Shared
 
 // Sync setting that shows the current Firefox Account status.
-class AccountStatusSetting: WithAccountSetting {
+final class AccountStatusSetting: WithAccountSetting, Notifiable {
     private weak var settingsDelegate: AccountSettingsDelegate?
     private var notificationCenter: NotificationProtocol
 
@@ -19,15 +19,14 @@ class AccountStatusSetting: WithAccountSetting {
         self.settingsDelegate = settingsDelegate
         super.init(settings: settings)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        notificationCenter.addObserver(self,
-                                       selector: #selector(updateAccount),
-                                       name: .FirefoxAccountProfileChanged,
-                                       object: nil)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.FirefoxAccountProfileChanged]
+        )
     }
 
-    @objc
-    func updateAccount(notification: Notification) {
+    nonisolated func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
             self.settings.tableView.reloadData()
         }
@@ -97,5 +96,11 @@ class AccountStatusSetting: WithAccountSetting {
                 }
             }
         }
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == .FirefoxAccountProfileChanged else { return }
+        updateAccount(notification: notification)
     }
 }
