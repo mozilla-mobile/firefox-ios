@@ -11,7 +11,8 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     func showToolbar() {
         if isBottomSearchBar {
             updateBottomToolbar(bottomContainerOffset: 0,
-                                overKeyboardContainerOffset: 0)
+                                overKeyboardContainerOffset: 0,
+                                alpha: 1)
         } else {
             updateTopToolbar(topOffset: 0, alpha: 1)
         }
@@ -19,10 +20,12 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
     func hideToolbar() {
         if isBottomSearchBar {
+            let overKeyboardOffset = calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
             updateBottomToolbar(bottomContainerOffset: bottomContainer.frame.height,
-                                overKeyboardContainerOffset: overKeyboardContainer.frame.height)
+                                overKeyboardContainerOffset: overKeyboardOffset,
+                                alpha: 0)
         } else {
-            updateTopToolbar(topOffset: -header.frame.height, alpha: 0)
+            updateTopToolbar(topOffset: headerOffset, alpha: 0)
         }
     }
 
@@ -32,14 +35,72 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         headerTopConstraint?.update(offset: topOffset)
         header.superview?.setNeedsLayout()
 
-        header.updateAlphaForSubviews(0)
+        header.updateAlphaForSubviews(alpha)
+
+        if isMinimalAddressBarEnabled {
+            store.dispatchLegacy(
+                ToolbarAction(
+                    scrollAlpha: Float(alpha),
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaDidChange
+                )
+            )
+        }
     }
 
-    private func updateBottomToolbar(bottomContainerOffset: CGFloat, overKeyboardContainerOffset: CGFloat) {
+    private func updateBottomToolbar(bottomContainerOffset: CGFloat,
+                                     overKeyboardContainerOffset: CGFloat,
+                                     alpha: CGFloat) {
         overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
         overKeyboardContainer.superview?.setNeedsLayout()
 
         bottomContainerConstraint?.update(offset: bottomContainerOffset)
         bottomContainer.superview?.setNeedsLayout()
+
+        if isMinimalAddressBarEnabled {
+            store.dispatchLegacy(
+                ToolbarAction(
+                    scrollAlpha: Float(alpha),
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaDidChange
+                )
+            )
+        }
+    }
+
+    private var headerOffset: CGFloat {
+        let baseOffset = -header.frame.height
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
+
+        guard isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) else {
+            return baseOffset
+        }
+        return baseOffset + UX.minimalHeaderOffset
+    }
+
+    /// Helper method for testing overKeyboardScrollHeight behavior.
+    /// - Parameters:
+    ///   - safeAreaInsets: The safe area insets to use (nil treated as .zero).
+    /// - Returns: The calculated scroll height.
+    private func calculateOverKeyboardScrollHeight(safeAreaInsets: UIEdgeInsets?) -> CGFloat {
+        let containerHeight = overKeyboardContainer.frame.height
+
+        let isReaderModeActive = tabManager.selectedTab?.url?.isReaderModeURL == true
+
+        // Return full height if conditions aren't met for adjustment.
+        let shouldAdjustHeight = isMinimalAddressBarEnabled
+                                  && isBottomSearchBar
+                                  && zoomPageBar == nil
+                                  && !isReaderModeActive
+
+        guard shouldAdjustHeight else { return containerHeight }
+
+        // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
+        let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
+
+        let topInset = safeAreaInsets?.top ?? .zero
+
+        return hasHomeIndicator ? .zero : containerHeight - topInset
     }
 }

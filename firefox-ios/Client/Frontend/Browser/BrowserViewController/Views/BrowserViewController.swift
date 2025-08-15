@@ -43,6 +43,7 @@ class BrowserViewController: UIViewController,
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
+        static let minimalHeaderOffset: CGFloat = 14
     }
 
     /// Describes the state of the current search session. This state is used

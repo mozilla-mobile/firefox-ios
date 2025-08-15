@@ -139,82 +139,14 @@ final class TabScrollHandler: NSObject,
         configureRefreshControl()
     }
 
-    /// Helper method for testing overKeyboardScrollHeight behavior.
-    /// - Parameters:
-    ///   - safeAreaInsets: The safe area insets to use (nil treated as .zero).
-    ///   - isMinimalAddressBarEnabled: Whether minimal address bar feature is enabled.
-    ///   - isBottomSearchBar: Whether search bar is set to the bottom.
-    /// - Returns: The calculated scroll height.
-    private func calculateOverKeyboardScrollHeight(overKeyboardContainer: BaseAlphaStackView,
-                                                   safeAreaInsets: UIEdgeInsets?) -> CGFloat {
-        let containerHeight = overKeyboardContainer.frame.height
-
-        let isReaderModeActive = tab?.url?.isReaderModeURL == true
-
-        // Return full height if conditions aren't met for adjustment.
-        let shouldAdjustHeight = isMinimalAddressBarEnabled
-                                  && isBottomSearchBar
-                                  && zoomPageBar == nil
-                                  && !isReaderModeActive
-
-        guard shouldAdjustHeight else { return containerHeight }
-
-        // Devices with home indicator (newer iPhones) vs physical home button (older iPhones).
-        let hasHomeIndicator = safeAreaInsets?.bottom ?? .zero > 0
-
-        let topInset = safeAreaInsets?.top ?? .zero
-
-        return hasHomeIndicator ? .zero : containerHeight - topInset
-    }
-
-    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
-                               bottomContainer: BaseAlphaStackView?,
-                               headerContainer: BaseAlphaStackView? ) {
-    }
-
-    private func handleOnTabContentLoading() {
-        if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
-            removePullRefreshControl()
-        } else {
-            configureRefreshControl()
-        }
-    }
-
-    func handleScroll(for translation: CGPoint, velocity: CGPoint) {
-        guard !tabIsLoading() else { return }
-
-        tab?.shouldScrollToTop = false
-
-        let delta = lastPanTranslation - translation.y
-        scrollDirection = delta > 0 ? .down : .up
-
-        guard shouldRespondToScroll(for: velocity, delta: delta) else { return }
-
-        updateToolbarDisplayState(for: delta)
-    }
-
-    /// Determines whether a scroll gesture is significant enough to trigger UI changes,
-    /// based on minimum translation distance and velocity thresholds.
-    ///
-    /// - Parameters:
-    ///   - velocity: The pan gesture recognizer used to detect scroll movement.
-    ///   - delta: The vertical scroll delta calculated from gesture translation.
-    /// - Returns: A Boolean value indicating whether the gesture should trigger a UI response.
-    private func shouldRespondToScroll(for velocity: CGPoint,
-                                       delta: CGFloat) -> Bool {
-        guard shouldUpdateUIWhenScrolling else { return false }
-
-        let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
-        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
-        return isSignificantScroll || isFastEnough
-    }
-
+    // TODO: Update to private in the future for now we need to keep support for Legacy protocol
     func showToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .expanded)
         lastValidState = toolbarDisplayState
         delegate?.showToolbar()
     }
 
+    // TODO: Update to private in the future for now we need to keep support for Legacy protocol
     func hideToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .collapsed)
         lastValidState = toolbarDisplayState
@@ -264,6 +196,19 @@ final class TabScrollHandler: NSObject,
         }
     }
 
+    func handleScroll(for translation: CGPoint, velocity: CGPoint) {
+        guard !tabIsLoading() else { return }
+
+        tab?.shouldScrollToTop = false
+
+        let delta = lastPanTranslation - translation.y
+        scrollDirection = delta > 0 ? .down : .up
+
+        guard shouldRespondToScroll(for: velocity, delta: delta) else { return }
+
+        updateToolbarDisplayState(for: delta)
+    }
+
     // MARK: - UIScrollViewDelegate
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
@@ -303,23 +248,6 @@ final class TabScrollHandler: NSObject,
         handleScroll(for: translation, velocity: velocity)
     }
 
-    /// Sends a scroll action to update the new toolbar border visibility based on scroll position changes.
-    ///
-    /// This function detects when the scroll view crosses the vertical `y = 0` threshold —
-    /// either from scrolling into the top of the content or pulling past the top (overscroll).
-    /// - Parameter contentOffset: The current vertical scroll offset of the scroll view.
-    private func sendActionToShowToolbarBorder(contentOffset: CGPoint) {
-        if (lastContentOffsetY > 0 && contentOffset.y <= 0) ||
-            (lastContentOffsetY <= 0 && contentOffset.y > 0) {
-            lastContentOffsetY = contentOffset.y
-            store.dispatchLegacy(
-                GeneralBrowserMiddlewareAction(
-                    scrollOffset: contentOffset,
-                    windowUUID: windowUUID,
-                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
-        }
-    }
-
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         // Only mess with the zoom level if the user did not initiate the zoom via a zoom gesture
         guard !isUserZoom else { return }
@@ -349,31 +277,57 @@ final class TabScrollHandler: NSObject,
         if toolbarDisplayState.isCollapsed { showToolbars(animated: true) }
         return true
     }
-}
 
-// MARK: - Private
+    // MARK: - Private
 
-private extension TabScrollHandler {
-    var isTopRubberbanding: Bool {
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
+                               bottomContainer: BaseAlphaStackView?,
+                               headerContainer: BaseAlphaStackView? ) {}
+
+    private func handleOnTabContentLoading() {
+        if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
+            removePullRefreshControl()
+        } else {
+            configureRefreshControl()
+        }
+    }
+
+    /// Determines whether a scroll gesture is significant enough to trigger UI changes,
+    /// based on minimum translation distance and velocity thresholds.
+    ///
+    /// - Parameters:
+    ///   - velocity: The pan gesture recognizer used to detect scroll movement.
+    ///   - delta: The vertical scroll delta calculated from gesture translation.
+    /// - Returns: A Boolean value indicating whether the gesture should trigger a UI response.
+    private func shouldRespondToScroll(for velocity: CGPoint,
+                                       delta: CGFloat) -> Bool {
+        guard shouldUpdateUIWhenScrolling else { return false }
+
+        let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
+        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
+        return isSignificantScroll || isFastEnough
+    }
+
+    private var isTopRubberbanding: Bool {
         return contentOffset.y <= 0
     }
 
-    var isBottomRubberbanding: Bool {
+    private var isBottomRubberbanding: Bool {
         return contentOffset.y + scrollViewHeight > contentSize.height
     }
 
     @objc
-    func reload() {
+    private func reload() {
         guard let tab = tab else { return }
         tab.reloadPage()
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
-    func roundNum(_ num: CGFloat) -> CGFloat {
+    private func roundNum(_ num: CGFloat) -> CGFloat {
         return round(100 * num) / 100
     }
 
-    func tabIsLoading() -> Bool {
+    private func tabIsLoading() -> Bool {
         return tab?.loading ?? true
     }
 
@@ -381,7 +335,7 @@ private extension TabScrollHandler {
     ///
     /// 1. If the content is scrollable (taller than the view).
     /// 2. The user has scrolled to (or beyond) the bottom.
-    func scrollReachBottom() -> Bool {
+    private func scrollReachBottom() -> Bool {
         let contentIsScrollable = contentSize.height > scrollViewHeight
         let isMaxContentOffset = contentOffset.y > (contentSize.height - scrollViewHeight)
 
@@ -394,7 +348,7 @@ private extension TabScrollHandler {
     /// - `.collapsed`: All containers are fully collapsed (scrolled to their maximum).
     /// - `.expanded`: Toolbar is currently fully expanded (`toolbarDisplayState.isExpanded == true`).
     /// - `.transitioning`: In transition or partially expanded state.
-    func updateToolbarDisplayState(for delta: CGFloat) {
+    private func updateToolbarDisplayState(for delta: CGFloat) {
         guard !toolbarDisplayState.isAnimating else { return }
 
         if scrollDirection == .down && !toolbarDisplayState.isCollapsed {
@@ -402,17 +356,13 @@ private extension TabScrollHandler {
         } else if scrollDirection == .up && !toolbarDisplayState.isExpanded {
             showToolbars(animated: true)
         } else {
-            toolbarDisplayState.update(displayState: .transitioning)
+            handleToolbarIsTransitioning()
         }
     }
 
-    func clamp(offset: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
-        if offset >= max {
-            return max
-        } else if offset <= min {
-            return min
-        }
-        return offset
+    private func handleToolbarIsTransitioning() {
+        delegate?.startAnimatingToolbar(displayState: toolbarDisplayState)
+        toolbarDisplayState.update(displayState: .transitioning)
     }
 
     private func setOffset(y: CGFloat, for scrollView: UIScrollView) {
@@ -420,5 +370,22 @@ private extension TabScrollHandler {
             x: contentOffsetBeforeAnimation.x,
             y: y
         )
+    }
+
+    /// Sends a scroll action to update the new toolbar border visibility based on scroll position changes.
+    ///
+    /// This function detects when the scroll view crosses the vertical `y = 0` threshold —
+    /// either from scrolling into the top of the content or pulling past the top (overscroll).
+    /// - Parameter contentOffset: The current vertical scroll offset of the scroll view.
+    private func sendActionToShowToolbarBorder(contentOffset: CGPoint) {
+        if (lastContentOffsetY > 0 && contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && contentOffset.y > 0) {
+            lastContentOffsetY = contentOffset.y
+            store.dispatchLegacy(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
+        }
     }
 }
