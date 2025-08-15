@@ -28,6 +28,7 @@ struct AddressBarSettingsView: View {
 
     private struct UX {
         static let spacing: CGFloat = 24
+        static let cornerRadius: CGFloat = 24
     }
 
     var body: some View {
@@ -39,11 +40,11 @@ struct AddressBarSettingsView: View {
                     theme: currentTheme,
                     selectedAddressBarPosition: addressBarPosition,
                     onSelected: viewModel.saveSearchBarPosition)
+                .modifier(SectionStyle(theme: currentTheme, cornerRadius: UX.cornerRadius))
             }
             Spacer()
         }
-        .padding(.top, UX.spacing)
-        .frame(maxWidth: .infinity)
+        .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))
         .background(viewBackground)
         .onAppear {
             currentTheme = themeManager.getCurrentTheme(for: windowUUID)

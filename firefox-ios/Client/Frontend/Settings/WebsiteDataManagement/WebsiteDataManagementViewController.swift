@@ -17,7 +17,17 @@ class WebsiteDataManagementViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private static let showMoreCellReuseIdentifier = "showMoreCell"
-
+    private struct UX {
+        static let sectionTopMargin: CGFloat = 10
+        static var tableViewStyleForCurrentOS: UITableView.Style {
+            guard #available(iOS 26.0, *) else { return .grouped }
+            return .insetGrouped
+        }
+        static var sectionTopMarginForCurrentOS: CGFloat {
+            guard #available(iOS 26.0, *) else { return 0 }
+            return UX.sectionTopMargin
+        }
+    }
     private enum Section: Int {
         case sites = 0
         case showMore = 1
@@ -66,7 +76,10 @@ class WebsiteDataManagementViewController: UIViewController,
     private func setupView() {
         title = .SettingsWebsiteDataTitle
 
-        let tableView = UITableView()
+        let tableView = UITableView(
+            frame: .zero,
+            style: UX.tableViewStyleForCurrentOS
+        )
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorColor = currentTheme().colors.borderPrimary
@@ -317,11 +330,11 @@ class WebsiteDataManagementViewController: UIViewController,
         let section = Section(rawValue: section)!
         switch section {
         case .clearButton:
-            return 10 // Controls the space between the site list and the button
+            return UX.sectionTopMargin // Controls the space between the site list and the button
         case .sites:
             return UITableView.automaticDimension
         case .showMore:
-            return 0
+            return UX.sectionTopMarginForCurrentOS
         }
     }
 
