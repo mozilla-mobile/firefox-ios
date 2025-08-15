@@ -133,6 +133,14 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - restore-spm-cache@2.1.1:
         is_always_run: true
+    - script@1.1.1:
+        title: Install iOS 18.2 Runtime
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            sudo xcodes runtimes install 'iOS 18.2'
+            xcodes runtimes list
+            xcrun simctl create "iPhone 16" "iPhone 16" "com.apple.CoreSimulator.SimRuntime.iOS-18-2"
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
@@ -286,6 +294,14 @@ workflows:
     - 1_git_clone_and_post_clone
     steps:
     - pull-intermediate-files@1: {}
+    - script@1.1.1:
+        title: Install iOS 18.2 Runtime
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            sudo xcodes runtimes install 'iOS 18.2'
+            xcodes runtimes list
+            xcrun simctl create "iPhone 16" "iPhone 16" "com.apple.CoreSimulator.SimRuntime.iOS-18-2"
     - xcode-test-without-building@0.4.2:
         timeout: 1200
         inputs:
@@ -296,7 +312,7 @@ workflows:
     - deploy-to-bitrise-io@2.10.0: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-26.0.x-edge
         machine_type_id: g2.mac.4x-large
   determine_apps_affected:
     steps:
@@ -1623,7 +1639,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
-        - maximum_test_repetitions: 5
+        - maximum_test_repetitions: 10
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
     meta:
@@ -2449,5 +2465,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-16.2.x
+    stack: osx-xcode-26.0.x-edge
     machine_type_id: g2.mac.4large
