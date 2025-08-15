@@ -702,7 +702,7 @@ open class BrowserProfile: Profile,
         let bucketName = (remoteSettingsServer == .prod ? "main" : "main-preview")
         let config = RemoteSettingsConfig2(server: remoteSettingsServer,
                                            bucketName: bucketName,
-                                           appContext: remoteSettingsAppContext())
+                                           appContext: RemoteSettingsEnvironment.remoteSettingsAppContext())
 
         let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
         let path = url.path
@@ -746,31 +746,6 @@ open class BrowserProfile: Profile,
             return nil
         }
     }()
-
-    private func remoteSettingsAppContext() -> RemoteSettingsContext {
-        let appInfo = BrowserKitInformation.shared
-        let uiDevice = UIDevice.current
-        let formFactor = switch uiDevice.userInterfaceIdiom {
-        case .pad: "tablet"
-        case .mac: "desktop"
-        default: "phone"
-        }
-        return RemoteSettingsContext(
-            channel: appInfo.buildChannel?.rawValue ?? "release",
-            appVersion: AppInfo.appVersion,
-            appId: AppInfo.bundleIdentifier,
-            /// `Locale.current.identifier` uses an underscore (e.g. “en_US”), which is not supported by RS.
-            /// Nimbus’s `getLocaleTag()` returns a Gecko-compatible locale (e.g. “en-US”).
-            /// In Gecko, we use BCP47 format, specifically `appLocaleAsBCP47`
-            /// See : https://searchfox.org/mozilla-central/rev/240ca3f/toolkit/modules/RustSharedRemoteSettingsService.sys.mjs#46
-            /// Once we drop support for iOS <16 we can support the proper  BCP47 by using `Locale.IdentifierType.bcp47`
-            /// See: https://developer.apple.com/documentation/foundation/locale/identifiertype/bcp47
-            locale: getLocaleTag(),
-            os: "iOS",
-            osVersion: uiDevice.systemVersion,
-            formFactor: formFactor,
-            country: Locale.current.regionCode)
-    }
 
     func hasAccount() -> Bool {
         return rustFxA.hasAccount()
@@ -865,5 +840,30 @@ extension RemoteSettingsEnvironment {
         case .stage: return .stage
         case .dev: return .dev
         }
+    }
+    
+    public static func remoteSettingsAppContext() -> RemoteSettingsContext {
+        let appInfo = BrowserKitInformation.shared
+        let uiDevice = UIDevice.current
+        let formFactor = switch uiDevice.userInterfaceIdiom {
+        case .pad: "tablet"
+        case .mac: "desktop"
+        default: "phone"
+        }
+        return RemoteSettingsContext(
+            channel: appInfo.buildChannel?.rawValue ?? "release",
+            appVersion: AppInfo.appVersion,
+            appId: AppInfo.bundleIdentifier,
+            /// `Locale.current.identifier` uses an underscore (e.g. “en_US”), which is not supported by RS.
+            /// Nimbus’s `getLocaleTag()` returns a Gecko-compatible locale (e.g. “en-US”).
+            /// In Gecko, we use BCP47 format, specifically `appLocaleAsBCP47`
+            /// See : https://searchfox.org/mozilla-central/rev/240ca3f/toolkit/modules/RustSharedRemoteSettingsService.sys.mjs#46
+            /// Once we drop support for iOS <16 we can support the proper  BCP47 by using `Locale.IdentifierType.bcp47`
+            /// See: https://developer.apple.com/documentation/foundation/locale/identifiertype/bcp47
+            locale: getLocaleTag(),
+            os: "iOS",
+            osVersion: uiDevice.systemVersion,
+            formFactor: formFactor,
+            country: Locale.current.regionCode)
     }
 }
