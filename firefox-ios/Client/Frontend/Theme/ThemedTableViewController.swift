@@ -23,7 +23,11 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        super.init(style: style)
+        if #available(iOS 26.0, *) {
+            super.init(style: .insetGrouped)
+        } else {
+            super.init(style: style)
+        }
     }
 
     override func tableView(

@@ -26,6 +26,10 @@ class WebsiteDataManagementViewController: UIViewController,
         static let count = 3
     }
 
+    private struct UX {
+        static let sectionTopMargin: CGFloat = 10
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -44,6 +48,14 @@ class WebsiteDataManagementViewController: UIViewController,
     fileprivate var showMoreButton: ThemedTableViewCell?
 
     private let viewModel = WebsiteDataManagementViewModel()
+
+    private var shouldUseNewStyle: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
+    }
 
     var tableView: UITableView?
     var searchController: UISearchController?
@@ -66,7 +78,7 @@ class WebsiteDataManagementViewController: UIViewController,
     private func setupView() {
         title = .SettingsWebsiteDataTitle
 
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: shouldUseNewStyle ? .insetGrouped : .grouped)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorColor = currentTheme().colors.borderPrimary
@@ -317,11 +329,11 @@ class WebsiteDataManagementViewController: UIViewController,
         let section = Section(rawValue: section)!
         switch section {
         case .clearButton:
-            return 10 // Controls the space between the site list and the button
+            return UX.sectionTopMargin // Controls the space between the site list and the button
         case .sites:
             return UITableView.automaticDimension
         case .showMore:
-            return 0
+            return shouldUseNewStyle ? UX.sectionTopMargin : 0
         }
     }
 

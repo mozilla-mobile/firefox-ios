@@ -16,6 +16,7 @@ struct GenericSectionView<Content: View>: View {
     let description: String?
     let content: () -> Content
     let identifier: String
+    let shouldUseDivider: Bool
 
     let theme: Theme?
 
@@ -38,12 +39,14 @@ struct GenericSectionView<Content: View>: View {
          title: String,
          description: String? = nil,
          identifier: String,
+         shouldUseDivider: Bool = true,
          @ViewBuilder content: @escaping () -> Content) {
         self.title = title
         self.description = description
         self.content = content
         self.theme = theme
         self.identifier = identifier
+        self.shouldUseDivider = shouldUseDivider
     }
 
     var body: some View {
@@ -52,12 +55,16 @@ struct GenericSectionView<Content: View>: View {
                                      sectionTitleColor: sectionTitleColor)
             .padding([.leading, .trailing], UX.sectionPadding)
 
-            Divider().frame(height: UX.dividerHeight)
+            if shouldUseDivider {
+                Divider().frame(height: UX.dividerHeight)
+            }
 
             content()
                 .padding([.top, .bottom], UX.contentPadding)
 
-            Divider().frame(height: UX.dividerHeight)
+            if shouldUseDivider {
+                Divider().frame(height: UX.dividerHeight)
+            }
 
             // Optional description at the bottom
             if let description = description {

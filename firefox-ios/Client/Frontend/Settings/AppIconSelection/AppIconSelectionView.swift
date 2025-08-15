@@ -47,7 +47,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
                     )
                 }.listRowBackground(themeColors.layer2.color)
             }
-            .listStyle(.plain)
+            .applyListStyle()
             .alert(isPresented: $isShowingErrorAlert) {
                 Alert(
                     title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
@@ -66,6 +66,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
             }
         }
         .background(themeColors.layer1.color)
+        .modifier(ScrollContentBackgroundModifier())
     }
 
     func applyTheme(theme: Theme) {
@@ -95,6 +96,27 @@ struct AppIconSelectionView: View, ThemeApplicable {
             }
 
             telemetry.selectedIcon(appIcon, previousIcon: previousIcon)
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func applyListStyle() -> some View {
+        if #available(iOS 26.0, *) {
+            self.listStyle(.insetGrouped)
+        } else {
+            self.listStyle(.plain)
+        }
+    }
+}
+
+struct ScrollContentBackgroundModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content.scrollContentBackground(.hidden)
+        } else {
+            content
         }
     }
 }
