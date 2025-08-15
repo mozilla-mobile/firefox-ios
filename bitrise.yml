@@ -1211,6 +1211,10 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.large
 
   SPM_Common_Steps:
     steps:
