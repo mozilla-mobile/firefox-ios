@@ -34,5 +34,6 @@ final class LocationContainer: UIView, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         setupShadow(theme: theme)
         self.theme = theme
+        self.backgroundColor = .orange
     }
 }

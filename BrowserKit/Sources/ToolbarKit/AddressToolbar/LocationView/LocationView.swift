@@ -665,6 +665,7 @@ final class LocationView: UIView,
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        self.backgroundColor = .clear
         self.theme = theme
         let colors = theme.colors
         // Get the appearance based on `isURLTextFieldCentered`
