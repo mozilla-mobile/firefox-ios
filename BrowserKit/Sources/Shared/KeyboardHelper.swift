@@ -33,6 +33,7 @@ public struct KeyboardState {
     /// accurate than simply using the height of UIKeyboardFrameBeginUserInfoKey since for example
     /// on iPad the overlap may be partial or if an external keyboard is attached, the intersection
     /// height will be zero. (Even if the height of the *invisible* keyboard will look normal!)
+    @MainActor
     public func intersectionHeightForView(_ view: UIView) -> CGFloat {
         if let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardFrame = keyboardFrameValue.cgRectValue

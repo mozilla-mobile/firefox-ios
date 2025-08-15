@@ -56,7 +56,7 @@ extension DeviceInfo {
     }
 
     public class func deviceModel() -> String {
-        return UIDevice.current.model
+        return UIDeviceDetails.model
     }
 
     public class func isBlurSupported() -> Bool {

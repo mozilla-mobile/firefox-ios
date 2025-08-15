@@ -76,7 +76,7 @@ public struct SupportUtils {
         // that this about Firefox on iOS. It makes it easier for webcompat people doing triage and diagnostics.
         // It adds a device-type label to help discriminating in between tablet and mobile devices.
         let deviceType: String
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if UIDeviceDetails.userInterfaceIdiom == .pad {
             deviceType = "device-tablet"
         } else {
             deviceType = "device-mobile"
