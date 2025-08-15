@@ -39,8 +39,7 @@ final class TabScrollHandler: NSObject,
     }
 
     private var isMinimalAddressBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly) &&
-        featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        return false
     }
 
     enum ScrollDirection {
