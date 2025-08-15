@@ -12,13 +12,29 @@ final class LocationContainer: UIView, ThemeApplicable {
         static let shadowOffset = CGSize(width: 0, height: 2)
     }
 
+    private lazy var glass: UIVisualEffectView = .build { view in
+        if #available(iOS 26.0, *) {
+            let glassEffect = UIGlassEffect(style: .regular)
+            glassEffect.isInteractive = true
+            glassEffect.tintColor = .darkGray
+            view.effect = glassEffect
+        }
+    }
+
     private var theme: Theme?
 
     override public func layoutSubviews() {
         super.layoutSubviews()
-
         guard let theme else { return }
         setupShadow(theme: theme)
+        self.addSubview(glass)
+
+        NSLayoutConstraint.activate([
+            glass.topAnchor.constraint(equalTo: topAnchor),
+            glass.leadingAnchor.constraint(equalTo: leadingAnchor),
+            glass.trailingAnchor.constraint(equalTo: trailingAnchor),
+            glass.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
     }
 
     private func setupShadow(theme: Theme) {
@@ -34,6 +50,6 @@ final class LocationContainer: UIView, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         setupShadow(theme: theme)
         self.theme = theme
-        self.backgroundColor = .orange
+        self.backgroundColor = .clear
     }
 }
