@@ -13,9 +13,10 @@
       "blur-material" : 0.5,
       "layers" : [
         {
+          "glass" : true,
           "hidden" : false,
-          "image-name" : "beta-1 2.svg",
-          "name" : "beta-1 2"
+          "image-name" : "beta-1.svg",
+          "name" : "beta-1"
         }
       ],
       "name" : "Group",
@@ -43,15 +44,15 @@
       ],
       "translucency" : {
         "enabled" : true,
-        "value" : 0.5
+        "value" : 0.25
       }
     },
     {
       "blur-material" : 0.5,
       "layers" : [
         {
-          "image-name" : "beta-2.svg",
-          "name" : "beta-2"
+          "image-name" : "beta-2 3.svg",
+          "name" : "beta-2 3"
         }
       ],
       "position" : {
@@ -120,6 +121,12 @@
     {
       "layers" : [
         {
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "automatic"
+            }
+          ],
           "image-name" : "beta-4 2.svg",
           "name" : "beta-4 2"
         }
