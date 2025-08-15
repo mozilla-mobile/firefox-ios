@@ -14,12 +14,12 @@ struct UIDeviceDetails {
     static let model = {
         getMainThreadDataSynchronously { UIDevice.current.model }
     }()
-    
+
     /// The style of interface to use on the current device.
     static let userInterfaceIdiom = {
         getMainThreadDataSynchronously { UIDevice.current.userInterfaceIdiom }
     }()
-    
+
     /// The current version of the operating system.
     static let systemVersion = {
         getMainThreadDataSynchronously { UIDevice.current.systemVersion }
@@ -29,7 +29,7 @@ struct UIDeviceDetails {
     private init() {}
 
     // MARK: Helper method
-    
+
     /// This nonisolated function will execute the `work` closure on the main thread return a value outside an asynchronous
     /// or main actor context. If not called on the main thread, it will use `DispatchQueue.main.sync` to synchronously wait
     /// for the `main` thread to be available, get the value on the main thread, and then return the value to the current
