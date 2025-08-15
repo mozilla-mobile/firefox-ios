@@ -77,10 +77,15 @@ let package = Package(
             exact: "0.11.0"),
     ],
     targets: [
-        .target(name: "Shared",
-                dependencies: ["Common",
-                               "WebEngine"],
-                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .target(
+            name: "Shared",
+            dependencies: ["Common",
+                           "WebEngine"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],
