@@ -139,7 +139,7 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             sudo xcodes runtimes install 'iOS 18.2'
-            xcodes runtimes list
+            xcrun simctl list runtimes
             xcrun simctl create "iPhone 16" "iPhone 16" "com.apple.CoreSimulator.SimRuntime.iOS-18-2"
     - xcode-build-for-test@3:
         inputs:
@@ -300,7 +300,7 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             sudo xcodes runtimes install 'iOS 18.2'
-            xcodes runtimes list
+            xcrun simctl list runtimes
             xcrun simctl create "iPhone 16" "iPhone 16" "com.apple.CoreSimulator.SimRuntime.iOS-18-2"
     - xcode-test-without-building@0.4.2:
         timeout: 1200
