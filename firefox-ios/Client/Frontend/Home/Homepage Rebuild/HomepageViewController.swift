@@ -956,20 +956,21 @@ final class HomepageViewController: UIViewController,
     /// the impressions were being tracked, but to match user's perspective, we add a throttle to delay.
     /// Time complexity: O(n) due to iterating visible items.
     private func trackVisibleItemImpressions() {
-        trackingImpressionsThrottler.throttle { [weak self] in
-            guard let self else { return }
-            guard let collectionView else {
-                logger.log(
-                    "Homepage collectionview should not have been nil, unable to track impression",
-                    level: .warning,
-                    category: .homepage
-                )
-                return
-            }
-            for indexPath in collectionView.indexPathsForVisibleItems {
-                guard let section = dataSource?.sectionIdentifier(for: indexPath.section),
-                      let item = dataSource?.itemIdentifier(for: indexPath) else { continue }
-                handleTrackingImpressions(for: section, with: item, at: indexPath.item)
+        trackingImpressionsThrottler.throttle { [self] in
+            ensureMainThread {
+                guard let collectionView = self.collectionView else {
+                    self.logger.log(
+                        "Homepage collectionview should not have been nil, unable to track impression",
+                        level: .warning,
+                        category: .homepage
+                    )
+                    return
+                }
+                for indexPath in collectionView.indexPathsForVisibleItems {
+                    guard let section = self.dataSource?.sectionIdentifier(for: indexPath.section),
+                          let item = self.dataSource?.itemIdentifier(for: indexPath) else { continue }
+                    self.handleTrackingImpressions(for: section, with: item, at: indexPath.item)
+                }
             }
         }
     }

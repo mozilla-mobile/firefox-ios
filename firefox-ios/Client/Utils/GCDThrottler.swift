@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 protocol ThrottleProtocol {
-    func throttle(completion: @escaping () -> Void)
+    func throttle(completion: @escaping @Sendable () -> Void)
 }
 
 /// For any work that needs to be delayed, you can wrap it inside a throttler
