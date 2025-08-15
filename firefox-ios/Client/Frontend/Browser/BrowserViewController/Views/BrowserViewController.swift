@@ -565,14 +565,12 @@ class BrowserViewController: UIViewController,
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
 
-        if let legacyController = scrollController as? LegacyTabScrollProvider {
-            let action = GeneralBrowserMiddlewareAction(
-                scrollOffset: legacyController.contentOffset,
-                toolbarPosition: newSearchBarPosition,
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-            store.dispatchLegacy(action)
-        }
+        let action = GeneralBrowserMiddlewareAction(
+            scrollOffset: scrollController.contentOffset,
+            toolbarPosition: newSearchBarPosition,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
+        store.dispatchLegacy(action)
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {

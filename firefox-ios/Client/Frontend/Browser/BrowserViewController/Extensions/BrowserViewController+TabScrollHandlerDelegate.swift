@@ -21,7 +21,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     func hideToolbar() {
         if isBottomSearchBar {
             let overKeyboardOffset = calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
-            updateBottomToolbar(bottomContainerOffset: bottomContainer.frame.height,
+            updateBottomToolbar(bottomContainerOffset: getBottomContainerSize().height,
                                 overKeyboardContainerOffset: overKeyboardOffset,
                                 alpha: 0)
         } else {
@@ -69,7 +69,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     }
 
     private var headerOffset: CGFloat {
-        let baseOffset = -header.frame.height
+        let baseOffset = -getHeaderSize().height
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
 
@@ -84,7 +84,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     ///   - safeAreaInsets: The safe area insets to use (nil treated as .zero).
     /// - Returns: The calculated scroll height.
     private func calculateOverKeyboardScrollHeight(safeAreaInsets: UIEdgeInsets?) -> CGFloat {
-        let containerHeight = overKeyboardContainer.frame.height
+        let containerHeight = getOverKeyboardContainerSize().height
 
         let isReaderModeActive = tabManager.selectedTab?.url?.isReaderModeURL == true
 
