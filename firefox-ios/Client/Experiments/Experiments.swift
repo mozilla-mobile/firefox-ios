@@ -14,12 +14,15 @@ import typealias MozillaAppServices.NimbusErrorReporter
 import protocol MozillaAppServices.NimbusEventStore
 import protocol MozillaAppServices.NimbusInterface
 import protocol MozillaAppServices.NimbusMessagingHelperProtocol
+import MozillaAppServices
 
 private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"
 private let NIMBUS_LOCAL_DATA_KEY = "nimbus_local_data"
 private let NIMBUS_USE_PREVIEW_COLLECTION_KEY = "nimbus_use_preview_collection"
 private let NIMBUS_IS_FIRST_RUN_KEY = "NimbusFirstRun"
+private let NIMBUS_PREVIEW_COLLECTION_NAME = "nimbus-preview"
+private let NIMBUS_MOBILE_COLLECTION_NAME = "nimbus-mobile-experiments"
 
 /// `Experiments` is the main entry point to use the `Nimbus` experimentation platform in Firefox for iOS.
 ///
@@ -93,8 +96,8 @@ enum Experiments {
     static func getLocalExperimentData(storage: UserDefaults = .standard) -> String? {
         return storage.string(forKey: NIMBUS_LOCAL_DATA_KEY)
     }
-
-    static var dbPath: String? {
+    
+    static var profilePath: String? {
         let profilePath: String?
         if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
             profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
@@ -108,6 +111,12 @@ enum Experiments {
                 .appendingPathComponent("profile.profile")
                 .path
         }
+        return profilePath
+        
+    }
+
+    static var dbPath: String? {
+        
         let dbPath = profilePath.flatMap {
             URL(fileURLWithPath: $0).appendingPathComponent("nimbus.db").path
         }
@@ -126,6 +135,27 @@ enum Experiments {
         }
 
         return url
+    }()
+    
+    static let remoteSettingsService: RemoteSettingsService = {
+        // This is only for nimbus
+        let remoteSettingsServer = remoteSettingsURL != nil
+            ? RemoteSettingsServer.custom(url: remoteSettingsURL!)
+            : RemoteSettingsServer.prod
+        let bucketName = (remoteSettingsServer == .prod ? "main" : "main-preview")
+        let config = RemoteSettingsConfig2(server: remoteSettingsServer,
+                                           bucketName: bucketName,
+                                           appContext: RemoteSettingsEnvironment.remoteSettingsAppContext())
+
+        let url = URL(fileURLWithPath: profilePath!, isDirectory: true).appendingPathComponent("remote-settings")
+        let path = url.path
+
+        // Create the remote settings directory if needed
+        if !FileManager.default.fileExists(atPath: path) {
+            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        }
+        let service = RemoteSettingsService(storageDir: path, config: config)
+        
     }()
 
     static func setUsePreviewCollection(enabled: Bool, storage: UserDefaults = .standard) {
@@ -236,6 +266,12 @@ enum Experiments {
             isAppleIntelligenceAvailable: isAppleIntelligenceAvailable(),
             cannotUseAppleIntelligence: cannotUseAppleIntelligence()
         )
+        let remoteSettingsServer = remoteSettingsURL != nil
+            ? RemoteSettingsServer.custom(url: remoteSettingsURL!)
+            : RemoteSettingsServer.prod
+        let collectionName = usePreviewCollection()
+            ? NIMBUS_PREVIEW_COLLECTION_NAME
+            : NIMBUS_MOBILE_COLLECTION_NAME
 
         return NimbusBuilder(dbPath: dbPath)
             .with(url: remoteSettingsURL)
@@ -247,7 +283,13 @@ enum Experiments {
             .with(featureManifest: FxNimbus.shared)
             .with(commandLineArgs: CommandLine.arguments)
             .with(recordedContext: nimbusRecordedContext)
-            .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
+            .build(
+                appInfo: getAppSettings(
+                    isFirstRun: isFirstRun,
+                    collectionName: collectionName,
+                    remoteSettingsService: remoteSettingsService
+                )
+            )
     }
 
     /// A convenience method to initialize the `NimbusApi` object at startup.
