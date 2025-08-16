@@ -576,6 +576,7 @@ private class ToolbarHelperMock: ToolbarHelperInterface {
     var isToolbarRefactorEnabled = true
     var isToolbarTranslucencyEnabled = true
     var isReduceTransparencyEnabled = false
+    var glassEffectAlpha: CGFloat = 0
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass != .compact

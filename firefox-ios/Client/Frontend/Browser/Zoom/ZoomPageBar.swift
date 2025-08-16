@@ -293,7 +293,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        let backgroundAlpha = toolbarHelper.backgroundAlpha()
+        let backgroundAlpha = toolbarHelper.glassEffectAlpha
         backgroundColor = colors.layer2.withAlphaComponent(backgroundAlpha)
 
         stepperContainer.backgroundColor = colors.layer5

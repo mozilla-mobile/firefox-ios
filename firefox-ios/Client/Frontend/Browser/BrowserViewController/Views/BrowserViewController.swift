@@ -220,8 +220,20 @@ class BrowserViewController: UIViewController,
         view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
 
-    private let bottomBlurView: UIVisualEffectView = .build { view in
-        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    private lazy var bottomBlurView: UIVisualEffectView = .build { view in
+		#if canImport(FoundationModels)
+            if #available(iOS 26.0, *) {
+                let glassEffect = UIGlassEffect(style: .regular)
+                glassEffect.isInteractive = true
+                // NOTE: this is a hack, in theory we need to actually change the icon color based on the glass effect
+                glassEffect.tintColor = self.themeManager.getCurrentTheme(for: self.windowUUID).colors.layer1
+                view.effect = glassEffect
+            } else {
+                view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+            }
+		#else
+		    view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+		#endif
     }
 
     // background view is placed behind content view so view scrolled to top or bottom shows
@@ -3793,6 +3805,20 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         zeroSearchDimmingView.backgroundColor = currentTheme.colors.layerScrim.withAlphaComponent(0.70)
+
+        #if canImport(FoundationModels)
+            if #available(iOS 26.0, *) {
+                let glassEffect = UIGlassEffect(style: .regular)
+                glassEffect.isInteractive = true
+                // NOTE: this is a hack, in theory we need to actually change the icon color based on the glass effect
+                glassEffect.tintColor = self.themeManager.getCurrentTheme(for: self.windowUUID).colors.layer1
+                bottomBlurView.effect = glassEffect
+            } else {
+                bottomBlurView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+            }
+        #else
+            bottomBlurView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
 
         if isToolbarRefactorEnabled {
             // to make sure on homepage with bottom search bar the status bar is hidden
