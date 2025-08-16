@@ -32,13 +32,18 @@ enum SentTabAction: String {
 }
 
 extension AppDelegate {
+    @MainActor
     func pushNotificationSetup() {
         UNUserNotificationCenter.current().delegate = self
         let categories: Set<UNNotificationCategory> = [SentTabAction.notificationCategory,
                                                        NotificationSurfaceManager.notificationCategory]
         UNUserNotificationCenter.current().setNotificationCategories(categories)
 
-        NotificationCenter.default.addObserver(forName: .RegisterForPushNotifications, object: nil, queue: .main) { _ in
+        NotificationCenter.default.addObserver(
+            forName: .RegisterForPushNotifications,
+            object: nil,
+            queue: .main
+        ) { _ in
             Task { @MainActor in
                 let settings = await UNUserNotificationCenter.current().notificationSettings()
                 if settings.authorizationStatus != .denied {
@@ -51,9 +56,19 @@ extension AppDelegate {
         NotificationCenter.default.addObserver(
             forName: .constellationStateUpdate,
             object: nil,
-            queue: nil
+            queue: .main
         ) { notification in
-            if let newState = notification.userInfo?["newState"] as? ConstellationState {
+            guard Thread.isMainThread else {
+                assertionFailure("This must be called main thread")
+                return
+            }
+
+            // Parse out anything we need from non-Sendable `Notification`
+            guard let newState = notification.userInfo?["newState"] as? ConstellationState else { return }
+
+            // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
+            MainActor.assumeIsolated {
+                // TODO: FXIOS-12854 Rust components need explicit Sendable conformance
                 self.setPreferencesForSyncedAccount(for: newState)
                 if newState.localDevice?.pushEndpointExpired ?? false {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)

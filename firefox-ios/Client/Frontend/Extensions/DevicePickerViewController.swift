@@ -126,11 +126,21 @@ class DevicePickerViewController: UITableViewController {
         tableView.backgroundColor = currentTheme().colors.layer2
         tableView.separatorStyle = .none
 
-        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate,
-                                                              object: nil,
-                                                              queue: .main) { [weak self ] _ in
-            self?.loadList()
-            self?.refreshControl?.endRefreshing()
+        notification = NotificationCenter.default.addObserver(
+            forName: Notification.Name.constellationStateUpdate,
+            object: nil,
+            queue: .main
+        ) { [weak self ] _ in
+            guard Thread.isMainThread else {
+                assertionFailure("This must be called main thread")
+                return
+            }
+
+            // We have set the queue to `.main` on the observer, so theoretically this is safe to call here
+            MainActor.assumeIsolated {
+                self?.loadList()
+                self?.refreshControl?.endRefreshing()
+            }
         }
 
         RustFirefoxAccounts.shared.accountManager?.deviceConstellation()?.refreshState()
