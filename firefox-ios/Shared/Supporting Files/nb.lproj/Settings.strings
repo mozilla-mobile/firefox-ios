@@ -173,7 +173,7 @@
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Slå på varsler";
 
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Settings.PrivacyNotice.Title.v137" = "Personvernbestemmelser";
+"Settings.PrivacyNotice.Title.v137" = "Personvernerklæring";
 
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Rull til Skjul fane og adressefelt";
@@ -244,6 +244,24 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Installer og kjør studier";
 
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Gir tilgang til å oppsummere sider.";
+
+/* This is the footer text for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Rist enheten fra side til side for å oppsummere en side.";
+
+/* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Rist for å oppsummere";
+
+/* This is the section title for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.Title.v142" = "Bevegelser";
+
+/* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.SummarizePagesTitle.v142" = "Oppsummer sider";
+
+/* In the settings menu, in the General section, this is the title for the Summarize settings section. */
+"Settings.Summarize.Title.v142" = "Sidesammendrag";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Les mer.";
 
@@ -263,5 +281,5 @@
 "Settings.TechnicalData.Title.v136" = "Send tekniske data og interaksjonsdata";
 
 /* Terms of Use settings section title */
-"Settings.TermsOfUse.Title.v137" = "Vilkår for bruk";
+"Settings.TermsOfUse.Title.v137" = "Bruksvilkår";
 

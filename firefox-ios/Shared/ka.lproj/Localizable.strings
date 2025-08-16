@@ -659,7 +659,7 @@
 "Logins.PasscodeRequirement.Warning" = "თვითშევსებით სარგებლობისთვის Firefox-ში, მოწყობილობაზე ჩართული უნდა იყოს შესვლის კოდი.";
 
 /* Label displaying welcome view tagline under the title */
-"Logins.WelcomeView.Tagline" = "თან წაიყოლეთ თქვენი პაროლები ყველგან";
+"Logins.WelcomeView.Tagline" = "თან გაიყოლეთ თქვენი პაროლები ყველგან";
 
 /* Label displaying welcome view title */
 "Logins.WelcomeView.Title2" = "პაროლების თვითშევსება Firefox-ში";

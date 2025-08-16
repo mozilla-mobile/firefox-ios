@@ -1,3 +1,48 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "Sammanfattat av Apple Intelligence";
+
+/* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
+"Summarizer.CloseButton.Label.v142" = "Stäng";
+
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "Sidan laddas fortfarande. Vänta tills det är slut och tryck sedan på sammanfatta.";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "Kan inte hantera den här för tillfället. Försök igen senare!";
+
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "Fel vid sammanfattning av sidan. Försök igen senare.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "Begränsat innehåll upptäcktes. Den här sidan kan vara begränsad eller mestadels visuell.";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "Den här webbplatsen tillåter inte innehållssammanfattningar. Prova en annan sida.";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "Sammanfattat av %@";
+
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "Sammanfattar…";
+
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "Försök igen";
+
+/* The label for the allow button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.AllowButton.Label.v142" = "Tillåt";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ använder Apple Intelligence för att sammanfatta sidor.";
+
+/* The label for the cancel button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.CancelButton.Label.v142" = "Avbryt";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v142" = "%@ använder AI på ett säkert sätt på Mozillas servrar för att sammanfatta sidor.";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Läs mer";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "Tillåt sidsammanfattningar?";
 

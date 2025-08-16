@@ -244,6 +244,24 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Installa e conduci studi";
 
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Consente l’accesso alla funzione per riassumere le pagine.";
+
+/* This is the footer text for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Agita il dispositivo da un lato all’altro per riassumere una pagina.";
+
+/* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Agita per riassumere";
+
+/* This is the section title for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.Title.v142" = "Gesti";
+
+/* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.SummarizePagesTitle.v142" = "Riassumi pagine";
+
+/* In the settings menu, in the General section, this is the title for the Summarize settings section. */
+"Settings.Summarize.Title.v142" = "Riassunti delle pagine";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Ulteriori informazioni.";
 

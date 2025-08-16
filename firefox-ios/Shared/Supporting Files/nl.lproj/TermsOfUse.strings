@@ -1,0 +1,24 @@
+/* Label for the button that confirms user acceptance of the Terms of Use. */
+"TermsOfUse.AcceptButton.v142" = "Accepteren";
+
+/* Label for the back button shown in the Terms of Use web view. */
+"TermsOfUse.BackButton.v142" = "Terug";
+
+/* Link shown in the Terms of Use sheet to direct users to more details about the update. */
+"TermsOfUse.Link.LearnMore.v142" = "Meer info";
+
+/* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
+"TermsOfUse.Link.PrivacyNotice.v142" = "Privacyverklaring";
+
+/* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Link.TermsOfUse.v142" = "Gebruiksvoorwaarden van %@";
+
+/* Label for the button that allows the user to postpone accepting the Terms of Use. */
+"TermsOfUse.RemindMeLaterButton.v142" = "Later herinneren";
+
+/* Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'. */
+"TermsOfUse.ReviewAndAcceptText.v142" = "Neem even de tijd om deze te beoordelen en te accepteren. Meer info";
+
+/* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
+"TermsOfUse.Title.v142" = "We hebben een update";
+

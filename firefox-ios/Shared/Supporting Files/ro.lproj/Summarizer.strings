@@ -1,0 +1,48 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "Rezumat de Apple Intelligence";
+
+/* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
+"Summarizer.CloseButton.Label.v142" = "Închide";
+
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "Pagina încă se încarcă. Așteaptă să se termine încărcarea, apoi cere rezumatul.";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "Nu putem gestiona cererea momentan. Încearcă din nou mai târziu!";
+
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "Eroare la rezumarea paginii. Încearcă din nou mai târziu.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "S-a depistat conținut limitat. Pagina poate fi restricționată sau în mare parte cu conținut vizual.";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "Site-ul web nu permite rezumarea conținutului. Încearcă o altă pagină.";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "Rezumat de %@";
+
+/* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
+"Summarizer.Loading.Label.v142" = "Se face rezumatul…";
+
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "Reîncearcă";
+
+/* The label for the allow button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.AllowButton.Label.v142" = "Permite";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ folosește Apple Intelligence pentru rezumarea paginilor.";
+
+/* The label for the cancel button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.CancelButton.Label.v142" = "Anulează";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v142" = "%@ folosește IA găzduită în siguranță pe serverele Mozilla pentru rezumarea paginilor.";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Află mai multe";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "Permiți rezumarea paginilor?";
+

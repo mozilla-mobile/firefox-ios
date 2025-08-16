@@ -34,6 +34,12 @@
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Acțiuni rapide";
 
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Comenzi rapide Firefox";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Adaugă comenzi rapide către filele deschise.";
+
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Vizualizare rapidă";
 
@@ -48,4 +54,7 @@
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Site-uri de top";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Comenzi rapide pentru site-uri web";
 

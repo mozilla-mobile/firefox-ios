@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Reîncarcă";
+
+/* On error page, this is the description for a generic error. %@ is the site url. */
+"NativeErrorPage.GenericError.Description.v134" = "Proprietarul %@ nu a configurat corect și nu se poate crea o conexiune securizată.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Ai grijă. Ceva nu pare în regulă.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Încearcă să te conectezi pe un alt dispozitiv. Verifică modemul sau routerul. Deconectează-te și reconectează-te la Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Se pare că ai o problemă cu conexiunea ta la internet.";
+

@@ -2,8 +2,8 @@
 "Cancel" = "Anulează";
 
 /* The confirmation button that clears history even when Sync is connected. */
-"OK" = "Ok";
+"OK" = "OK";
 
 /* Description of the confirmation dialog shown when a user tries to clear history that's synced to another device. */
-"This action will clear all of your private data, including history from your synced devices." = "Această acțiune va șterge toate datele tale private, inclusiv istoricul de pe dispozitivele sincronizate.";
+"This action will clear all of your private data, including history from your synced devices." = "Această acțiune îți va șterge toate datele private, inclusiv istoricul de pe dispozitivele sincronizate.";
 

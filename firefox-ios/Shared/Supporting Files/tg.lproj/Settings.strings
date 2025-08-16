@@ -170,7 +170,7 @@
 "Settings.Notifications.TurnOnNotificationsMessage.v112" = "Барои фаъол кардани огоҳномаҳо дар %@ ба Танзимоти дастгоҳи худ гузаред";
 
 /* This is the title informing the user that they need to turn on notifications in iOS Settings. */
-"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Хомӯш кардани огоҳномаҳо";
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Фаъол кардани огоҳномаҳо";
 
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "Огоҳномаи махфият";
@@ -243,6 +243,24 @@
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Насб ва иҷро кардани омӯзишҳо";
+
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Ба хулосаи саҳифаҳо дастрасӣ таъмин мекунад.";
+
+/* This is the footer text for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Барои баровардани хулоса ба саҳифа, дастгоҳи худро ба ду тараф ҷунбонед.";
+
+/* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Барои баровардани хулоса, дастгоҳро ҷунбонед";
+
+/* This is the section title for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.Title.v142" = "Ишораҳо";
+
+/* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.SummarizePagesTitle.v142" = "Баровардани хулоса дар бораи ин саҳифаҳо";
+
+/* In the settings menu, in the General section, this is the title for the Summarize settings section. */
+"Settings.Summarize.Title.v142" = "Хулосаҳои саҳифа";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Маълумоти бештар.";

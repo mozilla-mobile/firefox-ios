@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Privát lapok bezárása";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefoxos parancsikonok hozzáadása a kezdőképernyőhöz.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox indítóikonok hozzáadása a kezdőképernyőhöz.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Ugrás a másolt hivatkozáshoz";
@@ -38,7 +38,7 @@
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-hivatkozások";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescriptionV2" = "Parancsikonok hozzáadása a nyitott lapokhoz.";
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Parancsok hozzáadása a nyitott lapokhoz.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Gyors nézet";
@@ -50,7 +50,7 @@
 "TodayWidget.SearchInPrivateTabLabelV2" = "Keresés privát lapon";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "Parancsikonok hozzáadása a gyakran és nemrég látogatott webhelyekhez.";
+"TodayWidget.TopSitesGalleryDescription" = "Parancsok hozzáadása a gyakran és nemrég látogatott webhelyekhez.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Népszerű oldalak";

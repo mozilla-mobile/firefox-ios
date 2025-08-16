@@ -170,7 +170,7 @@
 "Onboarding.Notification.Title.v120" = "Огоҳиҳо барои кори бехатартар бо «%@» ба шумо кумак мекунанд";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.TurnOnNotifications.Action.v114" = "Хомӯш кардани огоҳномаҳо";
+"Onboarding.Notification.TurnOnNotifications.Action.v114" = "Фаъол кардани огоҳномаҳо";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Sync.Description.v123" = "Дар раванди ҳамоҳангсозӣ браузери «%@» ниҳонвожаҳо, хатбаракҳо ва чизҳои дигари шуморо рамзгузорӣ мекунад.";

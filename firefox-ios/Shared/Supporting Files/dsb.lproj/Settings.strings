@@ -244,6 +244,24 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Instalěrowaś a studije pśewjasć";
 
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Bitujo pśistup k bokam zespominanjow.";
+
+/* This is the footer text for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Tśěsćo swój rěd wót boka do boka, aby boku zespominał.";
+
+/* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Za zespominanje tśěsć";
+
+/* This is the section title for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.Title.v142" = "Gesty";
+
+/* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.SummarizePagesTitle.v142" = "Boki zespominaś";
+
+/* In the settings menu, in the General section, this is the title for the Summarize settings section. */
+"Settings.Summarize.Title.v142" = "Zespominanja bokow";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Dalšne informacije.";
 

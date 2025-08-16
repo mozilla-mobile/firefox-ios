@@ -1,0 +1,15 @@
+/* This value is used as the header for the remember card page. %@ is the app name (e.g. Firefox). */
+"CreditCard.RememberCard.Header.v122" = "%@ îți criptează numărul cardului. Codul tău de securitate nu va fi salvat.";
+
+/* This value is used as the title for the Yes button in the remember credit card page */
+"CreditCard.RememberCard.MainButtonTitle.v122" = "Salvează";
+
+/* This value is used as the title for the remember credit card page */
+"CreditCard.RememberCard.MainTitle.v122" = "Salvezi securizat acest card?";
+
+/* This value is used as the title for the Not Now button in the remember credit card page */
+"CreditCard.RememberCard.SecondaryButtonTitle.v115" = "Nu acum";
+
+/* This value is used as the toast message for the saving success alert in the remember credit card page */
+"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "Card nou salvat";
+
