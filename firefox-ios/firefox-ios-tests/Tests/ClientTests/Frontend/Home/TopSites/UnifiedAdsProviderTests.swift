@@ -12,12 +12,14 @@ class UnifiedAdsProviderTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        TelemetryContextualIdentifier.setupContextId()
+        let mock = MockContextIDComponent()
+        ContextIDManager.setup(isGleanMetricsAllowed: true, isTesting: true, contextIdComponent: mock)
         networking = MockContileNetworking()
     }
 
     override func tearDown() {
         networking = nil
+        ContextIDManager.setup(isGleanMetricsAllowed: true, isTesting: true, contextIdComponent: nil)
         super.tearDown()
     }
 
