@@ -158,7 +158,7 @@ final class MerinoProviderTests: XCTestCase {
     private func createSubject(
         thresholdHours: Double = 4,
         prefsEnabled: Bool = true,
-        cache: MockCache = MockCache(),
+        cache: MockCache = MockCache()
     ) -> (TestableMerinoProvider, MockCache) {
         let prefs = MockProfilePrefs()
         prefs.setBool(prefsEnabled, forKey: storiesFlag)
