@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Storage
 
-class MockRustRemoteTabs: RustRemoteTabs {
+class MockRustRemoteTabs: @unchecked Sendable, RustRemoteTabs {
     override public func getAll() -> Deferred<Maybe<[ClientRemoteTabs]>> {
         let url = "https://example.com"
         let title = "example"
