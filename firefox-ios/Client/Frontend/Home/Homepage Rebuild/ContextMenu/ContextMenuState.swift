@@ -50,14 +50,14 @@ struct ContextMenuState {
         guard let site = configuration.site else { return }
         self.site = site
 
-        switch configuration.homepageSection {
-        case .topSites:
+        switch configuration.menuType {
+        case .topSite, .shortcut:
             actions = [getTopSitesActions(site: site)]
         case .jumpBackIn:
             actions = [getJumpBackInActions(site: site)]
-        case .bookmarks:
+        case .bookmark:
             actions = [getBookmarksActions(site: site)]
-        case .pocket:
+        case .merino:
             actions = [getPocketActions(site: site)]
         default:
             return
@@ -271,7 +271,7 @@ struct ContextMenuState {
         // TODO: FXIOS-12750 ContextMenuState should be synchronized to the main actor, and then we won't need to pass
         // this state across isolation boundaries...
         let windowUUID = windowUUID
-        let section = configuration.homepageSection
+        let menuType = configuration.menuType
 
         return SingleActionViewModel(
             title: .OpenInNewPrivateTabContextMenuTitle,
@@ -285,7 +285,7 @@ struct ContextMenuState {
             )
             ContextMenuState.dispatchContextMenuActionForSection(
                 windowUUID: windowUUID,
-                section: section,
+                menuType: menuType,
                 actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
             )
         }.items
@@ -411,12 +411,12 @@ struct ContextMenuState {
 
     private static func dispatchContextMenuActionForSection(
         windowUUID: WindowUUID,
-        section: HomepageSection,
+        menuType: MenuType?,
         actionType: ActionType
     ) {
         store.dispatchLegacy(
             ContextMenuAction(
-                section: section,
+                menuType: menuType,
                 windowUUID: windowUUID,
                 actionType: actionType
             )

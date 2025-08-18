@@ -6,6 +6,7 @@ import Foundation
 import Common
 import Redux
 import Shared
+import Storage
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
@@ -748,7 +749,7 @@ final class HomepageViewController: UIViewController,
             return
         }
         if section.canHandleLongPress {
-            navigateToContextMenu(for: section, and: item, sourceView: sourceView)
+            navigateToContextMenu(for: item, sourceView: sourceView)
         }
     }
 
@@ -776,10 +777,10 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func navigateToContextMenu(for section: HomepageSection, and item: HomepageItem, sourceView: UIView? = nil) {
+    private func navigateToContextMenu(for item: HomepageItem, sourceView: UIView? = nil) {
         let configuration = ContextMenuConfiguration(
-            homepageSection: section,
-            item: item,
+            site: getSiteForContextMenu(for: item),
+            menuType: MenuType(homepageItem: item),
             sourceView: sourceView,
             toastContainer: toastContainer
         )
@@ -863,6 +864,23 @@ final class HomepageViewController: UIViewController,
                 actionType: actionType
             )
         )
+    }
+
+    private func getSiteForContextMenu(for item: HomepageItem) -> Site? {
+        switch item {
+        case .topSite(let state, _):
+            return state.site
+        case .jumpBackIn(let config):
+            return Site.createBasicSite(url: config.siteURL, title: config.titleText)
+        case .jumpBackInSyncedTab(let config):
+            return Site.createBasicSite(url: config.url.absoluteString, title: config.titleText)
+        case .bookmark(let state):
+            return Site.createBasicSite(url: state.site.url, title: state.site.title)
+        case .merino(let state):
+            return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
+        default:
+            return nil
+        }
     }
 
     // MARK: - UICollectionViewDelegate
