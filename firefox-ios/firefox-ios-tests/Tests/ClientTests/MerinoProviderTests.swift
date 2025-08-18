@@ -123,7 +123,7 @@ final class MerinoProviderTests: XCTestCase {
         let (sut, cache) = createSubject(prefsEnabled: true)
 
         // Cache has items but NO timestamp should be treated as STALE and must fetch
-        // new stories. We should never get in this position, but it should be checked.
+        // new stories. We should never get here, but we should still test it.
         cache.seed(items: [makeItem("staleButNoTimestamp")], lastUpdated: nil)
 
         sut.stubbedItems = [makeItem("net1"), makeItem("net2")]
