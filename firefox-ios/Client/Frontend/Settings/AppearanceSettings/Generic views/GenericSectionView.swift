@@ -55,16 +55,12 @@ struct GenericSectionView<Content: View>: View {
                                      sectionTitleColor: sectionTitleColor)
             .padding([.leading, .trailing], UX.sectionPadding)
 
-            if shouldUseDivider {
-                Divider().frame(height: UX.dividerHeight)
-            }
+            dividerView()
 
             content()
                 .padding([.top, .bottom], UX.contentPadding)
 
-            if shouldUseDivider {
-                Divider().frame(height: UX.dividerHeight)
-            }
+            dividerView()
 
             // Optional description at the bottom
             if let description = description {
@@ -87,6 +83,13 @@ struct GenericSectionView<Content: View>: View {
                 .font(.caption)
                 .foregroundColor(descriptionTextColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    @ViewBuilder
+    private func dividerView() -> some View {
+        if #unavailable(iOS 26.0) {
+            Divider().frame(height: UX.dividerHeight)
         }
     }
 }

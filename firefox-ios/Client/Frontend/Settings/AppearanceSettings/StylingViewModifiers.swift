@@ -1,0 +1,61 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import SwiftUI
+import Common
+
+struct SectionStyle: ViewModifier {
+    let theme: Theme?
+    let cornerRadius: CGFloat
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(Color(theme?.colors.layer2 ?? UIColor.clear))
+                )
+        } else {
+            content
+        }
+    }
+}
+
+struct PaddingStyle: ViewModifier {
+    let theme: Theme?
+    let spacing: CGFloat
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding(.top, spacing)
+                .padding(.horizontal, spacing / 2)
+        } else {
+            content
+                .padding(.top, spacing)
+                .frame(maxWidth: .infinity)
+        }
+    }
+}
+
+struct ListStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.listStyle(.insetGrouped)
+        } else {
+            content.listStyle(.plain)
+        }
+    }
+}
+
+struct ScrollContentBackgroundModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content.scrollContentBackground(.hidden)
+        } else {
+            content
+        }
+    }
+}

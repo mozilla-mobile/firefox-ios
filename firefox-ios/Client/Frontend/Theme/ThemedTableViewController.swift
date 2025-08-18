@@ -12,6 +12,18 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    struct UX {
+        static let horizontalMargin: CGFloat = 15
+        static func tableViewStyleForCurrentOS(with style: UITableView.Style) -> UITableView.Style {
+            guard #available(iOS 26.0, *) else { return style }
+            return .insetGrouped
+        }
+        static var cellSeparatorInsetForCurrentOS: UIEdgeInsets {
+            guard #available(iOS 26.0, *) else { return .zero }
+            return UIEdgeInsets(top: 0, left: horizontalMargin, bottom: 0, right: horizontalMargin)
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -23,11 +35,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        if #available(iOS 26.0, *) {
-            super.init(style: .insetGrouped)
-        } else {
-            super.init(style: style)
-        }
+        super.init(style: UX.tableViewStyleForCurrentOS(with: style))
     }
 
     override func tableView(

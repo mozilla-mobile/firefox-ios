@@ -13,7 +13,7 @@ import tempfile
 
 ROOT_DIR        = Path(__file__).parent.parent
 PACKAGE_SWIFT   = ROOT_DIR / "MozillaRustComponents" / "Package.swift"
-# Latest nightly.json produced by application‑services CI
+# Latest nightly.json produced by application-services CI
 NIGHTLY_JSON_URL = (
     "https://firefox-ci-tc.services.mozilla.com/api/index/v1/"
     "task/project.application-services.v2.nightly.latest/artifacts/"
@@ -27,24 +27,34 @@ def main() -> None:
     BRANCH   = "rcs-auto-update"
     TITLE    = f"(WIP)(Local AS flow) Nightly auto-update ({version.swift_version})"
 
-    # Ensure we have the latest remote copy of the update branch (if any)
-    subprocess.run(["git", "fetch", args.remote, BRANCH], check=False)
+    if not args.in_place:
+        # Ensure we have the latest remote copy of the update branch (if any)
+        subprocess.run(["git", "fetch", args.remote, BRANCH], check=False)
 
-    # Create (or reset) our working branch
-    remote_ref = f"refs/remotes/{args.remote}/{BRANCH}"
-    if subprocess.run(
-        ["git", "rev-parse", "--verify", remote_ref],
-        stdout=subprocess.DEVNULL,
-    ).returncode == 0:
-        subprocess.check_call(["git", "checkout", "-B", BRANCH, remote_ref])
+        # Create (or reset) our working branch
+        remote_ref = f"refs/remotes/{args.remote}/{BRANCH}"
+        if subprocess.run(
+            ["git", "rev-parse", "--verify", remote_ref],
+            stdout=subprocess.DEVNULL,
+        ).returncode == 0:
+            subprocess.check_call(["git", "checkout", "-B", BRANCH, remote_ref])
+        else:
+            subprocess.check_call(["git", "checkout", "-B", BRANCH, args.base])
     else:
-        subprocess.check_call(["git", "checkout", "-B", BRANCH, args.base])
+        print(
+            "In-place arg passed: skipping branch checkout and all commit/push steps.",
+            file=sys.stderr,
+        )
 
-    # Apply the nightly update
-    update_source(version)
+    # Apply the nightly (or specified) update
+    update_source(version, git_add=not args.in_place)
 
     if not repo_has_changes():
         print("No changes detected, quitting")
+        return
+
+    if args.in_place:
+        print("Updates applied in-place. Review, stage, and commit manually if desired.")
         return
 
     # Stage everything
@@ -115,6 +125,14 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog="update_from_application_services.py")
     parser.add_argument("version", help='Version to use (or literal `"nightly"`).')
     parser.add_argument(
+        "--in-place",
+        action="store_true",
+        help=(
+            "Apply updates in the current working branch and skip creating/updating "
+            "a branch, staging, committing, pushing, and PR creation."
+        ),
+    )
+    parser.add_argument(
         "--push", action="store_true", help="Push changes and create / update PR"
     )
     parser.add_argument(
@@ -128,7 +146,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 class VersionInfo:
-    """Encapsulates converting an A‑S version into the semver Swift expects."""
+    """Encapsulates converting an A-S version into the semver Swift expects."""
 
     def __init__(self, app_services_version: str):
         self.is_nightly = app_services_version == "nightly"
@@ -139,7 +157,7 @@ class VersionInfo:
         comps = app_services_version.split(".")
 
         if len(comps) == 2:
-            # 2‑component A‑S version → 3‑component Swift version
+            # 2-component A-S version → 3-component Swift version
             self.app_services_version = app_services_version
             self.swift_version = f"{comps[0]}.0.{comps[1]}"
         elif len(comps) == 3:
@@ -149,9 +167,9 @@ class VersionInfo:
             raise ValueError(f"Invalid app_services_version: {app_services_version}")
 
 
-def update_source(version: VersionInfo) -> None:
+def update_source(version: VersionInfo, *, git_add: bool = True) -> None:
     print("Updating Package.swift xcframework info …", flush=True)
-    update_package_swift(version)
+    update_package_swift(version, git_add=git_add)
 
     print("Updating Swift wrapper sources …", flush=True)
     with tempfile.TemporaryDirectory() as tmp:
@@ -160,17 +178,17 @@ def update_source(version: VersionInfo) -> None:
         replace_all_files(tmp_path)
 
 
-def update_package_swift(version: VersionInfo) -> None:
+def update_package_swift(version: VersionInfo, *, git_add: bool = True) -> None:
     url          = swift_artifact_url(version, "MozillaRustComponents.xcframework.zip")
     focus_url    = swift_artifact_url(version, "FocusRustComponents.xcframework.zip")
     checksum     = compute_checksum(url)
     focus_sum    = compute_checksum(focus_url)
 
     replacements = {
-        "let version =":     f'let version = "{version.swift_version}"',
-        "let url =":         f'let url = "{url}"',
-        "let checksum =":    f'let checksum = "{checksum}"',
-        "let focusUrl =":    f'let focusUrl = "{focus_url}"',
+        "let version =":       f'let version = "{version.swift_version}"',
+        "let url =":           f'let url = "{url}"',
+        "let checksum =":      f'let checksum = "{checksum}"',
+        "let focusUrl =":      f'let focusUrl = "{focus_url}"',
         "let focusChecksum =": f'let focusChecksum = "{focus_sum}"',
     }
 
@@ -181,7 +199,8 @@ def update_package_swift(version: VersionInfo) -> None:
                 break
         sys.stdout.write(line)
 
-    subprocess.check_call(["git", "add", PACKAGE_SWIFT])
+    if git_add:
+        subprocess.check_call(["git", "add", PACKAGE_SWIFT])
 
 def extract_tarball(version: VersionInfo, dest: Path) -> None:
     tar_url = swift_artifact_url(version, "swift-components.tar.xz")

@@ -1,5 +1,5 @@
 {
-  "originHash" : "b1d3d8248618ee0b9328b70113d5ffde4b1075d6dc5d75aaa2717907e7fbbb3a",
+  "originHash" : "46b9bab6acacf95f2290e4395371e18a7640bfa069d749723d149c54c88522b8",
   "pins" : [
     {
       "identity" : "a-star",
@@ -98,15 +98,6 @@
       "state" : {
         "branch" : "master",
         "revision" : "f56a6e483163a761adc8cd25c337db0ed1eac524"
-      }
-    },
-    {
-      "identity" : "rust-components-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mozilla/rust-components-swift.git",
-      "state" : {
-        "revision" : "c7d2ef62866eb8c862cb4fc11bbaab703c92955a",
-        "version" : "143.0.20250814050417"
       }
     },
     {

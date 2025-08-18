@@ -49,14 +49,11 @@ struct AddressBarSettingsView: View {
                     theme: currentTheme,
                     selectedAddressBarPosition: addressBarPosition,
                     onSelected: viewModel.saveSearchBarPosition)
-                .applyNewStyleForSectionIfAvailable(theme: currentTheme,
-                                                    cornerRadius: UX.cornerRadius,
-                                                    shouldUseNewStyle)
+                .modifier(SectionStyle(theme: currentTheme, cornerRadius: UX.cornerRadius))
             }
             Spacer()
         }
-        .applyPaddingForSectionIfAvailable(spacing: UX.spacing, shouldUseNewStyle)
-        .applyPaddingForViewIfAvailable(spacing: UX.spacing, shouldUseNewStyle)
+        .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))
         .background(viewBackground)
         .onAppear {
             currentTheme = themeManager.getCurrentTheme(for: windowUUID)

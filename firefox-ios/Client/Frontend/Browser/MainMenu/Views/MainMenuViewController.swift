@@ -245,6 +245,12 @@ class MainMenuViewController: UIViewController,
                 self?.adjustLayout()
             }
         }, completion: nil)
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.viewWillTransition
+            )
+        )
     }
 
     // MARK: - UI setup

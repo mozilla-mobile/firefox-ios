@@ -43,33 +43,34 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
     private struct UX {
         static let spacing: CGFloat = 24
         static let cornerRadius: CGFloat = 24
-    }
-
-    private var shouldUseNewStyle: Bool {
-        if #available(iOS 26.0, *) {
-            return true
-        } else {
-            return false
+        static var spacingCurrentOS: CGFloat {
+            guard #available(iOS 26.0, *) else { return 0 }
+            return UX.spacing
         }
     }
 
     var body: some View {
         ScrollView {
-            VStack(spacing: shouldUseNewStyle ? UX.spacing : 0) {
+            VStack(spacing: UX.spacingCurrentOS) {
                 // Section for selecting the browser theme.
-                browserThemeSection()
-
+                BrowserThemeSection(
+                    theme: currentTheme,
+                    themeOption: themeOption,
+                    onThemeSelected: updateBrowserTheme,
+                    cornerRadius: UX.cornerRadius
+                )
                 // Section for toggling website appearance (e.g., dark mode).
-                websiteAppearanceSection()
+                WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 
                 if shouldShowPageZoom {
-                    pageZoomSection()
+                    PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
+                        delegate?.pressedPageZoom()
+                    }
                 }
                 Spacer()
             }
-            .applyPaddingForSectionIfAvailable(spacing: UX.spacing, shouldUseNewStyle)
         }
-        .applyPaddingForViewIfAvailable(spacing: UX.spacing, shouldUseNewStyle)
+        .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))
         .background(viewBackground)
         .onAppear {
             currentTheme = themeManager.getCurrentTheme(for: windowUUID)
@@ -80,48 +81,71 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         }
     }
 
-    private func browserThemeSection() -> some View {
-        GenericSectionView(theme: currentTheme,
-                           title: String.BrowserThemeSectionHeader,
-                           identifier: AccessibilityIdentifiers.Settings.Appearance.browserThemeSectionTitle,
-                           shouldUseDivider: !shouldUseNewStyle) {
-            ThemeSelectionView(theme: currentTheme,
-                               selectedThemeOption: themeOption,
-                               onThemeSelected: updateBrowserTheme)
-            .applyNewStyleForSectionIfAvailable(theme: currentTheme,
-                                                cornerRadius: UX.cornerRadius,
-                                                shouldUseNewStyle)
-        }
-    }
+    // MARK: Subcomponents
+    private struct BrowserThemeSection: View {
+        let theme: Theme?
+        let themeOption: ThemeSelectionView.ThemeOption
+        let onThemeSelected: (ThemeSelectionView.ThemeOption) -> Void
+        let cornerRadius: CGFloat
 
-    private func websiteAppearanceSection() -> some View {
-        GenericSectionView(theme: currentTheme,
-                           title: String.WebsiteAppearanceSectionHeader,
-                           description: String.WebsiteDarkModeDescription,
-                           identifier: AccessibilityIdentifiers.Settings.Appearance.websiteAppearanceSectionTitle,
-                           shouldUseDivider: !shouldUseNewStyle) {
-            DarkModeToggleView(theme: currentTheme,
-                               isEnabled: NightModeHelper.isActivated(),
-                               onChange: setWebsiteDarkMode)
-            .applyNewStyleForSectionIfAvailable(theme: currentTheme,
-                                                cornerRadius: UX.cornerRadius,
-                                                shouldUseNewStyle)
-        }
-    }
-
-    private func pageZoomSection() -> some View {
-        GenericSectionView(theme: currentTheme,
-                           title: .Settings.Appearance.PageZoom.SectionHeader,
-                           identifier: .Settings.Appearance.PageZoom.SectionHeader,
-                           shouldUseDivider: !shouldUseNewStyle) {
-            GenericItemCellView(title: .Settings.Appearance.PageZoom.PageZoomTitle,
-                                image: .chevronRightLarge,
-                                theme: currentTheme) {
-                delegate?.pressedPageZoom()
+        var body: some View {
+            GenericSectionView(
+                theme: theme,
+                title: String.BrowserThemeSectionHeader,
+                identifier: AccessibilityIdentifiers.Settings.Appearance.browserThemeSectionTitle
+            ) {
+                ThemeSelectionView(
+                    theme: theme,
+                    selectedThemeOption: themeOption,
+                    onThemeSelected: onThemeSelected
+                )
+                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
             }
-            .applyNewStyleForSectionIfAvailable(theme: currentTheme,
-                                                cornerRadius: UX.cornerRadius,
-                                                shouldUseNewStyle)
+        }
+    }
+
+    private struct WebsiteAppearanceSection: View {
+        let theme: Theme?
+        let onChange: (Bool) -> Void
+        let cornerRadius: CGFloat
+
+        var body: some View {
+            GenericSectionView(
+                theme: theme,
+                title: String.WebsiteAppearanceSectionHeader,
+                description: String.WebsiteDarkModeDescription,
+                identifier: AccessibilityIdentifiers.Settings.Appearance.websiteAppearanceSectionTitle
+            ) {
+                DarkModeToggleView(
+                    theme: theme,
+                    isEnabled: NightModeHelper.isActivated(),
+                    onChange: onChange
+                )
+                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+            }
+        }
+    }
+
+    private struct PageZoomSection: View {
+        let theme: Theme?
+        let cornerRadius: CGFloat
+        let onTap: () -> Void
+
+        var body: some View {
+            GenericSectionView(
+                theme: theme,
+                title: .Settings.Appearance.PageZoom.SectionHeader,
+                identifier: .Settings.Appearance.PageZoom.SectionHeader
+            ) {
+                GenericItemCellView(
+                    title: .Settings.Appearance.PageZoom.PageZoomTitle,
+                    image: .chevronRightLarge,
+                    theme: theme
+                ) {
+                    onTap()
+                }
+                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+            }
         }
     }
 
@@ -143,44 +167,6 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             // TODO(FXIOS-11584): Add telemetry here
         } else {
             // TODO(FXIOS-11584): Add telemetry here
-        }
-    }
-}
-
-extension View {
-    @ViewBuilder
-    func applyNewStyleForSectionIfAvailable(theme: Theme?, cornerRadius: CGFloat, _ shouldUseNewStyle: Bool) -> some View {
-        if shouldUseNewStyle {
-            self
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .fill(Color(theme?.colors.layer2 ?? UIColor.clear))
-                )
-        } else {
-            self
-        }
-    }
-
-    @ViewBuilder
-    func applyPaddingForSectionIfAvailable(spacing: CGFloat, _ shouldUseNewStyle: Bool) -> some View {
-        if shouldUseNewStyle {
-            self
-                .padding(.top, spacing)
-                .padding(.horizontal, spacing / 2)
-        } else {
-            self
-        }
-    }
-
-    @ViewBuilder
-    func applyPaddingForViewIfAvailable(spacing: CGFloat, _ shouldUseNewStyle: Bool) -> some View {
-        if shouldUseNewStyle {
-            self
-        } else {
-            self
-                .padding(.top, spacing)
-                .frame(maxWidth: .infinity)
         }
     }
 }

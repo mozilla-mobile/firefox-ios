@@ -104,6 +104,8 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             loadingLabel: .Summarizer.LoadingLabel,
             loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
             loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel,
+            tabSnapshotA11yLabel: .Summarizer.TabSnapshotAccessibilityLabel,
+            tabSnapshotA11yId: AccessibilityIdentifiers.Summarizer.tabSnapshotView,
             brandLabel: brandLabel,
             summaryNote: .Summarizer.FootnoteLabel,
             summarizeTextViewA11yLabel: .Summarizer.SummaryTextAccessibilityLabel,

@@ -274,6 +274,11 @@ class BrowserCoordinator: BaseCoordinator,
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
 
+        // Shortcuts library is pushed on top of BVC, so we need to pop that view controller once the web view is showing
+        if router.navigationController.topViewController is ShortcutsLibraryViewController {
+            router.popViewController(animated: false)
+        }
+
         screenshotService.screenshotableView = webviewController
     }
 

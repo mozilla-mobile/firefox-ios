@@ -29,8 +29,16 @@ extension UILabel {
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 @MainActor
 class Setting: NSObject {
-    private struct UX {
+    struct UX {
         static let horizontalMargin: CGFloat = 15
+        static var cellLayoutMarginsForCurrentOS: UIEdgeInsets {
+            guard #available(iOS 26.0, *) else { return .zero }
+            return UIEdgeInsets(top: 0, left: horizontalMargin, bottom: 0, right: 0)
+        }
+        static var cellSeparatorInsetForCurrentOS: UIEdgeInsets {
+            guard #available(iOS 26.0, *) else { return .zero }
+            return UIEdgeInsets(top: 0, left: horizontalMargin, bottom: 0, right: horizontalMargin)
+        }
     }
 
     private var _title: NSAttributedString?
@@ -107,14 +115,8 @@ class Setting: NSObject {
         cell.imageView?.image = _image
         cell.accessibilityTraits = UIAccessibilityTraits.button
         cell.indentationWidth = 0
-        if #available(iOS 26.0, *) {
-            cell.layoutMargins = UIEdgeInsets(top: 0, left: UX.horizontalMargin, bottom: 0, right: 0)
-            cell.separatorInset = UIEdgeInsets(top: 0, left: UX.horizontalMargin, bottom: 0, right: UX.horizontalMargin)
-        } else {
-            cell.layoutMargins = .zero
-            // So that the separator line goes all the way to the left edge.
-            cell.separatorInset = .zero
-        }
+        cell.layoutMargins = UX.cellLayoutMarginsForCurrentOS
+        cell.separatorInset = UX.cellSeparatorInsetForCurrentOS
         cell.isUserInteractionEnabled = enabled
 
         backgroundView.backgroundColor = theme.colors.layer5Hover
