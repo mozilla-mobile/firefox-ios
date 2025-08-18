@@ -7,10 +7,10 @@ import func MozillaAppServices.createKey
 
 class MockRustKeychain: @unchecked Sendable, KeychainProtocol {
     static let shared = MockRustKeychain()
-    public let loginsKeyIdentifier = "appservices.key.logins.perfield"
-    public let loginsCanaryKeyIdentifier = "canaryPhrase"
-    public let creditCardKeyIdentifier = "appservices.key.creditcard.perfield"
-    public let creditCardCanaryKeyIdentifier = "creditCardCanaryPhrase"
+    public let loginsKeyIdentifier = "testLoginsKey"
+    public let loginsCanaryKeyIdentifier = "testLoginsCanaryKey"
+    public let creditCardKeyIdentifier = "testCCKeyID"
+    public let creditCardCanaryKeyIdentifier = "testCCCanaryKey"
     public let creditCardCanaryPhrase = "a string for checking validity of the key"
 
     let loginsCanaryPhrase = "a string for checking validity of the key"
