@@ -34,7 +34,7 @@ struct UIDeviceDetails {
     /// asynchronous or main actor context. If called off the main thread, this method will use `DispatchQueue.main.sync`
     /// to synchronously return a value without a suspension point.
     ///
-    /// This is a workaround to access unchanging values that Apple will probably mark `nonisolated` in the future.
+    /// This is a workaround to access unchanging values that Apple has marked main actor-isolated under `UIDevice.current`.
     ///
     /// **Do not** use this method to get the value of main actor-isolated state which can change during runtime, such as the
     /// device orientation or current system theme.
