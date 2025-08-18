@@ -17,6 +17,7 @@ struct ZoomLevelPickerView: View {
         static let verticalPadding: CGFloat = 12
         static let dividerHeight: CGFloat = 0.5
         static let pickerLabelSpacing: CGFloat = 4
+        static let cornerRadius: CGFloat = 24
     }
 
     private var sectionBackground: Color {
@@ -41,13 +42,25 @@ struct ZoomLevelPickerView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
-                                     sectionTitleColor: theme.colors.textSecondary.color)
-                .padding([.leading, .trailing, .top], UX.sectionPadding)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(sectionBackground)
+            if #available(iOS 26.0, *) {
+                GenericSectionView(
+                    theme: theme,
+                    title: .Settings.Appearance.PageZoom.DefaultSectionHeader,
+                    identifier: AccessibilityIdentifiers.Settings.Appearance.pageZoomTitle
+                ) {
+                    pickerContent
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .modifier(SectionStyle(theme: theme, cornerRadius: UX.cornerRadius))
+                }
+            } else {
+                GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
+                                         sectionTitleColor: theme.colors.textSecondary.color)
+                    .padding([.leading, .trailing, .top], UX.sectionPadding)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(sectionBackground)
 
-            defaultZoomPicker
+                defaultZoomPicker
+            }
         }
     }
 

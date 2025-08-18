@@ -15,6 +15,7 @@ struct PageZoomSettingsView: View {
     private struct UX {
         static let dividerHeight: CGFloat = 0.7
         static let sectionPadding: CGFloat = 16
+        static let spacing: CGFloat = 24
     }
 
     private var viewBackground: Color {
@@ -45,7 +46,7 @@ struct PageZoomSettingsView: View {
                 ZoomLevelPickerView(theme: theme,
                                     zoomManager: viewModel.zoomManager,
                                     onZoomLevelChanged: viewModel.updateDefaultZoomLevel)
-                    .background(theme.colors.layer5.color)
+                .modifier(PaddingWithColorStyle(theme: theme, spacing: UX.spacing, shouldChangeBackgroundColor: true))
 
                 // Specific site zoom level section
                 if !viewModel.domainZoomLevels.isEmpty {
@@ -53,6 +54,7 @@ struct PageZoomSettingsView: View {
                                      domainZoomLevels: $viewModel.domainZoomLevels,
                                      onDelete: viewModel.deleteZoomLevel,
                                      resetDomain: viewModel.resetDomainZoomLevel)
+                    .modifier(PaddingWithColorStyle(theme: theme, spacing: UX.spacing, shouldChangeBackgroundColor: false))
                 }
             }
             .frame(maxWidth: .infinity)
@@ -64,6 +66,27 @@ struct PageZoomSettingsView: View {
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
+        }
+    }
+
+    private struct PaddingWithColorStyle: ViewModifier {
+        let theme: Theme?
+        let spacing: CGFloat
+        let shouldChangeBackgroundColor: Bool
+
+        func body(content: Content) -> some View {
+            if #available(iOS 26.0, *) {
+                content
+                    .padding(.top, spacing)
+                    .padding(.horizontal, spacing / 2)
+            } else {
+                if shouldChangeBackgroundColor {
+                    content
+                        .background(theme?.colors.layer5.color)
+                } else {
+                    content
+                }
+            }
         }
     }
 }

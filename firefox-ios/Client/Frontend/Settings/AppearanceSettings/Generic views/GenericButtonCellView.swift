@@ -22,11 +22,7 @@ struct GenericButtonCellView: View {
     }
 
     var body: some View {
-        VStack {
-            Divider()
-                .frame(height: UX.dividerHeight)
-                .background(theme.colors.borderPrimary.color)
-
+        if #available(iOS 26.0, *) {
             Button(action: {
                 onTap()
             }) {
@@ -34,13 +30,28 @@ struct GenericButtonCellView: View {
                     .foregroundColor(theme.colors.textCritical.color)
                     .font(.callout)
             }
-            .background(theme.colors.layer5.color)
             .padding([.top, .bottom], UX.buttonPadding)
+        } else {
+            VStack {
+                Divider()
+                    .frame(height: UX.dividerHeight)
+                    .background(theme.colors.borderPrimary.color)
 
-            Divider()
-                .frame(height: UX.dividerHeight)
-                .background(theme.colors.borderPrimary.color)
+                Button(action: {
+                    onTap()
+                }) {
+                    Text(title)
+                        .foregroundColor(theme.colors.textCritical.color)
+                        .font(.callout)
+                }
+                .background(theme.colors.layer5.color)
+                .padding([.top, .bottom], UX.buttonPadding)
+
+                Divider()
+                    .frame(height: UX.dividerHeight)
+                    .background(theme.colors.borderPrimary.color)
+            }
+            .background(theme.colors.layer5.color)
         }
-        .background(theme.colors.layer5.color)
     }
 }
