@@ -10,11 +10,6 @@ import Foundation
 /// cannot be internal then we should move the ones that needs to be public to the Common package.
 /// This will be done with FXIOS-7960
 public extension URL {
-    var isReaderModeURL: Bool {
-        let scheme = self.scheme, host = self.host, path = self.path
-        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
-    }
-
     var isSyncedReaderModeURL: Bool {
         return absoluteString.hasPrefix("about:reader?url=")
     }
