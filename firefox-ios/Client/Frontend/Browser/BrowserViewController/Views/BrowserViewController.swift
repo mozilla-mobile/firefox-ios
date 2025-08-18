@@ -217,18 +217,26 @@ class BrowserViewController: UIViewController,
 
     // MARK: Blur views for translucent toolbars
     private let topBlurView: UIVisualEffectView = .build { view in
-        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    #if canImport(FoundationModels)
+            view.effect = if #available(iOS 26.0, *) {
+                UIGlassEffect(style: .regular)
+            } else {
+                UIBlurEffect(style: .systemUltraThinMaterial)
+            }
+    #else
+            view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    #endif
     }
 
     private let bottomBlurView: UIVisualEffectView = .build { view in
 #if canImport(FoundationModels)
-    view.effect = if #available(iOS 26.0, *) {
-        UIGlassEffect(style: .regular)
-    } else {
-        UIBlurEffect(style: .systemUltraThinMaterial)
-    }
+        view.effect = if #available(iOS 26.0, *) {
+            UIGlassEffect(style: .regular)
+        } else {
+            UIBlurEffect(style: .systemUltraThinMaterial)
+        }
 #else
-    view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
 #endif
     }
 
