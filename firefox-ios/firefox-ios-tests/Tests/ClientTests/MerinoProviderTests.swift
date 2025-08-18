@@ -109,13 +109,13 @@ final class MerinoProviderTests: XCTestCase {
         let (sut, _) = createSubject(prefsEnabled: false)
 
         do {
-                _ = try await sut.fetchStories(items: 3)
-                XCTFail("Expected MerinoProvider.Error to be thrown")
-            } catch let error as MerinoProvider.Error {
-                XCTAssertEqual(error, MerinoProvider.Error.failure)
-            } catch {
-                XCTFail("Threw unexpected error: \(error)")
-            }
+            _ = try await sut.fetchStories(items: 3)
+            XCTFail("Expected MerinoProvider.Error to be thrown")
+        } catch let error as MerinoProvider.Error {
+            XCTAssertEqual(error, MerinoProvider.Error.failure)
+        } catch {
+            XCTFail("Threw unexpected error: \(error)")
+        }
     }
 
     private func makeItem(_ name: String) -> RecommendationDataItem {
