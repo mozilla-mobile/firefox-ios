@@ -16,10 +16,13 @@ class SettingTest: BaseTestCase {
     // Smoketest
     // Check for the basic appearance of the Settings Menu
     // https://mozilla.testrail.io/index.php?/cases/view/394976
-    func testCheckSetting() {
+    func testCheckSetting() throws {
         dismissURLBarFocused()
 
         // Navigate to Settings
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Not supported in iOS 15")
+        }
         waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
 
@@ -46,6 +49,10 @@ class SettingTest: BaseTestCase {
 
         // Go back to Settings
         app.navigationBars.buttons.element(boundBy: 0).tap()
+
+        if #unavailable(iOS 17) {
+            throw XCTSkip("Not supported in iOS 15 and 16")
+        }
 
         // Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
