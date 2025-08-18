@@ -5,8 +5,8 @@
 import UIKit
 
 /// Contains static, unchanging information about the current `UIDevice`, like the model and system version.
-/// This makes it easier for code that runs on a background thread (without an asynchronous context) to use these values
-/// (e.g. to log additional information during background networking).
+///
+/// This makes it easier for code that runs on a background thread (without an asynchronous context) to use these values.
 ///
 /// **Never put values in here that might change during runtime.**
 struct UIDeviceDetails {
@@ -31,15 +31,10 @@ struct UIDeviceDetails {
     // MARK: Helper method
 
     /// This nonisolated function will execute the `work` closure on the main thread to return a value outside an
-    /// asynchronous or main actor context. If called off the main thread, this method will use `DispatchQueue.main.sync`
-    /// to synchronously return a value without a suspension point.
+    /// asynchronous or main actor context. It will synchronously suspend if necessary to wait for the MT.
     ///
-    /// This is a workaround to access unchanging values that Apple has marked main actor-isolated under `UIDevice.current`.
-    ///
-    /// **Do not** use this method to get the value of main actor-isolated state which can change during runtime, such as the
-    /// device orientation or current system theme.
-    /// - Parameter work: Work to execute to return a value for variables normally isolated to the main thread.
-    /// - Returns: The value from `work`.
+    /// **DO NOT USE THIS METHOD ELSEWHERE IN THE CODE BASE.**
+    /// This is a workaround to access unchanging `UIDevice.current` values that Apple has needlessly main actor-isolated.
     private static func getMainThreadDataSynchronously<T: Sendable>(
         work: @MainActor @Sendable () -> (T)
     ) -> T {
