@@ -19,7 +19,7 @@ extension MerinoStoriesProviding {
     }
 }
 
-final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
+class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
     private let thresholdInHours: Double
     private let cache: CuratedRecommendationsCacheProtocol
     private let prefs: Prefs
