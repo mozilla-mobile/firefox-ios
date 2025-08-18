@@ -43,6 +43,7 @@ class BrowserViewController: UIViewController,
         static let showHeaderTapAreaHeight: CGFloat = 32
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
+        static let minimalHeaderOffset: CGFloat = 14
     }
 
     /// Describes the state of the current search session. This state is used
@@ -160,6 +161,11 @@ class BrowserViewController: UIViewController,
     // the bottom reader mode, the bottom url bar and the ZoomPageBar
     private(set) lazy var overKeyboardContainer: BaseAlphaStackView = .build { _ in }
 
+    // Constraints used to show/hide toolbars 
+    var headerTopConstraint: Constraint?
+    var overKeyboardContainerConstraint: Constraint?
+    var bottomContainerConstraint: Constraint?
+
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
         view.backgroundColor = self.currentTheme().colors.layerScrim
@@ -174,7 +180,7 @@ class BrowserViewController: UIViewController,
     }
 
     // BottomContainer stack view contains toolbar
-    private lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
+    lazy var bottomContainer: BaseAlphaStackView = .build { _ in }
 
     // Alert content that appears on top of the content
     // ex: Find In Page, SnackBar from LoginsHelper
@@ -195,7 +201,7 @@ class BrowserViewController: UIViewController,
 
     private(set) lazy var scrollController: TabScrollHandlerProtocol = {
         if isTabScrollRefactoringEnabled {
-            return TabScrollHandler(windowUUID: windowUUID)
+            return TabScrollHandler(windowUUID: windowUUID, delegate: self)
         } else {
             return LegacyTabScrollController(windowUUID: windowUUID)
         }
@@ -559,14 +565,12 @@ class BrowserViewController: UIViewController,
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
 
-        if let legacyController = scrollController as? LegacyTabScrollProvider {
-            let action = GeneralBrowserMiddlewareAction(
-                scrollOffset: legacyController.contentOffset,
-                toolbarPosition: newSearchBarPosition,
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
-            store.dispatchLegacy(action)
-        }
+        let action = GeneralBrowserMiddlewareAction(
+            scrollOffset: scrollController.contentOffset,
+            toolbarPosition: newSearchBarPosition,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
+        store.dispatchLegacy(action)
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil) {
@@ -1691,7 +1695,7 @@ class BrowserViewController: UIViewController,
                 if let scrollController = scrollController as? LegacyTabScrollProvider {
                     scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
                 } else {
-                    make.top.equalTo(view.safeArea.top)
+                    headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
                 }
                 make.left.right.equalTo(view)
             }
@@ -1721,7 +1725,7 @@ class BrowserViewController: UIViewController,
             if let scrollController = scrollController as? LegacyTabScrollProvider {
                 scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
             } else {
-                make.bottom.equalTo(bottomContainer.snp.top)
+                overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
             }
 
             if !isBottomSearchBar, zoomPageBar != nil {
@@ -1736,7 +1740,7 @@ class BrowserViewController: UIViewController,
             if let scrollController = scrollController as? LegacyTabScrollProvider {
                 scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
             } else {
-                make.bottom.equalTo(view.snp.bottom)
+                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
             }
             make.leading.trailing.equalTo(view)
         }
@@ -1754,7 +1758,7 @@ class BrowserViewController: UIViewController,
         super.updateViewConstraints()
     }
 
-    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+    func adjustBottomContentStackView(_ remake: ConstraintMaker) {
         remake.left.equalTo(view.safeArea.left)
         remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
