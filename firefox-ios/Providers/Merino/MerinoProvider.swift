@@ -44,7 +44,7 @@ class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Senda
     }
 
     func fetchStories(items: Int32) async throws -> [RecommendationDataItem] {
-        if shouldUseMockData {
+        if !AppConstants.isRunningTest && shouldUseMockData {
             return try await MerinoTestData().getMockDataFeed(count: items)
         }
 
