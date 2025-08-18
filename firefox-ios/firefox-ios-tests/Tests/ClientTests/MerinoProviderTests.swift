@@ -33,10 +33,11 @@ private final class MockCache: CuratedRecommendationsCacheProtocol {
     func lastUpdatedDate() -> Date? { _lastUpdated }
 
     // Testing helpers
-    func seed(items: [RecommendationDataItem], lastUpdated: Date) {
+    func seed(items: [RecommendationDataItem], lastUpdated: Date?) {
         _stored = items
         _lastUpdated = lastUpdated
     }
+
     func seedEmpty(lastUpdated: Date? = nil) {
         _stored = nil
         _lastUpdated = lastUpdated
@@ -118,6 +119,26 @@ final class MerinoProviderTests: XCTestCase {
         }
     }
 
+    func test_fetchStories_fetches_whenNoLastUpdatedEvenIfItemsExist() async throws {
+        let (sut, cache) = createSubject(prefsEnabled: true)
+
+        // Cache has items but NO timestamp should be treated as STALE and must fetch
+        // new stories. We should never get in this position, but it should be checked.
+        cache.seed(items: [makeItem("staleButNoTimestamp")], lastUpdated: nil)
+
+        sut.stubbedItems = [makeItem("net1"), makeItem("net2")]
+
+        let result = try await sut.fetchStories(items: 3)
+
+        XCTAssertEqual(result.count, 2)
+        XCTAssertEqual(result.map(\.title), ["net1", "net2"])
+        XCTAssertEqual(sut.getFeedItemsCallCount, 1)
+
+        XCTAssertTrue(cache.didClear)
+        XCTAssertEqual(cache.loadRecommendations()?.count, 2)
+        XCTAssertEqual(cache.loadRecommendations()?.map(\.title), ["net1", "net2"])
+    }
+
     private func makeItem(_ name: String) -> RecommendationDataItem {
         return RecommendationDataItem(
             corpusItemId: "\(name)",
@@ -144,7 +165,7 @@ final class MerinoProviderTests: XCTestCase {
         let sut = TestableMerinoProvider(
             withThresholdInHours: thresholdHours,
             prefs: prefs,
-            cache: cache,
+            cache: cache
         )
 
         trackForMemoryLeaks(sut)

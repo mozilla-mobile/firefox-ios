@@ -150,7 +150,7 @@ class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Senda
 
     private func cacheUpdateThresholdHasNotPassed() -> Bool {
         let thresholdInSeconds: TimeInterval = thresholdInHours * 60 * 60
-        guard let lastUpdate = cache.lastUpdatedDate() else { return true }
+        guard let lastUpdate = cache.lastUpdatedDate() else { return false }
         return Date() < lastUpdate.addingTimeInterval(thresholdInSeconds)
     }
 }
