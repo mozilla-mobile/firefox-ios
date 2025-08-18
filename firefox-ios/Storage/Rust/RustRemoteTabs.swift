@@ -14,7 +14,7 @@ import struct MozillaAppServices.ClientRemoteTabs
 import struct MozillaAppServices.RemoteTabRecord
 import struct MozillaAppServices.PendingCommand
 
-// TODO:
+// TODO: FXIOS-13209 Make RustRemoteTabs actually sendable
 public class RustRemoteTabs: @unchecked Sendable {
     let databasePath: String
     let queue: DispatchQueue

@@ -54,7 +54,7 @@ public protocol BookmarksHandler {
     func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
 }
 
-// TODO:
+// TODO: FXIOS-13208 Make RustPlaces actually Sendable
 public class RustPlaces: @unchecked Sendable, BookmarksHandler {
     let databasePath: String
 
