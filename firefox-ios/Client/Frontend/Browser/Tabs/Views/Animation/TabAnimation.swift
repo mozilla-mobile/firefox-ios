@@ -75,7 +75,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         let finalFrame = context.finalFrame(for: destinationController)
 
-        DispatchQueue.main.async { [self] in
+        ensureMainThread { [self] in
             runPresentationAnimation(
                 context: context,
                 browserVC: bvc,
@@ -129,7 +129,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         toView.frame = finalFrame
 
         // Allow the UI to render to make the snapshotting code more performant
-        DispatchQueue.main.async { [self] in
+        ensureMainThread { [self] in
             runDismissalAnimation(
                 context: context,
                 toView: toView,
@@ -147,6 +147,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
+        let start = DispatchTime.now()
         // Snapshot of the BVC view
         let bvcSnapshot = UIImageView(image: browserVC.view.snapshot)
         bvcSnapshot.layer.cornerCurve = .continuous
@@ -288,6 +289,9 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         animator.addCompletion { _ in
             backgroundView.removeFromSuperview()
             borderLayer.removeFromSuperlayer()
+            let end = DispatchTime.now()
+            let elapsed = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000
+            print("👽Presentation animation took \(elapsed) seconds👽")
             context.completeTransition(true)
         }
 
@@ -308,6 +312,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
+        let start = DispatchTime.now()
         guard let panel = currentExperimentPanel as? ThemedNavigationController,
               let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
         else {
@@ -380,6 +385,9 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             self.view.removeFromSuperview()
             tabSnapshot.removeFromSuperview()
             toView.removeFromSuperview()
+            let end = DispatchTime.now()
+            let elapsed = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000
+            print("👽Dismissal animation took \(elapsed) seconds👽")
             context.completeTransition(true)
         }
     }
