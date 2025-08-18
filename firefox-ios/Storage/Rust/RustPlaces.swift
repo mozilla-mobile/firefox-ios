@@ -26,14 +26,14 @@ import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.VisitTransitionSet
 
 public protocol BookmarksHandler {
-    func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
+    func getRecentBookmarks(limit: UInt, completion: @Sendable @escaping ([BookmarkItemData]) -> Void)
     func getBookmarksTree(
         rootGUID: GUID,
         recursive: Bool,
-        completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
+        completion: @Sendable @escaping (Result<BookmarkNodeData?, any Error>) -> Void
     )
     func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>>
-    func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void)
+    func countBookmarksInTrees(folderGuids: [GUID], completion: @Sendable @escaping (Result<Int, Error>) -> Void)
     func updateBookmarkNode(
         guid: GUID,
         parentGUID: GUID?,
@@ -48,13 +48,14 @@ public protocol BookmarksHandler {
         position: UInt32?,
         title: String?,
         url: String?,
-        completion: @escaping (Result<Void, any Error>) -> Void
+        completion: @Sendable @escaping (Result<Void, any Error>) -> Void
     )
 
     func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
 }
 
-public class RustPlaces: BookmarksHandler {
+// TODO:
+public class RustPlaces: @unchecked Sendable, BookmarksHandler {
     let databasePath: String
 
     let writerQueue: DispatchQueue
@@ -113,7 +114,7 @@ public class RustPlaces: BookmarksHandler {
     }
 
     private func withWriter<T>(
-        _ callback: @escaping(_ connection: PlacesWriteConnection) throws -> T
+        _ callback: @Sendable @escaping (_ connection: PlacesWriteConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
@@ -144,10 +145,10 @@ public class RustPlaces: BookmarksHandler {
 
     /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
     public func withWriter<T>(
-        _ callback: @escaping (
+        _ callback: @Sendable @escaping (
             PlacesWriteConnection
         ) throws -> T,
-        completion: @escaping (Result<T, any Error>) -> Void
+        completion: @Sendable @escaping (Result<T, any Error>) -> Void
     ) {
         writerQueue.async {
             guard self.isOpen else {
@@ -173,7 +174,7 @@ public class RustPlaces: BookmarksHandler {
     }
 
     private func withReader<T>(
-        _ callback: @escaping(_ connection: PlacesReadConnection) throws -> T
+        _ callback: @Sendable @escaping (_ connection: PlacesReadConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
@@ -208,10 +209,10 @@ public class RustPlaces: BookmarksHandler {
 
     /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
     private func withReader<T>(
-        _ callback: @escaping (
+        _ callback: @Sendable @escaping (
             PlacesReadConnection
         ) throws -> T,
-        completion: @escaping (Result<T, any Error>) -> Void
+        completion: @Sendable @escaping (Result<T, any Error>) -> Void
     ) {
         readerQueue.async {
             guard self.isOpen else {
@@ -253,7 +254,7 @@ public class RustPlaces: BookmarksHandler {
     public func getBookmarksTree(
         rootGUID: GUID,
         recursive: Bool,
-        completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
+        completion: @Sendable @escaping (Result<BookmarkNodeData?, any Error>) -> Void
     ) {
         withReader({ connection in
             return try connection.getBookmarksTree(
@@ -399,7 +400,7 @@ public class RustPlaces: BookmarksHandler {
     /// This method is reimplemented with a completion handler because we want to incrementally get rid of using `Deferred`.
     public func createFolder(parentGUID: GUID, title: String,
                              position: UInt32?,
-                             completion: @escaping (Result<GUID, any Error>) -> Void) {
+                             completion: @Sendable @escaping (Result<GUID, any Error>) -> Void) {
         withWriter({ connection in
                 return try connection.createFolder(
                     parentGUID: parentGUID,
@@ -442,7 +443,7 @@ public class RustPlaces: BookmarksHandler {
         url: String,
         title: String?,
         position: UInt32?,
-        completion: @escaping (Result<GUID, any Error>) -> Void
+        completion: @Sendable @escaping (Result<GUID, any Error>) -> Void
     ) {
         withWriter({ connection in
                 let response = try connection.createBookmark(
@@ -481,7 +482,7 @@ public class RustPlaces: BookmarksHandler {
         position: UInt32? = nil,
         title: String? = nil,
         url: String? = nil,
-        completion: @escaping (Result<Void, any Error>) -> Void
+        completion: @Sendable @escaping (Result<Void, any Error>) -> Void
     ) {
         withWriter({ connection in
                 return try connection.updateBookmarkNode(
