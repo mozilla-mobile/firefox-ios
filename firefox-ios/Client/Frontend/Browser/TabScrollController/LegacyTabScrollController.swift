@@ -7,6 +7,7 @@ import SnapKit
 import Shared
 import Common
 
+@MainActor
 protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     var headerTopConstraint: Constraint? { get set }
     var overKeyboardContainerConstraint: Constraint? { get set }
@@ -20,6 +21,7 @@ protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     func resetZoomState()
 }
 
+@MainActor
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
                                        LegacyTabScrollProvider {
@@ -216,7 +218,22 @@ final class LegacyTabScrollController: NSObject,
 
     deinit {
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        // KVO observation removal directly requires self so we can not use the apple
+        // recommended work around here.
+        guard Thread.isMainThread else {
+            logger.log(
+                "TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        }
     }
 
     init(windowUUID: WindowUUID,
@@ -249,6 +266,7 @@ final class LegacyTabScrollController: NSObject,
         self.headerContainer = headerContainer
     }
 
+    @MainActor
     private func handleOnTabContentLoading() {
         if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
             removePullRefreshControl()
@@ -364,21 +382,22 @@ final class LegacyTabScrollController: NSObject,
         scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
     }
 
-    override func observeValue(
+    override nonisolated func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
         change: [NSKeyValueChangeKey: Any]?,
         context: UnsafeMutableRawPointer?
     ) {
         if keyPath == "contentSize" {
-            guard shouldUpdateUIWhenScrolling, toolbarsShowing else { return }
+            ensureMainThread { [weak self] in
+                guard let self, self.shouldUpdateUIWhenScrolling, self.toolbarsShowing else { return }
 
-            showToolbars(animated: true)
+                self.showToolbars(animated: true)
+            }
         }
     }
 
     // MARK: - Zoom
-
     func updateMinimumZoom() {
         guard let scrollView = scrollView else { return }
 

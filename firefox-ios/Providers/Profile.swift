@@ -176,12 +176,11 @@ extension Profile {
 
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
-        self.logins.listLogins().upon { loginResult in
+        self.logins.listLogins { loginResult in
             switch loginResult {
             case let .failure(error):
                 deferred.fill(.failure(error))
             case let .success(logins):
-
                 self.populateCredentialStore(
                         identities: logins.map(\.passwordCredentialIdentity)
                 ).upon(deferred.fill)

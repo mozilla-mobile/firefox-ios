@@ -6,15 +6,29 @@ import Common
 import Redux
 
 protocol ThemeManagerProvider {
+    @MainActor
     func getCurrentThemeManagerState(windowUUID: WindowUUID) -> ThemeSettingsState
+
+    @MainActor
     func updateManualTheme(with action: ThemeSettingsViewAction)
+
+    @MainActor
     func updateSystemTheme(with action: ThemeSettingsViewAction)
+
+    @MainActor
     func updateAutomaticBrightness(with action: ThemeSettingsViewAction)
+
+    @MainActor
     func updateAutomaticBrightnessValue(with action: ThemeSettingsViewAction)
+
+    @MainActor
     func updateThemeFromSystemBrightnessChange(with action: ThemeSettingsViewAction)
+
+    @MainActor
     func updatePrivateMode(with action: PrivateModeAction)
 }
 
+@MainActor
 final class ThemeManagerMiddleware: ThemeManagerProvider {
     var themeManager: ThemeManager
 

@@ -24,7 +24,8 @@ public enum AutofillEncryptionKeyError: Error {
     case noKeyCreated
 }
 
-public class RustAutofill {
+// TODO: FXIOS-13161 - refactor this to ensure it's actually thread safe and remove @unchecked Sendable
+public class RustAutofill: @unchecked Sendable {
     /// The path to the Autofill database file.
     let databasePath: String
     /// DispatchQueue for synchronization.
@@ -109,7 +110,7 @@ public class RustAutofill {
     /// - Note: Uses a completion handler for asynchronous code execution.
     public func addCreditCard(
         creditCard: UnencryptedCreditCardFields,
-        completion: @escaping (CreditCard?, Error?) -> Void
+        completion: @escaping @Sendable (CreditCard?, Error?) -> Void
     ) {
         performDatabaseOperation { error in
             guard error == nil else {
@@ -151,7 +152,7 @@ public class RustAutofill {
     ///   - id: The identifier of the credit card.
     ///   - completion: A closure called upon completion with the retrieved credit card or an error.
     /// - Note: Follows the common pattern of using completion handlers for asynchronous tasks.
-    public func getCreditCard(id: String, completion: @escaping (CreditCard?, Error?) -> Void) {
+    public func getCreditCard(id: String, completion: @escaping @Sendable (CreditCard?, Error?) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(nil, error)
@@ -170,7 +171,7 @@ public class RustAutofill {
     ///
     /// - Parameter completion: A closure called upon completion with the list of credit cards or an error.
     /// - Note: Uses a completion handler for handling asynchronous code execution.
-    public func listCreditCards(completion: @escaping ([CreditCard]?, Error?) -> Void) {
+    public func listCreditCards(completion: @escaping @Sendable ([CreditCard]?, Error?) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(nil, error)
@@ -191,7 +192,9 @@ public class RustAutofill {
     ///   - cardNumber: The last four digits of the credit card.
     ///   - completion: A closure called upon completion with the found credit card or an error.
     /// - Note: Checks for the existence of a credit card and uses a completion handler for result reporting.
-    public func checkForCreditCardExistance(cardNumber: String, completion: @escaping (CreditCard?, Error?) -> Void) {
+    public func checkForCreditCardExistance(
+        cardNumber: String,
+        completion: @escaping @Sendable (CreditCard?, Error?) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(nil, error)
@@ -221,7 +224,7 @@ public class RustAutofill {
     public func updateCreditCard(
         id: String,
         creditCard: UnencryptedCreditCardFields,
-        completion: @escaping (Bool?, Error?) -> Void
+        completion: @escaping @Sendable (Bool?, Error?) -> Void
     ) {
         performDatabaseOperation { error in
             guard error == nil else {
@@ -251,7 +254,7 @@ public class RustAutofill {
     ///   - id: The identifier of the credit card to be deleted.
     ///   - completion: A closure called upon completion with a boolean indicating success and an error if any.
     /// - Note: Deletes a credit card and reports the result using a completion handler.
-    public func deleteCreditCard(id: String, completion: @escaping (Bool, Error?) -> Void) {
+    public func deleteCreditCard(id: String, completion: @escaping @Sendable (Bool, Error?) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(false, error)
@@ -272,7 +275,7 @@ public class RustAutofill {
     ///   - creditCard: The credit card to be marked as used.
     ///   - completion: A closure called upon completion with a boolean indicating success and an error if any.
     /// - Note: Marks a credit card as used and reports the result using a completion handler.
-    public func use(creditCard: CreditCard, completion: @escaping (Bool, Error?) -> Void) {
+    public func use(creditCard: CreditCard, completion: @escaping @Sendable (Bool, Error?) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(false, error)
@@ -291,7 +294,7 @@ public class RustAutofill {
     ///
     /// - Parameter completion: A closure called upon completion with a result indicating success or failure.
     /// - Note: Scrubs encrypted credit card numbers and reports the result using a completion handler.
-    public func scrubCreditCardNums(completion: @escaping (Result<Void, Error>) -> Void) {
+    public func scrubCreditCardNums(completion: @escaping @Sendable (Result<Void, Error>) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(.failure(error!))
@@ -316,7 +319,9 @@ public class RustAutofill {
     ///   - address: The address fields to add.
     ///   - completion: A closure that is called when the operation is complete.
     ///   It takes a `Result` object as its parameter, which contains either the added address or an error.
-    public func addAddress(address: UpdatableAddressFields, completion: @escaping (Result<Address, Error>) -> Void) {
+    public func addAddress(
+        address: UpdatableAddressFields,
+        completion: @escaping @Sendable (Result<Address, Error>) -> Void) {
         performDatabaseOperation { [weak self] error in
             if let error {
                 completion(.failure(error))
@@ -339,7 +344,7 @@ public class RustAutofill {
     /// - Parameters:
     ///   - id: The identifier of the address.
     ///   - completion: A closure called upon completion with the retrieved address or an error.
-    public func getAddress(id: String, completion: @escaping (Address?, Error?) -> Void) {
+    public func getAddress(id: String, completion: @escaping @Sendable (Address?, Error?) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(nil, error)
@@ -373,7 +378,7 @@ public class RustAutofill {
     public func updateAddress(
         id: String,
         address: UpdatableAddressFields,
-        completion: @escaping (Result<Void, Error>) -> Void
+        completion: @escaping @Sendable (Result<Void, Error>) -> Void
     ) {
         performDatabaseOperation { error in
             guard error == nil else {
@@ -394,7 +399,7 @@ public class RustAutofill {
     /// - Parameters:
     ///   - id: The unique identifier of the address to be deleted.
     ///   - completion: A closure called upon update completion, taking a Result object indicating success or failure.
-    public func deleteAddress(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    public func deleteAddress(id: String, completion: @escaping @Sendable (Result<Void, Error>) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(.failure(error!))
@@ -413,7 +418,7 @@ public class RustAutofill {
     ///
     /// - Parameter completion: A closure called upon completion with the list of addresses or an error.
     /// - Note: Uses a completion handler for handling asynchronous code execution.
-    public func listAllAddresses(completion: @escaping ([Address]?, Error?) -> Void) {
+    public func listAllAddresses(completion: @escaping @Sendable ([Address]?, Error?) -> Void) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(nil, error)
@@ -503,7 +508,8 @@ public class RustAutofill {
         resetCreditCardsAndKey(completion: completion)
     }
 
-    private func handleFirstTimeCallOrClearedKeychainAction(completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleFirstTimeCallOrClearedKeychainAction(
+        completion: @escaping (Result<String, NSError>) -> Void) {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
         hasCreditCards { result in
@@ -553,7 +559,7 @@ public class RustAutofill {
         }
     }
 
-    private func performDatabaseOperation(_ operation: @escaping (Error?) -> Void) {
+    private func performDatabaseOperation(_ operation: @escaping @Sendable (Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = AutofillApiError.UnexpectedAutofillApiError(
@@ -597,7 +603,7 @@ public class RustAutofill {
     }
 
     private func encryptCreditCard(creditCard: UnencryptedCreditCardFields,
-                                   completion: @escaping (Result<UpdatableCreditCardFields, Error>) -> Void) {
+                                   completion: @escaping @Sendable (Result<UpdatableCreditCardFields, Error>) -> Void) {
         getStoredKey { result in
             var ccNumberEnc: String
             switch result {

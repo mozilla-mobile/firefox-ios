@@ -348,6 +348,6 @@ private func loadEntries() -> TLDEntryMap? {
     return entries
 }
 
-private var etldEntries: TLDEntryMap? = {
+private let etldEntries: TLDEntryMap? = {
     return loadEntries()
 }()

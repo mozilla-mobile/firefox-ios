@@ -312,7 +312,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         let bottomInset = isStoriesRedesignEnabled ? UX.TopSitesConstants.getBottomInset()
                                                    : UX.spacingBetweenSections - UX.interGroupSpacing
         section.contentInsets.top = 0

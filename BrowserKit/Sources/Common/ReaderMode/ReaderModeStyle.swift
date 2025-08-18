@@ -5,7 +5,8 @@
 import Foundation
 import UIKit
 
-public struct ReaderModeStyle {
+@MainActor
+public final class ReaderModeStyle {
     let windowUUID: WindowUUID?
     public var theme: ReaderModeTheme
     public var fontType: ReaderModeFontType
@@ -37,6 +38,7 @@ public struct ReaderModeStyle {
     }
 
     /// Initialize the style from a dictionary, taken from the profile. Returns nil if the object cannot be decoded.
+    @MainActor
     public init?(windowUUID: WindowUUID?, dict: [String: Any]) {
         let themeRawValue = dict["theme"] as? String
         let fontTypeRawValue = dict["fontType"] as? String
@@ -58,7 +60,7 @@ public struct ReaderModeStyle {
         self.fontSize = fontSize!
     }
 
-    public mutating func ensurePreferredColorThemeIfNeeded() {
+    public func ensurePreferredColorThemeIfNeeded() {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme, window: windowUUID)
     }
 

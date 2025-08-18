@@ -18,6 +18,7 @@ public protocol Engine {
     func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession
 
     /// Warm the `Engine` whenever we move the application to foreground
+    @MainActor
     func warmEngine()
 
     /// Idle the `Engine` whenever we move the application to background
