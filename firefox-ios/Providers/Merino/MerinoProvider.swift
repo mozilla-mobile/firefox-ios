@@ -20,6 +20,8 @@ extension MerinoStoriesProviding {
 }
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
+    private let thresholdInHours: Double
+    private let cache: CuratedRecommendationsCacheProtocol
     private let prefs: Prefs
     private var logger: Logger
 
@@ -30,27 +32,38 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     }
 
     init(
+        withThresholdInHours threshold: Double = 4,
         prefs: Prefs,
+        cache: CuratedRecommendationsCacheProtocol = CuratedRecommendationCacheUtility(),
         logger: Logger = DefaultLogger.shared
     ) {
+        self.thresholdInHours = threshold
+        self.cache = cache
         self.prefs = prefs
         self.logger = logger
     }
 
     func fetchStories(items: Int32) async throws -> [RecommendationDataItem] {
-        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        let isCurrentLocaleSupported = MerinoProvider.islocaleSupported(Locale.current.identifier)
-
         if shouldUseMockData {
             return try await MerinoTestData().getMockDataFeed(count: items)
         }
 
         // Ensure the feature is enabled and current locale is supported
-        guard isFeatureEnabled, isCurrentLocaleSupported else {
-            throw Error.failure
+        guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
+              MerinoProvider.islocaleSupported(Locale.current.identifier)
+        else { throw Error.failure }
+
+        if let cachedItems = cache.loadRecommendations(),
+           cacheUpdateThresholdHasNotPassed() {
+                return cachedItems
         }
 
-        return try await getFeedItems(items: items)
+        let items = try await getFeedItems(items: items)
+        if !items.isEmpty {
+            cache.clearCache()
+            cache.save(items)
+        }
+        return items
     }
 
     func getFeedItems(items: Int32) async throws -> [RecommendationDataItem] {
@@ -133,5 +146,11 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         return curatedRecommendationLocaleFromString(
             locale: locale.replacingOccurrences(of: "_", with: "-")
         )
+    }
+
+    private func cacheUpdateThresholdHasNotPassed() -> Bool {
+        let thresholdInSeconds: TimeInterval = thresholdInHours * 60 * 60
+        guard let lastUpdate = cache.lastUpdatedDate() else { return true }
+        return Date() < lastUpdate.addingTimeInterval(thresholdInSeconds)
     }
 }
