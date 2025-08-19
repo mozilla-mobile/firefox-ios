@@ -579,7 +579,7 @@ private class ToolbarHelperMock: ToolbarHelperInterface {
 
     var glassEffectAlpha: CGFloat {
         guard shouldBlur() else { return 1 }
-        return .zero
+        if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
     }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
