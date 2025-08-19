@@ -149,6 +149,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
     }
 
     private func updateMenuHeight(for data: [MenuSection]) {
+        guard !data.isEmpty else { return }
         let expandedSection = data.first(where: { $0.isExpanded ?? false })
         let isExpanded = expandedSection?.isExpanded ?? false
 
@@ -190,7 +191,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
             self?.setupView(with: data, isHeaderBanner: false)
             self?.bannerShown = true
             self?.isBannerVisible = false
-            self?.tableView.reloadData(isBannerVisible: self?.isBannerVisible ?? false)
+            self?.tableView.reloadTableView(with: self?.menuData ?? [], isBannerVisible: self?.isBannerVisible ?? false)
             self?.updateMenuHeight(for: self?.menuData ?? [])
             self?.closeBannerButtonCallback?()
         }
