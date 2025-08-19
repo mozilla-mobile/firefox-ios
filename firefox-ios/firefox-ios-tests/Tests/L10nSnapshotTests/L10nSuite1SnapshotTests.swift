@@ -280,6 +280,9 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     @MainActor
     func testTakeMarketingScreenshots() {
         let searchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
+        let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+        let searchTextfield = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         snapshot("00TopSites")
 
@@ -292,25 +295,27 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         if searchBar.exists {
             searchBar.waitAndTap()
         }
+        mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
         waitForTabsButton()
-        // Without the sleep(), the tabs button could not be found in the next step.
-        sleep(1)
-        navigator.createNewTab()
+        addNewTabButton.waitAndTap()
         if searchBar.exists {
             searchBar.waitAndTap()
         }
+        mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
         waitForTabsButton()
-        sleep(1)
-        navigator.createNewTab()
+        addNewTabButton.waitAndTap()
         if searchBar.exists {
             searchBar.waitAndTap()
         }
+        mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://mozilla.org/firefox/new")
         waitUntilPageLoad()
+        waitForTabsButton()
+        mozWaitForElementToExist(addNewTabButton)
         navigator.goto(TabTray)
         snapshot("02TabTray")
 

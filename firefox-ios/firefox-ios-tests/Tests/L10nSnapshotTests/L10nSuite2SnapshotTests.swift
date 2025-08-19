@@ -137,6 +137,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         let passcodeInput = springboard.secureTextFields.firstMatch
         passcodeInput.waitAndTap(timeout: 30)
         passcodeInput.typeText("foo\n")
+        mozWaitForElementToNotExist(passcodeInput)
 
         mozWaitForElementToExist(app.tables["Login List"], timeout: 25)
         mozWaitForElementToExist(app.buttons["addCredentialButton"], timeout: 20)
