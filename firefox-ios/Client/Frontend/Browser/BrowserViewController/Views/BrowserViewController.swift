@@ -3831,11 +3831,13 @@ class BrowserViewController: UIViewController,
             let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
             let colors = currentTheme.colors
             backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
+#if canImport(FoundationModels)
             if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
                 glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
                 bottomBlurView.effect = glassEffect
                 topBlurView.effect = glassEffect
             }
+#endif
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
