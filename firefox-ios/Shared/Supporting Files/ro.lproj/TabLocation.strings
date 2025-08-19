@@ -1,0 +1,33 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Atinge de două ori și ține apăsat pentru mai multe opțiuni";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Conexiunea nu este securizată. Protecția îmbunătățită împotriva urmăririi este dezactivată.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Conexiune securizată. Protecția îmbunătățită împotriva urmăririi este dezactivată.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Conexiune nesecurizată";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "Conexiune securizată";
+
+/* Accessibility label for the lock / tracking protection button on the URL bar */
+"TabLocation.LockButton.AccessibilityLabel.v122" = "Protecție împotriva urmăririi";
+
+/* Large content title for the lock button. This title is displayed when accessible font sizes are enabled */
+"TabLocation.LockButton.LargeContentTitle.v122" = "Protecție împotriva urmăririi";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "Partajează pagina";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "Partajează";
+
+/* Large content title for the tabs button. %@ is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "Afișează filele: %@";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "Elimină pagina";
+

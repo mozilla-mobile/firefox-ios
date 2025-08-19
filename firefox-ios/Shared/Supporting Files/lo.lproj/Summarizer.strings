@@ -1,3 +1,48 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "ສະຫຼຸບໂດຍ Apple Intelligence";
+
+/* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
+"Summarizer.CloseButton.Label.v142" = "ປິດ";
+
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "ໜ້າກຳລັງໂຫຼດຢູ່. ລໍຖ້າໃຫ້ມັນຈົບ, ຈາກນັ້ນກົດສະຫຼຸບ.";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "ບໍ່ສາມາດຈັດການກັບອັນນີ້ໃນເວລານີ້. ລອງໃໝ່ໃນພາຍຫຼັງ!";
+
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "ເກີດຄວາມຜິດພາດໃນການສະຫຼຸບໜ້າ. ລອງໃໝ່ໃນພາຍຫຼັງ.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "ກວດພົບເນື້ອຫາຈຳກັດ. ໜ້ານີ້ອາດຈະຖືກຈຳກັດ ຫຼື ສ່ວນຫຼາຍແມ່ນເປັນພາບ.";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "ເວັບໄຊທ໌ນີ້ບໍ່ອະນຸຍາດໃຫ້ສະຫຼຸບເນື້ອໃນ. ລອງໜ້າອື່ນ.";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "ສະຫຼຸບໂດຍ %@";
+
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "ກຳລັງສະຫຼຸບ…";
+
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "ລອງໃໝ່";
+
+/* The label for the allow button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.AllowButton.Label.v142" = "ອະນຸຍາດ";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ ໃຊ້ Apple Intelligence ເພື່ອສະຫຼຸບໜ້າ.";
+
+/* The label for the cancel button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.CancelButton.Label.v142" = "ຍົກເລີກ";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v142" = "%@ ໃຊ້ AI ໂຮດຢ່າງປອດໄພຢູ່ໃນເຊີບເວີ Mozilla ເພື່ອສະຫຼຸບໜ້າ.";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "ອະນຸຍາດໃຫ້ສະຫຼຸບຫນ້າບໍ?";
 

@@ -1,0 +1,15 @@
+/* Label for the button that confirms user acceptance of the Terms of Use. */
+"TermsOfUse.AcceptButton.v142" = "Αποδοχή";
+
+/* Label for the back button shown in the Terms of Use web view. */
+"TermsOfUse.BackButton.v142" = "Πίσω";
+
+/* Link shown in the Terms of Use sheet to direct users to more details about the update. */
+"TermsOfUse.Link.LearnMore.v142" = "Μάθετε περισσότερα";
+
+/* Label for the button that allows the user to postpone accepting the Terms of Use. */
+"TermsOfUse.RemindMeLaterButton.v142" = "Υπενθύμιση αργότερα";
+
+/* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
+"TermsOfUse.Title.v142" = "Έχουμε μια ενημέρωση";
+

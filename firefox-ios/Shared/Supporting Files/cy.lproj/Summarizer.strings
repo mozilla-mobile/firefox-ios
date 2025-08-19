@@ -1,0 +1,48 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "Wedi'i grynhoi gan Apple Intelligence";
+
+/* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
+"Summarizer.CloseButton.Label.v142" = "Cau";
+
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "Mae'r dudalen yn dal i lwytho. Arhoswch iddi orffen, yna pwyswch crynhoi.";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "Methu delio â hwn ar hyn o bryd. Ceisiwch eto yn nes ymlaen!";
+
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "Gwall wrth grynhoi'r dudalen. Ceisiwch eto yn nes ymlaen.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "Wedi canfod cynnwys cyfyngedig. Gall y dudalen hon fod yn gyfyngedig neu'n weledol yn bennaf.";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "Nid yw'r wefan hon yn caniatáu crynhoi cynnwys. Rhowch gynnig ar dudalen wahanol.";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "Crynhowyd gan %@";
+
+/* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
+"Summarizer.Loading.Label.v142" = "Wrthi'n crynhoi…";
+
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "Ceisio eto";
+
+/* The label for the allow button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.AllowButton.Label.v142" = "Caniatáu";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "Mae %@ yn defnyddio Apple Intelligence i grynhoi tudalennau.";
+
+/* The label for the cancel button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.CancelButton.Label.v142" = "Na";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v142" = "Mae %@ yn defnyddio AI sy'n cael ei westeio'n ddiogel ar weinyddion Mozilla i grynhoi tudalennau.";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Dysgu rhagor";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "Caniatáu Crynhoi Tudalennau?";
+

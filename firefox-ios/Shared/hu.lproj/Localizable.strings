@@ -1283,7 +1283,7 @@
 "Settings.Home.Option.RecentlyVisited" = "Nemrég felkeresett";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
-"Settings.Home.Option.Shortcuts" = "Gyorsbillentyűk";
+"Settings.Home.Option.Shortcuts" = "Parancsok";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "Kezdőlap négy óra tétlenség után";
@@ -1481,10 +1481,10 @@
 "Settings.Siri.OpenTabShortcut" = "Új lap megnyitása";
 
 /* The description that describes what siri shortcuts are */
-"Settings.Siri.SectionDescription" = "A Siri gyors parancsok segítségével gyorsan megnyithatja a Firefoxot a Sirivel";
+"Settings.Siri.SectionDescription" = "A Siri parancsok segítségével gyorsan megnyithatja a Firefoxot a Sirivel";
 
 /* The option that takes you to the siri shortcuts settings page */
-"Settings.Siri.SectionName" = "Siri gyors parancsok";
+"Settings.Siri.SectionName" = "Siri parancsok";
 
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "További tudnivalók.";

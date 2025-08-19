@@ -1,0 +1,30 @@
+/* Label for the button that confirms user acceptance of the Terms of Use. */
+"TermsOfUse.AcceptButton.v142" = "Chấp nhận";
+
+/* Label for the back button shown in the Terms of Use web view. */
+"TermsOfUse.BackButton.v142" = "Quay lại";
+
+/* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Description.v142" = "Chúng tôi đã đưa ra diều khoản sử dụng %@ và cập nhật thông báo về quyền riêng tư của chúng tôi.";
+
+/* Link shown in the Terms of Use sheet to direct users to more details about the update. */
+"TermsOfUse.Link.LearnMore.v142" = "Tìm hiểu thêm";
+
+/* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
+"TermsOfUse.Link.PrivacyNotice.v142" = "Thông báo về quyền riêng tư";
+
+/* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Link.TermsOfUse.v142" = "Điều khoản sử dụng của %@";
+
+/* Label for the button that allows the user to postpone accepting the Terms of Use. */
+"TermsOfUse.RemindMeLaterButton.v142" = "Nhắc tôi sau";
+
+/* Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'. */
+"TermsOfUse.ReviewAndAcceptText.v142" = "Vui lòng dành chút thời gian để xem xét và chấp nhận. Tìm hiểu thêm";
+
+/* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
+"TermsOfUse.TermsOfUseHasOpened.v142" = "Đã mở sheet Điều khoản sử dụng";
+
+/* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
+"TermsOfUse.Title.v142" = "Chúng tôi có một bản cập nhật";
+
