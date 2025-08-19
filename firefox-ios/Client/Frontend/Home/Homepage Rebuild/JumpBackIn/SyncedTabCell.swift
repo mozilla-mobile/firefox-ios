@@ -322,8 +322,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
     }
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
+        let name = notification.name
         ensureMainThread { [weak self] in
-            switch notification.name {
+            switch name {
             case .DynamicFontChanged:
                 self?.adjustLayout()
             default: break

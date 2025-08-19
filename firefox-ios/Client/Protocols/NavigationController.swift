@@ -11,6 +11,7 @@ protocol NavigationController {
     var transitionCoordinator: UIViewControllerTransitionCoordinator? { get }
     var fromViewController: UIViewController? { get }
     var presentedViewController: UIViewController? { get }
+    var topViewController: UIViewController? { get }
 
     func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)
     func dismiss(animated flag: Bool, completion: (() -> Void)?)

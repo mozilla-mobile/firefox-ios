@@ -162,9 +162,11 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     }
 
     @objc
-    func changeFontType(_ button: ReaderModeFontTypeButton) {
-        viewModel.fontTypeDidChange(button.fontType)
-        updateFontTypeButtons()
+    nonisolated func changeFontType(_ button: ReaderModeFontTypeButton) {
+        ensureMainThread {
+            self.viewModel.fontTypeDidChange(button.fontType)
+            self.updateFontTypeButtons()
+        }
     }
 
     private func updateFontTypeButtons() {
@@ -184,9 +186,11 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     }
 
     @objc
-    func changeFontSize(_ button: ReaderModeFontSizeButton) {
-        viewModel.fontSizeDidChangeSizeAction(button.fontSizeAction)
-        updateFontSizeButtons()
+    nonisolated func changeFontSize(_ button: ReaderModeFontSizeButton) {
+        ensureMainThread {
+            self.viewModel.fontSizeDidChangeSizeAction(button.fontSizeAction)
+            self.updateFontSizeButtons()
+        }
     }
 
     private func updateFontSizeButtons() {
@@ -205,14 +209,18 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     }
 
     @objc
-    func changeTheme(_ button: ReaderModeThemeButton) {
-        guard let readerModeTheme = button.readerModeTheme else { return }
-        viewModel.readerModeDidChangeTheme(readerModeTheme)
+    nonisolated func changeTheme(_ button: ReaderModeThemeButton) {
+        ensureMainThread {
+            guard let readerModeTheme = button.readerModeTheme else { return }
+            self.viewModel.readerModeDidChangeTheme(readerModeTheme)
+        }
     }
 
     @objc
-    func changeBrightness(_ slider: UISlider) {
-        viewModel.sliderDidChange(value: CGFloat(slider.value))
+    nonisolated func changeBrightness(_ slider: UISlider) {
+        ensureMainThread {
+            self.viewModel.sliderDidChange(value: CGFloat(slider.value))
+        }
     }
 
     // MARK: - Private

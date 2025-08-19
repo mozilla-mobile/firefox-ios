@@ -753,8 +753,13 @@ class TabManagerImplementation: NSObject,
 
     private func restoreScreenshot(tab: Tab) {
         Task {
-            let screenshot = try? await imageStore?.getImageForKey(tab.tabUUID)
-            tab.setScreenshot(screenshot)
+            do {
+                let screenshot = try await imageStore?.getImageForKey(tab.tabUUID)
+                tab.setScreenshot(screenshot)
+            } catch {
+                logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
+                tab.setScreenshot(nil)
+            }
         }
     }
 

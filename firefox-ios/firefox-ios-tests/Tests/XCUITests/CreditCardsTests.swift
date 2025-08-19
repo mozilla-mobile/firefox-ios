@@ -176,6 +176,11 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[useSavedCard])
         // If Keyboard is open, hit return button
         app.buttons["KeyboardAccessory.doneButton"].tapIfExists()
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])

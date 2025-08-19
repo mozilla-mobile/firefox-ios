@@ -720,6 +720,7 @@ struct AccessibilityIdentifiers {
     }
 
     struct Summarizer {
+        static let tabSnapshotView = "tabSnapshotView"
         static let closeSummaryButton = "closeSummaryButton"
         static let titleLabel = "summaryTitleLabel"
         static let loadingLabel = "summaryLoadingLabel"

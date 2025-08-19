@@ -12,6 +12,7 @@ class MockNavigationController: NavigationController {
     var delegate: UINavigationControllerDelegate?
     var isNavigationBarHidden = false
     var fromViewController: UIViewController?
+    var topViewController: UIViewController?
 
     var presentCalled = 0
     var dismissCalled = 0
@@ -30,6 +31,7 @@ class MockNavigationController: NavigationController {
     func pushViewController(_ viewController: UIViewController, animated: Bool) {
         pushCalled += 1
         presentedViewController = viewController
+        topViewController = viewController
     }
 
     func popViewController(animated: Bool) -> UIViewController? {

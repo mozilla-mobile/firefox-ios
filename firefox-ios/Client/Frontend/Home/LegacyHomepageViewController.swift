@@ -50,6 +50,7 @@ class LegacyHomepageViewController: UIViewController,
 
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
+    weak var termsOfUseDelegate: TermsOfUseDelegate?
 
     var contentType: ContentType = .legacyHomepage
 
@@ -183,6 +184,7 @@ class LegacyHomepageViewController: UIViewController,
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             self?.displayWallpaperSelector()
         }
+        termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

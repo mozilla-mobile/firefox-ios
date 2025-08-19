@@ -47,6 +47,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
+    var showTermsOfUseCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -149,8 +150,12 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         removeDocumentLoadingCalled += 1
     }
 
-    func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?) {
+    func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {
         showSummarizePanelCalled += 1
+    }
+
+    func showTermsOfUse(context: TriggerContext) {
+        showTermsOfUseCalled += 1
     }
 
     // MARK: - BrowserDelegate

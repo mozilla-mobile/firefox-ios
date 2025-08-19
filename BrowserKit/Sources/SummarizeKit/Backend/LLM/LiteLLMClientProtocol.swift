@@ -10,12 +10,12 @@ protocol LiteLLMClientProtocol {
     /// Sends a non-streaming chat completion request.
     func requestChatCompletion(
         messages: [LiteLLMMessage],
-        options: LiteLLMChatOptions
+        config: SummarizerConfig
     ) async throws -> String
 
     /// Sends a streaming chat completion request.
     func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
-        options: LiteLLMChatOptions
+        config: SummarizerConfig
     ) -> AsyncThrowingStream<String, Error>
 }

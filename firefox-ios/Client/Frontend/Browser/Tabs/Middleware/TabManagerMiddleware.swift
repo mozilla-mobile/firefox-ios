@@ -93,9 +93,6 @@ final class TabManagerMiddleware: FeatureFlaggable {
     }
 
     private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {
-        guard let tabsState = state.screenState(TabsPanelState.self,
-                                                for: .tabsPanel,
-                                                window: action.windowUUID) else { return }
         // TODO: FXIOS-12101 this should be removed once we figure out screenshots
         guard windowManager.windows[action.windowUUID]?.tabManager != nil else {
             logger.log("Tab manager does not exist for this window, bailing from taking a screenshot.", level: .fatal, category: .tabs, extra: ["windowUUID": "\(action.windowUUID)"])
@@ -104,6 +101,10 @@ final class TabManagerMiddleware: FeatureFlaggable {
 
         let manager = tabManager(for: action.windowUUID)
         manager.tabDidSetScreenshot(action.tab)
+
+        guard let tabsState = state.screenState(TabsPanelState.self,
+                                                for: .tabsPanel,
+                                                window: action.windowUUID) else { return }
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
@@ -786,22 +787,26 @@ final class TabManagerMiddleware: FeatureFlaggable {
                 return
             }
 
-            var canBeSaved = true
+            let canBeSaved: Bool
             if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
                 canBeSaved = false
+            } else {
+                canBeSaved = true
             }
 
             let browserProfile = self.profile as? BrowserProfile
             browserProfile?.tabs.getClientGUIDs { (result, error) in
-                let model = TabPeekModel(canTabBeSaved: canBeSaved,
-                                         canCopyURL: !(tab?.isFxHomeTab ?? false),
-                                         isSyncEnabled: !(result?.isEmpty ?? true),
-                                         screenshot: tab?.screenshot ?? UIImage(),
-                                         accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                let action = TabPeekAction(tabPeekModel: model,
-                                           windowUUID: uuid,
-                                           actionType: TabPeekActionType.loadTabPeek)
-                store.dispatchLegacy(action)
+                ensureMainThread {
+                    let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                             canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                             isSyncEnabled: !(result?.isEmpty ?? true),
+                                             screenshot: tab?.screenshot ?? UIImage(),
+                                             accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
+                    let action = TabPeekAction(tabPeekModel: model,
+                                               windowUUID: uuid,
+                                               actionType: TabPeekActionType.loadTabPeek)
+                    store.dispatchLegacy(action)
+                }
             }
         }
     }
@@ -832,7 +837,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         switch action.actionType {
         case MainMenuActionType.tapToggleUserAgent:
             changeUserAgent(forWindow: action.windowUUID)
-        case MainMenuMiddlewareActionType.requestTabInfo:
+        case MainMenuMiddlewareActionType.requestTabInfo, MainMenuActionType.viewWillTransition:
             provideTabInfo(forWindow: action.windowUUID, accountData: defaultAccountData())
             handleDidInstantiateViewAction(action: action)
         case MainMenuMiddlewareActionType.requestTabInfoForSiteProtectionsHeader:
@@ -896,14 +901,13 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     let summarizeMiddleware = SummarizerMiddleware()
                     let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
                     let contentType = summarizationCheckResult?.contentType ?? .generic
-                    let instructions = summarizeMiddleware.getInstructions(for: contentType)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
                         canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                        summarizerInstructions: instructions,
+                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
                         profileImage: profileImage
                     )
                 }
@@ -977,7 +981,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         windowUUID: WindowUUID,
         accountData: AccountData,
         canSummarize: Bool,
-        summarizerInstructions: String? = nil,
+        summarizerConfig: SummarizerConfig? = nil,
         profileImage: UIImage?
     ) {
         store.dispatchLegacy(
@@ -994,7 +998,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     zoomLevel: selectedTab.pageZoom,
                     readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
                     summaryIsAvailable: canSummarize,
-                    summarizerInstructions: summarizerInstructions,
+                    summarizerConfig: summarizerConfig,
                     isBookmarked: info.isBookmarked,
                     isInReadingList: info.isInReadingList,
                     isPinned: info.isPinned,

@@ -12,6 +12,10 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
         static let verticalMargin: CGFloat = 10
         static let labelsSpacing: CGFloat = 3
         static let learnMoreInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        static var cellSeparatorInsetForCurrentOS: UIEdgeInsets {
+            guard #available(iOS 26.0, *) else { return .zero }
+            return UIEdgeInsets(top: 0, left: horizontalMargin, bottom: 0, right: horizontalMargin)
+        }
     }
 
     private lazy var labelsStackView: UIStackView = .build { stackView in
@@ -64,7 +68,7 @@ class ThemedLearnMoreTableViewCell: ThemedTableViewCell {
     }
 
     private func setupLayout() {
-        separatorInset = .zero
+        separatorInset = UX.cellSeparatorInsetForCurrentOS
         selectionStyle = .none
         contentView.addSubview(labelsStackView)
         contentView.addSubview(learnMoreButton)

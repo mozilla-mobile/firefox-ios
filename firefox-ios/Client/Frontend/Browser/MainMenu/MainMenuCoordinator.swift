@@ -39,7 +39,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showShareSheetForCurrentlySelectedTab()
 
     @MainActor
-    func showSummarizePanel(_ trigger: SummarizerTrigger, instructions: String?)
+    func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?)
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -149,9 +149,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()
 
-        case .webpageSummary(let instructions):
+        case .webpageSummary(let config):
             dismissMenuModal(animated: true)
-            navigationHandler?.showSummarizePanel(.mainMenu, instructions: instructions)
+            navigationHandler?.showSummarizePanel(.mainMenu, config: config)
         }
     }
 

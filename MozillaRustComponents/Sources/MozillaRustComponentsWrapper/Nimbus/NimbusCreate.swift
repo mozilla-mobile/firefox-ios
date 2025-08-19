@@ -104,7 +104,8 @@ public extension Nimbus {
             coenrollingFeatureIds: coenrollingFeatureIds,
             dbpath: dbPath,
             remoteSettingsConfig: remoteSettings,
-            metricsHandler: GleanMetricsHandler()
+            metricsHandler: GleanMetricsHandler(),
+            geckoPrefHandler: nil
         )
 
         return Nimbus(

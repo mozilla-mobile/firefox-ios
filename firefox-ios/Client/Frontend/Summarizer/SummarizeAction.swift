@@ -5,20 +5,21 @@
 import Common
 import Redux
 import WebKit
+import SummarizeKit
 
 struct SummarizeAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
-    let instructions: String?
+    let summarizerConfig: SummarizerConfig
 
     init(
         windowUUID: WindowUUID,
         actionType: any ActionType,
-        instructions: String? = nil
+        summarizerConfig: SummarizerConfig
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
-        self.instructions = instructions
+        self.summarizerConfig = summarizerConfig
     }
 }
 

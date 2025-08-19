@@ -11,7 +11,7 @@
       "channel": "release",
       "userFacingName": "default shortcuts feature2",
       "userFacingDescription": "sponsored shortcut feature",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -236,6 +236,169 @@
       "firefoxLabsDescription": null,
       "firefoxLabsDescriptionLinks": null,
       "firefoxLabsGroup": null,
+      "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "ios-new-onboarding",
+      "id": "ios-new-onboarding",
+      "arguments": {},
+      "application": "org.mozilla.ios.FirefoxBeta",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.FirefoxBeta",
+      "channel": "beta",
+      "userFacingName": "iOS New Onboarding",
+      "userFacingDescription": "New onboarding",
+      "isEnrollmentPaused": false,
+      "isRollout": true,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-onboarding-framework-feature-beta-no_targeting-rollout-1",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "onboarding-framework-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "enableModernUi": true
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "(app_version|versionCompare('142.1.0') >= 0)",
+      "startDate": "2025-08-14",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2025-08-14T20:22:54.795561Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": "",
+      "firefoxLabsDescription": "",
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": "",
+      "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "ios-search-middle-homescreen",
+      "id": "ios-search-middle-homescreen",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "iOS Search Middle Homescreen",
+      "userFacingDescription": "Search in Middle of Homescreen",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-homepage-rebuild-feature-homepage-redesign-feature-release-4",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "homepage-rebuild-feature",
+        "homepage-redesign-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "homepage-rebuild-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true
+              }
+            },
+            {
+              "featureId": "homepage-redesign-feature",
+              "enabled": true,
+              "value": {
+                "enabled": false,
+                "search-bar": false,
+                "stories-redesign": false
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "homepage-rebuild-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true
+              }
+            },
+            {
+              "featureId": "homepage-redesign-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "search-bar": true,
+                "stories-redesign": true
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('142.1.0') >= 0)))",
+      "startDate": "2025-08-14",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 14,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2025-08-14T20:19:51.895887Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": "",
+      "firefoxLabsDescription": "",
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": "",
       "requiresRestart": false
     },
     {

@@ -150,6 +150,11 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         )
 
         // Now check if it switches to FF Home
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
@@ -176,6 +181,10 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
         )
 
         // Now check if it switches to FF Home
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)

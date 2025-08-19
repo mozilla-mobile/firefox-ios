@@ -47,7 +47,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
                     )
                 }.listRowBackground(themeColors.layer2.color)
             }
-            .listStyle(.plain)
+            .modifier(ListStyle())
             .alert(isPresented: $isShowingErrorAlert) {
                 Alert(
                     title: Text(String.Settings.AppIconSelection.Errors.SelectErrorMessage),
@@ -66,6 +66,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
             }
         }
         .background(themeColors.layer1.color)
+        .modifier(ScrollContentBackgroundModifier())
     }
 
     func applyTheme(theme: Theme) {

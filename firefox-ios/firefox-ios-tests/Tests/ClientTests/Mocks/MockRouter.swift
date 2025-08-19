@@ -23,6 +23,7 @@ class MockRouter: NSObject, Router {
     var setRootViewControllerCalled = 0
     var savedCompletion: (() -> Void)?
     var isNavigationBarHidden = false
+    var topViewController: UIViewController?
 
     init(navigationController: NavigationController) {
         self.navigationController = navigationController
@@ -51,6 +52,7 @@ class MockRouter: NSObject, Router {
     func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
         savedCompletion = completion
         pushedViewController = viewController
+        navigationController.pushViewController(viewController, animated: false)
         pushCalled += 1
     }
 

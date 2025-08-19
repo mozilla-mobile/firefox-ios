@@ -209,7 +209,7 @@ extension CrashManagerTests {
 }
 
 // MARK: - MockSentryWrapper
-private class MockSentryWrapper: SentryWrapper {
+private final class MockSentryWrapper: SentryWrapper, @unchecked Sendable {
     var mockCrashedInLastRun = false
     var crashedInLastRun: Bool {
         return mockCrashedInLastRun

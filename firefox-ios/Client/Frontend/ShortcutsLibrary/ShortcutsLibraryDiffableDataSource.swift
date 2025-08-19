@@ -9,6 +9,7 @@ typealias ShortcutsLibraryItem = ShortcutsLibraryDiffableDataSource.Item
 
 final class ShortcutsLibraryDiffableDataSource:
     UICollectionViewDiffableDataSource<ShortcutsLibrarySection, ShortcutsLibraryItem> {
+    // MARK: - Enums
     enum Section: Hashable {
         case shortcuts
     }
@@ -23,6 +24,7 @@ final class ShortcutsLibraryDiffableDataSource:
         }
     }
 
+    // MARK: - Private constants
     private let maxShortcutsToShow = 16
 
     func updateSnapshot(state: ShortcutsLibraryState) {

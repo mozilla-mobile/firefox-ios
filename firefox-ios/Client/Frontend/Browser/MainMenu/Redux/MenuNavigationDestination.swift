@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import SummarizeKit
 
 enum MainMenuNavigationDestination: Equatable {
     case bookmarks
@@ -17,7 +18,7 @@ enum MainMenuNavigationDestination: Equatable {
     case syncSignIn
     case printSheetV2
     case saveAsPDFV2
-    case webpageSummary(instructions: String)
+    case webpageSummary(config: SummarizerConfig?)
     case zoom
 
     /// NOTE: This is only used in tests. Right now, we have three entrypoints for the summarizer and 
@@ -39,7 +40,7 @@ enum MainMenuNavigationDestination: Equatable {
             .syncSignIn,
             .printSheetV2,
             .saveAsPDFV2,
-            .webpageSummary(instructions: "test_instructions"),
+            .webpageSummary(config: SummarizerConfig(instructions: "", options: [:])),
             .zoom
         ]
     }
