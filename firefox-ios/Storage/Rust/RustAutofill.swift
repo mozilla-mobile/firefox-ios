@@ -448,7 +448,7 @@ public class RustAutofill: @unchecked Sendable {
     ///
     /// - Parameters:
     ///   - completion: A closure called upon completion with the encryption key or an error upon failure.
-    public func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
+    public func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
         DispatchQueue.global(qos: .background).sync {
             let (key, encryptedCanaryPhrase) = rustKeychain.getCreditCardKeyData()
 
@@ -471,7 +471,7 @@ public class RustAutofill: @unchecked Sendable {
 
     private func handleExpectedKeyAction(encryptedCanaryPhrase: String?,
                                          key: String?,
-                                         completion: @escaping (Result<String, NSError>) -> Void) {
+                                         completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
         // We expected the key to be present, and it is.
         var canaryIsValid = false
         do {
@@ -498,7 +498,7 @@ public class RustAutofill: @unchecked Sendable {
         }
     }
 
-    private func handleUnexpectedKeyAction(completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleUnexpectedKeyAction(completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
         // The key is present, but we didn't expect it to be there.
         // or
         // We expected the key to be present, but it's gone missing on us
@@ -509,7 +509,7 @@ public class RustAutofill: @unchecked Sendable {
     }
 
     private func handleFirstTimeCallOrClearedKeychainAction(
-        completion: @escaping (Result<String, NSError>) -> Void) {
+        completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
         hasCreditCards { result in
@@ -571,7 +571,7 @@ public class RustAutofill: @unchecked Sendable {
         }
     }
 
-    private func resetCreditCardsAndKey(completion: @escaping (Result<String, NSError>) -> Void) {
+    private func resetCreditCardsAndKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
         self.scrubCreditCardNums { result in
             switch result {
             case .success(()):
@@ -591,7 +591,7 @@ public class RustAutofill: @unchecked Sendable {
         }
     }
 
-    private func hasCreditCards(completion: @escaping (Result<Bool, Error>) -> Void) {
+    private func hasCreditCards(completion: @Sendable @escaping (Result<Bool, Error>) -> Void) {
         return listCreditCards { (creditCards, err) in
             guard err == nil else {
                 completion(.failure(err!))

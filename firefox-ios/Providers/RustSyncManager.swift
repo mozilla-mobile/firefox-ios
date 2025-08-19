@@ -446,7 +446,7 @@ public class RustSyncManager: NSObject, SyncManager {
                            dispatchGroup: DispatchGroupInterface = DispatchGroup(),
                            completion: @escaping (([String], [String: String])) -> Void) {
         logins.getStoredKey { loginResult in
-            var loginKey: String?
+            let loginKey: String?
 
             switch loginResult {
             case .success(let key):
@@ -457,6 +457,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     level: .warning,
                     category: .sync
                 )
+                loginKey = nil
             }
 
             self.autofill.getStoredKey { creditCardResult in

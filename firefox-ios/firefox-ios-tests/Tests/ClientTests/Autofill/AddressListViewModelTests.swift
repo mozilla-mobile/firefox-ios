@@ -313,7 +313,7 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
         }
     }
 
-    func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
+    func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
         getStoredKeyCalledCount += 1
         return completion(.success("test autofill encryption key"))
     }
