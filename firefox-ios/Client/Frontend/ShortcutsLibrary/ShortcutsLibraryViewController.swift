@@ -113,6 +113,10 @@ class ShortcutsLibraryViewController: UIViewController,
         self.shortcutsLibraryState = state
 
         dataSource?.updateSnapshot(state: state)
+
+        if let toast = state.toast {
+            showToast(toast: toast)
+        }
     }
 
     func unsubscribeFromRedux() {
@@ -242,6 +246,20 @@ class ShortcutsLibraryViewController: UIViewController,
                 actionType: NavigationBrowserActionType.longPressOnCell
             )
         )
+    }
+
+    private func showToast(toast: Toast) {
+        toast.showToast(viewController: self,
+                        delay: Toast.UX.toastDelayBefore,
+                        duration: Toast.UX.toastDismissAfter) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            ]
+        }
     }
 
     // MARK: - Selectors

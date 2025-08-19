@@ -80,6 +80,7 @@ let middlewares = [
     WallpaperMiddleware().wallpaperProvider,
     BookmarksMiddleware().bookmarksProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
+    ShortcutsLibraryMiddleware().shortcutsLibraryProvider,
     StartAtHomeMiddleware().startAtHomeProvider,
     SummarizerMiddleware().summarizerProvider,
     TermsOfUseMiddleware().termsOfUseProvider

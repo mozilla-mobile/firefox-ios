@@ -12,10 +12,12 @@ struct ContextMenuAction: Action {
     let actionType: ActionType
     let menuType: MenuType?
     let site: Site?
+    let url: URL?
 
     init(
         menuType: MenuType? = nil,
         site: Site? = nil,
+        url: URL? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
@@ -23,10 +25,12 @@ struct ContextMenuAction: Action {
         self.actionType = actionType
         self.menuType = menuType
         self.site = site
+        self.url = url
     }
 }
 
 enum ContextMenuActionType: ActionType {
+    case tappedOnOpenNewTab
     case tappedOnOpenNewPrivateTab
     case tappedOnRemoveTopSite
     case tappedOnPinTopSite

@@ -8,6 +8,7 @@ import Redux
 struct ShortcutsLibraryState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     let shortcuts: [TopSiteConfiguration]
+    let toast: Toast?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let shortcutsLibraryState = store.state.screenState(
@@ -21,23 +22,27 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
 
         self.init(
             windowUUID: shortcutsLibraryState.windowUUID,
-            shortcuts: shortcutsLibraryState.shortcuts
+            shortcuts: shortcutsLibraryState.shortcuts,
+            toast: shortcutsLibraryState.toast
         )
     }
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            shortcuts: []
+            shortcuts: [],
+            toast: nil
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        shortcuts: [TopSiteConfiguration]
+        shortcuts: [TopSiteConfiguration],
+        toast: Toast? = nil,
     ) {
         self.windowUUID = windowUUID
         self.shortcuts = shortcuts
+        self.toast = toast
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -49,6 +54,8 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
         switch action.actionType {
         case TopSitesMiddlewareActionType.retrievedUpdatedSites:
             return handleRetrievedUpdatedSitesAction(action: action, state: state)
+        case ShortcutsLibraryMiddlewareActionType.openedNewTab:
+            return handleOpenedNewTabAction(action: action, state: state)
         default:
             return defaultState(from: state)
         }
@@ -67,10 +74,21 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
         )
     }
 
+    private static func handleOpenedNewTabAction(action: Action, state: Self) -> ShortcutsLibraryState {
+        guard let toast = (action as? ShortcutsLibraryAction)?.toast else { return defaultState(from: state) }
+
+        return ShortcutsLibraryState(
+            windowUUID: state.windowUUID,
+            shortcuts: state.shortcuts,
+            toast: toast
+        )
+    }
+
     static func defaultState(from state: ShortcutsLibraryState) -> ShortcutsLibraryState {
         return ShortcutsLibraryState(
             windowUUID: state.windowUUID,
-            shortcuts: state.shortcuts
+            shortcuts: state.shortcuts,
+            toast: state.toast
         )
     }
 }

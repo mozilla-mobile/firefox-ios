@@ -376,17 +376,24 @@ struct ContextMenuState {
         selectNewTab: Bool = false
     ) {
         store.dispatchLegacy(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(
-                    .newTab,
-                    url: siteURL,
-                    isPrivate: isPrivate,
-                    selectNewTab: selectNewTab
-                ),
+            ContextMenuAction(
+                url: siteURL,
                 windowUUID: windowUUID,
-                actionType: NavigationBrowserActionType.tapOnOpenInNewTab
+                actionType: ContextMenuActionType.tappedOnOpenNewTab
             )
         )
+//        store.dispatchLegacy(
+//            NavigationBrowserAction(
+//                navigationDestination: NavigationDestination(
+//                    .newTab,
+//                    url: siteURL,
+//                    isPrivate: isPrivate,
+//                    selectNewTab: selectNewTab
+//                ),
+//                windowUUID: windowUUID,
+//                actionType: NavigationBrowserActionType.tapOnOpenInNewTab
+//            )
+//        )
     }
 
     private static func dispatchShareSheetAction(windowUUID: WindowUUID, shareSheetConfiguration: ShareSheetConfiguration) {
