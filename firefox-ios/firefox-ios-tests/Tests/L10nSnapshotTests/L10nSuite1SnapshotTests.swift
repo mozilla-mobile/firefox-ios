@@ -155,6 +155,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.backButton])
         waitForTabsButton()
+        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
@@ -302,8 +303,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
         waitForTabsButton()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.backButton])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton])
+        sleep(1)
         navigator.createNewTab()
         if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
             app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
@@ -311,7 +311,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
         waitForTabsButton()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.backButton])
+        sleep(1)
         navigator.createNewTab()
         if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
             app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
@@ -323,7 +323,10 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // perform a search but don't complete (we're testing autocomplete here)
         navigator.createNewTab()
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
+            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        }
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].typeText("firef")
         sleep(2)
         snapshot("01SearchResults")
