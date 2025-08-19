@@ -221,29 +221,25 @@ class BrowserViewController: UIViewController,
         return toolbar.isHidden ? legacyUrlBar : toolbar
     }
 
-    // MARK: Blur views for translucent toolbars
-    private let topBlurView: UIVisualEffectView = .build { view in
-    #if canImport(FoundationModels)
-            view.effect = if #available(iOS 26.0, *) {
-                UIGlassEffect(style: .regular)
-            } else {
-                UIBlurEffect(style: .systemUltraThinMaterial)
-            }
-    #else
-            view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-    #endif
-    }
-
-    private let bottomBlurView: UIVisualEffectView = .build { view in
+    private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
-        view.effect = if #available(iOS 26.0, *) {
-            UIGlassEffect(style: .regular)
+        if #available(iOS 26, *) {
+            return UIGlassEffect(style: .regular)
         } else {
-            UIBlurEffect(style: .systemUltraThinMaterial)
+            return UIBlurEffect(style: .systemUltraThinMaterial)
         }
 #else
-        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        return UIBlurEffect(style: .systemUltraThinMaterial)
 #endif
+    }()
+
+    // MARK: Blur views for translucent toolbars
+    private lazy var topBlurView: UIVisualEffectView = .build { view in
+        view.effect = self.effect
+    }
+
+    private lazy var bottomBlurView: UIVisualEffectView = .build { view in
+        view.effect = self.effect
     }
 
     // background view is placed behind content view so view scrolled to top or bottom shows
@@ -3835,6 +3831,11 @@ class BrowserViewController: UIViewController,
             let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
             let colors = currentTheme.colors
             backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
+            if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
+                glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
+                bottomBlurView.effect = glassEffect
+                topBlurView.effect = glassEffect
+            }
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
