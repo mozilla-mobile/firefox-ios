@@ -137,10 +137,10 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Kezdőképernyőhöz adás";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Parancs";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Indítóikon";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Hozzáadás a Parancsokhoz";
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Hozzáadás az indítóikonokhoz";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Könyvjelző hozzáadása";
@@ -155,7 +155,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Eltávolítás az olvasási listáról";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
-"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Eltávolítás a Parancsokból";
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Eltávolítás az indítóikonok közül";
 
 /* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
 "MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";

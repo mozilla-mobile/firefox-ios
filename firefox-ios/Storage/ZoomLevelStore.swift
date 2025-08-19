@@ -22,7 +22,7 @@ public struct DomainZoomLevel: Codable, Equatable {
 
 public protocol ZoomLevelStorage {
     func saveDefaultZoomLevel(defaultZoom: CGFloat)
-    func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)?)
+    func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel, completion: (@Sendable () -> Void)?)
     func findZoomLevel(forDomain host: String) -> DomainZoomLevel?
     func getDefaultZoom() -> CGFloat
     func getDomainZoomLevel() -> [DomainZoomLevel]
@@ -30,7 +30,8 @@ public protocol ZoomLevelStorage {
     func resetDomainZoomLevel()
 }
 
-public class ZoomLevelStore: ZoomLevelStorage {
+// TODO: FXIOS-13212 Make ZoomLevelStore actually sendable
+public class ZoomLevelStore: @unchecked Sendable, ZoomLevelStorage {
     public static let shared = ZoomLevelStore()
 
     private(set) var zoomSetting = ZoomSettings(defaultZoom: ZoomLevelStore.defaultZoomLimit,
@@ -57,7 +58,7 @@ public class ZoomLevelStore: ZoomLevelStorage {
         save()
     }
 
-    public func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)? = nil) {
+    public func saveDomainZoom(_ domainZoomLevel: DomainZoomLevel, completion: (@Sendable () -> Void)? = nil) {
         if let index = zoomSetting.zoomLevels.firstIndex(where: {
             $0.host == domainZoomLevel.host
         }) {
@@ -67,7 +68,7 @@ public class ZoomLevelStore: ZoomLevelStorage {
         save(completion)
     }
 
-    private func save(_ completion: (() -> Void)? = nil) {
+    private func save(_ completion: (@Sendable () -> Void)? = nil) {
         concurrentQueue.async(flags: .barrier) { [unowned self] in
             let encoder = JSONEncoder()
             do {

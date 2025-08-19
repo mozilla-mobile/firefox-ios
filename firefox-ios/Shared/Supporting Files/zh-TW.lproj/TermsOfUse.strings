@@ -1,0 +1,30 @@
+/* Label for the button that confirms user acceptance of the Terms of Use. */
+"TermsOfUse.AcceptButton.v142" = "接受";
+
+/* Label for the back button shown in the Terms of Use web view. */
+"TermsOfUse.BackButton.v142" = "上一頁";
+
+/* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Description.v142" = "我們推出了 %@ 使用條款，並且更新了隱私權公告。";
+
+/* Link shown in the Terms of Use sheet to direct users to more details about the update. */
+"TermsOfUse.Link.LearnMore.v142" = "更多資訊";
+
+/* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
+"TermsOfUse.Link.PrivacyNotice.v142" = "隱私權公告";
+
+/* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Link.TermsOfUse.v142" = "%@ 使用條款";
+
+/* Label for the button that allows the user to postpone accepting the Terms of Use. */
+"TermsOfUse.RemindMeLaterButton.v142" = "之後再提醒我";
+
+/* Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'. */
+"TermsOfUse.ReviewAndAcceptText.v142" = "請花一些時間閱讀內容並且接受。更多資訊。";
+
+/* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
+"TermsOfUse.TermsOfUseHasOpened.v142" = "已開啟使用調款表";
+
+/* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
+"TermsOfUse.Title.v142" = "這裡有點新鮮事";
+

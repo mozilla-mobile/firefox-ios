@@ -1,0 +1,12 @@
+/* A statement shown to user when tapping an external link and the link doesn't work. */
+"ExternalLink.ExternalInvalidLinkMessage.v136" = "Aplicația necesară pentru a deschide acel link nu poate fi găsită.";
+
+/* Question shown to user when tapping a mail link that opens the external app for those. */
+"ExternalLink.ExternalMailLinkConfirmation.v136" = "Deschizi mesajul în aplicația de e-mail implicită?";
+
+/* The call to action button for a user to open an external link. */
+"ExternalLink.ExternalOpenMessage.v136" = "Deschide";
+
+/* Question shown to user when tapping an SMS link that opens the external app for those. */
+"ExternalLink.ExternalSmsLinkConfirmation.v136" = "Deschizi SMS-ul într-o aplicație externă?";
+
