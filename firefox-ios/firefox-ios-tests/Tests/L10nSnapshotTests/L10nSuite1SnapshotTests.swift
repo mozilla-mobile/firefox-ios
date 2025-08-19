@@ -152,6 +152,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+        waitForTabsButton()
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables["History List"])
         app.tables["History List"].cells.element(boundBy: 1).staticTexts.element(boundBy: 1).press(forDuration: 2)
@@ -167,12 +169,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         navigator.performAction(Action.Bookmark)
-        navigator.createNewTab()
-        // Disable due to issue #7521
-        // navigator.goto(BookmarksPanelContextMenu)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
+        navigator.goto(BookmarksPanelContextMenu)
         snapshot("BookmarksTableContextMenu-01")
     }
 
@@ -281,6 +279,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testTakeMarketingScreenshots() {
+        let searchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         snapshot("00TopSites")
 
@@ -290,24 +289,25 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // load some web pages in some new tabs
         navigator.goto(NewTabScreen)
-        if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
-            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        if searchBar.exists {
+            searchBar.waitAndTap()
         }
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
         waitForTabsButton()
+        // Without the sleep(), the tabs button could not be found in the next step.
         sleep(1)
         navigator.createNewTab()
-        if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
-            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        if searchBar.exists {
+            searchBar.waitAndTap()
         }
         navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
         waitForTabsButton()
         sleep(1)
         navigator.createNewTab()
-        if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
-            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        if searchBar.exists {
+            searchBar.waitAndTap()
         }
         navigator.openURL("https://mozilla.org/firefox/new")
         waitUntilPageLoad()
@@ -316,8 +316,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // perform a search but don't complete (we're testing autocomplete here)
         navigator.createNewTab()
-        if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
-            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        if searchBar.exists {
+            searchBar.waitAndTap()
         }
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].typeText("firef")
