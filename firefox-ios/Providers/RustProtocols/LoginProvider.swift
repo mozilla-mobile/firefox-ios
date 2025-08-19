@@ -14,7 +14,7 @@ protocol LoginProvider: AnyObject {
 }
 
 protocol SyncLoginProvider {
-    func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void)
+    func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void)
     func registerWithSyncManager()
     func verifyLogins(completionHandler: @escaping @Sendable (Bool) -> Void)
 }
