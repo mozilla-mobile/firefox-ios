@@ -13,6 +13,7 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -22,7 +23,8 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
     }
 
     @MainActor
-    func test_generateSettings_withDefault_hasExpectedSections() {
+    func test_generateSettings_withShakeFeature_hasExpectedSections() {
+        setupNimbusHostedSummarizerTesting(isEnabled: true)
         let subject = createSubject()
         let sections = subject.generateSettings()
         XCTAssertEqual(sections.count, 2)
@@ -32,10 +34,28 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
         XCTAssertEqual(sections.last?.children.count, 1)
     }
 
+    @MainActor
+    func test_generateSettings_withoutShakeFeature_hasExpectedSections() {
+        setupNimbusHostedSummarizerTesting(isEnabled: false)
+        let subject = createSubject()
+        let sections = subject.generateSettings()
+        XCTAssertEqual(sections.count, 1)
+        XCTAssertEqual(sections.first?.title, nil)
+        XCTAssertEqual(sections.first?.children.count, 1)
+        XCTAssertEqual(sections.last?.title?.string, nil)
+        XCTAssertEqual(sections.last?.children.count, 1)
+    }
+
     // MARK: - Helper
     private func createSubject() -> SummarizeSettingsViewController {
         let subject = SummarizeSettingsViewController(prefs: profile.prefs, windowUUID: .XCTestDefaultUUID)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setupNimbusHostedSummarizerTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
+        }
     }
 }
