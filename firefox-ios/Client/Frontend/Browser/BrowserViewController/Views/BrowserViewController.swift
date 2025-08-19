@@ -463,7 +463,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
-        logger.log("BVC deallocating", level: .info, category: .lifecycle)
+        logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
         unsubscribeFromRedux()
         // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
         // KVO observation removal directly requires self so we can not use the apple
@@ -861,6 +861,11 @@ class BrowserViewController: UIViewController,
         let uuid = tabManager.windowUUID
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
+
+        let allWindowUUIDs = (AppContainer.shared.resolve() as WindowManager).windows.keys.map { $0.uuidString.prefix(4) }
+        logger.log("BrowserDidBecomeActive. UUID = \(windowUUID.uuidString.prefix(4)). All windows: \(allWindowUUIDs)",
+                   level: .info,
+                   category: .lifecycle)
 
         NightModeHelper.cleanNightModeDefaults()
 

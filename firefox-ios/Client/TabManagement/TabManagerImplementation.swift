@@ -171,6 +171,10 @@ class TabManagerImplementation: NSObject,
             ])
     }
 
+    deinit {
+        logger.log("TabManager deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
+    }
+
     subscript(index: Int) -> Tab? {
         if index >= tabs.count {
             return nil
