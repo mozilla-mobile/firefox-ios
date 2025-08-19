@@ -45,7 +45,7 @@ private struct LightColourPalette: ThemeColourPalette {
     ])
     var layerSurfaceLow = FXColors.LightGrey20
     var layerSurfaceMedium = FXColors.White
-    var layerSummary = Gradient(colors: [
+    var layerGradientSummary = Gradient(colors: [
         FXColors.Red70,
         FXColors.Orange50
     ])
