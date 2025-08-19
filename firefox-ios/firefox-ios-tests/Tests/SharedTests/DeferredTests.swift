@@ -103,6 +103,108 @@ class DeferredTests: XCTestCase {
     func testDeferMaybe() {
         XCTAssertTrue(deferMaybe("foo").value.isSuccess)
     }
+
+    @MainActor // Test explicitly calling `all` on the main thread
+    func testDeferredAll_calledOnMainThread() {
+        let expectation = self.expectation(description: "All blocks ran")
+
+        let deferreds = [
+            Success(value: Maybe(success: ()), defaultQueue: .main),
+            Success(value: Maybe(success: ()), defaultQueue: .global())
+        ]
+
+        _ = all(deferreds).bind { results -> Success in
+            XCTAssertEqual(results.count, 2)
+
+            if let failure = results.first(where: { $0.isFailure }) {
+                return deferMaybe(failure.failureValue!)
+            }
+
+            expectation.fulfill()
+            return succeed()
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
+    @MainActor // Test explicitly calling `all` on the main thread
+    func testDeferredAll_calledOnMainThread_withFailure() {
+        let expectation = self.expectation(description: "All blocks ran")
+
+        let deferreds = [
+            Success(value: Maybe(success: ()), defaultQueue: .main),
+            Success(value: Maybe(success: ()), defaultQueue: .global()),
+            Success(value: Maybe(success: ()), defaultQueue: .main),
+            Success(value: Maybe(failure: NSError()), defaultQueue: .main)
+        ]
+
+        _ = all(deferreds).bind { results -> Success in
+            XCTAssertEqual(results.count, 4)
+
+            if let failure = results.first(where: { $0.isFailure }) {
+                // We expect one of the results to be a failure
+                expectation.fulfill()
+                return deferMaybe(failure.failureValue!)
+            }
+
+            return succeed()
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
+    func testDeferredAll_calledOnBackgroundThread() {
+        let expectation = self.expectation(description: "All blocks ran")
+
+        let deferreds = [
+            Success(value: Maybe(success: ()), defaultQueue: .main),
+            Success(value: Maybe(success: ()), defaultQueue: .global())
+        ]
+
+        // Run from a background thread
+        Task {
+            _ = all(deferreds).bind { results -> Success in
+                XCTAssertEqual(results.count, 2)
+
+                if let failure = results.first(where: { $0.isFailure }) {
+                    return deferMaybe(failure.failureValue!)
+                }
+
+                expectation.fulfill()
+                return succeed()
+            }
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
+    func testDeferredAll_calledOnBackgroundThread_withFailure() {
+        let expectation = self.expectation(description: "All blocks ran")
+
+        let deferreds = [
+            Success(value: Maybe(success: ()), defaultQueue: .main),
+            Success(value: Maybe(success: ()), defaultQueue: .global()),
+            Success(value: Maybe(success: ()), defaultQueue: .main),
+            Success(value: Maybe(failure: NSError()), defaultQueue: .main)
+        ]
+
+        // Run from a background thread
+        Task {
+            _ = all(deferreds).bind { results -> Success in
+                XCTAssertEqual(results.count, 4)
+
+                if let failure = results.first(where: { $0.isFailure }) {
+                    // We expect one of the results to be a failure
+                    expectation.fulfill()
+                    return deferMaybe(failure.failureValue!)
+                }
+
+                return succeed()
+            }
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
 }
 
 // MARK: Helper
