@@ -129,7 +129,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
 
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab)
-        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], to: URLBarOpen)
+        screenState.tap(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell], to: URLBarOpen)
     }
 
     map.addScreenState(WebPageLoading) { screenState in

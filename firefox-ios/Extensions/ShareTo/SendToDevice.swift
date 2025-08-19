@@ -8,6 +8,7 @@ import SwiftUI
 import UIKit
 import Common
 
+@MainActor
 class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
@@ -30,7 +31,6 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
         return themeManager.windowNonspecificTheme()
     }
 
-    @MainActor
     func initialViewController() -> UIViewController {
         let theme = currentTheme()
         guard let shareItem = sharedItem else {

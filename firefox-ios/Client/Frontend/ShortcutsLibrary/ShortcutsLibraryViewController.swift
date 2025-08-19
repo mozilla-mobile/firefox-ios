@@ -217,4 +217,32 @@ class ShortcutsLibraryViewController: UIViewController,
             return UICollectionViewCell()
         }
     }
+
+    // MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataSource?.itemIdentifier(for: indexPath) else {
+            self.logger.log(
+                "Item selected at \(indexPath) but does not navigate anywhere",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+
+        guard case let .shortcut(config) = item else { return }
+        let destination = NavigationDestination(
+            .link,
+            url: config.site.url.asURL,
+            isGoogleTopSite: config.isGoogleURL,
+            visitType: .link
+        )
+
+        store.dispatchLegacy(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: self.windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
 }

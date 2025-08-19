@@ -921,7 +921,9 @@ pro.cy
 tm.cy
 
 // cz : https://www.iana.org/domains/root/db/cz.html
+// Confirmed by registry <tech@nic.cz> 2025-08-06
 cz
+gov.cz
 
 // de : https://www.iana.org/domains/root/db/de.html
 // Confirmed by registry <ops@denic.de> (with technical
@@ -12770,13 +12772,11 @@ deta.dev
 
 // Dfinity Foundation: https://dfinity.org/
 // Submitted by Dfinity Team <domains@dfinity.org>
-caffeine.ai
-id.ai
-icp-api.io
 icp0.io
 *.raw.icp0.io
 icp1.io
 *.raw.icp1.io
+*.icp.net
 caffeine.site
 
 // dhosting.pl Sp. z o.o. : https://dhosting.pl/
@@ -13815,6 +13815,11 @@ ravendb.community
 development.run
 ravendb.run
 
+// HiDNS : https://www.hidoha.net
+// Submitted by ifeng <admin@hidoha.net>
+hidns.co
+hidns.vip
+
 // home.pl S.A. : https://home.pl
 // Submitted by Krzysztof Wolski <krzysztof.wolski@home.eu>
 homesklep.pl
@@ -13832,7 +13837,6 @@ hoplix.shop
 // HOSTBIP REGISTRY : https://www.hostbip.com/
 // Submitted by Atanunu Igbunuroghene <publicsuffixlist@hostbip.com>
 orx.biz
-biz.gl
 biz.ng
 co.biz.ng
 dl.biz.ng
@@ -14150,9 +14154,16 @@ krellian.net
 // Submitted by DisposaBoy <security@oya.to>
 oya.to
 
+// KV GmbH : https://www.nic.co.de
+// Submitted by KV GmbH <registry@kv-gmbh.de>
+// Abuse reports to <registry@kv-gmbh.de>
+co.de
+
 // Laravel Holdings, Inc. : https://laravel.com
-// Submitted by André Valentin <security@laravel.com>
+// Submitted by André Valentin & James Brooks <security@laravel.com>
 laravel.cloud
+on-forge.com
+on-vapor.com
 
 // LCube - Professional hosting e.K. : https://www.lcube-webhosting.de
 // Submitted by Lars Laehn <info@lcube.de>
@@ -14951,6 +14962,11 @@ qualifioapp.com
 // Submitted by Vasyl Tsalko <vtsalko@qualityunit.com>
 ladesk.com
 
+// Qualy : https://qualyhq.com
+// Submitted by Raphael Arias <security@qualyhq.com>
+*.qualyhqpartner.com
+*.qualyhqportal.com
+
 // QuickBackend : https://www.quickbackend.com
 // Submitted by Dani Biro <dani@pymet.com>
 qbuser.com
@@ -14984,6 +15000,10 @@ in.net
 // Submitted by Auke Tembrink <hostmaster@raidboxes.de>
 myrdbx.io
 site.rb-hosting.io
+
+// Railway Corporation : https://railway.com
+// Submitted by Phineas Walton <dns@railway.com>
+up.railway.app
 
 // Rancher Labs, Inc : https://rancher.com
 // Submitted by Vincent Fiduccia <domains@rancher.com>
@@ -15547,6 +15567,11 @@ tabitorder.co.il
 // Submitted by Bjoern Henke <dev-server@taifun-software.de>
 taifun-dns.de
 
+// Tailor Inc. : https://www.tailor.tech
+// Submitted by Ryuzo Yamamoto <psl-maintainers@tailor.tech>
+erp.dev
+web.erp.dev
+
 // Tailscale Inc. : https://www.tailscale.com
 // Submitted by David Anderson <infra+public-suffix-list@tailscale.com>
 ts.net
@@ -15941,5 +15966,9 @@ enterprisecloud.nu
 // Zone.ID: https://zone.id
 // Submitted by Gx1.org <security@gx1.org>
 zone.id
+
+// ZoneABC : https://zoneabc.net
+// Submitted by ZoneABC Team <support@zoneabc.net>
+zabc.net
 
 // ===END PRIVATE DOMAINS===

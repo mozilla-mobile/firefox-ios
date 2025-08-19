@@ -29,7 +29,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
     private let trigger: SummarizerTrigger
     private let prefs: Prefs
     private let summarizerTelemetry: SummarizerTelemetry
-    private let instructions: String?
+    private let config: SummarizerConfig?
     private let onRequestOpenURL: ((URL?) -> Void)?
 
     init(
@@ -43,7 +43,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         trigger: SummarizerTrigger,
         prefs: Prefs,
         windowUUID: WindowUUID,
-        instructions: String? = nil,
+        config: SummarizerConfig? = nil,
         router: Router,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
         onRequestOpenURL: ((URL?) -> Void)?
@@ -60,7 +60,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         self.onRequestOpenURL = onRequestOpenURL
         self.summarizerServiceFactory = summarizerServiceFactory
         self.summarizerTelemetry = SummarizerTelemetry(gleanWrapper: gleanWrapper)
-        self.instructions = instructions
+        self.config = config
         super.init(router: router)
     }
 
@@ -79,7 +79,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         guard let service = summarizerServiceFactory.make(
             isAppleSummarizerEnabled: isAppleSummarizerEnabled,
             isHostedSummarizerEnabled: isHostedSummarizerEnabled,
-            instructions: instructions) else { return }
+            config: config) else { return }
 
         service.summarizerLifecycle = self
 
@@ -104,6 +104,8 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             loadingLabel: .Summarizer.LoadingLabel,
             loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
             loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel,
+            tabSnapshotA11yLabel: .Summarizer.TabSnapshotAccessibilityLabel,
+            tabSnapshotA11yId: AccessibilityIdentifiers.Summarizer.tabSnapshotView,
             brandLabel: brandLabel,
             summaryNote: .Summarizer.FootnoteLabel,
             summarizeTextViewA11yLabel: .Summarizer.SummaryTextAccessibilityLabel,

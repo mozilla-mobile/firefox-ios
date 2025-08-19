@@ -83,21 +83,21 @@ public class NimbusMessagingHelper: NimbusMessagingHelperProtocol {
 class AlwaysConstantTargetingHelper: NimbusTargetingHelperProtocol {
     private let constant: Bool
 
-    public init(constant: Bool = false) {
+    init(constant: Bool = false) {
         self.constant = constant
     }
 
-    public func evalJexl(expression _: String) throws -> Bool {
+    func evalJexl(expression _: String) throws -> Bool {
         constant
     }
 }
 
 class EchoStringHelper: NimbusStringHelperProtocol {
-    public func getUuid(template _: String) -> String? {
+    func getUuid(template _: String) -> String? {
         nil
     }
 
-    public func stringFormat(template: String, uuid _: String?) -> String {
+    func stringFormat(template: String, uuid _: String?) -> String {
         template
     }
 }

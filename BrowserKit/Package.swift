@@ -108,7 +108,11 @@ let package = Package(
             dependencies: ["Dip",
                            "SwiftyBeaver",
                            .product(name: "Sentry-Dynamic", package: "sentry-cocoa")],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),

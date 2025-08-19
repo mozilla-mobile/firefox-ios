@@ -82,6 +82,7 @@ class ReaderModeContentScript: WKContentScript, ReaderModeStyleSetter {
     }
 
     // This sets the style onto the reader mode through JavaScript injection
+    @MainActor
     lazy var style = ReaderModeStyle.defaultStyle() {
         didSet {
             if state == ReaderModeState.active, let session {

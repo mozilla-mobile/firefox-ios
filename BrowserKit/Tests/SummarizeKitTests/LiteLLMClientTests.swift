@@ -86,12 +86,15 @@ final class LiteLLMClientTests: XCTestCase {
 
     func testMakeRequestBuildsURLRequestNonStreaming() throws {
         let subject = createSubject()
-        let options = LiteLLMChatOptions(
-            model: "fake-model",
-            maxTokens: 50,
-            stream: false
+        let config = SummarizerConfig(
+            instructions: "instructions",
+            options: [
+                "model": "fake-model",
+                "max_tokens": 50,
+                "stream": false
+            ]
         )
-        let urlRequest = try subject.makeRequest(messages: Self.mockMessages, options: options)
+        let urlRequest = try subject.makeRequest(messages: Self.mockMessages, config: config)
 
         XCTAssertEqual(urlRequest.httpMethod, LiteLLMClient.postMethod)
         XCTAssertEqual(urlRequest.url?.absoluteString, "\(Self.mockAPIEndpoint)/chat/completions")
@@ -108,7 +111,7 @@ final class LiteLLMClientTests: XCTestCase {
 
         XCTAssertEqual(body["model"] as? String, "fake-model")
         XCTAssertEqual(body["max_tokens"] as? Int, 50)
-        XCTAssertNil(body["stream"])
+        XCTAssertEqual(body["stream"] as? Bool, false)
 
         let messages = try XCTUnwrap(body["messages"] as? [[String: Any]], "Expected messages array")
         XCTAssertEqual(messages.count, 2)
@@ -119,12 +122,15 @@ final class LiteLLMClientTests: XCTestCase {
 
     func testMakeRequestBuildsURLRequestStreaming() throws {
         let subject = createSubject()
-        let options = LiteLLMChatOptions(
-            model: "fake-model",
-            maxTokens: 50,
-            stream: true
+        let config = SummarizerConfig(
+            instructions: "instructions",
+            options: [
+                "model": "fake-model",
+                "max_tokens": 50,
+                "stream": true
+            ]
         )
-        let urlRequest = try subject.makeRequest(messages: Self.mockMessages, options: options)
+        let urlRequest = try subject.makeRequest(messages: Self.mockMessages, config: config)
 
         // Verify headers for streaming mode
         let headers = try XCTUnwrap(urlRequest.allHTTPHeaderFields, "Expected headers to be non‑nil")

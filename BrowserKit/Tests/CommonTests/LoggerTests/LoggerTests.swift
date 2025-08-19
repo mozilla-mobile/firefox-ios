@@ -268,7 +268,7 @@ final class MockSwiftyBeaver: SwiftyBeaverWrapper {
 }
 
 // MARK: - CrashManager
-class MockCrashManager: CrashManager {
+final class MockCrashManager: CrashManager, @unchecked Sendable {
     var crashedLastLaunch = false
 
     var savedSendCrashReportsCalled = 0

@@ -5,6 +5,7 @@
 import Common
 
 protocol WKWebServerUtil {
+    @MainActor
     func setUpWebServer(readerModeConfiguration: ReaderModeConfiguration)
     func stopWebServer()
 }
@@ -29,6 +30,7 @@ class DefaultWKWebServerUtil: WKWebServerUtil {
         return DefaultWKWebServerUtil(webServer: webServer)
     }
 
+    @MainActor
     func setUpWebServer(readerModeConfiguration: ReaderModeConfiguration) {
         guard !webServer.isRunning else { return }
 

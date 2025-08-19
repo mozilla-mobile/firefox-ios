@@ -6,6 +6,7 @@ import Common
 import Foundation
 
 public struct ReaderModeUtils {
+    @MainActor
     public static func generateReaderContent(
         _ readabilityResult: ReadabilityResult,
         initialStyle: ReaderModeStyle
