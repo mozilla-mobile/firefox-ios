@@ -586,7 +586,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             closeButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
-        backgroundGradient.colors = theme.colors.layerSummary.cgColors
+        backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
         gradient.applyTheme(theme: theme)
         errorView.applyTheme(theme: theme)
     }
