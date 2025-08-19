@@ -9,48 +9,58 @@ import MozillaAppServices
 
 @testable import Client
 
+private struct TestableSubject {
+    let subject: MerinoProvider
+    let cache: MockCache
+    let fetcher: MockFeedFetcher
+}
+
+private final class MockFeedFetcher: MerinoFeedFetching, @unchecked Sendable {
+    var stubbedItems: [RecommendationDataItem] = []
+    var callCount = 0
+
+    func fetch(
+        items: Int32,
+        locale: CuratedRecommendationLocale,
+        userAgent: String
+    ) async throws -> [RecommendationDataItem] {
+        callCount += 1
+        return stubbedItems
+    }
+}
+
 private final class MockCache: CuratedRecommendationsCacheProtocol {
     private(set) var savedItemsHistory: [[RecommendationDataItem]] = []
     private(set) var didClear = false
 
-    private var _stored: [RecommendationDataItem]?
-    private var _lastUpdated: Date?
+    private var stored: [RecommendationDataItem]?
+    private var lastUpdated: Date?
 
-    func loadRecommendations() -> [RecommendationDataItem]? { _stored }
+    func loadRecommendations() -> [RecommendationDataItem]? { stored }
 
     func save(_ items: [RecommendationDataItem]) {
-        _stored = items
-        _lastUpdated = Date()
+        self.stored = items
+        self.lastUpdated = Date()
         savedItemsHistory.append(items)
     }
 
     func clearCache() {
         didClear = true
-        _stored = nil
-        _lastUpdated = nil
+        stored = nil
+        lastUpdated = nil
     }
 
-    func lastUpdatedDate() -> Date? { _lastUpdated }
+    func lastUpdatedDate() -> Date? { lastUpdated }
 
     // Testing helpers
     func seed(items: [RecommendationDataItem], lastUpdated: Date?) {
-        _stored = items
-        _lastUpdated = lastUpdated
+        stored = items
+        self.lastUpdated = lastUpdated
     }
 
     func seedEmpty(lastUpdated: Date? = nil) {
-        _stored = nil
-        _lastUpdated = lastUpdated
-    }
-}
-
-private final class TestableMerinoProvider: MerinoProvider, @unchecked Sendable {
-    var stubbedItems: [RecommendationDataItem] = []
-    var getFeedItemsCallCount = 0
-
-    override func getFeedItems(items: Int32) async throws -> [RecommendationDataItem] {
-        getFeedItemsCallCount += 1
-        return stubbedItems
+        stored = nil
+        self.lastUpdated = lastUpdated
     }
 }
 
@@ -69,48 +79,48 @@ final class MerinoProviderTests: XCTestCase {
     }
 
     func test_fetchStories_returnsCached_whenThresholdNotPassed() async throws {
-        let (sut, cache) = createSubject(thresholdHours: 4)
-        cache.seed(items: [makeItem("a"), makeItem("b")], lastUpdated: Date())
-        sut.stubbedItems = [makeItem("net1"), makeItem("net2")]
+        let control = createSubject(thresholdHours: 4)
+        control.cache.seed(items: [makeItem("a"), makeItem("b")], lastUpdated: Date())
+        control.fetcher.stubbedItems = [makeItem("net1"), makeItem("net2")]
 
-        let result = try await sut.fetchStories(items: 10)
+        let result = try await control.subject.fetchStories(items: 10)
 
         XCTAssertEqual(result.map(\.title), ["a", "b"])
-        XCTAssertEqual(sut.getFeedItemsCallCount, 0)
-        XCTAssertFalse(cache.didClear)
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertFalse(control.cache.didClear)
     }
 
     func test_fetchStories_fetchesAndSaves_whenThresholdPassed() async throws {
-        let (sut, cache) = createSubject(thresholdHours: 1/60)
-        cache.seed(items: [makeItem("old")], lastUpdated: Date().addingTimeInterval(-3600))
-        sut.stubbedItems = [makeItem("new1"), makeItem("new2")]
+        let control = createSubject(thresholdHours: 1/60)
+        control.cache.seed(items: [makeItem("old")], lastUpdated: Date().addingTimeInterval(-3600))
+        control.fetcher.stubbedItems = [makeItem("new1"), makeItem("new2")]
 
-        let result = try await sut.fetchStories(items: 10)
+        let result = try await control.subject.fetchStories(items: 10)
 
         XCTAssertEqual(result.map(\.title), ["new1", "new2"])
-        XCTAssertTrue(cache.didClear)
-        XCTAssertEqual(cache.loadRecommendations()?.map(\.title), ["new1", "new2"])
-        XCTAssertEqual(sut.getFeedItemsCallCount, 1)
+        XCTAssertTrue(control.cache.didClear)
+        XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["new1", "new2"])
+        XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
     func test_fetchStories_fetchesAndSaves_whenNoCache() async throws {
-        let (sut, cache) = createSubject()
-        cache.seedEmpty()
-        sut.stubbedItems = [makeItem("net")]
+        let control = createSubject()
+        control.cache.seedEmpty()
+        control.fetcher.stubbedItems = [makeItem("net")]
 
-        let result = try await sut.fetchStories(items: 5)
+        let result = try await control.subject.fetchStories(items: 5)
 
         XCTAssertEqual(result.map(\.title), ["net"])
-        XCTAssertTrue(cache.didClear)
-        XCTAssertEqual(cache.loadRecommendations()?.map(\.title), ["net"])
-        XCTAssertEqual(sut.getFeedItemsCallCount, 1)
+        XCTAssertTrue(control.cache.didClear)
+        XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["net"])
+        XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
     func test_fetchStories_throws_whenFeatureDisabled() async {
-        let (sut, _) = createSubject(prefsEnabled: false)
+        let control = createSubject(prefsEnabled: false)
 
         do {
-            _ = try await sut.fetchStories(items: 3)
+            _ = try await control.subject.fetchStories(items: 3)
             XCTFail("Expected MerinoProvider.Error to be thrown")
         } catch let error as MerinoProvider.Error {
             XCTAssertEqual(error, MerinoProvider.Error.failure)
@@ -120,23 +130,23 @@ final class MerinoProviderTests: XCTestCase {
     }
 
     func test_fetchStories_fetches_whenNoLastUpdatedEvenIfItemsExist() async throws {
-        let (sut, cache) = createSubject(prefsEnabled: true)
+        let control = createSubject(prefsEnabled: true)
 
         // Cache has items but NO timestamp should be treated as STALE and must fetch
         // new stories. We should never get here, but we should still test it.
-        cache.seed(items: [makeItem("staleButNoTimestamp")], lastUpdated: nil)
+        control.cache.seed(items: [makeItem("staleButNoTimestamp")], lastUpdated: nil)
 
-        sut.stubbedItems = [makeItem("net1"), makeItem("net2")]
+        control.fetcher.stubbedItems = [makeItem("net1"), makeItem("net2")]
 
-        let result = try await sut.fetchStories(items: 3)
+        let result = try await control.subject.fetchStories(items: 3)
 
         XCTAssertEqual(result.count, 2)
         XCTAssertEqual(result.map(\.title), ["net1", "net2"])
-        XCTAssertEqual(sut.getFeedItemsCallCount, 1)
+        XCTAssertEqual(control.fetcher.callCount, 1)
 
-        XCTAssertTrue(cache.didClear)
-        XCTAssertEqual(cache.loadRecommendations()?.count, 2)
-        XCTAssertEqual(cache.loadRecommendations()?.map(\.title), ["net1", "net2"])
+        XCTAssertTrue(control.cache.didClear)
+        XCTAssertEqual(control.cache.loadRecommendations()?.count, 2)
+        XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["net1", "net2"])
     }
 
     private func makeItem(_ name: String) -> RecommendationDataItem {
@@ -158,17 +168,19 @@ final class MerinoProviderTests: XCTestCase {
     private func createSubject(
         thresholdHours: Double = 4,
         prefsEnabled: Bool = true,
-        cache: MockCache = MockCache()
-    ) -> (TestableMerinoProvider, MockCache) {
+        cache: MockCache = MockCache(),
+        fetcher: MockFeedFetcher = MockFeedFetcher()
+    ) -> TestableSubject {
         let prefs = MockProfilePrefs()
         prefs.setBool(prefsEnabled, forKey: storiesFlag)
-        let sut = TestableMerinoProvider(
+        let subject = MerinoProvider(
             withThresholdInHours: thresholdHours,
             prefs: prefs,
-            cache: cache
+            cache: cache,
+            fetcher: fetcher
         )
 
-        trackForMemoryLeaks(sut)
-        return (sut, cache)
+        trackForMemoryLeaks(subject)
+        return TestableSubject(subject: subject, cache: cache, fetcher: fetcher)
     }
 }

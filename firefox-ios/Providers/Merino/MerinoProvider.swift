@@ -19,11 +19,12 @@ extension MerinoStoriesProviding {
     }
 }
 
-class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
+final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
     private let thresholdInHours: Double
     private let cache: CuratedRecommendationsCacheProtocol
     private let prefs: Prefs
     private var logger: Logger
+    private let fetcher: MerinoFeedFetching
 
     let MerinoServicesBaseURL = "https://merino.services.mozilla.com"
 
@@ -35,12 +36,17 @@ class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Senda
         withThresholdInHours threshold: Double = 4,
         prefs: Prefs,
         cache: CuratedRecommendationsCacheProtocol = CuratedRecommendationCacheUtility(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        fetcher: MerinoFeedFetching? = nil
     ) {
         self.thresholdInHours = threshold
         self.cache = cache
         self.prefs = prefs
         self.logger = logger
+        self.fetcher = fetcher ?? MerinoFeedFetcher(
+            baseURL: MerinoServicesBaseURL,
+            logger: logger
+        )
     }
 
     func fetchStories(items: Int32) async throws -> [RecommendationDataItem] {
@@ -48,90 +54,31 @@ class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Senda
             return try await MerinoTestData().getMockDataFeed(count: items)
         }
 
-        // Ensure the feature is enabled and current locale is supported
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
               MerinoProvider.islocaleSupported(Locale.current.identifier)
         else { throw Error.failure }
 
         if let cachedItems = cache.loadRecommendations(),
            cacheUpdateThresholdHasNotPassed() {
-                return cachedItems
+            return cachedItems
         }
 
-        let items = try await getFeedItems(items: items)
+        guard let currentLocale = iOSToMerinoLocale(from: Locale.current.identifier) else {
+            return []
+        }
+
+        let items = try await fetcher.fetch(
+            items: items,
+            locale: currentLocale,
+            userAgent: UserAgent.getUserAgent()
+        )
+
         if !items.isEmpty {
             cache.clearCache()
             cache.save(items)
         }
+
         return items
-    }
-
-    func getFeedItems(items: Int32) async throws -> [RecommendationDataItem] {
-        do {
-            let client = try CuratedRecommendationsClient(
-                config: CuratedRecommendationsConfig(
-                    baseHost: MerinoServicesBaseURL,
-                    userAgentHeader: UserAgent.getUserAgent()
-                )
-            )
-
-            guard let currentLocale = iOSToMerinoLocale(from: Locale.current.identifier) else {
-                return []
-            }
-
-            let merinoRequest = CuratedRecommendationsRequest(
-                locale: currentLocale,
-                count: items
-            )
-
-            let response = try client.getCuratedRecommendations(request: merinoRequest)
-            return response.data
-        } catch let error as CuratedRecommendationsApiError {
-            switch error {
-            case .Network(let reason):
-                logger.log("Network error when fetching Curated Recommendations: \(reason)",
-                           level: .debug,
-                           category: .merino
-                )
-
-            case .Other(let code?, let reason) where code == 400:
-                logger.log("Bad Request: \(reason)",
-                           level: .debug,
-                           category: .merino
-                )
-
-            case .Other(let code?, let reason) where code == 422:
-                logger.log("Validation Error: \(reason)",
-                           level: .debug,
-                           category: .merino
-                )
-
-            case .Other(let code?, let reason) where (500...599).contains(code):
-                logger.log("Server Error: \(reason)",
-                           level: .debug,
-                           category: .merino
-                )
-
-            case .Other(nil, let reason):
-                logger.log("Missing status code: \(reason)",
-                           level: .debug,
-                           category: .merino
-                )
-
-            case .Other(_, let reason):
-                logger.log("Unexpected Error: \(reason)",
-                           level: .debug,
-                           category: .merino
-                )
-            }
-            return []
-        } catch {
-            logger.log("Unhandled error: \(error)",
-                       level: .debug,
-                       category: .merino
-            )
-            return []
-        }
     }
 
     static func islocaleSupported(_ locale: String) -> Bool {
