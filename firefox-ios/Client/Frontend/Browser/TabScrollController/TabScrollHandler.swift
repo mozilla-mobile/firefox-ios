@@ -206,7 +206,6 @@ final class TabScrollHandler: NSObject,
 
         guard shouldUpdateUIWhenScrolling else { return }
 
-//        updateToolbarDisplayState(for: delta)
         handleToolbarIsTransitioning(scrollDelta: delta)
     }
 
@@ -216,11 +215,17 @@ final class TabScrollHandler: NSObject,
         guard shouldConfirmTransition(for: velocity, delta: delta) else {
             // cancel action
             print("--- YRD - cancel action for translation: \(translation) and velocity: \(velocity)")
+            cancelTransition()
             return
         }
 
-        print("--- YRD - confirm action for translation: \(translation) and velocity: \(velocity)")
         updateToolbarDisplayState(for: delta)
+    }
+
+    private func checkIfDeltaIsPassed(for translation: CGFloat) -> Bool {
+        let delta = lastPanTranslation - translation
+
+        return abs(delta) > UX.minimumScrollThreshold
     }
 
     // MARK: - UIScrollViewDelegate
@@ -247,7 +252,7 @@ final class TabScrollHandler: NSObject,
         print("--- YRD scrollViewDidScroll with delta \(translation.y)")
         handleScroll(for: translation)
     }
-    
+
     /// Decelerate is true the scrolling movement will continue
     /// If the value is false, scrolling stops immediately upon touch-up.
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -258,13 +263,12 @@ final class TabScrollHandler: NSObject,
               shouldUpdateUIWhenScrolling else { return }
 
         tab.shouldScrollToTop = false
-        
+
         guard let containerView = scrollView.superview else { return }
 
         let gesture = scrollView.panGestureRecognizer
         let translation = gesture.translation(in: containerView)
         let velocity = gesture.velocity(in: containerView)
-        print("--- YRD scrollViewDidEndDragging with delta \(translation.y) and velocity \(velocity)")
         handleEndScrolling(for: translation, velocity: velocity)
         // Reset lastPanTranslation
         lastPanTranslation = 0
@@ -323,7 +327,7 @@ final class TabScrollHandler: NSObject,
     ///   - delta: The vertical scroll delta calculated from gesture translation.
     /// - Returns: A Boolean value indicating whether the gesture should trigger a UI response.
     private func shouldConfirmTransition(for velocity: CGPoint,
-                                       delta: CGFloat) -> Bool {
+                                         delta: CGFloat) -> Bool {
         guard shouldUpdateUIWhenScrolling else { return false }
 
         let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
@@ -387,9 +391,20 @@ final class TabScrollHandler: NSObject,
             lastValidState = .expanded
         }
 
+        if toolbarDisplayState == .transitioning && checkIfDeltaIsPassed(for: scrollDelta) {
+            // confirm action
+            updateToolbarDisplayState(for: scrollDelta)
+            return
+        }
+
         let transitioningtState: ToolbarDisplayState = lastValidState == .expanded ? .collapsed : .expanded
         delegate?.updateToolbarTransition(progress: scrollDelta, towards: transitioningtState)
         toolbarDisplayState.update(displayState: .transitioning)
+    }
+
+    private func cancelTransition() {
+        print("--- YRD - cancel action for translation")
+        showToolbars(animated: true)
     }
 
     private func setOffset(y: CGFloat, for scrollView: UIScrollView) {

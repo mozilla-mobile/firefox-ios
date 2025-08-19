@@ -5,11 +5,21 @@
 import SnapKit
 
 extension BrowserViewController: TabScrollHandler.Delegate {
-    // TODO: Add bounce effect logic afterwards
+    var overKeyboardContainerHeight: CGFloat {
+        return calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
+    }
+
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
-        print("--- YRD updateToolbarTransition progress: \(progress), state: \(state) ---")
-        if isBottomSearchBar && state == .collapsed {
-            updateBottomToolbar(bottomContainerOffset: progress, overKeyboardContainerOffset: progress, alpha: 0.5)
+        if state == .collapsed {
+            if isBottomSearchBar {
+                let bottomOffset = clamp(offset: progress, min: 0, max: getBottomContainerSize().height)
+                bottomContainerConstraint?.update(offset: bottomOffset)
+                bottomContainer.superview?.setNeedsLayout()
+            } else {
+                let topOffset = clamp(offset: progress, min: getHeaderSize().height, max: 0)
+                headerTopConstraint?.update(offset: topOffset)
+                header.superview?.setNeedsLayout()
+            }
         }
     }
 
@@ -25,9 +35,8 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
     func hideToolbar() {
         if isBottomSearchBar {
-            let overKeyboardOffset = calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
             updateBottomToolbar(bottomContainerOffset: getBottomContainerSize().height,
-                                overKeyboardContainerOffset: overKeyboardOffset,
+                                overKeyboardContainerOffset: overKeyboardContainerHeight,
                                 alpha: 0)
         } else {
             updateTopToolbar(topOffset: headerOffset, alpha: 0)
@@ -37,8 +46,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     // MARK: - Helper private functions
 
     private func updateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
-        let headerContainerOffset = clamp(offset: topOffset, min: getHeaderSize().height, max: 0)
-        headerTopConstraint?.update(offset: headerContainerOffset)
+        headerTopConstraint?.update(offset: topOffset)
         header.superview?.setNeedsLayout()
 
         header.updateAlphaForSubviews(alpha)
@@ -57,12 +65,10 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     private func updateBottomToolbar(bottomContainerOffset: CGFloat,
                                      overKeyboardContainerOffset: CGFloat,
                                      alpha: CGFloat) {
-        let overKeyboardOffset = clamp(offset: bottomContainerOffset, min: 0, max: getOverKeyboardContainerSize().height)
-        overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
+        overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
         overKeyboardContainer.superview?.setNeedsLayout()
 
-        let bottomOffset = clamp(offset: bottomContainerOffset, min: 0, max: getBottomContainerSize().height)
-        bottomContainerConstraint?.update(offset: bottomOffset)
+        bottomContainerConstraint?.update(offset: bottomContainerOffset)
         bottomContainer.superview?.setNeedsLayout()
 
         if isMinimalAddressBarEnabled {
