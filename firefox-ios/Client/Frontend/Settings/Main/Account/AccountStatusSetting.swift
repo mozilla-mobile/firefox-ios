@@ -26,10 +26,8 @@ final class AccountStatusSetting: WithAccountSetting, Notifiable {
         )
     }
 
-    nonisolated func updateAccount(notification: Notification) {
-        DispatchQueue.main.async {
-            self.settings.tableView.reloadData()
-        }
+    private func updateAccount() {
+        settings.tableView.reloadData()
     }
 
     override var accessoryView: UIImageView? {
@@ -101,6 +99,8 @@ final class AccountStatusSetting: WithAccountSetting, Notifiable {
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         guard notification.name == .FirefoxAccountProfileChanged else { return }
-        updateAccount(notification: notification)
+        Task { @MainActor in
+            updateAccount()
+        }
     }
 }

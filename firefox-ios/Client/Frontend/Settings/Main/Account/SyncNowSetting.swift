@@ -70,10 +70,8 @@ final class SyncNowSetting: WithAccountSetting, Notifiable {
         }
     }
 
-    nonisolated func stopRotateSyncIcon() {
-        DispatchQueue.main.async {
-            self.imageView.layer.removeAllAnimations()
-        }
+    private func stopRotateSyncIcon() {
+        imageView.layer.removeAllAnimations()
     }
 
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
@@ -277,6 +275,8 @@ final class SyncNowSetting: WithAccountSetting, Notifiable {
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         guard notification.name == .ProfileDidFinishSyncing else { return }
-        stopRotateSyncIcon()
+        Task { @MainActor in
+            stopRotateSyncIcon()
+        }
     }
 }
