@@ -232,7 +232,7 @@ open class BrowserProfile: Profile,
     }()
     private var loginsVerificationEnabled = false
     fileprivate let name: String
-    fileprivate let keychain: RustKeychain
+    fileprivate let keychain: KeychainProtocol
     var isShutdown = false
 
     internal let files: FileAccessor
