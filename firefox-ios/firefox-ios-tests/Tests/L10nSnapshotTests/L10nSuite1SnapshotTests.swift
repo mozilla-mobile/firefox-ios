@@ -177,6 +177,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Disable due to issue #7521
         // navigator.goto(BookmarksPanelContextMenu)
         navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
         snapshot("BookmarksTableContextMenu-01")
     }
@@ -295,19 +296,26 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // load some web pages in some new tabs
         navigator.goto(NewTabScreen)
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
+            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        }
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
         waitForTabsButton()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.backButton])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton])
         navigator.createNewTab()
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
+            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        }
         navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
         waitForTabsButton()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.backButton])
         navigator.createNewTab()
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        if app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].exists {
+            app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
+        }
         navigator.openURL("https://mozilla.org/firefox/new")
         waitUntilPageLoad()
         navigator.goto(TabTray)
