@@ -6,7 +6,12 @@ import SnapKit
 
 extension BrowserViewController: TabScrollHandler.Delegate {
     // TODO: Add bounce effect logic afterwards
-    func startAnimatingToolbar(displayState: TabScrollHandler.ToolbarDisplayState) {}
+    func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
+        print("--- YRD updateToolbarTransition progress: \(progress), state: \(state) ---")
+        if isBottomSearchBar && state == .collapsed {
+            updateBottomToolbar(bottomContainerOffset: progress, overKeyboardContainerOffset: progress, alpha: 0.5)
+        }
+    }
 
     func showToolbar() {
         if isBottomSearchBar {
@@ -32,7 +37,8 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     // MARK: - Helper private functions
 
     private func updateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
-        headerTopConstraint?.update(offset: topOffset)
+        let headerContainerOffset = clamp(offset: topOffset, min: getHeaderSize().height, max: 0)
+        headerTopConstraint?.update(offset: headerContainerOffset)
         header.superview?.setNeedsLayout()
 
         header.updateAlphaForSubviews(alpha)
@@ -51,10 +57,12 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     private func updateBottomToolbar(bottomContainerOffset: CGFloat,
                                      overKeyboardContainerOffset: CGFloat,
                                      alpha: CGFloat) {
-        overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
+        let overKeyboardOffset = clamp(offset: bottomContainerOffset, min: 0, max: getOverKeyboardContainerSize().height)
+        overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
         overKeyboardContainer.superview?.setNeedsLayout()
 
-        bottomContainerConstraint?.update(offset: bottomContainerOffset)
+        let bottomOffset = clamp(offset: bottomContainerOffset, min: 0, max: getBottomContainerSize().height)
+        bottomContainerConstraint?.update(offset: bottomOffset)
         bottomContainer.superview?.setNeedsLayout()
 
         if isMinimalAddressBarEnabled {
@@ -102,5 +110,14 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         let topInset = safeAreaInsets?.top ?? .zero
 
         return hasHomeIndicator ? .zero : containerHeight - topInset
+    }
+
+    private func clamp(offset: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
+        if offset >= max {
+            return max
+        } else if offset <= min {
+            return min
+        }
+        return offset
     }
 }

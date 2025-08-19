@@ -25,7 +25,7 @@ final class TabScrollHandler: NSObject,
                               TabScrollHandlerProtocol,
                               UIScrollViewDelegate {
     protocol Delegate: AnyObject {
-        func startAnimatingToolbar(displayState: ToolbarDisplayState)
+        func updateToolbarTransition(progress: CGFloat, towards state: ToolbarDisplayState)
         func showToolbar()
         func hideToolbar()
     }
@@ -143,14 +143,12 @@ final class TabScrollHandler: NSObject,
     // TODO: Update to private in the future for now we need to keep support for Legacy protocol
     func showToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .expanded)
-        lastValidState = toolbarDisplayState
         delegate?.showToolbar()
     }
 
     // TODO: Update to private in the future for now we need to keep support for Legacy protocol
     func hideToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .collapsed)
-        lastValidState = toolbarDisplayState
         delegate?.hideToolbar()
     }
 
@@ -197,36 +195,37 @@ final class TabScrollHandler: NSObject,
         }
     }
 
-    func handleScroll(for translation: CGPoint, velocity: CGPoint) {
+    // TODO: Refactor velocity
+    func handleScroll(for translation: CGPoint) {
         guard !tabIsLoading() else { return }
 
         tab?.shouldScrollToTop = false
 
-        let delta = lastPanTranslation - translation.y
+        let delta = -translation.y
         scrollDirection = delta > 0 ? .down : .up
 
-        guard shouldRespondToScroll(for: velocity, delta: delta) else { return }
+        guard shouldUpdateUIWhenScrolling else { return }
 
+//        updateToolbarDisplayState(for: delta)
+        handleToolbarIsTransitioning(scrollDelta: delta)
+    }
+
+    func handleEndScrolling(for translation: CGPoint, velocity: CGPoint) {
+        let delta = lastPanTranslation - translation.y
+
+        guard shouldConfirmTransition(for: velocity, delta: delta) else {
+            // cancel action
+            print("--- YRD - cancel action for translation: \(translation) and velocity: \(velocity)")
+            return
+        }
+
+        print("--- YRD - confirm action for translation: \(translation) and velocity: \(velocity)")
         updateToolbarDisplayState(for: delta)
     }
 
     // MARK: - UIScrollViewDelegate
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
-    }
-
-    /// Decelerate is true the scrolling movement will continue
-    /// If the value is false, scrolling stops immediately upon touch-up.
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard let tab,
-              !tabIsLoading(),
-              !scrollReachBottom(),
-              !tab.isFindInPageMode,
-              shouldUpdateUIWhenScrolling else { return }
-
-        tab.shouldScrollToTop = false
-        lastPanTranslation = 0
-        toolbarDisplayState.update(displayState: lastValidState)
     }
 
     // checking if an abrupt scroll event was triggered and adjusting the offset to the one
@@ -241,12 +240,35 @@ final class TabScrollHandler: NSObject,
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
         sendActionToShowToolbarBorder(contentOffset: scrollView.contentOffset)
 
-        guard let containerView = scrollView.superview, !toolbarDisplayState.isAnimating else { return }
+        guard let containerView = scrollView.superview else { return }
+
+        let gesture = scrollView.panGestureRecognizer
+        let translation = gesture.translation(in: containerView)
+        print("--- YRD scrollViewDidScroll with delta \(translation.y)")
+        handleScroll(for: translation)
+    }
+    
+    /// Decelerate is true the scrolling movement will continue
+    /// If the value is false, scrolling stops immediately upon touch-up.
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard let tab,
+              !tabIsLoading(),
+              !scrollReachBottom(),
+              !tab.isFindInPageMode,
+              shouldUpdateUIWhenScrolling else { return }
+
+        tab.shouldScrollToTop = false
+        
+        guard let containerView = scrollView.superview else { return }
 
         let gesture = scrollView.panGestureRecognizer
         let translation = gesture.translation(in: containerView)
         let velocity = gesture.velocity(in: containerView)
-        handleScroll(for: translation, velocity: velocity)
+        print("--- YRD scrollViewDidEndDragging with delta \(translation.y) and velocity \(velocity)")
+        handleEndScrolling(for: translation, velocity: velocity)
+        // Reset lastPanTranslation
+        lastPanTranslation = 0
+        toolbarDisplayState.update(displayState: lastValidState)
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -300,13 +322,13 @@ final class TabScrollHandler: NSObject,
     ///   - velocity: The pan gesture recognizer used to detect scroll movement.
     ///   - delta: The vertical scroll delta calculated from gesture translation.
     /// - Returns: A Boolean value indicating whether the gesture should trigger a UI response.
-    private func shouldRespondToScroll(for velocity: CGPoint,
+    private func shouldConfirmTransition(for velocity: CGPoint,
                                        delta: CGFloat) -> Bool {
         guard shouldUpdateUIWhenScrolling else { return false }
 
         let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
-        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
-        return isSignificantScroll || isFastEnough
+//        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
+        return isSignificantScroll // || isFastEnough
     }
 
     private var isTopRubberbanding: Bool {
@@ -350,19 +372,23 @@ final class TabScrollHandler: NSObject,
     /// - `.expanded`: Toolbar is currently fully expanded (`toolbarDisplayState.isExpanded == true`).
     /// - `.transitioning`: In transition or partially expanded state.
     private func updateToolbarDisplayState(for delta: CGFloat) {
-        guard !toolbarDisplayState.isAnimating else { return }
-
         if scrollDirection == .down && !toolbarDisplayState.isCollapsed {
             hideToolbars(animated: true)
         } else if scrollDirection == .up && !toolbarDisplayState.isExpanded {
             showToolbars(animated: true)
-        } else {
-            handleToolbarIsTransitioning()
         }
     }
 
-    private func handleToolbarIsTransitioning() {
-        delegate?.startAnimatingToolbar(displayState: toolbarDisplayState)
+    private func handleToolbarIsTransitioning(scrollDelta: CGFloat) {
+        // Update last valid state only once and send transitioning state to delegate
+        if toolbarDisplayState.isExpanded {
+            lastValidState = .expanded
+        } else if toolbarDisplayState.isCollapsed {
+            lastValidState = .expanded
+        }
+
+        let transitioningtState: ToolbarDisplayState = lastValidState == .expanded ? .collapsed : .expanded
+        delegate?.updateToolbarTransition(progress: scrollDelta, towards: transitioningtState)
         toolbarDisplayState.update(displayState: .transitioning)
     }
 

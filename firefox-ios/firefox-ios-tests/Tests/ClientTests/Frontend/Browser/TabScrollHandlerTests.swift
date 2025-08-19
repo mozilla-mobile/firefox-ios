@@ -36,8 +36,8 @@ final class TabScrollHandlerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let translation = CGPoint(x: 0, y: -100)
-        let velocity = CGPoint(x: 10, y: 10)
-        subject.handleScroll(for: translation, velocity: velocity)
+//        let velocity = CGPoint(x: 10, y: 10)
+        subject.handleScroll(for: translation)
         XCTAssertEqual(subject.toolbarDisplayState, .collapsed)
     }
 
@@ -46,8 +46,8 @@ final class TabScrollHandlerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let translation = CGPoint(x: 0, y: 100)
-        let velocity = CGPoint(x: 10, y: 10)
-        subject.handleScroll(for: translation, velocity: velocity)
+//        let velocity = CGPoint(x: 10, y: 10)
+        subject.handleScroll(for: translation)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
         XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
@@ -57,8 +57,8 @@ final class TabScrollHandlerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let translation = CGPoint(x: 0, y: -10)
-        let velocity = CGPoint(x: 10, y: 110)
-        subject.handleScroll(for: translation, velocity: velocity)
+//        let velocity = CGPoint(x: 10, y: 110)
+        subject.handleScroll(for: translation)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
         XCTAssertEqual(subject.toolbarDisplayState, .collapsed)
     }
@@ -68,8 +68,8 @@ final class TabScrollHandlerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let translation = CGPoint(x: 0, y: 10)
-        let velocity = CGPoint(x: 10, y: 110)
-        subject.handleScroll(for: translation, velocity: velocity)
+//        let velocity = CGPoint(x: 10, y: 110)
+        subject.handleScroll(for: translation)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
         XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
@@ -79,8 +79,8 @@ final class TabScrollHandlerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let translation = CGPoint(x: 0, y: 10)
-        let velocity = CGPoint(x: 10, y: 10)
-        subject.handleScroll(for: translation, velocity: velocity)
+//        let velocity = CGPoint(x: 10, y: 10)
+        subject.handleScroll(for: translation)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
         XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
@@ -90,8 +90,8 @@ final class TabScrollHandlerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         let translation = CGPoint(x: 0, y: -10)
-        let velocity = CGPoint(x: 10, y: 10)
-        subject.handleScroll(for: translation, velocity: velocity)
+//        let velocity = CGPoint(x: 10, y: 10)
+        subject.handleScroll(for: translation)
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
         XCTAssertEqual(subject.toolbarDisplayState, .expanded)
     }
@@ -103,7 +103,7 @@ final class TabScrollHandlerTests: XCTestCase {
         // Hide toolbar
         let translation = CGPoint(x: 0, y: 100)
         let velocity = CGPoint(x: 10, y: 80)
-        subject.handleScroll(for: translation, velocity: velocity)
+        subject.handleScroll(for: translation)
 
         // Force call to showToolbars like clicking on top bar area
         subject.showToolbars(animated: true)
@@ -120,8 +120,8 @@ final class TabScrollHandlerTests: XCTestCase {
 
         // Hide toolbar
         let translation = CGPoint(x: 0, y: 100)
-        let velocity = CGPoint(x: 10, y: 80)
-        subject.handleScroll(for: translation, velocity: velocity)
+//        let velocity = CGPoint(x: 10, y: 80)
+        subject.handleScroll(for: translation)
         XCTAssertTrue(subject.scrollViewShouldScrollToTop(scrollView))
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
         XCTAssertEqual(subject.toolbarDisplayState, .expanded)
@@ -135,8 +135,8 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(subject.toolbarDisplayState, .collapsed)
 
         let translation = CGPoint(x: 0, y: -30)
-        let velocity = CGPoint(x: 0, y: 110)
-        subject.handleScroll(for: translation, velocity: velocity)
+//        let velocity = CGPoint(x: 0, y: 110)
+        subject.handleScroll(for: translation)
 
         XCTAssertEqual(subject.toolbarDisplayState, .transitioning)
     }
