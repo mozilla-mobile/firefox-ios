@@ -47,7 +47,7 @@ final class TabTrayViewController: UIViewController,
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlHorizontalSpacing: CGFloat = 16
         static let segmentedControlHeight: CGFloat = 53
-        static let segmentedControlMinHeightIOS26: CGFloat = 61
+        static let segmentedControlHeightIOS26: CGFloat = segmentedControlHeight + 16
     }
 
     // MARK: Theme
@@ -512,7 +512,7 @@ final class TabTrayViewController: UIViewController,
             experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
 
             let segmentControlHeight = if #available(iOS 26.0, *) {
-                UX.segmentedControlMinHeightIOS26
+                UX.segmentedControlHeightIOS26
             } else {
                 UX.segmentedControlHeight
             }
