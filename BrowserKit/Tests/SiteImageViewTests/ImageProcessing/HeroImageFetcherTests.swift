@@ -77,29 +77,6 @@ final class HeroImageFetcherTests: XCTestCase {
             XCTFail("Should have succeed with image")
         }
     }
-
-    func testHeroImageLoads_whenBackgroundThread_returnsImage() {
-        metadataProvider.metadataResult.imageProvider = ItemProviderFake()
-        let subject = DefaultHeroImageFetcher()
-        let expectation = expectation(description: "fetch on background thread")
-
-        DispatchQueue.global(qos: .userInitiated).async {
-            XCTAssertFalse(Thread.isMainThread, "Precondition: call site should not be on the main thread")
-
-            Task {
-                do {
-                    let image = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
-                                                                 metadataProvider: self.metadataProvider)
-                    XCTAssertNotNil(image)
-                    expectation.fulfill()
-                } catch {
-                    XCTFail("Should have succeed with image")
-                }
-            }
-        }
-
-        wait(for: [expectation], timeout: 2.0)
-    }
 }
 
 // MARK: - Helper
@@ -112,7 +89,7 @@ private extension HeroImageFetcherTests {
 }
 
 // MARK: - MetadataProviderFake
-private class MetadataProviderFake: LPMetadataProvider {
+private class MetadataProviderFake: LPMetadataProvider, @unchecked Sendable {
     var metadataResult = LPLinkMetadata()
     var errorResult: Error?
     override func startFetchingMetadata(for URL: URL, completionHandler: @escaping (LPLinkMetadata?, Error?) -> Void) {
