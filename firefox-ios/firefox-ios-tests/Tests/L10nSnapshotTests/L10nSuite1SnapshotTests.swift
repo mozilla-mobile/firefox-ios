@@ -165,10 +165,12 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         sleep(3)
         app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
+        waitUntilPageLoad()
         // There is no other way the test work with the new Copied.. snackbar ahow on iOS14
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         navigator.performAction(Action.Bookmark)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.goto(BookmarksPanelContextMenu)
         snapshot("BookmarksTableContextMenu-01")
