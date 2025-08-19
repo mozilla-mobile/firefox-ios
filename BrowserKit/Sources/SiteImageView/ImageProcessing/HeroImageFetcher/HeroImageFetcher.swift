@@ -5,6 +5,10 @@
 import LinkPresentation
 import UIKit
 
+// FXIOS-13243: LPMetadataProvider and LPLinkMetadata are not Sendable across boundaries
+extension LPLinkMetadata: @unchecked @retroactive Sendable {}
+extension LPMetadataProvider: @unchecked @retroactive Sendable {}
+
 protocol HeroImageFetcher: Sendable {
     /// FetchHeroImage using metadataProvider needs the main thread, hence using @MainActor for it.
     /// LPMetadataProvider is also a one shot object that we need to throw away once used.
@@ -12,12 +16,10 @@ protocol HeroImageFetcher: Sendable {
     ///   - siteURL: the url to fetch the hero image with
     ///   - metadataProvider: LPMetadataProvider
     /// - Returns: the hero image
-    @MainActor
     func fetchHeroImage(from siteURL: URL, metadataProvider: LPMetadataProvider) async throws -> UIImage
 }
 
 extension HeroImageFetcher {
-    @MainActor
     func fetchHeroImage(from siteURL: URL,
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
@@ -25,14 +27,16 @@ extension HeroImageFetcher {
     }
 }
 
-@MainActor
 final class DefaultHeroImageFetcher: HeroImageFetcher {
     func fetchHeroImage(from siteURL: URL,
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
         do {
             // Start fetching metadata needs to be called on the main thread on older devices. See PRs #12694 and #27951
-            let metadata = try await metadataProvider.startFetchingMetadata(for: siteURL)
+            let metadata = try await Task { @MainActor in
+                try await metadataProvider.startFetchingMetadata(for: siteURL)
+            }.value
+
             guard let imageProvider = metadata.imageProvider else {
                 throw SiteImageError.unableToDownloadImage("Metadata image provider could not be retrieved.")
             }
