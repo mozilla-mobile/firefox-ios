@@ -78,8 +78,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "Shared",
-                dependencies: ["Common",
-                               "WebEngine"],
+                dependencies: ["Common"],
                 swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "ComponentLibrary",
