@@ -98,7 +98,7 @@ open class Deferred<T>: @unchecked Sendable {
         return bindQueue(queue) { t in Deferred<U>(value: f(t)) }
     }
 
-    public func upon(_ block: @escaping (T) ->()) {
+    public func upon(_ block: @Sendable @escaping (T) ->()) {
         uponQueue(defaultQueue, block: block)
     }
 
@@ -115,25 +115,38 @@ open class Deferred<T>: @unchecked Sendable {
     }
 }
 
+// FIXME: FXIOS-13242 We want to remove this function for the sake of proper Swift Concurrency
 public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
     if deferreds.count == 0 {
         return Deferred(value: [])
     }
 
+    typealias SendableGenericClosure = @Sendable (T) -> ()
+
     let combined = Deferred<[T]>()
-    var results: [T] = []
+
+    // FIXME: FXIOS-13242 We should not be mutating local context captured in closures. For now we're manually applying
+    // some synchronization using a dispatch group.
+    nonisolated(unsafe) var results: [T] = []
     results.reserveCapacity(deferreds.count)
 
-    var block: ((T) -> ())!
-    block = { t in
-        results.append(t)
-        if results.count == deferreds.count {
-            combined.fill(results)
-        } else {
-            deferreds[results.count].upon(block)
+    DispatchQueue.global(qos: .default).async {
+        // Attempt 2
+        var iterator = 0
+        let group = DispatchGroup()
+        let block: SendableGenericClosure = { t in
+            results.append(t)
+            group.leave()
         }
+        while iterator < deferreds.count {
+            group.enter()
+            deferreds[iterator].upon(block)
+            iterator += 1
+            group.wait()
+        }
+
+        combined.fill(results)
     }
-    deferreds[0].upon(block)
 
     return combined
 }
