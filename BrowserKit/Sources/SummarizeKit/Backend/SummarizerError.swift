@@ -96,7 +96,8 @@ extension SummarizerError {
         case .unsupportedLanguageOrLocale: self = .unsupportedLanguage
         case .unsupportedGuide,
                 .decodingFailure,
-                .assetsUnavailable:
+                .assetsUnavailable,
+                .refusal:
             self = .unknown(error)
         @unknown default:
             self = .unknown(error)
