@@ -581,7 +581,7 @@ private class ToolbarHelperMock: ToolbarHelperInterface {
         guard shouldBlur() else { return 1 }
         return .zero
     }
-g
+
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass != .compact
                && traitCollection.horizontalSizeClass != .regular
