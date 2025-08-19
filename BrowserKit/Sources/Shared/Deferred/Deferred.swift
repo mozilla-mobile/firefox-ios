@@ -131,7 +131,6 @@ public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
     results.reserveCapacity(deferreds.count)
 
     DispatchQueue.global(qos: .default).async {
-        // Attempt 2
         var iterator = 0
         let group = DispatchGroup()
         let block: SendableGenericClosure = { t in
