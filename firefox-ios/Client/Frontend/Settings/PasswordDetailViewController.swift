@@ -339,18 +339,22 @@ extension PasswordDetailViewController {
     }
 
     func deleteLogin() {
-        viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
-            self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-                self.sendLoginsDeletedTelemetry()
-                self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id) { _ in
-                    DispatchQueue.main.async { [weak self] in
-                        _ = self?.navigationController?.popViewController(animated: true)
-                    }
-                }
-            }, hasSyncedLogins: yes.successValue ?? true)
+        viewModel.profile.hasSyncedLogins()
+            .uponQueue(.main) { yes in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+                        self.sendLoginsDeletedTelemetry()
+                        self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id) { _ in
+                            DispatchQueue.main.async { [weak self] in
+                                _ = self?.navigationController?.popViewController(animated: true)
+                            }
+                        }
+                    }, hasSyncedLogins: yes.successValue ?? true)
 
-            self.present(self.deleteAlert!, animated: true, completion: nil)
-        }
+                    self.present(self.deleteAlert!, animated: true, completion: nil)
+                }
+            }
     }
 
     func onProfileDidFinishSyncing(completion: @escaping () -> Void) {

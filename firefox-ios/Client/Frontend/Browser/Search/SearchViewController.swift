@@ -419,16 +419,22 @@ class SearchViewController: SiteTableViewController,
 
         ensureMainThread {
             // Get cached tabs
-            self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-                guard let clientAndTabs = result.successValue else { return }
-                self.viewModel.remoteClientTabs.removeAll()
-                // Update UI with cached data.
-                clientAndTabs.forEach { value in
-                    value.tabs.forEach { (tab) in
-                        self.viewModel.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
+            self.profile.getCachedClientsAndTabs()
+                .uponQueue(.main) { result in
+                    // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                    MainActor.assumeIsolated {
+                        guard let clientAndTabs = result.successValue else { return }
+                        self.viewModel.remoteClientTabs.removeAll()
+                        // Update UI with cached data.
+                        clientAndTabs.forEach { value in
+                            value.tabs.forEach { (tab) in
+                                self.viewModel.remoteClientTabs.append(
+                                    ClientTabsSearchWrapper(client: value.client, tab: tab)
+                                )
+                            }
+                        }
                     }
                 }
-            }
         }
     }
 

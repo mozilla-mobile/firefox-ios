@@ -65,11 +65,15 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
             return finish()
         }
 
-        profile.sendItem(item, toDevices: devices).uponQueue(.main) { _ in
-            self.finish()
+        profile.sendItem(item, toDevices: devices)
+            .uponQueue(.main) { _ in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    self.finish()
 
-            addAppExtensionTelemetryEvent(forMethod: "send-to-device")
-        }
+                    addAppExtensionTelemetryEvent(forMethod: "send-to-device")
+                }
+            }
     }
 
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
