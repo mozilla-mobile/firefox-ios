@@ -18,6 +18,7 @@ struct TabTraySelectorUX {
     static let fontScaleDelta: CGFloat = 0.055
     static let stackViewLeadingTrailingPadding: CGFloat = 8
     static let containerHorizontalSpacing: CGFloat = 16
+    static let bottomSpacingIOS26: CGFloat = 16
 }
 
 class TabTraySelectorView: UIView,
@@ -87,9 +88,15 @@ class TabTraySelectorView: UIView,
             applyButtonWidthAnchor(on: button, with: title as NSString)
         }
 
+        let bottomSpacing: CGFloat = if #available(iOS 26.0, *) {
+            -TabTraySelectorUX.bottomSpacingIOS26
+        } else {
+            0
+        }
+
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomSpacing),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                    constant: TabTraySelectorUX.containerHorizontalSpacing),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor,
