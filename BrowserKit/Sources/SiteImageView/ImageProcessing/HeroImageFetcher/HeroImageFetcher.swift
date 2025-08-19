@@ -31,6 +31,7 @@ final class DefaultHeroImageFetcher: HeroImageFetcher {
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
         do {
+            // Start fetching metadata needs to be called on the main thread on older devices. See PRs #12694 and #27951
             let metadata = try await metadataProvider.startFetchingMetadata(for: siteURL)
             guard let imageProvider = metadata.imageProvider else {
                 throw SiteImageError.unableToDownloadImage("Metadata image provider could not be retrieved.")
