@@ -28,7 +28,7 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
         let subject = createSubject()
         let sections = subject.generateSettings()
         XCTAssertEqual(sections.count, 2)
-        XCTAssertEqual(sections.first?.title, nil)
+        XCTAssertNil(sections.first?.title)
         XCTAssertEqual(sections.first?.children.count, 1)
         XCTAssertEqual(sections.last?.title?.string, "Gestures")
         XCTAssertEqual(sections.last?.children.count, 1)
@@ -40,9 +40,9 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
         let subject = createSubject()
         let sections = subject.generateSettings()
         XCTAssertEqual(sections.count, 1)
-        XCTAssertEqual(sections.first?.title, nil)
+        XCTAssertNil(sections.first?.title)
         XCTAssertEqual(sections.first?.children.count, 1)
-        XCTAssertEqual(sections.last?.title?.string, nil)
+        XCTAssertNil(sections.last?.title?.string)
         XCTAssertEqual(sections.last?.children.count, 1)
     }
 
