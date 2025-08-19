@@ -38,7 +38,7 @@ import Shared
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 
-public class DBOperationCancelled : MaybeErrorType {
+public final class DBOperationCancelled : MaybeErrorType {
     public var description: String {
         return "Database operation cancelled"
     }
@@ -82,7 +82,8 @@ enum SQLiteDBRecoverableError: Int {
  * Handle to a SQLite database.
  * Each instance holds a single connection that is shared across all queries.
  */
-open class SwiftData {
+// TODO: FXIOS-13213 Make SwiftData actually sendable
+open class SwiftData: @unchecked Sendable {
     let filename: String
     let schema: Schema
     let files: FileAccessor
