@@ -117,6 +117,7 @@ class DeferredTests: XCTestCase {
             XCTAssertEqual(results.count, 2)
 
             if let failure = results.first(where: { $0.isFailure }) {
+                XCTFail()
                 return deferMaybe(failure.failureValue!)
             }
 
@@ -147,6 +148,7 @@ class DeferredTests: XCTestCase {
                 return deferMaybe(failure.failureValue!)
             }
 
+            XCTFail()
             return succeed()
         }
 
@@ -167,6 +169,7 @@ class DeferredTests: XCTestCase {
                 XCTAssertEqual(results.count, 2)
 
                 if let failure = results.first(where: { $0.isFailure }) {
+                    XCTFail()
                     return deferMaybe(failure.failureValue!)
                 }
 
@@ -199,6 +202,7 @@ class DeferredTests: XCTestCase {
                     return deferMaybe(failure.failureValue!)
                 }
 
+                XCTFail()
                 return succeed()
             }
         }
