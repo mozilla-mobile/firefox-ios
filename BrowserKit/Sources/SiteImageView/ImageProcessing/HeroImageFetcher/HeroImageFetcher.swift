@@ -12,10 +12,12 @@ protocol HeroImageFetcher: Sendable {
     ///   - siteURL: the url to fetch the hero image with
     ///   - metadataProvider: LPMetadataProvider
     /// - Returns: the hero image
+    @MainActor
     func fetchHeroImage(from siteURL: URL, metadataProvider: LPMetadataProvider) async throws -> UIImage
 }
 
 extension HeroImageFetcher {
+    @MainActor
     func fetchHeroImage(from siteURL: URL,
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
@@ -23,14 +25,13 @@ extension HeroImageFetcher {
     }
 }
 
+@MainActor
 final class DefaultHeroImageFetcher: HeroImageFetcher {
     func fetchHeroImage(from siteURL: URL,
                         metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
         do {
-            let metadata = try await Task { @MainActor in
-                try await metadataProvider.startFetchingMetadata(for: siteURL)
-            }.value
+            let metadata = try await metadataProvider.startFetchingMetadata(for: siteURL)
             guard let imageProvider = metadata.imageProvider else {
                 throw SiteImageError.unableToDownloadImage("Metadata image provider could not be retrieved.")
             }
