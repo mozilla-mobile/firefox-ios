@@ -74,8 +74,7 @@ final class MenuMainViewTests: XCTestCase {
         let expandedSection = MenuSection(isExpanded: true, isHomepage: false, options: [])
         let expectation = XCTestExpectation(description: "Height should be calculated")
 
-        menuView.onCalculatedHeight = { height, isExpanded in
-            XCTAssertTrue(isExpanded)
+        menuView.onCalculatedHeight = { height in
             XCTAssertGreaterThan(height, 0)
             expectation.fulfill()
         }
