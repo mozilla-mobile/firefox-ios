@@ -500,7 +500,7 @@ final class TabTrayViewController: UIViewController,
 
     private func setupNavigationBarAppearance(theme: Theme) {
         guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
-        
+
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
         let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
 
@@ -634,8 +634,11 @@ final class TabTrayViewController: UIViewController,
             titleWidthConstraint?.isActive = true
         }
 
+        let topConstraintTo = tabTrayUtils.shouldDisplayExperimentUI() && tabTrayUtils.isTabTrayTranslucencyEnabled ?
+                                view.topAnchor : view.safeAreaLayoutGuide.topAnchor
+
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: view.topAnchor),
+            containerView.topAnchor.constraint(equalTo: topConstraintTo),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
