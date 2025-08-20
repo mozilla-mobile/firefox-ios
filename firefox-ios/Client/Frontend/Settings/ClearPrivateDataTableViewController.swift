@@ -187,10 +187,13 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             }
             .allSucceed()
             .uponQueue(.main) { result in
-                self.profile.prefs.setObject(self.toggles, forKey: Keys.keyTogglesPref.rawValue)
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    self.profile.prefs.setObject(self.toggles, forKey: Keys.keyTogglesPref.rawValue)
 
-                // Disable the Clear Private Data button after it's clicked.
-                self.clearButtonEnabled = false
+                    // Disable the Clear Private Data button after it's clicked.
+                    self.clearButtonEnabled = false
+                }
             }
     }
 

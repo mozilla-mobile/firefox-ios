@@ -8,11 +8,11 @@
 
 import Foundation
 
-public var DeferredDefaultQueue = DispatchQueue.global()
+public let DeferredDefaultQueue = DispatchQueue.global()
 
 // TODO: FXIOS-13184 Remove deferred code or validate it is sendable
 open class Deferred<T>: @unchecked Sendable {
-    typealias UponBlock = (DispatchQueue, (T) -> ())
+    typealias UponBlock = (DispatchQueue, @Sendable (T) -> ())
     private typealias Protected = (protectedValue: T?, uponBlocks: [UponBlock])
 
     private var protected: LockProtected<Protected>
@@ -57,7 +57,7 @@ open class Deferred<T>: @unchecked Sendable {
         return protected.withReadLock { $0.protectedValue }
     }
 
-    public func uponQueue(_ queue: DispatchQueue, block: @escaping (T) -> ()) {
+    public func uponQueue(_ queue: DispatchQueue, block: @Sendable @escaping (T) -> ()) {
         let maybeValue: T? = protected.withWriteLock{ data in
             if data.protectedValue == nil {
                 data.uponBlocks.append( (queue, block) )
