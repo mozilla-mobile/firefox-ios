@@ -577,6 +577,11 @@ private class ToolbarHelperMock: ToolbarHelperInterface {
     var isToolbarTranslucencyEnabled = true
     var isReduceTransparencyEnabled = false
 
+    var glassEffectAlpha: CGFloat {
+        guard shouldBlur() else { return 1 }
+        if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
+    }
+
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass != .compact
                && traitCollection.horizontalSizeClass != .regular
