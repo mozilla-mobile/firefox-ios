@@ -86,7 +86,7 @@ def target_tasks_promote_focus(full_task_graph, parameters, graph_config):
 
 @register_target_task("push_focus")
 def target_tasks_push_focus(full_task_graph, parameters, graph_config):
-    filtered_for_candidates = target_tasks_promote(
+    filtered_for_candidates = target_tasks_promote_focus(
         full_task_graph,
         parameters,
         graph_config,
@@ -101,7 +101,7 @@ def target_tasks_push_focus(full_task_graph, parameters, graph_config):
 
 @register_target_task("ship_focus")
 def target_tasks_ship_focus(full_task_graph, parameters, graph_config):
-    filtered_for_candidates = target_tasks_push(
+    filtered_for_candidates = target_tasks_push_focus(
         full_task_graph,
         parameters,
         graph_config,

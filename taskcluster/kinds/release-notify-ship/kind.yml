@@ -24,17 +24,14 @@ tasks:
         by-level:
           '3': ["release-signoff@mozilla.org"]
           default: []
-      subject: "firefox-ios {release_type} {version} build{build_number} is shipped!"
-      message: "firefox-ios {release_type} {version} build{build_number} is shipped!"
+      subject: "{product_type}-ios {release_type} {version} build{build_number} is shipped!"
+      message: "{product_type}-ios {release_type} {version} build{build_number} is shipped!"
     from-deps:
       group-by:
-        attribute: release-type
+        attribute: product-type
       unique-kinds: false
       copy-attributes: true
       with-attributes:
         product-type:
           - firefox
           - focus
-        release-type:
-          - beta
-          - release
