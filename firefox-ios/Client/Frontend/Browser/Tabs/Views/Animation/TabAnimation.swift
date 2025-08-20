@@ -203,7 +203,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
               let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
         else { return }
 
-        cv.reloadData()
+        cv.layoutIfNeeded()
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
 
