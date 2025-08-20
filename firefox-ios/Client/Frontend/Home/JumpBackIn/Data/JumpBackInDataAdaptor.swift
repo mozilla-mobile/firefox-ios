@@ -93,7 +93,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private func updateTabsData() async {
         await withTaskGroup(of: Void.self) { group in
             group.addTask {
-                let recentTabs = await self.updateRecentTabs()
+                let recentTabs = await self.recentlyAccessedNormalTabs()
                 await self.setRecentTabs(recentTabs: recentTabs)
             }
             group.addTask {
@@ -110,7 +110,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     }
 
     @MainActor
-    private func updateRecentTabs() async -> [Tab] {
+    private func recentlyAccessedNormalTabs() async -> [Tab] {
         // Recent tabs need to be accessed from .main otherwise value isn't proper
         return await self.tabManager.recentlyAccessedNormalTabs
     }
