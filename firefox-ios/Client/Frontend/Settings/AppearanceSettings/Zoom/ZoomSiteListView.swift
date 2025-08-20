@@ -65,7 +65,7 @@ struct ZoomSiteListView: View {
                     title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader,
                     identifier: AccessibilityIdentifiers.Settings.Appearance.specificSiteSettings
                 ) {
-                    listView
+                    zoomSitesListView
                 }
             } else {
                 // Header
@@ -80,7 +80,7 @@ struct ZoomSiteListView: View {
                     .frame(height: UX.dividerHeight)
                     .background(theme.colors.borderPrimary.color)
 
-                listView
+                zoomSitesListView
             }
 
             // Footer
@@ -94,7 +94,7 @@ struct ZoomSiteListView: View {
                                     trailing: UX.sectionPadding))
                 .background(sectionBackground)
 
-//            // Reset button
+            // Reset button
             GenericButtonCellView(theme: theme,
                                   title: String.Settings.Appearance.PageZoom.ResetButtonTitle,
                                   onTap: resetDomain)
@@ -102,7 +102,7 @@ struct ZoomSiteListView: View {
         }
     }
 
-    private var listView: some View {
+    private var zoomSitesListView: some View {
         List {
             ForEach(domainZoomLevels, id: \.host) { zoomItem in
                 ZoomLevelCellView(domainZoomLevel: zoomItem,

@@ -68,25 +68,4 @@ struct PageZoomSettingsView: View {
             themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
         }
     }
-
-    private struct PaddingWithColorStyle: ViewModifier {
-        let theme: Theme?
-        let spacing: CGFloat
-        let shouldChangeBackgroundColor: Bool
-
-        func body(content: Content) -> some View {
-            if #available(iOS 26.0, *) {
-                content
-                    .padding(.top, spacing)
-                    .padding(.horizontal, spacing / 2)
-            } else {
-                if shouldChangeBackgroundColor {
-                    content
-                        .background(theme?.colors.layer5.color)
-                } else {
-                    content
-                }
-            }
-        }
-    }
 }

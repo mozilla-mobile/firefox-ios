@@ -18,14 +18,6 @@ struct AddressBarSettingsView: View {
 
     @State private var currentTheme: Theme?
 
-    private var shouldUseNewStyle: Bool {
-        if #available(iOS 26.0, *) {
-            return true
-        } else {
-            return false
-        }
-    }
-
     private var addressBarPosition: SearchBarPosition {
         LegacyFeatureFlagsManager.shared.getCustomState(for: .searchBarPosition) ?? .bottom
     }
@@ -43,8 +35,7 @@ struct AddressBarSettingsView: View {
         VStack {
             GenericSectionView(theme: currentTheme,
                                title: .Settings.AddressBar.AddressBarSectionTitle,
-                               identifier: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting,
-                               shouldUseDivider: !shouldUseNewStyle) {
+                               identifier: AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting) {
                 AddressBarSelectionView(
                     theme: currentTheme,
                     selectedAddressBarPosition: addressBarPosition,

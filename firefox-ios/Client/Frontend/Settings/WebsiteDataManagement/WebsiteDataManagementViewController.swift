@@ -55,14 +55,6 @@ class WebsiteDataManagementViewController: UIViewController,
 
     private let viewModel = WebsiteDataManagementViewModel()
 
-    private var shouldUseNewStyle: Bool {
-        if #available(iOS 26.0, *) {
-            return true
-        } else {
-            return false
-        }
-    }
-
     var tableView: UITableView?
     var searchController: UISearchController?
 
