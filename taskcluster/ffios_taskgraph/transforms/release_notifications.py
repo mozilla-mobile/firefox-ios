@@ -10,6 +10,8 @@ transforms = TransformSequence()
 @transforms.add
 def build_notifications(config, tasks):
     for task in tasks:
+        # Remove build-type attribute since notifications should not be tied to specific build types
+        task.setdefault("attributes", {}).pop("build-type", None)
         resolve_keyed_by(task, "notifications.emails", item_name=task["name"], level=config.params["level"])
 
         notifications = task.pop("notifications", None)
