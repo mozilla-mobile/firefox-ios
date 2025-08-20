@@ -85,7 +85,9 @@ public extension Nimbus {
         enabled: Bool = true,
         userDefaults: UserDefaults? = nil,
         errorReporter: @escaping NimbusErrorReporter = defaultErrorReporter,
-        recordedContext: RecordedContext? = nil
+        recordedContext: RecordedContext? = nil,
+        remoteSettingsService: RemoteSettingsService? = nil,
+        collectionName: String? = nil
     ) throws -> NimbusInterface {
         guard enabled else {
             return NimbusDisabled.shared
@@ -105,7 +107,9 @@ public extension Nimbus {
             dbpath: dbPath,
             remoteSettingsConfig: remoteSettings,
             metricsHandler: GleanMetricsHandler(),
-            geckoPrefHandler: nil
+            geckoPrefHandler: nil,
+            collectionName: collectionName,
+            remoteSettingsService: remoteSettingsService
         )
 
         return Nimbus(
