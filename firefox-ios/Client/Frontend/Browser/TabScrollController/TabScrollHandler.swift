@@ -195,7 +195,6 @@ final class TabScrollHandler: NSObject,
         }
     }
 
-    // TODO: Refactor velocity
     func handleScroll(for translation: CGPoint) {
         guard !tabIsLoading() else { return }
 
@@ -213,13 +212,13 @@ final class TabScrollHandler: NSObject,
         let delta = lastPanTranslation - translation.y
 
         guard shouldConfirmTransition(for: velocity, delta: delta) else {
-            // cancel action
-            print("--- YRD - cancel action for translation: \(translation) and velocity: \(velocity)")
             cancelTransition()
             return
         }
 
         updateToolbarDisplayState(for: delta)
+        // Reset lastPanTranslation
+        lastPanTranslation = 0
     }
 
     private func checkIfDeltaIsPassed(for translation: CGFloat) -> Bool {
@@ -249,7 +248,6 @@ final class TabScrollHandler: NSObject,
 
         let gesture = scrollView.panGestureRecognizer
         let translation = gesture.translation(in: containerView)
-        print("--- YRD scrollViewDidScroll with delta \(translation.y)")
         handleScroll(for: translation)
     }
 
@@ -270,9 +268,6 @@ final class TabScrollHandler: NSObject,
         let translation = gesture.translation(in: containerView)
         let velocity = gesture.velocity(in: containerView)
         handleEndScrolling(for: translation, velocity: velocity)
-        // Reset lastPanTranslation
-        lastPanTranslation = 0
-        toolbarDisplayState.update(displayState: lastValidState)
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -388,11 +383,10 @@ final class TabScrollHandler: NSObject,
         if toolbarDisplayState.isExpanded {
             lastValidState = .expanded
         } else if toolbarDisplayState.isCollapsed {
-            lastValidState = .expanded
+            lastValidState = .collapsed
         }
 
         if toolbarDisplayState == .transitioning && checkIfDeltaIsPassed(for: scrollDelta) {
-            // confirm action
             updateToolbarDisplayState(for: scrollDelta)
             return
         }
@@ -403,8 +397,11 @@ final class TabScrollHandler: NSObject,
     }
 
     private func cancelTransition() {
-        print("--- YRD - cancel action for translation")
-        showToolbars(animated: true)
+        if lastValidState == .expanded {
+            showToolbars(animated: true)
+        } else {
+            hideToolbars(animated: true)
+        }
     }
 
     private func setOffset(y: CGFloat, for scrollView: UIScrollView) {
