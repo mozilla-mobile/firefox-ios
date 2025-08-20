@@ -520,7 +520,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     @objc
-    private func onTabSnapshotTap(_ gesture: UITapGestureRecognizer) {
+    private func dismissSummaryFromGesture(_ gesture: UITapGestureRecognizer) {
         triggerDismissingAnimation()
     }
 
@@ -562,8 +562,22 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         guard flag,
               let animation = anim as? CABasicAnimation,
               animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
-        tabSnapshotContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTabSnapshotTap)))
+        setupDismissGestures()
         summarize()
+    }
+
+    /// Sets up gestures that allow the user to dismiss the summary.
+    /// - Adds a tap gesture on the tab snapshot to close.
+    /// - Adds a swipe-up gesture on the tab snapshot to close.
+    ///
+    /// Both gestures call `dismissSummaryFromGesture`, which handles the dismissal animation.
+    private func setupDismissGestures() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissSummaryFromGesture))
+        tabSnapshotContainer.addGestureRecognizer(tap)
+
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(dismissSummaryFromGesture))
+        swipeUp.direction = .up
+        tabSnapshotContainer.addGestureRecognizer(swipeUp)
     }
 
     // MARK: - Notifiable

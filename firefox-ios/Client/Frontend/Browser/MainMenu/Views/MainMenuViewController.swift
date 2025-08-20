@@ -151,7 +151,7 @@ class MainMenuViewController: UIViewController,
             self?.dispatchCloseMenuAction()
         }
 
-        menuContent.onCalculatedHeight = { [weak self] height, isExpanded in
+        menuContent.onCalculatedHeight = { [weak self] height in
             let customHeight: CGFloat = self?.currentCustomMenuHeight ?? 0
             if (height > customHeight + UX.menuHeightTolerance) || (height < customHeight - UX.menuHeightTolerance) {
                 self?.currentCustomMenuHeight = height
@@ -159,13 +159,9 @@ class MainMenuViewController: UIViewController,
                     let customDetent = UISheetPresentationController.Detent.custom { context in
                         return height
                     }
-                    if isExpanded {
-                        self?.sheetPresentationController?.animateChanges({
-                            self?.sheetPresentationController?.detents = [customDetent]
-                        })
-                    } else {
+                    self?.sheetPresentationController?.animateChanges({
                         self?.sheetPresentationController?.detents = [customDetent]
-                    }
+                    })
                 }
             }
         }

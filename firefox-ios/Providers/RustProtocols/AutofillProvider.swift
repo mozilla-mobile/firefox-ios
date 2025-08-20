@@ -16,7 +16,7 @@ protocol AddressProvider {
 }
 
 protocol SyncAutofillProvider {
-    func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void)
+    func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void)
     func registerWithSyncManager()
 }
 

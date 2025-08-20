@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-@testable import WebEngine
+@testable import Common
 
 final class StringExtensionTests: XCTestCase {
     // MARK: Tests for HtmlEntityEncoding string

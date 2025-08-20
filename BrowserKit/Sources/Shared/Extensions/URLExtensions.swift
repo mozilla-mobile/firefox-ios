@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import WebEngine
 
 // The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 private let permanentURISchemes = [
