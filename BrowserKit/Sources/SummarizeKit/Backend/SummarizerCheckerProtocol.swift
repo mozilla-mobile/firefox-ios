@@ -9,5 +9,6 @@ public protocol SummarizationCheckerProtocol {
     /// Prevents model errors caused by exceeding token or context window limits.
     /// This is enforced by the injected JS, not the model itself.
     /// See UserScripts/MainFrame/AtDocumentStart/Summarizer.js for more context on how this is enforced.
+    @MainActor
     func check(on webView: WKWebView, maxWords: Int) async -> SummarizationCheckResult
 }
