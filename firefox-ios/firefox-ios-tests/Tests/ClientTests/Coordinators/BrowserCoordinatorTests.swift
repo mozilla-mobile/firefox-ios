@@ -541,7 +541,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowContextMenu_addsContextMenuCoordinator() {
         let subject = createSubject()
-        let config = ContextMenuConfiguration(homepageSection: .customizeHomepage, toastContainer: UIView())
+        let config = ContextMenuConfiguration(site: nil, menuType: nil, sourceView: nil, toastContainer: UIView())
         subject.showContextMenu(for: config)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
