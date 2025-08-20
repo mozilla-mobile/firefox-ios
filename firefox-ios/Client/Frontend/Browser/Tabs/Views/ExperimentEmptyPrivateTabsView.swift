@@ -30,6 +30,7 @@ class ExperimentEmptyPrivateTabsView: UIView,
     // UI
     private let scrollView: UIScrollView = .build { scrollview in
         scrollview.backgroundColor = .clear
+        scrollview.contentInset.bottom = TabTrayViewController.segmentedControlHeight
     }
 
     private lazy var containerView: UIView = .build { _ in }

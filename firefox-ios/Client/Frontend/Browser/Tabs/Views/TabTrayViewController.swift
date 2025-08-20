@@ -50,6 +50,14 @@ final class TabTrayViewController: UIViewController,
         static let segmentedControlHeightIOS26: CGFloat = segmentedControlHeight + 16
     }
 
+    static var segmentedControlHeight: CGFloat {
+        if #available(iOS 26.0, *) {
+            return UX.segmentedControlHeightIOS26
+        } else {
+            return UX.segmentedControlHeight
+        }
+    }
+
     // MARK: Theme
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
@@ -511,11 +519,7 @@ final class TabTrayViewController: UIViewController,
             containerView.addSubview(experimentSegmentControl)
             experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
 
-            let segmentControlHeight = if #available(iOS 26.0, *) {
-                UX.segmentedControlHeightIOS26
-            } else {
-                UX.segmentedControlHeight
-            }
+            let segmentControlHeight = TabTrayViewController.segmentedControlHeight
 
             NSLayoutConstraint.activate([
                 panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),

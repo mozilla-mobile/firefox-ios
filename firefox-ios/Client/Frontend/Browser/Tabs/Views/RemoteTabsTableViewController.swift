@@ -121,15 +121,17 @@ class RemoteTabsTableViewController: UITableViewController,
         tableView.alwaysBounceVertical = false
 
         tableView.sectionHeaderTopPadding = 0.0
+        tableView.contentInset.bottom = TabTrayViewController.segmentedControlHeight
 
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
 
         view.addSubview(emptyView)
         NSLayoutConstraint.activate([
-            emptyView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyView.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyView.widthAnchor.constraint(equalTo: view.widthAnchor),
         ])
 
         reloadUI()

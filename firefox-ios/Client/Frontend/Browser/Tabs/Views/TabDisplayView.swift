@@ -21,7 +21,6 @@ class TabDisplayView: UIView,
                       FeatureFlaggable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
-        static let segmentedControlHeight: CGFloat = 53
     }
 
     let panelType: TabTrayPanelType
@@ -137,6 +136,7 @@ class TabDisplayView: UIView,
         collectionView.dropDelegate = self
         collectionView.collectionViewLayout = createLayout()
         collectionView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.collectionView
+        collectionView.contentInset.bottom = TabTrayViewController.segmentedControlHeight
         return collectionView
     }()
 
@@ -185,8 +185,6 @@ class TabDisplayView: UIView,
                                             actionType: TabPanelViewActionType.addNewTab)
             store.dispatchLegacy(action)
         }
-
-        collectionView.contentInset.bottom = UX.segmentedControlHeight
     }
 
     private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
