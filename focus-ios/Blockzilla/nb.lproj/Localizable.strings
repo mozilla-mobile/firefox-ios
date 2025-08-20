@@ -20,13 +20,13 @@
 "About.rowHelp" = "Hjelp";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Personvernbestemmelser";
+"About.rowPrivacy" = "Personvernerklæring";
 
 /* Label for row in About screen */
 "About.rowRights" = "Dine rettigheter";
 
 /* Label for row in About screen */
-"About.rowTerms" = "Vilkår for bruk";
+"About.rowTerms" = "Bruksvilkår";
 
 /* Label on About screen */
 "About.safariBullet1" = "Blokker sporere for bedre personvern";
@@ -224,7 +224,7 @@
 "Onboarding.Incognito.Title" = "Mer enn bare inkognito";
 
 /* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
-"Onboarding.PrivacyNotice.LinkText" = "Personvernbestemmelser";
+"Onboarding.PrivacyNotice.LinkText" = "Personvernerklæring";
 
 /* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
 "Onboarding.PrivacyNotice.Text" = "Firefox bryr seg om personvernet ditt. Les mer i %@.";

@@ -5,6 +5,7 @@
 import Common
 import MenuKit
 import Redux
+import SummarizeKit
 
 struct AccountData: Equatable {
     let title: String
@@ -62,6 +63,7 @@ struct MainMenuTabInfo: Equatable {
     let zoomLevel: CGFloat
     let readerModeIsAvailable: Bool
     let summaryIsAvailable: Bool
+    let summarizerConfig: SummarizerConfig?
     let isBookmarked: Bool
     let isInReadingList: Bool
     let isPinned: Bool

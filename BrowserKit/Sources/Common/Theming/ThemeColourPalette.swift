@@ -33,9 +33,7 @@ public protocol ThemeColourPalette {
     var layerGradientURL: Gradient { get }
     var layerSurfaceLow: UIColor { get }
     var layerSurfaceMedium: UIColor { get }
-    // TODO: - FXIOS-12896 - colors name might need to be adjusted as per design review
-    var layerSummary: UIColor { get }
-    var layerSummaryGradient: Gradient { get }
+    var layerGradientSummary: Gradient { get }
 
     // MARK: - Ratings
     var layerRatingA: UIColor { get }
@@ -105,4 +103,11 @@ public protocol ThemeColourPalette {
     var shadowSubtle: UIColor { get }
     var shadowDefault: UIColor { get }
     var shadowStrong: UIColor { get }
+    var shadowBorder: UIColor { get }
+
+    // MARK: - Gradient
+    var gradientOnboardingStop1: UIColor { get }
+    var gradientOnboardingStop2: UIColor { get }
+    var gradientOnboardingStop3: UIColor { get }
+    var gradientOnboardingStop4: UIColor { get }
 }

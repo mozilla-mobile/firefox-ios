@@ -8,7 +8,7 @@
 /// The call to `replacingOccurrences(of: "\n", with: " ")` then reverts it back to a single line
 /// because tokenizers may treat newlines as distinct tokens, whereas spaces are merged more efficiently.
 /// For more context on how tokenizers handle newlines vs spaces, see: https://simonwillison.net/2023/Jun/8/gpt-tokenizers/
-enum SummarizerModelInstructions {
+public enum SummarizerModelInstructions {
     static let  defaultInstructions = """
     You are an expert at creating mobile-optimized summaries. Process:
     Step 1: Identify the type of content.
@@ -35,4 +35,38 @@ enum SummarizerModelInstructions {
     Bold critical details (numbers, warnings, key terms).
     Do not include any introductions, follow-ups, questions, or closing statements.
     """.replacingOccurrences(of: "\n", with: " ")
+
+    static let defaultRecipeInstructions = """
+    You are an expert at creating mobile-optimized recipe summaries.
+    Format exactly as shown below. Do not add any closing phrases.
+    If a field is null or empty, omit that line.
+
+    **Servings:** {servings}
+
+    **Total Time:** {convert total_time to human-readable format}
+
+    **Prep Time:** {convert prep_time to human-readable format}
+
+    **Cook Time:** {convert cook_time to human-readable format}
+
+    ## 🥕 Ingredients
+    - {ingredient 1}
+    - {ingredient 2}
+    - {ingredient 3}
+
+    ## 📋 Instructions
+    1. {step 1}
+    2. {step 2}
+    3. {step 3}
+
+    ## ⭐️ Tips
+    - {tip 1}
+    - {tip 2}
+
+    ## 🥗 Nutrition
+    - Calories: {calories}
+    - Protein: {protein}g
+    - Carbs: {carbs}g
+    - Fat: {fat}g
+    """
 }

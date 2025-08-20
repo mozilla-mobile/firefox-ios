@@ -47,6 +47,11 @@ class LoginTest: BaseTestCase {
     }
 
     private func openLoginsSettings() {
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(SettingsScreen)
         let syncInToSync = AccessibilityIdentifiers.Settings.ConnectSetting.title.self
         mozWaitForElementToExist(app.cells[syncInToSync])
@@ -89,6 +94,11 @@ class LoginTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         saveLogin(givenUrl: testLoginPage)
         // Make sure you can access populated Login List from Browser Tab Menu
+        // issue 28625: iOS 15 may not open the menu fully.
+        if #unavailable(iOS 16) {
+            navigator.goto(BrowserTabMenu)
+            app.swipeUp()
+        }
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         waitForElementsToExist(
@@ -452,6 +462,11 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
                        "1",
                        "Save passwords toggle in not enabled by default")
+        // iOS 15 may not clear the URL bar before entering the new URL.
+        // Open a fresh tab is a safer way to open the page for sure.
+        if #unavailable(iOS 16) {
+            navigator.goto(TabTray)
+        }
         navigator.goto(NewTabScreen)
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()

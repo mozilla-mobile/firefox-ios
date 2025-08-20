@@ -86,6 +86,16 @@ private final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
         return []
     }
 
+    func contents(atPath path: String) -> Data? {
+        return nil
+    }
+
+    var fileCreated = false
+    func createFile(atPath path: String, contents data: Data?, attributes attr: [FileAttributeKey: Any]?) -> Bool {
+        fileCreated = true
+        return fileCreated
+    }
+
     var contentsOfDirectory: [String] = []
     func contentsOfDirectory(atPath path: String) throws -> [String] {
         return contentsOfDirectory
@@ -115,6 +125,15 @@ private final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     var contentsOfDirectoryAtPath: [String] = []
     func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
         return contentsOfDirectoryAtPath
+    }
+
+    var contentsOfDirectoryAtURL: [URL] = []
+    func contentsOfDirectory(
+        at url: URL,
+        includingPropertiesForKeys keys: [URLResourceKey]?,
+        options mask: FileManager.DirectoryEnumerationOptions
+    ) throws -> [URL] {
+        return contentsOfDirectoryAtURL
     }
 
     var removeItemAtURLCalled = 0

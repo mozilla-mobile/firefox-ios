@@ -9,21 +9,24 @@ public struct SummarizationCheckResult: Decodable, Equatable, Sendable {
     public let reason: SummarizationReason?
     public let wordCount: Int
     public let textContent: String?
+    public let contentType: SummarizationContentType?
 
     public init(
         canSummarize: Bool,
         reason: SummarizationReason?,
         wordCount: Int,
-        textContent: String?
+        textContent: String?,
+        contentType: SummarizationContentType?
     ) {
         self.canSummarize = canSummarize
         self.reason = reason
         self.wordCount = wordCount
         self.textContent = textContent
+        self.contentType = contentType
     }
 
     /// Convenience initializer for constructing a failure result.
     public static func failure(_ error: SummarizationCheckError) -> SummarizationCheckResult {
-        SummarizationCheckResult(canSummarize: false, reason: nil, wordCount: 0, textContent: nil)
+        SummarizationCheckResult(canSummarize: false, reason: nil, wordCount: 0, textContent: nil, contentType: nil)
     }
 }

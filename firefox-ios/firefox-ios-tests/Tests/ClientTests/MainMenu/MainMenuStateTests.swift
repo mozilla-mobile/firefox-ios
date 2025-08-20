@@ -4,6 +4,7 @@
 
 import Redux
 import XCTest
+import SummarizeKit
 
 @testable import Client
 
@@ -42,6 +43,7 @@ final class MainMenuStateTests: XCTestCase {
             zoomLevel: 1.0,
             readerModeIsAvailable: false,
             summaryIsAvailable: false,
+            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,
@@ -69,7 +71,7 @@ final class MainMenuStateTests: XCTestCase {
 
         XCTAssertNil(initialState.navigationDestination)
 
-        MainMenuNavigationDestination.allCases.forEach { destination in
+        MainMenuNavigationDestination.allCasesForTests.forEach { destination in
             let newState = reducer(
                 initialState,
                 MainMenuAction(

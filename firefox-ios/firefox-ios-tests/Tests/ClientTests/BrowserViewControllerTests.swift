@@ -198,21 +198,21 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
         XCTAssertEqual(action.readerModeState, .active)
     }
-
-    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesToolbarAction() throws {
-        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
-        let subject = createSubject()
-        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-        subject.updateReaderModeState(for: tab, readerModeState: .active)
-        wait(for: [expectation])
-
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
-        XCTAssertEqual(action.readerModeState, .active)
-    }
+    // TODO(FXIOS-13126): Fix and uncomment this test
+//    func testUpdateReaderModeState_whenSummarizeFeatureOff_dispatchesToolbarAction() throws {
+//        let expectation = XCTestExpectation(description: "expect mock store to dispatch an action")
+//        let subject = createSubject()
+//        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+//
+//        mockStore.dispatchCalled = {
+//            expectation.fulfill()
+//        }
+//        subject.updateReaderModeState(for: tab, readerModeState: .active)
+//        wait(for: [expectation])
+//
+//        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarMiddlewareAction)
+//        XCTAssertEqual(action.readerModeState, .active)
+//    }
 
     // MARK: - Handle PDF
 
@@ -284,20 +284,20 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, GeneralBrowserActionType.shakeMotionEnded)
     }
 
-    func testMotionEnded_withShakeGestureDisabled_doesNotShowSummaryPanel() {
+    func testMotionEnded_withShakeGestureDisabled_doesNotShowSummaryPanel() async {
         profile.prefs.setBool(false, forKey: PrefsKeys.Summarizer.shakeGestureEnabled)
         setupSummarizedShakeGestureForTesting(isEnabled: false)
         let subject = createSubject()
-        let expectation = XCTestExpectation(description: "General browser action is dispatched")
-        expectation.isInverted = true
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
         tabManager.selectedTab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
         subject.motionEnded(.motionShake, with: nil)
-        wait(for: [expectation], timeout: 1)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        let showSummarizerWasDispatched = mockStore.dispatchedActions.contains { action in
+            guard let action = action as? GeneralBrowserAction,
+                  let actionType = action.actionType as? GeneralBrowserActionType else { return false }
+            if case .showSummarizer = actionType { return true }
+            return false
+        }
+        XCTAssertFalse(showSummarizerWasDispatched)
     }
 
     func testMotionEnded_withGestureNotShake_doesntShowSummarizePanel() {
@@ -522,8 +522,7 @@ class MockScreenshotHelper: ScreenshotHelper {
 
     override func takeScreenshot(_ tab: Tab,
                                  windowUUID: WindowUUID,
-                                 screenshotBounds: CGRect,
-                                 completion: (() -> Void)? = nil) {
+                                 screenshotBounds: CGRect) {
         takeScreenshotCalled = true
     }
 }

@@ -42,6 +42,7 @@ include:
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/startAtHomeFeature.yaml
+  - nimbus-features/tabScrollRefactorFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml

@@ -16,6 +16,7 @@ class AddressAutofillSettingsViewModel {
     lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
 
     /// ViewModel for managing the list of addresses.
+    @MainActor
     lazy var addressListViewModel = AddressListViewModel(
         windowUUID: windowUUID,
         addressProvider: profile.autofill

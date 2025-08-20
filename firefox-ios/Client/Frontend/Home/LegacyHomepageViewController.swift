@@ -50,6 +50,7 @@ class LegacyHomepageViewController: UIViewController,
 
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
+    weak var termsOfUseDelegate: TermsOfUseDelegate?
 
     var contentType: ContentType = .legacyHomepage
 
@@ -182,6 +183,10 @@ class LegacyHomepageViewController: UIViewController,
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             self?.displayWallpaperSelector()
+        }
+        // Add delay to ensure view hierarchy is stable before presenting
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
         }
     }
 

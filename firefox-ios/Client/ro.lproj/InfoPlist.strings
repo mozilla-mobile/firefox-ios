@@ -5,16 +5,19 @@
 "New Tab" = "Filă nouă";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Acest lucru îți permite să realizezi și să încarci fotografii.";
+"NSCameraUsageDescription" = "Firefox folosește camera pentru scanare de coduri QR și fotografii și videoclipuri.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox necesită Face ID pentru a-ți accesa parolele și metodele de plată salvate.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Site-urile web pe care le vizitezi îți pot solicita locația.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Acest lucru îți permite să realizezi și să încarci videoclipuri.";
+"NSMicrophoneUsageDescription" = "Firefox folosește microfonul pentru a înregistra și încărca audio.";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "Acest lucru îți permite să salvezi fotografii.";
+"NSPhotoLibraryAddUsageDescription" = "Îți permite să salvezi fotografii.";
 
 /* (No Comment) */
 "Scan QR Code" = "Scanează codul QR";

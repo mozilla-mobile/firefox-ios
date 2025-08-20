@@ -1,0 +1,18 @@
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v114" = "Intră în cont";
+
+/* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v114" = "Reia de unde ai rămas cu filele de pe alte dispozitive acum pe pagina ta de pornire.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v114" = "Treci de la un ecran la altul mai ușor ca niciodată";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v114" = "Setează ca browser implicit";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v114" = "Culori noi. Mai comod. Același angajament pentru oameni mai presus de profituri.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v114" = "Bun venit la un internet mai personal";
+

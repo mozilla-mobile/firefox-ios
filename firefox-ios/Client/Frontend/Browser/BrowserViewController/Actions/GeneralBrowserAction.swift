@@ -6,6 +6,7 @@ import Foundation
 import Redux
 import Common
 import WebKit
+import SummarizeKit
 
 struct GeneralBrowserAction: Action {
     let windowUUID: WindowUUID
@@ -17,6 +18,7 @@ struct GeneralBrowserAction: Action {
     let buttonTapped: UIButton?
     let isNativeErrorPage: Bool?
     let frame: WKFrameInfo?
+    let summarizerConfig: SummarizerConfig?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
@@ -24,6 +26,7 @@ struct GeneralBrowserAction: Action {
          buttonTapped: UIButton? = nil,
          isNativeErrorPage: Bool? = nil,
          frame: WKFrameInfo? = nil,
+         summarizerConfig: SummarizerConfig? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -35,6 +38,7 @@ struct GeneralBrowserAction: Action {
         self.showOverlay = showOverlay
         self.isNativeErrorPage = isNativeErrorPage
         self.frame = frame
+        self.summarizerConfig = summarizerConfig
     }
 }
 

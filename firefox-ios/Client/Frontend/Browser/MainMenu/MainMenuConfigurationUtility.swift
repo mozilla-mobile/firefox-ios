@@ -232,7 +232,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             ),
         ]
         // Conditionally add the Summarizer item if the feature is enabled
-        if isSummarizerOn, tabInfo.summaryIsAvailable {
+        if isSummarizerOn, tabInfo.summaryIsAvailable, !UIWindow.isLandscape {
             options.append(configureSummarizerItem(with: uuid, tabInfo: tabInfo))
         }
         options.append(configureUserAgentItemV2(with: uuid, tabInfo: tabInfo))
@@ -369,11 +369,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.summarizePage,
                 action: {
+                    let destination = MenuNavigationDestination(.webpageSummary(config: tabInfo.summarizerConfig))
                     store.dispatchLegacy(
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.webpageSummary),
+                            navigationDestination: destination,
                             telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )

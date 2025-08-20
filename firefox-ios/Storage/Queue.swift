@@ -7,7 +7,7 @@ import Shared
 
 public protocol TabQueue {
     func addToQueue(_ tab: ShareItem) -> Success
-    func getQueuedTabs(completion: @escaping @MainActor ([ShareItem]) -> Void)
+    func getQueuedTabs(completion: @MainActor @Sendable @escaping ([ShareItem]) -> Void)
     @discardableResult
     func clearQueuedTabs() -> Success
 }

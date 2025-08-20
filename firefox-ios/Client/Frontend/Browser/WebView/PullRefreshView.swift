@@ -106,6 +106,10 @@ class PullRefreshView: UIView,
     func startObservingContentScroll() {
         scrollObserver = scrollView?.observe(\.contentOffset) { [weak self] _, _ in
             guard let scrollView = self?.scrollView, scrollView.isDragging else {
+                if let scrollView = self?.scrollView, scrollView.contentOffset.y <= 0 {
+                    self?.updateElementAlpha()
+                }
+
                 guard let refreshHasFocus = self?.refreshIconHasFocus, refreshHasFocus else { return }
                 self?.refreshIconHasFocus = false
                 self?.easterEggGif?.removeFromSuperview()
@@ -129,9 +133,19 @@ class PullRefreshView: UIView,
 
                 UIView.animate(withDuration: UX.rotateProgressViewAnimationDuration) {
                     self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 1.5)
+                    self?.updateElementAlpha()
                 }
             }
         }
+    }
+
+    private func updateElementAlpha() {
+        guard let scrollView = scrollView else { return }
+
+        let threshold = computeShrinkingFactor() * UX.blinkProgressViewStandardThreshold
+        let elementAlpha: CGFloat = -(scrollView.contentOffset.y) / threshold
+        easterEggGif?.alpha = elementAlpha
+        progressView.alpha = elementAlpha
     }
 
     private func triggerReloadAnimation() {

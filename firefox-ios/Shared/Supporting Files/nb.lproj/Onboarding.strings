@@ -113,7 +113,7 @@
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ bryr seg om personvernet ditt. Les mer i vår %2$@";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "Personvernbestemmelser.";
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "Personvernerklæring.";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Les mer";
@@ -143,7 +143,7 @@
 "Onboarding.Modern.TermsOfService.Title.v140" = "Oppgrader nettlesingen din";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ brukervilkår.";
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@ bruksvilkår.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Bruk som standard nettleser";
@@ -203,7 +203,7 @@
 "Onboarding.TermsOfService.PrivacyNoticeAgreement.v135" = "%1$@ bryr seg om personvernet ditt. Les mer i vår %2$@";
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
-"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "Personvernbestemmelser.";
+"Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "Personvernerklæring.";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "Les mer.";
@@ -233,13 +233,13 @@
 "Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Ved å fortsette godtar du %@";
 
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ tjenestevilkår.";
+"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ bruksvilkår.";
 
 /* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "Velkommen til %@";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ brukervilkår.";
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ bruksvilkår.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Klassisk bakgrunnsbilde";

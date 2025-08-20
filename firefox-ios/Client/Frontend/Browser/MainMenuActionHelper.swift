@@ -233,6 +233,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         return section
     }
 
+    @MainActor
     private func getFirstMiscSection(_ navigationController: UINavigationController?) -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -491,6 +492,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         return openSettings
     }
 
+    @MainActor
     private func getNightModeTitle(_ isNightModeOn: Bool) -> String {
         if themeManager.isNewAppearanceMenuOn {
             return isNightModeOn
@@ -503,6 +505,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         }
     }
 
+    @MainActor
     private func getNightModeAction() -> [PhotonRowActions] {
         var items: [PhotonRowActions] = []
 

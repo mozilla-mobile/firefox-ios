@@ -8,6 +8,7 @@ import UIKit
 import ComponentLibrary
 import WebKit
 import Down
+import SwiftUI
 
 class CustomStyler: DownStyler {
     // NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
@@ -94,9 +95,37 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         $0.layer.shadowOffset = UX.tabSnapshotShadowOffset
         $0.layer.shadowOpacity = UX.tabSnapshotShadowOpacity
         $0.layer.shadowRadius = UX.tabSnapshotShadowRadius
+        $0.isUserInteractionEnabled = true
+        $0.isAccessibilityElement = true
     }
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
     private lazy var gradient = AnimatedGradientOutlineView(frame: view.bounds)
+    private lazy var backgroundGradient = CAGradientLayer()
+
+    /// Border overlay when loading the summary report
+    private lazy var borderOverlayHostingController: UIHostingController<BorderView> = {
+        let host = UIHostingController(rootView: BorderView(theme: themeManager.getCurrentTheme(for: currentWindowUUID)))
+        addChild(host)
+        host.view.translatesAutoresizingMaskIntoConstraints = false
+        host.view.backgroundColor = .clear
+        host.view.isUserInteractionEnabled = false
+        return host
+    }()
+
+    private func removeBorderOverlayView() {
+        borderOverlayHostingController.willMove(toParent: nil)
+        borderOverlayHostingController.view.removeFromSuperview()
+        borderOverlayHostingController.removeFromParent()
+    }
+
+    /// Background gradient when loading summarizer
+    private func setupLoadingBackgroundGradient() {
+        backgroundGradient.frame = view.bounds
+        backgroundGradient.locations = [0.0, 1.0]
+        backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+        backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+    }
+
     private let summaryView: UITextView = .build {
         $0.font = FXFontStyles.Regular.headline.scaledFont()
         $0.alpha = 0.0
@@ -155,15 +184,16 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         let impact = UIImpactFeedbackGenerator(style: .medium)
         impact.prepare()
         impact.impactOccurred()
+
         gradient.startAnimating { [weak self] in
-            self?.closeButton.alpha = 1.0
-            self?.view.backgroundColor = theme.colors.layerSummary
-            self?.viewModel.onShouldShowTabSnapshot()
-            self?.embedSnapshot()
+            guard let self else { return }
+            self.closeButton.alpha = 1.0
+            self.view.layer.insertSublayer(backgroundGradient, at: 0)
+            self.viewModel.onShouldShowTabSnapshot()
+            self.embedSnapshot()
         }
     }
 
@@ -199,18 +229,16 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
 
+        tabSnapshotContainer.accessibilityIdentifier = viewModel.loadingA11yId
+        tabSnapshotContainer.accessibilityLabel = viewModel.loadingA11yLabel
+
         closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
         closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
         closeButton.setImage(UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
                              for: .normal)
         closeButton.addAction(
             UIAction(handler: { [weak self] _ in
-                UIView.animate(withDuration: UX.panEndAnimationDuration) {
-                    self?.tabSnapshotContainer.transform = .identity
-                    self?.tabSnapshot.layer.cornerRadius = 0.0
-                } completion: { _ in
-                    self?.dismiss(animated: true)
-                }
+                self?.triggerDismissingAnimation()
             }),
             for: .touchUpInside
         )
@@ -219,7 +247,18 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func setupLayout() {
-        view.addSubviews(tabSnapshotContainer, gradient, titleLabel, closeButton, summaryView, loadingLabel, errorView)
+        gradient.isUserInteractionEnabled = false
+        setupLoadingBackgroundGradient()
+        view.addSubviews(
+            tabSnapshotContainer,
+            borderOverlayHostingController.view,
+            gradient,
+            titleLabel,
+            closeButton,
+            summaryView,
+            loadingLabel,
+            errorView
+        )
         tabSnapshotContainer.addSubview(tabSnapshot)
         tabSnapshot.pinToSuperview()
         tabSnapshotTopConstraint = tabSnapshotContainer.topAnchor.constraint(equalTo: view.topAnchor)
@@ -270,8 +309,16 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
 
             tabSnapshotContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tabSnapshotContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tabSnapshotContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tabSnapshotContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            borderOverlayHostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            borderOverlayHostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            borderOverlayHostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            borderOverlayHostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        /// Notify the hosting controller that it has been moved to the current view controller.
+        borderOverlayHostingController.didMove(toParent: self)
     }
 
     private func embedSnapshot() {
@@ -279,7 +326,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         tabSnapshotTopConstraint?.constant = viewModel.tabSnapshotTopOffset
 
         let frameHeight = view.frame.height
-        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.1))
+        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.5))
 
         let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
         transformAnimation.fromValue = 0
@@ -305,21 +352,26 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         impact.prepare()
         impact.impactOccurred()
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
-        tabSnapshotContainer.isUserInteractionEnabled = true
-        tabSnapshotContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan)))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.onTabSnapshotPan))
+        self.tabSnapshotContainer.addGestureRecognizer(panGesture)
+
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
         let brandedSummary = """
-        ###### *\(viewModel.brandLabel)*
+        ###### \(viewModel.brandLabel)
 
         \(summary)
+
+        ##### \(viewModel.summaryNote)
         """
         titleLabel.text = webView.title
         titleLabel.largeContentTitle = webView.title
         summaryView.attributedText = parse(markdown: brandedSummary)
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             gradient.alpha = 0.0
+            removeBorderOverlayView()
+            backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
             loadingLabel.alpha = 0.0
             summaryView.alpha = 1.0
@@ -379,40 +431,71 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func parse(markdown: String) -> NSAttributedString? {
+        let parser = Down(markdownString: markdown)
+
+        // Apply custom paragraph styling with centering to header level 5 (######)
+        let centeredParagraphStyle = NSMutableParagraphStyle()
+        centeredParagraphStyle.alignment = .center
+        centeredParagraphStyle.paragraphSpacingBefore = 16
+
+        let bodyStyle = NSMutableParagraphStyle()
+        bodyStyle.paragraphSpacing = 8
+
+        let heading6Style = NSMutableParagraphStyle()
+        heading6Style.paragraphSpacing = 16
+        heading6Style.paragraphSpacingBefore = 0
+
+        let heading2Style = NSMutableParagraphStyle()
+        heading2Style.paragraphSpacing = 16
+        heading2Style.paragraphSpacingBefore = 8
+
+        var configuration = configuration
+        var paragraphStyles = StaticParagraphStyleCollection()
+        paragraphStyles.heading5 = centeredParagraphStyle
+        paragraphStyles.heading6 = heading6Style
+        paragraphStyles.heading2 = heading2Style
+        paragraphStyles.body = bodyStyle
+        configuration.paragraphStyles = paragraphStyles
+
+        return try? parser.toAttributedString(
+            styler: CustomStyler(configuration: configuration)
+        )
+    }
+
+    private var configuration: DownStylerConfiguration {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         let textColor = theme.colors.textPrimary
-        let parser = Down(markdownString: markdown)
-        return try? parser.toAttributedString(
-            styler: CustomStyler(
-                configuration: DownStylerConfiguration(
-                    fonts: StaticFontCollection(
-                        heading1: FXFontStyles.Regular.title1.scaledFont(),
-                        heading2: FXFontStyles.Regular.title2.scaledFont(),
-                        heading3: FXFontStyles.Regular.title3.scaledFont(),
-                        heading4: FXFontStyles.Regular.headline.scaledFont(),
-                        heading5: FXFontStyles.Regular.caption1.scaledFont(),
-                        heading6: FXFontStyles.Regular.caption2.scaledFont(),
-                        body: FXFontStyles.Regular.body.scaledFont(),
-                        code: FXFontStyles.Regular.body.monospacedFont(),
-                        listItemPrefix: FXFontStyles.Regular.body.scaledFont()
-                    ),
-                    colors: StaticColorCollection(
-                        heading1: textColor,
-                        heading2: textColor,
-                        heading3: textColor,
-                        heading4: textColor,
-                        heading5: textColor,
-                        heading6: textColor,
-                        body: textColor,
-                        code: textColor,
-                        link: textColor,
-                        quote: textColor,
-                        quoteStripe: textColor,
-                        thematicBreak: textColor,
-                        listItemPrefix: textColor,
-                        codeBlockBackground: .clear
-                    )
-                )
+        return DownStylerConfiguration(
+            fonts: StaticFontCollection(
+                heading1: FXFontStyles.Regular.title1.scaledFont(),
+                heading2: FXFontStyles.Regular.title2.scaledFont(),
+                heading3: FXFontStyles.Regular.title3.scaledFont(),
+                heading4: FXFontStyles.Regular.headline.scaledFont(),
+                heading5: FXFontStyles.Regular.footnote.scaledFont(),
+                heading6: FXFontStyles.Regular.caption2.scaledFont(),
+                body: FXFontStyles.Regular.body.scaledFont(),
+                code: FXFontStyles.Regular.body.monospacedFont(),
+                listItemPrefix: FXFontStyles.Regular.body.scaledFont()
+            ),
+            colors: StaticColorCollection(
+                heading1: textColor,
+                heading2: textColor,
+                heading3: textColor,
+                heading4: textColor,
+                heading5: theme.colors.textSecondary,
+                heading6: theme.colors.textSecondary,
+                body: textColor,
+                code: textColor,
+                link: textColor,
+                quote: textColor,
+                quoteStripe: textColor,
+                thematicBreak: textColor,
+                listItemPrefix: textColor,
+                codeBlockBackground: .clear
+            ),
+            listItemOptions: ListItemOptions(
+                spacingAbove: 2,
+                spacingBelow: 4
             )
         )
     }
@@ -433,6 +516,20 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             handleTabPanEnded(gesture, tabSnapshotTransform: tabSnapshotTransform)
         default:
             break
+        }
+    }
+
+    @objc
+    private func dismissSummaryFromGesture(_ gesture: UITapGestureRecognizer) {
+        triggerDismissingAnimation()
+    }
+
+    private func triggerDismissingAnimation() {
+        UIView.animate(withDuration: UX.panEndAnimationDuration) { [weak self] in
+            self?.tabSnapshotContainer.transform = .identity
+            self?.tabSnapshot.layer.cornerRadius = 0.0
+        } completion: { [weak self] _ in
+            self?.dismiss(animated: true)
         }
     }
 
@@ -465,7 +562,22 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         guard flag,
               let animation = anim as? CABasicAnimation,
               animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
+        setupDismissGestures()
         summarize()
+    }
+
+    /// Sets up gestures that allow the user to dismiss the summary.
+    /// - Adds a tap gesture on the tab snapshot to close.
+    /// - Adds a swipe-up gesture on the tab snapshot to close.
+    ///
+    /// Both gestures call `dismissSummaryFromGesture`, which handles the dismissal animation.
+    private func setupDismissGestures() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissSummaryFromGesture))
+        tabSnapshotContainer.addGestureRecognizer(tap)
+
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(dismissSummaryFromGesture))
+        swipeUp.direction = .up
+        tabSnapshotContainer.addGestureRecognizer(swipeUp)
     }
 
     // MARK: - Notifiable
@@ -488,6 +600,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             closeButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
+        backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
         gradient.applyTheme(theme: theme)
         errorView.applyTheme(theme: theme)
     }

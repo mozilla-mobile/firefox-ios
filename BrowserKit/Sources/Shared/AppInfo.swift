@@ -17,11 +17,12 @@ extension AppInfo {
         return appVersion.components(separatedBy: ".").first!
     }
 
+    // FIXME: FXIOS-13210 nonisolated(unsafe) because some tests need to mutate this global state
     /// The port for the internal webserver, tests can change this
     /// Please be aware that we needed to migrate this webserverPort in WebEngine.WKEngineInfo
     /// due to Shared target issues in #17721. This webserverPort needs to be deleted with
     /// FXIOS-7960 once the WebEngine package is integrated in Firefox iOS
-    public static var webserverPort = 6571
+    public static nonisolated(unsafe) var webserverPort = 6571
 
     /// Return the keychain access group.
     public static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
@@ -36,7 +37,7 @@ extension AppInfo {
 
     public static let debugPrefIsChinaEdition = "debugPrefIsChinaEdition"
 
-    public static var isChinaEdition: Bool = {
+    public static let isChinaEdition: Bool = {
         if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
             return true
         }
@@ -44,7 +45,7 @@ extension AppInfo {
     }()
 
     // The App Store page identifier for the Firefox iOS application
-    public static var appStoreId = "id989804926"
+    public static let appStoreId = "id989804926"
 
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.

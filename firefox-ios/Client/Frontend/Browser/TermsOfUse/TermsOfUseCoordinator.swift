@@ -4,6 +4,17 @@
 import Common
 import Shared
 
+enum TriggerContext {
+    case appLaunch
+    case homepageOpened
+    case appBecameActive
+}
+
+@MainActor
+protocol TermsOfUseDelegate: AnyObject {
+    func showTermsOfUse(context: TriggerContext)
+}
+
 // TODO: FXIOS-12947 - Add tests for TermsOfUseCoordinator
 @MainActor
 protocol TermsOfUseCoordinatorDelegate: AnyObject {
@@ -20,7 +31,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
     private var presentedVC: TermsOfUseViewController?
     private let prefs: Prefs
-    private let daysSinceDismissedTerms = 5
+    private let hoursSinceDismissedTerms = 120 // 120 hours (5 days)
+    private let debugMinutesSinceDismissed = 1 // 1 minute used for testing
 
     init(windowUUID: WindowUUID,
          router: Router,
@@ -34,8 +46,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         super.init(router: router)
     }
 
-    func start() {
-        guard shouldShowTermsOfUse() else {
+    func start(context: TriggerContext = .appLaunch) {
+        guard shouldShowTermsOfUse(context: context) else {
             parentCoordinator?.didFinish(from: self)
             return
         }
@@ -67,38 +79,59 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             themeManager: themeManager,
             notificationCenter: notificationCenter
         )
+        linkVC.modalPresentationStyle = .pageSheet
+        linkVC.modalTransitionStyle = .coverVertical
         presentedVC?.present(linkVC, animated: true)
     }
 
-    func shouldShowTermsOfUse() -> Bool {
-        let isFeatureEnabled = featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly)
-        // 1. If feature is disabled, do not show.
-        guard isFeatureEnabled else { return false }
+    func shouldShowTermsOfUse(context: TriggerContext = .appLaunch) -> Bool {
+        // 1. Feature must be enabled
+        guard featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) else { return false }
 
-        let hasAccepted = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
-        // 2. If user has accepted, do not show again.
-        guard !hasAccepted else { return false }
+        // 2. If user has already accepted (onboarding or bottom sheet), never show again
+        let hasAcceptedTermsOfUse = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
+        let hasAcceptedTermsOfService = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
+        guard !hasAcceptedTermsOfUse && !hasAcceptedTermsOfService else { return false }
 
-        let didShowThisLaunch = store.state.screenState(
-            TermsOfUseState.self,
-            for: .termsOfUse,
-            window: windowUUID
-        )?.didShowThisLaunch ?? false
+        // 3. Check if this is the first time it is shown
+        // Show on fresh install or next app open for existing users
+        let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
+        guard hasShownFirstTime else { return true }
 
-        // 3. If not shown this launch, show it.
-        guard didShowThisLaunch else { return true }
+        // 4. Check if user dismissed and timeout period expired
+        guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) else {
+            // No dismissal record - user hasn't explicitly dismissed, so show it
+            return true
+        }
 
-        // 4. If shown this launch, show it if enough time has passed since dismissal.
-        guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
-        else { return false }
+        let dismissedDate = Date.fromTimestamp(dismissedTimestamp)
 
-        let dismissedWithoutAcceptDate = Date.fromTimestamp(dismissedTimestamp)
-        let daysSinceDismissal = Calendar.current.dateComponents(
-            [.day],
-            from: dismissedWithoutAcceptDate,
-            to: Date()
-        ).day ?? 0
+        // 5. After timeout period show on any trigger context
+        return hasTimeoutPeriodElapsed(since: dismissedDate)
+    }
 
-        return daysSinceDismissal >= daysSinceDismissedTerms
+    /// Checks if the timeout period has elapsed since the given dismissal date
+    /// Uses debug setting override for testing purposes (1 minute vs 120 hours)
+    private func hasTimeoutPeriodElapsed(since dismissedDate: Date) -> Bool {
+        let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterTermsOfUseTimeoutOverride)
+        let option = TermsOfUseTimeoutOption(rawValue: rawValue) ?? .normal
+
+        switch option {
+        case .normal:
+            let hoursSinceDismissal = Calendar.current.dateComponents(
+                [.hour],
+                from: dismissedDate,
+                to: Date()
+            ).hour ?? 0
+            return hoursSinceDismissal >= hoursSinceDismissedTerms
+
+        case .oneMinute:
+            let minutesSinceDismissal = Calendar.current.dateComponents(
+                [.minute],
+                from: dismissedDate,
+                to: Date()
+            ).minute ?? 0
+            return minutesSinceDismissal >= debugMinutesSinceDismissed
+        }
     }
 }

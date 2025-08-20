@@ -395,7 +395,13 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
-
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -623,18 +629,15 @@ extension TracingLevel: Equatable, Hashable {}
 
 
 
-public protocol EventSink: AnyObject {
+
+
+
+public protocol EventSink: AnyObject, Sendable {
     
     func onEvent(event: TracingEvent) 
     
 }
-// Magic number for the Rust proxy to call using the same mechanism as every other method,
-// to free the callback once it's dropped by Rust.
-private let IDX_CALLBACK_FREE: Int32 = 0
-// Callback return codes
-private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
-private let UNIFFI_CALLBACK_ERROR: Int32 = 1
-private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
 
 // Put the implementation in a struct so we don't pollute the top-level namespace
 fileprivate struct UniffiCallbackInterfaceEventSink {
@@ -793,9 +796,24 @@ public func registerEventSink(target: String, level: TracingLevel, sink: EventSi
     )
 }
 }
+public func registerMinLevelEventSink(level: TracingLevel, sink: EventSink)  {try! rustCall() {
+    uniffi_tracing_support_fn_func_register_min_level_event_sink(
+        FfiConverterTypeTracingLevel_lower(level),
+        FfiConverterCallbackInterfaceEventSink_lower(sink),$0
+    )
+}
+}
 public func unregisterEventSink(target: String)  {try! rustCall() {
     uniffi_tracing_support_fn_func_unregister_event_sink(
         FfiConverterString.lower(target),$0
+    )
+}
+}
+/**
+ * Remove the sink registered with [register_min_level_event_sink], if any.
+ */
+public func unregisterMinLevelEventSink()  {try! rustCall() {
+    uniffi_tracing_support_fn_func_unregister_min_level_event_sink($0
     )
 }
 }
@@ -818,7 +836,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_tracing_support_checksum_func_register_event_sink() != 21336) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_tracing_support_checksum_func_register_min_level_event_sink() != 23353) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_tracing_support_checksum_func_unregister_event_sink() != 40761) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_tracing_support_checksum_func_unregister_min_level_event_sink() != 40850) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tracing_support_checksum_method_eventsink_on_event() != 39979) {

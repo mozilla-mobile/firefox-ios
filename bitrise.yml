@@ -1211,6 +1211,10 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.large
 
   SPM_Common_Steps:
     steps:
@@ -1623,7 +1627,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
-        - maximum_test_repetitions: 10
+        - maximum_test_repetitions: 5
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
     meta:

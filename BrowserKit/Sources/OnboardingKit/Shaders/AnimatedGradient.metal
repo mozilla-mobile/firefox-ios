@@ -17,6 +17,14 @@ struct GradientControlPoint {
     float influence;
 };
 
+// MARK: - Gradient Palette Struct
+struct GradientPalette {
+    float3 gradientOnboardingStop1;
+    float3 gradientOnboardingStop2;
+    float3 gradientOnboardingStop3;
+    float3 gradientOnboardingStop4;
+};
+
 // MARK: - Utility Functions
 /**
  * Generates a pseudo-random value from a 2D coordinate
@@ -109,6 +117,7 @@ vertex VertexOutput animatedGradientVertex(uint vertexID [[vertex_id]]) {
 // MARK: - Fragment Shader
 fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
                                        constant float &currentTime [[buffer(0)]],
+                                       constant GradientPalette &palette [[buffer(1)]],
                                        texture2d<half> previousFrameTexture [[texture(0)]]) {
 
     // Animation constants
@@ -130,11 +139,11 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
     const float kThirdPointAnimationSpeed = 1.5f;
     const float kFourthPointAnimationSpeed = 1.1f;
 
-    // Gradient color palette (sRGB values)
-    const half3 kVividOrange = half3(0.996f, 0.514f, 0.000f);     // #FE8300
-    const half3 kElectricBlue = half3(0.180f, 0.506f, 0.996f);    // #2E81FE
-    const half3 kCrimsonRed = half3(0.949f, 0.020f, 0.004f);      // #F20501
-    const half3 kBurntOrange = half3(0.996f, 0.396f, 0.000f);     // #FE6500
+    // Use colors from Swift
+    const half3 kGradientOnboardingStop1  = half3(palette.gradientOnboardingStop1);
+    const half3 kGradientOnboardingStop2 = half3(palette.gradientOnboardingStop2);
+    const half3 kGradientOnboardingStop3   = half3(palette.gradientOnboardingStop3);
+    const half3 kGradientOnboardingStop4  = half3(palette.gradientOnboardingStop4);
 
     // Define base positions for gradient control points
     const float2 firstControlPointBase = float2(0.2f, 0.3f);
@@ -176,10 +185,10 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
         const float normalizedFourthInfluence = fourthPointInfluence / totalInfluence;
 
         // Blend colors based on normalized influence weights
-        blendedGradientColor = normalizedFirstInfluence * kVividOrange +
-                              normalizedSecondInfluence * kElectricBlue +
-                              normalizedThirdInfluence * kCrimsonRed +
-                              normalizedFourthInfluence * kBurntOrange;
+        blendedGradientColor = normalizedFirstInfluence * kGradientOnboardingStop1 +
+                              normalizedSecondInfluence * kGradientOnboardingStop2 +
+                              normalizedThirdInfluence * kGradientOnboardingStop3 +
+                              normalizedFourthInfluence * kGradientOnboardingStop4;
     }
 
     // Sample previous frame for motion blur effect

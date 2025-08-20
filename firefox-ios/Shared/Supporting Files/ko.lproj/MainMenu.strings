@@ -358,6 +358,9 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "하위 메뉴 저장";
 
+/* On the main menu, the accessibility label for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142" = "페이지 요약";
+
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "데스크톱으로 전환";
 
@@ -390,6 +393,9 @@
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "저장";
+
+/* On the main menu, the title for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.SummarizePage.Title.v142" = "페이지 요약";
 
 /* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "데스크톱 사이트로 전환";

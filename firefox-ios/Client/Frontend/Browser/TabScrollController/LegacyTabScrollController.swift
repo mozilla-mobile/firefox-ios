@@ -7,9 +7,24 @@ import SnapKit
 import Shared
 import Common
 
+@MainActor
+protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
+    var headerTopConstraint: Constraint? { get set }
+    var overKeyboardContainerConstraint: Constraint? { get set }
+    var bottomContainerConstraint: Constraint? { get set }
+
+    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
+                               bottomContainer: BaseAlphaStackView?,
+                               headerContainer: BaseAlphaStackView?)
+    func updateMinimumZoom()
+    func setMinimumZoom()
+    func resetZoomState()
+}
+
+@MainActor
 final class LegacyTabScrollController: NSObject,
                                        SearchBarLocationProvider,
-                                       TabScrollHandlerProtocol {
+                                       LegacyTabScrollProvider {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
         static let toolbarBaseAnimationDuration: CGFloat = 0.2
@@ -54,13 +69,13 @@ final class LegacyTabScrollController: NSObject,
         }
     }
 
-    // Top toolbar UI and Constraints
-    private weak var header: BaseAlphaStackView?
-    var headerTopConstraint: Constraint?
-
-    // Bottom toolbar UI and Constraints
+    // Toolbar Views
+    private weak var headerContainer: BaseAlphaStackView?
     private weak var overKeyboardContainer: BaseAlphaStackView?
     private weak var bottomContainer: BaseAlphaStackView?
+
+    // Toolbar Constraints
+    var headerTopConstraint: Constraint?
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
 
@@ -87,10 +102,10 @@ final class LegacyTabScrollController: NSObject,
     private var headerTopOffset: CGFloat = 0 {
         didSet {
             headerTopConstraint?.update(offset: headerTopOffset)
-            header?.superview?.setNeedsLayout()
+            headerContainer?.superview?.setNeedsLayout()
         }
     }
-    private var headerHeight: CGFloat { header?.frame.height ?? 0 }
+    private var headerHeight: CGFloat { headerContainer?.frame.height ?? 0 }
 
     /// Calculates the header offset based on device type and toolbar visibility.
     ///
@@ -134,9 +149,9 @@ final class LegacyTabScrollController: NSObject,
     ///   - isMinimalAddressBarEnabled: Whether minimal address bar feature is enabled.
     ///   - isBottomSearchBar: Whether search bar is set to the bottom.
     /// - Returns: The calculated scroll height.
-    func overKeyboardScrollHeight(with safeAreaInsets: UIEdgeInsets?,
-                                  isMinimalAddressBarEnabled: Bool,
-                                  isBottomSearchBar: Bool) -> CGFloat {
+    func calculateOverKeyboardScrollHeight(with safeAreaInsets: UIEdgeInsets?,
+                                           isMinimalAddressBarEnabled: Bool,
+                                           isBottomSearchBar: Bool) -> CGFloat {
         guard let containerHeight = overKeyboardContainer?.frame.height else { return .zero }
         let isReaderModeActive = tab?.url?.isReaderModeURL == true
         // Return full height if conditions aren't met for adjustment.
@@ -153,7 +168,7 @@ final class LegacyTabScrollController: NSObject,
     }
 
     private var overKeyboardScrollHeight: CGFloat {
-        return overKeyboardScrollHeight(
+        return calculateOverKeyboardScrollHeight(
             with: UIWindow.keyWindow?.safeAreaInsets,
             isMinimalAddressBarEnabled: isMinimalAddressBarEnabled,
             isBottomSearchBar: isBottomSearchBar
@@ -203,7 +218,22 @@ final class LegacyTabScrollController: NSObject,
 
     deinit {
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        // KVO observation removal directly requires self so we can not use the apple
+        // recommended work around here.
+        guard Thread.isMainThread else {
+            logger.log(
+                "TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("TabScrollController was not deallocated on the main thread. KVOs were not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        }
     }
 
     init(windowUUID: WindowUUID,
@@ -233,9 +263,10 @@ final class LegacyTabScrollController: NSObject,
                                headerContainer: BaseAlphaStackView?) {
         self.overKeyboardContainer = overKeyboardContainer
         self.bottomContainer = bottomContainer
-        self.header = headerContainer
+        self.headerContainer = headerContainer
     }
 
+    @MainActor
     private func handleOnTabContentLoading() {
         if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
             removePullRefreshControl()
@@ -265,7 +296,7 @@ final class LegacyTabScrollController: NSObject,
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
             let delta = lastPanTranslation - translation.y
-            setScrollDirection(delta)
+            scrollDirection = delta > 0 ? .down : .up
 
             guard shouldRespondToScrollGesture(gesture, delta: delta, in: containerView) else {
                 return
@@ -297,20 +328,6 @@ final class LegacyTabScrollController: NSObject,
         return shouldRespondToScroll
     }
 
-    /// Updates the current scroll direction based on the scroll delta.
-    ///
-    /// - Parameter delta: The change in vertical scroll position.
-    /// This is the inverse of the user's drag gesture. For example:
-    /// - If the user drags **up**, the content moves **down** (delta > 0), so the scroll direction is `.down`.
-    /// - If the user drags **down**, the content moves **up** (delta < 0), so the scroll direction is `.up`.
-    private func setScrollDirection(_ delta: CGFloat) {
-        if delta > 0 {
-            scrollDirection = .down
-        } else if delta < 0 {
-            scrollDirection = .up
-        }
-    }
-
     func showToolbars(animated: Bool) {
         guard toolbarState != .visible else { return }
 
@@ -327,7 +344,7 @@ final class LegacyTabScrollController: NSObject,
             completion: nil)
     }
 
-    func hideToolbars(animated: Bool, isFindInPageMode: Bool = false) {
+    func hideToolbars(animated: Bool) {
         guard toolbarState != .collapsed else { return }
 
         toolbarState = .collapsed
@@ -365,21 +382,22 @@ final class LegacyTabScrollController: NSObject,
         scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
     }
 
-    override func observeValue(
+    override nonisolated func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
         change: [NSKeyValueChangeKey: Any]?,
         context: UnsafeMutableRawPointer?
     ) {
         if keyPath == "contentSize" {
-            guard shouldUpdateUIWhenScrolling, toolbarsShowing else { return }
+            ensureMainThread { [weak self] in
+                guard let self, self.shouldUpdateUIWhenScrolling, self.toolbarsShowing else { return }
 
-            showToolbars(animated: true)
+                self.showToolbars(animated: true)
+            }
         }
     }
 
     // MARK: - Zoom
-
     func updateMinimumZoom() {
         guard let scrollView = scrollView else { return }
 
@@ -572,7 +590,7 @@ private extension LegacyTabScrollController {
             overKeyboardContainerOffset = clamp(offset: overKeyboardUpdatedOffset, min: 0, max: overKeyboardScrollHeight)
         }
 
-        header?.updateAlphaForSubviews(scrollAlpha)
+        headerContainer?.updateAlphaForSubviews(scrollAlpha)
         zoomPageBar?.updateAlphaForSubviews(scrollAlpha)
     }
 
@@ -646,8 +664,8 @@ private extension LegacyTabScrollController {
 
             overKeyboardContainerOffset = overKeyboardOffset
 
-            header?.updateAlphaForSubviews(alpha)
-            header?.superview?.layoutIfNeeded()
+            headerContainer?.updateAlphaForSubviews(alpha)
+            headerContainer?.superview?.layoutIfNeeded()
 
             zoomPageBar?.updateAlphaForSubviews(alpha)
             zoomPageBar?.superview?.layoutIfNeeded()
@@ -713,7 +731,7 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
             if scrollDirection == .up {
                 showToolbars(animated: true)
             } else {
-                hideToolbars(animated: true, isFindInPageMode: tab.isFindInPageMode)
+                hideToolbars(animated: true)
             }
 
             // this action controls the address toolbar's border position,

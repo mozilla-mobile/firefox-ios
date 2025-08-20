@@ -5,7 +5,9 @@
 import Foundation
 
 public protocol SummarizerServiceFactory {
-    func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService?
+    func make(isAppleSummarizerEnabled: Bool,
+              isHostedSummarizerEnabled: Bool,
+              config: SummarizerConfig?) -> SummarizerService?
 
     /// Returns the max words that the summarizer Service can handle.
     func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int
@@ -14,38 +16,31 @@ public protocol SummarizerServiceFactory {
 public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
     public init() {}
 
-    public func make(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> SummarizerService? {
+    public func make(isAppleSummarizerEnabled: Bool,
+                     isHostedSummarizerEnabled: Bool,
+                     config: SummarizerConfig?) -> SummarizerService? {
         let maxWords = maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
                                 isHostedSummarizerEnabled: isHostedSummarizerEnabled)
+        let config = config ?? SummarizerConfig.defaultConfig
         #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
-            let applSummarizer = FoundationModelsSummarizer(modelInstructions: FoundationModelsConfig.instructions)
+            let applSummarizer = FoundationModelsSummarizer(config: config)
             return SummarizerService(summarizer: applSummarizer, maxWords: maxWords)
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
-                  let model = LiteLLMConfig.apiModel,
+                  let model = config.options["model"] as? String, !model.isEmpty,
                   let key = LiteLLMConfig.apiKey else { return nil }
             let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
-            let llmSummarizer = LiteLLMSummarizer(
-                client: llmClient,
-                model: model,
-                maxTokens: LiteLLMConfig.maxTokens,
-                modelInstructions: LiteLLMConfig.instructions
-            )
+            let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
             return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         }
         #else
         guard isHostedSummarizerEnabled,
               let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
-              let model = LiteLLMConfig.apiModel,
+              let model = config.options["model"] as? String, !model.isEmpty,
               let key = LiteLLMConfig.apiKey else { return nil }
         let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
-        let llmSummarizer = LiteLLMSummarizer(
-            client: llmClient,
-            model: model,
-            maxTokens: LiteLLMConfig.maxTokens,
-            modelInstructions: LiteLLMConfig.instructions
-        )
+        let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
         return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         #endif
     }

@@ -38,13 +38,14 @@ import Shared
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 
-public class DBOperationCancelled : MaybeErrorType {
+public final class DBOperationCancelled : MaybeErrorType {
     public var description: String {
         return "Database operation cancelled"
     }
 }
 
-class DeferredDBOperation<T>: CancellableDeferred<T> {
+// TODO: FXIOS-13184 Remove deferred code or validate it is sendable
+class DeferredDBOperation<T>: CancellableDeferred<T>, @unchecked Sendable {
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
 
     override func cancel() {
@@ -81,7 +82,8 @@ enum SQLiteDBRecoverableError: Int {
  * Handle to a SQLite database.
  * Each instance holds a single connection that is shared across all queries.
  */
-open class SwiftData {
+// TODO: FXIOS-13213 Make SwiftData actually sendable
+open class SwiftData: @unchecked Sendable {
     let filename: String
     let schema: Schema
     let files: FileAccessor

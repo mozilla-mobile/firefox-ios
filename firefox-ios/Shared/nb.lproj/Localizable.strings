@@ -917,7 +917,7 @@
 "Privacy" = "Personvern";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "Personvernbestemmelser";
+"Privacy Policy" = "Personvernerklæring";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "Tilkoblingen er ikke sikker";

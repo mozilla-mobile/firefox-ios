@@ -337,7 +337,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         }
 
         // So that the separator line goes all the way to the left edge.
-        cell.separatorInset = .zero
+        cell.separatorInset = UX.cellSeparatorInsetForCurrentOS
 
         return cell
     }

@@ -78,8 +78,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "Shared",
-                dependencies: ["Common",
-                               "WebEngine"],
+                dependencies: ["Common"],
                 swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "ComponentLibrary",
@@ -108,7 +107,11 @@ let package = Package(
             dependencies: ["Dip",
                            "SwiftyBeaver",
                            .product(name: "Sentry-Dynamic", package: "sentry-cocoa")],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),

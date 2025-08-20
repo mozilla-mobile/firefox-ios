@@ -69,6 +69,7 @@ enum MainMenuActionType: ActionType {
     case tapRemoveFromShortcuts
     case updateSiteProtectionsHeader
     case updateMenuAppearance
+    case viewWillTransition
 }
 
 enum MainMenuMiddlewareActionType: ActionType {

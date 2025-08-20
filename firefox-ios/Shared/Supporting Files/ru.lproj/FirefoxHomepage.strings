@@ -4,6 +4,9 @@
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "Истории";
 
+/* This is the title of the Top Stories section on Firefox Homepage. */
+"FirefoxHome.Stories.TopStoriesSectionTitle.v143" = "Топ историй";
+
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Данные приватного просмотра удалены";
 
@@ -19,9 +22,15 @@
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Найдите или введите адрес";
 
+/* This is the navigation title for the Shortcuts Library view */
+"FirefoxHomepage.Shortcuts.Library.Title.v143" = "Ярлыки";
+
 /* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
 "FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "Закреплено: %@";
 
 /* This is the section title for the Shortcuts section on Firefox Homepage. */
 "FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Ярлыки";
+
+/* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
+"FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ из %2$@";
 

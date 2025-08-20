@@ -5,6 +5,7 @@
 import XCTest
 @testable import Common
 
+@MainActor
 final class DefaultThemeManagerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 

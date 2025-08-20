@@ -27,6 +27,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageSearchBar
     case homepageShortcutsLibrary
     case homepageStoriesRedesign
+    case homepageDiscoverMoreButton
+    case homepageDiscoverMoreExperience
     case inactiveTabs
     case loginsVerificationEnabled
     case menuDefaultBrowserBanner
@@ -49,6 +51,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case toolbarNavigationHint
     case toolbarUpdateHint
@@ -77,6 +80,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .homepageStoriesRedesign,
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
+                .homepageDiscoverMoreButton,
+                .homepageDiscoverMoreExperience,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
@@ -145,6 +150,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageSearchBar,
                 .homepageShortcutsLibrary,
                 .homepageStoriesRedesign,
+                .homepageDiscoverMoreButton,
+                .homepageDiscoverMoreExperience,
                 .loginsVerificationEnabled,
                 .menuDefaultBrowserBanner,
                 .menuRefactor,
@@ -165,6 +172,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarNavigationHint,
                 .toolbarUpdateHint,

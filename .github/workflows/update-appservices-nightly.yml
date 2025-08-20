@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: tmp/rust-components
+          ref: main
 
       - uses: actions/setup-python@v5
         with:

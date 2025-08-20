@@ -30,6 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
+                          TermsOfUseDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -162,6 +163,7 @@ class BrowserCoordinator: BaseCoordinator,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
         )
+        homepageController.termsOfUseDelegate = self
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
@@ -272,6 +274,11 @@ class BrowserCoordinator: BaseCoordinator,
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
 
+        // Shortcuts library is pushed on top of BVC, so we need to pop that view controller once the web view is showing
+        if router.navigationController.topViewController is ShortcutsLibraryViewController {
+            router.popViewController(animated: false)
+        }
+
         screenshotService.screenshotableView = webviewController
     }
 
@@ -309,6 +316,7 @@ class BrowserCoordinator: BaseCoordinator,
             legacyHomepageViewController.libraryPanelDelegate = libraryPanelDelegate
             legacyHomepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
             legacyHomepageViewController.browserNavigationHandler = self
+            legacyHomepageViewController.termsOfUseDelegate = self
 
             return legacyHomepageViewController
         }
@@ -1042,15 +1050,16 @@ class BrowserCoordinator: BaseCoordinator,
     private func present(_ viewController: UIViewController,
                          customTransition: UIViewControllerTransitioningDelegate,
                          style: UIModalPresentationStyle) {
-        browserViewController.willNavigateAway(from: tabManager.selectedTab) { [weak self] in
-            if !UIAccessibility.isReduceMotionEnabled {
-                self?.router.present(viewController,
-                                     animated: true,
-                                     customTransition: customTransition,
-                                     presentationStyle: style)
-            } else {
-                self?.router.present(viewController)
-            }
+        browserViewController.willNavigateAway(from: tabManager.selectedTab)
+        if !UIAccessibility.isReduceMotionEnabled {
+            router.present(
+                viewController,
+                animated: true,
+                customTransition: customTransition,
+                presentationStyle: style
+            )
+        } else {
+            router.present(viewController)
         }
     }
 
@@ -1079,7 +1088,7 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-  func showSummarizePanel(_ trigger: SummarizerTrigger) {
+  func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {
         guard isSummarizerOn,
               tabManager.selectedTab?.isFxHomeTab == false,
               let webView = tabManager.selectedTab?.webView else { return }
@@ -1106,6 +1115,7 @@ class BrowserCoordinator: BaseCoordinator,
             trigger: trigger,
             prefs: profile.prefs,
             windowUUID: windowUUID,
+            config: config,
             router: router) { [weak self] url in
             guard let url else { return }
             self?.openURLinNewTab(url)
@@ -1165,9 +1175,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - Terms of Use
-    // Terms Of Use Bottom Sheet should appear on every app launch on homepage or on current tab,
-    // until user accepts terms of use.
-    func showTermsOfUse() {
+
+    func showTermsOfUse(context: TriggerContext = .appLaunch) {
         let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
 
         let router = DefaultRouter(navigationController: presenter.navigationController ?? UINavigationController())
@@ -1179,10 +1188,10 @@ class BrowserCoordinator: BaseCoordinator,
             notificationCenter: NotificationCenter.default,
             prefs: profile.prefs
         )
-        guard coordinator.shouldShowTermsOfUse() else { return }
+        guard coordinator.shouldShowTermsOfUse(context: context) else { return }
         coordinator.parentCoordinator = self
         add(child: coordinator)
-        coordinator.start()
+        coordinator.start(context: context)
     }
 
     // MARK: - Password Generator

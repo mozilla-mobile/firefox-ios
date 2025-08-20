@@ -40,21 +40,43 @@ public class KeychainManager {
     }()
 }
 
-open class RustKeychain {
-    public private(set) var serviceName: String
-    public private(set) var accessGroup: String?
+public protocol KeychainProtocol: Sendable {
+    var creditCardCanaryPhrase: String { get }
+    var loginsCanaryPhrase: String { get }
+    var loginsKeyIdentifier: String { get }
+    func removeObject(key: String)
+    func removeLoginsKeysForDebugMenuItem()
+    func removeAllKeys()
+    func setLoginsKeyData(keyValue: String, canaryValue: String)
+    func setCreditCardsKeyData(keyValue: String, canaryValue: String)
+    func getLoginsKeyData() -> (String?, String?)
+    func getCreditCardKeyData() -> (String?, String?)
+    static func wipeKeychain()
+    func createLoginsKeyData() throws -> String
+    func queryKeychainForKey(key: String) -> Result<String?, Error>
+    func createAndStoreKey(canaryPhrase: String, canaryIdentifier: String, keyIdentifier: String) throws -> String
+    func decryptCreditCardNum(encryptedCCNum: String) -> String?
+    func checkCanary(canary: String,
+                     text: String,
+                     key: String) throws -> Bool
+    func createCreditCardsKeyData() throws -> String
+}
+
+public final class RustKeychain: KeychainProtocol {
+    public let serviceName: String
+    public let accessGroup: String?
 
     private let logger: Logger
 
     public let loginsKeyIdentifier = "appservices.key.logins.perfield"
     public let loginsCanaryKeyIdentifier = "canaryPhrase"
-    let loginsCanaryPhrase = "a string for checking validity of the key"
+    public let loginsCanaryPhrase = "a string for checking validity of the key"
 
     public let creditCardKeyIdentifier = "appservices.key.creditcard.perfield"
     public let creditCardCanaryKeyIdentifier = "creditCardCanaryPhrase"
-    let creditCardCanaryPhrase = "a string for checking validity of the key"
+    public let creditCardCanaryPhrase = "a string for checking validity of the key"
 
-    public static var sharedClientAppContainerKeychain: RustKeychain {
+    public static var sharedClientAppContainerKeychain: KeychainProtocol {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
 
         guard let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as? String else {
@@ -149,7 +171,7 @@ open class RustKeychain {
                    description: description)
     }
 
-    func createCreditCardsKeyData() throws -> String {
+    public func createCreditCardsKeyData() throws -> String {
         do {
             return try createAndStoreKey(canaryPhrase: creditCardCanaryPhrase,
                                          canaryIdentifier: creditCardCanaryKeyIdentifier,
@@ -166,7 +188,7 @@ open class RustKeychain {
         throw LoginEncryptionKeyError.noKeyCreated
     }
 
-    func createLoginsKeyData() throws -> String {
+    public func createLoginsKeyData() throws -> String {
         do {
             return try createAndStoreKey(canaryPhrase: loginsCanaryPhrase,
                                          canaryIdentifier: loginsCanaryKeyIdentifier,
@@ -186,7 +208,7 @@ open class RustKeychain {
         throw LoginEncryptionKeyError.noKeyCreated
     }
 
-    func queryKeychainForKey(key: String) -> Result<String?, Error> {
+    public func queryKeychainForKey(key: String) -> Result<String?, Error> {
         var keychainQueryDictionary = getBaseKeychainQuery(key: key)
         keychainQueryDictionary[kSecMatchLimit as String] = kSecMatchLimitOne
         keychainQueryDictionary[kSecReturnData as String] = kCFBooleanTrue
@@ -206,7 +228,7 @@ open class RustKeychain {
         return .success(String(data: data, encoding: .utf8))
     }
 
-    func createAndStoreKey(canaryPhrase: String, canaryIdentifier: String, keyIdentifier: String) throws -> String {
+    public func createAndStoreKey(canaryPhrase: String, canaryIdentifier: String, keyIdentifier: String) throws -> String {
          let keyValue = try createKey()
          let canaryValue = try createCanary(text: canaryPhrase, encryptionKey: keyValue)
 
@@ -217,7 +239,7 @@ open class RustKeychain {
          return keyValue
     }
 
-    func decryptCreditCardNum(encryptedCCNum: String) -> String? {
+    public func decryptCreditCardNum(encryptedCCNum: String) -> String? {
         var keyValue: String?
         (keyValue, _) = getCreditCardKeyData()
 
@@ -240,9 +262,11 @@ open class RustKeychain {
         }
     }
 
-    func checkCanary(canary: String,
-                     text: String,
-                     key: String) throws -> Bool {
+    public func checkCanary(
+        canary: String,
+        text: String,
+        key: String
+    ) throws -> Bool {
         return try decryptString(key: key, ciphertext: canary) == text
     }
 

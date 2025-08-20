@@ -5,8 +5,8 @@
 import Foundation
 import Shared
 
-public class ReadingListStorageError: MaybeErrorType {
-    var message: String
+public final class ReadingListStorageError: MaybeErrorType {
+    let message: String
     public init(_ message: String) {
         self.message = message
     }

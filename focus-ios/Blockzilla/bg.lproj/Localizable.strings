@@ -25,6 +25,9 @@
 /* Label for row in About screen */
 "About.rowRights" = "Вашите права";
 
+/* Label for row in About screen */
+"About.rowTerms" = "Условия за ползване";
+
 /* Label on About screen */
 "About.safariBullet1" = "Спирайте проследяването за подобрена поверителност";
 
@@ -178,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Затваряне";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Интернет връзката изглежда е офлайн.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Нов опит";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Първи стъпки";
 
@@ -214,6 +223,12 @@
 /* Text for a label that indicates the title of incognito section from onboarding screen. */
 "Onboarding.Incognito.Title" = "Повече от режим инкогнито";
 
+/* Used as a text for the link in Onboarding.PrivacyNotice.Text. */
+"Onboarding.PrivacyNotice.LinkText" = "Политика на поверителност";
+
+/* Text that describes Firefox's commitment to privacy. %@ is a link using Onboarding.PrivacyNotice.LinkText as text. */
+"Onboarding.PrivacyNotice.Text" = "Firefox се грижи за вашата поверителност. Научете повече на %@.";
+
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Конфигурирайте настройките, за да можете да решите колко или колко малко да споделяте.";
 
@@ -222,6 +237,27 @@
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "Изведете частното си сърфиране на следващото ниво.";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonText" = "Приемане и продължаване";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Продължаване";
+
+/* Button label to dismiss the Privacy Policy and Terms of Use screen. */
+"Onboarding.TermsOfUse.Done.ButtonText" = "Готово";
+
+/* Used as a text for the link in Onboarding.TermsOfUse.Text. */
+"Onboarding.TermsOfUse.LinkText" = "Условия за ползване на Firefox";
+
+/* Subtitle for the Terms of Use screen during onboarding. */
+"Onboarding.TermsOfUse.Subtitle" = "Бързо. Поверително. Без разсейване.";
+
+/* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
+"Onboarding.TermsOfUse.Text" = "Продължавайки, вие се съгласявате с %@.";
+
+/* Title for the Terms of Use screen during onboarding. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"Onboarding.TermsOfUse.Title" = "Добре дошли при %@";
 
 /* Text for a label that indicates the title for onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Onboarding.Title" = "Добре дошли във Firefox %@!";
@@ -274,8 +310,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes2" = "Блокиране на проследяващи елементи";
 
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. */
+"Settings.DailyUsagePing.Message" = "Това помага на Mozilla да оцени активните потребители.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title" = "Ежедневна употреба";
+
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Тъмна";
+
+/* Description associated with the Crash Reports toggle on settings screen */
+"Settings.detailTextCrashReports.V2" = "Това ни помага да откриваме и отстраняваме проблеми с четеца.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ ще изпраща към търсачката всичко, каквото въвеждате в адресната лента.";
@@ -381,6 +426,9 @@
 
 /* Label for the checkbox to toggle Social trackers */
 "Settings.toggleBlockSocial2" = "Социални";
+
+/* Label for Crash Reports toggle on settings screen */
+"Settings.toggleCrashReports" = "Автоматично изпращане на доклади за срив";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Използване на лицево разпознаване за отключване на приложението";

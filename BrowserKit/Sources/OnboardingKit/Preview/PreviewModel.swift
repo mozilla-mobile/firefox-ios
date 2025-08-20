@@ -227,8 +227,11 @@ extension PreviewModel {
 
 #Preview("Onboarding Card") {
     ZStack {
-        AnimatedGradientMetalView()
-            .edgesIgnoringSafeArea(.all)
+        AnimatedGradientMetalView(
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+        )
+        .edgesIgnoringSafeArea(.all)
         OnboardingBasicCardView(
             viewModel: PreviewModel.welcome,
             windowUUID: .DefaultUITestingUUID,
@@ -240,8 +243,11 @@ extension PreviewModel {
 
 #Preview("Multiple Choice Onboarding Card") {
     ZStack {
-        AnimatedGradientMetalView()
-            .edgesIgnoringSafeArea(.all)
+        AnimatedGradientMetalView(
+            windowUUID: .DefaultUITestingUUID,
+            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+        )
+        .edgesIgnoringSafeArea(.all)
         OnboardingMultipleChoiceCardView(
             viewModel: PreviewModel.customizationToolbar,
             windowUUID: .DefaultUITestingUUID,

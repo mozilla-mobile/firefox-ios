@@ -2,6 +2,6 @@
 # https://taskcluster-taskgraph.readthedocs.io/en/latest/howto/bootstrap-taskgraph.html
 
 mozilla-taskgraph>=3.0.3
-mozilla-version>=4.0.0
+mozilla-version>=5.0.0
 taskcluster-taskgraph>=14.4.0
 GitPython>=3.1.44

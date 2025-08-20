@@ -7,6 +7,7 @@ import Redux
 import Shared
 import Common
 import WebKit
+import SummarizeKit
 
 struct BrowserViewControllerState: ScreenState, Equatable {
     enum NavigationType {
@@ -35,7 +36,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case dataClearance
         case passwordGenerator
         // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
-        case summarizer
+        case summarizer(config: SummarizerConfig?)
     }
 
     let windowUUID: WindowUUID
@@ -204,7 +205,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                navigationDestination: NavigationDestination(.summarizer)
+                navigationDestination: NavigationDestination(.summarizer(config: action.summarizerConfig))
             )
         default:
             return defaultState(from: state, action: action)
@@ -471,7 +472,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                displayView: .summarizer,
+                displayView: .summarizer(config: action.summarizerConfig),
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return defaultState(from: state, action: action)

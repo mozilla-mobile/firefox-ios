@@ -11,13 +11,15 @@ class MockSummarizationChecker: SummarizationCheckerProtocol {
         canSummarize: true,
         reason: nil,
         wordCount: 0,
-        textContent: ""
+        textContent: "",
+        contentType: .generic
     )
     static let failure = SummarizationCheckResult(
         canSummarize: false,
         reason: .contentTooLong,
         wordCount: 0,
-        textContent: ""
+        textContent: "",
+        contentType: nil
     )
 
     var overrideResponse: SummarizationCheckResult?

@@ -10,9 +10,12 @@ public struct SummarizeViewModel {
     let loadingLabel: String
     let loadingA11yLabel: String
     let loadingA11yId: String
+    let tabSnapshotA11yLabel: String
+    let tabSnapshotA11yId: String
     let summarizeTextViewA11yLabel: String
     let summarizeTextViewA11yId: String
     let brandLabel: String
+    let summaryNote: String
 
     let closeButtonModel: CloseButtonViewModel
     let tabSnapshot: UIImage
@@ -27,7 +30,10 @@ public struct SummarizeViewModel {
         loadingLabel: String,
         loadingA11yLabel: String,
         loadingA11yId: String,
+        tabSnapshotA11yLabel: String,
+        tabSnapshotA11yId: String,
         brandLabel: String,
+        summaryNote: String,
         summarizeTextViewA11yLabel: String,
         summarizeTextViewA11yId: String,
         closeButtonModel: CloseButtonViewModel,
@@ -41,7 +47,10 @@ public struct SummarizeViewModel {
         self.loadingLabel = loadingLabel
         self.loadingA11yLabel = loadingA11yLabel
         self.loadingA11yId = loadingA11yId
+        self.tabSnapshotA11yLabel = tabSnapshotA11yLabel
+        self.tabSnapshotA11yId = tabSnapshotA11yId
         self.brandLabel = brandLabel
+        self.summaryNote = summaryNote
         self.summarizeTextViewA11yLabel = summarizeTextViewA11yLabel
         self.summarizeTextViewA11yId = summarizeTextViewA11yId
         self.closeButtonModel = closeButtonModel

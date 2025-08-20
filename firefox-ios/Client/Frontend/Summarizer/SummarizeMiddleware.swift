@@ -38,6 +38,20 @@ final class SummarizerMiddleware {
         }
     }
 
+    func getConfig(for contentType: SummarizationContentType) -> SummarizerConfig {
+        let summarizerType: SummarizerModel =
+            summarizerNimbusUtils.isAppleSummarizerEnabled()
+                ? .appleSummarizer
+                : .liteLLMSummarizer
+        return SummarizerConfigManager().getConfig(summarizerType, contentType: contentType)
+    }
+
+    func checkSummarizationResult(_ tab: Tab) async -> SummarizationCheckResult? {
+        guard let webView = tab.webView else { return nil }
+        let result = await summarizationChecker.check(on: webView, maxWords: maxWords)
+        return result
+    }
+
     private var maxWords: Int {
         summarizerServiceFactory.maxWords(
             isAppleSummarizerEnabled: summarizerNimbusUtils.isAppleSummarizerEnabled(),
@@ -46,16 +60,15 @@ final class SummarizerMiddleware {
     }
 
     private func dispatchSummarizeConfigurationAction(for action: Action) async {
-        guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
-        let result = await summarizationChecker.check(
-            on: webView,
-            maxWords: maxWords
-        )
-        guard result.canSummarize else { return }
+        guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
+        let result = await checkSummarizationResult(tab)
+        let contentType = result?.contentType ?? .generic
+        guard result?.canSummarize == true else { return }
         store.dispatchLegacy(
             SummarizeAction(
                 windowUUID: action.windowUUID,
-                actionType: SummarizeMiddlewareActionType.configuredSummarizer
+                actionType: SummarizeMiddlewareActionType.configuredSummarizer,
+                summarizerConfig: getConfig(for: contentType)
             )
         )
     }

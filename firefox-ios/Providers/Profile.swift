@@ -176,12 +176,11 @@ extension Profile {
 
     func updateCredentialIdentities() -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
-        self.logins.listLogins().upon { loginResult in
+        self.logins.listLogins { loginResult in
             switch loginResult {
             case let .failure(error):
                 deferred.fill(.failure(error))
             case let .success(logins):
-
                 self.populateCredentialStore(
                         identities: logins.map(\.passwordCredentialIdentity)
                 ).upon(deferred.fill)
@@ -233,7 +232,7 @@ open class BrowserProfile: Profile,
     }()
     private var loginsVerificationEnabled = false
     fileprivate let name: String
-    fileprivate let keychain: RustKeychain
+    fileprivate let keychain: KeychainProtocol
     var isShutdown = false
 
     internal let files: FileAccessor
@@ -696,10 +695,11 @@ open class BrowserProfile: Profile,
     }()
 
     lazy var remoteSettingsService: RemoteSettingsService? = {
-        let useStaging = prefs.boolForKey(PrefsKeys.RemoteSettings.useQAStagingServerForRemoteSettings) == true
-        let server = useStaging ? RemoteSettingsServer.stage : RemoteSettingsServer.prod
-        let bucketName = (server == .prod ? "main" : "main-preview")
-        let config = RemoteSettingsConfig2(server: server,
+        let remoteSettingsEnvironmentKey = prefs.stringForKey(PrefsKeys.RemoteSettings.remoteSettingsEnvironment) ?? ""
+        let remoteSettingsEnvironment = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
+        let remoteSettingsServer = remoteSettingsEnvironment.toRemoteSettingsServer()
+        let bucketName = (remoteSettingsServer == .prod ? "main" : "main-preview")
+        let config = RemoteSettingsConfig2(server: remoteSettingsServer,
                                            bucketName: bucketName,
                                            appContext: remoteSettingsAppContext())
 
@@ -852,5 +852,17 @@ open class BrowserProfile: Profile,
 
     class NoAccountError: MaybeErrorType {
         var description = "No account."
+    }
+}
+
+extension RemoteSettingsEnvironment {
+    /// NOTE: It would much cleaner to use RemoteSettingsServer if it had a public initializer.
+    /// TODO(FXIOS-13189): Add public initializer from rawValue to RemoteSettingsServer.
+    public func toRemoteSettingsServer() -> RemoteSettingsServer {
+        switch self {
+        case .prod: return .prod
+        case .stage: return .stage
+        case .dev: return .dev
+        }
     }
 }

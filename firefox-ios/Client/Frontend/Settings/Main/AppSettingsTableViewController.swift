@@ -7,6 +7,8 @@ import UIKit
 import Shared
 import Glean
 
+import struct MozillaAppServices.VisitObservation
+
 // MARK: - Settings Flow Delegate Protocol
 
 /// Supports decision making from VC to parent coordinator
@@ -473,12 +475,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
+            TermsOfUseTimeout(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
             ScreenshotSetting(settings: self),
             DeleteLoginsKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
-            PopupHTMLSetting(settings: self)
+            PopupHTMLSetting(settings: self),
+            AddShortcutsSetting(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
@@ -518,6 +522,31 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func pressedOpenFiftyTabs() {
         parentCoordinator?.openDebugTestTabs(count: 50)
+    }
+
+    /// Adds 20 random shortcuts to the top sites / shortcuts library
+    func pressedAddShortcuts() {
+        guard let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt"),
+              let fileContents = try? String(contentsOfFile: filePath, encoding: .utf8) else { return }
+
+        let allDomains = Array(Set(
+            fileContents
+                .components(separatedBy: .newlines)
+                .filter { !$0.isEmpty && $0.filter { $0 == "." }.count < 2 }
+        ))
+
+        let randomDomains = Array(allDomains.shuffled().prefix(20))
+
+        let sites = Dictionary(uniqueKeysWithValues: randomDomains.map { domain in
+            let title = domain.components(separatedBy: ".").first ?? domain
+            let url = "https://\(domain)"
+            return (title, url)
+        })
+
+        for site in sites {
+            let visitObservation = VisitObservation(url: site.value, title: site.key, visitType: .link)
+            _ = profile?.places.applyObservation(visitObservation: visitObservation)
+        }
     }
 
     func pressedDebugFeatureFlags() {
