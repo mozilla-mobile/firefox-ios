@@ -22,5 +22,5 @@ features:
       - channel: developer
         value:
           enabled: true
-          translucency: false
+          translucency: true
 
