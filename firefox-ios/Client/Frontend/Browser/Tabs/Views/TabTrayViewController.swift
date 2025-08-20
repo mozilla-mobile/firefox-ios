@@ -457,6 +457,7 @@ final class TabTrayViewController: UIViewController,
         }
 
         setupToolBarAppearance(theme: theme)
+        setupNavigationBarAppearance(theme: theme)
     }
 
     func applyTheme(fromIndex: Int, toIndex: Int, progress: CGFloat) {
@@ -476,6 +477,7 @@ final class TabTrayViewController: UIViewController,
 
         experimentSegmentControl.applyTheme(theme: swipeTheme)
         setupToolBarAppearance(theme: swipeTheme)
+        setupNavigationBarAppearance(theme: swipeTheme)
     }
 
     private func setupToolBarAppearance(theme: Theme) {
@@ -492,6 +494,24 @@ final class TabTrayViewController: UIViewController,
         navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
         navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
+    }
+
+    private func setupNavigationBarAppearance(theme: Theme) {
+        let backgroundAlpha = tabTrayUtils.backgroundAlpha()
+        let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
+        standardAppearance.backgroundColor = color
+        standardAppearance.backgroundEffect = nil
+        standardAppearance.shadowColor = .clear
+
+        navigationController?.navigationBar.standardAppearance = standardAppearance
+        navigationController?.navigationBar.compactAppearance = standardAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
+        navigationController?.navigationBar.compactScrollEdgeAppearance = standardAppearance
+        navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
     }
 
     // MARK: Private
@@ -565,14 +585,26 @@ final class TabTrayViewController: UIViewController,
     private func setupBlurView() {
         guard tabTrayUtils.isTabTrayUIExperimentsEnabled, tabTrayUtils.isTabTrayTranslucencyEnabled else { return }
 
-        containerView.insertSubview(blurView, belowSubview: experimentSegmentControl)
+        // Should use Regular layout used for iPad
+        if isRegularLayout {
+            containerView.insertSubview(blurView, aboveSubview: containerView)
 
-        NSLayoutConstraint.activate([
-            blurView.topAnchor.constraint(equalTo: experimentSegmentControl.topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
+            NSLayoutConstraint.activate([
+                blurView.topAnchor.constraint(equalTo: view.topAnchor),
+                blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                blurView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            ])
+        } else {
+            containerView.insertSubview(blurView, belowSubview: experimentSegmentControl)
+
+            NSLayoutConstraint.activate([
+                blurView.topAnchor.constraint(equalTo: experimentSegmentControl.topAnchor),
+                blurView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                blurView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                blurView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            ])
+        }
 
         updateBlurView()
     }
@@ -591,6 +623,7 @@ final class TabTrayViewController: UIViewController,
     private func setupForiPad() {
         navigationItem.titleView = segmentedControl
         view.addSubviews(containerView)
+        setupBlurView()
 
         if let titleView = navigationItem.titleView {
             titleWidthConstraint = titleView.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width)
@@ -598,7 +631,7 @@ final class TabTrayViewController: UIViewController,
         }
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.topAnchor.constraint(equalTo: view.topAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
