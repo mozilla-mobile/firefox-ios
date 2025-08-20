@@ -37,12 +37,10 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         self.cache = cache
         self.prefs = prefs
         self.logger = logger
-        self.fetcher =
-            fetcher
-            ?? MerinoFeedFetcher(
-                baseURL: MerinoServicesBaseURL,
-                logger: logger
-            )
+        self.fetcher = fetcher ?? MerinoFeedFetcher(
+            baseURL: MerinoServicesBaseURL,
+            logger: logger
+        )
     }
 
     func fetchStories(_ itemCount: Int32) async throws -> [RecommendationDataItem] {
@@ -51,11 +49,11 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
-            MerinoProvider.islocaleSupported(Locale.current.identifier)
+              MerinoProvider.islocaleSupported(Locale.current.identifier)
         else { throw Error.failure }
 
         if let cachedItems = cache.loadRecommendations(),
-            cacheUpdateThresholdHasNotPassed() {
+           cacheUpdateThresholdHasNotPassed() {
             return cachedItems
         }
 
@@ -79,7 +77,8 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
 
     static func islocaleSupported(_ locale: String) -> Bool {
         return allCuratedRecommendationLocales().contains(
-            locale.replacingOccurrences(of: "_", with: "-"))
+            locale.replacingOccurrences(of: "_", with: "-")
+        )
     }
 
     private var shouldUseMockData: Bool {
