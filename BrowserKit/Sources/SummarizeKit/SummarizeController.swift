@@ -183,16 +183,14 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let impact = UIImpactFeedbackGenerator(style: .medium)
-        impact.prepare()
-        impact.impactOccurred()
+        triggerImpactHaptics()
         setupLoadingViews()
         setupTabSnapshot()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Ensure that the layout
+        // Ensure that the layout is resolved before shimmering
         loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.5))
     }
 
@@ -346,9 +344,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func showSummary(_ summary: String) {
-        let impact = UIImpactFeedbackGenerator(style: .medium)
-        impact.prepare()
-        impact.impactOccurred()
+        triggerImpactHaptics()
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.onTabSnapshotPan))
         self.tabSnapshotContainer.addGestureRecognizer(panGesture)
@@ -552,6 +548,12 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
                 tabSnapshotContainer.transform = tabSnapshotTransform
             }
         }
+    }
+
+    private func triggerImpactHaptics(style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.prepare()
+        generator.impactOccurred()
     }
 
     // MARK: - CAAnimationDelegate
