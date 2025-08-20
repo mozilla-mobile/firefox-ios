@@ -92,6 +92,7 @@ extension DeviceInfo {
     }
 
     // Reports portrait screen size regardless of the current orientation.
+    @MainActor
     public class func screenSizeOrientationIndependent() -> CGSize {
         let screenSize = UIScreen.main.bounds.size
         return CGSize(width: min(screenSize.width, screenSize.height), height: max(screenSize.width, screenSize.height))
