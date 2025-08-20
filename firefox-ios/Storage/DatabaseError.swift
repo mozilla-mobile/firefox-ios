@@ -7,10 +7,10 @@ import Shared
 /**
  * Used to bridge the NSErrors we get here into something that Result is happy with.
  */
-open class DatabaseError: MaybeErrorType {
+final class DatabaseError: MaybeErrorType {
     let err: NSError?
 
-    open var description: String {
+    public var description: String {
         return err?.localizedDescription ?? "Unknown database error."
     }
 

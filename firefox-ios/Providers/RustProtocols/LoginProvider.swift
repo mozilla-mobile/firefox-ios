@@ -9,14 +9,14 @@ import Storage
 protocol LoginProvider: AnyObject {
     func searchLoginsWithQuery(
         _ query: String?,
-        completionHandler: @escaping (Result<[Login], Error>) -> Void)
-    func addLogin(login: LoginEntry, completionHandler: @escaping (Result<Login?, Error>) -> Void)
+        completionHandler: @escaping @Sendable (Result<[Login], Error>) -> Void)
+    func addLogin(login: LoginEntry, completionHandler: @escaping @Sendable (Result<Login?, Error>) -> Void)
 }
 
 protocol SyncLoginProvider {
-    func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void)
+    func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void)
     func registerWithSyncManager()
-    func verifyLogins(completionHandler: @escaping (Bool) -> Void)
+    func verifyLogins(completionHandler: @escaping @Sendable (Bool) -> Void)
 }
 
 extension RustLogins: LoginProvider, SyncLoginProvider {}

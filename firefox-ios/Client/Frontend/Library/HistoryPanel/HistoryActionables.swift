@@ -33,6 +33,7 @@ struct HistoryActionablesModel: Hashable {
         self.imageName = imageName
     }
 
+    @MainActor
     mutating func configureImage(for window: WindowUUID) {
         if let imageName = imageName {
             let themeManager: ThemeManager = AppContainer.shared.resolve()

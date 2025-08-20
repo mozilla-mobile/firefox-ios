@@ -39,7 +39,7 @@ class MockLoginProvider: LoginProvider, SyncLoginProvider {
         completionHandler(.success(nil))
     }
 
-    func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
+    func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void) {
         getStoredKeyCalledCount += 1
         return completion(.success("test encryption key"))
     }

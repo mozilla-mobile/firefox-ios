@@ -184,7 +184,10 @@ class LegacyHomepageViewController: UIViewController,
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             self?.displayWallpaperSelector()
         }
-        termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
+        // Add delay to ensure view hierarchy is stable before presenting
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {

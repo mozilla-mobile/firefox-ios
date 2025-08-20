@@ -9,6 +9,7 @@ import Shared
 import ComponentLibrary
 import OnboardingKit
 
+@MainActor
 final class OnboardingService: FeatureFlaggable {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
@@ -54,7 +55,6 @@ final class OnboardingService: FeatureFlaggable {
         self.searchBarLocationSaver = searchBarLocationSaver
     }
 
-    @MainActor
     func handleAction(
         _ action: OnboardingActions,
         from cardName: String,
@@ -169,7 +169,6 @@ final class OnboardingService: FeatureFlaggable {
         askForNotificationPermission(from: cardName)
     }
 
-    @MainActor
     private func handleSyncSignIn(
         from cardName: String,
         with activityEventHelper: ActivityEventHelper,
@@ -182,7 +181,6 @@ final class OnboardingService: FeatureFlaggable {
         presentSignToSync(with: fxaParams, profile: profile, completion: completion)
     }
 
-    @MainActor
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
         activityEventHelper.chosenOptions.insert(.setAsDefaultBrowser)
         activityEventHelper.updateOnboardingUserActivationEvent()
@@ -190,24 +188,20 @@ final class OnboardingService: FeatureFlaggable {
         defaultApplicationHelper.openSettings()
     }
 
-    @MainActor
     private func handleOpenInstructionsPopup(from popupViewModel: OnboardingDefaultBrowserModelProtocol) {
         presentDefaultBrowserPopup(from: popupViewModel) { [weak self] in
             self?.navigationDelegate?.finishOnboardingFlow()
         }
     }
 
-    @MainActor
     private func handleReadPrivacyPolicy(from url: URL, completion: @escaping () -> Void) {
         presentPrivacyPolicy(from: url, completion: completion)
     }
 
-    @MainActor
     private func handleOpenIosFxSettings(from cardName: String) {
         defaultApplicationHelper.openSettings()
     }
 
-    @MainActor
     private func handleEndOnboarding(with activityEventHelper: ActivityEventHelper) {
         introScreenManager?.didSeeIntroScreen()
         searchBarLocationSaver.saveUserSearchBarLocation(
@@ -240,7 +234,6 @@ final class OnboardingService: FeatureFlaggable {
         hasRegisteredForDefaultBrowserNotification = true
     }
 
-    @MainActor
     private func presentSignToSync(with params: FxALaunchParams, profile: Profile, completion: @escaping () -> Void) {
         guard let delegate = delegate else { return }
 
@@ -254,7 +247,6 @@ final class OnboardingService: FeatureFlaggable {
         delegate.present(signInVC, animated: true, completion: nil)
     }
 
-    @MainActor
     private func presentDefaultBrowserPopup(
         from popupViewModel: OnboardingDefaultBrowserModelProtocol,
         completion: @escaping @MainActor () -> Void
@@ -268,7 +260,6 @@ final class OnboardingService: FeatureFlaggable {
         delegate?.present(popupVC, animated: false, completion: nil)
     }
 
-    @MainActor
     private func presentPrivacyPolicy(from url: URL, completion: @escaping () -> Void) {
         guard let delegate = delegate else { return }
         let privacyVC = createPrivacyPolicyViewController(
@@ -351,10 +342,10 @@ final class OnboardingService: FeatureFlaggable {
         return controller
     }
 
-    @MainActor
     @objc
-    private func dismissSelector() {
-        assert(Thread.isMainThread, "Sometimes we have issues with @objc obeying @MainActor -- debug if this assert fails")
-        delegate?.dismiss(animated: true, completion: nil)
+    nonisolated private func dismissSelector() {
+        ensureMainThread {
+            self.delegate?.dismiss(animated: true, completion: nil)
+        }
     }
 }

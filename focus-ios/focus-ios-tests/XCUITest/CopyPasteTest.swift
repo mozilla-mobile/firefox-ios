@@ -59,8 +59,12 @@ class CopyPasteTest: BaseTestCase {
 
         // Tap URL field, check for paste & go menu
         if iPad() {
-            searchOrEnterAddressTextField.tap()
-            sleep(1)
+            if #unavailable(iOS 17) {
+                throw XCTSkip("Intermittent failures on iOS 15 and 16")
+            } else {
+                searchOrEnterAddressTextField.tap()
+                sleep(1)
+            }
         }
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.tap()

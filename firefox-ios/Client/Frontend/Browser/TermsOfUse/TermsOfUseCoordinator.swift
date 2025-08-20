@@ -32,6 +32,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     private var presentedVC: TermsOfUseViewController?
     private let prefs: Prefs
     private let hoursSinceDismissedTerms = 120 // 120 hours (5 days)
+    private let debugMinutesSinceDismissed = 1 // 1 minute used for testing
 
     init(windowUUID: WindowUUID,
          router: Router,
@@ -78,6 +79,8 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             themeManager: themeManager,
             notificationCenter: notificationCenter
         )
+        linkVC.modalPresentationStyle = .pageSheet
+        linkVC.modalTransitionStyle = .coverVertical
         presentedVC?.present(linkVC, animated: true)
     }
 
@@ -95,20 +98,40 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
         guard hasShownFirstTime else { return true }
 
-        // 4. Check if user dismissed and 120 hours passed
+        // 4. Check if user dismissed and timeout period expired
         guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) else {
-            // Already shown but no dismissal record - don't show
-            return false
+            // No dismissal record - user hasn't explicitly dismissed, so show it
+            return true
         }
 
         let dismissedDate = Date.fromTimestamp(dismissedTimestamp)
-        let hoursSinceDismissal = Calendar.current.dateComponents(
-            [.hour],
-            from: dismissedDate,
-            to: Date()
-        ).hour ?? 0
 
-        // 5. After 120 hours: show on any trigger context
-        return hoursSinceDismissal >= hoursSinceDismissedTerms
+        // 5. After timeout period show on any trigger context
+        return hasTimeoutPeriodElapsed(since: dismissedDate)
+    }
+
+    /// Checks if the timeout period has elapsed since the given dismissal date
+    /// Uses debug setting override for testing purposes (1 minute vs 120 hours)
+    private func hasTimeoutPeriodElapsed(since dismissedDate: Date) -> Bool {
+        let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterTermsOfUseTimeoutOverride)
+        let option = TermsOfUseTimeoutOption(rawValue: rawValue) ?? .normal
+
+        switch option {
+        case .normal:
+            let hoursSinceDismissal = Calendar.current.dateComponents(
+                [.hour],
+                from: dismissedDate,
+                to: Date()
+            ).hour ?? 0
+            return hoursSinceDismissal >= hoursSinceDismissedTerms
+
+        case .oneMinute:
+            let minutesSinceDismissal = Calendar.current.dateComponents(
+                [.minute],
+                from: dismissedDate,
+                to: Date()
+            ).minute ?? 0
+            return minutesSinceDismissal >= debugMinutesSinceDismissed
+        }
     }
 }

@@ -15,7 +15,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
     }
 
     public var closeButtonCallback: (() -> Void)?
-    public var onCalculatedHeight: ((CGFloat, _ isExpanded: Bool) -> Void)?
+    public var onCalculatedHeight: ((CGFloat) -> Void)?
     public var bannerButtonCallback: (() -> Void)?
     public var closeBannerButtonCallback: (() -> Void)?
 
@@ -149,13 +149,14 @@ public final class MenuMainView: UIView, ThemeApplicable {
     }
 
     private func updateMenuHeight(for data: [MenuSection]) {
+        guard !data.isEmpty else { return }
         let expandedSection = data.first(where: { $0.isExpanded ?? false })
         let isExpanded = expandedSection?.isExpanded ?? false
 
         // To avoid a glitch when expand the menu, we should not handle this action under DispatchQueue.main.async
         if isExpanded {
             let height = tableView.tableViewContentSize + UX.headerTopMargin
-            onCalculatedHeight?(height + siteProtectionHeader.frame.height, isExpanded)
+            onCalculatedHeight?(height + siteProtectionHeader.frame.height)
             layoutIfNeeded()
         } else {
             DispatchQueue.main.async { [weak self] in
@@ -163,25 +164,24 @@ public final class MenuMainView: UIView, ThemeApplicable {
                 if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
                     let tableViewHeight = tableView.tableViewContentSize
                     let height = isBannerVisible ? tableViewHeight + UX.headerTopMargin : tableViewHeight
-                    self.setHeightForHomepageMenu(height: height, isExpanded: isExpanded)
+                    self.setHeightForHomepageMenu(height: height)
                 } else {
                     onCalculatedHeight?(tableView.tableViewContentSize +
                                         UX.headerTopMargin +
-                                        siteProtectionHeader.frame.height,
-                                        isExpanded)
+                                        siteProtectionHeader.frame.height)
                 }
                 layoutIfNeeded()
             }
         }
     }
 
-    private func setHeightForHomepageMenu(height: CGFloat, isExpanded: Bool) {
+    private func setHeightForHomepageMenu(height: CGFloat) {
         if isMenuDefaultBrowserBanner {
             let headerBannerHeight = headerBanner.frame.height
             let calculatedHeight = isBannerVisible ? height + headerBannerHeight : height
-            self.onCalculatedHeight?(calculatedHeight, isExpanded)
+            self.onCalculatedHeight?(calculatedHeight)
         } else {
-            self.onCalculatedHeight?(height, isExpanded)
+            self.onCalculatedHeight?(height)
         }
     }
 
@@ -190,7 +190,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
             self?.setupView(with: data, isHeaderBanner: false)
             self?.bannerShown = true
             self?.isBannerVisible = false
-            self?.tableView.reloadData(isBannerVisible: self?.isBannerVisible ?? false)
+            self?.tableView.reloadTableView(with: self?.menuData ?? [], isBannerVisible: self?.isBannerVisible ?? false)
             self?.updateMenuHeight(for: self?.menuData ?? [])
             self?.closeBannerButtonCallback?()
         }

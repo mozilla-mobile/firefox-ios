@@ -7,14 +7,16 @@ import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
 protocol AddressProvider {
-    func listAllAddresses(completion: @escaping ([Address]?, Error?) -> Void)
-    func addAddress(address: UpdatableAddressFields, completion: @escaping (Result<Address, Error>) -> Void)
-    func updateAddress(id: String, address: UpdatableAddressFields, completion: @escaping (Result<Void, Error>) -> Void)
-    func deleteAddress(id: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func listAllAddresses(completion: @escaping @Sendable ([Address]?, Error?) -> Void)
+    func addAddress(address: UpdatableAddressFields, completion: @escaping @Sendable (Result<Address, Error>) -> Void)
+    func updateAddress(id: String,
+                       address: UpdatableAddressFields,
+                       completion: @escaping @Sendable (Result<Void, Error>) -> Void)
+    func deleteAddress(id: String, completion: @escaping @Sendable (Result<Void, Error>) -> Void)
 }
 
 protocol SyncAutofillProvider {
-    func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void)
+    func getStoredKey(completion: @Sendable @escaping (Result<String, NSError>) -> Void)
     func registerWithSyncManager()
 }
 

@@ -26,7 +26,8 @@ final class AppleIntelligenceUtilTests: XCTestCase {
 
         XCTAssertTrue(subject.isAppleIntelligenceAvailable)
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.appleIntelligenceAvailable))
-        XCTAssertEqual(userDefaults.setCalledCount, 1)
+        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.cannotRunAppleIntelligence))
+        XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
     func testAppleIntelligenceAvailability_whenIsNotAvailable_returnsFalse() {
@@ -35,7 +36,8 @@ final class AppleIntelligenceUtilTests: XCTestCase {
 
         XCTAssertFalse(subject.isAppleIntelligenceAvailable)
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.appleIntelligenceAvailable))
-        XCTAssertEqual(userDefaults.setCalledCount, 1)
+        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.cannotRunAppleIntelligence))
+        XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
     func testAppleIntelligenceAvailability_whenNotProcessed_returnsFalse() {

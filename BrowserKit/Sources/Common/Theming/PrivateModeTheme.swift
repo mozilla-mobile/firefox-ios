@@ -47,7 +47,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     ])
     var layerSurfaceLow = UIColor(rgb: 0x342B4A)
     var layerSurfaceMedium = UIColor(rgb: 0x24183A)
-    var layerSummary = Gradient(colors: [
+    var layerGradientSummary = Gradient(colors: [
         FXColors.Red70,
         FXColors.Orange50
     ])

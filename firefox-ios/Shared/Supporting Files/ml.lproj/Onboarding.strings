@@ -130,6 +130,9 @@
 /* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "%@-നു് മെച്ചപ്പെടുത്താൻ ഞങ്ങളെ തുണയ്ക്കുക";
 
+/* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "മിന്നൽവിരവോടു വെബ്ബിടങ്ങൾ ലഭ്യമാക്കുക\nതാനെ പിന്തുടൎച്ച പരിരക്ഷണം\nഎല്ലാ ഉപകരണങ്ങളിലും സമന്വയിപ്പിക്കുക";
+
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "തുടരുന്നതിലൂടെ, താങ്ങൾ %@ അംഗീകരിക്കുന്നു";
 

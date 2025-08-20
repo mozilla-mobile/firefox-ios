@@ -4,11 +4,12 @@
 
 import Foundation
 
-public enum ReaderModeTheme: String {
+public enum ReaderModeTheme: String, Sendable {
     case light
     case dark
     case sepia
 
+    @MainActor
     public static func preferredTheme(for theme: ReaderModeTheme? = nil, window: WindowUUID?) -> ReaderModeTheme {
         let themeManager: ThemeManager = AppContainer.shared.resolve()
 
