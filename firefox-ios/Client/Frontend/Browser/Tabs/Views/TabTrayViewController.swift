@@ -481,6 +481,8 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupToolBarAppearance(theme: Theme) {
+        guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
+
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
         let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
 
@@ -497,6 +499,8 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupNavigationBarAppearance(theme: Theme) {
+        guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
+        
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
         let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
 
