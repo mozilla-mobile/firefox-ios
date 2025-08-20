@@ -99,7 +99,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         $0.isAccessibilityElement = true
     }
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
-    private lazy var gradient = AnimatedGradientOutlineView(frame: view.bounds)
     private lazy var backgroundGradient = CAGradientLayer()
 
     /// Border overlay when loading the summary report
@@ -187,14 +186,19 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         let impact = UIImpactFeedbackGenerator(style: .medium)
         impact.prepare()
         impact.impactOccurred()
+        setupLoadingViews()
+        setupTabSnapshot()
+    }
 
-        gradient.startAnimating { [weak self] in
-            guard let self else { return }
-            self.closeButton.alpha = 1.0
-            self.view.layer.insertSublayer(backgroundGradient, at: 0)
-            self.viewModel.onShouldShowTabSnapshot()
-            self.embedSnapshot()
-        }
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Ensure that the layout
+        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.5))
+    }
+
+    private func setupLoadingViews() {
+        view.layer.insertSublayer(backgroundGradient, at: 0)
+        closeButton.alpha = 1.0
     }
 
     private func summarize() {
@@ -247,12 +251,10 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func setupLayout() {
-        gradient.isUserInteractionEnabled = false
         setupLoadingBackgroundGradient()
         view.addSubviews(
             tabSnapshotContainer,
             borderOverlayHostingController.view,
-            gradient,
             titleLabel,
             closeButton,
             summaryView,
@@ -321,13 +323,11 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         borderOverlayHostingController.didMove(toParent: self)
     }
 
-    private func embedSnapshot() {
+    private func setupTabSnapshot() {
         tabSnapshot.image = viewModel.tabSnapshot
         tabSnapshotTopConstraint?.constant = viewModel.tabSnapshotTopOffset
 
         let frameHeight = view.frame.height
-        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.5))
-
         let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
         transformAnimation.fromValue = 0
         transformAnimation.toValue = frameHeight / 2
@@ -338,8 +338,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         tabSnapshotContainer.layer.add(transformAnimation, forKey: "translation")
         tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0,
                                                            y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
-
-        gradient.animatePositionChange(animationCurve: UX.initialTransformTimingCurve)
 
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
@@ -369,7 +367,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         titleLabel.largeContentTitle = webView.title
         summaryView.attributedText = parse(markdown: brandedSummary)
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
-            gradient.alpha = 0.0
             removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
@@ -601,7 +598,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
-        gradient.applyTheme(theme: theme)
         errorView.applyTheme(theme: theme)
     }
 }
