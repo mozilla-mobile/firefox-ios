@@ -53,7 +53,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
         self.addSubview(tableView)
         if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
             self.siteProtectionHeader.removeFromSuperview()
-            if isHeaderBanner, isMenuDefaultBrowserBanner {
+            if isHeaderBanner, isMenuDefaultBrowserBanner, !isBrowserDefault, !bannerShown {
                 isBannerVisible = true
                 self.addSubview(headerBanner)
                 viewConstraints.append(contentsOf: [
