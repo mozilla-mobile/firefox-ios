@@ -624,6 +624,34 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
+    func testShouldShowNewTabToast_returnsTrue() throws {
+        let subject = createSubject()
+
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let shouldShowNewTabToast = subject.shouldShowNewTabToast(tab: tab)
+
+        XCTAssertTrue(shouldShowNewTabToast)
+    }
+
+    func testShouldShowNewTabToast_returnsFalse() throws {
+        let subject = createSubject()
+
+        subject.showShortcutsLibrary()
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let shouldShowNewTabToast = subject.shouldShowNewTabToast(tab: tab)
+
+        XCTAssertFalse(shouldShowNewTabToast)
+    }
+
+    func testShortcutsLibraryDelegate_didPressNewTabToastButton_selectsTab() throws {
+        let subject = createSubject()
+
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        subject.didPressNewTabToastButton(tab: tab)
+
+        XCTAssertEqual(tabManager.selectedTab, tab)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {
