@@ -1258,11 +1258,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - ShortcutsLibraryDelegate
 
-    func createTab(url: URL, isPrivate: Bool, selectNewTab: Bool) -> Tab {
-        return tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
-    }
-
-    func selectTab(tab: Tab) {
+    func didPressNewTabToastButton(tab: Tab) {
         tabManager.selectTab(tab)
     }
 

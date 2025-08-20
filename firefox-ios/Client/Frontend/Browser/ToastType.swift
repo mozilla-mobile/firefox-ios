@@ -14,7 +14,6 @@ enum ToastType: Equatable {
     case closedAllTabs(count: Int)
     case closedAllInactiveTabs(count: Int)
     case openNewTab
-//    case openNewPrivateTab
     case removeFromReadingList
     case removeShortcut
 

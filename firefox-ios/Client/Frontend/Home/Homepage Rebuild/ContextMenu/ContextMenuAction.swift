@@ -12,7 +12,6 @@ struct ContextMenuAction: Action {
     let actionType: ActionType
     let menuType: MenuType?
     let site: Site?
-    let url: URL?
 
     init(
         menuType: MenuType? = nil,
@@ -25,7 +24,6 @@ struct ContextMenuAction: Action {
         self.actionType = actionType
         self.menuType = menuType
         self.site = site
-        self.url = url
     }
 }
 

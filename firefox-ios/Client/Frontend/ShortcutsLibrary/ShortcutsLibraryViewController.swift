@@ -7,9 +7,7 @@ import Foundation
 import Redux
 
 protocol ShortcutsLibraryDelegate: AnyObject {
-    func createTab(url: URL, isPrivate: Bool, selectNewTab: Bool) -> Tab
-
-    func selectTab(tab: Tab)
+    func didPressNewTabToastButton(tab: Tab)
 }
 
 class ShortcutsLibraryViewController: UIViewController,
@@ -260,7 +258,7 @@ class ShortcutsLibraryViewController: UIViewController,
                                 theme: currentTheme,
                                 completion: { buttonPressed in
             if buttonPressed {
-                self.parentCoordinator?.selectTab(tab: tab)
+                self.parentCoordinator?.didPressNewTabToastButton(tab: tab)
             }
         })
 
