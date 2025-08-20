@@ -24,12 +24,7 @@ class AnimatedGradientOutlineView: UIView,
     }
 
     private let gradientLayer = CAGradientLayer()
-    private let shapeLayer = CAShapeLayer()
     let fadeLayer = RectangularFadeMaskLayer()
-    private let compositeMaskLayer = CALayer()
-    private var screenCornerRadius: CGFloat {
-        return UIScreen.main.value(forKey: "_displayCornerRadius") as? CGFloat ?? 0.0
-    }
     private var onAnimationEnd: (() -> Void)?
 
     override init(frame: CGRect) {
@@ -57,11 +52,6 @@ class AnimatedGradientOutlineView: UIView,
 
         gradientLayer.frame = bounds
         fadeLayer.frame = bounds
-        compositeMaskLayer.frame = bounds
-
-        let path = UIBezierPath(roundedRect: bounds, cornerRadius: screenCornerRadius)
-        shapeLayer.path = path.cgPath
-        shapeLayer.frame = bounds
     }
 
     func startAnimating(_ completion: (() -> Void)? = nil) {
