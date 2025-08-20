@@ -77,7 +77,9 @@ open class Deferred<T>: @unchecked Sendable {
 
         // slow path - block until filled
         let group = DispatchGroup()
-        var result: T!
+        // FIXME: FXIOS-13242 We should not be mutating local context captured in closures. Here we're manually applying
+        // some synchronization using a dispatch group.
+        nonisolated(unsafe) var result: T!
         group.enter()
         self.upon { result = $0; group.leave() }
         _ = group.wait(timeout: .distantFuture)
