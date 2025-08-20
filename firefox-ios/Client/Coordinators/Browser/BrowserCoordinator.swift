@@ -31,6 +31,7 @@ class BrowserCoordinator: BaseCoordinator,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
+                          ShortcutsLibraryDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -248,6 +249,14 @@ class BrowserCoordinator: BaseCoordinator,
             self?.didFinish(from: bookmarksCoordinator)
         }
         present(navigationController)
+    }
+
+    func shouldShowNewTabToast(tab: Tab) -> Bool {
+        guard let shortcutsLibraryVC = router.navigationController.topViewController as? ShortcutsLibraryViewController
+        else { return true }
+
+        shortcutsLibraryVC.showOpenedNewTabToast(tab: tab)
+        return false
     }
 
     // MARK: - PrivateHomepageDelegate
@@ -1125,6 +1134,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showShortcutsLibrary() {
         let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
+        shortcutsLibraryViewController.parentCoordinator = self
         router.push(shortcutsLibraryViewController)
     }
 
@@ -1244,6 +1254,16 @@ class BrowserCoordinator: BaseCoordinator,
         // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
         coordinator.dismissChildTabTrayPanels()
         remove(child: coordinator)
+    }
+
+    // MARK: - ShortcutsLibraryDelegate
+
+    func createTab(url: URL, isPrivate: Bool, selectNewTab: Bool) -> Tab {
+        return tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
+    }
+
+    func selectTab(tab: Tab) {
+        tabManager.selectTab(tab)
     }
 
     // MARK: - WindowEventCoordinator

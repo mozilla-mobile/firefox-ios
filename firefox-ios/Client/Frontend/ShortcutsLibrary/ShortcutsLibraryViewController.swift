@@ -6,6 +6,12 @@ import Common
 import Foundation
 import Redux
 
+protocol ShortcutsLibraryDelegate: AnyObject {
+    func createTab(url: URL, isPrivate: Bool, selectNewTab: Bool) -> Tab
+
+    func selectTab(tab: Tab)
+}
+
 class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
                                       FeatureFlaggable,
@@ -14,6 +20,9 @@ class ShortcutsLibraryViewController: UIViewController,
     struct UX {
         static let shortcutsSectionTopInset: CGFloat = 24
     }
+
+    // MARK: - Private variables
+    weak var parentCoordinator: ShortcutsLibraryDelegate?
 
     // MARK: - Private variables
     private var collectionView: UICollectionView?
@@ -113,10 +122,6 @@ class ShortcutsLibraryViewController: UIViewController,
         self.shortcutsLibraryState = state
 
         dataSource?.updateSnapshot(state: state)
-
-        if let toast = state.toast {
-            showToast(toast: toast)
-        }
     }
 
     func unsubscribeFromRedux() {
@@ -248,7 +253,17 @@ class ShortcutsLibraryViewController: UIViewController,
         )
     }
 
-    private func showToast(toast: Toast) {
+    func showOpenedNewTabToast(tab: Tab) {
+        let viewModel = ButtonToastViewModel(labelText: ToastType.openNewTab.title,
+                                             buttonText: ToastType.openNewTab.buttonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme,
+                                completion: { buttonPressed in
+            if buttonPressed {
+                self.parentCoordinator?.selectTab(tab: tab)
+            }
+        })
+
         toast.showToast(viewController: self,
                         delay: Toast.UX.toastDelayBefore,
                         duration: Toast.UX.toastDismissAfter) { toast in

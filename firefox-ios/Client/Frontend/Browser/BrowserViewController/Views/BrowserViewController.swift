@@ -4387,6 +4387,8 @@ extension BrowserViewController: HomePanelDelegate {
         // If we are showing toptabs a user can just use the top tab bar
         guard !topTabsVisible else { return }
 
+        guard browserDelegate?.shouldShowNewTabToast(tab: tab) == true else { return }
+
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
