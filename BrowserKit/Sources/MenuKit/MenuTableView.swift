@@ -67,11 +67,6 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
         tableHelper.reload()
     }
 
-    func reloadData(isBannerVisible: Bool) {
-        tableHelper.updateData([], theme: theme, isBannerVisible: isBannerVisible)
-        tableHelper.reload()
-    }
-
     // MARK: - UITableViewDataSource
     func numberOfSections(in tableView: UITableView) -> Int {
         return tableHelper.menuDataCount()
