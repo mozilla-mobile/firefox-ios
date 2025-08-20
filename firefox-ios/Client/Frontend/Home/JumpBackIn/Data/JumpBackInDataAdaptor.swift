@@ -109,14 +109,10 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         self.recentTabs = recentTabs
     }
 
+    @MainActor
     private func updateRecentTabs() async -> [Tab] {
         // Recent tabs need to be accessed from .main otherwise value isn't proper
-        return await withCheckedContinuation { continuation in
-            ensureMainThread {
-                let recentTabs = self.tabManager.recentlyAccessedNormalTabs
-                continuation.resume(returning: recentTabs)
-            }
-        }
+        return await self.tabManager.recentlyAccessedNormalTabs
     }
 
     // MARK: Synced tab data
