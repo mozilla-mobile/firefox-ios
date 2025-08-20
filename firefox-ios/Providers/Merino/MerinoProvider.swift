@@ -10,13 +10,7 @@ import Shared
 protocol MerinoStoriesProviding: Sendable {
     typealias StoryResult = Swift.Result<[RecommendationDataItem], Error>
 
-    func fetchStories(items: Int32) async throws -> [RecommendationDataItem]
-}
-
-extension MerinoStoriesProviding {
-    func fetchStories(items: Int32) async throws -> [RecommendationDataItem] {
-        return try await fetchStories(items: items)
-    }
+    func fetchStories(_ itemCount: Int32) async throws -> [RecommendationDataItem]
 }
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
@@ -49,10 +43,10 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         )
     }
 
-    func fetchStories(items: Int32) async throws -> [RecommendationDataItem] {
-        if !AppConstants.isRunningTest && shouldUseMockData {
-            return try await MerinoTestData().getMockDataFeed(count: items)
-        }
+    func fetchStories(_ itemCount: Int32) async throws -> [RecommendationDataItem] {
+//        if !AppConstants.isRunningTest && shouldUseMockData {
+//            return try await MerinoTestData().getMockDataFeed(count: itemCount)
+//        }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
               MerinoProvider.islocaleSupported(Locale.current.identifier)
@@ -67,8 +61,8 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
             return []
         }
 
-        let items = try await fetcher.fetch(
-            items: items,
+        let items = await fetcher.fetch(
+            itemCount: itemCount,
             locale: currentLocale,
             userAgent: UserAgent.getUserAgent()
         )

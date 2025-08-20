@@ -6,7 +6,11 @@ import Common
 import MozillaAppServices
 
 protocol MerinoFeedFetching: Sendable {
-    func fetch(items: Int32, locale: CuratedRecommendationLocale, userAgent: String) async throws -> [RecommendationDataItem]
+    func fetch(
+        itemCount: Int32,
+        locale: CuratedRecommendationLocale,
+        userAgent: String
+    ) async -> [RecommendationDataItem]
 }
 
 struct MerinoFeedFetcher: MerinoFeedFetching {
@@ -14,10 +18,10 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
     let logger: Logger
 
     func fetch(
-        items: Int32,
+        itemCount: Int32,
         locale: CuratedRecommendationLocale,
         userAgent: String
-    ) async throws -> [RecommendationDataItem] {
+    ) async -> [RecommendationDataItem] {
         do {
             let client = try CuratedRecommendationsClient(
                 config: CuratedRecommendationsConfig(
@@ -25,7 +29,7 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
                     userAgentHeader: userAgent
                 )
             )
-            let request = CuratedRecommendationsRequest(locale: locale, count: items)
+            let request = CuratedRecommendationsRequest(locale: locale, count: itemCount)
             let response = try client.getCuratedRecommendations(request: request)
             return response.data
         } catch let error as CuratedRecommendationsApiError {

@@ -20,10 +20,10 @@ private final class MockFeedFetcher: MerinoFeedFetching, @unchecked Sendable {
     var callCount = 0
 
     func fetch(
-        items: Int32,
+        itemCount: Int32,
         locale: CuratedRecommendationLocale,
         userAgent: String
-    ) async throws -> [RecommendationDataItem] {
+    ) async -> [RecommendationDataItem] {
         callCount += 1
         return stubbedItems
     }
@@ -39,8 +39,8 @@ private final class MockCache: CuratedRecommendationsCacheProtocol {
     func loadRecommendations() -> [RecommendationDataItem]? { stored }
 
     func save(_ items: [RecommendationDataItem]) {
-        self.stored = items
-        self.lastUpdated = Date()
+        stored = items
+        lastUpdated = Date()
         savedItemsHistory.append(items)
     }
 
@@ -83,7 +83,7 @@ final class MerinoProviderTests: XCTestCase {
         control.cache.seed(items: [makeItem("a"), makeItem("b")], lastUpdated: Date())
         control.fetcher.stubbedItems = [makeItem("net1"), makeItem("net2")]
 
-        let result = try await control.subject.fetchStories(items: 10)
+        let result = try await control.subject.fetchStories(10)
 
         XCTAssertEqual(result.map(\.title), ["a", "b"])
         XCTAssertEqual(control.fetcher.callCount, 0)
@@ -95,7 +95,7 @@ final class MerinoProviderTests: XCTestCase {
         control.cache.seed(items: [makeItem("old")], lastUpdated: Date().addingTimeInterval(-3600))
         control.fetcher.stubbedItems = [makeItem("new1"), makeItem("new2")]
 
-        let result = try await control.subject.fetchStories(items: 10)
+        let result = try await control.subject.fetchStories(10)
 
         XCTAssertEqual(result.map(\.title), ["new1", "new2"])
         XCTAssertTrue(control.cache.didClear)
@@ -108,7 +108,7 @@ final class MerinoProviderTests: XCTestCase {
         control.cache.seedEmpty()
         control.fetcher.stubbedItems = [makeItem("net")]
 
-        let result = try await control.subject.fetchStories(items: 5)
+        let result = try await control.subject.fetchStories(5)
 
         XCTAssertEqual(result.map(\.title), ["net"])
         XCTAssertTrue(control.cache.didClear)
@@ -120,7 +120,7 @@ final class MerinoProviderTests: XCTestCase {
         let control = createSubject(prefsEnabled: false)
 
         do {
-            _ = try await control.subject.fetchStories(items: 3)
+            _ = try await control.subject.fetchStories(3)
             XCTFail("Expected MerinoProvider.Error to be thrown")
         } catch let error as MerinoProvider.Error {
             XCTAssertEqual(error, MerinoProvider.Error.failure)
@@ -132,13 +132,13 @@ final class MerinoProviderTests: XCTestCase {
     func test_fetchStories_fetches_whenNoLastUpdatedEvenIfItemsExist() async throws {
         let control = createSubject(prefsEnabled: true)
 
-        // Cache has items but NO timestamp should be treated as STALE and must fetch
+        // Cache has _ itemCount but NO timestamp should be treated as STALE and must fetch
         // new stories. We should never get here, but we should still test it.
         control.cache.seed(items: [makeItem("staleButNoTimestamp")], lastUpdated: nil)
 
         control.fetcher.stubbedItems = [makeItem("net1"), makeItem("net2")]
 
-        let result = try await control.subject.fetchStories(items: 3)
+        let result = try await control.subject.fetchStories(3)
 
         XCTAssertEqual(result.count, 2)
         XCTAssertEqual(result.map(\.title), ["net1", "net2"])
