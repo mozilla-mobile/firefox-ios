@@ -34,7 +34,7 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        shortcuts: [TopSiteConfiguration],
+        shortcuts: [TopSiteConfiguration]
     ) {
         self.windowUUID = windowUUID
         self.shortcuts = shortcuts
