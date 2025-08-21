@@ -3,27 +3,37 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 /**
  * The keyboard state at the time of notification.
+ *
+ * FIXME: FXIOS-13260 KeyboardHelper in Shared package should probably not be @unchecked Sendable without review and/or
+ * manual thread synchronization
  */
-public struct KeyboardState {
+public struct KeyboardState: @unchecked Sendable {
     public let animationDuration: Double
     public let animationCurve: UIView.AnimationCurve
-    private let userInfo: [AnyHashable: Any]
+    private let keyboardEndFrame: CGRect?
 
-    fileprivate init(_ userInfo: [AnyHashable: Any]) {
-        self.userInfo = userInfo
-        if let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+    fileprivate init(
+        keyboardEndFrame: CGRect?,
+        keyboardAnimationDuration: Double?,
+        keyboardAnimationCurveValue: Int?
+    ) {
+        self.keyboardEndFrame = keyboardEndFrame
+
+        if let duration = keyboardAnimationDuration {
             animationDuration = duration
         } else {
             animationDuration = 0.0
         }
+
         // HACK: UIViewAnimationCurve doesn't expose the keyboard animation used (curveValue = 7),
         // so UIViewAnimationCurve(rawValue: curveValue) returns nil. As a workaround, get a
         // reference to an EaseIn curve, then change the underlying pointer data with that ref.
         var curve = UIView.AnimationCurve.easeIn
-        if let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int {
+        if let curveValue = keyboardAnimationCurveValue {
             NSNumber(value: curveValue as Int).getValue(&curve)
         }
         self.animationCurve = curve
@@ -35,13 +45,13 @@ public struct KeyboardState {
     /// height will be zero. (Even if the height of the *invisible* keyboard will look normal!)
     @MainActor
     public func intersectionHeightForView(_ view: UIView) -> CGFloat {
-        if let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardFrame = keyboardFrameValue.cgRectValue
-            let convertedKeyboardFrame = view.convert(keyboardFrame, from: nil)
-            let intersection = convertedKeyboardFrame.intersection(view.bounds)
-            return intersection.size.height
+        guard let keyboardEndFrame = keyboardEndFrame else {
+            return 0
         }
-        return 0
+
+        let convertedKeyboardFrame = view.convert(keyboardEndFrame, from: nil)
+        let intersection = convertedKeyboardFrame.intersection(view.bounds)
+        return intersection.size.height
     }
 }
 
@@ -75,12 +85,14 @@ public extension KeyboardHelperDelegate {
 /**
  * Convenience class for observing keyboard state.
  */
-open class KeyboardHelper: NSObject {
+@MainActor
+open class KeyboardHelper: NSObject, Notifiable {
     open var currentState: KeyboardState?
 
     fileprivate var delegates = [WeakKeyboardDelegate]()
 
     open class var defaultHelper: KeyboardHelper {
+        @MainActor
         struct Singleton {
             static let instance = KeyboardHelper()
         }
@@ -91,46 +103,50 @@ open class KeyboardHelper: NSObject {
      * Starts monitoring the keyboard state.
      */
     open func startObserving() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardDidShow),
-            name: UIResponder.keyboardDidShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardDidHide),
-            name: UIResponder.keyboardDidHideNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardDidChange),
-            name: UIResponder.keyboardDidChangeFrameNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillChange),
-            name: UIResponder.keyboardWillChangeFrameNotification,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [
+                UIResponder.keyboardWillShowNotification,
+                UIResponder.keyboardDidShowNotification,
+                UIResponder.keyboardWillHideNotification,
+                UIResponder.keyboardDidHideNotification,
+                UIResponder.keyboardDidChangeFrameNotification,
+                UIResponder.keyboardWillChangeFrameNotification
+            ]
         )
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+    public func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+
+        guard let userInfo = notification.userInfo else {
+            return
+        }
+
+        let keyboardState = KeyboardState(
+            keyboardEndFrame: (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+            keyboardAnimationDuration: userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+            keyboardAnimationCurveValue: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int
+        )
+
+        ensureMainThread {
+            switch notificationName {
+            case UIResponder.keyboardWillShowNotification:
+                self.keyboardWillShow(keyboardState: keyboardState)
+            case UIResponder.keyboardDidShowNotification:
+                self.keyboardDidShow(keyboardState: keyboardState)
+            case UIResponder.keyboardWillHideNotification:
+                self.keyboardWillHide(keyboardState: keyboardState)
+            case UIResponder.keyboardDidHideNotification:
+                self.keyboardDidHide(keyboardState: keyboardState)
+            case UIResponder.keyboardDidChangeFrameNotification:
+                self.keyboardDidChange(keyboardState: keyboardState)
+            case UIResponder.keyboardWillChangeFrameNotification:
+                self.keyboardWillChange(keyboardState: keyboardState)
+            default: break
+            }
+        }
     }
 
     /**
@@ -148,69 +164,57 @@ open class KeyboardHelper: NSObject {
     }
 
     @MainActor
-    @objc
-    private func keyboardWillShow(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardWillShowWithState: currentState!)
-            }
+    private func keyboardWillShow(keyboardState: KeyboardState) {
+        for weakDelegate in delegates {
+            weakDelegate.delegate?.keyboardHelper(self, keyboardWillShowWithState: keyboardState)
         }
     }
 
     @MainActor
-    @objc
-    private func keyboardDidShow(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self,
-                                                      keyboardDidShowWithState: KeyboardState(userInfo))
-            }
+    private func keyboardDidShow(keyboardState: KeyboardState) {
+        for weakDelegate in delegates {
+            weakDelegate.delegate?.keyboardHelper(
+                self,
+                keyboardDidShowWithState: keyboardState
+            )
         }
     }
 
     @MainActor
-    @objc
-    private func keyboardWillHide(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self,
-                                                      keyboardWillHideWithState: KeyboardState(userInfo))
-            }
+    private func keyboardWillHide(keyboardState: KeyboardState) {
+        for weakDelegate in delegates {
+            weakDelegate.delegate?.keyboardHelper(
+                self,
+                keyboardWillHideWithState: keyboardState
+            )
         }
     }
 
     @MainActor
-    @objc
-    private func keyboardDidHide(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self,
-                                                      keyboardDidHideWithState: KeyboardState(userInfo))
-            }
+    private func keyboardDidHide(keyboardState: KeyboardState) {
+        for weakDelegate in delegates {
+            weakDelegate.delegate?.keyboardHelper(self,
+                                                  keyboardDidHideWithState: keyboardState)
         }
     }
 
     @MainActor
-    @objc
-    private func keyboardWillChange(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self,
-                                                      keyboardWillChangeWithState: KeyboardState(userInfo))
-            }
+    private func keyboardWillChange(keyboardState: KeyboardState) {
+        for weakDelegate in delegates {
+            weakDelegate.delegate?.keyboardHelper(
+                self,
+                keyboardWillChangeWithState: keyboardState
+            )
         }
     }
 
     @MainActor
-    @objc
-    private func keyboardDidChange(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self,
-                                                      keyboardDidChangeWithState: KeyboardState(userInfo))
-            }
+    private func keyboardDidChange(keyboardState: KeyboardState) {
+        for weakDelegate in delegates {
+            weakDelegate.delegate?.keyboardHelper(
+                self,
+                keyboardDidChangeWithState: keyboardState
+            )
         }
     }
 }
