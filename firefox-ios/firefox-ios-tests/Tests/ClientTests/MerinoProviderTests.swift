@@ -78,6 +78,24 @@ final class MerinoProviderTests: XCTestCase {
         XCTAssertTrue(MerinoProvider.islocaleSupported("en_CA"))
     }
 
+    func test_fetchStories_cachesManyStories_returnsRequired() async throws {
+        let control = createSubject(thresholdHours: 4)
+        control.cache.seed(items: MerinoTestData().getMockDataFeed(), lastUpdated: Date())
+        control.fetcher.stubbedItems = MerinoTestData().getMockDataFeed()
+
+        let result = try await control.subject.fetchStories(30)
+
+        XCTAssertEqual(result.count, 30)
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertFalse(control.cache.didClear)
+
+        let anotherResult = try await control.subject.fetchStories(9)
+
+        XCTAssertEqual(anotherResult.count, 9)
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertFalse(control.cache.didClear)
+    }
+
     func test_fetchStories_returnsCached_whenThresholdNotPassed() async throws {
         let control = createSubject(thresholdHours: 4)
         control.cache.seed(items: [makeItem("a"), makeItem("b")], lastUpdated: Date())

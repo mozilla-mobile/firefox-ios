@@ -48,7 +48,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
 
     func fetchStories(_ numberOfRequestedStories: Int) async throws -> [RecommendationDataItem] {
         if !AppConstants.isRunningTest && shouldUseMockData {
-            return try await MerinoTestData().getMockDataFeed(count: numberOfRequestedStories)
+            return Array(MerinoTestData().getMockDataFeed().prefix(numberOfRequestedStories))
         }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
@@ -57,7 +57,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
 
         if let cachedItems = cache.loadRecommendations(),
            cacheUpdateThresholdHasNotPassed() {
-            return Array(cachedItems.prefix(Constants.numberOfStoriesToFetchForCaching))
+            return Array(cachedItems.prefix(numberOfRequestedStories))
         }
 
         guard let currentLocale = iOSToMerinoLocale(from: Locale.current.identifier) else {

@@ -8,7 +8,7 @@ import MozillaAppServices
 struct MerinoTestData {
     /// Because we're not testing the Merino API/AS module, we're simply providing some
     /// dummy data here.
-    func getMockDataFeed(count: Int = 2) async throws -> [RecommendationDataItem] {
+    func getMockDataFeed() -> [RecommendationDataItem] {
         return [
             MozillaAppServices.RecommendationDataItem(
                 corpusItemId: "3533e87e-4997-40d9-b9fb-d1cb0251f7a2",
