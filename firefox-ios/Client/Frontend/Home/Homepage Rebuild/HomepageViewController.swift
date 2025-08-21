@@ -309,6 +309,8 @@ final class HomepageViewController: UIViewController,
     }
 
     func newState(state: HomepageState) {
+        guard self.homepageState != state else { return }
+
         self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
 
