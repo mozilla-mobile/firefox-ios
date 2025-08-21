@@ -211,6 +211,15 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "പാഠനങ്ങൾ സ്ഥാപിച്ചിട്ടു് അവയെ നടത്തുക";
 
+/* This is the section title for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.Title.v142" = "ആംഗ്യങ്ങൾ";
+
+/* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.SummarizePagesTitle.v142" = "താൾ വിവരം ചുരുക്കിപ്പറയുക";
+
+/* In the settings menu, in the General section, this is the title for the Summarize settings section. */
+"Settings.Summarize.Title.v142" = "താൾ ചുരുക്കം";
+
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "കൂടുതൽ അറിയുക.";
 

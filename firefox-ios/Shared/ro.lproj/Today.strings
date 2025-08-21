@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Închide filele private";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Adaugă scurtături Firefox în ecranul de pornire.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Adaugă comenzi rapide Firefox în ecranul de pornire.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Deschide linkul copiat";
@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Căutare privată";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Adaugă o scurtătură Firefox în ecranul de pornire. După ce ai adăugat widgetul, ține-l atins pentru editare și selectează o scurtătură diferită.";
+"TodayWidget.QuickActionGalleryDescription" = "Adaugă o comandă rapidă Firefox în ecranul de pornire. După ce ai adăugat widgetul, ține-l atins pentru editare și selectează o comandă rapidă diferită.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Acțiuni rapide";

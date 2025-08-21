@@ -244,6 +244,9 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Araştırmaları yükle ve çalıştır";
 
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Sayfa özetleme özelliğine erişim sağlar.";
+
 /* This is the footer text for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "Bir sayfayı özetlemek için cihazınızı sağa sola sallayın.";
 

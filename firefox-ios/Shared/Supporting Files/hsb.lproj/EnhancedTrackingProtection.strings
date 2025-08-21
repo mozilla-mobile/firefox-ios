@@ -74,7 +74,7 @@
 "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Sydła přesahowace slědowace placki: %@";
 
 /* Text to let users know how many fingerprinters were blocked on the current website. %@ is the number of fingerprinters detected. */
-"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Zběraćel porstowych wotćišćow: %@";
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Hromadźaki porstowych wotćišćow: %@";
 
 /* Text to let users know how many social media trackers were blocked on the current website. %@ is the number of cookies of this type detected. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "Přesćěhowaki socialnych medijow: %@";

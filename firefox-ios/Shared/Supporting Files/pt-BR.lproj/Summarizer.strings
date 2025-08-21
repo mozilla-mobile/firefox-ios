@@ -7,8 +7,14 @@
 /* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
 "Summarizer.Error.MissingPageContent.Message.v142" = "A página ainda está sendo carregada. Aguarde terminar, depois toque em resumir.";
 
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = " No momento não é possível gerar este resumo. Tente novamente mais tarde.";
+
 /* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
 "Summarizer.Error.Unknown.Message.v142" = "Erro ao resumir página. Tente novamente mais tarde.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "Conteúdo limitado detectado. Esta página pode ser restrita ou principalmente visual.";
 
 /* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
 "Summarizer.Error.UnsupportedContent.Message.v142" = "Este site não permite resumo de conteúdo. Experimente outra página.";
@@ -30,9 +36,6 @@
 
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "Cancelar";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v142" = "O %@ usa inteligência artificial hospedada com segurança em servidores da Mozilla para resumir páginas.";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Saiba mais";

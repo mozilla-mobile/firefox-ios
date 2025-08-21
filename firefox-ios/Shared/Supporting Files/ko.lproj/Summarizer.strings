@@ -1,3 +1,45 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "Apple Intelligence로 요약";
+
+/* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
+"Summarizer.CloseButton.Label.v142" = "닫기";
+
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "페이지를 불러오는 중입니다. 완료될 때까지 기다린 후 요약을 누르세요.";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "지금 처리할 수 없습니다. 나중에 다시 시도하세요!";
+
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "페이지를 요약하는데 오류가 발생했습니다. 나중에 다시 시도하세요.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "제한된 콘텐츠가 감지되었습니다. 이 페이지는 제한적이거나 대부분 시각적으로 표시될 수 있습니다.";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "이 웹 사이트는 콘텐츠 요약을 허용하지 않습니다. 다른 페이지를 사용해 보세요.";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "%@로 요약";
+
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "요약하는 중…";
+
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "다시 시도";
+
+/* The label for the allow button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.AllowButton.Label.v142" = "허용";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@는 Apple Intelligence를 사용하여 페이지를 요약합니다.";
+
+/* The label for the cancel button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.CancelButton.Label.v142" = "취소";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "더 알아보기";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "페이지 요약을 허용하시겠습니까?";
 

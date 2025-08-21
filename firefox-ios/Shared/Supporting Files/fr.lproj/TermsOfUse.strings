@@ -22,6 +22,9 @@
 /* Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'. */
 "TermsOfUse.ReviewAndAcceptText.v142" = "Veuillez prendre quelques instants pour les consulter et les accepter. En savoir plus";
 
+/* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
+"TermsOfUse.TermsOfUseHasOpened.v142" = "Panneau des Conditions d’utilisation ouvert";
+
 /* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
 "TermsOfUse.Title.v142" = "Il y a du nouveau";
 
