@@ -20,7 +20,7 @@ private final class MockFeedFetcher: MerinoFeedFetching, @unchecked Sendable {
     var callCount = 0
 
     func fetch(
-        itemCount: Int32,
+        itemCount: Int,
         locale: CuratedRecommendationLocale,
         userAgent: String
     ) async -> [RecommendationDataItem] {
@@ -68,14 +68,32 @@ final class MerinoProviderTests: XCTestCase {
     private let storiesFlag = PrefsKeys.UserFeatureFlagPrefs.ASPocketStories
 
     func testIncorrectLocalesAreNotSupported() {
-        XCTAssertFalse(MerinoProvider.islocaleSupported("en_BD"))
-        XCTAssertFalse(MerinoProvider.islocaleSupported("enCA"))
+        XCTAssertFalse(MerinoProvider.isLocaleSupported("en_BD"))
+        XCTAssertFalse(MerinoProvider.isLocaleSupported("enCA"))
     }
 
     func testCorrectLocalesAreSupported() {
-        XCTAssertTrue(MerinoProvider.islocaleSupported("en_US"))
-        XCTAssertTrue(MerinoProvider.islocaleSupported("en_GB"))
-        XCTAssertTrue(MerinoProvider.islocaleSupported("en_CA"))
+        XCTAssertTrue(MerinoProvider.isLocaleSupported("en_US"))
+        XCTAssertTrue(MerinoProvider.isLocaleSupported("en_GB"))
+        XCTAssertTrue(MerinoProvider.isLocaleSupported("en_CA"))
+    }
+
+    func test_fetchStories_cachesManyStories_returnsRequired() async throws {
+        let control = createSubject(thresholdHours: 4)
+        control.cache.seed(items: MerinoTestData().getMockDataFeed(), lastUpdated: Date())
+        control.fetcher.stubbedItems = MerinoTestData().getMockDataFeed()
+
+        let result = try await control.subject.fetchStories(30)
+
+        XCTAssertEqual(result.count, 30)
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertFalse(control.cache.didClear)
+
+        let anotherResult = try await control.subject.fetchStories(9)
+
+        XCTAssertEqual(anotherResult.count, 9)
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertFalse(control.cache.didClear)
     }
 
     func test_fetchStories_returnsCached_whenThresholdNotPassed() async throws {
