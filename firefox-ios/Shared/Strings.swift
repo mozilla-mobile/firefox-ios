@@ -2198,7 +2198,7 @@ extension String {
             comment: "The label displayed in the summary report when the summary was generated using Apple Intelligence."
         )
         public static let FootnoteLabel = MZLocalizedString(
-            key: "Summarizer.Footnote.Label.v142",
+            key: "Summarizer.Footnote.Label.v144",
             tableName: "Summarizer",
             value: "Note: Summarization can make errors.",
             comment: "The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors."
