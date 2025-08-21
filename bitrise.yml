@@ -168,8 +168,8 @@ workflows:
             set -euxo pipefail
 
             # Point to the Unit tests plan instead of Accessibility
-            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.2-arm64.xctestrun"
-            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator18.2-arm64.xctestrun"
+            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun"
+            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun"
 
             if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
               echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
