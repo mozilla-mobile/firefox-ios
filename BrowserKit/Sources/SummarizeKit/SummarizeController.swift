@@ -60,6 +60,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         $0.showsLargeContentViewer = true
         $0.isUserInteractionEnabled = true
         $0.addInteraction(UILargeContentViewerInteraction())
+        $0.accessibilityTraits.insert(.header)
     }
     private let loadingLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.body.scaledFont()
@@ -229,8 +230,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
 
-        tabSnapshotContainer.accessibilityIdentifier = viewModel.loadingA11yId
-        tabSnapshotContainer.accessibilityLabel = viewModel.loadingA11yLabel
+        tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotA11yId
+        tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotA11yLabel
 
         closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
         closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
