@@ -2210,7 +2210,7 @@ extension String {
             comment: "The title for the Terms of Service alert that asks the user if they want to allow page summaries."
         )
         public static let ToSAlertMessageFirefoxLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v143",
+            key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v144",
             tableName: "Summarizer",
             value: "%@ uses cloud-based AI to summarize pages, and returns those summaries to your device.",
             comment: "The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox)."
