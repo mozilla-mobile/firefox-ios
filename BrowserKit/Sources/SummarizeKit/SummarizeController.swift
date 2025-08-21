@@ -172,7 +172,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         configure()
         setupLayout()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
-        view.backgroundColor = .clear
         applyTheme()
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
@@ -345,7 +344,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
 
     private func showSummary(_ summary: String) {
         triggerImpactHaptics()
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.onTabSnapshotPan))
         self.tabSnapshotContainer.addGestureRecognizer(panGesture)
 
@@ -369,7 +367,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             loadingLabel.alpha = 0.0
             summaryView.alpha = 1.0
             titleLabel.alpha = 1.0
-            view.backgroundColor = theme.colors.layer1
         } completion: { [weak self] _ in
             guard let tabSnapshotView = self?.tabSnapshotContainer else { return }
             UIView.animate(withDuration: UX.tabSnapshotBringToFrontAnimationDuration) {
@@ -591,6 +588,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        view.backgroundColor = theme.colors.layer1
         summaryView.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
         loadingLabel.textColor = theme.colors.textOnDark
