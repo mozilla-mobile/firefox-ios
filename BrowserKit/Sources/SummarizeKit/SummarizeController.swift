@@ -100,7 +100,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         $0.isAccessibilityElement = true
     }
     private var tabSnapshotTopConstraint: NSLayoutConstraint?
-    private lazy var gradient = AnimatedGradientOutlineView(frame: view.bounds)
     private lazy var backgroundGradient = CAGradientLayer()
 
     /// Border overlay when loading the summary report
@@ -174,7 +173,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         configure()
         setupLayout()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
-        view.backgroundColor = .clear
         applyTheme()
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
@@ -185,17 +183,20 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let impact = UIImpactFeedbackGenerator(style: .medium)
-        impact.prepare()
-        impact.impactOccurred()
+        triggerImpactHaptics()
+        setupLoadingViews()
+        setupTabSnapshot()
+    }
 
-        gradient.startAnimating { [weak self] in
-            guard let self else { return }
-            self.closeButton.alpha = 1.0
-            self.view.layer.insertSublayer(backgroundGradient, at: 0)
-            self.viewModel.onShouldShowTabSnapshot()
-            self.embedSnapshot()
-        }
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Ensure that the layout is resolved before shimmering
+        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.5))
+    }
+
+    private func setupLoadingViews() {
+        view.layer.insertSublayer(backgroundGradient, at: 0)
+        closeButton.alpha = 1.0
     }
 
     private func summarize() {
@@ -248,12 +249,10 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func setupLayout() {
-        gradient.isUserInteractionEnabled = false
         setupLoadingBackgroundGradient()
         view.addSubviews(
             tabSnapshotContainer,
             borderOverlayHostingController.view,
-            gradient,
             titleLabel,
             closeButton,
             summaryView,
@@ -322,13 +321,11 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         borderOverlayHostingController.didMove(toParent: self)
     }
 
-    private func embedSnapshot() {
+    private func setupTabSnapshot() {
         tabSnapshot.image = viewModel.tabSnapshot
         tabSnapshotTopConstraint?.constant = viewModel.tabSnapshotTopOffset
 
         let frameHeight = view.frame.height
-        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.5))
-
         let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
         transformAnimation.fromValue = 0
         transformAnimation.toValue = frameHeight / 2
@@ -340,8 +337,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0,
                                                            y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
 
-        gradient.animatePositionChange(animationCurve: UX.initialTransformTimingCurve)
-
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
             self.loadingLabel.alpha = 1.0
@@ -349,10 +344,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func showSummary(_ summary: String) {
-        let impact = UIImpactFeedbackGenerator(style: .medium)
-        impact.prepare()
-        impact.impactOccurred()
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        triggerImpactHaptics()
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.onTabSnapshotPan))
         self.tabSnapshotContainer.addGestureRecognizer(panGesture)
 
@@ -370,14 +362,12 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         titleLabel.largeContentTitle = webView.title
         summaryView.attributedText = parse(markdown: brandedSummary)
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
-            gradient.alpha = 0.0
             removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
             loadingLabel.alpha = 0.0
             summaryView.alpha = 1.0
             titleLabel.alpha = 1.0
-            view.backgroundColor = theme.colors.layer1
         } completion: { [weak self] _ in
             guard let tabSnapshotView = self?.tabSnapshotContainer else { return }
             UIView.animate(withDuration: UX.tabSnapshotBringToFrontAnimationDuration) {
@@ -558,6 +548,12 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         }
     }
 
+    private func triggerImpactHaptics(style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.prepare()
+        generator.impactOccurred()
+    }
+
     // MARK: - CAAnimationDelegate
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         guard flag,
@@ -593,6 +589,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        view.backgroundColor = theme.colors.layer1
         summaryView.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
         loadingLabel.textColor = theme.colors.textOnDark
@@ -602,7 +599,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
-        gradient.applyTheme(theme: theme)
         errorView.applyTheme(theme: theme)
     }
 }
