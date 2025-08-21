@@ -23,16 +23,14 @@ open class SQLiteQueue: TabQueue {
 
     open func getQueuedTabs(completion: @MainActor @Sendable @escaping ([ShareItem]) -> Void) {
         let sql = "SELECT url FROM queue"
-        let deferredResponse = db.runQuery(sql, args: nil, factory: self.factory) >>== { cursor in
-            return deferMaybe(cursor.asArray())
-        }
-
-        deferredResponse.uponQueue(.main) { result in
-            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-            MainActor.assumeIsolated {
-                completion(result.successValue ?? [])
+        db.runQuery(sql, args: nil, factory: self.factory)
+            .uponQueue(.main) { result in
+                guard let cursor = result.successValue else { return }
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    completion(cursor.asArray())
+                }
             }
-        }
     }
 
     open func clearQueuedTabs() -> Success {
