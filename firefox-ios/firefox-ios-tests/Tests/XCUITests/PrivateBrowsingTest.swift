@@ -265,8 +265,6 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         // If no private tabs are open, there should be a initial screen with label Private Browsing
         if #unavailable(iOS 26) {
             navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-
-
             let numPrivTabsFirstTime = app.otherElements[tabsTray].cells.count
             XCTAssertEqual(
                 numPrivTabsFirstTime,
@@ -299,8 +297,6 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         if #unavailable(iOS 26) {
             navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-
-
             navigator.openURL(path(forTestPage: "test-example.html"))
             mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
             app.webViews.links[website_2["link"]!].press(forDuration: 2)
@@ -374,7 +370,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
             if #unavailable(iOS 16) {
                 // Wait for the screen to refresh first.
                 mozWaitForElementToExist(
-                    app.staticTexts["Firefox won’t remember any of your history or cookies, but new bookmarks will be saved."])
+                    app.staticTexts[
+                        "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved."])
             }
             // The private tabs are closed
             waitForElementsToExist(
@@ -582,8 +579,6 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         waitForTabsButton()
         if #unavailable(iOS 26) {
             navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
-
-
             // A Tab opens directly in HomePanels view
             XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is not shown")
 

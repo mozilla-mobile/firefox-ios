@@ -245,7 +245,8 @@ class DragAndDropTests: FeatureFlaggedTestBase {
                 )
                 // Check that focus is kept on last website open
                 mozWaitForElementToExist(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0))
-                XCTAssertEqual(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0).label, secondWebsite.tabName)
+                XCTAssertEqual(app.collectionViews[tabTrayCollectionView]
+                    .cells.element(boundBy: 0).label, secondWebsite.tabName)
             }
         }
     }
