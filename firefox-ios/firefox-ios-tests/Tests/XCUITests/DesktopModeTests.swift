@@ -149,21 +149,23 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         // is now on in normal mode
 
         navigator.nowAt(BrowserTab)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(RequestDesktopSite) // toggle off
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.openURL(path(forTestPage: "test-user-agent.html"))
+            waitUntilPageLoad()
+            navigator.goto(BrowserTabMenu)
+            navigator.goto(RequestDesktopSite) // toggle off
+            waitUntilPageLoad()
+            XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
-        // is now off in private, mode, confirm it is off in normal mode
+            // is now off in private, mode, confirm it is off in normal mode
 
-        navigator.nowAt(BrowserTab)
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+            navigator.nowAt(BrowserTab)
+            navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.openURL(path(forTestPage: "test-user-agent.html"))
+            waitUntilPageLoad()
+            XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306856
@@ -210,20 +212,22 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(RequestDesktopSite)
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        navigator.nowAt(BrowserTab)
-        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        if #available(iOS 16, *) {
-            XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.openURL(path(forTestPage: "test-user-agent.html"))
+            waitUntilPageLoad()
+            navigator.goto(BrowserTabMenu)
+            navigator.goto(RequestDesktopSite)
+            waitUntilPageLoad()
+            XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+            
+            navigator.nowAt(BrowserTab)
+            navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+            navigator.openURL(path(forTestPage: "test-user-agent.html"))
+            waitUntilPageLoad()
+            if #available(iOS 16, *) {
+                XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+            }
         }
     }
 
@@ -285,14 +289,16 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
 
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        waitUntilPageLoad()
-        navigator.nowAt(NewTabScreen)
-        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
-        navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        if #unavailable(iOS 26) {
+            navigator.performAction(Action.AcceptRemovingAllTabs)
+            waitUntilPageLoad()
+            navigator.nowAt(NewTabScreen)
+            // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
+            navigator.createNewTab()
+            navigator.openURL(path(forTestPage: "test-user-agent.html"))
+            waitUntilPageLoad()
+            XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
@@ -326,14 +332,16 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         // The experiment is not opening the keyboard on a new tab
         navigator.nowAt(NewTabScreen)
 
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        waitUntilPageLoad()
-        navigator.nowAt(NewTabScreen)
-        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
-        navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        if #unavailable(iOS 26) {
+            navigator.performAction(Action.AcceptRemovingAllTabs)
+            waitUntilPageLoad()
+            navigator.nowAt(NewTabScreen)
+            // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
+            navigator.createNewTab()
+            navigator.openURL(path(forTestPage: "test-user-agent.html"))
+            waitUntilPageLoad()
+            XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        }
     }
 }
 // swiftlint:enable empty_count

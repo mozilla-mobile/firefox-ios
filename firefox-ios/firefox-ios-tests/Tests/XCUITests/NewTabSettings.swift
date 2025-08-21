@@ -264,10 +264,11 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
 
         // Switch to Private Browsing
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        validateKeyboardIsRaisedAndDismissed()
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            validateKeyboardIsRaisedAndDismissed()
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306877

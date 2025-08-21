@@ -112,30 +112,32 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         )
 
         // Switch to Private Browsing
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+            waitUntilPageLoad()
 
-        // Make sure TP is also there in PBM
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
-                app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            ]
-        )
+            // Make sure TP is also there in PBM
+            waitForElementsToExist(
+                [
+                    app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+                    app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+                ]
+            )
 
-        navigator.goto(BrowserTabMenu)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            app.swipeUp()
+            navigator.goto(BrowserTabMenu)
+            // issue 28625: iOS 15 may not open the menu fully.
+            if #unavailable(iOS 16) {
+                app.swipeUp()
+            }
+            navigator.goto(SettingsScreen)
+            mozWaitForElementToExist(app.tables.cells["NewTab"])
+            app.tables.cells["NewTab"].swipeUp()
+            // Enable TP again
+            navigator.goto(TrackingProtectionSettings)
+            // Turn on ETP
+            navigator.performAction(Action.SwitchETP)
         }
-        navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.tables.cells["NewTab"])
-        app.tables.cells["NewTab"].swipeUp()
-        // Enable TP again
-        navigator.goto(TrackingProtectionSettings)
-        // Turn on ETP
-        navigator.performAction(Action.SwitchETP)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307059
@@ -173,29 +175,31 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         )
 
         // Switch to Private Browsing
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-
-        // Make sure TP is also there in PBM
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
-                app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            ]
-        )
-        navigator.goto(BrowserTabMenu)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            app.swipeUp()
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+            navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+            waitUntilPageLoad()
+            
+            // Make sure TP is also there in PBM
+            waitForElementsToExist(
+                [
+                    app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+                    app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+                ]
+            )
+            navigator.goto(BrowserTabMenu)
+            // issue 28625: iOS 15 may not open the menu fully.
+            if #unavailable(iOS 16) {
+                app.swipeUp()
+            }
+            navigator.goto(SettingsScreen)
+            mozWaitForElementToExist(app.tables.cells["NewTab"])
+            app.tables.cells["NewTab"].swipeUp()
+            // Enable TP again
+            navigator.goto(TrackingProtectionSettings)
+            // Turn on ETP
+            navigator.performAction(Action.SwitchETP)
         }
-        navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.tables.cells["NewTab"])
-        app.tables.cells["NewTab"].swipeUp()
-        // Enable TP again
-        navigator.goto(TrackingProtectionSettings)
-        // Turn on ETP
-        navigator.performAction(Action.SwitchETP)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2319381

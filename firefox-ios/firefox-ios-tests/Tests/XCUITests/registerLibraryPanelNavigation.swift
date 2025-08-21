@@ -51,6 +51,6 @@ func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
             doneButton.waitAndTap()
         }
 
-        screenState.press(bookmarksTable.cells.element(boundBy: 0), to: BookmarksPanelContextMenu)
+        screenState.press(bookmarksTable.cells.element(boundBy: 4), to: BookmarksPanelContextMenu)
     }
 }

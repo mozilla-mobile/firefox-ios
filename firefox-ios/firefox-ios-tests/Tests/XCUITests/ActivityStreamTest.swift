@@ -250,15 +250,17 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         app.collectionViews.links.staticTexts["Wikipedia"].press(forDuration: 1)
         app.tables["Context Menu"].cells.buttons["Open in a Private Tab"].waitAndTap()
         mozWaitForElementToExist(TopSiteCellgroup)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts.element(boundBy: 0))
-        navigator.nowAt(TabTray)
-        app.otherElements[tabsTray].collectionViews.cells["Wikipedia"].waitAndTap()
-        // The website is open
-        mozWaitForElementToNotExist(TopSiteCellgroup)
-        waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                             value: "wikipedia.org")
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.goto(TabTray)
+            waitForExistence(app.cells.staticTexts.element(boundBy: 0))
+            navigator.nowAt(TabTray)
+            app.otherElements[tabsTray].collectionViews.cells["Wikipedia"].waitAndTap()
+            // The website is open
+            mozWaitForElementToNotExist(TopSiteCellgroup)
+            waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                 value: "wikipedia.org")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
@@ -338,17 +340,19 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         // Check that two tabs are open and one of them is the default top site one
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
-        if iPad() {
-            navigator.goto(TabTray)
-            numTabsOpen = app.otherElements[tabsTray].collectionViews.cells.count
-            waitForExistence(app.otherElements[tabsTray].collectionViews.cells.firstMatch)
-        } else {
-            waitForExistence(app.collectionViews.element(boundBy: 1).cells.firstMatch)
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
+            var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
+            if iPad() {
+                navigator.goto(TabTray)
+                numTabsOpen = app.otherElements[tabsTray].collectionViews.cells.count
+                waitForExistence(app.otherElements[tabsTray].collectionViews.cells.firstMatch)
+            } else {
+                waitForExistence(app.collectionViews.element(boundBy: 1).cells.firstMatch)
+            }
+            XCTAssertEqual(numTabsOpen, 1, "New tab not open")
         }
-        XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {

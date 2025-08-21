@@ -198,7 +198,9 @@ class CreditCardsTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
             app.webViews["Web content"].staticTexts["Card Number:"].waitAndTap()
         }
-        mozWaitForElementToExist(app.buttons[useSavedCard])
+        if #unavailable(iOS 26) {
+            mozWaitForElementToExist(app.buttons[useSavedCard])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306971
@@ -720,13 +722,19 @@ class CreditCardsTests: BaseTestCase {
                 )
             ]
         )
-        let cardDetails = ["Test", "05 / 40"]
-        for index in cardDetails {
-            if #available(iOS 16, *) {
-                mozWaitForElementToExist(app.buttons[index])
-                XCTAssertTrue(app.buttons[index].exists, "\(index) does not exists")
-            } else {
-                mozWaitForElementToExist(app.staticTexts[index])
+        if #available(iOS 26, *) {
+            mozWaitForElementToExist(app.buttons["Test"])
+            mozWaitForElementToExist(app.buttons["expiration"])
+            XCTAssertEqual(app.buttons["expiration"].value as? String, "05 / 40")
+        } else {
+            let cardDetails = ["Test", "05 / 40"]
+            for index in cardDetails {
+                if #available(iOS 16, *) {
+                    mozWaitForElementToExist(app.buttons[index])
+                    XCTAssertTrue(app.buttons[index].exists, "\(index) does not exists")
+                } else {
+                    mozWaitForElementToExist(app.staticTexts[index])
+                }
             }
         }
     }

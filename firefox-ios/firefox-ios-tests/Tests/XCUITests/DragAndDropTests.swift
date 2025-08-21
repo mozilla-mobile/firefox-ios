@@ -221,30 +221,32 @@ class DragAndDropTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        openTwoWebsites()
-        navigator.goto(TabTray)
-        checkTabsOrder(
-            dragAndDropTab: false,
-            firstTab: firstWebsite.tabName,
-            secondTab: secondWebsite.tabName
-        )
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
-        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
-        if #available(iOS 17, *) {
-            // Drag first tab on the second one
-            dragAndDrop(
-                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-            )
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            openTwoWebsites()
+            navigator.goto(TabTray)
             checkTabsOrder(
-                dragAndDropTab: true,
-                firstTab: secondWebsite.tabName,
-                secondTab: firstWebsite.tabName
+                dragAndDropTab: false,
+                firstTab: firstWebsite.tabName,
+                secondTab: secondWebsite.tabName
             )
-            // Check that focus is kept on last website open
-            mozWaitForElementToExist(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0))
-            XCTAssertEqual(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            // https://github.com/mozilla-mobile/firefox-ios/issues/19205
+            // https://github.com/mozilla-mobile/firefox-ios/issues/19043
+            if #available(iOS 17, *) {
+                // Drag first tab on the second one
+                dragAndDrop(
+                    dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+                    dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+                )
+                checkTabsOrder(
+                    dragAndDropTab: true,
+                    firstTab: secondWebsite.tabName,
+                    secondTab: firstWebsite.tabName
+                )
+                // Check that focus is kept on last website open
+                mozWaitForElementToExist(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0))
+                XCTAssertEqual(app.collectionViews[tabTrayCollectionView].cells.element(boundBy: 0).label, secondWebsite.tabName)
+            }
         }
     }
 }

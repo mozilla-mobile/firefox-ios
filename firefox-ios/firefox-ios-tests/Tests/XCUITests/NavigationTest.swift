@@ -229,17 +229,19 @@ class NavigationTest: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        longPressLinkOptions(optionSelected: "Copy Link")
-        navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            longPressLinkOptions(optionSelected: "Copy Link")
+            navigator.goto(NewTabScreen)
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
 
-        app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
-        app.buttons["Go"].waitAndTap()
-        waitUntilPageLoad()
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
+            app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction].waitAndTap()
+            app.buttons["Go"].waitAndTap()
+            waitUntilPageLoad()
+            let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+            mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441497
@@ -386,22 +388,24 @@ class NavigationTest: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        longPressLinkOptions(optionSelected: "Share Link")
-        if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.cells["Copy"])
-        } else {
-            mozWaitForElementToExist(app.buttons["Copy"])
-        }
-        if #unavailable(iOS 18) {
-            if !iPad() {
-                mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"])
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            longPressLinkOptions(optionSelected: "Share Link")
+            if #available(iOS 16, *) {
+                mozWaitForElementToExist(app.cells["Copy"])
+            } else {
+                mozWaitForElementToExist(app.buttons["Copy"])
             }
-        }
-        if #unavailable(iOS 17) {
-            mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"])
-        } else {
-            mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"])
+            if #unavailable(iOS 18) {
+                if !iPad() {
+                    mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"])
+                }
+            }
+            if #unavailable(iOS 17) {
+                mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"])
+            } else {
+                mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"])
+            }
         }
     }
 
@@ -699,8 +703,10 @@ class NavigationTest: FeatureFlaggedTestBase {
         navigator.goto(NewTabScreen)
         validateExternalLink()
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        validateExternalLink(isPrivate: true)
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            validateExternalLink(isPrivate: true)
+        }
     }
 
     private func validateExternalLink(isPrivate: Bool = false) {

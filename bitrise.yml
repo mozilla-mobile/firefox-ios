@@ -214,7 +214,7 @@ workflows:
             rm -f "$BITRISE_DEPLOY_DIR/swiftlint_report.txt" || true
 
             echo "Removing unit test xcresult"
-            rm -f "$BITRISE_DEPLOY_DIR/Test-Fennec_UnitTest_iphonesimulator18.2-arm64.xcresult.zip"
+            rm -f "$BITRISE_DEPLOY_DIR/Test-Fennec_UnitTest_iphonesimulator26.0-arm64.xcresult.zip"
     - deploy-to-bitrise-io@2.10.0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
@@ -280,6 +280,10 @@ workflows:
         - channel: "#firefox-ios"
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.large
 
   run_firefox_ui_tests:
     before_run:
@@ -290,14 +294,14 @@ workflows:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator18.2-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.4x-large
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.large
   determine_apps_affected:
     steps:
     - git-clone@6.2: {}
@@ -431,6 +435,10 @@ workflows:
             echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
             echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
             echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.large
 
   send_slack_notification:
     steps:

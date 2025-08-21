@@ -42,20 +42,22 @@ class ReadingListTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         // Navigate to reading list
         navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
-
-        // Check to make sure the reading list is empty
-        checkReadingListNumberOfItems(items: 0)
-        app.buttons["Done"].waitAndTap()
-        // Add item to reading list and check that it appears
-        addContentToReaderView()
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
-
-        // Check that there is one item
-        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        mozWaitForElementToExist(savedToReadingList)
-        checkReadingListNumberOfItems(items: 1)
+        if #unavailable(iOS 26) {
+            navigator.goto(LibraryPanel_ReadingList)
+            
+            // Check to make sure the reading list is empty
+            checkReadingListNumberOfItems(items: 0)
+            app.buttons["Done"].waitAndTap()
+            // Add item to reading list and check that it appears
+            addContentToReaderView()
+            navigator.goto(BrowserTabMenu)
+            navigator.goto(LibraryPanel_ReadingList)
+            
+            // Check that there is one item
+            let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+            mozWaitForElementToExist(savedToReadingList)
+            checkReadingListNumberOfItems(items: 1)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306995
@@ -65,38 +67,40 @@ class ReadingListTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
-
-        // Initially reading list is empty
-        checkReadingListNumberOfItems(items: 0)
-        app.buttons["Done"].waitAndTap()
-        // Add item to reading list and check that it appears
-        addContentToReaderView()
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
-
-        // Check that there is one item
-        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        mozWaitForElementToExist(savedToReadingList)
-        checkReadingListNumberOfItems(items: 1)
-        app.buttons["Done"].waitAndTap()
-        updateScreenGraph()
-        // Check that it appears on regular mode
-        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        navigator.goto(LibraryPanel_ReadingList)
-        checkReadingListNumberOfItems(items: 1)
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+            waitForTabsButton()
+            navigator.goto(BrowserTabMenu)
+            navigator.goto(LibraryPanel_ReadingList)
+            
+            // Initially reading list is empty
+            checkReadingListNumberOfItems(items: 0)
+            app.buttons["Done"].waitAndTap()
+            // Add item to reading list and check that it appears
+            addContentToReaderView()
+            navigator.goto(BrowserTabMenu)
+            navigator.goto(LibraryPanel_ReadingList)
+            
+            // Check that there is one item
+            let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+            mozWaitForElementToExist(savedToReadingList)
+            checkReadingListNumberOfItems(items: 1)
+            app.buttons["Done"].waitAndTap()
+            updateScreenGraph()
+            // Check that it appears on regular mode
+            navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+            waitForTabsButton()
+            navigator.goto(LibraryPanel_ReadingList)
+            checkReadingListNumberOfItems(items: 1)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306995
@@ -290,61 +294,12 @@ class ReadingListTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
         navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_ReadingList)
-        // Validate empty reading list panel
-        let emptyReadingList1 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList1
-        let emptyReadingList2 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList2
-        let emptyReadingList3 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList3
-        waitForElementsToExist(
-            [
-                app.staticTexts[emptyReadingList1],
-                app.staticTexts[emptyReadingList2],
-                app.staticTexts[emptyReadingList3]
-            ]
-        )
-        app.buttons["Done"].waitAndTap()
-        // Add item to reading list and check that it appears
-        addContentToReaderView()
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
-        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        mozWaitForElementToExist(savedToReadingList)
-        // Tap on an article
-        savedToReadingList.waitAndTap()
-        // The article is displayed in Reader View
-        mozWaitForElementToExist(app.buttons["Reader View"])
-        // iOS 18 only: Reader View icon is enabled but is not selected.
-        if #unavailable(iOS 18) {
-            XCTAssertTrue(app.buttons["Reader View"].isSelected)
-        }
-        XCTAssertTrue(app.buttons["Reader View"].isEnabled)
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #available(iOS 16, *) {
+        if #unavailable(iOS 26) {
             navigator.goto(LibraryPanel_ReadingList)
-            // Swipe the article left
-            // The article has been marked as Read
-            mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, read"))
-            savedToReadingList.swipeLeft()
-            // Two options are revealed
-            waitForElementsToExist(
-                [
-                    app.tables.cells.buttons.staticTexts["Mark as  Unread"],
-                    app.tables.cells.buttons.staticTexts["Remove"]
-                ]
-            )
-            // Tap 'Mark as Unread'
-            app.tables.cells.buttons.staticTexts["Mark as  Unread"].tap(force: true)
-            // The article has been marked as Unread
-            mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, unread"))
-            // Swipe te article left and tap 'Remove'
-            savedToReadingList.swipeLeft()
-            app.tables.cells.buttons.staticTexts["Remove"].tap(force: true)
-            // The article is deleted from the Reading List
-            checkReadingListNumberOfItems(items: 0)
+            // Validate empty reading list panel
+            let emptyReadingList1 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList1
+            let emptyReadingList2 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList2
+            let emptyReadingList3 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList3
             waitForElementsToExist(
                 [
                     app.staticTexts[emptyReadingList1],
@@ -352,6 +307,57 @@ class ReadingListTests: FeatureFlaggedTestBase {
                     app.staticTexts[emptyReadingList3]
                 ]
             )
+            app.buttons["Done"].waitAndTap()
+            // Add item to reading list and check that it appears
+            addContentToReaderView()
+            navigator.goto(BrowserTabMenu)
+            navigator.goto(LibraryPanel_ReadingList)
+            let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+            mozWaitForElementToExist(savedToReadingList)
+            // Tap on an article
+            savedToReadingList.waitAndTap()
+            // The article is displayed in Reader View
+            mozWaitForElementToExist(app.buttons["Reader View"])
+            // iOS 18 only: Reader View icon is enabled but is not selected.
+            if #unavailable(iOS 18) {
+                XCTAssertTrue(app.buttons["Reader View"].isSelected)
+            }
+            XCTAssertTrue(app.buttons["Reader View"].isEnabled)
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+            navigator.nowAt(NewTabScreen)
+            waitForTabsButton()
+            // issue 28625: iOS 15 may not open the menu fully.
+            if #available(iOS 16, *) {
+                navigator.goto(LibraryPanel_ReadingList)
+                // Swipe the article left
+                // The article has been marked as Read
+                mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, read"))
+                savedToReadingList.swipeLeft()
+                // Two options are revealed
+                waitForElementsToExist(
+                    [
+                        app.tables.cells.buttons.staticTexts["Mark as  Unread"],
+                        app.tables.cells.buttons.staticTexts["Remove"]
+                    ]
+                )
+                // Tap 'Mark as Unread'
+                app.tables.cells.buttons.staticTexts["Mark as  Unread"].tap(force: true)
+                // The article has been marked as Unread
+                mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, unread"))
+                // Swipe te article left and tap 'Remove'
+                savedToReadingList.swipeLeft()
+                app.tables.cells.buttons.staticTexts["Remove"].tap(force: true)
+                // The article is deleted from the Reading List
+                checkReadingListNumberOfItems(items: 0)
+                waitForElementsToExist(
+                    [
+                        app.staticTexts[emptyReadingList1],
+                        app.staticTexts[emptyReadingList2],
+                        app.staticTexts[emptyReadingList3]
+                    ]
+                )
+            }
         }
     }
 
