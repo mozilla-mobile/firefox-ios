@@ -60,6 +60,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         $0.showsLargeContentViewer = true
         $0.isUserInteractionEnabled = true
         $0.addInteraction(UILargeContentViewerInteraction())
+        $0.accessibilityTraits.insert(.header)
     }
     private let loadingLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.body.scaledFont()
@@ -230,8 +231,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
 
-        tabSnapshotContainer.accessibilityIdentifier = viewModel.loadingA11yId
-        tabSnapshotContainer.accessibilityLabel = viewModel.loadingA11yLabel
+        tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotA11yId
+        tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotA11yLabel
 
         closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
         closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
@@ -510,7 +511,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     @objc
-    private func onTabSnapshotTap(_ gesture: UITapGestureRecognizer) {
+    private func dismissSummaryFromGesture(_ gesture: UITapGestureRecognizer) {
         triggerDismissingAnimation()
     }
 
@@ -558,8 +559,22 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         guard flag,
               let animation = anim as? CABasicAnimation,
               animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
-        tabSnapshotContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTabSnapshotTap)))
+        setupDismissGestures()
         summarize()
+    }
+
+    /// Sets up gestures that allow the user to dismiss the summary.
+    /// - Adds a tap gesture on the tab snapshot to close.
+    /// - Adds a swipe-up gesture on the tab snapshot to close.
+    ///
+    /// Both gestures call `dismissSummaryFromGesture`, which handles the dismissal animation.
+    private func setupDismissGestures() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissSummaryFromGesture))
+        tabSnapshotContainer.addGestureRecognizer(tap)
+
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(dismissSummaryFromGesture))
+        swipeUp.direction = .up
+        tabSnapshotContainer.addGestureRecognizer(swipeUp)
     }
 
     // MARK: - Notifiable
@@ -583,12 +598,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             closeButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
-<<<<<<< HEAD
-        backgroundGradient.colors = theme.colors.layerSummary.cgColors
-        gradient.applyTheme(theme: theme)
-=======
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
->>>>>>> 1bddbec66 (Remove FXIOS-13178 [Shake to Summarize] old gradient code (#28824))
         errorView.applyTheme(theme: theme)
     }
 }
