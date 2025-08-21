@@ -52,11 +52,8 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
 
     private var termsContent: some View {
         GeometryReader { geometry in
-            ScrollView {
-                HStack {
-                    Spacer()
-                        .frame(minHeight: 0)
-
+            ScrollView(.vertical) {
+                VStack {
                     VStack(spacing: UX.CardView.tosSpacing) {
                         VStack(spacing: UX.CardView.spacing) {
                             imageView
@@ -68,21 +65,24 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
                             primaryButton
                         }
                     }
+                    .padding(.vertical, UX.CardView.verticalPadding)
                     .frame(width: UX.CardView.primaryButtonWidthiPad)
-
-                    Spacer()
-                        .frame(minHeight: 0)
                 }
+                .frame(width: geometry.size.width)
                 .frame(minHeight: geometry.size.height)
-                .padding(UX.CardView.verticalPadding)
             }
             .scrollBounceBehavior(basedOnSize: true)
         }
-        .frame(width: UX.CardView.baseiPadWidth, height: UX.CardView.baseiPadHeight)
+        .frame(
+            width: UX.CardView.baseiPadWidth,
+            height: UX.CardView.baseiPadHeight
+        )
         .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
+            RoundedRectangle(
+                cornerRadius: UX.CardView.cornerRadius
+            )
+            .fill(cardBackgroundColor)
+            .accessibilityHidden(true)
         )
         .padding(.horizontal, UX.CardView.horizontalPadding)
         .accessibilityElement(children: .contain)
