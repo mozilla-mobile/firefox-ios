@@ -1728,11 +1728,11 @@ workflows:
         - configuration: KlarDebug
         - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
     - xcode-test-without-building@0.4.2:
         timeout: 1200
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Klar_UnitTests_iphonesimulator18.2-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
@@ -1742,6 +1742,10 @@ workflows:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Klar testPlan: UnitTests"
         - webhook_url: "$SLACK_WEBHOOK"
+    meta:
+        bitrise.io:
+            stack: osx-xcode-26.0.x-edge
+            machine_type_id: g2.mac.large
   focus_ui_test:
     steps:
     - script@1.2.1:
