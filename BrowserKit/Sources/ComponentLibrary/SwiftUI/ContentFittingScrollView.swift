@@ -96,7 +96,9 @@ public struct ContentFittingScrollView<Content: View>: UIViewRepresentable {
                 // For Dynamic Type changes, we need to completely recreate the hosting controller
                 // because SwiftUI views don't always update their intrinsic size properly
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.recreateHostingController()
+                    MainActor.assumeIsolated {
+                        self.recreateHostingController()
+                    }
                 }
             }
         }
