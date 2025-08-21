@@ -71,7 +71,7 @@ final class PrivacyPreferencesViewController: UIViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
         setupLayout()
         setDetentSize()
@@ -259,7 +259,7 @@ final class PrivacyPreferencesViewController: UIViewController,
     // MARK: - Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             setDetentSize()
         default: break
         }

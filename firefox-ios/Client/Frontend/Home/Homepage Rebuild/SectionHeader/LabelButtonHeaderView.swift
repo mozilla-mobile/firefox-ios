@@ -55,7 +55,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
     }
 
@@ -158,7 +158,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             adjustLayout()
         default: break
         }
