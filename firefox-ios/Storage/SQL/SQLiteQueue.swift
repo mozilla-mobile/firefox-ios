@@ -27,11 +27,10 @@ open class SQLiteQueue: TabQueue {
             return deferMaybe(cursor.asArray())
         }
 
-        deferredResponse.upon { result in
-            // TODO: FXIOS-12842 It would be better if we could refactor Defer usage to rely on Swift Concurrency
-            let shareItem: [ShareItem] = result.successValue ?? []
-            DispatchQueue.main.async {
-                completion(shareItem)
+        deferredResponse.uponQueue(.main) { result in
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
+                completion(result.successValue ?? [])
             }
         }
     }
