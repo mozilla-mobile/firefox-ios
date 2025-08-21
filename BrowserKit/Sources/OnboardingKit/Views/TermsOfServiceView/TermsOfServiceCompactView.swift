@@ -57,7 +57,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
 
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
-        ContentFittingScrollView {
+        ScrollView {
             VStack(spacing: UX.CardView.spacing * scale) {
                 Spacer()
                     .accessibilityHidden(true)
@@ -69,10 +69,11 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 links
                 primaryButton
             }
+            .padding(UX.CardView.verticalPadding * scale)
+            .padding(.bottom)
         }
+        .scrollBounceBehavior(basedOnSize: true)
         .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-        .padding(UX.CardView.verticalPadding * scale)
-        .padding(.bottom)
         .background(
             RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                 .fill(cardBackgroundColor)
@@ -150,5 +151,23 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
+    }
+}
+
+struct ScrollBounceBehaviorModifier: ViewModifier {
+    let basedOnSize: Bool
+
+    func body(content: Content) -> some View {
+        if #available(iOS 16.4, *) {
+            content.scrollBounceBehavior(basedOnSize ? .basedOnSize : .always)
+        } else {
+            content
+        }
+    }
+}
+
+extension View {
+    func scrollBounceBehavior(basedOnSize: Bool) -> some View {
+        modifier(ScrollBounceBehaviorModifier(basedOnSize: basedOnSize))
     }
 }
