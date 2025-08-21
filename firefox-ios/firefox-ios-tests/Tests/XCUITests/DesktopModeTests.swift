@@ -220,7 +220,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
             navigator.goto(RequestDesktopSite)
             waitUntilPageLoad()
             XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-            
+
             navigator.nowAt(BrowserTab)
             navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
             navigator.openURL(path(forTestPage: "test-user-agent.html"))

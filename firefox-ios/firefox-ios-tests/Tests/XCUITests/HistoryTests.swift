@@ -946,7 +946,7 @@ class HistoryTests: FeatureFlaggedTestBase {
             }
             mozWaitForElementToNotExist(app.staticTexts["Last 24 Hours"])
             mozWaitForElementToExist(app.staticTexts["Older"])
-            
+
             // Begin Test for Last 7 Days
             // Visit a page to create a recent history entry.
             navigateToPage(isTabTrayOff: false)
@@ -959,7 +959,7 @@ class HistoryTests: FeatureFlaggedTestBase {
             }
             mozWaitForElementToNotExist(app.staticTexts["Last 7 Days"])
             mozWaitForElementToExist(app.staticTexts["Older"])
-            
+
             // Begin Test for Last 4 Weeks
             // Visit a page to create a recent history entry.
             navigateToPage(isTabTrayOff: false)
@@ -972,7 +972,7 @@ class HistoryTests: FeatureFlaggedTestBase {
             }
             mozWaitForElementToNotExist(app.staticTexts["Last 4 Weeks"])
             mozWaitForElementToExist(app.staticTexts["Older"])
-            
+
             // Begin Test for All Time
             // Visit a page to create a recent history entry.
             navigateToPage(isTabTrayOff: false)

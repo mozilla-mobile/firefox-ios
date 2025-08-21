@@ -179,7 +179,7 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
             navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
             navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
             waitUntilPageLoad()
-            
+
             // Make sure TP is also there in PBM
             waitForElementsToExist(
                 [

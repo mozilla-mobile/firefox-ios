@@ -44,7 +44,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         navigator.goto(BrowserTabMenu)
         if #unavailable(iOS 26) {
             navigator.goto(LibraryPanel_ReadingList)
-            
+
             // Check to make sure the reading list is empty
             checkReadingListNumberOfItems(items: 0)
             app.buttons["Done"].waitAndTap()
@@ -52,7 +52,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
             addContentToReaderView()
             navigator.goto(BrowserTabMenu)
             navigator.goto(LibraryPanel_ReadingList)
-            
+
             // Check that there is one item
             let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
             mozWaitForElementToExist(savedToReadingList)
@@ -76,7 +76,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
             waitForTabsButton()
             navigator.goto(BrowserTabMenu)
             navigator.goto(LibraryPanel_ReadingList)
-            
+
             // Initially reading list is empty
             checkReadingListNumberOfItems(items: 0)
             app.buttons["Done"].waitAndTap()
@@ -84,7 +84,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
             addContentToReaderView()
             navigator.goto(BrowserTabMenu)
             navigator.goto(LibraryPanel_ReadingList)
-            
+
             // Check that there is one item
             let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
             mozWaitForElementToExist(savedToReadingList)
@@ -344,7 +344,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
                 // Tap 'Mark as Unread'
                 app.tables.cells.buttons.staticTexts["Mark as  Unread"].tap(force: true)
                 // The article has been marked as Unread
-                mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, unread"))
+                mozWaitForElementToExist(
+                    app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, unread"))
                 // Swipe te article left and tap 'Remove'
                 savedToReadingList.swipeLeft()
                 app.tables.cells.buttons.staticTexts["Remove"].tap(force: true)

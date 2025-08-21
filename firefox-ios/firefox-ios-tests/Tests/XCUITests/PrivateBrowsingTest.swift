@@ -38,7 +38,7 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         // Go to Private browsing to open a website and check if it appears on History
         if #unavailable(iOS 26) {
             navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-            
+
             navigator.openURL(url2)
             mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                     value: "localhost")
@@ -50,7 +50,7 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
                 ]
             )
             mozWaitForElementToNotExist(app.tables[HistoryPanelA11y.tableView].staticTexts[url2Label])
-            
+
             // Open one tab in private browsing and check the total number of tabs
             let privateHistory = app.tables[HistoryPanelA11y.tableView].cells.count - 1
             XCTAssertEqual(privateHistory, 1, "History entries in private browsing do not match")
@@ -119,7 +119,7 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         // Open one tab in private browsing and check the total number of tabs
         if #unavailable(iOS 26) {
             navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-            
+
             navigator.goto(URLBarOpen)
             waitUntilPageLoad()
             navigator.openURL(url3)
@@ -611,10 +611,10 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         waitForTabsButton()
         if #unavailable(iOS 26) {
             navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
-            
+
             // A Tab opens directly in HomePanels view
             XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is not shown")
-            
+
             // Open website and check it does not appear under history once going back to regular mode
             navigator.openURL("http://example.com")
             navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)

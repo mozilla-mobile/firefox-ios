@@ -105,17 +105,17 @@ class JumpBackInTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
             navigator.performAction(Action.OpenNewTabFromTabTray)
             closeKeyboard()
-            
+
             // Amazon and Twitter are visible in the "Jump Back In" section
             scrollDown()
             mozWaitForElementToExist(jumpBackInItem.firstMatch)
             mozWaitForElementToExist(jumpBackInItem.staticTexts["Example Domain"])
             mozWaitForElementToExist(jumpBackInItem.staticTexts["Wikipedia"])
             mozWaitForElementToNotExist(jumpBackInItem.staticTexts["YouTube"])
-            
+
             // Tap on Twitter from "Jump Back In"
             jumpBackInItem.staticTexts["Wikipedia"].firstMatch.waitAndTap()
-            
+
             // The view is switched to the twitter tab
             if let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as? String {
                 XCTAssertEqual(url, "wikipedia.org", "The URL retrieved from the address toolbar does not match the expected value")
@@ -123,20 +123,20 @@ class JumpBackInTests: FeatureFlaggedTestBase {
                 XCTFail("Failed to retrieve the URL string from the address toolbar")
                 return
             }
-            
+
             // Open a new tab in normal browsing
             navigator.goto(TabTray)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
             navigator.performAction(Action.OpenNewTabFromTabTray)
             closeKeyboard()
-            
+
             // Check the "Jump Back In Section"
             scrollDown()
             mozWaitForElementToExist(jumpBackInItem.firstMatch)
-            
+
             // Amazon is visible in "Jump Back In"
             mozWaitForElementToExist(jumpBackInItem.staticTexts["Example Domain"])
-            
+
             // Close the amazon tab
             navigator.goto(TabTray)
             if isTablet {
@@ -145,12 +145,12 @@ class JumpBackInTests: FeatureFlaggedTestBase {
                 mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
             }
             app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.cross].waitAndTap()
-            
+
             // Revisit the "Jump Back In" section
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
             navigator.performAction(Action.OpenNewTabFromTabTray)
             closeKeyboard()
-            
+
             // The "Jump Back In" section is still here with twitter listed
             scrollDown()
             mozWaitForElementToExist(jumpBackInItem.firstMatch)

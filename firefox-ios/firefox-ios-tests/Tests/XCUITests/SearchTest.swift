@@ -575,26 +575,26 @@ class SearchTests: FeatureFlaggedTestBase {
             navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
             navigator.goto(URLBarOpen)
             urlBarAddress.typeText("ex")
-            
+
             let dimmingView = app.otherElements[AccessibilityIdentifiers.PrivateMode.dimmingView]
             mozWaitForElementToExist(dimmingView)
-            
+
             // Enable search suggest in private mode
             navigator.goto(SearchSettings)
             navigator.nowAt(SearchSettings)
-            
+
             mozWaitForElementToNotExist(app.tables["SiteTable"])
             mozWaitForElementToExist(privateModeSearchSuggestSwitch)
             privateModeSearchSuggestSwitch.tap()
-            
+
             app.navigationBars["Search"].buttons["Settings"].tap()
             app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
-            
+
             navigator.nowAt(NewTabScreen)
             navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
             navigator.goto(URLBarOpen)
             urlBarAddress.typeText("ex")
-            
+
             mozWaitForElementToNotExist(dimmingView)
             mozWaitForElementToExist(app.tables["SiteTable"])
         }
