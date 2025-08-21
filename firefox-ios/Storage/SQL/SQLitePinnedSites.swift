@@ -73,10 +73,15 @@ extension BrowserDBSQLite: PinnedSites {
 
         // do a fuzzy delete so dupes can be removed
         let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
-        return database.run([query]) >>== {
-            self.notificationCenter.post(name: .TopSitesUpdated, object: self)
-            return self.database.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
-        }
+        return database.run([query])
+            .bind { result in
+                if let failureValue = result.failureValue {
+                    return deferMaybe(failureValue)
+                }
+
+                self.notificationCenter.post(name: .TopSitesUpdated, object: self)
+                return self.database.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
+            }
     }
 
     public func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> {
