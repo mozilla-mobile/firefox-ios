@@ -153,21 +153,3 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         cardBackgroundColor = Color(color.layer2)
     }
 }
-
-struct ScrollBounceBehaviorModifier: ViewModifier {
-    let basedOnSize: Bool
-
-    func body(content: Content) -> some View {
-        if #available(iOS 16.4, *) {
-            content.scrollBounceBehavior(basedOnSize ? .basedOnSize : .always)
-        } else {
-            content
-        }
-    }
-}
-
-extension View {
-    func scrollBounceBehavior(basedOnSize: Bool) -> some View {
-        modifier(ScrollBounceBehaviorModifier(basedOnSize: basedOnSize))
-    }
-}
