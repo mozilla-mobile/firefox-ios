@@ -20,7 +20,7 @@ private final class MockFeedFetcher: MerinoFeedFetching, @unchecked Sendable {
     var callCount = 0
 
     func fetch(
-        itemCount: Int32,
+        itemCount: Int,
         locale: CuratedRecommendationLocale,
         userAgent: String
     ) async -> [RecommendationDataItem] {
