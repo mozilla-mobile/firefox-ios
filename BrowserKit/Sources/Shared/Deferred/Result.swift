@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum Maybe<T> {
+public enum Maybe<T: Sendable>: Sendable {
     case failure(MaybeErrorType)
     case success(T)
 

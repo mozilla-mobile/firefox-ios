@@ -10,8 +10,9 @@ import Foundation
 
 public let DeferredDefaultQueue = DispatchQueue.global()
 
-// TODO: FXIOS-13184 Remove deferred code or validate it is sendable
-open class Deferred<T>: @unchecked Sendable {
+// TODO: FXIOS-13184 Remove deferred code or validate it is sendable.
+// Also validate the T type is Sendable (actually protected) in all methods.
+open class Deferred<T: Sendable>: @unchecked Sendable {
     typealias UponBlock = (DispatchQueue, @Sendable (T) -> ())
     private typealias Protected = (protectedValue: T?, uponBlocks: [UponBlock])
 
