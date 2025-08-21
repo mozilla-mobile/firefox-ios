@@ -643,15 +643,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertFalse(shouldShowNewTabToast)
     }
 
-    func testShortcutsLibraryDelegate_didPressNewTabToastButton_selectsTab() throws {
-        let subject = createSubject()
-
-        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
-        subject.didPressNewTabToastButton(tab: tab)
-
-        XCTAssertEqual(tabManager.selectedTab, tab)
-    }
-
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {

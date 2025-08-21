@@ -6,10 +6,6 @@ import Common
 import Foundation
 import Redux
 
-protocol ShortcutsLibraryDelegate: AnyObject {
-    func didPressNewTabToastButton(tab: Tab)
-}
-
 class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
                                       FeatureFlaggable,
@@ -18,9 +14,6 @@ class ShortcutsLibraryViewController: UIViewController,
     struct UX {
         static let shortcutsSectionTopInset: CGFloat = 24
     }
-
-    // MARK: - Private variables
-    weak var parentCoordinator: ShortcutsLibraryDelegate?
 
     // MARK: - Private variables
     private var collectionView: UICollectionView?
@@ -258,7 +251,13 @@ class ShortcutsLibraryViewController: UIViewController,
                                 theme: currentTheme,
                                 completion: { buttonPressed in
             if buttonPressed {
-                self.parentCoordinator?.didPressNewTabToastButton(tab: tab)
+                store.dispatchLegacy(
+                    ShortcutsLibraryAction(
+                        tab: tab,
+                        windowUUID: self.windowUUID,
+                        actionType: ShortcutsLibraryActionType.switchTabToastButtonPressed
+                    )
+                )
             }
         })
 
