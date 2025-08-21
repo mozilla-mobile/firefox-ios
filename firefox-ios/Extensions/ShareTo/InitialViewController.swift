@@ -9,6 +9,7 @@ import Storage
 import MozillaAppServices
 
 // Small iPhone screens in landscape require that the popup have a shorter height.
+@MainActor
 func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
     if !UX.enableResizeRowsForSmallScreens {
         return false

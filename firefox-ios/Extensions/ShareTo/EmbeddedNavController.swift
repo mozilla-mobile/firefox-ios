@@ -6,6 +6,7 @@ import Common
 import UIKit
 import Shared
 
+@MainActor
 class EmbeddedNavController {
     weak var parent: UIViewController?
     var controllers = [UIViewController]()
@@ -71,7 +72,16 @@ class EmbeddedNavController {
     }
 
     deinit {
-        navigationController.view.removeFromSuperview()
-        navigationController.removeFromParent()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits. EmbeddedNavController probably
+        // should be a real nav controller...
+        guard Thread.isMainThread else {
+            assertionFailure("EmbeddedNavController was not deallocated on the main thread.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            navigationController.view.removeFromSuperview()
+            navigationController.removeFromParent()
+        }
     }
 }
