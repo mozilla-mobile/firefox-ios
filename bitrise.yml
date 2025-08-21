@@ -180,13 +180,13 @@ workflows:
             envman add --key BITRISE_XCTESTRUN_UNIT_TEST_FILE_PATH --value "$UNIT_TESTS_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH --value "$SMOKE_UI_XCTESTRUN"
 
-    - xcode-test-without-building@0.4.0:
-        timeout: 1200
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun
-        - maximum_test_repetitions: 2
+    # - xcode-test-without-building@0.4.0:
+    #     timeout: 1200
+    #     inputs:
+    #     - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+    #     - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+    #     - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun
+    #     - maximum_test_repetitions: 2
     - xcode-test-shard-calculation@0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
