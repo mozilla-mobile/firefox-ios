@@ -634,7 +634,7 @@ final class TabTrayViewController: UIViewController,
             titleWidthConstraint?.isActive = true
         }
 
-        let topConstraintTo = tabTrayUtils.shouldDisplayExperimentUI() && tabTrayUtils.isTabTrayTranslucencyEnabled ?
+        let topConstraintTo = tabTrayUtils.isTabTrayUIExperimentsEnabled && tabTrayUtils.isTabTrayTranslucencyEnabled ?
                                 view.topAnchor : view.safeAreaLayoutGuide.topAnchor
 
         NSLayoutConstraint.activate([
