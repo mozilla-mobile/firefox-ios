@@ -10,13 +10,15 @@ public protocol BrowserNavigationToolbarDelegate: AnyObject {
 }
 
 /// Navigation toolbar implementation.
-public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable {
+public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable, ToolbarButtonCaching {
     private enum UX {
+        static let verticalEdgeSpace: CGFloat = 8
         static let horizontalEdgeSpace: CGFloat = 16
         static let buttonSize = CGSize(width: 48, height: 48)
         static let borderHeight: CGFloat = 1
     }
 
+    var cachedButtonReferences = [String: ToolbarButton]()
     private weak var toolbarDelegate: BrowserNavigationToolbarDelegate?
     private lazy var actionStack: UIStackView = .build { view in
         view.distribution = .equalSpacing
@@ -61,13 +63,16 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
         toolbarBorderHeightConstraint = toolbarBorderView.heightAnchor.constraint(equalToConstant: 0)
         toolbarBorderHeightConstraint?.isActive = true
 
+        let actionStackTopConstraint = actionStack.topAnchor.constraint(equalTo: toolbarBorderView.bottomAnchor)
+        if #available(iOS 26.0, *) { actionStackTopConstraint.constant = UX.verticalEdgeSpace }
+
         NSLayoutConstraint.activate([
             toolbarBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarBorderView.topAnchor.constraint(equalTo: topAnchor),
             toolbarBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
             actionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalEdgeSpace),
-            actionStack.topAnchor.constraint(equalTo: toolbarBorderView.bottomAnchor),
+            actionStackTopConstraint,
             actionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             actionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
         ])
@@ -80,16 +85,19 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
     }
 
     private func updateActionStack(toolbarElements: [ToolbarElement]) {
-        actionStack.removeAllArrangedViews()
-        toolbarElements.forEach { toolbarElement in
-            let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
+        let buttons = toolbarElements.map { toolbarElement in
+            let button: ToolbarButton
+            // This checks for Xcode 26 sdk availability thus we can compile on older Xcode version too
+#if canImport(FoundationModels)
+            if #available(iOS 26.0, *) {
+                button = getToolbarButton(for: toolbarElement, buttonConfiguration: .prominentClearGlass())
+            } else {
+                button = getToolbarButton(for: toolbarElement)
+            }
+#else
+            button = getToolbarButton(for: toolbarElement)
+#endif
             button.configure(element: toolbarElement)
-            actionStack.addArrangedSubview(button)
-
-            NSLayoutConstraint.activate([
-                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
-                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
-            ])
 
             if let theme {
                 // As we recreate the buttons we need to apply the theme for them to be displayed correctly
@@ -99,6 +107,19 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
             if let contextualHintType = toolbarElement.contextualHintType {
                 toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType)
             }
+
+            return button
+        }
+
+        actionStack.removeAllArrangedViews()
+
+        buttons.forEach { button in
+            actionStack.addArrangedSubview(button)
+
+            NSLayoutConstraint.activate([
+                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+            ])
         }
     }
 
