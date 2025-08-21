@@ -15,8 +15,8 @@ protocol MerinoStoriesProviding: Sendable {
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
     private struct Constants {
-        static let MerinoServicesBaseURL = "https://merino.services.mozilla.com"
-        static let NumberOfStoriesToFetchForCaching = 30
+        static let merinoServicesBaseURL = "https://merino.services.mozilla.com"
+        static let numberOfStoriesToFetchForCaching = 30
     }
 
     private let thresholdInHours: Double
@@ -41,31 +41,31 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         self.prefs = prefs
         self.logger = logger
         self.fetcher = fetcher ?? MerinoFeedFetcher(
-            baseURL: Constants.MerinoServicesBaseURL,
+            baseURL: Constants.merinoServicesBaseURL,
             logger: logger
         )
     }
 
     func fetchStories(_ numberOfRequestedStories: Int) async throws -> [RecommendationDataItem] {
-//        if !AppConstants.isRunningTest && shouldUseMockData {
-//            return try await MerinoTestData().getMockDataFeed(count: numberOfRequestedStories)
-//        }
+        if !AppConstants.isRunningTest && shouldUseMockData {
+            return try await MerinoTestData().getMockDataFeed(count: numberOfRequestedStories)
+        }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
               MerinoProvider.islocaleSupported(Locale.current.identifier)
         else { throw Error.failure }
 
-//        if let cachedItems = cache.loadRecommendations(),
-//           cacheUpdateThresholdHasNotPassed() {
-//            return Array(cachedItems.prefix(Int(numberOfRequestedStories)))
-//        }
+        if let cachedItems = cache.loadRecommendations(),
+           cacheUpdateThresholdHasNotPassed() {
+            return Array(cachedItems.prefix(Constants.numberOfStoriesToFetchForCaching))
+        }
 
         guard let currentLocale = iOSToMerinoLocale(from: Locale.current.identifier) else {
             return []
         }
 
         let items = await fetcher.fetch(
-            itemCount: Constants.NumberOfStoriesToFetchForCaching,
+            itemCount: Constants.numberOfStoriesToFetchForCaching,
             locale: currentLocale,
             userAgent: UserAgent.getUserAgent()
         )
