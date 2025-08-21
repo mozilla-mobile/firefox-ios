@@ -70,7 +70,6 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
             userAgent: UserAgent.getUserAgent()
         )
 
-        print(items)
         if !items.isEmpty {
             cache.clearCache()
             cache.save(items)
