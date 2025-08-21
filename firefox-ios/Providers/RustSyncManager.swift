@@ -615,8 +615,10 @@ public class RustSyncManager: NSObject, SyncManager {
 
     @discardableResult
     public func syncEverything(why: SyncReason) -> Success {
-        return syncRustEngines(why: why,
-                               engines: syncManagerAPI.rustTogglableEngines.compactMap { $0.rawValue }) >>> succeed
+        return syncRustEngines(
+            why: why,
+            engines: syncManagerAPI.rustTogglableEngines.compactMap { $0.rawValue }
+        ).map { $0.map { _ in () } }
     }
 
     /**
