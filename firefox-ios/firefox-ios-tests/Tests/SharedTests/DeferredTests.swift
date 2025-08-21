@@ -67,42 +67,11 @@ class DeferredTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
     }
 
-    func testPassAccumulate_andDoesntLeak() {
-        let expectation = self.expectation(description: "Deinit is called")
-        let accumulateCall: () -> Success = {
-            return succeed()
-        }
-
-        var myclass: AccumulateTestClass? = AccumulateTestClass(
-            expectation: expectation,
-            accumulateCall: accumulateCall
-        )
-        trackForMemoryLeaks(myclass!)
-        myclass = nil
-
-        waitForExpectations(timeout: 3, handler: nil)
-    }
-
-    func testFailAccumulate_andDoesntLeak() {
-        let expectation = self.expectation(description: "Deinit is called")
-
-        let accumulateCall: () -> Success = {
-            return Deferred(value: Maybe(failure: AccumulateTestClass.Error()))
-        }
-
-        var myclass: AccumulateTestClass? = AccumulateTestClass(
-            expectation: expectation,
-            accumulateCall: accumulateCall
-        )
-        trackForMemoryLeaks(myclass!)
-        myclass = nil
-
-        waitForExpectations(timeout: 3, handler: nil)
-    }
-
     func testDeferMaybe() {
         XCTAssertTrue(deferMaybe("foo").value.isSuccess)
     }
+
+    // MARK: Test `all`
 
     @MainActor // Test explicitly calling `all` on the main thread
     func testDeferredAll_calledOnMainThread() {
@@ -213,23 +182,6 @@ class DeferredTests: XCTestCase {
 
 // MARK: Helper
 private extension DeferredTests {
-    class AccumulateTestClass {
-        class Error: MaybeErrorType {
-            var description = "Error"
-        }
-
-        let expectation: XCTestExpectation
-
-        init(expectation: XCTestExpectation, accumulateCall: @escaping () -> Success) {
-            self.expectation = expectation
-            accumulate([accumulateCall]).upon { _ in }
-        }
-
-        deinit {
-            expectation.fulfill()
-        }
-    }
-
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(
