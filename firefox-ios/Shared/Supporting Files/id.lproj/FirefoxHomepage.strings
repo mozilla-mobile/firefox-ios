@@ -1,3 +1,9 @@
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle.v140" = "Cerita";
+
+/* This is the title of the Stories section on Firefox Homepage. */
+"FirefoxHome.Stories.SectionTitle.v140" = "Cerita";
+
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Data Penjelajahan Pribadi Dihapus";
 
@@ -10,6 +16,18 @@
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Jangan tinggalkan jejak di perangkat ini";
 
+/* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
+"FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Cari atau masukkan alamat";
+
+/* This is the navigation title for the Shortcuts Library view */
+"FirefoxHomepage.Shortcuts.Library.Title.v143" = "Pintasan";
+
 /* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
 "FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "Disematkan: %@";
+
+/* This is the section title for the Shortcuts section on Firefox Homepage. */
+"FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Pintasan";
+
+/* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
+"FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ dari %2$@";
 

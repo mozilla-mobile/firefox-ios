@@ -839,13 +839,13 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Kryptokopanje ličenski wukon wašeho systema skradźu wužiwa, zo by digitalne pjenjezy dobyło. Kryptokopanske skripty wašu bateriju prózdnja, waš ličak spomaleja a móža wašu přetrjebu energije powyšić.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Nastajenja we wobhladowaku a na ličaku su jónkróćne. Porstowe wotćišće zběraja wšelakorosć tutych jónkróćnych nastajenjow, zo bychu profil wo was wutworili, kotryž da so wužiwać, zo by wam slědował, hdyž přehladujeće.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Nastajenja we wobhladowaku a na ličaku su jónkróćne. Hromadźaki porstowych wotćišćow wšelakorosć tutych jónkróćnych nastajenjow hromadźa, zo bychu profil wo was wutworili, kotryž da so wužiwać, zo by wam slědował, hdyž přehladujeće.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Socialne syće přesćěhowaki na druhich websydłach placěruja, zo bychu dospołniši a zaměrniši profil wo was wutworili. Blokowanje tutych přesćěhowakow redukuje, kelko předewzaća socialnych medijow móža wo tym widźeć, štož wy online činiće.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Porstowe wotćišće";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Hromadźaki porstowych wotćišćow";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Nowe funkcije a změny";

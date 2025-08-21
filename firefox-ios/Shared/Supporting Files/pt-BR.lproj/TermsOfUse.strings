@@ -4,6 +4,9 @@
 /* Label for the back button shown in the Terms of Use web view. */
 "TermsOfUse.BackButton.v142" = "Voltar";
 
+/* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Description.v142" = "Apresentamos os Termos de uso do %@ e atualizamos nosso Aviso de privacidade.";
+
 /* Link shown in the Terms of Use sheet to direct users to more details about the update. */
 "TermsOfUse.Link.LearnMore.v142" = "Saiba mais";
 
@@ -18,6 +21,9 @@
 
 /* Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'. */
 "TermsOfUse.ReviewAndAcceptText.v142" = "Reserve um momento para revisar e aceitar. Saiba mais";
+
+/* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
+"TermsOfUse.TermsOfUseHasOpened.v142" = "Aberta a página de termos de uso";
 
 /* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
 "TermsOfUse.Title.v142" = "Temos uma atualização";
