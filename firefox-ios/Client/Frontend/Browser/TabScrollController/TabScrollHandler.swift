@@ -36,7 +36,8 @@ final class TabScrollHandler: NSObject,
         static let minimalAddressBarAnimationDuration: CGFloat = 0.4
         static let heightOffset: CGFloat = 14
         static let minimumScrollThreshold: CGFloat = 20
-        static let minimumScrollVelocity: CGFloat = 100
+        // Setting a very high number to use translation mainly
+        static let minimumScrollVelocity: CGFloat = 1000
     }
 
     private var isMinimalAddressBarEnabled: Bool {
@@ -196,20 +197,29 @@ final class TabScrollHandler: NSObject,
     }
 
     func handleScroll(for translation: CGPoint) {
-        guard !tabIsLoading() else { return }
+        guard !tabIsLoading(),
+              shouldUpdateUIWhenScrolling else { return }
 
         tab?.shouldScrollToTop = false
 
         let delta = -translation.y
         scrollDirection = delta > 0 ? .down : .up
 
-        guard shouldUpdateUIWhenScrolling else { return }
+        // If the scrolling is in the same direction of the last action ignore the rest of the calls
+        guard !shouldIgnoreScroll() else { return }
 
         handleToolbarIsTransitioning(scrollDelta: delta)
     }
 
+    func shouldIgnoreScroll() -> Bool {
+        return scrollDirection == .down && toolbarDisplayState.isCollapsed
+            || scrollDirection == .up && toolbarDisplayState.isExpanded
+    }
+
     func handleEndScrolling(for translation: CGPoint, velocity: CGPoint) {
         let delta = lastPanTranslation - translation.y
+        // Reset lastPanTranslation
+        lastPanTranslation = 0
 
         guard shouldConfirmTransition(for: velocity, delta: delta) else {
             cancelTransition()
@@ -217,8 +227,6 @@ final class TabScrollHandler: NSObject,
         }
 
         updateToolbarDisplayState(for: delta)
-        // Reset lastPanTranslation
-        lastPanTranslation = 0
     }
 
     private func checkIfDeltaIsPassed(for translation: CGFloat) -> Bool {
@@ -327,7 +335,7 @@ final class TabScrollHandler: NSObject,
 
         let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
 //        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
-        return isSignificantScroll // || isFastEnough
+        return isSignificantScroll  // || isFastEnough
     }
 
     private var isTopRubberbanding: Bool {
@@ -380,20 +388,25 @@ final class TabScrollHandler: NSObject,
 
     private func handleToolbarIsTransitioning(scrollDelta: CGFloat) {
         // Update last valid state only once and send transitioning state to delegate
-        if toolbarDisplayState.isExpanded {
-            lastValidState = .expanded
-        } else if toolbarDisplayState.isCollapsed {
-            lastValidState = .collapsed
-        }
+        updateLastValidState()
 
         if toolbarDisplayState == .transitioning && checkIfDeltaIsPassed(for: scrollDelta) {
             updateToolbarDisplayState(for: scrollDelta)
+            updateLastValidState()
             return
         }
 
         let transitioningtState: ToolbarDisplayState = lastValidState == .expanded ? .collapsed : .expanded
         delegate?.updateToolbarTransition(progress: scrollDelta, towards: transitioningtState)
         toolbarDisplayState.update(displayState: .transitioning)
+    }
+
+    private func updateLastValidState() {
+        if toolbarDisplayState.isExpanded {
+            lastValidState = .expanded
+        } else if toolbarDisplayState.isCollapsed {
+            lastValidState = .collapsed
+        }
     }
 
     private func cancelTransition() {
