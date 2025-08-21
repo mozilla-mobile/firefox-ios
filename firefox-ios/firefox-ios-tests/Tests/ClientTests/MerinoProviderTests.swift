@@ -68,14 +68,14 @@ final class MerinoProviderTests: XCTestCase {
     private let storiesFlag = PrefsKeys.UserFeatureFlagPrefs.ASPocketStories
 
     func testIncorrectLocalesAreNotSupported() {
-        XCTAssertFalse(MerinoProvider.islocaleSupported("en_BD"))
-        XCTAssertFalse(MerinoProvider.islocaleSupported("enCA"))
+        XCTAssertFalse(MerinoProvider.isLocaleSupported("en_BD"))
+        XCTAssertFalse(MerinoProvider.isLocaleSupported("enCA"))
     }
 
     func testCorrectLocalesAreSupported() {
-        XCTAssertTrue(MerinoProvider.islocaleSupported("en_US"))
-        XCTAssertTrue(MerinoProvider.islocaleSupported("en_GB"))
-        XCTAssertTrue(MerinoProvider.islocaleSupported("en_CA"))
+        XCTAssertTrue(MerinoProvider.isLocaleSupported("en_US"))
+        XCTAssertTrue(MerinoProvider.isLocaleSupported("en_GB"))
+        XCTAssertTrue(MerinoProvider.isLocaleSupported("en_CA"))
     }
 
     func test_fetchStories_cachesManyStories_returnsRequired() async throws {

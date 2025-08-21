@@ -52,7 +52,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
-              MerinoProvider.islocaleSupported(Locale.current.identifier)
+              MerinoProvider.isLocaleSupported(Locale.current.identifier)
         else { throw Error.failure }
 
         if let cachedItems = cache.loadRecommendations(),
@@ -78,7 +78,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         return Array(items.prefix(numberOfRequestedStories))
     }
 
-    static func islocaleSupported(_ locale: String) -> Bool {
+    static func isLocaleSupported(_ locale: String) -> Bool {
         return allCuratedRecommendationLocales().contains(
             locale.replacingOccurrences(of: "_", with: "-")
         )
