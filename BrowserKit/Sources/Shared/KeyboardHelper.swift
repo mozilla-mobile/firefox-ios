@@ -7,11 +7,8 @@ import Common
 
 /**
  * The keyboard state at the time of notification.
- *
- * FIXME: FXIOS-13260 KeyboardHelper in Shared package should probably not be @unchecked Sendable without review and/or
- * manual thread synchronization
  */
-public struct KeyboardState: @unchecked Sendable {
+public struct KeyboardState: Sendable {
     public let animationDuration: Double
     public let animationCurve: UIView.AnimationCurve
     private let keyboardEndFrame: CGRect?
