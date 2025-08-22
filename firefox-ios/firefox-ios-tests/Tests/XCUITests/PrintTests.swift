@@ -20,20 +20,37 @@ class PrintTests: FeatureFlaggedTestBase {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         navigator.goto(PrintPage)
-        waitForElementsToExist(
-            [
-                app.navigationBars["Options"],
+        var navigatorBar = ""
+        if #available(iOS 17, *) {
+            navigatorBar = "Options"
+        } else {
+            navigatorBar = "Print Options"
+        }
+        if #available(iOS 16, *) {
+            waitForElementsToExist(
+                [
+                    app.navigationBars[navigatorBar],
+                    app.tables.cells.staticTexts["Printer"],
+                    app.tables.cells.staticTexts["Copies"],
+                    app.tables.cells.staticTexts["Paper Size"],
+                    app.tables.cells.staticTexts["Letter"],
+                    app.tables.cells.staticTexts["Orientation"],
+                    app.tables.cells.staticTexts["Portrait"],
+                    app.tables.cells.staticTexts["Scaling"],
+                    app.tables.cells.staticTexts["Layout"],
+                    app.collectionViews.cells["Page 1 of 1"]
+                ]
+            )
+        } else {
+            waitForElementsToExist([
+                app.navigationBars[navigatorBar],
                 app.tables.cells.staticTexts["Printer"],
-                app.tables.cells.staticTexts["Copies"],
+                app.tables.cells.staticTexts["1 Copy"],
                 app.tables.cells.staticTexts["Paper Size"],
-                app.tables.cells.staticTexts["Letter"],
                 app.tables.cells.staticTexts["Orientation"],
-                app.tables.cells.staticTexts["Portrait"],
-                app.tables.cells.staticTexts["Scaling"],
-                app.tables.cells.staticTexts["Layout"],
                 app.collectionViews.cells["Page 1 of 1"]
-            ]
-        )
+            ])
+        }
         navigator.goto(BrowserTab)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
