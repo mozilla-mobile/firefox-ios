@@ -98,8 +98,8 @@ final class MerinoProviderTests: XCTestCase {
 
     func test_fetchStories_returnsCached_whenThresholdNotPassed() async throws {
         let control = createSubject(thresholdHours: 4)
-        control.cache.seed(items: [makeItem("a"), makeItem("b")], lastUpdated: Date())
-        control.fetcher.stubbedItems = [makeItem("net1"), makeItem("net2")]
+        control.cache.seed(items: [.makeItem("a"), .makeItem("b")], lastUpdated: Date())
+        control.fetcher.stubbedItems = [.makeItem("net1"), .makeItem("net2")]
 
         let result = try await control.subject.fetchStories(10)
 
@@ -110,8 +110,8 @@ final class MerinoProviderTests: XCTestCase {
 
     func test_fetchStories_fetchesAndSaves_whenThresholdPassed() async throws {
         let control = createSubject(thresholdHours: 1/60)
-        control.cache.seed(items: [makeItem("old")], lastUpdated: Date().addingTimeInterval(-3600))
-        control.fetcher.stubbedItems = [makeItem("new1"), makeItem("new2")]
+        control.cache.seed(items: [.makeItem("old")], lastUpdated: Date().addingTimeInterval(-3600))
+        control.fetcher.stubbedItems = [.makeItem("new1"), .makeItem("new2")]
 
         let result = try await control.subject.fetchStories(10)
 
@@ -124,7 +124,7 @@ final class MerinoProviderTests: XCTestCase {
     func test_fetchStories_fetchesAndSaves_whenNoCache() async throws {
         let control = createSubject()
         control.cache.seedEmpty()
-        control.fetcher.stubbedItems = [makeItem("net")]
+        control.fetcher.stubbedItems = [.makeItem("net")]
 
         let result = try await control.subject.fetchStories(5)
 
@@ -152,9 +152,9 @@ final class MerinoProviderTests: XCTestCase {
 
         // Cache has _ itemCount but NO timestamp should be treated as STALE and must fetch
         // new stories. We should never get here, but we should still test it.
-        control.cache.seed(items: [makeItem("staleButNoTimestamp")], lastUpdated: nil)
+        control.cache.seed(items: [.makeItem("staleButNoTimestamp")], lastUpdated: nil)
 
-        control.fetcher.stubbedItems = [makeItem("net1"), makeItem("net2")]
+        control.fetcher.stubbedItems = [.makeItem("net1"), .makeItem("net2")]
 
         let result = try await control.subject.fetchStories(3)
 
@@ -165,22 +165,6 @@ final class MerinoProviderTests: XCTestCase {
         XCTAssertTrue(control.cache.didClear)
         XCTAssertEqual(control.cache.loadRecommendations()?.count, 2)
         XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["net1", "net2"])
-    }
-
-    private func makeItem(_ name: String) -> RecommendationDataItem {
-        return RecommendationDataItem(
-            corpusItemId: "\(name)",
-            scheduledCorpusItemId: "\(name)",
-            url: "https://\(name).com",
-            title: "\(name)",
-            excerpt: "Excerpt \(name)",
-            publisher: "Publisher \(name)",
-            isTimeSensitive: false,
-            imageUrl: "https://example\(name).com",
-            iconUrl: "https://example\(name).com",
-            tileId: 0,
-            receivedRank: 0
-        )
     }
 
     private func createSubject(
@@ -200,5 +184,23 @@ final class MerinoProviderTests: XCTestCase {
 
         trackForMemoryLeaks(subject)
         return TestableSubject(subject: subject, cache: cache, fetcher: fetcher)
+    }
+}
+
+extension RecommendationDataItem {
+    static func makeItem(_ name: String) -> RecommendationDataItem {
+        return RecommendationDataItem(
+            corpusItemId: "\(name)",
+            scheduledCorpusItemId: "\(name)",
+            url: "https://\(name).com",
+            title: "\(name)",
+            excerpt: "Excerpt \(name)",
+            publisher: "Publisher \(name)",
+            isTimeSensitive: false,
+            imageUrl: "https://example\(name).com",
+            iconUrl: "https://example\(name).com",
+            tileId: 0,
+            receivedRank: 0
+        )
     }
 }

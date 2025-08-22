@@ -15,43 +15,29 @@ class StoryProviderTests: XCTestCase, FeatureFlaggable {
         subject = nil
     }
 
-    func tesFetchingStories_ReturnsList() async {
-        let stories: [RecommendationDataItem] = [
-            .make(title: "feed1"),
-            .make(title: "feed2"),
-            .make(title: "feed3"),
-        ]
+    func testFetchingStories_forHomepage_returnsList() async {
+        let stories: [RecommendationDataItem] = (0...30).map { .makeItem("feed\($0)") }
+        let expectedResult = Array(stories.prefix(12)).map(MerinoStory.init)
 
-        subject = StoryProvider(
-            merinoAPI: MockMerinoAPI(result: .success(stories))
-        )
+        subject = StoryProvider(merinoAPI: MockMerinoAPI(result: .success(stories)))
+        let fetched = await subject.fetchHomepageStories()
 
-        let fetched = await subject.fetchStories()
-        XCTAssertEqual(fetched, stories.map(MerinoStory.init))
+        XCTAssertEqual(fetched, expectedResult)
+    }
+
+    func testFetchingStories_forDiscoverMore_returnsList() async {
+        let stories: [RecommendationDataItem] = (0...30).map { .makeItem("feed\($0)") }
+        let expectedResult = Array(stories.prefix(25)).map(MerinoStory.init)
+
+        subject = StoryProvider(merinoAPI: MockMerinoAPI(result: .success(stories)))
+        let fetched = await subject.fetchDiscoverMoreStories()
+
+        XCTAssertEqual(fetched, expectedResult)
     }
 }
 
 extension StoryProviderTests {
     enum TestError: Error {
         case `default`
-    }
-}
-
-extension RecommendationDataItem {
-    static func make(title: String) -> RecommendationDataItem {
-        RecommendationDataItem(
-            corpusItemId: "",
-            scheduledCorpusItemId: "",
-            url: "www.google.com",
-            title: title,
-            excerpt: "",
-            topic: "",
-            publisher: "",
-            isTimeSensitive: false,
-            imageUrl: "www.google.com",
-            iconUrl: "",
-            tileId: 0,
-            receivedRank: 0
-        )
     }
 }
