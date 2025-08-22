@@ -206,7 +206,7 @@ final class ReadingListPanel: UITableViewController,
             forObserver: self,
             observing: [
                 .FirefoxAccountChanged,
-                .DynamicFontChanged,
+                UIContentSizeCategory.didChangeNotification,
                 .DatabaseWasReopened
             ]
         )
@@ -262,7 +262,7 @@ final class ReadingListPanel: UITableViewController,
         let notificationDBname = notification.object as? String
         Task { @MainActor in
             switch notificationName {
-            case .FirefoxAccountChanged, .DynamicFontChanged:
+            case .FirefoxAccountChanged, UIContentSizeCategory.didChangeNotification:
                 refreshReadingList()
             case .DatabaseWasReopened:
                 if let dbName = notificationDBname, dbName == "ReadingList.db" {

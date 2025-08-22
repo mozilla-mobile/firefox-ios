@@ -16,7 +16,8 @@ struct BlockedTrackerItem: Hashable {
 // MARK: BlockedTrackersTableViewController
 class BlockedTrackersTableViewController: UIViewController,
                                           Themeable,
-                                          UITableViewDelegate {
+                                          UITableViewDelegate,
+                                          Notifiable {
     private struct UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
@@ -51,6 +52,12 @@ class BlockedTrackersTableViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
+
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -207,7 +214,7 @@ class BlockedTrackersTableViewController: UIViewController,
     // MARK: Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             adjustLayout()
         default: break
         }

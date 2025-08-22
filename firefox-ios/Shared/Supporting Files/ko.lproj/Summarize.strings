@@ -1,0 +1,3 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the summarize button on the new toolbar layout. */
+"ContextualHints.Summarize.Description.v142" = "이 페이지를 요약하려면 누르세요. 리더뷰로 보려면 길게 터치하세요.";
+

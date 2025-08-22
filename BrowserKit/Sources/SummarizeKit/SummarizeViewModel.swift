@@ -23,7 +23,6 @@ public struct SummarizeViewModel {
     let errorMessages: LocalizedErrorsViewModel
 
     let onDismiss: @MainActor () -> Void
-    let onShouldShowTabSnapshot: @MainActor () -> Void
 
     public init(
         titleLabelA11yId: String,
@@ -40,8 +39,7 @@ public struct SummarizeViewModel {
         tabSnapshot: UIImage,
         tabSnapshotTopOffset: CGFloat,
         errorMessages: LocalizedErrorsViewModel,
-        onDismiss: @escaping @MainActor () -> Void,
-        onShouldShowTabSnapshot: @escaping @MainActor () -> Void
+        onDismiss: @escaping @MainActor () -> Void
     ) {
         self.titleLabelA11yId = titleLabelA11yId
         self.loadingLabel = loadingLabel
@@ -56,7 +54,6 @@ public struct SummarizeViewModel {
         self.closeButtonModel = closeButtonModel
         self.tabSnapshot = tabSnapshot
         self.onDismiss = onDismiss
-        self.onShouldShowTabSnapshot = onShouldShowTabSnapshot
         self.tabSnapshotTopOffset = tabSnapshotTopOffset
         self.errorMessages = errorMessages
     }

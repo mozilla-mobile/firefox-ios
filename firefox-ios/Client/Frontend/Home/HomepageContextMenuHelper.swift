@@ -172,10 +172,14 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
-            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url).uponQueue(.main) { result in
-                guard result.isSuccess else { return }
-                self.removeBookmarkShortcut()
-            }
+            self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url)
+                .uponQueue(.main) { result in
+                    // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                    MainActor.assumeIsolated {
+                        guard result.isSuccess else { return }
+                        self.removeBookmarkShortcut()
+                    }
+                }
 
             self.delegate?.homePanelDidRequestBookmarkToast(urlString: site.url, action: .remove)
             self.bookmarksTelemetry.deleteBookmark(eventLabel: .activityStream)
@@ -319,9 +323,12 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
 
     private func fetchBookmarkStatus(for site: Site, completionHandler: @escaping (Site) -> Void) {
         viewModel.profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
-            var updatedSite = site
-            updatedSite.isBookmarked = result.successValue ?? false
-            completionHandler(updatedSite)
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
+                var updatedSite = site
+                updatedSite.isBookmarked = result.successValue ?? false
+                completionHandler(updatedSite)
+            }
         }
     }
 

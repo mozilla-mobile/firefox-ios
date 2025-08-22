@@ -34,8 +34,6 @@ extension Notification.Name {
 
     public static let RustPlacesOpened = Notification.Name("RustPlacesOpened")
 
-    public static let DynamicFontChanged = Notification.Name("DynamicFontChanged")
-
     public static let ReachabilityStatusChanged = Notification.Name("ReachabilityStatusChanged")
 
     public static let HomePanelPrefsChanged = Notification.Name("HomePanelPrefsChanged")

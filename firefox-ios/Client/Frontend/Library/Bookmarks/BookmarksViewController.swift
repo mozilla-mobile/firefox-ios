@@ -273,15 +273,23 @@ final class BookmarksViewController: SiteTableViewController,
     /// Performs the delete asynchronously even though we update the
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
-        profile.places.deleteBookmarkNode(guid: bookmarkNode.guid).uponQueue(.main) { _ in
-            if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
-                self.profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { node in
-                    guard let nodeValue = node.successValue, nodeValue == nil else { return }
-                    self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+        profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
+            .uponQueue(.main) { _ in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
+                        self.profile.places.getBookmark(guid: recentBookmarkFolderGuid)
+                            .uponQueue(.main) { node in
+                                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                                MainActor.assumeIsolated {
+                                    guard let nodeValue = node.successValue, nodeValue == nil else { return }
+                                    self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+                                }
+                            }
+                    }
+                    self.removeBookmarkShortcut()
                 }
             }
-            self.removeBookmarkShortcut()
-        }
 
         tableView.beginUpdates()
         viewModel.bookmarkNodes.remove(at: indexPath.row)

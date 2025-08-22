@@ -70,7 +70,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell])
         mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
         snapshot("Homescreen-first-visit")
     }
@@ -106,6 +106,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testWebViewAuthenticationDialog() {
+        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.nowAt(BasicAuthDialog)
@@ -114,6 +115,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func test3ReloadButtonContextMenu() {
+        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -146,14 +148,12 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testHistoryTableContextMenu() {
+        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"], timeout: 5)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         waitForTabsButton()
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables["History List"])
         app.tables["History List"].cells.element(boundBy: 1).staticTexts.element(boundBy: 1).press(forDuration: 2)
@@ -163,16 +163,16 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     @MainActor
     func testBookmarksTableContextMenu() {
         sleep(3)
+        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
+        waitUntilPageLoad()
         // There is no other way the test work with the new Copied.. snackbar ahow on iOS14
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
         navigator.performAction(Action.Bookmark)
-        navigator.createNewTab()
-        // Disable due to issue #7521
-        // navigator.goto(BookmarksPanelContextMenu)
-        navigator.nowAt(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
+        navigator.goto(BookmarksPanelContextMenu)
         snapshot("BookmarksTableContextMenu-01")
     }
 
@@ -281,6 +281,10 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testTakeMarketingScreenshots() {
+        let searchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
+        let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+        let searchTextfield = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         snapshot("00TopSites")
 
@@ -290,17 +294,36 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // load some web pages in some new tabs
         navigator.goto(NewTabScreen)
-        navigator.openNewURL(urlString: "https://www.mozilla.org")
+        if searchBar.exists {
+            searchBar.waitAndTap()
+        }
+        mozWaitForElementToExist(searchTextfield)
+        navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
-        navigator.openNewURL(urlString: "https://mozilla.org/firefox/desktop")
+        waitForTabsButton()
+        addNewTabButton.waitAndTap()
+        if searchBar.exists {
+            searchBar.waitAndTap()
+        }
+        mozWaitForElementToExist(searchTextfield)
+        navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
-        navigator.openNewURL(urlString: "https://mozilla.org/firefox/new")
+        waitForTabsButton()
+        addNewTabButton.waitAndTap()
+        if searchBar.exists {
+            searchBar.waitAndTap()
+        }
+        mozWaitForElementToExist(searchTextfield)
+        navigator.openURL("https://mozilla.org/firefox/new")
         waitUntilPageLoad()
+        waitForTabsButton()
+        mozWaitForElementToExist(addNewTabButton)
         navigator.goto(TabTray)
         snapshot("02TabTray")
 
         // perform a search but don't complete (we're testing autocomplete here)
         navigator.createNewTab()
+        searchBar.waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].typeText("firef")
         sleep(2)

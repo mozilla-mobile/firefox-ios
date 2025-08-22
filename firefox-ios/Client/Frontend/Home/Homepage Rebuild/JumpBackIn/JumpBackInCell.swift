@@ -74,7 +74,7 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
         setupLayout()
     }
@@ -225,7 +225,7 @@ final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable,
         let name = notification.name
         ensureMainThread { [weak self] in
             switch name {
-            case .DynamicFontChanged:
+            case UIContentSizeCategory.didChangeNotification:
                 self?.adjustLayout()
             default: break
             }

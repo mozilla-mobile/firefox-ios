@@ -89,7 +89,8 @@ private extension HeroImageFetcherTests {
 }
 
 // MARK: - MetadataProviderFake
-private class MetadataProviderFake: LPMetadataProvider {
+// FXIOS-13243: LPMetadataProvider and LPLinkMetadata are not Sendable across boundaries
+private final class MetadataProviderFake: LPMetadataProvider, @unchecked Sendable {
     var metadataResult = LPLinkMetadata()
     var errorResult: Error?
     override func startFetchingMetadata(for URL: URL, completionHandler: @escaping (LPLinkMetadata?, Error?) -> Void) {

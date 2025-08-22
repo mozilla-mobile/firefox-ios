@@ -285,9 +285,8 @@ features:
               uiVariant: modern
             customization-theme-modern:
               card-type: multiple-choice
-              order: 19
-              title: Onboarding/Onboarding.Customization.Theme.Title.v123
-              body: Onboarding/Onboarding.Customization.Theme.Description.v123
+              order: 25
+              title: Onboarding/Onboarding.Customization.Theme.Title.v143
               image: themeing
               buttons:
                 primary:

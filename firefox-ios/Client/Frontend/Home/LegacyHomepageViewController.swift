@@ -401,11 +401,7 @@ class LegacyHomepageViewController: UIViewController,
         }
     }
 
-    private func adjustPrivacySensitiveSections(notification: Notification) {
-        guard let dict = notification.object as? NSDictionary,
-              let isPrivate = dict[Tab.privateModeKey] as? Bool
-        else { return }
-
+    private func adjustPrivacySensitiveSections(isPrivate: Bool) {
         let privacySectionState = isPrivate ? "Removing": "Adding"
         logger.log("\(privacySectionState) privacy sensitive sections", level: .info, category: .legacyHomepage)
         viewModel.isPrivate = isPrivate
@@ -930,21 +926,24 @@ extension LegacyHomepageViewController: HomepageViewModelDelegate {
 
 // MARK: - Notifiable
 extension LegacyHomepageViewController: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            guard let self = self else { return }
+    nonisolated func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .TabsPrivacyModeChanged:
+            let notificationWindowUUID = notification.windowUUID
+            guard let dict = notification.object as? NSDictionary,
+                  let isPrivate = dict[Tab.privateModeKey] as? Bool
+            else { return }
 
-            switch notification.name {
-            case .TabsPrivacyModeChanged:
-                guard windowUUID == notification.windowUUID else { return }
-                self.adjustPrivacySensitiveSections(notification: notification)
-
-            case .HomePanelPrefsChanged,
-                    .WallpaperDidChange:
-                self.reloadView()
-
-            default: break
+            ensureMainThread {
+                guard self.windowUUID == notificationWindowUUID else { return }
+                self.adjustPrivacySensitiveSections(isPrivate: isPrivate)
             }
+        case .HomePanelPrefsChanged,
+                .WallpaperDidChange:
+            ensureMainThread {
+                self.reloadView()
+            }
+        default: break
         }
     }
 }

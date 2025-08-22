@@ -8,11 +8,12 @@
 
 import Foundation
 
-public var DeferredDefaultQueue = DispatchQueue.global()
+public let DeferredDefaultQueue = DispatchQueue.global()
 
-// TODO: FXIOS-13184 Remove deferred code or validate it is sendable
-open class Deferred<T>: @unchecked Sendable {
-    typealias UponBlock = (DispatchQueue, (T) -> ())
+// TODO: FXIOS-13184 Remove deferred code or validate it is sendable.
+// Also validate the T type is Sendable (actually protected) in all methods.
+open class Deferred<T: Sendable>: @unchecked Sendable {
+    typealias UponBlock = (DispatchQueue, @Sendable (T) -> ())
     private typealias Protected = (protectedValue: T?, uponBlocks: [UponBlock])
 
     private var protected: LockProtected<Protected>
@@ -57,7 +58,7 @@ open class Deferred<T>: @unchecked Sendable {
         return protected.withReadLock { $0.protectedValue }
     }
 
-    public func uponQueue(_ queue: DispatchQueue, block: @escaping (T) -> ()) {
+    public func uponQueue(_ queue: DispatchQueue, block: @Sendable @escaping (T) -> ()) {
         let maybeValue: T? = protected.withWriteLock{ data in
             if data.protectedValue == nil {
                 data.uponBlocks.append( (queue, block) )
@@ -77,7 +78,9 @@ open class Deferred<T>: @unchecked Sendable {
 
         // slow path - block until filled
         let group = DispatchGroup()
-        var result: T!
+        // FIXME: FXIOS-13242 We should not be mutating local context captured in closures. Here we're manually applying
+        // some synchronization using a dispatch group.
+        nonisolated(unsafe) var result: T!
         group.enter()
         self.upon { result = $0; group.leave() }
         _ = group.wait(timeout: .distantFuture)
@@ -98,7 +101,7 @@ open class Deferred<T>: @unchecked Sendable {
         return bindQueue(queue) { t in Deferred<U>(value: f(t)) }
     }
 
-    public func upon(_ block: @escaping (T) ->()) {
+    public func upon(_ block: @Sendable @escaping (T) ->()) {
         uponQueue(defaultQueue, block: block)
     }
 
@@ -115,25 +118,37 @@ open class Deferred<T>: @unchecked Sendable {
     }
 }
 
+// FIXME: FXIOS-13242 We want to remove this function for the sake of proper Swift Concurrency
 public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
     if deferreds.count == 0 {
         return Deferred(value: [])
     }
 
+    typealias SendableGenericClosure = @Sendable (T) -> ()
+
     let combined = Deferred<[T]>()
-    var results: [T] = []
+
+    // FIXME: FXIOS-13242 We should not be mutating local context captured in closures. For now we're manually applying
+    // some synchronization using a dispatch group.
+    nonisolated(unsafe) var results: [T] = []
     results.reserveCapacity(deferreds.count)
 
-    var block: ((T) -> ())!
-    block = { t in
-        results.append(t)
-        if results.count == deferreds.count {
-            combined.fill(results)
-        } else {
-            deferreds[results.count].upon(block)
+    DispatchQueue.global(qos: .default).async {
+        var iterator = 0
+        let group = DispatchGroup()
+        let block: SendableGenericClosure = { t in
+            results.append(t)
+            group.leave()
         }
+        while iterator < deferreds.count {
+            group.enter()
+            deferreds[iterator].upon(block)
+            iterator += 1
+            group.wait()
+        }
+
+        combined.fill(results)
     }
-    deferreds[0].upon(block)
 
     return combined
 }

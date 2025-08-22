@@ -29,7 +29,7 @@ final class DownloadsPanel: UIViewController,
     private let logger: Logger
     private let events: [Notification.Name] = [.FileDidDownload,
                                                .PrivateDataClearedDownloadedFiles,
-                                               .DynamicFontChanged,
+                                               UIContentSizeCategory.didChangeNotification,
                                                .DownloadPanelFileWasDeleted]
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -110,7 +110,7 @@ final class DownloadsPanel: UIViewController,
             switch notificationName {
             case .FileDidDownload, .PrivateDataClearedDownloadedFiles:
                 reloadData()
-            case .DynamicFontChanged:
+            case UIContentSizeCategory.didChangeNotification:
                 reloadData()
                 if emptyStateOverlayView.superview != nil {
                     emptyStateOverlayView.removeFromSuperview()
