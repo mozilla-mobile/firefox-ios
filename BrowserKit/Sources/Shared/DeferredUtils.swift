@@ -76,50 +76,6 @@ public func succeed() -> Success {
 }
 
 /**
- * Like `all`, but thanks to its taking thunks as input, each result is
- * generated in strict sequence. Fails immediately if any result is failure.
- */
-public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Maybe<[T]>> {
-    if thunks.isEmpty {
-        return deferMaybe([])
-    }
-
-    let combined = Deferred<Maybe<[T]>>()
-    var results: [T] = []
-    results.reserveCapacity(thunks.count)
-
-    var onValue: ((T) -> Void)?
-    var onResult: ((Maybe<T>) -> Void)?
-
-    // onValue and onResult both hold references to each other niling them out before exiting breaks a reference cycle
-    // We also cannot use unowned here because the thunks are not class types.
-    onValue = { t in
-        results.append(t)
-        if results.count == thunks.count {
-            onResult = nil
-            combined.fill(Maybe(success: results))
-        } else if let onResult {
-            thunks[results.count]().upon(onResult)
-        }
-    }
-
-    onResult = { r in
-        if r.isFailure {
-            onValue = nil
-            combined.fill(Maybe(failure: r.failureValue!))
-            return
-        }
-        onValue?(r.successValue!)
-    }
-
-    if let onResult {
-        thunks[0]().upon(onResult)
-    }
-
-    return combined
-}
-
-/**
  * Like `all`, but doesn't accrue individual values.
  */
 extension Array where Element: Success {

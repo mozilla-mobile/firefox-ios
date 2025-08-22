@@ -305,12 +305,14 @@ class CreditCardBottomSheetViewModel {
     }
 
     func updateCreditCardList(completionHandler: @escaping @Sendable ([CreditCard]?) -> Void) {
-        if state == .selectSavedCard {
-            listStoredCreditCards { [weak self] cards in
-                Task { @MainActor in
-                    self?.creditCards = cards
-                    completionHandler(cards)
-                }
+        guard state == .selectSavedCard else {
+            completionHandler(nil)
+            return
+        }
+        listStoredCreditCards { [weak self] cards in
+            Task { @MainActor in
+                self?.creditCards = cards
+                completionHandler(cards)
             }
         }
     }

@@ -10,17 +10,20 @@ import Shared
 protocol MerinoStoriesProviding: Sendable {
     typealias StoryResult = Swift.Result<[RecommendationDataItem], Error>
 
-    func fetchStories(_ itemCount: Int32) async throws -> [RecommendationDataItem]
+    func fetchStories(_ itemCount: Int) async throws -> [RecommendationDataItem]
 }
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
+    private struct Constants {
+        static let merinoServicesBaseURL = "https://merino.services.mozilla.com"
+        static let numberOfStoriesToFetchForCaching = 30
+    }
+
     private let thresholdInHours: Double
     private let cache: CuratedRecommendationsCacheProtocol
     private let prefs: Prefs
     private var logger: Logger
     private let fetcher: MerinoFeedFetching
-
-    let MerinoServicesBaseURL = "https://merino.services.mozilla.com"
 
     enum Error: Swift.Error {
         case failure
@@ -38,23 +41,23 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         self.prefs = prefs
         self.logger = logger
         self.fetcher = fetcher ?? MerinoFeedFetcher(
-            baseURL: MerinoServicesBaseURL,
+            baseURL: Constants.merinoServicesBaseURL,
             logger: logger
         )
     }
 
-    func fetchStories(_ itemCount: Int32) async throws -> [RecommendationDataItem] {
+    func fetchStories(_ numberOfRequestedStories: Int) async throws -> [RecommendationDataItem] {
         if !AppConstants.isRunningTest && shouldUseMockData {
-            return try await MerinoTestData().getMockDataFeed(count: itemCount)
+            return Array(MerinoTestData().getMockDataFeed().prefix(numberOfRequestedStories))
         }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
-              MerinoProvider.islocaleSupported(Locale.current.identifier)
+              MerinoProvider.isLocaleSupported(Locale.current.identifier)
         else { throw Error.failure }
 
         if let cachedItems = cache.loadRecommendations(),
            cacheUpdateThresholdHasNotPassed() {
-            return cachedItems
+            return Array(cachedItems.prefix(numberOfRequestedStories))
         }
 
         guard let currentLocale = iOSToMerinoLocale(from: Locale.current.identifier) else {
@@ -62,7 +65,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         }
 
         let items = await fetcher.fetch(
-            itemCount: itemCount,
+            itemCount: Constants.numberOfStoriesToFetchForCaching,
             locale: currentLocale,
             userAgent: UserAgent.getUserAgent()
         )
@@ -72,10 +75,10 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
             cache.save(items)
         }
 
-        return items
+        return Array(items.prefix(numberOfRequestedStories))
     }
 
-    static func islocaleSupported(_ locale: String) -> Bool {
+    static func isLocaleSupported(_ locale: String) -> Bool {
         return allCuratedRecommendationLocales().contains(
             locale.replacingOccurrences(of: "_", with: "-")
         )
