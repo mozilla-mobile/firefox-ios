@@ -13,9 +13,9 @@ final class MockMerinoManager: MerinoManagerProvider, @unchecked Sendable {
     func getMerinoItems() async -> [MerinoStoryConfiguration] {
         getMerinoItemsCalled += 1
         let stories: [RecommendationDataItem] = [
-            .make(title: "feed1"),
-            .make(title: "feed2"),
-            .make(title: "feed3"),
+            .makeItem("feed1"),
+            .makeItem("feed2"),
+            .makeItem("feed3"),
         ]
 
         return stories.compactMap { MerinoStoryConfiguration(story: MerinoStory(from: $0)) }

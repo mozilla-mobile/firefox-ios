@@ -269,7 +269,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     private func createStories(count: Int = 20) -> [MerinoStoryConfiguration] {
         var feedStories = [RecommendationDataItem]()
         (0..<count).forEach {
-            let story: RecommendationDataItem = .make(title: "feed \($0)")
+            let story: RecommendationDataItem = .makeItem("feed \($0)")
             feedStories.append(story)
         }
 
