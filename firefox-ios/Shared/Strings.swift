@@ -2206,7 +2206,7 @@ extension String {
             comment: "The label displayed in the summary report when the summary was generated using Apple Intelligence."
         )
         public static let FootnoteLabel = MZLocalizedString(
-            key: "Summarizer.Footnote.Label.v142",
+            key: "Summarizer.Footnote.Label.v144",
             tableName: "Summarizer",
             value: "Note: Summarization can make errors.",
             comment: "The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors."
@@ -2218,7 +2218,7 @@ extension String {
             comment: "The title for the Terms of Service alert that asks the user if they want to allow page summaries."
         )
         public static let ToSAlertMessageFirefoxLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v142",
+            key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v144",
             tableName: "Summarizer",
             value: "%@ uses cloud-based AI to summarize pages, and returns those summaries to your device.",
             comment: "The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox)."
