@@ -142,16 +142,10 @@ class SearchViewController: SiteTableViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged,
+            observing: [UIContentSizeCategory.didChangeNotification,
                         .SearchSettingsChanged,
                         .SponsoredAndNonSponsoredSuggestionsChanged]
         )
-    }
-
-    func dynamicFontChanged(_ notification: Notification) {
-        guard notification.name == .DynamicFontChanged else { return }
-
-        reloadData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -837,8 +831,8 @@ class SearchViewController: SiteTableViewController,
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
-            dynamicFontChanged(notification)
+        case UIContentSizeCategory.didChangeNotification:
+            reloadData()
         case .SearchSettingsChanged:
             reloadSearchEngines()
         case .SponsoredAndNonSponsoredSuggestionsChanged:

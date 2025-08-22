@@ -89,7 +89,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged,
+            observing: [UIContentSizeCategory.didChangeNotification,
                         UIApplication.willResignActiveNotification,
                         UIApplication.didBecomeActiveNotification]
         )
@@ -237,7 +237,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             applyDynamicFontChange()
         case UIApplication.willResignActiveNotification:
             store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,

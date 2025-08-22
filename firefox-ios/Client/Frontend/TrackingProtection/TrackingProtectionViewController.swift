@@ -156,7 +156,7 @@ class TrackingProtectionViewController: UIViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
         scrollView.delegate = self
         updateViewDetails()
@@ -494,7 +494,7 @@ class TrackingProtectionViewController: UIViewController,
     // MARK: Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             adjustLayout()
         default: break
         }

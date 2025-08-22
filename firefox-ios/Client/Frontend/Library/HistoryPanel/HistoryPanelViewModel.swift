@@ -78,7 +78,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     let historyPanelNotifications = [Notification.Name.FirefoxAccountChanged,
                                      Notification.Name.PrivateDataClearedHistory,
-                                     Notification.Name.DynamicFontChanged,
+                                     UIContentSizeCategory.didChangeNotification,
                                      Notification.Name.DatabaseWasReopened,
                                      Notification.Name.OpenClearRecentHistory,
                                      Notification.Name.OpenRecentlyClosedTabs]

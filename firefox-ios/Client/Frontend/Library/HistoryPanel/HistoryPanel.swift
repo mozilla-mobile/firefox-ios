@@ -337,7 +337,7 @@ class HistoryPanel: UIViewController,
                 resyncHistory()
             }
             break
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
