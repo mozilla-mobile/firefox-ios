@@ -1629,6 +1629,14 @@ extension String {
                     comment: "String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens.")
             }
 
+            public struct Theme {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Customization.Theme.Title.v143",
+                    tableName: "Onboarding",
+                    value: "Choose your theme",
+                    comment: "String used to describe the title of the theme customization onboarding page in our Onboarding screens.")
+            }
+
             public struct Sync {
                 public static let Title = MZLocalizedString(
                     key: "Onboarding.Modern.Sync.Title.v140",
