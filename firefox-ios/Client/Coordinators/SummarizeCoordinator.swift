@@ -10,17 +10,9 @@ import UIKit
 import Shared
 import WebKit
 
-/// Conforming types can show and hide the browser content together with its toolbars.
-protocol BrowserContentHiding: AnyObject {
-    func showBrowserContent()
-
-    func hideBrowserContent()
-}
-
 class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
     private let browserSnapshot: UIImage
     private let browserSnapshotTopOffset: CGFloat
-    private weak var browserContentHiding: BrowserContentHiding?
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let webView: WKWebView
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -38,7 +30,6 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         webView: WKWebView,
         summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
-        browserContentHiding: BrowserContentHiding,
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
         trigger: SummarizerTrigger,
         prefs: Prefs,
@@ -53,7 +44,6 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         self.browserSnapshotTopOffset = browserSnapshotTopOffset
         self.webView = webView
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
-        self.browserContentHiding = browserContentHiding
         self.windowUUID = windowUUID
         self.trigger = trigger
         self.prefs = prefs
@@ -119,10 +109,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             errorMessages: errorModel
         ) { [weak self] in
             self?.summarizerTelemetry.summarizationClosed()
-            self?.browserContentHiding?.showBrowserContent()
             self?.dismissCoordinator()
-        } onShouldShowTabSnapshot: { [weak self] in
-            self?.browserContentHiding?.hideBrowserContent()
         }
 
         let controller = SummarizeController(

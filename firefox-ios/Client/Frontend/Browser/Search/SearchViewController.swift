@@ -142,16 +142,10 @@ class SearchViewController: SiteTableViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged,
+            observing: [UIContentSizeCategory.didChangeNotification,
                         .SearchSettingsChanged,
                         .SponsoredAndNonSponsoredSuggestionsChanged]
         )
-    }
-
-    func dynamicFontChanged(_ notification: Notification) {
-        guard notification.name == .DynamicFontChanged else { return }
-
-        reloadData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -419,16 +413,22 @@ class SearchViewController: SiteTableViewController,
 
         ensureMainThread {
             // Get cached tabs
-            self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-                guard let clientAndTabs = result.successValue else { return }
-                self.viewModel.remoteClientTabs.removeAll()
-                // Update UI with cached data.
-                clientAndTabs.forEach { value in
-                    value.tabs.forEach { (tab) in
-                        self.viewModel.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
+            self.profile.getCachedClientsAndTabs()
+                .uponQueue(.main) { result in
+                    // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                    MainActor.assumeIsolated {
+                        guard let clientAndTabs = result.successValue else { return }
+                        self.viewModel.remoteClientTabs.removeAll()
+                        // Update UI with cached data.
+                        clientAndTabs.forEach { value in
+                            value.tabs.forEach { (tab) in
+                                self.viewModel.remoteClientTabs.append(
+                                    ClientTabsSearchWrapper(client: value.client, tab: tab)
+                                )
+                            }
+                        }
                     }
                 }
-            }
         }
     }
 
@@ -831,8 +831,8 @@ class SearchViewController: SiteTableViewController,
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
-            dynamicFontChanged(notification)
+        case UIContentSizeCategory.didChangeNotification:
+            reloadData()
         case .SearchSettingsChanged:
             reloadSearchEngines()
         case .SponsoredAndNonSponsoredSuggestionsChanged:

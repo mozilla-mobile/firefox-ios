@@ -51,7 +51,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
     }
 
@@ -63,7 +63,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
         setupLayout()
     }
@@ -151,7 +151,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             applyDynamicFontChange()
         default: break
         }

@@ -1,3 +1,45 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "Apple Intelligence تە خۇلاسىلەندى";
+
+/* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
+"Summarizer.CloseButton.Label.v142" = "تاقا";
+
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "بەت تېخى يۈكلىنىۋاتىدۇ. تاماملىنىشىنى كۈتۈپ ئاندىن خۇلاسە چېكىلىدۇ.";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "ھازىرچە بۇنى بىر تەرەپ قىلالمايدۇ. سەل تۇرۇپ قايتا سىناڭ!";
+
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "بەتنى خۇلاسەلەش خاتالىقى. سەل تۇرۇپ قايتا سىناڭ.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "چەكلىك مەزمۇن بايقالدى. بۇ بەت چەكلەنگەن ياكى قىسمەن بۆلىكى كۆرۈنۈشلۈك بولۇشى مۇمكىن.";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "بۇ تور بېكەت مەزمۇننى خۇلاسىلەشكە يول قويمايدۇ. باشقا بەتنى سىناڭ.";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "%@ دا خۇلاسىلەندى";
+
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "خۇلاسىلەۋاتىدۇ…";
+
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "قايتا سىنا";
+
+/* The label for the allow button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.AllowButton.Label.v142" = "يول قوي";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ بەت خۇلاسىلەشتە Apple Intelligence نى ئىشلىتىدۇ.";
+
+/* The label for the cancel button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.CancelButton.Label.v142" = "ۋاز كەچ";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "مول بىلىم";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "بەت خۇلاسىلەشكە يول قويامدۇ؟";
 

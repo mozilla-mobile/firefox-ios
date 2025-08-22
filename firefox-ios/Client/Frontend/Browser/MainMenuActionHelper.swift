@@ -782,10 +782,14 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
                                      iconString: StandardImageIdentifiers.Large.bookmarkSlash) { _ in
             guard let url = self.tabUrl?.displayURL else { return }
 
-            self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
-                guard result.isSuccess else { return }
-                self.removeBookmarkShortcut()
-            }
+            self.profile.places.deleteBookmarksWithURL(url: url.absoluteString)
+                .uponQueue(.main) { result in
+                    // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                    MainActor.assumeIsolated {
+                        guard result.isSuccess else { return }
+                        self.removeBookmarkShortcut()
+                    }
+                }
             let bookmarksTelemetry = BookmarksTelemetry()
             bookmarksTelemetry.deleteBookmark(eventLabel: .pageActionMenu)
         }

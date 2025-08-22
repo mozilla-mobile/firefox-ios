@@ -138,7 +138,7 @@ final class MicrosurveyViewController: UIViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
 
         subscribeToRedux()
@@ -307,7 +307,7 @@ final class MicrosurveyViewController: UIViewController,
     // MARK: Notifiable
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             adjustIconSize()
         default: break
         }

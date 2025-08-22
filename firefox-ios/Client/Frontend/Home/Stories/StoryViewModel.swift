@@ -173,7 +173,7 @@ extension StoryViewModel: HomepageViewModelProtocol {
 
     var isEnabled: Bool {
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        return isFeatureEnabled && MerinoProvider.islocaleSupported(Locale.current.identifier)
+        return isFeatureEnabled && MerinoProvider.isLocaleSupported(Locale.current.identifier)
     }
 
     var hasData: Bool {

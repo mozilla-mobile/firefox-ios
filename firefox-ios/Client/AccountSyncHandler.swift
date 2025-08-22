@@ -114,18 +114,25 @@ class AccountSyncHandler: TabEventHandler {
         // It's fine if we wait until more busy work has finished. We tend to contend with more important
         // work like querying for top sites.
         DispatchQueue.main.asyncAfter(deadline: .now() + queueDelay) { [weak self] in
-            self?.logger.log(
-                "Storing \(storedTabs.count) total tabs for \(windowCount) windows", level: .debug, category: .sync)
-            self?.profile.storeAndSyncTabs(storedTabs).upon { result in
+            guard let self else { return }
+
+            let logger = self.logger
+            let onSyncCompleted = self.onSyncCompleted
+
+            self.logger.log(
+                "Storing \(storedTabs.count) total tabs for \(windowCount) windows", level: .debug, category: .sync
+            )
+
+            self.profile.storeAndSyncTabs(storedTabs).upon { result in
                 switch result {
                 case .success(let tabCount):
-                    self?.logger.log(
+                    logger.log(
                         "Successfully stored \(tabCount) tabs", level: .debug, category: .sync)
                 case .failure(let error):
-                    self?.logger.log(
+                    logger.log(
                         "Failed to store tabs: \(error.localizedDescription)", level: .warning, category: .sync)
                 }
-                self?.onSyncCompleted?() // callback for tests
+                onSyncCompleted?() // callback for tests
             }
         }
     }

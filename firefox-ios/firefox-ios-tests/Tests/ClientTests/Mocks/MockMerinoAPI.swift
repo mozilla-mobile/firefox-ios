@@ -14,10 +14,10 @@ final class MockMerinoAPI: MerinoStoriesProviding {
 
     let result: Result<[RecommendationDataItem], Error>
 
-    func fetchStories(items: Int32) async throws -> [RecommendationDataItem] {
+    func fetchStories(_ itemCount: Int) async throws -> [RecommendationDataItem] {
         switch result {
         case .success(let value):
-            return Array(value.prefix(Int(items)))
+            return Array(value.prefix(itemCount))
         case .failure(let error):
             throw error
         }

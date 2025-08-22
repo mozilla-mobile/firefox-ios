@@ -200,14 +200,19 @@ class ShareSheetCoordinator: BaseCoordinator,
             return
         }
 
-        profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { [weak self] _ in
-            guard let self = self else { return }
-            self.router.dismiss()
-            self.parentCoordinator?.didFinish(from: self)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.showToast(text: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
+        profile.sendItem(shareItem, toDevices: devices)
+            .uponQueue(.main) { [weak self] _ in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    guard let self else { return }
+                    self.router.dismiss()
+                    self.parentCoordinator?.didFinish(from: self)
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                        self?.showToast(text: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
+                    }
+                }
             }
-        }
     }
 
     // MARK: - InstructionViewDelegate

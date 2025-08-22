@@ -337,7 +337,7 @@ class HistoryPanel: UIViewController,
                 resyncHistory()
             }
             break
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
@@ -786,13 +786,17 @@ extension HistoryPanel {
     }
 
     private func resyncHistory() {
-        profile.syncManager?.syncHistory().uponQueue(.main) { syncResult in
-            self.endRefreshing()
+        profile.syncManager?.syncHistory()
+            .uponQueue(.main) { syncResult in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    self.endRefreshing()
 
-            if syncResult.isSuccess {
-                self.fetchDataAndUpdateLayout(animating: true)
+                    if syncResult.isSuccess {
+                        self.fetchDataAndUpdateLayout(animating: true)
+                    }
+                }
             }
-        }
     }
 }
 
@@ -826,13 +830,17 @@ extension HistoryPanel {
 
     /// When long pressed, a menu appears giving the choice of pinning as a Top Site.
     func pinToTopSites(_ site: Site) {
-        profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
-            if result.isSuccess {
-                SimpleToast().showAlertWithText(.LegacyAppMenu.AddPinToShortcutsConfirmMessage,
-                                                bottomContainer: self.view,
-                                                theme: self.currentTheme())
+        profile.pinnedSites.addPinnedTopSite(site)
+            .uponQueue(.main) { result in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    if result.isSuccess {
+                        SimpleToast().showAlertWithText(.LegacyAppMenu.AddPinToShortcutsConfirmMessage,
+                                                        bottomContainer: self.view,
+                                                        theme: self.currentTheme())
+                    }
+                }
             }
-        }
     }
 
     @objc

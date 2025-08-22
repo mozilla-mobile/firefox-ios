@@ -202,7 +202,7 @@ class ReadingListPanel: UITableViewController,
 
         // FIXME: FXIOS-12995 Use Notifiable
         [ Notification.Name.FirefoxAccountChanged,
-          Notification.Name.DynamicFontChanged,
+          UIContentSizeCategory.didChangeNotification,
           Notification.Name.DatabaseWasReopened ].forEach {
             NotificationCenter.default.addObserver(
                 self,
@@ -260,7 +260,7 @@ class ReadingListPanel: UITableViewController,
     @objc
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case .FirefoxAccountChanged, .DynamicFontChanged:
+        case .FirefoxAccountChanged, UIContentSizeCategory.didChangeNotification:
             refreshReadingList()
         case .DatabaseWasReopened:
             if let dbName = notification.object as? String, dbName == "ReadingList.db" {

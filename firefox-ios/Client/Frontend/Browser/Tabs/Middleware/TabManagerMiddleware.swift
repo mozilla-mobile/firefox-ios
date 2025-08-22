@@ -838,7 +838,6 @@ final class TabManagerMiddleware: FeatureFlaggable {
         case MainMenuActionType.tapToggleUserAgent:
             changeUserAgent(forWindow: action.windowUUID)
         case MainMenuMiddlewareActionType.requestTabInfo, MainMenuActionType.viewWillTransition:
-            provideTabInfo(forWindow: action.windowUUID, accountData: defaultAccountData())
             handleDidInstantiateViewAction(action: action)
         case MainMenuMiddlewareActionType.requestTabInfoForSiteProtectionsHeader:
             provideTabInfoForSiteProtectionsHeader(forWindow: action.windowUUID)

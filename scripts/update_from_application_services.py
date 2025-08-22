@@ -216,9 +216,10 @@ def replace_all_files(tmp_dir: Path) -> None:
         tmp_dir / "swift-components/all",
         "MozillaRustComponents/Sources/MozillaRustComponentsWrapper",
     )
-    # If/when Focus components are enabled:
-    # replace_files(tmp_dir / "swift-components/focus",
-    #               "MozillaRustComponents/Sources/FocusRustComponentsWrapper")
+    replace_files(
+        tmp_dir / "swift-components/focus",
+        "MozillaRustComponents/Sources/FocusRustComponentsWrapper"
+    )
 
 
 def replace_files(source_dir: Path, repo_dir: str) -> None:
