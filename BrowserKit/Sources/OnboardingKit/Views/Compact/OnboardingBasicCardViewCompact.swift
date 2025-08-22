@@ -6,8 +6,8 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-// MARK: - Updated OnboardingBasicCardView
-struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
+// MARK: - Updated OnboardingBasicCardViewCompact
+struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear

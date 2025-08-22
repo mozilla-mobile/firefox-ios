@@ -37,7 +37,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     // MARK: - Regular Layout
     private var onboardingViewRegular: some View {
-        OnboardingRegularView(
+        OnboardingViewRegular(
             windowUUID: windowUUID,
             themeManager: themeManager,
             viewModel: viewModel
@@ -46,7 +46,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     // MARK: - Compact Layout
     private var onboardingViewCompact: some View {
-        OnboardingCompactView(
+        OnboardingViewCompact(
             windowUUID: windowUUID,
             themeManager: themeManager,
             viewModel: viewModel
