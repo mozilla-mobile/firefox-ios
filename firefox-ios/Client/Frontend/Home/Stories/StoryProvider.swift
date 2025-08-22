@@ -7,15 +7,15 @@ import MozillaAppServices
 import Shared
 
 final class StoryProvider: FeatureFlaggable, Sendable {
-    private let numberOfStories: Int
+    private struct Constants {
+        static let defaultNumberOfHomepageStories = 12
+        static let defaultNumberOfDiscoverMoreStories = 25
+    }
+
     private let merinoAPI: MerinoStoriesProviding
 
-    init(
-        merinoAPI: MerinoStoriesProviding,
-        numberOfStories: Int = 12
-    ) {
+    init(merinoAPI: MerinoStoriesProviding) {
         self.merinoAPI = merinoAPI
-        self.numberOfStories = numberOfStories
     }
 
     func fetchHomepageStories() async -> [MerinoStory] {
@@ -23,12 +23,12 @@ final class StoryProvider: FeatureFlaggable, Sendable {
         let numberOfStoriesIfRedesignEnabled = 9
         let numberOfStories = isStoriesRedesignEnabled
             ? numberOfStoriesIfRedesignEnabled
-            : self.numberOfStories
+            : Constants.defaultNumberOfHomepageStories
         return await fetchStories(numberOfStories)
     }
 
     func fetchDiscoverMoreStories() async -> [MerinoStory] {
-        return await fetchStories(25)
+        return await fetchStories(Constants.defaultNumberOfDiscoverMoreStories)
     }
 
     private func fetchStories(_ numberOfRequestedStories: Int) async -> [MerinoStory] {
