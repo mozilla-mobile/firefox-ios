@@ -17,7 +17,8 @@ class StoryProviderTests: XCTestCase, FeatureFlaggable {
 
     func testFetchingStories_forHomepage_returnsList() async {
         let stories: [RecommendationDataItem] = (0...30).map { .makeItem("feed\($0)") }
-        let expectedResult = Array(stories.prefix(12)).map(MerinoStory.init)
+        let expectedNumberOfStories = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) ? 9 : 12
+        let expectedResult = Array(stories.prefix(expectedNumberOfStories)).map(MerinoStory.init)
 
         subject = StoryProvider(merinoAPI: MockMerinoAPI(result: .success(stories)))
         let fetched = await subject.fetchHomepageStories()
