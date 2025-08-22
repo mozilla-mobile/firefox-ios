@@ -16,7 +16,7 @@ final class MerinoManager: MerinoManagerProvider {
     }
 
     func getMerinoItems() async -> [MerinoStoryConfiguration] {
-        let stories = await storyProvider.fetchStories()
+        let stories = await storyProvider.fetchHomepageStories()
         return stories.compactMap { MerinoStoryConfiguration(story: $0) }
     }
 }

@@ -18,13 +18,21 @@ final class StoryProvider: FeatureFlaggable, Sendable {
         self.numberOfStories = numberOfStories
     }
 
-    func fetchStories() async -> [MerinoStory] {
+    func fetchHomepageStories() async -> [MerinoStory] {
         let isStoriesRedesignEnabled = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
         let numberOfStoriesIfRedesignEnabled = 9
         let numberOfStories = isStoriesRedesignEnabled
             ? numberOfStoriesIfRedesignEnabled
             : self.numberOfStories
-        let data = (try? await merinoAPI.fetchStories(numberOfStories)) ?? []
+        return await fetchStories(numberOfStories)
+    }
+
+    func fetchDiscoverMoreStories() async -> [MerinoStory] {
+        return await fetchStories(25)
+    }
+
+    private func fetchStories(_ numberOfRequestedStories: Int) async -> [MerinoStory] {
+        let data = (try? await merinoAPI.fetchStories(numberOfRequestedStories)) ?? []
         return data.map(MerinoStory.init)
     }
 }
