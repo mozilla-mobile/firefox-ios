@@ -1,8 +1,20 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "Apple Intelligence tarafından özetlendi";
+
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "Kapat";
 
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "Sayfa hâlâ yükleniyor. Yükleme bittikten sonra “özetle” düğmesine dokunun.";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "Şu anda bu işlemi gerçekleştiremiyoruz. Daha sonra yeniden deneyin.";
+
 /* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
 "Summarizer.Error.Unknown.Message.v142" = "Sayfa özetlenirken hata oluştu. Daha sonra yeniden deneyin.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "Sınırlı içerik algılandı. Bu sayfa kısıtlanmış veya çoğunlukla görsel içerik içeriyor olabilir.";
 
 /* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
 "Summarizer.Error.UnsupportedContent.Message.v142" = "Bu web sitesi içerik özetlemeye izin vermiyor. Başka bir sayfa deneyin.";
@@ -19,9 +31,15 @@
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "İzin ver";
 
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v142" = "%@, sayfaları özetlemek için Mozilla sunucularında güvenli bir şekilde barındırılan yapay zekâyı kullanır.";
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ sayfaları özetlemek için Apple Intelligence’ı kullanır.";
+
+/* The label for the cancel button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.CancelButton.Label.v142" = "İptal";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Daha fazla bilgi alın";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "Sayfa özetlerine izin verilsin mi?";
 

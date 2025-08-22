@@ -20,7 +20,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     var isPocketSectionEnabled: Bool {
-        return MerinoProvider.islocaleSupported(Locale.current.identifier)
+        return MerinoProvider.isLocaleSupported(Locale.current.identifier)
     }
 
     // MARK: - Initializers

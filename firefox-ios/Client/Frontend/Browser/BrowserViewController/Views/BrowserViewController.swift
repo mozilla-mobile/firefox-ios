@@ -37,7 +37,6 @@ class BrowserViewController: UIViewController,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
-                             BrowserContentHiding,
                              BrowserStatusBarScrollDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
@@ -903,17 +902,6 @@ class BrowserViewController: UIViewController,
                 actionType: GeneralBrowserActionType.shakeMotionEnded
             )
         )
-    }
-
-    // MARK: - BrowserContentHiding
-    func showBrowserContent() {
-        contentContainer.isHidden = false
-        scrollController.showToolbars(animated: false)
-    }
-
-    func hideBrowserContent() {
-        contentContainer.isHidden = true
-        scrollController.hideToolbars(animated: true)
     }
 
     // MARK: - Start At Home

@@ -146,7 +146,6 @@ final class SummarizeCoordinatorTests: XCTestCase {
                                            webView: MockTabWebView(tab: MockTab(profile: MockProfile(),
                                                                                 windowUUID: .XCTestDefaultUUID)),
                                            summarizerServiceFactory: MockSummarizerServiceFactory(),
-                                           browserContentHiding: browserViewController,
                                            parentCoordinatorDelegate: parentCoordinator,
                                            trigger: trigger,
                                            prefs: prefs,

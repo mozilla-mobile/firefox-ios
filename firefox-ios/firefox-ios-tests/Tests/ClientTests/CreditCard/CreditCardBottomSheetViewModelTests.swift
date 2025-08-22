@@ -390,14 +390,14 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let subject = createSubject()
 
         let expectation = expectation(description: "wait for credit card to be added")
-        expectation.isInverted = true
         subject.creditCard = nil
         subject.decryptedCreditCard = nil
 
         subject.updateCreditCardList { cards in
+            XCTAssertNil(cards)
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 1.0)
+        wait(for: [expectation], timeout: 1.0)
     }
 
     // MARK: Helper methods

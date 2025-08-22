@@ -4,6 +4,9 @@
 /* Accessibility label for the new tab button that can be displayed in the navigation or address toolbar. */
 "Toolbar.NewTab.Button.v130" = "പുതിയ ടാബു്";
 
+/* Accessibility label for the summarize button that can be displayed in the address toolbar. */
+"Toolbar.NewTab.Button.v142" = "താൾ വിവരം ചുരുക്കിപ്പറയുക";
+
 /* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
 "Toolbar.Tab.CloseThisTab.Button.v130" = "ഈ ടാബു് അടയ്ക്കുക";
 
