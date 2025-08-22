@@ -121,7 +121,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
         configure(with: state)
         setupView()
@@ -217,7 +217,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
     // MARK: Notifiable
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             adjustIconSize()
         default: break
         }

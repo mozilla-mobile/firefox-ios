@@ -97,7 +97,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
         setupLayout()
     }
@@ -325,7 +325,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurra
         let name = notification.name
         ensureMainThread { [weak self] in
             switch name {
-            case .DynamicFontChanged:
+            case UIContentSizeCategory.didChangeNotification:
                 self?.adjustLayout()
             default: break
             }
