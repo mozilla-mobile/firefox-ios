@@ -12,32 +12,21 @@ protocol ToolbarButtonCaching: AnyObject {
     /// Retrieves a `ToolbarButton` for the given `ToolbarElement`.
     /// If a cached button exists for the element's accessibility identifier, it returns the cached button.
     /// Otherwise, it creates a new button, caches it, and then returns it.
-    /// - Parameters:
-    ///   - toolbarElement: The `ToolbarElement` for which to retrieve the button.
-    ///   - buttonConfiguration: The configuration to apply to newly created buttons.
+    /// - Parameter toolbarElement: The `ToolbarElement` for which to retrieve the button.
     /// - Returns: A `ToolbarButton` instance configured for the given `ToolbarElement`.
-    func getToolbarButton(
-        for toolbarElement: ToolbarElement,
-        buttonConfiguration: UIButton.Configuration
-    ) -> ToolbarButton
+    func getToolbarButton(for toolbarElement: ToolbarElement) -> ToolbarButton
 }
 
 // MARK: - Default Implementation
 extension ToolbarButtonCaching {
-    func getToolbarButton(
-        for toolbarElement: ToolbarElement,
-        buttonConfiguration: UIButton.Configuration = .plain()
-    ) -> ToolbarButton {
-        let cacheKey = "\(toolbarElement.a11yId)-\(buttonConfiguration.hashValue)"
+    func getToolbarButton(for toolbarElement: ToolbarElement) -> ToolbarButton {
+        let cacheKey = toolbarElement.a11yId
         let button: ToolbarButton
 
         if let cachedButton = cachedButtonReferences[cacheKey] {
             button = cachedButton
         } else {
-            button = toolbarElement.numberOfTabs != nil ?
-            TabNumberButton(configuration: buttonConfiguration) :
-            ToolbarButton(configuration: buttonConfiguration)
-
+            button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
             cachedButtonReferences[cacheKey] = button
         }
 

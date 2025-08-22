@@ -12,7 +12,6 @@ public protocol BrowserNavigationToolbarDelegate: AnyObject {
 /// Navigation toolbar implementation.
 public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable, ToolbarButtonCaching {
     private enum UX {
-        static let verticalEdgeSpace: CGFloat = 8
         static let horizontalEdgeSpace: CGFloat = 16
         static let buttonSize = CGSize(width: 48, height: 48)
         static let borderHeight: CGFloat = 1
@@ -63,16 +62,13 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
         toolbarBorderHeightConstraint = toolbarBorderView.heightAnchor.constraint(equalToConstant: 0)
         toolbarBorderHeightConstraint?.isActive = true
 
-        let actionStackTopConstraint = actionStack.topAnchor.constraint(equalTo: toolbarBorderView.bottomAnchor)
-        if #available(iOS 26.0, *) { actionStackTopConstraint.constant = UX.verticalEdgeSpace }
-
         NSLayoutConstraint.activate([
             toolbarBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarBorderView.topAnchor.constraint(equalTo: topAnchor),
             toolbarBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
             actionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalEdgeSpace),
-            actionStackTopConstraint,
+            actionStack.topAnchor.constraint(equalTo: toolbarBorderView.bottomAnchor),
             actionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             actionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
         ])
@@ -86,17 +82,7 @@ public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApp
 
     private func updateActionStack(toolbarElements: [ToolbarElement]) {
         let buttons = toolbarElements.map { toolbarElement in
-            let button: ToolbarButton
-            // This checks for Xcode 26 sdk availability thus we can compile on older Xcode version too
-#if canImport(FoundationModels)
-            if #available(iOS 26.0, *) {
-                button = getToolbarButton(for: toolbarElement, buttonConfiguration: .prominentClearGlass())
-            } else {
-                button = getToolbarButton(for: toolbarElement)
-            }
-#else
-            button = getToolbarButton(for: toolbarElement)
-#endif
+            let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
 
             if let theme {

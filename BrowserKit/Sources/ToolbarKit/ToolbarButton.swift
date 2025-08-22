@@ -38,25 +38,15 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private var isTextButton = false
     private var hasCustomColor = false
 
-    override convenience init(frame: CGRect) {
-        self.init(frame: frame, configuration: .plain())
-    }
-
-    init(frame: CGRect, configuration: UIButton.Configuration) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.configuration = configuration
-        self.configuration?.contentInsets = NSDirectionalEdgeInsets(
-            top: UX.verticalInset,
-            leading: UX.horizontalInset,
-            bottom: UX.verticalInset,
-            trailing: UX.horizontalInset
-        )
+        configuration = UIButton.Configuration.plain()
+        configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
+                                                               leading: UX.horizontalInset,
+                                                               bottom: UX.verticalInset,
+                                                               trailing: UX.horizontalInset)
         titleLabel?.adjustsFontForContentSizeCategory = true
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     open func configure(
@@ -127,6 +117,10 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
             }
         }
         layoutIfNeeded()
+    }
+
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override public func updateConfiguration() {

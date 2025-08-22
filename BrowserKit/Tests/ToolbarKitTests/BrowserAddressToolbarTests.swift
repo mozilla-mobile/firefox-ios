@@ -108,31 +108,14 @@ final class BrowserAddressToolbarTests: XCTestCase {
         XCTAssertEqual(sut.cachedButtonReferences.count, 2, "Cache should contain exactly two buttons.")
     }
 
-    func testGetToolbarButton_WithDifferentConfigurations() {
-        guard let sut, let toolbarElement else {
-            XCTFail("Setup failed")
-            return
-        }
-
-        let plainButton = sut.getToolbarButton(for: toolbarElement, buttonConfiguration: .plain())
-        let filledButton = sut.getToolbarButton(for: toolbarElement, buttonConfiguration: .filled())
-
-        XCTAssertNotNil(plainButton, "Plain button should not be nil.")
-        XCTAssertNotNil(filledButton, "Filled button should not be nil.")
-        XCTAssertFalse(plainButton === filledButton, "Different configurations should create different button instances.")
-        XCTAssertEqual(sut.cachedButtonReferences.count, 2, "Cache should contain buttons for different configurations.")
-    }
-
     func testCacheKeyGeneration() {
         guard let sut, let toolbarElement else {
             XCTFail("Setup failed")
             return
         }
 
-        let buttonConfiguration: UIButton.Configuration = .filled()
-        let cacheKey = "\(toolbarElement.a11yId)-\(buttonConfiguration.hashValue)"
-
-        _ = sut.getToolbarButton(for: toolbarElement, buttonConfiguration: buttonConfiguration)
+        let cacheKey = toolbarElement.a11yId
+        _ = sut.getToolbarButton(for: toolbarElement)
         XCTAssertTrue(sut.cachedButtonReferences.keys.contains(cacheKey),
                       "Cache should contain key for the toolbar element.")
     }
