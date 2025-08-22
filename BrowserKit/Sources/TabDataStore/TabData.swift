@@ -7,7 +7,7 @@ import Foundation
 /// A dictionary with as Key the local file directory for a temporary document and its online source URL as value
 public typealias TemporaryDocumentSession = [URL: URL]
 
-public struct TabData: Codable {
+public struct TabData: Codable, Sendable {
     public let id: UUID
     public let title: String?
     public let siteUrl: String
