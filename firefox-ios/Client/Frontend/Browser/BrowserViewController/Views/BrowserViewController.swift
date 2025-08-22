@@ -1145,26 +1145,29 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Notifiable
-    @MainActor
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.willResignActiveNotification: appWillResignActiveNotification()
-        case UIApplication.didBecomeActiveNotification: appDidBecomeActiveNotification()
-        case UIApplication.didEnterBackgroundNotification: appDidEnterBackgroundNotification()
-        case UIScene.didEnterBackgroundNotification: sceneDidEnterBackgroundNotification(notification: notification)
-        case UIScene.didActivateNotification: sceneDidActivateNotification()
-        case UIAccessibility.announcementDidFinishNotification: didFinishAnnouncement(notification: notification)
-        case UIAccessibility.reduceTransparencyStatusDidChangeNotification: onReduceTransparencyStatusDidChange(notification)
-        case .FirefoxAccountStateChange: appMenuBadgeUpdate()
-        case .SearchBarPositionDidChange: searchBarPositionDidChange(notification: notification)
-        case .DidTapUndoCloseAllTabToast: didTapUndoCloseAllTabToast(notification: notification)
-        case .PendingBlobDownloadAddedToQueue: didAddPendingBlobDownloadToQueue()
-        case .SearchSettingsDidUpdateDefaultSearchEngine: updateForDefaultSearchEngineDidChange(notification)
-        case .PageZoomLevelUpdated: handlePageZoomLevelUpdated(notification)
-        case .PageZoomSettingsChanged: handlePageZoomSettingsChanged(notification)
-        case .RemoteTabNotificationTapped: openRecentlyClosedTabs()
-        case .StopDownloads: onStopDownloads(notification)
-        default: break
+        let notificationName = notification.name
+        Task { @MainActor in
+            switch notificationName {
+            case UIApplication.willResignActiveNotification: appWillResignActiveNotification()
+            case UIApplication.didBecomeActiveNotification: appDidBecomeActiveNotification()
+            case UIApplication.didEnterBackgroundNotification: appDidEnterBackgroundNotification()
+            case UIScene.didEnterBackgroundNotification: sceneDidEnterBackgroundNotification(notification: notification)
+            case UIScene.didActivateNotification: sceneDidActivateNotification()
+            case UIAccessibility.announcementDidFinishNotification: didFinishAnnouncement(notification: notification)
+            case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+                onReduceTransparencyStatusDidChange(notification)
+            case .FirefoxAccountStateChange: appMenuBadgeUpdate()
+            case .SearchBarPositionDidChange: searchBarPositionDidChange(notification: notification)
+            case .DidTapUndoCloseAllTabToast: didTapUndoCloseAllTabToast(notification: notification)
+            case .PendingBlobDownloadAddedToQueue: didAddPendingBlobDownloadToQueue()
+            case .SearchSettingsDidUpdateDefaultSearchEngine: updateForDefaultSearchEngineDidChange(notification)
+            case .PageZoomLevelUpdated: handlePageZoomLevelUpdated(notification)
+            case .PageZoomSettingsChanged: handlePageZoomSettingsChanged(notification)
+            case .RemoteTabNotificationTapped: openRecentlyClosedTabs()
+            case .StopDownloads: onStopDownloads(notification)
+            default: break
+            }
         }
     }
 
