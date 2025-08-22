@@ -14056,10 +14056,9 @@
 		C714D27C2E45388D00FC02E6 /* ShortcutsLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				C7C6CD742E54BBB2002C6495 /* Redux */,
 				C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */,
 				C714D7742E46649600FC02E6 /* ShortcutsLibraryDiffableDataSource.swift */,
-				C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */,
-				C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */,
 			);
 			path = ShortcutsLibrary;
 			sourceTree = "<group>";
@@ -14071,6 +14070,15 @@
 				C714D7B52E4673A300FC02E6 /* ShortcutsLibraryDiffableDataSourceTests.swift */,
 			);
 			path = ShortcutsLibrary;
+			sourceTree = "<group>";
+		};
+		C7C6CD742E54BBB2002C6495 /* Redux */ = {
+			isa = PBXGroup;
+			children = (
+				C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */,
+				C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */,
+			);
+			path = Redux;
 			sourceTree = "<group>";
 		};
 		C7FA9B672E4B9A13004F2CA1 /* Layout */ = {

@@ -9,18 +9,22 @@ struct ShortcutsLibraryAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let topSites: [TopSiteConfiguration]?
+    let tab: Tab?
 
     init(
         topSites: [TopSiteConfiguration]? = nil,
+        tab: Tab? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.topSites = topSites
+        self.tab = tab
     }
 }
 
 enum ShortcutsLibraryActionType: ActionType {
     case initialize
+    case switchTabToastButtonPressed
 }

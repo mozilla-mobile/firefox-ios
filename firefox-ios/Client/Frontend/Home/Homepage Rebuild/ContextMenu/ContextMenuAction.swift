@@ -10,18 +10,19 @@ import Storage
 struct ContextMenuAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
-    let section: HomepageSection?
+    let menuType: MenuType?
     let site: Site?
 
     init(
-        section: HomepageSection? = nil,
+        menuType: MenuType? = nil,
         site: Site? = nil,
+        url: URL? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
-        self.section = section
+        self.menuType = menuType
         self.site = site
     }
 }

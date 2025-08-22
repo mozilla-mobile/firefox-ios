@@ -5,38 +5,42 @@
 import Storage
 
 struct ContextMenuConfiguration: Equatable {
-    var homepageSection: HomepageSection
+    var site: Site?
+    var menuType: MenuType?
     var sourceView: UIView?
     var toastContainer: UIView
 
-    var site: Site? {
-        switch item {
-        case .topSite(let state, _):
-            return state.site
-        case .jumpBackIn(let config):
-            return Site.createBasicSite(url: config.siteURL, title: config.titleText)
-        case .jumpBackInSyncedTab(let config):
-            return Site.createBasicSite(url: config.url.absoluteString, title: config.titleText)
-        case .bookmark(let state):
-            return Site.createBasicSite(url: state.site.url, title: state.site.title)
-        case .merino(let state):
-            return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
-        default:
-            return nil
-        }
-    }
-
-    private var item: HomepageItem?
-
     init(
-        homepageSection: HomepageSection,
-        item: HomepageItem? = nil,
+        site: Site?,
+        menuType: MenuType?,
         sourceView: UIView? = nil,
         toastContainer: UIView
     ) {
-        self.homepageSection = homepageSection
-        self.item = item
+        self.site = site
+        self.menuType = menuType
         self.sourceView = sourceView
         self.toastContainer = toastContainer
+    }
+}
+
+enum MenuType {
+    case topSite
+    case jumpBackIn
+    case jumpBackInSyncedTab
+    case bookmark
+    case merino
+    case shortcut
+}
+
+extension MenuType {
+    init?(homepageItem: HomepageItem) {
+        switch homepageItem {
+        case .topSite: self = .topSite
+        case .jumpBackIn: self = .jumpBackIn
+        case .jumpBackInSyncedTab: self = .jumpBackInSyncedTab
+        case .bookmark: self = .bookmark
+        case .merino: self = .merino
+        default: return nil
+        }
     }
 }

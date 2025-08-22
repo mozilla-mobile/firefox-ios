@@ -157,7 +157,7 @@ final class TopSitesMiddleware: FeatureFlaggable {
     }
 
     private func sendOpenInPrivateTelemetry(for action: Action) {
-        guard case .topSites = (action as? ContextMenuAction)?.section else {
+        guard case .topSite = (action as? ContextMenuAction)?.menuType else {
             self.logger.log(
                 "Unable to retrieve section for \(action.actionType)",
                 level: .debug,
