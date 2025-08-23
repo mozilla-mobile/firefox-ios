@@ -89,6 +89,15 @@ class ShortcutsLibraryViewController: UIViewController,
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        store.dispatch(
+            ShortcutsLibraryAction(
+                windowUUID: windowUUID,
+                actionType: ShortcutsLibraryActionType.viewDidAppear)
+        )
+    }
+
     // MARK: - Redux
     func subscribeToRedux() {
         let action = ScreenAction(
