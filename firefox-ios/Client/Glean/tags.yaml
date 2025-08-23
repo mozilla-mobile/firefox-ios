@@ -72,6 +72,9 @@ ReaderMode:
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
+ShortcutsLibrary:
+  description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
+
 Summarizer:
   description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
 
