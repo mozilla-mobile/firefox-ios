@@ -327,6 +327,13 @@ class ShortcutsLibraryViewController: UIViewController,
     @objc
     private func backBarButtonItemTapped() {
         onDismiss?()
+        store.dispatchLegacy(
+            ShortcutsLibraryAction(
+                windowUUID: self.windowUUID,
+                actionType: ShortcutsLibraryActionType.tapOnBackBarButton
+            )
+        )
+    }
     }
 
     // MARK: - UICollectionViewDelegate
@@ -353,6 +360,12 @@ class ShortcutsLibraryViewController: UIViewController,
                 navigationDestination: destination,
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+        store.dispatchLegacy(
+            ShortcutsLibraryAction(
+                windowUUID: self.windowUUID,
+                actionType: ShortcutsLibraryActionType.tapOnShortcutCell
             )
         )
     }
