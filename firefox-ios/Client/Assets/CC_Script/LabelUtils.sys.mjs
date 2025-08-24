@@ -23,11 +23,6 @@ export const LabelUtils = {
   // @type {Map<string, array>}
   _mappedLabels: null,
 
-  // An array consisting of label elements whose correponding form field doesn't
-  // have an id attribute.
-  // @type {Array<[HTMLLabelElement, HTMLElement]>}
-  _unmappedLabelControls: null,
-
   // A weak map consisting of label element and extracted strings pairs.
   // @type {WeakMap<HTMLLabelElement, array>}
   _labelStrings: null,
@@ -178,41 +173,29 @@ export const LabelUtils = {
 
   generateLabelMap(doc) {
     this._mappedLabels = new Map();
-    this._unmappedLabelControls = [];
     this._labelStrings = new WeakMap();
 
     // A map of potential label -> control for labels that don't have an id or
     // control associated with them. Labels that have ids or associated controls
     // will be placed in _mappedLabels.
     let potentialLabels = new Map();
-
     for (let label of doc.querySelectorAll("label")) {
-      let id = label.htmlFor;
-      let control;
-      if (!id) {
-        control = label.control;
-        if (!control) {
-          // If the label has no control, look for the next input or select
-          // element in the document and add that to the potentialLabels list.
-          control = this.findAdjacentControl(label, potentialLabels);
-          if (control) {
-            potentialLabels.set(control, label);
-          } else {
-            continue;
-          }
-        }
-        id = control.id;
-      }
-      if (id) {
-        let labels = this._mappedLabels.get(id);
+      let control = label.control;
+      if (control) {
+        const controlId = lazy.FormAutofillUtils.getElementIdentifier(control);
+        let labels = this._mappedLabels.get(controlId);
         if (labels) {
           labels.push(label);
         } else {
-          this._mappedLabels.set(id, [label]);
+          this._mappedLabels.set(controlId, [label]);
         }
       } else {
-        // control must be non-empty here
-        this._unmappedLabelControls.push({ label, control });
+        // If the label has no control, look for the next input or select
+        // element in the document and add that to the potentialLabels list.
+        control = this.findAdjacentControl(label, potentialLabels);
+        if (control) {
+          potentialLabels.set(control, label);
+        }
       }
     }
 
@@ -221,14 +204,9 @@ export const LabelUtils = {
     // control that is nearby even when it has no for attribute or doesn't match an id.
     if (potentialLabels.size) {
       for (let label of potentialLabels) {
-        if (
-          !this._unmappedLabelControls.some(e => e.control == label[0]) &&
-          (!label[1].id || !this._mappedLabels.has(label[1].id))
-        ) {
-          this._unmappedLabelControls.push({
-            label: label[1],
-            control: label[0],
-          });
+        const elementId = lazy.FormAutofillUtils.getElementIdentifier(label[0]);
+        if (!this._mappedLabels.has(elementId)) {
+          this._mappedLabels.set(elementId, [label[1]]);
         }
       }
     }
@@ -236,7 +214,6 @@ export const LabelUtils = {
 
   clearLabelMap() {
     this._mappedLabels = null;
-    this._unmappedLabelControls = null;
     this._labelStrings = null;
   },
 
@@ -245,12 +222,7 @@ export const LabelUtils = {
       this.generateLabelMap(element.ownerDocument);
     }
 
-    let id = element.id;
-    if (!id) {
-      return this._unmappedLabelControls
-        .filter(lc => lc.control == element)
-        .map(lc => lc.label);
-    }
+    let id = lazy.FormAutofillUtils.getElementIdentifier(element);
     return this._mappedLabels.get(id) || [];
   },
 };
