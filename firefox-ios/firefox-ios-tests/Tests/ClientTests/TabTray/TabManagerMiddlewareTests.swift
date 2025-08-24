@@ -371,7 +371,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let action = ShortcutsLibraryAction(
             tab: tab,
             windowUUID: .XCTestDefaultUUID,
-            actionType: ShortcutsLibraryActionType.switchTabToastButtonPressed
+            actionType: ShortcutsLibraryActionType.switchTabToastButtonTapped
         )
 
         subject.tabsPanelProvider(appState, action)

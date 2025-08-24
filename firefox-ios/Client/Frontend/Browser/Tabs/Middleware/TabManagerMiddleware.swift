@@ -96,7 +96,12 @@ final class TabManagerMiddleware: FeatureFlaggable {
 
     @MainActor
     private func resolveShortcutsLibrartActions(action: ShortcutsLibraryAction, state: AppState) {
-        tabManager(for: action.windowUUID).selectTab(action.tab)
+        switch action.actionType {
+        case ShortcutsLibraryActionType.switchTabToastButtonTapped:
+            tabManager(for: action.windowUUID).selectTab(action.tab)
+        default:
+            break
+        }
     }
 
     private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {
