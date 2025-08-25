@@ -119,7 +119,8 @@ let package = Package(
         .target(
             name: "TabDataStore",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"]),
+                            .enableExperimentalFeature("StrictConcurrency")]),
         .testTarget(
             name: "TabDataStoreTests",
             dependencies: ["TabDataStore"]),

@@ -22,7 +22,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         static let protectionIconMargin: CGFloat = 2
         static let siteProtectionsMoreSettingsIcon: CGFloat = 20
         static let siteProtectionsContentSpacing: CGFloat = 4
-        static let backgroundAlpha: CGFloat = 0.85
+        static let backgroundAlpha: CGFloat = 0.80
     }
 
     public var closeButtonCallback: (() -> Void)?

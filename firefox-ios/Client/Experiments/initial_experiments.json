@@ -70,7 +70,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('141.0.1') >= 0)))",
       "startDate": "2025-07-24",
-      "enrollmentEndDate": null,
+      "enrollmentEndDate": "2025-08-21",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 14,

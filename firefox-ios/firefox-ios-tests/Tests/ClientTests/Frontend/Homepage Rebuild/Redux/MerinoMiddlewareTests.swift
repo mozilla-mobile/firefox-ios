@@ -4,6 +4,7 @@
 
 import Glean
 import Redux
+import Storage
 import XCTest
 
 @testable import Client
@@ -164,11 +165,16 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_tappedOnOpenNewPrivateTabAction_sendTelemetryData() throws {
         let subject = createSubject(merinoManager: merinoManager)
+
+        let merinoItem = createMerinoItem()
+        guard case let .merino(state) = merinoItem else { return }
         let action = ContextMenuAction(
-            section: .pocket(nil),
+            menuType: MenuType(homepageItem: merinoItem),
+            site: Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title),
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
         )
+
         subject.pocketSectionProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
@@ -182,8 +188,12 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_tappedOnOpenNewPrivateTabAction_doesNotSendTelemetryData() {
         let subject = createSubject(merinoManager: merinoManager)
+
+        let topSiteItem = createTopSiteItem()
+        guard case let .topSite(state, nil) = topSiteItem else { return }
         let action = ContextMenuAction(
-            section: .topSites(nil, 4),
+            menuType: MenuType(homepageItem: topSiteItem),
+            site: state.site,
             windowUUID: .XCTestDefaultUUID,
             actionType: ContextMenuActionType.tappedOnOpenNewPrivateTab
         )
@@ -200,6 +210,35 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
             homepageTelemetry: HomepageTelemetry(
                 gleanWrapper: mockGleanWrapper
             )
+        )
+    }
+
+    private func createMerinoItem() -> HomepageItem {
+        return .merino(
+            MerinoStoryConfiguration(
+                story: MerinoStory(
+                    corpusItemId: "",
+                    scheduledCorpusItemId: "",
+                    url: URL("www.example.com/1234")!,
+                    title: "Site 0",
+                    excerpt: "example description",
+                    topic: nil,
+                    publisher: "",
+                    isTimeSensitive: false,
+                    imageURL: URL("www.example.com/image")!,
+                    iconURL: nil,
+                    tileId: 0,
+                    receivedRank: 0
+                )
+            )
+        )
+    }
+
+    private func createTopSiteItem() -> HomepageItem {
+        return .topSite(
+            TopSiteConfiguration(
+                site: Site.createBasicSite(url: "www.example.com/1234", title: "Site 0")
+            ), nil
         )
     }
 

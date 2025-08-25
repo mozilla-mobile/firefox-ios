@@ -541,7 +541,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowContextMenu_addsContextMenuCoordinator() {
         let subject = createSubject()
-        let config = ContextMenuConfiguration(homepageSection: .customizeHomepage, toastContainer: UIView())
+        let config = ContextMenuConfiguration(site: nil, menuType: nil, sourceView: nil, toastContainer: UIView())
         subject.showContextMenu(for: config)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
@@ -622,6 +622,25 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         XCTAssertNotNil(mockRouter.pushedViewController as? ShortcutsLibraryViewController)
         XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
+    func testShouldShowNewTabToast_returnsTrue() throws {
+        let subject = createSubject()
+
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let shouldShowNewTabToast = subject.shouldShowNewTabToast(tab: tab)
+
+        XCTAssertTrue(shouldShowNewTabToast)
+    }
+
+    func testShouldShowNewTabToast_returnsFalse() throws {
+        let subject = createSubject()
+
+        subject.showShortcutsLibrary()
+        let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let shouldShowNewTabToast = subject.shouldShowNewTabToast(tab: tab)
+
+        XCTAssertFalse(shouldShowNewTabToast)
     }
 
     // MARK: - ParentCoordinatorDelegate

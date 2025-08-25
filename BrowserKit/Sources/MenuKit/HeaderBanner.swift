@@ -18,7 +18,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         static let closeButtonVerticalMargin: CGFloat = 8
         static let foxImageHeight: CGFloat = 53
         static let foxImageWidth: CGFloat = 77
-        static let backgroundAlpha: CGFloat = 0.85
+        static let backgroundAlpha: CGFloat = 0.80
         static let labelsVerticalMargin: CGFloat = 8
         static let crossLarge = StandardImageIdentifiers.Large.cross
     }

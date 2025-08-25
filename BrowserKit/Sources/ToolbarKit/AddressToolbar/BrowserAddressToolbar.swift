@@ -15,6 +15,7 @@ public class BrowserAddressToolbar: UIView,
                                     Notifiable,
                                     AddressToolbar,
                                     ThemeApplicable,
+                                    ToolbarButtonCaching,
                                     LocationViewDelegate,
                                     UIDragInteractionDelegate {
     private enum UX {
@@ -36,9 +37,7 @@ public class BrowserAddressToolbar: UIView,
     private var droppableUrl: URL?
     private var addressBarPosition: AddressToolbarPosition = .bottom
 
-    /// A cache of `ToolbarButton` instances keyed by their accessibility identifier (`a11yId`).
-    /// This improves performance by reusing buttons instead of creating new instances.
-    private(set) var cachedButtonReferences = [String: ToolbarButton]()
+    var cachedButtonReferences = [String: ToolbarButton]()
 
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
@@ -358,23 +357,6 @@ public class BrowserAddressToolbar: UIView,
         let widthAnchor = stackView.widthAnchor.constraint(equalToConstant: 0)
         widthAnchor.isActive = true
         widthAnchor.priority = .defaultHigh
-    }
-
-    /// Retrieves a `ToolbarButton` for the given `ToolbarElement`.
-    /// If a cached button exists for the element's accessibility identifier, it returns the cached button.
-    /// Otherwise, it creates a new button, caches it, and then returns it.
-    /// - Parameter toolbarElement: The `ToolbarElement` for which to retrieve the button.
-    /// - Returns: A `ToolbarButton` instance configured for the given `ToolbarElement`.
-    func getToolbarButton(for toolbarElement: ToolbarElement) -> ToolbarButton {
-        let button: ToolbarButton
-        if let cachedButton = cachedButtonReferences[toolbarElement.a11yId] {
-            button = cachedButton
-        } else {
-            button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
-            cachedButtonReferences[toolbarElement.a11yId] = button
-        }
-
-        return button
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {

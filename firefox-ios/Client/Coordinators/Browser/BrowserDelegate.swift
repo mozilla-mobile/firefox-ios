@@ -62,4 +62,7 @@ protocol BrowserDelegate: AnyObject {
     /// Show the Error page to the user
     @MainActor
     func showNativeErrorPage(overlayManager: OverlayModeManager)
+
+    @MainActor
+    func shouldShowNewTabToast(tab: Tab) -> Bool
 }

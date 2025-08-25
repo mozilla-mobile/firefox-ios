@@ -226,7 +226,7 @@ features:
               order: 10
               title: Onboarding/Onboarding.Modern.Welcome.Title.v140
               body: Onboarding/Onboarding.Modern.Welcome.Description.v140
-              image: welcome-globe
+              image: trackers
               buttons:
                 primary:
                   title: Onboarding/Onboarding.Modern.Welcome.ActionTreatementA.v140
@@ -286,8 +286,7 @@ features:
             customization-theme-modern:
               card-type: multiple-choice
               order: 25
-              title: Onboarding/Onboarding.Customization.Theme.Title.v123
-              body: Onboarding/Onboarding.Customization.Theme.Description.v123
+              title: Onboarding/Onboarding.Customization.Theme.Title.v143
               image: themeing
               buttons:
                 primary:

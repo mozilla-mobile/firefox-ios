@@ -368,6 +368,7 @@
         "PocketTest",
         "PocketTests",
         "PocketTests\/testPocketEnabledByDefault()",
+        "PrintTests",
         "PrivateBrowsingTest\/testAllPrivateTabsRestore()",
         "PrivateBrowsingTest\/testAllPrivateTabsRestore_tabTrayExperimentOff()",
         "PrivateBrowsingTest\/testClearIndexedDB()",

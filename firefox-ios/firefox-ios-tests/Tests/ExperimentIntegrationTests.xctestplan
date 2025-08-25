@@ -142,6 +142,7 @@
         "PhotonActionSheetTests",
         "PocketTest",
         "PocketTests",
+        "PrintTests",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
         "ReportSiteTests",

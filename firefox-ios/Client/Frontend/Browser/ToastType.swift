@@ -13,6 +13,7 @@ enum ToastType: Equatable {
     case closedSingleInactiveTab
     case closedAllTabs(count: Int)
     case closedAllInactiveTabs(count: Int)
+    case openNewTab
     case removeFromReadingList
     case removeShortcut
 
@@ -31,6 +32,8 @@ enum ToastType: Equatable {
             return String.localizedStringWithFormat(
                 .TabsTray.CloseTabsToast.Title,
                 tabsCount)
+        case .openNewTab:
+            return .ContextMenuButtonToastNewTabOpenedLabelText
         case .removeFromReadingList:
             return .LegacyAppMenu.RemoveFromReadingListConfirmMessage
         case .removeShortcut:
@@ -39,7 +42,12 @@ enum ToastType: Equatable {
     }
 
     var buttonText: String {
-        return .TabsTray.CloseTabsToast.Action
+        switch self {
+        case .openNewTab:
+            return .ContextMenuButtonToastNewTabOpenedButtonText
+        default:
+            return .TabsTray.CloseTabsToast.Action
+        }
     }
 
     func reduxAction(for uuid: WindowUUID) -> TabPanelViewAction? {
@@ -52,6 +60,7 @@ enum ToastType: Equatable {
         case .clearCookies,
                 .addBookmark,
                 .addToReadingList,
+                .openNewTab,
                 .removeFromReadingList,
                 .removeShortcut:
             return nil
