@@ -278,7 +278,7 @@
 "Settings.toggleFaceIDDescription" = "Face ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
 
 /* Show home screen tips toggle label on settings screen */
-"Settings.toggleHomeScreenTips" = "Afișează ponturi în ecranul principal";
+"Settings.toggleHomeScreenTips" = "Afișează ponturi în ecranul de pornire";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
@@ -321,6 +321,9 @@
 
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Anulează";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Apasă lung pe ecranul de pornire până când pictogramele încep să tremure.";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Adaugă";
@@ -372,4 +375,7 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Elemente de urmărire blocate";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
+"WidgetOnboardingCard.Subtitle" = "Te lăsăm să navighezi în modul privat, dar ia startul mai repede data viitoare cu widgetul %@ din ecranul de pornire.";
 
