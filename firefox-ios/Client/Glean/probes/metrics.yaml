@@ -3615,7 +3615,6 @@ fx_suggest:
     send_in_pings:
       - fx-suggest
 
-
 # Window (iPad) metrics
 windows:
   ipad_window_count:

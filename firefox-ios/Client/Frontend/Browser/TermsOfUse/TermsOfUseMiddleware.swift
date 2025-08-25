@@ -9,8 +9,8 @@ import Glean
 // TODO: FXIOS-12947 - Add tests for TermsOfUse Feature
 @MainActor
 class TermsOfUseMiddleware {
-    private let termsOfUseVersion: Int64 = 4
-    private let termsOfUseSurface = "bottom_sheet"
+    let termsOfUseVersion: Int64 = 4
+    let termsOfUseSurface = "bottom_sheet"
 
     private let prefs: Prefs
     private let logger: Logger
