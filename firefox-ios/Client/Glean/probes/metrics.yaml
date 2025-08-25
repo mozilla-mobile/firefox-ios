@@ -1136,6 +1136,7 @@ termsofuse:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26435
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28906
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -1156,6 +1157,7 @@ termsofuse:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26435
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28906
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -1171,6 +1173,7 @@ termsofuse:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26435
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28906
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -1186,6 +1189,7 @@ termsofuse:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/26435
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28906
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
