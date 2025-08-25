@@ -10,35 +10,33 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     }
 
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
-        if isBottomSearchBar {
-            let bottomOffset = clamp(offset: progress, min: 0, max: getBottomContainerSize().height)
-            bottomContainerConstraint?.update(offset: bottomOffset)
-            bottomContainer.superview?.setNeedsLayout()
-        } else {
-            let topOffset = clamp(offset: progress, min: getHeaderSize().height, max: 0)
+        if !isBottomSearchBar {
+            let topOffset = clamp(offset: -progress, min: headerOffset, max: 0)
             headerTopConstraint?.update(offset: topOffset)
             header.superview?.setNeedsLayout()
         }
+        let bottomOffset = clamp(offset: progress, min: 0, max: getBottomContainerSize().height)
+        bottomContainerConstraint?.update(offset: bottomOffset)
+        bottomContainer.superview?.setNeedsLayout()
     }
 
     func showToolbar() {
-        if isBottomSearchBar {
-            updateBottomToolbar(bottomContainerOffset: 0,
-                                overKeyboardContainerOffset: 0,
-                                alpha: 1)
-        } else {
+        if !isBottomSearchBar {
             updateTopToolbar(topOffset: 0, alpha: 1)
         }
+        updateBottomToolbar(bottomContainerOffset: 0,
+                            overKeyboardContainerOffset: 0,
+                            alpha: 1)
     }
 
     func hideToolbar() {
-        if isBottomSearchBar {
-            updateBottomToolbar(bottomContainerOffset: getBottomContainerSize().height,
-                                overKeyboardContainerOffset: overKeyboardContainerHeight,
-                                alpha: 0)
-        } else {
+        if !isBottomSearchBar {
             updateTopToolbar(topOffset: headerOffset, alpha: 0)
         }
+
+        updateBottomToolbar(bottomContainerOffset: getBottomContainerSize().height,
+                            overKeyboardContainerOffset: overKeyboardContainerHeight,
+                            alpha: 0)
     }
 
     // MARK: - Helper private functions
