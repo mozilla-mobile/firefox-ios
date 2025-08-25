@@ -280,6 +280,7 @@
 		21618A8A2A4389F700A5189E /* ActiveScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A892A4389F700A5189E /* ActiveScreenState.swift */; };
 		21618A8C2A438A0900A5189E /* ActiveScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A8B2A438A0900A5189E /* ActiveScreenAction.swift */; };
 		21618A932A4499FC00A5189E /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21618A912A4499FC00A5189E /* AppState.swift */; };
+		216424D42E56175100A3AF40 /* MockTabScrollHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216424D32E56174400A3AF40 /* MockTabScrollHandlerDelegate.swift */; };
 		2165B2C02860BB41004C0786 /* AdjustTelemetryHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */; };
 		2165B2C22860C2F4004C0786 /* AdjustTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2C12860C2F4004C0786 /* AdjustTelemetryHelper.swift */; };
 		2165B2C42860CB34004C0786 /* MockAdjustTelemetryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */; };
@@ -2904,6 +2905,7 @@
 		21618A892A4389F700A5189E /* ActiveScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScreenState.swift; sourceTree = "<group>"; };
 		21618A8B2A438A0900A5189E /* ActiveScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScreenAction.swift; sourceTree = "<group>"; };
 		21618A912A4499FC00A5189E /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		216424D32E56174400A3AF40 /* MockTabScrollHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabScrollHandlerDelegate.swift; sourceTree = "<group>"; };
 		2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustTelemetryHelperTests.swift; sourceTree = "<group>"; };
 		2165B2C12860C2F4004C0786 /* AdjustTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustTelemetryHelper.swift; sourceTree = "<group>"; };
 		2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdjustTelemetryData.swift; sourceTree = "<group>"; };
@@ -14350,6 +14352,7 @@
 		C889D7D22858C85200121E1D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				216424D32E56174400A3AF40 /* MockTabScrollHandlerDelegate.swift */,
 				0B5CAF0C2E40DA89008B5D5A /* MockSummarizationChecker.swift */,
 				8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */,
 				8A01FE3F2DF0CE49002C483B /* MockDateProvider.swift */,
@@ -19031,6 +19034,7 @@
 				0EC57CE52CA31E59002E3F04 /* PasswordGeneratorStateTests.swift in Sources */,
 				212985E72A72B39D00546684 /* ThemeSettingsControllerTests.swift in Sources */,
 				8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */,
+				216424D42E56175100A3AF40 /* MockTabScrollHandlerDelegate.swift in Sources */,
 				8A1A66072CDD168A00DD883C /* MockTopSiteHistoryManager.swift in Sources */,
 				8A5189C92C1B614E00CDB668 /* SearchViewModelTests.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
