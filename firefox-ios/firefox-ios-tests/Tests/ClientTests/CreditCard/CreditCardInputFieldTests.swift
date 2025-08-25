@@ -18,7 +18,7 @@ class CreditCardInputFieldTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile()
-        viewModel = CreditCardInputViewModel(profile: profile)
+        viewModel = CreditCardInputViewModel(profile: profile, creditCardProvider: MockCreditCardProvider())
     }
 
     override func tearDown() {

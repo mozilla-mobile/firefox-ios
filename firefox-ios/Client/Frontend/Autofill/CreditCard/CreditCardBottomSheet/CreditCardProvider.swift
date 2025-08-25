@@ -12,6 +12,7 @@ protocol CreditCardProvider {
         completion: @escaping @Sendable (CreditCard?, Error?) -> Void
     )
     func decryptCreditCardNumber(encryptedCCNum: String?) -> String?
+    func deleteCreditCard(id: String, completion: @escaping @Sendable (Bool, Error?) -> Void)
     func listCreditCards(completion: @escaping @Sendable ([CreditCard]?, Error?) -> Void)
     func updateCreditCard(
         id: String,
