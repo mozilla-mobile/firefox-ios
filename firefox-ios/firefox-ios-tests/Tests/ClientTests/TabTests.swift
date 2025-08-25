@@ -15,6 +15,7 @@ class TabTests: XCTestCase {
     private var mockFileManager: MockFileManager!
     private var mockTabWebView: MockTabWebView!
     private let url = URL(string: "file://test.pdf")!
+    private var mockDispatchQueue: MockDispatchQueue!
 
     override func setUp() {
         super.setUp()
@@ -22,6 +23,7 @@ class TabTests: XCTestCase {
         mockTabWebView = MockTabWebView(frame: .zero, configuration: .init(), windowUUID: windowUUID)
         mockTabWebView.loadedURL = url
         mockFileManager = MockFileManager()
+        mockDispatchQueue = MockDispatchQueue()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         DependencyHelperMock().bootstrapDependencies()
 
@@ -34,6 +36,7 @@ class TabTests: XCTestCase {
         mockProfile = nil
         mockTabWebView = nil
         mockFileManager = nil
+        mockDispatchQueue = nil
         setIsPDFRefactorFeature(isEnabled: false)
         DependencyHelperMock().reset()
         super.tearDown()
@@ -463,8 +466,6 @@ class TabTests: XCTestCase {
     }
 
     func testDeinit_removesAllDocumentInSession() {
-        let numberOfDocumentsToRemove = 3
-
         var subject: Tab? = createSubject()
         let session = [
             URL(string: "file://local.pdf")!: URL(string: "https://www.example.com")!,
@@ -474,18 +475,10 @@ class TabTests: XCTestCase {
 
         subject?.restoreTemporaryDocumentSession(session)
 
-        let expectation = expectation(description: "Waiting to remove \(numberOfDocumentsToRemove) files")
-        mockFileManager.removeItemAtURLDispatch = { removeItemAtURLCalled in
-            if removeItemAtURLCalled == numberOfDocumentsToRemove {
-                expectation.fulfill()
-            }
-        }
-
         // deallocate object
         subject = nil
 
-        waitForExpectations(timeout: 2)
-        XCTAssertEqual(mockFileManager.removeItemAtURLCalled, 3)
+        XCTAssertEqual(mockFileManager.removeItemAtURLCalled, session.count)
     }
 
     // MARK: - Helpers
@@ -493,7 +486,8 @@ class TabTests: XCTestCase {
         let subject = Tab(
             profile: mockProfile,
             windowUUID: windowUUID,
-            fileManager: mockFileManager
+            fileManager: mockFileManager,
+            dispatchQueue: mockDispatchQueue
         )
         trackForMemoryLeaks(subject)
         return subject
