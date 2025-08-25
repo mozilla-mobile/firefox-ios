@@ -10,7 +10,6 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var secondaryActionColor: Color = .clear
 
     @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
