@@ -6,14 +6,11 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-// MARK: - Updated OnboardingBasicCardView
-struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var secondaryActionColor: Color = .clear
-    @Environment(\.sizeCategory)
-    private var sizeCategory
+    @State private var primaryActionColor: Color = .clear
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -33,49 +30,30 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            let widthScale = geometry.size.width / UX.CardView.baseWidth
-            let heightScale = geometry.size.height / UX.CardView.baseHeight
-            let scale = min(widthScale, heightScale)
-
-            cardContent(scale: scale, geometry: geometry)
-                .padding(.top, UX.CardView.cardTopPadding)
-                .onAppear {
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                    guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                }
-        }
-    }
-
-    @ViewBuilder
-    private func cardContent(scale: CGFloat, geometry: GeometryProxy) -> some View {
-        VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
-            VStack {
-                ContentFittingScrollView {
-                    VStack(spacing: UX.CardView.spacing * scale) {
-                        Spacer()
-                        titleView
-                        Spacer()
-                        imageView(scale: scale)
-                        Spacer()
-                        bodyView
-                        Spacer()
+        VStack {
+            Spacer()
+            ContentFittingScrollView {
+                VStack(spacing: UX.CardView.spacing) {
+                    Spacer()
+                    titleView
+                    imageView
+                    bodyView
+                    Spacer()
+                    VStack {
+                        primaryButton
+                        secondaryButton
                     }
                 }
-                primaryButton
             }
-            .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-            .padding(UX.CardView.verticalPadding * scale)
-            .background(
-                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                    .fill(cardBackgroundColor)
-                    .accessibilityHidden(true)
-            )
-            secondaryButton(scale: scale)
+            .padding(UX.CardView.verticalPadding)
             Spacer()
+        }
+        .onAppear {
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
@@ -87,16 +65,15 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
             .fixedSize(horizontal: false, vertical: true)
-            .alignmentGuide(.titleAlignment) { dimensions in dimensions[.bottom] }
     }
 
-    @ViewBuilder
-    func imageView(scale: CGFloat) -> some View {
+    @ViewBuilder var imageView: some View {
         if let img = viewModel.image {
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.imageHeight * scale)
+                .frame(height: UX.CardView.imageHeight)
+                .accessibilityLabel(viewModel.title)
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }
@@ -123,10 +100,10 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
         .font(UX.CardView.primaryActionFont)
         .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
         .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+        .frame(width: UX.CardView.primaryButtonWidthiPad)
     }
 
-    @ViewBuilder
-    func secondaryButton(scale: CGFloat) -> some View {
+    @ViewBuilder var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
             Button(
                 secondary.title,
@@ -137,9 +114,9 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
                     )
                 })
             .font(UX.CardView.secondaryActionFont)
-            .foregroundColor(secondaryActionColor)
-            .padding(.top, UX.CardView.secondaryButtonTopPadding * scale)
-            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding * scale)
+            .foregroundColor(primaryActionColor)
+            .padding(.top, UX.CardView.secondaryButtonTopPadding)
+            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
         }
     }
@@ -149,6 +126,6 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
-        secondaryActionColor = Color(color.textOnDark)
+        primaryActionColor = Color(color.actionPrimary)
     }
 }

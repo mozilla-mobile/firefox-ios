@@ -1,0 +1,3 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Adaugă o comandă rapidă %@ în ecranul de pornire. După ce ai adăugat widgetul, ține-l atins pentru editare și selectează o comandă rapidă diferită.";
+
