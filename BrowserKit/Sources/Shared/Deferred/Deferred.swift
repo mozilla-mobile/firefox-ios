@@ -87,7 +87,7 @@ open class Deferred<T: Sendable>: @unchecked Sendable {
         return result
     }
 
-    public func bindQueue<U>(_ queue: DispatchQueue, f: @escaping (T) -> Deferred<U>) -> Deferred<U> {
+    public func bindQueue<U>(_ queue: DispatchQueue, f: @escaping @Sendable (T) -> Deferred<U>) -> Deferred<U> {
         let d = Deferred<U>()
         self.uponQueue(queue) {
             f($0).uponQueue(queue) {
@@ -97,7 +97,7 @@ open class Deferred<T: Sendable>: @unchecked Sendable {
         return d
     }
 
-    public func mapQueue<U>(_ queue: DispatchQueue, f: @escaping (T) -> U) -> Deferred<U> {
+    public func mapQueue<U>(_ queue: DispatchQueue, f: @escaping @Sendable (T) -> U) -> Deferred<U> {
         return bindQueue(queue) { t in Deferred<U>(value: f(t)) }
     }
 
@@ -105,11 +105,11 @@ open class Deferred<T: Sendable>: @unchecked Sendable {
         uponQueue(defaultQueue, block: block)
     }
 
-    public func bind<U>(_ f: @escaping (T) -> Deferred<U>) -> Deferred<U> {
+    public func bind<U>(_ f: @escaping @Sendable (T) -> Deferred<U>) -> Deferred<U> {
         return bindQueue(defaultQueue, f: f)
     }
 
-    public func map<U>(_ f: @escaping (T) -> U) -> Deferred<U> {
+    public func map<U>(_ f: @escaping @Sendable (T) -> U) -> Deferred<U> {
         return mapQueue(defaultQueue, f: f)
     }
 

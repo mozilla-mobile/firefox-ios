@@ -44,19 +44,19 @@ class TestSQLitePinnedSites: XCTestCase {
         let site2 = Site.createBasicSite(url: "http://s\(2)ite\(2).com/foo", title: "A \(2)")
 
         let expectation = self.expectation(description: "First.")
-        func done() -> Success {
+        let done: @Sendable () -> Success = {
             expectation.fulfill()
             return succeed()
         }
 
-        func addPinnedSites() -> Success {
+        let addPinnedSites: @Sendable () -> Success = {
             return pinnedSites.addPinnedTopSite(site1) >>== {
                 sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
                 return pinnedSites.addPinnedTopSite(site2)
             }
         }
 
-        func checkPinnedSites() -> Success {
+        let checkPinnedSites: @Sendable () -> Success = {
             return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                 XCTAssertEqual(pinnedSites.count, 2)
                 XCTAssertEqual(pinnedSites[0]?.url, site2.url)
@@ -65,7 +65,7 @@ class TestSQLitePinnedSites: XCTestCase {
             }
         }
 
-        func removePinnedSites() -> Success {
+        let removePinnedSites: @Sendable () -> Success = {
             return pinnedSites.removeFromPinnedTopSites(site2) >>== {
                 return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "There should only be one pinned site")
@@ -75,7 +75,7 @@ class TestSQLitePinnedSites: XCTestCase {
             }
         }
 
-        func dupePinnedSite() -> Success {
+        let dupePinnedSite: @Sendable () -> Success = {
             return pinnedSites.addPinnedTopSite(site1) >>== {
                 return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 1, "There should not be a dupe")
@@ -110,19 +110,19 @@ class TestSQLitePinnedSites: XCTestCase {
         let site2 = Site.createBasicSite(url: "http://site.com/foo2", title: "A duplicate domain \(2)")
 
         let expectation = self.expectation(description: "First.")
-        func done() -> Success {
+        let done: @Sendable () -> Success = {
             expectation.fulfill()
             return succeed()
         }
 
-        func addPinnedSites() -> Success {
+        let addPinnedSites: @Sendable () -> Success = {
             return pinnedSites.addPinnedTopSite(site1) >>== {
                 sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
                 return pinnedSites.addPinnedTopSite(site2)
             }
         }
 
-        func checkPinnedSites() -> Success {
+        let checkPinnedSites: @Sendable () -> Success = {
             return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                 XCTAssertEqual(pinnedSites.count, 2)
                 XCTAssertEqual(pinnedSites[0]?.url, site2.url)
@@ -131,7 +131,7 @@ class TestSQLitePinnedSites: XCTestCase {
             }
         }
 
-        func removePinnedSites() -> Success {
+        let removePinnedSites: @Sendable () -> Success = {
             return pinnedSites.removeFromPinnedTopSites(site2) >>== {
                 return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 0, "Duplicate pinned domains are removed with a fuzzy search")
@@ -170,16 +170,16 @@ class TestSQLitePinnedSites: XCTestCase {
         )
 
         let expectation = self.expectation(description: "Add site")
-        func done() -> Success {
+        let done: @Sendable () -> Success = {
             expectation.fulfill()
             return succeed()
         }
 
-        func addPinnedSite() -> Success {
+        let addPinnedSite: @Sendable () -> Success = {
             return pinnedSites.addPinnedTopSite(site)
         }
 
-        func checkPinnedSite() -> Success {
+        let checkPinnedSite: @Sendable () -> Success = {
             return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                 XCTAssertEqual(pinnedSites.count, 1)
                 XCTAssertEqual(pinnedSites[0]?.id, siteId)
@@ -189,7 +189,7 @@ class TestSQLitePinnedSites: XCTestCase {
             }
         }
 
-        func removePinnedSite() -> Success {
+        let removePinnedSite: @Sendable () -> Success = {
             return pinnedSites.removeFromPinnedTopSites(site) >>== {
                 return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                     XCTAssertEqual(pinnedSites.count, 0, "There should be no pinned sites")
