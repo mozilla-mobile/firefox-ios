@@ -1117,6 +1117,79 @@ onboarding:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
 
+# Terms of Use metrics
+termsofuse:
+  impression:
+    type: event
+    description: |
+      User viewed the terms of use bottom sheet.
+    extra_keys:
+      tou_version:
+        type: string
+        description: |
+          The version of the Terms of Use that was shown.
+      surface:
+        type: string
+        description: |
+          The surface where ToU was shown (e.g., bottom_sheet, onboarding).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26435
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  accepted:
+    type: event
+    description: |
+      User accepted the terms of use.
+    extra_keys:
+      tou_version:
+        type: string
+        description: |
+          The version of the Terms of Use that was accepted.
+      surface:
+        type: string
+        description: |
+          The surface where ToU was accepted (e.g., bottom_sheet, onboarding).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26435
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  version:
+    type: quantity
+    description: >
+      The version of the Terms of Use the user accepted.
+    unit: version
+    lifetime: application
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26435
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  date:
+    type: datetime
+    description: >
+      The timestamp when the user accepted the Terms of Use.
+    time_unit: millisecond
+    lifetime: application
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/26435
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+
 # Top Site
 top_sites:
   tile_pressed:
@@ -3537,6 +3610,7 @@ fx_suggest:
     expires: never
     send_in_pings:
       - fx-suggest
+
 
 # Window (iPad) metrics
 windows:
