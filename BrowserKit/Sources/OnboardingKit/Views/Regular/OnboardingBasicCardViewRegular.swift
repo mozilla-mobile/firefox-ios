@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct OnboardingBasicCardViewiPad<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear

@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -32,7 +32,7 @@ struct OnboardingCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     selection: $viewModel.pageCount,
                     items: viewModel.onboardingCards
                 ) { card in
-                    OnboardingCardView(
+                    OnboardingCardViewCompact(
                         viewModel: card,
                         windowUUID: windowUUID,
                         themeManager: themeManager,
