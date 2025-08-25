@@ -9,13 +9,13 @@ import Shared
 import XCTest
 
 @MainActor
-class StatusBarOverlayTests: XCTestCase {
+final class StatusBarOverlayTests: XCTestCase {
     private var profile: MockProfile!
     private var wallpaperManager: WallpaperManagerMock!
     private var notificationCenter: MockNotificationCenter!
     private var toolbarHelper: ToolbarHelperInterface!
 
-    private let expectedAlpha: CGFloat = 0.85
+    private var expectedAlpha: CGFloat = if #available(iOS 26, *) { .zero } else { 0.85 }
 
     override func setUp() {
         super.setUp()
