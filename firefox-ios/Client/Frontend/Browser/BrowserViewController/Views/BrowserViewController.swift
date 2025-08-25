@@ -37,7 +37,6 @@ class BrowserViewController: UIViewController,
                              BookmarksHandlerDelegate,
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
-                             BrowserContentHiding,
                              BrowserStatusBarScrollDelegate {
     enum UX {
         static let showHeaderTapAreaHeight: CGFloat = 32
@@ -221,13 +220,25 @@ class BrowserViewController: UIViewController,
         return toolbar.isHidden ? legacyUrlBar : toolbar
     }
 
+    private lazy var effect: some UIVisualEffect = {
+#if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            return UIGlassEffect(style: .regular)
+        } else {
+            return UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+#else
+        return UIBlurEffect(style: .systemUltraThinMaterial)
+#endif
+    }()
+
     // MARK: Blur views for translucent toolbars
-    private let topBlurView: UIVisualEffectView = .build { view in
-        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    private lazy var topBlurView: UIVisualEffectView = .build { view in
+        view.effect = self.effect
     }
 
-    private let bottomBlurView: UIVisualEffectView = .build { view in
-        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    private lazy var bottomBlurView: UIVisualEffectView = .build { view in
+        view.effect = self.effect
     }
 
     // background view is placed behind content view so view scrolled to top or bottom shows
@@ -891,17 +902,6 @@ class BrowserViewController: UIViewController,
                 actionType: GeneralBrowserActionType.shakeMotionEnded
             )
         )
-    }
-
-    // MARK: - BrowserContentHiding
-    func showBrowserContent() {
-        contentContainer.isHidden = false
-        scrollController.showToolbars(animated: false)
-    }
-
-    func hideBrowserContent() {
-        contentContainer.isHidden = true
-        scrollController.hideToolbars(animated: true)
     }
 
     // MARK: - Start At Home
@@ -2263,10 +2263,14 @@ class BrowserViewController: UIViewController,
     }
 
     func removeBookmark(urlString: String, title: String?, site: Site? = nil) {
-        profile.places.deleteBookmarksWithURL(url: urlString).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            self.removeBookmarkShortcut()
-        }
+        profile.places.deleteBookmarksWithURL(url: urlString)
+            .uponQueue(.main) { result in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    guard result.isSuccess else { return }
+                    self.removeBookmarkShortcut()
+                }
+            }
     }
 
     private func showBookmarkToast(urlString: String? = nil, title: String? = nil, action: BookmarkAction) {
@@ -2276,12 +2280,16 @@ class BrowserViewController: UIViewController,
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
             if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
                 recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
-                profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { result in
-                    guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
-                    let folderName = bookmarkFolder.title
-                    let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
-                    self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
-                }
+                profile.places.getBookmark(guid: recentBookmarkFolderGuid)
+                    .uponQueue(.main) { result in
+                        // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                        MainActor.assumeIsolated {
+                            guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
+                            let folderName = bookmarkFolder.title
+                            let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
+                            self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
+                        }
+                    }
             // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
                 showToast(
@@ -2302,14 +2310,23 @@ class BrowserViewController: UIViewController,
         let bookmarksTelemetry = BookmarksTelemetry()
         bookmarksTelemetry.editBookmark(eventLabel: .addBookmarkToast)
 
-        profile.places.getBookmarksWithURL(url: urlString).uponQueue(.main) { result in
-            guard let bookmarkItem = result.successValue?.first,
-                  let parentGuid = bookmarkItem.parentGUID else { return }
-            self.profile.places.getBookmark(guid: parentGuid).uponQueue(.main) { result in
-                guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
-                self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
+        profile.places.getBookmarksWithURL(url: urlString)
+            .uponQueue(.main) { result in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    guard let bookmarkItem = result.successValue?.first,
+                          let parentGuid = bookmarkItem.parentGUID else { return }
+
+                    self.profile.places.getBookmark(guid: parentGuid)
+                        .uponQueue(.main) { result in
+                            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                            MainActor.assumeIsolated {
+                                guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
+                                self.navigationHandler?.showEditBookmark(parentFolder: parentFolder, bookmark: bookmarkItem)
+                            }
+                        }
+                }
             }
-        }
     }
 
     override func accessibilityPerformMagicTap() -> Bool {
@@ -2687,22 +2704,26 @@ class BrowserViewController: UIViewController,
         let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
         let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
 
-        profile.places.getBookmarkURLForKeyword(keyword: possibleKeyword).uponQueue(.main) { result in
-            if var urlString = result.successValue ?? "",
-               let escapedQuery = possibleQuery.addingPercentEncoding(
-                withAllowedCharacters: NSCharacterSet.urlQueryAllowed
-               ),
-               let range = urlString.range(of: "%s") {
-                urlString.replaceSubrange(range, with: escapedQuery)
+        profile.places.getBookmarkURLForKeyword(keyword: possibleKeyword)
+            .uponQueue(.main) { result in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    if var urlString = result.successValue ?? "",
+                       let escapedQuery = possibleQuery.addingPercentEncoding(
+                        withAllowedCharacters: NSCharacterSet.urlQueryAllowed
+                       ),
+                       let range = urlString.range(of: "%s") {
+                        urlString.replaceSubrange(range, with: escapedQuery)
 
-                if let url = URL(string: urlString) {
-                    self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
-                    return
+                        if let url = URL(string: urlString) {
+                            self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
+                            return
+                        }
+                    }
+
+                    self.submitSearchText(text, forTab: currentTab)
                 }
             }
-
-            self.submitSearchText(text, forTab: currentTab)
-        }
     }
 
     private func executeNavigationAndDisplayActions() {
@@ -3824,6 +3845,13 @@ class BrowserViewController: UIViewController,
             let isBottomSearchHomepage = isBottomSearchBar && tabManager.selectedTab?.isFxHomeTab ?? false
             let colors = currentTheme.colors
             backgroundView.backgroundColor = isBottomSearchHomepage ? colors.layer1 : colors.layerSurfaceLow
+#if canImport(FoundationModels)
+            if #available(iOS 26, *), let glassEffect = effect as? UIGlassEffect {
+                glassEffect.tintColor = currentTheme.colors.layer1.withAlphaComponent(0.5)
+                bottomBlurView.effect = glassEffect
+                topBlurView.effect = glassEffect
+            }
+#endif
         } else {
             backgroundView.backgroundColor = currentTheme.colors.layer1
         }
@@ -4358,6 +4386,8 @@ extension BrowserViewController: HomePanelDelegate {
 
         // If we are showing toptabs a user can just use the top tab bar
         guard !topTabsVisible else { return }
+
+        guard browserDelegate?.shouldShowNewTabToast(tab: tab) == true else { return }
 
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
@@ -5041,14 +5071,18 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
             present(alert, animated: true, completion: nil)
             return
         }
-        profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
-            self.popToBVC()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
-                                                bottomContainer: self.contentContainer,
-                                                theme: self.currentTheme())
+        profile.sendItem(shareItem, toDevices: devices)
+            .uponQueue(.main) { _ in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    self.popToBVC()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
+                                                        bottomContainer: self.contentContainer,
+                                                        theme: self.currentTheme())
+                    }
+                }
             }
-        }
     }
 }
 

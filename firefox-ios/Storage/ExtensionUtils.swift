@@ -19,8 +19,8 @@ extension NSItemProvider {
     }
 }
 
-public struct ExtensionUtils {
-    public enum ExtractedShareItem {
+public struct ExtensionUtils: Sendable {
+    public enum ExtractedShareItem: Sendable {
         case shareItem(ShareItem)
         case rawText(String)
 
@@ -40,7 +40,7 @@ public struct ExtensionUtils {
     /// If no URL is found, but a text provider *is*, then use the raw text as a fallback.
     public static func extractSharedItem(
         fromExtensionContext extensionContext: NSExtensionContext?,
-        completionHandler: @escaping (ExtractedShareItem?, Error?) -> Void
+        completionHandler: @Sendable @escaping (ExtractedShareItem?, Error?) -> Void
     ) {
         guard let extensionContext = extensionContext,
               let inputItems = extensionContext.inputItems as? [NSExtensionItem]

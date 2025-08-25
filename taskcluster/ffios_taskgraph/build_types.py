@@ -11,6 +11,10 @@ BUILD_TYPE_FOR_RELEASE_TYPE = {
 
 def should_build_type_get_targetted_for_release_type(task, release_type):
     task_build_type = task.attributes.get("build-type")
+
+    if task_build_type is None:
+        return True
+
     target_build_types = BUILD_TYPE_FOR_RELEASE_TYPE[release_type]
 
     return task_build_type in target_build_types

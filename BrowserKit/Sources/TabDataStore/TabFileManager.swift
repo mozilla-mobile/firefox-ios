@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-public protocol TabFileManager {
+public protocol TabFileManager: Sendable {
     /// Determines the directory where tab session data should be stored
     /// - Returns: the URL that should be used for storing tab session data, can be nil
     func tabSessionDataDirectory() -> URL?

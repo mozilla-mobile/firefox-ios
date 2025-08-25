@@ -8,7 +8,8 @@
 
 import Foundation
 
-public final class LockProtected<T> {
+// FIXME: FXIOS-13211 Validate this is Sendable, remove along with Deferred code, or actually make it concurrency safe.
+public final class LockProtected<T>: @unchecked Sendable {
     private var lock: ReadWriteLock
     private var item: T
 
@@ -21,13 +22,13 @@ public final class LockProtected<T> {
         self.lock = lock
     }
 
-    public func withReadLock<U>(block: (T) -> U) -> U {
+    public func withReadLock<U>(block: @Sendable (T) -> U) -> U {
         return lock.withReadLock { [unowned self] in
             return block(self.item)
         }
     }
 
-    public func withWriteLock<U>(block: (inout T) -> U) -> U {
+    public func withWriteLock<U>(block: @Sendable (inout T) -> U) -> U {
         return lock.withWriteLock { [unowned self] in
             return block(&self.item)
         }

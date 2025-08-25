@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 public struct AddressToolbarUXConfiguration {
-    let toolbarCornerRadius: CGFloat
+    private(set) var toolbarCornerRadius: CGFloat = if #available(iOS 26, *) { 22 } else { 12 }
     let browserActionsAddressBarDividerWidth: CGFloat
     let isLocationTextCentered: Bool
     let locationTextFieldTrailingPadding: CGFloat
@@ -20,7 +20,6 @@ public struct AddressToolbarUXConfiguration {
                                   scrollAlpha: CGFloat = 1.0,
                                   shouldBlur: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
-            toolbarCornerRadius: 12.0,
             browserActionsAddressBarDividerWidth: 0.0,
             isLocationTextCentered: true,
             locationTextFieldTrailingPadding: 0,

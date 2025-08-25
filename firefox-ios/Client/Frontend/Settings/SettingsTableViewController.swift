@@ -40,6 +40,7 @@ class Setting: NSObject {
             return UIEdgeInsets(top: 0, left: horizontalMargin, bottom: 0, right: horizontalMargin)
         }
     }
+
     private var _title: NSAttributedString?
     private var _footerTitle: NSAttributedString?
     private var _cellHeight: CGFloat?

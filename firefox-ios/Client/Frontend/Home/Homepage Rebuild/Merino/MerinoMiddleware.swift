@@ -65,7 +65,7 @@ final class MerinoMiddleware {
     }
 
     private func sendOpenInPrivateTelemetry(for action: Action) {
-        guard case .pocket = (action as? ContextMenuAction)?.section else {
+        guard case .merino = (action as? ContextMenuAction)?.menuType else {
             self.logger.log(
                 "Unable to retrieve section for \(action.actionType)",
                 level: .debug,

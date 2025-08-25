@@ -48,6 +48,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
     var showTermsOfUseCalled = 0
+    var shouldShowNewTabToastCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -207,5 +208,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showShortcutsLibrary() {
         showShortcutsLibraryCalled += 1
+    }
+
+    func shouldShowNewTabToast(tab: Client.Tab) -> Bool {
+        shouldShowNewTabToastCalled += 1
+        return true
     }
 }

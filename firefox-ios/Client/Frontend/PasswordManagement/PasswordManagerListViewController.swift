@@ -313,28 +313,32 @@ private extension PasswordManagerListViewController {
 
     @objc
     func tappedDelete() {
-        viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
-            self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-                // Delete here
-                let guidsToDelete = self.tableView.allLoginIndexPaths.compactMap { index in
-                    if let loginRecord = self.viewModel.loginAtIndexPath(index),
-                       self.viewModel.listSelectionHelper.isCellSelected(with: loginRecord) {
-                        return loginRecord.id
-                    }
-                    return nil
-                }
+        viewModel.profile.hasSyncedLogins()
+            .uponQueue(.main) { yes in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
+                        // Delete here
+                        let guidsToDelete = self.tableView.allLoginIndexPaths.compactMap { index in
+                            if let loginRecord = self.viewModel.loginAtIndexPath(index),
+                               self.viewModel.listSelectionHelper.isCellSelected(with: loginRecord) {
+                                return loginRecord.id
+                            }
+                            return nil
+                        }
 
-                self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete) { _ in
-                    DispatchQueue.main.async {
-                        self.cancelSelection()
-                        self.loadLogins()
-                        self.sendLoginsDeletedTelemetry()
-                    }
-                }
-            }, hasSyncedLogins: yes.successValue ?? true)
+                        self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete) { _ in
+                            DispatchQueue.main.async {
+                                self.cancelSelection()
+                                self.loadLogins()
+                                self.sendLoginsDeletedTelemetry()
+                            }
+                        }
+                    }, hasSyncedLogins: yes.successValue ?? true)
 
-            self.present(self.deleteAlert!, animated: true, completion: nil)
-        }
+                    self.present(self.deleteAlert!, animated: true, completion: nil)
+                }
+            }
     }
 
     @objc

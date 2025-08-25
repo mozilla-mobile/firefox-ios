@@ -86,7 +86,7 @@ def target_tasks_promote_focus(full_task_graph, parameters, graph_config):
 
 @register_target_task("push_focus")
 def target_tasks_push_focus(full_task_graph, parameters, graph_config):
-    filtered_for_candidates = target_tasks_promote(
+    filtered_for_candidates = target_tasks_promote_focus(
         full_task_graph,
         parameters,
         graph_config,
@@ -101,7 +101,7 @@ def target_tasks_push_focus(full_task_graph, parameters, graph_config):
 
 @register_target_task("ship_focus")
 def target_tasks_ship_focus(full_task_graph, parameters, graph_config):
-    filtered_for_candidates = target_tasks_push(
+    filtered_for_candidates = target_tasks_push_focus(
         full_task_graph,
         parameters,
         graph_config,
@@ -136,13 +136,5 @@ def _filter_release_promotion(
         ) == shipping_phase and does_task_match_release_type(
             task, parameters["release_type"]
         )
-
-    return [l for l, t in full_task_graph.tasks.items() if filter(t, parameters)]
-
-
-@register_target_task("beta_releases")
-def target_task_beta_releases(full_task_graph, parameters, graph_config):
-    def filter(task, parameters):
-        return task.kind == "beta-releases"
 
     return [l for l, t in full_task_graph.tasks.items() if filter(t, parameters)]

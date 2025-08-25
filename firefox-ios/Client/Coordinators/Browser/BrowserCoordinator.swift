@@ -250,6 +250,14 @@ class BrowserCoordinator: BaseCoordinator,
         present(navigationController)
     }
 
+    func shouldShowNewTabToast(tab: Tab) -> Bool {
+        guard let shortcutsLibraryVC = router.navigationController.topViewController as? ShortcutsLibraryViewController
+        else { return true }
+
+        shortcutsLibraryVC.showOpenedNewTabToast(tab: tab)
+        return false
+    }
+
     // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
@@ -1110,7 +1118,6 @@ class BrowserCoordinator: BaseCoordinator,
             browserSnapshot: browserScreenshot,
             browserSnapshotTopOffset: contentContainer.frame.origin.y,
             webView: webView,
-            browserContentHiding: browserViewController,
             parentCoordinatorDelegate: self,
             trigger: trigger,
             prefs: profile.prefs,

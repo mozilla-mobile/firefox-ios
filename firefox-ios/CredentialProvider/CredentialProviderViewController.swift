@@ -199,8 +199,11 @@ extension CredentialProviderViewController: CredentialWelcomeViewControllerDeleg
                 self.extensionContext.cancelRequest(withError: ASExtensionError(.failed))
                 return
             }
-            self.presenter?.profile.syncCredentialIdentities().upon { result in
-                self.extensionContext.completeExtensionConfigurationRequest()
+            self.presenter?.profile.syncCredentialIdentities().uponQueue(.main) { result in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    self.extensionContext.completeExtensionConfigurationRequest()
+                }
             }
         }
     }

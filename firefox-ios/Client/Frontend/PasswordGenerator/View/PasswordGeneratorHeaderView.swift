@@ -40,7 +40,7 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
     }
 
@@ -50,7 +50,7 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
         setupLayout()
     }
@@ -86,7 +86,7 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             applyDynamicFontChange()
         default: break
         }

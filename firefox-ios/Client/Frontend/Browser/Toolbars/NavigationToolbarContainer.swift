@@ -101,9 +101,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         toolbar.applyTheme(theme: theme)
-
-        let isTranslucent = model?.isTranslucent ?? false
-        let backgroundAlpha: CGFloat = isTranslucent ? toolbarHelper.backgroundAlpha() : 1.0
+        let backgroundAlpha: CGFloat = toolbarHelper.glassEffectAlpha
         backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(backgroundAlpha)
     }
 }

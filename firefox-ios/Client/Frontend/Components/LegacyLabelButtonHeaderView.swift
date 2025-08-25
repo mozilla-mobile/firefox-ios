@@ -74,7 +74,7 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.DynamicFontChanged]
+            observing: [UIContentSizeCategory.didChangeNotification]
         )
     }
 
@@ -174,7 +174,7 @@ extension LegacyLabelButtonHeaderView: ThemeApplicable {
 extension LegacyLabelButtonHeaderView: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DynamicFontChanged:
+        case UIContentSizeCategory.didChangeNotification:
             adjustLayout()
         default: break
         }

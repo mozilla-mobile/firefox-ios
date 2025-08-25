@@ -1523,7 +1523,7 @@
 "Settings.Toolbar.Bottom" = "Jos";
 
 /* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
-"Settings.Toolbar.SettingsTitle" = "Bară de unelte";
+"Settings.Toolbar.SettingsTitle" = "Bară de instrumente";
 
 /* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
 "Settings.Toolbar.Top" = "Sus";

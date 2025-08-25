@@ -9,8 +9,8 @@ import XCTest
 @testable import Client
 
 final class ContextMenuConfigurationTests: XCTestCase {
-    func tests_initialState_forPocketItem_returnsExpectedState() {
-        let pocketItem: HomepageItem = .merino(
+    func tests_initialState_forMerinoItem_returnsExpectedState() {
+        let merinoItem: HomepageItem = .merino(
             MerinoStoryConfiguration(
                 story: MerinoStory(
                     corpusItemId: "",
@@ -28,9 +28,10 @@ final class ContextMenuConfigurationTests: XCTestCase {
                 )
             )
         )
+        guard case let .merino(state) = merinoItem else { return }
         let subject = ContextMenuConfiguration(
-            homepageSection: .pocket(nil),
-            item: pocketItem,
+            site: Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title),
+            menuType: MenuType(homepageItem: merinoItem),
             toastContainer: UIView()
         )
         XCTAssertEqual(subject.site?.tileURL.absoluteString, "file:///www.example.com/1234")
@@ -43,21 +44,13 @@ final class ContextMenuConfigurationTests: XCTestCase {
                 site: Site.createBasicSite(url: "www.example.com/1234", title: "Site 0")
             ), nil
         )
+        guard case let .topSite(state, nil) = topSiteItem else { return }
         let subject = ContextMenuConfiguration(
-            homepageSection: .topSites(nil, 4),
-            item: topSiteItem,
+            site: state.site,
+            menuType: MenuType(homepageItem: topSiteItem),
             toastContainer: UIView()
         )
         XCTAssertEqual(subject.site?.tileURL.absoluteString, "www.example.com/1234")
         XCTAssertEqual(subject.site?.title, "Site 0")
-    }
-
-    func tests_initialState_forNoItem_returnsExpectedState() {
-        let subject = ContextMenuConfiguration(
-            homepageSection: .topSites(nil, 4),
-            item: nil,
-            toastContainer: UIView()
-        )
-        XCTAssertNil(subject.site)
     }
 }

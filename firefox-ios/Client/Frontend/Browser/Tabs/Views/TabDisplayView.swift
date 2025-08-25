@@ -171,9 +171,12 @@ class TabDisplayView: UIView,
             return
         }
 
-        tabsState = state
+        // TODO: FXIOS-13264 - Fix compositional layout using estimated heights for cells so this check isn't necessary.
+        if tabsState != state {
+            dataSource.updateSnapshot(state: tabsState)
+        }
 
-        dataSource.updateSnapshot(state: tabsState)
+        tabsState = state
 
         if let scrollState = state.scrollState {
             scrollToTab(scrollState)

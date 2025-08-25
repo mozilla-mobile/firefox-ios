@@ -92,7 +92,8 @@ let package = Package(
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
             exclude: ["README.md"],
             resources: [.process("BundledTopSitesFavicons.xcassets")],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"]),
+                            .enableExperimentalFeature("StrictConcurrency")]),
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
@@ -118,7 +119,8 @@ let package = Package(
         .target(
             name: "TabDataStore",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"]),
+                            .enableExperimentalFeature("StrictConcurrency")]),
         .testTarget(
             name: "TabDataStoreTests",
             dependencies: ["TabDataStore"]),

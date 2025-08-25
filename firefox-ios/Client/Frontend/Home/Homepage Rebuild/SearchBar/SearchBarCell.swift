@@ -10,7 +10,8 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         static let shadowRadius: CGFloat = 14
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 1
-        static let cornerRadius: CGFloat = 16
+        static let cornerRadius: CGFloat = 32
+        static let borderWidth: CGFloat = 1
         static let heightPadding: CGFloat = 20
         static let widthPadding: CGFloat = 16
         static let containerPadding: CGFloat = 4
@@ -20,6 +21,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     private let container: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
+        view.layer.borderWidth = UX.borderWidth
     }
 
     private lazy var contentStackView: UIStackView = .build { view in
@@ -92,6 +94,7 @@ class SearchBarCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         placeholderLabel.textColor = theme.colors.textSecondary
         container.backgroundColor = theme.colors.layer2
+        container.layer.borderColor = theme.colors.borderPrimary.cgColor
         searchImageView.tintColor = theme.colors.iconSecondary
         setupShadow(theme: theme)
     }

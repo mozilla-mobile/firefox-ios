@@ -27,6 +27,11 @@ class ShortcutsLibraryViewController: UIViewController,
     // MARK: - Private constants
     private let logger: Logger
 
+    // MARK: - Private variables
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+    }()
+
     // MARK: - Themeable Properties
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -34,6 +39,7 @@ class ShortcutsLibraryViewController: UIViewController,
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
+    // MARK: Initializers
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -58,6 +64,7 @@ class ShortcutsLibraryViewController: UIViewController,
         unsubscribeFromRedux()
     }
 
+    // MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         title = .FirefoxHomepage.Shortcuts.Library.Title
@@ -103,6 +110,8 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     func newState(state: ShortcutsLibraryState) {
+        // TODO: FXIOS-13265 Fix compositional layout using estimated heights for cells so this check isn't necessary.
+        guard self.shortcutsLibraryState != state else { return }
         self.shortcutsLibraryState = state
 
         dataSource?.updateSnapshot(state: state)
@@ -120,7 +129,7 @@ class ShortcutsLibraryViewController: UIViewController,
     // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.colors.layer1
     }
 
     // MARK: - Setup + Layout
@@ -152,6 +161,7 @@ class ShortcutsLibraryViewController: UIViewController,
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
         }
 
+        collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
 
@@ -216,6 +226,74 @@ class ShortcutsLibraryViewController: UIViewController,
 
             return UICollectionViewCell()
         }
+    }
+
+    private func navigateToContextMenu(for item: ShortcutsLibraryItem, sourceView: UIView? = nil) {
+        guard case let .shortcut(config) = item else { return }
+
+        let configuration = ContextMenuConfiguration(
+            site: config.site,
+            menuType: .shortcut,
+            sourceView: sourceView,
+            toastContainer: self.view
+        )
+        store.dispatchLegacy(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.contextMenu, contextMenuConfiguration: configuration),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.longPressOnCell
+            )
+        )
+    }
+
+    func showOpenedNewTabToast(tab: Tab) {
+        let viewModel = ButtonToastViewModel(labelText: ToastType.openNewTab.title,
+                                             buttonText: ToastType.openNewTab.buttonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme,
+                                completion: { buttonPressed in
+            if buttonPressed {
+                store.dispatchLegacy(
+                    ShortcutsLibraryAction(
+                        tab: tab,
+                        windowUUID: self.windowUUID,
+                        actionType: ShortcutsLibraryActionType.switchTabToastButtonPressed
+                    )
+                )
+            }
+        })
+
+        toast.showToast(viewController: self,
+                        delay: Toast.UX.toastDelayBefore,
+                        duration: Toast.UX.toastDismissAfter) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            ]
+        }
+    }
+
+    // MARK: - Selectors
+    @objc
+    private func handleLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+        let point = longPressGestureRecognizer.location(in: collectionView)
+        guard let indexPath = collectionView?.indexPathForItem(at: point),
+              let item = dataSource?.itemIdentifier(for: indexPath),
+              let sourceView = collectionView?.cellForItem(at: indexPath)
+        else {
+            self.logger.log(
+                "Context menu handling skipped: No valid indexPath, item, section or sourceView found at \(point)",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+
+        navigateToContextMenu(for: item, sourceView: sourceView)
     }
 
     // MARK: - UICollectionViewDelegate
