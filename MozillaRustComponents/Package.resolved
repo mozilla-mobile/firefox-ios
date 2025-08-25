@@ -6,7 +6,7 @@
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
         "revision" : "575df391e047767cf35021f8b29288a2bb41a993",
-        "version" : "64.3.1"
+        "version" : "65.0.2"
       }
     }
   ],
