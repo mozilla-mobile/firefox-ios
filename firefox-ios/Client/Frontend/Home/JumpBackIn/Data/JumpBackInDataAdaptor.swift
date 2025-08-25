@@ -16,7 +16,7 @@ protocol JumpBackInDelegate: AnyObject {
     func didLoadNewData()
 }
 
-actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggable {
+final actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggable, Notifiable {
     // MARK: Properties
 
     nonisolated let notificationCenter: NotificationProtocol
@@ -45,20 +45,19 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
         self.mainQueue = mainQueue
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        let notifications: [Notification.Name] = [.ShowHomepage,
-                                                  .TabsTrayDidClose,
-                                                  .TabsTrayDidSelectHomeTab,
-                                                  .TopTabsTabClosed,
-                                                  .ProfileDidFinishSyncing,
-                                                  .FirefoxAccountChanged,
-                                                  .TabDataUpdated]
-        notifications.forEach {
-            notificationCenter.addObserver(self,
-                                           selector: #selector(handleNotifications),
-                                           name: $0,
-                                           object: nil)
-        }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                .ShowHomepage,
+                .TabsTrayDidClose,
+                .TabsTrayDidSelectHomeTab,
+                .TopTabsTabClosed,
+                .ProfileDidFinishSyncing,
+                .FirefoxAccountChanged,
+                .TabDataUpdated
+            ]
+        )
 
         Task {
             await self.updateTabsAndAccountData()
@@ -170,17 +169,18 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         mostRecentSyncedTab = JumpBackInSyncedTab(client: mostRecentTab.client, tab: mostRecentTab.tab)
     }
 
-    @MainActor
-    @objc
-    func handleNotifications(_ notification: Notification) {
-        Task {
-            switch notification.name {
+    // MARK: - Notifiable
+    nonisolated func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+        let notificationWindowUUID = notification.windowUUID
+        Task { @MainActor in
+            switch notificationName {
             case .ShowHomepage,
                     .TabDataUpdated,
                     .TabsTrayDidClose,
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
-                guard let uuid = notification.windowUUID,
+                guard let uuid = notificationWindowUUID,
                     await uuid == windowUUID
                 else { return }
                 await updateTabsData()

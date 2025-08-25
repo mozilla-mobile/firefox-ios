@@ -9,7 +9,7 @@ import Common
 
 import struct MozillaAppServices.LoginEntry
 
-class PasswordDetailViewController: SensitiveViewController, Themeable {
+final class PasswordDetailViewController: SensitiveViewController, Themeable, Notifiable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
     }
@@ -57,11 +57,11 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(dismissAlertController),
-                                               name: UIApplication.didEnterBackgroundNotification,
-                                               object: nil)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIApplication.didEnterBackgroundNotification]
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,6 +123,14 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         let theme = currentTheme()
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == UIApplication.didEnterBackgroundNotification else { return }
+        Task { @MainActor in
+            deleteAlert?.dismiss(animated: false)
+        }
     }
 }
 
@@ -333,11 +341,6 @@ extension PasswordDetailViewController: KeyboardHelperDelegate {
 
 // MARK: - Selectors
 extension PasswordDetailViewController {
-    @objc
-    func dismissAlertController() {
-        deleteAlert?.dismiss(animated: false, completion: nil)
-    }
-
     func deleteLogin() {
         viewModel.profile.hasSyncedLogins()
             .uponQueue(.main) { yes in
