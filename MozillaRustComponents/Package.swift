@@ -16,7 +16,7 @@ let package = Package(
         .library(name: "MozillaRustComponents", targets: ["MozillaAppServices"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/mozilla/glean-swift", from: "64.1.0"),
+        .package(url: "https://github.com/mozilla/glean-swift", from: "65.0.2"),
     ],
     targets: [
         // A wrapper around our binary target that combines + any swift files we want to expose to the user
