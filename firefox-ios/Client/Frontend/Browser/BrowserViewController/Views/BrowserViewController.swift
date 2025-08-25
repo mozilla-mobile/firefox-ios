@@ -3274,8 +3274,9 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            if let isHomepage = tabManager.selectedTab?.isFxHomeTab, isHomepage {
-                focusLocationTextField(forTab: tabManager.selectedTab)
+            guard let selectedTab = tabManager.selectedTab else { return }
+            if selectedTab.isPrivate == isPrivate, selectedTab.isFxHomeTab {
+                focusLocationTextField(forTab: selectedTab)
             } else {
                 openBlankNewTab(
                     focusLocationField: options?.contains(.focusLocationField) == true,
