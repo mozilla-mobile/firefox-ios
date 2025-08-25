@@ -29,36 +29,34 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
         ZStack {
             AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
-            VStack {
-                TabView(selection: $viewModel.pageCount) {
-                    ForEach(Array(viewModel.onboardingCards.enumerated()), id: \.element.name) { index, card in
-                        OnboardingCardViewRegular(
-                            viewModel: card,
-                            windowUUID: windowUUID,
-                            themeManager: themeManager,
-                            onBottomButtonAction: viewModel.handleBottomButtonAction,
-                            onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
-                        )
-                        .tag(index)
+            SheetSizedCard {
+                VStack {
+                    TabView(selection: $viewModel.pageCount) {
+                        ForEach(Array(viewModel.onboardingCards.enumerated()), id: \.element.name) { index, card in
+                            OnboardingCardViewRegular(
+                                viewModel: card,
+                                windowUUID: windowUUID,
+                                themeManager: themeManager,
+                                onBottomButtonAction: viewModel.handleBottomButtonAction,
+                                onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
+                            )
+                            .tag(index)
+                        }
                     }
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    CustomPageControl(
+                        currentPage: $viewModel.pageCount,
+                        numberOfPages: viewModel.onboardingCards.count,
+                        windowUUID: windowUUID,
+                        themeManager: themeManager
+                    )
+                    .padding(.bottom)
                 }
-                .frame(
-                    maxWidth: UX.CardView.baseiPadWidth,
-                    maxHeight: UX.CardView.baseiPadHeight
+                .background(
+                    RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                        .fill(cardBackgroundColor)
                 )
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                CustomPageControl(
-                    currentPage: $viewModel.pageCount,
-                    numberOfPages: viewModel.onboardingCards.count,
-                    windowUUID: windowUUID,
-                    themeManager: themeManager
-                )
-                .padding(.bottom)
             }
-            .background(
-                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                    .fill(cardBackgroundColor)
-            )
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -73,4 +71,51 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
         let color = theme.colors
         cardBackgroundColor = Color(color.layer2)
     }
+}
+
+#Preview {
+    SheetSizedCard {
+        VStack(spacing: 20) {
+            RoundedRectangle(cornerRadius: 2.5)
+                .fill(Color(.systemGray3))
+                .frame(width: 36, height: 5)
+                .padding(.top)
+
+            Spacer()
+
+            Image(systemName: "doc.plaintext")
+                .font(.system(size: 60))
+                .foregroundColor(.blue)
+
+            Text("Sheet Sized Card")
+                .font(.title2)
+                .fontWeight(.bold)
+
+            Text("This card automatically sizes to match iPad sheet dimensions.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
+            Spacer()
+
+            Button("Sample Button") {
+                print("Button tapped")
+            }
+            .font(.headline)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.blue)
+            .cornerRadius(12)
+            .padding(.horizontal)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.1), radius: 20, x: 0, y: 10)
+        )
+    }
+    .background(Color(.systemGray6))
 }
