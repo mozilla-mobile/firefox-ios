@@ -18,6 +18,7 @@ protocol GleanWrapper {
     func recordString(for metric: StringMetricType, value: String)
     func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String)
     func setBoolean(for metric: BooleanMetricType, value: Bool)
+    func setUUID(for metric: UuidMetricType, value: UUID)
     func recordQuantity(for metric: QuantityMetricType, value: Int64)
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64)
     func recordUrl(for metric: UrlMetricType, value: String)
@@ -35,6 +36,7 @@ protocol GleanWrapper {
 
     // MARK: Pings
 
+    func setPingBoolean<ReasonCodesEnum>(for ping: Ping<ReasonCodesEnum>, value: Bool) where ReasonCodesEnum: ReasonCodes
     func submit<ReasonCodesEnum>(ping: Ping<ReasonCodesEnum>) where ReasonCodesEnum: ReasonCodes
 }
 
@@ -85,6 +87,10 @@ struct DefaultGleanWrapper: GleanWrapper {
         metric.set(value)
     }
 
+    func setUUID(for metric: UuidMetricType, value: UUID) {
+        metric.set(value)
+    }
+
     func recordQuantity(for metric: QuantityMetricType, value: Int64) {
         metric.set(value)
     }
@@ -124,6 +130,9 @@ struct DefaultGleanWrapper: GleanWrapper {
     }
 
     // MARK: Pings
+    func setPingBoolean<ReasonCodesEnum>(for ping: Ping<ReasonCodesEnum>, value: Bool) where ReasonCodesEnum: ReasonCodes {
+        ping.setEnabled(enabled: value)
+    }
 
     func submit<ReasonCodesEnum>(ping: Ping<ReasonCodesEnum>) where ReasonCodesEnum: ReasonCodes {
         ping.submit()

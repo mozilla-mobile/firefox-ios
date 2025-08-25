@@ -14,11 +14,9 @@ class SponsoredTileTelemetryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         gleanWrapper = MockGleanWrapper()
-        clearTest()
     }
 
     override func tearDown() {
-        clearTest()
         gleanWrapper = nil
         super.tearDown()
     }
@@ -26,7 +24,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
     // MARK: Impression
 
     func testImpressionTopSite() {
-        TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[0]
         let topSite = Site.createSponsoredSite(fromContile: contile)
 
@@ -49,7 +46,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
     // MARK: Click
 
     func testClickTopSite() {
-        TelemetryContextualIdentifier.setupContextId()
         let contile = ContileProviderMock.defaultSuccessData[1]
         let topSite = Site.createSponsoredSite(fromContile: contile)
 
@@ -73,9 +69,5 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
     func createSubject() -> SponsoredTileTelemetry {
         return DefaultSponsoredTileTelemetry(gleanWrapper: gleanWrapper)
-    }
-
-    func clearTest() {
-        TelemetryContextualIdentifier.clearUserDefaults()
     }
 }
