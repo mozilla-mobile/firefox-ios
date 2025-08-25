@@ -14,20 +14,20 @@ class ReportSiteTests: FeatureFlaggedTestBase {
         launchAndGoToMenu()
         mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.reportBrokenSite])
     }
-    
+
     // https://mozilla.testrail.io/index.php?/cases/view/2831279
     func testReportSiteIssueOff() {
         addLaunchArgument(jsonFileName: "reportSiteIssueOff",
                           featureName: "general-app-features")
-        
+
         launchAndGoToMenu()
         mozWaitForElementToNotExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.reportBrokenSite])
     }
-    
+
     // MARK: Helper
     func launchAndGoToMenu() {
         app.launch()
-        
+
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.goto(ToolsBrowserTabMenu)
     }

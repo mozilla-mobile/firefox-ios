@@ -55,9 +55,11 @@ class ZoomingTests: FeatureFlaggedTestBase {
         if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         }
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        validateZoomActions()
-        validateZoomActionsLandscape()
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            validateZoomActions()
+            validateZoomActionsLandscape()
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
@@ -109,8 +111,10 @@ class ZoomingTests: FeatureFlaggedTestBase {
         if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         }
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        validateZoomLevelOnSwitchingTabs()
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            validateZoomLevelOnSwitchingTabs()
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2609150
