@@ -615,8 +615,13 @@ public class RustSyncManager: NSObject, SyncManager {
 
     @discardableResult
     public func syncEverything(why: SyncReason) -> Success {
-        return syncRustEngines(why: why,
-                               engines: syncManagerAPI.rustTogglableEngines.compactMap { $0.rawValue }) >>> succeed
+        // Convert Deferred<Maybe<SyncResult>> into Deferred<Maybe<Void>>:
+        // - If sync succeeds, return success with ().
+        // - If sync fails, propagate the same failure.
+        return syncRustEngines(
+            why: why,
+            engines: syncManagerAPI.rustTogglableEngines.compactMap { $0.rawValue }
+        ).map { $0.map { _ in () } }
     }
 
     /**
