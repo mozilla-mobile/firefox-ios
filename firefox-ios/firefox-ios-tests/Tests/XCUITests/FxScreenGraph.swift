@@ -288,7 +288,7 @@ extension MMNavigator where T == FxUserState {
     func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
         autoreleasepool {
             let startTime = Date()
-            
+
             while !element.exists {
                 if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
                     XCTFail("Timed out waiting for element \(element) to exist")
