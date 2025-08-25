@@ -17,7 +17,7 @@ head_ref: refs/heads/main
 head_repository: https://github.com/mozilla-mobile/firefox-ios
 head_rev: 2a56c4b0e6e7737816147da950196f99895ff3d3
 head_tag: firefox-v137.0b1
-level: '1'
+level: '3'
 moz_build_date: '20250226191326'
 next_version: 137.0b2
 optimize_strategies: null

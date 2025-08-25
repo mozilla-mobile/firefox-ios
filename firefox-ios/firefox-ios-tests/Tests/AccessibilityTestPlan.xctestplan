@@ -310,6 +310,7 @@
         "PhotonActionSheetTests\/testShareSheetSendToDevice()",
         "PocketTests",
         "PocketTests\/testPocketEnabledByDefault()",
+        "PrintTests",
         "PrivateBrowsingTest",
         "PrivateBrowsingTest\/testAllPrivateTabsRestore()",
         "PrivateBrowsingTest\/testClearIndexedDB()",

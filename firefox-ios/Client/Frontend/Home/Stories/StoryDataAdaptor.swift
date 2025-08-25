@@ -47,7 +47,7 @@ final class StoryDataAdaptorImplementation: StoryDataAdaptor, FeatureFlaggable, 
     }
 
     private func updateMerinoSites() async {
-        let stories = await storyProvider.fetchStories()
+        let stories = await storyProvider.fetchHomepageStories()
         merinoStories = stories
         delegate?.didLoadNewData()
     }

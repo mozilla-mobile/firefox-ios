@@ -25,6 +25,7 @@ enum UX {
         }
         static let cardHeightRatio: CGFloat = 0.75
         static let spacing: CGFloat = 24
+        static let tosSpacing: CGFloat = 48
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150

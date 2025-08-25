@@ -44,9 +44,9 @@ final class MerinoManagerTests: XCTestCase {
 
     private func getMockStoriesData() -> [RecommendationDataItem] {
         return [
-            .make(title: "feed1"),
-            .make(title: "feed2"),
-            .make(title: "feed3"),
+            .makeItem("feed1"),
+            .makeItem("feed2"),
+            .makeItem("feed3"),
         ]
     }
 

@@ -31,9 +31,9 @@ final class MerinoStateTests: XCTestCase {
         let reducer = pocketReducer()
 
         let feedStories: [RecommendationDataItem] = [
-            .make(title: "feed1"),
-            .make(title: "feed2"),
-            .make(title: "feed3"),
+            .makeItem("feed1"),
+            .makeItem("feed2"),
+            .makeItem("feed3"),
         ]
 
         let stories = feedStories.compactMap {

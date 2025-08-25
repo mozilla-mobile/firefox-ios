@@ -1,0 +1,37 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - taskgraph.transforms.from_deps
+    - ffios_taskgraph.transforms.release_notifications:transforms
+    - taskgraph.transforms.task
+
+kind-dependencies:
+    - push
+
+tasks:
+  firefox-ios:
+    name: notify-release-signoff-push
+    description: Sends email to release-signoff telling a release was pushed.
+    run-on-projects: []
+    shipping-phase: push
+    worker-type: succeed
+    notifications:
+      emails:
+        by-level:
+          '3': ["release-signoff@mozilla.org"]
+          default: []
+      subject: "{product_type}-ios {release_type} {version} build{build_number} has been pushed to TestFlight!"
+      message: "{product_type}-ios {release_type} {version} build{build_number} has been pushed to TestFlight!"
+    from-deps:
+      group-by:
+        attribute: product-type
+      unique-kinds: false
+      copy-attributes: true
+      with-attributes:
+        product-type:
+          - firefox
+          - focus

@@ -6,7 +6,7 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-struct OnboardingRegularView<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var cardBackgroundColor: Color = .clear
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
 
@@ -32,11 +32,12 @@ struct OnboardingRegularView<ViewModel: OnboardingCardInfoModelProtocol>: View {
             VStack {
                 TabView(selection: $viewModel.pageCount) {
                     ForEach(Array(viewModel.onboardingCards.enumerated()), id: \.element.name) { index, card in
-                        OnboardingBasicCardViewiPad(
+                        OnboardingCardViewRegular(
                             viewModel: card,
                             windowUUID: windowUUID,
                             themeManager: themeManager,
-                            onBottomButtonAction: viewModel.handleBottomButtonAction
+                            onBottomButtonAction: viewModel.handleBottomButtonAction,
+                            onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
                         )
                         .tag(index)
                     }

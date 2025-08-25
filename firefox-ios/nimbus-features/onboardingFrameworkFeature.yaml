@@ -226,7 +226,7 @@ features:
               order: 10
               title: Onboarding/Onboarding.Modern.Welcome.Title.v140
               body: Onboarding/Onboarding.Modern.Welcome.Description.v140
-              image: welcome-globe
+              image: trackers
               buttons:
                 primary:
                   title: Onboarding/Onboarding.Modern.Welcome.ActionTreatementA.v140

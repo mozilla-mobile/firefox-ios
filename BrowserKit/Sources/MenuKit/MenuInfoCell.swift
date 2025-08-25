@@ -13,7 +13,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let infoLabelHorizontalMargin: CGFloat = 8
         static let infoLabelVerticalPadding: CGFloat = 7
         static let infoLabelHorizontalPadding: CGFloat = 14
-        static let backgroundAlpha: CGFloat = 0.85
+        static let backgroundAlpha: CGFloat = 0.80
     }
 
     // MARK: - UI Elements

@@ -86,10 +86,17 @@ final class TabManagerMiddleware: FeatureFlaggable {
                 self.resolveMainMenuActions(with: action, appState: state)
             } else if let action = action as? ScreenshotAction {
                 self.resolveScreenshotActions(action: action, state: state)
+            } else if let action = action as? ShortcutsLibraryAction {
+                self.resolveShortcutsLibrartActions(action: action, state: state)
             } else {
                 self.resolveHomepageActions(with: action)
             }
         }
+    }
+
+    @MainActor
+    private func resolveShortcutsLibrartActions(action: ShortcutsLibraryAction, state: AppState) {
+        tabManager(for: action.windowUUID).selectTab(action.tab)
     }
 
     private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {

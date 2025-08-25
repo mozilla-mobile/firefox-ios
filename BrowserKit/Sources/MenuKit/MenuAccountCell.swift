@@ -14,7 +14,7 @@ final class MenuAccountCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
         static let cornerRadius: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.85
+        static let backgroundAlpha: CGFloat = 0.80
     }
 
     // MARK: - UI Elements

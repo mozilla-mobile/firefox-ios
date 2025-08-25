@@ -35,9 +35,9 @@ class StoryDataAdaptorTests: XCTestCase {
 
     func testGetPocketData() async throws {
         let stories: [RecommendationDataItem] = [
-            .make(title: "feed1"),
-            .make(title: "feed2"),
-            .make(title: "feed3"),
+            .makeItem("feed1"),
+            .makeItem("feed2"),
+            .makeItem("feed3"),
         ]
         mockMerinoAPI = MockMerinoAPI(result: .success(stories))
         let subject = createSubject()

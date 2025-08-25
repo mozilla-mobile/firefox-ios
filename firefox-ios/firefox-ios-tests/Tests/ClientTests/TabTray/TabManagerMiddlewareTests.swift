@@ -365,6 +365,21 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, false)
     }
 
+    func test_shortcutsLibraryAction_switchTabToastButtonPressed_selectsTab() throws {
+        let subject = createSubject()
+        let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
+        let action = ShortcutsLibraryAction(
+            tab: tab,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ShortcutsLibraryActionType.switchTabToastButtonPressed
+        )
+
+        subject.tabsPanelProvider(appState, action)
+        let selectedTab = mockWindowManager.tabManager(for: .XCTestDefaultUUID).selectedTab
+
+        XCTAssertEqual(selectedTab, tab)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> TabManagerMiddleware {
         return TabManagerMiddleware(

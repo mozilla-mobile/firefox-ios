@@ -115,6 +115,7 @@
         "PhotonActionSheetTests",
         "PocketTest",
         "PocketTests",
+        "PrintTests",
         "PrivateBrowsingTest",
         "PrivateBrowsingTestIpad",
         "PrivateBrowsingTestIphone",

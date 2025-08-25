@@ -225,39 +225,6 @@ extension PreviewModel {
     ]
 }
 
-#Preview("Onboarding Card") {
-    ZStack {
-        AnimatedGradientMetalView(
-            windowUUID: .DefaultUITestingUUID,
-            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-        )
-        .edgesIgnoringSafeArea(.all)
-        OnboardingBasicCardView(
-            viewModel: PreviewModel.welcome,
-            windowUUID: .DefaultUITestingUUID,
-            themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onBottomButtonAction: { _, _ in }
-        )
-    }
-}
-
-#Preview("Multiple Choice Onboarding Card") {
-    ZStack {
-        AnimatedGradientMetalView(
-            windowUUID: .DefaultUITestingUUID,
-            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-        )
-        .edgesIgnoringSafeArea(.all)
-        OnboardingMultipleChoiceCardView(
-            viewModel: PreviewModel.customizationToolbar,
-            windowUUID: .DefaultUITestingUUID,
-            themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
-            onBottomButtonAction: { _, _ in },
-            onMultipleChoiceAction: { _, _ in }
-        )
-    }
-}
-
 #Preview("Onboarding Flow") {
     OnboardingView<PreviewModel>(
         windowUUID: .DefaultUITestingUUID,
