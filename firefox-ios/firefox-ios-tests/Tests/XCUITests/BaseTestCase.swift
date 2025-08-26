@@ -177,10 +177,10 @@ class BaseTestCase: XCTestCase {
 
     func mozWaitForElementToBeHittable(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
         let startTime = Date()
-        guard element.exists else {
+        guard element.exists && element.isHittable else {
             while !element.exists || !element.isHittable {
                 if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
-                    XCTFail("Timed out waiting for element \(element) to exist in \(timeout) seconds")
+                    XCTFail("Timed out waiting for element \(element) to exist and hittable in \(timeout) seconds")
                     break
                 }
                 usleep(10000)
