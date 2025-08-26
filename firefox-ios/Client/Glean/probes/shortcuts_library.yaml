@@ -29,7 +29,7 @@ shortcuts_library:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28953
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -43,7 +43,7 @@ shortcuts_library:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28953
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -57,7 +57,7 @@ shortcuts_library:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:
-      - TBD
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28953
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
