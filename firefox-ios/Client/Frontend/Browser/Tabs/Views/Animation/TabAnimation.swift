@@ -75,7 +75,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         let finalFrame = context.finalFrame(for: destinationController)
 
-        ensureMainThread { [self] in
+        DispatchQueue.main.async { [self] in
             runPresentationAnimation(
                 context: context,
                 browserVC: bvc,
@@ -129,7 +129,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         toView.frame = finalFrame
 
         // Allow the UI to render to make the snapshotting code more performant
-        ensureMainThread { [self] in
+        DispatchQueue.main.async { [self] in
             runDismissalAnimation(
                 context: context,
                 toView: toView,
