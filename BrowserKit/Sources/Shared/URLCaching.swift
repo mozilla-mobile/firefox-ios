@@ -7,19 +7,30 @@ import Foundation
 /// Protocol to provide a caching functionality for network calls
 public protocol URLCaching {
     var urlCache: URLCache { get }
-    var maxCacheAge: Timestamp { get }
 
-    func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data?
+    func findCachedData(for request: URLRequest, timestamp: Timestamp, maxCacheAge: Timestamp) -> Data?
     func findCachedResponse(for request: URLRequest) -> [String: Any]?
     func cache(response: HTTPURLResponse?, for request: URLRequest, with data: Data?)
 }
 
 public extension URLCaching {
-    // The default maximum cache age, 1 hour in milliseconds, can be overridden
-    var maxCacheAge: Timestamp { OneMinuteInMilliseconds * 60 }
     private var cacheAgeKey: String { "cache-time" }
 
-    func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data? {
+    /// This method checks the cached response stored in `urlCache` and determines whether it can be reused
+    /// based on the timestamp it was cached at, the current request timestamp, and a maximum cache age,`maxCacheAge`.
+    ///
+    /// - Parameters:
+    ///   - request: The `URLRequest` used as the key for retrieving the cached response.
+    ///   - timestamp: The provided timestamp
+    ///   - maxCacheAge: The default maximum cache age, 1 hour in milliseconds, (`OneMinuteInMilliseconds * 60`).
+    ///
+    /// - Returns: The cached `Data` if a valid cached response exists and is within the allowed age,
+    ///            or `nil` if the cache is missing, stale, or invalid.
+    func findCachedData(
+        for request: URLRequest,
+        timestamp: Timestamp,
+        maxCacheAge: Timestamp = OneMinuteInMilliseconds * 60
+    ) -> Data? {
         let cachedResponse = urlCache.cachedResponse(for: request)
         guard let cachedAtTime = cachedResponse?.userInfo?[cacheAgeKey] as? Timestamp,
               timestamp >= cachedAtTime, // crash fix: make sure timestamp is greater or equal time of cache
