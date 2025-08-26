@@ -14,6 +14,7 @@ let package = Package(
     platforms: [.iOS(.v15)],
     products: [
         .library(name: "MozillaRustComponents", targets: ["MozillaAppServices"]),
+        .library(name: "FocusRustComponents", targets: ["FocusAppServices"]),
     ],
     dependencies: [
         .package(url: "https://github.com/mozilla/glean-swift", from: "65.0.2"),
@@ -26,7 +27,7 @@ let package = Package(
             path: "Sources/MozillaRustComponentsWrapper"
         ),
         .target(
-            name: "FocusMozillaAppServices",
+            name: "FocusAppServices",
             dependencies: [
                 .target(name: "FocusRustComponents", condition: .when(platforms: [.iOS]))
             ],
