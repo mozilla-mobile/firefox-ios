@@ -833,9 +833,5 @@ struct AccessibilityIdentifiers {
         static let darkerBrightnessButton = "ReaderMode.darkerBrightnessButton"
         static let brightnessSlider = "ReaderMode.brightnessSlider"
     }
-
-    struct ShortcutsLibrary {
-        static let backBarButtonItem = "ShortcutsLibrary.backBarButtonItem"
-    }
 }
 // swiftlint:enable line_length
