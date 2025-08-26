@@ -45,7 +45,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 // Uses preference keys to find the maximum title height across all carousel cards,
                 // then applies that height to all title containers for consistent image positioning
                 .onPreferenceChange(TitleHeightPreferenceKey.self) { height in
-                    print(maxTitleHeight, height)
                     maxTitleHeight = max(maxTitleHeight, height)
                 }
 
