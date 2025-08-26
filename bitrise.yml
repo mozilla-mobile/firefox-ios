@@ -138,7 +138,7 @@ workflows:
         - scheme: Fennec
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
         title: Detect number of warnings
@@ -284,6 +284,7 @@ workflows:
   run_firefox_ui_tests:
     before_run:
     - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
     steps:
     - pull-intermediate-files@1: {}
     - xcode-test-without-building@0.4.2:
@@ -291,7 +292,7 @@ workflows:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator18.2-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
     meta:
@@ -2435,7 +2436,9 @@ app:
   - opts:
       is_expand: false
     TEST_FLIGHT_EXTERNAL_GROUP_NAME: Nightly
-
+  - opts:
+      is_expand: false
+    APPLE_TEAM_ID: '43AQ936H96' 
 
 trigger_map:
 - push_branch: main
