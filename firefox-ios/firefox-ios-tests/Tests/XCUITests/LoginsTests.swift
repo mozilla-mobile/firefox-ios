@@ -600,6 +600,7 @@ class LoginTest: BaseTestCase {
             mozWaitForElementToBeHittable(app.keyboards.keys["\(letter)"])
             app.keyboards.keys["\(letter)"].waitAndTap()
         }
+        mozWaitForElementToExist(app.tables["Add Credential"])
     }
 
     func closeURLBar () {
