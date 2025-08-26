@@ -103,7 +103,6 @@ class SearchProviderTest: BaseTestCase {
             waitForExistence(app.tables.cells["MDN"].buttons["Delete MDN"])
             app.tables.cells["MDN"].buttons["Delete MDN"].tap()
         }
-        print(app.debugDescription)
         waitForExistence(app.tables.buttons["Delete"])
         app.tables.buttons["Delete"].tap()
 

@@ -43,7 +43,6 @@ class BrowsingTest: BaseTestCase {
         waitForExistence(RemindersApp)
         waitForHittable(RemindersApp)
         RemindersApp.tap()
-        print(app.debugDescription)
         if #unavailable(iOS 26) {
             waitForExistence(app.buttons["Add"])
         } else {
