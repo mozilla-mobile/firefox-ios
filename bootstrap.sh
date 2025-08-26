@@ -5,9 +5,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 #
+# Pass either 'firefox' (defualt) or 'focus' to specify which product
 # Use the --force option to force a re-build locales.
-
-#!/usr/bin/env bash
 
 # Default argument is "firefox"
 PRODUCT="${1:-firefox}"
