@@ -26,7 +26,7 @@ public struct RustFxAFeatures: OptionSet {
     }
 }
 
-// TODO: FXIOS Make RustFirefoxAccounts actually sendable
+// TODO: FXIOS-13290 Make RustFirefoxAccounts actually sendable
 // TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 /**
  A singleton that wraps the Rust FxA library.
