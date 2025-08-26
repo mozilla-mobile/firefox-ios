@@ -4620,7 +4620,11 @@ extension BrowserViewController: TabManagerDelegate {
         readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
         ReaderModeHandlers.setCache(readerModeCache)
 
-        scrollController.tab = selectedTab
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.tab = selectedTab
+        } else {
+            scrollController.tabProvider = TabProviderAdapter(selectedTab)
+        }
 
         var needsReload = false
         if let webView = selectedTab.webView {
@@ -4656,7 +4660,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateFindInPageVisibility(isVisible: false, tab: previousTab)
-        setupMiddleButtonStatus(isLoading: selectedTab.loading)
+        setupMiddleButtonStatus(isLoading: selectedTab.isLoading)
 
         if isToolbarRefactorEnabled {
             dispatchBackForwardToolbarAction(canGoBack: selectedTab.canGoBack,

@@ -177,7 +177,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return url
     }
 
-    var loading: Bool {
+    var isLoading: Bool {
         return webView?.isLoading ?? false
     }
 
