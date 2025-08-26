@@ -87,8 +87,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func start(with launchType: LaunchType?) {
-        router.push(browserViewController, animated: false)
-        router.setRootViewController(browserViewController, hideBar: true, animated: true)
+        router.setRootViewController(browserViewController, hideBar: true, animated: false)
         let isIphone = UIDevice.current.userInterfaceIdiom == .phone
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
