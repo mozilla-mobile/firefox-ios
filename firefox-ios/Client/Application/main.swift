@@ -10,6 +10,7 @@ private let appDelegate: String
 // For unit tests, run no app delegate as unit tests are testing enclosed units of code and shouldn't rely
 // on App delegate for their setup and behavior
 // For everything else, run the normal app delegate
+print("hey its mee")
 if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
     appDelegate = NSStringFromClass(UITestAppDelegate.self)
 } else if AppConstants.isRunningTest {
