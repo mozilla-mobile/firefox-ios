@@ -57,7 +57,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                     VStack(spacing: UX.CardView.spacing) {
                         titleView
                             .padding(.top, UX.CardView.titleTopPadding)
-                        imageView()
+                        imageView
                         bodyView
                         Spacer()
                     }
@@ -77,7 +77,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                     .fill(cardBackgroundColor)
                     .accessibilityHidden(true)
             )
-            secondaryButton()
+            secondaryButton
             Spacer()
         }
     }
@@ -100,7 +100,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     @ViewBuilder
-    func imageView() -> some View {
+    var imageView: some View {
         if let img = viewModel.image {
             Image(uiImage: img)
                 .resizable()
@@ -135,7 +135,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     @ViewBuilder
-    func secondaryButton() -> some View {
+    var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
             Button(
                 secondary.title,
