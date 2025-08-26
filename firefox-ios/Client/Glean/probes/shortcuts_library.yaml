@@ -25,7 +25,7 @@ shortcuts_library:
   closed:
     type: event
     description: |
-      Recorded when a user closes the library via the back button or swipe back gesture
+      Recorded when a user closes the shortcuts library via the back button or swipe back gesture
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:

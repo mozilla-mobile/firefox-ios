@@ -15,6 +15,9 @@ class ShortcutsLibraryViewController: UIViewController,
         static let shortcutsSectionTopInset: CGFloat = 24
     }
 
+    // Used to only record telemetry closed telemetry on back button press and swipe gestures
+    var recordTelemetryOnDisappear = true
+
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: ShortcutsLibraryDiffableDataSource?
@@ -96,6 +99,17 @@ class ShortcutsLibraryViewController: UIViewController,
                 windowUUID: windowUUID,
                 actionType: ShortcutsLibraryActionType.viewDidAppear)
         )
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if recordTelemetryOnDisappear {
+            store.dispatch(
+                ShortcutsLibraryAction(
+                    windowUUID: windowUUID,
+                    actionType: ShortcutsLibraryActionType.viewDidDisappear)
+            )
+        }
     }
 
     // MARK: - Redux
@@ -322,16 +336,18 @@ class ShortcutsLibraryViewController: UIViewController,
             visitType: .link
         )
 
+        recordTelemetryOnDisappear = false
+
         store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: destination,
-                windowUUID: self.windowUUID,
+                windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell
             )
         )
         store.dispatchLegacy(
             ShortcutsLibraryAction(
-                windowUUID: self.windowUUID,
+                windowUUID: windowUUID,
                 actionType: ShortcutsLibraryActionType.tapOnShortcutCell
             )
         )

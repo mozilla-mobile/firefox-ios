@@ -14,12 +14,12 @@ final class ShortcutsLibraryMiddleware {
 
     lazy var shortcutsLibraryProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case ShortcutsLibraryActionType.tapOnBackBarButton:
-            self.shortcutsLibraryTelemetry.sendShortcutsLibraryClosedEvent()
         case ShortcutsLibraryActionType.tapOnShortcutCell:
             self.shortcutsLibraryTelemetry.sendShortcutTappedEvent()
         case ShortcutsLibraryActionType.viewDidAppear:
             self.shortcutsLibraryTelemetry.sendShortcutsLibraryViewedEvent()
+        case ShortcutsLibraryActionType.viewDidDisappear:
+            self.shortcutsLibraryTelemetry.sendShortcutsLibraryClosedEvent()
         default:
             break
         }
