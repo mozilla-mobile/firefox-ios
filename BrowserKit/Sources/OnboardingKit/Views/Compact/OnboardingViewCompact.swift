@@ -8,6 +8,7 @@ import ComponentLibrary
 
 struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
+    @State private var maxTitleHeight: CGFloat = 0
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
@@ -33,12 +34,19 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     items: viewModel.onboardingCards
                 ) { card in
                     OnboardingCardViewCompact(
+                        maxTitleHeight: $maxTitleHeight,
                         viewModel: card,
                         windowUUID: windowUUID,
                         themeManager: themeManager,
                         onBottomButtonAction: viewModel.handleBottomButtonAction,
                         onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
                     )
+                }
+                // Uses preference keys to find the maximum title height across all carousel cards,
+                // then applies that height to all title containers for consistent image positioning
+                .onPreferenceChange(TitleHeightPreferenceKey.self) { height in
+                    print(maxTitleHeight, height)
+                    maxTitleHeight = max(maxTitleHeight, height)
                 }
 
                 Spacer()

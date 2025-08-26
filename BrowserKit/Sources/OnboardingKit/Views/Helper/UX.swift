@@ -23,8 +23,10 @@ enum UX {
                 return 32
             }
         }
-        static let cardHeightRatio: CGFloat = 0.75
-        static let spacing: CGFloat = 24
+        static let titleTopPadding: CGFloat = 100
+        static let cardHeightRatio: CGFloat = 0.8
+        static let spacing: CGFloat = 30
+        static let regularSizeSpacing: CGFloat = 48
         static let tosSpacing: CGFloat = 48
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24

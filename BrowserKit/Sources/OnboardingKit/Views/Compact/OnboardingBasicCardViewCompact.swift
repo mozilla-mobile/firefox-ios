@@ -14,6 +14,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @State private var secondaryActionColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
+    @Binding private var maxTitleHeight: CGFloat
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -21,11 +22,13 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
 
     init(
+        maxTitleHeight: Binding<CGFloat>,
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void
     ) {
+        self._maxTitleHeight = maxTitleHeight
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -34,11 +37,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
 
     var body: some View {
         GeometryReader { geometry in
-            let widthScale = geometry.size.width / UX.CardView.baseWidth
-            let heightScale = geometry.size.height / UX.CardView.baseHeight
-            let scale = min(widthScale, heightScale)
-
-            cardContent(scale: scale, geometry: geometry)
+            cardContent(geometry: geometry)
                 .padding(.top, UX.CardView.cardTopPadding)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -51,30 +50,33 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     @ViewBuilder
-    private func cardContent(scale: CGFloat, geometry: GeometryProxy) -> some View {
+    private func cardContent(geometry: GeometryProxy) -> some View {
         VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
             VStack {
-                ContentFittingScrollView {
-                    VStack(spacing: UX.CardView.spacing * scale) {
-                        Spacer()
+                ScrollView {
+                    VStack(spacing: UX.CardView.spacing) {
                         titleView
-                        Spacer()
-                        imageView(scale: scale)
-                        Spacer()
+                            .padding(.top, UX.CardView.titleTopPadding)
+                        imageView()
                         bodyView
                         Spacer()
                     }
-                }
+                    .padding(.horizontal, UX.CardView.horizontalPadding)
+                }                .scrollBounceBehavior(basedOnSize: true)
+
                 primaryButton
+                    .padding(UX.CardView.verticalPadding)
             }
-            .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-            .padding(UX.CardView.verticalPadding * scale)
+            .frame(
+                width: geometry.size.width,
+                height: geometry.size.height * UX.CardView.cardHeightRatio
+            )
             .background(
                 RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                     .fill(cardBackgroundColor)
                     .accessibilityHidden(true)
             )
-            secondaryButton(scale: scale)
+            secondaryButton()
             Spacer()
         }
     }
@@ -87,16 +89,22 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
             .fixedSize(horizontal: false, vertical: true)
-            .alignmentGuide(.titleAlignment) { dimensions in dimensions[.bottom] }
+            .background(
+                GeometryReader { geo in
+                    Color.clear
+                        .preference(key: TitleHeightPreferenceKey.self, value: geo.size.height)
+                }
+            )
+            .frame(height: maxTitleHeight, alignment: .topLeading)
     }
 
     @ViewBuilder
-    func imageView(scale: CGFloat) -> some View {
+    func imageView() -> some View {
         if let img = viewModel.image {
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.imageHeight * scale)
+                .frame(height: UX.CardView.imageHeight)
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }
@@ -126,7 +134,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     @ViewBuilder
-    func secondaryButton(scale: CGFloat) -> some View {
+    func secondaryButton() -> some View {
         if let secondary = viewModel.buttons.secondary {
             Button(
                 secondary.title,
@@ -138,8 +146,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                 })
             .font(UX.CardView.secondaryActionFont)
             .foregroundColor(secondaryActionColor)
-            .padding(.top, UX.CardView.secondaryButtonTopPadding * scale)
-            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding * scale)
+            .padding(.top, UX.CardView.secondaryButtonTopPadding)
+            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
         }
     }
