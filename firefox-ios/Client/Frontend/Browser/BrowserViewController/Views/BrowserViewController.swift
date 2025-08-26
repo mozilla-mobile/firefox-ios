@@ -1052,6 +1052,8 @@ class BrowserViewController: UIViewController,
         setupConstraints()
         setupNotifications()
 
+        title = .FirefoxHomepage.ScreenTitle
+
         overlayManager.setURLBar(urlBarView: urlBarView)
 
         if toolbarHelper.shouldShowTopTabs(for: traitCollection) {

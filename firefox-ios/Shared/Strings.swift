@@ -977,6 +977,12 @@ extension String {
 extension String {
     /// Identifiers of all new strings should begin with `FirefoxHome.`
     public struct FirefoxHomepage {
+        public static let ScreenTitle = MZLocalizedString(
+            key: "FirefoxHome.ScreenTitle",
+            tableName: "FirefoxHomepage",
+            value: "Homepage",
+            comment: "The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu")
+
         public struct CustomizeHomepage {
             public static let ButtonTitle = MZLocalizedString(
                 key: "FirefoxHome.CustomizeHomeButton.Title",
