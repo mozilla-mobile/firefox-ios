@@ -57,10 +57,6 @@ struct SceneSetupHelper {
 }
 
 class RootNavigationController: UINavigationController {
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-
     override var childForStatusBarHidden: UIViewController? {
         return topViewController
     }
