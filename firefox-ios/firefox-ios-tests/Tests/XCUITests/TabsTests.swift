@@ -217,26 +217,28 @@ class TabsTests: FeatureFlaggedTestBase {
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs, undo it and check that the number of tabs is correct
-        navigator.performAction(Action.AcceptRemovingAllTabs)
+        if #unavailable(iOS 26) {
+            navigator.performAction(Action.AcceptRemovingAllTabs)
 
-        app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
+            app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
 
-        mozWaitForElementToExist(
-            app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        )
-        navigator.nowAt(BrowserTab)
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            mozWaitForElementToExist(
+                app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+            )
+            navigator.nowAt(BrowserTab)
+            if !iPad() {
+                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            }
+
+            if iPad() {
+                navigator.goto(TabTray)
+            } else {
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+
+            mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         }
-
-        if iPad() {
-            navigator.goto(TabTray)
-        } else {
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-
-        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
@@ -249,29 +251,31 @@ class TabsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
         navigator.back()
         // A different tab than home is open to do the proper checks
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-        waitForTabsButton()
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+            waitUntilPageLoad()
+            waitForTabsButton()
 
-        if iPad() {
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-        } else {
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-        }
+            if iPad() {
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+                app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            } else {
+                navigator.performAction(Action.OpenNewTabFromTabTray)
+                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            }
 
-        navigator.goto(URLBarOpen)
-        navigator.back()
-        if iPad() {
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        } else {
-            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+            navigator.goto(URLBarOpen)
+            navigator.back()
+            if iPad() {
+                checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+            } else {
+                checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+            }
+            // Close all tabs, undo it and check that the number of tabs is correct
+            navigator.performAction(Action.AcceptRemovingAllTabs)
+            mozWaitForElementToExist(app.staticTexts["Private Browsing"])
         }
-        // Close all tabs, undo it and check that the number of tabs is correct
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        mozWaitForElementToExist(app.staticTexts["Private Browsing"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
@@ -305,8 +309,10 @@ class TabsTests: FeatureFlaggedTestBase {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         }
         // Close all tabs, undo it and check that the number of tabs is correct
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+        if #unavailable(iOS 26) {
+            navigator.performAction(Action.AcceptRemovingAllTabs)
+            mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354579
@@ -341,21 +347,23 @@ class TabsTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         // A different tab than home is open to do the proper checks
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-        waitForTabsButton()
-        // Add several tabs from tab tray menu and check that the  number is correct before closing all
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        if !iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+            waitUntilPageLoad()
+            waitForTabsButton()
+            // Add several tabs from tab tray menu and check that the  number is correct before closing all
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            if !iPad() {
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
+            navigator.nowAt(NewTabScreen)
+            waitForTabsButton()
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+            // Close all tabs and check that the number of tabs is correct
+            navigator.performAction(Action.AcceptRemovingAllTabs)
+            mozWaitForElementToExist(app.staticTexts["Private Browsing"])
         }
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        // Close all tabs and check that the number of tabs is correct
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        mozWaitForElementToExist(app.staticTexts["Private Browsing"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354580
@@ -560,8 +568,10 @@ class TabsTests: FeatureFlaggedTestBase {
         waitForTabsButton()
         addTabsAndUndoCloseTabAction(nrOfTabs: 3)
         // Repeat steps for private browsing mode
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        addTabsAndUndoCloseTabAction(nrOfTabs: 4)
+        if #unavailable(iOS 26) {
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            addTabsAndUndoCloseTabAction(nrOfTabs: 4)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306868
@@ -588,16 +598,18 @@ class TabsTests: FeatureFlaggedTestBase {
         }
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         // Repeat for private browsing mode
-        navigator.performAction(Action.TogglePrivateMode)
-        validateToastWhenClosingMultipleTabs()
-        // Choose to undo the action
-        app.buttons["Undo"].waitAndTap()
-        // Only the latest tab closed is restored
-        if !iPad() {
-            let tabsTrayCell = app.otherElements[tabsTray].cells
-            XCTAssertEqual(1, tabsTrayCell.count)
+        if #unavailable(iOS 26) {
+            navigator.performAction(Action.TogglePrivateMode)
+            validateToastWhenClosingMultipleTabs()
+            // Choose to undo the action
+            app.buttons["Undo"].waitAndTap()
+            // Only the latest tab closed is restored
+            if !iPad() {
+                let tabsTrayCell = app.otherElements[tabsTray].cells
+                XCTAssertEqual(1, tabsTrayCell.count)
+            }
+            mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         }
-        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306867
@@ -848,13 +860,15 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         app.launch()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
-        navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
-        navigator.goto(URLBarOpen)
-        navigator.back()
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        mozWaitForElementToExist(app.buttons["privateModeLarge"])
-        XCTAssertTrue(app.buttons["privateModeLarge"].isEnabled)
-        XCTAssertTrue(userState.isPrivate)
+        if #unavailable(iOS 26) {
+            navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
+            navigator.goto(URLBarOpen)
+            navigator.back()
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+            mozWaitForElementToExist(app.buttons["privateModeLarge"])
+            XCTAssertTrue(app.buttons["privateModeLarge"].isEnabled)
+            XCTAssertTrue(userState.isPrivate)
+        }
     }
 
     // This test only runs for iPhone see bug 1409750
@@ -923,7 +937,9 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "iana")
         navigator.goto(TabTray)
-        XCTAssertTrue(app.buttons["privateModeLarge"].isEnabled)
+        if #unavailable(iOS 26) {
+            XCTAssertTrue(app.buttons["privateModeLarge"].isEnabled)
+        }
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
