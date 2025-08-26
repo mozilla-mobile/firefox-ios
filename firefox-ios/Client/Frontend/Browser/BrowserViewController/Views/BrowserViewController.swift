@@ -1053,6 +1053,7 @@ class BrowserViewController: UIViewController,
         setupNotifications()
 
         title = .FirefoxHomepage.ScreenTitle
+        navigationItem.backButtonDisplayMode = .generic
 
         overlayManager.setURLBar(urlBarView: urlBarView)
 
