@@ -1132,9 +1132,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showShortcutsLibrary() {
-        let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID) { [weak self] in
-            self?.router.popViewController(animated: true)
-        }
+        let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
         router.push(shortcutsLibraryViewController)
     }
 

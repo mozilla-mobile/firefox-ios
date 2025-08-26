@@ -28,21 +28,8 @@ class ShortcutsLibraryViewController: UIViewController,
     private let logger: Logger
 
     // MARK: - Private variables
-    private var onDismiss: (() -> Void)?
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
-    }()
-
-    // MARK: - UI Elements
-    private lazy var backBarButtonItem: UIBarButtonItem =  {
-        let button = UIBarButtonItem(
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?
-                .imageFlippedForRightToLeftLayoutDirection(),
-            style: .plain,
-            target: self,
-            action: #selector(backBarButtonItemTapped))
-        button.accessibilityIdentifier = AccessibilityIdentifiers.ShortcutsLibrary.backBarButtonItem
-        return button
     }()
 
     // MARK: - Themeable Properties
@@ -57,14 +44,12 @@ class ShortcutsLibraryViewController: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
-         onDismiss: (() -> Void)? = nil
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
         self.shortcutsLibraryState = ShortcutsLibraryState(windowUUID: windowUUID)
-        self.onDismiss = onDismiss
 
         super.init(nibName: nil, bundle: nil)
 
@@ -87,10 +72,6 @@ class ShortcutsLibraryViewController: UIViewController,
         configureCollectionView()
         setupLayout()
         configureDataSource()
-
-        // Uses a custom "<" navigation bar button item due to app root navigation controller architecture
-        // Using default navigation controller back button shows unwanted view controllers navigation options on long-press
-        navigationItem.leftBarButtonItem = backBarButtonItem
 
         store.dispatchLegacy(
             ShortcutsLibraryAction(
@@ -311,11 +292,6 @@ class ShortcutsLibraryViewController: UIViewController,
         }
 
         navigateToContextMenu(for: item, sourceView: sourceView)
-    }
-
-    @objc
-    private func backBarButtonItemTapped() {
-        onDismiss?()
     }
 
     // MARK: - UICollectionViewDelegate
