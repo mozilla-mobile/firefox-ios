@@ -309,17 +309,13 @@ final class HomepageViewController: UIViewController,
     }
 
     func newState(state: HomepageState) {
+        self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
 
-        // TODO: FXIOS-13265 - Fix compositional layout using estimated heights for cells so this check isn't necessary.
-        if self.homepageState != state {
-            dataSource?.updateSnapshot(
-                state: state,
-                jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
-            )
-        }
-
-        self.homepageState = state
+        dataSource?.updateSnapshot(
+            state: state,
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
+        )
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
         if homepageState.shouldTriggerImpression {
             scrollToTop()

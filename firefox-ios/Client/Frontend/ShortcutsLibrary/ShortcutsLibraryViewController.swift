@@ -103,8 +103,6 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     func newState(state: ShortcutsLibraryState) {
-        // TODO: FXIOS-13265 Fix compositional layout using estimated heights for cells so this check isn't necessary.
-        guard self.shortcutsLibraryState != state else { return }
         self.shortcutsLibraryState = state
 
         dataSource?.updateSnapshot(state: state)
