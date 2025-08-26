@@ -29,27 +29,16 @@ struct SheetSizedCard<Content: View>: View {
     }
 
     private func sheetWidth(for screenSize: CGSize) -> CGFloat {
-        let screenWidth = screenSize.width
-        let screenHeight = screenSize.height
-
-        let calculatedWidth: CGFloat
-        if screenWidth > screenHeight {
-            calculatedWidth = screenWidth * UX.CardView.landscapeWidthRatio
-        } else {
-            calculatedWidth = screenWidth * UX.CardView.portraitWidthRatio
-        }
+        let calculatedWidth = screenSize.width > screenSize.height
+            ? screenSize.width * UX.CardView.landscapeWidthRatio
+            : screenSize.width * UX.CardView.portraitWidthRatio
 
         return min(UX.CardView.maxWidth, calculatedWidth)
     }
 
     private func sheetHeight(for screenSize: CGSize) -> CGFloat {
-        let screenWidth = screenSize.width
-        let screenHeight = screenSize.height
-
-        if screenWidth > screenHeight {
-            return screenHeight * UX.CardView.landscapeHeightRatio
-        } else {
-            return min(UX.CardView.maxHeight, screenHeight * UX.CardView.portraitHeightRatio)
-        }
+        return screenSize.width > screenSize.height
+            ? screenSize.height * UX.CardView.landscapeHeightRatio
+            : min(UX.CardView.maxHeight, screenSize.height * UX.CardView.portraitHeightRatio)
     }
 }
