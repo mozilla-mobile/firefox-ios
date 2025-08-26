@@ -1716,6 +1716,12 @@ extension BrowserViewController: LegacyWebControllerDelegate {
         showToolbars()
     }
 
+    func webControllerWillCancelNavigation(_ controller: any LegacyWebController) {
+        // Ensure the current location is refreshed after the web view has updated its URL
+        // for a navigation action cancelled within our delegate callback
+        DispatchQueue.main.async { self.urlBar.url = self.webViewController.url }
+    }
+
     func webController(_ controller: LegacyWebController, didFailNavigationWithError error: Error) {
         // FXIOS-8637 - #19160 - Integrate onTitleChange, onLocationChange in Focus iOS
         urlBar.url = webViewController.url
