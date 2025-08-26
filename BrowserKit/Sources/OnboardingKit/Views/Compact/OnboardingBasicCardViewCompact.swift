@@ -149,6 +149,6 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
-        secondaryActionColor = Color(color.textInverted)
+        secondaryActionColor = Color(color.textOnDark)
     }
 }
