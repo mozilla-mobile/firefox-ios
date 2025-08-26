@@ -75,13 +75,6 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     }
 
     private func animateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
-        // Cancel any in-flight animation so we don't double-apply
-        toolbarAnimator?.stopAnimation(true)
-        toolbarAnimator = nil
-
-        // Ensure we start from current interactive state
-        view.layoutIfNeeded()
-
         let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) { [weak self] in
             guard let self else { return }
 
@@ -91,8 +84,6 @@ extension BrowserViewController: TabScrollHandler.Delegate {
             header.updateAlphaForSubviews(alpha)
         }
 
-        toolbarAnimator = animator
-        animator.addCompletion { [weak self] _ in self?.toolbarAnimator = nil }
         animator.startAnimation()
 
         if isMinimalAddressBarEnabled {
@@ -137,13 +128,6 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     private func animateBottomToolbar(bottomOffset: CGFloat,
                                       overKeyboardOffset: CGFloat,
                                       alpha: CGFloat) {
-        // Cancel any in-flight animation so we don't double-apply
-        toolbarAnimator?.stopAnimation(true)
-        toolbarAnimator = nil
-
-        // Ensure we start from current interactive state
-        view.layoutIfNeeded()
-
         let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) { [weak self] in
             guard let self else { return }
             bottomContainerConstraint?.update(offset: bottomOffset)
@@ -152,13 +136,9 @@ extension BrowserViewController: TabScrollHandler.Delegate {
             overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
             overKeyboardContainer.superview?.setNeedsLayout()
 
-            bottomContainer.alpha = CGFloat(alpha)
-            overKeyboardContainer.alpha = CGFloat(alpha)
             self.view.layoutIfNeeded()
         }
 
-        toolbarAnimator = animator
-        animator.addCompletion { [weak self] _ in self?.toolbarAnimator = nil }
         animator.startAnimation()
 
         if isMinimalAddressBarEnabled {

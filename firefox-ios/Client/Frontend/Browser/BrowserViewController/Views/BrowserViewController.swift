@@ -122,7 +122,6 @@ class BrowserViewController: UIViewController,
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
-    var toolbarAnimator: UIViewPropertyAnimator?
 
     private var _downloadLiveActivityWrapper: Any?
 
