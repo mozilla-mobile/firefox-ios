@@ -281,6 +281,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var lastExecutedTime: Timestamp
     var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
+    // TODO: FXIOS-13297 Keep track of new DispatchQueueInterface usages
     private var removeDispatchQueue: DispatchQueueInterface
     var faviconURL: String? {
         didSet {
