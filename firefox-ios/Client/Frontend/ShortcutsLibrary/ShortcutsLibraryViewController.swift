@@ -329,5 +329,11 @@ class ShortcutsLibraryViewController: UIViewController,
                 actionType: NavigationBrowserActionType.tapOnCell
             )
         )
+        store.dispatchLegacy(
+            ShortcutsLibraryAction(
+                windowUUID: self.windowUUID,
+                actionType: ShortcutsLibraryActionType.tapOnShortcutCell
+            )
+        )
     }
 }

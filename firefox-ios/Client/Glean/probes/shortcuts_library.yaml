@@ -22,10 +22,10 @@ $tags:
 # Add your new metrics and/or events here.
 
 shortcuts_library:
-  viewed:
+  closed:
     type: event
     description: |
-      Recorded when a user sees the shortcuts library screen
+      Recorded when a user closes the library via the back button or swipe back gesture
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:
@@ -40,6 +40,20 @@ shortcuts_library:
     type: event
     description: |
       Recorded when a user taps on a shortcut in the shortcuts library screen
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/28354
+    data_reviews:
+      - TBD
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+    metadata:
+      tags:
+        - ShortcutsLibrary
+  viewed:
+    type: event
+    description: |
+      Recorded when a user sees the shortcuts library screen
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:

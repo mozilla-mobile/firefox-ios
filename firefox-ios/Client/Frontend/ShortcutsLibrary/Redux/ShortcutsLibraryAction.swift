@@ -27,4 +27,7 @@ struct ShortcutsLibraryAction: Action {
 enum ShortcutsLibraryActionType: ActionType {
     case initialize
     case switchTabToastButtonTapped
+    case tapOnBackBarButton
+    case tapOnShortcutCell
+    case viewDidAppear
 }
