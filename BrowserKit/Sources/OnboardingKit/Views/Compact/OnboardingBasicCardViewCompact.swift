@@ -62,7 +62,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                         Spacer()
                     }
                     .padding(.horizontal, UX.CardView.horizontalPadding)
-                }                .scrollBounceBehavior(basedOnSize: true)
+                }
+                .scrollBounceBehavior(basedOnSize: true)
 
                 primaryButton
                     .padding(UX.CardView.verticalPadding)
