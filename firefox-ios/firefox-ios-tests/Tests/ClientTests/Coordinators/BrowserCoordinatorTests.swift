@@ -712,7 +712,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let result = testCanHandleAndHandle(subject, route: .search(url: nil, isPrivate: false))
 
         XCTAssertTrue(result)
-        XCTAssertTrue(!browserViewController.openBlankNewTabCalled)
+        XCTAssertFalse(browserViewController.openBlankNewTabCalled)
         XCTAssertFalse(browserViewController.openBlankNewTabIsPrivate)
         XCTAssertEqual(browserViewController.openBlankNewTabCount, 0)
     }
