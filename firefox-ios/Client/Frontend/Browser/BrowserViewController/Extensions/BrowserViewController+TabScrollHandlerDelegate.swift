@@ -5,8 +5,21 @@
 import SnapKit
 
 extension BrowserViewController: TabScrollHandler.Delegate {
-    // TODO: Add bounce effect logic afterwards
-    func startAnimatingToolbar(displayState: TabScrollHandler.ToolbarDisplayState) {}
+    var overKeyboardContainerHeight: CGFloat {
+        return calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
+    }
+
+    func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
+        if isBottomSearchBar {
+            let bottomOffset = clamp(offset: progress, min: 0, max: getBottomContainerSize().height)
+            bottomContainerConstraint?.update(offset: bottomOffset)
+            bottomContainer.superview?.setNeedsLayout()
+        } else {
+            let topOffset = clamp(offset: progress, min: getHeaderSize().height, max: 0)
+            headerTopConstraint?.update(offset: topOffset)
+            header.superview?.setNeedsLayout()
+        }
+    }
 
     func showToolbar() {
         if isBottomSearchBar {
@@ -20,9 +33,8 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
     func hideToolbar() {
         if isBottomSearchBar {
-            let overKeyboardOffset = calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
             updateBottomToolbar(bottomContainerOffset: getBottomContainerSize().height,
-                                overKeyboardContainerOffset: overKeyboardOffset,
+                                overKeyboardContainerOffset: overKeyboardContainerHeight,
                                 alpha: 0)
         } else {
             updateTopToolbar(topOffset: headerOffset, alpha: 0)
@@ -102,5 +114,14 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         let topInset = safeAreaInsets?.top ?? .zero
 
         return hasHomeIndicator ? .zero : containerHeight - topInset
+    }
+
+    private func clamp(offset: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
+        if offset >= max {
+            return max
+        } else if offset <= min {
+            return min
+        }
+        return offset
     }
 }

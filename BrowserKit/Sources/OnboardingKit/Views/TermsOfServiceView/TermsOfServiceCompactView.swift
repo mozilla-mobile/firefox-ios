@@ -10,7 +10,6 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var secondaryActionColor: Color = .clear
 
     @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
@@ -57,7 +56,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
 
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
-        ContentFittingScrollView {
+        ScrollView {
             VStack(spacing: UX.CardView.spacing * scale) {
                 Spacer()
                     .accessibilityHidden(true)
@@ -69,10 +68,11 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 links
                 primaryButton
             }
+            .padding(UX.CardView.verticalPadding * scale)
+            .padding(.bottom)
         }
+        .scrollBounceBehavior(basedOnSize: true)
         .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-        .padding(UX.CardView.verticalPadding * scale)
-        .padding(.bottom)
         .background(
             RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                 .fill(cardBackgroundColor)

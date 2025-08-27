@@ -34,7 +34,7 @@ public extension AutofillApiError {
 /// This should be removed if we ever have keychain support on our CI.
 public class KeychainManager {
     public static let shared = {
-        AppConstants.isRunningTest
+        AppConstants.isRunningUnitTest
             ? MockRustKeychain.shared
             : RustKeychain.sharedClientAppContainerKeychain
     }()

@@ -712,9 +712,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let result = testCanHandleAndHandle(subject, route: .search(url: nil, isPrivate: false))
 
         XCTAssertTrue(result)
-        XCTAssertTrue(browserViewController.openBlankNewTabCalled)
+        XCTAssertFalse(browserViewController.openBlankNewTabCalled)
         XCTAssertFalse(browserViewController.openBlankNewTabIsPrivate)
-        XCTAssertEqual(browserViewController.openBlankNewTabCount, 1)
+        XCTAssertEqual(browserViewController.openBlankNewTabCount, 0)
     }
 
     func testHandleSearchURL_returnsTrue() {
@@ -830,9 +830,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         // Then
         XCTAssertTrue(result)
-        XCTAssertEqual(browserViewController.openBlankNewTabCount, 1)
+        XCTAssertEqual(browserViewController.openBlankNewTabCount, 0)
         XCTAssertFalse(browserViewController.openBlankNewTabFocusLocationField)
-        XCTAssertEqual(browserViewController.openBlankNewTabIsPrivate, true)
+        XCTAssertEqual(browserViewController.openBlankNewTabIsPrivate, false)
     }
 
     func testHandleHomepanelNewTab_returnsTrue() {
@@ -846,7 +846,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         // Then
         XCTAssertTrue(result)
-        XCTAssertEqual(browserViewController.openBlankNewTabCount, 1)
+        XCTAssertEqual(browserViewController.openBlankNewTabCount, 0)
         XCTAssertFalse(browserViewController.openBlankNewTabFocusLocationField)
         XCTAssertEqual(browserViewController.openBlankNewTabIsPrivate, false)
     }

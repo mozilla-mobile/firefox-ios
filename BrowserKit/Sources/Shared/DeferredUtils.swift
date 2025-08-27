@@ -21,12 +21,12 @@ infix operator >>== : MonadicBindPrecedence
 infix operator >>> : MonadicDoPrecedence
 
 @discardableResult
-public func >>== <T, U>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
+public func >>== <T, U>(x: Deferred<Maybe<T>>, f: @escaping @Sendable (T) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
     return chainDeferred(x, f: f)
 }
 
 // A termination case.
-public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Void) {
+public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping @Sendable (T) -> Void) {
     return x.upon { result in
         if let v = result.successValue {
             f(v)
@@ -36,7 +36,7 @@ public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Void) {
 
 // Monadic `do` for Deferred.
 @discardableResult
-public func >>> <T, U>(x: Deferred<Maybe<T>>, f: @escaping () -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
+public func >>> <T, U>(x: Deferred<Maybe<T>>, f: @escaping @Sendable () -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
     return x.bind { res in
         if res.isSuccess {
             return f()
@@ -46,7 +46,7 @@ public func >>> <T, U>(x: Deferred<Maybe<T>>, f: @escaping () -> Deferred<Maybe<
 }
 
 // Another termination case.
-public func >>> <T>(x: Deferred<Maybe<T>>, f: @escaping () -> Void) {
+public func >>> <T>(x: Deferred<Maybe<T>>, f: @escaping @Sendable () -> Void) {
     return x.upon { res in
         if res.isSuccess {
             f()
@@ -90,7 +90,10 @@ extension Array where Element: Success {
     }
 }
 
-public func chainDeferred<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
+public func chainDeferred<T, U>(
+    _ a: Deferred<Maybe<T>>,
+    f: @escaping @Sendable (T) -> Deferred<Maybe<U>>
+) -> Deferred<Maybe<U>> {
     return a.bind { res in
         if let v = res.successValue {
             return f(v)

@@ -44,11 +44,11 @@ class DeferredTests: XCTestCase {
         let e1 = self.expectation(description: "First.")
         let e2 = self.expectation(description: "Second.")
 
-        let f1: () -> Deferred<Maybe<Int>> = {
+        let f1: @Sendable () -> Deferred<Maybe<Int>> = {
             return deferMaybe(5)
         }
 
-        let f2: (_ x: Int) -> Deferred<Maybe<String>> = {
+        let f2: @Sendable (_ x: Int) -> Deferred<Maybe<String>> = {
             if $0 == 5 {
                 e1.fulfill()
             }

@@ -15,7 +15,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
         static let contentViewBottomMargin: CGFloat = 8
         static let contentViewHorizontalMargin: CGFloat = 4
         static let cornerRadius: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.85
+        static let backgroundAlpha: CGFloat = 0.80
         static let hyphenationFactor: Float = 1.0
         static let dividerWidth: CGFloat = 0.5
     }

@@ -42,9 +42,13 @@ class HistoryClearable: Clearable {
         Tab.ChangeUserAgent.clear()
 
         // Clear everything in places
-        return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
-            return self.clearAfterHistory(success: success)
-        }
+        return profile.places.deleteEverythingHistory()
+            .bindQueue(.main) { success in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    return self.clearAfterHistory(success: success)
+                }
+            }
     }
 
     @MainActor
