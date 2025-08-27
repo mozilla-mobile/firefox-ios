@@ -19,7 +19,7 @@ class GCDThrottlerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        testQueue = DispatchQueue.global()
+        testQueue = DispatchQueue(label: "tests.gcdthrottler.serial")
     }
 
     override func tearDown() {
