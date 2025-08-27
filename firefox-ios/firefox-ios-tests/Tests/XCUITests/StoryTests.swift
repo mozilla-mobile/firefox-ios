@@ -88,7 +88,7 @@ class StoryTests: BaseTestCase {
         waitForElementsToExist(
             [
                 contextMenuTable.otherElements.staticTexts.firstMatch,
-                contextMenuTable.otherElements.staticTexts.elementContainingText(".co"),
+                contextMenuTable.otherElements.staticTexts.elementContainingText(".com"),
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.plus],
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.privateMode],
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.bookmark],
