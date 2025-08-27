@@ -77,7 +77,7 @@ final class OnboardingService: FeatureFlaggable {
             completion(.success(.advance(numberOfPages: 3)))
 
         case .syncSignIn:
-            handleSyncSignIn(from: cardName, with: activityEventHelper) {}
+            handleSyncSignIn(from: cardName, with: activityEventHelper)
 
         case .setDefaultBrowser:
             handleSetDefaultBrowser(with: activityEventHelper)
@@ -169,14 +169,13 @@ final class OnboardingService: FeatureFlaggable {
 
     private func handleSyncSignIn(
         from cardName: String,
-        with activityEventHelper: ActivityEventHelper,
-        completion: @escaping () -> Void
+        with activityEventHelper: ActivityEventHelper
     ) {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
         activityEventHelper.updateOnboardingUserActivationEvent()
 
         let fxaParams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
-        presentSignToSync(with: fxaParams, profile: profile, completion: completion)
+        presentSignToSync(with: fxaParams, profile: profile)
     }
 
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
@@ -230,14 +229,13 @@ final class OnboardingService: FeatureFlaggable {
         hasRegisteredForDefaultBrowserNotification = true
     }
 
-    private func presentSignToSync(with params: FxALaunchParams, profile: Profile, completion: @escaping () -> Void) {
+    private func presentSignToSync(with params: FxALaunchParams, profile: Profile) {
         guard let delegate = delegate else { return }
 
         let signInVC = createSignInViewController(
             windowUUID: windowUUID,
             params: params,
-            profile: profile,
-            completion: completion
+            profile: profile
         )
 
         delegate.present(signInVC, animated: true, completion: nil)
@@ -270,8 +268,7 @@ final class OnboardingService: FeatureFlaggable {
     private func createSignInViewController(
         windowUUID: WindowUUID,
         params: FxALaunchParams,
-        profile: Profile,
-        completion: @escaping () -> Void
+        profile: Profile
     ) -> UIViewController {
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             params,
@@ -289,7 +286,6 @@ final class OnboardingService: FeatureFlaggable {
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
 
         let controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
-        controller.onViewDismissed = completion
         return controller
     }
 
