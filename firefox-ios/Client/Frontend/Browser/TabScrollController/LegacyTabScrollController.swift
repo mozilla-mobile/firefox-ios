@@ -9,6 +9,7 @@ import Common
 
 @MainActor
 protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
+    var tab: Tab? { get set }
     var zoomPageBar: ZoomPageBar? { get set }
     var headerTopConstraint: Constraint? { get set }
     var overKeyboardContainerConstraint: Constraint? { get set }
@@ -69,6 +70,9 @@ final class LegacyTabScrollController: NSObject,
             }
         }
     }
+
+    // Not implemented in this class
+    weak var tabProvider: TabProviderProtocol?
 
     // Toolbar Views
     private weak var headerContainer: BaseAlphaStackView?
@@ -491,7 +495,7 @@ private extension LegacyTabScrollController {
     }
 
     func tabIsLoading() -> Bool {
-        return tab?.loading ?? true
+        return tab?.isLoading ?? true
     }
 
     /// Returns true if scroll has reach the bottom

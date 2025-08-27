@@ -8,7 +8,7 @@ import Common
 
 @MainActor
 protocol TabScrollHandlerProtocol: AnyObject {
-    var tab: Tab? { get set }
+    var tabProvider: TabProviderProtocol? { get set }
     var contentOffset: CGPoint { get }
 
     func showToolbars(animated: Bool)
@@ -69,10 +69,8 @@ final class TabScrollHandler: NSObject,
         }
     }
 
-    weak var tab: Tab? {
-        willSet {
-            self.scrollView?.delegate = nil
-        }
+    var tabProvider: TabProviderProtocol? {
+        willSet { scrollView?.delegate = nil }
 
         didSet {
             // FXIOS-9781 This could result in scrolling not closing the toolbar
@@ -80,8 +78,7 @@ final class TabScrollHandler: NSObject,
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
-
-            tab?.onWebViewLoadingStateChanged = { [weak self] in
+            tabProvider?.onLoadingStateChanged = { [weak self] in
                 self?.handleOnTabContentLoading()
             }
         }
@@ -101,7 +98,7 @@ final class TabScrollHandler: NSObject,
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
 
-    private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
+    private var scrollView: UIScrollView? { return tabProvider?.scrollView }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
@@ -183,12 +180,12 @@ final class TabScrollHandler: NSObject,
     // MARK: - Pull to refresh
 
     func removePullRefreshControl() {
-        tab?.webView?.removePullRefresh()
+        tabProvider?.removePullToRefresh()
     }
 
     func configureRefreshControl() {
-        guard tab?.isFxHomeTab == false else { return }
-        tab?.webView?.addPullRefresh { [weak self] in
+        guard tabProvider?.isFxHomeTab == false else { return }
+        tabProvider?.addPullToRefresh { [weak self] in
             self?.reload()
         }
     }
@@ -197,7 +194,7 @@ final class TabScrollHandler: NSObject,
         guard !tabIsLoading(),
               shouldUpdateUIWhenScrolling else { return }
 
-        tab?.shouldScrollToTop = false
+        tabProvider?.shouldScrollToTop = false
 
         let delta = -translation.y
         scrollDirection = delta > 0 ? .down : .up
@@ -241,7 +238,7 @@ final class TabScrollHandler: NSObject,
     // before the WKWebView's contentOffset is reset as a result of the contentView's frame becoming smaller
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // for PDFs, we should set the initial offset to 0 (ZERO)
-        if let tab, tab.shouldScrollToTop {
+        if let tabProvider, tabProvider.shouldScrollToTop {
             setOffset(y: 0, for: scrollView)
         }
 
@@ -259,13 +256,13 @@ final class TabScrollHandler: NSObject,
     /// Decelerate is true the scrolling movement will continue
     /// If the value is false, scrolling stops immediately upon touch-up.
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard let tab,
+        guard let tabProvider,
               !tabIsLoading(),
               !scrollReachBottom(),
-              !tab.isFindInPageMode,
+              !tabProvider.isFindInPageMode,
               shouldUpdateUIWhenScrolling else { return }
 
-        tab.shouldScrollToTop = false
+        tabProvider.shouldScrollToTop = false
 
         guard let containerView = scrollView.superview else { return }
 
@@ -312,7 +309,7 @@ final class TabScrollHandler: NSObject,
                                headerContainer: BaseAlphaStackView? ) {}
 
     private func handleOnTabContentLoading() {
-        if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
+        if tabIsLoading() || (tabProvider?.isFxHomeTab ?? false) {
             removePullRefreshControl()
         } else {
             configureRefreshControl()
@@ -345,8 +342,8 @@ final class TabScrollHandler: NSObject,
 
     @objc
     private func reload() {
-        guard let tab = tab else { return }
-        tab.reloadPage()
+        guard let tabProvider = tabProvider else { return }
+        tabProvider.reloadPage()
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
@@ -355,7 +352,7 @@ final class TabScrollHandler: NSObject,
     }
 
     private func tabIsLoading() -> Bool {
-        return tab?.loading ?? true
+        return tabProvider?.isLoading ?? true
     }
 
     /// Returns true if scroll has reach the bottom

@@ -249,7 +249,7 @@ final class TabScrollHandlerTests: XCTestCase {
         tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.delegate = subject
-        subject.tab = tab
+        subject.tabProvider = TabProviderAdapter(tab)
     }
 
     private func createSubject() -> TabScrollHandler {
