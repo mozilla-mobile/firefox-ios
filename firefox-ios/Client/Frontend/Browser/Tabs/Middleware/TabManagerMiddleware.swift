@@ -476,7 +476,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let isLastActiveTab = isPrivate
                             ? tabManager.privateTabs.count == 1
                             : (tabManager.normalActiveTabs.count <= 1 || tabManager.normalTabs.count == 1)
-        await tabManager.removeTab(tabUUID)
+        await tabManager.removeTab(tabUUID, inGroup: nil)
         return isLastActiveTab
     }
 
@@ -720,7 +720,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     restorePosition: index,
                     isSelected: false)
             }
-            await tabManager.removeTab(tabUUID)
+            await tabManager.removeTab(tabUUID, inGroup: nil)
 
             let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
             let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
