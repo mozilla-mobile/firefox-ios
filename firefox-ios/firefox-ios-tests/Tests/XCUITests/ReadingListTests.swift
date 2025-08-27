@@ -319,6 +319,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        mozWaitForElementToExist(app.keyboards.firstMatch)
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
