@@ -514,7 +514,12 @@ open class BrowserProfile: Profile,
         guard let syncManager else {
             return deferMaybe([])
         }
-        return syncManager.syncTabs() >>> { self.retrieveTabData() }
+        return syncManager.syncTabs().bind { result in
+                    if result.isSuccess {
+                        return self.retrieveTabData()
+                    }
+                    return deferMaybe(result.failureValue!)
+                }
     }
 
     public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
