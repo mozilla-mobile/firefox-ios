@@ -200,7 +200,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func summarize() {
-        loadingLabel.alpha = 1.0
         errorView.alpha = 0.0
         Task { [weak self] in
             await self?.summarizeTask()
@@ -340,6 +339,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
             self.loadingLabel.alpha = 1.0
+        } completion: { [weak self] _ in
+            self?.summarize()
         }
     }
 
@@ -365,7 +366,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
-            loadingLabel.alpha = 0.0
+            loadingLabel.stopShimmering()
+            loadingLabel.removeFromSuperview()
             summaryView.alpha = 1.0
             titleLabel.alpha = 1.0
         } completion: { [weak self] _ in
@@ -560,7 +562,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
               let animation = anim as? CABasicAnimation,
               animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
         setupDismissGestures()
-        summarize()
     }
 
     /// Sets up gestures that allow the user to dismiss the summary.
