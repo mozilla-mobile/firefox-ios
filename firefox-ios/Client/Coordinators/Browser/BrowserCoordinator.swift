@@ -1045,8 +1045,9 @@ class BrowserCoordinator: BaseCoordinator,
             )
         }
 
+        // FXIOS-13305: We don't handle animations properly for synced tabs, so we will use default presentation
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
-            UIDevice.current.userInterfaceIdiom != .pad {
+            UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
         } else {
