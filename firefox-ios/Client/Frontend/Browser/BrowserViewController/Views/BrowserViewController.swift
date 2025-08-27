@@ -1051,6 +1051,7 @@ class BrowserViewController: UIViewController,
         addSubviews()
         setupConstraints()
         setupNotifications()
+        setupNavigationAppearance()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
 
@@ -1139,6 +1140,11 @@ class BrowserViewController: UIViewController,
             }
             return true
         })
+    }
+
+    private func setupNavigationAppearance() {
+        title = .FirefoxHomepage.ScreenTitle
+        navigationItem.backButtonDisplayMode = .generic
     }
 
     // FIXME: FXIOS-12995 Use Notifiable on all of these...
