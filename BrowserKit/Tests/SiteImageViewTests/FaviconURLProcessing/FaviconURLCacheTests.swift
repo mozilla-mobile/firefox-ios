@@ -86,7 +86,7 @@ class FaviconURLCacheTests: XCTestCase {
     func createSubject(fileManager: URLCacheFileManager,
                        file: StaticString = #filePath,
                        line: UInt = #line) -> DefaultFaviconURLCache {
-        let subject = DefaultFaviconURLCache(fileManager: fileManager, preserveDebounceTime: 0)
+        let subject = DefaultFaviconURLCache(fileManager: fileManager)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

@@ -20,15 +20,10 @@ actor DefaultFaviconURLCache: FaviconURLCache {
     private let fileManager: URLCacheFileManager
     private var urlCache = [String: FaviconURL]()
     private var preserveTask: Task<Void, Never>?
-    private let preserveDebounceTime: UInt64
+    private let preserveDebounceTime: UInt64 = 10_000_000_000 // 10 seconds
 
-    /// - Parameters:
-    ///   - fileManager: The cache file manager
-    ///   - preserveDebounceTime: The preserve debounce time to throttle how often the cache is written to persistent storage, 10 seconds by default
-    init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager(),
-         preserveDebounceTime: UInt64 = 10_000_000_000) {
+    init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
         self.fileManager = fileManager
-        self.preserveDebounceTime = preserveDebounceTime
 
         Task {
             await retrieveCache()
