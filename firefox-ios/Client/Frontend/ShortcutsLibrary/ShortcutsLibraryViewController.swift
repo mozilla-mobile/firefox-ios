@@ -15,7 +15,7 @@ class ShortcutsLibraryViewController: UIViewController,
         static let shortcutsSectionTopInset: CGFloat = 24
     }
 
-    // Used to only record telemetry closed telemetry on back button press and swipe gestures
+    // Used to only record closed telemetry on back button press and swipe gestures
     var recordTelemetryOnDisappear = true
 
     // MARK: - Private variables

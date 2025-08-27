@@ -13,14 +13,14 @@ struct ShortcutsLibraryTelemetry {
     }
 
     func sendShortcutsLibraryViewedEvent() {
-        gleanWrapper.recordEvent(for: GleanMetrics.ShortcutsLibrary.viewed)
+        gleanWrapper.recordEvent(for: GleanMetrics.HomepageShortcutsLibrary.viewed)
     }
 
     func sendShortcutTappedEvent() {
-        gleanWrapper.recordEvent(for: GleanMetrics.ShortcutsLibrary.shortcutTapped)
+        gleanWrapper.recordEvent(for: GleanMetrics.HomepageShortcutsLibrary.shortcutTapped)
     }
 
     func sendShortcutsLibraryClosedEvent() {
-        gleanWrapper.recordEvent(for: GleanMetrics.ShortcutsLibrary.closed)
+        gleanWrapper.recordEvent(for: GleanMetrics.HomepageShortcutsLibrary.closed)
     }
 }

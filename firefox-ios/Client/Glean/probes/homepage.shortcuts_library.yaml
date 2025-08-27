@@ -13,6 +13,7 @@
 $schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 
 $tags:
+  - Homepage
   - ShortcutsLibrary
 
 ###############################################################################
@@ -21,11 +22,11 @@ $tags:
 
 # Add your new metrics and/or events here.
 
-shortcuts_library:
+homepage.shortcuts_library:
   closed:
     type: event
     description: |
-      Recorded when a user closes the shortcuts library via the back button or swipe back gesture
+      Recorded when a user closes the shortcuts library via the back button or swipe back gesture.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:
@@ -36,7 +37,7 @@ shortcuts_library:
   shortcut_tapped:
     type: event
     description: |
-      Recorded when a user taps on a shortcut in the shortcuts library screen
+      Recorded when a user taps on a shortcut in the shortcuts library screen.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:
@@ -47,7 +48,7 @@ shortcuts_library:
   viewed:
     type: event
     description: |
-      Recorded when a user sees the shortcuts library screen
+      Recorded when a user sees the shortcuts library screen.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:

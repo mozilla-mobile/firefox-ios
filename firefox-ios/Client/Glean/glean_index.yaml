@@ -23,7 +23,7 @@ metrics_files:
   - firefox-ios/Client/Glean/probes/reader_mode.yaml
   - firefox-ios/Client/Glean/probes/settings.yaml
   - firefox-ios/Client/Glean/probes/share_sheet.yaml
-  - firefox-ios/Client/Glean/probes/shortcuts_library.yaml
+  - firefox-ios/Client/Glean/probes/homepage.shortcuts_library.yaml
   - firefox-ios/Client/Glean/probes/tabs_panel.yaml
   - firefox-ios/Client/Glean/probes/terms_of_use.yaml
   - firefox-ios/Client/Glean/probes/toast.yaml
