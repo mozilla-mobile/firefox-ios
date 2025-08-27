@@ -8,7 +8,6 @@ import Common
 
 @MainActor
 protocol TabScrollHandlerProtocol: AnyObject {
-    var zoomPageBar: ZoomPageBar? { get set }
     var tab: Tab? { get set }
     var contentOffset: CGPoint { get }
 
@@ -87,8 +86,6 @@ final class TabScrollHandler: NSObject,
             }
         }
     }
-
-    weak var zoomPageBar: ZoomPageBar?
 
     private var lastPanTranslation: CGFloat = 0
     private var lastContentOffsetY: CGFloat = 0

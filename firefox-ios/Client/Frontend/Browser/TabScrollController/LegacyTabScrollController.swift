@@ -9,6 +9,7 @@ import Common
 
 @MainActor
 protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
+    var zoomPageBar: ZoomPageBar? { get set }
     var headerTopConstraint: Constraint? { get set }
     var overKeyboardContainerConstraint: Constraint? { get set }
     var bottomContainerConstraint: Constraint? { get set }
