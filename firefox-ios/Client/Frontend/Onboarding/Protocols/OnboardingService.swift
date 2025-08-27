@@ -77,9 +77,7 @@ final class OnboardingService: FeatureFlaggable {
             completion(.success(.advance(numberOfPages: 3)))
 
         case .syncSignIn:
-            handleSyncSignIn(from: cardName, with: activityEventHelper) {
-                completion(.success(.advance(numberOfPages: 1)))
-            }
+            handleSyncSignIn(from: cardName, with: activityEventHelper) {}
 
         case .setDefaultBrowser:
             handleSetDefaultBrowser(with: activityEventHelper)
@@ -189,9 +187,7 @@ final class OnboardingService: FeatureFlaggable {
     }
 
     private func handleOpenInstructionsPopup(from popupViewModel: OnboardingDefaultBrowserModelProtocol) {
-        presentDefaultBrowserPopup(from: popupViewModel) { [weak self] in
-            self?.navigationDelegate?.finishOnboardingFlow()
-        }
+        presentDefaultBrowserPopup(from: popupViewModel) {}
     }
 
     private func handleReadPrivacyPolicy(from url: URL, completion: @escaping () -> Void) {
