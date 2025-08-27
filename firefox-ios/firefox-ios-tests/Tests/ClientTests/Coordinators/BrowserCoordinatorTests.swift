@@ -512,6 +512,57 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
     }
 
+    func testShowTabTray_withPrivateTabs_withoutExperiment_showDefaultPresentation() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
+        let subject = createSubject()
+        subject.showTabTray(selectedPanel: .privateTabs)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
+    }
+
+    func testShowTabTray_withPrivateTabs_withExperiment_showAnimatedPresentation() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showTabTray(selectedPanel: .privateTabs)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
+        XCTAssertEqual(mockRouter.presentCalledWithAnimation, 1)
+        XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
+    }
+
+    func testShowTabTray_withSyncedTabs_withoutExperiment_showDefaultPresentation() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showTabTray(selectedPanel: .syncedTabs)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
+    }
+
+    func testShowTabTray_withSyncedTabs_withExperiment_showDefaultPresentation() throws {
+        setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.showTabTray(selectedPanel: .syncedTabs)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
+        let presentedVC = try XCTUnwrap(mockRouter.presentedViewController as? DismissableNavigationViewController)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(presentedVC.topViewController is TabTrayViewController)
+    }
+
     func testDismissTabTray_removesChild() throws {
         let subject = createSubject()
         subject.showTabTray(selectedPanel: .tabs)
