@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import GameController
 
 /**
  * The keyboard state at the time of notification.
@@ -11,6 +12,7 @@ import Common
 public struct KeyboardState: Sendable {
     public let animationDuration: Double
     public let animationCurve: UIView.AnimationCurve
+    public let isHardwareKeyboardConnected: Bool
     private let keyboardEndFrame: CGRect?
 
     fileprivate init(
@@ -33,7 +35,8 @@ public struct KeyboardState: Sendable {
         if let curveValue = keyboardAnimationCurveValue {
             NSNumber(value: curveValue as Int).getValue(&curve)
         }
-        self.animationCurve = curve
+        animationCurve = curve
+        isHardwareKeyboardConnected = GCKeyboard.coalesced != nil
     }
 
     /// Return the height of the keyboard that overlaps with the specified view. This is more

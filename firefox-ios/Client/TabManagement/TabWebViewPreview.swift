@@ -41,6 +41,7 @@ final class TabWebViewPreview: UIView, ThemeApplicable {
         layer.cornerRadius = screenCornerRadius
         layer.shadowOpacity = UX.backgroundShadowOpacity
         layer.shadowOffset = UX.backgroundShadowOffset
+        layer.shadowPath = CGPath(rect: bounds, transform: nil)
         layer.masksToBounds = false
 
         webPageScreenshotImageView.layer.cornerRadius = screenCornerRadius

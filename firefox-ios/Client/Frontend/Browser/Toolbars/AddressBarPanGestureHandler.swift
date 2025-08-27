@@ -266,6 +266,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                 } else {
                     store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
                                                               actionType: GeneralBrowserActionType.addNewTab))
+                    addressToolbarContainer.hideSkeletonBars()
                 }
             } else {
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,

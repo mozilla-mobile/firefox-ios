@@ -4927,7 +4927,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        cancelEditingMode()
+        cancelEditingMode(keyboardState: state)
         updateToolbarDisplay()
     }
 
@@ -4956,7 +4956,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
     }
 
-    private func cancelEditingMode() {
+    private func cancelEditingMode(keyboardState: KeyboardState) {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
         guard shouldCancelEditing else {
             guard isSwipingTabsEnabled,
@@ -4965,12 +4965,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
                   toolbarState.addressToolbar.url == nil,
                   toolbarState.isShowingNavigationToolbar == true
             else { return }
-            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager, keyboardState: keyboardState)
             return
         }
         overlayManager.cancelEditing(shouldCancelLoading: false)
         guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager, keyboardState: keyboardState)
     }
 
     private var shouldCancelEditing: Bool {

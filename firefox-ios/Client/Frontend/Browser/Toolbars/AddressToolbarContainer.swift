@@ -5,6 +5,7 @@
 import Common
 import Redux
 import ToolbarKit
+import Shared
 import UIKit
 
 protocol AddressToolbarContainerDelegate: AnyObject {
@@ -170,7 +171,11 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.isHidden = true
     }
 
-    func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {
+    func updateSkeletonAddressBarsVisibility(tabManager: TabManager, keyboardState: KeyboardState? = nil) {
+        if let keyboardState, keyboardState.isHardwareKeyboardConnected {
+            hideSkeletonBars()
+            return
+        }
         guard let selectedTab = tabManager.selectedTab, state?.toolbarPosition == .bottom else {
             hideSkeletonBars()
             return
