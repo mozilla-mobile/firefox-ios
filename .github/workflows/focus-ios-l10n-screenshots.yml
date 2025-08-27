@@ -51,7 +51,7 @@ jobs:
           xcodebuild -version
       - name: Run setup scripts for Focus
         run: |
-          ./checkout.sh
+          ./bootstrap.sh focus
       - name: Compile Focus iOS
         run: |
           xcodebuild build-for-testing -scheme FocusSnapshotTests \

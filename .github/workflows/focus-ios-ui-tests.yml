@@ -27,7 +27,7 @@ jobs:
                 sudo rm -rf /Applications/Xcode.app
                 sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
                 xcodebuild -version
-                ./checkout.sh
+                ./bootstrap.sh focus
                 ./bootstrap.sh --force
                 sudo xcodes runtimes install "iOS ${{ env.ios_version }}"
             - name: Compile source code
@@ -72,7 +72,7 @@ jobs:
                 sudo rm -rf /Applications/Xcode.app
                 sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
                 xcodebuild -version
-                ./checkout.sh
+                ./bootstrap.sh focus
                 ./bootstrap.sh --force
             - name: Get derived data
               id: download-derived-data
