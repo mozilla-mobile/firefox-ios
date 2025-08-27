@@ -30,7 +30,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         static let summaryLabelHorizontalPadding: CGFloat = 12.0
         static let panCloseSummaryVelocityThreshold: CGFloat = 1000.0
         static let panCloseSummaryHeightPercentageThreshold: CGFloat = 0.25
-        static let closeButtonEdgePadding: CGFloat = 16.0
         static let tabSnapshotBringToFrontAnimationDuration: CGFloat = 0.25
         static let tabSnapshotCornerRadius: CGFloat = 32.0
         static let tabSnapshotShadowRadius: CGFloat = 64.0
@@ -52,16 +51,16 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     public let currentWindowUUID: Common.WindowUUID?
 
     // MARK: - UI properties
-    private let titleLabel: UILabel = .build {
-        let isFontInAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
-        $0.numberOfLines = isFontInAccessibilityCategory ? 2 : 3
-        $0.font = FXFontStyles.Regular.title2.scaledFont()
-        $0.adjustsFontForContentSizeCategory = true
-        $0.showsLargeContentViewer = true
-        $0.isUserInteractionEnabled = true
-        $0.addInteraction(UILargeContentViewerInteraction())
-        $0.accessibilityTraits.insert(.header)
-    }
+//    private let titleLabel: UILabel = .build {
+//        let isFontInAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+//        $0.numberOfLines = isFontInAccessibilityCategory ? 2 : 3
+//        $0.font = FXFontStyles.Regular.title2.scaledFont()
+//        $0.adjustsFontForContentSizeCategory = true
+//        $0.showsLargeContentViewer = true
+//        $0.isUserInteractionEnabled = true
+//        $0.addInteraction(UILargeContentViewerInteraction())
+//        $0.accessibilityTraits.insert(.header)
+//    }
     private let loadingLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.body.scaledFont()
         $0.alpha = 0
@@ -70,22 +69,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
     private let errorView: ErrorView = .build {
         $0.alpha = 0
-    }
-    private let closeButton: UIButton = .build {
-        // This checks for Xcode 26 sdk availability thus we can compile on older Xcode version too
-        #if canImport(FoundationModels)
-        if #available(iOS 26, *) {
-            $0.configuration = .prominentClearGlass()
-        } else {
-            $0.configuration = .filled()
-            $0.configuration?.cornerStyle = .capsule
-        }
-        #else
-            $0.configuration = .filled()
-            $0.configuration?.cornerStyle = .capsule
-        #endif
-        $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        $0.alpha = 0.0
     }
     private let tabSnapshot: UIImageView = .build {
         $0.clipsToBounds = true
@@ -111,33 +94,8 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         host.view.isUserInteractionEnabled = false
         return host
     }()
-
-    private func removeBorderOverlayView() {
-        borderOverlayHostingController.willMove(toParent: nil)
-        borderOverlayHostingController.view.removeFromSuperview()
-        borderOverlayHostingController.removeFromParent()
-    }
-
-    /// Background gradient when loading summarizer
-    private func setupLoadingBackgroundGradient() {
-        backgroundGradient.frame = view.bounds
-        backgroundGradient.locations = [0.0, 1.0]
-        backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)
-        backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
-    }
-
-    private let summaryView: UITextView = .build {
-        $0.font = FXFontStyles.Regular.headline.scaledFont()
+    private let summaryView: SummaryView = .build {
         $0.alpha = 0.0
-        $0.showsVerticalScrollIndicator = false
-        $0.contentInset = UIEdgeInsets(
-            top: 0.0,
-            left: 0.0,
-            bottom: UX.tabSnapshotFinalPositionBottomPadding,
-            right: 0.0
-        )
-        $0.adjustsFontForContentSizeCategory = true
-        $0.isEditable = false
     }
 
     // For the MVP only the portrait orientation is supported
@@ -196,7 +154,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
 
     private func setupLoadingViews() {
         view.layer.insertSublayer(backgroundGradient, at: 0)
-        closeButton.alpha = 1.0
     }
 
     private func summarize() {
@@ -226,7 +183,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
     }
 
     private func configure() {
-        titleLabel.accessibilityIdentifier = viewModel.titleLabelA11yId
+//        titleLabel.accessibilityIdentifier = viewModel.titleLabelA11yId
         loadingLabel.text = viewModel.loadingLabel
         loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
         loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
@@ -234,16 +191,15 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotA11yLabel
 
-        closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
-        closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
-        closeButton.setImage(UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-                             for: .normal)
-        closeButton.addAction(
-            UIAction(handler: { [weak self] _ in
-                self?.triggerDismissingAnimation()
-            }),
-            for: .touchUpInside
-        )
+//        closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
+//        closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
+//        closeButton.setImage()
+//        closeButton.addAction(
+//            UIAction(handler: { [weak self] _ in
+//                self?.triggerDismissingAnimation()
+//            }),
+//            for: .touchUpInside
+//        )
         summaryView.accessibilityIdentifier = viewModel.summarizeTextViewA11yId
         summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
     }
@@ -253,8 +209,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         view.addSubviews(
             tabSnapshotContainer,
             borderOverlayHostingController.view,
-            titleLabel,
-            closeButton,
             summaryView,
             loadingLabel,
             errorView
@@ -263,13 +217,12 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         tabSnapshot.pinToSuperview()
         tabSnapshotTopConstraint = tabSnapshotContainer.topAnchor.constraint(equalTo: view.topAnchor)
         tabSnapshotTopConstraint?.isActive = true
-        closeButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-
+        
         let topHalfBoundGuide = UILayoutGuide()
         view.addLayoutGuide(topHalfBoundGuide)
 
         NSLayoutConstraint.activate([
-            topHalfBoundGuide.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
+            topHalfBoundGuide.topAnchor.constraint(equalTo: view.topAnchor),
             topHalfBoundGuide.bottomAnchor.constraint(equalTo: view.centerYAnchor),
             topHalfBoundGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topHalfBoundGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -290,21 +243,9 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             errorView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor),
             errorView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor),
 
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                            constant: UX.closeButtonEdgePadding),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
-                                                 constant: -UX.summaryViewEdgePadding),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                constant: UX.summaryViewEdgePadding),
-
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                  constant: -UX.closeButtonEdgePadding),
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                             constant: UX.closeButtonEdgePadding),
-
-            summaryView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.summaryViewEdgePadding),
-            summaryView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.summaryViewEdgePadding),
-            summaryView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.summaryViewEdgePadding),
+            summaryView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            summaryView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            summaryView.topAnchor.constraint(equalTo: view.topAnchor),
             summaryView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
             tabSnapshotContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -342,6 +283,13 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             self.loadingLabel.alpha = 1.0
         }
     }
+    
+    private func setupLoadingBackgroundGradient() {
+        backgroundGradient.frame = view.bounds
+        backgroundGradient.locations = [0.0, 1.0]
+        backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+        backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+    }
 
     private func showSummary(_ summary: String) {
         triggerImpactHaptics()
@@ -352,22 +300,25 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
         let brandedSummary = """
-        ###### \(viewModel.brandLabel)
-
         \(summary)
 
         ##### \(viewModel.summaryNote)
         """
-        titleLabel.text = webView.title
-        titleLabel.largeContentTitle = webView.title
-        summaryView.attributedText = parse(markdown: brandedSummary)
+//        titleLabel.text = webView.title
+//        titleLabel.largeContentTitle = webView.title
+        let inset = UIEdgeInsets(top: view.safeAreaInsets.top, left: 0.0, bottom: UX.tabSnapshotFinalPositionBottomPadding, right: 0.0)
+        summaryView.configure(model: SummaryModel(title: webView.title ?? "",
+                                                  titleA11yId: "",
+                                                  brandIcon: viewModel.brandImage,
+                                                  brandName: viewModel.brandLabel,
+                                                  summary: parse(markdown: brandedSummary),
+                                                  contentOffset: inset))
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
             loadingLabel.alpha = 0.0
             summaryView.alpha = 1.0
-            titleLabel.alpha = 1.0
         } completion: { [weak self] _ in
             guard let tabSnapshotView = self?.tabSnapshotContainer else { return }
             UIView.animate(withDuration: UX.tabSnapshotBringToFrontAnimationDuration) {
@@ -403,6 +354,12 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
             self.onSummaryDisplayed()
             errorView.alpha = 1.0
         }
+    }
+    
+    private func removeBorderOverlayView() {
+        borderOverlayHostingController.willMove(toParent: nil)
+        borderOverlayHostingController.view.removeFromSuperview()
+        borderOverlayHostingController.removeFromParent()
     }
 
     private func dismissSummary() {
@@ -582,7 +539,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
         DispatchQueue.main.async { [weak self] in
             let isFontInAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
-            self?.titleLabel.numberOfLines = isFontInAccessibilityCategory ? 2 : 3
+//            self?.titleLabel.numberOfLines = isFontInAccessibilityCategory ? 2 : 3
         }
     }
 
@@ -591,13 +548,9 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         view.backgroundColor = theme.colors.layer1
         summaryView.backgroundColor = .clear
-        titleLabel.textColor = theme.colors.textPrimary
+        summaryView.applyTheme(theme: theme)
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
-        if #unavailable(iOS 26) {
-            closeButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
-        }
-        closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
         errorView.applyTheme(theme: theme)
     }

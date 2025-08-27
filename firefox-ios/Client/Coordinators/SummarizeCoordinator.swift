@@ -89,6 +89,11 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         } else {
             String(format: .Summarizer.HostedBrandLabel, AppName.shortName.rawValue)
         }
+        let brandImage: UIImage = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
+            UIImage(resource: .faviconFox)
+        } else {
+            UIImage(resource: .faviconFox)
+        }
         let model = SummarizeViewModel(
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.titleLabel,
             loadingLabel: .Summarizer.LoadingLabel,
@@ -97,6 +102,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             tabSnapshotA11yLabel: .Summarizer.TabSnapshotAccessibilityLabel,
             tabSnapshotA11yId: AccessibilityIdentifiers.Summarizer.tabSnapshotView,
             brandLabel: brandLabel,
+            brandImage: brandImage,
             summaryNote: .Summarizer.FootnoteLabel,
             summarizeTextViewA11yLabel: .Summarizer.SummaryTextAccessibilityLabel,
             summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
