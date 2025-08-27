@@ -28,7 +28,7 @@ jobs:
                 sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
                 xcodebuild -version
                 ./bootstrap.sh focus
-                ./bootstrap.sh --force
+                ./bootstrap.sh firefox --force
                 sudo xcodes runtimes install "iOS ${{ env.ios_version }}"
             - name: Compile source code
               id: compile
