@@ -6,7 +6,7 @@ import XCTest
 import MappaMundi
 
 func registerLibraryPanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApplication) {
-    let doneButton = app.buttons["Done"]
+    let doneButton = app.buttons[AccessibilityIdentifiers.LibraryPanels.topRightButton]
 
     map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true

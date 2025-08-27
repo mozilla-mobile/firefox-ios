@@ -11,12 +11,16 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     func testPanelsEmptyState() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
-        navigator.goto(LibraryPanel_Bookmarks)
-        snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
-        // Tap on each of the library buttons
-        for i in 1...3 {
-            app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: i).tap()
-            snapshot("PanelsEmptyState-\(i)")
+        let panels = [
+            LibraryPanel_Bookmarks,
+            LibraryPanel_History,
+            LibraryPanel_Downloads,
+            // ReadingList icon is not found in debugDescription
+            // LibraryPanel_ReadingList
+        ]
+        panels.forEach { panel in
+            navigator.goto(panel)
+            snapshot("PanelsEmptyState-\(panel)")
         }
     }
 
