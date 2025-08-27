@@ -524,7 +524,7 @@ open class BrowserProfile: Profile,
                         return self.retrieveTabData()
                     }
                     return deferMaybe(result.failureValue!)
-                }
+        }
     }
 
     public func getClientsAndTabs(completion: @escaping ([ClientAndTabs]?) -> Void) {
