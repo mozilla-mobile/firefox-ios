@@ -292,6 +292,7 @@ final class LaunchCoordinator: BaseCoordinator,
 
         let hostingController = PortraitOnlyHostingController(rootView: view)
         hostingController.modalPresentationStyle = .fullScreen
+        hostingController.modalTransitionStyle = .crossDissolve
         router.present(hostingController, animated: false)
     }
 
