@@ -4,21 +4,20 @@
 import Common
 import Redux
 import Shared
-import Glean
 
 // TODO: FXIOS-12947 - Add tests for TermsOfUse Feature
 @MainActor
 class TermsOfUseMiddleware {
-    let termsOfUseVersion: Int64 = 4
-    let termsOfUseSurface = "bottom_sheet"
-
     private let prefs: Prefs
     private let logger: Logger
+    let telemetry: TermsOfUseTelemetry
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         telemetry: TermsOfUseTelemetry = TermsOfUseTelemetry()) {
         self.prefs = profile.prefs
         self.logger = logger
+        self.telemetry = telemetry
     }
 
     lazy var termsOfUseProvider: Middleware<AppState> = { _, action in
@@ -55,27 +54,17 @@ class TermsOfUseMiddleware {
 
     private func recordAcceptance() {
         self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        self.prefs.setString(String(termsOfUseVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
+        self.prefs.setString(String(telemetry.termsOfUseVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
         self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         // Record telemetry for ToU acceptance
-        let acceptedExtra = GleanMetrics.Termsofuse.AcceptedExtra(
-            surface: termsOfUseSurface,
-            touVersion: String(termsOfUseVersion)
-        )
-        GleanMetrics.Termsofuse.accepted.record(acceptedExtra)
-        GleanMetrics.Termsofuse.version.set(termsOfUseVersion)
-        GleanMetrics.Termsofuse.date.set(Date())
+        telemetry.termsOfUseAcceptButtonTapped()
     }
 
     private func recordImpression() {
         self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
 
         // Record telemetry for ToU impression
-        let impressionExtra = GleanMetrics.Termsofuse.ImpressionExtra(
-            surface: termsOfUseSurface,
-            touVersion: String(termsOfUseVersion)
-        )
-        GleanMetrics.Termsofuse.impression.record(impressionExtra)
+        telemetry.termsOfUseBottomSheetDisplayed()
     }
 }
