@@ -255,11 +255,3 @@ private final class MockImageHandler: ImageHandler, @unchecked Sendable {
         clearCacheCalledCount += 1
     }
 }
-
-public extension XCTestCase {
-    func trackForMemoryLeaks(_ object: AnyObject?, file: StaticString = #filePath, line: UInt = #line) {
-        addTeardownBlock { [weak object] in
-            XCTAssertNil(object, "Memory leak detected in \(file):\(line)")
-        }
-    }
-}
