@@ -30,7 +30,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase {
         subject.shortcutsLibraryProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.ShortcutsLibrary.viewed)
+        let expectedMetricType = type(of: GleanMetrics.HomepageShortcutsLibrary.viewed)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -48,7 +48,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase {
         subject.shortcutsLibraryProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.ShortcutsLibrary.closed)
+        let expectedMetricType = type(of: GleanMetrics.HomepageShortcutsLibrary.closed)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
@@ -66,7 +66,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase {
         subject.shortcutsLibraryProvider(AppState(), action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
-        let expectedMetricType = type(of: GleanMetrics.ShortcutsLibrary.shortcutTapped)
+        let expectedMetricType = type(of: GleanMetrics.HomepageShortcutsLibrary.shortcutTapped)
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
