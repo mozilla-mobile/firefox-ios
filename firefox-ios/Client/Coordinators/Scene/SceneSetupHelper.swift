@@ -57,6 +57,9 @@ struct SceneSetupHelper {
 }
 
 class RootNavigationController: UINavigationController {
+    // Forward status bar appearance decisions to the top view controller. By default, UINavigationController ignores
+    // child view controllers’ preferStatusBarHidden values. Overriding this ensures that the top view controller controls
+    // whether the status bar is hidden.
     override var childForStatusBarHidden: UIViewController? {
         return topViewController
     }
