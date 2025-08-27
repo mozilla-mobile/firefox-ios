@@ -1781,7 +1781,7 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            ./checkout.sh
+            ./bootstrap.sh focus
         title: ContentBlockerGen
 
   focus-set-project-version:
