@@ -224,7 +224,7 @@ extension TopSitesHelperTests {
 }
 
 // MARK: - SiteCursorMock
-private class SiteCursorMock: Cursor<Site> {
+private class SiteCursorMock: Cursor<Site>, @unchecked Sendable {
     var sites = [Site]()
     override func asArray() -> [Site] {
         return sites
