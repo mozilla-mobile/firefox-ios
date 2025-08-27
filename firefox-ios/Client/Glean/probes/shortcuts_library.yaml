@@ -33,9 +33,6 @@ shortcuts_library:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - ShortcutsLibrary
   shortcut_tapped:
     type: event
     description: |
@@ -47,9 +44,6 @@ shortcuts_library:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - ShortcutsLibrary
   viewed:
     type: event
     description: |
@@ -61,6 +55,3 @@ shortcuts_library:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - ShortcutsLibrary
