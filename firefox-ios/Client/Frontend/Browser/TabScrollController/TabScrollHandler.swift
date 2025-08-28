@@ -191,6 +191,8 @@ final class TabScrollHandler: NSObject,
     }
 
     func handleScroll(for translation: CGPoint) {
+        // Ignore user scroll if the tab is loading or if the conditions to update view are not meet
+        // voice over and webview's scroll content size is not enough to scroll
         guard !tabIsLoading(),
               shouldUpdateUIWhenScrolling else { return }
 
@@ -211,6 +213,11 @@ final class TabScrollHandler: NSObject,
     }
 
     func handleEndScrolling(for translation: CGPoint, velocity: CGPoint) {
+        // Ignore user scroll if the tab is loading or if the conditions to update view are not meet
+        // voice over and webview's scroll content size is not enough to scroll
+        guard !tabIsLoading(),
+              shouldUpdateUIWhenScrolling else { return }
+
         let delta = lastPanTranslation - translation.y
         // Reset lastPanTranslation
         lastPanTranslation = 0
@@ -258,9 +265,10 @@ final class TabScrollHandler: NSObject,
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard let tabProvider,
               !tabIsLoading(),
+              shouldUpdateUIWhenScrolling,
               !scrollReachBottom(),
-              !tabProvider.isFindInPageMode,
-              shouldUpdateUIWhenScrolling else { return }
+              !tabProvider.isFindInPageMode
+              else { return }
 
         tabProvider.shouldScrollToTop = false
 
@@ -332,14 +340,6 @@ final class TabScrollHandler: NSObject,
         return isSignificantScroll  // || isFastEnough
     }
 
-    private var isTopRubberbanding: Bool {
-        return contentOffset.y <= 0
-    }
-
-    private var isBottomRubberbanding: Bool {
-        return contentOffset.y + scrollViewHeight > contentSize.height
-    }
-
     @objc
     private func reload() {
         guard let tabProvider = tabProvider else { return }
@@ -360,10 +360,9 @@ final class TabScrollHandler: NSObject,
     /// 1. If the content is scrollable (taller than the view).
     /// 2. The user has scrolled to (or beyond) the bottom.
     private func scrollReachBottom() -> Bool {
-        let contentIsScrollable = contentSize.height > scrollViewHeight
         let isMaxContentOffset = contentOffset.y > (contentSize.height - scrollViewHeight)
 
-        return isMaxContentOffset && contentIsScrollable
+        return isMaxContentOffset
     }
 
     /// Updates the display state of the toolbar based on the scroll positions of various UI components.
@@ -396,11 +395,9 @@ final class TabScrollHandler: NSObject,
     }
 
     private func updateLastValidState() {
-        if toolbarDisplayState.isExpanded {
-            lastValidState = .expanded
-        } else if toolbarDisplayState.isCollapsed {
-            lastValidState = .collapsed
-        }
+        guard !toolbarDisplayState.isAnimating else { return }
+
+        lastValidState = toolbarDisplayState
     }
 
     private func cancelTransition() {
