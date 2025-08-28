@@ -125,6 +125,11 @@ final class TabDisplayPanelViewController: UIViewController,
         adjustStatusBarFrameIfNeeded()
     }
 
+    override func viewSafeAreaInsetsDidChange() {
+        super.view.safeAreaInsetsDidChange()
+        updateInsets()
+    }
+
     // MARK: - Setup
 
     private func setupView() {
