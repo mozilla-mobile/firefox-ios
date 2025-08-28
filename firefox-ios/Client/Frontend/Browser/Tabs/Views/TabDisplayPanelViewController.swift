@@ -274,7 +274,7 @@ final class TabDisplayPanelViewController: UIViewController,
             tabDisplayView.updateInsets(top: 0, bottom: DefaultTabTrayUtils().segmentedControlHeight)
         } else {
             (emptyPrivateTabsView as? InsetUpdatable)?.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
-            tabDisplayView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
+            tabDisplayView.updateInsets(top: 0, bottom: 0)
         }
     }
 
