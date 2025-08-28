@@ -11,6 +11,7 @@ extension UILabel {
     ///   - light: The color to apply to the label when the light is spreading on the label
     ///   - dark: The color to apply to portion of the label not affected by light.
     func startShimmering(light: UIColor, dark: UIColor) {
+        stopShimmering()
         let light = light.cgColor
         let dark = dark.cgColor
 
@@ -33,10 +34,12 @@ extension UILabel {
 
         animation.duration = 1.5
         animation.repeatCount = HUGE
+        animation.isRemovedOnCompletion = false
         gradient.add(animation, forKey: "shimmer")
     }
 
     func stopShimmering() {
+        (layer.mask as? CAGradientLayer)?.removeAnimation(forKey: "shimmer")
         layer.mask = nil
     }
 }

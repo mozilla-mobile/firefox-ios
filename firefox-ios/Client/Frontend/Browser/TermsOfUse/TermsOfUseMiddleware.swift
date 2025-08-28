@@ -10,14 +10,21 @@ import Shared
 class TermsOfUseMiddleware {
     private let prefs: Prefs
     private let logger: Logger
+    let telemetry: TermsOfUseTelemetry
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         telemetry: TermsOfUseTelemetry = TermsOfUseTelemetry()) {
         self.prefs = profile.prefs
         self.logger = logger
+        self.telemetry = telemetry
     }
 
     lazy var termsOfUseProvider: Middleware<AppState> = { _, action in
+        self.handleTermsOfUseAction(action)
+    }
+
+    private func handleTermsOfUseAction(_ action: Action) {
         // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
         // because we dispatch to the main thread in the store. We will want
         // to also isolate that to the @MainActor to remove this.
@@ -36,14 +43,28 @@ class TermsOfUseMiddleware {
 
             switch type {
             case TermsOfUseActionType.markAccepted:
-                self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-
+                self.recordAcceptance()
             case TermsOfUseActionType.markDismissed:
                 self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-
             case TermsOfUseActionType.markShown:
-                self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+                self.recordImpression()
             }
         }
+    }
+
+    private func recordAcceptance() {
+        self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
+        self.prefs.setString(String(telemetry.termsOfUseVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
+        self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
+
+        // Record telemetry for ToU acceptance
+        telemetry.termsOfUseAcceptButtonTapped()
+    }
+
+    private func recordImpression() {
+        self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+
+        // Record telemetry for ToU impression
+        telemetry.termsOfUseBottomSheetDisplayed()
     }
 }

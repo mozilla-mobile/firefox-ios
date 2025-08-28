@@ -35,8 +35,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
     }
 
     private lazy var imageView: FaviconImageView = {
-        let imageView = FaviconImageView {
-            self.configureFaviconWithTransparency()
+        let imageView = FaviconImageView { [weak self] in
+            self?.configureFaviconWithTransparency()
         }
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView

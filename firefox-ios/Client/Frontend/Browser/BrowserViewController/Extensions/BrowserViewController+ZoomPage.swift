@@ -14,7 +14,9 @@ extension BrowserViewController: ZoomPageBarDelegate {
     private func setupZoomPageBar() {
         let zoomPageBar = ZoomPageBar(zoomManager: zoomManager)
         self.zoomPageBar = zoomPageBar
-        scrollController.zoomPageBar = zoomPageBar
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.zoomPageBar = zoomPageBar
+        }
         zoomPageBar.delegate = self
 
         if UIDevice.current.userInterfaceIdiom == .pad {

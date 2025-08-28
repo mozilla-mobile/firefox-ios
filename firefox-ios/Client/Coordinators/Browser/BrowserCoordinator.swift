@@ -87,7 +87,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func start(with launchType: LaunchType?) {
-        router.push(browserViewController, animated: false)
+        router.setRootViewController(browserViewController, hideBar: true, animated: false)
         let isIphone = UIDevice.current.userInterfaceIdiom == .phone
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
@@ -1045,8 +1045,9 @@ class BrowserCoordinator: BaseCoordinator,
             )
         }
 
+        // FXIOS-13305: We don't handle animations properly for synced tabs, so we will use default presentation
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
-            UIDevice.current.userInterfaceIdiom != .pad {
+            UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
         } else {

@@ -255,7 +255,7 @@ class ShortcutsLibraryViewController: UIViewController,
                     ShortcutsLibraryAction(
                         tab: tab,
                         windowUUID: self.windowUUID,
-                        actionType: ShortcutsLibraryActionType.switchTabToastButtonPressed
+                        actionType: ShortcutsLibraryActionType.switchTabToastButtonTapped
                     )
                 )
             }
@@ -286,7 +286,7 @@ class ShortcutsLibraryViewController: UIViewController,
             self.logger.log(
                 "Context menu handling skipped: No valid indexPath, item, section or sourceView found at \(point)",
                 level: .debug,
-                category: .homepage
+                category: .shortcutsLibrary
             )
             return
         }
@@ -300,7 +300,7 @@ class ShortcutsLibraryViewController: UIViewController,
             self.logger.log(
                 "Item selected at \(indexPath) but does not navigate anywhere",
                 level: .debug,
-                category: .homepage
+                category: .shortcutsLibrary
             )
             return
         }
