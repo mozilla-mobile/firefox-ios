@@ -311,12 +311,17 @@ final class HomepageViewController: UIViewController,
 
     func newState(state: HomepageState) {
         self.homepageState = state
+
         wallpaperView.wallpaperState = state.wallpaperState
 
-        dataSource?.updateSnapshot(
-            state: state,
-            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
-        )
+        // FIXME: FXIOS-13343 We need to make sure redux isn't sending so many new states that aren't actually changing
+        if self.homepageState != state {
+            dataSource?.updateSnapshot(
+                state: state,
+                jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
+            )
+        }
+
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
         if homepageState.shouldTriggerImpression {
             scrollToTop()
