@@ -10,7 +10,7 @@ enum AccessoryType {
     case standard, creditCard, address, login, passwordGenerator
 }
 
-class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
+class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
     // MARK: - Constants
     private struct UX {
         static let toolbarHeight: CGFloat = 50
@@ -38,6 +38,9 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
 
     var hasAccessoryView: Bool {
         return currentAccessoryView != nil
+    }
+    private var searchBarPosition: SearchBarPosition {
+        return featureFlags.getCustomState(for: .searchBarPosition) ?? .bottom
     }
 
     // MARK: - UI Elements
@@ -159,6 +162,11 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
         setupLayout()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.SearchBarPositionDidChange]
+        )
         applyTheme()
     }
 
@@ -238,8 +246,18 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let backgroundColor: UIColor = if #available(iOS 26.0, *) {
+            searchBarPosition == .top ? .clear : theme.colors.layerSurfaceLow
+        } else {
+            theme.colors.layerSurfaceLow
+        }
+        let buttonsBackgroundColor: UIColor = if #available(iOS 26.0, *) {
+            .clear
+        } else {
+            theme.colors.layerSurfaceLow
+        }
 
-        backgroundColor = theme.colors.layer5
+        self.backgroundColor = backgroundColor
         [previousButton, nextButton, doneButton].forEach {
             $0.tintColor = theme.colors.iconAccentBlue
             $0.customView?.tintColor = theme.colors.iconAccentBlue
@@ -247,7 +265,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
 
         [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView].forEach {
             $0.accessoryImageViewTintColor = theme.colors.iconPrimary
-            $0.backgroundColor = theme.colors.layer5Hover
+            $0.backgroundColor = buttonsBackgroundColor
         }
     }
 
@@ -293,5 +311,12 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .creditCardAutofillPromptShown)
+    }
+
+    // MARK: - Notifiable
+    nonisolated func handleNotifications(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.applyTheme()
+        }
     }
 }

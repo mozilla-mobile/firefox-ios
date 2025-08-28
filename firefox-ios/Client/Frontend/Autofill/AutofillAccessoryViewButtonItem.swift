@@ -96,7 +96,6 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         // Add the stack view to the container view
         let accessoryView = UIStackView(arrangedSubviews: [accessoryImageView, useAccessoryTextLabel])
         accessoryView.spacing = UX.accessoryButtonStackViewSpacing
-        accessoryView.distribution = .equalCentering
 
         // Add the stack view to the container view
         containerView.addSubview(accessoryView)
