@@ -19,17 +19,27 @@ protocol RemoteTabsEmptyViewDelegate: AnyObject {
 }
 
 class RemoteTabsEmptyView: UIView,
-                           RemoteTabsEmptyViewProtocol {
+                           RemoteTabsEmptyViewProtocol,
+                           InsetUpdatable {
     struct UX {
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24
         static let paddingInBetweenItems: CGFloat = 15
         static let imageSize = CGSize(width: 90, height: 90)
+        static let containerWidthConstant = horizontalPadding * 2
     }
 
     weak var delegate: RemoteTabsEmptyViewDelegate?
 
     // MARK: - UI
+
+    private let scrollView: UIScrollView = .build { scrollview in
+        scrollview.backgroundColor = .clear
+        scrollview.contentInset = UIEdgeInsets(top: UX.verticalPadding,
+                                               left: UX.horizontalPadding,
+                                               bottom: UX.verticalPadding,
+                                               right: UX.horizontalPadding)
+    }
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
@@ -101,18 +111,22 @@ class RemoteTabsEmptyView: UIView,
         stackView.addArrangedSubview(instructionsLabel)
         stackView.addArrangedSubview(signInButton)
         stackView.setCustomSpacing(0, after: emptyStateImageView)
-        addSubview(stackView)
+        scrollView.addSubview(stackView)
+        addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor,
-                                               constant: UX.horizontalPadding),
-            stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            stackView.topAnchor.constraint(equalTo: self.topAnchor,
-                                           constant: UX.verticalPadding),
-            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor,
-                                                constant: -UX.horizontalPadding),
-            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
-                                              constant: -UX.verticalPadding).priority(.defaultLow),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
+                                             constant: -UX.containerWidthConstant),
+            
             signInButton.leadingAnchor.constraint(equalTo: instructionsLabel.leadingAnchor),
             signInButton.trailingAnchor.constraint(equalTo: instructionsLabel.trailingAnchor),
             emptyStateImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
@@ -139,5 +153,12 @@ class RemoteTabsEmptyView: UIView,
     @objc
     private func openAccountSettings() {
         delegate?.presentFxAccountSettings()
+    }
+
+    // MARK: - InsetUpdatable
+
+    func updateInsets(top: CGFloat, bottom: CGFloat) {
+        scrollView.contentInset.top = top
+        scrollView.contentInset.bottom = bottom + UX.verticalPadding
     }
 }
