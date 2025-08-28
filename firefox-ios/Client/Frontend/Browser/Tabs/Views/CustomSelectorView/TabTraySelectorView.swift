@@ -340,7 +340,7 @@ class TabTraySelectorView: UIView,
 
         let backgroundAlpha: CGFloat = tabTrayUtils.backgroundAlpha()
         backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
-        selectionBackgroundView.backgroundColor = theme.colors.layer3
+        selectionBackgroundView.backgroundColor = theme.colors.layerSearch
 
         for button in buttons {
             button.applyTheme(theme: theme)

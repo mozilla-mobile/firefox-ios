@@ -126,7 +126,7 @@ class RemoteTabsEmptyView: UIView,
             stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
                                              constant: -UX.containerWidthConstant),
-            
+
             signInButton.leadingAnchor.constraint(equalTo: instructionsLabel.leadingAnchor),
             signInButton.trailingAnchor.constraint(equalTo: instructionsLabel.trailingAnchor),
             emptyStateImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
