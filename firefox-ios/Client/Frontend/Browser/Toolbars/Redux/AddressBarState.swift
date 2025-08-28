@@ -55,6 +55,17 @@ struct AddressBarState: StateType, Sendable, Equatable {
         a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
 
+    private static let cancelCrossEditAction = ToolbarActionConfiguration(
+        actionType: .cancelEdit,
+        iconName: StandardImageIdentifiers.Large.cross,
+        isFlippedForRTL: true,
+        isEnabled: true,
+        configuration: {
+            if #available(iOS 26.0, *) { .prominentClearGlass() } else { .plain() }
+        }(),
+        a11yLabel: .AddressToolbar.CancelEditButtonLabel,
+        a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
+
     private static let cancelEditTextAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
         actionLabel: .CancelString, // Use .AddressToolbar.CancelEditButtonLabel starting v138 (localization)
@@ -1038,7 +1049,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         if isEditing {
             // cancel button when in edit mode
-            actions.append(cancelEditTextAction)
+            if #available(iOS 26.0, *), isShowingNavigationToolbar {
+                actions.append(cancelCrossEditAction)
+            } else {
+                actions.append(cancelEditTextAction)
+            }
         }
 
         // In compact only cancel action should be shown

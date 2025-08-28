@@ -37,6 +37,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var hasCustomColor = false
     var largeContentTitle: String?
     var contextualHintType: String?
+    var configuration: UIButton.Configuration?
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String

@@ -122,7 +122,11 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        let color: UIColor = isToolbarRefactorEnabled ? theme.colors.layerSurfaceLow : theme.colors.layer1
+        let color: UIColor = if isToolbarRefactorEnabled, #unavailable(iOS 26.0) {
+            theme.colors.layerSurfaceLow
+        } else {
+            theme.colors.layer1
+        }
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
 
         backgroundColor = isClearBackground ? .clear : color

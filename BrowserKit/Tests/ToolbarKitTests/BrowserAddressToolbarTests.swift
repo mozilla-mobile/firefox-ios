@@ -8,6 +8,7 @@ import XCTest
 final class BrowserAddressToolbarTests: XCTestCase {
     private var sut: BrowserAddressToolbar?
     private var toolbarElement: ToolbarElement?
+    private var toolbarElementFilledConfig: ToolbarElement?
     private var toolbarElement2: ToolbarElement?
     private var tabToolbarElement: ToolbarElement?
 
@@ -25,6 +26,21 @@ final class BrowserAddressToolbarTests: XCTestCase {
             a11yCustomActionName: nil,
             a11yCustomAction: nil,
             hasLongPressAction: false,
+            onSelected: nil,
+            onLongPress: nil
+        )
+
+        toolbarElementFilledConfig = ToolbarElement(
+            iconName: "icon",
+            isEnabled: true,
+            isSelected: false,
+            a11yLabel: "Test Button",
+            a11yHint: nil,
+            a11yId: "a11yID-1",
+            a11yCustomActionName: nil,
+            a11yCustomAction: nil,
+            hasLongPressAction: false,
+            configuration: .filled(),
             onSelected: nil,
             onLongPress: nil
         )
@@ -64,6 +80,7 @@ final class BrowserAddressToolbarTests: XCTestCase {
         sut = nil
         toolbarElement = nil
         toolbarElement2 = nil
+        toolbarElementFilledConfig = nil
         tabToolbarElement = nil
         super.tearDown()
     }
@@ -114,10 +131,36 @@ final class BrowserAddressToolbarTests: XCTestCase {
             return
         }
 
-        let cacheKey = toolbarElement.a11yId
+        let cacheKey = "\(toolbarElement.a11yId)_\(toolbarElement.configuration?.hashValue ?? 0)"
         _ = sut.getToolbarButton(for: toolbarElement)
         XCTAssertTrue(sut.cachedButtonReferences.keys.contains(cacheKey),
                       "Cache should contain key for the toolbar element.")
+    }
+
+    func testCacheKeyGeneration_DifferentConfigurationsCreateDifferentKeys() {
+        guard let sut, let tabToolbarElement, let toolbarElementFilledConfig else {
+            XCTFail("Setup failed")
+            return
+        }
+
+        _ = sut.getToolbarButton(for: tabToolbarElement)
+        _ = sut.getToolbarButton(for: toolbarElementFilledConfig)
+
+        // Generate expected cache keys
+        let plainConfigKey = "\(tabToolbarElement.a11yId)_\(tabToolbarElement.configuration?.hashValue ?? 0)"
+        let filledConfigKey = "\(toolbarElementFilledConfig.a11yId)_\(toolbarElementFilledConfig.configuration?.hashValue ?? 0)"
+
+        // Verify both keys exist in cache and are different
+        XCTAssertTrue(sut.cachedButtonReferences.keys.contains(plainConfigKey),
+                      "Cache should contain key for plain configuration element.")
+        XCTAssertTrue(sut.cachedButtonReferences.keys.contains(filledConfigKey),
+                      "Cache should contain key for filled configuration element.")
+        XCTAssertNotEqual(plainConfigKey,
+                          filledConfigKey,
+                          "Different configurations should generate different cache keys.")
+        XCTAssertEqual(sut.cachedButtonReferences.count,
+                       2,
+                       "Cache should contain two separate entries for different configurations.")
     }
 
     func testTabNumberButtonCreation() {

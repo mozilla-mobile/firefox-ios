@@ -416,8 +416,14 @@ public class BrowserAddressToolbar: UIView,
     private func updateBorder(borderPosition: AddressToolbarBorderPosition?) {
         switch borderPosition {
         case .top:
-            toolbarTopBorderHeightConstraint?.constant = UX.borderHeight
             toolbarBottomBorderHeightConstraint?.constant = 0
+            // We hide the top border if the address bar is set to the bottom and iOS version is 26 and above.
+            guard #available(iOS 26.0, *),
+                  previousConfiguration?.locationViewConfiguration.shouldShowKeyboard == true else {
+                toolbarTopBorderHeightConstraint?.constant = UX.borderHeight
+                return
+            }
+            toolbarTopBorderHeightConstraint?.constant = 0
         case .bottom:
             toolbarTopBorderHeightConstraint?.constant = 0
             toolbarBottomBorderHeightConstraint?.constant = UX.borderHeight

@@ -27,8 +27,8 @@ final class TabNumberButton: ToolbarButton {
     }
 
     // MARK: - Init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(frame: CGRect, configuration: UIButton.Configuration) {
+        super.init(frame: frame, configuration: configuration)
         setupLayout()
     }
 

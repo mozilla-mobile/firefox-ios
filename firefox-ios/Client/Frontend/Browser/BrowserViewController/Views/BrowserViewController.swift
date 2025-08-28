@@ -144,6 +144,7 @@ class BrowserViewController: UIViewController,
     private(set) lazy var mailtoLinkHandler = MailtoLinkHandler()
     private lazy var statusBarOverlay: StatusBarOverlay = .build { _ in }
     private var statusBarOverlayConstraints = [NSLayoutConstraint]()
+    private var bottomBlurViewTopConstraint = NSLayoutConstraint()
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
         AddressToolbarContainer(
             isSwipingTabsEnabled: self.isSwipingTabsEnabled,
@@ -1541,6 +1542,12 @@ class BrowserViewController: UIViewController,
             overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
+            guard #available(iOS 26.0, *) else { return }
+            if isKeyboardShowing {
+                bottomBlurViewTopConstraint.constant = addressToolbarContainer.frame.height
+            } else {
+                bottomBlurViewTopConstraint.constant = 0
+            }
         }
     }
 
@@ -1685,13 +1692,14 @@ class BrowserViewController: UIViewController,
         view.insertSubview(backgroundView,
                            belowSubview: isSwipingTabsEnabled ? webPagePreview : contentContainer)
 
+        bottomBlurViewTopConstraint = bottomBlurView.topAnchor.constraint(equalTo: overKeyboardContainer.topAnchor)
         NSLayoutConstraint.activate([
             topBlurView.topAnchor.constraint(equalTo: view.topAnchor),
             topBlurView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
             topBlurView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             topBlurView.bottomAnchor.constraint(equalTo: header.bottomAnchor),
 
-            bottomBlurView.topAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
+            bottomBlurViewTopConstraint,
             bottomBlurView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor),
             bottomBlurView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             bottomBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

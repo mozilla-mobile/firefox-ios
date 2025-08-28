@@ -57,6 +57,9 @@ public struct ToolbarElement: Equatable {
     /// this is only used to compare for equality as closures can't be compared
     let hasLongPressAction: Bool
 
+    /// Configuration that defines the visual style of the toolbar element.
+    let configuration: UIButton.Configuration?
+
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
 
@@ -82,6 +85,7 @@ public struct ToolbarElement: Equatable {
                 a11yCustomActionName: String? = nil,
                 a11yCustomAction: (() -> Void)? = nil,
                 hasLongPressAction: Bool,
+                configuration: UIButton.Configuration? = nil,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
@@ -103,6 +107,7 @@ public struct ToolbarElement: Equatable {
         self.a11yCustomActionName = a11yCustomActionName
         self.a11yCustomAction = a11yCustomAction
         self.hasLongPressAction = hasLongPressAction
+        self.configuration = configuration
     }
 
     public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {
@@ -118,6 +123,7 @@ public struct ToolbarElement: Equatable {
         lhs.largeContentTitle == rhs.largeContentTitle &&
         lhs.contextualHintType == rhs.contextualHintType &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&
+        lhs.configuration == rhs.configuration &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&
         lhs.a11yId == rhs.a11yId &&
