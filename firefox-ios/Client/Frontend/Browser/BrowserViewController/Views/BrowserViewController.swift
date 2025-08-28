@@ -1051,6 +1051,7 @@ class BrowserViewController: UIViewController,
         addSubviews()
         setupConstraints()
         setupNotifications()
+        setupNavigationAppearance()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
 
@@ -1139,6 +1140,11 @@ class BrowserViewController: UIViewController,
             }
             return true
         })
+    }
+
+    private func setupNavigationAppearance() {
+        title = .FirefoxHomepage.ScreenTitle
+        navigationItem.backButtonDisplayMode = .generic
     }
 
     // FIXME: FXIOS-12995 Use Notifiable on all of these...
@@ -3274,8 +3280,9 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            if let isHomepage = tabManager.selectedTab?.isFxHomeTab, isHomepage {
-                focusLocationTextField(forTab: tabManager.selectedTab)
+            guard let selectedTab = tabManager.selectedTab else { return }
+            if selectedTab.isPrivate == isPrivate, selectedTab.isFxHomeTab {
+                focusLocationTextField(forTab: selectedTab)
             } else {
                 openBlankNewTab(
                     focusLocationField: options?.contains(.focusLocationField) == true,
@@ -4619,7 +4626,11 @@ extension BrowserViewController: TabManagerDelegate {
         readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
         ReaderModeHandlers.setCache(readerModeCache)
 
-        scrollController.tab = selectedTab
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.tab = selectedTab
+        } else {
+            scrollController.tabProvider = TabProviderAdapter(selectedTab)
+        }
 
         var needsReload = false
         if let webView = selectedTab.webView {
@@ -4655,7 +4666,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateFindInPageVisibility(isVisible: false, tab: previousTab)
-        setupMiddleButtonStatus(isLoading: selectedTab.loading)
+        setupMiddleButtonStatus(isLoading: selectedTab.isLoading)
 
         if isToolbarRefactorEnabled {
             dispatchBackForwardToolbarAction(canGoBack: selectedTab.canGoBack,

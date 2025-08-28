@@ -10,7 +10,6 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var secondaryActionColor: Color = .clear
 
     @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
@@ -51,31 +50,38 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     // MARK: - Main Content
 
     private var termsContent: some View {
-        VStack {
-            Spacer()
-            ContentFittingScrollView {
-                VStack(spacing: UX.CardView.spacing) {
-                    Spacer()
-                    imageView
-                    titleView
-                    bodyView
-                    Spacer()
-                    links
-                    primaryButton
-                    Spacer()
+        SheetSizedCard {
+            GeometryReader { geometry in
+                ScrollView(.vertical) {
+                    VStack {
+                        VStack(spacing: UX.CardView.tosSpacing) {
+                            VStack(spacing: UX.CardView.spacing) {
+                                imageView
+                                titleView
+                                bodyView
+                            }
+                            VStack(spacing: UX.CardView.spacing) {
+                                links
+                                primaryButton
+                            }
+                        }
+                        .padding(.vertical, UX.CardView.verticalPadding)
+                        .frame(width: UX.CardView.primaryButtonWidthiPad)
+                    }
+                    .frame(width: geometry.size.width)
+                    .frame(minHeight: geometry.size.height)
                 }
-                .frame(width: UX.CardView.primaryButtonWidthiPad)
+                .scrollBounceBehavior(basedOnSize: true)
             }
-            .frame(width: UX.CardView.baseiPadWidth, height: UX.CardView.baseiPadHeight)
-            .padding(UX.CardView.verticalPadding)
             .background(
-                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                    .fill(cardBackgroundColor)
-                    .accessibilityHidden(true)
+                RoundedRectangle(
+                    cornerRadius: UX.CardView.cornerRadius
+                )
+                .fill(cardBackgroundColor)
+                .accessibilityHidden(true)
             )
             .padding(.horizontal, UX.CardView.horizontalPadding)
             .accessibilityElement(children: .contain)
-            Spacer()
         }
     }
 

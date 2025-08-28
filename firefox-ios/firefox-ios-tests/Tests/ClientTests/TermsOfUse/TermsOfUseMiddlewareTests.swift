@@ -26,7 +26,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         AppContainer.shared.reset()
     }
 
-     func testMiddleware_markAccepted_updatesPrefs() {
+    func testMiddleware_markAccepted_updatesPrefs() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markAccepted)
         middleware.termsOfUseProvider(AppState(), action)
         XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true)
@@ -51,5 +51,18 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNil(dismissedTimestamp)
+    }
+    func testMiddleware_markAccepted_recordsVersionAndDatePrefs() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markAccepted)
+        middleware.termsOfUseProvider(AppState(), action)
+
+        let versionString = profile.prefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion)
+        XCTAssertEqual(versionString, String(middleware.telemetry.termsOfUseVersion))
+        let dateTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate)
+        XCTAssertNotNil(dateTimestamp)
+        if let timestamp = dateTimestamp {
+            let acceptedDate = Date.fromTimestamp(timestamp)
+            XCTAssertTrue(Calendar.current.isDate(acceptedDate, inSameDayAs: Date()))
+        }
     }
 }

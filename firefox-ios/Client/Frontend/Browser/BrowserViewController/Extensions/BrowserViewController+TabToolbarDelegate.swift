@@ -79,7 +79,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         else { return }
 
         if let selectedTab = tabManager.selectedTab,
-            selectedTab.isFxHomeTab || !selectedTab.loading,
+            selectedTab.isFxHomeTab || !selectedTab.isLoading,
             !state.microsurveyState.showPrompt {
             present(navigationContextHintVC, animated: true)
             UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)

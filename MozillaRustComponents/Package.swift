@@ -1,22 +1,23 @@
 // swift-tools-version: 5.6
 import PackageDescription
 
-let checksum = "a83470fa0e8c409fd9ec126b67afb0ea8262d7e52d068406cdbab89118a46197"
-let version = "144.0.20250822050345"
-let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.144.20250822050345/artifacts/public/build/MozillaRustComponents.xcframework.zip"
+let checksum = "b8d1b51d0d67b6d2b2e409161a3561236bbf16293f17df44bb849cdbb32d70de"
+let version = "144.0.20250827050304"
+let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.144.20250827050304/artifacts/public/build/MozillaRustComponents.xcframework.zip"
 
 // Focus xcframework
-let focusChecksum = "30cde8dc8b55287e13da36b83bc2118a4be52d3ce667d82b424bdd1fd950e6bc"
-let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.144.20250822050345/artifacts/public/build/FocusRustComponents.xcframework.zip"
+let focusChecksum = "7e41237592ef15fc37693554ebedd0f826a26edd98cd21daa355f6fe07da73e4"
+let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.144.20250827050304/artifacts/public/build/FocusRustComponents.xcframework.zip"
 
 let package = Package(
     name: "MozillaRustComponentsSwift",
     platforms: [.iOS(.v15)],
     products: [
         .library(name: "MozillaRustComponents", targets: ["MozillaAppServices"]),
+        .library(name: "FocusRustComponents", targets: ["FocusAppServices"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/mozilla/glean-swift", from: "64.1.0"),
+        .package(url: "https://github.com/mozilla/glean-swift", from: "65.0.2"),
     ],
     targets: [
         // A wrapper around our binary target that combines + any swift files we want to expose to the user
@@ -26,7 +27,7 @@ let package = Package(
             path: "Sources/MozillaRustComponentsWrapper"
         ),
         .target(
-            name: "FocusMozillaAppServices",
+            name: "FocusAppServices",
             dependencies: [
                 .target(name: "FocusRustComponents", condition: .when(platforms: [.iOS]))
             ],

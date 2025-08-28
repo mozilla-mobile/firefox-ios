@@ -8,11 +8,14 @@ import Common
 
 enum UX {
     enum CardView {
-        // Base metrics for a standard device (e.g., iPhone 11)
         static let baseWidth: CGFloat = 375
         static let baseHeight: CGFloat = 812
-        static let baseiPadWidth: CGFloat = 510
-        static let baseiPadHeight: CGFloat = 755
+        static let landscapeWidthRatio: CGFloat = 0.75
+        static let portraitWidthRatio: CGFloat = 0.7
+        static let maxWidth: CGFloat = 508
+        static let landscapeHeightRatio: CGFloat = 0.85
+        static let portraitHeightRatio: CGFloat = 0.7
+        static let maxHeight: CGFloat = 712
 
         static let cardTopPadding: CGFloat = 32
         static func cardSecondaryContainerPadding(for sizeCategory: ContentSizeCategory) -> CGFloat {
@@ -25,6 +28,7 @@ enum UX {
         }
         static let cardHeightRatio: CGFloat = 0.75
         static let spacing: CGFloat = 24
+        static let tosSpacing: CGFloat = 48
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150

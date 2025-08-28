@@ -219,39 +219,21 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_viewDidAppear_withStoriesRedesignDisabled_triggersHomepageAction() throws {
         setIsStoriesRedesignEnabled(isEnabled: false)
         let subject = createSubject()
-        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
         // Need to call loadViewIfNeeded and newState to populate the datasource
         // used to check whether we should send dispatch action or not
         // layoutIfNeeded() recalculates the collection view to have items
         subject.loadViewIfNeeded()
-        subject.newState(state: initialState)
-        subject.view.layoutIfNeeded()
-
-        let firstActionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
-        )
-        let firstActionType = try XCTUnwrap(firstActionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(firstActionType, HomepageActionType.initialize)
-
-        // Trigger a new state so that we have a snapshot update
-        let newState =  HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
-            GeneralBrowserAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-            )
-        )
-        subject.newState(state: newState)
+        subject.newState(state: HomepageState(windowUUID: .XCTestDefaultUUID))
         subject.view.layoutIfNeeded()
         subject.viewDidAppear(false)
 
         XCTAssertTrue(mockThrottler.didCallThrottle)
-        let secondActionCalled = try XCTUnwrap(
+        let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
         )
-        let secondActionType = try XCTUnwrap(secondActionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(secondActionType, HomepageActionType.sectionSeen)
-        XCTAssertEqual(secondActionCalled.windowUUID, .XCTestDefaultUUID)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
+        XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
+        XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
     // This test differs from the one above in that is has the `stories-redesign` feature flag enabled.
@@ -286,30 +268,13 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_scrollViewDidEndDecelerating_withStoriesRedesignDisabled_triggersHomepageAction() throws {
         setIsStoriesRedesignEnabled(isEnabled: false)
         let subject = createSubject()
-        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
         // Need to call loadViewIfNeeded and newState to populate the datasource
         // used to check whether we should send dispatch action or not
         // layoutIfNeeded() recalculates the collection view to have items
         subject.loadViewIfNeeded()
-        subject.newState(state: initialState)
+        subject.newState(state: HomepageState(windowUUID: .XCTestDefaultUUID))
         subject.view.layoutIfNeeded()
 
-        let firstActionCalled = try XCTUnwrap(
-            mockStore.dispatchedActions.last(where: { $0 is HomepageAction }) as? HomepageAction
-        )
-        let firstActionType = try XCTUnwrap(firstActionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(firstActionType, HomepageActionType.initialize)
-
-        // Trigger a new state so that we have a snapshot update
-        let newState =  HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
-            GeneralBrowserAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-            )
-        )
-        subject.newState(state: newState)
-        subject.view.layoutIfNeeded()
         subject.scrollViewDidEndDecelerating(UIScrollView())
 
         XCTAssertTrue(mockThrottler.didCallThrottle)

@@ -97,7 +97,7 @@ class CreditCardInputViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
     var logger: Logger?
     let profile: Profile
-    let autofill: RustAutofill
+    let autofill: CreditCardProvider
     var creditCard: CreditCard?
     let creditCardValidator: CreditCardValidator
 
@@ -187,10 +187,11 @@ class CreditCardInputViewModel: ObservableObject {
     init(profile: Profile,
          creditCard: CreditCard? = nil,
          creditCardValidator: CreditCardValidator = CreditCardValidator(),
+         creditCardProvider: CreditCardProvider,
          logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
-        self.autofill = profile.autofill
+        self.autofill = creditCardProvider
         self.creditCard = creditCard
         self.state = .add
         self.creditCardValidator = creditCardValidator

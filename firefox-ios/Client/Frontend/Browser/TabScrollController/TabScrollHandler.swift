@@ -8,8 +8,7 @@ import Common
 
 @MainActor
 protocol TabScrollHandlerProtocol: AnyObject {
-    var zoomPageBar: ZoomPageBar? { get set }
-    var tab: Tab? { get set }
+    var tabProvider: TabProviderProtocol? { get set }
     var contentOffset: CGPoint { get }
 
     func showToolbars(animated: Bool)
@@ -25,7 +24,7 @@ final class TabScrollHandler: NSObject,
                               TabScrollHandlerProtocol,
                               UIScrollViewDelegate {
     protocol Delegate: AnyObject {
-        func startAnimatingToolbar(displayState: ToolbarDisplayState)
+        func updateToolbarTransition(progress: CGFloat, towards state: ToolbarDisplayState)
         func showToolbar()
         func hideToolbar()
     }
@@ -36,7 +35,8 @@ final class TabScrollHandler: NSObject,
         static let minimalAddressBarAnimationDuration: CGFloat = 0.4
         static let heightOffset: CGFloat = 14
         static let minimumScrollThreshold: CGFloat = 20
-        static let minimumScrollVelocity: CGFloat = 100
+        // Setting a very high number to use translation mainly
+        static let minimumScrollVelocity: CGFloat = 1000
     }
 
     private var isMinimalAddressBarEnabled: Bool {
@@ -69,10 +69,8 @@ final class TabScrollHandler: NSObject,
         }
     }
 
-    weak var tab: Tab? {
-        willSet {
-            self.scrollView?.delegate = nil
-        }
+    var tabProvider: TabProviderProtocol? {
+        willSet { scrollView?.delegate = nil }
 
         didSet {
             // FXIOS-9781 This could result in scrolling not closing the toolbar
@@ -80,14 +78,11 @@ final class TabScrollHandler: NSObject,
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
-
-            tab?.onWebViewLoadingStateChanged = { [weak self] in
+            tabProvider?.onLoadingStateChanged = { [weak self] in
                 self?.handleOnTabContentLoading()
             }
         }
     }
-
-    weak var zoomPageBar: ZoomPageBar?
 
     private var lastPanTranslation: CGFloat = 0
     private var lastContentOffsetY: CGFloat = 0
@@ -103,7 +98,7 @@ final class TabScrollHandler: NSObject,
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
 
-    private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
+    private var scrollView: UIScrollView? { return tabProvider?.scrollView }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
@@ -143,14 +138,12 @@ final class TabScrollHandler: NSObject,
     // TODO: Update to private in the future for now we need to keep support for Legacy protocol
     func showToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .expanded)
-        lastValidState = toolbarDisplayState
         delegate?.showToolbar()
     }
 
     // TODO: Update to private in the future for now we need to keep support for Legacy protocol
     func hideToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .collapsed)
-        lastValidState = toolbarDisplayState
         delegate?.hideToolbar()
     }
 
@@ -187,27 +180,53 @@ final class TabScrollHandler: NSObject,
     // MARK: - Pull to refresh
 
     func removePullRefreshControl() {
-        tab?.webView?.removePullRefresh()
+        tabProvider?.removePullToRefresh()
     }
 
     func configureRefreshControl() {
-        guard tab?.isFxHomeTab == false else { return }
-        tab?.webView?.addPullRefresh { [weak self] in
+        guard tabProvider?.isFxHomeTab == false else { return }
+        tabProvider?.addPullToRefresh { [weak self] in
             self?.reload()
         }
     }
 
-    func handleScroll(for translation: CGPoint, velocity: CGPoint) {
-        guard !tabIsLoading() else { return }
+    func handleScroll(for translation: CGPoint) {
+        guard !tabIsLoading(),
+              shouldUpdateUIWhenScrolling else { return }
 
-        tab?.shouldScrollToTop = false
+        tabProvider?.shouldScrollToTop = false
 
-        let delta = lastPanTranslation - translation.y
+        let delta = -translation.y
         scrollDirection = delta > 0 ? .down : .up
 
-        guard shouldRespondToScroll(for: velocity, delta: delta) else { return }
+        // If the scrolling is in the same direction of the last action ignore the rest of the calls
+        guard !shouldIgnoreScroll() else { return }
+
+        handleToolbarIsTransitioning(scrollDelta: delta)
+    }
+
+    func shouldIgnoreScroll() -> Bool {
+        return scrollDirection == .down && toolbarDisplayState.isCollapsed
+            || scrollDirection == .up && toolbarDisplayState.isExpanded
+    }
+
+    func handleEndScrolling(for translation: CGPoint, velocity: CGPoint) {
+        let delta = lastPanTranslation - translation.y
+        // Reset lastPanTranslation
+        lastPanTranslation = 0
+
+        guard shouldConfirmTransition(for: velocity, delta: delta) else {
+            cancelTransition()
+            return
+        }
 
         updateToolbarDisplayState(for: delta)
+    }
+
+    private func checkIfDeltaIsPassed(for translation: CGFloat) -> Bool {
+        let delta = lastPanTranslation - translation
+
+        return abs(delta) > UX.minimumScrollThreshold
     }
 
     // MARK: - UIScrollViewDelegate
@@ -215,25 +234,11 @@ final class TabScrollHandler: NSObject,
         lastContentOffsetY = scrollView.contentOffset.y
     }
 
-    /// Decelerate is true the scrolling movement will continue
-    /// If the value is false, scrolling stops immediately upon touch-up.
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard let tab,
-              !tabIsLoading(),
-              !scrollReachBottom(),
-              !tab.isFindInPageMode,
-              shouldUpdateUIWhenScrolling else { return }
-
-        tab.shouldScrollToTop = false
-        lastPanTranslation = 0
-        toolbarDisplayState.update(displayState: lastValidState)
-    }
-
     // checking if an abrupt scroll event was triggered and adjusting the offset to the one
     // before the WKWebView's contentOffset is reset as a result of the contentView's frame becoming smaller
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // for PDFs, we should set the initial offset to 0 (ZERO)
-        if let tab, tab.shouldScrollToTop {
+        if let tabProvider, tabProvider.shouldScrollToTop {
             setOffset(y: 0, for: scrollView)
         }
 
@@ -241,12 +246,30 @@ final class TabScrollHandler: NSObject,
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
         sendActionToShowToolbarBorder(contentOffset: scrollView.contentOffset)
 
-        guard let containerView = scrollView.superview, !toolbarDisplayState.isAnimating else { return }
+        guard let containerView = scrollView.superview else { return }
+
+        let gesture = scrollView.panGestureRecognizer
+        let translation = gesture.translation(in: containerView)
+        handleScroll(for: translation)
+    }
+
+    /// Decelerate is true the scrolling movement will continue
+    /// If the value is false, scrolling stops immediately upon touch-up.
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard let tabProvider,
+              !tabIsLoading(),
+              !scrollReachBottom(),
+              !tabProvider.isFindInPageMode,
+              shouldUpdateUIWhenScrolling else { return }
+
+        tabProvider.shouldScrollToTop = false
+
+        guard let containerView = scrollView.superview else { return }
 
         let gesture = scrollView.panGestureRecognizer
         let translation = gesture.translation(in: containerView)
         let velocity = gesture.velocity(in: containerView)
-        handleScroll(for: translation, velocity: velocity)
+        handleEndScrolling(for: translation, velocity: velocity)
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -286,7 +309,7 @@ final class TabScrollHandler: NSObject,
                                headerContainer: BaseAlphaStackView? ) {}
 
     private func handleOnTabContentLoading() {
-        if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
+        if tabIsLoading() || (tabProvider?.isFxHomeTab ?? false) {
             removePullRefreshControl()
         } else {
             configureRefreshControl()
@@ -300,13 +323,13 @@ final class TabScrollHandler: NSObject,
     ///   - velocity: The pan gesture recognizer used to detect scroll movement.
     ///   - delta: The vertical scroll delta calculated from gesture translation.
     /// - Returns: A Boolean value indicating whether the gesture should trigger a UI response.
-    private func shouldRespondToScroll(for velocity: CGPoint,
-                                       delta: CGFloat) -> Bool {
+    private func shouldConfirmTransition(for velocity: CGPoint,
+                                         delta: CGFloat) -> Bool {
         guard shouldUpdateUIWhenScrolling else { return false }
 
         let isSignificantScroll = abs(delta) > UX.minimumScrollThreshold
-        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
-        return isSignificantScroll || isFastEnough
+//        let isFastEnough = abs(velocity.y) > UX.minimumScrollVelocity
+        return isSignificantScroll  // || isFastEnough
     }
 
     private var isTopRubberbanding: Bool {
@@ -319,8 +342,8 @@ final class TabScrollHandler: NSObject,
 
     @objc
     private func reload() {
-        guard let tab = tab else { return }
-        tab.reloadPage()
+        guard let tabProvider = tabProvider else { return }
+        tabProvider.reloadPage()
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
@@ -329,7 +352,7 @@ final class TabScrollHandler: NSObject,
     }
 
     private func tabIsLoading() -> Bool {
-        return tab?.loading ?? true
+        return tabProvider?.isLoading ?? true
     }
 
     /// Returns true if scroll has reach the bottom
@@ -350,20 +373,42 @@ final class TabScrollHandler: NSObject,
     /// - `.expanded`: Toolbar is currently fully expanded (`toolbarDisplayState.isExpanded == true`).
     /// - `.transitioning`: In transition or partially expanded state.
     private func updateToolbarDisplayState(for delta: CGFloat) {
-        guard !toolbarDisplayState.isAnimating else { return }
-
         if scrollDirection == .down && !toolbarDisplayState.isCollapsed {
             hideToolbars(animated: true)
         } else if scrollDirection == .up && !toolbarDisplayState.isExpanded {
             showToolbars(animated: true)
-        } else {
-            handleToolbarIsTransitioning()
         }
     }
 
-    private func handleToolbarIsTransitioning() {
-        delegate?.startAnimatingToolbar(displayState: toolbarDisplayState)
+    private func handleToolbarIsTransitioning(scrollDelta: CGFloat) {
+        // Update last valid state only once and send transitioning state to delegate
+        updateLastValidState()
+
+        if toolbarDisplayState == .transitioning && checkIfDeltaIsPassed(for: scrollDelta) {
+            updateToolbarDisplayState(for: scrollDelta)
+            updateLastValidState()
+            return
+        }
+
+        let transitioningtState: ToolbarDisplayState = lastValidState == .expanded ? .collapsed : .expanded
+        delegate?.updateToolbarTransition(progress: scrollDelta, towards: transitioningtState)
         toolbarDisplayState.update(displayState: .transitioning)
+    }
+
+    private func updateLastValidState() {
+        if toolbarDisplayState.isExpanded {
+            lastValidState = .expanded
+        } else if toolbarDisplayState.isCollapsed {
+            lastValidState = .collapsed
+        }
+    }
+
+    private func cancelTransition() {
+        if lastValidState == .expanded {
+            showToolbars(animated: true)
+        } else {
+            hideToolbars(animated: true)
+        }
     }
 
     private func setOffset(y: CGFloat, for scrollView: UIScrollView) {
