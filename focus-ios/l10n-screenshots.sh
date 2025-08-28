@@ -30,7 +30,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-DEVICE="iPhone 16 (26.0)"
+DEVICE="iPhone 16"
 
 xcrun simctl list devices
 for lang in $LOCALES; do
