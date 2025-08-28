@@ -13,9 +13,6 @@ class GCDThrottlerTests: XCTestCase {
     }
 
     private var testQueue: DispatchQueue!
-    private var throttler: GCDThrottler!
-    private var expectation: XCTestExpectation!
-    private var testValue = 0
 
     override func setUp() {
         super.setUp()
@@ -23,64 +20,57 @@ class GCDThrottlerTests: XCTestCase {
     }
 
     override func tearDown() {
-        throttler = nil
-        expectation = nil
         testQueue = nil
         super.tearDown()
     }
 
     func testMultipleFastConsecutiveCallsAreThrottledAndExecutedAtMostOneTime() {
-        prepareTest(timeout: Timing.veryLongDelay)
+        let throttler = createSubject(timeout: Timing.veryLongDelay)
 
-        throttler.throttle { self.testValue += 1 }
-        throttler.throttle { self.testValue += 1 }
-        throttler.throttle { self.testValue += 1 }
+        let firedOnce = expectation(description: "Throttle completion fired")
+        firedOnce.expectedFulfillmentCount = 1
+        firedOnce.assertForOverFulfill = true
 
-        expect(value: 1)
+        throttler.throttle { firedOnce.fulfill() }
+        throttler.throttle { firedOnce.fulfill() }
+        throttler.throttle { firedOnce.fulfill() }
+
+        wait(for: [firedOnce], timeout: Timing.defaultTestMaxWaitTime)
     }
 
     func testThrottleZeroSecondThrottleExecutesAllClosures() {
-        prepareTest(timeout: 0)
+        let throttler = createSubject(timeout: 0)
 
-        throttler.throttle { self.testValue += 1 }
-        throttler.throttle { self.testValue += 1 }
+        let executedFirstThrottle = expectation(description: "First throttle completion fired")
+        let executedSecondThrottle = expectation(description: "Second throttle completion fired")
 
-        expect(value: 2)
+        throttler.throttle { executedFirstThrottle.fulfill() }
+        throttler.throttle { executedSecondThrottle.fulfill() }
+
+        wait(for: [executedFirstThrottle, executedSecondThrottle], timeout: Timing.defaultTestMaxWaitTime)
     }
 
     func testSecondCallAfterDelayThresholdCallsBothClosures() {
         let threshold = 0.5
         let step: Double = (threshold / 2.0)
-        prepareTest(timeout: threshold)
+        let throttler = createSubject(timeout: threshold)
 
         // Send one call to throttler
-        throttler.throttle { self.testValue = 1 }
-        DispatchQueue.main.asyncAfter(deadline: .now() + step) {
-            XCTAssertEqual(self.testValue, 1)
-        }
+        let executedFirstThrottle = expectation(description: "First throttle completion fired")
+        let executedSecondThrottle = expectation(description: "Second throttle completion fired")
+
+        throttler.throttle { executedFirstThrottle.fulfill() }
 
         // Wait briefly after our threshold and send another call
         DispatchQueue.main.asyncAfter(deadline: .now() + threshold + step) {
-            self.throttler.throttle { self.testValue = 2 }
+            throttler.throttle { executedSecondThrottle.fulfill() }
         }
 
-        // Expect both calls to throttler have executed
-        self.expect(value: 2)
+        wait(for: [executedFirstThrottle, executedSecondThrottle], timeout: Timing.defaultTestMaxWaitTime)
     }
 
     // MARK: - Utility
-
-    private func prepareTest(timeout: Double) {
-        testValue = 0
-        expectation = XCTestExpectation(description: "Throttle value expectation")
-        throttler = GCDThrottler(seconds: timeout, on: testQueue)
-    }
-
-    private func expect(value expected: Int) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Timing.defaultTestMaxWaitTime) {
-            guard self.testValue == expected else { XCTFail("Expected value \(expected) != \(self.testValue)."); return }
-            self.expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: Timing.defaultTestMaxWaitTime * 2.0)
+    private func createSubject(timeout: Double) -> GCDThrottler {
+        return GCDThrottler(seconds: timeout, on: testQueue)
     }
 }
