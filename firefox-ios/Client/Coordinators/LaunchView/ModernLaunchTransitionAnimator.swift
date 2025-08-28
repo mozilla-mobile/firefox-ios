@@ -9,8 +9,8 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
     // MARK: - UX Constants
     private enum UX {
         static let totalDuration: TimeInterval = 0.6
-        static let fadeOutDurationRatio: Double = 0.4
-        static let fadeInDurationRatio: Double = 0.6
+        static let fadeOutDurationRatio = 0.4
+        static let fadeInDurationRatio = 0.6
         static let initialAlpha: CGFloat = 0.0
         static let finalAlpha: CGFloat = 1.0
         static let fadeOutDelay: TimeInterval = 0

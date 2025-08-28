@@ -14,7 +14,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         static let fadeOutDuration: TimeInterval = 0.24
         static let fadeOutDelay: TimeInterval = 0
         static let fadeOutAlpha: CGFloat = 0.0
-        static let initialSetupDelayMilliseconds: Int = 500
+        static let initialSetupDelayMilliseconds = 500
         static let minimumDisplayTimeSeconds: TimeInterval = 1.0
 
         // Computed properties for nanosecond conversions

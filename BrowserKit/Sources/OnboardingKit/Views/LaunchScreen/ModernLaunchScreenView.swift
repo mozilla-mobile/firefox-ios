@@ -7,7 +7,7 @@ import Common
 
 public struct ModernLaunchScreenView: View {
     @State private var rotationAngle: Double = 0
-    @State private var isAnimating: Bool = false
+    @State private var isAnimating = false
 
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
