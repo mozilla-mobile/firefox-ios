@@ -150,7 +150,12 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         case .brand:
             cell = tableView.dequeueReusableCell(withIdentifier: SummaryBrandCell.cellIdentifier, for: indexPath)
             if let cell = cell as? SummaryBrandCell {
-                cell.configure(text: model.brandName, textA11yId: model.brandNameA11yId, logo: model.brandIcon, logoA11yId: model.brandIconA11yId)
+                cell.configure(
+                    text: model.brandName,
+                    textA11yId: model.brandNameA11yId,
+                    logo: model.brandIcon,
+                    logoA11yId: model.brandIconA11yId
+                )
             }
         case .summary:
             cell = tableView.dequeueReusableCell(withIdentifier: SummaryTextCell.cellIdentifier, for: indexPath)
