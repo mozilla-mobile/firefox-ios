@@ -1525,6 +1525,9 @@
 		C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */; };
 		C7F051582D9F098200EC52C0 /* ContextMenuTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */; };
 		C7F051692DB2F38000EC52C0 /* ContextMenuPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051682DB2F38000EC52C0 /* ContextMenuPreviewViewController.swift */; };
+		C7F5331A2E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F533192E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift */; };
+		C7F5331E2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F5331D2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift */; };
+		C7F538D52E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F538D42E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift */; };
 		C7FA9AE62E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA9AE52E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift */; };
 		C7FA9E1E2E4BD4D1004F2CA1 /* AddShortcutsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FA9E1D2E4BD4D1004F2CA1 /* AddShortcutsSetting.swift */; };
 		C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80685D026A0C93900DCD895 /* UserResearch.swift */; };
@@ -9614,6 +9617,9 @@
 		C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuTelemetry.swift; sourceTree = "<group>"; };
 		C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuTelemetryTests.swift; sourceTree = "<group>"; };
 		C7F051682DB2F38000EC52C0 /* ContextMenuPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPreviewViewController.swift; sourceTree = "<group>"; };
+		C7F533192E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryTelemetry.swift; sourceTree = "<group>"; };
+		C7F5331D2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryMiddleware.swift; sourceTree = "<group>"; };
+		C7F538D42E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryMiddlewareTests.swift; sourceTree = "<group>"; };
 		C7FA9AE52E4B7D0D004F2CA1 /* TopSitesSectionLayoutProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesSectionLayoutProvider.swift; sourceTree = "<group>"; };
 		C7FA9E1D2E4BD4D1004F2CA1 /* AddShortcutsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddShortcutsSetting.swift; sourceTree = "<group>"; };
 		C80685D026A0C93900DCD895 /* UserResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResearch.swift; sourceTree = "<group>"; };
@@ -14076,6 +14082,7 @@
 			children = (
 				C714D6362E46570700FC02E6 /* ShortcutsLibraryStateTests.swift */,
 				C714D7B52E4673A300FC02E6 /* ShortcutsLibraryDiffableDataSourceTests.swift */,
+				C7F538D42E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift */,
 			);
 			path = ShortcutsLibrary;
 			sourceTree = "<group>";
@@ -14085,6 +14092,7 @@
 			children = (
 				C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */,
 				C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */,
+				C7F5331D2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -15460,6 +15468,7 @@
 				C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */,
 				61CEFF5D2DA8BC78000B88A7 /* TabsPanelTelemetry.swift */,
 				ED232E9F2DFA3BF00046DA47 /* UserTelemetry.swift */,
+				C7F533192E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift */,
 			);
 			path = Telemetry;
 			sourceTree = "<group>";
@@ -17957,6 +17966,7 @@
 				219914052AF963F900153598 /* TabTrayAction.swift in Sources */,
 				5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
+				C7F5331A2E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift in Sources */,
 				C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */,
 				8A8917692B57283B008B01EA /* LegacyHomepageHeaderCell.swift in Sources */,
 				8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */,
@@ -18755,6 +18765,7 @@
 				213B7AF02D779D2400DF0123 /* Download.swift in Sources */,
 				BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */,
 				810FF3582B1784E7009F062C /* PrivateModeAction.swift in Sources */,
+				C7F5331E2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift in Sources */,
 				21EA466A2B04130500AAAB2D /* TabsPanelState.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
 				C29B64EE2AD937D500F3244B /* QRCodeNavigationHandler.swift in Sources */,
@@ -18920,6 +18931,7 @@
 				8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */,
 				8A8482F02BE1602500F9007B /* MicrosurveyPromptStateTests.swift in Sources */,
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
+				C7F538D52E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
 				8A44D3612DB7DFD700B7D80B /* MockThrottler.swift in Sources */,
 				8A7892072CF9228700490CA4 /* UnifiedAdsCallbackTelemetryTests.swift in Sources */,

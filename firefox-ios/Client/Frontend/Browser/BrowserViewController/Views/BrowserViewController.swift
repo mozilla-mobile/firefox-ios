@@ -3436,6 +3436,7 @@ class BrowserViewController: UIViewController,
         guard let currentViewController = navigationController?.topViewController else { return }
         // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
         if !isShowingJSPromptAlert() {
+            (currentViewController as? ShortcutsLibraryViewController)?.recordTelemetryOnDisappear = false
             currentViewController.dismiss(animated: true, completion: nil)
         }
 
