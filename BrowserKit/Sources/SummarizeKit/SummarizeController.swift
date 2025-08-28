@@ -185,8 +185,6 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             a11yLabel: viewModel.closeButtonModel.a11yLabel) { [weak self] in
                 self?.triggerDismissingAnimation()
         }
-        summaryView.accessibilityIdentifier = viewModel.summarizeTextViewA11yId
-        summaryView.accessibilityLabel = viewModel.summarizeTextViewA11yLabel
     }
 
     private func setupLayout() {
