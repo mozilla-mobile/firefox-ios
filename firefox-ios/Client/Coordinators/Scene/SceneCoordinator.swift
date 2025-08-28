@@ -26,7 +26,7 @@ class SceneCoordinator: BaseCoordinator,
          screenshotService: ScreenshotService = ScreenshotService(),
          sceneContainer: SceneContainer = SceneContainer(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
-         introManager: IntroScreenManagerProtocol? = nil) {
+         introManager: IntroScreenManagerProtocol) {
         // Note: this is where we singularly decide the UUID for this specific iOS browser window (UIScene).
         // The logic is handled by `reserveNextAvailableWindowUUID`, but this is the point at which a window's UUID
         // is set; this same UUID will be injected throughout several of the window's related components
@@ -40,6 +40,7 @@ class SceneCoordinator: BaseCoordinator,
         self.screenshotService = screenshotService
         self.sceneContainer = sceneContainer
         self.windowManager = windowManager
+        self.introManager = introManager
 
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)
