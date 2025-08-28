@@ -56,7 +56,7 @@ public enum FxAKeychainItemAccessibility: String {
      */
     case whenUnlockedThisDeviceOnly = "kSecAttrAccessibleWhenUnlockedThisDeviceOnly"
 
-    func secItemValue() -> CFString? {
+    func secItemValue() -> CFString {
         switch self {
         case .afterFirstUnlock:
             return kSecAttrAccessibleAfterFirstUnlock
