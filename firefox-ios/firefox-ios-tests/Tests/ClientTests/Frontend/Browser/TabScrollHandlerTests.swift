@@ -238,6 +238,8 @@ final class TabScrollHandlerTests: XCTestCase {
         let subject = createSubject(contentSize: smallContentSize)
 
         subject.handleScroll(for: CGPoint(x: 0, y: -80))
+        // Checks that transition state is not trigger even for a significant scroll
+        // because there is not enough scrollable content
         XCTAssertTrue(delegate.updateCalls.isEmpty)
 
         subject.handleEndScrolling(for: CGPoint(x: 0, y: -80), velocity: .zero)
@@ -260,7 +262,7 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.hideCount, 0)
     }
 
-    func test_IgnoreScroll_tabIsLoading_preventsCommit() {
+    func test_ignoreScroll_tabIsLoading_preventsCommit() {
         let subject = createSubject()
 
         tabProvider.isLoading = true

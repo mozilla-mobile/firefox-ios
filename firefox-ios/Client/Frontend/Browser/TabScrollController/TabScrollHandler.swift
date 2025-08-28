@@ -191,6 +191,8 @@ final class TabScrollHandler: NSObject,
     }
 
     func handleScroll(for translation: CGPoint) {
+        // Ignore user scroll if the tab is loading or if the conditions to update view are not meet
+        // voice over and webview's scroll content size is not enough to scroll
         guard !tabIsLoading(),
               shouldUpdateUIWhenScrolling else { return }
 
@@ -211,6 +213,8 @@ final class TabScrollHandler: NSObject,
     }
 
     func handleEndScrolling(for translation: CGPoint, velocity: CGPoint) {
+        // Ignore user scroll if the tab is loading or if the conditions to update view are not meet
+        // voice over and webview's scroll content size is not enough to scroll
         guard !tabIsLoading(),
               shouldUpdateUIWhenScrolling else { return }
 
