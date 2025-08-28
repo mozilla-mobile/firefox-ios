@@ -15,6 +15,7 @@ final class TabScrollHandlerTests: XCTestCase {
     var mockProfile: MockProfile!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var delegate: MockTabScrollHandlerDelegate!
+    var tabProvider: MockTabProviderProtocol!
 
     override func setUp() {
         super.setUp()
@@ -31,6 +32,7 @@ final class TabScrollHandlerTests: XCTestCase {
         mockProfile = nil
         tab = nil
         delegate = nil
+        tabProvider = nil
         super.tearDown()
     }
 
@@ -51,22 +53,20 @@ final class TabScrollHandlerTests: XCTestCase {
         // Start collapsed
         subject.hideToolbars(animated: true)
 
-        // Upward scroll => translation.y POSITIVE; choose +60
+        // Upward scroll => translation.y POSITIVE
         subject.handleScroll(for: CGPoint(x: 0, y: 60))
         subject.handleEndScrolling(for: CGPoint(x: 0, y: 60), velocity: .zero)
 
         XCTAssertEqual(delegate.showCount, 1, "Should show toolbar on significant upward scroll when collapsed")
     }
 
-    // 3) While dragging we emit a transition progress toward the correct state
     func test_updateToolbarTransition_emitsProgress_towardsCollapsed_fromExpanded() {
         let subject = createSubject()
 
-        // Expanded is default. A small in-progress drag should mark transitioning and call delegate.
+        // A small in-progress drag should mark transitioning and call delegate.
         subject.handleScroll(for: CGPoint(x: 0, y: -10)) // downwards; progress  -10
 
         XCTAssertFalse(delegate.updateCalls.isEmpty, "Expected transition progress callbacks during drag")
-        // From expanded, progress should be towards collapsed
         XCTAssertEqual(delegate.updateCalls.last?.towards, .collapsed)
     }
 
@@ -97,17 +97,16 @@ final class TabScrollHandlerTests: XCTestCase {
     /// then continues past the confirmation threshold → we should hide.
     func test_transitioning_confirmed_hides_whenDraggingDownPastThreshold() {
         let subject = createSubject()
-        // Expanded by default
 
-        // Start transitioning with a small downward drag (below threshold)
-        subject.handleScroll(for: CGPoint(x: 0, y: -10)) // delta = +10, towards .collapsed
+        // Small downward drag (below threshold) towards .collapsed
+        subject.handleScroll(for: CGPoint(x: 0, y: -10))
         XCTAssertFalse(delegate.updateCalls.isEmpty)
-        // Still transitioning; no final action yet
         XCTAssertEqual(delegate.hideCount, 0)
         XCTAssertEqual(delegate.showCount, 0)
 
-        // Continue the drag far enough to confirm (> 20)
-        subject.handleScroll(for: CGPoint(x: 0, y: -40)) // delta = +40, confirm
+        // Continue the drag far enough to confirm to pass threshold
+        subject.handleScroll(for: CGPoint(x: 0, y: -50))
+
         // Expect the transition to resolve to "hide"
         XCTAssertEqual(delegate.hideCount, 1)
         XCTAssertEqual(delegate.showCount, 0)
@@ -117,16 +116,16 @@ final class TabScrollHandlerTests: XCTestCase {
     /// then continues past the confirmation threshold → we should show.
     func test_transitioning_confirmed_shows_whenDraggingUpPastThreshold_fromCollapsed() {
         let subject = createSubject()
-        subject.hideToolbars(animated: true) // collapse first
+        subject.hideToolbars(animated: true)
         XCTAssertEqual(delegate.hideCount, 1)
 
-        // Start transitioning upward (below threshold)
-        subject.handleScroll(for: CGPoint(x: 0, y: 10)) // delta = -10, towards .expanded
+        // Small upward (below threshold)
+        subject.handleScroll(for: CGPoint(x: 0, y: 10))
         XCTAssertFalse(delegate.updateCalls.isEmpty)
         XCTAssertEqual(delegate.showCount, 0)
 
         // Continue upward past threshold to confirm
-        subject.handleScroll(for: CGPoint(x: 0, y: 40)) // delta = -40, confirm
+        subject.handleScroll(for: CGPoint(x: 0, y: 40))
         XCTAssertEqual(delegate.showCount, 1)
     }
 
@@ -139,27 +138,27 @@ final class TabScrollHandlerTests: XCTestCase {
         subject.handleScroll(for: CGPoint(x: 0, y: -10))
         XCTAssertFalse(delegate.updateCalls.isEmpty)
 
-        // End scrolling with a small delta — below threshold → cancelTransition() → show
+        // End scrolling with a small delta below threshold should cancel transition
         subject.handleEndScrolling(for: CGPoint(x: 0, y: -10), velocity: .zero)
 
         XCTAssertEqual(delegate.showCount, 1)
         XCTAssertEqual(delegate.hideCount, 0)
     }
 
-    /// Verify that the “towards” state emitted during transitioning depends on the last valid state.
-    /// Case 1: from expanded, dragging down → towards .collapsed
     func test_transitionProgress_targetsCollapsed_whenStartingExpanded_andDraggingDown() {
         let subject = createSubject()
-        subject.handleScroll(for: CGPoint(x: 0, y: -8)) // small downward
+
+        // from expanded, dragging down → towards .collapsed
+        subject.handleScroll(for: CGPoint(x: 0, y: -8))
         XCTAssertEqual(delegate.updateCalls.last?.towards, .collapsed)
     }
 
-    /// Case 2: from collapsed, dragging up → towards .expanded
     func test_transitionProgress_targetsExpanded_whenStartingCollapsed_andDraggingUp() {
         let subject = createSubject()
-        subject.hideToolbars(animated: true) // start collapsed
+        subject.hideToolbars(animated: true)
 
-        subject.handleScroll(for: CGPoint(x: 0, y: 8)) // small upward
+        // from collapsed, dragging up → towards .expanded
+        subject.handleScroll(for: CGPoint(x: 0, y: 8))
         XCTAssertEqual(delegate.updateCalls.last?.towards, .expanded)
     }
 
@@ -180,8 +179,6 @@ final class TabScrollHandlerTests: XCTestCase {
 
     // MARK: - Cancel actions (not significant scroll)
 
-    /// From expanded, a small downward drag that never exceeds the threshold should cancel
-    /// and snap back to show (expanded).
     func test_cancel_onSmallDownwardDrag_callsShow_noHide() {
         let subject = createSubject()
 
@@ -195,8 +192,6 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.hideCount, 0)
     }
 
-    /// From collapsed, a small upward drag that never exceeds the threshold should cancel
-    /// and (per current implementation) call show (snap to expanded).
     func test_cancel_onSmallUpwardDrag_fromCollapsed_callsShow_noHide() {
         let subject = createSubject()
         subject.hideToolbars(animated: true) // start collapsed
@@ -212,28 +207,23 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.hideCount, 2)
     }
 
-    /// Boundary case: exactly at the threshold should still CANCEL
-    /// because the code uses strict '>' comparison.
     func test_cancel_whenDeltaEqualsThreshold() {
         let subject = createSubject()
 
         // Start a small downward drag to enter transitioning
         subject.handleScroll(for: CGPoint(x: 0, y: -5)) // below threshold, transitioning
 
-        // End with |delta| == 20 (threshold) → should NOT confirm
         subject.handleEndScrolling(for: CGPoint(x: 0, y: -20), velocity: .zero)
 
         XCTAssertEqual(delegate.showCount, 1, "Equal to threshold should cancel and show")
         XCTAssertEqual(delegate.hideCount, 0)
     }
 
-    /// Velocity is currently ignored (commented out). Even with a high velocity,
-    /// if delta is below threshold we CANCEL.
     func test_cancel_ignoresVelocity_whenBelowThreshold() {
         let subject = createSubject()
 
         // Enter transitioning
-        subject.handleScroll(for: CGPoint(x: 0, y: -8)) // below threshold
+        subject.handleScroll(for: CGPoint(x: 0, y: -8))
 
         // End with small delta but large velocity → still cancel
         subject.handleEndScrolling(for: CGPoint(x: 0, y: -8),
@@ -243,18 +233,83 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.hideCount, 0)
     }
 
-    // MARK: - Setup
-    private func setupTabScroll(with subject: TabScrollHandler) {
-        tab.createWebview(configuration: .init())
-        tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
-        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
-        tab.webView?.scrollView.delegate = subject
-        subject.tabProvider = TabProviderAdapter(tab)
+    func test_noScrollableContent_preventsUIUpdates() {
+        let smallContentSize = CGSize(width: 320, height: 500)
+        let subject = createSubject(contentSize: smallContentSize)
+
+        subject.handleScroll(for: CGPoint(x: 0, y: -80))
+        XCTAssertTrue(delegate.updateCalls.isEmpty)
+
+        subject.handleEndScrolling(for: CGPoint(x: 0, y: -80), velocity: .zero)
+        XCTAssertEqual(delegate.showCount, 0)
+        XCTAssertEqual(delegate.hideCount, 0)
     }
 
-    private func createSubject() -> TabScrollHandler {
+    // MARK: - endDrag checks
+
+    func test_endDrag_atBottom_preventsCommit() {
+        let contentOffset = CGPoint(x: 0, y: 1980)
+        let subject = createSubject()
+        tabProvider.scrollView?.contentOffset = contentOffset
+
+        // Simulate end drag; handler checks scrollReachBottom()
+        subject.scrollViewDidEndDragging(tabProvider.scrollView!, willDecelerate: false)
+
+        // No show/hide because at bottom
+        XCTAssertEqual(delegate.showCount, 0)
+        XCTAssertEqual(delegate.hideCount, 0)
+    }
+
+    func test_IgnoreScroll_tabIsLoading_preventsCommit() {
+        let subject = createSubject()
+
+        tabProvider.isLoading = true
+        // Simulate end drag; handler checks scrollReachBottom()
+        subject.handleScroll(for: CGPoint(x: 0, y: -80))
+        subject.scrollViewDidEndDragging(tabProvider.scrollView!, willDecelerate: false)
+
+        // No show/hide because at bottom
+        XCTAssertEqual(delegate.showCount, 0)
+        XCTAssertEqual(delegate.hideCount, 0)
+    }
+
+    // MARK: - Pull to refresh
+    func test_addPullToRefresh_isCalled() {
+        let subject = createSubject()
+
+        // Initial call when tab is set
+        XCTAssertEqual(tabProvider.pullToRefreshAddCount, 1)
+        subject.configureRefreshControl()
+        XCTAssertEqual(tabProvider.pullToRefreshAddCount, 2)
+    }
+
+    func test_addPullToRefresh_isNotCalled_ForHomepage() {
+        let subject = createSubject()
+        tabProvider.isFxHomeTab = true
+
+        subject.configureRefreshControl()
+        XCTAssertEqual(tabProvider.pullToRefreshRemoveCount, 0)
+    }
+
+    func test_removePullToRefresh_isCalled() {
+        let subject = createSubject()
+
+        subject.removePullRefreshControl()
+        XCTAssertEqual(tabProvider.pullToRefreshRemoveCount, 1)
+    }
+
+    // MARK: - Setup
+
+    private func createSubject(contentSize: CGSize = CGSize(width: 200, height: 2000)) -> TabScrollHandler {
         let subject = TabScrollHandler(windowUUID: .XCTestDefaultUUID, delegate: delegate)
-        setupTabScroll(with: subject)
+
+        // Create tab and scrollView
+        tab.createWebview(configuration: .init())
+        tab.webView?.scrollView.frame.size = CGSize(width: 200, height: 2000)
+        tab.webView?.scrollView.contentSize = contentSize
+        tab.webView?.scrollView.delegate = subject
+        tabProvider = MockTabProviderProtocol(tab)
+        subject.tabProvider = tabProvider
 
         let header: BaseAlphaStackView = .build()
         let overKeyboardContainer: BaseAlphaStackView = .build()
