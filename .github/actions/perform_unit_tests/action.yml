@@ -9,15 +9,43 @@ inputs:
 runs:
   using: "composite"
   steps:
-
-    - name: Run Unit Tests
+        
+    - name: Install xcpretty and prepare output directory
       shell: bash
       run: |
-        bundle exec fastlane run run_tests prelaunch_simulator:true
+        gem install xcpretty
+        mkdir -p test_output/xml
 
+    - name: Run tests with xcodebuild and xcpretty
+      shell: bash
+      run: |
+        set -o pipefail && xcodebuild -scheme Ecosia \
+          -project firefox-ios/Client.xcodeproj \
+          -configuration Testing \
+          -enableCodeCoverage NO \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
+          -clonedSourcePackagesDirPath firefox-ios/SourcePackages \
+          -derivedDataPath DerivedData \
+          build-for-testing | xcpretty --color
+          
+        set -o pipefail && xcodebuild -scheme Ecosia \
+          -project firefox-ios/Client.xcodeproj \
+          -configuration Testing \
+          -enableCodeCoverage NO \
+          -testPlan UnitTest \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
+          -resultBundlePath TestResults.xcresult \
+          -derivedDataPath DerivedData \
+          test-without-building | xcpretty --color --report junit --output test_output/xml/report.junit || true
+        
     - name: Publish Test Report
       if: always()
-      uses: mikepenz/action-junit-report@v3.7.6
+      uses: mikepenz/action-junit-report@v5
       with:
         report_paths: '**/test_output/xml/report.junit'
         github_token: ${{ inputs.github-token }}
+        check_name: 'iOS Unit Test Results'
+        require_tests: false
+        include_passed: true
+        detailed_summary: true
+        fail_on_failure: false

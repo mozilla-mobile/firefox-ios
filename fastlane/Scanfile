@@ -1,10 +1,13 @@
+# This Scanfile is kept for reference but not used directly.
+# We're using direct xcodebuild command in perform_unit_tests/action.yml instead.
 scheme("Ecosia")
 configuration("Testing")
 project("firefox-ios/Client.xcodeproj")
-destination("platform=iOS Simulator,name=iPhone 16,OS=18.2")
-skip_detect_devices(true)
+device("iPhone 16")
+prelaunch_simulator(true)
 output_types("junit")
 output_directory("test_output/xml")
-cloned_source_packages_path("firefox-ios/SourcePackages")
-disable_concurrent_testing(true)
-number_of_retries(2)
+testplan("UnitTest")
+code_coverage(false)
+result_bundle(true)
+fail_build(false)

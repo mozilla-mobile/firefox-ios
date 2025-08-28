@@ -9,11 +9,35 @@ inputs:
 runs:
   using: "composite"
   steps:
+
     - name: Xcode Select Version
       uses: mobiledevops/xcode-select-version-action@v1
       with:
-        xcode-select-version: 16.2
-
+        xcode-select-version: 16.4
+        
+    - name: Check Xcode and Swift Version
+      shell: bash
+      run: |
+        echo "Checking Xcode and Swift version"
+        xcodebuild -version
+        swift --version
+        
+    - name: Fix SwiftBridging Module Redefinition
+      shell: bash
+      run: |
+        echo "Checking for duplicate SwiftBridging module"
+        BRIDGING_MODULEMAP="/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/swift/bridging.modulemap"
+        if [ -f "$BRIDGING_MODULEMAP" ]; then
+          echo "Backing up and fixing bridging.modulemap"
+          sudo cp "$BRIDGING_MODULEMAP" "${BRIDGING_MODULEMAP}.bak"
+          # Comment out the SwiftBridging module definition to prevent redefinition
+          sudo sed -i.tmp 's/^module SwiftBridging {/\/\* module SwiftBridging {/g' "$BRIDGING_MODULEMAP"
+          sudo sed -i.tmp 's/^}/} \*\//g' "$BRIDGING_MODULEMAP"
+          cat "$BRIDGING_MODULEMAP"
+        else
+          echo "bridging.modulemap not found at expected location"
+        fi
+        
     - name: Fix-up private Github URLs
       shell: bash
       run: find . -type f \( -name '*.pbxproj' -o -name 'Package.swift' -o -name 'Package.resolved' \) -exec sed -i '' "s/https:\/\/github.com\/${GITHUB_REPOSITORY_OWNER}/https:\/\/${GITHUB_ACCESS_TOKEN}@github.com\/${GITHUB_REPOSITORY_OWNER}/g" {} \;
@@ -33,12 +57,6 @@ runs:
 
     - name: Install npm
       uses: bahmutov/npm-install@v1
-
-    # lot of people are experiencing the same issue apparently
-    # found a workaround here https://github.com/actions/runner-images/issues/9577
-    - name: Delete Xcode.app
-      shell: bash
-      run: sudo rm -rf /Applications/Xcode.app
       
     - name: Restore SPM Cache
       id: restore-spm-cache
@@ -63,6 +81,36 @@ runs:
       shell: bash
       run: echo "$STAGING_XCCONFIG" | base64 --decode > firefox-ios/Client/Configuration/Staging.xcconfig
 
+    - name: List Available Simulator Runtimes
+      shell: bash
+      run: |
+        echo "Available simulator runtimes:"
+        xcrun simctl list runtimes
+        
+    - name: Create and Boot iPhone 16 Simulator
+      shell: bash
+      run: |
+        # Check if simulator already exists
+        if xcrun simctl list devices | grep -q "iPhone 16"; then
+          echo "iPhone 16 simulator already exists"
+        else
+          echo "Creating iPhone 16 simulator"
+          # Get the latest available iOS runtime
+          LATEST_RUNTIME=$(xcrun simctl list runtimes | grep iOS | tail -1 | awk '{print $NF}')
+          # Get the device type for iPhone 16
+          DEVICE_TYPE=$(xcrun simctl list devicetypes | grep "iPhone 16" | head -1 | awk '{print $NF}')
+          
+          if [ -n "$LATEST_RUNTIME" ] && [ -n "$DEVICE_TYPE" ]; then
+            xcrun simctl create "iPhone 16" "$DEVICE_TYPE" "$LATEST_RUNTIME"
+          else
+            echo "Error: Could not determine runtime or device type"
+            exit 1
+          fi
+        fi
+        
+        # Boot the simulator
+        xcrun simctl boot "iPhone 16" || echo "Simulator may already be booted"
+        
     - name: Run bootstrap script
       shell: bash
       run: ./bootstrap.sh

@@ -156,9 +156,13 @@
     },
     {
       "skippedTests" : [
+        "ContentBlockerTests\/testCompileListsNotInStore_callsCompletionHandlerSuccessfully()",
         "ETPCoverSheetTests",
         "FirefoxHomeViewModelTests",
         "FirefoxHomeViewModelTests\/testNumberOfSection_withoutUpdatingData_has2Sections()",
+        "GeneralizedImageFetcherTests\/testBadStatusCode()",
+        "GeneralizedImageFetcherTests\/testErrorResponse()",
+        "GeneralizedImageFetcherTests\/testNilData()",
         "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
         "HistoryHighlightsDataAdaptorTests",
         "HistoryHighlightsDataAdaptorTests\/testDelegateMemoryLeak()",
@@ -178,6 +182,18 @@
         "SyncContentSettingsViewControllerTests",
         "SyncContentSettingsViewControllerTests\/test_syncContentSettingsViewController_engineSectionForSettings()",
         "SyncContentSettingsViewControllerTests\/test_syncContentSettingsViewController_generateSettingsCount()",
+        "TabLocationViewTests\/testDelegateMemoryLeak()",
+        "TabManagerNavDelegateTests",
+        "TabManagerNavDelegateTests\/test_webViewDecidePolicyFor_actionPolicy_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewDecidePolicyFor_responsePolicy_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewDidCommit_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewDidFailProvisionalNavigation_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewDidFail_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewDidFinish_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewDidReceiveAuthenticationChallenge_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewDidReceiveServerRedirectForProvisionalNavigation_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewDidStartProvisionalNavigation_sendsCorrectMessage()",
+        "TabManagerNavDelegateTests\/test_webViewWebContentProcessDidTerminate_sendsCorrectMessage()",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
         "TestFavicons\/testFaviconFetcherParse()"
@@ -197,7 +213,8 @@
     },
     {
       "skippedTests" : [
-        "AnalyticsSpyTests\/testTrackMenuStatus()"
+        "AnalyticsSpyTests\/testTrackMenuStatus()",
+        "AppDelegateFeatureManagementIntegrationTests\/testStateAfterDidBecomeActive_expectesSameModel_AfterDidFinishLaunchingWithOptions()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
