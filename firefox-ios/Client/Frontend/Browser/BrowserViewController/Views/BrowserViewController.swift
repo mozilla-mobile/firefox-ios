@@ -527,9 +527,7 @@ class BrowserViewController: UIViewController,
         }
 
         crashTracker.updateData()
-        if featureFlags.isFeatureEnabled(.ratingPromptFeature, checking: .buildOnly) {
-            ratingPromptManager.showRatingPromptIfNeeded()
-        }
+        ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     @objc
