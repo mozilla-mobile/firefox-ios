@@ -1484,6 +1484,7 @@
 		C283EED02E4D4FE7008EB540 /* SummarizerConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */; };
 		C283EED22E4D5356008EB540 /* SummarizerConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */; };
 		C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */; };
+		C28CAABF2E5C8C660049D7C7 /* InsetUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */; };
 		C29B64812AD6959E00F3244B /* QRCodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */; };
 		C29B64832AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */; };
 		C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */; };
@@ -9536,6 +9537,7 @@
 		C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManager.swift; sourceTree = "<group>"; };
 		C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManagerTests.swift; sourceTree = "<group>"; };
 		C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigSource.swift; sourceTree = "<group>"; };
+		C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetUpdatable.swift; sourceTree = "<group>"; };
 		C29B428A81B120AFF0666037 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Menu.strings; sourceTree = "<group>"; };
 		C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinator.swift; sourceTree = "<group>"; };
 		C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockQRCodeParentCoordinator.swift; sourceTree = "<group>"; };
@@ -11536,6 +11538,7 @@
 		21C5B3582AF2A7130093F366 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */,
 				8A8D12122DD671BE00E0B8BB /* Animation */,
 				5A96FB602D97073C00917B12 /* CustomSelectorView */,
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
@@ -17969,6 +17972,7 @@
 				E177989C2BD7D48500F6F0EB /* ToolbarAction.swift in Sources */,
 				F8A0B08229AD61FA0091C75B /* RustSyncManager.swift in Sources */,
 				438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */,
+				C28CAABF2E5C8C660049D7C7 /* InsetUpdatable.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
 				5AD3B6742CF625B000AFA1FE /* DefaultBrowserUtil.swift in Sources */,
 				8A93F86229D36F0F004159D9 /* NavigationController.swift in Sources */,
