@@ -81,6 +81,9 @@ class RemoteTabsViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
+
+        tableView.dataSource = self
+        tableView.delegate = self
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -121,9 +124,6 @@ class RemoteTabsViewController: UIViewController,
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
-
-        tableView.delegate = self
-        tableView.dataSource = self
 
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero

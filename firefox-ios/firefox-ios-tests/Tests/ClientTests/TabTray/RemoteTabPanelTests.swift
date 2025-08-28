@@ -24,7 +24,7 @@ final class RemoteTabPanelTests: XCTestCase {
         let tableView = remotePanel.tabsDisplayViewController.tableView
 
         XCTAssertNotNil(tableView)
-        XCTAssertEqual(tableView!.numberOfSections, 0)
+        XCTAssertEqual(tableView.numberOfSections, 0)
     }
 
     func testTableView_oneClientTwoRows() {
@@ -32,8 +32,8 @@ final class RemoteTabPanelTests: XCTestCase {
         let tableView = remotePanel.tabsDisplayViewController.tableView
 
         XCTAssertNotNil(tableView)
-        XCTAssertEqual(tableView!.numberOfSections, 1)
-        XCTAssertEqual(tableView!.numberOfRows(inSection: 0), 2)
+        XCTAssertEqual(tableView.numberOfSections, 1)
+        XCTAssertEqual(tableView.numberOfRows(inSection: 0), 2)
     }
 
     // MARK: - Private
