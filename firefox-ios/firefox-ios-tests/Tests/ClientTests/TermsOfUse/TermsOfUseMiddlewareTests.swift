@@ -26,13 +26,13 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         AppContainer.shared.reset()
     }
 
-    func testMiddleware_markAccepted_updatesPrefs() {
-        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markAccepted)
+    func testMiddleware_termsAccepted_updatesPrefs() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsAccepted)
         middleware.termsOfUseProvider(AppState(), action)
         XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true)
     }
-    func testMiddleware_markDismissed_updatesPrefsWithDate() {
-        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markDismissed)
+    func testMiddleware_dismissalTimestampSet_updatesPrefsWithDate() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.dismissalTimestampSet)
         middleware.termsOfUseProvider(AppState(), action)
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNotNil(dismissedTimestamp)
@@ -42,8 +42,8 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
             XCTAssertTrue(Calendar.current.isDate(dismissedDate, inSameDayAs: Date()))
         }
     }
-    func testMiddleware_markShown_setsFirstShownPref() {
-        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markShown)
+    func testMiddleware_termsShown_setsShownPref() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), action)
 
         // Should set the first shown preference
@@ -52,8 +52,8 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNil(dismissedTimestamp)
     }
-    func testMiddleware_markAccepted_recordsVersionAndDatePrefs() {
-        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.markAccepted)
+    func testMiddleware_termsAccepted_recordsVersionAndDatePrefs() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsAccepted)
         middleware.termsOfUseProvider(AppState(), action)
 
         let versionString = profile.prefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion)

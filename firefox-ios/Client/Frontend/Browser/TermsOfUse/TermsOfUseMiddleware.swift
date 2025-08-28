@@ -42,29 +42,40 @@ class TermsOfUseMiddleware {
                   let type = action.actionType as? TermsOfUseActionType else { return }
 
             switch type {
-            case TermsOfUseActionType.markAccepted:
-                self.recordAcceptance()
-            case TermsOfUseActionType.markDismissed:
-                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
-            case TermsOfUseActionType.markShown:
+            case TermsOfUseActionType.termsShown:
                 self.recordImpression()
+            case TermsOfUseActionType.termsAccepted:
+                self.recordAcceptance()
+            case TermsOfUseActionType.dismissalTimestampSet:
+                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
+            case TermsOfUseActionType.remindMeLaterTapped:
+                self.telemetry.termsOfUseRemindMeLaterButtonTapped()
+            case TermsOfUseActionType.gestureDismiss:
+                self.telemetry.termsOfUseDismissed()
+            case TermsOfUseActionType.learnMoreLinkTapped:
+                self.telemetry.termsOfUseLearnMoreButtonTapped()
+            case TermsOfUseActionType.privacyLinkTapped:
+                self.telemetry.termsOfUsePrivacyNoticeLinkTapped()
+            case TermsOfUseActionType.termsLinkTapped:
+                self.telemetry.termsOfUseTermsOfUseLinkTapped()
             }
         }
     }
 
     private func recordAcceptance() {
+        let acceptedDate = Date()
         self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
         self.prefs.setString(String(telemetry.termsOfUseVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
-        self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
+        self.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         // Record telemetry for ToU acceptance
-        telemetry.termsOfUseAcceptButtonTapped()
+        telemetry.termsOfUseAcceptButtonTapped(acceptedDate: acceptedDate)
     }
 
     private func recordImpression() {
         self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
 
         // Record telemetry for ToU impression
-        telemetry.termsOfUseBottomSheetDisplayed()
+        telemetry.termsOfUseDisplayed()
     }
 }

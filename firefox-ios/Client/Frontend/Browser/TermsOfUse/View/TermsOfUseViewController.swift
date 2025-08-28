@@ -140,7 +140,7 @@ final class TermsOfUseViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markShown))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .termsShown))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -285,8 +285,8 @@ final class TermsOfUseViewController: UIViewController,
         // Only dismiss the view if the tap occurred outside the visible sheetContainer.
         // This prevents dismissing the Terms of Use sheet when interacting with its content.
         if !sheetContainer.frame.contains(sender.location(in: view)) {
-            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
-            coordinator?.dismissTermsFlow()
+            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .dismissalTimestampSet))
+            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss))
         }
     }
 
@@ -297,8 +297,8 @@ final class TermsOfUseViewController: UIViewController,
             sheetContainer.transform = CGAffineTransform(translationX: 0, y: translation.y)
         case .ended:
             if translation.y > UX.panDismissDistance || gesture.velocity(in: view).y > UX.panDismissVelocity {
-                store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
-                coordinator?.dismissTermsFlow()
+                store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .dismissalTimestampSet))
+                store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss))
             } else {
                 UIView.animate(withDuration: UX.animationDuration,
                                delay: 0,
@@ -314,11 +314,12 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     @objc private func acceptTapped() {
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markAccepted))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .termsAccepted))
     }
 
     @objc private func remindMeLaterTapped() {
-        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .markDismissed))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .dismissalTimestampSet))
+        store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .remindMeLaterTapped))
     }
 
     func applyTheme() {
@@ -359,6 +360,9 @@ final class TermsOfUseViewController: UIViewController,
                   in characterRange: NSRange,
                   interaction: UITextItemInteraction) -> Bool {
         guard interaction == .invokeDefaultAction else { return true }
+        if let linkType = TermsOfUseLinkType.linkType(for: url) {
+            store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: linkType.actionType))
+        }
         coordinator?.showTermsLink(url: url)
         return false
     }
