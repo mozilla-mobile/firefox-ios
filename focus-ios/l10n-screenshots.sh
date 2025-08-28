@@ -30,8 +30,9 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-DEVICE="iPhone 16"
+DEVICE="iPhone 16 (26.0)"
 
+xcrun simctl list devices
 for lang in $LOCALES; do
     # start simple with Focus only
     echo "Snapshotting on $DEVICE"
