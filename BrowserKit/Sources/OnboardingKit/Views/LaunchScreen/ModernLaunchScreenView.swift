@@ -34,6 +34,7 @@ public struct ModernLaunchScreenView: View {
                     .linear(duration: UX.LaunchScreen.Logo.rotationDuration).repeatForever(autoreverses: false),
                     value: rotationAngle
                 )
+                .accessibilityHidden(true)
         }
         .onAppear {
             startAnimation()
