@@ -10,11 +10,15 @@ import UIKit
 struct SummaryModel {
     let title: String?
     let titleA11yId: String
+    let compactTitleA11yId: String
     
-    let brandIcon: UIImage
+    let brandIcon: UIImage?
+    let brandIconA11yId: String
     let brandName: String
+    let brandNameA11yId: String
     
     let summary: NSAttributedString?
+    let summaryA11yId: String
     let contentOffset: UIEdgeInsets
 }
 
@@ -22,7 +26,9 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
     private struct UX {
         static let closeButtonEdgePadding: CGFloat = 16.0
         static let tableViewHorizontalPadding: CGFloat = 16.0
-        static let smallTitleAnimationOffset: CGFloat = 20.0
+        static let compactTitleAnimationOffset: CGFloat = 20.0
+        static let compactTitleAnimationDuration: CGFloat = 0.3
+        static let compactTitlePadding: CGFloat = 16.0
     }
     private enum Section: Int, CaseIterable {
         case title, brand, summary
@@ -31,13 +37,21 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
         $0.allowsSelection = false
+        $0.showsVerticalScrollIndicator = false
+        $0.alpha = 0.0
     }
-    private let titleLabel: UILabel = .build {
+    private let compactTitleLabel: UILabel = .build {
         $0.numberOfLines = 2
         $0.font = FXFontStyles.Bold.body.scaledFont()
+        $0.adjustsFontForContentSizeCategory = true
+        $0.showsLargeContentViewer = true
+        $0.isUserInteractionEnabled = true
+        $0.addInteraction(UILargeContentViewerInteraction())
+        $0.accessibilityTraits.insert(.header)
+        $0.alpha = 0.0
     }
-    private let titleContainer: UIView = .build()
-    private let titleBackgroundEffectView: UIVisualEffectView = .build {
+    private let compactTitleContainer: UIView = .build()
+    private let compactTitleBackgroundEffectView: UIVisualEffectView = .build {
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             $0.effect = UIGlassEffect(style: .regular)
@@ -47,9 +61,9 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         #else
         $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         #endif
+        $0.alpha = 0.0
     }
     private let closeButton: UIButton = .build {
-        // This checks for Xcode 26 sdk availability thus we can compile on older Xcode version too
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             $0.configuration = .prominentClearGlass()
@@ -80,39 +94,36 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
     private func setup() {
         tableView.dataSource = self
         tableView.delegate = self
-        // Scroll events are handled to update titleContainer visibility
-        
+
         tableView.register(cellType: SummaryTitleCell.self)
         tableView.register(cellType: SummaryBrandCell.self)
         tableView.register(cellType: SummaryTextCell.self)
         
-        titleContainer.addSubviews(titleBackgroundEffectView, titleLabel, closeButton)
-        addSubviews(tableView, titleContainer)
+        compactTitleContainer.addSubviews(compactTitleBackgroundEffectView, compactTitleLabel)
+        addSubviews(tableView, compactTitleContainer, closeButton)
         
         closeButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-        titleBackgroundEffectView.pinToSuperview()
+        closeButton.setContentHuggingPriority(.required, for: .vertical)
+        compactTitleBackgroundEffectView.pinToSuperview()
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.tableViewHorizontalPadding),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.tableViewHorizontalPadding),
             tableView.topAnchor.constraint(equalTo: topAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            titleContainer.topAnchor.constraint(equalTo: topAnchor),
-            titleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
-            titleContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
+            compactTitleContainer.topAnchor.constraint(equalTo: topAnchor),
+            compactTitleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
+            compactTitleContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            titleLabel.topAnchor.constraint(equalTo: titleContainer.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: titleContainer.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: titleContainer.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: titleContainer.bottomAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
+            compactTitleLabel.topAnchor.constraint(equalTo: compactTitleContainer.safeAreaLayoutGuide.topAnchor, constant: UX.compactTitlePadding),
+            compactTitleLabel.leadingAnchor.constraint(equalTo: compactTitleContainer.leadingAnchor, constant: UX.compactTitlePadding),
+            compactTitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -UX.compactTitlePadding),
+            compactTitleLabel.bottomAnchor.constraint(equalTo: compactTitleContainer.bottomAnchor, constant: -UX.compactTitlePadding),
             
-            closeButton.trailingAnchor.constraint(equalTo: titleContainer.trailingAnchor, constant: -UX.closeButtonEdgePadding),
-            closeButton.topAnchor.constraint(equalTo: titleContainer.safeAreaLayoutGuide.topAnchor, constant: UX.closeButtonEdgePadding),
+            closeButton.trailingAnchor.constraint(equalTo: compactTitleContainer.trailingAnchor, constant: -UX.closeButtonEdgePadding),
+            closeButton.topAnchor.constraint(equalTo: compactTitleContainer.safeAreaLayoutGuide.topAnchor, constant: UX.closeButtonEdgePadding),
+            closeButton.bottomAnchor.constraint(lessThanOrEqualTo: compactTitleContainer.bottomAnchor)
         ])
-        
-        titleLabel.alpha = 0.0
-        titleBackgroundEffectView.alpha = 0.0
     }
     
     // MARK: - UITableViewDataSource
@@ -129,17 +140,17 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         case .title:
             cell = tableView.dequeueReusableCell(withIdentifier: SummaryTitleCell.cellIdentifier, for: indexPath)
             if let cell = cell as? SummaryTitleCell {
-                cell.configure(text: model.title)
+                cell.configure(text: model.title, a11yId: model.titleA11yId)
             }
         case .brand:
             cell = tableView.dequeueReusableCell(withIdentifier: SummaryBrandCell.cellIdentifier, for: indexPath)
             if let cell = cell as? SummaryBrandCell {
-                cell.configure(text: model.brandName, logo: model.brandIcon)
+                cell.configure(text: model.brandName, textA11yId: model.brandNameA11yId, logo: model.brandIcon, logoA11yId: model.brandIconA11yId)
             }
         case .summary:
             cell = tableView.dequeueReusableCell(withIdentifier: SummaryTextCell.cellIdentifier, for: indexPath)
             if let cell = cell as? SummaryTextCell {
-                cell.configure(text: model.summary)
+                cell.configure(text: model.summary, a11yId: model.summaryA11yId)
             }
         }
         if let cell = cell as? ThemeApplicable, let theme {
@@ -154,28 +165,40 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
     
     func configure(model: SummaryModel) {
         self.model = model
-        titleLabel.text = model.title
-        titleLabel.accessibilityIdentifier = model.titleA11yId
+        compactTitleLabel.text = model.title
+        compactTitleLabel.accessibilityIdentifier = model.titleA11yId
         tableView.contentInset = model.contentOffset
         tableView.reloadData()
+    }
+    
+    func configureCloseButton(a11yId: String, a11yLabel: String, action: @escaping () -> Void) {
+        closeButton.addAction(UIAction(handler: { _ in
+            action()
+        }), for: .touchUpInside)
+        closeButton.accessibilityIdentifier = a11yId
+        closeButton.accessibilityLabel = a11yLabel
+    }
+    
+    func showContent() {
+        tableView.alpha = 1.0
     }
     
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let topInset = abs(tableView.contentInset.top) + abs(tableView.safeAreaInsets.top)
-        let shouldShowTitle = abs(scrollView.contentOffset.y) < topInset - UX.smallTitleAnimationOffset
-        let shouldAnimate = titleLabel.alpha != (shouldShowTitle ? 1.0 : 0.0)
+        let shouldShowTitle = scrollView.contentOffset.y + topInset - UX.compactTitleAnimationOffset > 0
+        let shouldAnimate = compactTitleLabel.alpha != (shouldShowTitle ? 1.0 : 0.0)
         guard shouldAnimate else { return }
         UIView.animate(withDuration: 0.25) { [self] in
-            titleLabel.alpha = shouldShowTitle ? 1.0 : 0.0
-            titleBackgroundEffectView.alpha = shouldShowTitle ? 1.0 : 0.0
+            compactTitleLabel.alpha = shouldShowTitle ? 1.0 : 0.0
+            compactTitleBackgroundEffectView.alpha = shouldShowTitle ? 1.0 : 0.0
         }
     }
     
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
-        titleLabel.textColor = theme.colors.textPrimary
+        compactTitleLabel.textColor = theme.colors.textPrimary
         if #unavailable(iOS 26) {
             closeButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
         }
@@ -187,6 +210,7 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
 class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.title1.scaledFont()
+        $0.adjustsFontForContentSizeCategory = true
         $0.numberOfLines = 0
     }
 
@@ -209,8 +233,9 @@ class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
         ])
     }
 
-    func configure(text: String?) {
+    func configure(text: String?, a11yId: String) {
         titleLabel.text = text
+        titleLabel.accessibilityIdentifier = a11yId
     }
     
     // MARK: - ThemeApplicable
@@ -239,6 +264,9 @@ class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
         $0.adjustsFontForContentSizeCategory = true
         $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        $0.showsLargeContentViewer = true
+        $0.isUserInteractionEnabled = true
+        $0.addInteraction(UILargeContentViewerInteraction())
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -275,9 +303,11 @@ class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
         containerView.layer.cornerRadius = containerView.bounds.height / 2
     }
 
-    func configure(text: String, logo: UIImage?) {
+    func configure(text: String, textA11yId: String, logo: UIImage?, logoA11yId: String) {
         brandLabel.text = text
+        brandLabel.accessibilityIdentifier = textA11yId
         logoImageView.image = logo
+        logoImageView.accessibilityIdentifier = logoA11yId
         setNeedsLayout()
     }
 
@@ -312,8 +342,9 @@ class SummaryTextCell: UITableViewCell, ReusableCell, ThemeApplicable {
         summaryView.pinToSuperview()
     }
 
-    func configure(text: NSAttributedString?) {
+    func configure(text: NSAttributedString?, a11yId: String) {
         summaryView.attributedText = text
+        summaryView.accessibilityIdentifier = a11yId
     }
     
     // MARK: - ThemeApplicable

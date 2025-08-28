@@ -89,22 +89,24 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         } else {
             String(format: .Summarizer.HostedBrandLabel, AppName.shortName.rawValue)
         }
-        let brandImage: UIImage = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
-            UIImage(resource: .faviconFox)
+        let brandImage: UIImage? = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
+            UIImage(named: "appleIntelligence")
         } else {
-            UIImage(resource: .faviconFox)
+            UIImage(named: "faviconFox")
         }
         let model = SummarizeViewModel(
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.titleLabel,
+            compactTitleLabelA11yId: AccessibilityIdentifiers.Summarizer.compactTitleLabel,
             loadingLabel: .Summarizer.LoadingLabel,
             loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
             loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel,
             tabSnapshotA11yLabel: .Summarizer.TabSnapshotAccessibilityLabel,
             tabSnapshotA11yId: AccessibilityIdentifiers.Summarizer.tabSnapshotView,
             brandLabel: brandLabel,
+            brandLabelA11yId: AccessibilityIdentifiers.Summarizer.brandLabel,
             brandImage: brandImage,
+            brandImageA11yId: AccessibilityIdentifiers.Summarizer.brandImage,
             summaryNote: .Summarizer.FootnoteLabel,
-            summarizeTextViewA11yLabel: .Summarizer.SummaryTextAccessibilityLabel,
             summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: .Summarizer.CloseButtonAccessibilityLabel,

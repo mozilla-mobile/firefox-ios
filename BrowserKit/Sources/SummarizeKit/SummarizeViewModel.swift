@@ -7,15 +7,17 @@ import ComponentLibrary
 
 public struct SummarizeViewModel {
     let titleLabelA11yId: String
+    let compactTitleLabelA11yId: String
     let loadingLabel: String
     let loadingA11yLabel: String
     let loadingA11yId: String
     let tabSnapshotA11yLabel: String
     let tabSnapshotA11yId: String
-    let summarizeTextViewA11yLabel: String
     let summarizeTextViewA11yId: String
     let brandLabel: String
-    let brandImage: UIImage
+    let brandLabelA11yId: String
+    let brandImage: UIImage?
+    let brandImageA11yId: String
     let summaryNote: String
 
     let closeButtonModel: CloseButtonViewModel
@@ -27,15 +29,17 @@ public struct SummarizeViewModel {
 
     public init(
         titleLabelA11yId: String,
+        compactTitleLabelA11yId: String,
         loadingLabel: String,
         loadingA11yLabel: String,
         loadingA11yId: String,
         tabSnapshotA11yLabel: String,
         tabSnapshotA11yId: String,
         brandLabel: String,
-        brandImage: UIImage,
+        brandLabelA11yId: String,
+        brandImage: UIImage?,
+        brandImageA11yId: String,
         summaryNote: String,
-        summarizeTextViewA11yLabel: String,
         summarizeTextViewA11yId: String,
         closeButtonModel: CloseButtonViewModel,
         tabSnapshot: UIImage,
@@ -44,15 +48,17 @@ public struct SummarizeViewModel {
         onDismiss: @escaping @MainActor () -> Void
     ) {
         self.titleLabelA11yId = titleLabelA11yId
+        self.compactTitleLabelA11yId = compactTitleLabelA11yId
         self.loadingLabel = loadingLabel
         self.loadingA11yLabel = loadingA11yLabel
         self.loadingA11yId = loadingA11yId
         self.tabSnapshotA11yLabel = tabSnapshotA11yLabel
         self.tabSnapshotA11yId = tabSnapshotA11yId
         self.brandLabel = brandLabel
+        self.brandLabelA11yId = brandLabelA11yId
         self.brandImage = brandImage
+        self.brandImageA11yId = brandImageA11yId
         self.summaryNote = summaryNote
-        self.summarizeTextViewA11yLabel = summarizeTextViewA11yLabel
         self.summarizeTextViewA11yId = summarizeTextViewA11yId
         self.closeButtonModel = closeButtonModel
         self.tabSnapshot = tabSnapshot
