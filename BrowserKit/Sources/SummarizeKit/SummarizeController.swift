@@ -320,7 +320,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             right: 0.0
         )
         summaryView.configure(
-            model: SummaryModel(
+            model: SummaryViewModel(
                 title: webView.title,
                 titleA11yId: viewModel.titleLabelA11yId,
                 compactTitleA11yId: viewModel.compactTitleLabelA11yId,

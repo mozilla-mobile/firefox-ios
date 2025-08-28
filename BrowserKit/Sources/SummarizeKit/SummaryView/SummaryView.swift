@@ -6,7 +6,7 @@ import Common
 import Foundation
 import UIKit
 
-struct SummaryModel {
+struct SummaryViewModel {
     let title: String?
     let titleA11yId: String
     let compactTitleA11yId: String
@@ -79,7 +79,7 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
                     for: .normal)
     }
     private var theme: Theme?
-    private var model: SummaryModel?
+    private var model: SummaryViewModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -173,7 +173,7 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         return UITableView.automaticDimension
     }
 
-    func configure(model: SummaryModel) {
+    func configure(model: SummaryViewModel) {
         self.model = model
         compactTitleLabel.text = model.title
         compactTitleLabel.accessibilityIdentifier = model.titleA11yId
@@ -214,152 +214,5 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         tableView.reloadData()
-    }
-}
-
-class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private let titleLabel: UILabel = .build {
-        $0.font = FXFontStyles.Bold.title1.scaledFont()
-        $0.adjustsFontForContentSizeCategory = true
-        $0.numberOfLines = 0
-    }
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setup()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func setup() {
-        contentView.addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-        ])
-    }
-
-    func configure(text: String?, a11yId: String) {
-        titleLabel.text = text
-        titleLabel.accessibilityIdentifier = a11yId
-    }
-
-    // MARK: - ThemeApplicable
-    func applyTheme(theme: any Theme) {
-        titleLabel.textColor = theme.colors.textPrimary
-        backgroundColor = .clear
-    }
-}
-
-class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
-        static let logoSize: CGFloat = 16.0
-        static let hPadding: CGFloat = 6.0
-        static let spacing: CGFloat = 8.0
-        static let bottomInset: CGFloat = 16.0
-    }
-
-    private let logoImageView: UIImageView = .build {
-        $0.contentMode = .scaleAspectFit
-        $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
-    }
-    private let containerView: UIView = .build()
-    private let brandLabel: UILabel = .build {
-        $0.font = FXFontStyles.Regular.caption2.scaledFont()
-        $0.numberOfLines = 1
-        $0.adjustsFontForContentSizeCategory = true
-        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        $0.showsLargeContentViewer = true
-        $0.isUserInteractionEnabled = true
-        $0.addInteraction(UILargeContentViewerInteraction())
-    }
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setup()
-    }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    private func setup() {
-        contentView.addSubview(containerView)
-        containerView.addSubviews(logoImageView, brandLabel)
-
-        logoImageView.setContentCompressionResistancePriority(.required, for: .vertical)
-        logoImageView.setContentHuggingPriority(.required, for: .vertical)
-
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            containerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomInset),
-
-            logoImageView.widthAnchor.constraint(equalToConstant: UX.logoSize),
-            logoImageView.heightAnchor.constraint(equalToConstant: UX.logoSize),
-            logoImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.hPadding),
-            logoImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-
-            brandLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.hPadding),
-            brandLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.hPadding),
-            brandLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: UX.spacing),
-            brandLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.hPadding),
-        ])
-
-        containerView.layoutIfNeeded()
-        containerView.layer.cornerRadius = containerView.bounds.height / 2
-    }
-
-    func configure(text: String, textA11yId: String, logo: UIImage?, logoA11yId: String) {
-        brandLabel.text = text
-        brandLabel.accessibilityIdentifier = textA11yId
-        logoImageView.image = logo
-        logoImageView.accessibilityIdentifier = logoA11yId
-        setNeedsLayout()
-    }
-
-    // MARK: - ThemeApplicable
-    func applyTheme(theme: any Theme) {
-        containerView.backgroundColor = theme.colors.actionSecondaryDisabled
-        brandLabel.textColor = theme.colors.textSecondary
-        backgroundColor = .clear
-    }
-}
-
-class SummaryTextCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    private let summaryView: UITextView = .build {
-        $0.isScrollEnabled = false
-        $0.font = FXFontStyles.Regular.headline.scaledFont()
-        $0.showsVerticalScrollIndicator = false
-        $0.adjustsFontForContentSizeCategory = true
-        $0.isEditable = false
-    }
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setup()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func setup() {
-        contentView.addSubview(summaryView)
-        summaryView.pinToSuperview()
-    }
-
-    func configure(text: NSAttributedString?, a11yId: String) {
-        summaryView.attributedText = text
-        summaryView.accessibilityIdentifier = a11yId
-    }
-
-    // MARK: - ThemeApplicable
-    func applyTheme(theme: any Theme) {
-        summaryView.backgroundColor = .clear
-        backgroundColor = .clear
     }
 }
