@@ -132,8 +132,15 @@ class RemoteTabsViewController: UIViewController,
         tableView.sectionHeaderTopPadding = 0.0
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
 
+        view.addSubview(tableView)
         view.addSubview(emptyView)
+        
         NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
             emptyView.topAnchor.constraint(equalTo: view.topAnchor),
             emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
