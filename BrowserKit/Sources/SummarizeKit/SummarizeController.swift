@@ -179,7 +179,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotA11yLabel
-        
+
         summaryView.configureCloseButton(
             a11yId: viewModel.closeButtonModel.a11yIdentifier,
             a11yLabel: viewModel.closeButtonModel.a11yLabel) { [weak self] in
@@ -200,7 +200,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         tabSnapshot.pinToSuperview()
         tabSnapshotTopConstraint = tabSnapshotContainer.topAnchor.constraint(equalTo: view.topAnchor)
         tabSnapshotTopConstraint?.isActive = true
-        
+
         let topHalfBoundGuide = UILayoutGuide()
         view.addLayoutGuide(topHalfBoundGuide)
 
@@ -266,14 +266,14 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             self.loadingLabel.alpha = 1.0
         }
     }
-    
+
     private func setupLoadingBackgroundGradient() {
         backgroundGradient.frame = view.bounds
         backgroundGradient.locations = [0.0, 1.0]
         backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)
         backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
     }
-    
+
     private func summarize() {
         loadingLabel.alpha = 1.0
         errorView.alpha = 0.0
@@ -375,7 +375,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             errorView.alpha = 1.0
         }
     }
-    
+
     private func removeBorderOverlayView() {
         borderOverlayHostingController.willMove(toParent: nil)
         borderOverlayHostingController.view.removeFromSuperview()

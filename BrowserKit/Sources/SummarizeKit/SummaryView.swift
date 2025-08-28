@@ -6,17 +6,16 @@ import Common
 import Foundation
 import UIKit
 
-
 struct SummaryModel {
     let title: String?
     let titleA11yId: String
     let compactTitleA11yId: String
-    
+
     let brandIcon: UIImage?
     let brandIconA11yId: String
     let brandName: String
     let brandNameA11yId: String
-    
+
     let summary: NSAttributedString?
     let summaryA11yId: String
     let contentOffset: UIEdgeInsets
@@ -81,16 +80,16 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
     }
     private var theme: Theme?
     private var model: SummaryModel?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setup() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -98,10 +97,10 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         tableView.register(cellType: SummaryTitleCell.self)
         tableView.register(cellType: SummaryBrandCell.self)
         tableView.register(cellType: SummaryTextCell.self)
-        
+
         compactTitleContainer.addSubviews(compactTitleBackgroundEffectView, compactTitleLabel)
         addSubviews(tableView, compactTitleContainer, closeButton)
-        
+
         closeButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         closeButton.setContentHuggingPriority(.required, for: .vertical)
         compactTitleBackgroundEffectView.pinToSuperview()
@@ -110,27 +109,33 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.tableViewHorizontalPadding),
             tableView.topAnchor.constraint(equalTo: topAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
+
             compactTitleContainer.topAnchor.constraint(equalTo: topAnchor),
             compactTitleContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
             compactTitleContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
-            compactTitleLabel.topAnchor.constraint(equalTo: compactTitleContainer.safeAreaLayoutGuide.topAnchor, constant: UX.compactTitlePadding),
-            compactTitleLabel.leadingAnchor.constraint(equalTo: compactTitleContainer.leadingAnchor, constant: UX.compactTitlePadding),
-            compactTitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -UX.compactTitlePadding),
-            compactTitleLabel.bottomAnchor.constraint(equalTo: compactTitleContainer.bottomAnchor, constant: -UX.compactTitlePadding),
-            
-            closeButton.trailingAnchor.constraint(equalTo: compactTitleContainer.trailingAnchor, constant: -UX.closeButtonEdgePadding),
-            closeButton.topAnchor.constraint(equalTo: compactTitleContainer.safeAreaLayoutGuide.topAnchor, constant: UX.closeButtonEdgePadding),
+
+            compactTitleLabel.topAnchor.constraint(equalTo: compactTitleContainer.safeAreaLayoutGuide.topAnchor,
+                                                   constant: UX.compactTitlePadding),
+            compactTitleLabel.leadingAnchor.constraint(equalTo: compactTitleContainer.leadingAnchor,
+                                                       constant: UX.compactTitlePadding),
+            compactTitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+                                                        constant: -UX.compactTitlePadding),
+            compactTitleLabel.bottomAnchor.constraint(equalTo: compactTitleContainer.bottomAnchor,
+                                                      constant: -UX.compactTitlePadding),
+
+            closeButton.trailingAnchor.constraint(equalTo: compactTitleContainer.trailingAnchor,
+                                                  constant: -UX.closeButtonEdgePadding),
+            closeButton.topAnchor.constraint(equalTo: compactTitleContainer.safeAreaLayoutGuide.topAnchor,
+                                             constant: UX.closeButtonEdgePadding),
             closeButton.bottomAnchor.constraint(lessThanOrEqualTo: compactTitleContainer.bottomAnchor)
         ])
     }
-    
+
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Section.allCases.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let section = Section(rawValue: indexPath.row), let model else {
             return UITableViewCell()
@@ -158,11 +163,11 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         }
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-    
+
     func configure(model: SummaryModel) {
         self.model = model
         compactTitleLabel.text = model.title
@@ -170,7 +175,7 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         tableView.contentInset = model.contentOffset
         tableView.reloadData()
     }
-    
+
     func configureCloseButton(a11yId: String, a11yLabel: String, action: @escaping () -> Void) {
         closeButton.addAction(UIAction(handler: { _ in
             action()
@@ -178,11 +183,11 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         closeButton.accessibilityIdentifier = a11yId
         closeButton.accessibilityLabel = a11yLabel
     }
-    
+
     func showContent() {
         tableView.alpha = 1.0
     }
-    
+
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let topInset = abs(tableView.contentInset.top) + abs(tableView.safeAreaInsets.top)
@@ -194,7 +199,7 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
             compactTitleBackgroundEffectView.alpha = shouldShowTitle ? 1.0 : 0.0
         }
     }
-    
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
@@ -237,7 +242,7 @@ class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
         titleLabel.text = text
         titleLabel.accessibilityIdentifier = a11yId
     }
-    
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         titleLabel.textColor = theme.colors.textPrimary
@@ -278,7 +283,7 @@ class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private func setup() {
         contentView.addSubview(containerView)
         containerView.addSubviews(logoImageView, brandLabel)
-        
+
         logoImageView.setContentCompressionResistancePriority(.required, for: .vertical)
         logoImageView.setContentHuggingPriority(.required, for: .vertical)
 
@@ -298,7 +303,7 @@ class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
             brandLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: UX.spacing),
             brandLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.hPadding),
         ])
-        
+
         containerView.layoutIfNeeded()
         containerView.layer.cornerRadius = containerView.bounds.height / 2
     }
@@ -346,11 +351,10 @@ class SummaryTextCell: UITableViewCell, ReusableCell, ThemeApplicable {
         summaryView.attributedText = text
         summaryView.accessibilityIdentifier = a11yId
     }
-    
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         summaryView.backgroundColor = .clear
         backgroundColor = .clear
     }
 }
-
