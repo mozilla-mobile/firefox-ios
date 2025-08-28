@@ -49,6 +49,9 @@
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "Pilih tema";
 
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v143" = "Pilih tema Anda";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Customization.Toolbar.Bottom.Action.v123" = "Dasar";
 
@@ -75,6 +78,87 @@
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Lewati";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "Lanjutkan";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "Dasar";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Modern.Customization.Toolbar.Title.v140" = "Pilih tempat untuk meletakkan bilah alamat Anda";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Puncak";
+
+/* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Sync.Description.v140" = "Dapatkan markah, riwayat, dan kata sandi Anda di perangkat apa pun.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.SignIn.Action.v140" = "Mulai Menyelaraskan";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.Skip.Action.v140" = "Jangan sekarang";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Sync.Title.v140" = "Langsung lanjutkan dari tempat yang terakhir Anda tinggalkan";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "Lanjutkan";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.Modern.TermsOfService.ManageLink.v140" = "Kelola";
+
+/* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Untuk membantu meningkatkan peramban, %1$@ mengirimkan data diagnostik dan interaksi ke %2$@. %3$@";
+
+/* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ peduli dengan privasi Anda. Baca lebih lanjut di %2$@ kami";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "Pemberitahuan Privasi.";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Pelajari lebih lanjut";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Laporan kerusakan memungkinkan kami mendiagnosis dan memperbaiki masalah pada peramban. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Kirim laporan kerusakan secara otomatis";
+
+/* Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %1$@ is the app name (e.g. Firefox), %2$@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v140" = "Data tentang perangkat Anda, konfigurasi perangkat keras, dan bagaimana Anda menggunakan %1$@ membantu meningkatkan fitur, kinerja, dan stabilitas untuk semua orang. %2$@";
+
+/* Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is the company name (e.g. Mozilla). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v140" = "Kirim data teknis dan interaksi ke %@";
+
+/* Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.Title.v140" = "Bantu kami membuat %@ lebih baik";
+
+/* Subtitle for the Terms of Service screen in the onboarding process. The '\n' symbols denote empty lines separating the first link parameter from the rest of the text. */
+"Onboarding.Modern.TermsOfService.Subtitle.v140" = "Muat situs secepat kilat\nPerlindungan pelacakan otomatis\nSinkronkan di semua perangkat Anda";
+
+/* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Dengan melanjutkan, Anda menyetujui %@";
+
+/* Title for the Terms of Service screen in the onboarding process. */
+"Onboarding.Modern.TermsOfService.Title.v140" = "Tingkatkan penjelajahan Anda";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "Ketentuan Penggunaan %@.";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
+"Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Jadikan Peramban Baku";
+
+/* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
+"Onboarding.Modern.Welcome.Description.v140" = "Satu pilihan melindungi Anda ke mana pun Anda pergi di web. Anda selalu dapat mengubahnya nanti.";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
+"Onboarding.Modern.Welcome.Skip.v140" = "Jangan sekarang";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Modern.Welcome.Title.v140" = "Ucapkan selamat tinggal pada iklan menyeramkan";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Lanjutkan";
