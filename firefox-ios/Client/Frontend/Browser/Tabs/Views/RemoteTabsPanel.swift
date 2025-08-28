@@ -33,7 +33,7 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Properties
 
     private(set) var state: RemoteTabsPanelState
-    var tableViewController: RemoteTabsTableViewController
+    var tabsDisplayViewController: RemoteTabsTableViewController
     weak var remoteTabsDelegate: RemoteTabsPanelDelegate?
 
     var themeManager: ThemeManager
@@ -57,11 +57,11 @@ class RemoteTabsPanel: UIViewController,
         self.state = RemoteTabsPanelState(windowUUID: windowUUID)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.tableViewController = RemoteTabsTableViewController(state: state, windowUUID: windowUUID)
+        self.tabsDisplayViewController = RemoteTabsTableViewController(state: state, windowUUID: windowUUID)
 
         super.init(nibName: nil, bundle: nil)
 
-        self.tableViewController.remoteTabsPanel = self
+        self.tabsDisplayViewController.remoteTabsPanel = self
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -105,19 +105,19 @@ class RemoteTabsPanel: UIViewController,
 
     private func setupLayout() {
         navigationController?.setNavigationBarHidden(true, animated: false)
-        tableViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        addChild(tableViewController)
-        view.addSubview(tableViewController.view)
-        tableViewController.didMove(toParent: self)
+        tabsDisplayViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        addChild(tabsDisplayViewController)
+        view.addSubview(tabsDisplayViewController.view)
+        tabsDisplayViewController.didMove(toParent: self)
 
         if isTabTrayUIExperimentsEnabled {
             view.addSubview(statusBarBackground)
 
             NSLayoutConstraint.activate([
-                tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                tableViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                tabsDisplayViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tabsDisplayViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                tabsDisplayViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tabsDisplayViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
                 statusBarBackground.topAnchor.constraint(equalTo: view.topAnchor),
                 statusBarBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -126,10 +126,10 @@ class RemoteTabsPanel: UIViewController,
             ])
         } else {
             NSLayoutConstraint.activate([
-                tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-                tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                tabsDisplayViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tabsDisplayViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+                tabsDisplayViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tabsDisplayViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             ])
         }
     }
@@ -139,8 +139,8 @@ class RemoteTabsPanel: UIViewController,
     func applyTheme() {
         let theme = retrieveTheme()
         view.backgroundColor = theme.colors.layer4
-        tableViewController.tableView.backgroundColor = theme.colors.layer3
-        tableViewController.tableView.separatorColor = theme.colors.borderPrimary
+        tabsDisplayViewController.tableView.backgroundColor = theme.colors.layer3
+        tabsDisplayViewController.tableView.separatorColor = theme.colors.borderPrimary
         statusBarBackground.backgroundColor = theme.colors.layer3
     }
 
@@ -164,8 +164,8 @@ class RemoteTabsPanel: UIViewController,
 
     func applyTheme(_ theme: Theme) {
         view.backgroundColor = theme.colors.layer4
-        tableViewController.tableView.backgroundColor = theme.colors.layer3
-        tableViewController.tableView.separatorColor = theme.colors.borderPrimary
+        tabsDisplayViewController.tableView.backgroundColor = theme.colors.layer3
+        tabsDisplayViewController.tableView.separatorColor = theme.colors.borderPrimary
         statusBarBackground.backgroundColor = theme.colors.layer3
     }
 
@@ -200,7 +200,7 @@ class RemoteTabsPanel: UIViewController,
             guard let self else { return }
 
             self.state = state
-            tableViewController.newState(state: state)
+            tabsDisplayViewController.newState(state: state)
         }
     }
 
