@@ -61,7 +61,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
         isFlippedForRTL: true,
         isEnabled: true,
         configuration: {
+#if canImport(FoundationModels)
             if #available(iOS 26.0, *) { .prominentClearGlass() } else { .plain() }
+#else
+            .plain()
+#endif
         }(),
         a11yLabel: .AddressToolbar.CancelEditButtonLabel,
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
