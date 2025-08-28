@@ -168,7 +168,7 @@
 		1D1933792AF2C8CF005089C9 /* AppEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78982ADF328E0011E9F2 /* AppEvent.swift */; };
 		1D2F68AB2ACB262900524B92 /* RemoteTabsPanelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */; };
 		1D2F68AD2ACB266300524B92 /* RemoteTabsPanelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */; };
-		1D2F68AF2ACB272500524B92 /* RemoteTabsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */; };
+		1D2F68AF2ACB272500524B92 /* RemoteTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68AE2ACB272500524B92 /* RemoteTabsViewController.swift */; };
 		1D2F68B12ACCA22000524B92 /* RemoteTabsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */; };
 		1D35644F2D90999300F52F12 /* ASSearchEnginePrefsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D35644E2D90998900F52F12 /* ASSearchEnginePrefsMigrator.swift */; };
 		1D3564542D9329FA00F52F12 /* SearchPrefsMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3564532D9329FA00F52F12 /* SearchPrefsMigrationTests.swift */; };
@@ -2789,7 +2789,7 @@
 		1D1418772DC92DFC004BBFAD /* ChangeRSServerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeRSServerSetting.swift; sourceTree = "<group>"; };
 		1D2F68AA2ACB262900524B92 /* RemoteTabsPanelAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelAction.swift; sourceTree = "<group>"; };
 		1D2F68AC2ACB266300524B92 /* RemoteTabsPanelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelState.swift; sourceTree = "<group>"; };
-		1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsTableViewController.swift; sourceTree = "<group>"; };
+		1D2F68AE2ACB272500524B92 /* RemoteTabsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsViewController.swift; sourceTree = "<group>"; };
 		1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsEmptyView.swift; sourceTree = "<group>"; };
 		1D35644E2D90998900F52F12 /* ASSearchEnginePrefsMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSearchEnginePrefsMigrator.swift; sourceTree = "<group>"; };
 		1D3564532D9329FA00F52F12 /* SearchPrefsMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPrefsMigrationTests.swift; sourceTree = "<group>"; };
@@ -11548,7 +11548,7 @@
 				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
 				1D2F68B02ACCA22000524B92 /* RemoteTabsEmptyView.swift */,
 				1DEBC55D2AC4ED70006E4801 /* RemoteTabsPanel.swift */,
-				1D2F68AE2ACB272500524B92 /* RemoteTabsTableViewController.swift */,
+				1D2F68AE2ACB272500524B92 /* RemoteTabsViewController.swift */,
 				1DDE3DB22AC34E1E0039363B /* TabCell.swift */,
 				F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */,
 				213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */,
@@ -17835,7 +17835,7 @@
 				21EEAA192D3852B300595119 /* BookmarksTelemetry.swift in Sources */,
 				8A9F4F072DC8F5CA004644B9 /* MockRemoteTabs.swift in Sources */,
 				E1A6AB4628CA6A4C00EBEBDD /* String+Extension.swift in Sources */,
-				1D2F68AF2ACB272500524B92 /* RemoteTabsTableViewController.swift in Sources */,
+				1D2F68AF2ACB272500524B92 /* RemoteTabsViewController.swift in Sources */,
 				ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */,
 				8AABBCFC2A0010900089941E /* GleanWrapper.swift in Sources */,
 				F85C7F0F271DD154004BDBA4 /* AppAuthenticator.swift in Sources */,

@@ -33,7 +33,7 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Properties
 
     private(set) var state: RemoteTabsPanelState
-    var tabsDisplayViewController: RemoteTabsTableViewController
+    var tabsDisplayViewController: RemoteTabsViewController
     weak var remoteTabsDelegate: RemoteTabsPanelDelegate?
 
     var themeManager: ThemeManager
@@ -57,7 +57,7 @@ class RemoteTabsPanel: UIViewController,
         self.state = RemoteTabsPanelState(windowUUID: windowUUID)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.tabsDisplayViewController = RemoteTabsTableViewController(state: state, windowUUID: windowUUID)
+        self.tabsDisplayViewController = RemoteTabsViewController(state: state, windowUUID: windowUUID)
 
         super.init(nibName: nil, bundle: nil)
 

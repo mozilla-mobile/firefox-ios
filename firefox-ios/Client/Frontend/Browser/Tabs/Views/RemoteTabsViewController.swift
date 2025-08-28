@@ -13,13 +13,13 @@ protocol CollapsibleTableViewSection: AnyObject {
     func hideTableViewSection(_ section: Int)
 }
 
-class RemoteTabsTableViewController: UIViewController,
-                                     Themeable,
-                                     CollapsibleTableViewSection,
-                                     LibraryPanelContextMenu,
-                                     FeatureFlaggable,
-                                     UITableViewDelegate,
-                                     UITableViewDataSource {
+class RemoteTabsViewController: UIViewController,
+                                Themeable,
+                                CollapsibleTableViewSection,
+                                LibraryPanelContextMenu,
+                                FeatureFlaggable,
+                                UITableViewDelegate,
+                                UITableViewDataSource {
     struct UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
     }
