@@ -116,6 +116,7 @@ final class TabDisplayPanelViewController: UIViewController,
                                                     actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
+        updateInsets()
     }
 
     override func viewDidLayoutSubviews() {
@@ -252,6 +253,23 @@ final class TabDisplayPanelViewController: UIViewController,
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let statusBarHeight = windowScene.statusBarManager?.statusBarFrame.height {
             statusBarView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight)
+        }
+    }
+
+    private func updateInsets() {
+        if isCompactLayout {
+            let emptyView = emptyPrivateTabsView as? InsetUpdatable
+            let bottomInset = if (emptyView as? ExperimentEmptyPrivateTabsView) != nil {
+                DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
+            } else {
+                DefaultTabTrayUtils().segmentedControlHeight
+            }
+
+            emptyView?.updateInsets(top: 0, bottom: bottomInset)
+            tabDisplayView.updateInsets(top: 0, bottom: DefaultTabTrayUtils().segmentedControlHeight)
+        } else {
+            (emptyPrivateTabsView as? InsetUpdatable)?.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
+            tabDisplayView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
         }
     }
 

@@ -9,6 +9,8 @@ protocol TabTrayUtils {
     var isTabTrayTranslucencyEnabled: Bool { get }
     var isReduceTransparencyEnabled: Bool { get }
 
+    var segmentedControlHeight: CGFloat { get }
+
     func shouldDisplayExperimentUI() -> Bool
     func shouldBlur() -> Bool
     func backgroundAlpha() -> CGFloat
@@ -18,6 +20,8 @@ protocol TabTrayUtils {
 struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
+        static let segmentedControlHeight: CGFloat = 53
+        static let segmentedControlHeightIOS26: CGFloat = segmentedControlHeight + 16
     }
 
     var isTabTrayUIExperimentsEnabled: Bool {
@@ -30,6 +34,14 @@ struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
 
     var isReduceTransparencyEnabled: Bool {
         UIAccessibility.isReduceTransparencyEnabled
+    }
+
+    var segmentedControlHeight: CGFloat {
+        if #available(iOS 26.0, *) {
+            return shouldDisplayExperimentUI() ? UX.segmentedControlHeightIOS26 : 0
+        } else {
+            return shouldDisplayExperimentUI() ? UX.segmentedControlHeight : 0
+        }
     }
 
     func shouldDisplayExperimentUI() -> Bool {

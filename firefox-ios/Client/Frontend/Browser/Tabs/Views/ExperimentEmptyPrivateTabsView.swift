@@ -15,7 +15,8 @@ protocol EmptyPrivateTabView: UIView, ThemeApplicable {
 
 // View we display when there are no private tabs created
 class ExperimentEmptyPrivateTabsView: UIView,
-                                      EmptyPrivateTabView {
+                                      EmptyPrivateTabView,
+                                      InsetUpdatable {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
@@ -30,7 +31,6 @@ class ExperimentEmptyPrivateTabsView: UIView,
     // UI
     private let scrollView: UIScrollView = .build { scrollview in
         scrollview.backgroundColor = .clear
-        scrollview.contentInset.bottom = TabTrayViewController.segmentedControlHeight
     }
 
     private lazy var containerView: UIView = .build { _ in }
@@ -150,5 +150,12 @@ class ExperimentEmptyPrivateTabsView: UIView,
         guard let url = SupportUtils.URLForTopic("private-browsing-ios") else { return }
         let request = URLRequest(url: url)
         delegate?.didTapLearnMore(urlRequest: request)
+    }
+
+    // MARK: - InsetUpdatable
+
+    func updateInsets(top: CGFloat, bottom: CGFloat) {
+        scrollView.contentInset.top = top
+        scrollView.contentInset.bottom = bottom
     }
 }
