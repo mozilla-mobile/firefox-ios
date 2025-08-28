@@ -16,7 +16,7 @@ protocol TabTrayUtils {
     func backgroundAlpha() -> CGFloat
 }
 
-/// Tiny utility to simplify checking for availability of the summarizers
+/// Tiny utility to simplify checking for availability of the tab tray features
 struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
