@@ -35,16 +35,8 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         toViewController.view.alpha = UX.initialAlpha
         containerView.addSubview(toViewController.view)
 
-        fadeOutLaunchScreenLoader(fromViewController)
-
-        UIView.animate(
-            withDuration: UX.totalDuration * UX.fadeOutDurationRatio,
-            delay: UX.fadeOutDelay,
-            options: [.curveEaseOut],
-            animations: {
-                // Logo fade out is handled in fadeOutLaunchScreenLoader
-            }
-        ) { _ in
+        fadeOutLaunchScreenLoader(fromViewController) {
+            // Once the loader fade-out completes, start the fade-in animation
             UIView.animate(
                 withDuration: UX.totalDuration * UX.fadeInDurationRatio,
                 delay: UX.fadeInDelay,
@@ -58,9 +50,12 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         }
     }
 
-    private func fadeOutLaunchScreenLoader(_ viewController: UIViewController) {
+    private func fadeOutLaunchScreenLoader(_ viewController: UIViewController, completion: @escaping () -> Void) {
         if let modernLaunchVC = viewController as? ModernLaunchScreenViewController {
-            modernLaunchVC.fadeOutLoader()
+            modernLaunchVC.fadeOutLoader(completion: completion)
+        } else {
+            // If it's not a ModernLaunchScreenViewController, just call the completion immediately
+            completion()
         }
     }
 }

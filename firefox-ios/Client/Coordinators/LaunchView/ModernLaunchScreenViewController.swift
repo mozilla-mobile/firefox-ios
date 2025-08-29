@@ -119,7 +119,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         modernLaunchView.stopAnimation()
     }
 
-    func fadeOutLoader() {
+    func fadeOutLoader(completion: (() -> Void)? = nil) {
         stopLoaderAnimation()
 
         UIView.animate(
@@ -128,6 +128,8 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
             options: [.curveEaseOut]
         ) {
             self.hostingController.view.alpha = UX.fadeOutAlpha
+        } completion: { _ in
+            completion?()
         }
     }
 
