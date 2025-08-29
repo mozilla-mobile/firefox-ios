@@ -173,7 +173,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_viewDidAppear_triggersHomepageAction() throws {
         let subject = createSubject()
 
-        subject.viewWillAppear(false)
+        subject.viewDidAppear(false)
 
         let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.first(where: { $0 is HomepageAction }) as? HomepageAction
