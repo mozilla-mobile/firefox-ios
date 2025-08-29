@@ -24,6 +24,8 @@ public struct RustFxAFeatures: OptionSet {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+
+    public static let useRustKeychainForFxA = RustFxAFeatures(rawValue: 1 << 0)
 }
 
 // TODO: FXIOS-13290 Make RustFirefoxAccounts actually sendable
@@ -181,7 +183,8 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
             config: config,
             deviceConfig: deviceConfig,
             applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
-            keychainAccessGroup: accessGroupIdentifier
+            keychainAccessGroup: accessGroupIdentifier,
+            useRustKeychainForFxA: features.contains(.useRustKeychainForFxA)
         )
     }
 
