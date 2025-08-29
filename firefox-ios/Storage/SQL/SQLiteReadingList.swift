@@ -42,24 +42,23 @@ open class SQLiteReadingList {
 extension SQLiteReadingList: ReadingList {
     public func getAvailableRecords(completion: @escaping ([ReadingListItem]) -> Void) {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
-        let deferredResponse = db.runQuery(
+        db.runQuery(
             sql,
             args: nil,
             factory: SQLiteReadingList.ReadingListItemFactory
-        ) >>== { cursor in
-            return deferMaybe(cursor.asArray())
-        }
-
-        deferredResponse.upon { result in
-            completion(result.successValue ?? [])
+        ).upon { result in
+            guard let cursor = result.successValue else {
+                completion([])
+                return
+            }
+            completion(cursor.asArray())
         }
     }
 
     public func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>> {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
-        return db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
-            return deferMaybe(cursor.asArray())
-        }
+        return db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory)
+            .map { $0.map { cursor in cursor.asArray() } }
     }
 
     public func deleteRecord(_ record: ReadingListItem, completion: ((Bool) -> Void)? = nil) {
@@ -109,13 +108,14 @@ extension SQLiteReadingList: ReadingList {
     public func getRecordWithURL(_ url: String) -> Deferred<Maybe<ReadingListItem>> {
         let sql = "SELECT \(allColumns) FROM items WHERE url = ? LIMIT 1"
         let args: Args = [url]
-        return db.runQuery(sql, args: args, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
+        return db.runQuery(sql, args: args, factory: SQLiteReadingList.ReadingListItemFactory).map { $0.bind { cursor in
             let items = cursor.asArray()
             if let item = items.first {
-                return deferMaybe(item)
+                return Maybe(success: item)
             } else {
-                return deferMaybe(ReadingListStorageError("Can't create RLCR from row"))
+                return Maybe(failure: ReadingListStorageError("Can't create RLCR from row"))
             }
+        }
         }
     }
 
