@@ -81,7 +81,7 @@ class NotificationService: UNNotificationServiceExtension {
                 }
                 if decryptResult.scope == RustFirefoxAccounts.pushScope {
                     let handler = FxAPushMessageHandler(with: profile)
-                    handler.handleDecryptedMessage(message: decryptedString, completion: completion)
+                    await handler.handleDecryptedMessage(message: decryptedString, completion: completion)
                 } else {
                     completion(.failure(.messageIncomplete("Unknown sender")))
                 }
