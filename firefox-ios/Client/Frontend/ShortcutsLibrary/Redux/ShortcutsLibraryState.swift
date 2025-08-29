@@ -8,6 +8,7 @@ import Redux
 struct ShortcutsLibraryState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     let shortcuts: [TopSiteConfiguration]
+    let shouldRecordImpressionTelemetry: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let shortcutsLibraryState = store.state.screenState(
@@ -21,23 +22,27 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
 
         self.init(
             windowUUID: shortcutsLibraryState.windowUUID,
-            shortcuts: shortcutsLibraryState.shortcuts
+            shortcuts: shortcutsLibraryState.shortcuts,
+            shouldRecordImpressionTelemetry: shortcutsLibraryState.shouldRecordImpressionTelemetry
         )
     }
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            shortcuts: []
+            shortcuts: [],
+            shouldRecordImpressionTelemetry: false
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        shortcuts: [TopSiteConfiguration]
+        shortcuts: [TopSiteConfiguration],
+        shouldRecordImpressionTelemetry: Bool
     ) {
         self.windowUUID = windowUUID
         self.shortcuts = shortcuts
+        self.shouldRecordImpressionTelemetry = shouldRecordImpressionTelemetry
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -47,12 +52,33 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
         }
 
         switch action.actionType {
+        case ShortcutsLibraryActionType.initialize:
+            return handleInitializeAction(state: state)
+        case ShortcutsLibraryMiddlewareActionType.impressionTelemetryRecorded:
+            return handleImpressionTelemetryRecordedAction(state: state)
         case TopSitesMiddlewareActionType.retrievedUpdatedSites:
             return handleRetrievedUpdatedSitesAction(action: action, state: state)
         default:
             return defaultState(from: state)
         }
     }
+
+    private static func handleInitializeAction(state: Self) -> ShortcutsLibraryState {
+        return ShortcutsLibraryState(
+            windowUUID: state.windowUUID,
+            shortcuts: state.shortcuts,
+            shouldRecordImpressionTelemetry: true
+        )
+    }
+
+    private static func handleImpressionTelemetryRecordedAction(state: Self) -> ShortcutsLibraryState {
+        return ShortcutsLibraryState(
+            windowUUID: state.windowUUID,
+            shortcuts: state.shortcuts,
+            shouldRecordImpressionTelemetry: false
+        )
+    }
+
 
     private static func handleRetrievedUpdatedSitesAction(action: Action, state: Self) -> ShortcutsLibraryState {
         guard let topSitesAction = action as? TopSitesAction,
@@ -63,14 +89,16 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
 
         return ShortcutsLibraryState(
             windowUUID: state.windowUUID,
-            shortcuts: sites
+            shortcuts: sites,
+            shouldRecordImpressionTelemetry: state.shouldRecordImpressionTelemetry
         )
     }
 
     static func defaultState(from state: ShortcutsLibraryState) -> ShortcutsLibraryState {
         return ShortcutsLibraryState(
             windowUUID: state.windowUUID,
-            shortcuts: state.shortcuts
+            shortcuts: state.shortcuts,
+            shouldRecordImpressionTelemetry: state.shouldRecordImpressionTelemetry
         )
     }
 }
