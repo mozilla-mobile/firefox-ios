@@ -14,10 +14,13 @@
 "Summarizer.Error.Unknown.Message.v142" = "总结页面时出错，请稍后再试！";
 
 /* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
-"Summarizer.Error.UnsafeWebsite.Message.v142" = "未检测到足够内容。此页面可能受限，或大部分是视觉内容。";
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "检测到受限内容。此页面可能受到限制，或大部分是视觉内容。";
 
 /* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
 "Summarizer.Error.UnsupportedContent.Message.v142" = "此网站不允许总结页面，请尝试其他页面。";
+
+/* The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors. */
+"Summarizer.Footnote.Label.v144" = "请注意：摘要内容可能存在错误。";
 
 /* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
 "Summarizer.HostedBrand.Label.v142" = "由 %@ 总结";
@@ -36,6 +39,9 @@
 
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "取消";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ 使用云端 AI 生成网页内容摘要，并将摘要结果返回至您的设备。";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "详细了解";

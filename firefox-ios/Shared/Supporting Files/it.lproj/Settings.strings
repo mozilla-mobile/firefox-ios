@@ -158,7 +158,7 @@
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Hai disattivato tutte le notifiche di %1$@. Attivale nelle impostazioni del dispositivo > Notifiche > %2$@";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
-"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Ulteriori informazioni su funzioni utili e come ottenere il massimo da %@.";
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Scopri funzioni utili e come ottenere il massimo da %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Suggerimenti e funzioni";

@@ -1430,7 +1430,7 @@
 "Settings.OfferClipboardBar.Title" = "詢問是否直接開啟複製的鏈結";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "開啟郵件鏈結的程式";
+"Settings.OpenWith.PageTitle" = "用來開啟郵件鏈結的程式";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "郵件 App";
