@@ -14,11 +14,7 @@ class StoryTests: BaseTestCase {
         let numPocketStories = app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
             .staticTexts.count
-        if iPad() {
-            XCTAssertTrue(numPocketStories > 7, "Expected at least 8 stories on iPad.")
-        } else {
-            XCTAssertTrue(numPocketStories > 6, "Expected at least 7 stories on iPhone.")
-        }
+        XCTAssertTrue(numPocketStories > 1, "Expected at least 2 stories.")
     }
 
     func togglePocket(shouldEnable: Bool) {

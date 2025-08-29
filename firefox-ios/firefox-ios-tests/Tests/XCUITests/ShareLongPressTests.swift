@@ -9,7 +9,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     func testShareNormalWebsiteTabReminders() {
         app.launch()
         if #available(iOS 17, *) {
-            longPressPocketAndReachShareOptions(option: "Reminders")
+            longPressTopSitesAndReachShareOptions(option: "Reminders")
             // The URL of the website is added in a new reminder
             waitForElementsToExist(
                 [
@@ -23,7 +23,7 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864324
     func testShareNormalWebsiteSendLinkToDevice() {
         app.launch()
-        longPressPocketAndReachShareOptions(option: "Send Link to Device")
+        longPressTopSitesAndReachShareOptions(option: "Send Link to Device")
         // If not signed in, the browser prompts you to sign in
         waitForElementsToExist(
             [
@@ -36,10 +36,8 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2864323
     func testShareNormalWebsiteCopyUrl() {
         app.launch()
-        longPressPocketAndReachShareOptions(option: "Copy")
-        app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
-            .staticTexts.firstMatch.waitAndTap()
+        longPressTopSitesAndReachShareOptions(option: "Copy")
+        app.collectionViews["FxCollectionView"].links.element(boundBy: 0).waitAndTap()
         if #available(iOS 16, *) {
             openNewTabAndValidateURLisPaste(url: "https://")
         }
@@ -182,6 +180,8 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressLinkAndSelectShareOption(option: String) {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.webViews["contentView"].links.element(boundBy: 0).press(forDuration: 1.5)
@@ -196,6 +196,8 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
     }
 
     private func longPressReadingListAndReachShareOptions(option: String) {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -219,9 +221,11 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     private func longPressHistoryAndReachShareOptions(option: String) {
         // Go to a webpage and navigate to history
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("mozilla.org")
-        waitForTabsButton()
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(HistoryRecentlyClosed)
         // Long-press on a website
         app.tables.cells.staticTexts.element(boundBy: 1).press(forDuration: 1.0)
@@ -238,7 +242,8 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
 
     private func longPressBookmarkAndReachShareOptions(option: String) {
         // Go to a webpage, and add to bookmarks
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -258,12 +263,10 @@ class ShareLongPressTests: FeatureFlaggedTestBase {
         }
     }
 
-    private func longPressPocketAndReachShareOptions(option: String) {
+    private func longPressTopSitesAndReachShareOptions(option: String) {
         navigator.goto(NewTabScreen)
         // Long tap on the first Pocket element
-        app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
-            .staticTexts.firstMatch.press(forDuration: 1.5)
+        app.collectionViews["FxCollectionView"].links.element(boundBy: 0).press(forDuration: 1.5)
         app.tables["Context Menu"].buttons["shareLarge"].waitAndTap()
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])

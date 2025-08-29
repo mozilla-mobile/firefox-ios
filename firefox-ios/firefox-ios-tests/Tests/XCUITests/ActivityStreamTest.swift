@@ -115,9 +115,10 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         if iPad() {
             navigator.goto(NewTabScreen)
         } else {
-            navigator.goto(HomePanelsScreen)
+            navigator.nowAt(ClearPrivateDataSettings)
+            navigator.goto(BrowserTab)
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
         mozWaitForElementToNotExist(app.cells.staticTexts[newTopSite["bookmarkLabel"]!])
     }
 
@@ -131,6 +132,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             app.textFields.element(boundBy: 0).waitAndTap()
             app.typeText("mozilla.org\n")
         } else {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
             navigator.openURL("mozilla.org")
         }
         waitUntilPageLoad()
@@ -183,6 +186,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             app.textFields.element(boundBy: 0).waitAndTap()
             app.typeText("mozilla.org\n")
         } else {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
             navigator.openURL("mozilla.org")
         }
         waitUntilPageLoad()
@@ -578,6 +583,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2855325
     func testSiteCanBeAddedToShortcuts() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         addWebsiteToShortcut(website: url_3)
         let itemCell = app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let cell = itemCell.staticTexts["Example Domain"]
@@ -603,7 +610,8 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         navigator.nowAt(Shortcuts)
         navigator.goto(HomeSettings)
         navigator.nowAt(HomeSettings)
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         addWebsiteToShortcut(website: url_3)
         addWebsiteToShortcut(website: path(forTestPage: url_2["url"]!))
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
@@ -633,6 +641,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     private func addWebsiteToShortcut(website: String) {
         navigator.openURL(website)
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         // navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.PinToTopSitesPAM)
