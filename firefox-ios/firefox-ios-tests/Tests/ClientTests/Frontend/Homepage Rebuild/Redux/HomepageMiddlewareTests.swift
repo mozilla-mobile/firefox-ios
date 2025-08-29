@@ -45,11 +45,11 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         ])
     }
 
-    func test_viewWillAppearAction_sendsTelemetryData() throws {
+    func test_viewDidAppearAction_sendsTelemetryData() throws {
         let subject = createSubject()
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.viewWillAppear
+            actionType: HomepageActionType.viewDidAppear
         )
 
         subject.homepageProvider(AppState(), action)

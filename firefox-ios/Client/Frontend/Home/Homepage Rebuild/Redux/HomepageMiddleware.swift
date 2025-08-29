@@ -24,7 +24,7 @@ final class HomepageMiddleware: FeatureFlaggable {
 
     lazy var homepageProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case HomepageActionType.viewWillAppear, GeneralBrowserActionType.didSelectedTabChangeToHomepage:
+        case HomepageActionType.viewDidAppear, GeneralBrowserActionType.didSelectedTabChangeToHomepage:
             self.homepageTelemetry.sendHomepageImpressionEvent()
 
         case NavigationBrowserActionType.tapOnCustomizeHomepageButton:

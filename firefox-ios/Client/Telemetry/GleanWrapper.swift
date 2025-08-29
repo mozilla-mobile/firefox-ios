@@ -21,6 +21,7 @@ protocol GleanWrapper {
     func recordQuantity(for metric: QuantityMetricType, value: Int64)
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64)
     func recordUrl(for metric: UrlMetricType, value: String)
+    func recordDatetime(for metric: DatetimeMetricType, value: Date)
 
     func incrementNumerator(for metric: RateMetricType, amount: Int32)
     func incrementDenominator(for metric: RateMetricType, amount: Int32)
@@ -94,6 +95,10 @@ struct DefaultGleanWrapper: GleanWrapper {
     }
 
     func recordUrl(for metric: UrlMetricType, value: String) {
+        metric.set(value)
+    }
+
+    func recordDatetime(for metric: DatetimeMetricType, value: Date) {
         metric.set(value)
     }
 

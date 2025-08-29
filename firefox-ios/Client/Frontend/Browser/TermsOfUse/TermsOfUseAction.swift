@@ -14,7 +14,11 @@ struct TermsOfUseAction: Action {
     }
 }
 enum TermsOfUseActionType: ActionType {
-    case markAccepted
-    case markDismissed
-    case markShown
+    case termsShown
+    case termsAccepted
+    case remindMeLaterTapped
+    case gestureDismiss
+    case learnMoreLinkTapped
+    case privacyLinkTapped
+    case termsLinkTapped
 }

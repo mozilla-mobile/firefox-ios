@@ -167,6 +167,12 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        store.dispatchLegacy(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewDidAppear
+            )
+        )
         trackVisibleItemImpressions()
     }
 
