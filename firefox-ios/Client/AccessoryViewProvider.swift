@@ -315,6 +315,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
     // MARK: - Notifiable
     nonisolated func handleNotifications(_ notification: Notification) {
+        guard notification.name == .SearchBarPositionDidChange else { return }
         DispatchQueue.main.async {
             self.applyTheme()
         }
