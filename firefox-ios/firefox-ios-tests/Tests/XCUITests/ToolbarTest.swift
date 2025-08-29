@@ -89,8 +89,6 @@ class ToolbarTests: FeatureFlaggedTestBase {
     func testLandscapeNavigationWithTabSwitch_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
         XCTAssert(app.textFields[searchTextField].exists)
@@ -107,7 +105,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
         guard let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
                 as? String else {
-            XCTFail("Failed to retrieve the value from the Mozilla URL bar text field")
+            XCTFail("Failed to retrieve the value from the Mozilla URL bar textField")
             return
         }
         XCTAssertEqual(valueMozilla, urlValueLong)
@@ -173,20 +171,22 @@ class ToolbarTests: FeatureFlaggedTestBase {
             // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
 
             XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
 
             navigator.openURL(website1["url"]!, waitForLoading: true)
-            // Adding the waiter right after navigating to the webpage in order to make the test more stable
+            // Wait for the loading indicator to appear
             waitUntilPageLoad()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
-            let PageOptionsMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+            let settingsMenuButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
             let statusbarElement: XCUIElement = XCUIApplication(
                 bundleIdentifier: "com.apple.springboard"
             ).statusBars.element(boundBy: 1)
             app.swipeUp()
-            XCTAssertFalse(PageOptionsMenu.isHittable)
+            XCTAssertFalse(settingsMenuButton.isHittable)
             statusbarElement.tap(force: true)
-            XCTAssertTrue(PageOptionsMenu.isHittable)
+            XCTAssertTrue(settingsMenuButton.isHittable)
             statusbarElement.tap(force: true)
             let topElement = app.webViews
                 .otherElements["Internet for people, not profit — Mozilla"]
@@ -227,8 +227,9 @@ class ToolbarTests: FeatureFlaggedTestBase {
         // Swipe up to close the app does not work on iOS 15.
         if #available(iOS 16, *) {
             closeFromAppSwitcherAndRelaunch()
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            navigator.nowAt(BrowserTab)
+            navigator.goto(TabTray)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String, "2")
         }

@@ -11,9 +11,13 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     func testPinToShortcuts_topSitesVisualRefreshFlagDisabled() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hnt-top-sites-visual-refresh-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
         navigator.performAction(Action.PinToTopSitesPAM)
 
         // Navigate to topsites to verify that the site has been pinned
@@ -49,9 +53,13 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     func testPinToShortcuts_testPinToShortcuts_topSitesVisualRefreshFlagEnabled() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
         navigator.performAction(Action.PinToTopSitesPAM)
 
         // Navigate to topsites to verify that the site has been pinned
@@ -85,8 +93,12 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     func testPinToShortcuts_andThenRemovingShortcuts_topSitesVisualRefreshFlagEnabled() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hnt-top-sites-visual-refresh-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -113,8 +125,12 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
     func testPinToShortcuts_andThenRemovingShortcuts_topSitesVisualRefreshFlagDisabled() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hnt-top-sites-visual-refresh-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -139,6 +155,8 @@ class PhotonActionSheetTests: FeatureFlaggedTestBase {
 
     private func openNewShareSheet() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("example.com")
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])

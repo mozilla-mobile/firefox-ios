@@ -21,6 +21,8 @@ final class CookiePersistenceTests: BaseTestCase {
 
     func testCookiePersistenceBasic() {
         // Open URL for Cookie login
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         openCookieSite()
         let webview = app.webViews.firstMatch
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
@@ -33,12 +35,16 @@ final class CookiePersistenceTests: BaseTestCase {
         // Relaunch app
         relaunchApp()
 
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_IN"])
     }
 
     func testCookiePersistenceOpenNewTab() {
         // Open URL for Cookie login
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         openCookieSite()
         let webview = app.webViews.firstMatch
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
@@ -61,7 +67,8 @@ final class CookiePersistenceTests: BaseTestCase {
         relaunchApp()
 
         // Open a new tab for cookie website and check login status
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_IN"])
     }
@@ -75,6 +82,7 @@ final class CookiePersistenceTests: BaseTestCase {
         toolbar.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
 
         // Open URL for Cookie login
+        navigator.goto(TabTray)
         openCookieSite()
         let webview = app.webViews.firstMatch
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
@@ -91,6 +99,8 @@ final class CookiePersistenceTests: BaseTestCase {
         app.buttons["Tabs"].tap()
         toolbar.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
 
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
     }

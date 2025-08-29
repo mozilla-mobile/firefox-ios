@@ -301,7 +301,6 @@ extension MMNavigator where T == FxUserState {
     func openNewURL(urlString: String) {
         let app = XCUIApplication()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
-
         self.goto(TabTray)
         createNewTab()
         self.openURL(urlString)

@@ -58,6 +58,7 @@ class TabsTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
+        navigator.goto(HomePanelsScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
@@ -81,7 +82,8 @@ class TabsTests: FeatureFlaggedTestBase {
     func testAddTabFromContext_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         // Initially there is only one tab open
         let tabsOpenInitially = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
@@ -102,6 +104,8 @@ class TabsTests: FeatureFlaggedTestBase {
     func testSwitchBetweenTabs_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -135,6 +139,8 @@ class TabsTests: FeatureFlaggedTestBase {
     func testSwitchBetweenTabs_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -168,6 +174,8 @@ class TabsTests: FeatureFlaggedTestBase {
     func testCloseOneTab_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
@@ -195,7 +203,8 @@ class TabsTests: FeatureFlaggedTestBase {
     func testCloseAllTabsUndo_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -208,19 +217,15 @@ class TabsTests: FeatureFlaggedTestBase {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         }
-
         if iPad() {
             navigator.goto(TabTray)
         } else {
             navigator.performAction(Action.CloseURLBarOpen)
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
-
         app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
-
         mozWaitForElementToExist(
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
@@ -228,14 +233,8 @@ class TabsTests: FeatureFlaggedTestBase {
         if !iPad() {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         }
-
-        if iPad() {
-            navigator.goto(TabTray)
-        } else {
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
+        navigator.goto(TabTray)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
@@ -244,6 +243,7 @@ class TabsTests: FeatureFlaggedTestBase {
     func testCloseAllTabsPrivateModeUndo_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
@@ -279,6 +279,7 @@ class TabsTests: FeatureFlaggedTestBase {
     func testCloseAllTabsPrivateModeUndo_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
@@ -313,6 +314,8 @@ class TabsTests: FeatureFlaggedTestBase {
     func testCloseAllTabs_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -568,7 +571,8 @@ class TabsTests: FeatureFlaggedTestBase {
     func testTabTrayCloseMultipleTabs_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].waitAndTap()
@@ -606,6 +610,8 @@ class TabsTests: FeatureFlaggedTestBase {
         app.launch()
         // Open a few tabs
         waitForTabsButton()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         navigator.createNewTab()
@@ -768,6 +774,7 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         if skipPlatform { return }
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.back()
         waitForTabsButton()
@@ -778,15 +785,11 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         closeTabTrayView(goBackToBrowserTab: "Homepage")
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeTabTrayView(goBackToBrowserTab: "Homepage")
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -800,6 +803,7 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         if skipPlatform { return }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.back()
         waitForTabsButton()
@@ -809,15 +813,11 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -882,7 +882,8 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
     func testSwitchBetweenTabsToastButton() {
         if skipPlatform { return }
         app.launch()
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
 
@@ -908,7 +909,8 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         if skipPlatform { return }
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
 
@@ -933,7 +935,8 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
         if skipPlatform { return }
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
 

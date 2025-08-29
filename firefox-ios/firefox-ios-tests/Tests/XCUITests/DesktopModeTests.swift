@@ -14,15 +14,18 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
         navigator.goto(ReloadLongPressMenu)
         navigator.performAction(Action.ToggleRequestDesktopSite)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         // Covering scenario that when reloading the page should preserve Desktop site
         navigator.performAction(Action.ReloadURL)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -37,6 +40,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         navigator.createNewTab()
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 }
@@ -53,13 +57,17 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
     func testClearPrivateData() {
         app.launch()
         if skipPlatform { return }
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // Go to Clear Data
@@ -72,6 +80,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
@@ -79,13 +88,17 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
     func testSameHostInMultipleTabs() {
         app.launch()
         if skipPlatform { return }
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // Tab #2
@@ -93,10 +106,13 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         // Tab #3
@@ -104,6 +120,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
@@ -112,15 +129,19 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
     func testChangeModeInSameTab() {
         app.launch()
         if skipPlatform { return }
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.desktopSite])
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
@@ -129,6 +150,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         // Select Mobile site here, the identifier is the same but the Text is not
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
@@ -137,13 +159,17 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         if skipPlatform { return }
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite) // toggle on
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // is now on in normal mode
@@ -152,9 +178,11 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite) // toggle off
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // is now off in private, mode, confirm it is off in normal mode
@@ -163,6 +191,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 
@@ -171,13 +200,17 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         if skipPlatform { return }
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite) // toggle on
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // is now on in normal mode
@@ -186,9 +219,11 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite) // toggle off
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // is now off in private, mode, confirm it is off in normal mode
@@ -197,6 +232,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 
@@ -205,17 +241,21 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         if skipPlatform { return }
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
@@ -223,6 +263,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
             XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         }
     }
@@ -232,24 +273,31 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         if skipPlatform { return }
-
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
             XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         }
     }
@@ -260,6 +308,8 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
         if skipPlatform { return }
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
@@ -301,6 +351,8 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         if skipPlatform { return }
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
@@ -328,11 +380,15 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
 
         navigator.performAction(Action.AcceptRemovingAllTabs)
         waitUntilPageLoad()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
         navigator.createNewTab()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 }

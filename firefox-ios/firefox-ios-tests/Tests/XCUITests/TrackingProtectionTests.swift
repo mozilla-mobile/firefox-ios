@@ -82,6 +82,7 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
     func testStandardProtectionLevel_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
@@ -100,6 +101,8 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
@@ -143,6 +146,7 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
     func testStandardProtectionLevel_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
@@ -161,6 +165,8 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
@@ -202,6 +208,8 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
     func testLockIconMenu_menuRefactorFeatureOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "menu-refactor-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
@@ -275,6 +283,8 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
     func testLockIconSecureConnection_menuRefactorFeatureOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "menu-refactor-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
         // iOS 15 displays a toast for the paste. The toast may cover areas to be
@@ -300,7 +310,11 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         // Dismiss the view and visit "badssl.com". Tap on "expired"
         navigator.performAction(Action.CloseTPContextMenu)
         navigator.nowAt(BrowserTab)
-        navigator.openNewURL(urlString: "https://www.badssl.com")
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("https://www.badssl.com")
         waitUntilPageLoad()
         app.links.staticTexts["expired"].waitAndTap()
         waitUntilPageLoad()
@@ -321,6 +335,8 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
     func testLockIconCloseMenu_menuRefactorFeatureOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "menu-refactor-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
         // iOS 15 displays a toast for the paste. The toast may cover areas to be
@@ -345,7 +361,8 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         navigator.goto(TrackingProtectionSettings)
         // Enable Strict Protection Level
         enableStrictMode()
-        navigator.nowAt(BrowserTab)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(trackingProtectionTestUrl)
         waitUntilPageLoad()
 
