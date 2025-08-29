@@ -90,4 +90,3 @@ public struct OhttpGleanUploader: PingUploader {
         }
     }
 }
-
