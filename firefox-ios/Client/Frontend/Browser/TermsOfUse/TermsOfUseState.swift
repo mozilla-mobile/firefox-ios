@@ -38,8 +38,7 @@ struct TermsOfUseState: ScreenState, Equatable {
             return TermsOfUseState(windowUUID: state.windowUUID,
                                    hasAccepted: true,
                                    wasDismissed: false)
-        case .dismissalTimestampSet,
-             .gestureDismiss,
+        case .gestureDismiss,
              .remindMeLaterTapped:
             return TermsOfUseState(windowUUID: state.windowUUID,
                                    hasAccepted: state.hasAccepted,

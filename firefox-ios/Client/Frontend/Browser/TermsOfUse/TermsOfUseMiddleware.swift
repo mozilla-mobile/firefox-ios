@@ -46,11 +46,11 @@ class TermsOfUseMiddleware {
                 self.recordImpression()
             case TermsOfUseActionType.termsAccepted:
                 self.recordAcceptance()
-            case TermsOfUseActionType.dismissalTimestampSet:
-                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
             case TermsOfUseActionType.remindMeLaterTapped:
+                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
                 self.telemetry.termsOfUseRemindMeLaterButtonTapped()
             case TermsOfUseActionType.gestureDismiss:
+                self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
                 self.telemetry.termsOfUseDismissed()
             case TermsOfUseActionType.learnMoreLinkTapped:
                 self.telemetry.termsOfUseLearnMoreButtonTapped()

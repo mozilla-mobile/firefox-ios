@@ -26,13 +26,24 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         AppContainer.shared.reset()
     }
 
-    func testMiddleware_termsAccepted_updatesPrefs() {
+    func testMiddleware_termsAccepted_updatesAcceptedPref() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsAccepted)
         middleware.termsOfUseProvider(AppState(), action)
         XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == true)
     }
-    func testMiddleware_dismissalTimestampSet_updatesPrefsWithDate() {
-        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.dismissalTimestampSet)
+    func testMiddleware_gestureDismiss_updatesPrefsWithDate() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
+        middleware.termsOfUseProvider(AppState(), action)
+        let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
+        XCTAssertNotNil(dismissedTimestamp)
+
+        if let timestamp = dismissedTimestamp {
+            let dismissedDate = Date.fromTimestamp(timestamp)
+            XCTAssertTrue(Calendar.current.isDate(dismissedDate, inSameDayAs: Date()))
+        }
+    }
+    func testMiddleware_remindMeLaterTapped_updatesPrefsWithDate() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
         middleware.termsOfUseProvider(AppState(), action)
         let dismissedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate)
         XCTAssertNotNil(dismissedTimestamp)

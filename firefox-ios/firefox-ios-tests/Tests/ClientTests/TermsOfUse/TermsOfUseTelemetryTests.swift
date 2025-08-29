@@ -168,4 +168,18 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         let events = try XCTUnwrap(GleanMetrics.Termsofuse.dismiss.testGetValue())
         XCTAssertEqual(events.count, 2)
     }
+
+    func testSetUsageMetrics() throws {
+        let mockProfile = MockProfile()
+        let mockGleanWrapper = MockGleanWrapper()
+
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
+        mockProfile.prefs.setString("1", forKey: PrefsKeys.TermsOfUseAcceptedVersion)
+        let acceptedDate = Date()
+        mockProfile.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
+        TermsOfUseTelemetry.setUsageMetrics(gleanWrapper: mockGleanWrapper, profile: mockProfile)
+
+        XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
+    }
 }
