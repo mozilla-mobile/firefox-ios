@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Glean
 
 protocol OhttpManager {
     func data(for request: URLRequest) async throws -> (Data, HTTPURLResponse)
@@ -26,7 +27,8 @@ actor StubOhttpManager: OhttpManager {
     // Global cache to caching Gateway encryption keys. Stale entries are
     // ignored and on Gateway errors the key used should be purged and retrieved
     // again next at next network attempt.
-    static var keyCache = [URL: ([UInt8], Date)]()
+    // TODO: Laurie
+    nonisolated(unsafe) static var keyCache = [URL: ([UInt8], Date)]()
 
     private var configUrl: URL
     private var relayUrl: URL
@@ -73,9 +75,6 @@ actor StubOhttpManager: OhttpManager {
 
     // Returning empty data for now since this is a stub
     public func data(for request: URLRequest) async throws -> (Data, HTTPURLResponse) {
-        let config = try await keyForGateway(gatewayConfigUrl: configUrl,
-                                             ttl: TimeInterval(3600))
-
         var request = URLRequest(url: relayUrl)
         request.httpMethod = "POST"
         request.setValue("message/ohttp-req", forHTTPHeaderField: "Content-Type")
@@ -93,5 +92,71 @@ actor StubOhttpManager: OhttpManager {
         }
 
         return (Data(), response)
+    }
+}
+
+// MARK: GLEAN DEFINITONS TO REMOVE
+
+public typealias HeadersList = [String: String]
+
+/// The interface defining how to send pings.
+public protocol PingUploader {
+    /**
+     * Synchronously upload a ping to a server.
+     *
+     * @param request the ping upload request, locked within a uploader capability check
+     *
+     * @param callback used to return the status code of the upload response, so Glean knows whether or not to try again
+     */
+    func upload(
+        request: CapablePingUploadRequest,
+        callback: @escaping (UploadResult) -> Void
+    )
+}
+
+struct PingRequest {
+    let documentId: String
+    let path: String
+    let body: [UInt8]
+    let headers: [String: String]
+    let uploaderCapabilities: [String]
+}
+
+public struct PingUploadRequest {
+    let documentId: String
+    public let url: String
+    public let data: [UInt8]
+    public let headers: HeadersList
+    let uploaderCapabilities: [String]
+
+    init(request: PingRequest, endpoint: String) {
+        self.documentId = request.documentId
+        self.url = endpoint + request.path
+        self.data = request.body
+        self.headers = request.headers
+        self.uploaderCapabilities = request.uploaderCapabilities
+    }
+}
+
+public struct CapablePingUploadRequest {
+    private let request: PingUploadRequest
+
+    init(_ request: PingUploadRequest) {
+        self.request = request
+    }
+
+    /**
+     * Checks to see if the requested uploader capabilites are within the advertised uploader capabilities.
+     *
+     *@param uploaderCapabilities an array of Strings representing the uploader's supported capabilities.
+     */
+    public func capable(_ uploaderCapabilities: [String]) -> PingUploadRequest? {
+        // Check to see if the request's uploader capabilites are all satisfied by the
+        // uploader capabilites that were advertised by the uploader via the
+        // `uploaderCapabilities` parameter to this function.
+        if self.request.uploaderCapabilities.allSatisfy(uploaderCapabilities.contains) {
+            return self.request
+        }
+        return nil
     }
 }
