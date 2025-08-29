@@ -263,17 +263,16 @@ final class TabDisplayPanelViewController: UIViewController,
 
     private func updateInsets() {
         if isCompactLayout {
-            let emptyView = emptyPrivateTabsView as? InsetUpdatable
-            let bottomInset = if (emptyView as? ExperimentEmptyPrivateTabsView) != nil {
+            let bottomInset = if emptyPrivateTabsView.needsSafeArea {
                 DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
             } else {
                 DefaultTabTrayUtils().segmentedControlHeight
             }
 
-            emptyView?.updateInsets(top: 0, bottom: bottomInset)
+            emptyPrivateTabsView.updateInsets(top: 0, bottom: bottomInset)
             tabDisplayView.updateInsets(top: 0, bottom: DefaultTabTrayUtils().segmentedControlHeight)
         } else {
-            (emptyPrivateTabsView as? InsetUpdatable)?.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
+            emptyPrivateTabsView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
             tabDisplayView.updateInsets(top: 0, bottom: 0)
         }
     }

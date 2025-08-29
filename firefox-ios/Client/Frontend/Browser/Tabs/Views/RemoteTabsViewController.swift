@@ -505,16 +505,15 @@ class RemoteTabsViewController: UIViewController,
 
     private func updateInsets() {
         if shouldUseiPadSetup() {
-            (emptyView as? InsetUpdatable)?.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
+            emptyView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
         } else {
-            let emptyView = emptyView as? InsetUpdatable
-            let bottomInset = if (emptyView as? ExperimentRemoteTabsEmptyView) != nil {
+            let bottomInset = if emptyView.needsSafeArea {
                 DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
             } else {
                 DefaultTabTrayUtils().segmentedControlHeight
             }
 
-            emptyView?.updateInsets(top: 0, bottom: bottomInset)
+            emptyView.updateInsets(top: 0, bottom: bottomInset)
         }
     }
 }

@@ -19,8 +19,7 @@ protocol RemoteTabsEmptyViewDelegate: AnyObject {
 }
 
 class RemoteTabsEmptyView: UIView,
-                           RemoteTabsEmptyViewProtocol,
-                           InsetUpdatable {
+                           RemoteTabsEmptyViewProtocol {
     struct UX {
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24
@@ -29,6 +28,7 @@ class RemoteTabsEmptyView: UIView,
         static let containerWidthConstant = horizontalPadding * 2
     }
 
+    var needsSafeArea: Bool { false }
     weak var delegate: RemoteTabsEmptyViewDelegate?
 
     // MARK: - UI

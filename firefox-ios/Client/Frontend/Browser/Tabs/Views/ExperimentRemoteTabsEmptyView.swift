@@ -7,15 +7,16 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable {
+protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable, InsetUpdatable {
+    var needsSafeArea: Bool { get }
+
     @MainActor
     func configure(config: RemoteTabsPanelEmptyStateReason,
                    delegate: RemoteTabsEmptyViewDelegate?)
 }
 
 class ExperimentRemoteTabsEmptyView: UIView,
-                                     RemoteTabsEmptyViewProtocol,
-                                     InsetUpdatable {
+                                     RemoteTabsEmptyViewProtocol {
     struct UX {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
@@ -24,6 +25,7 @@ class ExperimentRemoteTabsEmptyView: UIView,
         static let containerWidthConstant = horizontalPadding * 2
     }
 
+    var needsSafeArea: Bool { true }
     weak var delegate: RemoteTabsEmptyViewDelegate?
 
     // MARK: - UI
