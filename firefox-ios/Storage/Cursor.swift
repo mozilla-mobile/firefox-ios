@@ -83,7 +83,6 @@ open class Cursor<T>: @unchecked Sendable, TypedCursor {
     }
 }
 
-
 // TODO: FXIOS-13300 - Refactor Cursor and it's subclasses to be concurrency safe
 /*
  * A cursor implementation that wraps an array.
