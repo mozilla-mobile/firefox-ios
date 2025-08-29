@@ -88,7 +88,7 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
 
     // MARK: - Setup
     private func setup() {
-        configure()
+        configureAccessibility()
         let stackViewTapped = UITapGestureRecognizer(target: self, action: #selector(tappedAccessoryButton))
 
         // Create a container view for the stack view
@@ -119,7 +119,7 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         self.customView = containerView
     }
 
-    private func configure() {
+    private func configureAccessibility() {
         let isiOS26Available: Bool = if #available(iOS 26, *) {
             true
         } else {

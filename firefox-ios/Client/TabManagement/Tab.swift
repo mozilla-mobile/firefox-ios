@@ -1187,7 +1187,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
 
         NSLayoutConstraint.activate([
             accessoryView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            // accessoryView.heightAnchor.constraint(equalToConstant: 50)
+            accessoryView.heightAnchor.constraint(equalToConstant: 50)
         ])
 
         return accessoryView

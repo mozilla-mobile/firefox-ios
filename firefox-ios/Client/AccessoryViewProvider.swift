@@ -51,9 +51,10 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     }
 
     private lazy var previousButton: UIBarButtonItem = {
-        let barButton = UIBarButtonItem(title: "", style: .plain) { _ in
-            self.tappedPreviousButton()
-        }
+        let button = UIButton(type: .system)
+        button.addTarget(self, action: #selector(self.tappedPreviousButton), for: .touchUpInside)
+        button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
+        let barButton = UIBarButtonItem(customView: button)
         barButton.image = UIImage(named: StandardImageIdentifiers.Large.chevronUp)?.withRenderingMode(.alwaysTemplate)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
         barButton.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
@@ -61,9 +62,10 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     }()
 
     private lazy var nextButton: UIBarButtonItem = {
-        let barButton = UIBarButtonItem(title: "", style: .plain) { [weak self] _ in
-            self?.tappedNextButton()
-        }
+        let button = UIButton(type: .system)
+        button.addTarget(self, action: #selector(self.tappedNextButton), for: .touchUpInside)
+        button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
+        let barButton = UIBarButtonItem(customView: button)
         barButton.image = UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
         barButton.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
@@ -71,9 +73,11 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
-        let barButton = UIBarButtonItem(title: .CreditCard.Settings.Done, style: .plain) { [weak self] _ in
-            self?.tappedDoneButton()
-        }
+        let button = UIButton(type: .system)
+        button.setTitle(.CreditCard.Settings.Done, for: .normal)
+        button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
+        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        let barButton = UIBarButtonItem(customView: button)
         barButton.setTitleTextAttributes([.font: FXFontStyles.Regular.body.scaledFont()], for: .normal)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         return barButton
@@ -229,9 +233,9 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
         toolbar.accessibilityElements = [
             currentAccessoryView?.customView,
-            previousButton,
-            nextButton,
-            doneButton
+            previousButton.customView,
+            nextButton.customView,
+            doneButton.customView
         ].compactMap { $0 }
 
         addSubview(toolbar)
@@ -247,19 +251,21 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let backgroundColor: UIColor = if #available(iOS 26.0, *) {
+            // Use the same color that uses the toolbar
             searchBarPosition == .top ? .clear : theme.colors.layerSurfaceLow
         } else {
-            theme.colors.layerSurfaceLow
+            theme.colors.layer5
         }
         let buttonsBackgroundColor: UIColor = if #available(iOS 26.0, *) {
             .clear
         } else {
-            theme.colors.layerSurfaceLow
+            theme.colors.layer5Hover
         }
 
         self.backgroundColor = backgroundColor
         [previousButton, nextButton, doneButton].forEach {
             $0.tintColor = theme.colors.iconAccentBlue
+            $0.customView?.tintColor = theme.colors.iconAccentBlue
         }
 
         [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView].forEach {
