@@ -13,40 +13,31 @@ class ToolbarMenuTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306840
     func testToolbarMenu() {
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         let hamburgerMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        let firstPocketCell = app.collectionViews.cells["PocketCell"].firstMatch
         let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         let forwardButton = app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
         let searchField = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         waitForElementsToExist(
             [
                 hamburgerMenu,
-                firstPocketCell,
                 backButton,
                 forwardButton,
                 searchField,
                 tabsButton
             ]
         )
-        if iPad() {
-            mozWaitForElementToExist(firstPocketCell)
-            XCTAssertTrue(
-                hamburgerMenu.isAbove(element: firstPocketCell),
-                "Menu button is not above the pocket cells area"
-            )
-        } else {
-            mozWaitForElementToExist(tabsButton)
-            XCTAssertTrue(
-                hamburgerMenu.isLeftOf(rightElement: tabsButton),
-                "Menu button is not on the left side of tabs button"
-            )
-            XCTAssertTrue(
-                hamburgerMenu.isBelow(element: firstPocketCell),
-                "Menu button is not below the pocket cells area"
-            )
-        }
+        mozWaitForElementToExist(tabsButton)
+        XCTAssertTrue(
+            hamburgerMenu.isLeftOf(rightElement: tabsButton),
+            "Menu button is not on the left side of tabs button"
+        )
+        XCTAssertTrue(
+            hamburgerMenu.isRightOf(rightElement: forwardButton),
+            "Menu button is not below the pocket cells area"
+        )
         navigator.goto(BrowserTabMenu)
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
@@ -61,7 +52,6 @@ class ToolbarMenuTests: BaseTestCase {
             waitForElementsToExist(
                 [
                     hamburgerMenu,
-                    firstPocketCell,
                     backButton,
                     forwardButton,
                     searchField,
@@ -73,7 +63,7 @@ class ToolbarMenuTests: BaseTestCase {
                 "Menu button is not on the left side of tabs button"
             )
             XCTAssertTrue(
-                hamburgerMenu.isAbove(element: firstPocketCell),
+                hamburgerMenu.isRightOf(rightElement: forwardButton),
                 "Menu button is not below the pocket cells area"
             )
             hamburgerMenu.waitAndTap()

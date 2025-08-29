@@ -23,6 +23,8 @@ class URLValidationTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2460854
     // Smoketest
     func testDifferentURLTypes() {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
@@ -42,6 +44,7 @@ class URLValidationTests: BaseTestCase {
     }
 
     private func clearURL() {
+        navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         app.buttons["Clear text"].waitAndTap()
     }

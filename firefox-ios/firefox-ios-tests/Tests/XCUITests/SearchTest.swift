@@ -8,14 +8,16 @@ import Common
 private let LabelPrompt = "Turn on search suggestions?"
 private let SuggestedSite = "foobar meaning"
 private let SuggestedSite2 = "foobar google"
-private let SuggestedSite3 = "foobar2000"
+private let SuggestedSite3 = "foobar"
 
 private let SuggestedSite4 = "foobar buffer length"
 private let SuggestedSite5 = "foobar burn cd"
-private let SuggestedSite6 = "foobar bomb baby"
+private let SuggestedSite6 = "foobar/ b"
 
 class SearchTests: FeatureFlaggedTestBase {
     private func typeOnSearchBar(text: String) {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tapAndTypeText(text)
     }
@@ -30,7 +32,6 @@ class SearchTests: FeatureFlaggedTestBase {
     private func validateSearchSuggestionText(typeText: String) {
         // Open a new tab and start typing "text"
         navigator.createNewTab()
-        navigator.nowAt(NewTabScreen)
         typeOnSearchBar(text: typeText)
 
         // In the search suggestion, "text" should be displayed
@@ -43,7 +44,6 @@ class SearchTests: FeatureFlaggedTestBase {
     func testPromptPresence() {
         // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
         app.launch()
-        navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
         mozWaitForElementToNotExist(app.staticTexts[LabelPrompt])
 
@@ -60,8 +60,6 @@ class SearchTests: FeatureFlaggedTestBase {
 
         // Suggestions should not be shown
         mozWaitForElementToNotExist(app.tables["SiteTable"].cells.firstMatch)
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
         mozWaitForElementToNotExist(app.tables["SiteTable"].cells.firstMatch)
 
@@ -93,7 +91,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.launch()
         // According to bug 1192155 if a string contains /, do not show suggestions, if there a space an a string,
         // the suggestions are shown again
-        navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
         mozWaitForElementToNotExist(app.staticTexts[LabelPrompt])
 
@@ -127,7 +124,6 @@ class SearchTests: FeatureFlaggedTestBase {
     func testCopyPasteComplete() {
         // Copy, Paste and Go to url
         app.launch()
-        navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
         if #available(iOS 17, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 17
             || iPad() {
@@ -147,6 +143,7 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
+        navigator.goto(URLBarOpen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         urlBarAddress.waitAndTap()
 
@@ -164,12 +161,11 @@ class SearchTests: FeatureFlaggedTestBase {
 
         // Go back, write part of moz, check the autocompletion
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
-        navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
         typeOnSearchBar(text: "moz")
-        mozWaitForValueContains(urlBarAddress, value: "mozilla.org")
+        mozWaitForValueContains(urlBarAddress, value: "moz")
         let value = urlBarAddress.value
-        XCTAssertEqual(value as? String, "mozilla.org")
+        XCTAssertEqual(value as? String, "moz")
     }
 
     private func changeSearchEngine(searchEngine: String) {
@@ -186,6 +182,8 @@ class SearchTests: FeatureFlaggedTestBase {
         let tablesQuery2 = app.tables
         tablesQuery2.staticTexts[searchEngine].waitAndTap()
 
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("foo bar")
         mozWaitForElementToExist(app.webViews.firstMatch)
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -216,7 +214,10 @@ class SearchTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
     func testSearchWithFirefoxOption() {
         app.launch()
-        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.staticTexts["cloud"])
@@ -258,6 +259,7 @@ class SearchTests: FeatureFlaggedTestBase {
     // Smoketest
     func testSearchStartAfterTypingTwoWords() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         app.typeText("foo bar")
@@ -314,6 +316,8 @@ class SearchTests: FeatureFlaggedTestBase {
             throw XCTSkip("Test fails intermittently for iOS 15")
         }
         // Go to localhost website and check the page displays correctly
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         // Open new tab
@@ -323,8 +327,10 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         )
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
+        app.buttons["Cancel"].tap()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         validateSearchSuggestionText(typeText: "localhost")
     }
 
@@ -340,19 +346,20 @@ class SearchTests: FeatureFlaggedTestBase {
             navigator.goto(ToolbarSettings)
             navigator.performAction(Action.SelectToolbarBottom)
             navigator.goto(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
 
             // URL bar is moved to the bottom of the screen
-            let customizeHomepageElement = AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage
-            let customizeHomepage = app.cells.otherElements.buttons[customizeHomepageElement]
             let menuSettingsButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            app.swipeUp()
-            mozWaitForElementToExist(customizeHomepage)
+            let firstTopSite = app.links.element(boundBy: 0)
+            mozWaitForElementToExist(menuSettingsButton)
             let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-            XCTAssertTrue(urlBar.isBelow(element: customizeHomepage))
             XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
+            XCTAssertTrue(urlBar.isBelow(element: firstTopSite))
 
             // In a new tab, tap on the URL bar
             navigator.goto(NewTabScreen)
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
             urlBar.waitAndTap()
 
             // The URL bar is focused and the keyboard is displayed
@@ -388,7 +395,6 @@ class SearchTests: FeatureFlaggedTestBase {
 
         // Tap on URL Bar and type "g"
         app.launch()
-        navigator.nowAt(NewTabScreen)
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
@@ -432,12 +438,18 @@ class SearchTests: FeatureFlaggedTestBase {
     func testFirefoxSuggest() {
         // In history: mozilla.org
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("https://www.mozilla.org/en-US/")
         waitUntilPageLoad()
 
         // Bookmark The Book of Mozilla (on localhost)
-        navigator.openNewURL(urlString: "localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
+        navigator.createNewTab()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-book.html")
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         // navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
@@ -447,12 +459,12 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
         // Type partial match ("mo") of the history and the bookmark
-        navigator.goto(NewTabScreen)
+        navigator.goto(TabTray)
+        navigator.goto(HomePanelsScreen)
         typeOnSearchBar(text: "mo")
 
         // Google Search appears
         mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Google Search"])
-        mozWaitForElementToExist(app.tables["SiteTable"].buttons[StandardImageIdentifiers.Large.appendUpLeft])
 
         // Firefox Suggest appears
         mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Firefox Suggest"])

@@ -35,6 +35,10 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     func testRearrangeTabsTabTray_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
@@ -54,6 +58,10 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     func testRearrangeMoreThan3TabsTabTraytabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Arranging more than 3 to check that it works moving tabs between lines
         let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
 
@@ -160,6 +168,10 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     func testDragAndDropHomeTabTabsTray_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openNewURL(urlString: secondWebsite.url)
         waitUntilPageLoad()
         waitForTabsButton()

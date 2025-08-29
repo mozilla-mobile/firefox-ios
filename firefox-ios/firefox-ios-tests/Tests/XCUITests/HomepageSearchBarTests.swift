@@ -11,10 +11,11 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let homepageSearchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
-
+        if !iPad() {
+            homepageSearchBar.waitAndTap()
+        }
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
@@ -408,10 +409,10 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let homepageSearchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
+        homepageSearchBar.waitAndTap()
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
@@ -683,8 +684,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+        let homepageSearchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -722,12 +722,9 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
     }
 
     private func navigateToWebPage(with homepageSearchBar: XCUIElement, searchTextFieldA11y: String) {
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(homepageSearchBar)
-        homepageSearchBar.tap()
+        navigator.nowAt(HomePanelsScreen)
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
-
         mozWaitForElementToNotExist(homepageSearchBar)
         mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
