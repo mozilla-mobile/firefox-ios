@@ -40,7 +40,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var layerCritical: UIColor = FXColors.Pink80
     var layerSelectedText: UIColor = FXColors.Blue40
     var layerAutofillText: UIColor = FXColors.Violet60
-    var layerSearch: UIColor = FXColors.Ink90
+    var layerEmphasis: UIColor = FXColors.Ink90
     var layerGradientURL = Gradient(colors: [
         FXColors.Ink90.withAlphaComponent(0),
         FXColors.Ink90.withAlphaComponent(1)

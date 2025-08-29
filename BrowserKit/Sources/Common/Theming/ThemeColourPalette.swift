@@ -29,7 +29,7 @@ public protocol ThemeColourPalette {
     var layerCritical: UIColor { get }
     var layerSelectedText: UIColor { get }
     var layerAutofillText: UIColor { get }
-    var layerSearch: UIColor { get }
+    var layerEmphasis: UIColor { get }
     var layerGradientURL: Gradient { get }
     var layerSurfaceLow: UIColor { get }
     var layerSurfaceMedium: UIColor { get }

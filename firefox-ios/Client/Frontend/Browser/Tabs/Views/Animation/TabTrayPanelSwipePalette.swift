@@ -34,8 +34,8 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         return partialOverrides.layer3
     }
 
-    var layerSearch: UIColor {
-        return partialOverrides.layerSearch
+    var layerEmphasis: UIColor {
+        return partialOverrides.layerEmphasis
     }
 
     var textOnDark: UIColor {
@@ -69,7 +69,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         var actionSecondary: UIColor
         var layerScrim: UIColor
         var layer3: UIColor
-        var layerSearch: UIColor
+        var layerEmphasis: UIColor
         var textOnDark: UIColor
         var borderPrimary: UIColor
         var borderAccent: UIColor
