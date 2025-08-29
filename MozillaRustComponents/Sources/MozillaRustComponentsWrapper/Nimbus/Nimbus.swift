@@ -222,13 +222,8 @@ private extension Nimbus {
  * Methods split out onto a separate internal extension for testing purposes.
  */
 extension Nimbus {
-    func setExperimentParticipationOnThisThread(_ value: Bool) throws {
-        let changes = try nimbusClient.setExperimentParticipation(optIn: value)
-        postEnrollmentCalculation(changes)
-    }
-
-    func setRolloutParticipationOnThisThread(_ value: Bool) throws {
-        let changes = try nimbusClient.setRolloutParticipation(optIn: value)
+    func setGlobalUserParticipationOnThisThread(_ value: Bool) throws {
+        let changes = try nimbusClient.setGlobalUserParticipation(optIn: value)
         postEnrollmentCalculation(changes)
     }
 
@@ -271,24 +266,13 @@ extension Nimbus {
 }
 
 extension Nimbus: NimbusUserConfiguration {
-    public var experimentParticipation: Bool {
+    public var globalUserParticipation: Bool {
         get {
-            catchAll { try nimbusClient.getExperimentParticipation() } ?? true
+            catchAll { try nimbusClient.getGlobalUserParticipation() } ?? false
         }
         set {
             _ = catchAll(dbQueue) { _ in
-                try self.setExperimentParticipationOnThisThread(newValue)
-            }
-        }
-    }
-
-    public var rolloutParticipation: Bool {
-        get {
-            catchAll { try nimbusClient.getRolloutParticipation() } ?? true
-        }
-        set {
-            _ = catchAll(dbQueue) { _ in
-                try self.setRolloutParticipationOnThisThread(newValue)
+                try self.setGlobalUserParticipationOnThisThread(newValue)
             }
         }
     }
@@ -445,8 +429,7 @@ extension Nimbus: NimbusMessagingProtocol {
 public class NimbusDisabled: NimbusApi {
     public static let shared = NimbusDisabled()
 
-    public var experimentParticipation: Bool = true
-    public var rolloutParticipation: Bool = true
+    public var globalUserParticipation: Bool = false
 }
 
 public extension NimbusDisabled {
