@@ -146,9 +146,12 @@ public protocol NimbusUserConfiguration {
     /// Call this when toggling user preferences about sending analytics.
     func resetTelemetryIdentifiers()
 
-    /// Control the opt out for all experiments at once. This is likely a user action.
+    /// Control the opt out for all experiments. This is likely a user action.
     ///
-    var globalUserParticipation: Bool { get set }
+    var experimentParticipation: Bool { get set }
+    /// Control the opt out for all rollouts at once. This is likely a user action.
+    ///
+    var rolloutParticipation: Bool { get set }
 
     /// Get the list of currently enrolled experiments
     ///
