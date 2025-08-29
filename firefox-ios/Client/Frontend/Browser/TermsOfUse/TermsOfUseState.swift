@@ -19,7 +19,9 @@ struct TermsOfUseState: ScreenState, Equatable {
     }
 
     static func defaultState(from state: TermsOfUseState) -> TermsOfUseState {
-        return TermsOfUseState(windowUUID: state.windowUUID)
+        return TermsOfUseState(windowUUID: state.windowUUID,
+                               hasAccepted: state.hasAccepted,
+                               wasDismissed: state.wasDismissed)
     }
 
     static let reducer: Reducer<TermsOfUseState> = { state, action in

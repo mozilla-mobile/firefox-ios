@@ -69,7 +69,7 @@ class TermsOfUseMiddleware {
         self.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         // Record telemetry for ToU acceptance
-        telemetry.termsOfUseAcceptButtonTapped(acceptedDate: acceptedDate)
+        telemetry.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: acceptedDate)
     }
 
     private func recordImpression() {

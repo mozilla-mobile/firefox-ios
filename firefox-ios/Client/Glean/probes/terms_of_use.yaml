@@ -31,7 +31,7 @@ termsofuse:
     type: event
     description: |
       User viewed the terms of use bottom sheet.
-    extra_keys:
+    extra_keys: &tou_extra_keys
       tou_version:
         type: string
         description: |
@@ -48,22 +48,11 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   accepted:
     type: event
     description: |
       User accepted the terms of use.
-    extra_keys:
-      tou_version:
-        type: string
-        description: |
-          The version of the Terms of Use that was accepted.
-      surface:
-        type: string
-        description: |
-          The surface where ToU was accepted (e.g., bottom_sheet, onboarding).
+    extra_keys: *tou_extra_keys
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
     data_reviews:
@@ -72,9 +61,6 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   version:
     type: quantity
     description: >
@@ -92,9 +78,6 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   date:
     type: datetime
     description: >
@@ -112,22 +95,11 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   remind_me_later_click:
     type: event
     description: |
       User clicked the "remind me later" button in the Terms of Use bottom sheet.
-    extra_keys:
-      tou_version:
-        type: string
-        description: |
-          The version of the Terms of Use that was shown.
-      surface:
-        type: string
-        description: |
-          The surface where ToU was shown (e.g., bottom_sheet, onboarding).
+    extra_keys: *tou_extra_keys
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
     data_reviews:
@@ -135,22 +107,11 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   learn_more_click:
     type: event
     description: |
       User clicked the "learn more" button in the Terms of Use bottom sheet.
-    extra_keys:
-      tou_version:
-        type: string
-        description: |
-          The version of the Terms of Use that was shown.
-      surface:
-        type: string
-        description: |
-          The surface where ToU was shown (e.g., bottom_sheet, onboarding).
+    extra_keys: *tou_extra_keys
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
     data_reviews:
@@ -158,22 +119,11 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   privacy_notice_click:
     type: event
     description: |
       User clicked the privacy notice link in the Terms of Use bottom sheet.
-    extra_keys:
-      tou_version:
-        type: string
-        description: |
-          The version of the Terms of Use that was shown.
-      surface:
-        type: string
-        description: |
-          The surface where ToU was shown (e.g., bottom_sheet, onboarding).
+    extra_keys: *tou_extra_keys
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
     data_reviews:
@@ -181,22 +131,11 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   terms_of_use_click:
     type: event
     description: |
       User clicked the terms of use link in the Terms of Use bottom sheet.
-    extra_keys:
-      tou_version:
-        type: string
-        description: |
-          The version of the Terms of Use that was shown.
-      surface:
-        type: string
-        description: |
-          The surface where ToU was shown (e.g., bottom_sheet, onboarding).
+    extra_keys: *tou_extra_keys
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
     data_reviews:
@@ -204,22 +143,11 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   dismiss:
     type: event
     description: |
       User dismissed the Terms of Use bottom sheet without accepting or clicking remind me later.
-    extra_keys:
-      tou_version:
-        type: string
-        description: |
-          The version of the Terms of Use that was shown.
-      surface:
-        type: string
-        description: |
-          The surface where ToU was shown (e.g., bottom_sheet, onboarding).
+    extra_keys: *tou_extra_keys
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
     data_reviews:
@@ -227,9 +155,6 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   impression_count:
     type: counter
     description: >
@@ -244,9 +169,6 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   remind_me_later_count:
     type: counter
     description: >
@@ -261,9 +183,6 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
   dismiss_count:
     type: counter
     description: >
@@ -278,6 +197,3 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-    metadata:
-      tags:
-        - TermsOfUse
