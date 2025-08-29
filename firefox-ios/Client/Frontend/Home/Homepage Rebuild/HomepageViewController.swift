@@ -310,9 +310,6 @@ final class HomepageViewController: UIViewController,
     }
 
     func newState(state: HomepageState) {
-        // TODO: - FXIOS-13346 - fix collection view being reloaded all the time also when data don't change
-        // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
-        guard homepageState != state else { return }
         self.homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
 
