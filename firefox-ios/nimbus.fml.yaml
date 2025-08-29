@@ -35,7 +35,6 @@ include:
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
-  - nimbus-features/ratingPromptFeature.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
