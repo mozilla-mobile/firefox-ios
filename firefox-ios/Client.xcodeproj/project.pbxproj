@@ -1520,6 +1520,7 @@
 		C714D8362E468D8200FC02E6 /* homepageRedesignOff.json in Resources */ = {isa = PBXBuildFile; fileRef = C714D8352E468D6900FC02E6 /* homepageRedesignOff.json */; };
 		C743CB1D2DF201D50069CB23 /* StoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C743CB1C2DF201D50069CB23 /* StoryCell.swift */; };
 		C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */; };
+		C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */; };
 		C796E22A2E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */; };
 		C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */; };
 		C7F051522D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051512D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift */; };
@@ -9620,6 +9621,7 @@
 		C743CB1C2DF201D50069CB23 /* StoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCell.swift; sourceTree = "<group>"; };
 		C7664A29B78A808DC314353C /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Search.strings; sourceTree = "<group>"; };
 		C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxAccountSignInViewControllerTests.swift; sourceTree = "<group>"; };
+		C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewControllerTests.swift; sourceTree = "<group>"; };
 		C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewController.swift; sourceTree = "<group>"; };
 		C7A6413B89FE82B94F735FFD /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C7C54345A164D550CF2BC575 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -14094,11 +14096,20 @@
 		C714D6382E46575D00FC02E6 /* ShortcutsLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				C78FC19C2E62446B00B077DA /* Redux */,
+				C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */,
+			);
+			path = ShortcutsLibrary;
+			sourceTree = "<group>";
+		};
+		C78FC19C2E62446B00B077DA /* Redux */ = {
+			isa = PBXGroup;
+			children = (
 				C714D6362E46570700FC02E6 /* ShortcutsLibraryStateTests.swift */,
 				C714D7B52E4673A300FC02E6 /* ShortcutsLibraryDiffableDataSourceTests.swift */,
 				C7F538D42E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift */,
 			);
-			path = ShortcutsLibrary;
+			path = Redux;
 			sourceTree = "<group>";
 		};
 		C7C6CD742E54BBB2002C6495 /* Redux */ = {
@@ -19241,6 +19252,7 @@
 				8A01FE402DF0CE4E002C483B /* MockDateProvider.swift in Sources */,
 				8A97E6EF2C584C4900F94793 /* AddressLocaleFeatureValidatorTests.swift in Sources */,
 				C714D7B62E4673A300FC02E6 /* ShortcutsLibraryDiffableDataSourceTests.swift in Sources */,
+				C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */,
 				8ABE9F1D2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift in Sources */,
 				8A106D632D416F82009AD7E4 /* MessageCardMiddlewareTests.swift in Sources */,
 				E1E425322B5A2E9700899550 /* DownloadTests.swift in Sources */,
