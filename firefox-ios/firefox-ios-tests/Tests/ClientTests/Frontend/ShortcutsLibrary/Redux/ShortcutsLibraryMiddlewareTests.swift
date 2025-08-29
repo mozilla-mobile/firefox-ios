@@ -131,7 +131,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase {
                 screens: [
                     .shortcutsLibrary(
                         ShortcutsLibraryState(
-                            windowUUID: .DefaultUITestingUUID,
+                            windowUUID: .DefaultUITestingUUID
                         )
                     )
                 ]
