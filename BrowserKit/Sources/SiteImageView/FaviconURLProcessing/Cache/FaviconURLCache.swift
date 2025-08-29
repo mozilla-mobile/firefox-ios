@@ -63,9 +63,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
             try? await Task.sleep(nanoseconds: self?.preserveDebounceTime ?? 0)
             guard !Task.isCancelled,
                   let data = await self?.archiveCacheData()
-            else {
-                return
-            }
+            else { return }
             await self?.fileManager.saveURLCache(data: data)
         }
     }
