@@ -52,6 +52,7 @@ enum HomepageActionType: ActionType {
     case traitCollectionDidChange
     case viewWillTransition
     case viewWillAppear
+    case viewDidAppear
     case viewDidLayoutSubviews
     case didSelectItem
     case embeddedHomepage
