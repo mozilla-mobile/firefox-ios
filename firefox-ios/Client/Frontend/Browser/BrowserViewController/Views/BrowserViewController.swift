@@ -1143,7 +1143,8 @@ class BrowserViewController: UIViewController,
     }
 
     private func setupNavigationAppearance() {
-        title = .FirefoxHomepage.ScreenTitle
+        // TODO: FXIOS-13342 - replace this string with .FirefoxHomepage.ScreenTitle once it is translated (v144)
+        title = .SettingsHomePageSectionName
         navigationItem.backButtonDisplayMode = .generic
     }
 
