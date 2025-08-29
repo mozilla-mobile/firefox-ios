@@ -282,6 +282,9 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
+        let app = XCUIApplication()
+        let searchBarCell = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
+        searchBarCell.tapIfExists(timeout: 2)
         performAction(Action.LoadURLByTyping)
     }
 
@@ -301,7 +304,6 @@ extension MMNavigator where T == FxUserState {
     func openNewURL(urlString: String) {
         let app = XCUIApplication()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
-
         self.goto(TabTray)
         createNewTab()
         self.openURL(urlString)
