@@ -46,34 +46,35 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     // MARK: - UI Elements
     private let toolbar: UIToolbar = .build {
         $0.sizeToFit()
+        $0.isTranslucent = true
+        $0.backgroundColor = .clear
     }
 
     private lazy var previousButton: UIBarButtonItem = {
-        let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(self.tappedPreviousButton), for: .touchUpInside)
-        button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
-        let barButton = UIBarButtonItem(customView: button)
+        let barButton = UIBarButtonItem(title: "", style: .plain) { _ in
+            self.tappedPreviousButton()
+        }
+        barButton.image = UIImage(named: StandardImageIdentifiers.Large.chevronUp)?.withRenderingMode(.alwaysTemplate)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
         barButton.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
         return barButton
     }()
 
     private lazy var nextButton: UIBarButtonItem = {
-        let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(self.tappedNextButton), for: .touchUpInside)
-        button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
-        let barButton = UIBarButtonItem(customView: button)
+        let barButton = UIBarButtonItem(title: "", style: .plain) { [weak self] _ in
+            self?.tappedNextButton()
+        }
+        barButton.image = UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
         barButton.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
         return barButton
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
-        let button = UIButton(type: .system)
-        button.setTitle(.CreditCard.Settings.Done, for: .normal)
-        button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
-        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
-        let barButton = UIBarButtonItem(customView: button)
+        let barButton = UIBarButtonItem(title: .CreditCard.Settings.Done, style: .plain) { [weak self] _ in
+            self?.tappedDoneButton()
+        }
+        barButton.setTitleTextAttributes([.font: FXFontStyles.Regular.body.scaledFont()], for: .normal)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         return barButton
     }()
@@ -200,7 +201,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             currentAccessoryView = passwordGeneratorView
         }
 
-        setNeedsLayout()
         setupLayout()
         layoutIfNeeded()
     }
@@ -229,9 +229,9 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
         toolbar.accessibilityElements = [
             currentAccessoryView?.customView,
-            previousButton.customView,
-            nextButton.customView,
-            doneButton.customView
+            previousButton,
+            nextButton,
+            doneButton
         ].compactMap { $0 }
 
         addSubview(toolbar)
@@ -260,7 +260,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         self.backgroundColor = backgroundColor
         [previousButton, nextButton, doneButton].forEach {
             $0.tintColor = theme.colors.iconAccentBlue
-            $0.customView?.tintColor = theme.colors.iconAccentBlue
         }
 
         [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView].forEach {
