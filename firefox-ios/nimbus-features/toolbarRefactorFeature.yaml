@@ -8,17 +8,17 @@ features:
         description: >
           Enables the feature
         type: Boolean
-        default: false
+        default: true
       one_tap_new_tab:
         description: >
           If true, enables the one tap new tab feature for users.
         type: Boolean
-        default: false
+        default: true
       navigation_hint:
         description: >
           If true, enables the navigation contextual hint.
         type: Boolean
-        default: false
+        default: true
       toolbar_update_hint:
         description: >
           If true, enables the toolbar update contextual hint.
@@ -38,7 +38,7 @@ features:
         description: >
           Enables translucency for toolbars.
         type: Boolean
-        default: false
+        default: true
       minimal_address_bar:
         description: >
           Enables minimal address bar mode on scroll to ensure the url is always visible.
