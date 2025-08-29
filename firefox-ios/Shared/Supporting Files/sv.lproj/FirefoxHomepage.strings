@@ -5,7 +5,7 @@
 "FirefoxHome.Stories.SectionTitle.v140" = "Berättelser";
 
 /* This is the title of the Top Stories section on Firefox Homepage. */
-"FirefoxHome.Stories.TopStoriesSectionTitle.v143" = "Huvudnyheter";
+"FirefoxHome.Stories.TopStoriesSectionTitle.v143" = "Populära nyheter";
 
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Privata surfdata raderad";

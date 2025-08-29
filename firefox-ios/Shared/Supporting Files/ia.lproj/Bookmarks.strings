@@ -1,5 +1,5 @@
 /* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
-"Bookmarks.EmptyState.Nested.Body.v135" = "Adde marcapaginas dum tu naviga pro trovar tu sitos preferite plus tarde.";
+"Bookmarks.EmptyState.Nested.Body.v135" = "Adde marcapaginas durante que tu naviga pro retrovar tu sitos preferite plus tarde.";
 
 /* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
 "Bookmarks.EmptyState.Nested.Title.v135" = "Iste plica es vacue";
