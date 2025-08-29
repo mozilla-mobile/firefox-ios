@@ -1436,6 +1436,8 @@ private struct SDError {
     }
 }
 
+
+// TODO: FXIOS-13300 - Refactor Cursor and it's subclasses to be concurrency safe
 /// Provides access to the result set returned by a database query.
 /// The entire result set is cached, so this does not retain a reference
 /// to the statement or the database connection.
@@ -1483,6 +1485,8 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T>, @unchecked Sendable {
     }
 }
 
+
+// TODO: FXIOS-13300 - Refactor Cursor and it's subclasses to be concurrency safe
 /// Wrapper around a statement to help with iterating through the results.
 private class LiveSQLiteCursor<T>: Cursor<T>, @unchecked Sendable {
     fileprivate var statement: SQLiteDBStatement!
