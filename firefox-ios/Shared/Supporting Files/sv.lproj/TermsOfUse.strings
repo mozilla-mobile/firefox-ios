@@ -11,7 +11,7 @@
 "TermsOfUse.Link.LearnMore.v142" = "Läs mer";
 
 /* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
-"TermsOfUse.Link.PrivacyNotice.v142" = "Sekretesspolicy";
+"TermsOfUse.Link.PrivacyNotice.v142" = "Sekretessmeddelande";
 
 /* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
 "TermsOfUse.Link.TermsOfUse.v142" = "%@ Användarvillkor";
@@ -23,7 +23,7 @@
 "TermsOfUse.ReviewAndAcceptText.v142" = "Ta en stund att granska och acceptera. Läs mer";
 
 /* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
-"TermsOfUse.TermsOfUseHasOpened.v142" = "Filen med användarvillkor öppnad";
+"TermsOfUse.TermsOfUseHasOpened.v142" = "Användarvillkorsblad öppnat";
 
 /* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
 "TermsOfUse.Title.v142" = "Vi har en uppdatering";

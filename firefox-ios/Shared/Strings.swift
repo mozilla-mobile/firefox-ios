@@ -20,7 +20,8 @@ public struct Strings {
 /// - Parameters:
 ///   - key: The key should be unique and composed of a relevant name, ended with the version the string was included in.
 ///   Example: `"FirefoxHomepage.Pocket.Sponsored.v103"` is a string that lives under the homepage for the sponsored content in the pocket
-///   section, added in v103. The name is clear and explicit.
+///   section, added in the v103 release train. The name is clear and explicit.
+///   The version needs to be the current release train in Nightly: https://whattrainisitnow.com/
 ///   - tableName: The tablename defines the name of the table containing the localized string.
 ///   This specifically need to be defined for any strings that is part of the messaging framework, but since any string can be part of messaging in the
 ///   future all strings should have a tablename. This can be nil for existing strings, `new string shouldn't have a nil tableName`.
@@ -975,8 +976,13 @@ extension String {
 
 // MARK: - Firefox Homepage
 extension String {
-    /// Identifiers of all new strings should begin with `FirefoxHome.`
     public struct FirefoxHomepage {
+        public static let ScreenTitle = MZLocalizedString(
+            key: "FirefoxHome.ScreenTitle.v144",
+            tableName: "FirefoxHomepage",
+            value: "Homepage",
+            comment: "The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu")
+
         public struct CustomizeHomepage {
             public static let ButtonTitle = MZLocalizedString(
                 key: "FirefoxHome.CustomizeHomeButton.Title",

@@ -177,7 +177,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return url
     }
 
-    var loading: Bool {
+    var isLoading: Bool {
         return webView?.isLoading ?? false
     }
 
@@ -281,6 +281,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var lastExecutedTime: Timestamp
     var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
+    // TODO: FXIOS-13297 Keep track of new DispatchQueueInterface usages
+    private var removeDispatchQueue: DispatchQueueInterface
     var faviconURL: String? {
         didSet {
             guard let url = url,
@@ -487,7 +489,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
          tabCreatedTime: Date = Date(),
          fileManager: FileManagerProtocol = FileManager.default,
          logger: Logger = DefaultLogger.shared,
-         documentLogger: DocumentLogger = AppContainer.shared.resolve()) {
+         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
+         dispatchQueue: DispatchQueueInterface = DispatchQueue.global(qos: .background)) {
         self.nightMode = false
         self.windowUUID = windowUUID
         self.noImageMode = false
@@ -498,6 +501,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.fileManager = fileManager
         self.logger = logger
         self.documentLogger = documentLogger
+        self.removeDispatchQueue = dispatchQueue
         super.init()
         self.isPrivate = isPrivate
 #if DEBUG
@@ -929,7 +933,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     private func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
         guard !docsURL.isEmpty else { return }
-        DispatchQueue.global(qos: .background).async { [fileManager] in
+        removeDispatchQueue.async { [fileManager] in
             docsURL.forEach { url in
                 try? fileManager.removeItem(at: url.key)
             }

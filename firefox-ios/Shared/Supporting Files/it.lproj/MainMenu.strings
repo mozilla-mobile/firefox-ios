@@ -56,10 +56,10 @@
 "MainMenu.BookmarkPage.Title.v141" = "Aggiungi pagina ai segnalibri";
 
 /* On the main menu, a title for a label that indicate the Desktop Site option from menu, is OFF. */
-"MainMenu.DesktopSiteOff.Title.v142" = "Disattivata";
+"MainMenu.DesktopSiteOff.Title.v142" = "Disattivato";
 
 /* On the main menu, a title for a label that indicate the Desktop Site option from menu, is ON. */
-"MainMenu.DesktopSiteOn.Title.v142" = "Attiva";
+"MainMenu.DesktopSiteOn.Title.v142" = "Attivo";
 
 /* On the main menu, at the top, subtitle for the banner which suggest user can set Firefox as default browser. */
 "MainMenu.HeaderBanner.Subtitle.v142" = "Bastano pochi secondi. Cambia in qualsiasi momento.";

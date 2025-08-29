@@ -72,6 +72,9 @@ ReaderMode:
 ReadingListPanel:
   description: Corresponds to the library screen's reading list panel where the user can view their reading list.
 
+ShortcutsLibrary:
+  description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
+
 Summarizer:
   description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
 
@@ -83,6 +86,9 @@ ShareSheet:
 
 TabsPanel:
   description: Corresponds to all things related to the tab panel.
+
+TermsOfUse:
+  description: Corresponds to user interactions with the app's terms of use.
 
 Toasts:
   description: Corresponds to the toast elements which can be shown over any screen in the app to provide feedback for user interaction and to sometimes revert user changes.

@@ -3,6 +3,16 @@
     {
       "filename" : "onboardingThemeLightSelected.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "onboardingThemeLightSelected 1.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

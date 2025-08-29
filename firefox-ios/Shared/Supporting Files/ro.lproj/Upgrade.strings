@@ -2,7 +2,7 @@
 "Upgrade.SyncSign.Action.v114" = "Intră în cont";
 
 /* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v114" = "Reia de unde ai rămas cu filele de pe alte dispozitive acum pe pagina ta de pornire.";
+"Upgrade.SyncSign.Description.v114" = "Reia de unde ai rămas cu filele de pe alte dispozitive acum pe pagina ta de start.";
 
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Title.v114" = "Treci de la un ecran la altul mai ușor ca niciodată";

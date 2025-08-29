@@ -19,9 +19,9 @@ For information on how to contribute to this project, including communication ch
     ```shell
     cd firefox-ios
     ```
-1. Pull in the project dependencies:
+1. Pull in the project dependencies using the bootstrap script (pass in `focus` as the product argument):
    ```shell
-   ./checkout.sh
+   ./bootstrap.sh focus
    ```
 1. Open `Blockzilla.xcodeproj` under the `focus-ios` folder in Xcode.
 1. Build the `Focus` scheme in Xcode.
