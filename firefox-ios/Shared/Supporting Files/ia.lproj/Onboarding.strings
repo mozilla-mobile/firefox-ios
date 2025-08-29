@@ -49,6 +49,9 @@
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "Selige un thema";
 
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v143" = "Elige tu thema";
+
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Customization.Toolbar.Bottom.Action.v123" = "Basso";
 
@@ -182,7 +185,7 @@
 "Onboarding.Sync.Skip.Action.v114" = "Saltar";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
-"Onboarding.Sync.Title.v120" = "Resta cryptate dum tu passa inter tu apparatos";
+"Onboarding.Sync.Title.v120" = "Resta cryptate quando tu passa inter apparatos";
 
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.TermsOfService.AgreementButtonTitle.v135" = "Accordar se e continuar";
