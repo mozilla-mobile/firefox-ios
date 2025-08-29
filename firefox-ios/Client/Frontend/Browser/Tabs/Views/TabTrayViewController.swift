@@ -1098,10 +1098,12 @@ final class TabTrayViewController: UIViewController,
     }
 
     // MARK: - Notifiable
-    func handleNotifications(_ notification: Notification) {
+    nonisolated func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
-            updateBlurView()
+            DispatchQueue.main.async { [weak self] in
+                self?.updateBlurView()
+            }
         default: break
         }
     }
