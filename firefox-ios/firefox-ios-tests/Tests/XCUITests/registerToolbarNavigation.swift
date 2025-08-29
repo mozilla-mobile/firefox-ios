@@ -40,7 +40,11 @@ func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XC
 }
 
 func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>, app: XCUIApplication) {
-    screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], to: URLBarOpen)
+    if !isTablet {
+        screenState.tap(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell], to: URLBarOpen)
+    } else {
+        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], to: URLBarOpen)
+    }
     screenState.gesture(to: URLBarLongPressMenu) {
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.0)
     }
