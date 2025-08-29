@@ -223,7 +223,6 @@ extension TopSitesHelperTests {
     }
 }
 
-
 // TODO: FXIOS-13300 - Refactor Cursor and it's subclasses to be concurrency safe
 // MARK: - SiteCursorMock
 private class SiteCursorMock: Cursor<Site>, @unchecked Sendable {
