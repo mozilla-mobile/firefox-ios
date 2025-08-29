@@ -118,7 +118,7 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         // Set the custom view as the container view
         self.customView = containerView
     }
-    
+
     private func configure() {
         let isiOS26Available: Bool = if #available(iOS 26, *) {
             true
