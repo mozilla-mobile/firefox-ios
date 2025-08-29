@@ -7,7 +7,6 @@ import Common
 import ComponentLibrary
 
 struct OnboardingCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @Binding private var maxTitleHeight: CGFloat
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let viewModel: ViewModel
@@ -15,14 +14,12 @@ struct OnboardingCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Vi
     let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
 
     init(
-        maxTitleHeight: Binding<CGFloat>,
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
-        self._maxTitleHeight = maxTitleHeight
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -35,7 +32,6 @@ struct OnboardingCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Vi
             switch viewModel.cardType {
             case .basic:
                 OnboardingBasicCardViewCompact(
-                    maxTitleHeight: $maxTitleHeight,
                     viewModel: viewModel,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
@@ -43,7 +39,6 @@ struct OnboardingCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Vi
                 )
             case .multipleChoice:
                 OnboardingMultipleChoiceCardViewCompact(
-                    maxTitleHeight: $maxTitleHeight,
                     viewModel: viewModel,
                     windowUUID: windowUUID,
                     themeManager: themeManager,

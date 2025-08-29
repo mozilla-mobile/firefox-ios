@@ -10,7 +10,8 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
-    @Binding private var maxTitleHeight: CGFloat
+    @Environment(\.sizeCategory)
+    var sizeCategory
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -19,14 +20,12 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
 
     init?(
-        maxTitleHeight: Binding<CGFloat>,
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
-        self._maxTitleHeight = maxTitleHeight
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -89,17 +88,9 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
-            .fixedSize(horizontal: false, vertical: true)
-            .background(
-                GeometryReader { geo in
-                    Color.clear
-                        .preference(
-                            key: TitleHeightPreferenceKey.self,
-                            value: geo.size.height
-                        )
-                }
-            )
-            .frame(height: maxTitleHeight, alignment: .topLeading)
+            .if(sizeCategory <= .extraExtraLarge) { view in
+                view.frame(height: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
+            }
     }
 
     var primaryButton: some View {

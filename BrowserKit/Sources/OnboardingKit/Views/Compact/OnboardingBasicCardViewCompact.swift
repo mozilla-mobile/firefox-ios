@@ -14,7 +14,6 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @State private var secondaryActionColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
-    @Binding private var maxTitleHeight: CGFloat
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -22,13 +21,11 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
 
     init(
-        maxTitleHeight: Binding<CGFloat>,
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void
     ) {
-        self._maxTitleHeight = maxTitleHeight
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -89,14 +86,9 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
-            .fixedSize(horizontal: false, vertical: true)
-            .background(
-                GeometryReader { geo in
-                    Color.clear
-                        .preference(key: TitleHeightPreferenceKey.self, value: geo.size.height)
-                }
-            )
-            .frame(height: maxTitleHeight, alignment: .topLeading)
+            .if(sizeCategory <= .large) { view in
+                view.frame(minHeight: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
+            }
     }
 
     @ViewBuilder
@@ -159,5 +151,15 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
         secondaryActionColor = Color(color.textOnDark)
+    }
+}
+
+extension View {
+    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
     }
 }

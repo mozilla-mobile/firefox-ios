@@ -27,6 +27,7 @@ enum UX {
             }
         }
         static let titleTopPadding: CGFloat = 100
+        static let titleAlignmentMinHeightPadding: CGFloat = 80
         static let cardHeightRatio: CGFloat = 0.8
         static let spacing: CGFloat = 30
         static let regularSizeSpacing: CGFloat = 48
