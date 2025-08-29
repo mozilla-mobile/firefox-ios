@@ -79,7 +79,7 @@ struct TermsOfUseTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Termsofuse.dismiss, extras: dismissExtra)
         gleanWrapper.incrementCounter(for: GleanMetrics.Termsofuse.dismissCount)
     }
-    
+
     static func setUsageMetrics(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
                                 profile: Profile = AppContainer.shared.resolve()) {
         let hasAcceptedTermsOfUse = profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false
