@@ -55,7 +55,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         button.addTarget(self, action: #selector(self.tappedPreviousButton), for: .touchUpInside)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
         let barButton = UIBarButtonItem(customView: button)
-        barButton.image = UIImage(named: StandardImageIdentifiers.Large.chevronUp)?.withRenderingMode(.alwaysTemplate)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
         barButton.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
         return barButton
@@ -66,7 +65,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         button.addTarget(self, action: #selector(self.tappedNextButton), for: .touchUpInside)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
         let barButton = UIBarButtonItem(customView: button)
-        barButton.image = UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
         barButton.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
         return barButton
@@ -78,7 +76,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
         button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         let barButton = UIBarButtonItem(customView: button)
-        barButton.setTitleTextAttributes([.font: FXFontStyles.Regular.body.scaledFont()], for: .normal)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         return barButton
     }()
