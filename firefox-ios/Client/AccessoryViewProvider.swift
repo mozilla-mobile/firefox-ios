@@ -46,8 +46,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     // MARK: - UI Elements
     private let toolbar: UIToolbar = .build {
         $0.sizeToFit()
-        $0.isTranslucent = true
-        $0.backgroundColor = .clear
     }
 
     private lazy var previousButton: UIBarButtonItem = {
