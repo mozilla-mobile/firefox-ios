@@ -8,9 +8,9 @@ import Shared
 
 public typealias Args = [Any?]
 
-open class BrowserDB {
+public final class BrowserDB: Sendable {
     fileprivate let db: SwiftData
-    private var logger: Logger
+    private let logger: Logger
 
     public let databasePath: String
 
@@ -114,7 +114,7 @@ open class BrowserDB {
 
 /// The sqlite-backed implementation of the history protocol.
 /// Currently only supports pinned sites and favicons
-open class BrowserDBSQLite {
+public final class BrowserDBSQLite: Sendable {
     let database: BrowserDB
     let prefs: Prefs
     let notificationCenter: NotificationCenter
