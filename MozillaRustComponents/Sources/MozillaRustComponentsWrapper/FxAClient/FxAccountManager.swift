@@ -46,12 +46,14 @@ open class FxAccountManager {
         config: FxAConfig,
         deviceConfig: DeviceConfig,
         applicationScopes: [String] = [OAuthScope.profile],
-        keychainAccessGroup: String? = nil
+        keychainAccessGroup: String? = nil,
+        useRustKeychainForFxA: Bool = false
     ) {
         self.config = config
         self.deviceConfig = deviceConfig
         self.applicationScopes = applicationScopes
-        accountStorage = KeyChainAccountStorage(keychainAccessGroup: keychainAccessGroup)
+        accountStorage = KeyChainAccountStorage(keychainAccessGroup: keychainAccessGroup,
+                                                useRustKeychainForFxA: useRustKeychainForFxA)
         setupInternalListeners()
     }
 
@@ -170,21 +172,6 @@ open class FxAccountManager {
         } catch {
             return .failure(error)
         }
-    }
-
-    // A no-op place-holder for now removed support for migrating from a pre-rust
-    // session token into a rust fxa-client. This stub remains to avoid causing
-    // a breaking change for iOS and can be removed after https://github.com/mozilla-mobile/firefox-ios/issues/15258
-    // has been resolved.
-    public func authenticateViaMigration(
-        sessionToken _: String,
-        kSync _: String,
-        kXCS _: String,
-        completionHandler _: @escaping (MigrationResult) -> Void
-    ) {
-        // This will almost certainly never be called in practice. If it is, I guess
-        // trying to force iOS into a "needs auth" state is the right thing to do...
-        processEvent(event: .authenticationError) {}
     }
 
     /// Finish an authentication flow.
