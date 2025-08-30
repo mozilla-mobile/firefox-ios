@@ -322,7 +322,8 @@ class TabManagerImplementation: NSObject,
         }
 
         if flushToDisk {
-            commitChanges()
+            preserveTabs(forced: true)
+            saveSessionData(forTab: selectedTab)
         }
     }
 
