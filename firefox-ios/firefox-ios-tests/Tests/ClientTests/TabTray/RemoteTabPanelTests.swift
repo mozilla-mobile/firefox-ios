@@ -21,19 +21,19 @@ final class RemoteTabPanelTests: XCTestCase {
 
     func testTableView_emptyStateNoRows() {
         let remotePanel = createSubject(state: generateEmptyState())
-        let tableView = remotePanel.tableViewController.tableView
+        let tableView = remotePanel.tabsDisplayViewController.tableView
 
         XCTAssertNotNil(tableView)
-        XCTAssertEqual(tableView!.numberOfSections, 0)
+        XCTAssertEqual(tableView.numberOfSections, 0)
     }
 
     func testTableView_oneClientTwoRows() {
         let remotePanel = createSubject(state: generateStateOneClientTwoTabs())
-        let tableView = remotePanel.tableViewController.tableView
+        let tableView = remotePanel.tabsDisplayViewController.tableView
 
         XCTAssertNotNil(tableView)
-        XCTAssertEqual(tableView!.numberOfSections, 1)
-        XCTAssertEqual(tableView!.numberOfRows(inSection: 0), 2)
+        XCTAssertEqual(tableView.numberOfSections, 1)
+        XCTAssertEqual(tableView.numberOfRows(inSection: 0), 2)
     }
 
     // MARK: - Private

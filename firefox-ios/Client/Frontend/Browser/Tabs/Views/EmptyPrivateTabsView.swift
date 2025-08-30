@@ -25,6 +25,7 @@ class EmptyPrivateTabsView: UIView,
 
     // MARK: - Properties
 
+    var needsSafeArea: Bool { false }
     weak var delegate: EmptyPrivateTabsViewDelegate?
 
     // UI
@@ -138,5 +139,12 @@ class EmptyPrivateTabsView: UIView,
         guard let url = SupportUtils.URLForTopic("private-browsing-ios") else { return }
         let request = URLRequest(url: url)
         delegate?.didTapLearnMore(urlRequest: request)
+    }
+
+    // MARK: - InsetUpdatable
+
+    func updateInsets(top: CGFloat, bottom: CGFloat) {
+        scrollView.contentInset.top = top
+        scrollView.contentInset.bottom = bottom
     }
 }
