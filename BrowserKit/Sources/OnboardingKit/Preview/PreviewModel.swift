@@ -108,8 +108,8 @@ extension PreviewModel {
         cardType: .basic,
         name: "welcome",
         order: 10,
-        title: "Get automatic protection from trackers",
-        body: "One tap helps stop companies spying on your clicks.",
+        title: "Say goodbye to creepy ads",
+        body: "One choice protects you everywhere you go on the web. You can always change it later.",
         link: nil,
         buttons: .init(
             primary: .init(title: "Get Started", action: OnboardingActions.forwardOneCard),
@@ -136,7 +136,7 @@ extension PreviewModel {
         cardType: .basic,
         name: "signToSync",
         order: 20,
-        title: "Sync everywhere you use Firefox",
+        title: "Instantly pick up where you left off",
         body: "Get bookmarks, tabs, and passwords on any device. All protected with encryption.",
         link: nil,
         buttons: .init(
@@ -155,7 +155,7 @@ extension PreviewModel {
         name: "customizationToolbar",
         order: 41,
         title: "Toolbar Position",
-        body: "Where should the toolbar appear?",
+        body: "Choose where to put your address bar",
         link: nil,
         buttons: .init(
             primary: .init(title: "Continue", action: OnboardingActions.forwardOneCard),

@@ -56,22 +56,28 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
 
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
-        ScrollView {
-            VStack(spacing: UX.CardView.spacing * scale) {
-                Spacer()
-                    .accessibilityHidden(true)
-                imageView(scale: scale)
-                titleView
-                bodyView
-                Spacer()
-                    .accessibilityHidden(true)
-                links
-                primaryButton
+        VStack {
+            GeometryReader { geometry in
+                ScrollView(.vertical) {
+                    VStack(spacing: UX.CardView.spacing * scale) {
+                        Spacer()
+                        imageView(scale: scale)
+                        titleView
+                        bodyView
+                        Spacer()
+                        links
+                        Spacer()
+                    }
+                    .padding(UX.CardView.verticalPadding * scale)
+                        .frame(width: geometry.size.width)
+                        .frame(minHeight: geometry.size.height)
+                }
+                .scrollBounceBehavior(basedOnSize: true)
             }
-            .padding(UX.CardView.verticalPadding * scale)
-            .padding(.bottom)
+            primaryButton
+                .padding(UX.CardView.verticalPadding * scale)
+                .padding(.bottom)
         }
-        .scrollBounceBehavior(basedOnSize: true)
         .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
         .background(
             RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)

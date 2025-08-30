@@ -7,7 +7,6 @@ import Common
 
 struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View {
     @State private var actionPrimary: Color = .clear
-    @State private var noSelection: Color = .clear
     @Binding var selection: Action
     let items: [OnboardingMultipleChoiceButtonModel<Action>]
     let windowUUID: WindowUUID
@@ -41,7 +40,6 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
 
                             itemContent(item: item, isSelected: isSelected)
                         }
-                        .padding(.vertical, UX.SegmentedControl.verticalPadding)
                         .frame(maxWidth: .infinity, minHeight: UX.SegmentedControl.buttonMinHeight, alignment: .top)
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -82,7 +80,6 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
                     .font(.footnote)
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.center)
-                Spacer()
             }
 
             Rectangle()
@@ -104,6 +101,5 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     private func applyTheme(theme: Theme) {
         actionPrimary = Color(theme.colors.actionPrimary)
             .opacity(UX.SegmentedControl.selectedColorOpacity)
-        noSelection = Color(theme.colors.textOnDark)
     }
 }

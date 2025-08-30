@@ -37,11 +37,10 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
 
     var body: some View {
         VStack {
-            Spacer()
-            ContentFittingScrollView {
-                VStack(spacing: UX.CardView.spacing) {
-                    Spacer()
+            ScrollView {
+                VStack(spacing: UX.CardView.regularSizeSpacing) {
                     titleView
+                        .padding(.top, UX.CardView.titleTopPadding)
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                         selection: $selectedAction,
                         items: viewModel.multipleChoiceButtons,
@@ -51,12 +50,12 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
                     }
-                    Spacer()
-                    primaryButton
                 }
+                .padding(UX.CardView.verticalPadding)
             }
-            .padding(UX.CardView.verticalPadding)
-            Spacer()
+            .scrollBounceBehavior(basedOnSize: true)
+            primaryButton
+                .padding(.bottom, UX.CardView.verticalPadding)
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
