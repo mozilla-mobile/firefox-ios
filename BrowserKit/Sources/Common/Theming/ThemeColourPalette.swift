@@ -52,6 +52,7 @@ public protocol ThemeColourPalette {
     var actionPrimaryHover: UIColor { get }
     var actionPrimaryDisabled: UIColor { get }
     var actionSecondary: UIColor { get }
+    var actionSecondaryDisabled: UIColor { get }
     var actionSecondaryHover: UIColor { get }
     var formSurfaceOff: UIColor { get }
     var formKnob: UIColor { get }
