@@ -103,10 +103,10 @@ extension BrowserDBSQLite: PinnedSites {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
         }
 
-        let args: Args = [site.url, now, site.title, site.id, host]
+        let args: Args = [site.url, now, site.title, host]
         let arglist = BrowserDB.varlist(args.count)
 
-        return self.database.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, domain) VALUES \(arglist)", args)])
+        return self.database.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, domain) VALUES \(arglist)", args)])
         >>== {
             self.notificationCenter.post(name: .TopSitesUpdated, object: self)
             return succeed()
