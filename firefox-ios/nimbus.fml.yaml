@@ -36,6 +36,7 @@ include:
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
+  - nimbus-features/rustFxAKeychainEnabled.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/splashScreenFeature.yaml

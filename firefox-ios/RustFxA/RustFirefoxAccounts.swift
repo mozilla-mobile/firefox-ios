@@ -24,6 +24,8 @@ public struct RustFxAFeatures: OptionSet {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+
+    public static let useRustKeychainForFxA = RustFxAFeatures(rawValue: 1 << 0)
 }
 
 // TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
@@ -183,7 +185,8 @@ open class RustFirefoxAccounts {
             config: config,
             deviceConfig: deviceConfig,
             applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
-            keychainAccessGroup: accessGroupIdentifier
+            keychainAccessGroup: accessGroupIdentifier,
+            useRustKeychainForFxA: features.contains(.useRustKeychainForFxA)
         )
     }
 
