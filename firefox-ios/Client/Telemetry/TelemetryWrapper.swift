@@ -149,10 +149,21 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         glean.registerPings(GleanMetrics.Pings.shared)
 
         // Initialize Glean telemetry
-        let gleanConfig = Configuration(
-            channel: AppConstants.buildChannel.rawValue,
-            logLevel: .off
-        )
+        let gleanConfig: Configuration
+        if featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly) {
+            let environment = OhttpEnvironment.getEnvironment()
+            gleanConfig = Configuration(
+                channel: AppConstants.buildChannel.rawValue,
+                logLevel: .off // ,
+                // Laurie - TODO: needs the real Glean types
+//                httpClient: OhttpGleanUploader(environment: environment)
+            )
+        } else {
+            gleanConfig = Configuration(
+                channel: AppConstants.buildChannel.rawValue,
+                logLevel: .off
+            )
+        }
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
