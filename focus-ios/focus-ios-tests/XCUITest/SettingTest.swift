@@ -236,8 +236,8 @@ class SettingTest: BaseTestCase {
             waitForHittable(app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"])
             app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"].tap()
         }
-        waitForHittable(app.tables.cells["mozilla.org"].buttons["Delete"])
-        app.tables.cells["mozilla.org"].buttons["Delete"].tap()
+        waitForHittable(app.tables.buttons["Delete"])
+        app.tables.buttons["Delete"].tap()
 
         // Finish Editing
         waitForHittable(app.navigationBars.buttons["editButton"])
@@ -430,7 +430,7 @@ class SettingTest: BaseTestCase {
         } else {
             app.tables.cells["getfirefox.com"].buttons["Delete getfirefox.com"].tap()
         }
-        app.tables.cells["getfirefox.com"].buttons["Delete"].tap()
+        app.tables.buttons["Delete"].tap()
 
         // Finish Editing
         app.navigationBars.buttons["editButton"].tap()
