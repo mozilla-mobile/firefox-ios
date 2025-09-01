@@ -6,10 +6,10 @@ import Common
 import Foundation
 import UIKit
 
-class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let logoSize: CGFloat = 16.0
-        static let hPadding: CGFloat = 6.0
+        static let horizzontalPadding: CGFloat = 6.0
         static let spacing: CGFloat = 8.0
         static let bottomInset: CGFloat = 16.0
     }
@@ -51,13 +51,13 @@ class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
             logoImageView.widthAnchor.constraint(equalToConstant: UX.logoSize),
             logoImageView.heightAnchor.constraint(equalToConstant: UX.logoSize),
-            logoImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.hPadding),
+            logoImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.horizzontalPadding),
             logoImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 
-            brandLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.hPadding),
-            brandLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.hPadding),
+            brandLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.horizzontalPadding),
+            brandLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.horizzontalPadding),
             brandLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: UX.spacing),
-            brandLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.hPadding),
+            brandLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.horizzontalPadding),
         ])
 
         containerView.layoutIfNeeded()

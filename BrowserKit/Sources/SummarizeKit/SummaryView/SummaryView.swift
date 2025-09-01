@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import UIKit
+import ComponentLibrary
 
 struct SummaryViewModel {
     let title: String?
@@ -21,7 +22,7 @@ struct SummaryViewModel {
     let contentOffset: UIEdgeInsets
 }
 
-class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
+final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
     private struct UX {
         static let closeButtonEdgePadding: CGFloat = 16.0
         static let tableViewHorizontalPadding: CGFloat = 16.0
@@ -81,22 +82,29 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
     private var theme: Theme?
     private var model: SummaryViewModel?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setup()
+    init(closeButtonViewModel: CloseButtonViewModel,
+         closeButtonAction: @escaping () -> Void) {
+        super.init(frame: .zero)
+        setup(closeButtonViewModel: closeButtonViewModel, closeButtonAction: closeButtonAction)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setup() {
+    private func setup(closeButtonViewModel: CloseButtonViewModel, closeButtonAction: @escaping () -> Void) {
         tableView.dataSource = self
         tableView.delegate = self
 
         tableView.register(cellType: SummaryTitleCell.self)
         tableView.register(cellType: SummaryBrandCell.self)
         tableView.register(cellType: SummaryTextCell.self)
+        
+        closeButton.accessibilityIdentifier = closeButtonViewModel.a11yIdentifier
+        closeButton.accessibilityLabel = closeButtonViewModel.a11yLabel
+        closeButton.addAction(UIAction(handler: { _ in
+            closeButtonAction()
+        }), for: .touchUpInside)
 
         compactTitleContainer.addSubviews(compactTitleBackgroundEffectView, compactTitleLabel)
         addSubviews(tableView, compactTitleContainer, closeButton)
@@ -181,25 +189,21 @@ class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeAppl
         tableView.reloadData()
     }
 
-    func configureCloseButton(a11yId: String, a11yLabel: String, action: @escaping () -> Void) {
-        closeButton.addAction(UIAction(handler: { _ in
-            action()
-        }), for: .touchUpInside)
-        closeButton.accessibilityIdentifier = a11yId
-        closeButton.accessibilityLabel = a11yLabel
-    }
-
     func showContent() {
         tableView.alpha = 1.0
     }
 
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Determine the threshold for showing/hiding the compact title.
+        // The threshold must include both the table view’s top contentInset
+        // and its safe area inset, since the contentOffset.y does not start
+        // at 0 but instead reflects these insets.
         let topInset = abs(tableView.contentInset.top) + abs(tableView.safeAreaInsets.top)
         let shouldShowTitle = scrollView.contentOffset.y + topInset - UX.compactTitleAnimationOffset > 0
         let shouldAnimate = compactTitleLabel.alpha != (shouldShowTitle ? 1.0 : 0.0)
         guard shouldAnimate else { return }
-        UIView.animate(withDuration: 0.25) { [self] in
+        UIView.animate(withDuration: UX.compactTitleAnimationDuration) { [self] in
             compactTitleLabel.alpha = shouldShowTitle ? 1.0 : 0.0
             compactTitleBackgroundEffectView.alpha = shouldShowTitle ? 1.0 : 0.0
         }

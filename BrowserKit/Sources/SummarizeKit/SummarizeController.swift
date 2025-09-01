@@ -121,7 +121,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         host.view.isUserInteractionEnabled = false
         return host
     }()
-    private let summaryView: SummaryView = .build()
+    private let summaryView: SummaryView
 
     // For the MVP only the portrait orientation is supported
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -144,6 +144,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         self.summarizerService = summarizerService
         self.webView = webView
         self.onSummaryDisplayed = onSummaryDisplayed
+        self.summaryView = SummaryView(closeButtonViewModel: viewModel.closeButtonModel, closeButtonAction: { [weak self] in
+            self?.triggerDismissingAnimation()
+        })
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -179,12 +182,6 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotA11yLabel
-
-        summaryView.configureCloseButton(
-            a11yId: viewModel.closeButtonModel.a11yIdentifier,
-            a11yLabel: viewModel.closeButtonModel.a11yLabel) { [weak self] in
-                self?.triggerDismissingAnimation()
-        }
     }
 
     private func setupLayout() {
@@ -241,7 +238,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             borderOverlayHostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        /// Notify the hosting controller that it has been moved to the current view controller.
+        // Notify the hosting controller that it has been moved to the current view controller.
         borderOverlayHostingController.didMove(toParent: self)
     }
 
@@ -304,37 +301,14 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
     private func showSummary(_ summary: String) {
         triggerImpactHaptics()
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.onTabSnapshotPan))
-        self.tabSnapshotContainer.addGestureRecognizer(panGesture)
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan))
+        tabSnapshotContainer.addGestureRecognizer(panGesture)
 
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
-
-        let brandedSummary = """
-        \(summary)
-
-        ##### \(viewModel.summaryNote)
-        """
-        let inset = UIEdgeInsets(
-            top: view.safeAreaInsets.top,
-            left: 0.0,
-            bottom: UX.tabSnapshotFinalPositionBottomPadding,
-            right: 0.0
-        )
-        summaryView.configure(
-            model: SummaryViewModel(
-                title: webView.title,
-                titleA11yId: viewModel.titleLabelA11yId,
-                compactTitleA11yId: viewModel.compactTitleLabelA11yId,
-                brandIcon: viewModel.brandImage,
-                brandIconA11yId: viewModel.brandImageA11yId,
-                brandName: viewModel.brandLabel,
-                brandNameA11yId: viewModel.brandLabelA11yId,
-                summary: parse(markdown: brandedSummary),
-                summaryA11yId: viewModel.summarizeTextViewA11yId,
-                contentOffset: inset
-            )
-        )
+        
+        configureSummaryView(summary: summary)
+        
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
@@ -350,6 +324,37 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                 self?.view.bringSubviewToFront(tabSnapshotView)
             }
         }
+    }
+    
+    private func configureSummaryView(summary: String) {
+        let summaryWithNote = """
+        \(summary)
+
+        ##### \(viewModel.summaryNote)
+        """
+        // The summary view is constrained to the edge of the screen in order to have title animation and to scroll
+        // under the status bar. We need custom offset so the summary view doesn't overlay the bottom tab snapshot and
+        // the safe area. 
+        let summaryContentInset = UIEdgeInsets(
+            top: view.safeAreaInsets.top,
+            left: 0.0,
+            bottom: UX.tabSnapshotFinalPositionBottomPadding,
+            right: 0.0
+        )
+        summaryView.configure(
+            model: SummaryViewModel(
+                title: webView.title,
+                titleA11yId: viewModel.titleLabelA11yId,
+                compactTitleA11yId: viewModel.compactTitleLabelA11yId,
+                brandIcon: viewModel.brandImage,
+                brandIconA11yId: viewModel.brandImageA11yId,
+                brandName: viewModel.brandLabel,
+                brandNameA11yId: viewModel.brandLabelA11yId,
+                summary: parse(markdown: summaryWithNote),
+                summaryA11yId: viewModel.summarizeTextViewA11yId,
+                contentOffset: summaryContentInset
+            )
+        )
     }
 
     private func showError(_ error: SummarizerError) {

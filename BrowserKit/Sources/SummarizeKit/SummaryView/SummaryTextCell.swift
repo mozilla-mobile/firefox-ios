@@ -6,7 +6,7 @@ import Foundation
 import Common
 import UIKit
 
-class SummaryTextCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class SummaryTextCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private let summaryView: UITextView = .build {
         $0.isScrollEnabled = false
         $0.font = FXFontStyles.Regular.headline.scaledFont()

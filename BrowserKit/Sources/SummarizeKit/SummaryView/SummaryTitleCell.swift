@@ -6,7 +6,10 @@ import Common
 import Foundation
 import UIKit
 
-class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
+    private struct UX {
+        static let titleBottomPadding: CGFloat = 20
+    }
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.title1.scaledFont()
         $0.adjustsFontForContentSizeCategory = true
@@ -28,7 +31,7 @@ class SummaryTitleCell: UITableViewCell, ReusableCell, ThemeApplicable {
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.titleBottomPadding)
         ])
     }
 
