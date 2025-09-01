@@ -14,23 +14,16 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         static let fadeOutDuration: TimeInterval = 0.24
         static let fadeOutDelay: TimeInterval = 0
         static let fadeOutAlpha: CGFloat = 0.0
-        static let initialSetupDelayMilliseconds = 500
-        static let minimumDisplayTimeSeconds: TimeInterval = 1.0
-
-        // Computed properties for nanosecond conversions
-        static var initialSetupDelayNanoseconds: UInt64 {
-            return UInt64(initialSetupDelayMilliseconds * 1_000_000)
-        }
-
-        static var minimumDisplayTimeNanoseconds: UInt64 {
-            return UInt64(minimumDisplayTimeSeconds * 1_000_000)
-        }
+        static let minimumDisplayTimeSeconds: TimeInterval = 0.1
     }
 
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
     private let windowUUID: WindowUUID
-    private var isViewSetupComplete = false
+
+    // MARK: - Synchronization
+    private var isLoading = false
+    private var shouldLoadNextLaunchType = false
 
     // MARK: - UI Components
     private lazy var modernLaunchView: ModernLaunchScreenView = {
@@ -67,22 +60,20 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-
-        Task {
-            try await delayStart()
-            startLoading()
-        }
+        setupLayout()
+        startLoading()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        if !isViewSetupComplete {
-            setupLaunchScreen()
-            isViewSetupComplete = true
+        // Only load next launch type if loading is complete, otherwise defer it
+        if isLoading {
+            shouldLoadNextLaunchType = true
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + minimumDisplayTimeSeconds) {
+                self.viewModel.loadNextLaunchType()
+            }
         }
-
-        viewModel.loadNextLaunchType()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -92,6 +83,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
 
     // MARK: - Loading
     func startLoading() {
+        isLoading = true
         viewModel.startLoading()
     }
 
@@ -145,18 +137,12 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     }
 
     func finishedLoadingLaunchOrder() {
-        Task {
-            try await Task.sleep(nanoseconds: UX.minimumDisplayTimeNanoseconds)
-            viewModel.loadNextLaunchType()
+        isLoading = false
+
+        // If viewWillAppear was called while we were loading, now process the deferred call
+        if shouldLoadNextLaunchType {
+            shouldLoadNextLaunchType = false
+            self.viewModel.loadNextLaunchType()
         }
-    }
-
-    // MARK: - Private Methods
-    private func delayStart() async throws {
-        try await Task.sleep(nanoseconds: UX.initialSetupDelayNanoseconds)
-    }
-
-    private func setupLaunchScreen() {
-        setupLayout()
     }
 }
