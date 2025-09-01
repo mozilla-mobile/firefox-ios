@@ -216,6 +216,7 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
             closeButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
         }
         closeButton.configuration?.baseForegroundColor = theme.colors.textPrimary
+        // The table view needs to reload its content to apply the provided Theme.
         tableView.reloadData()
     }
 }
