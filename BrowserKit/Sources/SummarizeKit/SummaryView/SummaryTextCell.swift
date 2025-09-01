@@ -37,6 +37,7 @@ final class SummaryTextCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         summaryView.backgroundColor = .clear
+        summaryView.textColor = theme.colors.textPrimary
         backgroundColor = .clear
     }
 }
