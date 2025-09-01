@@ -408,11 +408,14 @@ final class LocationView: UIView,
         UIView.animate(
             withDuration: UX.identityResetAnimationDuration,
             delay: 0,
-            options: [.curveEaseInOut] ) { [unowned self] in
+            options: [.curveEaseInOut],
+            animations: { [unowned self] in
                 transform = .identity
-            } completion: { [unowned self] _ in
+            },
+            completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = true
-        }
+            }
+        )
     }
 
     private func applyToolbarAlphaIfNeeded(alpha: CGFloat, barPosition: AddressToolbarPosition) {
