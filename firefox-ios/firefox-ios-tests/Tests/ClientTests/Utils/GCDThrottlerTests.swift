@@ -10,6 +10,7 @@ class GCDThrottlerTests: XCTestCase {
     struct Timing {
         static let veryLongDelay: Double = 100_000
         static let defaultTestMaxWaitTime: Double = 2
+        static let shortenTestMaxWaitTime = 0.5
     }
 
     private var testQueue: DispatchQueue!
@@ -27,15 +28,20 @@ class GCDThrottlerTests: XCTestCase {
     func testMultipleFastConsecutiveCallsAreThrottledAndExecutedAtMostOneTime() {
         let throttler = createSubject(timeout: Timing.veryLongDelay)
 
-        let firedOnce = expectation(description: "Throttle completion fired")
-        firedOnce.expectedFulfillmentCount = 1
-        firedOnce.assertForOverFulfill = true
+        let executedFirstThrottle = expectation(description: "Throttle completion fired")
+        let executedSecondThrottle = expectation(description: "Second throttle completion fired")
+        executedSecondThrottle.isInverted = true
+        let executedThirdThrottle = expectation(description: "Third throttle completion fired")
+        executedThirdThrottle.isInverted = true
 
-        throttler.throttle { firedOnce.fulfill() }
-        throttler.throttle { firedOnce.fulfill() }
-        throttler.throttle { firedOnce.fulfill() }
+        throttler.throttle { executedFirstThrottle.fulfill() }
+        throttler.throttle { executedSecondThrottle.fulfill() }
+        throttler.throttle { executedThirdThrottle.fulfill() }
 
-        wait(for: [firedOnce], timeout: Timing.defaultTestMaxWaitTime)
+        // Note: Timeout is based on average time it takes to run the three throttles without time delay
+        // with a bit of buffer. To avoid tests taking too long, but also to confirm that we triggered 3 throttle calls
+        let expectations = [executedFirstThrottle, executedSecondThrottle, executedThirdThrottle]
+        wait(for: expectations, timeout: Timing.shortenTestMaxWaitTime)
     }
 
     func testThrottleZeroSecondThrottleExecutesAllClosures() {
@@ -43,11 +49,14 @@ class GCDThrottlerTests: XCTestCase {
 
         let executedFirstThrottle = expectation(description: "First throttle completion fired")
         let executedSecondThrottle = expectation(description: "Second throttle completion fired")
+        let executedThirdThrottle = expectation(description: "Third throttle completion fired")
 
         throttler.throttle { executedFirstThrottle.fulfill() }
         throttler.throttle { executedSecondThrottle.fulfill() }
+        throttler.throttle { executedThirdThrottle.fulfill() }
 
-        wait(for: [executedFirstThrottle, executedSecondThrottle], timeout: Timing.defaultTestMaxWaitTime)
+        let expectations = [executedFirstThrottle, executedSecondThrottle, executedThirdThrottle]
+        wait(for: expectations, timeout: Timing.defaultTestMaxWaitTime)
     }
 
     func testSecondCallAfterDelayThresholdCallsBothClosures() {

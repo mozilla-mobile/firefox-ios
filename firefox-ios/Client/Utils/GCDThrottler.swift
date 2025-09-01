@@ -26,7 +26,7 @@ class GCDThrottler: ThrottleProtocol {
 
     // This debounces; the task will not happen unless a duration of delay passes since the function was called
     func throttle(completion: @escaping @Sendable () -> Void) {
-        guard lastExecutionTime.timeIntervalSinceNow < -threshold else { return }
+        guard lastExecutionTime.timeIntervalSinceNow <= -threshold else { return }
         lastExecutionTime = Date()
         queue.async(execute: completion)
     }
