@@ -8,17 +8,17 @@ features:
         description: >
           Controls which menu users will see
         type: Boolean
-        default: false
+        default: true
       menu-default-browser-banner:
         description: >
           If true, enables the menu Make Firefox your default banner, on top of the menu.
         type: Boolean
-        default: false
+        default: true
       menu-redesign-hint:
         description: >
           If true, enables the menu contextual hint for menu redesign.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:

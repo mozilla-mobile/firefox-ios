@@ -527,9 +527,7 @@ class BrowserViewController: UIViewController,
         }
 
         crashTracker.updateData()
-        if featureFlags.isFeatureEnabled(.ratingPromptFeature, checking: .buildOnly) {
-            ratingPromptManager.showRatingPromptIfNeeded()
-        }
+        ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     @objc
@@ -1143,7 +1141,8 @@ class BrowserViewController: UIViewController,
     }
 
     private func setupNavigationAppearance() {
-        title = .FirefoxHomepage.ScreenTitle
+        // TODO: FXIOS-13342 - replace this string with .FirefoxHomepage.ScreenTitle once it is translated (v144)
+        title = .SettingsHomePageSectionName
         navigationItem.backButtonDisplayMode = .generic
     }
 
@@ -3436,6 +3435,7 @@ class BrowserViewController: UIViewController,
         guard let currentViewController = navigationController?.topViewController else { return }
         // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
         if !isShowingJSPromptAlert() {
+            (currentViewController as? ShortcutsLibraryViewController)?.recordTelemetryOnDisappear = false
             currentViewController.dismiss(animated: true, completion: nil)
         }
 

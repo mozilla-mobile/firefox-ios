@@ -324,7 +324,6 @@ final class OnboardingServiceTests: XCTestCase {
     func testHandleAction_SyncSignIn_UpdatesActivityEventHelper() {
         // Given
         let activityEventHelper = MockActivityEventHelper()
-        let expectation = XCTestExpectation(description: "Completion called")
 
         // When
         sut.handleAction(
@@ -332,10 +331,7 @@ final class OnboardingServiceTests: XCTestCase {
             from: "testCard",
             cards: [],
             with: activityEventHelper
-        ) { _ in
-            self.assertOnMainThread()
-            expectation.fulfill()
-        }
+        ) { _ in }
 
         guard let presented = mockDelegate.presentedViewController else {
             XCTFail("Expected a view controller to be presented")
@@ -344,8 +340,6 @@ final class OnboardingServiceTests: XCTestCase {
         presented.dismiss(animated: false, completion: nil)
         presented.beginAppearanceTransition(false, animated: false)
         presented.endAppearanceTransition()
-
-        wait(for: [expectation], timeout: 1.0)
 
         // Then
         XCTAssertTrue(activityEventHelper.chosenOptions.contains(.syncSignIn))

@@ -170,16 +170,16 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(actionCalled.showiPadSetup ?? true)
     }
 
-    func test_viewWillAppear_triggersHomepageAction() throws {
+    func test_viewDidAppear_triggersHomepageAction() throws {
         let subject = createSubject()
 
-        subject.viewWillAppear(false)
+        subject.viewDidAppear(false)
 
         let actionCalled = try XCTUnwrap(
             mockStore.dispatchedActions.first(where: { $0 is HomepageAction }) as? HomepageAction
         )
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
-        XCTAssertEqual(actionType, HomepageActionType.viewWillAppear)
+        XCTAssertEqual(actionType, HomepageActionType.viewDidAppear)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
@@ -219,12 +219,16 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_viewDidAppear_withStoriesRedesignDisabled_triggersHomepageAction() throws {
         setIsStoriesRedesignEnabled(isEnabled: false)
         let subject = createSubject()
-        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // Need to set up initial state so we can call updateSnapshot [FXIOS-13346 / FXIOS-13343]
+        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
+        subject.newState(state: initialState)
+        // Need to call loadViewIfNeeded and newState to populate the datasource after a state change
         // used to check whether we should send dispatch action or not
         // layoutIfNeeded() recalculates the collection view to have items
         subject.loadViewIfNeeded()
-        subject.newState(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+        subject.newState(state: changeInitialStateToTriggerUpdateInSnapshot())
         subject.view.layoutIfNeeded()
+
         subject.viewDidAppear(false)
 
         XCTAssertTrue(mockThrottler.didCallThrottle)
@@ -268,11 +272,14 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_scrollViewDidEndDecelerating_withStoriesRedesignDisabled_triggersHomepageAction() throws {
         setIsStoriesRedesignEnabled(isEnabled: false)
         let subject = createSubject()
-        // Need to call loadViewIfNeeded and newState to populate the datasource
+        // Need to set up initial state so we can call updateSnapshot [FXIOS-13346 / FXIOS-13343]
+        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
+        subject.newState(state: initialState)
+        // Need to call loadViewIfNeeded and newState to populate the datasource after a state change
         // used to check whether we should send dispatch action or not
         // layoutIfNeeded() recalculates the collection view to have items
         subject.loadViewIfNeeded()
-        subject.newState(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+        subject.newState(state: changeInitialStateToTriggerUpdateInSnapshot())
         subject.view.layoutIfNeeded()
 
         subject.scrollViewDidEndDecelerating(UIScrollView())
@@ -489,4 +496,15 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             )
         )
     }
+}
+
+// FXIOS-13346 / FXIOS-13343 - needed to update tests since we added a bandaid fix to not call
+private func changeInitialStateToTriggerUpdateInSnapshot() -> HomepageState {
+   return HomepageState.reducer(
+        HomepageState(windowUUID: .XCTestDefaultUUID),
+        GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+        )
+    )
 }

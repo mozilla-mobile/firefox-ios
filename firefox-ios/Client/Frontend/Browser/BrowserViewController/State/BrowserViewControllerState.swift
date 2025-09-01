@@ -124,7 +124,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+            return defaultState(from: state)
+        }
 
         if let action = action as? MicrosurveyPromptAction {
             return reduceStateForMicrosurveyAction(action: action, state: state)
@@ -256,7 +258,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                                                    state: BrowserViewControllerState) -> BrowserViewControllerState {
         switch action.actionType {
         case GeneralBrowserActionType.showToast:
-            guard let toastType = action.toastType else { return state }
+            guard let toastType = action.toastType else {
+                return defaultState(from: state)
+            }
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 toast: toastType,

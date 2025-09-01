@@ -60,6 +60,7 @@ final class GleanUsageReporting: GleanUsageReportingApi {
         let managedConfig = UserDefaults.standard.dictionary(forKey: "com.apple.configuration.managed")
         let isManaged = (managedConfig != nil) ? true : false
         GleanMetrics.Usage.isManagedDevice.set(isManaged)
+        TermsOfUseTelemetry.setUsageMetrics()
     }
 }
 

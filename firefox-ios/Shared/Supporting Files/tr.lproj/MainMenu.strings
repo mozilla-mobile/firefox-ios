@@ -347,7 +347,7 @@
 "MainMenu.ToolsSection.AccessibilityLabels.LibraryOptions.v142" = "Arşiv";
 
 /* On the main menu, the accessibility label for the action that will show more menu options in the current section of the menu. */
-"MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "Daha çok";
+"MainMenu.ToolsSection.AccessibilityLabels.MoreOptions.v141" = "Diğer";
 
 /* On the main menu, the accessibility label for the action that will open the page zoom tool. */
 "MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "Sayfa yakınlaştırma";
@@ -389,7 +389,7 @@
 "MainMenu.ToolsSection.LessOptions.Title.v141" = "Daha az";
 
 /* On the main menu, the title for the action that will show more menu options in the current section of the menu. */
-"MainMenu.ToolsSection.MoreOptions.Title.v141" = "Daha çok";
+"MainMenu.ToolsSection.MoreOptions.Title.v141" = "Diğer";
 
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Kaydet";
