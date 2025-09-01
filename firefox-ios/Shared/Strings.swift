@@ -2278,12 +2278,6 @@ extension String {
             value: "Summarizing",
             comment: "The a11y label for the loading label on the summarize loading screen."
         )
-        public static let SummaryTextAccessibilityLabel = MZLocalizedString(
-            key: "", // Summarizer.Summary.Text.Accessibility.Label.v142
-            tableName: "Summarizer",
-            value: "Summary report text",
-            comment: "The a11y label for the summary text shown when the summarizer returns a text result."
-        )
         public static let CloseButtonAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.CloseButton.Accessibility.Label.v142
             tableName: "Summarizer",
