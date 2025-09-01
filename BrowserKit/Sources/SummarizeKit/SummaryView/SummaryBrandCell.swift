@@ -9,9 +9,9 @@ import UIKit
 final class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let logoSize: CGFloat = 16.0
-        static let horizzontalPadding: CGFloat = 6.0
-        static let spacing: CGFloat = 8.0
-        static let bottomInset: CGFloat = 16.0
+        static let subViewsSidePadding: CGFloat = 6.0
+        static let brandLabelLeadingPadding: CGFloat = 8.0
+        static let containerViewBottomPadding: CGFloat = 16.0
     }
 
     private let logoImageView: UIImageView = .build {
@@ -47,17 +47,18 @@ final class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             containerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomInset),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                  constant: -UX.containerViewBottomPadding),
 
             logoImageView.widthAnchor.constraint(equalToConstant: UX.logoSize),
             logoImageView.heightAnchor.constraint(equalToConstant: UX.logoSize),
-            logoImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.horizzontalPadding),
+            logoImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.subViewsSidePadding),
             logoImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 
-            brandLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.horizzontalPadding),
-            brandLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.horizzontalPadding),
-            brandLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: UX.spacing),
-            brandLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.horizzontalPadding),
+            brandLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.subViewsSidePadding),
+            brandLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.subViewsSidePadding),
+            brandLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: UX.brandLabelLeadingPadding),
+            brandLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.subViewsSidePadding),
         ])
 
         containerView.layoutIfNeeded()
