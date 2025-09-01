@@ -255,9 +255,13 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupView() {
+        #if canImport(FoundationModels)
         if #unavailable(iOS 26.0) {
             view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
         }
+        #else
+            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+        #endif
         view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([
