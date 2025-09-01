@@ -55,10 +55,14 @@ final class SummaryBrandCell: UITableViewCell, ReusableCell, ThemeApplicable {
             logoImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.subViewsSidePadding),
             logoImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 
-            brandLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.subViewsSidePadding),
-            brandLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.subViewsSidePadding),
-            brandLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: UX.brandLabelLeadingPadding),
-            brandLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.subViewsSidePadding),
+            brandLabel.topAnchor.constraint(equalTo: containerView.topAnchor,
+                                            constant: UX.subViewsSidePadding),
+            brandLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
+                                               constant: -UX.subViewsSidePadding),
+            brandLabel.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor,
+                                                constant: UX.brandLabelLeadingPadding),
+            brandLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                 constant: -UX.subViewsSidePadding),
         ])
 
         containerView.layoutIfNeeded()
