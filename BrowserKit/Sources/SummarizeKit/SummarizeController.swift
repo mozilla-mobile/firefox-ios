@@ -121,7 +121,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         host.view.isUserInteractionEnabled = false
         return host
     }()
-    private let summaryView: SummaryView
+    private let summaryView: SummaryView = .build()
 
     // For the MVP only the portrait orientation is supported
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -144,9 +144,6 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         self.summarizerService = summarizerService
         self.webView = webView
         self.onSummaryDisplayed = onSummaryDisplayed
-        self.summaryView = SummaryView(closeButtonViewModel: viewModel.closeButtonModel, closeButtonAction: { [weak self] in
-            self?.triggerDismissingAnimation()
-        })
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -176,12 +173,15 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func configure() {
-        loadingLabel.text = viewModel.loadingLabel
-        loadingLabel.accessibilityIdentifier = viewModel.loadingA11yId
-        loadingLabel.accessibilityLabel = viewModel.loadingA11yLabel
+        loadingLabel.text = viewModel.loadingLabelViewModel.loadingLabel
+        loadingLabel.accessibilityIdentifier = viewModel.loadingLabelViewModel.loadingA11yId
+        loadingLabel.accessibilityLabel = viewModel.loadingLabelViewModel.loadingA11yLabel
 
-        tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotA11yId
-        tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotA11yLabel
+        tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotViewModel.tabSnapshotA11yId
+        tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotViewModel.tabSnapshotA11yLabel
+        summaryView.configureCloseButton(model: viewModel.closeButtonModel) { [weak self] in
+            self?.triggerDismissingAnimation()
+        }
     }
 
     private func setupLayout() {
@@ -243,8 +243,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func setupTabSnapshot() {
-        tabSnapshot.image = viewModel.tabSnapshot
-        tabSnapshotTopConstraint?.constant = viewModel.tabSnapshotTopOffset
+        tabSnapshot.image = viewModel.tabSnapshotViewModel.tabSnapshot
+        tabSnapshotTopConstraint?.constant = viewModel.tabSnapshotViewModel.tabSnapshotTopOffset
 
         let frameHeight = view.frame.height
         let transformAnimation = CABasicAnimation(keyPath: UX.tabSnapshotTranslationKeyPath)
@@ -306,9 +306,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
-        
+
         configureSummaryView(summary: summary)
-        
+
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
@@ -325,16 +325,16 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             }
         }
     }
-    
+
     private func configureSummaryView(summary: String) {
         let summaryWithNote = """
         \(summary)
 
-        ##### \(viewModel.summaryNote)
+        ##### \(viewModel.summaryFootnote)
         """
-        // The summary view is constrained to the edge of the screen in order to have title animation and to scroll
-        // under the status bar. We need custom offset so the summary view doesn't overlay the bottom tab snapshot and
-        // the safe area. 
+        // The summary view is constrained to the edge of the screen. In order to have title animation and to scroll
+        // under the status bar, a custom offset is needed so the summary view doesn't overlay the bottom tab snapshot and
+        // the safe area.
         let summaryContentInset = UIEdgeInsets(
             top: view.safeAreaInsets.top,
             left: 0.0,
@@ -346,13 +346,10 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                 title: webView.title,
                 titleA11yId: viewModel.titleLabelA11yId,
                 compactTitleA11yId: viewModel.compactTitleLabelA11yId,
-                brandIcon: viewModel.brandImage,
-                brandIconA11yId: viewModel.brandImageA11yId,
-                brandName: viewModel.brandLabel,
-                brandNameA11yId: viewModel.brandLabelA11yId,
+                brandViewModel: viewModel.brandViewModel,
                 summary: parse(markdown: summaryWithNote),
-                summaryA11yId: viewModel.summarizeTextViewA11yId,
-                contentOffset: summaryContentInset
+                summaryA11yId: viewModel.summarizeViewA11yId,
+                scrollContentInsets: summaryContentInset
             )
         )
     }

@@ -12,14 +12,11 @@ struct SummaryViewModel {
     let titleA11yId: String
     let compactTitleA11yId: String
 
-    let brandIcon: UIImage?
-    let brandIconA11yId: String
-    let brandName: String
-    let brandNameA11yId: String
+    let brandViewModel: BrandViewModel
 
     let summary: NSAttributedString?
     let summaryA11yId: String
-    let contentOffset: UIEdgeInsets
+    let scrollContentInsets: UIEdgeInsets
 }
 
 final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
@@ -82,29 +79,22 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
     private var theme: Theme?
     private var model: SummaryViewModel?
 
-    init(closeButtonViewModel: CloseButtonViewModel,
-         closeButtonAction: @escaping () -> Void) {
-        super.init(frame: .zero)
-        setup(closeButtonViewModel: closeButtonViewModel, closeButtonAction: closeButtonAction)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setup(closeButtonViewModel: CloseButtonViewModel, closeButtonAction: @escaping () -> Void) {
+    private func setup() {
         tableView.dataSource = self
         tableView.delegate = self
 
         tableView.register(cellType: SummaryTitleCell.self)
         tableView.register(cellType: SummaryBrandCell.self)
         tableView.register(cellType: SummaryTextCell.self)
-        
-        closeButton.accessibilityIdentifier = closeButtonViewModel.a11yIdentifier
-        closeButton.accessibilityLabel = closeButtonViewModel.a11yLabel
-        closeButton.addAction(UIAction(handler: { _ in
-            closeButtonAction()
-        }), for: .touchUpInside)
 
         compactTitleContainer.addSubviews(compactTitleBackgroundEffectView, compactTitleLabel)
         addSubviews(tableView, compactTitleContainer, closeButton)
@@ -135,8 +125,17 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
                                                   constant: -UX.closeButtonEdgePadding),
             closeButton.topAnchor.constraint(equalTo: compactTitleContainer.safeAreaLayoutGuide.topAnchor,
                                              constant: UX.closeButtonEdgePadding),
-            closeButton.bottomAnchor.constraint(lessThanOrEqualTo: compactTitleContainer.bottomAnchor)
+            closeButton.bottomAnchor.constraint(lessThanOrEqualTo: compactTitleContainer.bottomAnchor,
+                                                constant: -UX.closeButtonEdgePadding)
         ])
+    }
+
+    func configureCloseButton(model: CloseButtonViewModel, action: @escaping () -> Void) {
+        closeButton.accessibilityIdentifier = model.a11yIdentifier
+        closeButton.accessibilityLabel = model.a11yLabel
+        closeButton.addAction(UIAction(handler: { _ in
+            action()
+        }), for: .touchUpInside)
     }
 
     // MARK: - UITableViewDataSource
@@ -159,10 +158,10 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
             cell = tableView.dequeueReusableCell(withIdentifier: SummaryBrandCell.cellIdentifier, for: indexPath)
             if let cell = cell as? SummaryBrandCell {
                 cell.configure(
-                    text: model.brandName,
-                    textA11yId: model.brandNameA11yId,
-                    logo: model.brandIcon,
-                    logoA11yId: model.brandIconA11yId
+                    text: model.brandViewModel.brandLabel,
+                    textA11yId: model.brandViewModel.brandLabelA11yId,
+                    logo: model.brandViewModel.brandImage,
+                    logoA11yId: model.brandViewModel.brandImageA11yId
                 )
             }
         case .summary:
@@ -185,7 +184,7 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         self.model = model
         compactTitleLabel.text = model.title
         compactTitleLabel.accessibilityIdentifier = model.titleA11yId
-        tableView.contentInset = model.contentOffset
+        tableView.contentInset = model.scrollContentInsets
         tableView.reloadData()
     }
 

@@ -97,29 +97,34 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
         let model = SummarizeViewModel(
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.titleLabel,
             compactTitleLabelA11yId: AccessibilityIdentifiers.Summarizer.compactTitleLabel,
-            loadingLabel: .Summarizer.LoadingLabel,
-            loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
-            loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel,
-            tabSnapshotA11yLabel: .Summarizer.TabSnapshotAccessibilityLabel,
-            tabSnapshotA11yId: AccessibilityIdentifiers.Summarizer.tabSnapshotView,
-            brandLabel: brandLabel,
-            brandLabelA11yId: AccessibilityIdentifiers.Summarizer.brandLabel,
-            brandImage: brandImage,
-            brandImageA11yId: AccessibilityIdentifiers.Summarizer.brandImage,
-            summaryNote: .Summarizer.FootnoteLabel,
-            summarizeTextViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTextView,
+            summaryFootnote: .Summarizer.FootnoteLabel,
+            summarizeViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTableView,
+            tabSnapshotViewModel: TabSnapshotViewModel(
+                tabSnapshotA11yLabel: .Summarizer.TabSnapshotAccessibilityLabel,
+                tabSnapshotA11yId: AccessibilityIdentifiers.Summarizer.tabSnapshotView,
+                tabSnapshot: browserSnapshot,
+                tabSnapshotTopOffset: browserSnapshotTopOffset
+            ),
+            loadingLabelViewModel: LoadingLabelViewModel(
+                loadingLabel: .Summarizer.LoadingLabel,
+                loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
+                loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel
+            ),
+            brandViewModel: BrandViewModel(
+                brandLabel: brandLabel,
+                brandLabelA11yId: AccessibilityIdentifiers.Summarizer.brandLabel,
+                brandImage: brandImage,
+                brandImageA11yId: AccessibilityIdentifiers.Summarizer.brandImage
+            ),
             closeButtonModel: CloseButtonViewModel(
                 a11yLabel: .Summarizer.CloseButtonAccessibilityLabel,
                 a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeSummaryButton
             ),
-            tabSnapshot: browserSnapshot,
-            tabSnapshotTopOffset: browserSnapshotTopOffset,
             errorMessages: errorModel
         ) { [weak self] in
             self?.summarizerTelemetry.summarizationClosed()
             self?.dismissCoordinator()
         }
-
         let controller = SummarizeController(
             windowUUID: windowUUID,
             viewModel: model,

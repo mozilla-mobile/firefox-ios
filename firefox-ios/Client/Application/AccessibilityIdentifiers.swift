@@ -729,7 +729,7 @@ struct AccessibilityIdentifiers {
         static let loadingLabel = "summaryLoadingLabel"
         static let brandLabel = "summaryBrandLabel"
         static let brandImage = "summaryBrandImage"
-        static let summaryTextView = "summaryTextView"
+        static let summaryTableView = "summaryTextView"
         static let errorLabel = "errorLabel"
         static let errorButton = "errorButton"
         static let tosTitleLabel = "tosTitleLabel"
