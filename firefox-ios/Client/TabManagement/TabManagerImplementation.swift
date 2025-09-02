@@ -230,12 +230,12 @@ class TabManagerImplementation: NSObject,
     }
 
     func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
-        guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
-        let tab = tabs[index]
-
-        DispatchQueue.main.async { [weak self] in
-            self?.removeTab(tab, flushToDisk: true)
-            self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
+        ensureMainThread { [weak self] in
+            guard let self else { return }
+            guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
+            let tab = tabs[index]
+            removeTab(tab, flushToDisk: true)
+            updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
             completion?()
         }
     }
