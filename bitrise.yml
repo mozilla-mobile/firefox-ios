@@ -523,11 +523,11 @@ workflows:
             cd -
         title: Set xcodeproj code_sign_identity to iPhone Developer
     - script@1.2.1:
-        title: Pin swiftlint version to 0.59.1 (Workaround)
+        title: Pin swiftlint version to 0.60.0 (Workaround)
         inputs:
         - content: |-
             OLD_SWIFTLINT_PATH=`which swiftlint`
-            curl -L -o swiftlint.zip https://github.com/realm/SwiftLint/releases/download/0.59.1/portable_swiftlint.zip
+            curl -L -o swiftlint.zip https://github.com/realm/SwiftLint/releases/download/0.60.0/portable_swiftlint.zip
             unzip swiftlint.zip -d swiftlint_bin
             chmod +x swiftlint_bin/swiftlint
             sudo mv swiftlint_bin/swiftlint $OLD_SWIFTLINT_PATH
