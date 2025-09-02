@@ -423,6 +423,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleReloadWebsiteAction(state: BrowserViewControllerState,
+                                                  action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            navigateTo: .reload,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleReloadWebsiteNoCacheAction(state: BrowserViewControllerState,
                                                          action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
