@@ -318,15 +318,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.showTrackingProtectionDetails:
-            return BrowserViewControllerState(
-                    searchScreenState: state.searchScreenState,
-                    toast: state.toast,
-                    windowUUID: state.windowUUID,
-                    browserViewType: state.browserViewType,
-                    displayView: .trackingProtectionDetails,
-                    buttonTapped: action.buttonTapped,
-                    microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleShowTrackingProtectionDetailsAction(state: state, action: action)
         case GeneralBrowserActionType.showMenu:
             return handleShowMenuAction(state: state, action: action)
         case GeneralBrowserActionType.showTabsLongPressActions:
