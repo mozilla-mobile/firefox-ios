@@ -374,14 +374,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 navigateTo: .back,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.navigateForward:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                navigateTo: .forward,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleNavigateForwardAction(state: state, action: action)
         case GeneralBrowserActionType.showTabTray:
             return handleShowTabTrayAction(state: state, action: action)
         case GeneralBrowserActionType.reloadWebsite:
