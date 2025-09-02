@@ -437,6 +437,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleStopLoadingWebsiteAction(state: BrowserViewControllerState,
+                                                       action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            navigateTo: .stopLoading,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleShowShareAction(state: BrowserViewControllerState,
                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
