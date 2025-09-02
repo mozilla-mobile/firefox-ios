@@ -366,6 +366,19 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleShowTrackingProtectionDetailsAction(
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction) -> BrowserViewControllerState {
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .trackingProtectionDetails,
+                buttonTapped: action.buttonTapped,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        }
+
     private static func handleShowMenuAction(state: BrowserViewControllerState,
                                              action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
