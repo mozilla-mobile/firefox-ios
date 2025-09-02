@@ -46,6 +46,7 @@ struct CreditCardAutofillToggle: View {
                     .foregroundColor(textColor)
                     .padding(.leading, 16)
                     .padding(.trailing, 16)
+                    .modifier(ExtraPaddingTopAndBottom(paddingSize: 4))
                     .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
             }
             Divider()

@@ -70,18 +70,28 @@ struct CreditCardInputView: View {
 
     private var form: some View {
         return VStack(spacing: 0) {
-            Divider()
-                .frame(height: 0.7)
-                .foregroundColor(borderColor)
+            if #unavailable(iOS 26.0) {
+                Divider()
+                    .frame(height: 0.7)
+                    .foregroundColor(borderColor)
+            }
 
             name
                 .background(textFieldBackgroundColor)
+                .modifier(RoundedCorners(topLeadingCorner: 24,
+                                         topTrailingCorner: 24,
+                                         bottomLeadingCorner: nil,
+                                         bottomTrailingCorner: nil))
 
             number
                 .background(textFieldBackgroundColor)
 
             expiration
                 .background(textFieldBackgroundColor)
+                .modifier(RoundedCorners(topLeadingCorner: nil,
+                                         topTrailingCorner: nil,
+                                         bottomLeadingCorner: 24,
+                                         bottomTrailingCorner: 24))
 
             Spacer()
                 .frame(height: 4)
@@ -94,6 +104,7 @@ struct CreditCardInputView: View {
 
             Spacer()
         }
+        .modifier(ExtraPadding())
     }
 
     private var name: some View {
@@ -134,10 +145,12 @@ struct CreditCardInputView: View {
                                  inputViewModel: viewModel)
             .padding(.top, 11)
 
-            Divider()
-                .frame(height: 0.7)
-                .foregroundColor(borderColor)
-                .padding(.top, 1)
+            if #unavailable(iOS 26.0) {
+                Divider()
+                    .frame(height: 0.7)
+                    .foregroundColor(borderColor)
+                    .padding(.top, 1)
+            }
         }
     }
 

@@ -80,3 +80,49 @@ struct PaddingWithColorStyle: ViewModifier {
         }
     }
 }
+
+struct ExtraPaddingTopAndBottom: ViewModifier {
+    let paddingSize: CGFloat
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding(.top, paddingSize)
+                .padding(.bottom, paddingSize)
+        } else {
+            content
+        }
+    }
+}
+
+struct ExtraPadding: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding()
+        } else {
+            content
+        }
+    }
+}
+
+struct RoundedCorners: ViewModifier {
+    let topLeadingCorner: CGFloat?
+    let topTrailingCorner: CGFloat?
+    let bottomLeadingCorner: CGFloat?
+    let bottomTrailingCorner: CGFloat?
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .clipShape(
+                    UnevenRoundedRectangle(topLeadingRadius: topLeadingCorner ?? 0,
+                                           bottomLeadingRadius: bottomLeadingCorner ?? 0,
+                                           bottomTrailingRadius: bottomTrailingCorner ?? 0,
+                                           topTrailingRadius: topTrailingCorner ?? 0)
+                )
+        } else {
+            content
+        }
+    }
+}

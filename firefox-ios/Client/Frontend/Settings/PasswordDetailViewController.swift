@@ -20,15 +20,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
-    private lazy var tableView: UITableView = .build { [weak self] tableView in
-        guard let self = self else { return }
-        tableView.accessibilityIdentifier = "Login Detail List"
-        tableView.delegate = self
-        tableView.dataSource = self
-
-        // Add empty footer view to prevent separators from being drawn past the last item.
-        tableView.tableFooterView = UIView()
-    }
+    private var tableView: UITableView
 
     private weak var websiteField: UITextField?
     private weak var usernameField: UITextField?
@@ -55,6 +47,12 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+
+        if #available(iOS 26.0, *) {
+            tableView = UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            tableView = UITableView(frame: .zero, style: .plain)
+        }
         super.init(nibName: nil, bundle: nil)
 
         // FIXME: FXIOS-12995 Use Notifiable
@@ -75,6 +73,12 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
                                                             target: self,
                                                             action: #selector(edit))
 
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.accessibilityIdentifier = "Login Detail List"
+        tableView.delegate = self
+        tableView.dataSource = self
+        // Add empty footer view to prevent separators from being drawn past the last item.
+        tableView.tableFooterView = UIView()
         tableView.register(cellType: LoginDetailTableViewCell.self)
         tableView.register(cellType: LoginDetailCenteredTableViewCell.self)
         tableView.register(cellType: ThemedTableViewCell.self)
@@ -195,7 +199,11 @@ extension PasswordDetailViewController: UITableViewDataSource {
                 displayDescriptionAsPassword: true,
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
                 isEditingFieldData: isEditingFieldData)
-            setCellSeparatorHidden(loginCell)
+            if #available(iOS 26.0, *) {
+                setCellSeparatorHidden(loginCell, useRightInset: false)
+            } else {
+                setCellSeparatorHidden(loginCell)
+            }
             loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: currentTheme())
             passwordField = loginCell.descriptionLabel
@@ -239,7 +247,11 @@ extension PasswordDetailViewController: UITableViewDataSource {
             let cellModel = LoginDetailCenteredTableViewCellModel(
                 label: createdFormatted + "\n" + lastModifiedFormatted)
             cell.configure(viewModel: cellModel)
-            setCellSeparatorHidden(cell)
+            if #available(iOS 26.0, *) {
+                setCellSeparatorHidden(cell, useRightInset: false)
+            } else {
+                setCellSeparatorHidden(cell)
+            }
             cell.applyTheme(theme: currentTheme())
             return cell
 
@@ -271,12 +283,12 @@ extension PasswordDetailViewController: UITableViewDataSource {
         return cell
     }
 
-    private func setCellSeparatorHidden(_ cell: UITableViewCell) {
+    private func setCellSeparatorHidden(_ cell: UITableViewCell, useRightInset: Bool = true) {
         // Prevent separator from showing by pushing it off screen by the width of the cell
         cell.separatorInset = UIEdgeInsets(top: 0,
                                            left: 0,
                                            bottom: 0,
-                                           right: view.frame.width)
+                                           right: useRightInset ? view.frame.width : 0)
     }
 
     private func setCellSeparatorFullWidth(_ cell: UITableViewCell) {

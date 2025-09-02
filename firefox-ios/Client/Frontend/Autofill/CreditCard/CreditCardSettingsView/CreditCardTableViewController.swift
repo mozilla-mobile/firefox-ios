@@ -34,7 +34,13 @@ class CreditCardTableViewController: UIViewController, Themeable {
     // MARK: View
 
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        let tableView: UITableView = {
+            if #available(iOS 26.0, *) {
+                UITableView(frame: .zero, style: .insetGrouped)
+            } else {
+                UITableView(frame: .zero, style: .grouped)
+            }
+        }()
         tableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                            forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
         tableView.register(HostingTableViewCell<CreditCardAutofillToggle>.self,

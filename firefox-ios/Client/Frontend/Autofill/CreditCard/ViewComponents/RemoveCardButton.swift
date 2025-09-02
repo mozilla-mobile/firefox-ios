@@ -71,6 +71,10 @@ struct RemoveCardButton: View {
             // prevents the screen dismissal, hiding it is the simplest way to solve the issue.
             showAlert = false
         }
+        .modifier(RoundedCorners(topLeadingCorner: 24,
+                                 topTrailingCorner: 24,
+                                 bottomLeadingCorner: 24,
+                                 bottomTrailingCorner: 24))
     }
 
     func applyTheme(theme: Theme) {
