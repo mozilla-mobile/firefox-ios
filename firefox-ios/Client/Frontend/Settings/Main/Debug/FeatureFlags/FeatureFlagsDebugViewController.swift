@@ -22,6 +22,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         return [generateFeatureFlagToggleSettings(), generateFeatureFlagList()]
     }
 
+    // swiftlint:disable:next function_body_length
     private func generateFeatureFlagToggleSettings() -> SettingSection {
         // For better code readability and parsability in-app, please keep in alphabetical order by title
         var children: [Setting] =  [
