@@ -5,6 +5,8 @@
 import Common
 import Foundation
 import Glean
+import Shared
+import MozillaAppServices
 
 /// An enumeration representing different environments for the OHTTP client.
 public enum OhttpEnvironment {
@@ -40,6 +42,7 @@ public enum OhttpEnvironment {
     }
 }
 
+/// Custom Glean Ping Uploader adding the OHTTP capability into Glean
 public struct OhttpGleanUploader: PingUploader {
     private let environment: OhttpEnvironment
     private let capabilities = ["ohttp"]
@@ -58,7 +61,7 @@ public struct OhttpGleanUploader: PingUploader {
             return
         }
 
-        let manager = StubOhttpManager(configUrl: config, relayUrl: relay)
+        let manager = OhttpManager(configUrl: config, relayUrl: relay)
         guard let capableRequest = request.capable(capabilities),
               let url = URL(string: capableRequest.url) else { return }
 
@@ -73,7 +76,7 @@ public struct OhttpGleanUploader: PingUploader {
         }
         oHttpRequest.timeoutInterval = connectionTimeout
         oHttpRequest.httpBody = body
-        oHttpRequest.httpMethod = "POST"
+        oHttpRequest.httpMethod = HTTPMethod.post.rawValue
         oHttpRequest.httpShouldHandleCookies = false
 
         Task {
