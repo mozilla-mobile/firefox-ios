@@ -270,14 +270,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
         case GeneralBrowserActionType.showOverlay,
             GeneralBrowserActionType.leaveOverlay:
-            let showOverlay = action.showOverlay ?? false
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                showOverlay: showOverlay,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleShowAndLeaveOverlayAction(state: state, action: action)
         case GeneralBrowserActionType.updateSelectedTab:
             return resolveStateForUpdateSelectedTab(action: action, state: state)
         case GeneralBrowserActionType.goToHomepage:
