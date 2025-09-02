@@ -392,14 +392,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.reloadWebsite:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                navigateTo: .reload,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleReloadWebsiteAction(state: state, action: action)
         case GeneralBrowserActionType.reloadWebsiteNoCache:
             return handleReloadWebsiteNoCacheAction(state: state, action: action)
         case GeneralBrowserActionType.stopLoadingWebsite:
