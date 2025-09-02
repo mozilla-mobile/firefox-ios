@@ -478,6 +478,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleShowPasswordGeneratorAction(state: BrowserViewControllerState,
+                                                          action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .passwordGenerator,
+            frame: action.frame,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleShowSummarizerAction(state: BrowserViewControllerState,
                                                    action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
