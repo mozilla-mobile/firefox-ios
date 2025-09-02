@@ -337,6 +337,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleGoToHomepageAction(state: BrowserViewControllerState,
+                                                 action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            navigateTo: .home,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleAddNewTabAction(state: BrowserViewControllerState,
                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
