@@ -9,7 +9,7 @@ import Shared
 import MozillaAppServices
 
 /// An enumeration representing different environments for the OHTTP client.
-/// This is an enum in case we want to add other environement other than production.
+/// This is an enum in case we want to add other environment other than production.
 public enum OhttpEnvironment {
     case prod
 
@@ -48,7 +48,6 @@ public struct OhttpGleanUploader: PingUploader {
         guard let config = environment.config,
               let relay = environment.relay
         else {
-            // TODO: Laurie - What Int8 should be passed here for the unrecoverableFailure?
             callback(UploadResult.unrecoverableFailure(unused: 0))
             return
         }
@@ -60,7 +59,6 @@ public struct OhttpGleanUploader: PingUploader {
         var body = Data(capacity: capableRequest.data.count)
         body.append(contentsOf: capableRequest.data)
 
-        // TODO: Laurie - Cache policy? timeoutInterval? etc. Double check request info
         var oHttpRequest = URLRequest(url: url,
                                       cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
         for (field, value) in capableRequest.headers {
