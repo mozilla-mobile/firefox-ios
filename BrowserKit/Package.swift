@@ -155,7 +155,9 @@ let package = Package(
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"]),
+                            .enableExperimentalFeature("StrictConcurrency"),
+                            .enableUpcomingFeature("InferSendableFromCaptures")]),
         .testTarget(
             name: "ToolbarKitTests",
             dependencies: ["ToolbarKit"]),
