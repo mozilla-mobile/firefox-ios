@@ -419,15 +419,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.showShare:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                displayView: .share,
-                buttonTapped: action.buttonTapped,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleShowShareAction(state: state, action: action)
         case GeneralBrowserActionType.showReaderMode:
             return handleShowReaderModeAction(state: state, action: action)
         case GeneralBrowserActionType.showNewTabLongPressActions:
