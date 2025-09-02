@@ -447,14 +447,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.addToReadingListLongPressAction:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                displayView: .readerModeLongPressAction,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleAddToReadingListLongPressAction(state: state, action: action)
         case GeneralBrowserActionType.clearData:
             return handleClearDataAction(state: state, action: action)
         case GeneralBrowserActionType.showPasswordGenerator:
