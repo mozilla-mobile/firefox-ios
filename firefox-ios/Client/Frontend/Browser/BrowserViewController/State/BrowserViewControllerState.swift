@@ -282,14 +282,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return resolveStateForUpdateSelectedTab(action: action, state: state)
 
         case GeneralBrowserActionType.goToHomepage:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                navigateTo: .home,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleGoToHomepageAction(state: state, action: action)
         case GeneralBrowserActionType.addNewTab:
             return handleAddNewTabAction(state: state, action: action)
         case GeneralBrowserActionType.showQRcodeReader:
