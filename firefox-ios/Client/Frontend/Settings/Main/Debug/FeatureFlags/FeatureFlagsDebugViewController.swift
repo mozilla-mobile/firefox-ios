@@ -22,6 +22,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         return [generateFeatureFlagToggleSettings(), generateFeatureFlagList()]
     }
 
+    // swiftlint:disable function_body_length
     private func generateFeatureFlagToggleSettings() -> SettingSection {
         // For better code readability and parsability in-app, please keep in alphabetical order by title
         var children: [Setting] =  [
@@ -259,6 +260,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             children: children
         )
     }
+    // swiftlint:enable function_body_length
 
     private func generateFeatureFlagList() -> SettingSection {
         let flags = NimbusFeatureFlagID.allCases
