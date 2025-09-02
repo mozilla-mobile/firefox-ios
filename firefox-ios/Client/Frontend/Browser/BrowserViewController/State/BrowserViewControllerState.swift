@@ -329,6 +329,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleShowAndLeaveOverlayAction(state: BrowserViewControllerState,
+                                                        action: GeneralBrowserAction) -> BrowserViewControllerState {
+        let showOverlay = action.showOverlay ?? false
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            showOverlay: showOverlay,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleGoToHomepageAction(state: BrowserViewControllerState,
                                                  action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
