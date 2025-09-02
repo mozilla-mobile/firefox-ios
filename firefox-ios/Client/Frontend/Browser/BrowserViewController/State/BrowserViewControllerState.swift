@@ -291,14 +291,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.addNewTab:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                navigateTo: .newTab,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleAddNewTabAction(state: state, action: action)
         case GeneralBrowserActionType.showQRcodeReader:
             return handleShowQRcodeReaderAction(state: state, action: action)
         case GeneralBrowserActionType.showBackForwardList:
