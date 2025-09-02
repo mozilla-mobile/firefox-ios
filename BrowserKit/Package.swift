@@ -88,7 +88,10 @@ let package = Package(
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .testTarget(
             name: "ComponentLibraryTests",
             dependencies: ["ComponentLibrary"]),
