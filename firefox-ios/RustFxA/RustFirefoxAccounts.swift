@@ -16,19 +16,6 @@ import struct MozillaAppServices.Profile
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
-// A convenience to allow other callers to pass in Nimbus/Flaggable features
-// to RustFirefoxAccounts
-public struct RustFxAFeatures: OptionSet {
-    public let rawValue: Int
-
-    public init(rawValue: Int) {
-        self.rawValue = rawValue
-    }
-
-    public static let useRustKeychainForFxA = RustFxAFeatures(rawValue: 1 << 0)
-}
-
-// TODO: FXIOS-13290 Make RustFirefoxAccounts actually sendable
 // TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 /**
  A singleton that wraps the Rust FxA library.
@@ -79,7 +66,6 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     @MainActor
     public static func startup(
         prefs: Prefs,
-        features: RustFxAFeatures = RustFxAFeatures(),
         logger: Logger = DefaultLogger.shared,
         completion: @escaping (FxAccountManager) -> Void
     ) {
@@ -87,7 +73,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         if let accManager = RustFirefoxAccounts.shared.accountManager {
             completion(accManager)
         }
-        let manager = RustFirefoxAccounts.shared.createAccountManager(features: features)
+        let manager = RustFirefoxAccounts.shared.createAccountManager(prefs: prefs)
         manager.initialize { result in
             assert(Thread.isMainThread)
             if !Thread.isMainThread {
@@ -121,8 +107,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         return RustFirefoxAccounts.prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
     }
 
-    @MainActor
-    private func createAccountManager(features: RustFxAFeatures) -> FxAccountManager {
+    private func createAccountManager(prefs: Prefs) -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
         if prefs == nil {
             logger.log("prefs is unexpectedly nil", level: .warning, category: .sync)
@@ -184,7 +169,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
             deviceConfig: deviceConfig,
             applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
             keychainAccessGroup: accessGroupIdentifier,
-            useRustKeychainForFxA: features.contains(.useRustKeychainForFxA)
+            useRustKeychainForFxA: prefs?.boolForKey(PrefsKeys.RustFxaKeychainEnabled) ?? false
         )
     }
 

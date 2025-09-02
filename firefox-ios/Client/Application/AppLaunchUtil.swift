@@ -116,9 +116,9 @@ final class AppLaunchUtil: Sendable {
             .rustFxaKeychain
             .value()
             .rustFxaKeychainEnabled
-        let features: RustFxAFeatures = rustFxaKeychainEnabled ? [.useRustKeychainForFxA] : []
+        profile.prefs.setBool(rustFxaKeychainEnabled, forKey: PrefsKeys.RustFxaKeychainEnabled)
 
-        RustFirefoxAccounts.startup(prefs: profile.prefs, features: features) { manager in
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { manager in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
             AppEventQueue.signal(event: .accountManagerInitialized)
 
