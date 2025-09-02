@@ -300,14 +300,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.showQRcodeReader:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                displayView: .qrCodeReader,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleShowQRcodeReaderAction(state: state, action: action)
         case GeneralBrowserActionType.showBackForwardList:
             return handleShowBackForwardListAction(state: state, action: action)
         case GeneralBrowserActionType.showTrackingProtectionDetails:
