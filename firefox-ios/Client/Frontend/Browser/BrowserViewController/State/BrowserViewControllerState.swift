@@ -358,6 +358,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleShowBackForwardListAction(state: BrowserViewControllerState,
+                                                        action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .backForwardList,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleShowTrackingProtectionDetailsAction(
         state: BrowserViewControllerState,
         action: GeneralBrowserAction) -> BrowserViewControllerState {
