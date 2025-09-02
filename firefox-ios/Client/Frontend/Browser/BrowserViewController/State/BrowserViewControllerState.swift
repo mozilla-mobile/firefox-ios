@@ -258,16 +258,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                                                    state: BrowserViewControllerState) -> BrowserViewControllerState {
         switch action.actionType {
         case GeneralBrowserActionType.showToast:
-            guard let toastType = action.toastType else {
-                return defaultState(from: state)
-            }
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: toastType,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleShowToastAction(state: state, action: action)
         case GeneralBrowserActionType.showOverlay,
             GeneralBrowserActionType.leaveOverlay:
             return handleShowAndLeaveOverlayAction(state: state, action: action)
