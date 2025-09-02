@@ -154,8 +154,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             let environment = OhttpEnvironment.getEnvironment()
             gleanConfig = Configuration(
                 channel: AppConstants.buildChannel.rawValue,
-                logLevel: .off // ,
-//                httpClient: OhttpGleanUploader(environment: environment)
+                logLevel: .off,
+                httpClient: OhttpGleanUploader(environment: environment)
             )
         } else {
             gleanConfig = Configuration(
