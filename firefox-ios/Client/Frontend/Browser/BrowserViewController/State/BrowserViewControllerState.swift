@@ -409,6 +409,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleNavigateForwardAction(state: BrowserViewControllerState,
+                                                    action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            navigateTo: .forward,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleShowTabTrayAction(state: BrowserViewControllerState,
                                                 action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
