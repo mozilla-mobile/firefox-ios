@@ -280,7 +280,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
         case GeneralBrowserActionType.updateSelectedTab:
             return resolveStateForUpdateSelectedTab(action: action, state: state)
-
         case GeneralBrowserActionType.goToHomepage:
             return handleGoToHomepageAction(state: state, action: action)
         case GeneralBrowserActionType.addNewTab:
