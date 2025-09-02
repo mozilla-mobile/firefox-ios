@@ -1,7 +1,8 @@
-// swiftlint:disable comment_spacing file_header
-//// This Source Code Form is subject to the terms of the Mozilla Public
-//// License, v. 2.0. If a copy of the MPL was not distributed with this
-//// file, You can obtain one at http://mozilla.org/MPL/2.0/
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+//
+// swiftlint:disable comment_spacing
 //
 //import Foundation
 //import Adjust
@@ -57,4 +58,4 @@
 //        gleanWrapper.submit(GleanMetrics.Pings.shared.firstSession)
 //    }
 //}
-// swiftlint:enable comment_spacing file_header
+// swiftlint:enable comment_spacing
