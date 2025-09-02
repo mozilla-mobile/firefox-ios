@@ -351,6 +351,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleShowQRcodeReaderAction(state: BrowserViewControllerState,
+                                                     action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .qrCodeReader,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleShowBackForwardListAction(state: BrowserViewControllerState,
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
