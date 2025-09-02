@@ -102,6 +102,7 @@ struct CustomUserAgentConstant {
     private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
     static let customMobileUAForDomain = [
+        "tver.jp": safariMobileUA,
         "epic.com": safariMobileUA,
         "athenahealth.com": safariMobileUA,
         "ehealthontario.ca": safariMobileUA
