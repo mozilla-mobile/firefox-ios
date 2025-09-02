@@ -381,6 +381,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleShowTabsLongPressAction(state: BrowserViewControllerState,
+                                                      action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .tabsLongPressActions,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func handleShowReloadLongPressAction(state: BrowserViewControllerState,
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
