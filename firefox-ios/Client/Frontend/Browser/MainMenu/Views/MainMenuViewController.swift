@@ -118,6 +118,9 @@ class MainMenuViewController: UIViewController,
         sheetPresentationController?.delegate = self
 
         subscribeToRedux()
+
+        // TODO: FXIOS-13353 We are dispatching multiple actions when we should be dispatching only one.
+        // Actions should not need to know about the consequences.
         store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: windowUUID,
@@ -255,9 +258,13 @@ class MainMenuViewController: UIViewController,
     }
 
     private func setupView() {
+        #if canImport(FoundationModels)
         if #unavailable(iOS 26.0) {
             view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
         }
+        #else
+            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+        #endif
         view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([

@@ -527,9 +527,7 @@ class BrowserViewController: UIViewController,
         }
 
         crashTracker.updateData()
-        if featureFlags.isFeatureEnabled(.ratingPromptFeature, checking: .buildOnly) {
-            ratingPromptManager.showRatingPromptIfNeeded()
-        }
+        ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     @objc
@@ -1051,6 +1049,7 @@ class BrowserViewController: UIViewController,
         addSubviews()
         setupConstraints()
         setupNotifications()
+        setupNavigationAppearance()
 
         overlayManager.setURLBar(urlBarView: urlBarView)
 
@@ -1139,6 +1138,12 @@ class BrowserViewController: UIViewController,
             }
             return true
         })
+    }
+
+    private func setupNavigationAppearance() {
+        // TODO: FXIOS-13342 - replace this string with .FirefoxHomepage.ScreenTitle once it is translated (v144)
+        title = .SettingsHomePageSectionName
+        navigationItem.backButtonDisplayMode = .generic
     }
 
     // FIXME: FXIOS-12995 Use Notifiable on all of these...
@@ -3274,8 +3279,9 @@ class BrowserViewController: UIViewController,
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
-            if let isHomepage = tabManager.selectedTab?.isFxHomeTab, isHomepage {
-                focusLocationTextField(forTab: tabManager.selectedTab)
+            guard let selectedTab = tabManager.selectedTab else { return }
+            if selectedTab.isPrivate == isPrivate, selectedTab.isFxHomeTab {
+                focusLocationTextField(forTab: selectedTab)
             } else {
                 openBlankNewTab(
                     focusLocationField: options?.contains(.focusLocationField) == true,
@@ -3429,6 +3435,7 @@ class BrowserViewController: UIViewController,
         guard let currentViewController = navigationController?.topViewController else { return }
         // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
         if !isShowingJSPromptAlert() {
+            (currentViewController as? ShortcutsLibraryViewController)?.recordTelemetryOnDisappear = false
             currentViewController.dismiss(animated: true, completion: nil)
         }
 
@@ -4619,7 +4626,11 @@ extension BrowserViewController: TabManagerDelegate {
         readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.shared : DiskReaderModeCache.shared
         ReaderModeHandlers.setCache(readerModeCache)
 
-        scrollController.tab = selectedTab
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.tab = selectedTab
+        } else {
+            scrollController.tabProvider = TabProviderAdapter(selectedTab)
+        }
 
         var needsReload = false
         if let webView = selectedTab.webView {
@@ -4655,7 +4666,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateFindInPageVisibility(isVisible: false, tab: previousTab)
-        setupMiddleButtonStatus(isLoading: selectedTab.loading)
+        setupMiddleButtonStatus(isLoading: selectedTab.isLoading)
 
         if isToolbarRefactorEnabled {
             dispatchBackForwardToolbarAction(canGoBack: selectedTab.canGoBack,

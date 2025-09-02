@@ -49,7 +49,9 @@ final class InactiveTabsTest: FeatureFlaggedTestBase {
         )
 
         // Tap on the ">" button.
-        app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView].waitAndTap()
+        let inactiveButtone = app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView]
+        mozWaitForElementToExist(inactiveButtone)
+        inactiveButtone.tap(force: true)
         waitForElementsToExist(
             [
                 app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton],

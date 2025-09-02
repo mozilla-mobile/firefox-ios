@@ -5,45 +5,59 @@
 import SnapKit
 
 extension BrowserViewController: TabScrollHandler.Delegate {
-    var overKeyboardContainerHeight: CGFloat {
+    private var overKeyboardContainerHeight: CGFloat {
         return calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
     }
 
+    private var headerOffset: CGFloat {
+        let baseOffset = -getHeaderSize().height
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
+
+        guard isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) else {
+            return baseOffset
+        }
+        return baseOffset + UX.minimalHeaderOffset
+    }
+
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
-        if isBottomSearchBar {
-            let bottomOffset = clamp(offset: progress, min: 0, max: getBottomContainerSize().height)
-            bottomContainerConstraint?.update(offset: bottomOffset)
-            bottomContainer.superview?.setNeedsLayout()
-        } else {
-            let topOffset = clamp(offset: progress, min: getHeaderSize().height, max: 0)
+        if !isBottomSearchBar {
+            let topOffset = clamp(offset: -progress, min: headerOffset, max: 0)
             headerTopConstraint?.update(offset: topOffset)
             header.superview?.setNeedsLayout()
         }
+        let bottomOffset = clamp(offset: progress, min: 0, max: getBottomContainerSize().height)
+        bottomContainerConstraint?.update(offset: bottomOffset)
+        bottomContainer.superview?.setNeedsLayout()
     }
 
     func showToolbar() {
-        if isBottomSearchBar {
-            updateBottomToolbar(bottomContainerOffset: 0,
-                                overKeyboardContainerOffset: 0,
-                                alpha: 1)
-        } else {
+        if !isBottomSearchBar {
             updateTopToolbar(topOffset: 0, alpha: 1)
         }
+        updateBottomToolbar(bottomContainerOffset: 0,
+                            overKeyboardContainerOffset: 0,
+                            alpha: 1)
     }
 
     func hideToolbar() {
-        if isBottomSearchBar {
-            updateBottomToolbar(bottomContainerOffset: getBottomContainerSize().height,
-                                overKeyboardContainerOffset: overKeyboardContainerHeight,
-                                alpha: 0)
-        } else {
+        if !isBottomSearchBar {
             updateTopToolbar(topOffset: headerOffset, alpha: 0)
         }
+
+        updateBottomToolbar(bottomContainerOffset: getBottomContainerSize().height,
+                            overKeyboardContainerOffset: overKeyboardContainerHeight,
+                            alpha: 0)
     }
 
     // MARK: - Helper private functions
 
     private func updateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
+        guard UIAccessibility.isReduceMotionEnabled else {
+         animateTopToolbar(topOffset: topOffset, alpha: alpha)
+          return
+        }
+
         headerTopConstraint?.update(offset: topOffset)
         header.superview?.setNeedsLayout()
 
@@ -60,9 +74,39 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         }
     }
 
+    private func animateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
+        let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) { [weak self] in
+            guard let self else { return }
+
+            headerTopConstraint?.update(offset: topOffset)
+            header.superview?.setNeedsLayout()
+
+            header.updateAlphaForSubviews(alpha)
+        }
+
+        animator.startAnimation()
+
+        if isMinimalAddressBarEnabled {
+            store.dispatchLegacy(
+                ToolbarAction(
+                    scrollAlpha: Float(alpha),
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaDidChange
+                )
+            )
+        }
+    }
+
     private func updateBottomToolbar(bottomContainerOffset: CGFloat,
                                      overKeyboardContainerOffset: CGFloat,
                                      alpha: CGFloat) {
+        guard UIAccessibility.isReduceMotionEnabled else {
+         animateBottomToolbar(bottomOffset: bottomContainerOffset,
+                              overKeyboardOffset: overKeyboardContainerOffset,
+                              alpha: alpha)
+          return
+        }
+
         overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
         overKeyboardContainer.superview?.setNeedsLayout()
 
@@ -78,18 +122,35 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                 )
             )
         }
+        view.layoutIfNeeded()
     }
 
-    private var headerOffset: CGFloat {
-        let baseOffset = -getHeaderSize().height
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
+    private func animateBottomToolbar(bottomOffset: CGFloat,
+                                      overKeyboardOffset: CGFloat,
+                                      alpha: CGFloat) {
+        let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) { [weak self] in
+            guard let self else { return }
+            bottomContainerConstraint?.update(offset: bottomOffset)
+            bottomContainer.superview?.setNeedsLayout()
 
-        guard isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) else {
-            return baseOffset
+            overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
+            overKeyboardContainer.superview?.setNeedsLayout()
+
+            self.view.layoutIfNeeded()
         }
-        return baseOffset + UX.minimalHeaderOffset
-    }
+
+        animator.startAnimation()
+
+        if isMinimalAddressBarEnabled {
+            store.dispatchLegacy(
+                ToolbarAction(
+                    scrollAlpha: Float(alpha),
+                    windowUUID: self.windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaDidChange
+                )
+            )
+        }
+   }
 
     /// Helper method for testing overKeyboardScrollHeight behavior.
     /// - Parameters:

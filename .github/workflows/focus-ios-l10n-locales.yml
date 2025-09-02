@@ -31,7 +31,7 @@ jobs:
           xcodebuild -version
       - name: Run setup scripts for Focus
         run: |
-          ./checkout.sh
+          ./bootstrap.sh focus
       - name: Fetch derived data
         id: download-derived-data
         uses: actions/download-artifact@v4

@@ -167,6 +167,12 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        store.dispatchLegacy(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.viewDidAppear
+            )
+        )
         trackVisibleItemImpressions()
     }
 
@@ -312,21 +318,22 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         wallpaperView.wallpaperState = state.wallpaperState
 
-        // TODO: FXIOS-13265 - Fix compositional layout using estimated heights for cells so this check isn't necessary.
-        if self.homepageState != state {
+        // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
+        // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
+        if homepageState != state {
             dataSource?.updateSnapshot(
                 state: state,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
             )
         }
 
-        self.homepageState = state
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
-        if homepageState.shouldTriggerImpression {
+        if state.shouldTriggerImpression {
             scrollToTop()
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
+        self.homepageState = state
     }
 
     nonisolated func unsubscribeFromRedux() {

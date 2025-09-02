@@ -44,7 +44,7 @@ jobs:
           pip install -r l10n_repo/.github/scripts/requirements.txt
       - name: Run checkout script
         run: |
-          (cd code_repo && ./checkout.sh)
+          (cd code_repo && ./bootstrap.sh focus)
       - name: Extract strings
         run: |
           (cd code_repo && ./focus-ios/focus-ios-tests/tools/export-strings.sh)

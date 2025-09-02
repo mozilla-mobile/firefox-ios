@@ -273,12 +273,12 @@ features:
                   title: Onboarding/Onboarding.Modern.Customization.Theme.Continue.Action.v140
                   action: forward-one-card
               multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v140
-                  image: toolbar-top
-                  action: toolbar-top
                 - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140
                   image: toolbar-bottom
                   action: toolbar-bottom
+                - title: Onboarding/Onboarding.Modern.Customization.Toolbar.Top.Action.v140
+                  image: toolbar-top
+                  action: toolbar-top
               onboarding-type: fresh-install
               prerequisites:
                 - ALWAYS

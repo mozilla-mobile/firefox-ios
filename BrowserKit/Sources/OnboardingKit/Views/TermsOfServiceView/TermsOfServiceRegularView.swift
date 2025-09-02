@@ -50,41 +50,39 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     // MARK: - Main Content
 
     private var termsContent: some View {
-        GeometryReader { geometry in
-            ScrollView(.vertical) {
-                VStack {
-                    VStack(spacing: UX.CardView.tosSpacing) {
-                        VStack(spacing: UX.CardView.spacing) {
-                            imageView
-                            titleView
-                            bodyView
+        SheetSizedCard {
+            GeometryReader { geometry in
+                ScrollView(.vertical) {
+                    VStack {
+                        VStack(spacing: UX.CardView.tosSpacing) {
+                            VStack(spacing: UX.CardView.spacing) {
+                                imageView
+                                titleView
+                                bodyView
+                            }
+                            VStack(spacing: UX.CardView.spacing) {
+                                links
+                                primaryButton
+                            }
                         }
-                        VStack(spacing: UX.CardView.spacing) {
-                            links
-                            primaryButton
-                        }
+                        .padding(.vertical, UX.CardView.verticalPadding)
+                        .frame(width: UX.CardView.primaryButtonWidthiPad)
                     }
-                    .padding(.vertical, UX.CardView.verticalPadding)
-                    .frame(width: UX.CardView.primaryButtonWidthiPad)
+                    .frame(width: geometry.size.width)
+                    .frame(minHeight: geometry.size.height)
                 }
-                .frame(width: geometry.size.width)
-                .frame(minHeight: geometry.size.height)
+                .scrollBounceBehavior(basedOnSize: true)
             }
-            .scrollBounceBehavior(basedOnSize: true)
-        }
-        .frame(
-            width: UX.CardView.baseiPadWidth,
-            height: UX.CardView.baseiPadHeight
-        )
-        .background(
-            RoundedRectangle(
-                cornerRadius: UX.CardView.cornerRadius
+            .background(
+                RoundedRectangle(
+                    cornerRadius: UX.CardView.cornerRadius
+                )
+                .fill(cardBackgroundColor)
+                .accessibilityHidden(true)
             )
-            .fill(cardBackgroundColor)
-            .accessibilityHidden(true)
-        )
-        .padding(.horizontal, UX.CardView.horizontalPadding)
-        .accessibilityElement(children: .contain)
+            .padding(.horizontal, UX.CardView.horizontalPadding)
+            .accessibilityElement(children: .contain)
+        }
     }
 
     // MARK: - Subviews

@@ -19,27 +19,36 @@ struct TermsOfUseState: ScreenState, Equatable {
     }
 
     static func defaultState(from state: TermsOfUseState) -> TermsOfUseState {
-        return TermsOfUseState(windowUUID: state.windowUUID)
+        return TermsOfUseState(windowUUID: state.windowUUID,
+                               hasAccepted: state.hasAccepted,
+                               wasDismissed: state.wasDismissed)
     }
 
     static let reducer: Reducer<TermsOfUseState> = { state, action in
         guard let action = action as? TermsOfUseAction,
               let type = action.actionType as? TermsOfUseActionType,
-              action.windowUUID == state.windowUUID else { return state }
+              action.windowUUID == state.windowUUID else { return defaultState(from: state) }
 
         switch type {
-        case .markAccepted:
-            return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: true,
-                                   wasDismissed: false)
-        case .markDismissed:
-            return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: state.hasAccepted,
-                                   wasDismissed: true)
-        case .markShown:
+        case .termsShown:
             return TermsOfUseState(windowUUID: state.windowUUID,
                                    hasAccepted: false,
                                    wasDismissed: false)
+        case .termsAccepted:
+            return TermsOfUseState(windowUUID: state.windowUUID,
+                                   hasAccepted: true,
+                                   wasDismissed: false)
+        case .gestureDismiss,
+             .remindMeLaterTapped:
+            return TermsOfUseState(windowUUID: state.windowUUID,
+                                   hasAccepted: state.hasAccepted,
+                                   wasDismissed: true)
+        case .learnMoreLinkTapped,
+             .privacyLinkTapped,
+             .termsLinkTapped:
+            return TermsOfUseState(windowUUID: state.windowUUID,
+                                   hasAccepted: state.hasAccepted,
+                                   wasDismissed: state.wasDismissed)
         }
     }
 }

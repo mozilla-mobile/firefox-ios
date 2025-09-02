@@ -10,8 +10,9 @@ class MockCreditCardProvider: CreditCardProvider {
     var addCreditCardCalledCount = 0
     var updateCreditCardCalledCount = 0
     var listCreditCardsCalledCount = 0
+    var deleteCreditCardsCalledCount = 0
 
-    private var exampleCreditCard = CreditCard(
+    var exampleCreditCard = CreditCard(
         guid: "1",
         ccName: "Allen Burges",
         ccNumberEnc: "4111111111111111",
@@ -25,6 +26,10 @@ class MockCreditCardProvider: CreditCardProvider {
         timesUsed: 123123
     )
 
+    private(set) var lastDeletedID: String?
+    var deleteResult: (status: Bool, error: Error?) = (false, nil)
+    var updateResult: (status: Bool?, error: Error?) = (nil, nil)
+
     func addCreditCard(
         creditCard: UnencryptedCreditCardFields,
         completion: @escaping (CreditCard?, Error?) -> Void
@@ -33,6 +38,11 @@ class MockCreditCardProvider: CreditCardProvider {
         completion(exampleCreditCard, nil)
     }
     func decryptCreditCardNumber(encryptedCCNum: String?) -> String? { return "testCCNum" }
+    func deleteCreditCard(id: String, completion: @escaping @Sendable (Bool, (any Error)?) -> Void) {
+        deleteCreditCardsCalledCount += 1
+        lastDeletedID = id
+        completion(deleteResult.status, deleteResult.error)
+    }
     func listCreditCards(completion: @escaping ([CreditCard]?, Error?) -> Void) {
         listCreditCardsCalledCount += 1
         completion([exampleCreditCard], nil)
@@ -43,6 +53,6 @@ class MockCreditCardProvider: CreditCardProvider {
         completion: @escaping (Bool?, Error?) -> Void
     ) {
         updateCreditCardCalledCount += 1
-        completion(nil, nil)
+        completion(updateResult.status, updateResult.error)
     }
 }
