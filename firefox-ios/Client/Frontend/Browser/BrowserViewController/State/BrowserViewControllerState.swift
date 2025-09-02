@@ -483,6 +483,16 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
+    private static func handleShowSummarizerAction(state: BrowserViewControllerState,
+                                                   action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .summarizer(config: action.summarizerConfig),
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
     private static func defaultState(from state: BrowserViewControllerState,
                                      action: Action?) -> BrowserViewControllerState {
         var microsurveyState = state.microsurveyState
