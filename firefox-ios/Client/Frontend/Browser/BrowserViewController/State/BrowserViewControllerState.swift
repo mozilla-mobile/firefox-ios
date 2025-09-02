@@ -472,12 +472,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.showSummarizer:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                displayView: .summarizer(config: action.summarizerConfig),
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+            return handleShowSummarizerAction(state: state, action: action)
         default:
             return defaultState(from: state, action: action)
         }
