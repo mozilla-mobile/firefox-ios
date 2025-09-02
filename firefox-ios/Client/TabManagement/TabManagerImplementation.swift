@@ -322,7 +322,11 @@ class TabManagerImplementation: NSObject,
         }
 
         if flushToDisk {
-            preserveTabs(forced: true)
+            // Only preserve tabs if restore has finished
+            if tabRestoreHasFinished {
+                logger.log("Preserve tabs started", level: .debug, category: .tabs)
+                preserveTabs(forced: true)
+            }
             saveSessionData(forTab: selectedTab)
         }
     }
