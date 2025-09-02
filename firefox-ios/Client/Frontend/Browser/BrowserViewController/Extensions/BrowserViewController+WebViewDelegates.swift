@@ -1307,13 +1307,13 @@ private extension BrowserViewController {
                   let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
                   self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
             else {
-                Task { @MainActor in
+                ensureMainThread {
                     completionHandler(.performDefaultHandling, nil)
                 }
                 return
             }
 
-            Task { @MainActor in
+            ensureMainThread {
                 completionHandler(.useCredential, URLCredential(trust: trust))
             }
         }
