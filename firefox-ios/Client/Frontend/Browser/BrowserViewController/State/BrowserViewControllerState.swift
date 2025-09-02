@@ -309,14 +309,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.showBackForwardList:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                displayView: .backForwardList,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleShowBackForwardListAction(state: state, action: action)
         case GeneralBrowserActionType.showTrackingProtectionDetails:
             return handleShowTrackingProtectionDetailsAction(state: state, action: action)
         case GeneralBrowserActionType.showMenu:
