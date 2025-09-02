@@ -172,11 +172,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager, keyboardState: KeyboardState? = nil) {
-        if let keyboardState, keyboardState.isHardwareKeyboardConnected {
-            hideSkeletonBars()
-            return
-        }
-        guard let selectedTab = tabManager.selectedTab, state?.toolbarPosition == .bottom else {
+        guard let selectedTab = tabManager.selectedTab,
+              state?.toolbarPosition == .bottom,
+              keyboardState?.isHardwareKeyboardConnected == false else {
             hideSkeletonBars()
             return
         }
