@@ -347,15 +347,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.showReloadLongPressAction:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                toast: state.toast,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                displayView: .reloadLongPressAction,
-                buttonTapped: action.buttonTapped,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleShowReloadLongPressAction(state: state, action: action)
         case GeneralBrowserActionType.showLocationViewLongPressActionSheet:
             return handleShowLocationViewLongPressActionSheetAction(state: state, action: action)
         case GeneralBrowserActionType.navigateBack:
