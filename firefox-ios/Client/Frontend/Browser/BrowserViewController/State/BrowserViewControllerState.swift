@@ -328,15 +328,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                     microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.showMenu:
-            return BrowserViewControllerState(
-                    searchScreenState: state.searchScreenState,
-                    toast: state.toast,
-                    windowUUID: state.windowUUID,
-                    browserViewType: state.browserViewType,
-                    displayView: .menu,
-                    buttonTapped: action.buttonTapped,
-                    microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-
+            return handleShowMenuAction(state: state, action: action)
         case GeneralBrowserActionType.showTabsLongPressActions:
             return handleShowTabsLongPressAction(state: state, action: action)
         case GeneralBrowserActionType.showReloadLongPressAction:
