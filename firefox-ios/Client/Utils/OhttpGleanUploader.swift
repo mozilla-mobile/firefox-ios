@@ -9,36 +9,28 @@ import Shared
 import MozillaAppServices
 
 /// An enumeration representing different environments for the OHTTP client.
+/// This is an enum in case we want to add other environement other than production.
 public enum OhttpEnvironment {
-    case staging
     case prod
 
-    // TODO: Laurie - config URL to pass into the OHTTPManager?
     /// Returns the configuration URL based on the selected environment.
     var config: URL? {
         switch self {
-        case .staging:
-            return URL(string: "https://stage.ohttp-gateway.nonprod.webservices.mozgcp.net/ohttp-configs")
         case .prod:
             return URL(string: "https://prod.ohttp-gateway.prod.webservices.mozgcp.net/ohttp-configs")
         }
     }
 
-    // TODO: Laurie - relay URL to pass into the OHTTPManager?
     /// Returns the relay URL based on the selected environment.
     var relay: URL? {
         switch self {
-        case .staging:
-            return URL(string: "https://mozilla-ohttp-dev.fastly-edge.com/")
         case .prod:
-            return URL(string: "https://mozilla-ohttp-dev.fastly-edge.com/")
+            return URL(string: "https://mozilla-ohttp.fastly-edge.com/")
         }
     }
 
     static func getEnvironment() -> OhttpEnvironment {
-        // TODO: Laurie - Double-check this is accurate
-        let shouldUseRelease = AppConstants.buildChannel == .release || AppConstants.buildChannel == .beta
-        return shouldUseRelease ? OhttpEnvironment.prod: OhttpEnvironment.staging
+        return OhttpEnvironment.prod
     }
 }
 
