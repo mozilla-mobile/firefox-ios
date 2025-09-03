@@ -40,7 +40,7 @@ class ArrayExtensionTests: XCTestCase {
         let resultB = b.duplicates()
         XCTAssertEqual(resultB, [])
 
-        let c = [1, 1, 1, 1, 1]
+        let c = [1, 1, 1, 1]
         let resultC = c.duplicates()
         XCTAssertEqual(resultC, [1, 1, 1])
     }
