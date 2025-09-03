@@ -349,7 +349,13 @@ class TabManagerImplementation: NSObject,
         }
 
         guard !tabsToRemove.isEmpty else { return }
-        removeTabs(tabsToRemove)
+
+        Task { @MainActor in
+            for tab in tabsToRemove {
+                await self.removeTab(tab.tabUUID)
+            }
+            commitChanges()
+        }
     }
 
     // MARK: - Add Tab
