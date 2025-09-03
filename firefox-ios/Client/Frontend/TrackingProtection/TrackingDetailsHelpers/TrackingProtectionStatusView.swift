@@ -41,11 +41,7 @@ class TrackingProtectionStatusView: UIView {
 
     // MARK: View Setup
     private func setupView() {
-        if #available(iOS 26.0, *) {
-            layer.cornerRadius = TPMenuUX.UX.newStyleCornerRadius
-        } else {
-            layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-        }
+        layer.cornerRadius = TPMenuUX.UX.newStyleCornerRadius
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         layer.masksToBounds = true
 

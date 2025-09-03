@@ -22,7 +22,11 @@ struct TPMenuUX {
         static let clearDataButtonBorderWidth: CGFloat = 0
         static let settingsLinkButtonBottomSpacing: CGFloat = 16
         static let modalMenuCornerRadius: CGFloat = 12
-        static let newStyleCornerRadius: CGFloat = 24
+        static let newStyleCornerRadius: CGFloat = if #available(iOS 26.0, *) {
+            24
+        } else {
+            viewCornerRadius
+        }
         static let backgroundAlpha: CGFloat = 0.80
         struct Line {
             static let height: CGFloat = 0.5
