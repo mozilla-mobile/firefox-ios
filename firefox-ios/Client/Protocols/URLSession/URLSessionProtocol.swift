@@ -21,6 +21,12 @@ protocol URLSessionProtocol: Sendable {
         request: URLRequest,
         completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void
     ) -> URLSessionDataTaskProtocol
+
+    func uploadTask(
+        with request: URLRequest,
+        from bodyData: Data?,
+        completionHandler: @escaping (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionUploadTask
 }
 
 /// Default implementation for bytes(for:) (for backward compatibility)
