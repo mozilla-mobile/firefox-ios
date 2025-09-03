@@ -5,7 +5,6 @@
 import Common
 import Glean
 import MozillaAppServices
-import Shared
 
 protocol ASOhttpManager {
     func data(for request: URLRequest) async throws -> (Data, HTTPURLResponse)
@@ -35,10 +34,10 @@ enum OhttpEnvironment {
     }
 }
 
-struct GleanOhttpUploader {
-    private let connectionTimeout = TimeInterval(10)
+struct GleanOhttpUploader: PingUploaderProtocol {
+    let connectionTimeout = TimeInterval(10)
+    let logger: Logger
     private let manager: ASOhttpManager
-    private let logger: Logger
 
     init(manager: ASOhttpManager,
          logger: Logger = DefaultLogger.shared) {
@@ -58,27 +57,23 @@ struct GleanOhttpUploader {
         var body = Data(capacity: request.data.count)
         body.append(contentsOf: request.data)
 
-        var oHttpRequest = URLRequest(url: url,
-                                      cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
-        for (field, value) in request.headers {
-            oHttpRequest.addValue(value, forHTTPHeaderField: field)
-        }
-        oHttpRequest.timeoutInterval = connectionTimeout
-        oHttpRequest.httpBody = body
-        oHttpRequest.httpMethod = HTTPMethod.post.rawValue
-        oHttpRequest.httpShouldHandleCookies = false
-
-        Task {
-            do {
-                let response = try await manager.data(for: oHttpRequest)
-                let httpResponse = response.1
-                let statusCode = Int32(httpResponse.statusCode)
-                // HTTP status codes are handled on the Rust side
-                callback(.httpStatus(code: statusCode))
-            } catch {
-                // Upload failed on the client-side. We should try again.
-                logger.log("Upload failed on the client-side: \(error)", level: .info, category: .telemetry)
-                callback(.recoverableFailure(unused: 0))
+        if let request = buildRequest(
+            url: request.url,
+            data: body,
+            headers: request.headers
+        ) {
+            Task {
+                do {
+                    let response = try await manager.data(for: request)
+                    let httpResponse = response.1
+                    let statusCode = Int32(httpResponse.statusCode)
+                    // HTTP status codes are handled on the Rust side
+                    callback(.httpStatus(code: statusCode))
+                } catch {
+                    // Upload failed on the client-side. We should try again.
+                    logger.log("Upload failed on the client-side: \(error)", level: .info, category: .telemetry)
+                    callback(.recoverableFailure(unused: 0))
+                }
             }
         }
     }
