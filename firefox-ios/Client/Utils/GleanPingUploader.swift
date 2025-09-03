@@ -33,10 +33,10 @@ struct GleanPingUploader: PingUploader {
 
     func upload(request: CapablePingUploadRequest,
                 callback: @escaping (UploadResult) -> Void) {
-        if let capableRequest = request.capable([PingCapabilities.ohttp.rawValue]) {
-            ohttpUploader.uploadOhttpRequest(request: capableRequest, callback: callback)
-        } else if let capableRequest = request.capable([PingCapabilities.http.rawValue]) {
+        if let capableRequest = request.capable([PingCapabilities.http.rawValue]) {
             httpUploader.uploadHttpRequest(request: capableRequest, callback: callback)
+        } else if let capableRequest = request.capable([PingCapabilities.ohttp.rawValue]) {
+            ohttpUploader.uploadOhttpRequest(request: capableRequest, callback: callback)
         } else {
             logger.log("Rejected ping upload due to unsupported capabilities", level: .info, category: .telemetry)
             callback(.incapable(unused: 0))
