@@ -162,7 +162,10 @@ let package = Package(
         .target(
             name: "MenuKit",
             dependencies: ["Common", "ComponentLibrary"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .testTarget(
             name: "MenuKitTests",
             dependencies: ["MenuKit"]),
