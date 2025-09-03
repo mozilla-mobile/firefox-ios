@@ -39,22 +39,18 @@ struct GleanPingUploader: PingUploader {
     private let ohttpEnvironment: OhttpEnvironment
     private let connectionTimeout = TimeInterval(10)
     private let logger: Logger
-    private let session: URLSession
+    private let session: URLSessionProtocol
 
     enum PingCapability: String {
         case ohttp, http
     }
 
     init(ohttpEnvironment: OhttpEnvironment,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         session: URLSessionProtocol = NetworkUtils.defaultGleanPingURLSession) {
         self.ohttpEnvironment = ohttpEnvironment
         self.logger = logger
-
-        // Build a URLSession with no-caching suitable for uploading pings
-        let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.requestCachePolicy = .reloadIgnoringLocalCacheData
-        sessionConfig.urlCache = nil
-        self.session = URLSession(configuration: sessionConfig)
+        self.session = session
     }
 
     func upload(request: CapablePingUploadRequest,
@@ -70,6 +66,7 @@ struct GleanPingUploader: PingUploader {
         }
     }
 
+    /// Build the request and create upload operation using the `OhttpManager`
     private func uploadOhttpRequest(request: PingUploadRequest,
                                     callback: @escaping (UploadResult) -> Void) {
         guard let config = ohttpEnvironment.config,
@@ -148,7 +145,7 @@ struct GleanPingUploader: PingUploader {
         }
     }
 
-    /// Internal function that builds the request used for uploading the pings.
+    /// Builds the request used for uploading the pings.
     ///
     /// - Parameters:
     ///   - url: The URL, including the path, to use for the destination of the ping
@@ -156,7 +153,7 @@ struct GleanPingUploader: PingUploader {
     ///   - headers: Map of headers from Glean to annotate ping with
     ///
     /// - Returns: Optional `URLRequest` object with the configured headings set.
-    func buildRequest(url: String, data: Data, headers: [String: String]) -> URLRequest? {
+    private func buildRequest(url: String, data: Data, headers: [String: String]) -> URLRequest? {
         guard let url = URL(string: url) else {
             logger.log("HTTP request could not be built", level: .info, category: .telemetry)
             return nil
