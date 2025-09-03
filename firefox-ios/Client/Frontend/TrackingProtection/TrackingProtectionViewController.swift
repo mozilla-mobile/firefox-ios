@@ -19,10 +19,11 @@ struct TPMenuUX {
         static let connectionDetailsHeaderMargins: CGFloat = 8
         static let faviconCornerRadius: CGFloat = 16
         static let clearDataButtonTopDistance: CGFloat = 32
-        static let clearDataButtonCornerRadius: CGFloat = 12
         static let clearDataButtonBorderWidth: CGFloat = 0
         static let settingsLinkButtonBottomSpacing: CGFloat = 16
         static let modalMenuCornerRadius: CGFloat = 12
+        static let newStyleCornerRadius: CGFloat = 24
+        static let backgroundAlpha: CGFloat = 0.80
         struct Line {
             static let height: CGFloat = 0.5
         }
@@ -88,7 +89,6 @@ class TrackingProtectionViewController: UIViewController,
     private lazy var clearCookiesButton: TrackingProtectionButton = .build { button in
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.numberOfLines = 0
-        button.layer.cornerRadius = TPMenuUX.UX.clearDataButtonCornerRadius
         button.layer.borderWidth = TPMenuUX.UX.clearDataButtonBorderWidth
         button.addTarget(self, action: #selector(self.didTapClearCookiesAndSiteData), for: .touchUpInside)
     }
@@ -330,6 +330,9 @@ class TrackingProtectionViewController: UIViewController,
                 equalTo: baseView.topAnchor,
                 constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
         ]
+        if #available(iOS 26.0, *) {
+            connectionDetailsHeaderView.layer.cornerRadius = TPMenuUX.UX.newStyleCornerRadius
+        }
         constraints.append(contentsOf: connectionHeaderConstraints)
     }
 
@@ -391,6 +394,9 @@ class TrackingProtectionViewController: UIViewController,
             // site is safelisted if site ETP is disabled
             self?.model.toggleSiteSafelistStatus()
             self?.updateProtectionViewStatus()
+        }
+        if #available(iOS 26.0, *) {
+            toggleView.layer.cornerRadius = TPMenuUX.UX.newStyleCornerRadius
         }
     }
 
@@ -683,7 +689,7 @@ extension TrackingProtectionViewController {
     func applyTheme() {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
-        view.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.colors.layer3.withAlphaComponent(TPMenuUX.UX.backgroundAlpha)
         headerContainer.applyTheme(theme: theme)
         connectionDetailsHeaderView.applyTheme(theme: theme)
         trackersView.applyTheme(theme: theme)
