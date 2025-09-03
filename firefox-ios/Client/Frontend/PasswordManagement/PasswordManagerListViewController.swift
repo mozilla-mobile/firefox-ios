@@ -73,13 +73,11 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = .Settings.Passwords.Title
-        let rightInset: CGFloat = {
-            if #available(iOS 26.0, *) {
-                UX.separatorInset / 1.5
-            } else {
-                0
-            }
-        }()
+        let rightInset: CGFloat = if #available(iOS 26.0, *) {
+            UX.separatorInset / 1.5
+        } else {
+            0
+        }
         tableView.separatorInset = UIEdgeInsets(top: 0, left: UX.separatorInset, bottom: 0, right: rightInset)
         tableView.register(cellType: PasswordManagerSettingsTableViewCell.self)
         tableView.register(cellType: PasswordManagerTableViewCell.self)

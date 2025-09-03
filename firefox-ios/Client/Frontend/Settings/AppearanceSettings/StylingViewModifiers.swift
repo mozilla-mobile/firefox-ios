@@ -81,7 +81,7 @@ struct PaddingWithColorStyle: ViewModifier {
     }
 }
 
-struct ExtraPaddingTopAndBottom: ViewModifier {
+struct NewStyleExtraPaddingTopAndBottom: ViewModifier {
     let paddingSize: CGFloat
 
     func body(content: Content) -> some View {
@@ -95,7 +95,7 @@ struct ExtraPaddingTopAndBottom: ViewModifier {
     }
 }
 
-struct ExtraPadding: ViewModifier {
+struct NewStyleExtraPadding: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
             content
@@ -106,7 +106,7 @@ struct ExtraPadding: ViewModifier {
     }
 }
 
-struct RoundedCorners: ViewModifier {
+struct NewStyleRoundedCorners: ViewModifier {
     let topLeadingCorner: CGFloat?
     let topTrailingCorner: CGFloat?
     let bottomLeadingCorner: CGFloat?
