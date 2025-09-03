@@ -151,11 +151,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // Initialize Glean telemetry
         let gleanConfig: Configuration
         if featureFlags.isFeatureEnabled(.ohttpManagerGleanUploader, checking: .buildOnly) {
-            let environment = OhttpEnvironment.getEnvironment()
+            let ohttpEnvironment = OhttpEnvironment.getEnvironment()
             gleanConfig = Configuration(
                 channel: AppConstants.buildChannel.rawValue,
                 logLevel: .off,
-                httpClient: OhttpGleanUploader(environment: environment)
+                httpClient: GleanPingUploader(ohttpEnvironment: ohttpEnvironment)
             )
         } else {
             gleanConfig = Configuration(
@@ -1852,7 +1852,7 @@ extension TelemetryWrapper {
     ) {
         DefaultLogger.shared.log("Uninstrumented metric recorded",
                                  level: .info,
-                                 category: .lifecycle,
+                                 category: .telemetry,
                                  description: "\(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))")
     }
 }
