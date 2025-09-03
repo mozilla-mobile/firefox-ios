@@ -102,7 +102,9 @@ struct CustomUserAgentConstant {
     private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
     static let customMobileUAForDomain = [
+        // TODO: FXIOS-13391 [webcompat] "connection error" only on FxiOS/* UA (bug 1983983)
         "tver.jp": safariMobileUA,
+        // TODO: FXIOS-13096 [webcompat] UA version parsed as "Safari 0" (webcompat #170304)
         "epic.com": safariMobileUA,
         "athenahealth.com": safariMobileUA,
         "ehealthontario.ca": safariMobileUA
