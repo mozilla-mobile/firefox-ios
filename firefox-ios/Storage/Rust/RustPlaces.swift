@@ -728,13 +728,11 @@ extension RustPlaces {
                 if let actualTitle = info.title, !actualTitle.isEmpty {
                     title = actualTitle
                 } else {
-                    // In case there is no title, we use the url
-                    // as the title
+                    // In case there is no title, we use the url as the title
                     title = info.url
                 }
-                // Note: FXIOS-10740 Necessary to have unique Site ID iOS 18 HistoryPanel crash with diffable data sources
-                let hashValue = "\(info.url)_\(info.timestamp)".hashValue
-                var site = Site.createBasicSite(id: hashValue, url: info.url, title: title)
+
+                var site = Site.createBasicSite(url: info.url, title: title)
                 site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
             }
