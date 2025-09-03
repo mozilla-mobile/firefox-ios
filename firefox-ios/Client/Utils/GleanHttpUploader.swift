@@ -29,7 +29,7 @@ struct GleanHttpUploader {
             headers: request.headers
         ) {
             // Create an URLSessionUploadTask to upload our ping and handle the server responses.
-            let uploadTask = session.uploadTask(with: request, from: body) { _, response, error in
+            var uploadTask = session.uploadTaskWith(with: request, from: body) { _, response, error in
                 if let error {
                     // Upload failed on the client-side. We should try again.
                     logger.log("Upload failed on the client-side: \(error)", level: .info, category: .telemetry)
