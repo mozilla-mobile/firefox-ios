@@ -20,6 +20,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
         static let savedCardsTitleLabelLeading: CGFloat = 16
         static let savedCardsTitleLabelHeight: CGFloat = 13
         static let tableViewTopAnchor: CGFloat = 8
+        static let estimatedRowHeight: CGFloat = 86
     }
 
     var viewModel: CreditCardTableViewModel
@@ -34,7 +35,11 @@ class CreditCardTableViewController: UIViewController, Themeable {
     // MARK: View
 
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        let tableView: UITableView = if #available(iOS 26.0, *) {
+            UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            UITableView(frame: .zero, style: .grouped)
+        }
         tableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                            forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
         tableView.register(HostingTableViewCell<CreditCardAutofillToggle>.self,
@@ -48,7 +53,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
             origin: .zero,
             size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 86
+        tableView.estimatedRowHeight = UX.estimatedRowHeight
         tableView.separatorStyle = .none
         tableView.separatorColor = .clear
         tableView.dataSource = self
