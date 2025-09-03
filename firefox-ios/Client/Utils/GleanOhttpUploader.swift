@@ -49,8 +49,7 @@ struct GleanOhttpUploader {
     /// Build the request and create upload operation using the `OhttpManager`
     func uploadOhttpRequest(request: GleanPingUploadRequest,
                             callback: @escaping (UploadResult) -> Void) {
-        guard let url = URL(string: request.url)
-        else {
+        guard let url = URL(string: request.url) else {
             logger.log("Rejected ohttp ping upload due environment variables", level: .info, category: .telemetry)
             callback(.unrecoverableFailure(unused: 0))
             return

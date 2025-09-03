@@ -959,7 +959,8 @@
 		8A48807E2E68923200AD43D5 /* GleanHttpUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48807D2E68923200AD43D5 /* GleanHttpUploader.swift */; };
 		8A4880802E68AF8400AD43D5 /* GleanHttpUploaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48807F2E68AF8100AD43D5 /* GleanHttpUploaderTests.swift */; };
 		8A4880822E68AF8E00AD43D5 /* GleanOhttpUploaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4880812E68AF8700AD43D5 /* GleanOhttpUploaderTests.swift */; };
-		8A4880852E68CCF000AD43D5 /* MockGleanPingUploadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4880842E68CCF000AD43D5 /* MockGleanPingUploadRequest.swift */; };
+		8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4880872E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift */; };
+		8A48808A2E68DC4300AD43D5 /* MockASOHttpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4880892E68DC4300AD43D5 /* MockASOHttpManager.swift */; };
 		8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */; };
 		8A4AC0EC28C929D700439F83 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0EA28C929D700439F83 /* URLSessionProtocol.swift */; };
 		8A4B14852CF8D67800FCE2D0 /* UnifiedTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B14842CF8D67300FCE2D0 /* UnifiedTile.swift */; };
@@ -8646,7 +8647,8 @@
 		8A48807D2E68923200AD43D5 /* GleanHttpUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanHttpUploader.swift; sourceTree = "<group>"; };
 		8A48807F2E68AF8100AD43D5 /* GleanHttpUploaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanHttpUploaderTests.swift; sourceTree = "<group>"; };
 		8A4880812E68AF8700AD43D5 /* GleanOhttpUploaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanOhttpUploaderTests.swift; sourceTree = "<group>"; };
-		8A4880842E68CCF000AD43D5 /* MockGleanPingUploadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGleanPingUploadRequest.swift; sourceTree = "<group>"; };
+		8A4880872E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGleanPingUploadRequest.swift; sourceTree = "<group>"; };
+		8A4880892E68DC4300AD43D5 /* MockASOHttpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockASOHttpManager.swift; sourceTree = "<group>"; };
 		8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProtocol.swift; sourceTree = "<group>"; };
 		8A4AC0EA28C929D700439F83 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
 		8A4B14842CF8D67300FCE2D0 /* UnifiedTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedTile.swift; sourceTree = "<group>"; };
@@ -12749,6 +12751,7 @@
 		8A1E3BE028CBAC1F003388C4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8A4880862E68D41A00AD43D5 /* Mocks */,
 				8A48807F2E68AF8100AD43D5 /* GleanHttpUploaderTests.swift */,
 				8A4880812E68AF8700AD43D5 /* GleanOhttpUploaderTests.swift */,
 				8A13FA8E2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift */,
@@ -12945,10 +12948,11 @@
 			path = RemoteSettings;
 			sourceTree = "<group>";
 		};
-		8A4880832E68CCE900AD43D5 /* Mocks */ = {
+		8A4880862E68D41A00AD43D5 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				8A4880842E68CCF000AD43D5 /* MockGleanPingUploadRequest.swift */,
+				8A4880892E68DC4300AD43D5 /* MockASOHttpManager.swift */,
+				8A4880872E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -15436,7 +15440,6 @@
 		E65075551E37F714006961AC /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				8A4880832E68CCE900AD43D5 /* Mocks */,
 				8A13FA8C2AD834FA007527AB /* BackgroundTabLoader.swift */,
 				0EBD66912DBFE40100A78532 /* ConcurrencyThrottler.swift */,
 				ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */,
@@ -18564,7 +18567,6 @@
 				C8124BB129D6F55400540B79 /* Route.swift in Sources */,
 				8A4EA0DB2C0117CD00E4E4F1 /* MobileMessageSurfaceProtocol.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
-				8A4880852E68CCF000AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
 				21996BAB2AE95AFC00E0D55F /* TabTrayPanelType.swift in Sources */,
 				8A0DF2C22D6D1C670066EC00 /* AutoplaySettingTelemetry.swift in Sources */,
 				8A7A26EA29D4C3C800EA76F1 /* LaunchType.swift in Sources */,
@@ -19133,6 +19135,7 @@
 				8A5189C92C1B614E00CDB668 /* SearchViewModelTests.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				8CA6FA0E2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift in Sources */,
+				8A48808A2E68DC4300AD43D5 /* MockASOHttpManager.swift in Sources */,
 				439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */,
 				8A7653C528A2E69100924ABF /* MockMerinoAPI.swift in Sources */,
 				8A83B74A2A265044002FF9AC /* SettingsCoordinatorTests.swift in Sources */,
@@ -19317,6 +19320,7 @@
 				8AEF41622D15EDBC0013925D /* TopSitesMiddlewareTests.swift in Sources */,
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
+				8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
 				21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */,
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
