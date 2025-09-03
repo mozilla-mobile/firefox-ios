@@ -77,13 +77,22 @@ let package = Package(
             exact: "0.11.0"),
     ],
     targets: [
-        .target(name: "Shared",
-                dependencies: ["Common"],
-                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .target(
+            name: "Shared",
+            dependencies: ["Common"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]),
         .testTarget(
             name: "ComponentLibraryTests",
             dependencies: ["ComponentLibrary"]),
@@ -92,8 +101,11 @@ let package = Package(
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
             exclude: ["README.md"],
             resources: [.process("BundledTopSitesFavicons.xcassets")],
-            swiftSettings: [.unsafeFlags(["-enable-testing"]),
-                            .enableExperimentalFeature("StrictConcurrency")]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]),
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
@@ -110,7 +122,8 @@ let package = Package(
                            .product(name: "Sentry-Dynamic", package: "sentry-cocoa")],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency")
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
             ]
         ),
         .testTarget(

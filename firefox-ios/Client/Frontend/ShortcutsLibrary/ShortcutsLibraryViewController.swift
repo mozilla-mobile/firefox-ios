@@ -15,8 +15,10 @@ class ShortcutsLibraryViewController: UIViewController,
         static let shortcutsSectionTopInset: CGFloat = 24
     }
 
-    // Used to only record closed telemetry on back button press and swipe gestures
+    // Used to only record "closed" telemetry on back button press and swipe gestures
     var recordTelemetryOnDisappear = true
+    // Used to only record "viewed" telemetry once per initialization
+    var viewedTelemetryRecorded = false
 
     // MARK: - Private variables
     private var collectionView: UICollectionView?
@@ -94,11 +96,14 @@ class ShortcutsLibraryViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatch(
-            ShortcutsLibraryAction(
-                windowUUID: windowUUID,
-                actionType: ShortcutsLibraryActionType.viewDidAppear)
-        )
+        if !viewedTelemetryRecorded {
+            viewedTelemetryRecorded = true
+            store.dispatch(
+                ShortcutsLibraryAction(
+                    windowUUID: windowUUID,
+                    actionType: ShortcutsLibraryActionType.viewDidAppear)
+            )
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {

@@ -92,9 +92,6 @@ final class NimbusFeatureFlagLayer {
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
 
-        case .ratingPromptFeature:
-            return checkRatingPromptFeature(from: nimbus)
-
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
@@ -368,10 +365,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.pdfRefactorFeature.value().enabled
-    }
-
-    private func checkRatingPromptFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.ratingPromptFeature.value().enabled
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
