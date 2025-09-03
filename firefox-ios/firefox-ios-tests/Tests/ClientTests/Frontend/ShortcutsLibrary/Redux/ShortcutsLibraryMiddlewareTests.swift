@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-final class ShortcutsLibraryMiddlewareTests: XCTestCase {
+final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockGleanWrapper: MockGleanWrapper!
     var mockStore: MockStoreForMiddleware<AppState>!
 
@@ -25,8 +25,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase {
     }
 
     func test_viewDidAppearAction_sendsTelemetryData_whenShouldRecordImpressionTelemetry_isTrue() throws {
-        mockStore = MockStoreForMiddleware(state: setupShortcutsLibraryShouldRecordImpressionTelemetryAppState())
-        StoreTestUtilityHelper.setupStore(with: mockStore)
+        let initialState = setupShortcutsLibraryStateForTelemetry()
 
         let subject = createSubject()
         let action = ShortcutsLibraryAction(
@@ -34,7 +33,7 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase {
             actionType: ShortcutsLibraryActionType.viewDidAppear
         )
 
-        subject.shortcutsLibraryProvider(mockStore.state, action)
+        subject.shortcutsLibraryProvider(initialState, action)
 
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>)
         let expectedMetricType = type(of: GleanMetrics.HomepageShortcutsLibrary.viewed)
@@ -122,6 +121,12 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase {
                 ]
             )
         )
+    }
+
+    private func setupShortcutsLibraryStateForTelemetry() -> AppState {
+        mockStore = MockStoreForMiddleware(state: setupShortcutsLibraryShouldRecordImpressionTelemetryAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+        return mockStore.state
     }
 
     // MARK: StoreTestUtility

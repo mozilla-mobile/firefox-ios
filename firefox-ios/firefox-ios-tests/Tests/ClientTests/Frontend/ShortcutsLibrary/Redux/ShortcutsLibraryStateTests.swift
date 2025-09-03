@@ -24,7 +24,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.shortcuts, [])
-        XCTAssertEqual(initialState.shouldRecordImpressionTelemetry, false)
+        XCTAssertFalse(initialState.shouldRecordImpressionTelemetry)
     }
 
     func test_initializeAction_returnsExpectedState() throws {

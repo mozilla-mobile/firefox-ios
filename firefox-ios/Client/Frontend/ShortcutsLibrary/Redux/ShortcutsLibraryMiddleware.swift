@@ -23,7 +23,7 @@ final class ShortcutsLibraryMiddleware {
             self.logger.log(
                 "Shortcuts Library Middleware is not being called from the main thread!",
                 level: .fatal,
-                category: .tabs
+                category: .shortcutsLibrary
             )
             return
         }

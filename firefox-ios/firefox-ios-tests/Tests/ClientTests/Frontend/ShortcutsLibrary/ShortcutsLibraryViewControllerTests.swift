@@ -6,7 +6,7 @@ import XCTest
 
 @testable import Client
 
-final class ShortcutsLibraryViewControllerTests: XCTestCase {
+final class ShortcutsLibraryViewControllerTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() {
