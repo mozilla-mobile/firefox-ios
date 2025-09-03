@@ -7,6 +7,7 @@ import UIKit
 
 /// `LocationViewDelegate` protocol defines the delegate methods that respond
 /// to user interactions with a location view.
+@MainActor
 protocol LocationViewDelegate: AnyObject {
     /// Called when the user enters text into the location view.
     ///
