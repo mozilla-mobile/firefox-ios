@@ -150,7 +150,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         // Initialize Glean telemetry
         let gleanConfig: Configuration
-        if featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.ohttpManagerGleanUploader, checking: .buildOnly) {
             let environment = OhttpEnvironment.getEnvironment()
             gleanConfig = Configuration(
                 channel: AppConstants.buildChannel.rawValue,
