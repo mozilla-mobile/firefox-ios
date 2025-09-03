@@ -179,8 +179,15 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotViewModel.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotViewModel.tabSnapshotA11yLabel
-        summaryView.configureCloseButton(model: viewModel.closeButtonModel) { [weak self] in
-            self?.triggerDismissingAnimation()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "xmark"),
+            style: .plain,
+            target: nil,
+            action: nil
+        )
+        summaryView.onShouldShowCompactTitle = { [self] shouldShow in
+            title = shouldShow ? webView.title : nil
         }
     }
 
@@ -530,5 +537,19 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
         errorView.applyTheme(theme: theme)
+    }
+}
+
+#Preview {
+    if #available(iOS 16.0, *) {
+        NavigationStack {
+            List(0..<50) { i in
+                Text("Row \(i)")
+            }
+            .navigationTitle("Large Title")
+            .navigationBarTitleDisplayMode(.large) // 👈 needed
+        }
+    } else {
+        // Fallback on earlier versions
     }
 }
