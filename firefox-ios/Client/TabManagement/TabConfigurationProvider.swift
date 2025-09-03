@@ -13,6 +13,7 @@ class TabConfigurationProvider {
         configuration(from: prefs, isPrivate: false)
     }
 
+    // A WKWebViewConfiguration used for private mode tabs
     var privateConfiguration: WKEngineConfiguration {
         configuration(from: prefs, isPrivate: true)
     }
