@@ -111,13 +111,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .loginsVerificationEnabled,
-                titleText: format(string: "Logins Verification"),
-                statusText: format(string: "Toggle to enable logins verification")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .menuRefactor,
                 titleText: format(string: "Menu Refactor"),
                 statusText: format(string: "Toggle to use the menu redesign")

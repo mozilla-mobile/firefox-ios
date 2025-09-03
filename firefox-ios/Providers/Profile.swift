@@ -230,7 +230,6 @@ open class BrowserProfile: Profile,
             fatalError("Could not create directory at root path: \(error)")
         }
     }()
-    private var loginsVerificationEnabled = false
     fileprivate let name: String
     fileprivate let keychain: KeychainProtocol
     var isShutdown = false
@@ -257,7 +256,6 @@ open class BrowserProfile: Profile,
      */
     init(localName: String,
          fxaCommandsDelegate: FxACommandsDelegate? = nil,
-         loginsVerificationEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
         logger.log("Initing profile \(localName) on thread \(Thread.current).",
@@ -265,7 +263,6 @@ open class BrowserProfile: Profile,
                    category: .setup)
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
-        self.loginsVerificationEnabled = loginsVerificationEnabled
         self.keychain = KeychainManager.shared
         self.logger = logger
         self.fxaCommandsDelegate = fxaCommandsDelegate
@@ -312,8 +309,7 @@ open class BrowserProfile: Profile,
 
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
-        self.syncManager = RustSyncManager(profile: self,
-                                           loginsVerificationEnabled: loginsVerificationEnabled)
+        self.syncManager = RustSyncManager(profile: self)
 
         let notificationCenter = NotificationCenter.default
 
