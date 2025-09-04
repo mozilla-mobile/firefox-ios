@@ -21,12 +21,19 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     }
 
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
+        // Only allow movement in the direction of `towards`
+        let clampProgress = (state == .collapsed) ? max(0, progress) : min(0, progress)
+
         if !isBottomSearchBar {
-            let topOffset = clamp(offset: -progress, min: headerOffset, max: 0)
+            let originTop: CGFloat = (state == .expanded) ? 0 : headerOffset
+            let topOffset = clamp(offset: originTop + progress, min: headerOffset, max: 0)
             headerTopConstraint?.update(offset: topOffset)
             header.superview?.setNeedsLayout()
         }
-        let bottomOffset = clamp(offset: progress, min: 0, max: getBottomContainerSize().height)
+
+        let bottomContainerHeight = getBottomContainerSize().height
+        let originBottom: CGFloat = (state == .expanded) ? bottomContainerHeight : 0
+        let bottomOffset = clamp(offset: originBottom + progress, min: 0, max: bottomContainerHeight)
         bottomContainerConstraint?.update(offset: bottomOffset)
         bottomContainer.superview?.setNeedsLayout()
     }

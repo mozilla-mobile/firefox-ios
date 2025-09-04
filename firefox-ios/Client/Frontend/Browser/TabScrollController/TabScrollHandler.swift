@@ -89,6 +89,7 @@ final class TabScrollHandler: NSObject,
     private var scrollDirection: ScrollDirection = .down
     var toolbarDisplayState = ToolbarDisplayState()
     var lastValidState: ToolbarDisplayState = .expanded
+    private var isStatusBarScrollToTop = false
 
     private weak var delegate: TabScrollHandler.Delegate?
     private let windowUUID: WindowUUID
@@ -172,6 +173,7 @@ final class TabScrollHandler: NSObject,
         // Ignore user scroll if the tab is loading or if the conditions to update view are not meet
         // voice over and webview's scroll content size is not enough to scroll
         guard !tabIsLoading(),
+              !isStatusBarScrollToTop,
               shouldUpdateUIWhenScrolling else { return }
 
         let delta = -translation.y
@@ -192,6 +194,7 @@ final class TabScrollHandler: NSObject,
         // Ignore user scroll if the tab is loading or if the conditions to update view are not meet
         // voice over and webview's scroll content size is not enough to scroll
         guard !tabIsLoading(),
+              !isStatusBarScrollToTop,
               shouldUpdateUIWhenScrolling else { return }
 
         let delta = lastPanTranslation - translation.y
@@ -275,8 +278,13 @@ final class TabScrollHandler: NSObject,
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        isStatusBarScrollToTop = true
         if toolbarDisplayState.isCollapsed { showToolbars(animated: true) }
         return true
+    }
+
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        isStatusBarScrollToTop = false
     }
 
     // MARK: - Private
