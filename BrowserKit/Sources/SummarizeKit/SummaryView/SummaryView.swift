@@ -22,12 +22,9 @@ struct SummaryViewModel {
 
 final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
     private struct UX {
-        static let closeButtonEdgePadding: CGFloat = 16.0
-        static let closeButtonBottomPadding: CGFloat = 20.0
         static let tableViewHorizontalPadding: CGFloat = 16.0
-        static let compactTitleAnimationOffset: CGFloat = 30.0
-        static let compactTitleAnimationDuration: CGFloat = 0.3
-        static let compactTitlePadding: CGFloat = 16.0
+        static let titleVisbilityThreshold: CGFloat = 30.0
+        static let titleVisibilityAnimationDuration: CGFloat = 0.1
     }
     private enum Section: Int, CaseIterable {
         case title, brand, summary
@@ -41,6 +38,9 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
     }
     private var theme: Theme?
     private var model: SummaryViewModel?
+    /// A closure that is called in response to the tableView scroll and provide a Bool to indicate wether the title cell was hided or shown.
+    /// The paramater is true when the title cell is showed
+    var onDidChangeTitleCellVisibility: ((Bool) -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -121,8 +121,6 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         tableView.alpha = 1.0
     }
 
-    var onShouldShowCompactTitle: ((Bool) -> Void)?
-
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let titleCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) else { return }
@@ -132,12 +130,13 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         // at 0 but instead reflects these insets.
         let topInset = abs(tableView.contentInset.top) + abs(tableView.safeAreaInsets.top)
         let offset = scrollView.contentOffset.y + topInset - titleCell.frame.height
-        let percentage = abs(offset / (titleCell.frame.height))
-        print("FF all values: \(scrollView.contentOffset.y), \(topInset), \(titleCell.frame.height), \(offset), \(percentage)")
-        let shouldHideTitleCell = offset >= -UX.compactTitleAnimationOffset
-        UIView.animate(withDuration: 0.1) {
-            titleCell.alpha = percentage
-            self.onShouldShowCompactTitle?(shouldHideTitleCell)
+        // hide or show the title cell gradually as the table view scrolls.
+        let titleCellAlpha = abs(offset / (titleCell.frame.height))
+        
+        let isShowingTitleCell = offset < -UX.titleVisbilityThreshold
+        UIView.animate(withDuration: UX.titleVisibilityAnimationDuration) {
+            titleCell.alpha = titleCellAlpha
+            self.onDidChangeTitleCellVisibility?(isShowingTitleCell)
         }
     }
 

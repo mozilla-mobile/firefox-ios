@@ -96,7 +96,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
     private lazy var closeButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
-            image: UIImage(systemName: "xmark"),
+            image: UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
             primaryAction: UIAction(handler: { [weak self] _ in
                 self?.triggerDismissingAnimation()
             })
@@ -198,9 +198,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         navigationItem.rightBarButtonItem = closeButton
         navigationItem.titleView = titleLabel
 
-        summaryView.onShouldShowCompactTitle = { [weak self] shouldShowCompactTitle in
-            self?.titleLabel.alpha = shouldShowCompactTitle ? 1 : 0
-            self?.titleLabel.text = shouldShowCompactTitle ? self?.webView.title : nil
+        summaryView.onDidChangeTitleCellVisibility = { [weak self] isShowingTitleCell in
+            self?.titleLabel.alpha = isShowingTitleCell ? 0.0 : 1.0
+            self?.titleLabel.text = isShowingTitleCell ? nil : self?.webView.title
         }
     }
 
