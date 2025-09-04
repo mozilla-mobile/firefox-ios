@@ -477,7 +477,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let isLastActiveTab = isPrivate
                             ? tabManager.privateTabs.count == 1
                             : (tabManager.normalActiveTabs.count <= 1 || tabManager.normalTabs.count == 1)
-       tabManager.removeTab(tabUUID)
+        tabManager.removeTab(tabUUID)
         return isLastActiveTab
     }
 
