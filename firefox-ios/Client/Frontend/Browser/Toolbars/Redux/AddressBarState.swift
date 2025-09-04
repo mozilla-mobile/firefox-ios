@@ -776,7 +776,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     private static func handleDidSetSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,

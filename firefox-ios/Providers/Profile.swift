@@ -443,8 +443,6 @@ open class BrowserProfile: Profile,
                   return RustPlaces(databasePath: self.placesDbPath)
         }
     }
-    
-    
 
     public func migrateHistoryToPlaces(
         callback: @escaping (HistoryMigrationResult) -> Void,
