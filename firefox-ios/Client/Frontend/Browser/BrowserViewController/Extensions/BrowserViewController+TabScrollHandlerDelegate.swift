@@ -26,14 +26,14 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
         if !isBottomSearchBar {
             let originTop: CGFloat = (state == .expanded) ? 0 : headerOffset
-            let topOffset = clamp(offset: originTop + progress, min: headerOffset, max: 0)
+            let topOffset = clamp(offset: originTop - clampProgress, min: headerOffset, max: 0)
             headerTopConstraint?.update(offset: topOffset)
             header.superview?.setNeedsLayout()
         }
 
         let bottomContainerHeight = getBottomContainerSize().height
         let originBottom: CGFloat = (state == .expanded) ? bottomContainerHeight : 0
-        let bottomOffset = clamp(offset: originBottom + progress, min: 0, max: bottomContainerHeight)
+        let bottomOffset = clamp(offset: originBottom + clampProgress, min: 0, max: bottomContainerHeight)
         bottomContainerConstraint?.update(offset: bottomOffset)
         bottomContainer.superview?.setNeedsLayout()
     }
@@ -82,7 +82,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     }
 
     private func animateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) { [weak self] in
+        let animator = UIViewPropertyAnimator(duration: UX.topToolbarDuration, curve: .easeOut) { [weak self] in
             guard let self else { return }
 
             headerTopConstraint?.update(offset: topOffset)
@@ -129,21 +129,18 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                 )
             )
         }
-        view.layoutIfNeeded()
     }
 
     private func animateBottomToolbar(bottomOffset: CGFloat,
                                       overKeyboardOffset: CGFloat,
                                       alpha: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) { [weak self] in
+        let animator = UIViewPropertyAnimator(duration: UX.bottomToolbarDuration, curve: .easeOut) { [weak self] in
             guard let self else { return }
             bottomContainerConstraint?.update(offset: bottomOffset)
             bottomContainer.superview?.setNeedsLayout()
 
             overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
             overKeyboardContainer.superview?.setNeedsLayout()
-
-            self.view.layoutIfNeeded()
         }
 
         animator.startAnimation()

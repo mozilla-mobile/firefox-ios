@@ -180,12 +180,15 @@ final class TabScrollHandler: NSObject,
         scrollDirection = delta > 0 ? .down : .up
 
         // If the scrolling is in the same direction of the last action ignore the rest of the calls
-        guard !shouldIgnoreScroll() else { return }
+        guard !shouldIgnoreScroll(delta: delta) else { return }
 
         handleToolbarIsTransitioning(scrollDelta: delta)
     }
 
-    func shouldIgnoreScroll() -> Bool {
+    func shouldIgnoreScroll(delta: CGFloat) -> Bool {
+        // ignore micro-jitter near zero
+        guard abs(delta) > 0.5 else { return true }
+
         return scrollDirection == .down && toolbarDisplayState.isCollapsed
             || scrollDirection == .up && toolbarDisplayState.isExpanded
     }
