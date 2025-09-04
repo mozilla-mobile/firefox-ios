@@ -955,6 +955,13 @@
 		8A46F5AE2C9E4389005B6422 /* RemoteSettingsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A92C9E4389005B6422 /* RemoteSettingsUtils.swift */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
+		8A48807C2E68922400AD43D5 /* GleanOhttpUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48807B2E68922400AD43D5 /* GleanOhttpUploader.swift */; };
+		8A48807E2E68923200AD43D5 /* GleanHttpUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48807D2E68923200AD43D5 /* GleanHttpUploader.swift */; };
+		8A4880802E68AF8400AD43D5 /* GleanHttpUploaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48807F2E68AF8100AD43D5 /* GleanHttpUploaderTests.swift */; };
+		8A4880822E68AF8E00AD43D5 /* GleanOhttpUploaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4880812E68AF8700AD43D5 /* GleanOhttpUploaderTests.swift */; };
+		8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4880872E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift */; };
+		8A48808A2E68DC4300AD43D5 /* MockASOHttpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4880892E68DC4300AD43D5 /* MockASOHttpManager.swift */; };
+		8A48808C2E68DD8100AD43D5 /* PingUploaderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48808B2E68DD8000AD43D5 /* PingUploaderProtocol.swift */; };
 		8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */; };
 		8A4AC0EC28C929D700439F83 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0EA28C929D700439F83 /* URLSessionProtocol.swift */; };
 		8A4B14852CF8D67800FCE2D0 /* UnifiedTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B14842CF8D67300FCE2D0 /* UnifiedTile.swift */; };
@@ -1073,6 +1080,7 @@
 		8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */; };
 		8A8D277D2CC000BE0076AD3A /* NavigationBrowserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
+		8A8F54202E5CB95B00C0207F /* GleanPingUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8F541F2E5CB8AF00C0207F /* GleanPingUploader.swift */; };
 		8A927D4B2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A927D4A2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift */; };
 		8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */; };
 		8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080A27C01AD60052167D /* SingleActionViewModel.swift */; };
@@ -1605,7 +1613,7 @@
 		C869915E28917811007ACC5C /* wallpaperBadLastUpdatedDate.json in Resources */ = {isa = PBXBuildFile; fileRef = C869913A28917770007ACC5C /* wallpaperBadLastUpdatedDate.json */; };
 		C869915F28917811007ACC5C /* wallpaperGoodData.json in Resources */ = {isa = PBXBuildFile; fileRef = C86991392891776F007ACC5C /* wallpaperGoodData.json */; };
 		C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C869916228918C36007ACC5C /* WallpaperNetworkingModuleTests.swift */; };
-		C869916528918C8E007ACC5C /* WallpaperURLSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C869916428918C8E007ACC5C /* WallpaperURLSessionMock.swift */; };
+		C869916528918C8E007ACC5C /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C869916428918C8E007ACC5C /* MockURLSession.swift */; };
 		C874FB3A2660E8B900EBE86E /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */; };
 		C874FC652661367900EBE86E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C874FC642661367900EBE86E /* MainInterface.storyboard */; };
 		C877037A25222F30006E38EB /* Localizations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; };
@@ -8636,6 +8644,13 @@
 		8A46F5A92C9E4389005B6422 /* RemoteSettingsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSettingsUtils.swift; sourceTree = "<group>"; };
 		8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelViewModel.swift; sourceTree = "<group>"; };
 		8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorTableViewCell.swift; sourceTree = "<group>"; };
+		8A48807B2E68922400AD43D5 /* GleanOhttpUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanOhttpUploader.swift; sourceTree = "<group>"; };
+		8A48807D2E68923200AD43D5 /* GleanHttpUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanHttpUploader.swift; sourceTree = "<group>"; };
+		8A48807F2E68AF8100AD43D5 /* GleanHttpUploaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanHttpUploaderTests.swift; sourceTree = "<group>"; };
+		8A4880812E68AF8700AD43D5 /* GleanOhttpUploaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanOhttpUploaderTests.swift; sourceTree = "<group>"; };
+		8A4880872E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGleanPingUploadRequest.swift; sourceTree = "<group>"; };
+		8A4880892E68DC4300AD43D5 /* MockASOHttpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockASOHttpManager.swift; sourceTree = "<group>"; };
+		8A48808B2E68DD8000AD43D5 /* PingUploaderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingUploaderProtocol.swift; sourceTree = "<group>"; };
 		8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProtocol.swift; sourceTree = "<group>"; };
 		8A4AC0EA28C929D700439F83 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
 		8A4B14842CF8D67300FCE2D0 /* UnifiedTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedTile.swift; sourceTree = "<group>"; };
@@ -8763,6 +8778,7 @@
 		8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationType.swift; sourceTree = "<group>"; };
 		8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBrowserAction.swift; sourceTree = "<group>"; };
 		8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManager.swift; sourceTree = "<group>"; };
+		8A8F541F2E5CB8AF00C0207F /* GleanPingUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPingUploader.swift; sourceTree = "<group>"; };
 		8A927D4A2E2ED5D600E676CC /* LegacyClipboardBarDisplayHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyClipboardBarDisplayHandlerDelegate.swift; sourceTree = "<group>"; };
 		8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetContainerCell.swift; sourceTree = "<group>"; };
 		8A93080A27C01AD60052167D /* SingleActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleActionViewModel.swift; sourceTree = "<group>"; };
@@ -9722,7 +9738,7 @@
 		C869914E289177A6007ACC5C /* WallpaperDataServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperDataServiceTests.swift; sourceTree = "<group>"; };
 		C869914F289177A6007ACC5C /* WallpaperNetworkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkingTests.swift; sourceTree = "<group>"; };
 		C869916228918C36007ACC5C /* WallpaperNetworkingModuleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkingModuleTests.swift; sourceTree = "<group>"; };
-		C869916428918C8E007ACC5C /* WallpaperURLSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperURLSessionMock.swift; sourceTree = "<group>"; };
+		C869916428918C8E007ACC5C /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
 		C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenter.swift; sourceTree = "<group>"; };
 		C874FC642661367900EBE86E /* MainInterface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		C87A121928C2451A0097ED51 /* WallpaperMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMigrationUtility.swift; sourceTree = "<group>"; };
@@ -12737,6 +12753,9 @@
 		8A1E3BE028CBAC1F003388C4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8A4880862E68D41A00AD43D5 /* Mocks */,
+				8A48807F2E68AF8100AD43D5 /* GleanHttpUploaderTests.swift */,
+				8A4880812E68AF8700AD43D5 /* GleanOhttpUploaderTests.swift */,
 				8A13FA8E2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift */,
 				961D6B822995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift */,
 				C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */,
@@ -12929,6 +12948,15 @@
 				8A46F5A92C9E4389005B6422 /* RemoteSettingsUtils.swift */,
 			);
 			path = RemoteSettings;
+			sourceTree = "<group>";
+		};
+		8A4880862E68D41A00AD43D5 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				8A4880892E68DC4300AD43D5 /* MockASOHttpManager.swift */,
+				8A4880872E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 		8A4AC0ED28C929DD00439F83 /* URLSession */ = {
@@ -14333,7 +14361,7 @@
 			children = (
 				C869914C28917789007ACC5C /* NetworkingMock.swift */,
 				E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */,
-				C869916428918C8E007ACC5C /* WallpaperURLSessionMock.swift */,
+				C869916428918C8E007ACC5C /* MockURLSession.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -15414,22 +15442,26 @@
 		E65075551E37F714006961AC /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				818BCC732E463BA5008309B1 /* CuratedRecommendationCacheUtility.swift */,
-				1DDDCEB82E048967000D34AE /* PopupThrottler.swift */,
+				8A13FA8C2AD834FA007527AB /* BackgroundTabLoader.swift */,
 				0EBD66912DBFE40100A78532 /* ConcurrencyThrottler.swift */,
 				ED80541A2DAD966B00484080 /* ContinuationsChecker.swift */,
+				818BCC732E463BA5008309B1 /* CuratedRecommendationCacheUtility.swift */,
 				0E4AF8602D763E9D002E4238 /* DownloadLiveActivityUtil.swift */,
-				5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */,
-				5AD3B67B2CF65DE300AFA1FE /* LocaleInterface.swift */,
-				8A13FA8C2AD834FA007527AB /* BackgroundTabLoader.swift */,
+				96D95015270238500079D39D /* GCDThrottler.swift */,
+				8A48807D2E68923200AD43D5 /* GleanHttpUploader.swift */,
+				8A48807B2E68922400AD43D5 /* GleanOhttpUploader.swift */,
+				8A8F541F2E5CB8AF00C0207F /* GleanPingUploader.swift */,
 				C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */,
 				C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */,
 				F85C7F112721048E004BDBA4 /* Layout.swift */,
+				5AD3B67B2CF65DE300AFA1FE /* LocaleInterface.swift */,
 				C8DC90B92A0669540008832B /* MarkupParser */,
+				8A48808B2E68DD8000AD43D5 /* PingUploaderProtocol.swift */,
+				1DDDCEB82E048967000D34AE /* PopupThrottler.swift */,
 				8A1E3BDE28CBA81E003388C4 /* SponsoredContentFilterUtility.swift */,
 				E650755A1E37F747006961AC /* Swizzling.h */,
 				E650755B1E37F747006961AC /* Swizzling.m */,
-				96D95015270238500079D39D /* GCDThrottler.swift */,
+				5AD3B67D2CF665AE00AFA1FE /* UIApplicationInterface.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -18073,6 +18105,7 @@
 				C8610DAA2A0EBF7100B79FF1 /* OnboardingCardDelegate.swift in Sources */,
 				3BB50E111D6274CD004B33DF /* TopSiteItemCell.swift in Sources */,
 				C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */,
+				8A48807E2E68923200AD43D5 /* GleanHttpUploader.swift in Sources */,
 				C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */,
 				0E4AF8652D764046002E4238 /* DownloadProgressManager.swift in Sources */,
 				819656192C80ECFE00E62323 /* MainMenuMiddleware.swift in Sources */,
@@ -18482,6 +18515,7 @@
 				21F422662E315E5C004FF994 /* LegacyTabScrollController.swift in Sources */,
 				E18BAAFD28E4A44500098AE2 /* TopTabFader.swift in Sources */,
 				EDD21F2E2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift in Sources */,
+				8A8F54202E5CB95B00C0207F /* GleanPingUploader.swift in Sources */,
 				C8656D79270F866700E199EA /* CustomizeHomepageSectionCell.swift in Sources */,
 				C84655FB28879FC600861B4A /* WallpaperStorageUtility.swift in Sources */,
 				8A13FA8B2AD82E6D007527AB /* ApplicationStateProvider.swift in Sources */,
@@ -18778,6 +18812,7 @@
 				9636D92E27F9E5D900771F5E /* GleanPlumbMessage.swift in Sources */,
 				8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */,
 				966E4B2629F2D4AC00299B8D /* AccessoryViewProvider.swift in Sources */,
+				8A48808C2E68DD8100AD43D5 /* PingUploaderProtocol.swift in Sources */,
 				ABEF80D52A254185003F52C4 /* CreditCardBottomSheetFooterView.swift in Sources */,
 				C869912E28917688007ACC5C /* WallpaperDataService.swift in Sources */,
 				5A8017E029CE15D90047120D /* TabManagerImplementation.swift in Sources */,
@@ -18870,6 +18905,7 @@
 				59A68D66379CFA85C4EAF00B /* TwoLineImageOverlayCell.swift in Sources */,
 				5A96FB5A2D94357800917B12 /* ScreenshotSetting.swift in Sources */,
 				0A49784A2C53E63200B1E82A /* TrackingProtectionViewController.swift in Sources */,
+				8A48807C2E68922400AD43D5 /* GleanOhttpUploader.swift in Sources */,
 				0AFE9BF12CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift in Sources */,
 				8A9E041B2D4D08350022ED90 /* BookmarkConfiguration.swift in Sources */,
 				8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */,
@@ -18909,7 +18945,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
-				C869916528918C8E007ACC5C /* WallpaperURLSessionMock.swift in Sources */,
+				C869916528918C8E007ACC5C /* MockURLSession.swift in Sources */,
 				961577942A39008100391E8D /* SponsoredTileDataUtilityTests.swift in Sources */,
 				8A093D812A4B58330099ABA5 /* MockSettingsFlowDelegate.swift in Sources */,
 				431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */,
@@ -18934,6 +18970,7 @@
 				21ED80B32AF2E43A0065D4C7 /* TabDisplayDiffableDataSourceTests.swift in Sources */,
 				2165B2C42860CB34004C0786 /* MockAdjustTelemetryData.swift in Sources */,
 				C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */,
+				8A4880802E68AF8400AD43D5 /* GleanHttpUploaderTests.swift in Sources */,
 				8CA4E80F2D22D2C7007207C1 /* GleanUsageReportingLifecycleObserverTest.swift in Sources */,
 				8AE80BAF2891960300BC12EA /* MockTraitCollection.swift in Sources */,
 				8A55E8042BFBA9BE006DBD85 /* MicrosurveyCoordinatorTests.swift in Sources */,
@@ -19102,6 +19139,7 @@
 				8A5189C92C1B614E00CDB668 /* SearchViewModelTests.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				8CA6FA0E2E1D27E10032D57D /* OnboardingKitCardInfoModel.swift in Sources */,
+				8A48808A2E68DC4300AD43D5 /* MockASOHttpManager.swift in Sources */,
 				439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */,
 				8A7653C528A2E69100924ABF /* MockMerinoAPI.swift in Sources */,
 				8A83B74A2A265044002FF9AC /* SettingsCoordinatorTests.swift in Sources */,
@@ -19277,6 +19315,7 @@
 				5A81C5DD2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift in Sources */,
 				C8699153289177FB007ACC5C /* WallpaperDataServiceTests.swift in Sources */,
 				C23889E32A50319A00429673 /* ShareSheetCoordinatorTests.swift in Sources */,
+				8A4880822E68AF8E00AD43D5 /* GleanOhttpUploaderTests.swift in Sources */,
 				E1312FD129D237EE008DDA85 /* NotificationSurfaceManagerTests.swift in Sources */,
 				21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */,
 				61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */,
@@ -19285,6 +19324,7 @@
 				8AEF41622D15EDBC0013925D /* TopSitesMiddlewareTests.swift in Sources */,
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
 				8AABBD052A0041380089941E /* MockCoordinator.swift in Sources */,
+				8A4880882E68D41F00AD43D5 /* MockGleanPingUploadRequest.swift in Sources */,
 				8AABBCFF2A0017960089941E /* MockGleanWrapper.swift in Sources */,
 				21FA8FAE2AE856460013B815 /* TabsCoordinatorTests.swift in Sources */,
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
@@ -29939,7 +29979,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 65.0.2;
+				version = 65.0.3;
 			};
 		};
 		4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */ = {

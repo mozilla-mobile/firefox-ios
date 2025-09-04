@@ -147,6 +147,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .ohttpManagerGleanUploader,
+                titleText: format(string: "Ohttp Glean uploader"),
+                statusText: format(string: "Toggle to enable the Ohttp Glean uploader capability")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .pdfRefactor,
                 titleText: format(string: "PDF Refactor"),
                 statusText: format(string: "Toggle to enable PDF Refactor feature")
