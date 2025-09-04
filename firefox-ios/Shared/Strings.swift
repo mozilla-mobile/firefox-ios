@@ -1044,12 +1044,12 @@ extension String {
                 key: "FirefoxHome.Stories.PopularTodaySectionTitle.v144",
                 tableName: "FirefoxHomepage",
                 value: "Popular today",
-                comment: "This is the title of the Popular Today stories section on Firefox Homepage.")
+                comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
             public static let AllStoriesButtonTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.AllStoriesButtonTitle.v144",
                 tableName: "FirefoxHomepage",
                 value: "All stories",
-                comment: "This is the title for the button next to the Popular Today stories section title on Firefox Homepage that takes you to the Top Stories view.")
+                comment: "This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles.")
             public static let NumberOfMinutes = MZLocalizedString(
                 key: "FirefoxHome.Stories.Minutes.v140",
                 tableName: nil,
@@ -1083,7 +1083,7 @@ extension String {
                     key: "FirefoxHome.Stories.TopStoriesViewTitle.v144",
                     tableName: "FirefoxHomepage",
                     value: "Top stories",
-                    comment: "This is the title that appears in the navigation bar for the Top Stories view.")
+                    comment: "This is the title that appears in the navigation bar for the Top Stories view, a screen that displays a collection of trending news articles")
             }
         }
 
