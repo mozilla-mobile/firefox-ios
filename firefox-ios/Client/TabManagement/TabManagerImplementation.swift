@@ -192,7 +192,7 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Add/Remove Delegate
     func removeDelegate(_ delegate: any TabManagerDelegate, completion: (() -> Void)?) {
-        DispatchQueue.main.async { [unowned self] in
+        ensureMainThread { [unowned self] in
             for index in 0 ..< self.delegates.count {
                 let del = self.delegates[index]
                 if delegate === del.get() || del.get() == nil {
@@ -230,7 +230,7 @@ class TabManagerImplementation: NSObject,
     }
 
     func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
-        DispatchQueue.main.async {
+        ensureMainThread {
             guard let index = self.tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
             let tab = self.tabs[index]
             self.removeTab(tab, flushToDisk: true)
@@ -315,7 +315,7 @@ class TabManagerImplementation: NSObject,
         tab.close()
 
         // Notify of tab removal
-        DispatchQueue.main.async {
+        ensureMainThread { [unowned self] in
             self.delegates.forEach {
                 $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished)
             }
