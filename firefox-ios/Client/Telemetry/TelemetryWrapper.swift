@@ -150,8 +150,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         // Initialize Glean telemetry
         let gleanConfig: Configuration
-        if featureFlags.isFeatureEnabled(.ohttpManagerGleanUploader, checking: .buildOnly),
-            let pingUploader = GleanPingUploader() {
+        if let pingUploader = GleanPingUploader() {
             gleanConfig = Configuration(
                 channel: AppConstants.buildChannel.rawValue,
                 logLevel: .off,
