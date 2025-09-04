@@ -8,6 +8,7 @@ import UIKit
 import ComponentLibrary
 import WebKit
 import Down
+import SwiftUI
 
 class CustomStyler: DownStyler {
     // NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
@@ -93,18 +94,16 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         $0.numberOfLines = 0
         $0.textAlignment = .center
     }
-    private lazy var closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(
+    private lazy var closeButton: UIButton = .build {
+        $0.setImage(
             UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
             for: .normal
         )
-        button.addAction(UIAction(handler: { [weak self] _ in
+        $0.addAction(UIAction(handler: { [weak self] _ in
             self?.triggerDismissingAnimation()
         }), for: .touchUpInside)
-        button.showsLargeContentViewer = true
-        return button
-    }()
+        $0.showsLargeContentViewer = true
+    }
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.body.systemFont()
         $0.showsLargeContentViewer = true
@@ -205,7 +204,11 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
         navigationItem.titleView = titleLabel
-
+        
+        setupTitleAnimation()
+    }
+    
+    private func setupTitleAnimation() {
         summaryView.onDidChangeTitleCellVisibility = { [weak self] isShowingTitleCell in
             self?.titleLabel.alpha = isShowingTitleCell ? 0.0 : 1.0
             self?.titleLabel.text = isShowingTitleCell ? nil : self?.webView.title

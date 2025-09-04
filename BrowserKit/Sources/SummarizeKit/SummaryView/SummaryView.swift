@@ -6,7 +6,6 @@ import Common
 import Foundation
 import UIKit
 import ComponentLibrary
-import SwiftUI
 
 struct SummaryViewModel {
     let title: String?
