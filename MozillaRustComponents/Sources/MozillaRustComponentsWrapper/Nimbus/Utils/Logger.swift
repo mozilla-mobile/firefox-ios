@@ -13,7 +13,7 @@ class Logger {
     /// - parameters:
     ///     * tag: `String` value used to tag log messages
     init(tag: String) {
-        self.log = OSLog(
+        log = OSLog(
             subsystem: Bundle.main.bundleIdentifier!,
             category: tag
         )

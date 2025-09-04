@@ -222,6 +222,18 @@ private extension Nimbus {
  * Methods split out onto a separate internal extension for testing purposes.
  */
 extension Nimbus {
+    func setExperimentParticipationOnThisThread(_ value: Bool) throws {
+        let changes = try nimbusClient.setExperimentParticipation(optIn: value)
+        postEnrollmentCalculation(changes)
+    }
+
+    func setRolloutParticipationOnThisThread(_ value: Bool) throws {
+        let changes = try nimbusClient.setRolloutParticipation(optIn: value)
+        postEnrollmentCalculation(changes)
+    }
+
+    @available(*, deprecated,
+               message: "Use setExperimentParticipationOnThisThread and setRolloutParticipationOnThisThread instead")
     func setGlobalUserParticipationOnThisThread(_ value: Bool) throws {
         let changes = try nimbusClient.setGlobalUserParticipation(optIn: value)
         postEnrollmentCalculation(changes)
@@ -266,9 +278,32 @@ extension Nimbus {
 }
 
 extension Nimbus: NimbusUserConfiguration {
+    public var experimentParticipation: Bool {
+        get {
+            catchAll { try nimbusClient.getExperimentParticipation() } ?? true
+        }
+        set {
+            _ = catchAll(dbQueue) { _ in
+                try self.setExperimentParticipationOnThisThread(newValue)
+            }
+        }
+    }
+
+    public var rolloutParticipation: Bool {
+        get {
+            catchAll { try nimbusClient.getRolloutParticipation() } ?? true
+        }
+        set {
+            _ = catchAll(dbQueue) { _ in
+                try self.setRolloutParticipationOnThisThread(newValue)
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "Use experimentParticipation and rolloutParticipation instead")
     public var globalUserParticipation: Bool {
         get {
-            catchAll { try nimbusClient.getGlobalUserParticipation() } ?? false
+            catchAll { try nimbusClient.getGlobalUserParticipation() } ?? true
         }
         set {
             _ = catchAll(dbQueue) { _ in
@@ -429,7 +464,17 @@ extension Nimbus: NimbusMessagingProtocol {
 public class NimbusDisabled: NimbusApi {
     public static let shared = NimbusDisabled()
 
-    public var globalUserParticipation: Bool = false
+    public var experimentParticipation: Bool = false
+    public var rolloutParticipation: Bool = false
+
+    @available(*, deprecated, message: "Use experimentParticipation and rolloutParticipation instead")
+    public var globalUserParticipation: Bool {
+        get { return experimentParticipation && rolloutParticipation }
+        set {
+            experimentParticipation = newValue
+            rolloutParticipation = newValue
+        }
+    }
 }
 
 public extension NimbusDisabled {
