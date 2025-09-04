@@ -188,7 +188,10 @@ let package = Package(
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .target(
             name: "ContentBlockingGenerator",
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
