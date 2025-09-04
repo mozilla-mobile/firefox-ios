@@ -59,16 +59,20 @@ class SaveLoginAlert: UIView, ThemeApplicable {
     }
 
     private lazy var notNowButton: SecondaryRoundedButton = .build { button in
+        #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
             button.configuration = .glass()
         }
+        #else
         button.addTarget(self, action: #selector(self.notNowButtonPressed), for: .touchUpInside)
     }
 
     private lazy var saveButton: PrimaryRoundedButton = .build { button in
+        #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
             button.configuration = .glass()
         }
+        #else
         button.addTarget(self, action: #selector(self.saveButtonPressed), for: .touchUpInside)
     }
 
@@ -190,10 +194,19 @@ class SaveLoginAlert: UIView, ThemeApplicable {
         guard glassEffectView == nil else { return }
 
         let effectView = UIVisualEffectView()
-        let glassEffect = UIGlassEffect()
-        glassEffect.isInteractive = true
 
-        effectView.effect = glassEffect
+        #if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            let glassEffect = UIGlassEffect()
+            glassEffect.isInteractive = true
+            effectView.effect = glassEffect
+        } else {
+            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+        #else
+        effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
+
         effectView.layer.cornerRadius = UX.cornerRadius
         effectView.clipsToBounds = true
         effectView.translatesAutoresizingMaskIntoConstraints = false
