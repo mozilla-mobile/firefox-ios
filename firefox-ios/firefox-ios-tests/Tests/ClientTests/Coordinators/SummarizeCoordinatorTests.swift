@@ -70,14 +70,16 @@ final class SummarizeCoordinatorTests: XCTestCase {
         XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
     }
 
-    func testStart_showsSummarizeController_whenTermsOfServiceAgreed() {
+    func testStart_showsSummarizeController_whenTermsOfServiceAgreed() throws {
         prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
         let subject = createSubject()
 
         subject.start()
+    
+        let presentedController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
 
         XCTAssertEqual(router.presentCalled, 1)
-        XCTAssertTrue(router.presentedViewController is SummarizeController)
+        XCTAssertTrue(presentedController.viewControllers.first is SummarizeController)
     }
 
     func testStart_whenPressLearnMoreLink_onToSBottomSheet() throws {
@@ -122,12 +124,14 @@ final class SummarizeCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    func testStart_dismissCoordinator_whenTermsOfServiceAgreed() {
+    func testStart_dismissCoordinator_whenTermsOfServiceAgreed() throws {
         prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
         let subject = createSubject()
 
         subject.start()
-        router.presentedViewController?.dismiss(animated: false)
+        let presentedController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
+        // call dismiss on the root view controller
+        presentedController.viewControllers.first?.dismiss(animated: false)
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
