@@ -120,6 +120,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
+    @MainActor
     private func resolveTabPeekActions(action: TabPeekAction, state: AppState) {
         guard let tabUUID = action.tabUUID else { return }
         switch action.actionType {
@@ -482,41 +483,40 @@ final class TabManagerMiddleware: FeatureFlaggable {
 
     /// Close tab and trigger refresh
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
+    @MainActor
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
-        Task { @MainActor in
-            let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
-            triggerRefresh(uuid: uuid, isPrivate: isPrivate)
+        let shouldDismiss = self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
+        triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
-            if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
-                let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelViewActionType.tabPanelDidLoad)
-                store.dispatchLegacy(didLoadAction)
+        if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
+            let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
+                                                   windowUUID: uuid,
+                                                   actionType: TabPanelViewActionType.tabPanelDidLoad)
+            store.dispatchLegacy(didLoadAction)
 
-                if !isTabTrayUIExperimentsEnabled {
-                    let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                               windowUUID: uuid,
-                                                               actionType: TabPanelMiddlewareActionType.showToast)
-                    store.dispatchLegacy(toastAction)
-                }
-            } else if shouldDismiss {
-                let dismissAction = TabTrayAction(windowUUID: uuid,
-                                                  actionType: TabTrayActionType.dismissTabTray)
-                store.dispatchLegacy(dismissAction)
-
-                if !isTabTrayUIExperimentsEnabled {
-                    let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
-                                                           windowUUID: uuid,
-                                                           actionType: GeneralBrowserActionType.showToast)
-                    store.dispatchLegacy(toastAction)
-                }
-                addNewTabIfPrivate(uuid: uuid)
-            } else if !isTabTrayUIExperimentsEnabled {
+            if !isTabTrayUIExperimentsEnabled {
                 let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
                                                            windowUUID: uuid,
                                                            actionType: TabPanelMiddlewareActionType.showToast)
                 store.dispatchLegacy(toastAction)
             }
+        } else if shouldDismiss {
+            let dismissAction = TabTrayAction(windowUUID: uuid,
+                                              actionType: TabTrayActionType.dismissTabTray)
+            store.dispatchLegacy(dismissAction)
+
+            if !isTabTrayUIExperimentsEnabled {
+                let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
+                                                       windowUUID: uuid,
+                                                       actionType: GeneralBrowserActionType.showToast)
+                store.dispatchLegacy(toastAction)
+            }
+            addNewTabIfPrivate(uuid: uuid)
+        } else if !isTabTrayUIExperimentsEnabled {
+            let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
+                                                       windowUUID: uuid,
+                                                       actionType: TabPanelMiddlewareActionType.showToast)
+            store.dispatchLegacy(toastAction)
         }
     }
 
@@ -823,6 +823,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         UIPasteboard.general.url = tabManager.getTabForUUID(uuid: tabID)?.canonicalURL
     }
 
+    @MainActor
     private func tabPeekCloseTab(with tabID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         closeTabFromTabPanel(with: tabID, uuid: uuid, isPrivate: isPrivate)
     }

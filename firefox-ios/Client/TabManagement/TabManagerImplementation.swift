@@ -316,7 +316,9 @@ class TabManagerImplementation: NSObject,
 
         // Notify of tab removal
         DispatchQueue.main.async {
-            self.delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished) }
+            self.delegates.forEach {
+                $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished)
+            }
             TabEvent.post(.didClose, for: tab)
         }
 
