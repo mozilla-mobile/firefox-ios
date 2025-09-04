@@ -48,12 +48,6 @@ struct GleanOhttpUploader: PingUploaderProtocol {
     /// Build the request and create upload operation using the `OhttpManager`
     func uploadOhttpRequest(request: GleanPingUploadRequest,
                             callback: @escaping (UploadResult) -> Void) {
-        guard let url = URL(string: request.url) else {
-            logger.log("Rejected ohttp ping upload due environment variables", level: .info, category: .telemetry)
-            callback(.unrecoverableFailure(unused: 0))
-            return
-        }
-
         var body = Data(capacity: request.data.count)
         body.append(contentsOf: request.data)
 
@@ -69,12 +63,16 @@ struct GleanOhttpUploader: PingUploaderProtocol {
                     let statusCode = Int32(httpResponse.statusCode)
                     // HTTP status codes are handled on the Rust side
                     callback(.httpStatus(code: statusCode))
+                    logger.log("Sent http ping with status code: \(statusCode)", level: .debug, category: .telemetry)
                 } catch {
                     // Upload failed on the client-side. We should try again.
                     logger.log("Upload failed on the client-side: \(error)", level: .info, category: .telemetry)
                     callback(.recoverableFailure(unused: 0))
                 }
             }
+        } else {
+            logger.log("Rejected ohttp ping since couldn't build request", level: .info, category: .telemetry)
+            callback(.unrecoverableFailure(unused: 0))
         }
     }
 }

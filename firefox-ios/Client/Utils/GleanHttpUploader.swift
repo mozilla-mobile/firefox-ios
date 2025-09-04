@@ -46,11 +46,15 @@ struct GleanHttpUploader: PingUploaderProtocol {
                 // HTTP status codes are handled on the Rust side
                 let statusCode = Int32(httpResponse.statusCode)
                 callback(.httpStatus(code: statusCode))
+                logger.log("Sent http ping with status code: \(statusCode)", level: .debug, category: .telemetry)
             }
 
             uploadTask.countOfBytesClientExpectsToSend = 1024 * 1024
             uploadTask.countOfBytesClientExpectsToReceive = 512
             uploadTask.resume()
+        } else {
+            logger.log("Rejected ohttp ping since couldn't build request", level: .info, category: .telemetry)
+            callback(.unrecoverableFailure(unused: 0))
         }
     }
 }
