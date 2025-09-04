@@ -176,10 +176,7 @@ let package = Package(
                 "ComponentLibrary",
                 "Down"
             ],
-            swiftSettings: [
-                .unsafeFlags(["-enable-testing"]),
-                .enableExperimentalFeature("StrictConcurrency")
-            ]
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]
         ),
         .testTarget(name: "SummarizeKitTests",
                     dependencies: ["SummarizeKit"]),
