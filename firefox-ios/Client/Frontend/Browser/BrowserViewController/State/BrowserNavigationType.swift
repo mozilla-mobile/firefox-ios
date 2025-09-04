@@ -17,6 +17,7 @@ enum BrowserNavigationDestination: Equatable {
     case zeroSearch
     case shortcutsLibrary
     case summarizer(config: SummarizerConfig)
+    case topStories
 
     // Webpage views
     case link
