@@ -214,7 +214,7 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Remove Tab
     @MainActor
-    func removeTab(_ tabUUID: TabUUID) async {
+    func removeTab(_ tabUUID: TabUUID) {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -255,7 +255,7 @@ class TabManagerImplementation: NSObject,
             return urls.contains(url)
         }
         for tab in tabsToRemove {
-            await removeTab(tab.tabUUID)
+            removeTab(tab.tabUUID)
         }
     }
 
@@ -331,6 +331,7 @@ class TabManagerImplementation: NSObject,
         }
     }
 
+    @MainActor
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {
         let calendar = Calendar.current
         let cutoffDate: Date
@@ -350,12 +351,10 @@ class TabManagerImplementation: NSObject,
 
         guard !tabsToRemove.isEmpty else { return }
 
-        Task { @MainActor in
-            for tab in tabsToRemove {
-                await self.removeTab(tab.tabUUID)
-            }
-            commitChanges()
+        for tab in tabsToRemove {
+            removeTab(tab.tabUUID)
         }
+        commitChanges()
     }
 
     // MARK: - Add Tab
