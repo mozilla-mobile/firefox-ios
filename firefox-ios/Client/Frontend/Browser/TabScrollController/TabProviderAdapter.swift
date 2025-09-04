@@ -7,7 +7,6 @@ import UIKit
 @MainActor
 protocol TabProviderProtocol: AnyObject {
     var scrollView: UIScrollView? { get }
-    var shouldScrollToTop: Bool { get set }
     var isFxHomeTab: Bool { get }
     var isFindInPageMode: Bool { get }
     var isLoading: Bool { get }
@@ -28,12 +27,6 @@ final class TabProviderAdapter: TabProviderProtocol {
     var isFxHomeTab: Bool { tab.isFxHomeTab }
     var isFindInPageMode: Bool { tab.isFindInPageMode }
     var isLoading: Bool { tab.isLoading }
-
-    var shouldScrollToTop: Bool {
-        get { tab.shouldScrollToTop }
-        set { tab.shouldScrollToTop = newValue }
-    }
-
     var scrollView: UIScrollView? { tab.webView?.scrollView }
 
     var onLoadingStateChanged: (() -> Void)? {
