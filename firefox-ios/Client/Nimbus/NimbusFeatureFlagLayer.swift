@@ -80,9 +80,6 @@ final class NimbusFeatureFlagLayer {
         case .modernOnboardingUI:
             return checkMondernOnboardingUIFeature(from: nimbus)
 
-        case .loginsVerificationEnabled:
-            return checkLoginsVerificationFeature(from: nimbus)
-
         case .nativeErrorPage:
             return checkNativeErrorPageFeature(from: nimbus)
 
@@ -420,10 +417,6 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.microsurveyFeature.value()
 
         return config.enabled
-    }
-
-    private func checkLoginsVerificationFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.loginsVerification.value().loginsVerificationEnabled
     }
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
