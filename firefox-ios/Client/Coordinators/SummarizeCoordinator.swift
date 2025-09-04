@@ -121,10 +121,11 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
                 self?.summarizerTelemetry.summarizationDisplayed()
             }
         )
+        let navController = UINavigationController(rootViewController: controller)
 
-        controller.modalTransitionStyle = .crossDissolve
-        controller.modalPresentationStyle = .overFullScreen
-        router.present(controller, animated: true)
+        navController.modalTransitionStyle = .crossDissolve
+        navController.modalPresentationStyle = .overFullScreen
+        router.present(navController, animated: true)
     }
 
     private func showToSAlert() {
