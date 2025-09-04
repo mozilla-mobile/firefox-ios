@@ -274,7 +274,7 @@ class TabManagerImplementation: NSObject,
         backupCloseTabs = tabs
 
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
@@ -1058,7 +1058,7 @@ class TabManagerImplementation: NSObject,
         let currentModeTabs = getInactiveTabs()
         backupCloseTabs = currentModeTabs
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
         commitChanges()
     }
