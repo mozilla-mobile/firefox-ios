@@ -104,7 +104,10 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         return button
     }()
     private let titleLabel: UILabel = .build {
-        $0.font = FXFontStyles.Bold.body.scaledFont()
+        $0.font = FXFontStyles.Bold.body.systemFont()
+        $0.adjustsFontForContentSizeCategory = true
+        $0.isUserInteractionEnabled = true
+        $0.addInteraction(UILargeContentViewerInteraction())
         $0.alpha = 0.0
     }
     private let errorView: ErrorView = .build {
@@ -197,6 +200,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
         navigationItem.rightBarButtonItem = closeButton
         navigationItem.titleView = titleLabel
+        titleLabel.largeContentTitle = webView.title
 
         summaryView.onDidChangeTitleCellVisibility = { [weak self] isShowingTitleCell in
             self?.titleLabel.alpha = isShowingTitleCell ? 0.0 : 1.0
