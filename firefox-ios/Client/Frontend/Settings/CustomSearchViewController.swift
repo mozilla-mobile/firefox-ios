@@ -119,6 +119,7 @@ class CustomSearchViewController: SettingsTableViewController {
                                       image: image,
                                       searchTemplate: template,
                                       suggestTemplate: nil,
+                                      trendingTemplate: nil,
                                       isCustomEngine: true)
 
         // Make sure a valid scheme is used

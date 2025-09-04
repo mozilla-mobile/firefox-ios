@@ -139,6 +139,7 @@ class OpenSearchEngineTests: XCTestCase {
             image: testImage,
             searchTemplate: "some link",
             suggestTemplate: nil,
+            trendingTemplate: nil,
             isCustomEngine: true
         )
     }

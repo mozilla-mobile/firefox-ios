@@ -75,7 +75,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
          image: UIImage,
          searchTemplate: String,
          suggestTemplate: String?,
-         trendingTemplate: String?,
+         trendingTemplate: String? = nil,
          isCustomEngine: Bool) {
         self.shortName = shortName
         self.image = image
@@ -151,7 +151,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
         }
         return nil
     }
-    
+
     /// Returns the trending search URL for the specific search engine.
     func trendingURLForQuery() -> URL? {
         guard let trendingTemplate else { return nil }

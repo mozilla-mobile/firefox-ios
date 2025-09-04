@@ -19,9 +19,27 @@ final class SearchEngineSelectionMiddleware {
     }
 
     lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] state, action in
-        guard let action = action as? SearchEngineSelectionAction else { return }
+//        guard let action = action as? SearchEngineSelectionAction else { return }
 
         switch action.actionType {
+        case ToolbarActionType.didSubmitSearchTerm:
+            guard let toolbarAction = action as? ToolbarAction else { return }
+            print("⚠️ \(toolbarAction.searchTerm)")
+            let searchEngine = searchEnginesManager.defaultEngine
+            let provider = RecentSearchProvider(searchEngineID: searchEngine!.engineID)
+            provider.addRecentSearch(toolbarAction.searchTerm ?? "")
+            print("⚠️ \(provider.recentSearches())")
+        case HomepageActionType.viewWillAppear:
+            let searchEngine = searchEnginesManager.defaultEngine
+            let searchClient = TrendingSearchClient(searchEngine: searchEngine!)
+            Task {
+                do {
+                    let results = try await searchClient.getTrendingSearches()
+                    print("⚠️ \(results)")
+                } catch {
+                    print("⚠️ Error")
+                }
+            }
         case SearchEngineSelectionActionType.viewDidLoad:
             let searchEngines = searchEnginesManager.orderedEngines
 

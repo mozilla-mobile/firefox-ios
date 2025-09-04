@@ -453,6 +453,10 @@ final class AddressToolbarContainer: UIView,
     }
 
     func openBrowser(searchTerm: String) {
+        if let windowUUID {
+            let action = ToolbarAction(searchTerm: searchTerm, windowUUID: windowUUID, actionType: ToolbarActionType.didSubmitSearchTerm)
+            store.dispatchLegacy(action)
+        }
         delegate?.openBrowser(searchTerm: searchTerm)
     }
 

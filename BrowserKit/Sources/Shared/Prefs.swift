@@ -116,6 +116,10 @@ public struct PrefsKeys {
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
     }
+    
+    public struct Search {
+        public static let recentSearchesCache = "recentSearchesCacheBaseKey"
+    }
 
     public struct RemoteSettings {
         public static let lastRemoteSettingsServiceSyncTimestamp =
