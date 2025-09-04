@@ -193,10 +193,19 @@ public class BottomSheetViewController: UIViewController,
         guard glassEffectView == nil else { return }
 
         let effectView = UIVisualEffectView()
-        let glassEffect = UIGlassEffect()
-        glassEffect.isInteractive = true
 
-        effectView.effect = glassEffect
+        #if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            let glassEffect = UIGlassEffect()
+            glassEffect.isInteractive = true
+            effectView.effect = glassEffect
+        } else {
+            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+        #else
+        effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
+
         effectView.layer.cornerRadius = viewModel.cornerRadius
         effectView.clipsToBounds = true
         effectView.translatesAutoresizingMaskIntoConstraints = false
