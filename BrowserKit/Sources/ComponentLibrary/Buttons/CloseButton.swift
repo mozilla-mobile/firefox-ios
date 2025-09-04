@@ -30,6 +30,10 @@ public class CloseButton: UIButton,
         setImage(UIImage(named: UX.crossCircleImage), for: .normal)
         adjustsImageSizeForAccessibilityContentSizeCategory = true
         setupConstraints()
+
+        if #available(iOS 26.0, *) {
+            configuration = .glass()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -64,6 +64,7 @@ public class BottomSheetViewController: UIViewController,
     private var contentViewBottomConstraint: NSLayoutConstraint?
     private var viewTranslation = CGPoint(x: 0, y: 0)
     private let windowUUID: WindowUUID
+    private var glassEffectView: UIVisualEffectView?
 
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
@@ -134,12 +135,21 @@ public class BottomSheetViewController: UIViewController,
         sheetView.layer.shadowRadius = 20.0
         sheetView.layer.shadowPath = UIBezierPath(roundedRect: sheetView.bounds,
                                                   cornerRadius: viewModel.cornerRadius).cgPath
+
+        if #available(iOS 26.0, *) {
+            setupDynamicBackground()
+        }
     }
 
     // MARK: - Theme
 
     public func applyTheme() {
-        contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
+        if #available(iOS 26.0, *) {
+            setupDynamicBackground()
+        } else {
+            contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
+        }
+
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
 
         if useDimmedBackground {
@@ -162,6 +172,53 @@ public class BottomSheetViewController: UIViewController,
     }
 
     // MARK: - Private
+
+    @available(iOS 26.0, *)
+    private func setupDynamicBackground() {
+        let screenHeight = UIScreen.main.bounds.height
+        let seventyFivePercentScreenHeight = screenHeight * 0.75
+        let currentSheetHeight = childViewController.view.frame.height
+
+        if currentSheetHeight <= seventyFivePercentScreenHeight {
+            setupGlassEffect()
+        } else {
+            removeGlassEffect()
+            contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
+        }
+    }
+
+    @available(iOS 26.0, *)
+    private func setupGlassEffect() {
+        // Only add glass effect if it doesn't already exist
+        guard glassEffectView == nil else { return }
+
+        let effectView = UIVisualEffectView()
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+
+        effectView.effect = glassEffect
+        effectView.layer.cornerRadius = viewModel.cornerRadius
+        effectView.clipsToBounds = true
+        effectView.translatesAutoresizingMaskIntoConstraints = false
+
+        contentView.backgroundColor = .clear
+        contentView.insertSubview(effectView, at: 0)
+
+        NSLayoutConstraint.activate([
+            effectView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            effectView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            effectView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            effectView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+
+        glassEffectView = effectView
+    }
+
+    @available(iOS 26.0, *)
+    private func removeGlassEffect() {
+        glassEffectView?.removeFromSuperview()
+        glassEffectView = nil
+    }
 
     private func setupView() {
         if viewModel.shouldDismissForTapOutside {
