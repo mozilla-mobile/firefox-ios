@@ -142,10 +142,19 @@ class Toast: UIView, ThemeApplicable, Notifiable {
         guard glassEffectView == nil else { return }
 
         let effectView = UIVisualEffectView()
-        let glassEffect = UIGlassEffect()
-        glassEffect.tintColor = theme.colors.actionPrimary
 
-        effectView.effect = glassEffect
+        #if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            let glassEffect = UIGlassEffect()
+            glassEffect.tintColor = theme.colors.actionPrimary
+            effectView.effect = glassEffect
+        } else {
+            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+        #else
+        effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
+
         effectView.layer.cornerRadius = UX.toastCornerRadius
         effectView.clipsToBounds = true
         effectView.translatesAutoresizingMaskIntoConstraints = false
