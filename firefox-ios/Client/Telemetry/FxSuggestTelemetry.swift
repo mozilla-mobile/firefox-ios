@@ -18,7 +18,7 @@ class FxSuggestTelemetry {
     private let systemRegion: String
 
     init(locale: Locale = Locale.current) {
-        systemRegion = Self.regionCode(from: locale)
+        systemRegion = locale.regionCode()
     }
 
     func clickEvent(telemetryInfo: RustFirefoxSuggestionTelemetryInfo, position: Int) {
@@ -95,15 +95,5 @@ class FxSuggestTelemetry {
             GleanMetrics.FxSuggest.advertiser.set(EventInfo.wikipediaAdvertiser.rawValue)
         }
         GleanMetrics.Pings.shared.fxSuggest.submit()
-    }
-
-    private static func regionCode(from locale: Locale) -> String {
-        let systemRegion: String?
-        if #available(iOS 17, *) {
-            systemRegion = (locale as NSLocale).regionCode
-        } else {
-            systemRegion = (locale as NSLocale).countryCode
-        }
-        return systemRegion ?? locale.identifier.components(separatedBy: "-").last ?? "US"
     }
 }
