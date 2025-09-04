@@ -20,10 +20,12 @@ class CustomStyler: DownStyler {
 
 public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
     private struct UX {
+        @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
+        static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)
+
         static let tabSnapshotInitialTransformPercentage: CGFloat = 0.5
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
         static let summaryViewEdgePadding: CGFloat = 12.0
-        static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)
         static let initialTransformAnimationDuration = 1.25
         static let panEndAnimationDuration: CGFloat = 0.3
         static let showSummaryAnimationDuration: CGFloat = 0.3
@@ -499,11 +501,14 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     // MARK: - CAAnimationDelegate
-    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+    nonisolated public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         guard flag,
               let animation = anim as? CABasicAnimation,
               animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
-        setupDismissGestures()
+
+        ensureMainThread {
+            self.setupDismissGestures()
+        }
     }
 
     /// Sets up gestures that allow the user to dismiss the summary.

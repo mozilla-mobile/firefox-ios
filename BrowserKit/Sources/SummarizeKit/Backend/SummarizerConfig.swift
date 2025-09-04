@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// A configuration container for a summarizer.
-public struct SummarizerConfig: Equatable {
+public struct SummarizerConfig: Equatable, Sendable {
     public let instructions: String
     /// NOTE: options is intentionally untyped to allow for flexibility in the configuration.
     /// There are two main reasons for this. 

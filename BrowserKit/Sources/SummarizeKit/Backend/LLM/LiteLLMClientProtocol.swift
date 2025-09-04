@@ -6,7 +6,7 @@ import Foundation
 
 /// Interface for a litellm client for both streamed and non-streamed responses.
 /// This used because we want to be able to replace the real `LiteLLMClient` with a mock during testing.
-protocol LiteLLMClientProtocol {
+protocol LiteLLMClientProtocol: Sendable {
     /// Sends a non-streaming chat completion request.
     func requestChatCompletion(
         messages: [LiteLLMMessage],
