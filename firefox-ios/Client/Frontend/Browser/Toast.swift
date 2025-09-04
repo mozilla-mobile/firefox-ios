@@ -150,7 +150,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
         effectView.clipsToBounds = true
         effectView.translatesAutoresizingMaskIntoConstraints = false
 
-        toastView.backgroundColor = .clear
+        toastView.layer.masksToBounds = true
         toastView.insertSubview(effectView, at: 0)
 
         NSLayoutConstraint.activate([
