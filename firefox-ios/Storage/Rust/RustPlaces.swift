@@ -25,6 +25,7 @@ import struct MozillaAppServices.Url
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.VisitTransitionSet
 
+// TODO: FXIOS-12903 Bookmark Data from Rust components is not Sendable
 extension BookmarkNodeData: @unchecked @retroactive Sendable {}
 
 public protocol BookmarksHandler {
