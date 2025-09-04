@@ -1035,11 +1035,6 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "Stories",
                 comment: "This is the title of the Stories section on Firefox Homepage.")
-            public static let TopStoriesSectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.TopStoriesSectionTitle.v143",
-                tableName: "FirefoxHomepage",
-                value: "Top Stories",
-                comment: "This is the title of the Top Stories section on Firefox Homepage.")
             public static let PopularTodaySectionTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.PopularTodaySectionTitle.v144",
                 tableName: "FirefoxHomepage",

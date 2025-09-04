@@ -13,7 +13,6 @@ struct MerinoState: StateType, Equatable {
     let merinoData: [MerinoStoryConfiguration]
     let shouldShowSection: Bool
 
-    // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143
     let sectionHeaderState = SectionHeaderConfiguration(
         title: .FirefoxHomepage.Pocket.SectionTitle,
         a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino
