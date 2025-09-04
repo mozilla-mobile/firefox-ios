@@ -192,7 +192,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotViewModel.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotViewModel.tabSnapshotA11yLabel
-        
+
         closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
         closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
         navigationItem.rightBarButtonItem = closeButton
@@ -326,7 +326,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
-    
+
         configureSummaryView(summary: summary)
 
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
@@ -407,7 +407,6 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         borderOverlayHostingController.view.removeFromSuperview()
         borderOverlayHostingController.removeFromParent()
     }
-
 
     private func dismissSummary() {
         UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in

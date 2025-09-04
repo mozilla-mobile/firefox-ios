@@ -50,7 +50,7 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setup() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -120,7 +120,7 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
     func showContent() {
         tableView.alpha = 1.0
     }
-    
+
     var onShouldShowCompactTitle: ((Bool) -> Void)?
 
     // MARK: - UIScrollViewDelegate

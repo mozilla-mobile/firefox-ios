@@ -125,7 +125,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
             self?.summarizerTelemetry.summarizationClosed()
             self?.dismissCoordinator()
         }
-        
+
         let controller = SummarizeController(
             windowUUID: windowUUID,
             viewModel: model,
