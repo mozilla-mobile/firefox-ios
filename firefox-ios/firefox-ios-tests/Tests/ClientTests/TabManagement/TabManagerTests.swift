@@ -1593,11 +1593,9 @@ class TabManagerTests: XCTestCase {
         }
 
         // Set the second tab as selected (edge case that an inactive tab is the selected tab)
-        await MainActor.run {
-            tabManager.selectTab(secondTab)
-            // Selecting a tab makes it active, so reset to inactive again with an old timestamp
-            secondTab.lastExecutedTime = Date().lastMonth.toTimestamp()
-        }
+        tabManager.selectTab(secondTab)
+        // Selecting a tab makes it active, so reset to inactive again with an old timestamp
+        secondTab.lastExecutedTime = Date().lastMonth.toTimestamp()
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs)
@@ -1607,7 +1605,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedTab, secondTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
-        await tabManager.removeAllInactiveTabs()
+        tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
 
         // We expect a new normal active tab will be created, all inactive tabs removed
@@ -1645,7 +1643,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedTab, secondTab)
         XCTAssertEqual(tabManager.selectedIndex, 4)
 
-        await tabManager.removeAllInactiveTabs()
+        tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
@@ -1670,9 +1668,7 @@ class TabManagerTests: XCTestCase {
         }
 
         // Set the second private tab as selected
-        await MainActor.run {
-            tabManager.selectTab(secondPrivateTab)
-        }
+        tabManager.selectTab(secondPrivateTab)
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs + numberNormalPrivateTabs)
@@ -1682,7 +1678,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 4)
 
-        await tabManager.removeAllInactiveTabs()
+        tabManager.removeAllInactiveTabs()
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalPrivateTabs, "Number of private tabs should not have changed")
