@@ -45,7 +45,7 @@ public final class DBOperationCancelled : MaybeErrorType {
 }
 
 // TODO: FXIOS-13184 Remove deferred code or validate it is sendable
-class DeferredDBOperation<T>: CancellableDeferred<T>, @unchecked Sendable {
+class DeferredDBOperation<T: Sendable>: CancellableDeferred<T>, @unchecked Sendable {
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
 
     override func cancel() {

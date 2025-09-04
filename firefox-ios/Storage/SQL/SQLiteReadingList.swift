@@ -15,7 +15,7 @@ public final class ReadingListStorageError: MaybeErrorType {
     }
 }
 
-open class SQLiteReadingList {
+public final class SQLiteReadingList: Sendable {
     let db: BrowserDB
 
     let allColumns = [
@@ -40,7 +40,7 @@ open class SQLiteReadingList {
 }
 
 extension SQLiteReadingList: ReadingList {
-    public func getAvailableRecords(completion: @escaping ([ReadingListItem]) -> Void) {
+    public func getAvailableRecords(completion: @escaping @Sendable ([ReadingListItem]) -> Void) {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
         let deferredResponse = db.runQuery(
             sql,
@@ -62,7 +62,7 @@ extension SQLiteReadingList: ReadingList {
         }
     }
 
-    public func deleteRecord(_ record: ReadingListItem, completion: ((Bool) -> Void)? = nil) {
+    public func deleteRecord(_ record: ReadingListItem, completion: (@Sendable (Bool) -> Void)? = nil) {
         let sql = "DELETE FROM items WHERE client_id = ?"
         let args: Args = [record.id]
         let deferredResponse = db.run(sql, withArgs: args)
