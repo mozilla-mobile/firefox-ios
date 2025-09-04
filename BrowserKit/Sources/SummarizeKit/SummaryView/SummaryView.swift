@@ -38,8 +38,8 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
     }
     private var theme: Theme?
     private var model: SummaryViewModel?
-    /// A closure that is called in response to the tableView scroll and provide a Bool to indicate wether the title cell was hided or shown.
-    /// The paramater is true when the title cell is showed
+    /// A closure that is called in response to the tableView scroll.
+    /// The paramater provided is true when the title cell is showed.
     var onDidChangeTitleCellVisibility: ((Bool) -> Void)?
 
     override init(frame: CGRect) {
@@ -132,7 +132,7 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         let offset = scrollView.contentOffset.y + topInset - titleCell.frame.height
         // hide or show the title cell gradually as the table view scrolls.
         let titleCellAlpha = abs(offset / (titleCell.frame.height))
-        
+
         let isShowingTitleCell = offset < -UX.titleVisbilityThreshold
         UIView.animate(withDuration: UX.titleVisibilityAnimationDuration) {
             titleCell.alpha = titleCellAlpha
