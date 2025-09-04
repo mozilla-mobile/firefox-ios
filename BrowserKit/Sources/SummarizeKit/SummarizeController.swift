@@ -204,10 +204,10 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
         navigationItem.titleView = titleLabel
-        
+
         setupTitleAnimation()
     }
-    
+
     private func setupTitleAnimation() {
         summaryView.onDidChangeTitleCellVisibility = { [weak self] isShowingTitleCell in
             self?.titleLabel.alpha = isShowingTitleCell ? 0.0 : 1.0
