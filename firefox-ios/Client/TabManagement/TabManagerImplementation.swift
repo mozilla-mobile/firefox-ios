@@ -332,6 +332,7 @@ class TabManagerImplementation: NSObject,
         }
     }
 
+    @MainActor
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {
         let calendar = Calendar.current
         let cutoffDate: Date
@@ -351,12 +352,10 @@ class TabManagerImplementation: NSObject,
 
         guard !tabsToRemove.isEmpty else { return }
 
-        Task { @MainActor in
-            for tab in tabsToRemove {
-                await self.removeTab(tab.tabUUID)
-            }
-            commitChanges()
+        for tab in tabsToRemove {
+            removeTab(tab.tabUUID)
         }
+        commitChanges()
     }
 
     // MARK: - Add Tab
