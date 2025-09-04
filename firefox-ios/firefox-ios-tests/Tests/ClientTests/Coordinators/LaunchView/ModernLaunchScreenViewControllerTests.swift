@@ -25,11 +25,11 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
         viewModel = nil
         profile = nil
         coordinatorDelegate = nil
+        super.tearDown()
     }
 
     // MARK: - Initialization Tests
