@@ -150,10 +150,10 @@ final class TabScrollHandler: NSObject,
 
     // MARK: - ScrollView observation
 
-    // TODO: FXIOS-13340 Remove
+    // TODO: FXIOS-13340 Remove when Legacy protocol are removed
     func beginObserving(scrollView: UIScrollView) {}
 
-    // TODO: FXIOS-13340 Remove 
+    // TODO: FXIOS-13340 Remove when Legacy protocol are removed
     func stopObserving(scrollView: UIScrollView) {}
 
     // MARK: - Pull to refresh
