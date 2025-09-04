@@ -94,6 +94,19 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         $0.numberOfLines = 0
         $0.textAlignment = .center
     }
+    private lazy var closeButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage(systemName: "xmark"),
+            primaryAction: UIAction(handler: { [weak self] _ in
+                self?.triggerDismissingAnimation()
+            })
+        )
+        return button
+    }()
+    private let titleLabel: UILabel = .build {
+        $0.font = FXFontStyles.Bold.body.scaledFont()
+        $0.alpha = 0.0
+    }
     private let errorView: ErrorView = .build {
         $0.alpha = 0
     }
@@ -180,24 +193,24 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotViewModel.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotViewModel.tabSnapshotA11yLabel
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "xmark"),
-            style: .plain,
-            target: nil,
-            action: nil
-        )
-        summaryView.onShouldShowCompactTitle = { [self] shouldShow in
-            title = shouldShow ? webView.title : nil
+        closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
+        closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
+        navigationItem.rightBarButtonItem = closeButton
+        navigationItem.titleView = titleLabel
+
+        summaryView.onShouldShowCompactTitle = { [weak self] shouldShowCompactTitle in
+            self?.titleLabel.alpha = shouldShowCompactTitle ? 1 : 0
+            self?.titleLabel.text = shouldShowCompactTitle ? self?.webView.title : nil
         }
     }
 
     private func setupLayout() {
         setupLoadingBackgroundGradient()
         view.addSubviews(
-            tabSnapshotContainer,
-            borderOverlayHostingController.view,
             summaryView,
             loadingLabel,
+            tabSnapshotContainer,
+            borderOverlayHostingController.view,
             errorView
         )
         tabSnapshotContainer.addSubview(tabSnapshot)
@@ -313,7 +326,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
-
+    
         configureSummaryView(summary: summary)
 
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
@@ -394,6 +407,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         borderOverlayHostingController.view.removeFromSuperview()
         borderOverlayHostingController.removeFromParent()
     }
+
 
     private func dismissSummary() {
         UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
@@ -533,23 +547,11 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         view.backgroundColor = theme.colors.layer1
         summaryView.backgroundColor = .clear
         summaryView.applyTheme(theme: theme)
+        titleLabel.textColor = theme.colors.textPrimary
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
+        navigationItem.rightBarButtonItem?.tintColor = theme.colors.iconPrimary
         errorView.applyTheme(theme: theme)
-    }
-}
-
-#Preview {
-    if #available(iOS 16.0, *) {
-        NavigationStack {
-            List(0..<50) { i in
-                Text("Row \(i)")
-            }
-            .navigationTitle("Large Title")
-            .navigationBarTitleDisplayMode(.large) // 👈 needed
-        }
-    } else {
-        // Fallback on earlier versions
     }
 }

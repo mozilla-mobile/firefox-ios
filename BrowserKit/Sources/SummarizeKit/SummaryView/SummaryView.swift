@@ -25,7 +25,7 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         static let closeButtonEdgePadding: CGFloat = 16.0
         static let closeButtonBottomPadding: CGFloat = 20.0
         static let tableViewHorizontalPadding: CGFloat = 16.0
-        static let compactTitleAnimationOffset: CGFloat = 20.0
+        static let compactTitleAnimationOffset: CGFloat = 30.0
         static let compactTitleAnimationDuration: CGFloat = 0.3
         static let compactTitlePadding: CGFloat = 16.0
     }
@@ -131,10 +131,13 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
         // and its safe area inset, since the contentOffset.y does not start
         // at 0 but instead reflects these insets.
         let topInset = abs(tableView.contentInset.top) + abs(tableView.safeAreaInsets.top)
-        let shouldShowTitle = scrollView.contentOffset.y + topInset - titleCell.frame.height + UX.compactTitleAnimationOffset > 0
-        UIView.animate(withDuration: 0.3) { [self] in
-            titleCell.alpha = shouldShowTitle ? 0.0 : 1.0
-            onShouldShowCompactTitle?(shouldShowTitle)
+        let offset = scrollView.contentOffset.y + topInset - titleCell.frame.height
+        let percentage = abs(offset / (titleCell.frame.height))
+        print("FF all values: \(scrollView.contentOffset.y), \(topInset), \(titleCell.frame.height), \(offset), \(percentage)")
+        let shouldHideTitleCell = offset >= -UX.compactTitleAnimationOffset
+        UIView.animate(withDuration: 0.1) {
+            titleCell.alpha = percentage
+            self.onShouldShowCompactTitle?(shouldHideTitleCell)
         }
     }
 
