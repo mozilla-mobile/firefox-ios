@@ -63,7 +63,7 @@ class SaveLoginAlert: UIView, ThemeApplicable {
         if #available(iOS 26.0, *) {
             button.configuration = .glass()
         }
-        #else
+        #endif
         button.addTarget(self, action: #selector(self.notNowButtonPressed), for: .touchUpInside)
     }
 
@@ -72,7 +72,7 @@ class SaveLoginAlert: UIView, ThemeApplicable {
         if #available(iOS 26.0, *) {
             button.configuration = .glass()
         }
-        #else
+        #endif
         button.addTarget(self, action: #selector(self.saveButtonPressed), for: .touchUpInside)
     }
 
