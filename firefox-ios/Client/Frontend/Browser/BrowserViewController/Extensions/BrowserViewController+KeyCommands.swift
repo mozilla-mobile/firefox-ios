@@ -4,6 +4,7 @@
 
 import Shared
 import UIKit
+import Common
 
 // Naming functions: use the suffix 'KeyCommand' for an additional level of namespacing (bug 1415830)
 extension BrowserViewController {
@@ -195,15 +196,15 @@ extension BrowserViewController {
 
     @objc
     func closeTabKeyCommand() {
-        Task {
+        ensureMainThread {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .press,
                                          object: .keyCommand,
                                          extras: ["action": "close-tab"])
-            guard let currentTab = tabManager.selectedTab else { return }
-            tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
-            await tabManager.removeTab(currentTab.tabUUID)
-            keyboardPressesHandler().reset()
+            guard let currentTab = self.tabManager.selectedTab else { return }
+            self.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
+            self.tabManager.removeTab(currentTab.tabUUID)
+            self.keyboardPressesHandler().reset()
         }
     }
 
