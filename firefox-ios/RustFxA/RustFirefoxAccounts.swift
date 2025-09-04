@@ -16,6 +16,17 @@ import struct MozillaAppServices.Profile
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
+// A convenience to allow other callers to pass in Nimbus/Flaggable features
+// to RustFirefoxAccounts
+public struct RustFxAFeatures: OptionSet {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+// TODO: FXIOS-13290 Make RustFirefoxAccounts actually sendable
 // TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 /**
  A singleton that wraps the Rust FxA library.
@@ -73,7 +84,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         if let accManager = RustFirefoxAccounts.shared.accountManager {
             completion(accManager)
         }
-        let manager = RustFirefoxAccounts.shared.createAccountManager(prefs: prefs)
+        let manager = RustFirefoxAccounts.shared.createAccountManager()
         manager.initialize { result in
             assert(Thread.isMainThread)
             if !Thread.isMainThread {
@@ -107,7 +118,8 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         return RustFirefoxAccounts.prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
     }
 
-    private func createAccountManager(prefs: Prefs) -> FxAccountManager {
+    @MainActor
+    private func createAccountManager() -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
         if prefs == nil {
             logger.log("prefs is unexpectedly nil", level: .warning, category: .sync)
