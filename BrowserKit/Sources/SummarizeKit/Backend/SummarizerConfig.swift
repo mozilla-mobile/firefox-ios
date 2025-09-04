@@ -5,13 +5,14 @@
 /// A configuration container for a summarizer.
 public struct SummarizerConfig: Equatable, Sendable {
     public let instructions: String
+    // FIXME: FXIOS-13417 We should strongly type options in the future so they can be any Sendable & Hashable
     /// NOTE: options is intentionally untyped to allow for flexibility in the configuration.
     /// There are two main reasons for this. 
     /// 1. The hosted model that is using an OpenAI-like API that has a lot of different parameters that can be tuned, 
     ///    and we want to allow for easy experimentation with these parameters.
     /// 2. The Apple foundation model is a new API that may introduce additional parameters or change existing ones.
     /// Options can include things like temperature, max tokens, and other model-specific settings.
-    public let options: [String: AnyHashable]
+    public nonisolated(unsafe) let options: [String: AnyHashable]
     public static let defaultConfig =
         SummarizerConfig(instructions: SummarizerModelInstructions.defaultInstructions, options: [:])
 
