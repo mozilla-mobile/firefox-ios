@@ -94,6 +94,23 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         $0.numberOfLines = 0
         $0.textAlignment = .center
     }
+    private lazy var closeButton: UIButton = .build {
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        $0.addAction(UIAction(handler: { [weak self] _ in
+            self?.triggerDismissingAnimation()
+        }), for: .touchUpInside)
+        $0.showsLargeContentViewer = true
+    }
+    private let titleLabel: UILabel = .build {
+        $0.font = FXFontStyles.Bold.body.systemFont()
+        $0.showsLargeContentViewer = true
+        $0.isUserInteractionEnabled = true
+        $0.addInteraction(UILargeContentViewerInteraction())
+        $0.alpha = 0.0
+    }
     private let errorView: ErrorView = .build {
         $0.alpha = 0
     }
@@ -179,18 +196,32 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotViewModel.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotViewModel.tabSnapshotA11yLabel
-        summaryView.configureCloseButton(model: viewModel.closeButtonModel) { [weak self] in
-            self?.triggerDismissingAnimation()
+
+        titleLabel.largeContentTitle = webView.title
+        closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
+        closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
+        closeButton.largeContentTitle = viewModel.closeButtonModel.a11yLabel
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+        navigationItem.titleView = titleLabel
+
+        setupTitleAnimation()
+    }
+
+    private func setupTitleAnimation() {
+        summaryView.onDidChangeTitleCellVisibility = { [weak self] isShowingTitleCell in
+            self?.titleLabel.alpha = isShowingTitleCell ? 0.0 : 1.0
+            self?.titleLabel.text = isShowingTitleCell ? nil : self?.webView.title
         }
     }
 
     private func setupLayout() {
         setupLoadingBackgroundGradient()
         view.addSubviews(
-            tabSnapshotContainer,
-            borderOverlayHostingController.view,
             summaryView,
             loadingLabel,
+            tabSnapshotContainer,
+            borderOverlayHostingController.view,
             errorView
         )
         tabSnapshotContainer.addSubview(tabSnapshot)
@@ -332,15 +363,6 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         ##### \(viewModel.summaryFootnote)
         """
-        // The summary view is constrained to the edge of the screen. In order to have title animation and to scroll
-        // under the status bar, a custom offset is needed so the summary view doesn't overlay the bottom tab snapshot and
-        // the safe area.
-        let summaryContentInset = UIEdgeInsets(
-            top: view.safeAreaInsets.top,
-            left: 0.0,
-            bottom: UX.tabSnapshotFinalPositionBottomPadding,
-            right: 0.0
-        )
         summaryView.configure(
             model: SummaryViewModel(
                 title: webView.title,
@@ -349,7 +371,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                 brandViewModel: viewModel.brandViewModel,
                 summary: parse(markdown: summaryWithNote),
                 summaryA11yId: viewModel.summarizeViewA11yId,
-                scrollContentInsets: summaryContentInset
+                scrollContentBottomInset: UX.tabSnapshotFinalPositionBottomPadding
             )
         )
     }
@@ -526,9 +548,11 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         view.backgroundColor = theme.colors.layer1
         summaryView.backgroundColor = .clear
         summaryView.applyTheme(theme: theme)
+        titleLabel.textColor = theme.colors.textPrimary
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
+        closeButton.tintColor = theme.colors.iconPrimary
         errorView.applyTheme(theme: theme)
     }
 }
