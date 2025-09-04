@@ -352,15 +352,6 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         ##### \(viewModel.summaryFootnote)
         """
-        // The summary view is constrained to the edge of the screen. In order to have title animation and to scroll
-        // under the status bar, a custom offset is needed so the summary view doesn't overlay the bottom tab snapshot and
-        // the safe area.
-        let summaryContentInset = UIEdgeInsets(
-            top: view.safeAreaInsets.top,
-            left: 0.0,
-            bottom: UX.tabSnapshotFinalPositionBottomPadding,
-            right: 0.0
-        )
         summaryView.configure(
             model: SummaryViewModel(
                 title: webView.title,
@@ -369,7 +360,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                 brandViewModel: viewModel.brandViewModel,
                 summary: parse(markdown: summaryWithNote),
                 summaryA11yId: viewModel.summarizeViewA11yId,
-                scrollContentInsets: summaryContentInset
+                scrollContentBottomInset: UX.tabSnapshotFinalPositionBottomPadding
             )
         )
     }

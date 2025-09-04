@@ -17,7 +17,7 @@ struct SummaryViewModel {
 
     let summary: NSAttributedString?
     let summaryA11yId: String
-    let scrollContentInsets: UIEdgeInsets
+    let scrollContentBottomInset: CGFloat
 }
 
 final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, ThemeApplicable {
@@ -113,7 +113,12 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
 
     func configure(model: SummaryViewModel) {
         self.model = model
-        tableView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: model.scrollContentInsets.bottom, right: 0.0)
+        tableView.contentInset = UIEdgeInsets(
+            top: 0.0,
+            left: 0.0,
+            bottom: model.scrollContentBottomInset,
+            right: 0.0
+        )
         tableView.reloadData()
     }
 
