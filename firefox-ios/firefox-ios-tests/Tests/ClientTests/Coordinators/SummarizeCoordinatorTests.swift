@@ -75,7 +75,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         let subject = createSubject()
 
         subject.start()
-    
+
         let presentedController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
 
         XCTAssertEqual(router.presentCalled, 1)
