@@ -91,11 +91,11 @@ class MockTabManager: TabManager {
 
     func removeTabs(_ tabs: [Tab]) {}
 
-    func removeTab(_ tabUUID: TabUUID) async {}
+    func removeTab(_ tabUUID: TabUUID) {}
 
-    func removeAllTabs(isPrivateMode: Bool) async {}
+    func removeAllTabs(isPrivateMode: Bool) {}
 
-    func removeTabs(by urls: [URL]) async {
+    func removeTabs(by urls: [URL]) {
         removeTabsByURLCalled += 1
     }
 
@@ -167,7 +167,7 @@ class MockTabManager: TabManager {
         return inactiveTabs
     }
 
-    func removeAllInactiveTabs() async {}
+    func removeAllInactiveTabs() {}
 
     func undoCloseInactiveTabs() async {}
 

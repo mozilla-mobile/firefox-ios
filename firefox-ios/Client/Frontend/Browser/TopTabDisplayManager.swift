@@ -334,7 +334,7 @@ class TopTabDisplayManager: NSObject {
 
         getTabs { [weak self] _ in
             self?.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-            self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
+            self?.tabManager.removeTab(tab.tabUUID)
         }
     }
 
