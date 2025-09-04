@@ -437,12 +437,7 @@ open class BrowserProfile: Profile,
         fileURLWithPath: directory,
         isDirectory: true
     ).appendingPathComponent("places.db").path
-    var places: RustPlaces {
-        get {
-            print("⚠️ \(self.placesDbPath) \(self.browserDbPath)")
-                  return RustPlaces(databasePath: self.placesDbPath)
-        }
-    }
+    lazy var places = RustPlaces(databasePath: self.placesDbPath)
 
     public func migrateHistoryToPlaces(
         callback: @escaping (HistoryMigrationResult) -> Void,
