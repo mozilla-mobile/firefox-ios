@@ -31,3 +31,7 @@ enum ShortcutsLibraryActionType: ActionType {
     case viewDidAppear
     case viewDidDisappear
 }
+
+enum ShortcutsLibraryMiddlewareActionType: ActionType {
+    case impressionTelemetryRecorded
+}
