@@ -32,6 +32,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
     weak var viewController: UIViewController?
 
     var dismissed = false
+    private var glassEffectView: UIVisualEffectView?
 
     lazy var gestureRecognizer: UITapGestureRecognizer = {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -62,10 +63,12 @@ class Toast: UIView, ThemeApplicable, Notifiable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.shadowPath = UIBezierPath(
-            roundedRect: self.toastView.bounds,
-            cornerRadius: UX.toastCornerRadius
-        ).cgPath
+        if #unavailable(iOS 26.0) {
+            layer.shadowPath = UIBezierPath(
+                roundedRect: self.toastView.bounds,
+                cornerRadius: UX.toastCornerRadius
+            ).cgPath
+        }
     }
 
     func showToast(viewController: UIViewController? = nil,
@@ -125,8 +128,39 @@ class Toast: UIView, ThemeApplicable, Notifiable {
     }
 
     func applyTheme(theme: Theme) {
-        toastView.backgroundColor = theme.colors.actionPrimary
-        setupShadow(theme: theme)
+        if #available(iOS 26.0, *) {
+            setupGlassEffect(theme: theme)
+        } else {
+            toastView.backgroundColor = theme.colors.actionPrimary
+            setupShadow(theme: theme)
+        }
+    }
+
+    @available(iOS 26.0, *)
+    private func setupGlassEffect(theme: Theme) {
+        // Only add glass effect if it doesn't already exist
+        guard glassEffectView == nil else { return }
+
+        let effectView = UIVisualEffectView()
+        let glassEffect = UIGlassEffect()
+        glassEffect.tintColor = theme.colors.actionPrimary
+
+        effectView.effect = glassEffect
+        effectView.layer.cornerRadius = UX.toastCornerRadius
+        effectView.clipsToBounds = true
+        effectView.translatesAutoresizingMaskIntoConstraints = false
+
+        toastView.backgroundColor = .clear
+        toastView.insertSubview(effectView, at: 0)
+
+        NSLayoutConstraint.activate([
+            effectView.topAnchor.constraint(equalTo: toastView.topAnchor),
+            effectView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor),
+            effectView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor),
+            effectView.bottomAnchor.constraint(equalTo: toastView.bottomAnchor)
+        ])
+
+        glassEffectView = effectView
     }
 
     private func setupShadow(theme: Theme) {
