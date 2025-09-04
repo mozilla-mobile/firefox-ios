@@ -55,12 +55,15 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
     }
 
     func start() {
-        if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false {
-            summarizerTelemetry.summarizationRequested(trigger: trigger)
-            showSummarizeViewController()
-        } else {
-            showToSAlert()
-        }
+        // NOTE(FXIOS-13416): We need this back for certain regions for the hosted model.
+        // if prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false {
+        //     summarizerTelemetry.summarizationRequested(trigger: trigger)
+        //     showSummarizeViewController()
+        // } else {
+        //     showToSAlert()
+        // }
+        summarizerTelemetry.summarizationRequested(trigger: trigger)
+        showSummarizeViewController()
     }
 
     private func showSummarizeViewController() {
