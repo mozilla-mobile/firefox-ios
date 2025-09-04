@@ -8,7 +8,6 @@ import UIKit
 import ComponentLibrary
 import WebKit
 import Down
-import SwiftUI
 
 class CustomStyler: DownStyler {
     // NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
@@ -203,7 +202,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
         closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
         closeButton.largeContentTitle = viewModel.closeButtonModel.a11yLabel
-        
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
         navigationItem.titleView = titleLabel
 
