@@ -94,18 +94,21 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         $0.numberOfLines = 0
         $0.textAlignment = .center
     }
-    private lazy var closeButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(
-            image: UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-            primaryAction: UIAction(handler: { [weak self] _ in
-                self?.triggerDismissingAnimation()
-            })
+    private lazy var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
         )
+        button.addAction(UIAction(handler: { [weak self] _ in
+            self?.triggerDismissingAnimation()
+        }), for: .touchUpInside)
+        button.showsLargeContentViewer = true
         return button
     }()
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.body.systemFont()
-        $0.adjustsFontForContentSizeCategory = true
+        $0.showsLargeContentViewer = true
         $0.isUserInteractionEnabled = true
         $0.addInteraction(UILargeContentViewerInteraction())
         $0.alpha = 0.0
@@ -196,11 +199,13 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         tabSnapshotContainer.accessibilityIdentifier = viewModel.tabSnapshotViewModel.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = viewModel.tabSnapshotViewModel.tabSnapshotA11yLabel
 
-        closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
-        closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
-        navigationItem.rightBarButtonItem = closeButton
-        navigationItem.titleView = titleLabel
         titleLabel.largeContentTitle = webView.title
+        closeButton.accessibilityIdentifier = viewModel.closeButtonModel.a11yIdentifier
+        closeButton.accessibilityLabel = viewModel.closeButtonModel.a11yLabel
+        closeButton.largeContentTitle = viewModel.closeButtonModel.a11yLabel
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+        navigationItem.titleView = titleLabel
 
         summaryView.onDidChangeTitleCellVisibility = { [weak self] isShowingTitleCell in
             self?.titleLabel.alpha = isShowingTitleCell ? 0.0 : 1.0
@@ -545,7 +550,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
-        navigationItem.rightBarButtonItem?.tintColor = theme.colors.iconPrimary
+        closeButton.tintColor = theme.colors.iconPrimary
         errorView.applyTheme(theme: theme)
     }
 }
