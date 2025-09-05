@@ -45,7 +45,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with tabInfo: MainMenuTabInfo,
         and uuid: WindowUUID,
         isExpanded: Bool = false,
-        profileImage: UIImage? = nil,
+        profileImage: UIImage? = nil
     ) -> [MenuSection] {
         return getMainMenuElements(with: uuid, and: tabInfo, isExpanded: isExpanded, profileImage: profileImage)
     }
