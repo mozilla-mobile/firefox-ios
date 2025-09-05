@@ -239,7 +239,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             loadingLabel,
             infoView,
             tabSnapshotContainer,
-            borderOverlayHostingController.view,
+            borderOverlayHostingController.view
         )
         tabSnapshotContainer.addSubview(tabSnapshot)
         tabSnapshot.pinToSuperview()

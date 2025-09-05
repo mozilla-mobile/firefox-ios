@@ -64,7 +64,7 @@ struct SummarizeErrorFormatter {
     func format(error: SummarizerError) -> NSAttributedString? {
         let markDown = generateMarkdown(error: error)
         let parser = Down(markdownString: markDown)
-        return try? parser.toAttributedString(styler: DownStyler(configuration: parserConfiguration, ))
+        return try? parser.toAttributedString(styler: DownStyler(configuration: parserConfiguration))
     }
 
     private func generateMarkdown(error: SummarizerError) -> String {

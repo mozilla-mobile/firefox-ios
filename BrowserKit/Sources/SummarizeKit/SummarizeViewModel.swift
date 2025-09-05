@@ -123,7 +123,7 @@ public struct ToSBottomSheetViewModel {
         allowButtonA11yLabel: String,
         cancelButtonTitle: String,
         cancelButtonA11yId: String,
-        cancelButtonA11yLabel: String,
+        cancelButtonA11yLabel: String
     ) {
         self.titleLabel = titleLabel
         self.titleLabelA11yId = titleLabelA11yId
@@ -162,7 +162,7 @@ public struct SummarizeViewModel {
         brandViewModel: BrandViewModel,
         closeButtonModel: CloseButtonViewModel,
         errorMessages: LocalizedErrorsViewModel,
-        tosViewModel: ToSBottomSheetViewModel,
+        tosViewModel: ToSBottomSheetViewModel
     ) {
         self.titleLabelA11yId = titleLabelA11yId
         self.compactTitleLabelA11yId = compactTitleLabelA11yId
