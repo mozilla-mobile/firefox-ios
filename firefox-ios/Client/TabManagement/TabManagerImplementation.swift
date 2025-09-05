@@ -985,7 +985,7 @@ class TabManagerImplementation: NSObject,
 
     @MainActor
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
-        assert(Thread.isMainThread, "Currently expected to be called only on main thread.")
+        MainActor.assertIsolated("Expected to be called only on main actor.")
         let configuration: WKWebViewConfiguration = tabConfigurationProvider.configuration(
             isPrivate: tab.isPrivate
         ).webViewConfiguration
