@@ -300,6 +300,73 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(tabProvider.pullToRefreshRemoveCount, 1)
     }
 
+    // MARK: - Status-bar "scroll to top" behavior
+
+    func test_statusBarScrollToTop_blocksInteractiveUpdates_whileFlagIsTrue() {
+        let subject = createSubject()
+
+        // Begin the system "tap status bar → scroll to top"
+        let should = subject.scrollViewShouldScrollToTop(tab.webView!.scrollView)
+        XCTAssertTrue(should, "Delegate should allow scroll-to-top")
+
+        // While the system is animating to top, our handler should ignore user updates
+        subject.handleScroll(for: CGPoint(x: 0, y: -80))
+        subject.handleEndScrolling(for: CGPoint(x: 0, y: -80), velocity: .zero)
+
+        XCTAssertTrue(delegate.updateCalls.isEmpty, "No transition progress while status-bar jump is active")
+        XCTAssertEqual(delegate.showCount, 0, "Already expanded → no extra show")
+        XCTAssertEqual(delegate.hideCount, 0, "No hide during status-bar jump")
+    }
+
+    func test_statusBarScrollToTop_resetsFlag_onDidScrollToTop_andReenablesHandling() {
+        let subject = createSubject()
+
+        _ = subject.scrollViewShouldScrollToTop(tab.webView!.scrollView)
+        subject.scrollViewDidScrollToTop(tab.webView!.scrollView)
+
+        // User scrolling should work again
+        subject.handleScroll(for: CGPoint(x: 0, y: -60))
+        subject.handleEndScrolling(for: CGPoint(x: 0, y: -60), velocity: .zero)
+
+        XCTAssertEqual(delegate.hideCount, 1, "After flag reset, normal hide should occur")
+    }
+
+    func test_scrollToTop_notCalledWhenAlreadyExpanded() {
+        let subject = createSubject()
+
+        _ = subject.scrollViewShouldScrollToTop(tab.webView!.scrollView)
+
+        XCTAssertEqual(delegate.showCount, 0, "Should not call showToolbars when already expanded")
+        XCTAssertEqual(delegate.hideCount, 0)
+    }
+
+    func test_scrollToTop_collapsed_callsShowOnce_andBlocksUntilTop() {
+        let subject = createSubject()
+        subject.hideToolbars(animated: true)
+        XCTAssertEqual(delegate.hideCount, 1, "Precondition: collapsed")
+
+        let beforeShow = delegate.showCount
+        _ = subject.scrollViewShouldScrollToTop(tab.webView!.scrollView)
+
+        // If is collapsed we should request show immediately
+        XCTAssertEqual(delegate.showCount, beforeShow + 1)
+
+        // While jump is active, ignore our own scroll attempts
+        subject.handleScroll(for: CGPoint(x: 0, y: -120))
+        subject.handleEndScrolling(for: CGPoint(x: 0, y: -120), velocity: .zero)
+
+        XCTAssertTrue(delegate.updateCalls.isEmpty, "No progress updates during system jump")
+        XCTAssertEqual(delegate.hideCount, 1, "No additional hides while jumping to top")
+
+        // Finish the jump
+        subject.scrollViewDidScrollToTop(tab.webView!.scrollView)
+
+        // Now user scrolls down again → hide should work
+        subject.handleScroll(for: CGPoint(x: 0, y: -60))
+        subject.handleEndScrolling(for: CGPoint(x: 0, y: -60), velocity: .zero)
+        XCTAssertEqual(delegate.hideCount, 2, "After jump completes, hides work again")
+    }
+
     // MARK: - Setup
 
     private func createSubject(contentSize: CGSize = CGSize(width: 200, height: 2000)) -> TabScrollHandler {

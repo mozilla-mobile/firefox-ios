@@ -20,13 +20,26 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         return baseOffset + UX.minimalHeaderOffset
     }
 
+    /// Interactive toolbar transition.
+    /// Top bar moves in [headerOffset, 0] using `originTop - clampProgress`
+    /// Bottom bar moves in [0, height]using `originBottom + clampProgress`
+    /// Values are clamped to their ranges, then layout is requested.
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
+        // Clamp movement to the intended direction (toward `state`)
+        let clampProgress = (state == .collapsed) ? max(0, progress) : min(0, progress)
+
+        // Top toolbar: range [headerOffset ... 0]
         if !isBottomSearchBar {
-            let topOffset = clamp(offset: -progress, min: headerOffset, max: 0)
+            let originTop: CGFloat = (state == .expanded) ? 0 : headerOffset
+            let topOffset = clamp(offset: originTop - clampProgress, min: headerOffset, max: 0)
             headerTopConstraint?.update(offset: topOffset)
             header.superview?.setNeedsLayout()
         }
-        let bottomOffset = clamp(offset: progress, min: 0, max: getBottomContainerSize().height)
+
+        // Bottom toolbar: range [0 ... height]
+        let bottomContainerHeight = getBottomContainerSize().height
+        let originBottom: CGFloat = (state == .expanded) ? bottomContainerHeight : 0
+        let bottomOffset = clamp(offset: originBottom + clampProgress, min: 0, max: bottomContainerHeight)
         bottomContainerConstraint?.update(offset: bottomOffset)
         bottomContainer.superview?.setNeedsLayout()
     }
@@ -75,7 +88,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
     }
 
     private func animateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) { [weak self] in
+        let animator = UIViewPropertyAnimator(duration: UX.topToolbarDuration, curve: .easeOut) { [weak self] in
             guard let self else { return }
 
             headerTopConstraint?.update(offset: topOffset)
@@ -122,21 +135,18 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                 )
             )
         }
-        view.layoutIfNeeded()
     }
 
     private func animateBottomToolbar(bottomOffset: CGFloat,
                                       overKeyboardOffset: CGFloat,
                                       alpha: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: 0.2, curve: .easeInOut) { [weak self] in
+        let animator = UIViewPropertyAnimator(duration: UX.bottomToolbarDuration, curve: .easeOut) { [weak self] in
             guard let self else { return }
             bottomContainerConstraint?.update(offset: bottomOffset)
             bottomContainer.superview?.setNeedsLayout()
 
             overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
             overKeyboardContainer.superview?.setNeedsLayout()
-
-            self.view.layoutIfNeeded()
         }
 
         animator.startAnimation()
