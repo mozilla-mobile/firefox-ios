@@ -214,7 +214,7 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Remove Tab
     @MainActor
-    func removeTab(_ tabUUID: TabUUID) async {
+    func removeTab(_ tabUUID: TabUUID) {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -255,7 +255,7 @@ class TabManagerImplementation: NSObject,
             return urls.contains(url)
         }
         for tab in tabsToRemove {
-            await removeTab(tab.tabUUID)
+            removeTab(tab.tabUUID)
         }
     }
 
@@ -274,7 +274,7 @@ class TabManagerImplementation: NSObject,
         backupCloseTabs = tabs
 
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
@@ -331,6 +331,7 @@ class TabManagerImplementation: NSObject,
         }
     }
 
+    @MainActor
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {
         let calendar = Calendar.current
         let cutoffDate: Date
@@ -349,7 +350,11 @@ class TabManagerImplementation: NSObject,
         }
 
         guard !tabsToRemove.isEmpty else { return }
-        removeTabs(tabsToRemove)
+
+        for tab in tabsToRemove {
+            removeTab(tab.tabUUID)
+        }
+        commitChanges()
     }
 
     // MARK: - Add Tab
@@ -1053,7 +1058,7 @@ class TabManagerImplementation: NSObject,
         let currentModeTabs = getInactiveTabs()
         backupCloseTabs = currentModeTabs
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
         commitChanges()
     }
