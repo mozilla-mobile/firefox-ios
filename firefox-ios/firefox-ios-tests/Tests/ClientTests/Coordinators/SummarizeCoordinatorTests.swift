@@ -97,7 +97,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         subject.dismissSummary()
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
-        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
