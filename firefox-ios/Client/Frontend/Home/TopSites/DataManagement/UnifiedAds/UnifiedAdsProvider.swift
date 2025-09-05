@@ -85,10 +85,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             return nil
         }
 
-        guard let contextId = TelemetryContextualIdentifier.contextId else {
-            logger.log("No context id: \(String(describing: TelemetryContextualIdentifier.contextId))",
-                       level: .warning,
-                       category: .legacyHomepage)
+        guard let contextId = ContextIDManager.shared.getContextID() else {
             return nil
         }
 
