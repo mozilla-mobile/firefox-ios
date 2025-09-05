@@ -150,21 +150,6 @@ final class MainMenuMiddleware: FeatureFlaggable {
         )
     }
 
-    private func dispatchUpdateAccountHeader(
-        accountData: AccountData? = nil,
-        action: MainMenuAction,
-        icon: UIImage? = nil
-    ) {
-        store.dispatchLegacy(
-            MainMenuAction(
-                windowUUID: action.windowUUID,
-                actionType: MainMenuMiddlewareActionType.updateAccountHeader,
-                accountData: accountData,
-                accountIcon: icon
-            )
-        )
-    }
-
     private func handleViewDidLoadAction(action: MainMenuAction) {
         store.dispatchLegacy(
             MainMenuAction(

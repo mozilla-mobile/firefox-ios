@@ -72,8 +72,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,
-            accountData: AccountData(title: "Test Title", subtitle: "Test Subtitle"),
-            accountProfileImage: UIImage()
+            accountData: AccountData(title: "Test Title", subtitle: "Test Subtitle")
         )
     }
 }
