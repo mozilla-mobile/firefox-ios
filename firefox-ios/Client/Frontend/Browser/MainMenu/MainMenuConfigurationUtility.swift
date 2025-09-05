@@ -44,9 +44,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         and uuid: WindowUUID,
-        isExpanded: Bool = false
+        isExpanded: Bool = false,
+        profileImage: UIImage? = nil,
     ) -> [MenuSection] {
-        return getMainMenuElements(with: uuid, and: tabInfo, isExpanded: isExpanded)
+        return getMainMenuElements(with: uuid, and: tabInfo, isExpanded: isExpanded, profileImage: profileImage)
     }
 
     // MARK: - Main Menu
@@ -54,18 +55,19 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private func getMainMenuElements(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo,
-        isExpanded: Bool = false
+        isExpanded: Bool = false,
+        profileImage: UIImage?
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = []
 
         if tabInfo.isHomepage {
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
-            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         } else {
             menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
-            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         }
 
         return menuSections
@@ -159,7 +161,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // Account Section
-    private func getAccountSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
+    private func getAccountSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo, profileImage: UIImage?) -> MenuSection {
         return MenuSection(
             isHomepage: tabInfo.isHomepage,
             options: [
@@ -167,7 +169,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     title: tabInfo.accountData.title,
                     description: tabInfo.accountData.subtitle,
                     iconName: Icons.avatarCircle,
-                    iconImage: tabInfo.accountProfileImage,
+                    iconImage: profileImage,
                     needsReAuth: tabInfo.accountData.needsReAuth,
                     isEnabled: true,
                     isActive: false,
