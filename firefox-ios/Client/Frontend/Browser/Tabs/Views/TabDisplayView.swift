@@ -18,7 +18,8 @@ class TabDisplayView: UIView,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
                       InactiveTabsSectionManagerDelegate,
-                      FeatureFlaggable {
+                      FeatureFlaggable,
+                      InsetUpdatable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
     }
@@ -417,6 +418,13 @@ class TabDisplayView: UIView,
 
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
         return !isDragging
+    }
+
+    // MARK: - InsetUpdatable
+
+    func updateInsets(top: CGFloat, bottom: CGFloat) {
+        collectionView.contentInset.top = top
+        collectionView.contentInset.bottom = bottom
     }
 }
 
