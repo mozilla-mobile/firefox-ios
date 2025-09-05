@@ -5,7 +5,7 @@
 import WebKit
 import Foundation
 
-public class SummarizationChecker: SummarizationCheckerProtocol {
+public final class SummarizationChecker: SummarizationCheckerProtocol {
     public init() {}
 
     /// Calls `checkSummarization(maxWords:)` in the web page and returns a typed result.

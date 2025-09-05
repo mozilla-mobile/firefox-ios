@@ -224,7 +224,10 @@ public class ToSBottomSheetViewController: UIViewController,
     // MARK: - Notifiable
     public func handleNotifications(_ notification: Notification) {
         guard notification.name == UIContentSizeCategory.didChangeNotification else { return }
-        updateDynamicFontSize()
+
+        ensureMainThread {
+            self.updateDynamicFontSize()
+        }
     }
 
     // MARK: - UITextViewDelegate

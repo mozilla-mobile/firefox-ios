@@ -5,7 +5,7 @@
 import SummarizeKit
 import WebKit
 
-class MockSummarizationChecker: SummarizationCheckerProtocol {
+final class MockSummarizationChecker: SummarizationCheckerProtocol, @unchecked Sendable {
     var checkCalledCount = 0
     static let success = SummarizationCheckResult(
         canSummarize: true,

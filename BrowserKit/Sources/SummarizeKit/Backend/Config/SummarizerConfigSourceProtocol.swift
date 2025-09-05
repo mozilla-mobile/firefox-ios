@@ -3,6 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// An interface that defines the contract for loading summarizer configurations from various sources.
-public protocol SummarizerConfigSourceProtocol {
+public protocol SummarizerConfigSourceProtocol: Sendable {
     func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig?
 }
