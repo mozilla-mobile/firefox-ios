@@ -27,10 +27,9 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             let applSummarizer = FoundationModelsSummarizer(config: config)
             return SummarizerService(summarizer: applSummarizer, maxWords: maxWords)
         } else {
-            guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
-                  let model = config.options["model"] as? String, !model.isEmpty,
-                  let key = LiteLLMConfig.apiKey else { return nil }
-            let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
+            let model = "mistral-small-2503"
+            // NOTE(Nish): key here
+            let llmClient = LiteLLMClient(apiKey: "sk-xxxxxx", baseURL: URL(string:"https://xxxxx.com")!)
             let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
             return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
         }

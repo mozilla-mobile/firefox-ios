@@ -113,6 +113,9 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
         // config.options is the base value for the payload
         var payload = config.options.compactMapValues { $0 }
         payload["messages"] = messages.map { ["role": $0.role.rawValue, "content": $0.content] }
+        // NOTE(Nish): model
+        payload["model"] = "mistral-small-2503"
+        payload["stream"] = true
 
         if let stream = config.options["stream"] as? Bool, stream {
             request.addValue("text/event-stream", forHTTPHeaderField: "Accept")

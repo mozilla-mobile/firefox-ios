@@ -41,6 +41,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     private let viewModel: SummarizeViewModel
     private let summarizerService: SummarizerService
     private let webView: WKWebView
+    var tempSummary = ""
 
     private let onSummaryDisplayed: () -> Void
 
@@ -312,12 +313,20 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         }
     }
 
+
     private func summarizeTask() async {
         do {
-            let summary = try await summarizerService.summarize(from: webView)
-            await MainActor.run {
-                showSummary(summary)
+            tempSummary = ""
+            
+            let summary = try await summarizerService.summarizeStreamed(from: webView)
+            
+            for try await chunk in summary {
+                await MainActor.run {
+                    tempSummary += chunk
+                    showSummary(tempSummary)
+                }
             }
+            
         } catch {
             let summaryError: SummarizerError = if let error = error as? SummarizerError {
                 error
