@@ -94,13 +94,13 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle, Summari
         )
 
         let tosViewModel = ToSBottomSheetViewModel(
-            titleLabel: .Summarizer.ToSAlertTitleLabel,
+            titleLabel: .Summarizer.ToSInfoPanelTitleLabel,
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.tosTitleLabel,
             descriptionText: String(format: .Summarizer.ToSInfoPanelLabel, AppName.shortName.rawValue),
             descriptionTextA11yId: AccessibilityIdentifiers.Summarizer.tosDescriptionText,
-            linkButtonLabel: .Summarizer.ToSAlertLinkButtonLabel,
+            linkButtonLabel: .Summarizer.ToSInfoLabelLinkButtonLabel,
             linkButtonURL: SupportUtils.URLForTopic("summarize-pages-ios"),
-            allowButtonTitle: .Summarizer.ToSAlertAllowButtonLabel,
+            allowButtonTitle: .Summarizer.ToSInfoPanelContinueButtonLabel,
             allowButtonA11yId: AccessibilityIdentifiers.Summarizer.tosAllowButton,
             allowButtonA11yLabel: .Summarizer.ToSAlertAllowButtonAccessibilityLabel,
             cancelButtonTitle: .Summarizer.ToSAlertCancelButtonLabel,
