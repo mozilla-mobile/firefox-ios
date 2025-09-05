@@ -90,7 +90,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle, Summari
             errorButtonA11yId: AccessibilityIdentifiers.Summarizer.errorButton,
             retryButtonLabel: .Summarizer.RetryButtonLabel,
             closeButtonLabel: .Summarizer.CloseButtonLabel,
-            acceptToSButtonLabel: .Summarizer.ToSAlertAllowButtonLabel
+            acceptToSButtonLabel: .Summarizer.ToSAlertContinueButtonLabel
         )
 
         let tosViewModel = ToSBottomSheetViewModel(

@@ -594,7 +594,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
-        closeButton.tintColor = theme.colors.iconPrimary
+        closeButton.tintColor = theme.colors.iconOnColor
         infoView.applyTheme(theme: theme)
     }
 }

@@ -2271,6 +2271,12 @@ extension String {
             value: "Allow",
             comment: "The label for the allow button on the Terms of Service alert."
         )
+        public static let ToSAlertContinueButtonLabel = MZLocalizedString(
+            key: "Summarizer.ToS.Alert.ContinueButton.Label.v144",
+            tableName: "Summarizer",
+            value: "Continue",
+            comment: "The label for the continue button on the Terms of Service alert."
+        )
         public static let ToSInfoPanelContinueButtonLabel = MZLocalizedString(
             key: "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143",
             tableName: "Summarizer",

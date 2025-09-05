@@ -110,7 +110,7 @@ class InfoView: UIView,
         if #unavailable(iOS 26) {
             actionButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
         }
-        actionButton.configuration?.baseForegroundColor = theme.colors.textPrimary
+        actionButton.configuration?.baseForegroundColor = theme.colors.textOnDark
         contentView.linkTextAttributes = [
             .font: FXFontStyles.Regular.subheadline.scaledFont(),
             .foregroundColor: theme.colors.textOnDark.withAlphaComponent(0.8),
