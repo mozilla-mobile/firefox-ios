@@ -13,6 +13,9 @@ class SelfSizingHostingController<Content>: UIHostingController<Content>, Bottom
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.view.invalidateIntrinsicContentSize() // Adjusts size based on content.
+        if #available(iOS 26.0, *) {
+            view.backgroundColor = .clear
+        }
     }
 
     /// Placeholder for bottom sheet dismissal handling. Override to add custom behavior.
