@@ -328,7 +328,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     private func summarizeTask(isTosAccepted: Bool) async {
         do {
             guard isTosAccepted else {
-                throw SummarizerError.tosConsetMissing
+                throw SummarizerError.tosConsentMissing
             }
             let summary = try await summarizerService.summarize(from: webView)
             await MainActor.run {

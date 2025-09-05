@@ -16,7 +16,7 @@ extension SummarizerError {
              .invalidResponse,
              .invalidChunk:
             .retry
-        case .tosConsetMissing:
+        case .tosConsentMissing:
             .acceptToS
         default:
             .close
@@ -38,7 +38,7 @@ extension SummarizerError {
             localizedErrors.pageStillLoadingMessage
         case .unknown, .cancelled, .invalidChunk:
             localizedErrors.genericErrorMessage
-        case .tosConsetMissing:
+        case .tosConsentMissing:
             ""
         }
     }

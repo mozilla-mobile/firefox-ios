@@ -69,7 +69,7 @@ struct SummarizeErrorFormatter {
 
     private func generateMarkdown(error: SummarizerError) -> String {
         switch error {
-        case .tosConsetMissing:
+        case .tosConsentMissing:
             if isAccessibilityCategoryEnabled {
                 return """
                 # \(viewModel.tosViewModel.titleLabel)
