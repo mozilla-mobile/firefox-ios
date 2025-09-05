@@ -18,6 +18,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
+        mockProfile.reopen()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         testBookmarkGUID = await addBookmark(title: testBookmark.title, url: testBookmark.url)
         testFolderGUID = await addFolder(title: testFolder.title)
