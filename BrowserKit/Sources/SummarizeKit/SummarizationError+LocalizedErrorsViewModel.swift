@@ -4,16 +4,22 @@
 
 import Foundation
 
+enum ErrorButtonState {
+    case retry, close, acceptToS
+}
+
 extension SummarizerError {
-    var shouldRetrySummarizing: Bool {
+    var shouldRetrySummarizing: ErrorButtonState {
         return switch self {
         case .busy,
              .noContent,
              .invalidResponse,
              .invalidChunk:
-            true
+            .retry
+        case .tosConsetMissing:
+            .acceptToS
         default:
-            false
+            .close
         }
     }
 
@@ -32,6 +38,8 @@ extension SummarizerError {
             localizedErrors.pageStillLoadingMessage
         case .unknown, .cancelled, .invalidChunk:
             localizedErrors.genericErrorMessage
+        case .tosConsetMissing:
+            ""
         }
     }
 }
