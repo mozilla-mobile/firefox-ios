@@ -96,7 +96,7 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle, Summari
         let tosViewModel = ToSBottomSheetViewModel(
             titleLabel: .Summarizer.ToSAlertTitleLabel,
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.tosTitleLabel,
-            descriptionText: .Summarizer.ToSInfoPanelLabel,
+            descriptionText: String(format: .Summarizer.ToSInfoPanelLabel, AppName.shortName.rawValue),
             descriptionTextA11yId: AccessibilityIdentifiers.Summarizer.tosDescriptionText,
             linkButtonLabel: .Summarizer.ToSAlertLinkButtonLabel,
             linkButtonURL: SupportUtils.URLForTopic("summarize-pages-ios"),

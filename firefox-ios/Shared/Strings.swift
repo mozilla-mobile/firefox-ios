@@ -2256,8 +2256,8 @@ extension String {
         public static let ToSInfoPanelLabel = MZLocalizedString(
             key: "Summarizer.ToS.InfoPanel.Label.v142",
             tableName: "Summarizer",
-            value: "See the main points in seconds with Firefox.",
-            comment: "The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox)."
+            value: "See the main points in seconds with %@.",
+            comment: "The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox)."
         )
         public static let ToSAlertAllowButtonLabel = MZLocalizedString(
             key: "Summarizer.ToS.Alert.AllowButton.Label.v142",
