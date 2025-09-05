@@ -86,7 +86,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
 
     func testAcceptToSConsent_recordsTelemetry() throws {
         let subject = createSubject()
-        subject.acceptTosConset()
+        subject.acceptToSConsent()
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
     }

@@ -166,9 +166,13 @@ class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle, Summari
         onRequestOpenURL?(url)
     }
 
-    func acceptTosConset() {
+    func acceptToSConsent() {
         prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
         summarizerTelemetry.summarizationConsentDisplayed(true)
+    }
+
+    func denyToSConsent() {
+        summarizerTelemetry.summarizationConsentDisplayed(false)
     }
 
     func dismissSummary() {

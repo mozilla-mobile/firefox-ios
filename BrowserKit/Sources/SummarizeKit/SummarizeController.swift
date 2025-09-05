@@ -21,7 +21,9 @@ class CustomStyler: DownStyler {
 public protocol SummarizeNavigationHandler: AnyObject {
     func openURL(url: URL)
 
-    func acceptTosConset()
+    func acceptToSConsent()
+
+    func denyToSConsent()
 
     func dismissSummary()
 }
@@ -51,6 +53,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     private let summarizerService: SummarizerService
     private let webView: WKWebView
     private let isTosAccepted: Bool
+    private var tosPanelWasShown = false
     private let onSummaryDisplayed: () -> Void
     private weak var navigationHandler: SummarizeNavigationHandler?
 
@@ -393,6 +396,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func showError(_ error: SummarizerError) {
+        if case .tosConsentMissing = error {
+            tosPanelWasShown = true
+        }
         let actionButtonLabel: String = switch error.shouldRetrySummarizing {
         case .acceptToS:
             viewModel.errorMessages.acceptToSButtonLabel
@@ -419,7 +425,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                     case .close:
                         self?.dismissSummary()
                     case .acceptToS:
-                        self?.navigationHandler?.acceptTosConset()
+                        self?.navigationHandler?.acceptToSConsent()
                         self?.summarize(isTosAccepted: true)
                     }
                 }, linkCallback: { [weak self] url in
@@ -454,6 +460,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if tosPanelWasShown && !isTosAccepted {
+            navigationHandler?.denyToSConsent()
+        }
         navigationHandler?.dismissSummary()
         super.dismiss(animated: flag, completion: completion)
     }
