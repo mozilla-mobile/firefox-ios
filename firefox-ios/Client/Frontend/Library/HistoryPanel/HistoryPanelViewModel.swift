@@ -10,7 +10,8 @@ import SwiftUI
 
 import struct MozillaAppServices.VisitTransitionSet
 
-class HistoryPanelViewModel: FeatureFlaggable {
+// TODO: FXIOS Make HistoryPanelViewModel actually sendable
+final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
         case lastHour
@@ -46,13 +47,12 @@ class HistoryPanelViewModel: FeatureFlaggable {
     // MARK: - Properties
 
     private let profile: Profile
-    private var logger: Logger
+    private let logger: Logger
     // Request limit and offset
     private let queryFetchLimit = 100
     // Is not intended to be use in prod code, only on test
     private(set) var currentFetchOffset = 0
     private let searchQueryFetchLimit = 50
-    private var searchCurrentFetchOffset = 0
 
     // Search
     var isSearchInProgress = false
