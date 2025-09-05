@@ -20,10 +20,15 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         return baseOffset + UX.minimalHeaderOffset
     }
 
+    /// Interactive toolbar transition.
+    /// Top bar moves in [headerOffset, 0] using `originTop - clampProgress`
+    /// Bottom bar moves in [0, height]using `originBottom + clampProgress`
+    /// Values are clamped to their ranges, then layout is requested.
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
-        // Only allow movement in the direction of `towards`
+        // Clamp movement to the intended direction (toward `state`)
         let clampProgress = (state == .collapsed) ? max(0, progress) : min(0, progress)
 
+        // Top toolbar: range [headerOffset ... 0]
         if !isBottomSearchBar {
             let originTop: CGFloat = (state == .expanded) ? 0 : headerOffset
             let topOffset = clamp(offset: originTop - clampProgress, min: headerOffset, max: 0)
@@ -31,6 +36,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
             header.superview?.setNeedsLayout()
         }
 
+        // Bottom toolbar: range [0 ... height]
         let bottomContainerHeight = getBottomContainerSize().height
         let originBottom: CGFloat = (state == .expanded) ? bottomContainerHeight : 0
         let bottomOffset = clamp(offset: originBottom + clampProgress, min: 0, max: bottomContainerHeight)
