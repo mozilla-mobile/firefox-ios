@@ -150,8 +150,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
         // Initialize Glean telemetry
         let gleanConfig: Configuration
-        if featureFlags.isFeatureEnabled(.ohttpManagerGleanUploader, checking: .buildOnly),
-            let pingUploader = GleanPingUploader() {
+        if let pingUploader = GleanPingUploader() {
             gleanConfig = Configuration(
                 channel: AppConstants.buildChannel.rawValue,
                 logLevel: .off,
@@ -322,7 +321,6 @@ extension TelemetryWrapper {
         case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
         case information = "information"
-        case firefoxSuggest = "fx-suggest"
     }
 
     public enum EventMethod: String {
@@ -555,7 +553,6 @@ extension TelemetryWrapper {
         case viewHistoryPanel = "view-history-panel"
         case createNewTab = "create-new-tab"
         case sponsoredShortcuts = "sponsored-shortcuts"
-        case fxSuggest = "fx-suggest"
         case webview = "webview"
         case urlbarImpression = "urlbar-impression"
         case urlbarEngagement = "urlbar-engagement"
@@ -639,10 +636,6 @@ extension TelemetryWrapper {
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
         case tabLossDetected = "tab_loss_detected"
-        case fxSuggestionTelemetryInfo = "fx-suggestion-telemetry-info"
-        case fxSuggestionPosition = "fx-suggestion-position"
-        case fxSuggestionDidTap = "fx-suggestion-did-tap"
-        case fxSuggestionDidAbandonSearchSession = "fx-suggestion-did-abandon-search-session"
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
@@ -1760,82 +1753,6 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-
-        // MARK: - FX Suggest
-        case(.action, .tap, .fxSuggest, _, let extras):
-            guard let contextIdString = TelemetryContextualIdentifier.contextId,
-                  let contextId = UUID(uuidString: contextIdString),
-                  let telemetryInfo = extras?[EventValue.fxSuggestionTelemetryInfo.rawValue] as? RustFirefoxSuggestionTelemetryInfo,
-                  let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int else {
-                return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-
-            // Record an event for this tap in the `events` ping.
-            // These events include the `client_id`.
-            let searchResultTapExtra = switch telemetryInfo {
-            case .amp: GleanMetrics.Awesomebar.SearchResultTapExtra(type: "amp-suggestion")
-            case .wikipedia: GleanMetrics.Awesomebar.SearchResultTapExtra(type: "wikipedia-suggestion")
-            }
-            GleanMetrics.Awesomebar.searchResultTap.record(searchResultTapExtra)
-
-            // Submit a separate `fx-suggest` ping for this tap.
-            // These pings do not include the `client_id`.
-            GleanMetrics.FxSuggest.contextId.set(contextId)
-            GleanMetrics.FxSuggest.pingType.set("fxsuggest-click")
-            GleanMetrics.FxSuggest.isClicked.set(true)
-            GleanMetrics.FxSuggest.position.set(Int64(position))
-            switch telemetryInfo {
-            case let .amp(blockId, advertiser, iabCategory, _, clickReportingURL):
-                GleanMetrics.FxSuggest.blockId.set(blockId)
-                GleanMetrics.FxSuggest.advertiser.set(advertiser)
-                GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
-                if let clickReportingURL {
-                    GleanMetrics.FxSuggest.reportingUrl.set(url: clickReportingURL)
-                }
-            case .wikipedia:
-                GleanMetrics.FxSuggest.advertiser.set("wikipedia")
-            }
-            GleanMetrics.Pings.shared.fxSuggest.submit()
-
-        case(.action, .view, .fxSuggest, _, let extras):
-            guard let contextIdString = TelemetryContextualIdentifier.contextId,
-                  let contextId = UUID(uuidString: contextIdString),
-                  let telemetryInfo = extras?[EventValue.fxSuggestionTelemetryInfo.rawValue] as? RustFirefoxSuggestionTelemetryInfo,
-                  let position = extras?[EventValue.fxSuggestionPosition.rawValue] as? Int,
-                  let didTap = extras?[EventValue.fxSuggestionDidTap.rawValue] as? Bool,
-                  let didAbandonSearchSession = extras?[EventValue.fxSuggestionDidAbandonSearchSession.rawValue] as? Bool else {
-                return recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-
-            // Record an event for this impression in the `events` ping.
-            // These events include the `client_id`, and we record them for
-            // engaged and abandoned search sessions.
-            let searchResultImpressionExtra = switch telemetryInfo {
-            case .amp: GleanMetrics.Awesomebar.SearchResultImpressionExtra(type: "amp-suggestion")
-            case .wikipedia: GleanMetrics.Awesomebar.SearchResultImpressionExtra(type: "wikipedia-suggestion")
-            }
-            GleanMetrics.Awesomebar.searchResultImpression.record(searchResultImpressionExtra)
-
-            // Submit a separate `fx-suggest` ping for this impression.
-            // These pings do not include the `client_id`, and we only submit
-            // them for engaged search sessions.
-            if didAbandonSearchSession { break }
-            GleanMetrics.FxSuggest.contextId.set(contextId)
-            GleanMetrics.FxSuggest.pingType.set("fxsuggest-impression")
-            GleanMetrics.FxSuggest.isClicked.set(didTap)
-            GleanMetrics.FxSuggest.position.set(Int64(position))
-            switch telemetryInfo {
-            case let .amp(blockId, advertiser, iabCategory, impressionReportingURL, _):
-                GleanMetrics.FxSuggest.blockId.set(blockId)
-                GleanMetrics.FxSuggest.advertiser.set(advertiser)
-                GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
-                if let impressionReportingURL {
-                    GleanMetrics.FxSuggest.reportingUrl.set(url: impressionReportingURL)
-                }
-            case .wikipedia:
-                GleanMetrics.FxSuggest.advertiser.set("wikipedia")
-            }
-            GleanMetrics.Pings.shared.fxSuggest.submit()
 
         // MARK: - Uninstrumented
         default:
