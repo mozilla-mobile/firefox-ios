@@ -75,7 +75,7 @@ class ContentContainer: UIView,
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)
         case .homepage:
-            return !(content is HomepageViewController)
+            return !(content is HomepageNavigationController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)
         case .webview:
@@ -120,13 +120,14 @@ class ContentContainer: UIView,
     }
 
     private func addToView(content: ContentContainable) {
-        addSubview(content.view)
-        content.view.translatesAutoresizingMaskIntoConstraints = false
+        let testView = ((content as? HomepageNavigationController)?.topViewController?.view ?? content.view)!
+        addSubview(testView)
+        testView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            content.view.topAnchor.constraint(equalTo: topAnchor),
-            content.view.leadingAnchor.constraint(equalTo: leadingAnchor),
-            content.view.bottomAnchor.constraint(equalTo: bottomAnchor),
-            content.view.trailingAnchor.constraint(equalTo: trailingAnchor)
+            testView.topAnchor.constraint(equalTo: topAnchor),
+            testView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            testView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            testView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 }

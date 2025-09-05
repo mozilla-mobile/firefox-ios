@@ -41,6 +41,7 @@ class BrowserCoordinator: BaseCoordinator,
     var legacyHomepageViewController: LegacyHomepageViewController?
     var homepageViewController: HomepageViewController?
     private weak var privateHomepageViewController: PrivateHomepageViewController?
+    private var homepageRouter: Router?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -87,7 +88,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func start(with launchType: LaunchType?) {
-        router.setRootViewController(browserViewController, hideBar: true, animated: false)
+        router.setRootViewController(browserViewController, hideBar: false, animated: false)
         let isIphone = UIDevice.current.userInterfaceIdiom == .phone
         if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: isIphone) {
             startLaunch(with: launchType)
@@ -157,19 +158,29 @@ class BrowserCoordinator: BaseCoordinator,
         statusBarScrollDelegate: StatusBarScrollDelegate,
         toastContainer: UIView
     ) {
-        let homepageController = self.homepageViewController ?? HomepageViewController(
-            windowUUID: windowUUID,
-            overlayManager: overlayManager,
-            statusBarScrollDelegate: statusBarScrollDelegate,
-            toastContainer: toastContainer
-        )
+        if homepageViewController == nil {
+            let homepageViewController = HomepageViewController(
+                windowUUID: windowUUID,
+                overlayManager: overlayManager,
+                statusBarScrollDelegate: statusBarScrollDelegate,
+                toastContainer: toastContainer
+            )
+            self.homepageViewController = homepageViewController
+
+            let homepageRouter = DefaultRouter(navigationController: HomepageNavigationController())
+            self.homepageRouter = homepageRouter
+            homepageRouter.setRootViewController(homepageViewController, hideBar: true, animated: false)
+        }
+
+        guard let homepageController = self.homepageViewController, let homepageRouter = self.homepageRouter else { return }
+
         homepageController.termsOfUseDelegate = self
         dispatchActionForEmbeddingHomepage(with: isZeroSearch)
-        guard browserViewController.embedContent(homepageController) else {
+        guard browserViewController.embedContent((homepageRouter.navigationController as? HomepageNavigationController)!)
+        else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
         }
-        self.homepageViewController = homepageController
         homepageController.scrollToTop()
     }
 
@@ -1340,4 +1351,8 @@ class BrowserCoordinator: BaseCoordinator,
             action(expectedCoordinator)
         }
     }
+}
+
+class HomepageNavigationController: UINavigationController, ContentContainable {
+    var contentType: ContentType = .homepage
 }
