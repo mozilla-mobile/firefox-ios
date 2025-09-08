@@ -1704,6 +1704,8 @@ workflows:
         - message: "The build run the Klar testPlan: UnitTests"
         - webhook_url: "$SLACK_WEBHOOK"
   focus_ui_test:
+    after_run:
+    - focus_configure_build
     steps:
     - script@1.2.1:
         inputs:
