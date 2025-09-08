@@ -10,28 +10,12 @@ pipelines:
               expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
-        focus_configure_build:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - determine_apps_affected
-        klar_configure_build:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - determine_apps_affected
         run_firefox_ui_tests:
             run_if:
               expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
             depends_on:
             - firefox_configure_build
             parallel: 5
-        focus_ui_test:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - focus_configure_build
-            parallel: 1
 
 workflows:
   firefox_accessibility_test:
@@ -339,7 +323,6 @@ workflows:
 
             # Initialize all application flags as "false" by default
             BUILD_FIREFOX_IOS="false"
-            BUILD_FOCUS_IOS="false"
             BUILD_SAMPLE_BROWSER_IOS="false"
 
             # Manual triggers leave empty commits.
@@ -349,7 +332,6 @@ workflows:
                 echo "No files changed in commit/PR. Skipping Blacklist check..."
                 # Set environment variables
                 envman add --key BUILD_FIREFOX_IOS --value "true"
-                envman add --key BUILD_FOCUS_IOS --value "true"
                 exit 0
             fi
 
@@ -381,16 +363,12 @@ workflows:
                     firefox-ios*)
                         BUILD_FIREFOX_IOS="true"
                         ;;
-                    focus-ios*)
-                        BUILD_FOCUS_IOS="true"
-                        ;;
                     SampleBrowser*)
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                     BrowserKit*|taskcluster*|test-fixtures*)
                         # Explicitly directory changes - build all applications
                         BUILD_FIREFOX_IOS="true"
-                        BUILD_FOCUS_IOS="true"
                         ;;
                     ".")
                         # Root directory changes - build all applications
@@ -401,7 +379,6 @@ workflows:
                     *)
                         # Default case - build all applications (e.g, BrowserKit)
                         BUILD_FIREFOX_IOS="true"
-                        BUILD_FOCUS_IOS="true"
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                 esac
@@ -409,18 +386,15 @@ workflows:
 
             # Set environment variables
             envman add --key BUILD_FIREFOX_IOS --value "$BUILD_FIREFOX_IOS"
-            envman add --key BUILD_FOCUS_IOS --value "$BUILD_FOCUS_IOS"
             envman add --key BUILD_SAMPLE_BROWSER_IOS --value "$BUILD_SAMPLE_BROWSER_IOS"
 
             echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
-            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
             echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
 
     - share-pipeline-variable@1:
         inputs:
         - variables: |-
             BUILD_FIREFOX_IOS
-            BUILD_FOCUS_IOS
             BUILD_SAMPLE_BROWSER_IOS
     - script@1.2.1:
         title: Echo applications set
@@ -430,7 +404,6 @@ workflows:
             set -ex
 
             echo "BUILD_FIREFOX_IOS: $BUILD_FIREFOX_IOS"
-            echo "BUILD_FOCUS_IOS: $BUILD_FOCUS_IOS"
             echo "BUILD_SAMPLE_BROWSER_IOS: $BUILD_SAMPLE_BROWSER_IOS"
 
   send_slack_notification:
