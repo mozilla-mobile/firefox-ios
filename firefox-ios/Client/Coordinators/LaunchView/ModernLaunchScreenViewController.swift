@@ -70,8 +70,8 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         if isLoading {
             shouldLoadNextLaunchType = true
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + UX.minimumDisplayTimeSeconds) {
-                self.viewModel.loadNextLaunchType()
+            DispatchQueue.main.asyncAfter(deadline: .now() + UX.minimumDisplayTimeSeconds) { [weak self] in
+                self?.viewModel.loadNextLaunchType()
             }
         }
     }

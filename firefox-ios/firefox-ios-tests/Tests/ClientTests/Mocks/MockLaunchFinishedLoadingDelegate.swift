@@ -6,21 +6,90 @@ import Foundation
 @testable import Client
 
 class MockLaunchFinishedLoadingDelegate: LaunchFinishedLoadingDelegate {
+    // MARK: - Properties
     var savedLaunchType: LaunchType?
     var launchWithTypeCalled = 0
     var launchBrowserCalled = 0
     var finishedLoadingLaunchOrderCalled = 0
 
+    // MARK: - Call Tracking
+    private var launchWithTypeCallHistory: [LaunchType] = []
+    private var launchBrowserCallHistory: [Date] = []
+    private var finishedLoadingCallHistory: [Date] = []
+
     func launchWith(launchType: LaunchType) {
         launchWithTypeCalled += 1
         savedLaunchType = launchType
+        launchWithTypeCallHistory.append(launchType)
     }
 
     func launchBrowser() {
         launchBrowserCalled += 1
+        launchBrowserCallHistory.append(Date())
     }
 
     func finishedLoadingLaunchOrder() {
         finishedLoadingLaunchOrderCalled += 1
+        finishedLoadingCallHistory.append(Date())
+    }
+
+    // MARK: - Test Helper Methods
+
+    func reset() {
+        savedLaunchType = nil
+        launchWithTypeCalled = 0
+        launchBrowserCalled = 0
+        finishedLoadingLaunchOrderCalled = 0
+        launchWithTypeCallHistory.removeAll()
+        launchBrowserCallHistory.removeAll()
+        finishedLoadingCallHistory.removeAll()
+    }
+
+    func verifyLaunchWithCalled(with launchType: LaunchType) -> Bool {
+        return launchWithTypeCallHistory.contains { savedType in
+            switch (savedType, launchType) {
+            case (.intro, .intro), (.update, .update), (.survey, .survey),
+                 (.defaultBrowser, .defaultBrowser), (.termsOfService, .termsOfService):
+                return true
+            default:
+                return false
+            }
+        }
+    }
+
+    func verifyLaunchWithCallCount(_ expectedCount: Int) -> Bool {
+        return launchWithTypeCalled == expectedCount
+    }
+
+    func verifyLaunchBrowserCallCount(_ expectedCount: Int) -> Bool {
+        return launchBrowserCalled == expectedCount
+    }
+
+    func verifyFinishedLoadingCallCount(_ expectedCount: Int) -> Bool {
+        return finishedLoadingLaunchOrderCalled == expectedCount
+    }
+
+    var allLaunchTypes: [LaunchType] {
+        return launchWithTypeCallHistory
+    }
+
+    var launchWithCallCount: Int {
+        return launchWithTypeCalled
+    }
+
+    var launchBrowserCallCount: Int {
+        return launchBrowserCalled
+    }
+
+    var finishedLoadingCallCount: Int {
+        return finishedLoadingLaunchOrderCalled
+    }
+
+    var hasAnyLaunchBeenCalled: Bool {
+        return launchWithTypeCalled > 0 || launchBrowserCalled > 0
+    }
+
+    var totalLaunchCalls: Int {
+        return launchWithTypeCalled + launchBrowserCalled
     }
 }
