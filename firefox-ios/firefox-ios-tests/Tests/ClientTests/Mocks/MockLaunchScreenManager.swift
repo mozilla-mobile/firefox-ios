@@ -57,26 +57,4 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
             delegate?.launchBrowser()
         }
     }
-
-    // MARK: - Test Helper Methods
-
-    func verifyStartLoadingCalled(with appVersion: String) -> Bool {
-        return startLoadingCallHistory.contains(appVersion)
-    }
-
-    func verifyStartLoadingCallCount(_ expectedCount: Int) -> Bool {
-        return startLoadingCalled == expectedCount
-    }
-
-    func verifyLoadNextLaunchTypeCallCount(_ expectedCount: Int) -> Bool {
-        return loadNextLaunchTypeCalled == expectedCount
-    }
-
-    func getLastAppVersion() -> String? {
-        return startLoadingCallHistory.last
-    }
-
-    var loadNextLaunchTypeCallCount: Int {
-        return loadNextLaunchTypeCalled
-    }
 }

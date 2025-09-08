@@ -46,40 +46,4 @@ class MockLaunchFinishedLoadingDelegate: LaunchFinishedLoadingDelegate {
             }
         }
     }
-
-    func verifyLaunchWithCallCount(_ expectedCount: Int) -> Bool {
-        return launchWithTypeCalled == expectedCount
-    }
-
-    func verifyLaunchBrowserCallCount(_ expectedCount: Int) -> Bool {
-        return launchBrowserCalled == expectedCount
-    }
-
-    func verifyFinishedLoadingCallCount(_ expectedCount: Int) -> Bool {
-        return finishedLoadingLaunchOrderCalled == expectedCount
-    }
-
-    var allLaunchTypes: [LaunchType] {
-        return launchWithTypeCallHistory
-    }
-
-    var launchWithCallCount: Int {
-        return launchWithTypeCalled
-    }
-
-    var launchBrowserCallCount: Int {
-        return launchBrowserCalled
-    }
-
-    var finishedLoadingCallCount: Int {
-        return finishedLoadingLaunchOrderCalled
-    }
-
-    var hasAnyLaunchBeenCalled: Bool {
-        return launchWithTypeCalled > 0 || launchBrowserCalled > 0
-    }
-
-    var totalLaunchCalls: Int {
-        return launchWithTypeCalled + launchBrowserCalled
-    }
 }

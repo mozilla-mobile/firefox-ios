@@ -220,9 +220,9 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         subject.launchWith(launchType: launchType)
         subject.launchBrowser()
 
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCallCount(1))
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchBrowserCallCount(1))
-        XCTAssertTrue(coordinatorDelegate.hasAnyLaunchBeenCalled)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+        XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
+        XCTAssertTrue(coordinatorDelegate.launchWithTypeCalled > 0 || coordinatorDelegate.launchBrowserCalled > 0)
     }
 
     // MARK: - Enhanced Mock Verification Tests
@@ -234,8 +234,8 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         viewModel.loadNextLaunchType()
         subject.finishedLoadingLaunchOrder()
 
-        XCTAssertTrue(viewModel.verifyStartLoadingCallCount(1))
-        XCTAssertTrue(viewModel.verifyLoadNextLaunchTypeCallCount(1))
+        XCTAssertEqual(viewModel.startLoadingCalled, 1)
+        XCTAssertEqual(viewModel.loadNextLaunchTypeCalled, 1)
     }
 
     func test_coordinatorDelegateCallTracking_verifiesCorrectBehavior() {
@@ -247,11 +247,11 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         subject.launchWith(launchType: updateLaunchType)
         subject.launchBrowser()
 
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCallCount(2))
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchBrowserCallCount(1))
-        XCTAssertEqual(coordinatorDelegate.totalLaunchCalls, 3)
-        XCTAssertTrue(coordinatorDelegate.hasAnyLaunchBeenCalled)
-        XCTAssertEqual(coordinatorDelegate.allLaunchTypes.count, 2)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 2)
+        XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled + coordinatorDelegate.launchBrowserCalled, 3)
+        XCTAssertTrue(coordinatorDelegate.launchWithTypeCalled > 0 || coordinatorDelegate.launchBrowserCalled > 0)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 2)
     }
 
     func test_launchTypeVerification_withDifferentTypes() {
@@ -270,7 +270,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: updateType))
         XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: surveyType))
         XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: defaultBrowserType))
-        XCTAssertEqual(coordinatorDelegate.allLaunchTypes.count, 4)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 4)
     }
 
     private func createModernSubject(file: StaticString = #filePath,
