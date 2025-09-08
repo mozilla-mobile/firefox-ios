@@ -163,6 +163,61 @@ public class BottomSheetViewController: UIViewController,
 
     // MARK: - Private
 
+<<<<<<< HEAD
+=======
+    @available(iOS 26.0, *)
+    private func setupDynamicBackground() {
+        let screenHeight = UIScreen.main.bounds.height
+        let seventyFivePercentScreenHeight = screenHeight * 0.75
+        let currentSheetHeight = childViewController.view.frame.height
+
+        if currentSheetHeight <= seventyFivePercentScreenHeight {
+            setupGlassEffect()
+        } else {
+            removeGlassEffect()
+            contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
+        }
+    }
+
+    @available(iOS 26.0, *)
+    private func setupGlassEffect() {
+        // Only add glass effect if it doesn't already exist
+        guard glassEffectView == nil else { return }
+
+        let effectView = UIVisualEffectView()
+
+        #if canImport(FoundationModels)
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        effectView.effect = glassEffect
+        #else
+        effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
+
+        effectView.layer.cornerRadius = viewModel.cornerRadius
+        effectView.clipsToBounds = true
+        effectView.translatesAutoresizingMaskIntoConstraints = false
+
+        contentView.backgroundColor = .clear
+        contentView.insertSubview(effectView, at: 0)
+
+        NSLayoutConstraint.activate([
+            effectView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            effectView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            effectView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            effectView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+
+        glassEffectView = effectView
+    }
+
+    @available(iOS 26.0, *)
+    private func removeGlassEffect() {
+        glassEffectView?.removeFromSuperview()
+        glassEffectView = nil
+    }
+
+>>>>>>> 39f3e8795 (Bugfix FXIOS-13359 [iOS 26] Glass effect is not applied to toast notifications (#29153))
     private func setupView() {
         if viewModel.shouldDismissForTapOutside {
             topTapView.addGestureRecognizer(UITapGestureRecognizer(target: self,
