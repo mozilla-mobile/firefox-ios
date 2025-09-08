@@ -37,14 +37,14 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     // MARK: - Initialization Tests
 
     func test_init_setsPrefersStatusBarHiddenToTrue() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         XCTAssertTrue(subject.prefersStatusBarHidden)
     }
 
     // MARK: - View Lifecycle Tests
 
     func test_startLoading_triggersViewModelStartLoadingOnce() {
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         let initialLoadingCount = viewModel.startLoadingCalled
         subject.startLoading()
@@ -53,7 +53,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     func test_startLoading_whenLoading_defersLoadNextLaunchType() {
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         let initialLoadingCount = viewModel.startLoadingCalled
         let initialLoadNextLaunchTypeCount = viewModel.loadNextLaunchTypeCalled
@@ -67,7 +67,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     func test_finishedLoadingLaunchOrder_triggersDeferredLoadNextLaunchType() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         subject.startLoading()
         viewModel.loadNextLaunchType()
 
@@ -77,7 +77,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     // MARK: - LaunchFinishedLoadingDelegate Tests
 
     func test_launchWithLaunchType_callsCoordinatorDelegate() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         let launchType: LaunchType = .intro(manager: viewModel.introScreenManager)
 
         subject.launchWith(launchType: launchType)
@@ -90,7 +90,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     func test_launchWithLaunchType_withUpdateType_callsCoordinatorCorrectly() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         let launchType: LaunchType = .update(viewModel: viewModel.updateViewModel)
 
         subject.launchWith(launchType: launchType)
@@ -103,7 +103,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     func test_launchWithLaunchType_withSurveyType_callsCoordinatorCorrectly() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         let launchType: LaunchType = .survey(manager: viewModel.surveySurfaceManager)
 
         subject.launchWith(launchType: launchType)
@@ -116,7 +116,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     func test_launchWithLaunchType_withDefaultBrowserType_callsCoordinatorCorrectly() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         let launchType: LaunchType = .defaultBrowser
 
         subject.launchWith(launchType: launchType)
@@ -129,7 +129,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     func test_launchBrowser_callsCoordinatorDelegate() {
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         subject.launchBrowser()
 
@@ -140,7 +140,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
     func test_fullLaunchFlow_withIntroLaunchType_triggersCorrectDelegateCall() {
         viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         subject.startLoading()
 
@@ -154,7 +154,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
     func test_fullLaunchFlow_withUpdateLaunchType_triggersCorrectDelegateCall() {
         viewModel.mockLaunchType = .update(viewModel: viewModel.updateViewModel)
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         subject.startLoading()
 
@@ -168,7 +168,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
     func test_fullLaunchFlow_withSurveyLaunchType_triggersCorrectDelegateCall() {
         viewModel.mockLaunchType = .survey(manager: viewModel.surveySurfaceManager)
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         subject.startLoading()
 
@@ -182,7 +182,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
     func test_fullLaunchFlow_withDefaultBrowserLaunchType_triggersCorrectDelegateCall() {
         viewModel.mockLaunchType = .defaultBrowser
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         subject.startLoading()
 
@@ -196,7 +196,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
     func test_fullLaunchFlow_withNilLaunchType_triggersLaunchBrowser() {
         viewModel.mockLaunchType = nil
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         subject.startLoading()
 
@@ -208,7 +208,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     // MARK: - Edge Cases and Error Handling Tests
 
     func test_launchMethods_withoutAnimationStarted_handlesGracefully() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         let launchType: LaunchType = .intro(manager: viewModel.introScreenManager)
 
         subject.launchWith(launchType: launchType)
@@ -222,7 +222,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     // MARK: - Enhanced Mock Verification Tests
 
     func test_viewModelCallTracking_verifiesCorrectBehavior() {
-        let subject = createModernSubject()
+        let subject = createSubject()
 
         subject.startLoading()
         viewModel.loadNextLaunchType()
@@ -233,7 +233,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     func test_coordinatorDelegateCallTracking_verifiesCorrectBehavior() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         let introLaunchType: LaunchType = .intro(manager: viewModel.introScreenManager)
         let updateLaunchType: LaunchType = .update(viewModel: viewModel.updateViewModel)
 
@@ -249,7 +249,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     func test_launchTypeVerification_withDifferentTypes() {
-        let subject = createModernSubject()
+        let subject = createSubject()
         let introType: LaunchType = .intro(manager: viewModel.introScreenManager)
         let updateType: LaunchType = .update(viewModel: viewModel.updateViewModel)
         let surveyType: LaunchType = .survey(manager: viewModel.surveySurfaceManager)
@@ -267,7 +267,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 4)
     }
 
-    private func createModernSubject(file: StaticString = #filePath,
+    private func createSubject(file: StaticString = #filePath,
                                      line: UInt = #line) -> ModernLaunchScreenViewController {
         let subject = ModernLaunchScreenViewController(windowUUID: windowUUID,
                                                        coordinator: coordinatorDelegate,
