@@ -229,7 +229,7 @@ class OverlayView: UIView {
         }
     }
 
-    func setUpOverlayButton (button: InsetButton) {
+    func setUpOverlayButton(button: InsetButton) {
         button.titleLabel?.lineBreakMode = .byTruncatingTail
         if UIView.userInterfaceLayoutDirection(for: button.semanticContentAttribute) == .rightToLeft {
             button.contentHorizontalAlignment = .right
