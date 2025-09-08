@@ -1705,7 +1705,7 @@ workflows:
         - webhook_url: "$SLACK_WEBHOOK"
   _focus_ui_test:
     after_run:
-    - focus_configure_build
+    - _focus_configure_build
     steps:
     - script@1.2.1:
         inputs:
