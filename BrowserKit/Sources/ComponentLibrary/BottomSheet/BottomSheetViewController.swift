@@ -39,7 +39,6 @@ public class BottomSheetViewController: UIViewController,
     private let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
     private let childViewController: BottomSheetChild
-    private var glassEffectView: UIVisualEffectView?
 
     // Views
     private lazy var scrollView: FadeScrollView = .build { scrollView in
