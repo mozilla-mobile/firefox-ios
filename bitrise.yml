@@ -1707,27 +1707,11 @@ workflows:
     after_run:
     - _focus_configure_build
     steps:
+    - pull-intermediate-files@1: {}
     - script@1.2.1:
         inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-            # Check if it is a scheduled or regular build
-            # to select the testPlan to run
-
-            if [[ $BITRISE_GIT_MESSAGE == Schedule* ]]
-            then
-                echo "Scheduled build, running Full Functional Tests"
-                envman add --key TEST_PLAN_NAME --value FullFunctionalTests
-            else
-                echo "Regular build, running Smoke Test"
-                envman add --key TEST_PLAN_NAME --value SmokeTest
-            fi
-        - title: Check if build is scheduled or regular to set the test plan
-    - pull-intermediate-files@1: {}
+        - content: |
+            ls -lah
     - xcode-test-without-building@0.4.2:
         timeout: 1200
         inputs:
@@ -1743,7 +1727,7 @@ workflows:
         run_if: ".IsBuildFailed"
         inputs:
         - channel: "#mobile-alerts-ios"
-        - message: "The build run the Focus testPlan: $TEST_PLAN_NAME"
+        - message: "The build run the Focus testPlan: Smoketest"
         - webhook_url: "$SLACK_WEBHOOK"
 
   focus:
