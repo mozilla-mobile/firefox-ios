@@ -10,7 +10,9 @@ import UIKit
 import Shared
 import WebKit
 
-final class SummarizeCoordinator: BaseCoordinator, SummarizerServiceLifecycle {
+final class SummarizeCoordinator: BaseCoordinator,
+                                  SummarizerServiceLifecycle,
+                                  SummarizeNavigationHandler {
     private let browserSnapshot: UIImage
     private let browserSnapshotTopOffset: CGFloat
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
