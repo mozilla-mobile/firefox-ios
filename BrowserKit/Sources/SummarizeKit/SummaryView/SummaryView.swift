@@ -40,7 +40,15 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
     /// A closure that is called in response to the tableView scroll.
     /// The paramater provided is true when the title cell is showed.
     var onDidChangeTitleCellVisibility: ((Bool) -> Void)?
-
+    override var alpha: CGFloat {
+        set {
+            tableView.alpha = newValue
+        }
+        get {
+            return tableView.alpha
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -119,10 +127,6 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
             right: 0.0
         )
         tableView.reloadData()
-    }
-
-    func showContent() {
-        tableView.alpha = 1.0
     }
 
     // MARK: - UIScrollViewDelegate

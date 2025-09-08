@@ -52,7 +52,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     private let viewModel: SummarizeViewModel
     private let summarizerService: SummarizerService
     private let webView: WKWebView
-    private let isTosAccepted: Bool
+    private var isTosAccepted: Bool
     private var tosPanelWasShown = false
     private let onSummaryDisplayed: () -> Void
     private weak var navigationHandler: SummarizeNavigationHandler?
@@ -308,8 +308,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
             self.loadingLabel.alpha = 1.0
-        } completion: { [weak self, isTosAccepted] _ in
-            self?.summarize(isTosAccepted: isTosAccepted)
+        } completion: { [weak self] _ in
+            self?.summarize()
         }
     }
 
@@ -320,32 +320,28 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
     }
 
-    private func summarize(isTosAccepted: Bool) {
+    private func summarize() {
         loadingLabel.alpha = 1.0
         infoView.alpha = 0.0
-        Task { [weak self] in
-            await self?.summarizeTask(isTosAccepted: isTosAccepted)
+        Task { @MainActor [weak self] in
+            await self?.summarizeTask()
         }
     }
 
-    private func summarizeTask(isTosAccepted: Bool) async {
+    private func summarizeTask() async {
         do {
             guard isTosAccepted else {
                 throw SummarizerError.tosConsentMissing
             }
             let summary = try await summarizerService.summarize(from: webView)
-            await MainActor.run {
-                showSummary(summary)
-            }
+            showSummary(summary)
         } catch {
             let summaryError: SummarizerError = if let error = error as? SummarizerError {
                 error
             } else {
                 .unknown(error)
             }
-            await MainActor.run {
-                showError(summaryError)
-            }
+            showError(summaryError)
         }
     }
 
@@ -357,6 +353,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
+        closeButton.tintColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.iconPrimary
         configureSummaryView(summary: summary)
 
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
@@ -364,7 +361,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
             backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
             loadingLabel.alpha = 0.0
-            summaryView.showContent()
+            summaryView.alpha = 1.0
             loadingLabel.stopShimmering()
             loadingLabel.removeFromSuperview()
         } completion: { [weak self] _ in
@@ -418,15 +415,16 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                 titleA11yId: viewModel.errorMessages.errorLabelA11yId,
                 actionButtonLabel: actionButtonLabel,
                 actionButtonA11yId: viewModel.errorMessages.errorButtonA11yId,
-                actionButtonCallback: { [weak self, isTosAccepted] in
+                actionButtonCallback: { [weak self] in
                     switch error.shouldRetrySummarizing {
                     case .retry:
-                        self?.summarize(isTosAccepted: isTosAccepted)
+                        self?.summarize()
                     case .close:
                         self?.dismissSummary()
                     case .acceptToS:
                         self?.navigationHandler?.acceptToSConsent()
-                        self?.summarize(isTosAccepted: true)
+                        self?.isTosAccepted = true
+                        self?.summarize()
                     }
                 }, linkCallback: { [weak self] url in
                     self?.triggerDismissingAnimation {
@@ -594,7 +592,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
-        closeButton.tintColor = theme.colors.iconOnColor
+        closeButton.tintColor = summaryView.alpha == 0 ? theme.colors.iconOnColor : theme.colors.iconPrimary
         infoView.applyTheme(theme: theme)
     }
 }
