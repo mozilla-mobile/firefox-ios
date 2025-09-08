@@ -14,8 +14,7 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        // TODO: FXIOS-13435 Workaround for weird side effects, we should not be hitting the db here
-        mockProfile = MockProfile(databasePrefix: "mock_for_folder_hierarchy")
+        mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         testFolderGuid = await addFolder(title: testFolderTitle)
     }

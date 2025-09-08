@@ -17,8 +17,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        // TODO: FXIOS-13435 Workaround for weird side effects, we should not be hitting the db here
-        mockProfile = MockProfile(databasePrefix: "mock_for_bookmarks")
+        mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         testBookmarkGUID = await addBookmark(title: testBookmark.title, url: testBookmark.url)
         testFolderGUID = await addFolder(title: testFolder.title)

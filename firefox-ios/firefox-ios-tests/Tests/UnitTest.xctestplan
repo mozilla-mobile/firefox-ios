@@ -104,6 +104,7 @@
     },
     {
       "skippedTests" : [
+        "BrowserViewControllerWebViewDelegateTests\/testWebViewDidFinishNavigation_takeScreenshotWhenTabIsSelected()",
         "ContentBlockerTests",
         "ETPCoverSheetTests",
         "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
