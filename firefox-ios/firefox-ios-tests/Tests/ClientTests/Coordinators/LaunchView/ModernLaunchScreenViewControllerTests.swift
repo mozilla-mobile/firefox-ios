@@ -43,10 +43,9 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     func test_startLoading_triggersViewModelStartLoadingOnce() {
         let subject = createSubject()
 
-        let initialLoadingCount = viewModel.startLoadingCalled
         subject.startLoading()
 
-        XCTAssertEqual(viewModel.startLoadingCalled, initialLoadingCount + 1)
+        XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
     func test_startLoading_whenLoading_defersLoadNextLaunchType() {
@@ -245,23 +244,44 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 2)
     }
 
-    func test_launchTypeVerification_withDifferentTypes() {
+    func test_launchTypeVerification_withIntroType_verifiesCorrectly() {
         let subject = createSubject()
         let introType: LaunchType = .intro(manager: viewModel.introScreenManager)
-        let updateType: LaunchType = .update(viewModel: viewModel.updateViewModel)
-        let surveyType: LaunchType = .survey(manager: viewModel.surveySurfaceManager)
-        let defaultBrowserType: LaunchType = .defaultBrowser
 
         subject.launchWith(launchType: introType)
-        subject.launchWith(launchType: updateType)
-        subject.launchWith(launchType: surveyType)
-        subject.launchWith(launchType: defaultBrowserType)
 
         XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: introType))
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+    }
+
+    func test_launchTypeVerification_withUpdateType_verifiesCorrectly() {
+        let subject = createSubject()
+        let updateType: LaunchType = .update(viewModel: viewModel.updateViewModel)
+
+        subject.launchWith(launchType: updateType)
+
         XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: updateType))
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+    }
+
+    func test_launchTypeVerification_withSurveyType_verifiesCorrectly() {
+        let subject = createSubject()
+        let surveyType: LaunchType = .survey(manager: viewModel.surveySurfaceManager)
+
+        subject.launchWith(launchType: surveyType)
+
         XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: surveyType))
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+    }
+
+    func test_launchTypeVerification_withDefaultBrowserType_verifiesCorrectly() {
+        let subject = createSubject()
+        let defaultBrowserType: LaunchType = .defaultBrowser
+
+        subject.launchWith(launchType: defaultBrowserType)
+
         XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCalled(with: defaultBrowserType))
-        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 4)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
     }
 
     private func createSubject(file: StaticString = #filePath,
