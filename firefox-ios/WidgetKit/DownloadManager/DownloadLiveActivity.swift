@@ -143,7 +143,7 @@ struct DownloadLiveActivity: Widget {
                 .frame(width: UX.circleWidthMinimal, height: UX.circleWidthMinimal)
         }
     }
-    private func lockScreenView (liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
+    private func lockScreenView(liveDownload: ActivityViewContext<DownloadLiveActivityAttributes>) -> some View {
         let intent = DownloadLiveActivityIntent()
         intent.windowUUID = liveDownload.attributes.windowUUID
         return

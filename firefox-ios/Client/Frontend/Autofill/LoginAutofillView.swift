@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Common
+import ComponentLibrary
 
 struct LoginAutofillView: View {
     let windowUUID: WindowUUID
@@ -29,13 +30,23 @@ struct LoginAutofillView: View {
             )
         }
         .padding()
-        .background(backgroundColor)
+        .if(!isIOS26OrLater) { view in
+            view.background(backgroundColor)
+        }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+
+    private var isIOS26OrLater: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
         }
     }
 
