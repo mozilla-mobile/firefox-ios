@@ -81,6 +81,8 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // TODO: FXIOS-13434 Refactor the `LaunchScreenViewModel` to enhance the logic
+        // making it easier to comprehend and facilitating unit testing.
         // Only load next launch type if loading is complete, otherwise defer it
         if isLoading {
             shouldLoadNextLaunchType = true
