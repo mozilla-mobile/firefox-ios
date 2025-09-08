@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import SummarizeKit
 
-public final class MockSummarizerConfigSource: SummarizerConfigSourceProtocol {
+public final class MockSummarizerConfigSource: SummarizerConfigSourceProtocol, @unchecked Sendable {
     var configToReturn: SummarizerConfig
 
     init(configToReturn: SummarizerConfig) {

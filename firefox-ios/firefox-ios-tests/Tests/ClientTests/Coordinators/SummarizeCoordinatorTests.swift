@@ -9,7 +9,7 @@ import Shared
 import ComponentLibrary
 @testable import Client
 
-class MockSummarizer: SummarizerProtocol {
+final class MockSummarizer: SummarizerProtocol, @unchecked Sendable {
     var modelName: SummarizerModel = .appleSummarizer
 
     func summarize(_ contentToSummarize: String) async throws -> String {
