@@ -39,6 +39,7 @@ public class BottomSheetViewController: UIViewController,
     private let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
     private let childViewController: BottomSheetChild
+    private var glassEffectView: UIVisualEffectView?
 
     // Views
     private lazy var scrollView: FadeScrollView = .build { scrollView in
@@ -195,13 +196,9 @@ public class BottomSheetViewController: UIViewController,
         let effectView = UIVisualEffectView()
 
         #if canImport(FoundationModels)
-        if #available(iOS 26, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            effectView.effect = glassEffect
-        } else {
-            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-        }
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        effectView.effect = glassEffect
         #else
         effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         #endif
