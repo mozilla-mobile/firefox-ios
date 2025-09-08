@@ -8,7 +8,7 @@ import Common
 final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentViewSpacing: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.85
+        static let backgroundAlpha: CGFloat = 0.80
     }
 
     private var contentStackView: UIStackView = .build { stack in
