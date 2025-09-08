@@ -149,6 +149,10 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: View
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
+<<<<<<< HEAD:BrowserKit/Sources/OnboardingKit/Views/OnboardingBasicCardView/OnboardingBasicCardView.swift
         secondaryActionColor = Color(color.textInverted)
+=======
+        secondaryActionColor = Color(color.textOnDark)
+>>>>>>> 1439902ce (Bugfix FXIOS-13372 [iOS 26] Glass effect is not applied to Saved Passwords suggestions (#29145)):BrowserKit/Sources/OnboardingKit/Views/Compact/OnboardingBasicCardViewCompact.swift
     }
 }
