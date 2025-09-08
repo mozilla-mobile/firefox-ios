@@ -144,13 +144,9 @@ class Toast: UIView, ThemeApplicable, Notifiable {
         let effectView = UIVisualEffectView()
 
         #if canImport(FoundationModels)
-        if #available(iOS 26, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.tintColor = theme.colors.actionPrimary
-            effectView.effect = glassEffect
-        } else {
-            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-        }
+        let glassEffect = UIGlassEffect()
+        glassEffect.tintColor = theme.colors.actionPrimary
+        effectView.effect = glassEffect
         #else
         effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         #endif
