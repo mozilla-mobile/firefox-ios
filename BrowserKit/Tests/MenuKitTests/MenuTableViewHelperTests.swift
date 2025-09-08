@@ -5,6 +5,7 @@
 import XCTest
 @testable import MenuKit
 
+@MainActor
 final class MenuTableViewHelperTests: XCTestCase {
     var tableView: UITableView!
     var helper: MenuTableViewHelper!
@@ -39,7 +40,6 @@ final class MenuTableViewHelperTests: XCTestCase {
         XCTAssertEqual(tableView.numberOfSections, 1)
     }
 
-    @MainActor
     func testCellForRow_shouldReturnAccountCellType() {
         let option = MenuElement(
             title: "Option 1",
@@ -63,7 +63,6 @@ final class MenuTableViewHelperTests: XCTestCase {
         XCTAssertTrue(cell is MenuAccountCell)
     }
 
-    @MainActor
     func testCellForRow_shouldReturnSquaresViewContentCellType() {
         let option = MenuElement(
             title: "Option 1",
@@ -86,7 +85,6 @@ final class MenuTableViewHelperTests: XCTestCase {
         XCTAssertTrue(cell is MenuSquaresViewContentCell)
     }
 
-    @MainActor
     func testCellForRow_shouldReturnInfoCellType() {
         let option = MenuElement(
             title: "Option 1",
@@ -109,7 +107,6 @@ final class MenuTableViewHelperTests: XCTestCase {
         XCTAssertTrue(cell is MenuInfoCell)
     }
 
-    @MainActor
     func testCellForRow_shouldReturnRedesignCellType() {
         let option = MenuElement(
             title: "Option 1",

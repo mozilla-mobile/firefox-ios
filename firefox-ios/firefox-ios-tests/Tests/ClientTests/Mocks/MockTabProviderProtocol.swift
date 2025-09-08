@@ -11,7 +11,6 @@ final class MockTabProviderProtocol: TabProviderProtocol {
     var isFxHomeTab = false
     var isFindInPageMode = false
     var isLoading = false
-    var shouldScrollToTop = false
 
     var onLoadingStateChanged: (() -> Void)?
 

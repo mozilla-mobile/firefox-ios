@@ -36,7 +36,7 @@ only_rules: # Only enforce these rules, ignore all others
   - protocol_property_accessors_order
   - redundant_discardable_let
   - redundant_objc_attribute
-  - redundant_optional_initialization
+  - implicit_optional_initialization
   - redundant_string_enum_value
   - redundant_void_return
   - return_arrow_whitespace
@@ -107,14 +107,14 @@ closure_body_length:
   error: 34
 
 function_body_length:
-  warning: 240
-  error: 240
+  warning: 188
+  error: 188
 
 file_header:
   required_string: |
                     // This Source Code Form is subject to the terms of the Mozilla Public
                     // License, v. 2.0. If a copy of the MPL was not distributed with this
-                    // file, You can obtain one at http://mozilla.org/MPL/2.0/
+#                    // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 redundant_type_annotation:
   consider_default_literal_types_redundant: true

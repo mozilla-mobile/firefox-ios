@@ -244,6 +244,12 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Settu upp og keyrðu rannsóknir";
 
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Veitir aðgang að samantekt á efni vefsíðna.";
+
+/* This is the footer text for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Hristu tækið til hliðanna til að gera yfirlit úr efni síðu.";
+
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Hristu til að gera samantekt";
 

@@ -22,8 +22,8 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
 
         static let dimmedWhiteValue = 0.0
 
-        static let presentDuration: TimeInterval = 0.3
-        static let dismissDuration: TimeInterval = 0.3
+        static let presentDuration: TimeInterval = 0.275
+        static let dismissDuration: TimeInterval = 0.275
 
         static let cvScalingFactor = 1.2
         static let initialOpacity = 0.0
@@ -202,7 +202,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
               let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
         else { return }
 
-        cv.reloadData()
+        cv.layoutIfNeeded()
         var tabCell: ExperimentTabCell?
         var cellFrame: CGRect?
 

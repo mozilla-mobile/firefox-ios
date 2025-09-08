@@ -6,14 +6,12 @@ import XCTest
 @testable import ToolbarKit
 
 final class BrowserAddressToolbarTests: XCTestCase {
-    private var sut: BrowserAddressToolbar?
     private var toolbarElement: ToolbarElement?
     private var toolbarElement2: ToolbarElement?
     private var tabToolbarElement: ToolbarElement?
 
     override func setUp() {
         super.setUp()
-        sut = BrowserAddressToolbar()
 
         toolbarElement = ToolbarElement(
             iconName: "icon",
@@ -60,17 +58,17 @@ final class BrowserAddressToolbarTests: XCTestCase {
     }
 
     override func tearDown() {
-        sut?.cachedButtonReferences.removeAll()
-        sut = nil
         toolbarElement = nil
         toolbarElement2 = nil
         tabToolbarElement = nil
         super.tearDown()
     }
 
+    @MainActor
     func testGetToolbarButton_CreatesAndReturnsTheCachedButton() {
+        let sut = createSubject()
         // First call to getToolbarButton should create a new button
-        guard let sut, let toolbarElement else {
+        guard let toolbarElement else {
             XCTFail("Setup failed")
             return
         }
@@ -89,8 +87,10 @@ final class BrowserAddressToolbarTests: XCTestCase {
         XCTAssertEqual(sut.cachedButtonReferences.count, 1, "Cache should contain one button.")
     }
 
+    @MainActor
     func testGetToolbarButton_CreatesNewButtonForDifferentElements() {
-        guard let sut, let toolbarElement, let toolbarElement2 else {
+        let sut = createSubject()
+        guard let toolbarElement, let toolbarElement2 else {
             XCTFail("Setup failed")
             return
         }
@@ -108,8 +108,10 @@ final class BrowserAddressToolbarTests: XCTestCase {
         XCTAssertEqual(sut.cachedButtonReferences.count, 2, "Cache should contain exactly two buttons.")
     }
 
+    @MainActor
     func testCacheKeyGeneration() {
-        guard let sut, let toolbarElement else {
+        let sut = createSubject()
+        guard let toolbarElement else {
             XCTFail("Setup failed")
             return
         }
@@ -120,13 +122,23 @@ final class BrowserAddressToolbarTests: XCTestCase {
                       "Cache should contain key for the toolbar element.")
     }
 
+    @MainActor
     func testTabNumberButtonCreation() {
-        guard let sut, let tabToolbarElement else {
+        let sut = createSubject()
+        guard let tabToolbarElement else {
             XCTFail("Setup failed")
             return
         }
 
         let button = sut.getToolbarButton(for: tabToolbarElement)
         XCTAssertTrue(button is TabNumberButton, "Should create TabNumberButton when numberOfTabs is provided.")
+    }
+
+    // MARK: Test helper
+
+    func createSubject(file: StaticString = #filePath, line: UInt = #line) -> BrowserAddressToolbar {
+        let subject = BrowserAddressToolbar()
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }

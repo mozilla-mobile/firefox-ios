@@ -5,6 +5,7 @@
 import UIKit
 import Common
 
+@MainActor
 final class MenuTableViewHelper: NSObject {
     private weak var tableView: UITableView?
     private var menuData: [MenuSection] = []

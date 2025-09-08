@@ -19,6 +19,9 @@
 /* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
 "Summarizer.Error.UnsupportedContent.Message.v142" = "ਇਹ ਵੈੱਬਸਾਈਟ ਸਮੱਗਰੀ ਦਾ ਸਾਰ ਲੈਣ ਦੀ ਇਜਾਜ਼ਤ ਨਹੀਂ ਦਿੰਦੀ ਹੈ। ਵੱਖਰੇ ਸਫ਼ੇ ਨਾਲ ਅਜ਼ਮਾਓ।";
 
+/* The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors. */
+"Summarizer.Footnote.Label.v144" = "ਸੂਚਨਾ: ਸਾਰ ਵਿੱਚ ਗਲਤੀਆਂ ਹੋ ਸਕਦੀਆਂ ਹਨ।";
+
 /* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
 "Summarizer.HostedBrand.Label.v142" = "%@ ਰਾਹੀਂ ਸਾਰ ਤਿਆਰ ਕੀਤਾ";
 
@@ -36,6 +39,9 @@
 
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "ਰੱਦ ਕਰੋ";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "ਸਫ਼ਿਆਂ ਦਾ ਸਾਰ ਤਿਆਰ ਕਰਨ ਅਤੇ ਉਸ ਸਾਰ ਨੂੰ ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਤੱਕ ਪਹੁੰਚਣ ਲਈ %@ ਕਲਾਉਡ ਅਧਾਰਿਤ AI ਨੂੰ ਵਰਤਦਾ ਹੈ।";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "ਹੋਰ ਜਾਣੋ";

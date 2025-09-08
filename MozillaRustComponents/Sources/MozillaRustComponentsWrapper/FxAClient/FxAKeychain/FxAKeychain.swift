@@ -91,9 +91,31 @@ open class FxAKeychain {
     }
 
     func setKeyValue(_ value: String, key: String, accessibility: FxAKeychainItemAccessibility? = nil) -> Bool {
-        let accessibilityValue = accessibility != nil ? accessibility : FxAKeychainItemAccessibility.whenUnlocked
+        guard let data = value.data(using: .utf8) else {
+            return false
+        }
 
-        return addOrUpdateKeychainKey(value, key: key, accessibility: accessibilityValue)
+        var addQueryDictionary = getBaseKeychainQuery(key: key, accessibility: accessibility)
+
+        addQueryDictionary[kSecValueData as String] = data
+
+        if let accessibility = accessibility {
+            addQueryDictionary[kSecAttrAccessible as String] = accessibility.secItemValue()
+        } else {
+            addQueryDictionary[kSecAttrAccessible as String] = FxAKeychainItemAccessibility.whenUnlocked.secItemValue()
+        }
+
+        let addStatus = SecItemAdd(addQueryDictionary as CFDictionary, nil)
+
+        if addStatus == errSecSuccess {
+            return true
+        } else if addStatus == errSecDuplicateItem {
+            let updateStatus = SecItemUpdate(getBaseKeychainQuery(key: key) as CFDictionary,
+                                             [kSecValueData: data] as CFDictionary)
+            return updateStatus == errSecSuccess
+        } else {
+            return false
+        }
     }
 
     func getKeyValue(key: String, accessibility: FxAKeychainItemAccessibility? = nil) -> String? {
@@ -138,31 +160,6 @@ open class FxAKeychain {
             return value
         case .failure:
             return nil
-        }
-    }
-
-    private func addOrUpdateKeychainKey(_ value: String,
-                                        key: String,
-                                        accessibility: FxAKeychainItemAccessibility? = nil) -> Bool
-    {
-        guard let data = value.data(using: .utf8) else { return false }
-
-        var addQueryDictionary = getBaseKeychainQuery(key: key)
-        let accessibilityValue = accessibility != nil ? accessibility : FxAKeychainItemAccessibility.afterFirstUnlock
-
-        addQueryDictionary[kSecValueData as String] = data
-        addQueryDictionary[kSecAttrAccessible as String] = accessibilityValue
-
-        let addStatus = SecItemAdd(addQueryDictionary as CFDictionary, nil)
-
-        if addStatus == errSecSuccess {
-            return true
-        } else if addStatus == errSecDuplicateItem {
-            let updateStatus = SecItemUpdate(getBaseKeychainQuery(key: key) as CFDictionary,
-                                             [kSecValueData: data] as CFDictionary)
-            return updateStatus == errSecSuccess
-        } else {
-            return false
         }
     }
 
