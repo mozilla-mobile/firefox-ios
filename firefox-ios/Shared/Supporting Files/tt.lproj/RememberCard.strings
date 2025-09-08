@@ -1,3 +1,6 @@
+/* This value is used as the header for the remember card page. %@ is the app name (e.g. Firefox). */
+"CreditCard.RememberCard.Header.v122" = "%@ карта номерыгызны шифрлый. Иминлек кодыгыз сакланмаячак.";
+
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v122" = "Саклау";
 

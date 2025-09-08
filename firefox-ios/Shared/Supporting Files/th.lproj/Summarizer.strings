@@ -10,6 +10,21 @@
 /* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
 "Summarizer.Error.RateLimited.Message.v142" = "ยังไม่พร้อมใช้งานในตอนนี้ โปรดลองอีกครั้งในภายหลัง!";
 
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "สรุปหน้านี้ไม่สำเร็จ โปรดลองอีกครั้ง";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "ตรวจพบเนื้อหาไม่ครบถ้วน หน้านี้อาจเข้าถึงได้ไม่เต็มที่หรือเป็นภาพส่วนใหญ่";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "เว็บไซต์นี้ไม่อนุญาตให้สรุปเนื้อหา ลองหน้าอื่น";
+
+/* The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors. */
+"Summarizer.Footnote.Label.v144" = "หมายเหตุ: การสรุปอาจมีความคลาดเคลื่อน";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "สรุปโดย %@";
+
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "กำลังสรุป…";
 
@@ -24,6 +39,9 @@
 
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "ยกเลิก";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ ใช้ AI บนคลาวด์เพื่อสรุปเนื้อหาในหน้าเว็บ แล้วส่งบทสรุปกลับมายังอุปกรณ์ของคุณ";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "เรียนรู้เพิ่มเติม";

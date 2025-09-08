@@ -41,7 +41,6 @@ public class RustSyncManager: NSObject, SyncManager {
     private var notificationCenter: NotificationProtocol
     private var syncBackOffTimer: Timer?
     private let syncBackOffDelay = 180.0 // 3 Minutes
-    var loginsVerificationEnabled = false
 
     let fifteenMinutesInterval = TimeInterval(60 * 15)
 
@@ -74,7 +73,6 @@ public class RustSyncManager: NSObject, SyncManager {
 
     init(profile: BrowserProfile,
          creditCardAutofillEnabled: Bool = false,
-         loginsVerificationEnabled: Bool = false,
          logger: Logger = DefaultLogger.shared,
          logins: SyncLoginProvider? = nil,
          autofill: SyncAutofillProvider? = nil,
@@ -91,7 +89,6 @@ public class RustSyncManager: NSObject, SyncManager {
         self.tabs = tabs ?? profile.tabs
 
         super.init()
-        self.loginsVerificationEnabled = loginsVerificationEnabled
     }
 
     @objc
@@ -392,20 +389,13 @@ public class RustSyncManager: NSObject, SyncManager {
                  self.tabs.registerWithSyncManager()
                  rustEngines.append(engine.rawValue)
              case .passwords:
-                 if loginsVerificationEnabled {
-                     dispatchGroup.enter()
-                     self.shouldSyncLogins { shouldSync in
-                         defer { dispatchGroup.leave() }
-                         if shouldSync, loginKey != nil {
-                             self.logins.registerWithSyncManager()
-                             rustEngines.append(engine.rawValue)
-                         }
-                     }
-                 } else {
-                     if loginKey != nil {
+                 dispatchGroup.enter()
+                 self.shouldSyncLogins { shouldSync in
+                     defer { dispatchGroup.leave() }
+                     if shouldSync, loginKey != nil {
                          self.logins.registerWithSyncManager()
-                          rustEngines.append(engine.rawValue)
-                      }
+                         rustEngines.append(engine.rawValue)
+                     }
                  }
              case .creditcards:
                 if let key = creditCardKey {
@@ -433,11 +423,7 @@ public class RustSyncManager: NSObject, SyncManager {
              }
         }
 
-        if loginsVerificationEnabled {
-            dispatchGroup.notify(queue: .global()) {
-                completion((rustEngines, localEncryptionKeys))
-            }
-        } else {
+        dispatchGroup.notify(queue: .global()) {
             completion((rustEngines, localEncryptionKeys))
         }
     }

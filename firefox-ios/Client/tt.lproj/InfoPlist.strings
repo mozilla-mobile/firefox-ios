@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Firefox uses your camera to scan QR codes and take photos and video.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Сакланган серсүзләрегезгә һәм түләү ысулларыгызга ирешү өчен Firefox Face ID таләп итә.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Зиярат ителгән вебсайтлар урнашуыгызны сорый ала.";
 

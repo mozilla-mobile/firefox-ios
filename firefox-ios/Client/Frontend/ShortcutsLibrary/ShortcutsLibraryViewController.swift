@@ -15,6 +15,9 @@ class ShortcutsLibraryViewController: UIViewController,
         static let shortcutsSectionTopInset: CGFloat = 24
     }
 
+    // Used to only record "closed" telemetry on back button press and swipe gestures
+    var recordTelemetryOnDisappear = true
+
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: ShortcutsLibraryDiffableDataSource?
@@ -87,6 +90,27 @@ class ShortcutsLibraryViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        store.dispatch(
+            ShortcutsLibraryAction(
+                windowUUID: windowUUID,
+                actionType: ShortcutsLibraryActionType.viewDidAppear
+            )
+        )
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if recordTelemetryOnDisappear {
+            store.dispatch(
+                ShortcutsLibraryAction(
+                    windowUUID: windowUUID,
+                    actionType: ShortcutsLibraryActionType.viewDidDisappear)
+            )
+        }
     }
 
     // MARK: - Redux
@@ -255,7 +279,7 @@ class ShortcutsLibraryViewController: UIViewController,
                     ShortcutsLibraryAction(
                         tab: tab,
                         windowUUID: self.windowUUID,
-                        actionType: ShortcutsLibraryActionType.switchTabToastButtonPressed
+                        actionType: ShortcutsLibraryActionType.switchTabToastButtonTapped
                     )
                 )
             }
@@ -286,7 +310,7 @@ class ShortcutsLibraryViewController: UIViewController,
             self.logger.log(
                 "Context menu handling skipped: No valid indexPath, item, section or sourceView found at \(point)",
                 level: .debug,
-                category: .homepage
+                category: .shortcutsLibrary
             )
             return
         }
@@ -300,7 +324,7 @@ class ShortcutsLibraryViewController: UIViewController,
             self.logger.log(
                 "Item selected at \(indexPath) but does not navigate anywhere",
                 level: .debug,
-                category: .homepage
+                category: .shortcutsLibrary
             )
             return
         }
@@ -313,11 +337,19 @@ class ShortcutsLibraryViewController: UIViewController,
             visitType: .link
         )
 
+        recordTelemetryOnDisappear = false
+
         store.dispatchLegacy(
             NavigationBrowserAction(
                 navigationDestination: destination,
-                windowUUID: self.windowUUID,
+                windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+        store.dispatchLegacy(
+            ShortcutsLibraryAction(
+                windowUUID: windowUUID,
+                actionType: ShortcutsLibraryActionType.tapOnShortcutCell
             )
         )
     }

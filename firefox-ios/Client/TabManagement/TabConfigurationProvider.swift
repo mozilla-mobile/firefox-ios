@@ -9,14 +9,14 @@ import WebKit
 @MainActor
 class TabConfigurationProvider {
     // A WKWebViewConfiguration used for normal tabs
-    lazy var configuration: WKEngineConfiguration = {
-        return configuration(from: prefs, isPrivate: false)
-    }()
+    var configuration: WKEngineConfiguration {
+        configuration(from: prefs, isPrivate: false)
+    }
 
     // A WKWebViewConfiguration used for private mode tabs
-    lazy var privateConfiguration: WKEngineConfiguration = {
-        return configuration(from: prefs, isPrivate: true)
-    }()
+    var privateConfiguration: WKEngineConfiguration {
+        configuration(from: prefs, isPrivate: true)
+    }
 
     private let configurationProvider = DefaultWKEngineConfigurationProvider()
     private let prefs: Prefs

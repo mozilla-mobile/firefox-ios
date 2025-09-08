@@ -10,6 +10,8 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
+    @Environment(\.sizeCategory)
+    var sizeCategory
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -38,6 +40,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     var body: some View {
         GeometryReader { geometry in
             scrollViewContent(geometry: geometry)
+                .padding(.top, UX.CardView.cardTopPadding)
             .onAppear {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
@@ -49,39 +52,33 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     }
 
     private func scrollViewContent(geometry: GeometryProxy) -> some View {
-        // Determine scale factor based on current size vs base metrics
-        let widthScale = geometry.size.width / UX.CardView.baseWidth
-        let heightScale = geometry.size.height / UX.CardView.baseHeight
-        let scale = min(widthScale, heightScale)
-
-        return VStack {
-            ContentFittingScrollView {
-                VStack(spacing: UX.CardView.spacing * scale) {
-                    Spacer()
+        VStack {
+            ScrollView {
+                VStack(spacing: UX.CardView.spacing) {
                     titleView
-                    Spacer()
+                        .padding(.top, UX.CardView.titleTopPadding)
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                         selection: $selectedAction,
                         items: viewModel.multipleChoiceButtons,
                         windowUUID: windowUUID,
                         themeManager: themeManager
                     )
-                    .alignmentGuide(.descriptionAlignment) { dimensions in dimensions[.bottom] }
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
                     }
                 }
+                .padding(.horizontal, UX.CardView.horizontalPadding)
             }
+            .scrollBounceBehavior(basedOnSize: true)
             primaryButton
+                .padding(UX.CardView.verticalPadding)
         }
         .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
-        .padding(UX.CardView.verticalPadding * scale)
         .background(
             RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                 .fill(cardBackgroundColor)
                 .accessibilityHidden(true)
         )
-        .padding(.top, UX.CardView.cardTopPadding)
     }
 
     var titleView: some View {
@@ -91,8 +88,9 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
-            .fixedSize(horizontal: false, vertical: true)
-            .alignmentGuide(.titleAlignment) { dimensions in dimensions[.bottom] }
+            .if(sizeCategory <= .extraExtraLarge) { view in
+                view.frame(height: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
+            }
     }
 
     var primaryButton: some View {

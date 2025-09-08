@@ -197,6 +197,7 @@ struct AccessibilityIdentifiers {
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
+            static let stories = "storiesSectionMoreButton"
         }
 
         struct SectionTitles {
@@ -725,8 +726,11 @@ struct AccessibilityIdentifiers {
         static let tabSnapshotView = "tabSnapshotView"
         static let closeSummaryButton = "closeSummaryButton"
         static let titleLabel = "summaryTitleLabel"
+        static let compactTitleLabel = "summaryCompactTitleLabel"
         static let loadingLabel = "summaryLoadingLabel"
-        static let summaryTextView = "summaryTextView"
+        static let brandLabel = "summaryBrandLabel"
+        static let brandImage = "summaryBrandImage"
+        static let summaryTableView = "summaryTextView"
         static let errorLabel = "errorLabel"
         static let errorButton = "errorButton"
         static let tosTitleLabel = "tosTitleLabel"

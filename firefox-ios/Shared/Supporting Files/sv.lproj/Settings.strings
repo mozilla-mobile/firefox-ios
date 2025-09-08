@@ -260,7 +260,7 @@
 "Settings.Summarize.SummarizePagesTitle.v142" = "Sammanfatta sidor";
 
 /* In the settings menu, in the General section, this is the title for the Summarize settings section. */
-"Settings.Summarize.Title.v142" = "Sammanfattningar för sida";
+"Settings.Summarize.Title.v142" = "Sidsammanfattningar";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v135" = "Läs mer.";

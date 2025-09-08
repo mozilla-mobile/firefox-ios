@@ -8,8 +8,7 @@ import Common
 
 @MainActor
 protocol TabScrollHandlerProtocol: AnyObject {
-    var zoomPageBar: ZoomPageBar? { get set }
-    var tab: Tab? { get set }
+    var tabProvider: TabProviderProtocol? { get set }
     var contentOffset: CGPoint { get }
 
     func showToolbars(animated: Bool)
@@ -70,10 +69,8 @@ final class TabScrollHandler: NSObject,
         }
     }
 
-    weak var tab: Tab? {
-        willSet {
-            self.scrollView?.delegate = nil
-        }
+    var tabProvider: TabProviderProtocol? {
+        willSet { scrollView?.delegate = nil }
 
         didSet {
             // FXIOS-9781 This could result in scrolling not closing the toolbar
@@ -81,14 +78,11 @@ final class TabScrollHandler: NSObject,
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
-
-            tab?.onWebViewLoadingStateChanged = { [weak self] in
+            tabProvider?.onLoadingStateChanged = { [weak self] in
                 self?.handleOnTabContentLoading()
             }
         }
     }
-
-    weak var zoomPageBar: ZoomPageBar?
 
     private var lastPanTranslation: CGFloat = 0
     private var lastContentOffsetY: CGFloat = 0
@@ -104,7 +98,7 @@ final class TabScrollHandler: NSObject,
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
 
-    private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
+    private var scrollView: UIScrollView? { return tabProvider?.scrollView }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
@@ -141,13 +135,13 @@ final class TabScrollHandler: NSObject,
         configureRefreshControl()
     }
 
-    // TODO: Update to private in the future for now we need to keep support for Legacy protocol
+    // TODO: FXIOS-13340 Update to private in the future for now we need to keep support for Legacy protocol
     func showToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .expanded)
         delegate?.showToolbar()
     }
 
-    // TODO: Update to private in the future for now we need to keep support for Legacy protocol
+    // TODO: FXIOS-13340 Update to private in the future for now we need to keep support for Legacy protocol
     func hideToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .collapsed)
         delegate?.hideToolbar()
@@ -155,52 +149,30 @@ final class TabScrollHandler: NSObject,
 
     // MARK: - ScrollView observation
 
-    // Not needed anymore
+    // TODO: FXIOS-13340 Remove
     func beginObserving(scrollView: UIScrollView) {}
 
-    // Not needed anymore
+    // TODO: FXIOS-13340 Remove 
     func stopObserving(scrollView: UIScrollView) {}
-
-    // MARK: - Zoom
-
-    func updateMinimumZoom() {
-        guard let scrollView = scrollView else { return }
-
-        isZoomedOut = roundNum(scrollView.zoomScale) == roundNum(scrollView.minimumZoomScale)
-        lastZoomedScale = isZoomedOut ? 0 : scrollView.zoomScale
-    }
-
-    func setMinimumZoom() {
-        guard let scrollView = scrollView else { return }
-
-        if isZoomedOut && roundNum(scrollView.zoomScale) != roundNum(scrollView.minimumZoomScale) {
-            scrollView.zoomScale = scrollView.minimumZoomScale
-        }
-    }
-
-    func resetZoomState() {
-        isZoomedOut = false
-        lastZoomedScale = 0
-    }
 
     // MARK: - Pull to refresh
 
     func removePullRefreshControl() {
-        tab?.webView?.removePullRefresh()
+        tabProvider?.removePullToRefresh()
     }
 
     func configureRefreshControl() {
-        guard tab?.isFxHomeTab == false else { return }
-        tab?.webView?.addPullRefresh { [weak self] in
+        guard tabProvider?.isFxHomeTab == false else { return }
+        tabProvider?.addPullToRefresh { [weak self] in
             self?.reload()
         }
     }
 
     func handleScroll(for translation: CGPoint) {
+        // Ignore user scroll if the tab is loading or if the conditions to update view are not meet
+        // voice over and webview's scroll content size is not enough to scroll
         guard !tabIsLoading(),
               shouldUpdateUIWhenScrolling else { return }
-
-        tab?.shouldScrollToTop = false
 
         let delta = -translation.y
         scrollDirection = delta > 0 ? .down : .up
@@ -217,6 +189,11 @@ final class TabScrollHandler: NSObject,
     }
 
     func handleEndScrolling(for translation: CGPoint, velocity: CGPoint) {
+        // Ignore user scroll if the tab is loading or if the conditions to update view are not meet
+        // voice over and webview's scroll content size is not enough to scroll
+        guard !tabIsLoading(),
+              shouldUpdateUIWhenScrolling else { return }
+
         let delta = lastPanTranslation - translation.y
         // Reset lastPanTranslation
         lastPanTranslation = 0
@@ -243,11 +220,6 @@ final class TabScrollHandler: NSObject,
     // checking if an abrupt scroll event was triggered and adjusting the offset to the one
     // before the WKWebView's contentOffset is reset as a result of the contentView's frame becoming smaller
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // for PDFs, we should set the initial offset to 0 (ZERO)
-        if let tab, tab.shouldScrollToTop {
-            setOffset(y: 0, for: scrollView)
-        }
-
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
         sendActionToShowToolbarBorder(contentOffset: scrollView.contentOffset)
@@ -262,13 +234,12 @@ final class TabScrollHandler: NSObject,
     /// Decelerate is true the scrolling movement will continue
     /// If the value is false, scrolling stops immediately upon touch-up.
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard let tab,
+        guard let tabProvider,
               !tabIsLoading(),
+              shouldUpdateUIWhenScrolling,
               !scrollReachBottom(),
-              !tab.isFindInPageMode,
-              shouldUpdateUIWhenScrolling else { return }
-
-        tab.shouldScrollToTop = false
+              !tabProvider.isFindInPageMode
+              else { return }
 
         guard let containerView = scrollView.superview else { return }
 
@@ -315,7 +286,7 @@ final class TabScrollHandler: NSObject,
                                headerContainer: BaseAlphaStackView? ) {}
 
     private func handleOnTabContentLoading() {
-        if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
+        if tabIsLoading() || (tabProvider?.isFxHomeTab ?? false) {
             removePullRefreshControl()
         } else {
             configureRefreshControl()
@@ -338,18 +309,10 @@ final class TabScrollHandler: NSObject,
         return isSignificantScroll  // || isFastEnough
     }
 
-    private var isTopRubberbanding: Bool {
-        return contentOffset.y <= 0
-    }
-
-    private var isBottomRubberbanding: Bool {
-        return contentOffset.y + scrollViewHeight > contentSize.height
-    }
-
     @objc
     private func reload() {
-        guard let tab = tab else { return }
-        tab.reloadPage()
+        guard let tabProvider = tabProvider else { return }
+        tabProvider.reloadPage()
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
@@ -358,7 +321,7 @@ final class TabScrollHandler: NSObject,
     }
 
     private func tabIsLoading() -> Bool {
-        return tab?.loading ?? true
+        return tabProvider?.isLoading ?? true
     }
 
     /// Returns true if scroll has reach the bottom
@@ -366,10 +329,9 @@ final class TabScrollHandler: NSObject,
     /// 1. If the content is scrollable (taller than the view).
     /// 2. The user has scrolled to (or beyond) the bottom.
     private func scrollReachBottom() -> Bool {
-        let contentIsScrollable = contentSize.height > scrollViewHeight
         let isMaxContentOffset = contentOffset.y > (contentSize.height - scrollViewHeight)
 
-        return isMaxContentOffset && contentIsScrollable
+        return isMaxContentOffset
     }
 
     /// Updates the display state of the toolbar based on the scroll positions of various UI components.
@@ -402,11 +364,9 @@ final class TabScrollHandler: NSObject,
     }
 
     private func updateLastValidState() {
-        if toolbarDisplayState.isExpanded {
-            lastValidState = .expanded
-        } else if toolbarDisplayState.isCollapsed {
-            lastValidState = .collapsed
-        }
+        guard !toolbarDisplayState.isAnimating else { return }
+
+        lastValidState = toolbarDisplayState
     }
 
     private func cancelTransition() {
@@ -415,13 +375,6 @@ final class TabScrollHandler: NSObject,
         } else {
             hideToolbars(animated: true)
         }
-    }
-
-    private func setOffset(y: CGFloat, for scrollView: UIScrollView) {
-        scrollView.contentOffset = CGPoint(
-            x: contentOffsetBeforeAnimation.x,
-            y: y
-        )
     }
 
     /// Sends a scroll action to update the new toolbar border visibility based on scroll position changes.

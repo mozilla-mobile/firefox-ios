@@ -22,6 +22,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         return [generateFeatureFlagToggleSettings(), generateFeatureFlagList()]
     }
 
+    // swiftlint:disable:next function_body_length
     private func generateFeatureFlagToggleSettings() -> SettingSection {
         // For better code readability and parsability in-app, please keep in alphabetical order by title
         var children: [Setting] =  [
@@ -110,13 +111,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .loginsVerificationEnabled,
-                titleText: format(string: "Logins Verification"),
-                statusText: format(string: "Toggle to enable logins verification")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .menuRefactor,
                 titleText: format(string: "Menu Refactor"),
                 statusText: format(string: "Toggle to use the menu redesign")
@@ -149,6 +143,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .noInternetConnectionErrorPage,
                 titleText: format(string: "NIC Native Error Page"),
                 statusText: format(string: "Toggle to display natively created no internet connection error page")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .ohttpManagerGleanUploader,
+                titleText: format(string: "Ohttp Glean uploader"),
+                statusText: format(string: "Toggle to enable the Ohttp Glean uploader capability")
             ) { [weak self] _ in
                 self?.reloadView()
             },

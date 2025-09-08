@@ -5,57 +5,57 @@
 import UIKit
 import ComponentLibrary
 
-public struct SummarizeViewModel {
-    let titleLabelA11yId: String
+public struct BrandViewModel {
+    let brandLabel: String
+    let brandLabelA11yId: String
+    let brandImage: UIImage?
+    let brandImageA11yId: String
+
+    public init(
+        brandLabel: String,
+        brandLabelA11yId: String,
+        brandImage: UIImage?,
+        brandImageA11yId: String
+    ) {
+        self.brandLabel = brandLabel
+        self.brandLabelA11yId = brandLabelA11yId
+        self.brandImage = brandImage
+        self.brandImageA11yId = brandImageA11yId
+    }
+}
+
+public struct LoadingLabelViewModel {
     let loadingLabel: String
     let loadingA11yLabel: String
     let loadingA11yId: String
-    let tabSnapshotA11yLabel: String
-    let tabSnapshotA11yId: String
-    let summarizeTextViewA11yLabel: String
-    let summarizeTextViewA11yId: String
-    let brandLabel: String
-    let summaryNote: String
-
-    let closeButtonModel: CloseButtonViewModel
-    let tabSnapshot: UIImage
-    let tabSnapshotTopOffset: CGFloat
-    let errorMessages: LocalizedErrorsViewModel
-
-    let onDismiss: @MainActor () -> Void
 
     public init(
-        titleLabelA11yId: String,
         loadingLabel: String,
         loadingA11yLabel: String,
-        loadingA11yId: String,
-        tabSnapshotA11yLabel: String,
-        tabSnapshotA11yId: String,
-        brandLabel: String,
-        summaryNote: String,
-        summarizeTextViewA11yLabel: String,
-        summarizeTextViewA11yId: String,
-        closeButtonModel: CloseButtonViewModel,
-        tabSnapshot: UIImage,
-        tabSnapshotTopOffset: CGFloat,
-        errorMessages: LocalizedErrorsViewModel,
-        onDismiss: @escaping @MainActor () -> Void
+        loadingA11yId: String
     ) {
-        self.titleLabelA11yId = titleLabelA11yId
         self.loadingLabel = loadingLabel
         self.loadingA11yLabel = loadingA11yLabel
         self.loadingA11yId = loadingA11yId
+    }
+}
+
+public struct TabSnapshotViewModel {
+    let tabSnapshotA11yLabel: String
+    let tabSnapshotA11yId: String
+    let tabSnapshot: UIImage
+    let tabSnapshotTopOffset: CGFloat
+
+    public init(
+        tabSnapshotA11yLabel: String,
+        tabSnapshotA11yId: String,
+        tabSnapshot: UIImage,
+        tabSnapshotTopOffset: CGFloat
+    ) {
         self.tabSnapshotA11yLabel = tabSnapshotA11yLabel
         self.tabSnapshotA11yId = tabSnapshotA11yId
-        self.brandLabel = brandLabel
-        self.summaryNote = summaryNote
-        self.summarizeTextViewA11yLabel = summarizeTextViewA11yLabel
-        self.summarizeTextViewA11yId = summarizeTextViewA11yId
-        self.closeButtonModel = closeButtonModel
         self.tabSnapshot = tabSnapshot
-        self.onDismiss = onDismiss
         self.tabSnapshotTopOffset = tabSnapshotTopOffset
-        self.errorMessages = errorMessages
     }
 }
 
@@ -91,5 +91,43 @@ public struct LocalizedErrorsViewModel {
         self.errorButtonA11yId = errorButtonA11yId
         self.retryButtonLabel = retryButtonLabel
         self.closeButtonLabel = closeButtonLabel
+    }
+}
+
+public struct SummarizeViewModel {
+    let titleLabelA11yId: String
+    let compactTitleLabelA11yId: String
+    let summarizeViewA11yId: String
+    let summaryFootnote: String
+    let tabSnapshotViewModel: TabSnapshotViewModel
+    let loadingLabelViewModel: LoadingLabelViewModel
+    let brandViewModel: BrandViewModel
+    let closeButtonModel: CloseButtonViewModel
+    let errorMessages: LocalizedErrorsViewModel
+
+    let onDismiss: @MainActor () -> Void
+
+    public init(
+        titleLabelA11yId: String,
+        compactTitleLabelA11yId: String,
+        summaryFootnote: String,
+        summarizeViewA11yId: String,
+        tabSnapshotViewModel: TabSnapshotViewModel,
+        loadingLabelViewModel: LoadingLabelViewModel,
+        brandViewModel: BrandViewModel,
+        closeButtonModel: CloseButtonViewModel,
+        errorMessages: LocalizedErrorsViewModel,
+        onDismiss: @escaping @MainActor () -> Void
+    ) {
+        self.titleLabelA11yId = titleLabelA11yId
+        self.compactTitleLabelA11yId = compactTitleLabelA11yId
+        self.summarizeViewA11yId = summarizeViewA11yId
+        self.loadingLabelViewModel = loadingLabelViewModel
+        self.tabSnapshotViewModel = tabSnapshotViewModel
+        self.brandViewModel = brandViewModel
+        self.summaryFootnote = summaryFootnote
+        self.closeButtonModel = closeButtonModel
+        self.onDismiss = onDismiss
+        self.errorMessages = errorMessages
     }
 }

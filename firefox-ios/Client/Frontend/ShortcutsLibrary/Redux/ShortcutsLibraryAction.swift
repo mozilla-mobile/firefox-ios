@@ -26,5 +26,12 @@ struct ShortcutsLibraryAction: Action {
 
 enum ShortcutsLibraryActionType: ActionType {
     case initialize
-    case switchTabToastButtonPressed
+    case switchTabToastButtonTapped
+    case tapOnShortcutCell
+    case viewDidAppear
+    case viewDidDisappear
+}
+
+enum ShortcutsLibraryMiddlewareActionType: ActionType {
+    case impressionTelemetryRecorded
 }

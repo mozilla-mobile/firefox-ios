@@ -1,0 +1,199 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+# This file is organized (roughly) alphabetically by metric names
+# for easy navigation
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - TermsOfUse
+
+###############################################################################
+# Terms of Use Telemetry Metrics
+# 
+# This file contains telemetry metrics for tracking user interactions
+# - User impressions and acceptance tracking
+# - Date and Version of accepted terms
+# - Button taps and navigation events
+# - Dismissal behavior
+###############################################################################
+
+# Terms of Use metrics
+termsofuse:
+  impression:
+    type: event
+    description: |
+      User viewed the terms of use bottom sheet.
+    extra_keys: &tou_extra_keys
+      tou_version:
+        type: string
+        description: |
+          The version of the Terms of Use that was shown.
+      surface:
+        type: string
+        description: |
+          The surface where ToU was shown (e.g., bottom_sheet, onboarding).
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28906
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  accepted:
+    type: event
+    description: |
+      User accepted the terms of use.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28906
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  version:
+    type: quantity
+    description: >
+      The version of the Terms of Use the user accepted.
+    unit: version
+    lifetime: application
+    send_in_pings:
+      - metrics
+      - usage-reporting
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28906
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  date:
+    type: datetime
+    description: >
+      The timestamp when the user accepted the Terms of Use.
+    time_unit: millisecond
+    lifetime: application
+    send_in_pings:
+      - metrics
+      - usage-reporting
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/28906
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  remind_me_later_click:
+    type: event
+    description: |
+      User clicked the "remind me later" button in the Terms of Use bottom sheet.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  learn_more_click:
+    type: event
+    description: |
+      User clicked the "learn more" button in the Terms of Use bottom sheet.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  privacy_notice_click:
+    type: event
+    description: |
+      User clicked the privacy notice link in the Terms of Use bottom sheet.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  terms_of_use_click:
+    type: event
+    description: |
+      User clicked the terms of use link in the Terms of Use bottom sheet.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  dismiss:
+    type: event
+    description: |
+      User dismissed the Terms of Use bottom sheet without accepting or clicking remind me later.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  impression_count:
+    type: counter
+    description: >
+      Records the number of ToU impressions the user has had.
+    lifetime: application
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  remind_me_later_count:
+    type: counter
+    description: >
+      Records the number of times a user clicks "remind me later".
+    lifetime: application
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  dismiss_count:
+    type: counter
+    description: >
+      Records the number of times a user clicks to dismiss (does not include tapping accept or remind me later).
+    lifetime: application
+    send_in_pings:
+      - metrics
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
