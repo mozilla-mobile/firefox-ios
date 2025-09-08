@@ -8,7 +8,7 @@ import UIKit
 import SwiftUI
 import OnboardingKit
 
-class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable {
+class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable, Themeable {
     // MARK: - UX Constants
     private enum UX {
         static let fadeOutDuration: TimeInterval = 0.24
@@ -21,13 +21,20 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     private var viewModel: LaunchScreenViewModel
     private let windowUUID: WindowUUID
 
+    // MARK: - Themeable Properties
+    var themeManager: ThemeManager
+    var themeListenerCancellable: Any?
+    var currentWindowUUID: WindowUUID? { return windowUUID }
+
+    // MARK: - Dependencies
+    private let notificationCenter: NotificationProtocol
+
     // MARK: - Synchronization
     private var isLoading = false
     private var shouldLoadNextLaunchType = false
 
     // MARK: - UI Components
     private lazy var modernLaunchView: ModernLaunchScreenView = {
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
         return ModernLaunchScreenView(windowUUID: windowUUID, themeManager: themeManager)
     }()
 
@@ -37,12 +44,18 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         return controller
     }()
 
-    init(windowUUID: WindowUUID,
-         coordinator: LaunchFinishedLoadingDelegate,
-         viewModel: LaunchScreenViewModel? = nil) {
+    init(
+        windowUUID: WindowUUID,
+        coordinator: LaunchFinishedLoadingDelegate,
+        viewModel: LaunchScreenViewModel? = nil,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
         self.windowUUID = windowUUID
         self.coordinator = coordinator
         self.viewModel = viewModel ?? LaunchScreenViewModel(windowUUID: windowUUID)
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
         self.viewModel.delegate = self
     }
@@ -61,6 +74,9 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         super.viewDidLoad()
         setupLayout()
         startLoading()
+
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -143,5 +159,12 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
             shouldLoadNextLaunchType = false
             viewModel.loadNextLaunchType()
         }
+    }
+
+    // MARK: - Themeable Protocol
+
+    func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer1
     }
 }
