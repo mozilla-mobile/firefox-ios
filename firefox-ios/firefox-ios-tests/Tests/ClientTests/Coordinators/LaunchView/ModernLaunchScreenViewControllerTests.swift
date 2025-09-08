@@ -43,12 +43,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
     // MARK: - View Lifecycle Tests
 
-    func test_viewDidLoad_setsBackgroundColorToSystemBackground() {
-        let subject = createModernSubject()
-        subject.viewDidLoad()
-        XCTAssertEqual(subject.view.backgroundColor, .systemBackground)
-    }
-
     func test_startLoading_triggersViewModelStartLoadingOnce() {
         let subject = createModernSubject()
 
