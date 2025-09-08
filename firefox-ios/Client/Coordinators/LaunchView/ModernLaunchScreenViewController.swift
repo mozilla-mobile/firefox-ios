@@ -128,12 +128,12 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
     // MARK: - LaunchFinishedLoadingDelegate
     func launchWith(launchType: LaunchType) {
         stopLoaderAnimation()
-        self.coordinator?.launchWith(launchType: launchType)
+        coordinator?.launchWith(launchType: launchType)
     }
 
     func launchBrowser() {
         stopLoaderAnimation()
-        self.coordinator?.launchBrowser()
+        coordinator?.launchBrowser()
     }
 
     func finishedLoadingLaunchOrder() {
@@ -142,7 +142,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         // If viewWillAppear was called while we were loading, now process the deferred call
         if shouldLoadNextLaunchType {
             shouldLoadNextLaunchType = false
-            self.viewModel.loadNextLaunchType()
+            viewModel.loadNextLaunchType()
         }
     }
 }
