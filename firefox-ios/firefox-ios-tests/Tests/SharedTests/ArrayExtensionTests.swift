@@ -17,6 +17,34 @@ class ArrayExtensionTests: XCTestCase {
         XCTAssertEqual(resultB, [1, 2, 3])
     }
 
+    func testUniqued() {
+        let a = [1, 2, 3, 4, 5, 6, 1, 2]
+        let result = a.uniqued()
+        XCTAssertEqual(result, [1, 2, 3, 4, 5, 6])
+
+        let b = [1, 2, 3]
+        let resultB = b.uniqued()
+        XCTAssertEqual(resultB, [1, 2, 3])
+
+        let c = [1, 1, 1, 1, 1]
+        let resultC = c.uniqued()
+        XCTAssertEqual(resultC, [1])
+    }
+
+    func testDuplicates() {
+        let a = [1, 2, 3, 4, 5, 6, 1, 2]
+        let result = a.duplicates()
+        XCTAssertEqual(result, [1, 2])
+
+        let b = [1, 2, 3]
+        let resultB = b.duplicates()
+        XCTAssertEqual(resultB, [])
+
+        let c = [1, 1, 1, 1]
+        let resultC = c.duplicates()
+        XCTAssertEqual(resultC, [1, 1, 1])
+    }
+
     func testUnion() {
         let a = [1, 2, 3, 4, 5, 6]
         let b = [7, 8, 9, 10]

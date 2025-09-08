@@ -15,6 +15,7 @@
 | <!--insert "before" image here--> | <!--insert "after" image here--> |
 | <!--insert "before" image here--> | <!--insert "after" image here--> |
 
+<!-- If you're only using the Before/After table above, or the Demo disclosure below, you can delete the other, unused markup -->
 <details>
 <summary>Demo</summary>
 <!-- Shorthand image template: <img height=400 src="<URL>" /> -->
@@ -27,4 +28,4 @@
 - [ ] If working on UI, I checked and implemented accessibility (Dynamic Text and VoiceOver)
 - [ ] If adding telemetry, I read the [data stewardship requirements](https://github.com/mozilla-mobile/firefox-ios/wiki/Adding-Glean-Telemetry-Events) and will request a data review
 - [ ] If needed, I updated documentation and added comments to complex code
-- [ ] If needed, I added a backport comment (example `@Mergifyio backport release/v120`)
+- [ ] If needed, I added a backport comment (example `@Mergifyio backport release/v150.0`)

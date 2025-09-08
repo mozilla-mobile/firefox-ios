@@ -236,7 +236,7 @@ or.at
 
 // au : https://www.iana.org/domains/root/db/au.html
 // https://www.auda.org.au/
-// Confirmed by registry <general@auda.org.au> 2024-11-17
+// Confirmed by registry <general@auda.org.au> 2025-07-16
 au
 // 2LDs
 asn.au
@@ -279,7 +279,7 @@ vic.gov.au
 wa.gov.au
 // 4LDs
 // education.tas.edu.au - Removed at the request of the Department of Education Tasmania
-schools.nsw.edu.au
+// schools.nsw.edu.au - Removed at the request of the New South Wales Department of Education.
 
 // aw : https://www.iana.org/domains/root/db/aw.html
 aw
@@ -499,6 +499,7 @@ aju.br
 am.br
 anani.br
 aparecida.br
+api.br
 app.br
 arq.br
 art.br
@@ -584,6 +585,7 @@ se.gov.br
 sp.gov.br
 to.gov.br
 gru.br
+ia.br
 imb.br
 ind.br
 inf.br
@@ -644,6 +646,7 @@ seg.br
 sjc.br
 slg.br
 slz.br
+social.br
 sorocaba.br
 srv.br
 taxi.br
@@ -660,6 +663,7 @@ vet.br
 vix.br
 vlog.br
 wiki.br
+xyz.br
 zlg.br
 
 // bs : http://www.nic.bs/rules.html
@@ -6169,95 +6173,94 @@ cc.dc.us
 lib.dc.us
 cc.de.us
 cc.fl.us
+lib.fl.us
 cc.ga.us
+lib.ga.us
 cc.gu.us
+lib.gu.us
 cc.hi.us
+lib.hi.us
 cc.ia.us
+lib.ia.us
 cc.id.us
+lib.id.us
 cc.il.us
+lib.il.us
 cc.in.us
+lib.in.us
 cc.ks.us
+lib.ks.us
 cc.ky.us
+lib.ky.us
 cc.la.us
+lib.la.us
 cc.ma.us
+lib.ma.us
 cc.md.us
+lib.md.us
 cc.me.us
+lib.me.us
 cc.mi.us
+lib.mi.us
 cc.mn.us
+lib.mn.us
 cc.mo.us
+lib.mo.us
 cc.ms.us
+lib.ms.us
 cc.mt.us
+lib.mt.us
 cc.nc.us
+lib.nc.us
 cc.nd.us
+lib.nd.us
 cc.ne.us
+lib.ne.us
 cc.nh.us
+lib.nh.us
 cc.nj.us
+lib.nj.us
 cc.nm.us
+lib.nm.us
 cc.nv.us
+lib.nv.us
 cc.ny.us
+lib.ny.us
 cc.oh.us
+lib.oh.us
 cc.ok.us
+lib.ok.us
 cc.or.us
+lib.or.us
 cc.pa.us
+lib.pa.us
 cc.pr.us
+lib.pr.us
 cc.ri.us
+lib.ri.us
 cc.sc.us
+lib.sc.us
 cc.sd.us
+lib.sd.us
 cc.tn.us
+lib.tn.us
 cc.tx.us
+lib.tx.us
 cc.ut.us
+lib.ut.us
 cc.va.us
+lib.va.us
 cc.vi.us
+lib.vi.us
 cc.vt.us
+lib.vt.us
 cc.wa.us
+lib.wa.us
 cc.wi.us
+lib.wi.us
 cc.wv.us
 cc.wy.us
 k12.wy.us
-// lib.de.us - Issue #243 - Moved to Private section at request of Ed Moore <Ed.Moore@lib.de.us>
-lib.fl.us
-lib.ga.us
-lib.gu.us
-lib.hi.us
-lib.ia.us
-lib.id.us
-lib.il.us
-lib.in.us
-lib.ks.us
-lib.ky.us
-lib.la.us
-lib.ma.us
-lib.md.us
-lib.me.us
-lib.mi.us
-lib.mn.us
-lib.mo.us
-lib.ms.us
-lib.mt.us
-lib.nc.us
-lib.nd.us
-lib.ne.us
-lib.nh.us
-lib.nj.us
-lib.nm.us
-lib.nv.us
-lib.ny.us
-lib.oh.us
-lib.ok.us
-lib.or.us
-lib.pa.us
-lib.pr.us
-lib.ri.us
-lib.sc.us
-lib.sd.us
-lib.tn.us
-lib.tx.us
-lib.ut.us
-lib.va.us
-lib.vi.us
-lib.vt.us
-lib.wa.us
-lib.wi.us
 // lib.wv.us - Bug 941670 - Removed at request of Larry W Arnold <arnold@wvlc.lib.wv.us>
 lib.wy.us
 // k12.ma.us contains school districts in Massachusetts. The 4LDs are
@@ -6791,7 +6794,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-07-16T15:22:08Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-08-27T15:19:08Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -9401,7 +9404,7 @@ nowruz
 // https://www.iana.org/domains/root/db/nowtv.html
 nowtv
 
-// nra : NRA Holdings Company, INC.
+// nra : National Rifle Association of America
 // https://www.iana.org/domains/root/db/nra.html
 nra
 
@@ -9760,10 +9763,6 @@ recipes
 // red : Identity Digital Domains Limited
 // https://www.iana.org/domains/root/db/red.html
 red
-
-// redstone : Redstone Haute Couture Co., Ltd.
-// https://www.iana.org/domains/root/db/redstone.html
-redstone
 
 // redumbrella : Travelers TLD, LLC
 // https://www.iana.org/domains/root/db/redumbrella.html
@@ -11255,10 +11254,6 @@ poznan.pl
 wroc.pl
 zakopane.pl
 
-// .US
-// Submitted by Ed Moore <Ed.Moore@lib.de.us>
-lib.de.us
-
 // 12CHARS : https://12chars.com
 // Submitted by Kenny Niehage <psl@12chars.com>
 12chars.dev
@@ -11271,7 +11266,7 @@ cc.ua
 inf.ua
 ltd.ua
 
-// 611 blockchain domain name system : https://611project.net/
+// 611 blockchain domain name system : https://sixone.one/
 611.to
 
 // A2 Hosting
@@ -13577,10 +13572,6 @@ gitlab.io
 gitapp.si
 gitpage.si
 
-// Glitch, Inc : https://glitch.com
-// Submitted by Mads Hartmann <mads@glitch.com>
-glitch.me
-
 // Global NOG Alliance : https://nogalliance.org/
 // Submitted by Sander Steffann <sander@nogalliance.org>
 nog.community
@@ -14098,6 +14089,7 @@ myjino.ru
 
 // Jotelulu S.L. : https://jotelulu.com
 // Submitted by Daniel Fariña <ingenieria@jotelulu.com>
+jote.cloud
 jotelulu.cloud
 
 // JouwWeb B.V. : https://www.jouwweb.nl
@@ -14430,6 +14422,11 @@ routingthecloud.com
 sn.mynetname.net
 routingthecloud.net
 routingthecloud.org
+
+// Million Software, Inc : https://million.dev/
+// Submitted by Rayhan Noufal Arayilakath <security@million.dev>
+same-app.com
+same-preview.com
 
 // minion.systems : http://minion.systems
 // Submitted by Robert Böttinger <r@minion.systems>
@@ -15529,8 +15526,10 @@ utwente.io
 temp-dns.com
 
 // Supabase : https://supabase.io
-// Submitted by Inian Parameshwaran <security@supabase.io>
+// Submitted by Supabase Security <psl-maintainers@supabase.io>
 supabase.co
+realtime.supabase.co
+storage.supabase.co
 supabase.in
 supabase.net
 
@@ -15803,6 +15802,10 @@ voorloper.cloud
 // Submitted by Masayuki Note <masa@blade.wafflecell.com>
 wafflecell.com
 
+// Walrus : https://walrus.xyz
+// Submitted by Max Spector <info@walrus.xyz>
+wal.app
+
 // Webflow, Inc. : https://www.webflow.com
 // Submitted by Webflow Security Team <security@webflow.com>
 webflow.io
@@ -15855,6 +15858,8 @@ wmflabs.org
 // William Harrison : https://wharrison.com.au
 // Submitted by William Harrison <security@wharrison.com.au>
 wdh.app
+hrsn.au
+vps.hrsn.au
 hrsn.dev
 
 // Windsurf : https://windsurf.com
@@ -15921,6 +15926,7 @@ xs4all.space
 yandexcloud.net
 storage.yandexcloud.net
 website.yandexcloud.net
+sourcecraft.site
 
 // YesCourse Pty Ltd : https://yescourse.com
 // Submitted by Atul Bhouraskar <atul@yescourse.com>

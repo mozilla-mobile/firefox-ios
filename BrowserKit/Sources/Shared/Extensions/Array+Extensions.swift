@@ -57,6 +57,13 @@ public extension Sequence where Iterator.Element: Hashable {
         var seen: Set<Iterator.Element> = []
         return filter { seen.insert($0).inserted }
     }
+
+    /// Returns all the duplicated elements within a sequence with the order preserved. If a duplicate appears more than
+    /// twice, it will return each excess duplicate. For example, [1, 1, 1, 1] would return 3 duplicates, [1, 1, 1].
+    func duplicates() -> [Iterator.Element] {
+        var seen: Set<Iterator.Element> = []
+        return filter { !seen.insert($0).inserted }
+    }
 }
 
 public extension Sequence {

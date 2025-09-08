@@ -428,10 +428,12 @@ public class BrowserAddressToolbar: UIView,
     }
 
     // MARK: - Notifiable
-    public func handleNotifications(_ notification: Notification) {
+    nonisolated public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustHeightConstraintForA11ySizeCategory()
+            ensureMainThread {
+                self.adjustHeightConstraintForA11ySizeCategory()
+            }
         default: break
         }
     }

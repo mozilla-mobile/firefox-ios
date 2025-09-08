@@ -64,11 +64,14 @@ extension UIViewController {
         guard let uuid = (view as ThemeUUIDIdentifiable).currentWindowUUID else { return }
 
         let vcToPresent = vcBeingPresented
-        let buttonItem = UIBarButtonItem(title: navItemText.localizedString(), style: .plain) { [weak self] _ in
-            // Note: Do not initialize the back button action with an @objc selector, as `dismissVC`'s method signature
-            // no longer matches (will crash).
-            self?.dismissVC()
-        }
+        let buttonItem = UIBarButtonItem(
+            title: navItemText.localizedString(),
+            style: .plain,
+            target: self,
+            // Note: Do not call `dismissVC` directly as the method signature is not correct (will crash)
+            action: #selector(handleRightBarButtonPressed)
+        )
+
         switch navItemLocation {
         case .Left:
             vcToPresent.navigationItem.leftBarButtonItem = buttonItem
@@ -87,6 +90,13 @@ extension UIViewController {
             themedNavigationController.modalPresentationStyle = .fullScreen
         }
         presentWithModalDismissIfNeeded(themedNavigationController, animated: true)
+    }
+
+    @objc // Note: objc methods should always be marked nonisolated as `@MainActor` isolation can't be guaranteed
+    nonisolated private func handleRightBarButtonPressed(_ sender: UIBarButtonItem) {
+        ensureMainThread {
+            self.dismissVC()
+        }
     }
 
     func dismissVC(withCompletion completion: (() -> Void)? = nil) {

@@ -9,3 +9,11 @@ protocol URLSessionDataTaskProtocol {
 }
 
 extension URLSessionDataTask: URLSessionDataTaskProtocol {}
+
+protocol URLSessionUploadTaskProtocol {
+    var countOfBytesClientExpectsToSend: Int64 { get set }
+    var countOfBytesClientExpectsToReceive: Int64 { get set }
+    func resume()
+}
+
+extension URLSessionUploadTask: URLSessionUploadTaskProtocol {}

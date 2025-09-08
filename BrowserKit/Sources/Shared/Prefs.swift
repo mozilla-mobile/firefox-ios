@@ -52,6 +52,7 @@ public struct PrefsKeys {
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
     public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
     public static let ReaderModeProfileKeyStyle = "readermode.style"
+    public static let RustFxaKeychainEnabled = "RustFxaKeychainEnabled"
 
     // Only set if we get an actual response, no assumptions, nil otherwise
     public static let AppleConfirmedUserIsDefaultBrowser = "AppleConfirmedUserIsDefaultBrowser"

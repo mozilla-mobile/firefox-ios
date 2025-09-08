@@ -161,9 +161,7 @@ class TestSQLitePinnedSites: XCTestCase {
         let pinnedSites = BrowserDBSQLite(database: database, prefs: prefs)
 
         // create pinned sites with a same domain name
-        let siteId = Int.max
         let site = Site.createPinnedSite(
-            id: Int.max,
             url: "http://site.com/foo1",
             title: "A domain",
             isGooglePinnedTile: false
@@ -182,7 +180,6 @@ class TestSQLitePinnedSites: XCTestCase {
         let checkPinnedSite: @Sendable () -> Success = {
             return pinnedSites.getPinnedTopSites() >>== { pinnedSites in
                 XCTAssertEqual(pinnedSites.count, 1)
-                XCTAssertEqual(pinnedSites[0]?.id, siteId)
                 XCTAssertEqual(pinnedSites[0]?.url, site.url)
                 XCTAssertEqual(pinnedSites[0]?.title, site.title)
                 return succeed()

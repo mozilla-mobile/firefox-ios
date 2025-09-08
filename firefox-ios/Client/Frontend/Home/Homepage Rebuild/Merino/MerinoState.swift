@@ -12,12 +12,7 @@ struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
     let merinoData: [MerinoStoryConfiguration]
     let shouldShowSection: Bool
-
-    // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143
-    let sectionHeaderState = SectionHeaderConfiguration(
-        title: .FirefoxHomepage.Pocket.SectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino
-    )
+    let sectionHeaderState = initializeSectionHeaderState()
 
     let footerURL = SupportUtils.URLForPocketLearnMore
 
@@ -92,6 +87,20 @@ struct MerinoState: StateType, Equatable {
             windowUUID: state.windowUUID,
             merinoData: state.merinoData,
             shouldShowSection: state.shouldShowSection
+        )
+    }
+
+    private static func initializeSectionHeaderState() -> SectionHeaderConfiguration {
+        let isDiscoverMoreEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageDiscoverMoreButton,
+                                                                                      checking: .buildOnly)
+        let title: String = isDiscoverMoreEnabled ? .FirefoxHomepage.Pocket.PopularTodaySectionTitle
+                                                  : .FirefoxHomepage.Pocket.SectionTitle
+        return SectionHeaderConfiguration(
+            title: title,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
+            isButtonHidden: !isDiscoverMoreEnabled,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.stories,
+            buttonTitle: String.FirefoxHomepage.Pocket.AllStoriesButtonTitle
         )
     }
 }

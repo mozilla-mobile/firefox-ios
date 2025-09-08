@@ -45,7 +45,7 @@ public final class DBOperationCancelled : MaybeErrorType {
 }
 
 // TODO: FXIOS-13184 Remove deferred code or validate it is sendable
-class DeferredDBOperation<T>: CancellableDeferred<T>, @unchecked Sendable {
+class DeferredDBOperation<T: Sendable>: CancellableDeferred<T>, @unchecked Sendable {
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
 
     override func cancel() {
@@ -1436,10 +1436,12 @@ private struct SDError {
     }
 }
 
+
+// TODO: FXIOS-13300 - Refactor Cursor and it's subclasses to be concurrency safe
 /// Provides access to the result set returned by a database query.
 /// The entire result set is cached, so this does not retain a reference
 /// to the statement or the database connection.
-private class FilledSQLiteCursor<T>: ArrayCursor<T> {
+private class FilledSQLiteCursor<T>: ArrayCursor<T>, @unchecked Sendable {
     fileprivate init(statement: SQLiteDBStatement, factory: (SDRow) -> T) {
         let (data, status, statusMessage) = FilledSQLiteCursor.getValues(statement, factory: factory)
         super.init(data: data, status: status, statusMessage: statusMessage)
@@ -1483,8 +1485,10 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
     }
 }
 
+
+// TODO: FXIOS-13300 - Refactor Cursor and it's subclasses to be concurrency safe
 /// Wrapper around a statement to help with iterating through the results.
-private class LiveSQLiteCursor<T>: Cursor<T> {
+private class LiveSQLiteCursor<T>: Cursor<T>, @unchecked Sendable {
     fileprivate var statement: SQLiteDBStatement!
 
     // Function for generating objects of type T from a row.

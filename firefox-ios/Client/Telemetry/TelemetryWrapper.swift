@@ -149,10 +149,20 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         glean.registerPings(GleanMetrics.Pings.shared)
 
         // Initialize Glean telemetry
-        let gleanConfig = Configuration(
-            channel: AppConstants.buildChannel.rawValue,
-            logLevel: .off
-        )
+        let gleanConfig: Configuration
+        if featureFlags.isFeatureEnabled(.ohttpManagerGleanUploader, checking: .buildOnly),
+            let pingUploader = GleanPingUploader() {
+            gleanConfig = Configuration(
+                channel: AppConstants.buildChannel.rawValue,
+                logLevel: .off,
+                httpClient: pingUploader
+            )
+        } else {
+            gleanConfig = Configuration(
+                channel: AppConstants.buildChannel.rawValue,
+                logLevel: .off
+            )
+        }
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
@@ -1842,7 +1852,7 @@ extension TelemetryWrapper {
     ) {
         DefaultLogger.shared.log("Uninstrumented metric recorded",
                                  level: .info,
-                                 category: .lifecycle,
+                                 category: .telemetry,
                                  description: "\(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))")
     }
 }
