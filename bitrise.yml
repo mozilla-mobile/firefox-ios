@@ -1611,7 +1611,7 @@ workflows:
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   #
-  focus_configure_build:
+  _focus_configure_build:
     before_run:
     - focus-clone-and-build-dependencies
     steps:
@@ -1703,7 +1703,7 @@ workflows:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Klar testPlan: UnitTests"
         - webhook_url: "$SLACK_WEBHOOK"
-  focus_ui_test:
+  _focus_ui_test:
     after_run:
     - focus_configure_build
     steps:
@@ -1745,6 +1745,12 @@ workflows:
         - channel: "#mobile-alerts-ios"
         - message: "The build run the Focus testPlan: $TEST_PLAN_NAME"
         - webhook_url: "$SLACK_WEBHOOK"
+
+  focus:
+    before_run:
+    - _focus_configure_build
+    after_run:
+    - focus_ui_test
 
   # # FOCUS UTILITIES WORKFLOWS
   focus-clone-and-build-dependencies:
