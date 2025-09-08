@@ -35,16 +35,6 @@ class MockLaunchFinishedLoadingDelegate: LaunchFinishedLoadingDelegate {
 
     // MARK: - Test Helper Methods
 
-    func reset() {
-        savedLaunchType = nil
-        launchWithTypeCalled = 0
-        launchBrowserCalled = 0
-        finishedLoadingLaunchOrderCalled = 0
-        launchWithTypeCallHistory.removeAll()
-        launchBrowserCallHistory.removeAll()
-        finishedLoadingCallHistory.removeAll()
-    }
-
     func verifyLaunchWithCalled(with launchType: LaunchType) -> Bool {
         return launchWithTypeCallHistory.contains { savedType in
             switch (savedType, launchType) {

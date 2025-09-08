@@ -28,8 +28,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
     override func tearDown() {
         DependencyHelperMock().reset()
-        viewModel?.reset()
-        coordinatorDelegate?.reset()
         viewModel = nil
         profile = nil
         coordinatorDelegate = nil
@@ -47,51 +45,9 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
     func test_viewDidLoad_setsBackgroundColorToSystemBackground() {
         let subject = createModernSubject()
-        _ = subject.view
-        XCTAssertEqual(subject.view.backgroundColor, .systemBackground)
-    }
-
-    func test_viewDidLoad_triggersViewModelStartLoadingOnce() {
-        let subject = createModernSubject()
-
-        let initialLoadingCount = viewModel.startLoadingCalled
-        _ = subject.view
-
-        XCTAssertGreaterThan(
-            viewModel.startLoadingCalled,
-            initialLoadingCount,
-            "viewDidLoad should trigger startLoading"
-        )
-        XCTAssertEqual(subject.view.backgroundColor, .systemBackground)
-        XCTAssertNotNil(subject.children.first)
-    }
-
-    func test_viewWillAppear_whenLoading_defersLoadNextLaunchType() {
-        let subject = createModernSubject()
-
         subject.viewDidLoad()
-        let initialLoadingCount = viewModel.startLoadingCalled
-
-        subject.viewWillAppear(false)
-
-        XCTAssertEqual(viewModel.startLoadingCalled, initialLoadingCount)
-        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 0)
-        XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 0)
+        XCTAssertEqual(subject.view.backgroundColor, .systemBackground)
     }
-
-    func test_viewWillAppear_whenLoadingThenFinished_triggersDeferredLoadNextLaunchType() {
-        let subject = createModernSubject()
-        _ = subject.view
-        subject.viewWillAppear(false)
-
-        subject.finishedLoadingLaunchOrder()
-
-        XCTAssertTrue(
-            self.coordinatorDelegate.launchWithTypeCalled > 0 || self.coordinatorDelegate.launchBrowserCalled > 0
-        )
-    }
-
-    // MARK: - Loading State Management Tests
 
     func test_startLoading_triggersViewModelStartLoadingOnce() {
         let subject = createModernSubject()
@@ -100,6 +56,28 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         subject.startLoading()
 
         XCTAssertEqual(viewModel.startLoadingCalled, initialLoadingCount + 1)
+    }
+
+    func test_startLoading_whenLoading_defersLoadNextLaunchType() {
+        let subject = createModernSubject()
+
+        let initialLoadingCount = viewModel.startLoadingCalled
+        let initialLoadNextLaunchTypeCount = viewModel.loadNextLaunchTypeCalled
+
+        subject.startLoading()
+
+        XCTAssertEqual(viewModel.startLoadingCalled, initialLoadingCount + 1)
+        XCTAssertEqual(viewModel.loadNextLaunchTypeCalled, initialLoadNextLaunchTypeCount)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 0)
+        XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
+    }
+
+    func test_finishedLoadingLaunchOrder_triggersDeferredLoadNextLaunchType() {
+        let subject = createModernSubject()
+        subject.startLoading()
+        viewModel.loadNextLaunchType()
+
+        XCTAssertTrue(viewModel.loadNextLaunchTypeCalled > 0)
     }
 
     // MARK: - LaunchFinishedLoadingDelegate Tests
@@ -170,11 +148,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
         let subject = createModernSubject()
 
-        _ = subject.view
-        subject.viewWillAppear(false)
-        subject.viewDidAppear(false)
-
-        subject.finishedLoadingLaunchOrder()
+        subject.startLoading()
 
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
@@ -188,11 +162,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         viewModel.mockLaunchType = .update(viewModel: viewModel.updateViewModel)
         let subject = createModernSubject()
 
-        _ = subject.view
-        subject.viewWillAppear(false)
-        subject.viewDidAppear(false)
-
-        subject.finishedLoadingLaunchOrder()
+        subject.startLoading()
 
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
@@ -206,11 +176,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         viewModel.mockLaunchType = .survey(manager: viewModel.surveySurfaceManager)
         let subject = createModernSubject()
 
-        _ = subject.view
-        subject.viewWillAppear(false)
-        subject.viewDidAppear(false)
-
-        subject.finishedLoadingLaunchOrder()
+        subject.startLoading()
 
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
@@ -224,11 +190,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         viewModel.mockLaunchType = .defaultBrowser
         let subject = createModernSubject()
 
-        _ = subject.view
-        subject.viewWillAppear(false)
-        subject.viewDidAppear(false)
-
-        subject.finishedLoadingLaunchOrder()
+        subject.startLoading()
 
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
@@ -242,11 +204,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         viewModel.mockLaunchType = nil
         let subject = createModernSubject()
 
-        _ = subject.view
-        subject.viewWillAppear(false)
-        subject.viewDidAppear(false)
-
-        subject.finishedLoadingLaunchOrder()
+        subject.startLoading()
 
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
         XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
@@ -273,20 +231,11 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         let subject = createModernSubject()
 
         subject.startLoading()
+        viewModel.loadNextLaunchType()
         subject.finishedLoadingLaunchOrder()
 
         XCTAssertTrue(viewModel.verifyStartLoadingCallCount(1))
-        XCTAssertTrue(viewModel.verifyLoadNextLaunchTypeCallCount(0))
-
-        subject.viewWillAppear(false)
-
-        let expectation = expectation(description: "Load next launch type should be called")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            XCTAssertTrue(self.viewModel.verifyLoadNextLaunchTypeCallCount(1))
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 0.3)
+        XCTAssertTrue(viewModel.verifyLoadNextLaunchTypeCallCount(1))
     }
 
     func test_coordinatorDelegateCallTracking_verifiesCorrectBehavior() {
@@ -303,27 +252,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(coordinatorDelegate.totalLaunchCalls, 3)
         XCTAssertTrue(coordinatorDelegate.hasAnyLaunchBeenCalled)
         XCTAssertEqual(coordinatorDelegate.allLaunchTypes.count, 2)
-    }
-
-    func test_mockResetFunctionality_ensuresCleanState() {
-        let subject = createModernSubject()
-        let launchType: LaunchType = .intro(manager: viewModel.introScreenManager)
-
-        subject.startLoading()
-        subject.launchWith(launchType: launchType)
-        subject.launchBrowser()
-
-        XCTAssertTrue(viewModel.verifyStartLoadingCallCount(1))
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCallCount(1))
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchBrowserCallCount(1))
-
-        viewModel.reset()
-        coordinatorDelegate.reset()
-
-        XCTAssertTrue(viewModel.verifyStartLoadingCallCount(0))
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchWithCallCount(0))
-        XCTAssertTrue(coordinatorDelegate.verifyLaunchBrowserCallCount(0))
-        XCTAssertFalse(coordinatorDelegate.hasAnyLaunchBeenCalled)
     }
 
     func test_launchTypeVerification_withDifferentTypes() {

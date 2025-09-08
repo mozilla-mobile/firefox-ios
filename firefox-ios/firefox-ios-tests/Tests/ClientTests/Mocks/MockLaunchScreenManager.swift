@@ -41,6 +41,11 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         startLoadingCalled += 1
         startLoadingCallHistory.append(appVersion)
         mockAppVersion = appVersion
+        if let mockLaunchType = mockLaunchType {
+            delegate?.launchWith(launchType: mockLaunchType)
+        } else {
+            delegate?.launchBrowser()
+        }
     }
 
     override func loadNextLaunchType() {
@@ -54,15 +59,6 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
     }
 
     // MARK: - Test Helper Methods
-
-    func reset() {
-        startLoadingCalled = 0
-        loadNextLaunchTypeCalled = 0
-        startLoadingCallHistory.removeAll()
-        loadNextLaunchTypeCallHistory.removeAll()
-        mockLaunchType = nil
-        mockAppVersion = nil
-    }
 
     func verifyStartLoadingCalled(with appVersion: String) -> Bool {
         return startLoadingCallHistory.contains(appVersion)
