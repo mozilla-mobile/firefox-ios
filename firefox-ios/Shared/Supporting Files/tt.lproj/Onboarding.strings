@@ -76,20 +76,74 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Калдырып тору";
 
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "Аста";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Өстә";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
+"Onboarding.Modern.Sync.Skip.Action.v140" = "Хәзер түгел";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "Дәвам итү";
+
+/* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
+"Onboarding.Modern.TermsOfService.ManageLink.v140" = "Идарә итү";
+
+/* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "Хосусыйлык аңлатмасы.";
+
+/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Күбрәк белү";
+
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v140" = "Ватылу турындагы хәбәрләр безгә браузердагы хаталарны ачыкларга һәм төзәтергә ярдәм итә. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.Modern.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v140" = "Ватылу турындагы хәбәрләрне автоматик рәвештә җибәрү";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "%@-ның куллану шартлары.";
+
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
+"Onboarding.Modern.Welcome.Skip.v140" = "Хәзер түгел";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Дәвам итү";
+
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Notification.Description.v120" = "Җиһазларыгыз арасында табларны хәвефсез рәвештә уртаклашыгыз һәм %@ кушымтасының бүтән хосусыйлык үзенчәлекләрен үзегез өчен ачыгыз.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Калдырып тору";
 
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Notification.Title.v120" = "Искәртүләр Сезгә %@ белән иминлерәк булып калырга ярдәм итә";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Искәртүләрне кабызу";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Sync.Description.v123" = "Синхронланган булсагыз, %@ серсүзләрегезне, кыстыргычларыгызны һәм башкаларны шифрлый.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "Керү";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "Калдырып тору";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v120" = "Җиһазларыгыз арасында күчкәндә шифрланган булып калыгыз";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v135" = "Кабул итү һәм дәвам итү";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v136" = "Кабул итү һәм дәвам итү";
+
+/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
+"Onboarding.TermsOfService.AgreementButtonTitle.v140" = "Дәвам итү";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.TermsOfService.ManageLink.v135" = "Идарә итү";
@@ -103,11 +157,20 @@
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Күбрәк белү";
 
+/* Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135" = "Ватылу турындагы хәбәрләр безгә браузердагы хаталарны ачыкларга һәм төзәтергә ярдәм итә. %@";
+
+/* Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
+"Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135" = "Ватылу турында хәбәрләрне автоматик рәвештә җибәрү";
+
 /* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.TermsOfServiceLink.v135" = "%@ Куллану Шартлары.";
 
 /* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "%@ кушымтасына рәхим итегез";
+
+/* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
+"Onboarding.TermsOfUse.TermsOfUseLink.v136" = "%@ куллану шартлары.";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Классик фон рәсеме";
@@ -135,6 +198,12 @@
 
 /* Accessibility label for close button that dismisses the welcome onboarding screen. %@ is the app name (e.g. Firefox). */
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Ябу һәм %@ таныштыру экраныннан чыгу";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Description.TreatementA.v120" = "Коммерциягә нигезләнмәгән оешма ярдәме белән ясалган браузерыбыз ширкәтләрнең Интернетта яшерен рәвештә Сезнең артыгыздан йөрүен туктатырга ярдәм итә.";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. %@ is the app name (e.g. Firefox). */
+"Onboarding.Welcome.Description.v120" = "Коммерциягә нигезләнмәгән оешма ярдәме белән ясалган браузерыбыз ширкәтләрнең Интернетта яшерен рәвештә Сезнең артыгыздан йөрүен туктатырга ярдәм итә.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Безнең xоусыйлык аңлатмасында күбрәк белегез";

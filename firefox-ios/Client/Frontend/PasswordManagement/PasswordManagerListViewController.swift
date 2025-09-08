@@ -10,6 +10,10 @@ import Common
 import struct MozillaAppServices.LoginEntry
 
 class PasswordManagerListViewController: SensitiveViewController, Themeable {
+    private struct UX {
+        static let separatorInset: CGFloat = 20
+        static let selectAllButtonMargin: CGFloat = 16
+    }
     static let loginsSettingsSection = 0
 
     var themeManager: ThemeManager
@@ -23,7 +27,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     private let loadingView: SettingsLoadingView = .build()
     private var deleteAlert: UIAlertController?
     private var selectedIndexPaths = [IndexPath]()
-    private let tableView: UITableView = .build()
+    private let tableView: UITableView
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -53,6 +57,12 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        if #available(iOS 26.0, *) {
+            tableView = UITableView(frame: .zero, style: .insetGrouped)
+            tableView.translatesAutoresizingMaskIntoConstraints = false
+        } else {
+            tableView = .build()
+        }
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -63,7 +73,12 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = .Settings.Passwords.Title
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
+        let rightInset: CGFloat = if #available(iOS 26.0, *) {
+            UX.separatorInset / 1.5
+        } else {
+            0
+        }
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: UX.separatorInset, bottom: 0, right: rightInset)
         tableView.register(cellType: PasswordManagerSettingsTableViewCell.self)
         tableView.register(cellType: PasswordManagerTableViewCell.self)
         tableView.registerHeaderFooter(cellType: ThemedTableSectionHeaderFooterView.self)
@@ -110,9 +125,6 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: selectionButton.topAnchor),
 
-            selectionButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            selectionButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            selectionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             selectionButton.topAnchor.constraint(equalTo: tableView.bottomAnchor),
             selectionButton.heightAnchor.constraint(equalToConstant: UIConstants.ToolbarHeight),
 
@@ -123,6 +135,30 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         ])
 
         selectionButton.isHidden = true
+
+        if #available(iOS 26.0, *) {
+            selectionButton.layer.cornerRadius = UIConstants.ToolbarHeight / 2
+            NSLayoutConstraint.activate([
+                selectionButton.leadingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: UX.selectAllButtonMargin
+                ),
+                selectionButton.trailingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -UX.selectAllButtonMargin
+                ),
+                selectionButton.bottomAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                    constant: -UX.selectAllButtonMargin / 2
+                )
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                selectionButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                selectionButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+                selectionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            ])
+        }
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
@@ -379,8 +415,13 @@ extension PasswordManagerListViewController: UITableViewDelegate {
         ) as? ThemedTableSectionHeaderFooterView else { return nil }
         headerView.titleLabel.text = .LoginsListTitle
         // not using a grouped table: show header borders
-        headerView.showBorder(for: .top, true)
-        headerView.showBorder(for: .bottom, true)
+        if #available(iOS 26.0, *) {
+            headerView.showBorder(for: .top, false)
+            headerView.showBorder(for: .bottom, false)
+        } else {
+            headerView.showBorder(for: .top, true)
+            headerView.showBorder(for: .bottom, true)
+        }
         headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }

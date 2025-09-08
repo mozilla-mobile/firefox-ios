@@ -600,10 +600,12 @@ final class LocationView: UIView,
         return super.canPerformAction(action, withSender: sender)
     }
 
-    func menuHelperPasteAndGo() {
-        guard let pasteboardContents = UIPasteboard.general.string else { return }
-        delegate?.locationViewDidSubmitText(pasteboardContents)
-        urlTextField.text = pasteboardContents
+    nonisolated func menuHelperPasteAndGo() {
+        ensureMainThread {
+            guard let pasteboardContents = UIPasteboard.general.string else { return }
+            self.delegate?.locationViewDidSubmitText(pasteboardContents)
+            self.urlTextField.text = pasteboardContents
+        }
     }
 
     // MARK: - LocationTextFieldDelegate

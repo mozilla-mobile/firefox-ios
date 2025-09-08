@@ -1,13 +1,13 @@
 // swift-tools-version: 5.6
 import PackageDescription
 
-let checksum = "e930560197f8e2d537a145052b22b1566fddc35b61f825438284ef328fd247de"
-let version = "144.0.20250830050338"
-let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.144.20250830050338/artifacts/public/build/MozillaRustComponents.xcframework.zip"
+let checksum = "377073bcef808ce6a64d68be00822a6743954c48b8c2f5ec8a032979d7daa526"
+let version = "144.0.20250905050321"
+let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.144.20250905050321/artifacts/public/build/MozillaRustComponents.xcframework.zip"
 
 // Focus xcframework
-let focusChecksum = "3b133930994c949e5c76c140027e5a5876167df59a434e04f56a3d0397599722"
-let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.144.20250830050338/artifacts/public/build/FocusRustComponents.xcframework.zip"
+let focusChecksum = "b60d96986fd5915f958face28fc9d3f1cde1ca0dcbb81f511c48273ec3289a09"
+let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.144.20250905050321/artifacts/public/build/FocusRustComponents.xcframework.zip"
 
 let package = Package(
     name: "MozillaRustComponentsSwift",
@@ -17,7 +17,7 @@ let package = Package(
         .library(name: "FocusRustComponents", targets: ["FocusAppServices"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/mozilla/glean-swift", from: "65.0.2"),
+        .package(url: "https://github.com/mozilla/glean-swift", from: "65.0.3"),
     ],
     targets: [
         // A wrapper around our binary target that combines + any swift files we want to expose to the user

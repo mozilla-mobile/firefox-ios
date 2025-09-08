@@ -1,0 +1,30 @@
+/* Label for the button that confirms user acceptance of the Terms of Use. */
+"TermsOfUse.AcceptButton.v142" = "承諾";
+
+/* Label for the back button shown in the Terms of Use web view. */
+"TermsOfUse.BackButton.v142" = "戻る";
+
+/* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Description.v142" = "%@ 利用規約を導入し、プライバシー通知を更新しました。";
+
+/* Link shown in the Terms of Use sheet to direct users to more details about the update. */
+"TermsOfUse.Link.LearnMore.v142" = "詳細情報";
+
+/* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
+"TermsOfUse.Link.PrivacyNotice.v142" = "プライバシー通知";
+
+/* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Link.TermsOfUse.v142" = "%@ 利用規約";
+
+/* Label for the button that allows the user to postpone accepting the Terms of Use. */
+"TermsOfUse.RemindMeLaterButton.v142" = "後で通知";
+
+/* Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'. */
+"TermsOfUse.ReviewAndAcceptText.v142" = "内容を確認の上、ご承諾ください。詳細情報";
+
+/* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
+"TermsOfUse.TermsOfUseHasOpened.v142" = "利用規約シートが開きました";
+
+/* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
+"TermsOfUse.Title.v142" = "更新情報があります";
+

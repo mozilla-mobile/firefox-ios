@@ -80,14 +80,14 @@ final class NimbusFeatureFlagLayer {
         case .modernOnboardingUI:
             return checkMondernOnboardingUIFeature(from: nimbus)
 
-        case .loginsVerificationEnabled:
-            return checkLoginsVerificationFeature(from: nimbus)
-
         case .nativeErrorPage:
             return checkNativeErrorPageFeature(from: nimbus)
 
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
+
+        case .ohttpManagerGleanUploader:
+            return checkOhttpManagerGleanUploader(from: nimbus)
 
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
@@ -422,16 +422,16 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkLoginsVerificationFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.loginsVerification.value().loginsVerificationEnabled
-    }
-
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().enabled
     }
 
     private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
+    }
+
+    private func checkOhttpManagerGleanUploader(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.ohttpGleanUploaderCapabilityFeature.value().enabled
     }
 
     private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {

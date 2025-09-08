@@ -5,6 +5,7 @@
 import Foundation
 
 /// Protocol representing an address toolbar.
+@MainActor
 public protocol AddressToolbar {
     func configure(config: AddressToolbarConfiguration,
                    toolbarPosition: AddressToolbarPosition,

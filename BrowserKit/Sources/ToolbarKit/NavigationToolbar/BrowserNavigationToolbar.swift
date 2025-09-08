@@ -10,7 +10,10 @@ public protocol BrowserNavigationToolbarDelegate: AnyObject {
 }
 
 /// Navigation toolbar implementation.
-public final class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable, ToolbarButtonCaching {
+public final class BrowserNavigationToolbar: UIView,
+                                             NavigationToolbar,
+                                             ThemeApplicable,
+                                             ToolbarButtonCaching {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let buttonSize = CGSize(width: 48, height: 48)

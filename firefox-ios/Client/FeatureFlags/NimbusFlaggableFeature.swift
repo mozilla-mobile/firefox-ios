@@ -30,7 +30,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageDiscoverMoreButton
     case homepageDiscoverMoreExperience
     case inactiveTabs
-    case loginsVerificationEnabled
     case menuDefaultBrowserBanner
     case menuRefactor
     case menuRedesignHint
@@ -38,6 +37,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case noInternetConnectionErrorPage
+    case ohttpManagerGleanUploader
     case pdfRefactor
     case reportSiteIssue
     case revertUnsafeContinuationsRefactor
@@ -85,9 +85,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
-                .loginsVerificationEnabled,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
+                .ohttpManagerGleanUploader,
                 .searchEngineConsolidation,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -151,7 +151,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .homepageStoriesRedesign,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
-                .loginsVerificationEnabled,
                 .menuDefaultBrowserBanner,
                 .menuRefactor,
                 .menuRedesignHint,
@@ -159,6 +158,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .modernOnboardingUI,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
+                .ohttpManagerGleanUploader,
                 .pdfRefactor,
                 .reportSiteIssue,
                 .revertUnsafeContinuationsRefactor,
