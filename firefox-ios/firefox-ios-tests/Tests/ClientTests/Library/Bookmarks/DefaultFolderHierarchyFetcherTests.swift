@@ -14,20 +14,19 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        mockProfile = MockProfile()
+        // TODO: FXIOS-13435 Workaround for weird side effects, we should not be hitting the db here
+        mockProfile = MockProfile(databasePrefix: "mock_for_folder_hierarchy")
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         testFolderGuid = await addFolder(title: testFolderTitle)
     }
 
     override func tearDown() {
-        mockProfile.shutdown()
         mockProfile = nil
         super.tearDown()
     }
 
     func testFecthFolder_returnsPreviouslyAddedFolder() async throws {
         let subject = createSubject()
-        mockProfile.reopen()
 
         let folders = await subject.fetchFolders()
 
