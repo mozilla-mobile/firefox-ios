@@ -18,6 +18,7 @@ class SaveLoginAlert: UIView, ThemeApplicable {
     var notNotAction: (() -> Void)?
     // Used to persist the alert a certain amount of time only
     var shouldPersist = false
+    private var glassEffectView: UIVisualEffectView?
 
     private struct UX {
         static let cornerRadius: CGFloat = 8
@@ -58,10 +59,20 @@ class SaveLoginAlert: UIView, ThemeApplicable {
     }
 
     private lazy var notNowButton: SecondaryRoundedButton = .build { button in
+        #if canImport(FoundationModels)
+        if #available(iOS 26.0, *) {
+            button.configuration = .glass()
+        }
+        #endif
         button.addTarget(self, action: #selector(self.notNowButtonPressed), for: .touchUpInside)
     }
 
     private lazy var saveButton: PrimaryRoundedButton = .build { button in
+        #if canImport(FoundationModels)
+        if #available(iOS 26.0, *) {
+            button.configuration = .glass()
+        }
+        #endif
         button.addTarget(self, action: #selector(self.saveButtonPressed), for: .touchUpInside)
     }
 
@@ -147,7 +158,13 @@ class SaveLoginAlert: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         backgroundColor = .clear
-        shadowView.backgroundColor = theme.colors.layer1
+
+        if #available(iOS 26.0, *) {
+            setupGlassEffect()
+        } else {
+            shadowView.backgroundColor = theme.colors.layer1
+        }
+
         imageView.tintColor = theme.colors.iconPrimary
         textLabel.textColor = theme.colors.textPrimary
         setupShadow(theme: theme)
@@ -169,5 +186,41 @@ class SaveLoginAlert: UIView, ThemeApplicable {
             roundedRect: shadowView.bounds,
             cornerRadius: UX.cornerRadius
         ).cgPath
+    }
+
+    @available(iOS 26.0, *)
+    private func setupGlassEffect() {
+        // Only add glass effect if it doesn't already exist
+        guard glassEffectView == nil else { return }
+
+        let effectView = UIVisualEffectView()
+
+        #if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            let glassEffect = UIGlassEffect()
+            glassEffect.isInteractive = true
+            effectView.effect = glassEffect
+        } else {
+            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+        #else
+        effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
+
+        effectView.layer.cornerRadius = UX.cornerRadius
+        effectView.clipsToBounds = true
+        effectView.translatesAutoresizingMaskIntoConstraints = false
+
+        shadowView.backgroundColor = .clear
+        shadowView.insertSubview(effectView, at: 0)
+
+        NSLayoutConstraint.activate([
+            effectView.topAnchor.constraint(equalTo: shadowView.topAnchor),
+            effectView.leadingAnchor.constraint(equalTo: shadowView.leadingAnchor),
+            effectView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor),
+            effectView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor)
+        ])
+
+        glassEffectView = effectView
     }
 }
