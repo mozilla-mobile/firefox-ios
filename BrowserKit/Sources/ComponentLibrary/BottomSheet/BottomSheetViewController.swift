@@ -65,6 +65,7 @@ public class BottomSheetViewController: UIViewController,
     private var contentViewBottomConstraint: NSLayoutConstraint?
     private var viewTranslation = CGPoint(x: 0, y: 0)
     private let windowUUID: WindowUUID
+    private var glassEffectView: UIVisualEffectView?
 
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
@@ -135,12 +136,21 @@ public class BottomSheetViewController: UIViewController,
         sheetView.layer.shadowRadius = 20.0
         sheetView.layer.shadowPath = UIBezierPath(roundedRect: sheetView.bounds,
                                                   cornerRadius: viewModel.cornerRadius).cgPath
+
+        if #available(iOS 26.0, *) {
+            setupDynamicBackground()
+        }
     }
 
     // MARK: - Theme
 
     public func applyTheme() {
-        contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
+        if #available(iOS 26.0, *) {
+            setupDynamicBackground()
+        } else {
+            contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
+        }
+
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
 
         if useDimmedBackground {
