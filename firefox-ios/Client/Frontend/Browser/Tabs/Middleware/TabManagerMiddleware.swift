@@ -954,7 +954,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
             windowUUID: windowUUID,
             accountData: accountData,
             canSummarize: false,
-            summarizerConfig: nil
+            summarizerConfig: SummarizerMiddleware().getConfig(for: .generic)
         )
     }
 
