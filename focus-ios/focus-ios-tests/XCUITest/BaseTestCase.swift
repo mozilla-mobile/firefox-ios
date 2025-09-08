@@ -145,7 +145,7 @@ class BaseTestCase: XCTestCase {
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
     }
 
-    func waitForWebPageLoad () {
+    func waitForWebPageLoad() {
         let app = XCUIApplication()
         let finishLoadingTimeout: TimeInterval = 60
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
