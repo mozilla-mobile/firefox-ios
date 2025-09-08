@@ -39,6 +39,7 @@ public class BottomSheetViewController: UIViewController,
     private let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
     private let childViewController: BottomSheetChild
+    private var glassEffectView: UIVisualEffectView?
 
     // Views
     private lazy var scrollView: FadeScrollView = .build { scrollView in
@@ -163,8 +164,6 @@ public class BottomSheetViewController: UIViewController,
 
     // MARK: - Private
 
-<<<<<<< HEAD
-=======
     @available(iOS 26.0, *)
     private func setupDynamicBackground() {
         let screenHeight = UIScreen.main.bounds.height
@@ -217,7 +216,6 @@ public class BottomSheetViewController: UIViewController,
         glassEffectView = nil
     }
 
->>>>>>> 39f3e8795 (Bugfix FXIOS-13359 [iOS 26] Glass effect is not applied to toast notifications (#29153))
     private func setupView() {
         if viewModel.shouldDismissForTapOutside {
             topTapView.addGestureRecognizer(UITapGestureRecognizer(target: self,
