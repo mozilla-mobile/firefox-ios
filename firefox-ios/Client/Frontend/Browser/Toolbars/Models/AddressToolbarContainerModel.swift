@@ -66,7 +66,7 @@ final class AddressToolbarContainerModel: Equatable {
             safeListedURLImageName: safeListedURLImageName,
             url: isEmptySearch ? nil : url,
             droppableUrl: droppableUrl,
-            searchTerm: term,
+            searchTerm: isEmptySearch ? nil : term,
             isEditing: isEditing,
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
