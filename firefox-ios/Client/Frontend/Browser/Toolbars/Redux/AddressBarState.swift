@@ -697,7 +697,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEmptySearch: true),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
-            url: nil, // the url needs to be nil so that the location field doesn't display the url again while editing
+            url: state.url,
             searchTerm: nil,
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
