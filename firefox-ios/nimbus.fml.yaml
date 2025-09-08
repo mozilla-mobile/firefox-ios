@@ -32,9 +32,11 @@ include:
   - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
+  - nimbus-features/ohttpGleanUploaderCapabilityFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
+  - nimbus-features/rustFxAKeychainEnabled.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/splashScreenFeature.yaml

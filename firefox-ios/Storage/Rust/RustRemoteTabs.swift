@@ -131,7 +131,7 @@ public class RustRemoteTabs: @unchecked Sendable {
         }
     }
 
-    public func getClientGUIDs(completion: @escaping (Set<GUID>?, Error?) -> Void) {
+    public func getClientGUIDs(completion: @escaping @Sendable (Set<GUID>?, Error?) -> Void) {
         self.getAll().upon { result in
             if let failureValue = result.failureValue {
                 completion(nil, failureValue)

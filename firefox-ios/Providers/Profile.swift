@@ -440,8 +440,8 @@ open class BrowserProfile: Profile,
     lazy var places = RustPlaces(databasePath: self.placesDbPath)
 
     public func migrateHistoryToPlaces(
-        callback: @escaping (HistoryMigrationResult) -> Void,
-        errCallback: @escaping (Error?) -> Void
+        callback: @escaping @Sendable (HistoryMigrationResult) -> Void,
+        errCallback: @escaping @Sendable (Error?) -> Void
     ) {
         guard FileManager.default.fileExists(atPath: browserDbPath) else {
             // This is the user's first run of the app, they don't have a browserDB, so lets report a successful

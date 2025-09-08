@@ -24,6 +24,41 @@ final class ShortcutsLibraryStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.shortcuts, [])
+        XCTAssertFalse(initialState.shouldRecordImpressionTelemetry)
+    }
+
+    func test_initializeAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = shortcutsLibraryReducer()
+
+        let newState = reducer(
+            initialState,
+            ShortcutsLibraryAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ShortcutsLibraryActionType.initialize
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.shortcuts.count, initialState.shortcuts.count)
+        XCTAssertTrue(newState.shouldRecordImpressionTelemetry)
+    }
+
+    func test_impressionTelemetryRecordedAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = shortcutsLibraryReducer()
+
+        let newState = reducer(
+            initialState,
+            ShortcutsLibraryAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ShortcutsLibraryMiddlewareActionType.impressionTelemetryRecorded
+            )
+        )
+
+        XCTAssertFalse(newState.shouldRecordImpressionTelemetry)
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.shortcuts.count, initialState.shortcuts.count)
     }
 
     func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
@@ -67,9 +102,10 @@ final class ShortcutsLibraryStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
 
-        XCTAssertEqual(newState, defaultState(with: initialState))
         XCTAssertEqual(newState.shortcuts.count, 0)
         XCTAssertEqual(newState.shortcuts.compactMap { $0.title }, [])
+        XCTAssertEqual(newState, defaultState(with: initialState))
+        XCTAssertEqual(newState.shouldRecordImpressionTelemetry, initialState.shouldRecordImpressionTelemetry)
     }
 
     // MARK: - Private

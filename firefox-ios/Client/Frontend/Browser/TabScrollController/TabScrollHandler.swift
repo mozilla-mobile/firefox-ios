@@ -135,13 +135,13 @@ final class TabScrollHandler: NSObject,
         configureRefreshControl()
     }
 
-    // TODO: Update to private in the future for now we need to keep support for Legacy protocol
+    // TODO: FXIOS-13340 Update to private in the future for now we need to keep support for Legacy protocol
     func showToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .expanded)
         delegate?.showToolbar()
     }
 
-    // TODO: Update to private in the future for now we need to keep support for Legacy protocol
+    // TODO: FXIOS-13340 Update to private in the future for now we need to keep support for Legacy protocol
     func hideToolbars(animated: Bool) {
         toolbarDisplayState.update(displayState: .collapsed)
         delegate?.hideToolbar()
@@ -149,33 +149,11 @@ final class TabScrollHandler: NSObject,
 
     // MARK: - ScrollView observation
 
-    // Not needed anymore
+    // TODO: FXIOS-13340 Remove
     func beginObserving(scrollView: UIScrollView) {}
 
-    // Not needed anymore
+    // TODO: FXIOS-13340 Remove 
     func stopObserving(scrollView: UIScrollView) {}
-
-    // MARK: - Zoom
-
-    func updateMinimumZoom() {
-        guard let scrollView = scrollView else { return }
-
-        isZoomedOut = roundNum(scrollView.zoomScale) == roundNum(scrollView.minimumZoomScale)
-        lastZoomedScale = isZoomedOut ? 0 : scrollView.zoomScale
-    }
-
-    func setMinimumZoom() {
-        guard let scrollView = scrollView else { return }
-
-        if isZoomedOut && roundNum(scrollView.zoomScale) != roundNum(scrollView.minimumZoomScale) {
-            scrollView.zoomScale = scrollView.minimumZoomScale
-        }
-    }
-
-    func resetZoomState() {
-        isZoomedOut = false
-        lastZoomedScale = 0
-    }
 
     // MARK: - Pull to refresh
 
@@ -195,8 +173,6 @@ final class TabScrollHandler: NSObject,
         // voice over and webview's scroll content size is not enough to scroll
         guard !tabIsLoading(),
               shouldUpdateUIWhenScrolling else { return }
-
-        tabProvider?.shouldScrollToTop = false
 
         let delta = -translation.y
         scrollDirection = delta > 0 ? .down : .up
@@ -244,11 +220,6 @@ final class TabScrollHandler: NSObject,
     // checking if an abrupt scroll event was triggered and adjusting the offset to the one
     // before the WKWebView's contentOffset is reset as a result of the contentView's frame becoming smaller
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // for PDFs, we should set the initial offset to 0 (ZERO)
-        if let tabProvider, tabProvider.shouldScrollToTop {
-            setOffset(y: 0, for: scrollView)
-        }
-
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
         sendActionToShowToolbarBorder(contentOffset: scrollView.contentOffset)
@@ -269,8 +240,6 @@ final class TabScrollHandler: NSObject,
               !scrollReachBottom(),
               !tabProvider.isFindInPageMode
               else { return }
-
-        tabProvider.shouldScrollToTop = false
 
         guard let containerView = scrollView.superview else { return }
 
@@ -406,13 +375,6 @@ final class TabScrollHandler: NSObject,
         } else {
             hideToolbars(animated: true)
         }
-    }
-
-    private func setOffset(y: CGFloat, for scrollView: UIScrollView) {
-        scrollView.contentOffset = CGPoint(
-            x: contentOffsetBeforeAnimation.x,
-            y: y
-        )
     }
 
     /// Sends a scroll action to update the new toolbar border visibility based on scroll position changes.

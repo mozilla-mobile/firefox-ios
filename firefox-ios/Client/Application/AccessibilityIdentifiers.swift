@@ -197,6 +197,7 @@ struct AccessibilityIdentifiers {
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
+            static let stories = "storiesSectionMoreButton"
         }
 
         struct SectionTitles {

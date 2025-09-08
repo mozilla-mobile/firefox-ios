@@ -75,6 +75,9 @@ public enum LoggerCategory: String {
     /// Related to the tabs UI, setup and management
     case tabs
 
+    /// Related to Glean telemetry pings and events
+    case telemetry
+
     /// Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
 

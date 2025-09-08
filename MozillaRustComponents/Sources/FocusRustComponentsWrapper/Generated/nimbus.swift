@@ -591,7 +591,6 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
     func getFeatureConfigVariables(featureId: String) throws  -> String?
     
     /**
-     * DEPRECATED: Use set_experiment_participation and set_rollout_participation instead.
      * Getter and setter for global user participation (applies to both experiments and rollouts).
      * For simplicity, the getter returns the experiment participation value.
      */
@@ -920,7 +919,6 @@ open func getFeatureConfigVariables(featureId: String)throws  -> String?  {
 }
     
     /**
-     * DEPRECATED: Use set_experiment_participation and set_rollout_participation instead.
      * Getter and setter for global user participation (applies to both experiments and rollouts).
      * For simplicity, the getter returns the experiment participation value.
      */

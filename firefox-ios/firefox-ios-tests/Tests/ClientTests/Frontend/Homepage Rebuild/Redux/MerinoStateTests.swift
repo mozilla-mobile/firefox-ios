@@ -12,6 +12,7 @@ final class MerinoStateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() {
@@ -88,6 +89,20 @@ final class MerinoStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
+    func test_initialState_withShowDiscoverMoreButtonEnabled_showsHeaderButton() {
+        setupNimbusShowDiscoverMoreButtonTesting(isEnabled: true)
+        let initialState = createSubject()
+
+        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, false)
+    }
+
+    func test_initialState_withShowDiscoverMoreButtonDisabled_hidesHeaderButton() {
+        setupNimbusShowDiscoverMoreButtonTesting(isEnabled: false)
+        let initialState = createSubject()
+
+        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+    }
+
     // MARK: - Private
     private func createSubject() -> MerinoState {
         return MerinoState(windowUUID: .XCTestDefaultUUID)
@@ -95,5 +110,13 @@ final class MerinoStateTests: XCTestCase {
 
     private func pocketReducer() -> Reducer<MerinoState> {
         return MerinoState.reducer
+    }
+
+    private func setupNimbusShowDiscoverMoreButtonTesting(isEnabled: Bool) {
+        let discoverMoreConfiguration = DiscoverMoreConfiguration(discoverMoreV1Experience: false,
+                                                                  showDiscoverMoreButton: isEnabled)
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(discoverMoreFeatureConfiguration: discoverMoreConfiguration)
+        }
     }
 }

@@ -21,6 +21,14 @@ public struct NetworkUtils {
         configuration.multipathServiceType = .handover
         return URLSession(configuration: configuration)
     }
+
+    // Build a URLSession with no-caching suitable for uploading pings
+    public static func defaultGleanPingURLSession() -> URLSession {
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.requestCachePolicy = .reloadIgnoringLocalCacheData
+        sessionConfig.urlCache = nil
+        return URLSession(configuration: sessionConfig)
+    }
 }
 
 public func makeURLSession(

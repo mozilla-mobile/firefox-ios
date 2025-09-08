@@ -17,7 +17,7 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
                                                httpVersion: nil,
                                                headerFields: nil)!
 
-        let session = WallpaperURLSessionMock(
+        let session = MockURLSession(
             with: expectedData,
             response: expectedResponse,
             and: nil
@@ -35,9 +35,9 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
 
     func testServerReturnsError() async {
         let expectedError = URLError(.cannotConnectToHost)
-        let session = WallpaperURLSessionMock(with: nil,
-                                              response: nil,
-                                              and: expectedError)
+        let session = MockURLSession(with: nil,
+                                     response: nil,
+                                     and: expectedError)
         let subject = WallpaperNetworkingModule(with: session)
 
         do {
@@ -50,9 +50,9 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
 
     func testResponseUnder200() async {
         let response = createResponseWith(statusCode: Int.random(in: 0..<200))
-        let session = WallpaperURLSessionMock(with: nil,
-                                              response: response,
-                                              and: nil)
+        let session = MockURLSession(with: nil,
+                                     response: response,
+                                     and: nil)
         let subject = WallpaperNetworkingModule(with: session)
 
         do {
@@ -66,9 +66,9 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
 
     func testResponseOver300() async {
         let response = createResponseWith(statusCode: Int.random(in: 300...599))
-        let session = WallpaperURLSessionMock(with: nil,
-                                              response: response,
-                                              and: nil)
+        let session = MockURLSession(with: nil,
+                                     response: response,
+                                     and: nil)
         let subject = WallpaperNetworkingModule(with: session)
 
         do {
@@ -83,9 +83,9 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
     func testDataReturned() async {
         let response = createResponseWith(statusCode: Int.random(in: 200..<300))
         let data = getDataFromJSONFile(named: .goodData)
-        let session = WallpaperURLSessionMock(with: data,
-                                              response: response,
-                                              and: nil)
+        let session = MockURLSession(with: data,
+                                     response: response,
+                                     and: nil)
         let subject = WallpaperNetworkingModule(with: session)
 
         do {
@@ -98,9 +98,9 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
 
     func testDataNotReturnedButWithGoodResponse() async {
         let response = createResponseWith(statusCode: Int.random(in: 200..<300))
-        let session = WallpaperURLSessionMock(with: nil,
-                                              response: response,
-                                              and: nil)
+        let session = MockURLSession(with: nil,
+                                     response: response,
+                                     and: nil)
         let subject = WallpaperNetworkingModule(with: session)
 
         do {

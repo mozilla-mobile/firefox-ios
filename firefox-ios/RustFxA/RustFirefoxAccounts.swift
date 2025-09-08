@@ -77,7 +77,6 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     @MainActor
     public static func startup(
         prefs: Prefs,
-        features: RustFxAFeatures = RustFxAFeatures(),
         logger: Logger = DefaultLogger.shared,
         completion: @escaping (FxAccountManager) -> Void
     ) {
@@ -85,7 +84,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         if let accManager = RustFirefoxAccounts.shared.accountManager {
             completion(accManager)
         }
-        let manager = RustFirefoxAccounts.shared.createAccountManager(features: features)
+        let manager = RustFirefoxAccounts.shared.createAccountManager()
         manager.initialize { result in
             assert(Thread.isMainThread)
             if !Thread.isMainThread {
@@ -120,7 +119,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     }
 
     @MainActor
-    private func createAccountManager(features: RustFxAFeatures) -> FxAccountManager {
+    private func createAccountManager() -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
         if prefs == nil {
             logger.log("prefs is unexpectedly nil", level: .warning, category: .sync)
@@ -181,7 +180,8 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
             config: config,
             deviceConfig: deviceConfig,
             applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
-            keychainAccessGroup: accessGroupIdentifier
+            keychainAccessGroup: accessGroupIdentifier,
+            useRustKeychainForFxA: prefs?.boolForKey(PrefsKeys.RustFxaKeychainEnabled) ?? false
         )
     }
 
