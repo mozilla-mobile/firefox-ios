@@ -88,7 +88,9 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
         let expectation = expectation(description: "Deferred launch should trigger after loading completes")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            XCTAssertTrue(self.coordinatorDelegate.launchWithTypeCalled > 0 || self.coordinatorDelegate.launchBrowserCalled > 0)
+            XCTAssertTrue(
+                self.coordinatorDelegate.launchWithTypeCalled > 0 || self.coordinatorDelegate.launchBrowserCalled > 0
+            )
             expectation.fulfill()
         }
 
@@ -105,7 +107,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
 
         XCTAssertEqual(viewModel.startLoadingCalled, initialLoadingCount + 1)
     }
-
 
     // MARK: - LaunchFinishedLoadingDelegate Tests
 

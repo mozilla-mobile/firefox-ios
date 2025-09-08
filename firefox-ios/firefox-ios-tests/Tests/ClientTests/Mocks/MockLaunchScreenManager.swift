@@ -42,11 +42,10 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         startLoadingCallHistory.append(appVersion)
         mockAppVersion = appVersion
     }
-    
+
     override func loadNextLaunchType() {
         loadNextLaunchTypeCalled += 1
-        loadNextLaunchTypeCallHistory.append(Date())
-        
+        loadNextLaunchTypeCallHistory.append(Date()) 
         if let mockLaunchType = mockLaunchType {
             delegate?.launchWith(launchType: mockLaunchType)
         } else {
