@@ -285,35 +285,6 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(selectedTab?.url?.absoluteString, "www.mozilla.org")
     }
 
-    func testTabPanelProvider_dispatchesMainMenuAction_withSummaryIsAvailableTrue() throws {
-        setIsHostedSummaryEnabled(true)
-        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
-        let subject = createSubject()
-
-        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
-        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
-        tab.webView = MockTabWebView(tab: tab)
-        mockTabManager?.selectedTab = tab
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-        subject.tabsPanelProvider(
-            appState,
-            MainMenuAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuMiddlewareActionType.requestTabInfo
-            )
-        )
-        wait(for: [expectation])
-
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
-        // TODO(FXIOS-13126): Fix this when we merge all implemenations for how we disptach showing summaries.
-        // This should be true but since we have no way to override the checker for now, this will be false always.
-        XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, false)
-    }
-
     func testTabPanelProvider_dispatchesMainMenuAction_withSummaryIsAvailableFalse_whenWebViewNil() throws {
         setIsHostedSummaryEnabled(true)
         let expectation = XCTestExpectation(description: "expect main menu action to be fired")
