@@ -41,11 +41,11 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
     /// The paramater provided is true when the title cell is showed.
     var onDidChangeTitleCellVisibility: ((Bool) -> Void)?
     override var alpha: CGFloat {
-        set {
-            tableView.alpha = newValue
-        }
         get {
             return tableView.alpha
+        }
+        set {
+            tableView.alpha = newValue
         }
     }
 
