@@ -48,7 +48,7 @@ final class SummaryView: UIView, UITableViewDataSource, UITableViewDelegate, The
             return tableView.alpha
         }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()

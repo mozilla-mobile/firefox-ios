@@ -13,20 +13,20 @@ final class MockSummarizeNavigationHandler: SummarizeNavigationHandler {
     var acceptToSConsentCalled = 0
     var denyToSConsentCalled = 0
     var dismissSummaryCalled = 0
-    
+
     func openURL(url: URL) {
         openURLCalled += 1
         lastOpenedURL = url
     }
-    
+
     func acceptToSConsent() {
         acceptToSConsentCalled += 1
     }
-    
+
     func denyToSConsent() {
         denyToSConsentCalled += 1
     }
-    
+
     func dismissSummary() {
         dismissSummaryCalled += 1
     }
@@ -88,7 +88,7 @@ final class SummarizeControllerTests: XCTestCase {
         )
     )
     private let maxWords = 5000
-    
+
     override func setUp() {
         super.setUp()
         UIView.setAnimationsEnabled(false)
@@ -97,7 +97,7 @@ final class SummarizeControllerTests: XCTestCase {
         webView = MockWebView(URL(string: "https://www.example.com")!)
         AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
     }
-    
+
     override func tearDown() {
         UIView.setAnimationsEnabled(true)
         summarizer = nil
@@ -106,34 +106,34 @@ final class SummarizeControllerTests: XCTestCase {
         AppContainer.shared.reset()
         super.tearDown()
     }
-    
+
     func test_dismiss_callsNavigationHandler() {
         let subject = createSubject()
-        
+
         subject.dismiss(animated: false)
-        
+
         XCTAssertEqual(navigationHandler.dismissSummaryCalled, 1)
         XCTAssertEqual(navigationHandler.denyToSConsentCalled, 0)
     }
-    
+
     func test_dismiss_denyTos_whenTosIsShown() {
         let expectation = XCTestExpectation(description: "ToS should be displayed")
         let subject = createSubject {
             expectation.fulfill()
         }
-        
+
         subject.viewDidLoad()
         subject.viewWillAppear(false)
-        
+
         wait(for: [expectation], timeout: 0.5)
-        
+
         subject.dismiss(animated: false)
-        
+
         XCTAssertEqual(navigationHandler.denyToSConsentCalled, 1)
         XCTAssertEqual(navigationHandler.acceptToSConsentCalled, 0)
         XCTAssertEqual(navigationHandler.dismissSummaryCalled, 1)
     }
-    
+
     private func createSubject(
         isTosAccepted: Bool = false,
         onSummaryDisplayed: @escaping () -> Void = {}
