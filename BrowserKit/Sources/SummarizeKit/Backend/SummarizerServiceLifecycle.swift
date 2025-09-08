@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// A protocol defining the lifecycle events for a text summarization service.
-public protocol SummarizerServiceLifecycle: AnyObject {
+public protocol SummarizerServiceLifecycle: AnyObject, Sendable {
     /// Called once before summarization starts.
     func summarizerServiceDidStart(_ text: String)
     /// Called on success, with the summary text.

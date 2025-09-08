@@ -4,7 +4,7 @@
 
 import WebKit
 
-public protocol SummarizationCheckerProtocol {
+public protocol SummarizationCheckerProtocol: Sendable {
     /// The maximum number of words allowed before rejecting summarization.
     /// Prevents model errors caused by exceeding token or context window limits.
     /// This is enforced by the injected JS, not the model itself.

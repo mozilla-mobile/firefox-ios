@@ -5,7 +5,7 @@
 import Foundation
 @testable import SummarizeKit
 
-final class MockSummarizer: SummarizerProtocol {
+final class MockSummarizer: SummarizerProtocol, @unchecked Sendable {
     var modelName: SummarizerModel = .appleSummarizer
 
     /// If set, both `summarize` and `summarizeStreamed` will throw this error.
