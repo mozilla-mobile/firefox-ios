@@ -1750,7 +1750,7 @@ workflows:
     before_run:
     - _focus_configure_build
     after_run:
-    - focus_ui_test
+    - _focus_ui_test
 
   # # FOCUS UTILITIES WORKFLOWS
   focus-clone-and-build-dependencies:
