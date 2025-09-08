@@ -268,7 +268,7 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     }
 
     private func createSubject(file: StaticString = #filePath,
-                                     line: UInt = #line) -> ModernLaunchScreenViewController {
+                               line: UInt = #line) -> ModernLaunchScreenViewController {
         let subject = ModernLaunchScreenViewController(windowUUID: windowUUID,
                                                        coordinator: coordinatorDelegate,
                                                        viewModel: viewModel)
