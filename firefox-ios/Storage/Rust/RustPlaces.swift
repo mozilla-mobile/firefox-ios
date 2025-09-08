@@ -25,6 +25,9 @@ import struct MozillaAppServices.Url
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.VisitTransitionSet
 
+// TODO: FXIOS-12903 Bookmark Data from Rust components is not Sendable
+extension BookmarkNodeData: @unchecked @retroactive Sendable {}
+
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @Sendable @escaping ([BookmarkItemData]) -> Void)
     func getBookmarksTree(
@@ -272,7 +275,7 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler {
 
     public func getRecentBookmarks(
         limit: UInt,
-        completion: @escaping ([BookmarkItemData]) -> Void
+        completion: @escaping @Sendable ([BookmarkItemData]) -> Void
     ) {
         let deferredResponse = withReader { connection in
             return try connection.getRecentBookmarks(limit: limit)
@@ -283,7 +286,7 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler {
         }
     }
 
-    public func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
+    public func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping @Sendable (Result<Int, Error>) -> Void) {
         let deferredResponse = withReader { connection in
             return try connection.countBookmarksInTrees(folderGuids: folderGuids)
         }
@@ -544,7 +547,7 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler {
 
     public func deleteHistoryMetadata(
         since startDate: Int64,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         let deferredResponse = deleteHistoryMetadata(since: startDate)
         deferredResponse.upon { result in
@@ -561,8 +564,8 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler {
     public func migrateHistory(
         dbPath: String,
         lastSyncTimestamp: Int64,
-        completion: @escaping (HistoryMigrationResult) -> Void,
-        errCallback: @escaping (Error?) -> Void
+        completion: @escaping @Sendable (HistoryMigrationResult) -> Void,
+        errCallback: @escaping @Sendable (Error?) -> Void
     ) {
         _ = reopenIfClosed()
         let deferredResponse = self.migrateHistory(dbPath: dbPath, lastSyncTimestamp: lastSyncTimestamp)
@@ -728,13 +731,11 @@ extension RustPlaces {
                 if let actualTitle = info.title, !actualTitle.isEmpty {
                     title = actualTitle
                 } else {
-                    // In case there is no title, we use the url
-                    // as the title
+                    // In case there is no title, we use the url as the title
                     title = info.url
                 }
-                // Note: FXIOS-10740 Necessary to have unique Site ID iOS 18 HistoryPanel crash with diffable data sources
-                let hashValue = "\(info.url)_\(info.timestamp)".hashValue
-                var site = Site.createBasicSite(id: hashValue, url: info.url, title: title)
+
+                var site = Site.createBasicSite(url: info.url, title: title)
                 site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
             }

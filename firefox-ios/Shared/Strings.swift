@@ -1035,11 +1035,16 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "Stories",
                 comment: "This is the title of the Stories section on Firefox Homepage.")
-            public static let TopStoriesSectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.TopStoriesSectionTitle.v143",
+            public static let PopularTodaySectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.PopularTodaySectionTitle.v144",
                 tableName: "FirefoxHomepage",
-                value: "Top Stories",
-                comment: "This is the title of the Top Stories section on Firefox Homepage.")
+                value: "Popular today",
+                comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
+            public static let AllStoriesButtonTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.AllStoriesButtonTitle.v144",
+                tableName: "FirefoxHomepage",
+                value: "All stories",
+                comment: "This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles.")
             public static let NumberOfMinutes = MZLocalizedString(
                 key: "FirefoxHome.Stories.Minutes.v140",
                 tableName: nil,
@@ -1067,6 +1072,14 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "%@ of %@",
                 comment: "On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5'")
+
+            public struct TopStories {
+                public static let TopStoriesViewTitle = MZLocalizedString(
+                    key: "FirefoxHome.Stories.TopStoriesViewTitle.v144",
+                    tableName: "FirefoxHomepage",
+                    value: "Top stories",
+                    comment: "This is the title that appears in the navigation bar for the Top Stories view, a screen that displays a collection of trending news articles")
+            }
         }
 
         public struct RecentlySaved { }
@@ -2277,12 +2290,6 @@ extension String {
             tableName: "Summarizer",
             value: "Summarizing",
             comment: "The a11y label for the loading label on the summarize loading screen."
-        )
-        public static let SummaryTextAccessibilityLabel = MZLocalizedString(
-            key: "", // Summarizer.Summary.Text.Accessibility.Label.v142
-            tableName: "Summarizer",
-            value: "Summary report text",
-            comment: "The a11y label for the summary text shown when the summarizer returns a text result."
         )
         public static let CloseButtonAccessibilityLabel = MZLocalizedString(
             key: "", // Summarizer.CloseButton.Accessibility.Label.v142

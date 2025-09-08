@@ -88,7 +88,7 @@ TabsPanel:
   description: Corresponds to all things related to the tab panel.
 
 TermsOfUse:
-  description: Telemetry for interaction with terms of use bottom sheet
+  description: Corresponds to user interactions with the app's terms of use.
 
 Toasts:
   description: Corresponds to the toast elements which can be shown over any screen in the app to provide feedback for user interaction and to sometimes revert user changes.

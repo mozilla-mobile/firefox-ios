@@ -5,51 +5,92 @@
 import Foundation
 
 class KeyChainAccountStorage {
-    var keychainWrapper: MZKeychainWrapper
+    var useRustKeychainForFxA: Bool
+    var legacyKeychainWrapper: MZKeychainWrapper
+    var keychainWrapper: FxAKeychain
     static var keychainKey: String = "accountJSON"
-    static var accessibility: MZKeychainItemAccessibility = .afterFirstUnlock
+    static var legacyAccessibility: MZKeychainItemAccessibility = .afterFirstUnlock
+    static var accessibility: FxAKeychainItemAccessibility = .afterFirstUnlock
 
-    init(keychainAccessGroup: String?) {
-        keychainWrapper = MZKeychainWrapper.sharedAppContainerKeychain(keychainAccessGroup: keychainAccessGroup)
+    init(keychainAccessGroup: String?, useRustKeychainForFxA: Bool = false) {
+        self.useRustKeychainForFxA = useRustKeychainForFxA
+        keychainWrapper = FxAKeychain.sharedAppContainerKeychainForFxA(keychainAccessGroup: keychainAccessGroup)
+        legacyKeychainWrapper = MZKeychainWrapper.sharedAppContainerKeychain(keychainAccessGroup: keychainAccessGroup)
     }
 
     func read() -> PersistedFirefoxAccount? {
         // Firefox iOS v25.0 shipped with the default accessibility, which breaks Send Tab when the screen is locked.
         // This method migrates the existing keychains to the correct accessibility.
-        keychainWrapper.ensureStringItemAccessibility(
-            KeyChainAccountStorage.accessibility,
-            forKey: KeyChainAccountStorage.keychainKey
-        )
-        if let json = keychainWrapper.string(
-            forKey: KeyChainAccountStorage.keychainKey,
-            withAccessibility: KeyChainAccountStorage.accessibility
-        ) {
-            do {
-                return try PersistedFirefoxAccount.fromJSON(data: json)
-            } catch {
-                FxALog.error("FxAccount internal state de-serialization failed: \(error).")
-                return nil
+
+        if useRustKeychainForFxA {
+            keychainWrapper.ensureStringItemAccessibility(KeyChainAccountStorage.accessibility,
+                                                          forKey: KeyChainAccountStorage.keychainKey)
+            if let json = keychainWrapper
+                .getKeyValue(key: KeyChainAccountStorage.keychainKey,
+                             accessibility: KeyChainAccountStorage.accessibility)
+            {
+                do {
+                    return try PersistedFirefoxAccount.fromJSON(data: json)
+                } catch {
+                    FxALog.error("FxAccount internal state de-serialization failed: \(error).")
+                    return nil
+                }
+            }
+        } else {
+            legacyKeychainWrapper.ensureStringItemAccessibility(
+                KeyChainAccountStorage.legacyAccessibility,
+                forKey: KeyChainAccountStorage.keychainKey
+            )
+            if let json = legacyKeychainWrapper.string(
+                forKey: KeyChainAccountStorage.keychainKey,
+                withAccessibility: KeyChainAccountStorage.legacyAccessibility
+            ) {
+                do {
+                    return try PersistedFirefoxAccount.fromJSON(data: json)
+                } catch {
+                    FxALog.error("FxAccount internal state de-serialization failed: \(error).")
+                    return nil
+                }
             }
         }
         return nil
     }
 
     func write(_ json: String) {
-        if !keychainWrapper.set(
-            json,
-            forKey: KeyChainAccountStorage.keychainKey,
-            withAccessibility: KeyChainAccountStorage.accessibility
-        ) {
-            FxALog.error("Could not write account state.")
+        if useRustKeychainForFxA {
+            if !keychainWrapper.setKeyValue(
+                json,
+                key: KeyChainAccountStorage.keychainKey,
+                accessibility: KeyChainAccountStorage.accessibility
+            ) {
+                FxALog.error("Could not write account state.")
+            }
+        } else {
+            if !legacyKeychainWrapper.set(
+                json,
+                forKey: KeyChainAccountStorage.keychainKey,
+                withAccessibility: KeyChainAccountStorage.legacyAccessibility
+            ) {
+                FxALog.error("Could not write account state.")
+            }
         }
     }
 
     func clear() {
-        if !keychainWrapper.removeObject(
-            forKey: KeyChainAccountStorage.keychainKey,
-            withAccessibility: KeyChainAccountStorage.accessibility
-        ) {
-            FxALog.error("Could not clear account state.")
+        if useRustKeychainForFxA {
+            if !keychainWrapper.removeObject(
+                key: KeyChainAccountStorage.keychainKey,
+                accessibility: KeyChainAccountStorage.accessibility
+            ) {
+                FxALog.error("Could not clear account state.")
+            }
+        } else {
+            if !legacyKeychainWrapper.removeObject(
+                forKey: KeyChainAccountStorage.keychainKey,
+                withAccessibility: KeyChainAccountStorage.legacyAccessibility
+            ) {
+                FxALog.error("Could not clear account state.")
+            }
         }
     }
 }

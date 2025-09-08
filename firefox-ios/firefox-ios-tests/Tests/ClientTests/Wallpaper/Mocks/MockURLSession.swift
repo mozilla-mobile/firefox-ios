@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Client
 
-class WallpaperURLSessionDataTaskMock: URLSessionDataTaskProtocol {
+final class MockURLSessionDataTask: URLSessionDataTaskProtocol {
     private(set) var resumeWasCalled = false
 
     func resume() {
@@ -14,8 +14,9 @@ class WallpaperURLSessionDataTaskMock: URLSessionDataTaskProtocol {
     }
 }
 
-final class WallpaperURLSessionMock: URLSessionProtocol, @unchecked Sendable {
-    var dataTask = WallpaperURLSessionDataTaskMock()
+final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
+    var dataTask = MockURLSessionDataTask()
+    var uploadTask = MockURLSessionUploadTask()
     private let data: Data?
     private let response: URLResponse?
     private let error: Error?
@@ -53,10 +54,24 @@ final class WallpaperURLSessionMock: URLSessionProtocol, @unchecked Sendable {
         request: URLRequest,
         completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void
     ) -> URLSessionDataTaskProtocol {
-        return MockURLSessionDataTaskProtocol()
+        return MockURLSessionDataTask()
+    }
+
+    func uploadTaskWith(
+        with request: URLRequest,
+        from bodyData: Data?,
+        completionHandler: @escaping (Data?, URLResponse?, (any Error)?) -> Void
+    ) -> URLSessionUploadTaskProtocol {
+        completionHandler(data, response, error)
+        return uploadTask
     }
 }
 
-class MockURLSessionDataTaskProtocol: URLSessionDataTaskProtocol {
-    func resume() {}
+class MockURLSessionUploadTask: URLSessionUploadTaskProtocol {
+    var resumeCount = 0
+    var countOfBytesClientExpectsToSend: Int64 = 0
+    var countOfBytesClientExpectsToReceive: Int64 = 0
+    func resume() {
+        resumeCount += 1
+    }
 }

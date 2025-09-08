@@ -4,6 +4,7 @@
 import UIKit
 
 /// Protocol for caching and providing toolbar buttons with performance optimization.
+@MainActor
 protocol ToolbarButtonCaching: AnyObject {
     /// A cache of `ToolbarButton` instances keyed by their accessibility identifier (`a11yId`).
     /// This improves performance by reusing buttons instead of creating new instances.

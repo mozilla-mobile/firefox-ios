@@ -25,6 +25,7 @@ final class FxAPushMessageHandler: @unchecked Sendable {
 }
 
 extension FxAPushMessageHandler {
+    @MainActor
     func handleDecryptedMessage(
         message: String,
         completion: @escaping @Sendable (Result<PushMessage, PushMessageError>) -> Void
@@ -32,34 +33,32 @@ extension FxAPushMessageHandler {
         // Reconfig has to happen on the main thread, since it calls `startup`
         // and `startup` asserts that we are on the main thread. Otherwise the notification
         // service will crash.
-        DispatchQueue.main.async {
-            RustFirefoxAccounts.reconfig(prefs: self.profile.prefs) { accountManager in
-                accountManager.deviceConstellation()?.handlePushMessage(pushPayload: message) { result in
-                    guard case .success(let event) = result else {
-                        let err = self.makePushErrorMessageFrom(result: result)
-                        completion(.failure(err))
-                        return
-                    }
+        RustFirefoxAccounts.reconfig(prefs: self.profile.prefs) { accountManager in
+            accountManager.deviceConstellation()?.handlePushMessage(pushPayload: message) { result in
+                guard case .success(let event) = result else {
+                    let err = self.makePushErrorMessageFrom(result: result)
+                    completion(.failure(err))
+                    return
+                }
 
-                    switch event {
-                    case .commandReceived(let deviceCommand):
-                        let pushMessage = self.makePushMessageFrom(deviceCommand: deviceCommand)
-                        completion(.success(pushMessage))
-                    case .deviceConnected(let deviceName):
-                        completion(.success(PushMessage.deviceConnected(deviceName)))
-                    case let .deviceDisconnected(_, isLocalDevice):
-                        if isLocalDevice {
-                            // We can't disconnect the device from the account until we have access to the application,
-                            // so we'll handle this properly in the AppDelegate (as this code in an extension),
-                            // by calling the FxALoginHelper.applicationDidDisonnect(application).
-                            self.profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
-                            completion(.success(PushMessage.thisDeviceDisconnected))
-                        }
-                        completion(.success(PushMessage.deviceDisconnected))
-                    default:
-                        // There are other events, but we ignore them at this level.
-                        break
+                switch event {
+                case .commandReceived(let deviceCommand):
+                    let pushMessage = self.makePushMessageFrom(deviceCommand: deviceCommand)
+                    completion(.success(pushMessage))
+                case .deviceConnected(let deviceName):
+                    completion(.success(PushMessage.deviceConnected(deviceName)))
+                case let .deviceDisconnected(_, isLocalDevice):
+                    if isLocalDevice {
+                        // We can't disconnect the device from the account until we have access to the application,
+                        // so we'll handle this properly in the AppDelegate (as this code in an extension),
+                        // by calling the FxALoginHelper.applicationDidDisonnect(application).
+                        self.profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
+                        completion(.success(PushMessage.thisDeviceDisconnected))
                     }
+                    completion(.success(PushMessage.deviceDisconnected))
+                default:
+                    // There are other events, but we ignore them at this level.
+                    break
                 }
             }
         }

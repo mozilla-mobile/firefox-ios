@@ -7,8 +7,9 @@ import Foundation
 @objc
 public protocol MenuHelperURLBarInterface {
     /// Used to add a paste and go option on the URL bar textfield
+    /// Note: objc methods should always be marked nonisolated as `@MainActor` isolation can't be guaranteed
     @objc
-    optional func menuHelperPasteAndGo()
+    nonisolated optional func menuHelperPasteAndGo()
 }
 
 /// Used to pass in the Client strings for the URL bar textfield menu options

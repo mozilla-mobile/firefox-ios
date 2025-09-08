@@ -38,7 +38,6 @@ public struct PagingCarousel<Item, Content: View>: View {
 
     @State private var dragOffset: CGFloat = 0
     @State private var isDragging = false
-    @GestureState private var gestureOffset: CGFloat = 0
     @Environment(\.accessibilityReduceMotion)
     private var reduceMotion
 
@@ -57,7 +56,6 @@ public struct PagingCarousel<Item, Content: View>: View {
             carouselContent(geometry: geometry)
                 .gesture(dragGesture(geometry: geometry))
                 .animation(PagingCarouselUX.swipeAnimation, value: selection)
-                .animation(PagingCarouselUX.swipeAnimation, value: gestureOffset)
                 .accessibilityAdjustableAction { direction in
                     handleAccessibilityAdjustment(direction: direction)
                 }
@@ -104,15 +102,16 @@ public struct PagingCarousel<Item, Content: View>: View {
 
     private func dragGesture(geometry: GeometryProxy) -> some Gesture {
         DragGesture()
-            .updating($gestureOffset) { value, state, _ in
-                state = value.translation.width
-            }
-            .onChanged { _ in
+            .onChanged { value in
                 isDragging = true
+                dragOffset = value.translation.width
             }
             .onEnded { value in
                 isDragging = false
                 handleDragEnded(value: value, geometry: geometry)
+
+                // Always reset drag offset immediately for clean transitions
+                dragOffset = 0
             }
     }
 
@@ -173,7 +172,27 @@ public struct PagingCarousel<Item, Content: View>: View {
             edgeAdjustment += PagingCarouselUX.edgePaddingAdjustment
         }
 
-        return baseOffset + edgeAdjustment + gestureOffset
+        // Apply constrained drag offset when actively dragging
+        let constrainedDragOffset = isDragging ? constrainDragOffset(dragOffset) : 0
+        return baseOffset + edgeAdjustment + constrainedDragOffset
+    }
+
+    /// Constrains drag offset to prevent overscroll at boundaries
+    private func constrainDragOffset(_ offset: CGFloat) -> CGFloat {
+        let isAtStart = selection == 0
+        let isAtEnd = selection == items.count - 1
+
+        // Completely prevent overscroll - no movement beyond boundaries
+        if isAtStart && offset > 0 {
+            return 0
+        }
+
+        if isAtEnd && offset < 0 {
+            return 0
+        }
+
+        // Normal drag behavior for items in the middle
+        return offset
     }
 
     // MARK: - Gesture Handling

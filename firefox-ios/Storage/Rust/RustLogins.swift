@@ -589,7 +589,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    private func resetLoginsAndKey(completion: @escaping (Result<String, NSError>) -> Void) {
+    private func resetLoginsAndKey(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
         self.wipeLocalEngine().upon { result in
             guard result.isSuccess else {
                 completion(.failure(result.failureValue! as NSError))
@@ -609,7 +609,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    public func getStoredKey(completion: @escaping (Result<String, NSError>) -> Void) {
+    public func getStoredKey(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
         let (key, encryptedCanaryPhrase) = rustKeychain.getLoginsKeyData()
 
         switch(key, encryptedCanaryPhrase) {
@@ -630,7 +630,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
 
     private func handleExpectedKeyAction(encryptedCanaryPhrase: String?,
                                          key: String?,
-                                         completion: @escaping (Result<String, NSError>) -> Void) {
+                                         completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
         // We expected the key to be present, and it is.
         do {
             let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!,
@@ -654,7 +654,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         }
     }
 
-    private func handleUnexpectedKeyAction(completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleUnexpectedKeyAction(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
         // The key is present, but we didn't expect it to be there.
 
         self.logger.log("Logins key lost due to storage malfunction, new one generated",
@@ -664,7 +664,7 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         self.resetLoginsAndKey(completion: completion)
     }
 
-    private func handleMissingKeyAction(completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleMissingKeyAction(completion: @escaping @Sendable (Result<String, NSError>) -> Void) {
         // We expected the key to be present, but it's gone missing on us.
 
         self.logger.log("Logins key lost, new one generated",
@@ -674,7 +674,9 @@ public final class RustLogins: LoginsProtocol, KeyManager, @unchecked Sendable {
         self.resetLoginsAndKey(completion: completion)
     }
 
-    private func handleFirstTimeCallOrClearedKeychainAction(completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleFirstTimeCallOrClearedKeychainAction(
+        completion: @escaping @Sendable (Result<String, NSError>) -> Void
+    ) {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
 

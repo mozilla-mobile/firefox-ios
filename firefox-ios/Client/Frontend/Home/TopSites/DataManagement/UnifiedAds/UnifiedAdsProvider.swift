@@ -10,7 +10,7 @@ typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
 
 /// Used only for sponsored tiles content and telemetry. This is aiming to be a temporary API
 /// as we'll migrate to using A-S for this at some point in 2025
-protocol UnifiedAdsProviderInterface {
+protocol UnifiedAdsProviderInterface: Sendable {
     /// Fetch tiles either from cache or backend
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
@@ -24,14 +24,13 @@ extension UnifiedAdsProviderInterface {
     }
 }
 
-class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable {
+final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable, Sendable {
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
-    var maxCacheAge: Timestamp = OneMinuteInMilliseconds * 30
-
-    var urlCache: URLCache
-    private var logger: Logger
-    private var networking: ContileNetworking
+    let maxCacheAge: Timestamp = OneMinuteInMilliseconds * 30
+    let urlCache: URLCache
+    private let logger: Logger
+    private let networking: ContileNetworking
 
     enum Error: Swift.Error {
         case noDataAvailable
@@ -71,7 +70,7 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
         // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
         var cacheRequest = request
         cacheRequest.httpBody = nil
-        if let cachedData = findCachedData(for: cacheRequest, timestamp: timestamp) {
+        if let cachedData = findCachedData(for: cacheRequest, timestamp: timestamp, maxCacheAge: maxCacheAge) {
             decode(data: cachedData, completion: completion)
         } else {
             fetchTiles(request: request, completion: completion)

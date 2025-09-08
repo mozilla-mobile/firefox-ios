@@ -9,6 +9,16 @@ import SwiftUI
 import struct MozillaAppServices.CreditCard
 
 struct CreditCardInputView: View {
+    private struct UX {
+        static let cornerRadius: CGFloat = 24
+        static let blurRadius: CGFloat = 10
+        static let dividerHeight: CGFloat = 0.7
+        static let spacerHeight: CGFloat = 4
+        static let dividerPaddingTop: CGFloat = 1
+        static let inputFieldPaddingTop: CGFloat = 11
+        static let removeCardButtonPaddingTop: CGFloat = 28
+    }
+
     @ObservedObject var viewModel: CreditCardInputViewModel
     @State private var isBlurred = false
 
@@ -25,7 +35,7 @@ struct CreditCardInputView: View {
     var body: some View {
         NavigationView {
             main
-                .blur(radius: isBlurred ? 10 : 0)
+                .blur(radius: isBlurred ? UX.blurRadius : 0)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
@@ -70,30 +80,41 @@ struct CreditCardInputView: View {
 
     private var form: some View {
         return VStack(spacing: 0) {
-            Divider()
-                .frame(height: 0.7)
-                .foregroundColor(borderColor)
+            if #unavailable(iOS 26.0) {
+                Divider()
+                    .frame(height: UX.dividerHeight)
+                    .foregroundColor(borderColor)
+            }
 
             name
                 .background(textFieldBackgroundColor)
+                .modifier(NewStyleRoundedCorners(topLeadingCorner: UX.cornerRadius,
+                                                 topTrailingCorner: UX.cornerRadius,
+                                                 bottomLeadingCorner: nil,
+                                                 bottomTrailingCorner: nil))
 
             number
                 .background(textFieldBackgroundColor)
 
             expiration
                 .background(textFieldBackgroundColor)
+                .modifier(NewStyleRoundedCorners(topLeadingCorner: nil,
+                                                 topTrailingCorner: nil,
+                                                 bottomLeadingCorner: UX.cornerRadius,
+                                                 bottomTrailingCorner: UX.cornerRadius))
 
             Spacer()
-                .frame(height: 4)
+                .frame(height: UX.spacerHeight)
 
             if viewModel.state == .edit {
                 RemoveCardButton(windowUUID: windowUUID,
                                  alertDetails: viewModel.removeButtonDetails)
-                .padding(.top, 28)
+                .padding(.top, UX.removeCardButtonPaddingTop)
             }
 
             Spacer()
         }
+        .modifier(NewStyleExtraPadding())
     }
 
     private var name: some View {
@@ -102,12 +123,12 @@ struct CreditCardInputView: View {
                                  inputType: .name,
                                  showError: !viewModel.nameIsValid,
                                  inputViewModel: viewModel)
-            .padding(.top, 11)
+            .padding(.top, UX.inputFieldPaddingTop)
 
             Divider()
-                .frame(height: 0.7)
+                .frame(height: UX.dividerHeight)
                 .foregroundColor(borderColor)
-                .padding(.top, 1)
+                .padding(.top, UX.dividerPaddingTop)
         }
     }
 
@@ -117,12 +138,12 @@ struct CreditCardInputView: View {
                                  inputType: .number,
                                  showError: !viewModel.numberIsValid,
                                  inputViewModel: viewModel)
-            .padding(.top, 11)
+            .padding(.top, UX.inputFieldPaddingTop)
 
             Divider()
-                .frame(height: 0.7)
+                .frame(height: UX.dividerHeight)
                 .foregroundColor(borderColor)
-                .padding(.top, 1)
+                .padding(.top, UX.dividerPaddingTop)
         }
     }
 
@@ -132,12 +153,14 @@ struct CreditCardInputView: View {
                                  inputType: .expiration,
                                  showError: viewModel.showExpirationError,
                                  inputViewModel: viewModel)
-            .padding(.top, 11)
+            .padding(.top, UX.inputFieldPaddingTop)
 
-            Divider()
-                .frame(height: 0.7)
-                .foregroundColor(borderColor)
-                .padding(.top, 1)
+            if #unavailable(iOS 26.0) {
+                Divider()
+                    .frame(height: UX.dividerHeight)
+                    .foregroundColor(borderColor)
+                    .padding(.top, UX.dividerPaddingTop)
+            }
         }
     }
 

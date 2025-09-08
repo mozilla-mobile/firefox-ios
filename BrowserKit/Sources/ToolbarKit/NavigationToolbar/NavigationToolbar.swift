@@ -5,6 +5,7 @@
 import Foundation
 
 /// Protocol representing an navigation toolbar.
+@MainActor
 public protocol NavigationToolbar {
     func configure(
         config: NavigationToolbarConfiguration,

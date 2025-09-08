@@ -1033,6 +1033,21 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Сорауны %s белән алыштырыгыз)";
 
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "Аста";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "Адрес юлы";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "Өстә";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Браузер темасы";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Тышкы күренеш";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Вебсайтның барлык мәгълүматларын чистарту";
 

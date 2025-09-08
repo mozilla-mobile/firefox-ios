@@ -31,22 +31,20 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
 
     var body: some View {
         VStack {
-            Spacer()
-            ContentFittingScrollView {
-                VStack(spacing: UX.CardView.spacing) {
-                    Spacer()
+            ScrollView {
+                VStack(spacing: UX.CardView.regularSizeSpacing) {
                     titleView
+                        .padding(.top, UX.CardView.titleTopPadding)
                     imageView
                     bodyView
-                    Spacer()
-                    VStack {
-                        primaryButton
-                        secondaryButton
-                    }
                 }
+                .padding(UX.CardView.verticalPadding)
             }
-            .padding(UX.CardView.verticalPadding)
-            Spacer()
+            .scrollBounceBehavior(basedOnSize: true)
+            VStack {
+                primaryButton
+                secondaryButton
+            }
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

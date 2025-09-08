@@ -6,7 +6,7 @@ import Common
 import UIKit
 import Shared
 
-open class Avatar {
+public final class Avatar: Sendable {
     public let url: URL?
 
     init(url: URL?) {
@@ -17,7 +17,7 @@ open class Avatar {
         }
     }
 
-    private func downloadAvatar(url: URL?, completion: @escaping (UIImage?) -> Void) {
+    private func downloadAvatar(url: URL?, completion: @escaping @Sendable (UIImage?) -> Void) {
         guard let avatarUrl = url else {
             completion(nil)
             return

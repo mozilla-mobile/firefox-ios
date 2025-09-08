@@ -146,8 +146,16 @@ public protocol NimbusUserConfiguration {
     /// Call this when toggling user preferences about sending analytics.
     func resetTelemetryIdentifiers()
 
-    /// Control the opt out for all experiments at once. This is likely a user action.
+    /// Control participation (opting in) for all experiments. This is likely a user action.
     ///
+    var experimentParticipation: Bool { get set }
+    /// Control participation (opting in) for all rollouts at once. This is likely a user action.
+    ///
+    var rolloutParticipation: Bool { get set }
+
+    /// Control participation (opting in) for all experiments and rollouts at once. This is likely a user action.
+    /// - Deprecated: Use experimentParticipation and rolloutParticipation instead for granular control.
+    @available(*, deprecated, message: "Use experimentParticipation and rolloutParticipation instead")
     var globalUserParticipation: Bool { get set }
 
     /// Get the list of currently enrolled experiments

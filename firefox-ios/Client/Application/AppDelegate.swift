@@ -16,16 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
-    private let loginsVerificationEnabled = FxNimbus.shared
-        .features
-        .loginsVerification
-        .value()
-        .loginsVerificationEnabled
-
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
-        fxaCommandsDelegate: UIApplication.shared.fxaCommandsDelegate,
-        loginsVerificationEnabled: loginsVerificationEnabled)
+        fxaCommandsDelegate: UIApplication.shared.fxaCommandsDelegate)
 
     lazy var searchEnginesManager = SearchEnginesManager(
         prefs: profile.prefs,

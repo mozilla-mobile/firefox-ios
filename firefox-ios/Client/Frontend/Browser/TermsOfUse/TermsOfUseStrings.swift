@@ -5,6 +5,49 @@ import Common
 import Localizations
 import Shared
 
+enum TermsOfUseLinkType: CaseIterable {
+    case termsOfUse
+    case privacyNotice
+    case learnMore
+
+    var localizedText: String {
+        switch self {
+        case .termsOfUse:
+            return String.localizedStringWithFormat(TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue)
+        case .privacyNotice:
+            return TermsOfUse.LinkPrivacyNotice
+        case .learnMore:
+            return TermsOfUse.LinkLearnMore
+        }
+    }
+
+    var url: URL? {
+        switch self {
+        case .termsOfUse:
+            return SupportUtils.URLForTermsOfUse
+        case .privacyNotice:
+            return SupportUtils.URLForPrivacyNotice
+        case .learnMore:
+            return SupportUtils.URLForTopic("firefox-terms-of-use-faq", useMobilePath: false)
+        }
+    }
+
+    var actionType: TermsOfUseActionType {
+        switch self {
+        case .termsOfUse:
+            return .termsLinkTapped
+        case .privacyNotice:
+            return .privacyLinkTapped
+        case .learnMore:
+            return .learnMoreLinkTapped
+        }
+    }
+
+    static func linkType(for url: URL) -> TermsOfUseLinkType? {
+        return TermsOfUseLinkType.allCases.first { $0.url == url }
+    }
+}
+
 struct TermsOfUseStrings {
     static let titleText = TermsOfUse.Title
 
@@ -22,23 +65,10 @@ struct TermsOfUseStrings {
     }
 
     static var linkTerms: [String] {
-        return [
-            String.localizedStringWithFormat(TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue),
-            TermsOfUse.LinkPrivacyNotice,
-            TermsOfUse.LinkLearnMore
-        ]
+        return TermsOfUseLinkType.allCases.map { $0.localizedText }
     }
 
     static func linkURL(for term: String) -> URL? {
-        switch term {
-        case String.localizedStringWithFormat(TermsOfUse.LinkTermsOfUse, AppName.shortName.rawValue):
-            return SupportUtils.URLForTermsOfUse
-        case TermsOfUse.LinkPrivacyNotice:
-            return SupportUtils.URLForPrivacyNotice
-        case TermsOfUse.LinkLearnMore:
-            return SupportUtils.URLForTopic("firefox-terms-of-use-faq", useMobilePath: false)
-        default:
-            return nil
-        }
+        return TermsOfUseLinkType.allCases.first { $0.localizedText == term }?.url
     }
 }
