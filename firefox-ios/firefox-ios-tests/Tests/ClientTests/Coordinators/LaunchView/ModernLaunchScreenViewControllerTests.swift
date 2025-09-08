@@ -51,13 +51,10 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
     func test_startLoading_whenLoading_defersLoadNextLaunchType() {
         let subject = createSubject()
 
-        let initialLoadingCount = viewModel.startLoadingCalled
-        let initialLoadNextLaunchTypeCount = viewModel.loadNextLaunchTypeCalled
-
         subject.startLoading()
 
-        XCTAssertEqual(viewModel.startLoadingCalled, initialLoadingCount + 1)
-        XCTAssertEqual(viewModel.loadNextLaunchTypeCalled, initialLoadNextLaunchTypeCount)
+        XCTAssertEqual(viewModel.startLoadingCalled, 1)
+        XCTAssertEqual(viewModel.loadNextLaunchTypeCalled, 0)
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 0)
         XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
     }
