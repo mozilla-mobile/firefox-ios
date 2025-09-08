@@ -30,7 +30,7 @@ only_rules: # Only enforce these rules, ignore all others
   - mark
   - no_space_in_method_call
   - ns_number_init_as_function_reference
-  - operator_whitespace
+  - function_name_whitespace
   - orphaned_doc_comment
   - private_over_fileprivate
   - protocol_property_accessors_order
@@ -114,7 +114,7 @@ file_header:
   required_string: |
                     // This Source Code Form is subject to the terms of the Mozilla Public
                     // License, v. 2.0. If a copy of the MPL was not distributed with this
-#                    // file, You can obtain one at http://mozilla.org/MPL/2.0/
+                    // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 redundant_type_annotation:
   consider_default_literal_types_redundant: true
