@@ -304,10 +304,6 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator18.6-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
-    meta:
-      bitrise.io:
-        stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.4x-large
   determine_apps_affected:
     steps:
     - git-clone@6.2: {}
@@ -850,10 +846,6 @@ workflows:
     description: >-
       This Workflow is to run L10n tests in one locale and then share the bundle with
       the rest of the builds
-    meta:
-      bitrise.io:
-        stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.large
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4.1.1:
@@ -895,10 +887,6 @@ workflows:
       BITRISE_SCHEME: L10nSnapshotTest
     description: >-
       This Workflow is to run L10n tests for all locales
-    meta:
-      bitrise.io:
-        stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.large
   SPM_Deploy_Prod_Beta:
     before_run:
     - SPM_Common_Steps
