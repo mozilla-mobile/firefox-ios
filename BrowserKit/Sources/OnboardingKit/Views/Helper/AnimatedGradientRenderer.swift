@@ -138,9 +138,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     // swiftlint:enable large_tuple
 
     private func triggerRedraw() {
-        ensureMainThread { [weak self] in
-            self?.metalView?.setNeedsDisplay()
-        }
+        metalView?.setNeedsDisplay()
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
