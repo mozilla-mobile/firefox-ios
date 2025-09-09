@@ -340,7 +340,12 @@ workflows:
             fi
 
             # Determine apps affected by the changes introduced in the commit/PR
-            APPS_AFFECTED=$(git diff --name-only $BASE_BRANCH...`git rev-parse HEAD` | xargs -n1 dirname | sort | uniq)
+            if [ -z "$BITRISE_GIT_COMMIT" ]; then
+              echo "BITRISE_GIT_COMMIT is not set. Using HEAD instead."
+              BITRISE_GIT_COMMIT=$(git rev-parse HEAD)
+            fi
+            echo $BITRISE_GIT_COMMIT
+            APPS_AFFECTED=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
 
             echo "These are the files changed:"
             echo $APPS_AFFECTED
