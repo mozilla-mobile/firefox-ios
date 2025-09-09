@@ -15,11 +15,12 @@ pipelines:
               expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
-        klar_configure_build:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - determine_apps_affected
+        # TODO: May belong to pipeline_build_and_test_focus instead
+        # klar_configure_build:
+        #     run_if:
+        #       expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+        #     depends_on:
+        #     - determine_apps_affected
         run_firefox_ui_tests:
             run_if:
               expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
@@ -32,6 +33,13 @@ pipelines:
             depends_on:
             - focus_configure_build
             parallel: 1
+  pipeline_build_and_test_focus:
+    workflows:
+      focus_configure_build: {}
+      run_focus_ui_tests:
+          depends_on:
+          - focus_configure_build
+          parallel: 1
 
 workflows:
   firefox_accessibility_test:
@@ -395,7 +403,6 @@ workflows:
                     ".")
                         # Root directory changes - build all applications
                         BUILD_FIREFOX_IOS="true"
-                        BUILD_FOCUS_IOS="true"
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                     *)
