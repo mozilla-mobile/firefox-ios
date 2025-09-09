@@ -10,8 +10,6 @@ import enum MozillaAppServices.SyncManagerError
 import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
 
-extension SyncManagerComponent: @retroactive @unchecked Sendable {}
-
 public final class RustSyncManagerAPI: Sendable {
     private let logger: Logger
     private let dispatchQueue: DispatchQueueInterface
