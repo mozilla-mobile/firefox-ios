@@ -39,6 +39,7 @@ extension SIMD3 where Scalar == Float {
     }
 }
 
+@MainActor
 class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private let logger: Logger
     private let commandQueue: MTLCommandQueue
@@ -143,9 +144,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     }
 
     private func triggerRedraw() {
-        DispatchQueue.main.async { [weak self] in
-            self?.metalView?.setNeedsDisplay()
-        }
+        metalView?.setNeedsDisplay()
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

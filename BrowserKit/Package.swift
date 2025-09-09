@@ -204,7 +204,10 @@ let package = Package(
             resources: [
                 .process("Shaders")
             ],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ],
             linkerSettings: [
                 .linkedFramework("Metal"),
                 .linkedFramework("MetalKit")
