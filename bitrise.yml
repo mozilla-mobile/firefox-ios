@@ -341,6 +341,7 @@ workflows:
 
             # Determine apps affected by the changes introduced in the commit/PR
             git fetch
+            echo $BITRISE_GIT_COMMIT
             APPS_AFFECTED=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | xargs -n1 dirname | sort | uniq)
 
             echo "These are the files changed:"
@@ -615,6 +616,7 @@ workflows:
             # First check destination branch for PRs and then check $BITRISE_GIT_BRANCH for
             # merges to origin/main since the destination branch changes back to origin/main
             git fetch
+            echo $BITRIRSE_GIT_COMMIT
             if [[ $BITRISEIO_GIT_BRANCH_DEST = release* ]] || [[ $BITRISEIO_GIT_BRANCH_DEST = epic* ]]; then
                 FILES_CHANGED=$(git diff --name-only $BITRISEIO_GIT_BRANCH_DEST..."$BITRISE_GIT_COMMIT")
             elif [[ $BITRISE_GIT_BRANCH = release* ]] || [[ $BITRISE_GIT_BRANCH = epic* ]]; then
