@@ -70,6 +70,7 @@ public struct LocalizedErrorsViewModel {
     let errorButtonA11yId: String
     let retryButtonLabel: String
     let closeButtonLabel: String
+    let acceptToSButtonLabel: String
 
     public init(
         rateLimitedMessage: String,
@@ -80,7 +81,8 @@ public struct LocalizedErrorsViewModel {
         errorLabelA11yId: String,
         errorButtonA11yId: String,
         retryButtonLabel: String,
-        closeButtonLabel: String
+        closeButtonLabel: String,
+        acceptToSButtonLabel: String
     ) {
         self.rateLimitedMessage = rateLimitedMessage
         self.unsafeContentMessage = unsafeContentMessage
@@ -91,5 +93,89 @@ public struct LocalizedErrorsViewModel {
         self.errorButtonA11yId = errorButtonA11yId
         self.retryButtonLabel = retryButtonLabel
         self.closeButtonLabel = closeButtonLabel
+        self.acceptToSButtonLabel = acceptToSButtonLabel
     }
 }
+
+public struct ToSBottomSheetViewModel {
+    let titleLabel: String
+    let titleLabelA11yId: String
+    let descriptionText: String
+    let descriptionTextA11yId: String
+    let linkButtonLabel: String
+    let linkButtonURL: URL?
+    let allowButtonTitle: String
+    let allowButtonA11yId: String
+    let allowButtonA11yLabel: String
+    let cancelButtonTitle: String
+    let cancelButtonA11yId: String
+    let cancelButtonA11yLabel: String
+
+    public init(
+        titleLabel: String,
+        titleLabelA11yId: String,
+        descriptionText: String,
+        descriptionTextA11yId: String,
+        linkButtonLabel: String,
+        linkButtonURL: URL?,
+        allowButtonTitle: String,
+        allowButtonA11yId: String,
+        allowButtonA11yLabel: String,
+        cancelButtonTitle: String,
+        cancelButtonA11yId: String,
+        cancelButtonA11yLabel: String
+    ) {
+        self.titleLabel = titleLabel
+        self.titleLabelA11yId = titleLabelA11yId
+        self.descriptionText = descriptionText
+        self.descriptionTextA11yId = descriptionTextA11yId
+        self.linkButtonLabel = linkButtonLabel
+        self.linkButtonURL = linkButtonURL
+        self.allowButtonTitle = allowButtonTitle
+        self.allowButtonA11yId = allowButtonA11yId
+        self.allowButtonA11yLabel = allowButtonA11yLabel
+        self.cancelButtonTitle = cancelButtonTitle
+        self.cancelButtonA11yId = cancelButtonA11yId
+        self.cancelButtonA11yLabel = cancelButtonA11yLabel
+    }
+}
+<<<<<<< HEAD
+=======
+
+public struct SummarizeViewModel {
+    let titleLabelA11yId: String
+    let compactTitleLabelA11yId: String
+    let summarizeViewA11yId: String
+    let summaryFootnote: String
+    let tabSnapshotViewModel: TabSnapshotViewModel
+    let loadingLabelViewModel: LoadingLabelViewModel
+    let brandViewModel: BrandViewModel
+    let closeButtonModel: CloseButtonViewModel
+    let errorMessages: LocalizedErrorsViewModel
+    let tosViewModel: ToSBottomSheetViewModel
+
+    public init(
+        titleLabelA11yId: String,
+        compactTitleLabelA11yId: String,
+        summaryFootnote: String,
+        summarizeViewA11yId: String,
+        tabSnapshotViewModel: TabSnapshotViewModel,
+        loadingLabelViewModel: LoadingLabelViewModel,
+        brandViewModel: BrandViewModel,
+        closeButtonModel: CloseButtonViewModel,
+        errorMessages: LocalizedErrorsViewModel,
+        tosViewModel: ToSBottomSheetViewModel
+    ) {
+        self.titleLabelA11yId = titleLabelA11yId
+        self.compactTitleLabelA11yId = compactTitleLabelA11yId
+        self.summarizeViewA11yId = summarizeViewA11yId
+        self.loadingLabelViewModel = loadingLabelViewModel
+        self.tabSnapshotViewModel = tabSnapshotViewModel
+        self.brandViewModel = brandViewModel
+        self.summaryFootnote = summaryFootnote
+        self.closeButtonModel = closeButtonModel
+        self.errorMessages = errorMessages
+        self.tosViewModel = tosViewModel
+    }
+}
+>>>>>>> 83d27e4e0 (Refactor [Shake to Summarize] FXIOS-13415 move ToS inside SummarizeController (#29179))
