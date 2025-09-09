@@ -741,6 +741,7 @@ open class BrowserSchema: Schema {
         )
         """
 
+    // swiftlint:disable:next function_body_length
     public func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons = """
             CREATE TABLE IF NOT EXISTS favicons (
