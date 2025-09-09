@@ -4936,6 +4936,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Print",
                     comment: "On the main menu, the title for the action that will take the user to the Print module in the application.")
+                public static let Share = MZLocalizedString(
+                    key: "MainMenu.Submenus.Tools.Share.Title.v144",
+                    tableName: "MainMenu",
+                    value: "Share",
+                    comment: "On the main menu, the title for the action that will take the user to the Share module in the application.")
 
                 public struct AccessibilityLabels {
                     public static let NightModeOn = MZLocalizedString(
@@ -4953,6 +4958,11 @@ extension String {
                         tableName: "MainMenu",
                         value: "Print",
                         comment: "On the main menu, the accessibility label for the action that will take the user to the Print module in the application.")
+                    public static let Share = MZLocalizedString(
+                        key: "MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v144",
+                        tableName: "MainMenu",
+                        value: "Share",
+                        comment: "On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu.")
                 }
             }
 
