@@ -120,10 +120,6 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
-    meta:
-      bitrise.io:
-        stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.large
 
   firefox_configure_build:
     before_run:
@@ -284,10 +280,6 @@ workflows:
         - channel: "#firefox-ios"
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
-    meta:
-      bitrise.io:
-        stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.large
 
   run_firefox_ui_tests:
     before_run:
@@ -747,7 +739,7 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - deploy-to-bitrise-io@2.10.0: {}
     - cache-push@2.7.1: {}
     - slack@4.2.1:
@@ -1220,6 +1212,10 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.large
 
   SPM_Common_Steps:
     steps:
@@ -1290,10 +1286,6 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
-    meta:
-      bitrise.io:
-        stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.large
   Archive_and_Run_Robo_Test:
     before_run:
     - 1_git_clone_and_post_clone
@@ -1405,10 +1397,6 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
-    meta:
-      bitrise.io:
-        stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.large
   Firebase_Performance_Test:
     before_run:
     - 1_git_clone_and_post_clone
@@ -1671,7 +1659,7 @@ workflows:
         - configuration: FocusDebug
         - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - script@1.2.1:
         title: Override xctestrun Focus env variables
         inputs:
@@ -1679,16 +1667,16 @@ workflows:
             #!/usr/bin/env bash
             set -euxo pipefail
             # Point to the Unit tests plan instead of Accessibility
-            FOCUS_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator26.0-arm64.xctestrun"
+            FOCUS_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator18.2-arm64.xctestrun"
 
             echo "Found UITest .xctestrun: $FOCUS_UI_XCTESTRUN"
             envman add --key BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH --value "$FOCUS_UI_XCTESTRUN"
     - xcode-test-without-building@0.4.2:
         timeout: 1200
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_UnitTests_iphonesimulator26.0-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_UnitTests_iphonesimulator18.2-arm64.xctestrun
     - xcode-test-shard-calculation@0:
         inputs:
         - product_path: $BITRISE_XCTESTRUN_FOCUS_UI_TEST_FILE_PATH
@@ -1728,13 +1716,13 @@ workflows:
         - configuration: KlarDebug
         - project_path: /Users/vagrant/git/focus-ios/Blockzilla.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - xcode-test-without-building@0.4.2:
         timeout: 1200
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Klar_UnitTests_iphonesimulator26.0-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Klar_UnitTests_iphonesimulator18.2-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
     - slack@4.2.1:
         run_if: ".IsBuildFailed"
@@ -1769,9 +1757,9 @@ workflows:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator26.0-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Focus_SmokeTest_iphonesimulator18.2-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
     - github-status@3.0.1:
         inputs:
@@ -2472,5 +2460,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-26.0.x-edge
-    machine_type_id: g2.mac.large
+    stack: osx-xcode-16.2.x
+    machine_type_id: g2.mac.4large
