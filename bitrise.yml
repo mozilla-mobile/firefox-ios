@@ -36,7 +36,7 @@ pipelines:
   pipeline_build_and_test_focus:
     workflows:
       focus_configure_build: {}
-      run_focus_ui_tests:
+      focus_ui_test:
           depends_on:
           - focus_configure_build
           parallel: 1
