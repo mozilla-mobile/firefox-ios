@@ -139,17 +139,14 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             siteProtectionsIcon.widthAnchor.constraint(equalToConstant: UX.siteProtectionsIcon),
             siteProtectionsMoreSettingsIcon.widthAnchor.constraint(equalToConstant: UX.siteProtectionsMoreSettingsIcon),
 
-            siteProtectionsContent.topAnchor.constraint(equalTo: contentLabels.bottomAnchor,
+            siteProtectionsContent.topAnchor.constraint(equalTo: favicon.bottomAnchor,
                                                         constant: UX.siteProtectionsContentTopMargin),
             siteProtectionsContent.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
             siteProtectionsContent.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            siteProtectionsContent.leadingAnchor.constraint(
-                equalTo: favicon.trailingAnchor,
-                constant: UX.horizontalContentMargin - UX.siteProtectionsContentHorizontalPadding - UX.protectionIconMargin
-            )
+            siteProtectionsContent.leadingAnchor.constraint(equalTo: favicon.leadingAnchor)
         ])
 
         closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize

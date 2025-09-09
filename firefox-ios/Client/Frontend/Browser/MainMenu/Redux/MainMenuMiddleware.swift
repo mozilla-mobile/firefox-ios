@@ -16,6 +16,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         static let passwords = "passwords"
         static let settings = "settings"
         static let print = "print"
+        static let share = "share"
         static let saveAsPDF = "save_as_PDF"
         static let switchToDesktopSite = "switch_to_desktop_site"
         static let switchToMobileSite = "switch_to_mobile_site"
@@ -221,6 +222,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
 
         case .printSheetV2:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
+
+        case .shareSheet:
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.share)
 
         case .saveAsPDFV2:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.saveAsPDF)

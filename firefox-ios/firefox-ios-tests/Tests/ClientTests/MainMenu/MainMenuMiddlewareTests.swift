@@ -173,6 +173,27 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.option, "print")
     }
 
+    func test_tapNavigateToDestination_shareSheetAction_sendTelemetryData() throws {
+        let action = getNavigationDestinationAction(for: .shareSheet)
+        let subject = createSubject()
+
+        subject.mainMenuProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.option, "share")
+    }
+
     func test_tapNavigateToDestination_saveAsPDFV2Action_sendTelemetryData() throws {
         let action = getNavigationDestinationAction(for: .saveAsPDFV2)
         let subject = createSubject()

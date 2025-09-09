@@ -23,6 +23,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let saveAsPDFV2 = StandardImageIdentifiers.Large.saveFile
         static let summarizer = StandardImageIdentifiers.Large.summarizer
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
+        static let share = StandardImageIdentifiers.Large.share
     }
 
     private var shouldShowReportSiteIssue: Bool {
@@ -285,6 +286,29 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(
                                     .printSheetV2,
+                                    url: tabInfo.canonicalURL
+                                ),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.Submenus.Tools.Share,
+                    iconName: Icons.share,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Share,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.share,
+                    isOptional: true,
+                    action: {
+                        store.dispatchLegacy(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(
+                                    .shareSheet,
                                     url: tabInfo.canonicalURL
                                 ),
                                 telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
