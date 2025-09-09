@@ -6,15 +6,17 @@ import Foundation
 import UIKit
 import Common
 
-struct ErrorViewModel {
-    let title: String
+struct InfoViewModel {
+    let title: NSAttributedString?
     let titleA11yId: String
     let actionButtonLabel: String
     let actionButtonA11yId: String
     let actionButtonCallback: () -> Void
+    let linkCallback: (URL) -> Void
 }
 
-class ErrorView: UIView,
+class InfoView: UIView,
+                UITextViewDelegate,
                  ThemeApplicable {
     private struct UX {
         static let labelHorizontalPadding: CGFloat = 44.0
@@ -26,10 +28,10 @@ class ErrorView: UIView,
             trailing: 32.0
         )
     }
-    private let label: UILabel = .build {
+    private let contentView: UITextView = .build {
         $0.adjustsFontForContentSizeCategory = true
-        $0.font = FXFontStyles.Regular.body.scaledFont()
-        $0.numberOfLines = 0
+        $0.isEditable = false
+        $0.isScrollEnabled = false
         $0.textAlignment = .center
     }
     private let actionButton: UIButton = .build {
@@ -47,6 +49,7 @@ class ErrorView: UIView,
         #endif
         $0.configuration?.contentInsets = UX.actionButtonInsets
     }
+    private var viewModel: InfoViewModel?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,27 +61,29 @@ class ErrorView: UIView,
     }
 
     private func setup() {
-        addSubviews(label, actionButton)
+        contentView.delegate = self
+        addSubviews(contentView, actionButton)
 
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: topAnchor),
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.labelHorizontalPadding),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.labelHorizontalPadding),
+            contentView.topAnchor.constraint(equalTo: topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.labelHorizontalPadding),
+            contentView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.labelHorizontalPadding),
 
-            actionButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: UX.actionButtonTopPadding),
+            actionButton.topAnchor.constraint(equalTo: contentView.bottomAnchor, constant: UX.actionButtonTopPadding),
             actionButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             actionButton.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
             actionButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
             actionButton.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
 
-        label.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        contentView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         actionButton.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    func configure(viewModel: ErrorViewModel) {
-        label.text = viewModel.title
-        label.accessibilityIdentifier = viewModel.titleA11yId
+    func configure(viewModel: InfoViewModel) {
+        self.viewModel = viewModel
+        contentView.attributedText = viewModel.title
+        contentView.accessibilityIdentifier = viewModel.titleA11yId
         actionButton.configuration?.title = viewModel.actionButtonLabel
         actionButton.accessibilityIdentifier = viewModel.actionButtonA11yId
         actionButton.addAction(UIAction(handler: { _ in
@@ -86,13 +91,33 @@ class ErrorView: UIView,
         }), for: .touchUpInside)
     }
 
+    // MARK: - UITextViewDelegate
+    func textView(
+        _ textView: UITextView,
+        shouldInteractWith URL: URL,
+        in characterRange: NSRange,
+        interaction: UITextItemInteraction
+    ) -> Bool {
+        viewModel?.linkCallback(URL)
+        return false
+    }
+
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: any Theme) {
-        label.textColor = theme.colors.textOnDark
+        contentView.textColor = theme.colors.textOnDark
+        contentView.backgroundColor = .clear
         if #unavailable(iOS 26) {
-            actionButton.configuration?.baseBackgroundColor = theme.colors.actionTabActive
+            actionButton.configuration?.baseBackgroundColor = theme.colors.textOnDark
+            actionButton.configuration?.baseForegroundColor = theme.colors.textOnLight
+        } else {
+            actionButton.configuration?.baseForegroundColor = theme.colors.textOnDark
         }
-        actionButton.configuration?.baseForegroundColor = theme.colors.textPrimary
+        contentView.linkTextAttributes = [
+            .font: FXFontStyles.Regular.subheadline.scaledFont(),
+            .foregroundColor: theme.colors.textOnDark.withAlphaComponent(0.8),
+            .underlineColor: theme.colors.textOnDark.withAlphaComponent(0.8),
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
     }
 }

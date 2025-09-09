@@ -4,30 +4,12 @@
 
 @testable import SummarizeKit
 import XCTest
-import WebKit
-
-class WKWebViewMock: WKWebView {
-    var overridenURL: URL
-
-    init(_ url: URL) {
-        self.overridenURL = url
-        super.init(frame: .zero, configuration: WKWebViewConfiguration())
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("Not implemented")
-    }
-
-    override var url: URL {
-        return overridenURL
-    }
-}
 
 final class SummarizerServiceTests: XCTestCase {
     static let mockResponse = ["Summarized", "content"]
     static let maxWords = 100
     static let maxWordCount = 50
-    var mockWebView = WKWebViewMock(URL(string: "https://foo.com")!)
+    var mockWebView = MockWebView(URL(string: "https://foo.com")!)
 
     func testSummarizerServiceReturnsSummary() async throws {
         let subject = createSubject()

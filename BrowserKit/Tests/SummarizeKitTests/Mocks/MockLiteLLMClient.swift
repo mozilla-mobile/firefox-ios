@@ -7,7 +7,7 @@ import Foundation
 
 /// Mock implementation of a real  LiteLLMClient for testing the session and responses.
 /// This allows injecting controlled outputs or errors without calling the real inference backend.
-final class MockLiteLLMClient: LiteLLMClientProtocol {
+final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     var respondWith: [String] = [""]
     var respondWithError: Error?
 
