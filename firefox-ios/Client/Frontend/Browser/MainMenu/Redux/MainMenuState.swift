@@ -68,7 +68,6 @@ struct MainMenuTabInfo: Equatable {
     let isInReadingList: Bool
     let isPinned: Bool
     let accountData: AccountData
-    let accountProfileImage: UIImage?
 }
 
 struct MainMenuState: ScreenState, Equatable, Sendable {
@@ -78,7 +77,7 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
     let shouldDismiss: Bool
 
     let accountData: AccountData?
-    let accountIcon: UIImage?
+    let accountProfileImage: UIImage?
     let isBrowserDefault: Bool
     let isPhoneLandscape: Bool
     let moreCellTapped: Bool
@@ -107,7 +106,7 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             navigationDestination: mainMenuState.navigationDestination,
             shouldDismiss: mainMenuState.shouldDismiss,
             accountData: mainMenuState.accountData,
-            accountIcon: mainMenuState.accountIcon,
+            accountProfileImage: mainMenuState.accountProfileImage,
             siteProtectionsData: mainMenuState.siteProtectionsData,
             isBrowserDefault: mainMenuState.isBrowserDefault,
             isPhoneLandscape: mainMenuState.isPhoneLandscape,
@@ -123,7 +122,7 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             navigationDestination: nil,
             shouldDismiss: false,
             accountData: nil,
-            accountIcon: nil,
+            accountProfileImage: nil,
             siteProtectionsData: nil,
             isBrowserDefault: false,
             isPhoneLandscape: false,
@@ -138,7 +137,7 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
         navigationDestination: MenuNavigationDestination? = nil,
         shouldDismiss: Bool = false,
         accountData: AccountData?,
-        accountIcon: UIImage?,
+        accountProfileImage: UIImage?,
         siteProtectionsData: SiteProtectionsData?,
         isBrowserDefault: Bool,
         isPhoneLandscape: Bool,
@@ -150,7 +149,7 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
         self.accountData = accountData
-        self.accountIcon = accountIcon
+        self.accountProfileImage = accountProfileImage
         self.siteProtectionsData = siteProtectionsData
         self.isBrowserDefault = isBrowserDefault
         self.isPhoneLandscape = isPhoneLandscape
@@ -180,6 +179,8 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             return handleUpdateSiteProtectionsHeaderAction(state: state, action: action)
         case MainMenuActionType.updateCurrentTabInfo:
             return handleUpdateCurrentTabInfoAction(state: state, action: action)
+        case MainMenuActionType.updateProfileImage:
+            return handleUpdateProfileImageAction(state: state, action: action)
         case MainMenuActionType.tapMoreOptions:
             return handleShowMoreOptions(state: state, action: action)
         case MainMenuActionType.tapNavigateToDestination:
@@ -208,11 +209,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             menuElements: state.menuElements,
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -222,11 +223,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             menuElements: state.menuElements,
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -238,11 +239,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             menuElements: state.menuElements,
             currentTabInfo: state.currentTabInfo,
             accountData: action.accountData,
-            accountIcon: action.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -254,11 +255,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             menuElements: state.menuElements,
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: action.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -270,11 +271,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             menuElements: state.menuElements,
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: action.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -286,11 +287,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             menuElements: state.menuElements,
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: action.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -303,15 +304,40 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             windowUUID: state.windowUUID,
             menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
-                and: state.windowUUID
+                and: state.windowUUID,
+                isExpanded: state.moreCellTapped
             ),
             currentTabInfo: currentTabInfo,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
+        )
+    }
+
+    private static func handleUpdateProfileImageAction(state: MainMenuState, action: Action) -> MainMenuState {
+        guard let action = action as? MainMenuAction,
+              let accountProfileImage = action.accountProfileImage,
+              let currentTabInfo = state.currentTabInfo
+        else { return defaultState(from: state) }
+
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuConfigurator.generateMenuElements(
+                with: currentTabInfo,
+                and: state.windowUUID,
+                isExpanded: state.moreCellTapped,
+                profileImage: accountProfileImage
+            ),
+            currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountProfileImage: accountProfileImage,
+            siteProtectionsData: state.siteProtectionsData,
+            isBrowserDefault: state.isBrowserDefault,
+            isPhoneLandscape: state.isPhoneLandscape,
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -326,11 +352,12 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             menuElements: state.menuConfigurator.generateMenuElements(
                 with: currentTabInfo,
                 and: state.windowUUID,
-                isExpanded: !isExpanded
+                isExpanded: !isExpanded,
+                profileImage: state.accountProfileImage
             ),
             currentTabInfo: state.currentTabInfo,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
@@ -347,11 +374,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             currentTabInfo: state.currentTabInfo,
             navigationDestination: action.navigationDestination,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -362,11 +389,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             currentTabInfo: state.currentTabInfo,
             shouldDismiss: true,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -377,11 +404,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             currentTabInfo: state.currentTabInfo,
             shouldDismiss: true,
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -392,11 +419,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             currentTabInfo: state.currentTabInfo,
             navigationDestination: MenuNavigationDestination(.editBookmark),
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 
@@ -407,11 +434,11 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
             currentTabInfo: state.currentTabInfo,
             navigationDestination: MenuNavigationDestination(.zoom),
             accountData: state.accountData,
-            accountIcon: state.accountIcon,
+            accountProfileImage: state.accountProfileImage,
             siteProtectionsData: state.siteProtectionsData,
             isBrowserDefault: state.isBrowserDefault,
             isPhoneLandscape: state.isPhoneLandscape,
-            moreCellTapped: false
+            moreCellTapped: state.moreCellTapped
         )
     }
 }
