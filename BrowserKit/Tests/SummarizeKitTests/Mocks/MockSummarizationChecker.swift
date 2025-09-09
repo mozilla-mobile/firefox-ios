@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 @testable import SummarizeKit
 
-final class MockSummarizationChecker: SummarizationCheckerProtocol {
+final class MockSummarizationChecker: SummarizationCheckerProtocol, @unchecked Sendable {
     var canSummarize: Bool
     var reason: SummarizationReason?
     var wordCount: Int

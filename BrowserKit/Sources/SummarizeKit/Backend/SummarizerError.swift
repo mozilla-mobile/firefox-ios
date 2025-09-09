@@ -17,6 +17,7 @@ public enum SummarizerError: Error, LocalizedError, Sendable {
     case invalidChunk
     case cancelled
     case noContent
+    case tosConsentMissing
     case unknown(Error)
 
     /// Returns a telemetry-safe string describing how the summarizer failed.
@@ -42,6 +43,7 @@ public enum SummarizerError: Error, LocalizedError, Sendable {
         case .invalidChunk: return "invalidChunk"
         case .cancelled: return "cancelled"
         case .noContent: return "noContent"
+        case .tosConsentMissing: return "tosConsetMissing"
         case .unknown(let error):
             if let nsError = error as NSError? {
                 return "unknown(domain: \(nsError.domain), code: \(nsError.code))"
@@ -64,6 +66,7 @@ public enum SummarizerError: Error, LocalizedError, Sendable {
         case .invalidChunk: return ""
         case .unableToExtractContent: return ""
         case .unknown: return ""
+        case .tosConsentMissing: return ""
         }
     }
 
