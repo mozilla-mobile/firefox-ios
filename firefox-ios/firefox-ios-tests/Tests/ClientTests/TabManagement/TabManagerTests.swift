@@ -1488,6 +1488,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tabs Older than
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_whenNotOldNormalTabs_thenNoTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalActive, count: numberTabs)
@@ -1498,6 +1499,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_whenInactiveNormalTabs_thenTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalInactive, count: numberTabs)
@@ -1508,6 +1510,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_whenPrivateTabs_thenNoTabsRemoved() {
         let numberPrivateTabs = 3
         let tabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
@@ -1518,6 +1521,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
     }
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabs_thenTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
@@ -1528,6 +1532,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabsOlderThanOneWeek_thenTabsNotRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
@@ -1538,6 +1543,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabsOlderThanOneMonth_thenTabsNotRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalInactiveYesterday, count: numberTabs)
@@ -1548,6 +1554,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_when2WeeksNormalTabs_thenTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
@@ -1558,6 +1565,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_when2WeeksNormalTabsOlderThanOneWeek_thenTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
@@ -1568,6 +1576,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
 
+    @MainActor
     func testRemoveNormalTabsOlderThan_when2WeeksNormalTabsOlderThanOneMonth_thenTabsNotRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalInactive2Weeks, count: numberTabs)
