@@ -12,9 +12,7 @@ public class FeedbackViewController: UIHostingController<FeedbackView> {
     public var onFeedbackSubmitted: (() -> Void)?
 
     public init(windowUUID: WindowUUID? = nil) {
-        let themeManager = AppContainer.shared.resolve() as ThemeManager
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        var feedbackView = FeedbackView(windowUUID: windowUUID, initialTheme: theme)
+        var feedbackView = FeedbackView(windowUUID: windowUUID)
 
         super.init(rootView: feedbackView)
 

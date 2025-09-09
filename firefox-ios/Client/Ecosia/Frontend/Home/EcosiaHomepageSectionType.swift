@@ -11,6 +11,7 @@ import Foundation
 import Common
 
 enum HomepageSectionType: Int, CaseIterable {
+    case header
     case climateImpactCounter
     case homepageHeader
     case libraryShortcuts
@@ -21,6 +22,12 @@ enum HomepageSectionType: Int, CaseIterable {
 
     var cellIdentifier: String {
         switch self {
+        case .header:
+            if #available(iOS 16.0, *) {
+                return NTPHeader.cellIdentifier
+            } else {
+                return "" // Fallback for iOS < 16.0
+            }
         case .climateImpactCounter: return NTPSeedCounterCell.cellIdentifier
         case .homepageHeader: return NTPLogoCell.cellIdentifier
         case .libraryShortcuts: return NTPLibraryCell.cellIdentifier
@@ -32,7 +39,13 @@ enum HomepageSectionType: Int, CaseIterable {
     }
 
     static var cellTypes: [ReusableCell.Type] {
-        return [
+        var types: [ReusableCell.Type] = []
+
+        if #available(iOS 16.0, *) {
+            types.append(NTPHeader.self)
+        }
+
+        types.append(contentsOf: [
             NTPSeedCounterCell.self,
             NTPLogoCell.self,
             TopSiteItemCell.self,
@@ -41,7 +54,9 @@ enum HomepageSectionType: Int, CaseIterable {
             NTPImpactCell.self,
             NTPNewsCell.self,
             NTPCustomizationCell.self
-        ]
+        ])
+
+        return types
     }
 
     init(_ section: Int) {
@@ -54,7 +69,7 @@ private let MinimumInsets: CGFloat = 16
 extension HomepageSectionType {
     var customizableConfig: CustomizableNTPSettingConfig? {
         switch self {
-        case .homepageHeader, .libraryShortcuts, .ntpCustomization, .climateImpactCounter: return nil
+        case .header, .homepageHeader, .libraryShortcuts, .ntpCustomization, .climateImpactCounter: return nil
         case .topSites: return .topSites
         case .impact: return .climateImpact
         case .news: return .ecosiaNews
@@ -86,7 +101,7 @@ extension HomepageSectionType {
                                            leading: horizontal,
                                            bottom: bottomSpacing,
                                            trailing: horizontal)
-        case .homepageHeader, .climateImpactCounter:
+        case .homepageHeader, .climateImpactCounter, .header:
             return .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         }
     }

@@ -6,7 +6,8 @@ import SwiftUI
 import Common
 
 struct FeedbackTypeSection: View {
-    let viewModel: FeedbackViewModel
+    @State private var theme = FeedbackTypeSectionTheme()
+    let windowUUID: WindowUUID?
     @Binding var selectedFeedbackType: FeedbackType?
     let updateButtonState: () -> Void
 
@@ -21,18 +22,18 @@ struct FeedbackTypeSection: View {
                         HStack {
                             Text(type.localizedString)
                                 .font(.body)
-                                .foregroundColor(viewModel.textPrimaryColor)
+                                .foregroundColor(theme.textPrimaryColor)
 
                             Spacer()
 
                             if selectedFeedbackType == type {
                                 Image(systemName: "checkmark")
-                                    .foregroundColor(viewModel.brandPrimaryColor)
+                                    .foregroundColor(theme.brandPrimaryColor)
                                     .accessibility(label: Text("Selected"))
                             }
                         }
                         .padding(.ecosia.space._m)
-                        .background(viewModel.sectionBackgroundColor)
+                        .background(theme.sectionBackgroundColor)
                     }
 
                     if type != FeedbackType.allCases.last {
@@ -43,8 +44,9 @@ struct FeedbackTypeSection: View {
             }
             .frame(minHeight: 44 * CGFloat(FeedbackType.allCases.count))
         }
-        .background(viewModel.sectionBackgroundColor)
+        .background(theme.sectionBackgroundColor)
         .cornerRadius(.ecosia.borderRadius._l)
         .padding(.horizontal, .ecosia.space._m)
+        .ecosiaThemed(windowUUID, $theme)
     }
 }

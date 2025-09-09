@@ -30,8 +30,9 @@ public struct User: Codable, Equatable {
     public var adultFilter = AdultFilter.moderate
     public var autoComplete = true
     public var personalized = false
+    public var aiOverviews = true
 
-    // MARK: Privacy settings
+    // MARK: Privacy Settings
     public var sendAnonymousUsageData = true
     public internal(set) var cookieConsentValue: String?
     public var hasAnalyticsCookieConsent: Bool {
@@ -83,6 +84,7 @@ public struct User: Codable, Equatable {
         autoComplete,
         firstTime,
         personalized,
+        aiOverviews,
         sendAnonymousUsageData,
         topSitesRows,
         showClimateImpact,
@@ -110,6 +112,7 @@ public struct User: Codable, Equatable {
         autoComplete = (try? root.decode(Bool.self, forKey: .autoComplete)) ?? true
         firstTime = (try? root.decode(Bool.self, forKey: .firstTime)) ?? true
         personalized = (try? root.decode(Bool.self, forKey: .personalized)) ?? false
+        aiOverviews = (try? root.decode(Bool.self, forKey: .aiOverviews)) ?? true
         sendAnonymousUsageData = (try? root.decode(Bool.self, forKey: .sendAnonymousUsageData)) ?? true
         topSitesRows = (try? root.decode(Int.self, forKey: .topSitesRows)) ?? 4
         showTopSites = (try? root.decode(Bool.self, forKey: .showTopSites)) ?? true
@@ -135,6 +138,7 @@ public struct User: Codable, Equatable {
             firstTime = stored.firstTime
             analyticsId = stored.analyticsId
             personalized = stored.personalized
+            aiOverviews = stored.aiOverviews
             sendAnonymousUsageData = stored.sendAnonymousUsageData
             migrated = stored.migrated
             state = stored.state
@@ -241,10 +245,15 @@ extension User {
         let adultFilter: AdultFilter
         let autoComplete: Bool
         let personalized: Bool
+        let aiOverviews: Bool
     }
 
     private var searchSetting: SearchSetting {
-        .init(marketCode: marketCode, adultFilter: adultFilter, autoComplete: autoComplete, personalized: personalized)
+        .init(marketCode: marketCode,
+              adultFilter: adultFilter,
+              autoComplete: autoComplete,
+              personalized: personalized,
+              aiOverviews: aiOverviews)
     }
 
     func hasNewSearchSetting(compared to: User) -> Bool {

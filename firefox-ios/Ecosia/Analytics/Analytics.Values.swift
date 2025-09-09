@@ -8,6 +8,7 @@ extension Analytics {
     public enum Category: String {
         case
         activity,
+        autocomplete = "autocomplete_suggestion",
         bookmarks,
         brazeIAM = "braze_iam",
         browser,
@@ -23,12 +24,7 @@ extension Analytics {
         settings
     }
 
-    public enum Label: String {
-        case
-        analytics,
-        clear,
-        market,
-        toolbar
+    public enum Label {
 
         public enum Bookmarks: String {
             case
@@ -81,6 +77,7 @@ extension Analytics {
             case
             help,
             inapp,
+            market,
             news,
             privacy,
             projects,
@@ -112,6 +109,19 @@ extension Analytics {
             learnMore = "learn_more",
             linkCopying = "link_copying",
             promo
+        }
+
+        public enum Settings: String {
+            case
+            aiOverviews = "ai_overviews",
+            analytics,
+            clear,
+            toolbar
+        }
+
+        public enum AISearch: String {
+            case
+            cta = "ai_search_cta"
         }
     }
 
@@ -207,6 +217,7 @@ extension Analytics {
         case
         enable,
         disable,
+        header,
         home,
         detail,
         nativeSettings = "native_settings"

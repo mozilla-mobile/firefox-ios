@@ -6,7 +6,9 @@ import SwiftUI
 import Common
 
 struct FeedbackContentView: View {
-    let viewModel: FeedbackViewModel
+    @State private var theme = FeedbackContentViewTheme()
+    let windowUUID: WindowUUID?
+
     @Binding var selectedFeedbackType: FeedbackType?
     @Binding var feedbackText: String
     @Binding var isButtonEnabled: Bool
@@ -16,35 +18,29 @@ struct FeedbackContentView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: .ecosia.space._1l) {
-                // Header section
                 Text(String.localized(.whatWouldYouLikeToShare))
                     .font(.title3)
-                    .foregroundColor(viewModel.textPrimaryColor)
+                    .foregroundColor(theme.textPrimaryColor)
                     .padding(.horizontal, .ecosia.space._m)
                     .padding(.top, .ecosia.space._m)
                     .accessibilityIdentifier("feedback_title")
 
-                // Feedback type selection section
                 FeedbackTypeSection(
-                    viewModel: viewModel,
+                    windowUUID: windowUUID,
                     selectedFeedbackType: $selectedFeedbackType,
                     updateButtonState: updateButtonState
                 )
-
-                // Combined container for text input and send button
                 VStack(spacing: .ecosia.space._m) {
-                    // Feedback text input section with proper placeholder
                     ZStack(alignment: .topLeading) {
-
-                        viewModel.backgroundColor
+                        theme.backgroundColor
 
                         TextEditor(text: $feedbackText)
                             .font(.body)
                             .transparentScrolling()
-                            .foregroundColor(viewModel.textPrimaryColor)
+                            .foregroundColor(theme.textPrimaryColor)
                             .padding(.horizontal, .ecosia.space._s)
                             .padding(.vertical, .ecosia.space._m)
-                            .border(viewModel.borderColor, width: viewModel.borderWidth)
+                            .border(theme.borderColor, width: theme.borderWidth)
                             .onChange(of: feedbackText) { _ in
                                 updateButtonState()
                             }
@@ -52,7 +48,7 @@ struct FeedbackContentView: View {
                         if feedbackText.isEmpty {
                             Text(String.localized(.addMoreDetailAboutYourFeedback))
                                 .font(.body)
-                                .foregroundColor(viewModel.textSecondaryColor)
+                                .foregroundColor(theme.textSecondaryColor)
                                 .padding(.horizontal, .ecosia.space._m)
                                 .padding(.vertical, .ecosia.space._1l)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -63,14 +59,13 @@ struct FeedbackContentView: View {
                     .padding(.top, .ecosia.space._m)
                     .padding(.horizontal, .ecosia.space._m)
 
-                    // Send button
                     Button(action: sendFeedback) {
                         Text(String.localized(.send))
                             .font(.body.bold())
                             .frame(maxWidth: .infinity)
                             .padding(.ecosia.space._m)
                             .foregroundColor(.white)
-                            .background(isButtonEnabled ? viewModel.buttonBackgroundColor : viewModel.buttonDisabledBackgroundColor)
+                            .background(isButtonEnabled ? theme.buttonBackgroundColor : theme.buttonDisabledBackgroundColor)
                             .cornerRadius(.ecosia.borderRadius._m)
                     }
                     .disabled(!isButtonEnabled)
@@ -81,11 +76,12 @@ struct FeedbackContentView: View {
                     .accessibilityLabel(Text("Send feedback"))
                     .accessibilityAddTraits(.isButton)
                 }
-                .background(viewModel.sectionBackgroundColor)
+                .background(theme.sectionBackgroundColor)
                 .cornerRadius(.ecosia.borderRadius._l)
                 .padding(.horizontal, .ecosia.space._m)
             }
-            .background(viewModel.backgroundColor)
+            .background(theme.backgroundColor)
+            .ecosiaThemed(windowUUID, $theme)
         }
     }
 }

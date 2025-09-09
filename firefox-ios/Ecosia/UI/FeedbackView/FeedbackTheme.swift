@@ -5,26 +5,21 @@
 import SwiftUI
 import Common
 
-/// View model to handle theming for the FeedbackView
-class FeedbackViewModel: ObservableObject {
-    @Published var backgroundColor = Color.white
-    @Published var sectionBackgroundColor = Color.white
-    @Published var feedbackTypeListItemBackgroundColor = Color(UIColor.systemBackground)
-    @Published var textPrimaryColor = Color.black
-    @Published var textSecondaryColor = Color.gray
-    @Published var buttonBackgroundColor = Color.blue
-    @Published var buttonDisabledBackgroundColor = Color.gray
-    @Published var brandPrimaryColor = Color.blue
-    @Published var borderColor = Color.gray.opacity(0.2)
-    @Published var borderWidth: CGFloat = 1
+public struct FeedbackTheme: EcosiaThemeable {
+    public var backgroundColor = Color.white
+    public var sectionBackgroundColor = Color.white
+    public var feedbackTypeListItemBackgroundColor = Color(UIColor.systemBackground)
+    public var textPrimaryColor = Color.black
+    public var textSecondaryColor = Color.gray
+    public var buttonBackgroundColor = Color.blue
+    public var buttonDisabledBackgroundColor = Color.gray
+    public var brandPrimaryColor = Color.blue
+    public var borderColor = Color.gray.opacity(0.2)
+    public var borderWidth: CGFloat = 1
 
-    init(theme: Theme? = nil) {
-        if let theme = theme {
-            applyTheme(theme: theme)
-        }
-    }
+    public init() {}
 
-    func applyTheme(theme: Theme) {
+    public mutating func applyTheme(theme: Theme) {
         backgroundColor = Color(theme.colors.ecosia.backgroundPrimaryDecorative)
         sectionBackgroundColor = Color(theme.colors.ecosia.backgroundElevation1)
         feedbackTypeListItemBackgroundColor = Color(theme.colors.ecosia.backgroundPrimary)

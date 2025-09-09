@@ -11,11 +11,13 @@ final class UnleashTests: XCTestCase {
     static let appVersion = "0.0.0"
 
     override func setUp() {
+        Unleash.clearInstanceModel()
         Unleash.rules = []
         try? FileManager.default.removeItem(at: FileManager.unleash)
     }
 
     override func tearDown() {
+        Unleash.clearInstanceModel()
         Unleash.rules = []
         try? FileManager.default.removeItem(at: FileManager.unleash)
     }
@@ -81,6 +83,24 @@ final class UnleashTests: XCTestCase {
         let isEnabled = Unleash.isEnabled(toggleName)
 
         XCTAssertEqual(isEnabled, expectedEnabledStatus)
+    }
+
+    func testIsLoadedFlagReflectsUnleashState() async {
+        XCTAssertFalse(Unleash.isLoaded)
+
+        _ = try? await Unleash.start(appVersion: "1.0.0")
+        XCTAssertTrue(Unleash.isLoaded)
+        let firstId = Unleash.model.id
+
+        Unleash.clearInstanceModel()
+        XCTAssertFalse(Unleash.isLoaded)
+
+        _ = try? await Unleash.start(appVersion: "1.0.0")
+        XCTAssertEqual(Unleash.model.id, firstId, "Id should remain the same between sessions")
+
+        _ = try? await Unleash.reset(env: .production, appVersion: "1.0.0")
+        XCTAssertTrue(Unleash.isLoaded)
+        XCTAssertNotEqual(Unleash.model.id, firstId, "Id should change after reset")
     }
 }
 

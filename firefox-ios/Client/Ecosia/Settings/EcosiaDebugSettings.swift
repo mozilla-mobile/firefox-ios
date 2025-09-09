@@ -285,6 +285,20 @@ final class UnleashNativeSRPVAnalyticsSetting: UnleashVariantResetSetting {
     }
 }
 
+final class UnleashAISearchMVPSetting: UnleashVariantResetSetting {
+    override var titleName: String? {
+        "AI Search MVP"
+    }
+
+    override var variant: Unleash.Variant? {
+        Unleash.getVariant(.aiSearchMVP)
+    }
+
+    override var unleashEnabled: Bool? {
+        Unleash.isEnabled(.aiSearchMVP)
+    }
+}
+
 final class AnalyticsIdentifierSetting: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Analytics Identifier", attributes: [:])
@@ -298,6 +312,22 @@ final class AnalyticsIdentifierSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         UIPasteboard.general.string = analyticsIdentifier
+    }
+}
+
+final class UnleashIdentifierSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Unleash Identifier", attributes: [:])
+    }
+
+    var analyticsIdentifier: String { Unleash.userId.uuidString }
+
+    override var status: NSAttributedString? {
+        return NSAttributedString(string: "\(Unleash.userId.uuidString) (Click to copy)", attributes: [:])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        UIPasteboard.general.string = Unleash.userId.uuidString
     }
 }
 

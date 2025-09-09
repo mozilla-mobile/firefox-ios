@@ -162,4 +162,8 @@ public enum URLProvider {
         ]
         return components.url!
     }
+
+    public var aiSearch: URL {
+        root.appendingPathComponent("ai-search")
+    }
 }

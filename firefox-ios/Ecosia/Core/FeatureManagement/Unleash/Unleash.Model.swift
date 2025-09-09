@@ -26,6 +26,7 @@ extension Unleash {
             case seedCounterNTP = "mob_ios_seed_counter_ntp"
             case nativeSRPVAnalytics = "mob_ios_native_srpv_analytics"
             case newsletterCard = "mob_ios_newsletter_card"
+            case aiSearchMVP = "ai2-67-ai-search-mvp"
         }
 
         public let name: String

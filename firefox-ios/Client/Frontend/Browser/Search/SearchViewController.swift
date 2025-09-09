@@ -7,6 +7,7 @@ import Shared
 import Storage
 import Common
 import SiteImageView
+import Ecosia
 
 private struct SearchViewControllerUX {
     static let EngineButtonHeight: Float = 44 // Equivalent to toolbar height, fixed at the moment
@@ -446,6 +447,12 @@ class SearchViewController: SiteTableViewController,
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
+            // Ecosia: Check if this is the AI Search item
+            if isAISearchRow(indexPath) {
+                handleAISearchSelection(indexPath)
+                return
+            }
+
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
             searchTelemetry?.selectedResult = .searchSuggest
@@ -566,7 +573,16 @@ class SearchViewController: SiteTableViewController,
         if let section = SearchListSection(rawValue: indexPath.section) {
             switch section {
             case .searchSuggestions:
+                /* Ecosia: Modified to skip telemetry for AI Search item and use safe array access
                 if let site = viewModel.suggestions?[indexPath.row] {
+                    if searchTelemetry?.visibleSuggestions.contains(site) == false {
+                        searchTelemetry?.visibleSuggestions.append(site)
+                    }
+                }
+                */
+                // Ecosia: Skip telemetry for AI Search item
+                if !isAISearchRow(indexPath),
+                   let site = safeSuggestion(at: indexPath.row) {
                     if searchTelemetry?.visibleSuggestions.contains(site) == false {
                         searchTelemetry?.visibleSuggestions.append(site)
                     }
@@ -624,8 +640,12 @@ class SearchViewController: SiteTableViewController,
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
         case .searchSuggestions:
+            // Ecosia: Use our custom method that includes AI Search item
+            return numberOfRowsForSearchSuggestions()
+            /* Ecosia: Modified to include AI Search item when feature flag is enabled
             guard let count = viewModel.suggestions?.count else { return 0 }
             return count < 4 ? count : 4
+            */
         case .openedTabs:
             return viewModel.filteredOpenedTabs.count
         case .remoteTabs:
@@ -657,7 +677,16 @@ class SearchViewController: SiteTableViewController,
             let suggestion = viewModel.historySites[indexPath.item]
             searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
         case .searchSuggestions:
-            guard let suggestion = viewModel.suggestions?[indexPath.item] else { return }
+            // Ecosia: Check if this is the AI Search item
+            if isAISearchRow(indexPath) {
+                handleAISearchHighlight(indexPath)
+                return
+            }
+
+            /* Ecosia: Modified to handle AI Search item and use safe array access
+            let suggestion = viewModel.suggestions?[indexPath.item] ?? ""
+            */
+            guard let suggestion = safeSuggestion(at: indexPath.item) else { return }
             searchDelegate?.searchViewController(self, didHighlightText: suggestion, search: false)
         case .remoteTabs:
             let suggestion = viewModel.remoteClientTabs[indexPath.item]
@@ -710,7 +739,12 @@ class SearchViewController: SiteTableViewController,
         var cell = UITableViewCell()
         switch section {
         case .searchSuggestions:
+            /* Ecosia: Modified to handle AI Search item and use safe array access
             if let site = viewModel.suggestions?[indexPath.row] {
+            */
+            if isAISearchRow(indexPath) {
+                cell = configureAISearchCell(oneLineCell)
+            } else if let site = safeSuggestion(at: indexPath.row) {
                 oneLineCell.titleLabel.text = site
                 if Locale.current.languageCode == "en",
                    let attributedString = getAttributedBoldSearchSuggestions(
@@ -866,9 +900,13 @@ class SearchViewController: SiteTableViewController,
 
     func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
+        /* Ecosia: Modified to handle AI Search item and use safe array access
+        if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = viewModel.suggestions?[indexPath.row] {
+        */
         if let indexPath = tableView.indexPathForRow(
             at: buttonPosition
-        ), let newQuery = viewModel.suggestions?[indexPath.row] {
+        ), !isAISearchRow(indexPath), // Ecosia: Add AI Search check
+           let newQuery = safeSuggestion(at: indexPath.row) {
             searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
             viewModel.searchQuery = newQuery + " "
             searchTelemetry?.searchQuery = viewModel.searchQuery

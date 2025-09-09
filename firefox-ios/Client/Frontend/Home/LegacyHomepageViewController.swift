@@ -119,6 +119,10 @@ class LegacyHomepageViewController:
         // Ecosia: Add HomePageViewControllerDelegate
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
+
+        // Ecosia: Set multi-purpose header delegate after super.init
+        viewModel.multiPurposeEcosiaHeaderViewModel.delegate = self
+
         updateHeaderToShowPrivateModeToggle()
         viewModel.isZeroSearch = isZeroSearch
 

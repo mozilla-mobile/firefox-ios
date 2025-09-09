@@ -14,7 +14,7 @@ public struct FeedbackView: View {
     @State private var isButtonEnabled: Bool = false
 
     // Theme handling
-    @StateObject private var viewModel = FeedbackViewModel()
+    @State private var theme = FeedbackTheme()
     let windowUUID: WindowUUID?
 
     // Define a dismiss callback that will be injected by the hosting controller
@@ -29,24 +29,18 @@ public struct FeedbackView: View {
         static let textEditorHeight: CGFloat = 200
     }
 
-    public init(windowUUID: WindowUUID? = nil,
-                initialTheme: Theme? = nil) {
+    public init(windowUUID: WindowUUID? = nil) {
         self.windowUUID = windowUUID
-
-        // Apply initial theme if provided
-        if let theme = initialTheme {
-            _viewModel = StateObject(wrappedValue: FeedbackViewModel(theme: theme))
-        }
     }
 
     public var body: some View {
         NavigationView {
             ZStack {
 
-                viewModel.backgroundColor.ignoresSafeArea()
+                theme.backgroundColor.ignoresSafeArea()
 
                 let feedbackContent = FeedbackContentView(
-                    viewModel: viewModel,
+                    windowUUID: windowUUID,
                     selectedFeedbackType: $selectedFeedbackType,
                     feedbackText: $feedbackText,
                     isButtonEnabled: $isButtonEnabled,
@@ -60,7 +54,7 @@ public struct FeedbackView: View {
                         Button(String.localized(.close)) {
                             dismiss()
                         }
-                        .foregroundColor(viewModel.brandPrimaryColor)
+                        .foregroundColor(theme.brandPrimaryColor)
                         .accessibilityIdentifier("close_feedback_button")
                     }
                 }
@@ -73,11 +67,7 @@ public struct FeedbackView: View {
                     }
                 }
             }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-                guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-                let themeManager = AppContainer.shared.resolve() as ThemeManager
-                viewModel.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
+            .ecosiaThemed(windowUUID, $theme)
         }
     }
 
@@ -103,5 +93,5 @@ public struct FeedbackView: View {
 }
 
 #Preview {
-    FeedbackView(windowUUID: UUID())
+    FeedbackView(windowUUID: .XCTestDefaultUUID)
 }

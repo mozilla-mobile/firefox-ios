@@ -208,7 +208,7 @@ open class Analytics {
     public func navigationChangeMarket(_ new: String) {
         track(Structured(category: Category.navigation.rawValue,
                          action: Action.change.rawValue)
-            .label(Label.market.rawValue)
+            .label(Label.Navigation.market.rawValue)
             .property(new))
     }
 
@@ -300,8 +300,15 @@ open class Analytics {
     public func searchbarChanged(to position: String) {
         track(Structured(category: Category.settings.rawValue,
                          action: Action.change.rawValue)
-            .label(Label.toolbar.rawValue)
+            .label(Label.Settings.toolbar.rawValue)
             .property(position))
+    }
+
+    public func toggleAISearchOverviewsSetting(enabled: Bool) {
+        track(Structured(category: Category.settings.rawValue,
+                         action: Action.change.rawValue)
+            .label(Label.Settings.aiOverviews.rawValue)
+            .property(enabled ? Property.enable.rawValue : Property.disable.rawValue))
     }
 
     public func sendAnonymousUsageDataSetting(enabled: Bool) {
@@ -309,14 +316,14 @@ open class Analytics {
         // used since we want to send this just as the user opts out
         _ = tracker.track(Structured(category: Category.settings.rawValue,
                                      action: Action.change.rawValue)
-            .label(Label.analytics.rawValue)
+            .label(Label.Settings.analytics.rawValue)
             .property(enabled ? Property.enable.rawValue : Property.disable.rawValue))
     }
 
     public func clearsDataFromSection(_ section: Analytics.Property.SettingsPrivateDataSection) {
         track(Structured(category: Category.settings.rawValue,
                          action: Action.click.rawValue)
-            .label(Analytics.Label.clear.rawValue)
+            .label(Analytics.Label.Settings.clear.rawValue)
             .property(section.rawValue))
     }
 
@@ -338,6 +345,22 @@ open class Analytics {
 
         track(SelfDescribing(schema: Self.feedbackSchema,
                              payload: payload))
+    }
+
+    // MARK: AI Search MVP
+
+    public func aiSearchNTPButtonTapped() {
+        track(Structured(category: Category.ntp.rawValue,
+                         action: Action.click.rawValue)
+            .label(Analytics.Label.AISearch.cta.rawValue)
+            .property(Analytics.Property.header.rawValue))
+    }
+
+    public func aiSearchAutocompleteForQuery(_ text: String) {
+        track(Structured(category: Category.autocomplete.rawValue,
+                         action: Action.click.rawValue)
+            .label(Analytics.Label.AISearch.cta.rawValue)
+            .property(text))
     }
 }
 

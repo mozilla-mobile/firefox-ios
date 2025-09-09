@@ -132,6 +132,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     }
 
     // Ecosia: Add Ecosia's ViewModels
+    var multiPurposeEcosiaHeaderViewModel: NTPHeaderViewModel
     var libraryViewModel: NTPLibraryCellViewModel
     var impactViewModel: NTPImpactCellViewModel
     var newsViewModel: NTPNewsCellViewModel
@@ -152,7 +153,9 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
          isZeroSearch: Bool = false,
          theme: Theme,
          wallpaperManager: WallpaperManager = WallpaperManager(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         // Ecosia: Add delegate for multi-purpose header actions
+         multiPurposeEcosiaHeaderDelegate: NTPHeaderDelegate? = nil) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
@@ -169,6 +172,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                                   theme: theme,
                                                   wallpaperManager: wallpaperManager)
         // Ecosia: Add Ecosia's ViewModels
+        self.multiPurposeEcosiaHeaderViewModel = NTPHeaderViewModel(theme: theme, windowUUID: tabManager.windowUUID, delegate: multiPurposeEcosiaHeaderDelegate)
         self.libraryViewModel = NTPLibraryCellViewModel(theme: theme)
         self.impactViewModel = NTPImpactCellViewModel(referrals: referrals, theme: theme)
         self.newsViewModel = NTPNewsCellViewModel(theme: theme)
@@ -228,7 +232,8 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         ]
          */
         // Ecosia: Those models needs to follow strictly the order defined in `enum HomepageSectionType`
-        self.childViewModels = [climateImpactCounterViewModel,
+        self.childViewModels = [multiPurposeEcosiaHeaderViewModel,
+                                climateImpactCounterViewModel,
                                 headerViewModel,
                                 libraryViewModel,
                                 topSiteViewModel,

@@ -1,4 +1,5 @@
 "%@ days ago" = "%@ days ago";
+"AI Search" = "AI Search";
 "Autocomplete" = "Autocomplete";
 "Blog" = "Blog";
 "Close all" = "Close all";
@@ -56,6 +57,7 @@
 "Cancel" = "Cancel";
 "Open" = "Open";
 "Open link in external app?" = "Open link in external app?";
+"Overviews" = "Overviews";
 "%@ wants to open this application." = "%@ wants to open this application.";
 "Send usage data" = "Send usage data";
 "To improve our browser apps, we collect usage statistics from your device. These are anonymous and protect your privacy." = "To improve our browser apps, we collect usage statistics from your device. These are anonymous and protect your privacy.";
@@ -63,6 +65,7 @@
 "Customize homepage" = "Customize homepage";
 "Homepage"= "Homepage";
 "Show on homepage" = "Show on homepage";
+"Show AI-generated overviews at the top of search results" = "Show AI-generated overviews at the top of search results";
 "Top Sites" = "Top Sites";
 "Not now" = "Not now";
 

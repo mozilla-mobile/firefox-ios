@@ -9,6 +9,9 @@ public protocol UnleashProtocol {
     /// - Parameter name: The name of the toggle.
     /// - Returns: `true` if the toggle is enabled, `false` otherwise.
     static func isEnabled(_ flag: Unleash.Toggle.Name) -> Bool
+
+    /// Indicates whether Unleash has been loaded from filesystem or network
+    static var isLoaded: Bool { get }
 }
 
 public enum Unleash: UnleashProtocol {
@@ -16,14 +19,22 @@ public enum Unleash: UnleashProtocol {
     public typealias Context = [String: String]
 
     static var model = Model()
+    public static var userId: UUID { model.id }
     private static let queue = DispatchQueue(label: "com.ecosia.ModelManagerQueue")
     static var rules: [RefreshingRule] = []
+    private static var _isLoaded = false
+
+    /// Indicates whether Unleash has been loaded from filesystem or network
+    public static var isLoaded: Bool {
+        return queue.sync { _isLoaded }
+    }
+
     static var currentDeviceRegion: String {
         Locale.current.regionIdentifierLowercasedWithFallbackValue
     }
 
     public static func queryParameters(appVersion: String) -> Context {
-        ["userId": model.id.uuidString,
+        ["userId": userId.uuidString,
          "appName": "iOS",
          "appVersion": appVersion,
          "versionOnInstall": User.shared.versionOnInstall,
@@ -53,6 +64,9 @@ public enum Unleash: UnleashProtocol {
                         if model.updated.timeIntervalSince1970 == 0 {
                             await load().map({ Self.model = $0 })
                         }
+
+                        // Mark as loaded after initial load
+                        _isLoaded = true
 
                         // Call backend to refresh the model
                         Self.model = try await refresh(client: client,
@@ -119,6 +133,12 @@ public enum Unleash: UnleashProtocol {
         return latestAvailableModel
     }
 
+    /// Clear the stored model and sets as unloaded. Does not change the saved file! This is useful for testing purposes.
+    public static func clearInstanceModel() {
+        Self.model = .init()
+        _isLoaded = false
+    }
+
     /// Resets the Unleash feature management session and returns the initial model.
     /// - Parameters:
     ///   - client: The HTTP client to use for network requests. Default is `URLSessionHTTPClient`.
@@ -128,7 +148,7 @@ public enum Unleash: UnleashProtocol {
     public static func reset(client: HTTPClient = URLSessionHTTPClient(),
                              env: Environment,
                              appVersion: String) async throws -> Model {
-        Self.model = .init()
+        clearInstanceModel()
         try await save(Self.model)
         let unleashRemoteRequest = UnleashStartRequest(etag: model.etag, queryParameters: Unleash.queryParameters(appVersion: appVersion))
         return try await start(client: client,
