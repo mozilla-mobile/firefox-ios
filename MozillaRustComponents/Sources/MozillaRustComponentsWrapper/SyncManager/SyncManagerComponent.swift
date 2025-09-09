@@ -5,7 +5,7 @@
 import Foundation
 import Glean
 
-final class SyncManagerComponent: Sendable {
+public final class SyncManagerComponent: Sendable {
     private let api: SyncManager
 
     public init() {
