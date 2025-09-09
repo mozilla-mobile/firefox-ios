@@ -34,6 +34,10 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         return partialOverrides.layer3
     }
 
+    var layerEmphasis: UIColor {
+        return partialOverrides.layerEmphasis
+    }
+
     var textOnDark: UIColor {
         return partialOverrides.textOnDark
     }
@@ -65,6 +69,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
         var actionSecondary: UIColor
         var layerScrim: UIColor
         var layer3: UIColor
+        var layerEmphasis: UIColor
         var textOnDark: UIColor
         var borderPrimary: UIColor
         var borderAccent: UIColor
@@ -90,7 +95,6 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerCritical: UIColor { base.layerCritical }
     var layerSelectedText: UIColor { base.layerSelectedText }
     var layerAutofillText: UIColor { base.layerAutofillText }
-    var layerSearch: UIColor { base.layerSearch }
     var layerGradientURL: Gradient { base.layerGradientURL }
     var layerSurfaceLow: UIColor { base.layerSurfaceLow }
     var layerSurfaceMedium: UIColor { base.layerSurfaceMedium }

@@ -116,12 +116,18 @@ final class TabDisplayPanelViewController: UIViewController,
                                                     actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
+        updateInsets()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = fadeView.bounds
         adjustStatusBarFrameIfNeeded()
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.view.safeAreaInsetsDidChange()
+        updateInsets()
     }
 
     // MARK: - Setup
@@ -252,6 +258,22 @@ final class TabDisplayPanelViewController: UIViewController,
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let statusBarHeight = windowScene.statusBarManager?.statusBarFrame.height {
             statusBarView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: statusBarHeight)
+        }
+    }
+
+    private func updateInsets() {
+        if isCompactLayout {
+            let bottomInset = if emptyPrivateTabsView.needsSafeArea {
+                DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
+            } else {
+                DefaultTabTrayUtils().segmentedControlHeight
+            }
+
+            emptyPrivateTabsView.updateInsets(top: 0, bottom: bottomInset)
+            tabDisplayView.updateInsets(top: 0, bottom: DefaultTabTrayUtils().segmentedControlHeight)
+        } else {
+            emptyPrivateTabsView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
+            tabDisplayView.updateInsets(top: 0, bottom: 0)
         }
     }
 

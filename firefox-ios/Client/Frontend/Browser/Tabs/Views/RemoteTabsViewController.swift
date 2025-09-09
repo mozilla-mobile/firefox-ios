@@ -13,11 +13,13 @@ protocol CollapsibleTableViewSection: AnyObject {
     func hideTableViewSection(_ section: Int)
 }
 
-class RemoteTabsTableViewController: UITableViewController,
-                                     Themeable,
-                                     CollapsibleTableViewSection,
-                                     LibraryPanelContextMenu,
-                                     FeatureFlaggable {
+class RemoteTabsViewController: UIViewController,
+                                Themeable,
+                                CollapsibleTableViewSection,
+                                LibraryPanelContextMenu,
+                                FeatureFlaggable,
+                                UITableViewDelegate,
+                                UITableViewDataSource {
     struct UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
     }
@@ -40,6 +42,7 @@ class RemoteTabsTableViewController: UITableViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
+    var tableView: UITableView = .build()
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
     private lazy var emptyView: RemoteTabsEmptyViewProtocol = {
         if isTabTrayUIExperimentsEnabled {
@@ -78,6 +81,9 @@ class RemoteTabsTableViewController: UITableViewController,
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
+
+        tableView.dataSource = self
+        tableView.delegate = self
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -95,13 +101,19 @@ class RemoteTabsTableViewController: UITableViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (navigationController as? ThemedNavigationController)?.applyTheme()
+        updateInsets()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if refreshControl != nil {
+        if tableView.refreshControl != nil {
             removeRefreshControl()
         }
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.view.safeAreaInsetsDidChange()
+        updateInsets()
     }
 
     // MARK: - UI
@@ -113,23 +125,27 @@ class RemoteTabsTableViewController: UITableViewController,
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
 
-        tableView.delegate = self
-        tableView.dataSource = self
-
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
         tableView.alwaysBounceVertical = false
 
         tableView.sectionHeaderTopPadding = 0.0
-
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
 
+        view.addSubview(tableView)
         view.addSubview(emptyView)
+
         NSLayoutConstraint.activate([
-            emptyView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
             emptyView.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyView.widthAnchor.constraint(equalTo: view.widthAnchor),
         ])
 
         reloadUI()
@@ -149,13 +165,13 @@ class RemoteTabsTableViewController: UITableViewController,
     private func updateUI() {
         if state.refreshState == .refreshing {
             emptyView.isHidden = true
-            refreshControl?.beginRefreshing()
+            tableView.refreshControl?.beginRefreshing()
         } else {
             emptyView.isHidden = !isShowingEmptyView
             if isShowingEmptyView {
                 configureEmptyView()
             }
-            refreshControl?.endRefreshing()
+            tableView.refreshControl?.endRefreshing()
         }
     }
 
@@ -214,13 +230,11 @@ class RemoteTabsTableViewController: UITableViewController,
     func addRefreshControl() {
         let control = UIRefreshControl()
         control.addTarget(self, action: #selector(onRefreshPulled), for: .valueChanged)
-        refreshControl = control
         tableView.refreshControl = control
     }
 
     func removeRefreshControl() {
         tableView.refreshControl = nil
-        refreshControl = nil
     }
 
     @objc
@@ -232,20 +246,20 @@ class RemoteTabsTableViewController: UITableViewController,
         guard state.refreshState == .idle else {
             return
         }
-        refreshControl?.beginRefreshing()
+        tableView.refreshControl?.beginRefreshing()
         remoteTabsPanel?.tableViewControllerDidPullToRefresh()
     }
 
     private func beginRefreshing() {
-        if state.allowsRefresh && refreshControl == nil {
+        if state.allowsRefresh && tableView.refreshControl == nil {
             addRefreshControl()
-            refreshControl?.beginRefreshing()
+            tableView.refreshControl?.beginRefreshing()
         }
     }
 
     private func endRefreshing() {
         // Always end refreshing, even if we failed!
-        refreshControl?.endRefreshing()
+        tableView.refreshControl?.endRefreshing()
 
         // Remove the refresh control if the user has logged out in the meantime
         if !state.allowsRefresh {
@@ -290,26 +304,26 @@ class RemoteTabsTableViewController: UITableViewController,
 
     // MARK: - UITableView
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         guard !isShowingEmptyView else { return 0 }
 
         return state.clientAndTabs.count
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard !isShowingEmptyView, !hiddenSections.contains(section) else { return 0 }
         return state.clientAndTabs[section].tabs.count
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !isShowingEmptyView else {
             assertionFailure("Empty state; expecting 0 sections/rows.")
             return .build()
@@ -339,8 +353,7 @@ class RemoteTabsTableViewController: UITableViewController,
          hideTableViewSection(section)
     }
 
-    override func tableView(_ tableView: UITableView,
-                            didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let tab = state.clientAndTabs[indexPath.section].tabs[indexPath.item]
 
@@ -348,9 +361,9 @@ class RemoteTabsTableViewController: UITableViewController,
         remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidSelectURL(tab.URL, visitType: VisitType.typed)
     }
 
-    override func tableView(_ tableView: UITableView,
-                            commit editingStyle: UITableViewCell.EditingStyle,
-                            forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView,
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let clientAndTabs = state.clientAndTabs[indexPath.section]
             guard let fxaDeviceId = clientAndTabs.client.fxaDeviceId else {
@@ -388,7 +401,7 @@ class RemoteTabsTableViewController: UITableViewController,
         }
     }
 
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let clientAndTabs = state.clientAndTabs[indexPath.section]
         guard let deviceId = clientAndTabs.client.fxaDeviceId else {
             // should not get into this situation, we should probs throw an error
@@ -406,12 +419,12 @@ class RemoteTabsTableViewController: UITableViewController,
         return isCloseRemoteTabCompatible
     }
 
-    override func tableView(_ tableView: UITableView,
-                            titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+    func tableView(_ tableView: UITableView,
+                   titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
          return .ContextualHints.ContextualHintsCloseAccessibility
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }
 
@@ -487,6 +500,20 @@ class RemoteTabsTableViewController: UITableViewController,
             MainActor.assumeIsolated {
                 self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: deviceId)
             }
+        }
+    }
+
+    private func updateInsets() {
+        if shouldUseiPadSetup() {
+            emptyView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
+        } else {
+            let bottomInset = if emptyView.needsSafeArea {
+                DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
+            } else {
+                DefaultTabTrayUtils().segmentedControlHeight
+            }
+
+            emptyView.updateInsets(top: 0, bottom: bottomInset)
         }
     }
 }
