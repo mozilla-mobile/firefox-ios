@@ -881,7 +881,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let isPinned: Bool
     }
 
-    private func provideTabInfo(forWindow windowUUID: WindowUUID, accountData: AccountData, profileImage: UIImage? = nil) {
+    private func provideTabInfo(forWindow windowUUID: WindowUUID, accountData: AccountData) {
         guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
             logger.log(
                 "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
@@ -890,6 +890,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
             )
             return
         }
+        dispatchDefaultTabInfo(windowUUID: windowUUID, selectedTab: selectedTab, accountData: accountData)
         let isSummarizerEnabled = isSummarizerEnabled
         fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
             if isSummarizerEnabled {
@@ -903,9 +904,9 @@ final class TabManagerMiddleware: FeatureFlaggable {
                         windowUUID: windowUUID,
                         accountData: accountData,
                         canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
-                        profileImage: profileImage
+                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
                     )
+                    self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
                 }
             } else {
                 self?.dispatchTabInfo(
@@ -913,11 +914,33 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     selectedTab: selectedTab,
                     windowUUID: windowUUID,
                     accountData: accountData,
-                    canSummarize: false,
-                    profileImage: profileImage
+                    canSummarize: false
+                )
+                self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
+            }
+        }
+    }
+
+    private func provideProfileImage(forWindow windowUUID: WindowUUID, accountData: AccountData) {
+        if let iconURL = accountData.iconURL {
+            GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                self?.dispatchProfileImage(
+                    windowUUID: windowUUID,
+                    profileImage: image
                 )
             }
         }
+    }
+
+    private func dispatchDefaultTabInfo(windowUUID: WindowUUID, selectedTab: Tab, accountData: AccountData) {
+        self.dispatchTabInfo(
+            info: ProfileTabInfo(isBookmarked: false, isInReadingList: false, isPinned: false),
+            selectedTab: selectedTab,
+            windowUUID: windowUUID,
+            accountData: accountData,
+            canSummarize: false,
+            summarizerConfig: SummarizerMiddleware().getConfig(for: .generic)
+        )
     }
 
     private func fetchProfileTabInfo(
@@ -977,8 +1000,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         windowUUID: WindowUUID,
         accountData: AccountData,
         canSummarize: Bool,
-        summarizerConfig: SummarizerConfig? = nil,
-        profileImage: UIImage?
+        summarizerConfig: SummarizerConfig? = nil
     ) {
         store.dispatchLegacy(
             MainMenuAction(
@@ -998,23 +1020,28 @@ final class TabManagerMiddleware: FeatureFlaggable {
                     isBookmarked: info.isBookmarked,
                     isInReadingList: info.isInReadingList,
                     isPinned: info.isPinned,
-                    accountData: accountData,
-                    accountProfileImage: profileImage
+                    accountData: accountData
                 )
+            )
+        )
+    }
+
+    private func dispatchProfileImage(
+        windowUUID: WindowUUID,
+        profileImage: UIImage?
+    ) {
+        store.dispatchLegacy(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.updateProfileImage,
+                accountProfileImage: profileImage
             )
         )
     }
 
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
         let accountData = getAccountData()
-        if let iconURL = accountData.iconURL {
-            GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                guard let self else { return }
-                self.provideTabInfo(forWindow: action.windowUUID, accountData: accountData, profileImage: image)
-            }
-        } else {
-            provideTabInfo(forWindow: action.windowUUID, accountData: accountData)
-        }
+        provideTabInfo(forWindow: action.windowUUID, accountData: accountData)
     }
 
     private func getAccountData() -> AccountData {
