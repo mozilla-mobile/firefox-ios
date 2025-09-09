@@ -211,11 +211,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(0.5))
     }
 
-<<<<<<< HEAD
-    private func setupLoadingViews() {
-        view.layer.insertSublayer(backgroundGradient, at: 0)
-        closeButton.alpha = 1.0
-=======
     private func configure() {
         loadingLabel.text = viewModel.loadingLabelViewModel.loadingLabel
         loadingLabel.accessibilityIdentifier = viewModel.loadingLabelViewModel.loadingA11yId
@@ -329,7 +324,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         backgroundGradient.locations = [0.0, 1.0]
         backgroundGradient.startPoint = CGPoint(x: 0.5, y: 0.0)
         backgroundGradient.endPoint = CGPoint(x: 0.5, y: 1.0)
->>>>>>> ff698b4ff (Refactor [Shake To Summarize] FXIOS-13145 shake to summarize title animation with native component (#29147))
     }
 
     private func summarize() {
@@ -512,8 +506,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         }
     }
 
-<<<<<<< HEAD
-=======
     private func configureSummaryView(summary: String) {
         let summaryWithNote = """
         \(summary)
@@ -533,7 +525,6 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         )
     }
 
->>>>>>> ff698b4ff (Refactor [Shake To Summarize] FXIOS-13145 shake to summarize title animation with native component (#29147))
     private func showError(_ error: SummarizerError) {
         let actionButtonLabel: String = if error.shouldRetrySummarizing {
             viewModel.errorMessages.retryButtonLabel
@@ -747,10 +738,7 @@ public class SummarizeController: UIViewController, Themeable, Notifiable, CAAni
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         view.backgroundColor = theme.colors.layer1
         summaryView.backgroundColor = .clear
-<<<<<<< HEAD
-=======
         summaryView.applyTheme(theme: theme)
->>>>>>> ff698b4ff (Refactor [Shake To Summarize] FXIOS-13145 shake to summarize title animation with native component (#29147))
         titleLabel.textColor = theme.colors.textPrimary
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
