@@ -11,7 +11,7 @@ protocol TabDisplayViewDragAndDropInteraction: AnyObject {
     func dragAndDropEnded()
 }
 
-class TabDisplayView: UIView,
+final class TabDisplayView: UIView,
                       ThemeApplicable,
                       UICollectionViewDelegate,
                       UICollectionViewDelegateFlowLayout,
@@ -235,16 +235,15 @@ class TabDisplayView: UIView,
             return headerView
 
         case TabTitleSupplementaryView.cellIdentifier:
-            let titleView = collectionView.dequeueReusableSupplementaryView(
+            guard let titleView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: TabTitleSupplementaryView.cellIdentifier,
                 withReuseIdentifier: TabTitleSupplementaryView.cellIdentifier,
                 for: indexPath
-            ) as? TabTitleSupplementaryView
+            ) as? TabTitleSupplementaryView else { return nil }
 
-            guard let tab = tabsState.tabs[safe: indexPath.row] else {
-                return nil
+            if let tab = tabsState.tabs[safe: indexPath.row] {
+                titleView.configure(with: tab, theme: theme)
             }
-            titleView?.configure(with: tab, theme: theme)
             return titleView
 
         case UICollectionView.elementKindSectionFooter:
