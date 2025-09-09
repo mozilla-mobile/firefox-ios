@@ -79,6 +79,7 @@ protocol TabManager: AnyObject {
     func removeTabs(_ tabs: [Tab])
 
     /// Remove normal tabs older than a certain period of time
+    @MainActor
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date)
 
     // MARK: - Undo Close
