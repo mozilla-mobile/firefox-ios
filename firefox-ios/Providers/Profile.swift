@@ -379,13 +379,12 @@ open class BrowserProfile: Profile,
         let title = notification.userInfo!["title"] as? NSString {
             // Only record local visits if the change notification originated from a non-private tab
             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
-                let result = self.places.applyObservation(
-                    visitObservation: VisitObservation(
-                        url: url.description,
-                        title: title as String,
-                        visitType: visitType
-                    )
+                let visitObservation = VisitObservation(
+                    url: url.description,
+                    title: title as String,
+                    visitType: visitType
                 )
+                let result = self.places.applyObservation(visitObservation: visitObservation)
                 result.upon { result in
                     guard result.isSuccess else {
                         self.logger.log(
