@@ -30,10 +30,15 @@ final class FxSuggestTelemetryTests: XCTestCase {
         super.tearDown()
     }
 
-    func testClickEventPing_givenWikipediaInfo_thenPingSent() {
+    // MARK: Click event
+
+    func testClickEventPing_givenWikipediaInfo_thenPingSent() throws {
         TelemetryContextualIdentifier.setupContextId()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
         GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+            let event = try XCTUnwrap(GleanMetrics.Awesomebar.searchResultTap.testGetValue())
+            XCTAssertEqual(event[0].extra?["type"], FxSuggestTelemetry.EventInfo.wikipediaSuggestion.rawValue)
+
             XCTAssertEqual(
                 GleanMetrics.FxSuggest.pingType.testGetValue(),
                 FxSuggestTelemetry.EventInfo.pingTypeClick.rawValue
@@ -59,10 +64,13 @@ final class FxSuggestTelemetryTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
 
-    func testClickEventPing_givenAmpInfo_thenPingSent() {
+    func testClickEventPing_givenAmpInfo_thenPingSent() throws {
         TelemetryContextualIdentifier.setupContextId()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
         GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+            let event = try XCTUnwrap(GleanMetrics.Awesomebar.searchResultTap.testGetValue())
+            XCTAssertEqual(event[0].extra?["type"], FxSuggestTelemetry.EventInfo.ampSuggestion.rawValue)
+
             XCTAssertEqual(
                 GleanMetrics.FxSuggest.pingType.testGetValue(),
                 FxSuggestTelemetry.EventInfo.pingTypeClick.rawValue
@@ -110,10 +118,30 @@ final class FxSuggestTelemetryTests: XCTestCase {
         XCTAssertNil(gleanWrapper.savedPing)
     }
 
-    func testImpressionEventPing_givenWikipediaInfo_thenPingSent() {
+    func testClickEventPing_givenContextId_thenPingSent() {
+        TelemetryContextualIdentifier.setupContextId()
+        let info = RustFirefoxSuggestionTelemetryInfo.amp(
+            blockId: 1234,
+            advertiser: "test-advertiser",
+            iabCategory: "test-category",
+            impressionReportingURL: URL(string: "https://test1.com"),
+            clickReportingURL: URL(string: "https://test2.com")
+        )
+
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        subject.clickEvent(telemetryInfo: info, position: 0)
+
+        XCTAssertNotNil(gleanWrapper.savedPing)
+    }
+
+    // MARK: Impression event
+
+    func testImpressionEventPing_givenWikipediaInfo_thenPingSent() throws {
         TelemetryContextualIdentifier.setupContextId()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
         GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+            let event = try XCTUnwrap(GleanMetrics.Awesomebar.searchResultImpression.testGetValue())
+            XCTAssertEqual(event[0].extra?["type"], FxSuggestTelemetry.EventInfo.wikipediaSuggestion.rawValue)
             XCTAssertEqual(
                 GleanMetrics.FxSuggest.pingType.testGetValue(),
                 FxSuggestTelemetry.EventInfo.pingTypeImpression.rawValue
@@ -142,10 +170,12 @@ final class FxSuggestTelemetryTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
 
-    func testImpressionEventPing_givenAmpInfo_thenPingSent() {
+    func testImpressionEventPing_givenAmpInfo_thenPingSent() throws {
         TelemetryContextualIdentifier.setupContextId()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
         GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+            let event = try XCTUnwrap(GleanMetrics.Awesomebar.searchResultImpression.testGetValue())
+            XCTAssertEqual(event[0].extra?["type"], FxSuggestTelemetry.EventInfo.ampSuggestion.rawValue)
             XCTAssertEqual(
                 GleanMetrics.FxSuggest.pingType.testGetValue(),
                 FxSuggestTelemetry.EventInfo.pingTypeImpression.rawValue
@@ -198,7 +228,27 @@ final class FxSuggestTelemetryTests: XCTestCase {
         XCTAssertNil(gleanWrapper.savedPing)
     }
 
+    func testImpressionEventPing_givenContextId_thenPingSent() {
+        TelemetryContextualIdentifier.setupContextId()
+        let info = RustFirefoxSuggestionTelemetryInfo.amp(
+            blockId: 1234,
+            advertiser: "test-advertiser",
+            iabCategory: "test-category",
+            impressionReportingURL: URL(string: "https://test1.com"),
+            clickReportingURL: URL(string: "https://test2.com")
+        )
+
+        let subject = createSubject(gleanWrapper: gleanWrapper)
+        subject.impressionEvent(telemetryInfo: info,
+                                position: 1,
+                                didTap: true,
+                                didAbandonSearchSession: false)
+
+        XCTAssertNotNil(gleanWrapper.savedPing)
+    }
+
     func testImpressionEventPing_givenDidAbandonSearchSession_thenPingNotSent() {
+        TelemetryContextualIdentifier.setupContextId()
         let info = RustFirefoxSuggestionTelemetryInfo.amp(
             blockId: 1234,
             advertiser: "test-advertiser",
@@ -213,6 +263,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
                                 didTap: true,
                                 didAbandonSearchSession: true)
 
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1, "Awesomebar.searchResultTap is called")
         XCTAssertNil(gleanWrapper.savedPing)
     }
 
