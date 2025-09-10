@@ -297,6 +297,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         if searchBar.exists {
             searchBar.waitAndTap()
         }
+        mozWaitForElementToNotExist(searchBar)
         mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
@@ -305,6 +306,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         if searchBar.exists {
             searchBar.waitAndTap()
         }
+        mozWaitForElementToNotExist(searchBar)
         mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
@@ -313,6 +315,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         if searchBar.exists {
             searchBar.waitAndTap()
         }
+        mozWaitForElementToNotExist(searchBar)
         mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://mozilla.org/firefox/new")
         waitUntilPageLoad()
