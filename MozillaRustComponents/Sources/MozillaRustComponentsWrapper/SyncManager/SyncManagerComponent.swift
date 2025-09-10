@@ -5,8 +5,8 @@
 import Foundation
 import Glean
 
-open class SyncManagerComponent {
-    private var api: SyncManager
+public final class SyncManagerComponent: Sendable {
+    private let api: SyncManager
 
     public init() {
         api = SyncManager()
