@@ -22,7 +22,12 @@ import Foundation
 /// 3. The stream ends when `[DONE]` is received (`Constants.doneSignal`).
 final class SSEDataParser {
     enum Constants {
+        /// Per spec, SSE lines end with LF and a preceding CR is ignored.
+        /// So an empty line (event boundary) may be either "\n\n" or "\r\n\r\n".
+        /// Reference: https://html.spec.whatwg.org/multipage/server-sent-events.html?utm_source=chatgpt.com#parsing-an-event-stream
+        /// For completeness, both are supported, even though most servers (including ours) effectively use "\n\n".
         static let eventDelimiter = "\n\n"
+        static let crlfEventDelimiter = "\r\n\r\n"
         static let dataPrefix = "data: "
         static let doneSignal = "[DONE]"
     }
@@ -31,6 +36,7 @@ final class SSEDataParser {
     /// Buffer to hold partial data fragments. This is used because the server might send
     /// incomplete chunks or cases where the incoming data is split across multiple chunks.
     private var buffer = ""
+    private var pendingBytes = Data()
 
     init(decoder: JSONDecoder = JSONDecoder()) {
         self.decoder = decoder
@@ -41,13 +47,18 @@ final class SSEDataParser {
     /// - Returns: Array of successfully decoded objects
     /// - Throws: `SSEParseError` when valid-looking data fails to decode into the expected type `T`
     func parse<T: Decodable & Sendable>(_ data: Data) throws -> [T] {
-        // Convert data to string, skip if conversion fails
-        guard let stringData = String(data: data, encoding: .utf8) else { throw SSEDataParserError.invalidDataEncoding }
+        // Accumulate bytes and only convert when the sequence is valid UTF-8
+        pendingBytes.append(data)
+        guard let chunk = String(data: pendingBytes, encoding: .utf8) else { return [] }
+        pendingBytes.removeAll(keepingCapacity: true)
         // Append new data to buffer
-        buffer += stringData
+        buffer += chunk
 
-        // Split into complete events (delimited by Constants.eventDelimiter)
-        let parts = buffer.components(separatedBy: Constants.eventDelimiter)
+        // Split into complete events (delimited by Constants.eventDelimiter or Constants.crlfEventDelimiter)
+        let delimiter = buffer.contains(Constants.eventDelimiter)
+            ? Constants.eventDelimiter
+            : Constants.crlfEventDelimiter
+        let parts = buffer.components(separatedBy: delimiter)
         // Last part is either:
         // 1. Empty (if buffer ended with delimiter) -> clear buffer
         // 2. Incomplete event -> keep for next chunk
@@ -65,6 +76,7 @@ final class SSEDataParser {
     /// - Note: This does not affect the already processed data.
     func flush() {
         buffer = ""
+        pendingBytes.removeAll(keepingCapacity: false)
     }
 
     // MARK: - Helper Methods
