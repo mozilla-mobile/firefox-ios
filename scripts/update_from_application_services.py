@@ -25,7 +25,7 @@ def main() -> None:
     args     = parse_args()
     version  = VersionInfo(args.version)
     BRANCH   = "rcs-auto-update"
-    TITLE    = f"(WIP)(Local AS flow) Nightly auto-update ({version.swift_version})"
+    TITLE    = f"(Local AS flow) Nightly auto-update ({version.swift_version})"
 
     if not args.in_place:
         # Ensure we have the latest remote copy of the update branch (if any)
@@ -214,11 +214,11 @@ def extract_tarball(version: VersionInfo, dest: Path) -> None:
 def replace_all_files(tmp_dir: Path) -> None:
     replace_files(
         tmp_dir / "swift-components/all",
-        "MozillaRustComponents/Sources/MozillaRustComponentsWrapper",
+        "MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated/",
     )
     replace_files(
         tmp_dir / "swift-components/focus",
-        "MozillaRustComponents/Sources/FocusRustComponentsWrapper"
+        "MozillaRustComponents/Sources/FocusRustComponentsWrapper/Generated/"
     )
 
 

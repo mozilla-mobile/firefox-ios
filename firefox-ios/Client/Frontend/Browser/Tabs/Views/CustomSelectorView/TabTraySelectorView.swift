@@ -18,11 +18,13 @@ struct TabTraySelectorUX {
     static let fontScaleDelta: CGFloat = 0.055
     static let stackViewLeadingTrailingPadding: CGFloat = 8
     static let containerHorizontalSpacing: CGFloat = 16
+    static let topSpacing: CGFloat = 8
     static let bottomSpacingIOS26: CGFloat = 16
 }
 
 class TabTraySelectorView: UIView,
-                           ThemeApplicable {
+                           ThemeApplicable,
+                           FeatureFlaggable {
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme
@@ -32,6 +34,8 @@ class TabTraySelectorView: UIView,
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
     private var stackViewOffsetConstraint: NSLayoutConstraint?
     private let edgeFadeGradientLayer = CAGradientLayer()
+
+    private var tabTrayUtils: TabTrayUtils
 
     private lazy var containerView: UIView = .build()
 
@@ -48,10 +52,12 @@ class TabTraySelectorView: UIView,
 
     init(selectedIndex: Int,
          theme: Theme,
-         buttonTitles: [String]) {
+         buttonTitles: [String],
+         tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()) {
         self.selectedIndex = selectedIndex
         self.theme = theme
         self.buttonTitles = buttonTitles
+        self.tabTrayUtils = tabTrayUtils
         super.init(frame: .zero)
         setup()
     }
@@ -95,7 +101,8 @@ class TabTraySelectorView: UIView,
         }
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor,
+                                               constant: TabTraySelectorUX.topSpacing),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomSpacing),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                    constant: TabTraySelectorUX.containerHorizontalSpacing),
@@ -330,8 +337,10 @@ class TabTraySelectorView: UIView,
 
     func applyTheme(theme: Theme) {
         self.theme = theme
-        backgroundColor = theme.colors.layer1
-        selectionBackgroundView.backgroundColor = theme.colors.layer3
+
+        let backgroundAlpha: CGFloat = tabTrayUtils.backgroundAlpha()
+        backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+        selectionBackgroundView.backgroundColor = theme.colors.layerEmphasis
 
         for button in buttons {
             button.applyTheme(theme: theme)

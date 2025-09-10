@@ -192,7 +192,7 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Add/Remove Delegate
     func removeDelegate(_ delegate: any TabManagerDelegate, completion: (() -> Void)?) {
-        DispatchQueue.main.async { [unowned self] in
+        ensureMainThread { [unowned self] in
             for index in 0 ..< self.delegates.count {
                 let del = self.delegates[index]
                 if delegate === del.get() || del.get() == nil {
@@ -214,7 +214,7 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Remove Tab
     @MainActor
-    func removeTab(_ tabUUID: TabUUID) async {
+    func removeTab(_ tabUUID: TabUUID) {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -230,12 +230,11 @@ class TabManagerImplementation: NSObject,
     }
 
     func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
-        ensureMainThread { [weak self] in
-            guard let self else { return }
-            guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
-            let tab = tabs[index]
-            removeTab(tab, flushToDisk: true)
-            updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
+        ensureMainThread {
+            guard let index = self.tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
+            let tab = self.tabs[index]
+            self.removeTab(tab, flushToDisk: true)
+            self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
             completion?()
         }
     }
@@ -248,19 +247,19 @@ class TabManagerImplementation: NSObject,
     }
 
     @MainActor
-    func removeTabs(by urls: [URL]) async {
+    func removeTabs(by urls: [URL]) {
         let urls = Set(urls)
         let tabsToRemove = normalTabs.filter { tab in
             guard let url = tab.url else { return false }
             return urls.contains(url)
         }
         for tab in tabsToRemove {
-            await removeTab(tab.tabUUID)
+            removeTab(tab.tabUUID)
         }
     }
 
     @MainActor
-    func removeAllTabs(isPrivateMode: Bool) async {
+    func removeAllTabs(isPrivateMode: Bool) {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
         var currentSelectedTab: BackupCloseTab?
 
@@ -274,7 +273,7 @@ class TabManagerImplementation: NSObject,
         backupCloseTabs = tabs
 
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
@@ -316,8 +315,10 @@ class TabManagerImplementation: NSObject,
         tab.close()
 
         // Notify of tab removal
-        ensureMainThread { @MainActor [unowned self] in
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !tabRestoreHasFinished) }
+        ensureMainThread { [unowned self] in
+            self.delegates.forEach {
+                $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished)
+            }
             TabEvent.post(.didClose, for: tab)
         }
 
@@ -331,6 +332,7 @@ class TabManagerImplementation: NSObject,
         }
     }
 
+    @MainActor
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {
         let calendar = Calendar.current
         let cutoffDate: Date
@@ -349,7 +351,11 @@ class TabManagerImplementation: NSObject,
         }
 
         guard !tabsToRemove.isEmpty else { return }
-        removeTabs(tabsToRemove)
+
+        for tab in tabsToRemove {
+            removeTab(tab.tabUUID)
+        }
+        commitChanges()
     }
 
     // MARK: - Add Tab
@@ -985,7 +991,7 @@ class TabManagerImplementation: NSObject,
 
     @MainActor
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
-        assert(Thread.isMainThread, "Currently expected to be called only on main thread.")
+        MainActor.assertIsolated("Expected to be called only on main actor.")
         let configuration: WKWebViewConfiguration = tabConfigurationProvider.configuration(
             isPrivate: tab.isPrivate
         ).webViewConfiguration
@@ -1049,11 +1055,11 @@ class TabManagerImplementation: NSObject,
     }
 
     @MainActor
-    func removeAllInactiveTabs() async {
+    func removeAllInactiveTabs() {
         let currentModeTabs = getInactiveTabs()
         backupCloseTabs = currentModeTabs
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
         commitChanges()
     }

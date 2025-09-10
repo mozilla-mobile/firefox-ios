@@ -77,7 +77,7 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         subject.newState(state: newState)
 
         XCTAssertEqual(subject.state.refreshState, .refreshing)
-        XCTAssertEqual(subject.tableViewController.state.refreshState, .refreshing)
+        XCTAssertEqual(subject.tabsDisplayViewController.state.refreshState, .refreshing)
     }
 
     // MARK: - RemoteTabsClientAndTabsDataSourceDelegate

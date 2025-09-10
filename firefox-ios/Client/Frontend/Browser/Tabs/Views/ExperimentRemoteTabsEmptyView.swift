@@ -7,7 +7,9 @@ import ComponentLibrary
 import UIKit
 import Shared
 
-protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable {
+protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable, InsetUpdatable {
+    var needsSafeArea: Bool { get }
+
     @MainActor
     func configure(config: RemoteTabsPanelEmptyStateReason,
                    delegate: RemoteTabsEmptyViewDelegate?)
@@ -20,11 +22,20 @@ class ExperimentRemoteTabsEmptyView: UIView,
         static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
         static let imageSize = CGSize(width: 72, height: 72)
+        static let containerWidthConstant = horizontalPadding * 2
     }
 
+    var needsSafeArea: Bool { true }
     weak var delegate: RemoteTabsEmptyViewDelegate?
 
     // MARK: - UI
+    private let scrollView: UIScrollView = .build { scrollview in
+        scrollview.backgroundColor = .clear
+        scrollview.contentInset = UIEdgeInsets(top: UX.verticalPadding,
+                                               left: UX.horizontalPadding,
+                                               bottom: UX.verticalPadding,
+                                               right: UX.horizontalPadding)
+    }
 
     private lazy var containerView: UIView = .build { _ in }
 
@@ -85,17 +96,21 @@ class ExperimentRemoteTabsEmptyView: UIView,
 
     private func setupLayout() {
         containerView.addSubviews(iconImageView, titleLabel, descriptionLabel, signInButton)
-        addSubview(containerView)
+        scrollView.addSubview(containerView)
+        addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                   constant: UX.horizontalPadding),
-            containerView.topAnchor.constraint(equalTo: topAnchor,
-                                               constant: UX.verticalPadding),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                    constant: -UX.horizontalPadding),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor,
-                                                  constant: -UX.verticalPadding),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            containerView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
+                                                 constant: -UX.containerWidthConstant),
 
             iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor,
                                                constant: UX.paddingInBetweenItems),
@@ -144,5 +159,12 @@ class ExperimentRemoteTabsEmptyView: UIView,
     @objc
     private func openAccountSettings() {
         delegate?.presentFxAccountSettings()
+    }
+
+    // MARK: - InsetUpdatable
+
+    func updateInsets(top: CGFloat, bottom: CGFloat) {
+        scrollView.contentInset.top = top
+        scrollView.contentInset.bottom = bottom + UX.verticalPadding
     }
 }

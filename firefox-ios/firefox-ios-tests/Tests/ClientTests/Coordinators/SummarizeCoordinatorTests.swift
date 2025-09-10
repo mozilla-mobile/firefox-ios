@@ -9,7 +9,7 @@ import Shared
 import ComponentLibrary
 @testable import Client
 
-class MockSummarizer: SummarizerProtocol {
+final class MockSummarizer: SummarizerProtocol, @unchecked Sendable {
     var modelName: SummarizerModel = .appleSummarizer
 
     func summarize(_ contentToSummarize: String) async throws -> String {
@@ -39,6 +39,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinator!
     private var prefs: MockProfilePrefs!
+    private var gleanWrapper: MockGleanWrapper!
     private let url = URL(string: "https://example.com")!
 
     override func setUp() {
@@ -49,7 +50,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         router = MockRouter(navigationController: MockNavigationController())
         parentCoordinator = MockParentCoordinator()
         prefs = MockProfilePrefs()
-        prefs.setBool(false, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
+        gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
@@ -58,20 +59,11 @@ final class SummarizeCoordinatorTests: XCTestCase {
         router = nil
         prefs = nil
         parentCoordinator = nil
+        gleanWrapper = nil
         super.tearDown()
     }
 
-    func testStart_showsToSPanel_whenTermsOfServiceMissing() {
-        let subject = createSubject()
-
-        subject.start()
-
-        XCTAssertEqual(router.presentCalled, 1)
-        XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
-    }
-
-    func testStart_showsSummarizeController_whenTermsOfServiceAgreed() throws {
-        prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
+    func testStart_showsSummarizeController() throws {
         let subject = createSubject()
 
         subject.start()
@@ -82,58 +74,30 @@ final class SummarizeCoordinatorTests: XCTestCase {
         XCTAssertTrue(presentedController.viewControllers.first is SummarizeController)
     }
 
-    func testStart_whenPressLearnMoreLink_onToSBottomSheet() throws {
-        let expectation = XCTestExpectation(description: "open URL should be called when ToS text view link is tapped")
+    func testOpenURL() {
+        let expectation = XCTestExpectation(description: "the open url callback should be called")
         let subject = createSubject { url in
             XCTAssertEqual(url, self.url)
             expectation.fulfill()
         }
-
-        subject.start()
-
-        let bottomSheetViewController = try XCTUnwrap(router.presentedViewController as? BottomSheetViewController)
-        bottomSheetViewController.loadViewIfNeeded()
-        let tosController = try XCTUnwrap(bottomSheetViewController.children.first as? ToSBottomSheetViewController)
-
-        _ = tosController.textView(UITextView(), shouldInteractWith: url, in: .init())
-
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
-        wait(for: [expectation], timeout: 1.0)
+        subject.openURL(url: url)
+        wait(for: [expectation], timeout: 0.5)
     }
 
-    func testStart_dismissCoordinator_whenTermsOfServiceMissing() throws {
+    func testAcceptToSConsent_recordsTelemetry() throws {
         let subject = createSubject()
+        subject.acceptToSConsent()
 
-        subject.start()
-        let bottomSheet = try XCTUnwrap(router.presentedViewController as? BottomSheetViewController)
-        bottomSheet.dismissSheetViewController()
-
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
     }
 
-    func testStart_dismissCoordinator_whenToSBottomSheetCallsWillDismiss() throws {
+    func testDismissSummary() {
         let subject = createSubject()
 
-        subject.start()
-
-        let bottomSheetViewController = try XCTUnwrap(router.presentedViewController as? BottomSheetViewController)
-        bottomSheetViewController.loadViewIfNeeded()
-        let tosController = try XCTUnwrap(bottomSheetViewController.children.first as? ToSBottomSheetViewController)
-        tosController.willDismiss()
+        subject.dismissSummary()
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
-    }
-
-    func testStart_dismissCoordinator_whenTermsOfServiceAgreed() throws {
-        prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
-        let subject = createSubject()
-
-        subject.start()
-        let presentedController = try XCTUnwrap(router.presentedViewController as? UINavigationController)
-        // call dismiss on the root view controller
-        presentedController.viewControllers.first?.dismiss(animated: false)
-
-        XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
@@ -155,6 +119,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
                                            prefs: prefs,
                                            windowUUID: .XCTestDefaultUUID,
                                            router: router,
+                                           gleanWrapper: gleanWrapper,
                                            onRequestOpenURL: onRequestOpenURL)
         trackForMemoryLeaks(subject)
         return subject

@@ -17,6 +17,7 @@ enum MainMenuNavigationDestination: Equatable {
     case siteProtections
     case syncSignIn
     case printSheetV2
+    case shareSheet
     case saveAsPDFV2
     case webpageSummary(config: SummarizerConfig?)
     case zoom
@@ -39,6 +40,7 @@ enum MainMenuNavigationDestination: Equatable {
             .siteProtections,
             .syncSignIn,
             .printSheetV2,
+            .shareSheet,
             .saveAsPDFV2,
             .webpageSummary(config: SummarizerConfig(instructions: "", options: [:])),
             .zoom

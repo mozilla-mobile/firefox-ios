@@ -80,4 +80,13 @@ enum UX {
             static let buttonCornerRadius: CGFloat = 12
         }
     }
+
+    struct LaunchScreen {
+        struct Logo {
+            static let size: CGFloat = 125
+            static let rotationDuration: TimeInterval = 2.0
+            static let rotationAngle: Double = 360
+            static let image = "firefoxLoader"
+        }
+    }
 }

@@ -31,7 +31,7 @@ struct LocationViewAppearanceConfiguration {
     static func getAppearanceForBaseline(theme: Theme) -> Self {
         let colors = theme.colors
         return Self(
-            backgroundColor: colors.layerSearch,
+            backgroundColor: colors.layerEmphasis,
             placeholderColor: colors.textSecondary,
             etpIconImageColor: colors.textPrimary,
             etpIconTintColor: colors.textPrimary,

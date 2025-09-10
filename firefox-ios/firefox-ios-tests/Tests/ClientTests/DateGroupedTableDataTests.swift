@@ -175,7 +175,7 @@ final class DateGroupedTableDataTests: XCTestCase {
         XCTAssertEqual(subject.timestampData.count, 3)
     }
 
-    func testCustomIntervalsItemsForSection () {
+    func testCustomIntervalsItemsForSection() {
         var subject = DateGroupedTableData<String>(timestamps: customTimeStamps)
 
         subject.add("Last Hour", timestamp: lastHour.timeIntervalSince1970)

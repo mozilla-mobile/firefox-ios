@@ -20,7 +20,6 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
     }
 
     override func tearDown() {
-        mockProfile.shutdown()
         mockProfile = nil
         super.tearDown()
     }
@@ -46,6 +45,7 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
     }
 
     func testAddFolderToPreviousAddedFolderGUID_returnsFolderWithIndentationHigherThenPreviousFolder() async throws {
+        mockProfile.reopen()
         let subject = createSubject()
         let previousFolders = await subject.fetchFolders()
         let previouslyAddedFolder = try XCTUnwrap(previousFolders.first)

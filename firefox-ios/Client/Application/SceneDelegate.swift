@@ -14,6 +14,7 @@ class SceneDelegate: UIResponder,
     var window: UIWindow?
 
     let profile: Profile = AppContainer.shared.resolve()
+    lazy var introScreenManager = IntroScreenManager(prefs: profile.prefs)
     var sessionManager: AppSessionProvider = AppContainer.shared.resolve()
     var downloadQueue: DownloadQueue = AppContainer.shared.resolve()
 
@@ -53,7 +54,7 @@ class SceneDelegate: UIResponder,
             prefs: profile.prefs
         )
 
-        let sceneCoordinator = SceneCoordinator(scene: scene)
+        let sceneCoordinator = SceneCoordinator(scene: scene, introManager: introScreenManager)
         self.sceneCoordinator = sceneCoordinator
         self.window = sceneCoordinator.window
         sceneCoordinator.start()

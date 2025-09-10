@@ -13,13 +13,13 @@ struct MainMenuAction: Action {
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
     var accountData: AccountData?
-    var accountIcon: UIImage?
     var siteProtectionsData: SiteProtectionsData?
     var telemetryInfo: TelemetryInfo?
     var isExpanded: Bool?
     var isBrowserDefault: Bool
     var isPhoneLandscape: Bool
     var moreCellTapped: Bool
+    var accountProfileImage: UIImage?
 
     init(
         windowUUID: WindowUUID,
@@ -28,13 +28,13 @@ struct MainMenuAction: Action {
         currentTabInfo: MainMenuTabInfo? = nil,
         tabID: TabUUID? = nil,
         accountData: AccountData? = nil,
-        accountIcon: UIImage? = nil,
         siteProtectionsData: SiteProtectionsData? = nil,
         telemetryInfo: TelemetryInfo? = nil,
         isExpanded: Bool? = nil,
         isBrowserDefault: Bool = false,
         isPhoneLandscape: Bool = false,
-        moreCellTapped: Bool = false
+        moreCellTapped: Bool = false,
+        accountProfileImage: UIImage? = nil
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
@@ -42,13 +42,13 @@ struct MainMenuAction: Action {
         self.currentTabInfo = currentTabInfo
         self.tabID = tabID
         self.accountData = accountData
-        self.accountIcon = accountIcon
         self.siteProtectionsData = siteProtectionsData
         self.telemetryInfo = telemetryInfo
         self.isExpanded = isExpanded
         self.isBrowserDefault = isBrowserDefault
         self.isPhoneLandscape = isPhoneLandscape
         self.moreCellTapped = moreCellTapped
+        self.accountProfileImage = accountProfileImage
     }
 }
 
@@ -57,6 +57,7 @@ enum MainMenuActionType: ActionType {
     case tapCloseMenu
     case tapToggleUserAgent
     case updateCurrentTabInfo
+    case updateProfileImage
     case tapMoreOptions
     case didInstantiateView
     case viewDidLoad

@@ -137,6 +137,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         case .printSheetV2:
             navigationHandler?.showPrintSheet()
 
+        case .shareSheet:
+            navigationHandler?.showShareSheetForCurrentlySelectedTab()
+
         case .saveAsPDFV2:
             navigationHandler?.presentSavePDFController()
 

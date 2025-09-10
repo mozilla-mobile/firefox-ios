@@ -103,8 +103,8 @@ class SearchProviderTest: BaseTestCase {
             waitForExistence(app.tables.cells["MDN"].buttons["Delete MDN"])
             app.tables.cells["MDN"].buttons["Delete MDN"].tap()
         }
-        waitForExistence(app.tables.cells["MDN"].buttons["Delete"])
-        app.tables.cells["MDN"].buttons["Delete"].tap()
+        waitForExistence(app.tables.buttons["Delete"])
+        app.tables.buttons["Delete"].tap()
 
         // leave edit mode
         app.navigationBars.buttons["edit"].tap()

@@ -23,6 +23,7 @@ final class AddressToolbarContainerModel: Equatable {
     let lockIconNeedsTheming: Bool
     let safeListedURLImageName: String?
     let url: URL?
+    let isEmptySearch: Bool
     let searchTerm: String?
     let isEditing: Bool
     let didStartTyping: Bool
@@ -63,9 +64,9 @@ final class AddressToolbarContainerModel: Equatable {
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
-            url: url,
+            url: isEmptySearch ? nil : url,
             droppableUrl: droppableUrl,
-            searchTerm: term,
+            searchTerm: isEmptySearch ? nil : term,
             isEditing: isEditing,
             didStartTyping: didStartTyping,
             shouldShowKeyboard: shouldShowKeyboard,
@@ -217,6 +218,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
         self.url = state.addressToolbar.url
+        self.isEmptySearch = state.addressToolbar.isEmptySearch
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
         self.didStartTyping = state.addressToolbar.didStartTyping
@@ -315,6 +317,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.lockIconNeedsTheming == rhs.lockIconNeedsTheming &&
         lhs.safeListedURLImageName == rhs.safeListedURLImageName &&
         lhs.url == rhs.url &&
+        lhs.isEmptySearch == rhs.isEmptySearch &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&
         lhs.didStartTyping == rhs.didStartTyping &&

@@ -19,12 +19,14 @@ class SceneCoordinator: BaseCoordinator,
     private let sceneContainer: SceneContainer
     private let windowManager: WindowManager
     private let reservedWindowUUID: ReservedWindowUUID
+    private let introManager: IntroScreenManagerProtocol
 
     init(scene: UIScene,
          sceneSetupHelper: SceneSetupHelper = SceneSetupHelper(),
          screenshotService: ScreenshotService = ScreenshotService(),
          sceneContainer: SceneContainer = SceneContainer(),
-         windowManager: WindowManager = AppContainer.shared.resolve()) {
+         windowManager: WindowManager = AppContainer.shared.resolve(),
+         introManager: IntroScreenManagerProtocol) {
         // Note: this is where we singularly decide the UUID for this specific iOS browser window (UIScene).
         // The logic is handled by `reserveNextAvailableWindowUUID`, but this is the point at which a window's UUID
         // is set; this same UUID will be injected throughout several of the window's related components
@@ -38,6 +40,7 @@ class SceneCoordinator: BaseCoordinator,
         self.screenshotService = screenshotService
         self.sceneContainer = sceneContainer
         self.windowManager = windowManager
+        self.introManager = introManager
 
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)
@@ -51,7 +54,15 @@ class SceneCoordinator: BaseCoordinator,
     func start() {
         router.setRootViewController(sceneContainer, hideBar: true)
 
-        let launchScreenVC = LaunchScreenViewController(windowUUID: windowUUID, coordinator: self)
+        let launchScreenVC: UIViewController
+        if introManager.isModernOnboardingEnabled && introManager.shouldShowIntroScreen {
+            // Show modern launch screen only for first-time users when modern onboarding is enabled
+            launchScreenVC = ModernLaunchScreenViewController(windowUUID: windowUUID, coordinator: self)
+        } else {
+            // Use legacy launch screen for returning users or when modern onboarding is disabled
+            launchScreenVC = LaunchScreenViewController(windowUUID: windowUUID, coordinator: self)
+        }
+
         router.push(launchScreenVC, animated: false)
     }
 
@@ -74,16 +85,12 @@ class SceneCoordinator: BaseCoordinator,
     }
 
     private func canShowIntroOnboarding() -> Bool {
-        let profile: Profile = AppContainer.shared.resolve()
-        let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
         let isIphone = UIDevice.current.userInterfaceIdiom == .phone
         return launchType.canLaunch(fromType: .SceneCoordinator, isIphone: isIphone)
     }
 
     private func showIntroOnboardingIfNeeded() {
-        let profile: Profile = AppContainer.shared.resolve()
-        let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
         let isIphone = UIDevice.current.userInterfaceIdiom == .phone
         if launchType.canLaunch(fromType: .SceneCoordinator, isIphone: isIphone) {
