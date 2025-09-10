@@ -1023,7 +1023,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-26.0.x-edge
-        machine_type_id: g2.mac.large
+        machine_type_id: g2.mac.4large
   SPM_Deploy_Beta_Only:
     before_run:
     - SPM_Common_Steps
@@ -1120,7 +1120,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-26.0.x-edge
-        machine_type_id: g2.mac.large
+        machine_type_id: g2.mac.4large
   SPM_Nightly_Beta_Only:
     steps:
     - activate-ssh-key@4.1.1:
@@ -1223,7 +1223,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-26.0.x-edge
-        machine_type_id: g2.mac.large
+        machine_type_id: g2.mac.4large
 
   SPM_Common_Steps:
     steps:
@@ -1642,7 +1642,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-26.0.x-edge
-        machine_type_id: g2.mac.large
+        machine_type_id: g2.mac.4large
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   #
@@ -2003,7 +2003,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-26.0.x-edge
-        machine_type_id: g2.mac.large
+        machine_type_id: g2.mac.4large
 
   focus_SPM_Nightly:
     before_run:
@@ -2075,7 +2075,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-26.0.x-edge
-        machine_type_id: g2.mac.large
+        machine_type_id: g2.mac.4large
 
   focus_release:
     before_run:
@@ -2191,6 +2191,10 @@ workflows:
         is_expand: false
       EXPORT_METHOD: app-store
     description: This step is used during release promotion to build a focus release
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.4large
 
   release_promotion_push_focus:
     before_run:
@@ -2263,6 +2267,10 @@ workflows:
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         - ipa_path: $IPA_PATH
         - retries: 5
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.4large
 
   release_promotion_promote:
     before_run:
@@ -2364,6 +2372,10 @@ workflows:
         is_expand: false
       EXPORT_METHOD: app-store
     description: This step is used during release promotion to build a firefox release
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.4large
 
   AddNightlyGroupToTestFlightBeta:
     description: This step is used to add the Nightly group to the Beta build in TestFlight.
@@ -2431,6 +2443,10 @@ workflows:
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         - ipa_path: $IPA_PATH
         - retries: 5
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.0.x-edge
+        machine_type_id: g2.mac.4large
 
 app:
   envs:
