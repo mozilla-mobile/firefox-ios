@@ -764,46 +764,9 @@ workflows:
     - certificate-and-profile-installer@1.11.4: {}
     - script@1.2.1:
         inputs:
-        - content: >-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo
-            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-
-            echo 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig
-
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: Workaround carthage lipo
-    - script@1.2.1:
-        inputs:
         - content: |-
-            ./bootstrap.sh
+            ./bootstrap.sh firefox
         title: Run bootstrap
-    - script@1.2.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-        title: Remove carthage lip
     - script@1.2.1:
         title: NPM install and build
         inputs:
