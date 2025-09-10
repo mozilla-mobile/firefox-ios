@@ -38,7 +38,7 @@ final class SSEDataParserTests: XCTestCase {
     data: { "id": 43, "content": "Baz", "tags": ["tag5", "tag6"]}
     """.data(using: .utf8)!
 
-    static let badSSEPayload = Data([0xFF, 0xFF, 0xFF])
+    static let incompleteSSEPayload = Data([0xFF, 0xFF, 0xFF])
 
     static let invalidSSEPayload = """
     data: { "id": "notAnInt", "content": "Foo" }
@@ -60,6 +60,22 @@ final class SSEDataParserTests: XCTestCase {
 
     """.data(using: .utf8)!
 
+    static let emojiOnelineSSEPayload = """
+    data: { "id": 45, "content": "Hello 🥕", "tags": null}
+
+
+    """.data(using: .utf8)!
+
+    static let emojiPartialChunk1 = Data("data: { \"id\": 46, \"content\": \"Hi ".utf8)
+    // First byte of 🥕 (U+1F955)
+    static let emojiPartialChunk2 = Data([0xF0])
+    // Remaining bytes of 🥕 + rest of payload
+    static let emojiPartialChunk3: Data = Data([0x9F, 0xA5, 0x95]) + Data("\", \"tags\": null}\n\n".utf8)
+
+    static let crlfOnelineSSEPayload = """
+    data: { \"id\": 50, \"content\": \"CRLF\", \"tags\": null}\r\n\r\n"
+    """.data(using: .utf8)!
+
     func testOnelinePayloadParsesSuccessfully() throws {
         let subject = createSubject()
         let results: [EventExampleType] = try subject.parse(Self.onelineSSEPayload)
@@ -77,11 +93,10 @@ final class SSEDataParserTests: XCTestCase {
         ])
     }
 
-    func testBadPayloadThrows() throws {
+    func testIncompleteUtf8DoesNotEmit() throws {
         let subject = createSubject()
-        XCTAssertThrowsError(try subject.parse(Self.badSSEPayload) as [EventExampleType]) { error in
-            XCTAssertEqual(error as? SSEDataParserError, .invalidDataEncoding)
-        }
+        let results: [EventExampleType] = try subject.parse(Self.incompleteSSEPayload)
+        XCTAssertEqual(results, [])
     }
 
     func testInvalidPayloadThrows() throws {
@@ -111,6 +126,36 @@ final class SSEDataParserTests: XCTestCase {
         XCTAssertEqual(results, [
             EventExampleType(id: 44, content: "Qux", tags: ["tag7", "tag8"])
         ])
+    }
+
+    func testEmojiInSingleChunkParsesSuccessfully() throws {
+        let subject = createSubject()
+        let results: [EventExampleType] = try subject.parse(Self.emojiOnelineSSEPayload)
+        XCTAssertEqual(results, [
+            EventExampleType(id: 45, content: "Hello 🥕", tags: nil)
+        ])
+    }
+
+    func testEmojiSplitAcrossChunksParsesSuccessfully() throws {
+        let subject = createSubject()
+        var results: [EventExampleType] = []
+
+        results = try subject.parse(Self.emojiPartialChunk1)
+        XCTAssertEqual(results, [])
+
+        results = try subject.parse(Self.emojiPartialChunk2)
+        XCTAssertEqual(results, [])
+
+        results = try subject.parse(Self.emojiPartialChunk3)
+        XCTAssertEqual(results, [
+            EventExampleType(id: 46, content: "Hi 🥕", tags: nil)
+        ])
+    }
+
+    func testCRLFDelimiterParsesSuccessfully() throws {
+        let subject = createSubject()
+        let results: [EventExampleType] = try subject.parse(Self.crlfOnelineSSEPayload)
+        XCTAssertEqual(results, [EventExampleType(id: 50, content: "CRLF", tags: nil)])
     }
 
     func testFlushClearsBuffer() throws {
