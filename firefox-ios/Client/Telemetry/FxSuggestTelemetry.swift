@@ -36,27 +36,40 @@ struct FxSuggestTelemetry {
         case .amp: GleanMetrics.Awesomebar.SearchResultTapExtra(type: EventInfo.ampSuggestion.rawValue)
         case .wikipedia: GleanMetrics.Awesomebar.SearchResultTapExtra(type: EventInfo.wikipediaSuggestion.rawValue)
         }
-        GleanMetrics.Awesomebar.searchResultTap.record(searchResultTapExtra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Awesomebar.searchResultTap,
+                                 extras: searchResultTapExtra)
 
         // Submit a separate `fx-suggest` ping for this tap.
         // These pings do not include the `client_id`.
-        GleanMetrics.FxSuggest.contextId.set(contextId)
-        GleanMetrics.FxSuggest.pingType.set(EventInfo.pingTypeClick.rawValue)
-        GleanMetrics.FxSuggest.isClicked.set(true)
-        GleanMetrics.FxSuggest.position.set(Int64(position))
-        GleanMetrics.FxSuggest.country.set(systemRegion)
+        gleanWrapper.recordUUID(for: GleanMetrics.FxSuggest.contextId,
+                                value: contextId)
+        gleanWrapper.recordString(for: GleanMetrics.FxSuggest.pingType,
+                                  value: EventInfo.pingTypeClick.rawValue)
+        gleanWrapper.setBoolean(for: GleanMetrics.FxSuggest.isClicked,
+                                value: true)
+        gleanWrapper.recordQuantity(for: GleanMetrics.FxSuggest.position,
+                                    value: Int64(position))
+        gleanWrapper.recordString(for: GleanMetrics.FxSuggest.country,
+                                  value: systemRegion)
+
         switch telemetryInfo {
         case let .amp(blockId, advertiser, iabCategory, _, clickReportingURL):
-            GleanMetrics.FxSuggest.blockId.set(blockId)
-            GleanMetrics.FxSuggest.advertiser.set(advertiser)
-            GleanMetrics.FxSuggest.iabCategory.set(iabCategory)
+            gleanWrapper.recordQuantity(for: GleanMetrics.FxSuggest.blockId,
+                                        value: blockId)
+            gleanWrapper.recordString(for: GleanMetrics.FxSuggest.advertiser,
+                                      value: advertiser)
+            gleanWrapper.recordString(for: GleanMetrics.FxSuggest.iabCategory,
+                                      value: iabCategory)
+
             if let clickReportingURL {
-                GleanMetrics.FxSuggest.reportingUrl.set(url: clickReportingURL)
+                gleanWrapper.recordUrl(for: GleanMetrics.FxSuggest.reportingUrl,
+                                       value: clickReportingURL)
             }
         case .wikipedia:
-            GleanMetrics.FxSuggest.advertiser.set(EventInfo.wikipediaAdvertiser.rawValue)
+            gleanWrapper.recordString(for: GleanMetrics.FxSuggest.advertiser,
+                                      value: EventInfo.wikipediaAdvertiser.rawValue)
         }
-        GleanMetrics.Pings.shared.fxSuggest.submit()
+        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.fxSuggest)
     }
 
     func impressionEvent(telemetryInfo: RustFirefoxSuggestionTelemetryInfo,
