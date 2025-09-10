@@ -573,7 +573,7 @@ class BrowserViewController: UIViewController,
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
 
         searchBarView.removeFromParent()
-        searchBarView.addToParent(parent: newParent)
+        searchBarView.addToParent(parent: newParent, addToTop: !newPositionIsBottom)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             webPagePreview.invalidateScreenshotData()
@@ -689,7 +689,14 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
+    private func updateAddressToolbarContainerPosition(
+        for traitCollection: UITraitCollection,
+        previousTraitCollection: UITraitCollection?) {
+            // Only update position if device size class changed (rotation, split view, etc.)
+            // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
+        guard traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
+                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass else { return }
+
         guard searchBarPosition == .bottom, isToolbarRefactorEnabled, isSearchBarLocationFeatureEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
@@ -1619,7 +1626,7 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
-            updateAddressToolbarContainerPosition(for: traitCollection)
+            updateAddressToolbarContainerPosition(for: traitCollection, previousTraitCollection: previousTraitCollection)
             updateToolbarStateForTraitCollection(traitCollection)
         }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
