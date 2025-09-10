@@ -414,24 +414,19 @@ final class TabManagerMiddleware: FeatureFlaggable {
         assert(Thread.isMainThread)
         // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled,
         // check if change is still needed
+        let tabManager = tabManager(for: uuid)
+        let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
+        tabManager.selectTab(tab)
+
+        let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
+        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
+        store.dispatchLegacy(refreshAction)
+
         let dismissAction = TabTrayAction(windowUUID: uuid,
                                           actionType: TabTrayActionType.dismissTabTray)
         store.dispatchLegacy(dismissAction)
-
-        // Add a short delay to let the dismissal animation start without showing the tab tray refresh to the user
-        Task { @MainActor in
-            try await Task.sleep(nanoseconds: 170_000_000)
-
-            let tabManager = tabManager(for: uuid)
-            let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
-            tabManager.selectTab(tab)
-
-            let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
-            let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                         windowUUID: uuid,
-                                                         actionType: TabPanelMiddlewareActionType.refreshTabs)
-            store.dispatchLegacy(refreshAction)
-        }
 
         if !isTabTrayUIExperimentsEnabled {
             let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
