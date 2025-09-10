@@ -43,7 +43,7 @@ for lang in $LOCALES; do
       --skip_open_summary \
       --xcargs "-maximum-parallel-testing-workers 1" \
       --erase_simulator --localize_simulator \
-      --ios_version "26.0" \
+      --ios_version "18.6" \
       --devices "$DEVICE" \
       --languages "$lang" \
       --output_directory "l10n-screenshots/$lang" \
