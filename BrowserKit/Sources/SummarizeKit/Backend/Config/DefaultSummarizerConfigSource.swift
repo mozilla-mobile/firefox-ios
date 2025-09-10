@@ -14,7 +14,7 @@ public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {
         "top_p": 0.01,
         "max_tokens": LiteLLMConfig.maxTokens,
         "model": LiteLLMConfig.apiModel,
-        "stream": false
+        "stream": true
     ]
 
     public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {

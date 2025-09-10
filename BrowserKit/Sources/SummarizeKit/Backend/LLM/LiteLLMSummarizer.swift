@@ -40,12 +40,14 @@ final class LiteLLMSummarizer: SummarizerProtocol {
         let messages = makeMessages(modelInstructions: config.instructions, contentToSummarize: contentToSummarize)
 
         var stream = client.requestChatCompletionStreamed(messages: messages, config: config).makeAsyncIterator()
+        var accumulator = ""
         return AsyncThrowingStream<String, Error>(unfolding: {
            do {
                /// When `next()` returns nil, the underlying stream has no more data
                /// returning nil in turn ends the AsyncThrowingStream
                guard let chunk = try await stream.next() else { return nil }
-               return chunk
+               accumulator += chunk
+               return accumulator
            } catch {
                throw self.mapError(error)
            }

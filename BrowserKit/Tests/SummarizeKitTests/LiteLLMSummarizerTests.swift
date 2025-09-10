@@ -40,12 +40,12 @@ final class LiteLLMSummarizerTests: XCTestCase {
         let chunks = ["a", "b", "c"]
         let subject = createSubject(respondWith: chunks)
 
-        var received: [String] = []
+        var received = ""
         let stream = subject.summarizeStreamed("t")
         for try await chunk in stream {
-            received.append(chunk)
+            received = chunk
         }
-        XCTAssertEqual(received, chunks)
+        XCTAssertEqual(received, chunks.joined())
     }
 
     func testSummarizeStreamedMapsRateLimited() async throws {
