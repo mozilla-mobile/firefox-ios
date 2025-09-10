@@ -46,6 +46,8 @@ class MockGleanWrapper: GleanWrapper {
         savedSetUploadIsEnabled = isEnabled
     }
 
+    func enableTestingMode() {}
+
     func recordEvent<ExtraObject>(for metric: EventMetricType<ExtraObject>,
                                   extras: EventExtras) where ExtraObject: EventExtras {
         savedExtras.append(extras)
@@ -90,7 +92,7 @@ class MockGleanWrapper: GleanWrapper {
         recordLabeledQuantityCalled += 1
     }
 
-    func recordUrl(for metric: UrlMetricType, value: String) {
+    func recordUrl(for metric: UrlMetricType, value: URL) {
         savedEvents.append(metric)
         recordUrlCalled += 1
     }

@@ -1070,6 +1070,7 @@
 		8A87B4322CC1A3C0003A9239 /* MerinoManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B4302CC1A3BA003A9239 /* MerinoManagerTests.swift */; };
 		8A87B4342CC1A731003A9239 /* MerinoMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B42E2CC1A3AA003A9239 /* MerinoMiddlewareTests.swift */; };
 		8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B4362CC1A910003A9239 /* MockPocketManager.swift */; };
+		8A87E98C2E707932006F0239 /* FxSuggestTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87E98B2E70792F006F0239 /* FxSuggestTelemetryTests.swift */; };
 		8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815D2B21071E009635AE /* GCDWebServers */; };
 		8A8904132D511E6A00A5BB29 /* TabManagerAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8904122D511E6A00A5BB29 /* TabManagerAction.swift */; };
 		8A89046D2D52874600A5BB29 /* SyncedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A89046C2D52874200A5BB29 /* SyncedTabCell.swift */; };
@@ -8778,6 +8779,7 @@
 		8A87B42E2CC1A3AA003A9239 /* MerinoMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoMiddlewareTests.swift; sourceTree = "<group>"; };
 		8A87B4302CC1A3BA003A9239 /* MerinoManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MerinoManagerTests.swift; path = "firefox-ios-tests/Tests/ClientTests/Frontend/Homepage Rebuild/MerinoManagerTests.swift"; sourceTree = SOURCE_ROOT; };
 		8A87B4362CC1A910003A9239 /* MockPocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPocketManager.swift; sourceTree = "<group>"; };
+		8A87E98B2E70792F006F0239 /* FxSuggestTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxSuggestTelemetryTests.swift; sourceTree = "<group>"; };
 		8A880C432C63CFE200B77F23 /* MockLoginViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginViewModelDelegate.swift; sourceTree = "<group>"; };
 		8A8904122D511E6A00A5BB29 /* TabManagerAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerAction.swift; sourceTree = "<group>"; };
 		8A89046C2D52874200A5BB29 /* SyncedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCell.swift; sourceTree = "<group>"; };
@@ -13483,12 +13485,13 @@
 		8AC225632B6D3F9600CDA7FD /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
-				ED6C230F2DFB4F36005EDE1D /* UserTelemetryTests.swift */,
-				0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */,
-				0A686B3B2CDB70DC0090E146 /* MainMenuTelemetryTests.swift */,
-				613489A42D9443610009AF01 /* ToastTelemetryTests.swift */,
-				C7F0514F2D95EA5C00EC52C0 /* HistoryDeletionUtilityTelemetryTests.swift */,
 				C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */,
+				8A87E98B2E70792F006F0239 /* FxSuggestTelemetryTests.swift */,
+				C7F0514F2D95EA5C00EC52C0 /* HistoryDeletionUtilityTelemetryTests.swift */,
+				0A686B3B2CDB70DC0090E146 /* MainMenuTelemetryTests.swift */,
+				0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */,
+				613489A42D9443610009AF01 /* ToastTelemetryTests.swift */,
+				ED6C230F2DFB4F36005EDE1D /* UserTelemetryTests.swift */,
 				2109726D2DCA8831001162A2 /* ZoomTelemetryTests.swift */,
 			);
 			path = Telemetry;
@@ -19344,6 +19347,7 @@
 				E1E425322B5A2E9700899550 /* DownloadTests.swift in Sources */,
 				5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */,
 				8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewProviderTests.swift in Sources */,
+				8A87E98C2E707932006F0239 /* FxSuggestTelemetryTests.swift in Sources */,
 				5A81C5DD2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift in Sources */,
 				C8699153289177FB007ACC5C /* WallpaperDataServiceTests.swift in Sources */,
 				C23889E32A50319A00429673 /* ShareSheetCoordinatorTests.swift in Sources */,
