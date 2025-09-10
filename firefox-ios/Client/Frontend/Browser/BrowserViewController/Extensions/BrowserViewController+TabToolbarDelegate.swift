@@ -374,19 +374,18 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                      iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-                self.tabManager.removeTabWithCompletion(tab.tabUUID) {
-                    store.dispatchLegacy(
-                        GeneralBrowserAction(
-                            windowUUID: self.windowUUID,
-                            actionType: GeneralBrowserActionType.didCloseTabFromToolbar
-                        )
+                self.tabManager.removeTab(tab.tabUUID)
+                store.dispatchLegacy(
+                    GeneralBrowserAction(
+                        windowUUID: self.windowUUID,
+                        actionType: GeneralBrowserActionType.didCloseTabFromToolbar
                     )
-                    self.updateTabCountUsingTabManager(self.tabManager)
-
-                    if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-                        || UIDevice.current.userInterfaceIdiom == .pad {
-                        self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
-                    }
+                )
+                self.updateTabCountUsingTabManager(self.tabManager)
+                
+                if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+                    || UIDevice.current.userInterfaceIdiom == .pad {
+                    self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
                 }
             }
         }.items

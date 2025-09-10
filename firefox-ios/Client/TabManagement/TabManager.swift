@@ -55,14 +55,6 @@ protocol TabManager: AnyObject {
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
 
-    // MARK: - Remove Tab
-    // TODO: FXIOS-11272 Remove this function in favor of the async remove tab.
-    /// GCD remove tab option using tabUUID with completion
-    /// - Parameters:
-    ///   - tabUUID: UUID from the tab
-    ///   - completion: closure called after remove tab completes on main thread
-    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?)
-
     /// Async Remove tab option using tabUUID.
     /// - Parameter tabUUID: UUID from the tab
     @MainActor

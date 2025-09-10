@@ -87,8 +87,6 @@ class MockTabManager: TabManager {
 
     func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {}
 
-    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {}
-
     func removeTabs(_ tabs: [Tab]) {}
 
     func removeTab(_ tabUUID: TabUUID) {}

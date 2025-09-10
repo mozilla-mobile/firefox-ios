@@ -229,16 +229,6 @@ class TabManagerImplementation: NSObject,
         self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
     }
 
-    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {
-        ensureMainThread {
-            guard let index = self.tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
-            let tab = self.tabs[index]
-            self.removeTab(tab, flushToDisk: true)
-            self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
-            completion?()
-        }
-    }
-
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
             self.removeTab(tab, flushToDisk: false)
@@ -1089,7 +1079,7 @@ class TabManagerImplementation: NSObject,
             tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
         selectTab(tabToSelect)
-        removeTabWithCompletion(selectedTab.tabUUID, completion: nil)
+        removeTab(selectedTab.tabUUID)
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
