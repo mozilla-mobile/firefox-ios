@@ -187,7 +187,9 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         subject.webView(tab.webView!,
                         decidePolicyFor: MockNavigationAction(url: url,
                                                               type: .linkActivated)) { _ in
-            XCTAssertNotNil(subject.pendingRequests[url.absoluteString])
+            ensureMainThread {
+                XCTAssertNotNil(subject.pendingRequests[url.absoluteString])
+            }
         }
     }
 
@@ -345,6 +347,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     // This test is being skipped because there are some very strange side effects
     // in webView didFinish because the profile database is not being stubbed out
     // TODO: FXIOS-13435 to look in to this
+    @MainActor
     func testWebViewDidFinishNavigation_takeScreenshotWhenTabIsSelected() {
         let subject = createSubject()
         let screenshotHelper = MockScreenshotHelper(controller: subject)

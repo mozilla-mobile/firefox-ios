@@ -19,7 +19,7 @@ class MockTabManager: TabManager {
     var backupCloseTab: BackupCloseTab?
     var backupCloseTabs = [Tab]()
 
-    var recentlyAccessedNormalTabs: [Tab]
+    var recentlyAccessedNormalTabs = [Tab]()
 
     var tabs = [Tab]()
 
@@ -43,12 +43,10 @@ class MockTabManager: TabManager {
     var commitChangesCalled = 0
     var selectTabExpectation: XCTestExpectation?
 
-    init(
-        windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
-        recentlyAccessedNormalTabs: [Tab] = [Tab]()
+    nonisolated init(
+        windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID
     ) {
         self.windowUUID = windowUUID
-        self.recentlyAccessedNormalTabs = recentlyAccessedNormalTabs
     }
 
     subscript(index: Int) -> Tab? {

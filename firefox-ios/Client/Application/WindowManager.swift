@@ -72,6 +72,7 @@ protocol WindowManager {
     /// Returns the current window (if available) which hosts a specific tab.
     /// - Parameter tab: the UUID of the tab.
     /// - Returns: the UUID of the window hosting it (if available and open).
+    @MainActor
     func window(for tab: TabUUID) -> WindowUUID?
 }
 
@@ -278,7 +279,6 @@ final class WindowManagerImplementation: WindowManager {
         }
     }
 
-    @MainActor
     func window(for tab: TabUUID) -> WindowUUID? {
         return allWindowTabManagers().first(where: { $0.tabs.contains(where: { $0.tabUUID == tab }) })?.windowUUID
     }
