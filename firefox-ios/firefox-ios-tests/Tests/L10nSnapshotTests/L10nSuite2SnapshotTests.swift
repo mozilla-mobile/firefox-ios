@@ -21,15 +21,14 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
             }
         } else {
             // iOS 26: Unable to tap buttons under toolbar
-            snapshot("PanelsEmptyState-1")
             app.navigationBars.buttons[AccessibilityIdentifiers.LibraryPanels.topRightButton].waitAndTap()
             navigator.nowAt(NewTabScreen)
             navigator.goto(LibraryPanel_History)
-            snapshot("PanelsEmptyState-2")
+            snapshot("PanelsEmptyState-1")
             app.navigationBars.buttons[AccessibilityIdentifiers.LibraryPanels.topRightButton].waitAndTap()
             navigator.nowAt(NewTabScreen)
             navigator.goto(LibraryPanel_Downloads)
-            snapshot("PanelsEmptyState-3")
+            snapshot("PanelsEmptyState-2")
         }
     }
 
