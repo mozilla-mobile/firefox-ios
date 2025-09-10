@@ -27,7 +27,7 @@ jobs:
       - name: Setup Xcode
         run: |
           sudo rm -rf /Applications/Xcode.app
-          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode_26.0.app/Contents/Developer
           xcodebuild -version
       - name: Run setup scripts for Focus
         run: |
