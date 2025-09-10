@@ -26,7 +26,6 @@ private enum AnimatedGradientUX {
     static let fragmentShaderFunctionName = "animatedGradientFragment"
     static let fullScreenQuadVertexCount = 4
     static let timeBufferIndex = 0
-    static let previousFrameTextureIndex = 0
 }
 
 extension SIMD3 where Scalar == Float {
@@ -45,7 +44,6 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private let commandQueue: MTLCommandQueue
     private let renderPipelineState: MTLRenderPipelineState
     private var currentTime: Float = 0.0
-    private var previousFrameTexture: MTLTexture?
     let metalDevice: MTLDevice
 
     // Add a weak reference to the MTKView to trigger redraws
@@ -53,7 +51,14 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
 
     private var palette = GradientPalette.defaultColors
 
-    init?(logger: Logger = DefaultLogger.shared, device: MTLDevice?) {
+    // Configurable animation speed multiplier (1.0 = normal, 2.0 = 2x faster, etc.)
+    var animationSpeedMultiplier: Float = 1.0 {
+        didSet {
+            triggerRedraw()
+        }
+    }
+
+    init?(logger: Logger = DefaultLogger.shared, device: MTLDevice?, speed: Float = 1.0) {
         self.logger = logger
 
         if let device {
@@ -114,10 +119,14 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         }
 
         super.init()
+
+        // Set the initial speed
+        self.animationSpeedMultiplier = speed
+
         updatePaletteForCurrentTheme(palette: palette)
 
         logger.log(
-            "AnimatedGradientRenderer initialized successfully",
+            "AnimatedGradientRenderer initialized successfully with speed \(speed)x",
             level: .info,
             category: .onboarding
         )
@@ -127,14 +136,11 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     func setMetalView(_ view: MTKView) {
         metalView = view
     }
-    // swiftlint:disable large_tuple
+
     func updatePaletteForCurrentTheme(palette: GradientPalette) {
         self.palette = palette
-
-        // Trigger a redraw when palette changes
         triggerRedraw()
     }
-    // swiftlint:enable large_tuple
 
     private func triggerRedraw() {
         DispatchQueue.main.async { [weak self] in
@@ -143,7 +149,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        createPreviousFrameTexture(size: size)
+        // Simple implementation - no complex texture management
     }
 
     func draw(in view: MTKView) {
@@ -179,11 +185,6 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
             return
         }
 
-        let currentDrawableSize = view.drawableSize
-        if shouldRecreateFrameTexture(for: currentDrawableSize) {
-            createPreviousFrameTexture(size: currentDrawableSize)
-        }
-
         guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else {
             logger.log(
                 "Failed to create render command encoder",
@@ -196,38 +197,10 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         encodeRenderCommands(with: renderEncoder)
         renderEncoder.endEncoding()
 
-        copyCurrentFrameToPreviousFrame(
-            from: currentDrawable,
-            using: commandBuffer
-        )
-
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
 
         advanceAnimationTime()
-    }
-
-    private func createPreviousFrameTexture(size: CGSize) {
-        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(
-            pixelFormat: .bgra8Unorm,
-            width: Int(size.width),
-            height: Int(size.height),
-            mipmapped: false
-        )
-        textureDescriptor.usage = [.shaderRead, .renderTarget]
-
-        guard let texture = metalDevice.makeTexture(descriptor: textureDescriptor) else {
-            return
-        }
-
-        previousFrameTexture = texture
-    }
-
-    private func shouldRecreateFrameTexture(for size: CGSize) -> Bool {
-        guard let existingTexture = previousFrameTexture else { return true }
-
-        return existingTexture.width != Int(size.width) ||
-               existingTexture.height != Int(size.height)
     }
 
     private func encodeRenderCommands(with encoder: MTLRenderCommandEncoder) {
@@ -245,9 +218,12 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
                                  length: MemoryLayout<GradientPalette>.stride,
                                  index: 1)
 
-        encoder.setFragmentTexture(
-            previousFrameTexture,
-            index: AnimatedGradientUX.previousFrameTextureIndex
+        // Pass the speed multiplier to the shader
+        var speedMultiplier = animationSpeedMultiplier
+        encoder.setFragmentBytes(
+            &speedMultiplier,
+            length: MemoryLayout<Float>.size,
+            index: 2
         )
 
         encoder.drawPrimitives(
@@ -257,43 +233,8 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
         )
     }
 
-    /// Copy current drawable to previousFrameTexture for motion blur
-    private func copyCurrentFrameToPreviousFrame(
-        from drawable: CAMetalDrawable,
-        using commandBuffer: MTLCommandBuffer
-    ) {
-        guard let destinationTexture = previousFrameTexture else { return }
-
-        guard let blitEncoder = commandBuffer.makeBlitCommandEncoder() else {
-            logger.log(
-                "Failed to create blit command encoder",
-                level: .warning,
-                category: .onboarding
-            )
-            return
-        }
-
-        blitEncoder.copy(
-            from: drawable.texture,
-            sourceSlice: 0,
-            sourceLevel: 0,
-            sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
-            sourceSize: MTLSize(
-                width: destinationTexture.width,
-                height: destinationTexture.height,
-                depth: 1
-            ),
-            to: destinationTexture,
-            destinationSlice: 0,
-            destinationLevel: 0,
-            destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0)
-        )
-
-        blitEncoder.endEncoding()
-    }
-
     private func advanceAnimationTime() {
-        currentTime += AnimatedGradientUX.timeIncrementPerFrame
+        currentTime += AnimatedGradientUX.timeIncrementPerFrame * animationSpeedMultiplier
     }
 }
 
@@ -336,7 +277,7 @@ struct AnimatedGradientMetalView: View {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        _delegate = State(initialValue: AnimatedGradientRenderer(device: metalDevice))
+        _delegate = State(initialValue: AnimatedGradientRenderer(device: metalDevice, speed: 3.0))
     }
 
     var body: some View {
@@ -384,15 +325,5 @@ struct AnimatedGradientMetalView: View {
                 gradientOnboardingStop4: SIMD3<Float>(color.gradientOnboardingStop4)
             )
         )
-    }
-}
-
-struct AnimatedGradientMetalView_Previews: PreviewProvider {
-    static var previews: some View {
-        AnimatedGradientMetalView(
-            windowUUID: .DefaultUITestingUUID,
-            themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
-        )
-        .ignoresSafeArea(.all)
     }
 }

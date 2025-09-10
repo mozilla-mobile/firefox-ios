@@ -118,12 +118,19 @@ vertex VertexOutput animatedGradientVertex(uint vertexID [[vertex_id]]) {
 fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
                                        constant float &currentTime [[buffer(0)]],
                                        constant GradientPalette &palette [[buffer(1)]],
+                                       constant float &speedMultiplier [[buffer(2)]],
                                        texture2d<half> previousFrameTexture [[texture(0)]]) {
+
+    // Base animation speeds (configurable multiplier will be applied)
+    const float kBaseFirstPointAnimationSpeed = 0.8f;
+    const float kBaseSecondPointAnimationSpeed = 0.6f;
+    const float kBaseThirdPointAnimationSpeed = 1.5f;
+    const float kBaseFourthPointAnimationSpeed = 1.1f;
+    const float kBasePulsationSpeed = 1.2f;
 
     // Animation constants
     const float kBaseInfluenceRadius = 0.725f;
     const float kPulsationAmplitude = 0.05f;
-    const float kPulsationSpeed = 1.2f;
     const float kNoiseScale = 10.0f;
     const float kNoiseInfluence = 0.1f;
 
@@ -132,12 +139,14 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
 
     // Smoothing constants
     const float kMinInfluenceThreshold = 0.001f;
+    const float kMinColorThreshold = 0.01f; // Threshold for detecting uninitialized textures
 
-    // Control point animation speeds
-    const float kFirstPointAnimationSpeed = 0.8f;
-    const float kSecondPointAnimationSpeed = 0.6f;
-    const float kThirdPointAnimationSpeed = 1.5f;
-    const float kFourthPointAnimationSpeed = 1.1f;
+    // Control point animation speeds - now configurable with speed multiplier
+    const float kFirstPointAnimationSpeed = kBaseFirstPointAnimationSpeed * speedMultiplier;
+    const float kSecondPointAnimationSpeed = kBaseSecondPointAnimationSpeed * speedMultiplier;
+    const float kThirdPointAnimationSpeed = kBaseThirdPointAnimationSpeed * speedMultiplier;
+    const float kFourthPointAnimationSpeed = kBaseFourthPointAnimationSpeed * speedMultiplier;
+    const float kPulsationSpeed = kBasePulsationSpeed * speedMultiplier;
 
     // Use colors from Swift
     const half3 kGradientOnboardingStop1  = half3(palette.gradientOnboardingStop1);
