@@ -50,7 +50,6 @@ jobs:
           sudo xcode-select -s /Applications/Xcode_26.0.app/Contents/Developer
           xcodebuild -version
           xcodes runtimes install 'iOS 26.0'
-          xcodes runtimes list
       - name: Run setup scripts for Focus
         run: |
           ./bootstrap.sh focus
