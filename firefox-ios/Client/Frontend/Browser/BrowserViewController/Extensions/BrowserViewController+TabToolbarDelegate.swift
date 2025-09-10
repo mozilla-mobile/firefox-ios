@@ -382,7 +382,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                     )
                 )
                 self.updateTabCountUsingTabManager(self.tabManager)
-                
+
                 if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
                     || UIDevice.current.userInterfaceIdiom == .pad {
                     self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)

@@ -56,12 +56,12 @@ protocol TabManager: AnyObject {
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
 
-    ///Remove tab option using tabUUID.
+    /// Remove tab option using tabUUID.
     /// - Parameter tabUUID: UUID from the tab
     @MainActor
     func removeTab(_ tabUUID: TabUUID)
 
-    ///Remove all tabs indicating if is on private mode or not
+    /// Remove all tabs indicating if is on private mode or not
     /// - Parameter isPrivateMode: Is private mode enabled or not
     @MainActor
     func removeAllTabs(isPrivateMode: Bool)
@@ -90,7 +90,7 @@ protocol TabManager: AnyObject {
     /// - Returns: Return list of tabs considered inactive
     func getInactiveTabs() -> [Tab]
 
-    ///Remove all inactive tabs, used when user closes all inactive tabs
+    /// Remove all inactive tabs, used when user closes all inactive tabs
     @MainActor
     func removeAllInactiveTabs()
 
