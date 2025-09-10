@@ -10,7 +10,7 @@ import SwiftUI
 
 import struct MozillaAppServices.VisitTransitionSet
 
-// TODO: FXIOS Make HistoryPanelViewModel actually sendable
+// TODO: FXIOS-13450 Make HistoryPanelViewModel actually sendable
 final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions

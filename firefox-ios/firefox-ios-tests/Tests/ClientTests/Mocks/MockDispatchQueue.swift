@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MockDispatchQueue: DispatchQueueInterface {
+final class MockDispatchQueue: DispatchQueueInterface, @unchecked Sendable {
     var asyncCalled = 0
     var asyncAferCalled = 0
     var ensureMainThreadCalled = 0
