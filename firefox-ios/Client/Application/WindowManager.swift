@@ -278,6 +278,7 @@ final class WindowManagerImplementation: WindowManager {
         }
     }
 
+    @MainActor
     func window(for tab: TabUUID) -> WindowUUID? {
         return allWindowTabManagers().first(where: { $0.tabs.contains(where: { $0.tabUUID == tab }) })?.windowUUID
     }

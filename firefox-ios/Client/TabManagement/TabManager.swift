@@ -15,8 +15,9 @@ enum TabsDeletionPeriod: String {
 }
 
 // MARK: - TabManager protocol
+@MainActor
 protocol TabManager: AnyObject {
-    var windowUUID: WindowUUID { get }
+    nonisolated var windowUUID: WindowUUID { get }
     var isRestoringTabs: Bool { get }
     var tabRestoreHasFinished: Bool { get }
     var delaySelectingNewPopupTab: TimeInterval { get }
@@ -55,12 +56,12 @@ protocol TabManager: AnyObject {
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
 
-    /// Async Remove tab option using tabUUID.
+    ///Remove tab option using tabUUID.
     /// - Parameter tabUUID: UUID from the tab
     @MainActor
     func removeTab(_ tabUUID: TabUUID)
 
-    /// Async Remove all tabs indicating if is on private mode or not
+    ///Remove all tabs indicating if is on private mode or not
     /// - Parameter isPrivateMode: Is private mode enabled or not
     @MainActor
     func removeAllTabs(isPrivateMode: Bool)
@@ -89,12 +90,13 @@ protocol TabManager: AnyObject {
     /// - Returns: Return list of tabs considered inactive
     func getInactiveTabs() -> [Tab]
 
-    /// Async Remove all inactive tabs, used when user closes all inactive tabs
+    ///Remove all inactive tabs, used when user closes all inactive tabs
     @MainActor
     func removeAllInactiveTabs()
 
     /// Undo all inactive tabs closure. All inactive tabs are added back to the list of tabs
-    func undoCloseInactiveTabs() async
+    @MainActor
+    func undoCloseInactiveTabs()
 
     // MARK: Get Tab
     func getTabForUUID(uuid: TabUUID) -> Tab?

@@ -167,7 +167,7 @@ class MockTabManager: TabManager {
 
     func removeAllInactiveTabs() {}
 
-    func undoCloseInactiveTabs() async {}
+    func undoCloseInactiveTabs() {}
 
     func notifyCurrentTabDidFinishLoading() {
         notifyCurrentTabDidFinishLoadingCalled += 1

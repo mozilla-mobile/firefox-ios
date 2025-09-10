@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-public protocol TabDataStore {
+public protocol TabDataStore: Sendable {
     /// Fetches the previously saved window data matching the provided UUID,
     /// if it exists. This data contains the list of tabs.
     /// - Returns: The window data object if one was previously saved

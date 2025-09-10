@@ -107,6 +107,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func resolveToolbarMiddlewareActions(action: ToolbarMiddlewareAction, state: AppState) {
         switch action.actionType {
         case ToolbarMiddlewareActionType.customA11yAction:
@@ -151,6 +152,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func resolveToolbarMiddlewareButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
         guard let gestureType = action.gestureType else { return }
 
@@ -172,6 +174,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func handleToolbarButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return }
@@ -276,7 +279,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.clearData)
             store.dispatchLegacy(action)
         case .summarizer:
-            Task {
+            Task { @MainActor in
                 guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
                 let summarizeMiddleware = SummarizerMiddleware()
                 let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
@@ -428,6 +431,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         store.dispatchLegacy(toolbarAction)
     }
 
+    @MainActor
     private func checkPageCanSummarize(action: ToolbarMiddlewareAction) {
         guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView,
               isSummarizerOn
@@ -451,6 +455,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     // MARK: - Helper
+    @MainActor
     private func cancelEditMode(windowUUID: WindowUUID) {
         var url = tabManager(for: windowUUID).selectedTab?.url
         if let currentURL = url {

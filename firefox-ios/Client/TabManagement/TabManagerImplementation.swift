@@ -62,6 +62,7 @@ class TabManagerImplementation: NSObject,
         return tabs[selectedIndex]
     }
 
+    @MainActor
     var normalActiveTabs: [Tab] {
         let inactiveTabs = getInactiveTabs()
         let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
@@ -80,6 +81,7 @@ class TabManagerImplementation: NSObject,
         return tabs.filter { $0.isPrivate }
     }
 
+    @MainActor
     var recentlyAccessedNormalTabs: [Tab] {
         // If inactive tabs are enabled, do not include inactive tabs, as they are not "recently" accessed
         var eligibleTabs = isInactiveTabsEnabled ? normalActiveTabs : normalTabs
@@ -104,9 +106,9 @@ class TabManagerImplementation: NSObject,
 
     private let inactiveTabsManager: InactiveTabsManagerProtocol
     private let logger: Logger
-    private let tabDataStore: TabDataStore
+    private nonisolated let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
-    private let imageStore: DiskImageStore?
+    private nonisolated let imageStore: DiskImageStore?
     private let windowManager: WindowManager
     private let windowIsNew: Bool
     private let profile: Profile
@@ -191,21 +193,20 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Add/Remove Delegate
+    @MainActor
     func removeDelegate(_ delegate: any TabManagerDelegate, completion: (() -> Void)?) {
-        ensureMainThread { [unowned self] in
-            for index in 0 ..< self.delegates.count {
-                let del = self.delegates[index]
-                if delegate === del.get() || del.get() == nil {
-                    self.delegates.remove(at: index)
-                    return
-                }
+        for index in 0 ..< delegates.count {
+            let del = delegates[index]
+            if delegate === del.get() || del.get() == nil {
+                delegates.remove(at: index)
+                return
             }
-            completion?()
         }
+        completion?()
     }
 
     func addDelegate(_ delegate: TabManagerDelegate) {
-        self.delegates.append(WeakTabManagerDelegate(value: delegate))
+        delegates.append(WeakTabManagerDelegate(value: delegate))
     }
 
     func setNavigationDelegate(_ delegate: WKNavigationDelegate) {
@@ -213,7 +214,6 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Remove Tab
-    @MainActor
     func removeTab(_ tabUUID: TabUUID) {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
@@ -236,7 +236,6 @@ class TabManagerImplementation: NSObject,
         commitChanges()
     }
 
-    @MainActor
     func removeTabs(by urls: [URL]) {
         let urls = Set(urls)
         let tabsToRemove = normalTabs.filter { tab in
@@ -248,7 +247,6 @@ class TabManagerImplementation: NSObject,
         }
     }
 
-    @MainActor
     func removeAllTabs(isPrivateMode: Bool) {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
         var currentSelectedTab: BackupCloseTab?
@@ -305,12 +303,10 @@ class TabManagerImplementation: NSObject,
         tab.close()
 
         // Notify of tab removal
-        ensureMainThread { [unowned self] in
-            self.delegates.forEach {
-                $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished)
-            }
-            TabEvent.post(.didClose, for: tab)
+        self.delegates.forEach {
+            $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished)
         }
+        TabEvent.post(.didClose, for: tab)
 
         if flushToDisk {
             // Only preserve tabs if restore has finished
@@ -322,7 +318,6 @@ class TabManagerImplementation: NSObject,
         }
     }
 
-    @MainActor
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {
         let calendar = Calendar.current
         let cutoffDate: Date
@@ -349,7 +344,6 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Add Tab
-    @MainActor
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
         return addTab(request,
                       afterTab: afterTab,
@@ -359,7 +353,6 @@ class TabManagerImplementation: NSObject,
     }
 
     @discardableResult
-    @MainActor
     func addTab(_ request: URLRequest? = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
@@ -372,7 +365,6 @@ class TabManagerImplementation: NSObject,
                       isPrivate: isPrivate)
     }
 
-    @MainActor
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
         if urls.isEmpty {
             return
@@ -415,6 +407,7 @@ class TabManagerImplementation: NSObject,
         return filterdTabs.first
     }
 
+    @MainActor
     func getTabForURL(_ url: URL) -> Tab? {
         return tabs.first(where: { $0.webView?.url == url })
     }
@@ -544,20 +537,17 @@ class TabManagerImplementation: NSObject,
 
     private func restoreTabs() {
         tabs = [Tab]()
-        Task {
+        Task { @MainActor in
             // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
-            await buildTabRestore(window: windowData)
-            await TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
-            await MainActor.run {
-                // Log on main thread, where computed `tab` properties can be accessed without risk of races
-                logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-                logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
-            }
+            buildTabRestore(window: windowData)
+            TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
+            // Log on main thread, where computed `tab` properties can be accessed without risk of races
+            logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 
-    @objc
     @MainActor
     private func blockPopUpDidChange() {
         assert(Thread.isMainThread)
@@ -570,7 +560,6 @@ class TabManagerImplementation: NSObject,
         tabConfigurationProvider.updateAllowsPopups(allowPopups)
     }
 
-    @objc
     @MainActor
     private func autoPlayDidChange() {
         assert(Thread.isMainThread)
@@ -581,7 +570,8 @@ class TabManagerImplementation: NSObject,
         tabConfigurationProvider.updateMediaTypesRequiringUserActionForPlayback(mediaType)
     }
 
-    private func buildTabRestore(window: WindowData?) async {
+    @MainActor
+    private func buildTabRestore(window: WindowData?) {
         defer {
             isRestoringTabs = false
             tabRestoreHasFinished = true
@@ -593,7 +583,7 @@ class TabManagerImplementation: NSObject,
         guard let windowData = window else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            await generateEmptyTab()
+            generateEmptyTab()
             logger.log("Not restoring tabs because there is no window data.",
                        level: .warning,
                        category: .tabs)
@@ -604,7 +594,7 @@ class TabManagerImplementation: NSObject,
               !nonPrivateTabs.isEmpty else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            await generateEmptyTab()
+            generateEmptyTab()
             logger.log("Not restoring tabs because there is no tab data on the window data.",
                        level: .warning,
                        category: .tabs)
@@ -614,21 +604,19 @@ class TabManagerImplementation: NSObject,
         guard tabs.isEmpty else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            await generateEmptyTab()
+            generateEmptyTab()
             logger.log("Not restoring tabs because there are in memory tabs already.",
                        level: .warning,
                        category: .tabs)
 
             return
         }
-        await generateTabs(from: windowData)
+        generateTabs(from: windowData)
         cleanUpUnusedScreenshots()
         cleanUpTabSessionData()
 
-        await MainActor.run {
-            for delegate in delegates {
-                delegate.get()?.tabManagerDidRestoreTabs(self)
-            }
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidRestoreTabs(self)
         }
     }
 
@@ -639,7 +627,7 @@ class TabManagerImplementation: NSObject,
 
     /// Creates the webview so needs to live on the main thread
     @MainActor
-    private func generateTabs(from windowData: WindowData) async {
+    private func generateTabs(from windowData: WindowData) {
         let filteredTabs = filterPrivateTabs(from: windowData,
                                              clearPrivateTabs: shouldClearPrivateTabs())
         var tabToSelect: Tab?
@@ -751,7 +739,7 @@ class TabManagerImplementation: NSObject,
 
     /// Creates the webview so needs to live on the main thread
     @MainActor
-    private func generateEmptyTab() async {
+    private func generateEmptyTab() {
         let newTab = addTab()
         selectTab(newTab)
     }
@@ -779,7 +767,7 @@ class TabManagerImplementation: NSObject,
     }
 
     private func preserveTabs(forced: Bool) {
-        Task {
+        Task { @MainActor in
             // FIXME FXIOS-10059 TabManagerImplementation's preserveTabs is called with a nil selectedTab
             let windowData = WindowData(id: windowUUID,
                                         activeTabId: self.selectedTabUUID ?? UUID(),
@@ -787,10 +775,10 @@ class TabManagerImplementation: NSObject,
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
 
             // Save simple tabs, used by widget extension
-            await windowManager.performMultiWindowAction(.saveSimpleTabs)
+            windowManager.performMultiWindowAction(.saveSimpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
-            await TabErrorTelemetryHelper.shared.recordTabCountAfterPreservingTabs(windowUUID)
+            TabErrorTelemetryHelper.shared.recordTabCountAfterPreservingTabs(windowUUID)
         }
     }
 
@@ -828,6 +816,7 @@ class TabManagerImplementation: NSObject,
         return tabData
     }
 
+    @MainActor
     func commitChanges() {
         preserveTabs()
         saveSessionData(forTab: selectedTab)
@@ -840,6 +829,7 @@ class TabManagerImplementation: NSObject,
         }
     }
 
+    @MainActor
     private func saveSessionData(forTab tab: Tab?) {
         guard let tab = tab,
               let tabSession = tab.webView?.interactionState as? Data,
@@ -849,6 +839,7 @@ class TabManagerImplementation: NSObject,
         self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
     }
 
+    @MainActor
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished, let url = selectedTab?.url, !url.isFxHomeUrl else { return }
@@ -1037,6 +1028,7 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Inactive tabs
+    @MainActor
     func getInactiveTabs() -> [Tab] {
         let inactiveTabsPrefEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs) ?? true
         let inactiveTabsEnabled = inactiveTabsPrefEnabled && !isTabTrayUIExperimentsEnabled
@@ -1055,7 +1047,7 @@ class TabManagerImplementation: NSObject,
     }
 
     @MainActor
-    func undoCloseInactiveTabs() async {
+    func undoCloseInactiveTabs() {
         tabs.append(contentsOf: backupCloseTabs)
         commitChanges()
         backupCloseTabs = [Tab]()
@@ -1085,6 +1077,7 @@ class TabManagerImplementation: NSObject,
         }
     }
 
+    @MainActor
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
         let currentTabs = privateMode ? privateTabs : normalActiveTabs
 
@@ -1268,6 +1261,7 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Update Menu Items
+    @MainActor
     private func updateMenuItemsForSelectedTab() {
         guard let selectedTab,
               var menuItems = UIMenuController.shared.menuItems

@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Glean
 import Storage
+import Common
 
 /// Type-specific information to record in telemetry about a visible search
 /// suggestion.
@@ -138,7 +139,8 @@ enum SearchTelemetryValues {
     }
 }
 
-class SearchTelemetry {
+// TODO: FXIOS Make SearchTelemetry actually sendable
+class SearchTelemetry: @unchecked Sendable {
     var code = ""
     var provider: SearchEngine = .none
     var shouldSetGoogleTopSiteSearch = false
@@ -196,7 +198,7 @@ class SearchTelemetry {
     }
 
     // MARK: Track Regular and Follow-on SAP from Tab and TopSite
-
+    @MainActor
     func trackTabAndTopSiteSAP(_ tab: Tab, webView: WKWebView) {
         let provider = tab.getProviderForUrl()
         let code = SearchPartner.getCode(
@@ -238,66 +240,19 @@ class SearchTelemetry {
     // MARK: Impression Telemetry
     func startImpressionTimer() {
         impressionTelemetryTimer?.invalidate()
-        impressionTelemetryTimer = Timer.scheduledTimer(timeInterval: 1.0,
-                                                        target: self,
-                                                        selector: #selector(recordURLBarSearchImpressionTelemetryEvent),
-                                                        userInfo: nil,
-                                                        repeats: false)
+        impressionTelemetryTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false, block: { [weak self] _ in
+            ensureMainThread {
+                self?.recordURLBarSearchEngagementTelemetryEvent()
+            }
+        })
     }
 
     func stopImpressionTimer() {
         impressionTelemetryTimer?.invalidate()
     }
 
-    @objc
-    func recordURLBarSearchImpressionTelemetryEvent() {
-        guard let tab = tabManager.selectedTab else { return }
-        let reasonKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.reason.rawValue
-        let reason = SearchTelemetryValues.Reason.pause.rawValue
-
-        let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
-        let sap = checkSAP(for: tab).rawValue
-
-        let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
-        let interaction = interactionType.rawValue
-
-        let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
-        let searchMode = SearchTelemetryValues.SearchMode.tabs.rawValue
-
-        let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
-        let nChars = Int32(searchQuery.count)
-
-        let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
-        let nWords = searchQuery.numberOfWords
-
-        let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
-        let nResults = Int32(numberOfSearchResults())
-
-        let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
-        let groups = listGroupTypes()
-
-        let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
-        let results = listResultTypes()
-
-        let extraDetails = [
-            reasonKey: reason,
-            sapKey: sap,
-            interactionKey: interaction,
-            searchModeKey: searchMode,
-            nCharsKey: nChars,
-            nWordsKey: nWords,
-            nResultsKey: nResults,
-            groupsKey: groups,
-            resultsKey: results]
-        as [String: Any]
-
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .view,
-                                     object: .urlbarImpression,
-                                     extras: extraDetails)
-    }
-
     // MARK: Engagement Telemetry
+    @MainActor
     func recordURLBarSearchEngagementTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -358,6 +313,7 @@ class SearchTelemetry {
                                      extras: extraDetails)
     }
 
+    @MainActor
     func recordURLBarSearchAbandonmentTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }
 
