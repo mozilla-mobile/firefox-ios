@@ -177,10 +177,8 @@ workflows:
             set -euxo pipefail
 
             # Point to the Unit tests plan instead of Accessibility
-            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
-            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator18.6-arm64.xctestrun"
-
-            ls "$BITRISE_TEST_BUNDLE_PATH"
+            UNIT_TESTS_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun"
+            SMOKE_UI_XCTESTRUN="$BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun"
 
             if [ ! -f "$UNIT_TESTS_XCTESTRUN" ]; then
               echo "ERROR: .xctestrun file not found: $UNIT_TESTS_XCTESTRUN"
@@ -194,9 +192,9 @@ workflows:
     - xcode-test-without-building@0.4.0:
         timeout: 1200
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun
         - maximum_test_repetitions: 2
     - xcode-test-shard-calculation@0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
@@ -304,7 +302,7 @@ workflows:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator18.6-arm64.xctestrun
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
   determine_apps_affected:
     steps:
