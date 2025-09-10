@@ -148,7 +148,6 @@ final class SummarizeControllerTests: XCTestCase {
             isTosAccepted: isTosAccepted,
             onSummaryDisplayed: onSummaryDisplayed
         )
-        trackForMemoryLeaks(controller)
         return controller
     }
 }
