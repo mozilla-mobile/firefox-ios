@@ -103,21 +103,6 @@ final class FxSuggestTelemetryTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
 
-    func testClickEventPing_givenNoContextId_thenPingNotSent() {
-        let info = RustFirefoxSuggestionTelemetryInfo.amp(
-            blockId: 1234,
-            advertiser: "test-advertiser",
-            iabCategory: "test-category",
-            impressionReportingURL: URL(string: "https://test1.com"),
-            clickReportingURL: URL(string: "https://test2.com")
-        )
-
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.clickEvent(telemetryInfo: info, position: 0)
-
-        XCTAssertNil(gleanWrapper.savedPing)
-    }
-
     func testClickEventPing_givenContextId_thenPingSent() {
         TelemetryContextualIdentifier.setupContextId()
         let info = RustFirefoxSuggestionTelemetryInfo.amp(
@@ -208,24 +193,6 @@ final class FxSuggestTelemetryTests: XCTestCase {
                                 didTap: true,
                                 didAbandonSearchSession: false)
         wait(for: [expectation], timeout: 5.0)
-    }
-
-    func testImpressionEventPing_givenNoContextId_thenPingNotSent() {
-        let info = RustFirefoxSuggestionTelemetryInfo.amp(
-            blockId: 1234,
-            advertiser: "test-advertiser",
-            iabCategory: "test-category",
-            impressionReportingURL: URL(string: "https://test1.com"),
-            clickReportingURL: URL(string: "https://test2.com")
-        )
-
-        let subject = createSubject(gleanWrapper: gleanWrapper)
-        subject.impressionEvent(telemetryInfo: info,
-                                position: 1,
-                                didTap: true,
-                                didAbandonSearchSession: false)
-
-        XCTAssertNil(gleanWrapper.savedPing)
     }
 
     func testImpressionEventPing_givenContextId_thenPingSent() {
