@@ -8,6 +8,7 @@ import XCTest
 import WebKit
 import Common
 
+@MainActor
 final class JumpBackInDataAdaptorTests: XCTestCase {
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
