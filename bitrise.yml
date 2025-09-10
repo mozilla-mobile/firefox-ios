@@ -148,7 +148,7 @@ workflows:
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
     - script@1.2.1:
         title: Detect number of warnings
         is_always_run: true
@@ -196,6 +196,16 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun
         - maximum_test_repetitions: 2
+    # Workaround: Sanity check for iOS 26 and Firefox since we cannot run many XCUITest
+    - xcode-test-without-building@0.4.2:
+        timeout: 1200
+        inputs:
+        - only_testing: |
+            XCUITests/LoginTest
+            XCUITests/OnboardingTests
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - xcode-test-shard-calculation@0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
