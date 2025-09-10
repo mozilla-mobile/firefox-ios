@@ -60,11 +60,13 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.TopSites.contileImpression, extras: extra)
 
         // Some information isn't set on the ping when unified ads is enabled
-        if !isUnifiedAdsEnabled, let impressionURL = URL(string: siteInfo.impressionURL) {
+        if !isUnifiedAdsEnabled {
             gleanWrapper.recordQuantity(for: GleanMetrics.TopSites.contileTileId,
                                         value: Int64(siteInfo.tileId))
-            gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
-                                   value: impressionURL)
+            if let impressionURL = URL(string: siteInfo.impressionURL) {
+                gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
+                                       value: impressionURL)
+            }
         }
 
         gleanWrapper.recordString(for: GleanMetrics.TopSites.contileAdvertiser,
@@ -92,11 +94,13 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.TopSites.contileClick, extras: extra)
 
         // Some information isn't set on the ping when unified ads is enabled
-        if !isUnifiedAdsEnabled, let clickURL = URL(string: siteInfo.clickURL) {
+        if !isUnifiedAdsEnabled {
             gleanWrapper.recordQuantity(for: GleanMetrics.TopSites.contileTileId,
                                         value: Int64(siteInfo.tileId))
-            gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
-                                   value: clickURL)
+            if let clickURL = URL(string: siteInfo.clickURL) {
+                gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
+                                       value: clickURL)
+            }
         }
 
         gleanWrapper.recordString(for: GleanMetrics.TopSites.contileAdvertiser,

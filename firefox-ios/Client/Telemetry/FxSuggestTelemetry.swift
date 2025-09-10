@@ -27,6 +27,7 @@ struct FxSuggestTelemetry {
     func clickEvent(telemetryInfo: RustFirefoxSuggestionTelemetryInfo, position: Int) {
         guard let contextIdString = TelemetryContextualIdentifier.contextId,
               let contextId = UUID(uuidString: contextIdString) else {
+            assertionFailure("Contextual identifier should be set")
             return
         }
 
@@ -78,6 +79,7 @@ struct FxSuggestTelemetry {
                          didAbandonSearchSession: Bool) {
         guard let contextIdString = TelemetryContextualIdentifier.contextId,
               let contextId = UUID(uuidString: contextIdString) else {
+            assertionFailure("Contextual identifier should be set")
             return
         }
 
