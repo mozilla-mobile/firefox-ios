@@ -26,13 +26,15 @@ struct QuickActionInfos {
 }
 
 // MARK: - QuickActions
-protocol QuickActions {
+protocol QuickActions: Sendable {
+    @MainActor
     func addDynamicApplicationShortcutItemOfType(
         _ type: ShortcutType,
         withUserData userData: [String: String],
         toApplication application: UIApplication
     )
 
+    @MainActor
     func removeDynamicApplicationShortcutItemOfType(
         _ type: ShortcutType,
         fromApplication application: UIApplication
@@ -40,6 +42,7 @@ protocol QuickActions {
 }
 
 extension QuickActions {
+    @MainActor
     func addDynamicApplicationShortcutItemOfType(
         _ type: ShortcutType,
         withUserData userData: [String: String] = [String: String](),
