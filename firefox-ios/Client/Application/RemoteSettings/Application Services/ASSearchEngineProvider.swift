@@ -115,7 +115,7 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
                                                possibleLanguageIdentifier: [String],
                                                completion: @escaping ([OpenSearchEngine]) -> Void ) {
         let localeCode = localeCode(from: locale)
-        let region = regionCode(from: locale)
+        let region = locale.regionCode()
         let logger = self.logger
         guard let iconPopulator = iconDataFetcher, let selector else {
             let logExtra1 = iconDataFetcher == nil ? "nil" : "ok"
@@ -173,15 +173,5 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
             }
             return identifier
         }
-    }
-
-    private func regionCode(from locale: Locale) -> String {
-        let systemRegion: String?
-        if #available(iOS 17, *) {
-            systemRegion = (locale as NSLocale).regionCode
-        } else {
-            systemRegion = (locale as NSLocale).countryCode
-        }
-        return systemRegion ?? locale.identifier.components(separatedBy: "-").last ?? "US"
     }
 }

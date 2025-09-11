@@ -63,8 +63,10 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
         if !isUnifiedAdsEnabled {
             gleanWrapper.recordQuantity(for: GleanMetrics.TopSites.contileTileId,
                                         value: Int64(siteInfo.tileId))
-            gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
-                                   value: siteInfo.impressionURL)
+            if let impressionURL = URL(string: siteInfo.impressionURL) {
+                gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
+                                       value: impressionURL)
+            }
         }
 
         gleanWrapper.recordString(for: GleanMetrics.TopSites.contileAdvertiser,
@@ -95,8 +97,10 @@ struct DefaultSponsoredTileTelemetry: SponsoredTileTelemetry {
         if !isUnifiedAdsEnabled {
             gleanWrapper.recordQuantity(for: GleanMetrics.TopSites.contileTileId,
                                         value: Int64(siteInfo.tileId))
-            gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
-                                   value: siteInfo.clickURL)
+            if let clickURL = URL(string: siteInfo.clickURL) {
+                gleanWrapper.recordUrl(for: GleanMetrics.TopSites.contileReportingUrl,
+                                       value: clickURL)
+            }
         }
 
         gleanWrapper.recordString(for: GleanMetrics.TopSites.contileAdvertiser,

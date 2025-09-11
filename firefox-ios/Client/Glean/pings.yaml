@@ -50,13 +50,15 @@ fx-suggest:
     Distinguishable by its `ping_type`.
     Does not contain a `client_id`, preferring a `context_id` instead.
   include_client_id: false
+  uploader_capabilities:
+    - ohttp
   bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/16589
+    - https://github.com/mozilla-mobile/firefox-ios/issues/26928
   data_reviews:
     - https://github.com/mozilla-mobile/firefox-ios/pull/17556
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
-    - lina@mozilla.com
     - ttran@mozilla.com
     - najiang@mozilla.com
 
