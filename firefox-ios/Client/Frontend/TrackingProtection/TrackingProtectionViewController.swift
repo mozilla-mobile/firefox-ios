@@ -698,7 +698,7 @@ class TrackingProtectionViewController: UIViewController,
     func applyTheme() {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
-        view.backgroundColor = theme.colors.layer3.withAlphaComponent(backgroundAlpha())
+        view.backgroundColor = theme.colors.layer3.withAlphaComponent(backgroundAlpha)
         headerContainer.applyTheme(theme: theme)
         connectionDetailsHeaderView.applyTheme(theme: theme)
         trackersView.applyTheme(theme: theme)
@@ -710,7 +710,7 @@ class TrackingProtectionViewController: UIViewController,
         setNeedsStatusBarAppearanceUpdate()
     }
 
-    private func backgroundAlpha() -> CGFloat {
+    private var backgroundAlpha: CGFloat {
         guard !UIAccessibility.isReduceTransparencyEnabled else {
             return 1.0
         }
