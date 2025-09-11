@@ -1398,7 +1398,7 @@ workflows:
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
             SDK="iphoneos"
-            IOS_VERSION="26.0"
+            IOS_VERSION="18.2"
             DESTINATION="generic/platform=iOS"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
@@ -1476,6 +1476,13 @@ workflows:
               bash install.sh --disable-prompts
               source $HOME/google-cloud-sdk/path.bash.inc
             fi
+    - script@1.2.1:
+        title: Pin Python version
+        inputs:
+        - content: |-
+            brew unlink python@3.12
+            brew unlink python@3.11
+            brew link --force python@3.11
     - cache-push@2.7.1:
         inputs:
         - cache_paths: "$HOME/google-cloud-sdk"
@@ -1503,7 +1510,7 @@ workflows:
 
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test "$TARGET_ARCHIVE" \
-                --xcode-version=26.0 \
+                --xcode-version=16.2 \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
@@ -1575,6 +1582,10 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.2.x
+        machine_type_id: g2.mac.4large
 
   Firefox_Unit_Tests:
     before_run:
