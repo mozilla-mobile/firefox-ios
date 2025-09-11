@@ -62,7 +62,6 @@ class TabManagerImplementation: NSObject,
         return tabs[selectedIndex]
     }
 
-    @MainActor
     var normalActiveTabs: [Tab] {
         let inactiveTabs = getInactiveTabs()
         let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
@@ -81,7 +80,6 @@ class TabManagerImplementation: NSObject,
         return tabs.filter { $0.isPrivate }
     }
 
-    @MainActor
     var recentlyAccessedNormalTabs: [Tab] {
         // If inactive tabs are enabled, do not include inactive tabs, as they are not "recently" accessed
         var eligibleTabs = isInactiveTabsEnabled ? normalActiveTabs : normalTabs
@@ -121,7 +119,7 @@ class TabManagerImplementation: NSObject,
     var tabRestoreHasFinished = false
     private(set) var selectedIndex: Int = -1
 
-    @MainActor private lazy var tabConfigurationProvider = {
+    private lazy var tabConfigurationProvider = {
         return TabConfigurationProvider(prefs: profile.prefs)
     }()
 
@@ -193,7 +191,6 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Add/Remove Delegate
-    @MainActor
     func removeDelegate(_ delegate: any TabManagerDelegate, completion: (() -> Void)?) {
         for index in 0 ..< delegates.count {
             let del = delegates[index]
@@ -387,7 +384,6 @@ class TabManagerImplementation: NSObject,
         commitChanges()
     }
 
-    @MainActor
     private func addTab(_ request: URLRequest? = nil,
                         afterTab: Tab? = nil,
                         flushToDisk: Bool,
@@ -407,13 +403,11 @@ class TabManagerImplementation: NSObject,
         return filterdTabs.first
     }
 
-    @MainActor
     func getTabForURL(_ url: URL) -> Tab? {
         return tabs.first(where: { $0.webView?.url == url })
     }
 
     // MARK: - Undo Close Tab
-    @MainActor
     func undoCloseTab() {
         assert(Thread.isMainThread)
         guard let backupCloseTab = self.backupCloseTab else { return }
@@ -435,7 +429,6 @@ class TabManagerImplementation: NSObject,
         commitChanges()
     }
 
-    @MainActor
     func undoCloseAllTabs() {
         assert(Thread.isMainThread)
         guard !backupCloseTabs.isEmpty else { return }
@@ -450,7 +443,6 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Restore tabs
 
-    @MainActor
     func restoreTabs(_ forced: Bool = false) {
         assert(Thread.isMainThread)
         if isDeeplinkOptimizationRefactorEnabled {
@@ -488,7 +480,6 @@ class TabManagerImplementation: NSObject,
         restoreTabs()
     }
 
-    @MainActor
     private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
         assert(Thread.isMainThread)
         // If the currently selected tab has been deleted, try to select the next most reasonable tab.
@@ -547,7 +538,6 @@ class TabManagerImplementation: NSObject,
         }
     }
 
-    @MainActor
     private func blockPopUpDidChange() {
         assert(Thread.isMainThread)
         let allowPopups = !(profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true)
@@ -559,7 +549,6 @@ class TabManagerImplementation: NSObject,
         tabConfigurationProvider.updateAllowsPopups(allowPopups)
     }
 
-    @MainActor
     private func autoPlayDidChange() {
         assert(Thread.isMainThread)
         let mediaType = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(profile.prefs)
@@ -569,7 +558,6 @@ class TabManagerImplementation: NSObject,
         tabConfigurationProvider.updateMediaTypesRequiringUserActionForPlayback(mediaType)
     }
 
-    @MainActor
     private func buildTabRestore(window: WindowData?) {
         defer {
             isRestoringTabs = false
@@ -625,7 +613,6 @@ class TabManagerImplementation: NSObject,
     }
 
     /// Creates the webview so needs to live on the main thread
-    @MainActor
     private func generateTabs(from windowData: WindowData) {
         let filteredTabs = filterPrivateTabs(from: windowData,
                                              clearPrivateTabs: shouldClearPrivateTabs())
@@ -650,7 +637,6 @@ class TabManagerImplementation: NSObject,
         handleTabSelectionAfterRestore(tabToSelect: tabToSelect)
     }
 
-    @MainActor
     private func configureNewTab(with tabData: TabData) -> Tab? {
         let newTab: Tab
 
@@ -700,7 +686,6 @@ class TabManagerImplementation: NSObject,
         return newTab
     }
 
-    @MainActor
     private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
         assert(Thread.isMainThread)
         if isDeeplinkOptimizationRefactorEnabled, let deeplinkTab {
@@ -737,7 +722,6 @@ class TabManagerImplementation: NSObject,
     }
 
     /// Creates the webview so needs to live on the main thread
-    @MainActor
     private func generateEmptyTab() {
         let newTab = addTab()
         selectTab(newTab)
@@ -815,20 +799,17 @@ class TabManagerImplementation: NSObject,
         return tabData
     }
 
-    @MainActor
     func commitChanges() {
         preserveTabs()
         saveSessionData(forTab: selectedTab)
     }
 
-    @MainActor
     func notifyCurrentTabDidFinishLoading() {
         delegates.forEach {
             $0.get()?.tabManagerTabDidFinishLoading()
         }
     }
 
-    @MainActor
     private func saveSessionData(forTab tab: Tab?) {
         guard let tab = tab,
               let tabSession = tab.webView?.interactionState as? Data,
@@ -838,7 +819,6 @@ class TabManagerImplementation: NSObject,
         self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
     }
 
-    @MainActor
     private func saveAllTabData() {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished, let url = selectedTab?.url, !url.isFxHomeUrl else { return }
@@ -852,7 +832,6 @@ class TabManagerImplementation: NSObject,
     /// This function updates the selectedIndex.
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
-    @MainActor
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         assert(Thread.isMainThread)
         // Fallback everywhere to selectedTab if no previous tab
@@ -934,7 +913,6 @@ class TabManagerImplementation: NSObject,
                                   forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
-    @MainActor
     private func removeAllPrivateTabs() {
         // reset the selectedTabIndex if we are on a private tab because we will be removing it.
         if selectedTab?.isPrivate ?? false {
@@ -969,7 +947,6 @@ class TabManagerImplementation: NSObject,
         store.dispatchLegacy(action)
     }
 
-    @MainActor
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
         let configuration: WKWebViewConfiguration = tabConfigurationProvider.configuration(
@@ -1027,7 +1004,6 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Inactive tabs
-    @MainActor
     func getInactiveTabs() -> [Tab] {
         let inactiveTabsPrefEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs) ?? true
         let inactiveTabsEnabled = inactiveTabsPrefEnabled && !isTabTrayUIExperimentsEnabled
@@ -1035,7 +1011,6 @@ class TabManagerImplementation: NSObject,
         return inactiveTabsManager.getInactiveTabs(tabs: tabs)
     }
 
-    @MainActor
     func removeAllInactiveTabs() {
         let currentModeTabs = getInactiveTabs()
         backupCloseTabs = currentModeTabs
@@ -1045,14 +1020,12 @@ class TabManagerImplementation: NSObject,
         commitChanges()
     }
 
-    @MainActor
     func undoCloseInactiveTabs() {
         tabs.append(contentsOf: backupCloseTabs)
         commitChanges()
         backupCloseTabs = [Tab]()
     }
 
-    @MainActor
     func clearAllTabsHistory() {
         assert(Thread.isMainThread)
         guard let selectedTab = selectedTab, let url = selectedTab.url else { return }
@@ -1076,7 +1049,6 @@ class TabManagerImplementation: NSObject,
         }
     }
 
-    @MainActor
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
         let currentTabs = privateMode ? privateTabs : normalActiveTabs
 
@@ -1103,7 +1075,6 @@ class TabManagerImplementation: NSObject,
         }
     }
 
-    @MainActor
     func switchPrivacyMode() -> SwitchPrivacyModeResult {
         assert(Thread.isMainThread)
         var result = SwitchPrivacyModeResult.usedExistingTab
@@ -1128,7 +1099,6 @@ class TabManagerImplementation: NSObject,
         return result
     }
 
-    @MainActor
     func addPopupForParentTab(profile: any Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
         assert(Thread.isMainThread)
         let popup = Tab(profile: profile,
@@ -1156,7 +1126,6 @@ class TabManagerImplementation: NSObject,
     }
 
     /// Note: Inserts AND configures the given tab.
-    @MainActor
     private func configureTab(
         _ tab: Tab,
         request: URLRequest?,
@@ -1260,7 +1229,6 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - Update Menu Items
-    @MainActor
     private func updateMenuItemsForSelectedTab() {
         guard let selectedTab,
               var menuItems = UIMenuController.shared.menuItems
@@ -1292,7 +1260,6 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - SessionCreator
-    @MainActor
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
         guard let parentTab = self[parent] else { return nil }
         return addPopupForParentTab(profile: profile, parentTab: parentTab, configuration: configuration).webView
@@ -1304,17 +1271,17 @@ extension TabManagerImplementation: Notifiable {
     func handleNotifications(_ notification: Notification) {
         let name = notification.name
         let notificationWindowUUID = notification.windowUUID
-        Task { @MainActor in
+        ensureMainThread {
             switch name {
             case UIApplication.willResignActiveNotification:
-                saveAllTabData()
+                self.saveAllTabData()
             case .TabMimeTypeDidSet:
-                guard windowUUID == notificationWindowUUID else { return }
-                updateMenuItemsForSelectedTab()
+                guard self.windowUUID == notificationWindowUUID else { return }
+                self.updateMenuItemsForSelectedTab()
             case .BlockPopup:
-                blockPopUpDidChange()
+                self.blockPopUpDidChange()
             case .AutoPlayChanged:
-                autoPlayDidChange()
+                self.autoPlayDidChange()
             default:
                 break
             }
