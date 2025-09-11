@@ -469,7 +469,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-        updateZoomPageBarVisibility(visible: false)
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
