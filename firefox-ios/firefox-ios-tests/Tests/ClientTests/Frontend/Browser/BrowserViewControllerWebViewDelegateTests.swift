@@ -183,14 +183,18 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let tab = createTab()
         let url = URL(string: "https://www.example.com")!
         tabManager.tabs = [tab]
+        let expectation = XCTestExpectation()
 
         subject.webView(tab.webView!,
                         decidePolicyFor: MockNavigationAction(url: url,
                                                               type: .linkActivated)) { _ in
             ensureMainThread {
                 XCTAssertNotNil(subject.pendingRequests[url.absoluteString])
+                expectation.fulfill()
             }
         }
+
+        wait(for: [expectation])
     }
 
     @MainActor

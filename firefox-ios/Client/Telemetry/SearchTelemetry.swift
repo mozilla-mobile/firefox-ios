@@ -139,7 +139,7 @@ enum SearchTelemetryValues {
     }
 }
 
-// TODO: FXIOS Make SearchTelemetry actually sendable
+// TODO: FXIOS-13477 Make SearchTelemetry actually sendable
 class SearchTelemetry: @unchecked Sendable {
     var code = ""
     var provider: SearchEngine = .none

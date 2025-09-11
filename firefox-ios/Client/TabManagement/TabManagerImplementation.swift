@@ -542,7 +542,6 @@ class TabManagerImplementation: NSObject,
             let windowData: WindowData? = windowIsNew ? nil : await tabDataStore.fetchWindowData(uuid: windowUUID)
             buildTabRestore(window: windowData)
             TabErrorTelemetryHelper.shared.validateTabCountAfterRestoringTabs(windowUUID)
-            // Log on main thread, where computed `tab` properties can be accessed without risk of races
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
