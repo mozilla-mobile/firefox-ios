@@ -8,6 +8,7 @@ import Glean
 protocol GleanWrapper {
     func handleDeeplinkUrl(url: URL)
     func setUpload(isEnabled: Bool)
+    func enableTestingMode()
 
     // MARK: Glean Metrics
 
@@ -20,8 +21,9 @@ protocol GleanWrapper {
     func setBoolean(for metric: BooleanMetricType, value: Bool)
     func recordQuantity(for metric: QuantityMetricType, value: Int64)
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64)
-    func recordUrl(for metric: UrlMetricType, value: String)
+    func recordUrl(for metric: UrlMetricType, value: URL)
     func recordDatetime(for metric: DatetimeMetricType, value: Date)
+    func recordUUID(for metric: UuidMetricType, value: UUID)
 
     func incrementNumerator(for metric: RateMetricType, amount: Int32)
     func incrementDenominator(for metric: RateMetricType, amount: Int32)
@@ -53,6 +55,10 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     func setUpload(isEnabled: Bool) {
         glean.setCollectionEnabled(isEnabled)
+    }
+
+    func enableTestingMode() {
+        glean.enableTestingMode()
     }
 
     // MARK: Glean Metrics
@@ -94,11 +100,15 @@ struct DefaultGleanWrapper: GleanWrapper {
         metric[label].set(value)
     }
 
-    func recordUrl(for metric: UrlMetricType, value: String) {
-        metric.set(value)
+    func recordUrl(for metric: UrlMetricType, value: URL) {
+        metric.set(url: value)
     }
 
     func recordDatetime(for metric: DatetimeMetricType, value: Date) {
+        metric.set(value)
+    }
+
+    func recordUUID(for metric: UuidMetricType, value: UUID) {
         metric.set(value)
     }
 
