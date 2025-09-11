@@ -36,17 +36,7 @@ final class LanguageModelSessionAdapter: LanguageModelSessionProtocol {
         to prompt: Prompt,
         options: GenerationOptions
     ) -> any LanguageModelResponseStreamProtocol {
-        // TODO(FXIOS-13088): The API changed between beta 4 and 5, so this now breaks when building.
-        // To avoid any future issues, this is commented out until we get the stable API.
-        // This is unused in the current implementation. We only use non-streaming responses.
-        // realSession.streamResponse(to: prompt, options: options)
-        assertionFailure(
-        """
-        streaming is disabled until we get a stable API for
-        `LanguageModelSession.ResponseStream`.
-        """
-        )
-        return AsyncThrowingStream<String, Error> { $0.finish() }
+        return realSession.streamResponse(to: prompt, options: options)
     }
 }
 

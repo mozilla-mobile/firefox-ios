@@ -119,6 +119,12 @@ final class TabDisplayPanelViewController: UIViewController,
         updateInsets()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        shouldShowFadeView()
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = fadeView.bounds
