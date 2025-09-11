@@ -414,12 +414,6 @@ class CreditCardBottomSheetViewController: UIViewController,
         glassEffectView = effectView
     }
 
-    @available(iOS 26.0, *)
-    private func removeGlassEffect() {
-        glassEffectView?.removeFromSuperview()
-        glassEffectView = nil
-    }
-
     // MARK: Telemetry
     fileprivate func sendCreditCardAutofillPromptDismissedTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
