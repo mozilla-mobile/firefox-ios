@@ -515,10 +515,10 @@ open class BrowserProfile: Profile,
             return deferMaybe([])
         }
         return syncManager.syncTabs().bind { result in
-                    if result.isSuccess {
-                        return self.retrieveTabData()
-                    }
-                    return deferMaybe(result.failureValue!)
+            if result.isSuccess {
+                return self.retrieveTabData()
+            }
+            return deferMaybe(result.failureValue!)
         }
     }
 
