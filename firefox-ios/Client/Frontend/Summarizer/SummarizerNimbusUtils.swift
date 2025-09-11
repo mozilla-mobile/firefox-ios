@@ -68,7 +68,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
             // TODO(FXIOS-13471): Bypassing nimbus for now for 143, until we figure out what's happening with nimbus.
             // let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
             // return AppleIntelligenceUtil().isAppleIntelligenceAvailable && isFlagEnabled
-            return AppleIntelligenceUtil().isAppleIntelligenceAvailable
+            let isEngLang = NSLocale.current.languageCode == "en"
+            return AppleIntelligenceUtil().isAppleIntelligenceAvailable && isEngLang
         #else
             return false
         #endif
@@ -82,7 +83,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         // TODO(FXIOS-13471): Bypassing nimbus for now for 143, until we figure out what's happening with nimbus.
         // let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizerToolbarEntrypoint, checking: .buildOnly)
         // return isAppleSummarizerEnabled() && isFlagEnabled
-        return AppleIntelligenceUtil().isAppleIntelligenceAvailable
+        let isEngLang = NSLocale.current.languageCode == "en"
+        return AppleIntelligenceUtil().isAppleIntelligenceAvailable && isEngLang
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
@@ -94,7 +96,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         // TODO(FXIOS-13471): Bypassing nimbus for now for 143, until we figure out what's happening with nimbus.
         // let isShakeEnabled = featureFlags.isFeatureEnabled(.appleSummarizerShakeGesture, checking: .buildOnly)
         // return isAppleSummarizerEnabled() && isShakeEnabled
-        return isAppleSummarizerEnabled()
+        let isEngLang = NSLocale.current.languageCode == "en"
+        return isAppleSummarizerEnabled() && isEngLang
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
