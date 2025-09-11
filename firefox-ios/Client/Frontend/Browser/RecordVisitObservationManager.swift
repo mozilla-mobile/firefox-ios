@@ -8,7 +8,7 @@ import Shared
 import Storage
 import WebKit
 
-// Handles recording visit to website that will be used to list History
+// Handles recording visits to websites, which will be displayed in the History Panel.
 class RecordVisitObservationManager {
     private var historyHandler: HistoryHandler
     nonisolated let logger: Logger
@@ -40,17 +40,17 @@ class RecordVisitObservationManager {
         }
     }
 
-    // Based in user action like create new tab we reset the last visit observation
+    // Based on user actions like creating a new tab, we reset the last visit observation.
     func resetRecording() {
         lastObservationRecorded = nil
     }
 
-    // Should record if is not Private tab, URL should not be ignored
-    // or title is not empty
+    // Record visits for websites that are not in a private tab, have non-empty titles,
+    // and are not URLs that we ignore (localhost and about schemes).
     private func shouldRecordObservation(visitObservation: VisitObservation, isPrivateTab: Bool) -> Bool {
         guard let title = visitObservation.title, !title.isEmpty,
-              let url = URL(string: visitObservation.url), !isIgnoredURL(url),
-              !isPrivateTab else {
+              !isPrivateTab,
+              isValidURLToRecord(url: visitObservation.url) else {
             logger.log("Ignoring location change",
                        level: .debug,
                        category: .lifecycle)
@@ -58,5 +58,11 @@ class RecordVisitObservationManager {
         }
 
         return true
+    }
+
+    private func isValidURLToRecord(url: Url) -> Bool {
+        guard let url = URL(string: url) else { return false }
+
+        return !isIgnoredURL(url) && (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL
     }
 }
