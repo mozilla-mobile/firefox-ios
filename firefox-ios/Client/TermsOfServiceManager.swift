@@ -40,8 +40,10 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
         return prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == nil
     }
 
-    func setAccepted() {
+    func setAccepted(acceptedDate: Date) {
         prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
+        prefs.setString(String(TermsOfUseTelemetry().termsOfUseVersion), forKey: PrefsKeys.TermsOfServiceAcceptedVersion)
+        prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfServiceAcceptedDate)
     }
 
     func shouldSendTechnicalData(telemetryValue: Bool, studiesValue: Bool) {

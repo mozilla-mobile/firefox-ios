@@ -32,7 +32,16 @@ struct TermsOfServiceTelemetry {
         GleanMetrics.Onboarding.termsOfServiceManageLinkClicked.record()
     }
 
-    func termsOfServiceAcceptButtonTapped() {
+    func termsOfServiceAcceptButtonTapped(acceptedDate: Date) {
         GleanMetrics.Onboarding.termsOfServiceAccepted.record()
+
+        // Record the ToU version and date metrics with onboarding surface
+        let acceptedExtra = GleanMetrics.Termsofuse.AcceptedExtra(
+            surface: TermsOfUseTelemetry.Surface.onboarding.rawValue,
+            touVersion: String(TermsOfUseTelemetry().termsOfUseVersion)
+        )
+        GleanMetrics.Termsofuse.accepted.record(acceptedExtra)
+        GleanMetrics.Termsofuse.version.set(TermsOfUseTelemetry().termsOfUseVersion)
+        GleanMetrics.Termsofuse.date.set(acceptedDate)
     }
 }
