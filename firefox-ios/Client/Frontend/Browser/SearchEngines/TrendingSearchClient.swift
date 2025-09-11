@@ -5,7 +5,7 @@
 import Common
 import Shared
 
-protocol TrendingSearchEngine {
+public protocol TrendingSearchEngine {
     func trendingURLForQuery() -> URL?
 }
 
