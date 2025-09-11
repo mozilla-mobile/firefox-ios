@@ -1,5 +1,5 @@
 /* Prompt title when deleting logins */
-"Are you sure?" = "Ste si istý?";
+"Are you sure?" = "Naozaj?";
 
 /* Prompt option for cancelling out of deletion */
 "Cancel" = "Zrušiť";
