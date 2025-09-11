@@ -10,7 +10,7 @@ import UIKit
 struct SummarizeErrorFormatter {
     let theme: Theme
     let isAccessibilityCategoryEnabled: Bool
-    let viewModel: SummarizeViewModel
+    let viewModel: SummarizeViewConfiguration
 
     private var parserConfiguration: DownStylerConfiguration {
         let centeredParagraphStyle = NSMutableParagraphStyle()

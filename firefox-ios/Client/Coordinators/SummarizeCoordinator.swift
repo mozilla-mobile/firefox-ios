@@ -12,13 +12,14 @@ import WebKit
 
 final class SummarizeCoordinator: BaseCoordinator,
                                   SummarizerServiceLifecycle,
+                                  SummarizeToSAcceptor,
                                   SummarizeNavigationHandler {
     private let browserSnapshot: UIImage
     private let browserSnapshotTopOffset: CGFloat
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let webView: WKWebView
     private let summarizerNimbusUtils: SummarizerNimbusUtils
-    private let summarizerServiceFactory: SummarizerServiceFactory
+    private var summarizerServiceFactory: SummarizerServiceFactory
     private let windowUUID: WindowUUID
     private let trigger: SummarizerTrigger
     private let prefs: Prefs
@@ -54,6 +55,7 @@ final class SummarizeCoordinator: BaseCoordinator,
         self.summarizerTelemetry = SummarizerTelemetry(gleanWrapper: gleanWrapper)
         self.config = config
         super.init(router: router)
+        self.summarizerServiceFactory.lifecycleDelegate = self
     }
 
     func start() {
@@ -69,8 +71,6 @@ final class SummarizeCoordinator: BaseCoordinator,
             isHostedSummarizerEnabled: isHostedSummarizerEnabled,
             config: config) else { return }
 
-        service.summarizerLifecycle = self
-
         let brandLabel: String = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
             .Summarizer.AppleBrandLabel
         } else {
@@ -82,7 +82,7 @@ final class SummarizeCoordinator: BaseCoordinator,
             UIImage(named: "faviconFox")
         }
 
-        let errorModel = LocalizedErrorsViewModel(
+        let errorModel = LocalizedErrorsViewConfiguration(
             rateLimitedMessage: .Summarizer.RateLimitedErrorMessage,
             unsafeContentMessage: .Summarizer.UnsafeWebsiteErrorMessage,
             summarizationNotAvailableMessage: .Summarizer.UnsupportedContentErrorMessage,
@@ -95,7 +95,7 @@ final class SummarizeCoordinator: BaseCoordinator,
             acceptToSButtonLabel: .Summarizer.ToSAlertContinueButtonLabel
         )
 
-        let tosViewModel = ToSBottomSheetViewModel(
+        let tosViewModel = ToSViewConfiguration(
             titleLabel: .Summarizer.ToSInfoPanelTitleLabel,
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.tosTitleLabel,
             descriptionText: String(format: .Summarizer.ToSInfoPanelLabel, AppName.shortName.rawValue),
@@ -110,23 +110,23 @@ final class SummarizeCoordinator: BaseCoordinator,
             cancelButtonA11yLabel: .Summarizer.ToSAlertCancelButtonAccessibilityLabel
         )
 
-        let model = SummarizeViewModel(
+        let model = SummarizeViewConfiguration(
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.titleLabel,
             compactTitleLabelA11yId: AccessibilityIdentifiers.Summarizer.compactTitleLabel,
             summaryFootnote: .Summarizer.FootnoteLabel,
             summarizeViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTableView,
-            tabSnapshotViewModel: TabSnapshotViewModel(
+            tabSnapshotViewModel: TabSnapshotViewConfiguration(
                 tabSnapshotA11yLabel: .Summarizer.TabSnapshotAccessibilityLabel,
                 tabSnapshotA11yId: AccessibilityIdentifiers.Summarizer.tabSnapshotView,
                 tabSnapshot: browserSnapshot,
                 tabSnapshotTopOffset: browserSnapshotTopOffset
             ),
-            loadingLabelViewModel: LoadingLabelViewModel(
+            loadingLabelViewModel: LoadingLabelViewConfiguration(
                 loadingLabel: .Summarizer.LoadingLabel,
                 loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
                 loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel
             ),
-            brandViewModel: BrandViewModel(
+            brandViewModel: BrandViewConfiguration(
                 brandLabel: brandLabel,
                 brandLabelA11yId: AccessibilityIdentifiers.Summarizer.brandLabel,
                 brandImage: brandImage,
@@ -142,15 +142,18 @@ final class SummarizeCoordinator: BaseCoordinator,
 
         let controller = SummarizeController(
             windowUUID: windowUUID,
-            viewModel: model,
-            summarizerService: service,
+            configuration: model,
+            viewModel: DefaultSummarizeViewModel(
+                summarizerService: service,
+                tosAcceptor: self,
+                isTosAcceppted: prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false
+            ),
             navigationHandler: self,
             webView: webView,
-            isTosAccepted: prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false,
-            onSummaryDisplayed: { [weak self] in
-                self?.summarizerTelemetry.summarizationDisplayed()
-            }
-        )
+        ) { [weak self] in
+            self?.summarizerTelemetry.summarizationDisplayed()
+        }
+
         let navController = UINavigationController(rootViewController: controller)
 
         navController.modalTransitionStyle = .crossDissolve
@@ -162,19 +165,21 @@ final class SummarizeCoordinator: BaseCoordinator,
         parentCoordinatorDelegate?.didFinish(from: self)
     }
 
-    // MARK: - SummarizeNavigationHandler
+    // MARK: - SummarizeToSAcceptor
 
-    func openURL(url: URL) {
-        onRequestOpenURL?(url)
-    }
-
-    func acceptToSConsent() {
+    func acceptTosConsent() {
         prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
         summarizerTelemetry.summarizationConsentDisplayed(true)
     }
 
-    func denyToSConsent() {
+    func denyTosConsent() {
         summarizerTelemetry.summarizationConsentDisplayed(false)
+    }
+
+    // MARK: - SummarizeNavigationHandler
+
+    func openURL(url: URL) {
+        onRequestOpenURL?(url)
     }
 
     func dismissSummary() {
