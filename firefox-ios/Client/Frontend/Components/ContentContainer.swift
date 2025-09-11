@@ -12,6 +12,7 @@ enum ContentType {
     case webview
 }
 
+@MainActor
 protocol ContentContainable: UIViewController {
     var contentType: ContentType { get }
 }

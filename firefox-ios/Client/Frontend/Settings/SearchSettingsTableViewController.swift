@@ -8,6 +8,7 @@ import ComponentLibrary
 import Common
 
 protocol SearchEnginePickerDelegate: AnyObject {
+    @MainActor
     func searchEnginePicker(
         _ searchEnginePicker: SearchEnginePicker?,
         didSelectSearchEngine engine: OpenSearchEngine?
