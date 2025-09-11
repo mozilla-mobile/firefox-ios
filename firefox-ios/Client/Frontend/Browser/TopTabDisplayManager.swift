@@ -719,10 +719,11 @@ extension TopTabDisplayManager: Notifiable {
     func handleNotifications(_ notification: Notification) {
         let name = notification.name
         let windowUUID = notification.windowUUID
+        let tabManagerWindowUUID = tabManager.windowUUID
         ensureMainThread {
             switch name {
             case .DidTapUndoCloseAllTabToast:
-                guard self.tabManager.windowUUID == windowUUID else { return }
+                guard tabManagerWindowUUID == windowUUID else { return }
                 self.refreshStore()
                 self.collectionView.reloadData()
             default:

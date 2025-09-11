@@ -23,7 +23,7 @@ public protocol TabDataStore: Sendable {
     /// saved files in the directory) it is faster than fetchWindowData() and is
     /// preferable when only the UUIDs are needed.
     /// - Returns: a list of UUIDs for any saved WindowData.
-    func fetchWindowDataUUIDs() -> [WindowUUID]
+    nonisolated func fetchWindowDataUUIDs() -> [WindowUUID]
 
     /// Erases the on-disk data for tab windows matching the provided UUIDs.
     /// - Parameter forUUIDs: the UUIDs to delete the on-disk tab files for.

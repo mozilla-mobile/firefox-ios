@@ -1270,7 +1270,6 @@ final class TabManagerMiddleware: FeatureFlaggable {
     /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
     @MainActor
     private func dispatchRecentlyAccessedTabs(action: Action) {
-        // [FXIOS-5149] Recent tabs need to be accessed from .main thread
         let recentTabs = self.tabManager(for: action.windowUUID).recentlyAccessedNormalTabs
         store.dispatchLegacy(
             TabManagerAction(

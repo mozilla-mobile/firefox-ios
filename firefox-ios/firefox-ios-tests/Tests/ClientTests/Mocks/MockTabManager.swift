@@ -146,7 +146,8 @@ class MockTabManager: TabManager {
                 isPrivate: Bool
     ) -> Tab {
         addTabWasCalled = true
-        return Tab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID)
+        let isHomePage = request?.url?.absoluteString == "internal://local/about/home"
+        return MockTab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID, isHomePage: isHomePage)
     }
 
     func backgroundRemoveAllTabs(isPrivate: Bool,
