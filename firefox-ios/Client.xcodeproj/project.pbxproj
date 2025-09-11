@@ -267,6 +267,7 @@
 		214099652DD295F5004881E1 /* ZoomLevelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */; };
 		214099672DD392D1004881E1 /* ZoomSiteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099662DD392D1004881E1 /* ZoomSiteListView.swift */; };
 		214099692DD3B8AD004881E1 /* ZoomLevelCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214099682DD3B8AD004881E1 /* ZoomLevelCellView.swift */; };
+		2140E4632E71FC250054173A /* RecordVisitObservationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2140E4622E71FC240054173A /* RecordVisitObservationManager.swift */; };
 		21420EF72ABA338D00B28550 /* TabTrayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */; };
 		21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */; };
 		2142B12C2D9F1284003AA82F /* ZoomPageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142B12A2D9F1284003AA82F /* ZoomPageManager.swift */; };
@@ -2922,6 +2923,7 @@
 		214099642DD295F5004881E1 /* ZoomLevelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelPickerView.swift; sourceTree = "<group>"; };
 		214099662DD392D1004881E1 /* ZoomSiteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomSiteListView.swift; sourceTree = "<group>"; };
 		214099682DD3B8AD004881E1 /* ZoomLevelCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelCellView.swift; sourceTree = "<group>"; };
+		2140E4622E71FC240054173A /* RecordVisitObservationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordVisitObservationManager.swift; sourceTree = "<group>"; };
 		21420EF62ABA338D00B28550 /* TabTrayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinator.swift; sourceTree = "<group>"; };
 		21420EF82ABC75A400B28550 /* TabTrayCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayCoordinatorTests.swift; sourceTree = "<group>"; };
 		2142B1292D9F1284003AA82F /* ZoomPageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageBar.swift; sourceTree = "<group>"; };
@@ -14973,6 +14975,7 @@
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				2140E4622E71FC240054173A /* RecordVisitObservationManager.swift */,
 				034784BA2E2690F600D04A84 /* TermsOfUse */,
 				81A3F6EE2C2DAED500BDD86B /* MainMenu */,
 				1D7B78952ADF324E0011E9F2 /* Event Queue */,
@@ -18188,6 +18191,7 @@
 				0AFF7F6C2C7C7BBA00265214 /* CertificatesCell.swift in Sources */,
 				8AAEBA062BF51141000C02B5 /* MicrosurveyMiddleware.swift in Sources */,
 				431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */,
+				2140E4632E71FC250054173A /* RecordVisitObservationManager.swift in Sources */,
 				8A454D432CB9B8F5009436D9 /* TopSitesManager.swift in Sources */,
 				7482205C1DBAB56300EEEA72 /* MailProviders.swift in Sources */,
 				8A93F87029D3A597004159D9 /* SceneCoordinator.swift in Sources */,
