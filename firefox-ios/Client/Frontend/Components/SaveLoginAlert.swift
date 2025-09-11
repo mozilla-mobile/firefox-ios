@@ -196,13 +196,9 @@ class SaveLoginAlert: UIView, ThemeApplicable {
         let effectView = UIVisualEffectView()
 
         #if canImport(FoundationModels)
-        if #available(iOS 26, *) {
-            let glassEffect = UIGlassEffect()
-            glassEffect.isInteractive = true
-            effectView.effect = glassEffect
-        } else {
-            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-        }
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        effectView.effect = glassEffect
         #else
         effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         #endif
