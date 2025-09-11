@@ -402,7 +402,6 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func showSummary(_ summary: String) {
-        triggerImpactHaptics()
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan))
         tabSnapshotContainer.addGestureRecognizer(panGesture)
 
@@ -412,7 +411,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         closeButton.tintColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.iconPrimary
         configureSummaryView(summary: summary)
 
+        // show the summary and related animation only if summary wasn't showed yet
         guard summaryView.alpha == 0.0 else { return }
+        triggerImpactHaptics()
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
