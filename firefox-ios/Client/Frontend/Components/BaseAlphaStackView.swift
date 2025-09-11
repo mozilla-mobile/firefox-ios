@@ -5,6 +5,7 @@
 import Common
 import Foundation
 
+@MainActor
 protocol AlphaDimmable {
     func updateAlphaForSubviews(_ alpha: CGFloat)
 }

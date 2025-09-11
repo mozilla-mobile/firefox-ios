@@ -7,19 +7,28 @@ import UIKit
 import Shared
 
 protocol TabLocationViewDelegate: AnyObject {
+    @MainActor
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView)
+    @MainActor
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
+    @MainActor
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
+    @MainActor
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView)
+    @MainActor
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
+    @MainActor
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
+    @MainActor
     func tabLocationViewPresentCFR(at sourceView: UIView)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions
     /// for even starting handling long-press were not satisfied
-    @discardableResult
+    @MainActor @discardableResult
     func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
+    @MainActor
     func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView)
+    @MainActor
     func tabLocationViewLocationAccessibilityActions(
         _ tabLocationView: TabLocationView
     ) -> [UIAccessibilityCustomAction]?

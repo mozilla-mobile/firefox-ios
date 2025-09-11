@@ -10,6 +10,7 @@ import ComponentLibrary
 // MARK: - ZoomPageBarDelegate Protocol
 
 protocol ZoomPageBarDelegate: AnyObject {
+    @MainActor
     func zoomPageDidPressClose()
 }
 
