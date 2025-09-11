@@ -2572,11 +2572,13 @@ class BrowserViewController: UIViewController,
             // to navigateInTab(tab:) except when ReaderModeState is active
             // so that evaluateJavascriptInDefaultContentWorld() is called.
             guard let title = tab.title else { break }
-            if !title.isEmpty && title != tab.lastTitle {
-                tab.lastTitle = title
-                navigateInTab(tab: tab, webViewStatus: .title)
-            } else {
-                navigateIfReaderModeActive(currentTab: tab)
+            if !title.isEmpty {
+                if title != tab.lastTitle {
+                    tab.lastTitle = title
+                    navigateInTab(tab: tab, webViewStatus: .title)
+                } else {
+                    navigateIfReaderModeActive(currentTab: tab)
+                }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
         case .canGoBack:
@@ -3476,7 +3478,7 @@ class BrowserViewController: UIViewController,
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
-    fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
+    fileprivate func recordVisitForLocationChange(_ tab: Tab, navigation: WKNavigation?) {
         let visitType = getVisitTypeForTab(tab, navigation: navigation) ?? .link
         let url = tab.url?.displayURL?.description ?? ""
         let visitObservation = VisitObservation(url: url, title: tab.title, visitType: visitType)
@@ -3505,7 +3507,7 @@ class BrowserViewController: UIViewController,
 
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
-                postLocationChangeNotificationForTab(tab, navigation: navigation)
+                recordVisitForLocationChange(tab, navigation: navigation)
                 tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld(
                     "\(ReaderModeInfo.namespace.rawValue).checkReadability()"
