@@ -601,7 +601,7 @@
           ]
         }
       ],
-      "targeting": "(is_apple_intelligence_available) && (app_version|versionCompare('143.!') >= 0) && (language in ['en'])",
+      "targeting": "(is_apple_intelligence_available) && (isFirstRun == 'true') && (app_version|versionCompare('143.!') >= 0) && (language in ['en'])",
       "startDate": "2025-08-29",
       "enrollmentEndDate": null,
       "endDate": null,
