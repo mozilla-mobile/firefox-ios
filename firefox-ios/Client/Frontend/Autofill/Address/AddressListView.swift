@@ -55,7 +55,9 @@ struct AddressListView: View {
                     .font(.caption)
                     .foregroundColor(customLightGray)
                 }
-                .listStyle(.plain)
+                .modifier(ListStyleWithColor(
+                    backgroundColor: Color(themeManager.getCurrentTheme(for: windowUUID).colors.layer1))
+                )
                 .listRowInsets(EdgeInsets())
             } else if viewModel.isEditingFeatureEnabled {
                 contentUnavailableView

@@ -40,6 +40,21 @@ struct PaddingStyle: ViewModifier {
     }
 }
 
+struct ListStyleWithColor: ViewModifier {
+    let backgroundColor: Color
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
+                .background(backgroundColor)
+        } else {
+            content.listStyle(.plain)
+        }
+    }
+}
+
 struct ListStyle: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
@@ -123,6 +138,29 @@ struct NewStyleRoundedCorners: ViewModifier {
                 )
         } else {
             content
+        }
+    }
+}
+
+struct NewStyleToggleView: ViewModifier {
+    let paddingSize: CGFloat
+    let cornerRadius: CGFloat
+    let backgroundColor: Color
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding(.top, paddingSize / 2)
+                .padding(.bottom, paddingSize / 2)
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(backgroundColor)
+                )
+                .padding(.leading, paddingSize)
+                .padding(.trailing, paddingSize)
+        } else {
+            content
+                .background(backgroundColor)
         }
     }
 }
