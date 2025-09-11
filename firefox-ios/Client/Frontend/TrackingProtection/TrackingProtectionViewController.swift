@@ -686,14 +686,12 @@ class TrackingProtectionViewController: UIViewController,
                                                  image: model.connectionDetailsImage)
         adjustLayout()
     }
-}
 
-// MARK: - Themable
-extension TrackingProtectionViewController {
+    // MARK: - Themable
     func applyTheme() {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
-        view.backgroundColor = theme.colors.layer3.withAlphaComponent(TPMenuUX.UX.backgroundAlpha)
+        view.backgroundColor = theme.colors.layer3.withAlphaComponent(backgroundAlpha())
         headerContainer.applyTheme(theme: theme)
         connectionDetailsHeaderView.applyTheme(theme: theme)
         trackersView.applyTheme(theme: theme)
@@ -703,5 +701,17 @@ extension TrackingProtectionViewController {
         clearCookiesButton.applyTheme(theme: theme)
         settingsLinkButton.applyTheme(theme: theme)
         setNeedsStatusBarAppearanceUpdate()
+    }
+
+    private func backgroundAlpha() -> CGFloat {
+        guard !UIAccessibility.isReduceTransparencyEnabled else {
+            return 1.0
+        }
+
+        if #available(iOS 26.0, *) {
+            return TPMenuUX.UX.backgroundAlpha
+        }
+
+        return 1.0
     }
 }
