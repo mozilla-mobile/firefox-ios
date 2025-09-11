@@ -31,6 +31,7 @@ public struct StandardImageIdentifiers {
         public static let cross = "crossMedium"
         public static let crossCircleFill = "crossCircleFillMedium"
         public static let lightning = "lightningMedium"
+        public static let microphone = "microphoneMedium"
         public static let nightMode = "nightModeMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
         public static let readerView = "readerViewMedium"
