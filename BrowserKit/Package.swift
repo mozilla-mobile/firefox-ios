@@ -95,7 +95,10 @@ let package = Package(
             ]),
         .testTarget(
             name: "ComponentLibraryTests",
-            dependencies: ["ComponentLibrary"]),
+            dependencies: ["ComponentLibrary"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]),
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
@@ -113,6 +116,10 @@ let package = Package(
                 .copy("Resources/mozilla.ico"),
                 .copy("Resources/inf-nan.svg"),
                 .copy("Resources/hackernews.svg")
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
             ]
         ),
         .target(
@@ -128,7 +135,12 @@ let package = Package(
         ),
         .testTarget(
             name: "CommonTests",
-            dependencies: ["Common"]),
+            dependencies: ["Common"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         .target(
             name: "TabDataStore",
             dependencies: ["Common"],
@@ -136,7 +148,11 @@ let package = Package(
                             .enableExperimentalFeature("StrictConcurrency")]),
         .testTarget(
             name: "TabDataStoreTests",
-            dependencies: ["TabDataStore"]),
+            dependencies: ["TabDataStore"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "Redux",
             dependencies: ["Common"],
@@ -146,7 +162,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "ReduxTests",
-            dependencies: ["Redux"]),
+            dependencies: ["Redux"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "WebEngine",
             dependencies: ["Common",
@@ -158,22 +178,34 @@ let package = Package(
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"]),
-                            .enableExperimentalFeature("StrictConcurrency"),
-                            .enableUpcomingFeature("InferSendableFromCaptures")]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency"),
+                .enableUpcomingFeature("InferSendableFromCaptures")
+            ]
+        ),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"]),
+            dependencies: ["ToolbarKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "MenuKit",
             dependencies: ["Common", "ComponentLibrary"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
                 .enableExperimentalFeature("StrictConcurrency")
-            ]),
+            ]
+        ),
         .testTarget(
             name: "MenuKitTests",
-            dependencies: ["MenuKit"]),
+            dependencies: ["MenuKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "SummarizeKit",
             dependencies: [
@@ -181,10 +213,14 @@ let package = Package(
                 "ComponentLibrary",
                 "Down"
             ],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"])
+            ]
         ),
-        .testTarget(name: "SummarizeKitTests",
-                    dependencies: ["SummarizeKit"]),
+        .testTarget(
+            name: "SummarizeKitTests",
+            dependencies: ["SummarizeKit"]
+        ),
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],
@@ -194,10 +230,18 @@ let package = Package(
             ]),
         .target(
             name: "ContentBlockingGenerator",
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .testTarget(
             name: "ContentBlockingGeneratorTests",
-            dependencies: ["ContentBlockingGenerator"]),
+            dependencies: ["ContentBlockingGenerator"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],
@@ -214,9 +258,17 @@ let package = Package(
             ]),
         .testTarget(
             name: "OnboardingKitTests",
-            dependencies: ["OnboardingKit"]),
+            dependencies: ["OnboardingKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
-            dependencies: ["ContentBlockingGenerator"]),
+            dependencies: ["ContentBlockingGenerator"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
     ]
 )
