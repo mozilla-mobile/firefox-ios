@@ -5,6 +5,7 @@
 import Foundation
 
 /// Child settings pages debug actions
+@MainActor
 protocol DebugSettingsDelegate: AnyObject, SharedSettingsDelegate {
     func pressedVersion()
     func pressedShowTour()
