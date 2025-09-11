@@ -400,7 +400,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         let action = MainMenuAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: MainMenuActionType.viewDidLoad
+            actionType: MainMenuActionType.didInstantiateView
         )
 
         let dispatchExpectation = XCTestExpectation(description: "Request tab info middleware action dispatched")
@@ -427,7 +427,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         let action = MainMenuAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: MainMenuActionType.viewDidLoad
+            actionType: MainMenuActionType.didInstantiateView
         )
 
         let dispatchExpectation = XCTestExpectation(description: "Request tab info header middleware action dispatched")
