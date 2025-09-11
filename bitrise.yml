@@ -15,12 +15,13 @@ pipelines:
               expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
             depends_on:
             - determine_apps_affected
-        # TODO: May belong to pipeline_build_and_test_focus instead
-        # klar_configure_build:
-        #     run_if:
-        #       expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-        #     depends_on:
-        #     - determine_apps_affected
+        # We don't build klar for new PR now, bu we can still 
+        # start klar_configure_build manually.
+        klar_configure_build:
+            run_if:
+              expression: false
+            depends_on:
+            - determine_apps_affected
         run_firefox_ui_tests:
             run_if:
               expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
@@ -403,6 +404,7 @@ workflows:
                     ".")
                         # Root directory changes - build all applications
                         BUILD_FIREFOX_IOS="true"
+                        BUILD_FOCUS_IOS="false"
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                     *)
