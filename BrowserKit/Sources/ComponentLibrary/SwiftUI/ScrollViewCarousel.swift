@@ -64,15 +64,15 @@ public struct ScrollViewCarousel<Item, Content: View>: View {
     private func scrollViewContent(for size: CGSize) -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: ScrollViewCarouselUX.stackSpacing) {
-                ForEach(Array(items.enumerated()), id: \.offset) {
-                    index,
-                    item in
+                ForEach(Array(items.enumerated()), id: \.offset) { index, item in
                     content(item)
                         .frame(width: itemWidth(for: size))
                         .padding(.trailing, index == items.count - 1 ? 0 : ScrollViewCarouselUX.interItemSpacing)
                         .accessibilityElement(children: .contain)
                         .accessibilitySortPriority(
-                            index == selection ? ScrollViewCarouselUX.selectedAccessibilityPriority : ScrollViewCarouselUX.unselectedAccessibilityPriority
+                            index == selection
+                            ? ScrollViewCarouselUX.selectedAccessibilityPriority
+                            : ScrollViewCarouselUX.unselectedAccessibilityPriority
                         )
                         .accessibilityAddTraits(index == selection ? [.isSelected] : [])
                         .accessibilityHidden(index != selection)
@@ -103,7 +103,11 @@ public struct ScrollViewCarousel<Item, Content: View>: View {
     private func handleSelectionChange(_ oldValue: Int, _ newValue: Int) {
         guard !isInternalUpdate else { return }
 
-        withAnimation(reduceMotion ? .easeInOut(duration: ScrollViewCarouselUX.reduceMotionAnimationDuration) : ScrollViewCarouselUX.swipeAnimation) {
+        withAnimation(
+            reduceMotion ? .easeInOut(
+                duration: ScrollViewCarouselUX.reduceMotionAnimationDuration
+            ) : ScrollViewCarouselUX.swipeAnimation
+        ) {
             scrollPosition = newValue
         }
         provideFeedback()
