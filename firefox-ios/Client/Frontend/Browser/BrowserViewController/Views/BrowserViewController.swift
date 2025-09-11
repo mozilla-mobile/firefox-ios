@@ -3506,10 +3506,7 @@ class BrowserViewController: UIViewController,
 
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
-                // Post location changed that records visit only when called from webview's didFinishNavigation
-                if webViewStatus == .finishedNavigation {
-                    postLocationChangeNotificationForTab(tab, navigation: navigation)
-                }
+                postLocationChangeNotificationForTab(tab, navigation: navigation)
                 tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld(
                     "\(ReaderModeInfo.namespace.rawValue).checkReadability()"
