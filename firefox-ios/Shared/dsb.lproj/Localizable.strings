@@ -839,13 +839,13 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Kryptokopanje liceńske wugbaśe wašogo systema kšajźu wužywa, aby digitalne pjenjeze dobyło. Kryptokopanske skripty wašu bateriju proznje, wašo licadło spómałšuju a mógu wašu pśetrjebu energije pówušyś.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Nastajenja we wobglědowaku a na licadle su jadnorazowe. Palcowe wótśišće zběraju wjelerakosć toś tych jadnorazowych nastajenjow, aby profil wó was napórali, kótaryž dajo se wužywaś, aby wam slědował, gaž pśeglědujośo.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Nastajenja we wobglědowaku a na licadle su jadnorazowe. Zběrarje palcowych wótśišćow zběraju wjelerakosć toś tych jadnorazowych nastajenjow, aby profil wó was napórali, kótaryž dajo se wužywaś, aby wam slědował, gaž pśeglědujośo.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Socialne seśi pśeslědowaki na drugich websedłach placěruju, aby dopołnjejšy a zaměrnjejšy profil wó was napórali. Blokěrowanje toś tych pśeslědowakow reducěrujo, kak wjele pśedewześa socialnych medijow mógu wó tom wiźeś, což wy online gótujośo.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Palcowe wótśišće";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Zběrarje palcowych wótśišćow";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Nowe funkcije a změny";
