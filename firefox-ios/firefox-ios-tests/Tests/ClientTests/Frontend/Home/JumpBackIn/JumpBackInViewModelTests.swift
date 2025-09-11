@@ -19,6 +19,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     let iPhone14ScreenSize = CGSize(width: 390, height: 844)
     let sleepTime: UInt64 = 100_000_000
+
     override func setUp() {
         super.setUp()
 
@@ -28,8 +29,7 @@ class JumpBackInViewModelTests: XCTestCase {
         mockTabManager = MockTabManager()
         stubBrowserViewController = BrowserViewController(
             profile: mockProfile,
-            tabManager: TabManagerImplementation(profile: mockProfile,
-                                                 uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
+            tabManager: mockTabManager
         )
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)

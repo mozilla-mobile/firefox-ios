@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-public protocol TabDataStore {
+public protocol TabDataStore: Sendable {
     /// Fetches the previously saved window data matching the provided UUID,
     /// if it exists. This data contains the list of tabs.
     /// - Returns: The window data object if one was previously saved
@@ -23,7 +23,7 @@ public protocol TabDataStore {
     /// saved files in the directory) it is faster than fetchWindowData() and is
     /// preferable when only the UUIDs are needed.
     /// - Returns: a list of UUIDs for any saved WindowData.
-    func fetchWindowDataUUIDs() -> [WindowUUID]
+    nonisolated func fetchWindowDataUUIDs() -> [WindowUUID]
 
     /// Erases the on-disk data for tab windows matching the provided UUIDs.
     /// - Parameter forUUIDs: the UUIDs to delete the on-disk tab files for.

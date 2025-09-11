@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import Shared
+import Common
 import class MozillaAppServices.FeatureHolder
 
 protocol SearchViewDelegate: AnyObject {
@@ -185,30 +186,32 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery,
                              callback: { suggestions, error in
-            if error == nil, self.shouldShowSearchEngineSuggestions {
-                self.suggestions = suggestions!
-                // Remove user searching term inside suggestions list
-                self.suggestions?.removeAll(where: {
-                    // swiftlint:disable line_length
-                    $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
-                    // swiftlint:enable line_length
-                })
-                // First suggestion should be what the user is searching
-                self.suggestions?.insert(self.searchQuery, at: 0)
-                self.searchTelemetry.clearVisibleResults()
-            }
+            ensureMainThread {
+                if error == nil, self.shouldShowSearchEngineSuggestions {
+                    self.suggestions = suggestions!
+                    // Remove user searching term inside suggestions list
+                    self.suggestions?.removeAll(where: {
+                        // swiftlint:disable line_length
+                        $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+                        // swiftlint:enable line_length
+                    })
+                    // First suggestion should be what the user is searching
+                    self.suggestions?.insert(self.searchQuery, at: 0)
+                    self.searchTelemetry.clearVisibleResults()
+                }
 
-            // If there are no suggestions, just use whatever the user typed.
-            if self.shouldShowSearchEngineSuggestions &&
-               suggestions?.isEmpty ?? true {
-                self.suggestions = [self.searchQuery]
-            }
+                // If there are no suggestions, just use whatever the user typed.
+                if self.shouldShowSearchEngineSuggestions &&
+                    suggestions?.isEmpty ?? true {
+                    self.suggestions = [self.searchQuery]
+                }
 
-            self.searchTabs(for: self.searchQuery)
-            self.searchRemoteTabs(for: self.searchQuery)
-            self.savedQuery = tempSearchQuery
-            self.searchTelemetry.savedQuery = tempSearchQuery
-            self.delegate?.reloadTableView()
+                self.searchTabs(for: self.searchQuery)
+                self.searchRemoteTabs(for: self.searchQuery)
+                self.savedQuery = tempSearchQuery
+                self.searchTelemetry.savedQuery = tempSearchQuery
+                self.delegate?.reloadTableView()
+            }
         })
     }
 
@@ -257,6 +260,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         delegate?.reloadTableView()
     }
 
+    @MainActor
     func searchTabs(for searchString: String) {
         let currentTabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
 

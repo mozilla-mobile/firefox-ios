@@ -10,15 +10,14 @@ import Common
 class StartAtHomeHelperTests: XCTestCase {
     private var helper: StartAtHomeHelper!
     private var profile: MockProfile!
-    private var tabManager: TabManager!
+    private var tabManager: MockTabManager!
 
     override func setUp() {
         super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        tabManager = TabManagerImplementation(profile: profile,
-                                              uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
+        tabManager = MockTabManager()
 
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)

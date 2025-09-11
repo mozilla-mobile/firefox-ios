@@ -37,6 +37,7 @@ class NoImageModeHelper: TabContentScript {
         return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }
 
+    @MainActor
     static func toggle(isEnabled: Bool, profile: Profile) {
         profile.prefs.setBool(isEnabled, forKey: NoImageModePrefsKey.NoImageModeStatus)
 

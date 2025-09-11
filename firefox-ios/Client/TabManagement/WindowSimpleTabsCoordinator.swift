@@ -4,8 +4,10 @@
 
 import Foundation
 import WidgetKit
+import Common
 
 protocol WindowSimpleTabsProvider {
+    @MainActor
     func windowSimpleTabs() -> [String: SimpleTab]
 }
 
@@ -17,8 +19,10 @@ final class WindowSimpleTabsCoordinator {
 
     func saveSimpleTabs(for providers: [WindowSimpleTabsProvider]) {
         throttler.throttle {
-            let allTabs = providers.reduce([:], { $0.merge(with: $1.windowSimpleTabs()) })
-            SimpleTab.saveSimpleTab(tabs: allTabs)
+            ensureMainThread {
+                let allTabs = providers.reduce([:], { $0.merge(with: $1.windowSimpleTabs()) })
+                SimpleTab.saveSimpleTab(tabs: allTabs)
+            }
         }
     }
 }

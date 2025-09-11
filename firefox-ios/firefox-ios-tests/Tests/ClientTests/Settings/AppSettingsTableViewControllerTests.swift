@@ -6,6 +6,7 @@ import XCTest
 import Common
 @testable import Client
 
+@MainActor
 class AppSettingsTableViewControllerTests: XCTestCase {
     private var profile: Profile!
     private var tabManager: TabManager!

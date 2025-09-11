@@ -49,7 +49,6 @@ final class MockWindowManager: WindowManager {
         wrappedManager.allWindowUUIDs(includingReserved: includingReserved)
     }
 
-    @MainActor
     func windowWillClose(uuid: WindowUUID) {
         wrappedManager.windowWillClose(uuid: uuid)
     }
@@ -58,12 +57,10 @@ final class MockWindowManager: WindowManager {
         wrappedManager.reserveNextAvailableWindowUUID(isIpad: isIpad)
     }
 
-    @MainActor
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {
         wrappedManager.postWindowEvent(event: event, windowUUID: windowUUID)
     }
 
-    @MainActor
     func performMultiWindowAction(_ action: MultiWindowAction) {
         switch action {
         case .closeAllPrivateTabs:

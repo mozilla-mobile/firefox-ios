@@ -7,6 +7,7 @@ import XCTest
 import Common
 @testable import Client
 
+@MainActor
 class WindowManagerTests: XCTestCase {
     let tabManager = MockTabManager(windowUUID: WindowUUID())
     let secondTabManager = MockTabManager(windowUUID: WindowUUID())

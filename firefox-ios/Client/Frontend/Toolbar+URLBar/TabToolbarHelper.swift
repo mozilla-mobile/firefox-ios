@@ -182,10 +182,13 @@ open class TabToolbarHelper: NSObject {
         NotificationCenter.default.addObserver(
             forName: UILargeContentViewerInteraction.enabledStatusDidChangeNotification,
             object: nil,
-            queue: nil
+            queue: .main
         ) { [weak self] _ in
-            self?.longPressGestureRecognizers.forEach { gesture in
-                gesture.minimumPressDuration = longPressDuration
+            guard let self = self else { return }
+            ensureMainThread {
+                self.longPressGestureRecognizers.forEach { gesture in
+                    gesture.minimumPressDuration = longPressDuration
+                }
             }
         }
     }

@@ -53,6 +53,7 @@ class TabManagerTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testRecentlyAccessedNormalTabs() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         var tabs = generateTabs(count: 5)
@@ -67,12 +68,14 @@ class TabManagerTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
+    @MainActor
     func testTabIndexSubscript() {
         let subject = createSubject(tabs: generateTabs(count: 5))
         let tab = subject[0]
         XCTAssertNotNil(tab)
     }
 
+    @MainActor
     func testRemoveTabs() {
         let subject = createSubject(tabs: generateTabs(count: 5))
         let tabs = subject.tabs
@@ -118,6 +121,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.count, 4)
     }
 
+    @MainActor
     func testGetTabForUUID() {
         let subject = createSubject(tabs: generateTabs(count: 1))
         let uuid = subject.tabs.first!.tabUUID
@@ -353,7 +357,7 @@ class TabManagerTests: XCTestCase {
     }
 
     // MARK: - Save tabs
-
+    @MainActor
     func testPreserveTabsWithNoTabs() async throws {
         let subject = createSubject()
         subject.preserveTabs()
@@ -362,6 +366,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.count, 0)
     }
 
+    @MainActor
     func testPreserveTabsWithOneTab() async throws {
         let subject = createSubject(tabs: generateTabs(count: 1))
         subject.tabRestoreHasFinished = true
@@ -371,6 +376,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.count, 1)
     }
 
+    @MainActor
     func testPreserveTabsWithManyTabs() async throws {
         let subject = createSubject(tabs: generateTabs(count: 5))
         subject.tabRestoreHasFinished = true
@@ -381,7 +387,7 @@ class TabManagerTests: XCTestCase {
     }
 
     // MARK: - Save preview screenshot
-
+    @MainActor
     func testSaveScreenshotWithNoImage() async throws {
         let subject = createSubject(tabs: generateTabs(count: 5))
         guard let tab = subject.tabs.first else {
@@ -394,6 +400,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
     }
 
+    @MainActor
     func testSaveScreenshotWithImage() async throws {
         let subject = createSubject(tabs: generateTabs(count: 5))
         guard let tab = subject.tabs.first else {
@@ -406,6 +413,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
     }
 
+    @MainActor
     func testGetActiveAndInactiveTabs() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         let totalTabCount = 3
@@ -451,7 +459,7 @@ class TabManagerTests: XCTestCase {
     }
 
     // MARK: - Test findRightOrLeftTab helper
-
+    @MainActor
     func testFindRightOrLeftTab_forEmptyArray() {
         // Set up a tab array as follows:
         // [] Empty
@@ -468,6 +476,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertNil(rightOrLeftTab, "Cannot return a tab when the array is empty")
     }
 
+    @MainActor
     func testFindRightOrLeftTab_forSingleTabInArray_ofSameType() {
         // Set up a tab array as follows:
         // [A1]
@@ -485,6 +494,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(rightOrLeftTab, tabManager.tabs[safe: 0], "Should return neighbour of same type, as one exists")
     }
 
+    @MainActor
     func testFindRightOrLeftTab_forSingleTabInArray_ofDifferentType() {
         // Set up a tab array as follows:
         // [A1]
@@ -501,6 +511,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertNil(rightOrLeftTab, "Cannot return neighbour tab of same type, as no other private tabs exist")
     }
 
+    @MainActor
     func testFindRightOrLeftTab_forDeletedIndexInMiddle_uniformTabTypes() {
         // Set up a tab array as follows:
         // [A1, A2, A3, A4, A5, A6, A7]
@@ -519,6 +530,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(rightOrLeftTab, tabManager.tabs[safe: 3], "Should pick tab A4 at the same position as deletedIndex")
     }
 
+    @MainActor
     func testFindRightOrLeftTab_forDeletedIndexInMiddle_mixedTabTypes() {
         // Set up a tab array as follows:
         // [A1, P1, P2, I1, A2, I2, A3, A4, P3]
@@ -543,6 +555,7 @@ class TabManagerTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testFindRightOrLeftTab_forDeletedIndexAtStart() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         // Set up a tab array as follows:
@@ -567,6 +580,7 @@ class TabManagerTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testFindRightOrLeftTab_forDeletedIndexAtEnd() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         // Set up a tab array as follows:
@@ -592,6 +606,7 @@ class TabManagerTests: XCTestCase {
         )
     }
 
+    @MainActor
     func testFindRightOrLeftTab_prefersRightTabOverLeftTab() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         // Set up a tab array as follows:
@@ -1699,7 +1714,7 @@ class TabManagerTests: XCTestCase {
     }
 
     // MARK: - Helper methods
-
+    @MainActor
     private func createSubject(tabs: [Tab] = [],
                                windowUUID: WindowUUID? = nil,
                                file: StaticString = #filePath,
@@ -1785,6 +1800,7 @@ class TabManagerTests: XCTestCase {
         return URL(string: "https://mozilla.com?item=\(count)")!
     }
 
+    @MainActor
     private func setupForFindRightOrLeftTab_mixedTypes(file: StaticString = #filePath,
                                                        line: UInt = #line) -> TabManagerImplementation {
         // Set up a tab array as follows:

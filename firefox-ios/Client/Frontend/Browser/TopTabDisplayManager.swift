@@ -97,6 +97,7 @@ class TopTabDisplayManager: NSObject {
 
     private(set) var isPrivate = false
 
+    @MainActor
     private var isSelectedTabTypeEmpty: Bool {
         return isPrivate ? tabManager.privateTabs.isEmpty : tabManager.normalTabs.isEmpty
     }
@@ -119,6 +120,7 @@ class TopTabDisplayManager: NSObject {
         return started
     }
 
+    @MainActor
     var shouldPresentUndoToastOnHomepage: Bool {
         guard !isPrivate else { return false }
         return tabManager.normalTabs.count == 1
@@ -176,6 +178,7 @@ class TopTabDisplayManager: NSObject {
         return isActive
     }
 
+    @MainActor
     init(collectionView: UICollectionView,
          tabManager: TabManager,
          tabDisplayer: TabDisplayerDelegate,
@@ -213,6 +216,7 @@ class TopTabDisplayManager: NSObject {
         self.collectionView.reloadData()
     }
 
+    @MainActor
     private func getTabs() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         self.filteredTabs = allTabs
@@ -264,6 +268,7 @@ class TopTabDisplayManager: NSObject {
                                         userInfo: tabManager.windowUUID.userInfo)
     }
 
+    @MainActor
     func refreshStore(forceReload: Bool = false,
                       shouldAnimate: Bool = false) {
         operations.removeAll()
@@ -612,6 +617,7 @@ extension TopTabDisplayManager: TabManagerDelegate {
         }
     }
 
+    @MainActor
     func getIndexToPlaceTab(placeNextToParentTab: Bool) -> Int {
         // Place new tab at the end by default unless it has been opened from parent tab
         var indexToPlaceTab = !dataStore.isEmpty ? dataStore.count : 0
@@ -711,13 +717,18 @@ extension TopTabDisplayManager: TabManagerDelegate {
 extension TopTabDisplayManager: Notifiable {
     // MARK: - Notifiable protocol
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DidTapUndoCloseAllTabToast:
-            guard tabManager.windowUUID == notification.windowUUID else { return }
-            refreshStore()
-            collectionView.reloadData()
-        default:
-            break
+        let name = notification.name
+        let windowUUID = notification.windowUUID
+        let tabManagerWindowUUID = tabManager.windowUUID
+        ensureMainThread {
+            switch name {
+            case .DidTapUndoCloseAllTabToast:
+                guard tabManagerWindowUUID == windowUUID else { return }
+                self.refreshStore()
+                self.collectionView.reloadData()
+            default:
+                break
+            }
         }
     }
 }
