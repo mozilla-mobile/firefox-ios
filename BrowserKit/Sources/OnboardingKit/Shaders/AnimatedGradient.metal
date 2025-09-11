@@ -139,7 +139,6 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
 
     // Smoothing constants
     const float kMinInfluenceThreshold = 0.001f;
-    const float kMinColorThreshold = 0.01f; // Threshold for detecting uninitialized textures
 
     // Control point animation speeds - now configurable with speed multiplier
     const float kFirstPointAnimationSpeed = kBaseFirstPointAnimationSpeed * speedMultiplier;

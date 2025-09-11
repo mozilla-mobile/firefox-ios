@@ -266,7 +266,7 @@ struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
 
 struct AnimatedGradientMetalView: View {
     @State private var gradientColors: [Color] = []
-    @State private var delegate: AnimatedGradientRenderer?
+    @StateObject private var rendererStore: RendererStore
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
@@ -277,11 +277,11 @@ struct AnimatedGradientMetalView: View {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        _delegate = State(initialValue: AnimatedGradientRenderer(device: metalDevice, speed: 3.0))
+        _rendererStore = StateObject(wrappedValue: RendererStore(device: metalDevice, speed: 3.0))
     }
 
     var body: some View {
-        if let delegate {
+        if let delegate = rendererStore.renderer {
             AnimatedGradientMetalViewRepresentable(delegate: delegate)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -317,7 +317,7 @@ struct AnimatedGradientMetalView: View {
             Color(color.gradientOnboardingStop4)
         ]
 
-        delegate?.updatePaletteForCurrentTheme(
+        rendererStore.renderer?.updatePaletteForCurrentTheme(
             palette: GradientPalette(
                 gradientOnboardingStop1: SIMD3<Float>(color.gradientOnboardingStop1),
                 gradientOnboardingStop2: SIMD3<Float>(color.gradientOnboardingStop2),
@@ -325,5 +325,14 @@ struct AnimatedGradientMetalView: View {
                 gradientOnboardingStop4: SIMD3<Float>(color.gradientOnboardingStop4)
             )
         )
+    }
+}
+
+// Wrapper class to manage the optional renderer
+class RendererStore: ObservableObject {
+    let renderer: AnimatedGradientRenderer?
+
+    init(device: MTLDevice?, speed: Float) {
+        self.renderer = AnimatedGradientRenderer(device: device, speed: speed)
     }
 }
