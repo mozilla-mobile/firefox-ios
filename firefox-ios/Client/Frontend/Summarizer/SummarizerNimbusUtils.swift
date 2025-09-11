@@ -65,8 +65,10 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     func isAppleSummarizerEnabled() -> Bool {
         #if canImport(FoundationModels)
-            let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
-            return AppleIntelligenceUtil().isAppleIntelligenceAvailable && isFlagEnabled
+            // TODO(FXIOS-13471): Bypassing nimbus for now for 143, until we figure out what's happening with nimbus.
+            // let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
+            // return AppleIntelligenceUtil().isAppleIntelligenceAvailable && isFlagEnabled
+            return AppleIntelligenceUtil().isAppleIntelligenceAvailable
         #else
             return false
         #endif
@@ -77,8 +79,10 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
-        let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizerToolbarEntrypoint, checking: .buildOnly)
-        return isAppleSummarizerEnabled() && isFlagEnabled
+        // TODO(FXIOS-13471): Bypassing nimbus for now for 143, until we figure out what's happening with nimbus.
+        // let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizerToolbarEntrypoint, checking: .buildOnly)
+        // return isAppleSummarizerEnabled() && isFlagEnabled
+        return AppleIntelligenceUtil().isAppleIntelligenceAvailable
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
@@ -87,8 +91,10 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerShakeGestureEnabled() -> Bool {
-        let isShakeEnabled = featureFlags.isFeatureEnabled(.appleSummarizerShakeGesture, checking: .buildOnly)
-        return isAppleSummarizerEnabled() && isShakeEnabled
+        // TODO(FXIOS-13471): Bypassing nimbus for now for 143, until we figure out what's happening with nimbus.
+        // let isShakeEnabled = featureFlags.isFeatureEnabled(.appleSummarizerShakeGesture, checking: .buildOnly)
+        // return isAppleSummarizerEnabled() && isShakeEnabled
+        return isAppleSummarizerEnabled()
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
