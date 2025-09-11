@@ -398,7 +398,6 @@ class BrowserViewController: UIViewController,
     private var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
-    // TODO: YRD Confirm if can be deleted
     var ignoredNavigation = Set<WKNavigation>()
     var typedNavigation = [WKNavigation: VisitType]()
 

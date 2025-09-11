@@ -10,10 +10,8 @@ import WebKit
 
 // Handles recording visit to website that will be used to list History
 class RecordVisitObservationManager {
-    // some kind of mech to avoid recording same observation twice based in user actions like new tab
     private var historyHandler: HistoryHandler
     nonisolated let logger: Logger
-
     var lastObservationRecorded: VisitObservation?
 
     init (profile: Profile,
@@ -47,9 +45,8 @@ class RecordVisitObservationManager {
         lastObservationRecorded = nil
     }
 
-    // Should record if is not Private tab
-    // if URL should not be ignored
-    // or title is empty
+    // Should record if is not Private tab, URL should not be ignored
+    // or title is not empty
     private func shouldRecordObservation(visitObservation: VisitObservation, isPrivateTab: Bool) -> Bool {
         guard let title = visitObservation.title, !title.isEmpty,
               let url = URL(string: visitObservation.url), !isIgnoredURL(url),
