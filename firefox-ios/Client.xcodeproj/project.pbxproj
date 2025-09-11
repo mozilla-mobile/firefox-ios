@@ -1370,6 +1370,7 @@
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
+		AA5BE2BC2E71D0D100C0E445 /* MockTrendingSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5BE2BB2E71D0CD00C0E445 /* MockTrendingSearchEngine.swift */; };
 		AA85F8BD2E69CCF600A6A30A /* RecentSearchProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA85F8BC2E69CCF100A6A30A /* RecentSearchProviderTests.swift */; };
 		AAE3CE932E68703800131228 /* TrendingSearchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE3CE922E68703100131228 /* TrendingSearchClientTests.swift */; };
 		AAE642AE2E67177F00899E76 /* RecentSearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE642AD2E67177900899E76 /* RecentSearchClient.swift */; };
@@ -9302,6 +9303,7 @@
 		AA0B46CCA57F0E0997CC0AEA /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Intro.strings; sourceTree = "<group>"; };
 		AA0B47C6B76C81D58AD910F1 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		AA244A28A4D501F91E5C0FF2 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
+		AA5BE2BB2E71D0CD00C0E445 /* MockTrendingSearchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrendingSearchEngine.swift; sourceTree = "<group>"; };
 		AA80494199BED7BAA77241A9 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Storage.strings"; sourceTree = "<group>"; };
 		AA85F8BC2E69CCF100A6A30A /* RecentSearchProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchProviderTests.swift; sourceTree = "<group>"; };
 		AAAB41FC97F6C8F8A1506603 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -12953,6 +12955,7 @@
 		8A5189C62C1B5F6C00CDB668 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				AA5BE2BB2E71D0CD00C0E445 /* MockTrendingSearchEngine.swift */,
 				AA85F8BC2E69CCF100A6A30A /* RecentSearchProviderTests.swift */,
 				AAE3CE922E68703100131228 /* TrendingSearchClientTests.swift */,
 				8A87AEE02C1B4D17007428B2 /* SearchViewModelTests.swift */,
@@ -19188,6 +19191,7 @@
 				5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */,
 				C80C11F028B3C9150062922A /* MockUserDefaults.swift in Sources */,
 				D8BA1790206D47830023AC00 /* DeferredTestUtils.swift in Sources */,
+				AA5BE2BC2E71D0D100C0E445 /* MockTrendingSearchEngine.swift in Sources */,
 				ED4294852CF1286E0077D7CB /* ShareManagerTests.swift in Sources */,
 				5AA75A652A46274A00533F8D /* MockThemeManager.swift in Sources */,
 				8A5038142A5DFCE000A1B02A /* MockBrowserProfile.swift in Sources */,

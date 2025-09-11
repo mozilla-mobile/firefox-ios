@@ -5,6 +5,10 @@
 import Common
 import Shared
 
+protocol TrendingSearchEngine {
+    func trendingURLForQuery() -> URL?
+}
+
 enum TrendingSearchClientError: Error {
     case invalidHTTPResponse
     case unableToRetrieveResponse
@@ -12,19 +16,21 @@ enum TrendingSearchClientError: Error {
 }
 
 final class TrendingSearchClient {
-    private let searchEngine: OpenSearchEngine
+    private let searchEngine: TrendingSearchEngine
     private let logger: Logger
+    private var urlSession: URLSession
 
-    init(searchEngine: OpenSearchEngine,
-         logger: Logger = DefaultLogger.shared) {
+    init(searchEngine: TrendingSearchEngine,
+         logger: Logger = DefaultLogger.shared,
+         session: URLSession = makeURLSession(
+            userAgent: UserAgent.mobileUserAgent(),
+            configuration: URLSessionConfiguration.defaultMPTCP
+         )
+    ) {
         self.searchEngine = searchEngine
         self.logger = logger
+        self.urlSession = session
     }
-
-    private var urlSession = makeURLSession(
-        userAgent: UserAgent.mobileUserAgent(),
-        configuration: URLSessionConfiguration.defaultMPTCP
-    )
 
     func getTrendingSearches() async throws -> [String] {
         do {

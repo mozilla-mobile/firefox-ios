@@ -54,8 +54,8 @@ final class RecentSearchProviderTest: XCTestCase {
         let sut = createSubject(for: "engineA")
 
         sut.addRecentSearch("Swift")
-        sut.addRecentSearch("swift")  // dedupe + move to front
-        sut.addRecentSearch("SWIFT")  // move to front again
+        sut.addRecentSearch("swift")
+        sut.addRecentSearch("SWIFT")
 
         XCTAssertEqual(sut.recentSearches(), ["SWIFT"])
     }
