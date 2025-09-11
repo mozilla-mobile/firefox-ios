@@ -160,7 +160,8 @@ class TrackingProtectionViewController: UIViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [UIContentSizeCategory.didChangeNotification]
+            observing: [UIContentSizeCategory.didChangeNotification,
+                        UIAccessibility.reduceTransparencyStatusDidChangeNotification]
         )
         scrollView.delegate = self
         updateViewDetails()
@@ -501,16 +502,22 @@ class TrackingProtectionViewController: UIViewController,
         toggleView.setupActions()
     }
 
-    // MARK: Notifications
+    // - MARK: Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustLayout()
+            ensureMainThread {
+                self.adjustLayout()
+            }
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            ensureMainThread {
+                self.applyTheme()
+            }
         default: break
         }
     }
 
-    // MARK: View Transitions
+    // MARK: - View Transitions
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         adjustLayout()
@@ -523,7 +530,7 @@ class TrackingProtectionViewController: UIViewController,
         }, completion: nil)
     }
 
-    // MARK: Accessibility
+    // MARK: - Accessibility
     private func setupAccessibilityIdentifiers() {
         connectionDetailsHeaderView.setupAccessibilityIdentifiers(foxImageA11yId: model.foxImageA11yId)
         trackersView.setupAccessibilityIdentifiers(
