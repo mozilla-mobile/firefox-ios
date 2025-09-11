@@ -83,8 +83,9 @@ class AccountSyncHandler: TabEventHandler {
     private func performClientsAndTabsSync() {
         guard profile.hasSyncableAccount() else { return }
         debouncer.call { [weak self] in
+            guard let self = self else {return }
             ensureMainThread {
-                self?.storeTabs()
+                self.storeTabs()
             }
         }
     }

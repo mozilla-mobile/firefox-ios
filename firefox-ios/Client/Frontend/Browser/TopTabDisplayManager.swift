@@ -56,7 +56,6 @@ struct TabDisplayOrder: Codable {
 
 /// This class is only used in top tabs, but it was used beforehand in the tab tray. Some clean up was done,
 /// but the code is not as clear as it could be since this class had multiple purposes.
-@MainActor
 class TopTabDisplayManager: NSObject {
     private struct UX {
         static let tabCornerRadius: CGFloat = 8
@@ -98,6 +97,7 @@ class TopTabDisplayManager: NSObject {
 
     private(set) var isPrivate = false
 
+    @MainActor
     private var isSelectedTabTypeEmpty: Bool {
         return isPrivate ? tabManager.privateTabs.isEmpty : tabManager.normalTabs.isEmpty
     }
@@ -120,6 +120,7 @@ class TopTabDisplayManager: NSObject {
         return started
     }
 
+    @MainActor
     var shouldPresentUndoToastOnHomepage: Bool {
         guard !isPrivate else { return false }
         return tabManager.normalTabs.count == 1
@@ -177,6 +178,7 @@ class TopTabDisplayManager: NSObject {
         return isActive
     }
 
+    @MainActor
     init(collectionView: UICollectionView,
          tabManager: TabManager,
          tabDisplayer: TabDisplayerDelegate,
@@ -214,6 +216,7 @@ class TopTabDisplayManager: NSObject {
         self.collectionView.reloadData()
     }
 
+    @MainActor
     private func getTabs() -> [Tab] {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         self.filteredTabs = allTabs
@@ -265,6 +268,7 @@ class TopTabDisplayManager: NSObject {
                                         userInfo: tabManager.windowUUID.userInfo)
     }
 
+    @MainActor
     func refreshStore(forceReload: Bool = false,
                       shouldAnimate: Bool = false) {
         operations.removeAll()
@@ -613,6 +617,7 @@ extension TopTabDisplayManager: TabManagerDelegate {
         }
     }
 
+    @MainActor
     func getIndexToPlaceTab(placeNextToParentTab: Bool) -> Int {
         // Place new tab at the end by default unless it has been opened from parent tab
         var indexToPlaceTab = !dataStore.isEmpty ? dataStore.count : 0
@@ -712,10 +717,12 @@ extension TopTabDisplayManager: TabManagerDelegate {
 extension TopTabDisplayManager: Notifiable {
     // MARK: - Notifiable protocol
     func handleNotifications(_ notification: Notification) {
+        let name = notification.name
+        let windowUUID = notification.windowUUID
         ensureMainThread {
-            switch notification.name {
+            switch name {
             case .DidTapUndoCloseAllTabToast:
-                guard self.tabManager.windowUUID == notification.windowUUID else { return }
+                guard self.tabManager.windowUUID == windowUUID else { return }
                 self.refreshStore()
                 self.collectionView.reloadData()
             default:

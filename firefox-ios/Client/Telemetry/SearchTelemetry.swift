@@ -241,14 +241,63 @@ class SearchTelemetry: @unchecked Sendable {
     func startImpressionTimer() {
         impressionTelemetryTimer?.invalidate()
         impressionTelemetryTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false, block: { [weak self] _ in
+            guard let self = self else { return }
             ensureMainThread {
-                self?.recordURLBarSearchEngagementTelemetryEvent()
+                self.recordURLBarSearchImpressionTelemetryEvent()
             }
         })
     }
 
     func stopImpressionTimer() {
         impressionTelemetryTimer?.invalidate()
+    }
+
+    @MainActor
+    func recordURLBarSearchImpressionTelemetryEvent() {
+        guard let tab = tabManager.selectedTab else { return }
+        let reasonKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.reason.rawValue
+        let reason = SearchTelemetryValues.Reason.pause.rawValue
+
+        let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
+        let sap = checkSAP(for: tab).rawValue
+
+        let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
+        let interaction = interactionType.rawValue
+
+        let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
+        let searchMode = SearchTelemetryValues.SearchMode.tabs.rawValue
+
+        let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
+        let nChars = Int32(searchQuery.count)
+
+        let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
+        let nWords = searchQuery.numberOfWords
+
+        let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
+        let nResults = Int32(numberOfSearchResults())
+
+        let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
+        let groups = listGroupTypes()
+
+        let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
+        let results = listResultTypes()
+
+        let extraDetails = [
+            reasonKey: reason,
+            sapKey: sap,
+            interactionKey: interaction,
+            searchModeKey: searchMode,
+            nCharsKey: nChars,
+            nWordsKey: nWords,
+            nResultsKey: nResults,
+            groupsKey: groups,
+            resultsKey: results]
+        as [String: Any]
+
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .view,
+                                     object: .urlbarImpression,
+                                     extras: extraDetails)
     }
 
     // MARK: Engagement Telemetry

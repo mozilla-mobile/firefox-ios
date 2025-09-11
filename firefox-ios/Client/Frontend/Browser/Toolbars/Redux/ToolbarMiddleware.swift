@@ -45,16 +45,30 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     lazy var toolbarProvider: Middleware<AppState> = { state, action in
-        if let action = action as? GeneralBrowserMiddlewareAction {
-            self.resolveGeneralBrowserMiddlewareActions(action: action, state: state)
-        } else if let action = action as? MicrosurveyPromptMiddlewareAction {
-            self.resolveMicrosurveyActions(windowUUID: action.windowUUID, actionType: action.actionType, state: state)
-        } else if let action = action as? MicrosurveyPromptAction {
-            self.resolveMicrosurveyActions(windowUUID: action.windowUUID, actionType: action.actionType, state: state)
-        } else if let action = action as? ToolbarMiddlewareAction {
-            self.resolveToolbarMiddlewareActions(action: action, state: state)
-        } else if let action = action as? ToolbarAction {
-            self.resolveToolbarActions(action: action, state: state)
+        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
+        // because we dispatch to the main thread in the store. We will want to
+        // also isolate that to the @MainActor to remove this.
+        guard Thread.isMainThread else {
+            self.logger.log(
+                "MessageCardMiddleware is not being called from the main thread!",
+                level: .fatal,
+                category: .tabs
+            )
+            return
+        }
+
+        MainActor.assumeIsolated {
+            if let action = action as? GeneralBrowserMiddlewareAction {
+                self.resolveGeneralBrowserMiddlewareActions(action: action, state: state)
+            } else if let action = action as? MicrosurveyPromptMiddlewareAction {
+                self.resolveMicrosurveyActions(windowUUID: action.windowUUID, actionType: action.actionType, state: state)
+            } else if let action = action as? MicrosurveyPromptAction {
+                self.resolveMicrosurveyActions(windowUUID: action.windowUUID, actionType: action.actionType, state: state)
+            } else if let action = action as? ToolbarMiddlewareAction {
+                self.resolveToolbarMiddlewareActions(action: action, state: state)
+            } else if let action = action as? ToolbarAction {
+                self.resolveToolbarActions(action: action, state: state)
+            }
         }
     }
 
