@@ -437,6 +437,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         updateFindInPageVisibility(isVisible: false)
+        updateZoomPageBarVisibility(visible: false)
 
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
