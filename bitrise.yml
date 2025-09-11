@@ -2239,6 +2239,10 @@ workflows:
             set -xe
             echo "$IPA_PATH"
             file "$IPA_PATH"
+            shasum -a 256 "$IPA_PATH"
+            unzip -p "$IPA_PATH" "Payload/*.app/Info.plist" | plutil -p - | grep CFBundleIdentifier
+            unzip -p "$IPA_PATH" "Payload/*.app/Info.plist" | plutil -p - | grep CFBundleVersion
+            unzip -p "$IPA_PATH" "Payload/*.app/Info.plist" | plutil -p - | grep CFBundleShortVersionString
     - script@1.2.1:
         title: Check if symbols were downloaded
         inputs:
@@ -2415,6 +2419,10 @@ workflows:
             set -xe
             echo "$IPA_PATH"
             file "$IPA_PATH"
+            shasum -a 256 "$IPA_PATH"
+            unzip -p "$IPA_PATH" "Payload/*.app/Info.plist" | plutil -p - | grep CFBundleIdentifier
+            unzip -p "$IPA_PATH" "Payload/*.app/Info.plist" | plutil -p - | grep CFBundleVersion
+            unzip -p "$IPA_PATH" "Payload/*.app/Info.plist" | plutil -p - | grep CFBundleShortVersionString
     - script@1.2.1:
         title: Check if symbols were downloaded
         inputs:
@@ -2470,7 +2478,7 @@ app:
     TEST_FLIGHT_EXTERNAL_GROUP_NAME: Nightly
   - opts:
       is_expand: false
-    APPLE_TEAM_ID: '43AQ936H96' 
+    APPLE_TEAM_ID: '43AQ936H96'
 
 trigger_map:
 - push_branch: main
