@@ -107,8 +107,8 @@ closure_body_length:
   error: 34
 
 function_body_length:
-  warning: 188
-  error: 188
+  warning: 161
+  error: 161
 
 file_header:
   required_string: |
