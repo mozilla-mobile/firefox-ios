@@ -46,9 +46,11 @@ protocol SettingsFlowDelegate: AnyObject,
 // MARK: - App Settings Screen Protocol
 
 protocol AppSettingsScreen: UIViewController {
+    @MainActor
     var settingsDelegate: SettingsDelegate? { get set }
+    @MainActor
     var parentCoordinator: SettingsFlowDelegate? { get set }
-
+    @MainActor
     func handle(route: Route.SettingsSection)
 }
 
