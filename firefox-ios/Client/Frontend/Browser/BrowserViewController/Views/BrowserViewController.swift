@@ -2881,7 +2881,10 @@ class BrowserViewController: UIViewController,
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
             }
         case .speechToText:
-            
+            // Trigger editing in the toolbar
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
+            store.dispatchLegacy(action)
+            navigationHandler?.showTranscriber()
         }
     }
 

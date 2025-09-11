@@ -1137,6 +1137,16 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(shortcutsLibraryViewController)
     }
 
+    func showTranscriber() {
+        let transcriberViewController = TranscriptionViewController(windowUUID: windowUUID)
+
+        if let sheetPresentationController = transcriberViewController.sheetPresentationController {
+            sheetPresentationController.detents = [.medium(), .large()]
+            sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
+        }
+        router.present(transcriberViewController, animated: true, completion: nil)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {
