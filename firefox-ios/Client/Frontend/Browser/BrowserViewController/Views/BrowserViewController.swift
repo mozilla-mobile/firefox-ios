@@ -2933,6 +2933,7 @@ class BrowserViewController: UIViewController,
         case .newTab:
             willNavigateAway(from: tabManager.selectedTab)
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
+            recordVisitManager.resetRecording()
         }
     }
 

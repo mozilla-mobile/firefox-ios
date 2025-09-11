@@ -9,10 +9,12 @@ import Storage
 import WebKit
 
 // Handles recording visit to website that will be used to list History
-struct RecordVisitObservationManager {
+class RecordVisitObservationManager {
     // some kind of mech to avoid recording same observation twice based in user actions like new tab
     private var historyHandler: HistoryHandler
     nonisolated let logger: Logger
+
+    var lastObservationRecorded: VisitObservation?
 
     init (profile: Profile,
           logger: Logger = DefaultLogger.shared) {
@@ -23,17 +25,26 @@ struct RecordVisitObservationManager {
     func recordVisit(visitObservation: VisitObservation, isPrivateTab: Bool) {
         guard shouldRecordObservation(visitObservation: visitObservation, isPrivateTab: isPrivateTab) else { return }
 
-        let result = historyHandler.applyObservation(visitObservation: visitObservation)
-        result.upon { result in
-            guard result.isSuccess else {
-                self.logger.log(
-                    result.failureValue?.localizedDescription ?? "Unknown error adding history visit",
-                    level: .warning,
-                    category: .sync
-                )
-                return
+        // Check this observation hasn't been recorded already
+        if lastObservationRecorded?.url != visitObservation.url {
+            let result = historyHandler.applyObservation(visitObservation: visitObservation)
+            result.upon { [weak self] result in
+                guard result.isSuccess else {
+                    self?.logger.log(
+                        result.failureValue?.localizedDescription ?? "Unknown error adding history visit",
+                        level: .warning,
+                        category: .sync
+                    )
+                    return
+                }
+                self?.lastObservationRecorded = visitObservation
             }
         }
+    }
+
+    // Based in user action like create new tab we reset the last visit observation
+    func resetRecording() {
+        lastObservationRecorded = nil
     }
 
     // Should record if is not Private tab
@@ -51,38 +62,4 @@ struct RecordVisitObservationManager {
 
         return true
     }
-    
-    /*
-     @objc
-     func onLocationChange(notification: NSNotification) {
-         let v = notification.userInfo!["visitType"] as? Int
-         let visitType = VisitType.fromRawValue(rawValue: v)
-         if let url = notification.userInfo!["url"] as? URL, !isIgnoredURL(url),
-            let title = notification.userInfo!["title"] as? NSString {
-             // Only record local visits if the change notification originated from a non-private tab
-             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
-                 let visitObservation = VisitObservation(
-                     url: url.description,
-                     title: title as String,
-                     visitType: visitType
-                 )
-                 let result = self.places.applyObservation(visitObservation: visitObservation)
-                 result.upon { result in
-                     guard result.isSuccess else {
-                         self.logger.log(
-                             result.failureValue?.localizedDescription ?? "Unknown error adding history visit",
-                             level: .warning,
-                             category: .sync
-                         )
-                         return
-                     }
-                 }
-             }
-         } else {
-             logger.log("Ignoring location change",
-                        level: .debug,
-                        category: .lifecycle)
-         }
-     }
-     */
 }
