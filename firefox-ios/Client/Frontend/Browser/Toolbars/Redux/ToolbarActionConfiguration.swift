@@ -23,6 +23,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
         case summarizer
         case dataClearance
         case cancelEdit
+        case speechToText
     }
 
     var actionType: ActionType

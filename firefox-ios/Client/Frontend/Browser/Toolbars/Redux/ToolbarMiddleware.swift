@@ -286,6 +286,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatchLegacy(action)
             }
+        case .speechToText:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showSpeechToText)
+            store.dispatchLegacy(action)
         default:
             break
         }

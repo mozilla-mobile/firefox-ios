@@ -87,6 +87,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
         a11yLabel: .Toolbars.SummarizeButtonAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.summarizeButton)
 
+    private static let speechToTextAction = ToolbarActionConfiguration(
+        actionType: .speechToText,
+        iconName: StandardImageIdentifiers.Medium.microphone,
+        isEnabled: true,
+        a11yLabel: "",
+        a11yId: AccessibilityIdentifiers.Toolbar.microphoneButton)
+
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
@@ -987,6 +994,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard !hasEmptySearchField, // When the search field is empty we show no actions
               !isEditing
         else { return actions }
+
+        actions.append(speechToTextAction)
 
         let isSummarizeFeatureForToolbarOn = DefaultSummarizerNimbusUtils().isToolbarButtonEnabled
         if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active, !UIWindow.isLandscape {

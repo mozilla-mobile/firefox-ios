@@ -2870,6 +2870,8 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frame = state.frame {
                 navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
             }
+        case .speechToText:
+            
         }
     }
 

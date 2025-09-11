@@ -37,6 +37,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case passwordGenerator
         // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
         case summarizer(config: SummarizerConfig?)
+        case speechToText
     }
 
     let windowUUID: WindowUUID
@@ -308,6 +309,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return handleShowPasswordGeneratorAction(state: state, action: action)
         case GeneralBrowserActionType.showSummarizer:
             return handleShowSummarizerAction(state: state, action: action)
+        case GeneralBrowserActionType.showSpeechToText:
+            return handleShowTextToSpeechAction(state: state, action: action)
         default:
             return defaultState(from: state, action: action)
         }
@@ -580,6 +583,16 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             displayView: .summarizer(config: action.summarizerConfig),
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
+    private static func handleShowTextToSpeechAction(state: BrowserViewControllerState,
+                                                     action: GeneralBrowserAction) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .speechToText,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
