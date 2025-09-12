@@ -366,10 +366,16 @@ extension AppDelegate {
     }
 }
 
-// Ecosia: Register the APN device token
-
+// Ecosia: Register the APN device token and handle background notifications
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         BrazeService.shared.registerDeviceToken(deviceToken)
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if BrazeService.shared.handleBackgroundNotification(userInfo: userInfo, completionHandler: completionHandler) {
+            return
+        }
+        completionHandler(.noData)
     }
 }
