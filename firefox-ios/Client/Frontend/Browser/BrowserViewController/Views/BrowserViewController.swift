@@ -22,6 +22,7 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import struct MozillaAppServices.Login
 import enum MozillaAppServices.BookmarkRoots
+import struct MozillaAppServices.VisitObservation
 import enum MozillaAppServices.VisitType
 
 class BrowserViewController: UIViewController,
@@ -125,6 +126,7 @@ class BrowserViewController: UIViewController,
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
+    let recordVisitManager: RecordVisitObservationManager
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -467,6 +469,7 @@ class BrowserViewController: UIViewController,
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
+        self.recordVisitManager = RecordVisitObservationManager(profile: profile)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -2915,6 +2918,7 @@ class BrowserViewController: UIViewController,
         case .newTab:
             willNavigateAway(from: tabManager.selectedTab)
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
+            recordVisitManager.resetRecording()
         }
     }
 
@@ -3458,16 +3462,11 @@ class BrowserViewController: UIViewController,
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
-    fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
-        let notificationCenter = NotificationCenter.default
-        var info = [AnyHashable: Any]()
-        info["url"] = tab.url?.displayURL
-        info["title"] = tab.title
-        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
-            info["visitType"] = visitType
-        }
-        info["isPrivate"] = tab.isPrivate
-        notificationCenter.post(name: .OnLocationChange, object: self, userInfo: info)
+    fileprivate func recordVisitForLocationChange(_ tab: Tab, navigation: WKNavigation?) {
+        let visitType = getVisitTypeForTab(tab, navigation: navigation) ?? .link
+        let url = tab.url?.displayURL?.description ?? ""
+        let visitObservation = VisitObservation(url: url, title: tab.title, visitType: visitType)
+        recordVisitManager.recordVisit(visitObservation: visitObservation, isPrivateTab: tab.isPrivate)
     }
 
     /// Enum to represent the WebView observation or delegate that triggered calling `navigateInTab`
@@ -3492,7 +3491,7 @@ class BrowserViewController: UIViewController,
 
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
-                postLocationChangeNotificationForTab(tab, navigation: navigation)
+                recordVisitForLocationChange(tab, navigation: navigation)
                 tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld(
                     "\(ReaderModeInfo.namespace.rawValue).checkReadability()"
