@@ -60,7 +60,6 @@ enum MainMenuActionType: ActionType {
     case updateProfileImage
     case tapMoreOptions
     case didInstantiateView
-    case viewDidLoad
     case menuDismissed
     case tapAddToBookmarks
     case tapEditBookmark
