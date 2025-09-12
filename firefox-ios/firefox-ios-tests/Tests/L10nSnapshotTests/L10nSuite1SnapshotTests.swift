@@ -294,25 +294,28 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // load some web pages in some new tabs
         navigator.goto(NewTabScreen)
-        if searchBar.exists {
-            searchBar.waitAndTap()
-        }
+        searchBar.waitAndTap()
+        mozWaitForElementToNotExist(searchBar)
         mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
         waitForTabsButton()
         addNewTabButton.waitAndTap()
+        mozWaitForElementToNotExist(addNewTabButton)
         if searchBar.exists {
             searchBar.waitAndTap()
         }
+        mozWaitForElementToNotExist(searchBar)
         mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
         waitForTabsButton()
         addNewTabButton.waitAndTap()
+        mozWaitForElementToNotExist(addNewTabButton)
         if searchBar.exists {
             searchBar.waitAndTap()
         }
+        mozWaitForElementToNotExist(searchBar)
         mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://mozilla.org/firefox/new")
         waitUntilPageLoad()
