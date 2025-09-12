@@ -150,8 +150,9 @@ final class LaunchCoordinator: BaseCoordinator,
             },
             onComplete: { [weak self] in
                 guard let self = self else { return }
-                manager.setAccepted()
-                TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped()
+                let acceptedDate = Date()
+                manager.setAccepted(acceptedDate: acceptedDate)
+                TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped(acceptedDate: acceptedDate)
 
                 let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
                 let sendStudies = profile.prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true
@@ -210,8 +211,9 @@ final class LaunchCoordinator: BaseCoordinator,
         let viewController = TermsOfServiceViewController(profile: profile, windowUUID: windowUUID)
         viewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
-            manager.setAccepted()
-            TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped()
+            let acceptedDate = Date()
+            manager.setAccepted(acceptedDate: acceptedDate)
+            TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped(acceptedDate: acceptedDate)
 
             let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
             let sendStudies = profile.prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true
