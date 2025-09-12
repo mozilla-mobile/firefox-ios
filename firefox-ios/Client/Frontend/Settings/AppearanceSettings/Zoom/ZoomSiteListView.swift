@@ -9,6 +9,9 @@ import Storage
 struct ZoomSiteListView: View {
     let theme: Theme
     @Binding var domainZoomLevels: [DomainZoomLevel]
+    // If this value is 0, then the SwiftUI doesn't properly rerender
+    // the screen after updating `listHeight` in the cell overlay
+    @State private var listHeight: CGFloat = 1
     private let onDelete: (IndexSet) -> Void
     private let resetDomain: () -> Void
 
@@ -16,7 +19,6 @@ struct ZoomSiteListView: View {
         static let sectionPadding: CGFloat = 16
         static let footerBottomPadding: CGFloat = 32
         static let footerTopPadding: CGFloat = 8
-        static let cellHeight: CGFloat = 48
         static let listPadding: CGFloat = 5
         static let dividerHeight: CGFloat = 0.5
         static let cornerRadius: CGFloat = 24
@@ -36,15 +38,6 @@ struct ZoomSiteListView: View {
         } else {
             return UX.footerTopPadding
         }
-    }
-
-    // Calculate list height to avoid scroll in inner list view
-    // Base height calculation with cell height and extra padding
-    var listViewHeight: CGFloat {
-        let baseHeight = CGFloat(domainZoomLevels.count) * UX.cellHeight
-        let extraPadding = CGFloat(domainZoomLevels.count) * UX.listPadding
-
-        return baseHeight + extraPadding
     }
 
     init(theme: Theme,
@@ -112,8 +105,15 @@ struct ZoomSiteListView: View {
                 .modifier(CellStyle(theme: theme))
             }
             .onDelete(perform: onDelete)
+            .overlay {
+                GeometryReader { proxy in
+                    Color.clear.onAppear {
+                        listHeight += proxy.size.height
+                    }
+                }
+            }
         }
-        .frame(height: listViewHeight)
+        .frame(height: listHeight)
         .listStyle(.plain)
         .modifier(ListStyle(theme: theme, cellBackground: cellBackground))
     }
