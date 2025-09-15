@@ -237,15 +237,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case .firefoxSuggestSettings:
             switch indexPath.item {
             case FirefoxSuggestItem.browsingHistory.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions,
-                    defaultValue: model.shouldShowBrowsingHistorySuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.SearchBrowsingHistory
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleBrowsingHistorySuggestions)
-                )
+                configureCellForBrowsingHistoryAction(cell: cell)
 
             case FirefoxSuggestItem.bookmarks.rawValue:
                 configureCellForBookmarksAction(cell: cell)
