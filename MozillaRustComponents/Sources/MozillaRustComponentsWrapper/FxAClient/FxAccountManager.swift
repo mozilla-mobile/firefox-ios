@@ -146,7 +146,8 @@ open class FxAccountManager {
         scopes: [String] = [],
         completionHandler: @escaping (Result<URL, Error>) -> Void
     ) {
-        var scopes = scopes
+        // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+        nonisolated(unsafe) var scopes = scopes
         if scopes.isEmpty {
             scopes = applicationScopes
         }
