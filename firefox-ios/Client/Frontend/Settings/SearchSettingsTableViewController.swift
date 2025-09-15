@@ -266,6 +266,18 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForDefaultSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
+            defaultValue: model.shouldShowSearchSuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.ShowSearchSuggestions
+            ),
+            cell: cell,
+            selector: #selector(didToggleSearchSuggestions)
+        )
+    }
+
     private func configureCellForPrivateSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
         if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             buildSettingWith(
