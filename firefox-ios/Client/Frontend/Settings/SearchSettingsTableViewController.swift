@@ -319,18 +319,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 //                cell.isHidden = shouldHidePrivateModeFirefoxSuggestSetting
 
             case FirefoxSuggestItem.suggestionLearnMore.rawValue:
-                cell.accessibilityLabel = String.localizedStringWithFormat(
-                    .Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
-                    AppName.shortName.rawValue
-                )
-                cell.textLabel?.text = String.localizedStringWithFormat(
-                    .Settings.Search.Suggest.LearnAboutSuggestions,
-                    AppName.shortName.rawValue
-                )
-                cell.imageView?.layer.cornerRadius = 4
-                cell.imageView?.layer.masksToBounds = true
-                cell.selectionStyle = .none
-                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                configureCellForSuggestionLearnMoreAction(cell: cell)
 
             default:
                 break
