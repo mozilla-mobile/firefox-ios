@@ -5,7 +5,6 @@
 import Common
 import Redux
 import ToolbarKit
-import Shared
 import UIKit
 
 protocol AddressToolbarContainerDelegate: AnyObject {
