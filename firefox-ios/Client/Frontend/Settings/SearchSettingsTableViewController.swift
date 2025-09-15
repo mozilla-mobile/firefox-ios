@@ -332,6 +332,24 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForSponsoredAction(cell: ThemedSubtitleTableViewCell) {
+        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+            buildSettingWith(
+                prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
+                defaultValue: model.shouldShowSponsoredSuggestions,
+                titleText: String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
+                ),
+                statusText: String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+                    AppName.shortName.rawValue
+                ),
+                cell: cell,
+                selector: #selector(didToggleEnableSponsoredSuggestions)
+            )
+        }
+    }
+
     private func configureCellForSuggestionLearnMoreAction(cell: ThemedSubtitleTableViewCell) {
         cell.accessibilityLabel = String.localizedStringWithFormat(
             .Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
