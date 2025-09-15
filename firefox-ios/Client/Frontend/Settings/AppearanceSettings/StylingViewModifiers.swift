@@ -40,6 +40,21 @@ struct PaddingStyle: ViewModifier {
     }
 }
 
+struct ColoredListStyle: ViewModifier {
+    let backgroundColor: Color
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
+                .background(backgroundColor)
+        } else {
+            content.listStyle(.plain)
+        }
+    }
+}
+
 struct ListStyle: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
@@ -80,3 +95,75 @@ struct PaddingWithColorStyle: ViewModifier {
         }
     }
 }
+<<<<<<< HEAD
+=======
+
+struct NewStyleExtraPaddingTopAndBottom: ViewModifier {
+    let paddingSize: CGFloat
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding(.top, paddingSize)
+                .padding(.bottom, paddingSize)
+        } else {
+            content
+        }
+    }
+}
+
+struct NewStyleExtraPadding: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding()
+        } else {
+            content
+        }
+    }
+}
+
+struct NewStyleRoundedCorners: ViewModifier {
+    let topLeadingCorner: CGFloat?
+    let topTrailingCorner: CGFloat?
+    let bottomLeadingCorner: CGFloat?
+    let bottomTrailingCorner: CGFloat?
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .clipShape(
+                    UnevenRoundedRectangle(topLeadingRadius: topLeadingCorner ?? 0,
+                                           bottomLeadingRadius: bottomLeadingCorner ?? 0,
+                                           bottomTrailingRadius: bottomTrailingCorner ?? 0,
+                                           topTrailingRadius: topTrailingCorner ?? 0)
+                )
+        } else {
+            content
+        }
+    }
+}
+
+struct ToggleStyle: ViewModifier {
+    let paddingSize: CGFloat
+    let cornerRadius: CGFloat
+    let backgroundColor: Color
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .padding(.top, paddingSize / 2)
+                .padding(.bottom, paddingSize / 2)
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(backgroundColor)
+                )
+                .padding(.leading, paddingSize)
+                .padding(.trailing, paddingSize)
+        } else {
+            content
+                .background(backgroundColor)
+        }
+    }
+}
+>>>>>>> 21747c714 (Add FXIOS-13377 ⁃ [iOS 26] Glass effect is not applied to lists in Passwords, Credit Cards, and Addresses (#29269))
