@@ -229,6 +229,17 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForDefaultEngineAction(cell: ThemedSubtitleTableViewCell, engine: OpenSearchEngine) {
+        cell.editingAccessoryType = .disclosureIndicator
+        cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
+        cell.accessibilityValue = engine.shortName
+        cell.textLabel?.text = engine.shortName
+        cell.imageView?.image = engine.image.createScaled(IconSize)
+        cell.imageView?.layer.cornerRadius = 4
+        cell.imageView?.layer.masksToBounds = true
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
     private func configureCellForAlternateEnginesAction(cell: ThemedSubtitleTableViewCell, indexPath: IndexPath) {
         // The default engine is not an alternate search engine.
         let index = indexPath.item + 1
