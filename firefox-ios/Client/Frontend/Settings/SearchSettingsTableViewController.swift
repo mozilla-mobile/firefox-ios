@@ -216,21 +216,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case SearchSuggestItem.privateSuggestions.rawValue:
-                if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-                    buildSettingWith(
-                        prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
-                        defaultValue: model.shouldShowPrivateModeSearchSuggestions,
-                        titleText: String.localizedStringWithFormat(
-                            .Settings.Search.PrivateSessionSetting
-                        ),
-                        statusText: String.localizedStringWithFormat(
-                            .Settings.Search.PrivateSessionDescription
-                        ),
-                        cell: cell,
-                        selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
-                    )
-                    cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showPrivateSuggestions
-                }
+                configureCellForPrivateSuggestionsAction(cell: cell)
             default: break
             }
 
