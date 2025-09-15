@@ -4976,7 +4976,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
     }
 
-    private func cancelEditingMode(keyboardState: KeyboardState) {
+    private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
         guard shouldCancelEditing else {
             guard isSwipingTabsEnabled,
