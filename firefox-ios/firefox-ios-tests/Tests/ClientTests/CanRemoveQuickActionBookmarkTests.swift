@@ -76,7 +76,7 @@ private class MockCanRemoveQuickActionBookmark: CanRemoveQuickActionBookmark {
 }
 
 // MARK: - MockQuickActions
-class MockQuickActions: QuickActions {
+class MockQuickActions: QuickActions, @unchecked Sendable {
     var addFromShareItemCalled = 0
     func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
                                                  fromShareItem shareItem: ShareItem,
