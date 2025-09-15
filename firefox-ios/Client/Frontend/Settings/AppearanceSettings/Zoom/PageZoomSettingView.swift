@@ -13,13 +13,9 @@ struct PageZoomSettingsView: View {
     @State private var themeColors: ThemeColourPalette = LightTheme().colors
 
     private struct UX {
-        static let dividerHeight: CGFloat = 0.7
-        static let sectionPadding: CGFloat = 16
         static let spacing: CGFloat = 24
-    }
-
-    private var viewBackground: Color {
-        return themeColors.layer1.color
+        static let cornerRadius: CGFloat = 24
+        static let sectionPadding: CGFloat = 16
     }
 
     var sectionTitleColor: Color {
@@ -30,7 +26,14 @@ struct PageZoomSettingsView: View {
         return themeColors.textPrimary.color
     }
 
+    var cellBackground: Color {
+        return theme.colors.layer1.color
+    }
+
     init(windowUUID: WindowUUID) {
+        if #available(iOS 15, *) {
+            UITableView.appearance().backgroundColor = .clear
+        }
         self.windowUUID = windowUUID
         self.viewModel = PageZoomSettingsViewModel(zoomManager: ZoomPageManager(windowUUID: windowUUID))
     }
@@ -40,32 +43,83 @@ struct PageZoomSettingsView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack {
-                // Default zoom level section
-                ZoomLevelPickerView(theme: theme,
-                                    zoomManager: viewModel.zoomManager,
-                                    onZoomLevelChanged: viewModel.updateDefaultZoomLevel)
-                .modifier(PaddingWithColorStyle(theme: theme, spacing: UX.spacing, shouldChangeBackgroundColor: true))
+        List {
+            // Default zoom level section
+            ZoomLevelPickerView(theme: theme,
+                                zoomManager: viewModel.zoomManager,
+                                onZoomLevelChanged: viewModel.updateDefaultZoomLevel)
+            .listRowSeparator(.hidden)
+            .listRowInsets(.init())
 
-                // Specific site zoom level section
-                if !viewModel.domainZoomLevels.isEmpty {
-                    ZoomSiteListView(theme: theme,
-                                     domainZoomLevels: $viewModel.domainZoomLevels,
-                                     onDelete: viewModel.deleteZoomLevel,
-                                     resetDomain: viewModel.resetDomainZoomLevel)
-                    .modifier(PaddingWithColorStyle(theme: theme, spacing: UX.spacing, shouldChangeBackgroundColor: false))
-                }
+            // Specific site zoom level section
+            if !viewModel.domainZoomLevels.isEmpty {
+                ZoomSiteListView(theme: theme,
+                                 domainZoomLevels: $viewModel.domainZoomLevels,
+                                 onDelete: viewModel.deleteZoomLevel,
+                                 resetDomain: viewModel.resetDomainZoomLevel)
+                .listRowInsets(.init())
             }
-            .frame(maxWidth: .infinity)
         }
-        .background(viewBackground)
+        .modifier(ListSectionSpacing())
+        .modifier(ListStyle(theme: theme, cellBackground: cellBackground, viewBackground: themeColors.layer1.color))
+        .modifier(ScrollContentBackground(background: themeColors.layer1.color))
         .onAppear {
             themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
+        }
+    }
+
+    private struct ListStyle: ViewModifier {
+        let theme: Theme?
+        let cellBackground: Color
+        let viewBackground: Color
+
+        func body(content: Content) -> some View {
+            if #unavailable(iOS 26.0) {
+                content
+                    .listStyle(.grouped)
+                    .listSectionSeparator(.hidden)
+            } else {
+                content
+                    .listSectionSeparator(.hidden)
+            }
+        }
+    }
+
+    private struct ScrollContentBackground: ViewModifier {
+        let background: Color
+
+        func body(content: Content) -> some View {
+            if #available(iOS 16.0, *) {
+                content
+                    .scrollContentBackground(.hidden)
+                    .background(background)
+            } else {
+                content
+                    .background(background)
+            }
+        }
+    }
+
+    private struct ListSectionSpacing: ViewModifier {
+        func body(content: Content) -> some View {
+            if #available(iOS 26.0, *) {
+                content
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, UX.spacing)
+            } else if #available(iOS 17.0, *) {
+                content
+                    .listSectionSpacing(UX.sectionPadding)
+                    .frame(maxWidth: .infinity)
+                    .padding([.bottom, .leading, .trailing], .zero)
+            } else {
+                content
+                    .frame(maxWidth: .infinity)
+                    .padding([.bottom, .leading, .trailing], .zero)
+            }
         }
     }
 }

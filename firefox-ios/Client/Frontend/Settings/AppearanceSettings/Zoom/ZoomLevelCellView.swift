@@ -20,19 +20,60 @@ struct ZoomLevelCellView: View {
     }
 
     var body: some View {
-        HStack {
-            Text(domainZoomLevel.host)
-                .font(.body)
-                .foregroundColor(textColor)
+        if #available(iOS 16, *) {
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    domainZoomLevelText
 
-            Spacer()
+                    Spacer()
 
-            Text(ZoomLevel(from: domainZoomLevel.zoomLevel).displayName)
-                .font(.body)
-                .foregroundColor(textColor)
+                    textView(for: ZoomLevel(from: domainZoomLevel.zoomLevel))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(UX.textPadding)
+
+                VStack {
+                    HStack {
+                        Text(domainZoomLevel.host)
+                            .alignmentGuide(.leading) { $0[.leading] + UX.textPadding }
+
+                        Spacer()
+                    }
+
+                    HStack {
+                        Spacer()
+
+                        Text(ZoomLevel(from: domainZoomLevel.zoomLevel).displayName)
+                            .alignmentGuide(.trailing) { $0[.trailing] + UX.textPadding }
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(UX.textPadding)
+            }
+            .font(.body)
+            .foregroundColor(textColor)
+        } else {
+            HStack {
+                Text(domainZoomLevel.host)
+
+                Spacer()
+
+                textView(for: ZoomLevel(from: domainZoomLevel.zoomLevel))
+            }
+            .font(.body)
+            .foregroundColor(textColor)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(UX.textPadding)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(UX.textPadding)
-        .listRowBackground(Color.clear)
+    }
+
+    private var domainZoomLevelText: some View {
+        Text(domainZoomLevel.host)
+    }
+
+    private func textView(
+        for zoomLevel: ZoomLevel
+    ) -> some View {
+        Text(zoomLevel.displayName)
     }
 }

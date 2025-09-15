@@ -7,6 +7,7 @@ import SwiftUI
 
 struct ZoomLevelPickerView: View {
     @State private var selectedZoomLevel: ZoomLevel
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private let theme: Theme
     private let zoomManager: ZoomPageManager
     private let onZoomLevelChanged: (ZoomLevel) -> Void
@@ -41,49 +42,55 @@ struct ZoomLevelPickerView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            if #available(iOS 26.0, *) {
-                GenericSectionView(
-                    theme: theme,
-                    title: .Settings.Appearance.PageZoom.DefaultSectionHeader,
-                    identifier: AccessibilityIdentifiers.Settings.Appearance.pageZoomTitle
-                ) {
+        Section(
+            content: {
+                if #available(iOS 26.0, *) {
                     pickerContent
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .modifier(SectionStyle(theme: theme, cornerRadius: UX.cornerRadius))
+                        .background(
+                            RoundedRectangle(cornerRadius: UX.cornerRadius, style: .continuous)
+                                .fill(Color(theme.colors.layer2))
+                        )
+                } else {
+                    VStack(spacing: .zero) {
+                        Divider()
+                            .frame(height: UX.dividerHeight)
+                            .background(theme.colors.borderPrimary.color)
+                        pickerContent
+                        Divider()
+                            .frame(height: UX.dividerHeight)
+                            .background(theme.colors.borderPrimary.color)
+                    }
                 }
-            } else {
-                GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
-                                         sectionTitleColor: theme.colors.textSecondary.color)
+            },
+            header: {
+                if #available(iOS 26.0, *) {
+                    GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
+                                             sectionTitleColor: theme.colors.textSecondary.color)
+                } else {
+                    GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.DefaultSectionHeader.uppercased(),
+                                             sectionTitleColor: theme.colors.textSecondary.color)
                     .padding([.leading, .trailing, .top], UX.sectionPadding)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .background(sectionBackground)
-
-                defaultZoomPicker
+               }
             }
-        }
+        )
     }
 
-    var defaultZoomPicker: some View {
-        VStack(spacing: 0) {
-            // Top divider
-            Divider()
-                .frame(height: UX.dividerHeight)
-                .background(theme.colors.borderPrimary.color)
-
-            // Picker content
-            pickerContent
-
-            // Bottom divider
-            Divider()
-                .frame(height: UX.dividerHeight)
-                .background(theme.colors.borderPrimary.color)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(backgroundColor)
-    }
-
+    @ViewBuilder
     var pickerContent: some View {
+        if #available(iOS 16.0, *) {
+            ViewThatFits(in: .horizontal) {
+                horizontalView
+                verticalView
+            }
+        } else if dynamicTypeSize.isAccessibilitySize {
+            verticalView
+        } else {
+            horizontalView
+        }
+    }
+
+    var horizontalView: some View {
         HStack {
             Text(pickerText)
                 .font(.body)
@@ -117,6 +124,49 @@ struct ZoomLevelPickerView: View {
             }
         }
         .padding(.horizontal, UX.sectionPadding)
+        .padding(.vertical, UX.verticalPadding)
+    }
+
+    var verticalView: some View {
+        VStack {
+            HStack {
+                Text(pickerText)
+                    .font(.body)
+                    .foregroundColor(theme.colors.textPrimary.color)
+
+                Spacer()
+            }
+            .padding(.horizontal, UX.sectionPadding)
+            HStack {
+                Spacer()
+
+                // Right side - picker with current value
+                Menu {
+                    Picker(selection: $selectedZoomLevel, label: EmptyView()) {
+                        ForEach(ZoomLevel.allCases, id: \.self) { item in
+                            Text(item.displayName)
+                                .tag(item)
+                        }
+                    }
+                    .onChange(of: selectedZoomLevel, perform: onZoomLevelChanged)
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                } label: {
+                    HStack(spacing: UX.pickerLabelSpacing) {
+                        Text(selectedZoomLevel.displayName)
+                            .font(.body)
+                            .foregroundColor(theme.colors.textPrimary.color)
+
+                        Image(systemName: UX.chevronImageIdentifier)
+                            .renderingMode(.template)
+                            .font(.caption)
+                            .foregroundColor(theme.colors.textPrimary.color)
+                            .accessibilityHidden(true)
+                    }
+                }
+            }
+            .padding(.horizontal, UX.sectionPadding)
+        }
         .padding(.vertical, UX.verticalPadding)
     }
 }
