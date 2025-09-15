@@ -288,6 +288,18 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForBrowsingHistoryAction(cell: ThemedSubtitleTableViewCell) {
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions,
+            defaultValue: model.shouldShowBrowsingHistorySuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.Suggest.SearchBrowsingHistory
+            ),
+            cell: cell,
+            selector: #selector(didToggleBrowsingHistorySuggestions)
+        )
+    }
+
     private func configureCellForBookmarksAction(cell: ThemedSubtitleTableViewCell) {
         buildSettingWith(
             prefKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions,
