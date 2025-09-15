@@ -428,10 +428,10 @@ final class TabManagerMiddleware: FeatureFlaggable {
         tabManager.selectTab(tab)
 
         let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatchLegacy(refreshAction)
+//        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+//                                                     windowUUID: uuid,
+//                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
+//        store.dispatchLegacy(refreshAction)
 
         let dismissAction = TabTrayAction(windowUUID: uuid,
                                           actionType: TabTrayActionType.dismissTabTray)
