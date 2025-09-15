@@ -174,7 +174,8 @@ final class AddressToolbarContainer: UIView,
         let isEditing = model?.isEditing ?? false
         guard let selectedTab = tabManager.selectedTab,
               state?.toolbarPosition == .bottom,
-              !isEditing else {
+              !isEditing
+        else {
             hideSkeletonBars()
             return
         }
