@@ -318,6 +318,24 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForNonSponsoredAction(cell: ThemedSubtitleTableViewCell) {
+        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+            buildSettingWith(
+                prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
+                defaultValue: model.shouldShowFirefoxSuggestions,
+                titleText: String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
+                ),
+                statusText: String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
+                    AppName.shortName.rawValue
+                ),
+                cell: cell,
+                selector: #selector(didToggleEnableNonSponsoredSuggestions)
+            )
+        }
+    }
+
     private func configureCellForSponsoredAction(cell: ThemedSubtitleTableViewCell) {
         if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
             buildSettingWith(
