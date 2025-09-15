@@ -991,11 +991,17 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let canSummarize = isReaderModeAction ? action.canSummarize : addressBarState.canSummarize
         let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
 
-        guard !hasEmptySearchField, // When the search field is empty we show no actions
-              !isEditing
-        else { return actions }
+        guard !isEditing
+        else {
+            if hasEmptySearchField {
+                // only show the speech to text action when the user has not entered any text
+                actions.append(speechToTextAction)
+            }
+            return actions
+        }
 
-        actions.append(speechToTextAction)
+        // When the search field is empty we show no actions
+        guard !hasEmptySearchField else { return actions }
 
         let isSummarizeFeatureForToolbarOn = DefaultSummarizerNimbusUtils().isToolbarButtonEnabled
         if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active, !UIWindow.isLandscape {
