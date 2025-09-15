@@ -166,6 +166,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
 class ReadingListPanel: UITableViewController,
                         LibraryPanel,
+                        LibraryPanelContextMenu,
                         Themeable {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var navigationHandler: ReadingListNavigationHandler?
@@ -467,9 +468,9 @@ class ReadingListPanel: UITableViewController,
         tableView.backgroundColor = currentTheme().colors.layer1
         refreshReadingList()
     }
-}
 
-extension ReadingListPanel: LibraryPanelContextMenu {
+    // MARK: - LibraryPanelContextMenu
+
     func presentContextMenu(
         for site: Site,
         with indexPath: IndexPath,

@@ -5,6 +5,7 @@
 import Common
 import Storage
 
+@MainActor
 protocol LibraryPanelContextMenu {
     var windowUUID: WindowUUID { get }
     func getSiteDetails(for indexPath: IndexPath) -> Site?
