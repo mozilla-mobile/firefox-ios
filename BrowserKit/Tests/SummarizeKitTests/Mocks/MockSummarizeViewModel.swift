@@ -33,15 +33,15 @@ class MockSummarizeViewModel: SummarizeViewModel {
         closeSummariationCalled += 1
     }
 
-    func setTosScreenShown() {
+    func setConsentScreenShown() {
         setTosScreenShownCalled += 1
     }
 
-    func setTosConsentAccepted() {
+    func setConsentAccepted() {
         setTosConsentAcceptedCalled += 1
     }
 
-    func logTosStatus() {
+    func logConsentStatus() {
         logTosStatusCalled += 1
     }
 }

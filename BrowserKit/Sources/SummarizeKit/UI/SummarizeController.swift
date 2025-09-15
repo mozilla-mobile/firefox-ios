@@ -344,7 +344,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
     private func showError(_ error: SummarizerError) {
         if case .tosConsentMissing = error {
-            viewModel.setTosScreenShown()
+            viewModel.setConsentScreenShown()
         }
         let actionButtonLabel: String = switch error.shouldRetrySummarizing {
         case .acceptToS:
@@ -373,7 +373,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                     case .close:
                         self?.dismissSummary()
                     case .acceptToS:
-                        self?.viewModel.setTosConsentAccepted()
+                        self?.viewModel.setConsentAccepted()
                         self?.summarize()
                     }
                 }, linkCallback: { [weak self] url in
@@ -417,7 +417,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
     override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         viewModel.closeSummarization()
-        viewModel.logTosStatus()
+        viewModel.logConsentStatus()
         navigationHandler?.dismissSummary()
         super.dismiss(animated: flag, completion: completion)
     }

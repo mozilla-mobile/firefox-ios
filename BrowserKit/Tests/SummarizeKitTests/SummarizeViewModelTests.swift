@@ -144,16 +144,16 @@ final class SummarizeViewModelTests: XCTestCase {
     func test_setTosConsentAccepted_callsTosAcceptorAllowConsent() {
         let subject = createSubject()
 
-        subject.setTosConsentAccepted()
+        subject.setConsentAccepted()
 
         XCTAssertEqual(tosAcceptor.acceptTosConsentCalled, 1)
     }
 
     func test_logTosStatus_callTosAcceptorDenyConsent() {
         let subject = createSubject()
-        subject.setTosScreenShown()
+        subject.setConsentScreenShown()
 
-        subject.logTosStatus()
+        subject.logConsentStatus()
 
         XCTAssertEqual(tosAcceptor.denyTosConsentCalled, 1)
         XCTAssertEqual(tosAcceptor.acceptTosConsentCalled, 0)
@@ -161,10 +161,10 @@ final class SummarizeViewModelTests: XCTestCase {
 
     func test_logTosStatus_doesntToSAcceptorDenyConsent() {
         let subject = createSubject()
-        subject.setTosScreenShown()
-        subject.setTosConsentAccepted()
+        subject.setConsentScreenShown()
+        subject.setConsentAccepted()
 
-        subject.logTosStatus()
+        subject.logConsentStatus()
 
         XCTAssertEqual(tosAcceptor.denyTosConsentCalled, 0)
         XCTAssertEqual(tosAcceptor.acceptTosConsentCalled, 1)

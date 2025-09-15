@@ -16,17 +16,17 @@ public protocol SummarizeViewModel {
 
     func closeSummarization()
 
-    func setTosScreenShown()
+    func setConsentScreenShown()
 
-    func setTosConsentAccepted()
+    func setConsentAccepted()
 
-    func logTosStatus()
+    func logConsentStatus()
 }
 
-public protocol SummarizeToSAcceptor: AnyObject {
-    func acceptTosConsent()
+public protocol SummarizeTermOfServiceAcceptor: AnyObject {
+    func acceptConsent()
 
-    func denyTosConsent()
+    func denyConsent()
 }
 
 struct SummarizeState: Sendable {
@@ -66,11 +66,11 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
     private var semaphoreContinuation: CheckedContinuation<Void, Never>?
     private var state: SummarizeState
     private let minWordsAcceptedToShow: Int
-    private weak var tosAcceptor: SummarizeToSAcceptor?
+    private weak var tosAcceptor: SummarizeTermOfServiceAcceptor?
 
     public init(
         summarizerService: SummarizerService,
-        tosAcceptor: SummarizeToSAcceptor?,
+        tosAcceptor: SummarizeTermOfServiceAcceptor?,
         minWordsAcceptedToShow: Int? = nil,
         isTosAcceppted: Bool
     ) {
@@ -150,17 +150,17 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
         semaphoreContinuation = nil
     }
 
-    public func setTosScreenShown() {
+    public func setConsentScreenShown() {
         state = state.copy(wasTosScreenShown: true)
     }
 
-    public func setTosConsentAccepted() {
+    public func setConsentAccepted() {
         state = state.copy(isTosConsentAccepted: true)
-        tosAcceptor?.acceptTosConsent()
+        tosAcceptor?.acceptConsent()
     }
 
-    public func logTosStatus() {
+    public func logConsentStatus() {
         guard !state.isTosConsentAccepted, state.wasTosScreenShown else { return }
-        tosAcceptor?.denyTosConsent()
+        tosAcceptor?.denyConsent()
     }
 }

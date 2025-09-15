@@ -22,10 +22,12 @@ final class MockSummarizer: SummarizerProtocol, @unchecked Sendable {
 }
 
 class MockSummarizerServiceFactory: SummarizerServiceFactory {
+    var lifecycleDelegate: (any SummarizeKit.SummarizerServiceLifecycle)?
+    
     func make(isAppleSummarizerEnabled: Bool,
               isHostedSummarizerEnabled: Bool,
               config: SummarizerConfig?) -> SummarizerService? {
-        return SummarizerService(summarizer: MockSummarizer(), maxWords: 10)
+        return DefaultSummarizerService(summarizer: MockSummarizer(), lifecycleDelegate: lifecycleDelegate, maxWords: 10)
     }
 
     func maxWords(isAppleSummarizerEnabled: Bool, isHostedSummarizerEnabled: Bool) -> Int {
@@ -86,7 +88,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
 
     func testAcceptToSConsent_recordsTelemetry() throws {
         let subject = createSubject()
-        subject.acceptToSConsent()
+        subject.acceptConsent()
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
     }

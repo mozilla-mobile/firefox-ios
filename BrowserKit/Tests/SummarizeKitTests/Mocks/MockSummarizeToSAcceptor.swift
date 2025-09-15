@@ -5,15 +5,15 @@
 import Foundation
 @testable import SummarizeKit
 
-class MockSummarizeToSAcceptor: SummarizeToSAcceptor {
+class MockSummarizeToSAcceptor: SummarizeTermOfServiceAcceptor {
     var acceptTosConsentCalled = 0
     var denyTosConsentCalled = 0
 
-    func acceptTosConsent() {
+    func acceptConsent() {
         acceptTosConsentCalled += 1
     }
 
-    func denyTosConsent() {
+    func denyConsent() {
         denyTosConsentCalled += 1
     }
 }

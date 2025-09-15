@@ -12,7 +12,7 @@ import WebKit
 
 final class SummarizeCoordinator: BaseCoordinator,
                                   SummarizerServiceLifecycle,
-                                  SummarizeToSAcceptor,
+                                  SummarizeTermOfServiceAcceptor,
                                   SummarizeNavigationHandler {
     private let browserSnapshot: UIImage
     private let browserSnapshotTopOffset: CGFloat
@@ -167,12 +167,12 @@ final class SummarizeCoordinator: BaseCoordinator,
 
     // MARK: - SummarizeToSAcceptor
 
-    func acceptTosConsent() {
+    func acceptConsent() {
         prefs.setBool(true, forKey: PrefsKeys.Summarizer.didAgreeTermsOfService)
         summarizerTelemetry.summarizationConsentDisplayed(true)
     }
 
-    func denyTosConsent() {
+    func denyConsent() {
         summarizerTelemetry.summarizationConsentDisplayed(false)
     }
 
