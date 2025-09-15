@@ -62,16 +62,16 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.termsOfServiceAccepted)
 
         // Test that ToU accepted event is recorded with onboarding surface
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Termsofuse.accepted)
-        let acceptedEventValue = try XCTUnwrap(GleanMetrics.Termsofuse.accepted.testGetValue())
+        testEventMetricRecordingSuccess(metric: GleanMetrics.TermsOfUse.accepted)
+        let acceptedEventValue = try XCTUnwrap(GleanMetrics.TermsOfUse.accepted.testGetValue())
         XCTAssertEqual(acceptedEventValue[0].extra?["surface"], "onboarding")
         let expectedVersionString = String(TermsOfUseTelemetry().termsOfUseVersion)
         XCTAssertEqual(acceptedEventValue[0].extra?["tou_version"], expectedVersionString)
 
         // Test that ToU version and date metrics are also recorded for consistency
-        let versionValue = try XCTUnwrap(GleanMetrics.Termsofuse.version.testGetValue())
+        let versionValue = try XCTUnwrap(GleanMetrics.TermsOfUse.versionAccepted.testGetValue())
         XCTAssertEqual(versionValue, TermsOfUseTelemetry().termsOfUseVersion)
-        let dateValue = try XCTUnwrap(GleanMetrics.Termsofuse.date.testGetValue())
+        let dateValue = try XCTUnwrap(GleanMetrics.TermsOfUse.dateAccepted.testGetValue())
         XCTAssertTrue(Calendar.current.isDate(dateValue, inSameDayAs: acceptedDate))
     }
 }

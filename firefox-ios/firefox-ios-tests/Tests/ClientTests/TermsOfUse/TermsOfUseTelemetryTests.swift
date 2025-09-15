@@ -29,14 +29,14 @@ final class TermsOfUseTelemetryTests: XCTestCase {
 
     func testTermsOfUseBottomSheetDisplayed() throws {
         telemetry.termsOfUseDisplayed(surface: .bottomSheet)
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.impression.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.shown.testGetValue())
         XCTAssertEqual(events.count, 1)
         let event = events[0]
         XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
         XCTAssertEqual(event.extra?["tou_version"], String(telemetry.termsOfUseVersion))
 
         // Test impression counter
-        let impressionCount = try XCTUnwrap(GleanMetrics.Termsofuse.impressionCount.testGetValue())
+        let impressionCount = try XCTUnwrap(GleanMetrics.TermsOfUse.shownCount.testGetValue())
         XCTAssertEqual(impressionCount, 1)
     }
 
@@ -44,16 +44,16 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: Date())
 
         // Test accepted event
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.accepted.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.accepted.testGetValue())
         XCTAssertEqual(events.count, 1)
         let event = events[0]
         XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
         XCTAssertEqual(event.extra?["tou_version"], String(telemetry.termsOfUseVersion))
         // Test version metric
-        let version = try XCTUnwrap(GleanMetrics.Termsofuse.version.testGetValue())
+        let version = try XCTUnwrap(GleanMetrics.TermsOfUse.versionAccepted.testGetValue())
         XCTAssertEqual(version, telemetry.termsOfUseVersion)
         // Test date metric
-        let dateMetric = try XCTUnwrap(GleanMetrics.Termsofuse.date.testGetValue())
+        let dateMetric = try XCTUnwrap(GleanMetrics.TermsOfUse.dateAccepted.testGetValue())
         let now = Date()
         let timeDifference = abs(now.timeIntervalSince(dateMetric))
         XCTAssertLessThan(timeDifference, 60)
@@ -63,24 +63,24 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUseDisplayed(surface: .bottomSheet)
 
         // Impression should not record acceptance metrics
-        XCTAssertNil(GleanMetrics.Termsofuse.version.testGetValue())
-        XCTAssertNil(GleanMetrics.Termsofuse.date.testGetValue())
+        XCTAssertNil(GleanMetrics.TermsOfUse.versionAccepted.testGetValue())
+        XCTAssertNil(GleanMetrics.TermsOfUse.dateAccepted.testGetValue())
         // But impression event should be recorded
-        XCTAssertNotNil(GleanMetrics.Termsofuse.impression.testGetValue())
+        XCTAssertNotNil(GleanMetrics.TermsOfUse.shown.testGetValue())
     }
 
     func testTermsOfUseRemindMeLaterButtonTapped() throws {
         telemetry.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
 
         // Test remind me later event
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.remindMeLaterClick.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.remindMeLaterButtonTapped.testGetValue())
         XCTAssertEqual(events.count, 1)
         let event = events[0]
         XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
         XCTAssertEqual(event.extra?["tou_version"], String(telemetry.termsOfUseVersion))
 
         // Test remind me later counter
-        let remindMeLaterCount = try XCTUnwrap(GleanMetrics.Termsofuse.remindMeLaterCount.testGetValue())
+        let remindMeLaterCount = try XCTUnwrap(GleanMetrics.TermsOfUse.remindMeLaterCount.testGetValue())
         XCTAssertEqual(remindMeLaterCount, 1)
     }
 
@@ -88,7 +88,7 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUseLearnMoreButtonTapped(surface: .bottomSheet)
 
         // Test learn more event
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.learnMoreClick.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.learnMoreButtonTapped.testGetValue())
         XCTAssertEqual(events.count, 1)
         let event = events[0]
         XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
@@ -99,7 +99,7 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUsePrivacyNoticeLinkTapped(surface: .bottomSheet)
 
         // Test privacy notice event
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.privacyNoticeClick.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.privacyNoticeTapped.testGetValue())
         XCTAssertEqual(events.count, 1)
         let event = events[0]
         XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
@@ -110,7 +110,7 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUseTermsOfUseLinkTapped(surface: .bottomSheet)
 
         // Test terms of use link event
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.termsOfUseClick.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.termsOfUseLinkTapped.testGetValue())
         XCTAssertEqual(events.count, 1)
         let event = events[0]
         XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
@@ -121,14 +121,14 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUseDismissed(surface: .bottomSheet)
 
         // Test dismiss event
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.dismiss.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissed.testGetValue())
         XCTAssertEqual(events.count, 1)
         let event = events[0]
         XCTAssertEqual(event.extra?["surface"], TermsOfUseTelemetry.Surface.bottomSheet.rawValue)
         XCTAssertEqual(event.extra?["tou_version"], String(telemetry.termsOfUseVersion))
 
         // Test dismiss counter
-        let dismissCount = try XCTUnwrap(GleanMetrics.Termsofuse.dismissCount.testGetValue())
+        let dismissCount = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissedCount.testGetValue())
         XCTAssertEqual(dismissCount, 1)
     }
 
@@ -138,10 +138,10 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUseDisplayed(surface: .bottomSheet)
         telemetry.termsOfUseDisplayed(surface: .bottomSheet)
 
-        let impressionCount = try XCTUnwrap(GleanMetrics.Termsofuse.impressionCount.testGetValue())
+        let impressionCount = try XCTUnwrap(GleanMetrics.TermsOfUse.shownCount.testGetValue())
         XCTAssertEqual(impressionCount, 3)
 
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.impression.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.shown.testGetValue())
         XCTAssertEqual(events.count, 3)
     }
 
@@ -150,10 +150,10 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
         telemetry.termsOfUseRemindMeLaterButtonTapped(surface: .bottomSheet)
 
-        let remindMeLaterCount = try XCTUnwrap(GleanMetrics.Termsofuse.remindMeLaterCount.testGetValue())
+        let remindMeLaterCount = try XCTUnwrap(GleanMetrics.TermsOfUse.remindMeLaterCount.testGetValue())
         XCTAssertEqual(remindMeLaterCount, 2)
 
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.remindMeLaterClick.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.remindMeLaterButtonTapped.testGetValue())
         XCTAssertEqual(events.count, 2)
     }
 
@@ -162,10 +162,10 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         telemetry.termsOfUseDismissed(surface: .bottomSheet)
         telemetry.termsOfUseDismissed(surface: .bottomSheet)
 
-        let dismissCount = try XCTUnwrap(GleanMetrics.Termsofuse.dismissCount.testGetValue())
+        let dismissCount = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissedCount.testGetValue())
         XCTAssertEqual(dismissCount, 2)
 
-        let events = try XCTUnwrap(GleanMetrics.Termsofuse.dismiss.testGetValue())
+        let events = try XCTUnwrap(GleanMetrics.TermsOfUse.dismissed.testGetValue())
         XCTAssertEqual(events.count, 2)
     }
 
