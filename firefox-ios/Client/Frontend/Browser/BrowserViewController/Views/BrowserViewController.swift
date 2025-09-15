@@ -4973,7 +4973,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {
         guard isToolbarRefactorEnabled, isSwipingTabsEnabled else { return }
-        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager, keyboardState: state)
+        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
     }
 
     private func cancelEditingMode(keyboardState: KeyboardState) {
@@ -4985,12 +4985,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
                   toolbarState.addressToolbar.url == nil,
                   toolbarState.isShowingNavigationToolbar == true
             else { return }
-            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager, keyboardState: keyboardState)
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
             return
         }
         overlayManager.cancelEditing(shouldCancelLoading: false)
         guard isSwipingTabsEnabled, isToolbarRefactorEnabled else { return }
-        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager, keyboardState: keyboardState)
+        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
     }
 
     private var shouldCancelEditing: Bool {
