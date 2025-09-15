@@ -4942,7 +4942,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 self.bottomContentStackView.layoutIfNeeded()
             })
 
-        cancelEditingMode(keyboardState: state)
+        cancelEditingMode()
         updateToolbarDisplay()
     }
 
