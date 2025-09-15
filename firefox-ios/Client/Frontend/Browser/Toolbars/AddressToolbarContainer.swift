@@ -171,7 +171,11 @@ final class AddressToolbarContainer: UIView,
     }
 
     func updateSkeletonAddressBarsVisibility(tabManager: TabManager) {
-        guard let selectedTab = tabManager.selectedTab, state?.toolbarPosition == .bottom else {
+        let isEditing = model?.isEditing ?? false
+        guard let selectedTab = tabManager.selectedTab,
+              state?.toolbarPosition == .bottom,
+              !isEditing
+        else {
             hideSkeletonBars()
             return
         }

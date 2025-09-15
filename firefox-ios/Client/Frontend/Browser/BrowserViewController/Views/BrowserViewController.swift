@@ -4971,6 +4971,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
     }
 
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {
+        guard isToolbarRefactorEnabled, isSwipingTabsEnabled else { return }
+        addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+    }
+
     private func cancelEditingMode() {
         // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
         guard shouldCancelEditing else {
