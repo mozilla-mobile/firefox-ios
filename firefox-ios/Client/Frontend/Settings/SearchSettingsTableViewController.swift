@@ -280,6 +280,24 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForPrivateSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            buildSettingWith(
+                prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
+                defaultValue: model.shouldShowPrivateModeSearchSuggestions,
+                titleText: String.localizedStringWithFormat(
+                    .Settings.Search.PrivateSessionSetting
+                ),
+                statusText: String.localizedStringWithFormat(
+                    .Settings.Search.PrivateSessionDescription
+                ),
+                cell: cell,
+                selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
+            )
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showPrivateSuggestions
+        }
+    }
+
     private func configureCellForBrowsingHistoryAction(cell: ThemedSubtitleTableViewCell) {
         buildSettingWith(
             prefKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions,
