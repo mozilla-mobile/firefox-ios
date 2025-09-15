@@ -259,15 +259,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case FirefoxSuggestItem.syncedTabs.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions,
-                    defaultValue: model.shouldShowSyncedTabsSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.SearchSyncedTabs
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleSyncedTabsSuggestions)
-                )
+                configureCellForSyncedTabsAction(cell: cell)
 
             case FirefoxSuggestItem.nonSponsored.rawValue:
                 configureCellForNonSponsoredAction(cell: cell)
