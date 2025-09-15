@@ -213,12 +213,12 @@ def extract_tarball(version: VersionInfo, dest: Path) -> None:
 
 def replace_all_files(tmp_dir: Path) -> None:
     replace_files(
-        tmp_dir / "swift-components/all",
-        "MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated/",
+        tmp_dir / "swift-components/all/Generated",
+        "MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated",
     )
     replace_files(
-        tmp_dir / "swift-components/focus",
-        "MozillaRustComponents/Sources/FocusRustComponentsWrapper/Generated/"
+        tmp_dir / "swift-components/focus/Generated",
+        "MozillaRustComponents/Sources/FocusRustComponentsWrapper/Generated"
     )
 
 
