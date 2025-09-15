@@ -427,7 +427,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
         tabManager.selectTab(tab)
 
-        let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
+   //     let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
 //        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
 //                                                     windowUUID: uuid,
 //                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
