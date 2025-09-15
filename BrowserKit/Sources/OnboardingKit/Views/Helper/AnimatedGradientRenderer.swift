@@ -328,6 +328,7 @@ struct AnimatedGradientMetalView: View {
 }
 
 // Wrapper class to manage the optional renderer
+@MainActor
 class RendererStore: ObservableObject {
     let renderer: AnimatedGradientRenderer?
 
