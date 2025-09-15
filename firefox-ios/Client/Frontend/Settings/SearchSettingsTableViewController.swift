@@ -161,14 +161,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         switch section {
         case .defaultEngine:
             guard let engine = model.defaultEngine else { break }
-            cell.editingAccessoryType = .disclosureIndicator
-            cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
-            cell.accessibilityValue = engine.shortName
-            cell.textLabel?.text = engine.shortName
-            cell.imageView?.image = engine.image.createScaled(IconSize)
-            cell.imageView?.layer.cornerRadius = 4
-            cell.imageView?.layer.masksToBounds = true
-            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            configureCellForDefaultEngineAction(cell: cell, engine: engine)
 
         case .alternateEngines:
             configureCellForAlternateEnginesAction(cell: cell, indexPath: indexPath)
