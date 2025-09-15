@@ -17,20 +17,20 @@ class ResetTermsOfServiceAcceptancePage: HiddenSetting {
         guard let theme else { return nil }
         let tosAccepted = settings.profile?.prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
         let status = tosAccepted ? "accepted" : "not accepted"
-        
+
         return NSAttributedString(string: "Reset onboarding ToS accept (\(status))",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let prefs = settings.profile?.prefs else { return }
-        
+
         // Reset onboarding Terms of Service preferences
         // This allows testing the Terms of Use bottom sheet after onboarding acceptance
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAccepted)
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
         prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedDate)
-        
+
         settingsDelegate?.askedToReload()
     }
 }
