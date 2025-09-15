@@ -99,7 +99,8 @@ public enum MZKeychainItemAccessibility: Sendable {
     }
 }
 
-private let keychainItemAccessibilityLookup: [MZKeychainItemAccessibility: CFString] =
+// FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+private nonisolated(unsafe) let keychainItemAccessibilityLookup: [MZKeychainItemAccessibility: CFString] =
     [
         .afterFirstUnlock: kSecAttrAccessibleAfterFirstUnlock,
         .afterFirstUnlockThisDeviceOnly: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,

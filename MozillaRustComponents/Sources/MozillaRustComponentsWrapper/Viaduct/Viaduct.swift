@@ -15,7 +15,8 @@ import Foundation
 /// `shared` static member.
 public class Viaduct {
     /// The singleton instance of Viaduct
-    public static let shared = Viaduct()
+    /// FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    public nonisolated(unsafe) static let shared = Viaduct()
 
     private init() {}
 

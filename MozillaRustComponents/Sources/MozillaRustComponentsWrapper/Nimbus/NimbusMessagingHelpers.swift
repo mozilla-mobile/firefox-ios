@@ -44,7 +44,8 @@ public protocol NimbusMessagingHelperProtocol: NimbusStringHelperProtocol, Nimbu
 public class NimbusMessagingHelper: NimbusMessagingHelperProtocol {
     private let targetingHelper: NimbusTargetingHelperProtocol
     private let stringHelper: NimbusStringHelperProtocol
-    private var cache: [String: Bool]
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    private nonisolated(unsafe) var cache: [String: Bool]
 
     public init(targetingHelper: NimbusTargetingHelperProtocol,
                 stringHelper: NimbusStringHelperProtocol,

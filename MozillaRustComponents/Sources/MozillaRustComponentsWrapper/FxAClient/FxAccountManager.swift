@@ -16,13 +16,15 @@ public extension Notification.Name {
 public enum MigrationResult {}
 
 // swiftlint:disable type_body_length
-open class FxAccountManager: Sendable {
+open class FxAccountManager {
     let accountStorage: KeyChainAccountStorage
     let config: FxAConfig
-    var deviceConfig: DeviceConfig
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    nonisolated(unsafe) var deviceConfig: DeviceConfig
     let applicationScopes: [String]
 
-    var acct: PersistedFirefoxAccount?
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    nonisolated(unsafe) var acct: PersistedFirefoxAccount?
     var account: PersistedFirefoxAccount? {
         get { return acct }
         set {
@@ -113,7 +115,8 @@ open class FxAccountManager: Sendable {
         completionHandler: @escaping (Result<URL, Error>) -> Void
     ) {
         FxALog.info("beginAuthentication")
-        var scopes = scopes
+        // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+        nonisolated(unsafe) var scopes = scopes
         if scopes.isEmpty {
             scopes = applicationScopes
         }
