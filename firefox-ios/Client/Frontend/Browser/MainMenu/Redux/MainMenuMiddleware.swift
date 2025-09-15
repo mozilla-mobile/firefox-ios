@@ -71,14 +71,11 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuActionType.tapCloseMenu:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
 
-        case MainMenuActionType.didInstantiateView:
+        case MainMenuActionType.viewDidLoad:
             handleDidInstantiateViewAction(action: action)
 
-        case MainMenuActionType.viewDidLoad:
-            handleViewDidLoadAction(action: action)
-
         case MainMenuActionType.updateMenuAppearance:
-            handleUpdateMenuAppearance(action: action)
+            dispatchUpdateMenuAppearance(action: action)
 
         case MainMenuActionType.menuDismissed:
             telemetry.menuDismissed(isHomepage: isHomepage)
@@ -128,6 +125,8 @@ final class MainMenuMiddleware: FeatureFlaggable {
     @MainActor
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
         dispatchUpdateBannerVisibility(action: action)
+        dispatchUpdateMenuAppearance(action: action)
+        handleViewDidLoadAction(action: action)
     }
 
     @MainActor
@@ -141,7 +140,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         )
     }
 
-    private func handleUpdateMenuAppearance(action: MainMenuAction) {
+    private func dispatchUpdateMenuAppearance(action: MainMenuAction) {
         store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: action.windowUUID,
