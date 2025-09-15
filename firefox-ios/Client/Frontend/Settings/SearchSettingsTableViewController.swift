@@ -287,21 +287,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 }
 
             case FirefoxSuggestItem.sponsored.rawValue:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                    buildSettingWith(
-                        prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
-                        defaultValue: model.shouldShowSponsoredSuggestions,
-                        titleText: String.localizedStringWithFormat(
-                            .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
-                        ),
-                        statusText: String.localizedStringWithFormat(
-                            .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
-                            AppName.shortName.rawValue
-                        ),
-                        cell: cell,
-                        selector: #selector(didToggleEnableSponsoredSuggestions)
-                    )
-                }
+                configureCellForSponsoredAction(cell: cell)
 
 //            case FirefoxSuggestItem.privateSuggestions.rawValue:
 //                buildSettingWith(
