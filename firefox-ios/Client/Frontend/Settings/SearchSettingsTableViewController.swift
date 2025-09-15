@@ -205,15 +205,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case .searchEnginesSuggestions:
             switch indexPath.item {
             case SearchSuggestItem.defaultSuggestions.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
-                    defaultValue: model.shouldShowSearchSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.ShowSearchSuggestions
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleSearchSuggestions)
-                )
+                configureCellForDefaultSuggestionsAction(cell: cell)
 
             case SearchSuggestItem.privateSuggestions.rawValue:
                 configureCellForPrivateSuggestionsAction(cell: cell)
