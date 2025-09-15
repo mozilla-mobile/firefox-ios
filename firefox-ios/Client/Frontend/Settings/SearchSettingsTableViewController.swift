@@ -343,6 +343,21 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForSuggestionLearnMoreAction(cell: ThemedSubtitleTableViewCell) {
+        cell.accessibilityLabel = String.localizedStringWithFormat(
+            .Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
+            AppName.shortName.rawValue
+        )
+        cell.textLabel?.text = String.localizedStringWithFormat(
+            .Settings.Search.Suggest.LearnAboutSuggestions,
+            AppName.shortName.rawValue
+        )
+        cell.imageView?.layer.cornerRadius = 4
+        cell.imageView?.layer.masksToBounds = true
+        cell.selectionStyle = .none
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         sectionsToDisplay = [
             .defaultEngine,
