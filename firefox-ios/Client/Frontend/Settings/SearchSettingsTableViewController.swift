@@ -270,21 +270,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case FirefoxSuggestItem.nonSponsored.rawValue:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                    buildSettingWith(
-                        prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
-                        defaultValue: model.shouldShowFirefoxSuggestions,
-                        titleText: String.localizedStringWithFormat(
-                            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
-                        ),
-                        statusText: String.localizedStringWithFormat(
-                            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
-                            AppName.shortName.rawValue
-                        ),
-                        cell: cell,
-                        selector: #selector(didToggleEnableNonSponsoredSuggestions)
-                    )
-                }
+                configureCellForNonSponsoredAction(cell: cell)
 
             case FirefoxSuggestItem.sponsored.rawValue:
                 configureCellForSponsoredAction(cell: cell)
