@@ -4,13 +4,18 @@
 
 import Shared
 
-class ResetTermsOfServiceAcceptancePage: HiddenSetting {
+class ResetTermsOfServiceAcceptancePage: HiddenSetting, FeatureFlaggable {
     private weak var settingsDelegate: DebugSettingsDelegate?
 
     init(settings: SettingsTableViewController,
          settingsDelegate: DebugSettingsDelegate) {
         self.settingsDelegate = settingsDelegate
         super.init(settings: settings)
+    }
+
+    // Only show this debug setting when Terms Of Service feature is enabled
+    override var hidden: Bool {
+        return !featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser)
     }
 
     override var title: NSAttributedString? {
