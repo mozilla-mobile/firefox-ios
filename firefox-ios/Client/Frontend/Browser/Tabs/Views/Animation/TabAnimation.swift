@@ -23,7 +23,7 @@ extension TabTrayViewController: UIViewControllerTransitioningDelegate {
         static let dimmedWhiteValue = 0.0
 
         static let presentDuration: TimeInterval = 0.275
-        static let dismissDuration: TimeInterval = 0.275
+        static let dismissDuration: TimeInterval = 3
 
         static let cvScalingFactor = 1.2
         static let initialOpacity = 0.0
@@ -315,72 +315,143 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
-        let cv = panelViewController.tabDisplayView.collectionView
-        guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
-              let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-        else {
-            // We don't have a collection view when the view is empty (ex: in private tabs)
-            context.completeTransition(true)
-            return
-        }
+        if selectedTab.screenshot == nil {
+            let cv = panelViewController.tabDisplayView.collectionView
+            let contentContainer = browserVC.contentContainer
+            let tabTraySnapshot = panelViewController.takeScreenshot(afterScreenUpdates: false)!
+            let tabSnapshot = UIImageView(image: selectedTab.screenshot)
+            // crop the tab screenshot to the contentContainer frame so the animation
+            // and the initial transform doesn't stutter
+            if let image = tabSnapshot.image, let croppedImage = image.cgImage?.cropping(
+                to: CGRect(
+                    x: contentContainer.frame.origin.x * image.scale,
+                    y: contentContainer.frame.origin.y * image.scale,
+                    width: contentContainer.frame.width * image.scale,
+                    height: contentContainer.frame.height * image.scale
+                )
+            ) {
+                tabSnapshot.image = UIImage(cgImage: croppedImage)
+            }
 
-        let contentContainer = browserVC.contentContainer
-        let tabSnapshot = UIImageView(image: selectedTab.screenshot)
-        // crop the tab screenshot to the contentContainer frame so the animation
-        // and the initial transform doesn't stutter
-        if let image = tabSnapshot.image, let croppedImage = image.cgImage?.cropping(
-            to: CGRect(
-                x: contentContainer.frame.origin.x * image.scale,
-                y: contentContainer.frame.origin.y * image.scale,
-                width: contentContainer.frame.width * image.scale,
-                height: contentContainer.frame.height * image.scale
-            )
-        ) {
-            tabSnapshot.image = UIImage(cgImage: croppedImage)
-        }
+            tabSnapshot.clipsToBounds = true
+            tabSnapshot.contentMode = .scaleAspectFill
+            tabSnapshot.layer.cornerCurve = .continuous
+            tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
 
-        tabSnapshot.clipsToBounds = true
-        tabSnapshot.contentMode = .scaleAspectFill
-        tabSnapshot.layer.cornerCurve = .continuous
-        tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            contentContainer.isHidden = true
 
-        contentContainer.isHidden = true
+            tabTraySnapshot.layer.cornerCurve = .continuous
+            tabTraySnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            tabTraySnapshot.clipsToBounds = true
+            tabTraySnapshot.alpha = UX.opaqueAlpha
 
-        toView.layer.cornerCurve = .continuous
-        toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-        toView.clipsToBounds = true
-        toView.alpha = UX.clearAlpha
+            toView.layer.cornerCurve = .continuous
+            toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            toView.clipsToBounds = true
+            toView.alpha = UX.clearAlpha
 
-        context.containerView.addSubview(toView)
-        context.containerView.addSubview(tabSnapshot)
+            context.containerView.addSubview(tabTraySnapshot)
+            context.containerView.addSubview(toView)
+            context.containerView.addSubview(tabSnapshot)
 
-        var tabCell: ExperimentTabCell?
-        if let indexPath = dataSource.indexPath(for: item),
-           let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
-            tabCell = cell
-            tabSnapshot.frame = cv.convert(cell.frame, to: browserVC.view)
+//            var tabCell: ExperimentTabCell?
+//            if let indexPath = dataSource.indexPath(for: item),
+//               let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
+//                tabCell = cell
+//                tabSnapshot.frame = cv.convert(cell.frame, to: browserVC.view)
+//
+//                cell.isHidden = true
+//            }
 
-            cell.isHidden = true
-        }
+            UIView.animate(
+                withDuration: UX.dismissDuration,
+                delay: 0.0,
+                options: .curveEaseOut) {
+                tabTraySnapshot.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+                tabSnapshot.alpha = UX.opaqueAlpha
 
-        UIView.animate(
-            withDuration: UX.dismissDuration,
-            delay: 0.0,
-            options: .curveEaseOut) {
-            cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            cv.alpha = UX.opaqueAlpha
+             //   tabTraySnapshot.alpha = UX.opaqueAlpha
+                tabSnapshot.frame = contentContainer.frame
+                toView.alpha = UX.opaqueAlpha
+                toView.layer.cornerRadius = UX.zeroCornerRadius
+                tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
+            } completion: { _ in
+                contentContainer.isHidden = false
+                //tabCell?.isHidden = false
+                self.view.removeFromSuperview()
+                tabSnapshot.removeFromSuperview()
+                tabTraySnapshot.removeFromSuperview()
+                toView.removeFromSuperview()
+                context.completeTransition(true)
+            }
+        } else {
+            let cv = panelViewController.tabDisplayView.collectionView
+            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+                  let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
+            else {
+                // We don't have a collection view when the view is empty (ex: in private tabs)
+                context.completeTransition(true)
+                return
+            }
 
-            tabSnapshot.frame = contentContainer.frame
-            toView.alpha = UX.opaqueAlpha
-            toView.layer.cornerRadius = UX.zeroCornerRadius
-            tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
-        } completion: { _ in
-            contentContainer.isHidden = false
-            tabCell?.isHidden = false
-            self.view.removeFromSuperview()
-            tabSnapshot.removeFromSuperview()
-            toView.removeFromSuperview()
-            context.completeTransition(true)
+            let contentContainer = browserVC.contentContainer
+            let tabSnapshot = UIImageView(image: selectedTab.screenshot)
+            // crop the tab screenshot to the contentContainer frame so the animation
+            // and the initial transform doesn't stutter
+            if let image = tabSnapshot.image, let croppedImage = image.cgImage?.cropping(
+                to: CGRect(
+                    x: contentContainer.frame.origin.x * image.scale,
+                    y: contentContainer.frame.origin.y * image.scale,
+                    width: contentContainer.frame.width * image.scale,
+                    height: contentContainer.frame.height * image.scale
+                )
+            ) {
+                tabSnapshot.image = UIImage(cgImage: croppedImage)
+            }
+
+            tabSnapshot.clipsToBounds = true
+            tabSnapshot.contentMode = .scaleAspectFill
+            tabSnapshot.layer.cornerCurve = .continuous
+            tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+
+            contentContainer.isHidden = true
+
+            toView.layer.cornerCurve = .continuous
+            toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
+            toView.clipsToBounds = true
+            toView.alpha = UX.clearAlpha
+
+            context.containerView.addSubview(toView)
+            context.containerView.addSubview(tabSnapshot)
+
+            var tabCell: ExperimentTabCell?
+            if let indexPath = dataSource.indexPath(for: item),
+               let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
+                tabCell = cell
+                tabSnapshot.frame = cv.convert(cell.frame, to: browserVC.view)
+
+                cell.isHidden = true
+            }
+
+            UIView.animate(
+                withDuration: UX.dismissDuration,
+                delay: 0.0,
+                options: .curveEaseOut) {
+                cv.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+                cv.alpha = UX.opaqueAlpha
+
+                tabSnapshot.frame = contentContainer.frame
+                toView.alpha = UX.opaqueAlpha
+                toView.layer.cornerRadius = UX.zeroCornerRadius
+                tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
+            } completion: { _ in
+                contentContainer.isHidden = false
+                tabCell?.isHidden = false
+                self.view.removeFromSuperview()
+                tabSnapshot.removeFromSuperview()
+                toView.removeFromSuperview()
+                context.completeTransition(true)
+            }
         }
     }
 
@@ -393,5 +464,28 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 return model.id == id
             }
         }
+    }
+}
+
+extension UIViewController {
+    @MainActor
+    func takeScreenshot(afterScreenUpdates: Bool = true) -> UIImageView? {
+        guard isViewLoaded else { return nil }
+        let view = self.view!
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        format.opaque = view.isOpaque
+
+        let renderer = UIGraphicsImageRenderer(size: view.bounds.size, format: format)
+        let image = renderer.image { _ in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: afterScreenUpdates)
+        }
+
+        let imageView = UIImageView(image: image)
+        imageView.frame = view.bounds
+        imageView.isUserInteractionEnabled = false
+        imageView.contentMode = .scaleToFill  // same size as source view
+        return imageView
     }
 }
