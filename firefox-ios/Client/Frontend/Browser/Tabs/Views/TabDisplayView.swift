@@ -11,6 +11,16 @@ protocol TabDisplayViewDragAndDropInteraction: AnyObject {
     func dragAndDropEnded()
 }
 
+/// NOTE: ⚠️ CRITICAL: `TabTitleSupplementaryView` Creation.
+/// The app was crashing with `NSInternalInconsistencyException` when `TabTitleSupplementaryView`
+/// was successfully created but then returned `nil` due to missing tab data: https://mozilla-hub.atlassian.net/browse/FXIOS-13374.
+/// This violated `UICollectionViewDiffableDataSource`'s requirement that `supplementaryViewProvider` must always
+/// return a valid view.
+///
+/// IMPORTANT: Returning `nil` is acceptable when cell creation fails, but we must avoid the pattern
+/// of successfully creating our designated cell only to return `nil` based on subsequent conditions.
+///
+/// Always return a valid view once creation succeeds, or fail early during creation.
 final class TabDisplayView: UIView,
                       ThemeApplicable,
                       UICollectionViewDelegate,
