@@ -1,4 +1,4 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.10
 import PackageDescription
 
 let checksum = "bf9dcba56f603cd0f3ad1f564bd9ecec80fdac9b4447bcceb74c4166ca501d9b"
@@ -24,7 +24,10 @@ let package = Package(
         .target(
             name: "MozillaAppServices",
             dependencies: ["MozillaRustComponents", .product(name: "Glean", package: "glean-swift")],
-            path: "Sources/MozillaRustComponentsWrapper"
+            path: "Sources/MozillaRustComponentsWrapper",
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ],
         ),
         .target(
             name: "FocusAppServices",
