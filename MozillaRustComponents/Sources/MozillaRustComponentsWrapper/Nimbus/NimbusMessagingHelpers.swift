@@ -41,7 +41,7 @@ public protocol NimbusMessagingHelperProtocol: NimbusStringHelperProtocol, Nimbu
  *
  * It should also provide a similar function for String substitution, though this scheduled for EXP-2159.
  */
-public class NimbusMessagingHelper: NimbusMessagingHelperProtocol {
+public final class NimbusMessagingHelper: NimbusMessagingHelperProtocol {
     private let targetingHelper: NimbusTargetingHelperProtocol
     private let stringHelper: NimbusStringHelperProtocol
     // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
@@ -81,7 +81,7 @@ public class NimbusMessagingHelper: NimbusMessagingHelperProtocol {
 
 // MARK: Dummy implementations
 
-class AlwaysConstantTargetingHelper: NimbusTargetingHelperProtocol {
+final class AlwaysConstantTargetingHelper: NimbusTargetingHelperProtocol {
     private let constant: Bool
 
     init(constant: Bool = false) {
@@ -93,7 +93,7 @@ class AlwaysConstantTargetingHelper: NimbusTargetingHelperProtocol {
     }
 }
 
-class EchoStringHelper: NimbusStringHelperProtocol {
+final class EchoStringHelper: NimbusStringHelperProtocol {
     func getUuid(template _: String) -> String? {
         nil
     }
