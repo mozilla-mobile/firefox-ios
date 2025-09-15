@@ -5,6 +5,30 @@
 import Foundation
 import WebKit
 
+@MainActor
+public protocol SummarizeViewModel {
+    func summarize(webView: WKWebView,
+                   footNoteLabel: String,
+                   onNewData: @escaping (Result<String, SummarizerError>) -> Void) async
+
+    /// Free the lock on the summarization stream, and unlock the stream to send data to the UI.
+    func unblockSummarization()
+
+    func closeSummarization()
+
+    func setTosScreenShown()
+
+    func setTosConsentAccepted()
+
+    func logTosStatus()
+}
+
+public protocol SummarizeToSAcceptor: AnyObject {
+    func acceptTosConsent()
+
+    func denyTosConsent()
+}
+
 struct SummarizeState: Sendable {
     let isTosConsentAccepted: Bool
     let wasTosScreenShown: Bool
@@ -31,30 +55,6 @@ struct SummarizeState: Sendable {
             canSummarize: canSummarize ?? self.canSummarize
         )
     }
-}
-
-@MainActor
-public protocol SummarizeViewModel {
-    func summarize(webView: WKWebView,
-                   footNoteLabel: String,
-                   onNewData: @escaping (Result<String, SummarizerError>) -> Void) async
-
-    /// Free the lock on the summarization stream, and unlock the stream to send data the UI.
-    func unblockSummarization()
-
-    func closeSummarization()
-
-    func setTosScreenShown()
-
-    func setTosConsentAccepted()
-
-    func logTosStatus()
-}
-
-public protocol SummarizeToSAcceptor: AnyObject {
-    func acceptTosConsent()
-
-    func denyTosConsent()
 }
 
 public final class DefaultSummarizeViewModel: SummarizeViewModel {
