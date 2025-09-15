@@ -15,6 +15,7 @@ public final class SummarizerService {
     /// This is enforced by the injected JS, not the model itself.
     /// See UserScripts/MainFrame/AtDocumentStart/Summarizer.js for more context on how this is enforced.
     private let maxWords: Int
+    private var streamContinuation: AsyncThrowingStream<String, Error>.Continuation?
 
     /// Lifecycle delegate for “started / completed / failed” callbacks.
     public weak var summarizerLifecycle: SummarizerServiceLifecycle?
@@ -56,6 +57,7 @@ public final class SummarizerService {
     ///   the stream must use a generic `Error` type. But all errors thrown from this method are `SummarizerError`.
     func summarizeStreamed(from webView: WKWebView) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in
+            streamContinuation = continuation
             Task {
                 do {
                     let text = try await self.extractSummarizableText(from: webView)
@@ -64,7 +66,7 @@ public final class SummarizerService {
                     var summary = ""
 
                     for try await chunk in stream {
-                        summary += chunk
+                        summary = chunk
                         continuation.yield(chunk)
                     }
                     summarizerLifecycle?.summarizerServiceDidComplete(summary, modelName: summarizer.modelName)
@@ -79,6 +81,11 @@ public final class SummarizerService {
                 }
             }
         }
+    }
+
+    func closeStream() {
+        streamContinuation?.finish()
+        streamContinuation = nil
     }
 
     /// Helper that extracts summarizable text from the given web view.

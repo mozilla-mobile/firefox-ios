@@ -230,7 +230,7 @@
 "Onboarding.TermsOfService.PrivacyPreferences.Title.v135" = "帮助我们改进 %@";
 
 /* Subtitle for the Terms of Service screen in the onboarding process. */
-"Onboarding.TermsOfService.Subtitle.v136" = "快速又安全的浏览体验";
+"Onboarding.TermsOfService.Subtitle.v136" = "浏览快如风，安全不漏风";
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "继续即表示您同意 %@";

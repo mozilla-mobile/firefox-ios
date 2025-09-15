@@ -342,6 +342,9 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    // This test is being skipped because there are some very strange side effects
+    // in webView didFinish because the profile database is not being stubbed out
+    // TODO: FXIOS-13435 to look in to this
     func testWebViewDidFinishNavigation_takeScreenshotWhenTabIsSelected() {
         let subject = createSubject()
         let screenshotHelper = MockScreenshotHelper(controller: subject)

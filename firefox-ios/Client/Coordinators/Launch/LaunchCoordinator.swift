@@ -26,6 +26,7 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
+    private let modernLaunchTransitionDelegate = ModernLaunchTransitionDelegate()
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
@@ -149,8 +150,9 @@ final class LaunchCoordinator: BaseCoordinator,
             },
             onComplete: { [weak self] in
                 guard let self = self else { return }
-                manager.setAccepted()
-                TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped()
+                let acceptedDate = Date()
+                manager.setAccepted(acceptedDate: acceptedDate)
+                TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped(acceptedDate: acceptedDate)
 
                 let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
                 let sendStudies = profile.prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true
@@ -177,8 +179,9 @@ final class LaunchCoordinator: BaseCoordinator,
 
         let viewController = PortraitOnlyHostingController(rootView: view)
         viewController.modalPresentationStyle = .fullScreen
-        viewController.modalTransitionStyle = .crossDissolve
-        router.present(viewController, animated: false)
+        viewController.transitioningDelegate = modernLaunchTransitionDelegate
+
+        router.present(viewController, animated: true)
     }
 
     private func presentLink(with url: URL?) {
@@ -208,8 +211,9 @@ final class LaunchCoordinator: BaseCoordinator,
         let viewController = TermsOfServiceViewController(profile: profile, windowUUID: windowUUID)
         viewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
-            manager.setAccepted()
-            TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped()
+            let acceptedDate = Date()
+            manager.setAccepted(acceptedDate: acceptedDate)
+            TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped(acceptedDate: acceptedDate)
 
             let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
             let sendStudies = profile.prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true
@@ -293,7 +297,9 @@ final class LaunchCoordinator: BaseCoordinator,
         let hostingController = PortraitOnlyHostingController(rootView: view)
         hostingController.modalPresentationStyle = .fullScreen
         hostingController.modalTransitionStyle = .crossDissolve
-        router.present(hostingController, animated: false)
+        hostingController.transitioningDelegate = modernLaunchTransitionDelegate
+
+        router.present(hostingController, animated: true)
     }
 
     // MARK: - Intro

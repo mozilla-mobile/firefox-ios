@@ -75,7 +75,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("Homescreen-first-visit")
     }
 
-    func testWebViewContextMenu () throws {
+    func testWebViewContextMenu() throws {
         throw XCTSkip("Failing a lot and now new strings here")
 //        // Drag the context menu up to show all the options
 //        func drag() {

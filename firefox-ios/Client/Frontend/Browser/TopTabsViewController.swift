@@ -402,6 +402,7 @@ extension TopTabsViewController: TabDisplayerDelegate {
 }
 
 extension TopTabsViewController: TopTabCellDelegate {
+    @MainActor
     func tabCellDidClose(_ cell: UICollectionViewCell) {
         topTabDisplayManager.closeActionPerformed(forCell: cell)
         delegate?.topTabsShowCloseTabsToast()

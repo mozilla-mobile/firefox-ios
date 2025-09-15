@@ -11,6 +11,8 @@ private struct PagingCarouselUX {
     static let minimumSwipeVelocity: CGFloat = 50
     static let edgePaddingAdjustment: CGFloat = 30
     static let swipeAnimation: Animation = .interactiveSpring(response: 0.3, dampingFraction: 0.7)
+    static let rubberBandStrength: CGFloat = 0.3
+    static let horizontalDragThreshold: CGFloat = 10
 }
 
 /// A horizontal paging carousel that displays items with smooth scrolling and swipe gestures.
@@ -54,8 +56,9 @@ public struct PagingCarousel<Item, Content: View>: View {
     public var body: some View {
         GeometryReader { geometry in
             carouselContent(geometry: geometry)
-                .gesture(dragGesture(geometry: geometry))
-                .animation(PagingCarouselUX.swipeAnimation, value: selection)
+                .simultaneousGesture(dragGesture(geometry: geometry))
+                // Only animate when not dragging
+                .animation(isDragging ? nil : PagingCarouselUX.swipeAnimation, value: selection)
                 .accessibilityAdjustableAction { direction in
                     handleAccessibilityAdjustment(direction: direction)
                 }
@@ -101,17 +104,30 @@ public struct PagingCarousel<Item, Content: View>: View {
     }
 
     private func dragGesture(geometry: GeometryProxy) -> some Gesture {
-        DragGesture()
+        DragGesture(minimumDistance: 10) // Require minimum distance to start
             .onChanged { value in
-                isDragging = true
-                dragOffset = value.translation.width
+                // Only start horizontal swiping if the gesture is primarily horizontal
+                let horizontalMovement = abs(value.translation.width)
+                let verticalMovement = abs(value.translation.height)
+
+                // If this is primarily a horizontal gesture, take control
+                if horizontalMovement > verticalMovement && horizontalMovement > 10 {
+                    isDragging = true
+                    dragOffset = value.translation.width
+                }
             }
             .onEnded { value in
-                isDragging = false
-                handleDragEnded(value: value, geometry: geometry)
+                if isDragging {
+                    handleDragEnded(value: value, geometry: geometry)
 
-                // Always reset drag offset immediately for clean transitions
-                dragOffset = 0
+                    // Reset drag state
+                    isDragging = false
+
+                    // Use animation when resetting drag offset
+                    withAnimation(PagingCarouselUX.swipeAnimation) {
+                        dragOffset = 0
+                    }
+                }
             }
     }
 
@@ -172,23 +188,25 @@ public struct PagingCarousel<Item, Content: View>: View {
             edgeAdjustment += PagingCarouselUX.edgePaddingAdjustment
         }
 
-        // Apply constrained drag offset when actively dragging
-        let constrainedDragOffset = isDragging ? constrainDragOffset(dragOffset) : 0
+        // Apply rubber-band constrained drag offset
+        let constrainedDragOffset = constrainDragOffset(dragOffset)
         return baseOffset + edgeAdjustment + constrainedDragOffset
     }
 
-    /// Constrains drag offset to prevent overscroll at boundaries
+    /// Constrains drag offset with rubber-band effect at boundaries
     private func constrainDragOffset(_ offset: CGFloat) -> CGFloat {
         let isAtStart = selection == 0
         let isAtEnd = selection == items.count - 1
 
-        // Completely prevent overscroll - no movement beyond boundaries
+        // Apply rubber-band effect at boundaries instead of completely blocking
         if isAtStart && offset > 0 {
-            return 0
+            // Rubber band effect when trying to drag past the start
+            return offset * PagingCarouselUX.rubberBandStrength
         }
 
         if isAtEnd && offset < 0 {
-            return 0
+            // Rubber band effect when trying to drag past the end
+            return offset * PagingCarouselUX.rubberBandStrength
         }
 
         // Normal drag behavior for items in the middle

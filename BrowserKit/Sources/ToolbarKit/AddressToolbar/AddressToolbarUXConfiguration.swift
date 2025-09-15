@@ -54,7 +54,7 @@ public struct AddressToolbarUXConfiguration {
 
     func locationContainerBackgroundColor(theme: some Theme) -> UIColor {
         guard !scrollAlpha.isZero else { return .clear }
-        let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerSearch
+        let backgroundColor = isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerEmphasis
         return backgroundColor
     }
 

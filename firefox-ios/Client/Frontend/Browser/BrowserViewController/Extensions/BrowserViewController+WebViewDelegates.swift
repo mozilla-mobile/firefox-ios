@@ -139,12 +139,12 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webViewDidClose(_ webView: WKWebView) {
-        Task {
+        Task { @MainActor in
             if let tab = tabManager[webView] {
                 // Need to wait here in case we're waiting for a pending `window.open()`.
                 try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
                 tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-                await tabManager.removeTab(tab.tabUUID)
+                tabManager.removeTab(tab.tabUUID)
             }
         }
     }
@@ -437,6 +437,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         updateFindInPageVisibility(isVisible: false)
+        updateZoomPageBarVisibility(visible: false)
 
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
@@ -469,7 +470,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-        updateZoomPageBarVisibility(visible: false)
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
@@ -554,7 +554,7 @@ extension BrowserViewController: WKNavigationDelegate {
                        currentTab.historyList.count == 1,
                        self?.isStoreURL(currentTab.historyList[0]) ?? false {
                         self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
-                        self?.tabManager.removeTabWithCompletion(tab.tabUUID, completion: nil)
+                        self?.tabManager.removeTab(currentTab.tabUUID)
                     }
                 }
             }

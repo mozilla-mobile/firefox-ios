@@ -26,10 +26,10 @@ enum UX {
                 return 32
             }
         }
-        static let titleTopPadding: CGFloat = 100
+        static let titleTopPadding: CGFloat = 80
         static let titleAlignmentMinHeightPadding: CGFloat = 80
         static let cardHeightRatio: CGFloat = 0.8
-        static let spacing: CGFloat = 30
+        static let spacing: CGFloat = 24
         static let regularSizeSpacing: CGFloat = 48
         static let tosSpacing: CGFloat = 48
         static let horizontalPadding: CGFloat = 24
@@ -78,6 +78,15 @@ enum UX {
         struct Layout {
             static let logoSize = CGSize(width: 150, height: 150)
             static let buttonCornerRadius: CGFloat = 12
+        }
+    }
+
+    struct LaunchScreen {
+        struct Logo {
+            static let size: CGFloat = 125
+            static let rotationDuration: TimeInterval = 2.0
+            static let rotationAngle: Double = 360
+            static let image = "firefoxLoader"
         }
     }
 }

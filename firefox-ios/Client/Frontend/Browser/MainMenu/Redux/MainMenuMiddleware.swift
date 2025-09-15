@@ -16,6 +16,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         static let passwords = "passwords"
         static let settings = "settings"
         static let print = "print"
+        static let share = "share"
         static let saveAsPDF = "save_as_PDF"
         static let switchToDesktopSite = "switch_to_desktop_site"
         static let switchToMobileSite = "switch_to_mobile_site"
@@ -70,14 +71,11 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuActionType.tapCloseMenu:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
 
-        case MainMenuActionType.didInstantiateView:
+        case MainMenuActionType.viewDidLoad:
             handleDidInstantiateViewAction(action: action)
 
-        case MainMenuActionType.viewDidLoad:
-            handleViewDidLoadAction(action: action)
-
         case MainMenuActionType.updateMenuAppearance:
-            handleUpdateMenuAppearance(action: action)
+            dispatchUpdateMenuAppearance(action: action)
 
         case MainMenuActionType.menuDismissed:
             telemetry.menuDismissed(isHomepage: isHomepage)
@@ -127,6 +125,8 @@ final class MainMenuMiddleware: FeatureFlaggable {
     @MainActor
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
         dispatchUpdateBannerVisibility(action: action)
+        dispatchUpdateMenuAppearance(action: action)
+        handleViewDidLoadAction(action: action)
     }
 
     @MainActor
@@ -140,27 +140,12 @@ final class MainMenuMiddleware: FeatureFlaggable {
         )
     }
 
-    private func handleUpdateMenuAppearance(action: MainMenuAction) {
+    private func dispatchUpdateMenuAppearance(action: MainMenuAction) {
         store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: action.windowUUID,
                 actionType: MainMenuMiddlewareActionType.updateMenuAppearance,
                 isPhoneLandscape: UIDevice().isIphoneLandscape
-            )
-        )
-    }
-
-    private func dispatchUpdateAccountHeader(
-        accountData: AccountData? = nil,
-        action: MainMenuAction,
-        icon: UIImage? = nil
-    ) {
-        store.dispatchLegacy(
-            MainMenuAction(
-                windowUUID: action.windowUUID,
-                actionType: MainMenuMiddlewareActionType.updateAccountHeader,
-                accountData: accountData,
-                accountIcon: icon
             )
         )
     }
@@ -236,6 +221,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
 
         case .printSheetV2:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
+
+        case .shareSheet:
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.share)
 
         case .saveAsPDFV2:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.saveAsPDF)

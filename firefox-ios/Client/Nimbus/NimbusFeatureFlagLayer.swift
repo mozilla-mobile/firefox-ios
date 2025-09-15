@@ -86,9 +86,6 @@ final class NimbusFeatureFlagLayer {
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
 
-        case .ohttpManagerGleanUploader:
-            return checkOhttpManagerGleanUploader(from: nimbus)
-
         case .pdfRefactor:
             return checkPdfRefactorFeature(from: nimbus)
 
@@ -130,6 +127,9 @@ final class NimbusFeatureFlagLayer {
 
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
+
+        case .tabTrayTranslucency:
+            return checkTabTrayTranslucencyFeature(from: nimbus)
 
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature(from: nimbus)
@@ -241,6 +241,11 @@ final class NimbusFeatureFlagLayer {
     private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homepageRebuildFeature.value()
         return config.enabled
+    }
+
+    private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayUiExperiments.value()
+        return config.translucency
     }
 
     private func checkTabScrollRefactorFeature(from nimbus: FxNimbus) -> Bool {
@@ -428,10 +433,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
-    }
-
-    private func checkOhttpManagerGleanUploader(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.ohttpGleanUploaderCapabilityFeature.value().enabled
     }
 
     private func checkRevertUnsafeContinuationsRefactor(from nimbus: FxNimbus) -> Bool {

@@ -23,16 +23,17 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 }
 
 final class TabTrayViewController: UIViewController,
-                             TabTrayController,
-                             UIToolbarDelegate,
-                             UIPageViewControllerDataSource,
-                             UIPageViewControllerDelegate,
-                             UIScrollViewDelegate,
-                             StoreSubscriber,
-                             FeatureFlaggable,
-                             TabTraySelectorDelegate,
-                             TabTrayAnimationDelegate,
-                             TabDisplayViewDragAndDropInteraction {
+                                   TabTrayController,
+                                   UIToolbarDelegate,
+                                   UIPageViewControllerDataSource,
+                                   UIPageViewControllerDelegate,
+                                   UIScrollViewDelegate,
+                                   StoreSubscriber,
+                                   FeatureFlaggable,
+                                   TabTraySelectorDelegate,
+                                   TabTrayAnimationDelegate,
+                                   TabDisplayViewDragAndDropInteraction,
+                                   Notifiable {
     typealias SubscriberStateType = TabTrayState
     private struct UX {
         struct NavigationMenu {
@@ -44,10 +45,7 @@ final class TabTrayViewController: UIViewController,
             static let undoDuration = DispatchTimeInterval.seconds(3)
         }
         static let fixedSpaceWidth: CGFloat = 32
-        static let segmentedControlTopSpacing: CGFloat = 8
         static let segmentedControlHorizontalSpacing: CGFloat = 16
-        static let segmentedControlMinHeight: CGFloat = 45
-        static let segmentedControlMinHeightIOS26: CGFloat = 61
     }
 
     // MARK: Theme
@@ -64,6 +62,7 @@ final class TabTrayViewController: UIViewController,
     var childPanelThemes: [Theme]?
     weak var delegate: TabTrayViewControllerDelegate?
     weak var navigationHandler: TabTrayNavigationHandler?
+    private var tabTrayUtils: TabTrayUtils
 
     private lazy var panelContainer: UIView = .build { _ in }
     private var pageViewController: UIPageViewController?
@@ -71,13 +70,12 @@ final class TabTrayViewController: UIViewController,
     private var swipeFromIndex: Int?
     private lazy var themeAnimator = TabTrayThemeAnimator()
 
+    private let blurView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    }
+
     var openInNewTab: ((URL, Bool) -> Void)?
     var didSelectUrl: ((URL, VisitType) -> Void)?
-
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
-    }
 
     // MARK: - Redux state
     var tabTrayState: TabTrayState
@@ -265,11 +263,13 @@ final class TabTrayViewController: UIViewController,
     var currentWindowUUID: UUID? { windowUUID }
 
     init(panelType: TabTrayPanelType,
+         tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tabTrayState = TabTrayState(windowUUID: windowUUID, panelType: panelType)
+        self.tabTrayUtils = tabTrayUtils
         self.themeManager = themeManager
         self.logger = logger
         self.notificationCenter = notificationCenter
@@ -289,6 +289,12 @@ final class TabTrayViewController: UIViewController,
         setupView()
         subscribeToRedux()
         updateToolbarItems()
+
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIAccessibility.reduceTransparencyStatusDidChangeNotification]
+        )
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
@@ -329,7 +335,7 @@ final class TabTrayViewController: UIViewController,
         case .compact:
             navigationItem.leftBarButtonItem = nil
             navigationItem.titleView = nil
-            if isTabTrayUIExperimentsEnabled {
+            if tabTrayUtils.shouldDisplayExperimentUI() {
                 navigationController?.setNavigationBarHidden(true, animated: false)
                 navigationItem.rightBarButtonItems = nil
             } else {
@@ -439,6 +445,9 @@ final class TabTrayViewController: UIViewController,
             let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
             navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
         }
+
+        setupToolBarAppearance(theme: theme)
+        setupNavigationBarAppearance(theme: theme)
     }
 
     func applyTheme(fromIndex: Int, toIndex: Int, progress: CGFloat) {
@@ -457,6 +466,46 @@ final class TabTrayViewController: UIViewController,
         panelContainer.backgroundColor = swipeTheme.colors.layer3
 
         experimentSegmentControl.applyTheme(theme: swipeTheme)
+        setupToolBarAppearance(theme: swipeTheme)
+        setupNavigationBarAppearance(theme: swipeTheme)
+    }
+
+    private func setupToolBarAppearance(theme: Theme) {
+        guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
+
+        let backgroundAlpha = tabTrayUtils.backgroundAlpha()
+        let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+
+        let standardAppearance = UIToolbarAppearance()
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.backgroundColor = color
+        standardAppearance.backgroundEffect = nil
+        standardAppearance.shadowColor = .clear
+        navigationController?.toolbar.standardAppearance = standardAppearance
+        navigationController?.toolbar.compactAppearance = standardAppearance
+        navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
+        navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
+        navigationController?.toolbar.tintColor = theme.colors.actionPrimary
+    }
+
+    private func setupNavigationBarAppearance(theme: Theme) {
+        guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
+
+        let backgroundAlpha = tabTrayUtils.backgroundAlpha()
+        let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
+        standardAppearance.backgroundColor = color
+        standardAppearance.backgroundEffect = nil
+        standardAppearance.shadowColor = .clear
+
+        navigationController?.navigationBar.standardAppearance = standardAppearance
+        navigationController?.navigationBar.compactAppearance = standardAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = standardAppearance
+        navigationController?.navigationBar.compactScrollEdgeAppearance = standardAppearance
+        navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
     }
 
     // MARK: Private
@@ -473,7 +522,8 @@ final class TabTrayViewController: UIViewController,
         navigationItem.titleView = nil
         updateTitle()
         view.addSubviews(containerView)
-        if isTabTrayUIExperimentsEnabled {
+        if tabTrayUtils.shouldDisplayExperimentUI() {
+            containerView.addSubview(panelContainer)
             containerView.addSubview(segmentedControl)
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
             // Out of simplicity for the experiment, turn off a11y for the old segmented control
@@ -483,20 +533,13 @@ final class TabTrayViewController: UIViewController,
             containerView.addSubview(experimentSegmentControl)
             experimentSegmentControl.translatesAutoresizingMaskIntoConstraints = false
 
-            containerView.addSubview(panelContainer)
-
-            let segmentControlHeight = if #available(iOS 26.0, *) {
-                UX.segmentedControlMinHeightIOS26
-            } else {
-                UX.segmentedControlMinHeight
-            }
+            let segmentControlHeight = tabTrayUtils.segmentedControlHeight
 
             NSLayoutConstraint.activate([
                 panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
                 panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panelContainer.bottomAnchor.constraint(equalTo: experimentSegmentControl.topAnchor,
-                                                       constant: -UX.segmentedControlTopSpacing),
+                panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -514,6 +557,8 @@ final class TabTrayViewController: UIViewController,
                 experimentSegmentControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 experimentSegmentControl.heightAnchor.constraint(equalToConstant: segmentControlHeight)
             ])
+
+            setupBlurView()
         } else {
             view.addSubview(navigationToolbar)
             navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControl)], animated: false)
@@ -531,8 +576,40 @@ final class TabTrayViewController: UIViewController,
         }
     }
 
+    private func setupBlurView() {
+        guard tabTrayUtils.isTabTrayUIExperimentsEnabled, tabTrayUtils.isTabTrayTranslucencyEnabled else { return }
+
+        // Should use Regular layout used for iPad
+        if isRegularLayout {
+            containerView.insertSubview(blurView, aboveSubview: containerView)
+
+            NSLayoutConstraint.activate([
+                blurView.topAnchor.constraint(equalTo: view.topAnchor),
+                blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                blurView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            ])
+        } else {
+            containerView.insertSubview(blurView, belowSubview: experimentSegmentControl)
+
+            NSLayoutConstraint.activate([
+                blurView.topAnchor.constraint(equalTo: experimentSegmentControl.topAnchor),
+                blurView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                blurView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                blurView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            ])
+        }
+
+        updateBlurView()
+    }
+
+    private func updateBlurView() {
+        blurView.isHidden = !tabTrayUtils.shouldBlur()
+        applyTheme()
+    }
+
     private func updateTitle() {
-        if !isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
+        if !tabTrayUtils.shouldDisplayExperimentUI(), !self.isRegularLayout {
             navigationItem.title = tabTrayState.navigationTitle
         }
     }
@@ -540,14 +617,18 @@ final class TabTrayViewController: UIViewController,
     private func setupForiPad() {
         navigationItem.titleView = segmentedControl
         view.addSubviews(containerView)
+        setupBlurView()
 
         if let titleView = navigationItem.titleView {
             titleWidthConstraint = titleView.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width)
             titleWidthConstraint?.isActive = true
         }
 
+        let isTabTrayEnabled = tabTrayUtils.isTabTrayUIExperimentsEnabled && tabTrayUtils.isTabTrayTranslucencyEnabled
+        let topConstraintTo = isTabTrayEnabled ? view.topAnchor : view.safeAreaLayoutGuide.topAnchor
+
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.topAnchor.constraint(equalTo: topConstraintTo),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -563,7 +644,7 @@ final class TabTrayViewController: UIViewController,
 
         let isSyncTabsPanel = tabTrayState.isSyncTabsPanel
         var toolbarItems: [UIBarButtonItem]
-        if isTabTrayUIExperimentsEnabled {
+        if tabTrayUtils.shouldDisplayExperimentUI() {
             toolbarItems = isSyncTabsPanel ? experimentBottomToolbarItemsForSync : experimentBottomToolbarItems
         } else {
             toolbarItems = isSyncTabsPanel ? bottomToolbarItemsForSync : bottomToolbarItems
@@ -635,14 +716,13 @@ final class TabTrayViewController: UIViewController,
             toast.showToast(viewController: self,
                             delay: UX.Toast.undoDelay,
                             duration: UX.Toast.undoDuration) { toast in
-                if self.isTabTrayUIExperimentsEnabled, !self.isRegularLayout {
+                if self.tabTrayUtils.shouldDisplayExperimentUI(), !self.isRegularLayout {
                     [
                         toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
                                                        constant: Toast.UX.toastSidePadding),
                         toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                         constant: -Toast.UX.toastSidePadding),
-                        toast.bottomAnchor.constraint(equalTo: self.segmentedControl.topAnchor,
-                                                      constant: -UX.segmentedControlTopSpacing)
+                        toast.bottomAnchor.constraint(equalTo: self.segmentedControl.topAnchor)
                     ]
                 } else {
                     [
@@ -673,7 +753,7 @@ final class TabTrayViewController: UIViewController,
         updateTitle()
         updateLayout()
 
-        if !isTabTrayUIExperimentsEnabled {
+        if !tabTrayUtils.shouldDisplayExperimentUI() {
             hideCurrentPanel()
             showPanel(currentPanel)
             navigationHandler?.start(panelType: panelType, navigationController: currentPanel)
@@ -901,7 +981,7 @@ final class TabTrayViewController: UIViewController,
     func didSelectSection(panelType: TabTrayPanelType) {
         guard tabTrayState.selectedPanel != panelType else { return }
 
-        if isTabTrayUIExperimentsEnabled {
+        if tabTrayUtils.shouldDisplayExperimentUI() {
             let targetIndex = TabTrayPanelType.getExperimentConvert(index: panelType.rawValue).rawValue
             guard let targetVC = childPanelControllers[safe: targetIndex],
                   let currentVC = pageViewController?.viewControllers?.first as? UINavigationController,
@@ -979,7 +1059,7 @@ final class TabTrayViewController: UIViewController,
     // MARK: - UIScrollViewDelegate
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard isTabTrayUIExperimentsEnabled,
+        guard tabTrayUtils.shouldDisplayExperimentUI(),
               let fromIndex = swipeFromIndex,
               let width = scrollView.superview?.bounds.width else { return }
 
@@ -1015,5 +1095,16 @@ final class TabTrayViewController: UIViewController,
 
     func dragAndDropEnded() {
         pageScrollView?.isScrollEnabled = true
+    }
+
+    // MARK: - Notifiable
+    nonisolated func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            DispatchQueue.main.async { [weak self] in
+                self?.updateBlurView()
+            }
+        default: break
+        }
     }
 }

@@ -43,7 +43,11 @@ class BrowsingTest: BaseTestCase {
         waitForExistence(RemindersApp)
         waitForHittable(RemindersApp)
         RemindersApp.tap()
-        waitForExistence(app.buttons["Add"])
+        if #unavailable(iOS 26) {
+            waitForExistence(app.buttons["Add"])
+        } else {
+            waitForExistence(app.images["safari"])
+        }
     }
 
     // Smoketest

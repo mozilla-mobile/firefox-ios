@@ -1,4 +1,4 @@
-name: (WIP)(Local AS flow) Create a PR for release with the newest A-S version available
+name: (Local AS flow) Create a PR for release with the newest A-S version available
 
 # Controls when the workflow will run
 on:

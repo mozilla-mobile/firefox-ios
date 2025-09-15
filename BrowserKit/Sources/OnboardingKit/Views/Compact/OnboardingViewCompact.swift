@@ -28,17 +28,10 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             VStack {
-                PagingCarousel(
-                    selection: $viewModel.pageCount,
-                    items: viewModel.onboardingCards
-                ) { card in
-                    OnboardingCardViewCompact(
-                        viewModel: card,
-                        windowUUID: windowUUID,
-                        themeManager: themeManager,
-                        onBottomButtonAction: viewModel.handleBottomButtonAction,
-                        onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
-                    )
+                if #available(iOS 17.0, *) {
+                    modernScrollViewCarousel
+                } else {
+                    legacyPagingCarousel
                 }
 
                 Spacer()
@@ -52,6 +45,37 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 )
                 .padding(.bottom)
             }
+        }
+    }
+
+    @available(iOS 17.0, *)
+    private var modernScrollViewCarousel: some View {
+        ScrollViewCarousel(
+            selection: $viewModel.pageCount,
+            items: viewModel.onboardingCards
+        ) { card in
+            OnboardingCardViewCompact(
+                viewModel: card,
+                windowUUID: windowUUID,
+                themeManager: themeManager,
+                onBottomButtonAction: viewModel.handleBottomButtonAction,
+                onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
+            )
+        }
+    }
+
+    private var legacyPagingCarousel: some View {
+        PagingCarousel(
+            selection: $viewModel.pageCount,
+            items: viewModel.onboardingCards
+        ) { card in
+            OnboardingCardViewCompact(
+                viewModel: card,
+                windowUUID: windowUUID,
+                themeManager: themeManager,
+                onBottomButtonAction: viewModel.handleBottomButtonAction,
+                onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
+            )
         }
     }
 }

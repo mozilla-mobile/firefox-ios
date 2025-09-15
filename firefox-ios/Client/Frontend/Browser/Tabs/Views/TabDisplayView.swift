@@ -11,14 +11,25 @@ protocol TabDisplayViewDragAndDropInteraction: AnyObject {
     func dragAndDropEnded()
 }
 
-class TabDisplayView: UIView,
+/// NOTE: ⚠️ CRITICAL: `TabTitleSupplementaryView` Creation.
+/// The app was crashing with `NSInternalInconsistencyException` when `TabTitleSupplementaryView`
+/// was successfully created but then returned `nil` due to missing tab data: https://mozilla-hub.atlassian.net/browse/FXIOS-13374.
+/// This violated `UICollectionViewDiffableDataSource`'s requirement that `supplementaryViewProvider` must always
+/// return a valid view.
+///
+/// IMPORTANT: Returning `nil` is acceptable when cell creation fails, but we must avoid the pattern
+/// of successfully creating our designated cell only to return `nil` based on subsequent conditions.
+///
+/// Always return a valid view once creation succeeds, or fail early during creation.
+final class TabDisplayView: UIView,
                       ThemeApplicable,
                       UICollectionViewDelegate,
                       UICollectionViewDelegateFlowLayout,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
                       InactiveTabsSectionManagerDelegate,
-                      FeatureFlaggable {
+                      FeatureFlaggable,
+                      InsetUpdatable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
     }
@@ -235,16 +246,15 @@ class TabDisplayView: UIView,
             return headerView
 
         case TabTitleSupplementaryView.cellIdentifier:
-            let titleView = collectionView.dequeueReusableSupplementaryView(
+            guard let titleView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: TabTitleSupplementaryView.cellIdentifier,
                 withReuseIdentifier: TabTitleSupplementaryView.cellIdentifier,
                 for: indexPath
-            ) as? TabTitleSupplementaryView
+            ) as? TabTitleSupplementaryView else { return nil }
 
-            guard let tab = tabsState.tabs[safe: indexPath.row] else {
-                return nil
+            if let tab = tabsState.tabs[safe: indexPath.row] {
+                titleView.configure(with: tab, theme: theme)
             }
-            titleView?.configure(with: tab, theme: theme)
             return titleView
 
         case UICollectionView.elementKindSectionFooter:
@@ -417,6 +427,13 @@ class TabDisplayView: UIView,
 
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
         return !isDragging
+    }
+
+    // MARK: - InsetUpdatable
+
+    func updateInsets(top: CGFloat, bottom: CGFloat) {
+        collectionView.contentInset.top = top
+        collectionView.contentInset.bottom = bottom
     }
 }
 

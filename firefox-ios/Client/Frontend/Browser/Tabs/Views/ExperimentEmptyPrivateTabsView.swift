@@ -8,7 +8,9 @@ import Foundation
 import Shared
 import ComponentLibrary
 
-protocol EmptyPrivateTabView: UIView, ThemeApplicable {
+protocol EmptyPrivateTabView: UIView, ThemeApplicable, InsetUpdatable {
+    var needsSafeArea: Bool { get }
+
     @MainActor
     var delegate: EmptyPrivateTabsViewDelegate? { get set }
 }
@@ -25,6 +27,7 @@ class ExperimentEmptyPrivateTabsView: UIView,
 
     // MARK: - Properties
 
+    var needsSafeArea: Bool { true }
     weak var delegate: EmptyPrivateTabsViewDelegate?
 
     // UI
@@ -149,5 +152,12 @@ class ExperimentEmptyPrivateTabsView: UIView,
         guard let url = SupportUtils.URLForTopic("private-browsing-ios") else { return }
         let request = URLRequest(url: url)
         delegate?.didTapLearnMore(urlRequest: request)
+    }
+
+    // MARK: - InsetUpdatable
+
+    func updateInsets(top: CGFloat, bottom: CGFloat) {
+        scrollView.contentInset.top = top
+        scrollView.contentInset.bottom = bottom
     }
 }

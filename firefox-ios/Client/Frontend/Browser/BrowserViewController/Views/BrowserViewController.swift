@@ -43,6 +43,9 @@ class BrowserViewController: UIViewController,
         static let downloadToastDelay = DispatchTimeInterval.milliseconds(500)
         static let downloadToastDuration = DispatchTimeInterval.seconds(5)
         static let minimalHeaderOffset: CGFloat = 14
+
+        static let topToolbarDuration: TimeInterval = 0.3
+        static let bottomToolbarDuration: TimeInterval = 0.5
     }
 
     /// Describes the state of the current search session. This state is used
@@ -570,7 +573,7 @@ class BrowserViewController: UIViewController,
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
 
         searchBarView.removeFromParent()
-        searchBarView.addToParent(parent: newParent)
+        searchBarView.addToParent(parent: newParent, addToTop: !newPositionIsBottom)
 
         if isSwipingTabsEnabled, isToolbarRefactorEnabled {
             webPagePreview.invalidateScreenshotData()
@@ -686,7 +689,14 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
+    private func updateAddressToolbarContainerPosition(
+        for traitCollection: UITraitCollection,
+        previousTraitCollection: UITraitCollection?) {
+            // Only update position if device size class changed (rotation, split view, etc.)
+            // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
+        guard traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
+                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass else { return }
+
         guard searchBarPosition == .bottom, isToolbarRefactorEnabled, isSearchBarLocationFeatureEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
@@ -1616,7 +1626,7 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
-            updateAddressToolbarContainerPosition(for: traitCollection)
+            updateAddressToolbarContainerPosition(for: traitCollection, previousTraitCollection: previousTraitCollection)
             updateToolbarStateForTraitCollection(traitCollection)
         }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
@@ -4517,15 +4527,21 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func searchViewControllerWillHide(_ searchViewController: SearchViewController) {
+        let suggestTelemetry = FxSuggestTelemetry()
+
         switch searchSessionState {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
-            visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
+            visibleSuggestionsTelemetryInfo.forEach {
+                trackVisibleSuggestion(telemetryInfo: $0, suggestTelemetry: suggestTelemetry)
+            }
             searchViewController.searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
         case .abandoned:
             searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
-            visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
+            visibleSuggestionsTelemetryInfo.forEach {
+                trackVisibleSuggestion(telemetryInfo: $0, suggestTelemetry: suggestTelemetry)
+            }
             searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break
@@ -4536,32 +4552,20 @@ extension BrowserViewController: SearchViewControllerDelegate {
     /// abandoned search session. The user may have tapped on this suggestion
     /// or on a different suggestion, typed in a search term or a URL, or
     /// dismissed the URL bar without completing their search.
-    func trackVisibleSuggestion(telemetryInfo info: SearchViewVisibleSuggestionTelemetryInfo) {
+    func trackVisibleSuggestion(telemetryInfo info: SearchViewVisibleSuggestionTelemetryInfo,
+                                suggestTelemetry: FxSuggestTelemetry) {
         switch info {
         // A sponsored or non-sponsored suggestion from Firefox Suggest.
         case let .firefoxSuggestion(telemetryInfo, position, didTap):
             let didAbandonSearchSession = searchSessionState == .abandoned
-            TelemetryWrapper.gleanRecordEvent(
-                category: .action,
-                method: .view,
-                object: TelemetryWrapper.EventObject.fxSuggest,
-                extras: [
-                    TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
-                    TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
-                    TelemetryWrapper.EventValue.fxSuggestionDidTap.rawValue: didTap,
-                    TelemetryWrapper.EventValue.fxSuggestionDidAbandonSearchSession.rawValue: didAbandonSearchSession,
-                ]
-            )
+            suggestTelemetry.impressionEvent(telemetryInfo: telemetryInfo,
+                                             position: position,
+                                             didTap: didTap,
+                                             didAbandonSearchSession: didAbandonSearchSession)
+
             if didTap {
-                TelemetryWrapper.gleanRecordEvent(
-                    category: .action,
-                    method: .tap,
-                    object: TelemetryWrapper.EventObject.fxSuggest,
-                    extras: [
-                        TelemetryWrapper.EventValue.fxSuggestionTelemetryInfo.rawValue: telemetryInfo,
-                        TelemetryWrapper.EventValue.fxSuggestionPosition.rawValue: position,
-                    ]
-                )
+                suggestTelemetry.clickEvent(telemetryInfo: telemetryInfo,
+                                            position: position)
             }
         }
     }

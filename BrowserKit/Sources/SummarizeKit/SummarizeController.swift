@@ -18,15 +18,29 @@ class CustomStyler: DownStyler {
     override func style(image str: NSMutableAttributedString, title: String?, url: String?) {}
 }
 
+public protocol SummarizeNavigationHandler: AnyObject {
+    func openURL(url: URL)
+
+    func acceptToSConsent()
+
+    func denyToSConsent()
+
+    func dismissSummary()
+}
+
 public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
     private struct UX {
+        @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
+        static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)
+
         static let tabSnapshotInitialTransformPercentage: CGFloat = 0.5
         static let tabSnapshotFinalPositionBottomPadding: CGFloat = 110.0
         static let summaryViewEdgePadding: CGFloat = 12.0
-        static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)
         static let initialTransformAnimationDuration = 1.25
+        static let infoViewAnimationDuration: CGFloat = 0.3
         static let panEndAnimationDuration: CGFloat = 0.3
         static let showSummaryAnimationDuration: CGFloat = 0.3
+        static let streamingRevealDelay: TimeInterval = 4.0
         static let summaryLabelHorizontalPadding: CGFloat = 12.0
         static let panCloseSummaryVelocityThreshold: CGFloat = 1000.0
         static let panCloseSummaryHeightPercentageThreshold: CGFloat = 0.25
@@ -41,8 +55,12 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     private let viewModel: SummarizeViewModel
     private let summarizerService: SummarizerService
     private let webView: WKWebView
-
+    private var isTosAccepted: Bool
+    private var tosPanelWasShown = false
     private let onSummaryDisplayed: () -> Void
+    private weak var navigationHandler: SummarizeNavigationHandler?
+    private var animationDoneContinuation: CheckedContinuation<Void, Never>?
+    private var animationDone = false
 
     // MARK: - Themeable
     public let themeManager: any Common.ThemeManager
@@ -111,7 +129,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         $0.addInteraction(UILargeContentViewerInteraction())
         $0.alpha = 0.0
     }
-    private let errorView: ErrorView = .build {
+    private let infoView: InfoView = .build {
         $0.alpha = 0
     }
     private let tabSnapshot: UIImageView = .build {
@@ -149,7 +167,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         windowUUID: WindowUUID,
         viewModel: SummarizeViewModel,
         summarizerService: SummarizerService,
+        navigationHandler: SummarizeNavigationHandler?,
         webView: WKWebView,
+        isTosAccepted: Bool,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         onSummaryDisplayed: @escaping () -> Void
@@ -160,6 +180,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         self.viewModel = viewModel
         self.summarizerService = summarizerService
         self.webView = webView
+        self.navigationHandler = navigationHandler
+        self.isTosAccepted = isTosAccepted
         self.onSummaryDisplayed = onSummaryDisplayed
         super.init(nibName: nil, bundle: nil)
     }
@@ -172,15 +194,16 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         super.viewDidLoad()
         configure()
         setupLayout()
+        setupTabSnapshot()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        summarize()
     }
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         triggerImpactHaptics()
         view.layer.insertSublayer(backgroundGradient, at: 0)
-        setupTabSnapshot()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -220,9 +243,9 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         view.addSubviews(
             summaryView,
             loadingLabel,
+            infoView,
             tabSnapshotContainer,
-            borderOverlayHostingController.view,
-            errorView
+            borderOverlayHostingController.view
         )
         tabSnapshotContainer.addSubview(tabSnapshot)
         tabSnapshot.pinToSuperview()
@@ -247,12 +270,12 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                                                    constant: -UX.summaryLabelHorizontalPadding),
             loadingLabel.bottomAnchor.constraint(lessThanOrEqualTo: topHalfBoundGuide.bottomAnchor),
 
-            errorView.centerXAnchor.constraint(equalTo: topHalfBoundGuide.centerXAnchor),
-            errorView.centerYAnchor.constraint(equalTo: topHalfBoundGuide.centerYAnchor),
-            errorView.topAnchor.constraint(greaterThanOrEqualTo: topHalfBoundGuide.topAnchor),
-            errorView.bottomAnchor.constraint(lessThanOrEqualTo: topHalfBoundGuide.bottomAnchor),
-            errorView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor),
-            errorView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor),
+            infoView.centerXAnchor.constraint(equalTo: topHalfBoundGuide.centerXAnchor),
+            infoView.centerYAnchor.constraint(equalTo: topHalfBoundGuide.centerYAnchor),
+            infoView.topAnchor.constraint(greaterThanOrEqualTo: topHalfBoundGuide.topAnchor),
+            infoView.bottomAnchor.constraint(lessThanOrEqualTo: topHalfBoundGuide.bottomAnchor),
+            infoView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor),
+            infoView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor),
 
             summaryView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             summaryView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -288,12 +311,12 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         tabSnapshotContainer.layer.add(transformAnimation, forKey: "translation")
         tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0,
                                                            y: view.frame.height * UX.tabSnapshotInitialTransformPercentage)
-
         UIView.animate(withDuration: UX.initialTransformAnimationDuration) {
             self.tabSnapshot.layer.cornerRadius = UX.tabSnapshotCornerRadius
             self.loadingLabel.alpha = 1.0
         } completion: { [weak self] _ in
-            self?.summarize()
+            self?.animationDone = true
+            self?.animationDoneContinuation?.resume()
         }
     }
 
@@ -306,46 +329,99 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
     private func summarize() {
         loadingLabel.alpha = 1.0
-        errorView.alpha = 0.0
-        Task { [weak self] in
+        infoView.alpha = 0.0
+        Task { @MainActor [weak self] in
             await self?.summarizeTask()
         }
     }
 
     private func summarizeTask() async {
         do {
-            let summary = try await summarizerService.summarize(from: webView)
-            await MainActor.run {
-                showSummary(summary)
+            guard isTosAccepted else {
+                throw SummarizerError.tosConsentMissing
             }
+            let stream = summarizerService.summarizeStreamed(from: webView)
+            try await showStreamWithDelay(stream, delay: UX.streamingRevealDelay)
         } catch {
             let summaryError: SummarizerError = if let error = error as? SummarizerError {
                 error
             } else {
                 .unknown(error)
             }
-            await MainActor.run {
-                showError(summaryError)
-            }
+            showError(summaryError)
         }
     }
 
+    private func showStreamWithDelay(_ stream: AsyncThrowingStream<String, Error>, delay: TimeInterval) async throws {
+        let startRevealingAt = Date().addingTimeInterval(delay)
+        var lastChunk = ""
+        var revealed = false
+        do {
+            /// NOTE1: By design the APIs send aggregated tokens instead of individual chunks.
+            /// We don't need to accumulate them.
+            /// NOTE2: Wait for the specified delay before revealing the summary. 
+            /// This is done to provide a smoother user experience and avoid sudden changes.
+            for try await aggregatedChunk in stream {
+                lastChunk = aggregatedChunk
+                guard Date() >= startRevealingAt || enoughWords(aggregatedChunk) else { continue }
+                await withCheckedContinuation { continuation in
+                    if self.animationDone {
+                        continuation.resume()
+                    } else {
+                        self.animationDoneContinuation = continuation
+                    }
+                }
+                revealed = true
+                showSummary(aggregatedChunk)
+            }
+            /// NOTE: Streaming especially from a request that was cached can be faster than `delay`.
+            /// This is to make sure when that happens we show the summary immediately.
+            if !revealed {
+                await withCheckedContinuation { continuation in
+                    if self.animationDone {
+                        continuation.resume()
+                    } else {
+                        self.animationDoneContinuation = continuation
+                    }
+                }
+                showSummary(lastChunk)
+            }
+
+            let summaryWithNote = """
+            \(lastChunk)
+
+            ##### \(viewModel.summaryFootnote)
+            """
+            showSummary(summaryWithNote)
+        } catch {
+            guard revealed else { throw error }
+            return
+        }
+    }
+
+    private func enoughWords(_ text: String) -> Bool {
+        return text.count > 2000
+    }
+
     private func showSummary(_ summary: String) {
-        triggerImpactHaptics()
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onTabSnapshotPan))
         tabSnapshotContainer.addGestureRecognizer(panGesture)
 
         let tabSnapshotOffset = tabSnapshotTopConstraint?.constant ?? 0.0
         let tabSnapshotYTransform = view.frame.height - UX.tabSnapshotFinalPositionBottomPadding - tabSnapshotOffset
 
+        closeButton.tintColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.iconPrimary
         configureSummaryView(summary: summary)
 
+        // show the summary and related animation only if summary wasn't showed yet
+        guard summaryView.alpha == 0.0 else { return }
+        triggerImpactHaptics()
         UIView.animate(withDuration: UX.showSummaryAnimationDuration) { [self] in
             removeBorderOverlayView()
             backgroundGradient.removeFromSuperlayer()
             tabSnapshotContainer.transform = CGAffineTransform(translationX: 0.0, y: tabSnapshotYTransform)
             loadingLabel.alpha = 0.0
-            summaryView.showContent()
+            summaryView.alpha = 1.0
             loadingLabel.stopShimmering()
             loadingLabel.removeFromSuperview()
         } completion: { [weak self] _ in
@@ -358,18 +434,13 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func configureSummaryView(summary: String) {
-        let summaryWithNote = """
-        \(summary)
-
-        ##### \(viewModel.summaryFootnote)
-        """
         summaryView.configure(
             model: SummaryViewModel(
                 title: webView.title,
                 titleA11yId: viewModel.titleLabelA11yId,
                 compactTitleA11yId: viewModel.compactTitleLabelA11yId,
                 brandViewModel: viewModel.brandViewModel,
-                summary: parse(markdown: summaryWithNote),
+                summary: parse(markdown: summary),
                 summaryA11yId: viewModel.summarizeViewA11yId,
                 scrollContentBottomInset: UX.tabSnapshotFinalPositionBottomPadding
             )
@@ -377,30 +448,50 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func showError(_ error: SummarizerError) {
-        let actionButtonLabel: String = if error.shouldRetrySummarizing {
+        if case .tosConsentMissing = error {
+            tosPanelWasShown = true
+        }
+        let actionButtonLabel: String = switch error.shouldRetrySummarizing {
+        case .acceptToS:
+            viewModel.errorMessages.acceptToSButtonLabel
+        case .retry:
             viewModel.errorMessages.retryButtonLabel
-        } else {
+        case .close:
             viewModel.errorMessages.closeButtonLabel
         }
-        errorView.configure(
-            viewModel: ErrorViewModel(
-                title: error.description(for: viewModel.errorMessages),
+        let formatter = SummarizeErrorFormatter(
+            theme: themeManager.getCurrentTheme(for: currentWindowUUID),
+            isAccessibilityCategoryEnabled: traitCollection.preferredContentSizeCategory.isAccessibilityCategory,
+            viewModel: viewModel
+        )
+        infoView.configure(
+            viewModel: InfoViewModel(
+                title: formatter.format(error: error),
                 titleA11yId: viewModel.errorMessages.errorLabelA11yId,
                 actionButtonLabel: actionButtonLabel,
                 actionButtonA11yId: viewModel.errorMessages.errorButtonA11yId,
                 actionButtonCallback: { [weak self] in
-                    if error.shouldRetrySummarizing {
+                    switch error.shouldRetrySummarizing {
+                    case .retry:
                         self?.summarize()
-                    } else {
+                    case .close:
                         self?.dismissSummary()
+                    case .acceptToS:
+                        self?.navigationHandler?.acceptToSConsent()
+                        self?.isTosAccepted = true
+                        self?.summarize()
+                    }
+                }, linkCallback: { [weak self] url in
+                    self?.triggerDismissingAnimation {
+                        self?.navigationHandler?.openURL(url: url)
                     }
                 }
             )
         )
         loadingLabel.alpha = 0.0
-        UIView.animate(withDuration: UX.initialTransformAnimationDuration) { [self] in
-            self.onSummaryDisplayed()
-            errorView.alpha = 1.0
+        UIView.animate(withDuration: UX.infoViewAnimationDuration) { [self] in
+            onSummaryDisplayed()
+            infoView.alpha = 1.0
         }
     }
 
@@ -412,7 +503,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
     private func dismissSummary() {
         UIView.animate(withDuration: UX.panEndAnimationDuration) { [self] in
-            errorView.alpha = 0.0
+            infoView.alpha = 0.0
             loadingLabel.alpha = 0.0
             tabSnapshotContainer.transform = .identity
             tabSnapshot.layer.cornerRadius = 0.0
@@ -422,7 +513,11 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     override public func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        viewModel.onDismiss()
+        summarizerService.closeStream()
+        if tosPanelWasShown && !isTosAccepted {
+            navigationHandler?.denyToSConsent()
+        }
+        navigationHandler?.dismissSummary()
         super.dismiss(animated: flag, completion: completion)
     }
 
@@ -481,11 +576,12 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         triggerDismissingAnimation()
     }
 
-    private func triggerDismissingAnimation() {
+    private func triggerDismissingAnimation(completion: (() -> Void)? = nil) {
         UIView.animate(withDuration: UX.panEndAnimationDuration) { [weak self] in
             self?.tabSnapshotContainer.transform = .identity
             self?.tabSnapshot.layer.cornerRadius = 0.0
         } completion: { [weak self] _ in
+            completion?()
             self?.dismiss(animated: true)
         }
     }
@@ -521,11 +617,14 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     // MARK: - CAAnimationDelegate
-    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+    nonisolated public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         guard flag,
               let animation = anim as? CABasicAnimation,
               animation.keyPath == UX.tabSnapshotTranslationKeyPath else { return }
-        setupDismissGestures()
+
+        ensureMainThread {
+            self.setupDismissGestures()
+        }
     }
 
     /// Sets up gestures that allow the user to dismiss the summary.
@@ -552,7 +651,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         loadingLabel.textColor = theme.colors.textOnDark
         tabSnapshotContainer.layer.shadowColor = theme.colors.shadowStrong.cgColor
         backgroundGradient.colors = theme.colors.layerGradientSummary.cgColors
-        closeButton.tintColor = theme.colors.iconPrimary
-        errorView.applyTheme(theme: theme)
+        closeButton.tintColor = summaryView.alpha == 0 ? theme.colors.iconOnColor : theme.colors.iconPrimary
+        infoView.applyTheme(theme: theme)
     }
 }

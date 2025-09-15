@@ -26,7 +26,7 @@ jobs:
         with:
           repo-path: firefox-ios
           output-path: firefox-ios/Client/Experiments/initial_experiments.json
-          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/
+          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/?ts=12312312
           app-name: firefox_ios
           branch: automation/update-nimbus-experiments
       - name: "Debug - workaround issue: 23215"

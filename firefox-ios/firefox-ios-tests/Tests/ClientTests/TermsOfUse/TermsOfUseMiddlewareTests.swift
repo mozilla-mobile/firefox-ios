@@ -76,4 +76,32 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
             XCTAssertTrue(Calendar.current.isDate(acceptedDate, inSameDayAs: Date()))
         }
     }
+    func testMiddleware_remindMeLaterTapped_tracksTapTimestamp() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
+        middleware.termsOfUseProvider(AppState(), action)
+
+        let timestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseRemindMeLaterTapDate)
+        XCTAssertNotNil(timestamp)
+    }
+    func testMiddleware_learnMoreLinkTapped_tracksTapTimestamp() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.learnMoreLinkTapped)
+        middleware.termsOfUseProvider(AppState(), action)
+
+        let timestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseLearnMoreTapDate)
+        XCTAssertNotNil(timestamp)
+    }
+    func testMiddleware_privacyLinkTapped_tracksTapTimestamp() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.privacyLinkTapped)
+        middleware.termsOfUseProvider(AppState(), action)
+
+        let timestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUsePrivacyNoticeTapDate)
+        XCTAssertNotNil(timestamp)
+    }
+    func testMiddleware_termsLinkTapped_tracksTapTimestamp() {
+        let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsLinkTapped)
+        middleware.termsOfUseProvider(AppState(), action)
+
+        let timestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseTermsLinkTapDate)
+        XCTAssertNotNil(timestamp)
+    }
 }

@@ -6,7 +6,7 @@ import Foundation
 
 /// A lightweight client for interacting with an OpenAI style API chat completions endpoint.
 /// TODO(FXIOS-12942): Implement proper thread-safety
-final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
+final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     private let apiKey: String
     private let baseURL: URL
 
@@ -71,7 +71,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     }
 
     /// TODO(FXIOS-12994): Add tests for streaming requests.
-    /// Specifically, we need to test for the interaction with SSEDataParser and how it handles multiple reqeusts at a time.
+    /// Specifically, we need to test for the interaction with SSEDataParser and how it handles multiple requests at a time.
     private func handleStreamingRequest(request: URLRequest) -> AsyncThrowingStream<String, Error> {
         return AsyncThrowingStream { continuation in
             Task {

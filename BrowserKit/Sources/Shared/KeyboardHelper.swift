@@ -133,6 +133,7 @@ open class KeyboardHelper: NSObject, Notifiable {
         ensureMainThread {
             switch notificationName {
             case UIResponder.keyboardWillShowNotification:
+                self.currentState = keyboardState
                 self.keyboardWillShow(keyboardState: keyboardState)
             case UIResponder.keyboardDidShowNotification:
                 self.keyboardDidShow(keyboardState: keyboardState)
@@ -143,6 +144,7 @@ open class KeyboardHelper: NSObject, Notifiable {
             case UIResponder.keyboardDidChangeFrameNotification:
                 self.keyboardDidChange(keyboardState: keyboardState)
             case UIResponder.keyboardWillChangeFrameNotification:
+                self.currentState = keyboardState
                 self.keyboardWillChange(keyboardState: keyboardState)
             default: break
             }

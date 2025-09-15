@@ -349,7 +349,6 @@ final class AddressToolbarContainer: UIView,
     private func setupToolbarConstraints() {
         addSubview(toolbar)
         if isSwipingTabsEnabled {
-            addSubviews(leftSkeletonAddressBar, rightSkeletonAddressBar)
             insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
             insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
 

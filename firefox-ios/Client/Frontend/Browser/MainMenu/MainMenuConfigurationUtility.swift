@@ -23,6 +23,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let saveAsPDFV2 = StandardImageIdentifiers.Large.saveFile
         static let summarizer = StandardImageIdentifiers.Large.summarizer
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
+        static let share = StandardImageIdentifiers.Large.share
     }
 
     private var shouldShowReportSiteIssue: Bool {
@@ -44,9 +45,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         and uuid: WindowUUID,
-        isExpanded: Bool = false
+        isExpanded: Bool = false,
+        profileImage: UIImage? = nil
     ) -> [MenuSection] {
-        return getMainMenuElements(with: uuid, and: tabInfo, isExpanded: isExpanded)
+        return getMainMenuElements(with: uuid, and: tabInfo, isExpanded: isExpanded, profileImage: profileImage)
     }
 
     // MARK: - Main Menu
@@ -54,18 +56,19 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private func getMainMenuElements(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo,
-        isExpanded: Bool = false
+        isExpanded: Bool = false,
+        profileImage: UIImage?
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = []
 
         if tabInfo.isHomepage {
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
-            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         } else {
             menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
-            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo))
+            menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         }
 
         return menuSections
@@ -159,7 +162,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // Account Section
-    private func getAccountSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
+    private func getAccountSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo, profileImage: UIImage?) -> MenuSection {
         return MenuSection(
             isHomepage: tabInfo.isHomepage,
             options: [
@@ -167,7 +170,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     title: tabInfo.accountData.title,
                     description: tabInfo.accountData.subtitle,
                     iconName: Icons.avatarCircle,
-                    iconImage: tabInfo.accountProfileImage,
+                    iconImage: profileImage,
                     needsReAuth: tabInfo.accountData.needsReAuth,
                     isEnabled: true,
                     isActive: false,
@@ -283,6 +286,29 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                 actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(
                                     .printSheetV2,
+                                    url: tabInfo.canonicalURL
+                                ),
+                                telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.Submenus.Tools.Share,
+                    iconName: Icons.share,
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Share,
+                    a11yHint: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.share,
+                    isOptional: true,
+                    action: {
+                        store.dispatchLegacy(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(
+                                    .shareSheet,
                                     url: tabInfo.canonicalURL
                                 ),
                                 telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)

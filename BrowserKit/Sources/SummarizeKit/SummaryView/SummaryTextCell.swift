@@ -32,6 +32,10 @@ final class SummaryTextCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func configure(text: NSAttributedString?, a11yId: String) {
         summaryView.attributedText = text
         summaryView.accessibilityIdentifier = a11yId
+        let transition = CATransition()
+        transition.type = .fade
+        transition.duration = 0.3
+        summaryView.layer.add(transition, forKey: "fadeAnimation")
     }
 
     // MARK: - ThemeApplicable

@@ -9,6 +9,12 @@ import SwiftUI
 
 /// A SwiftUI view representing a toggle with theming for address autofill functionality.
 struct AddressAutofillToggle: View {
+    private struct UX {
+        static let viewPadding: CGFloat = 16
+        static let viewCornerRadius: CGFloat = 24
+        static let dividerHeight: CGFloat = 0.7
+    }
+
     let windowUUID: WindowUUID
 
     // MARK: - Theming
@@ -36,10 +42,12 @@ struct AddressAutofillToggle: View {
 
     var body: some View {
         VStack {
-            Divider()
-                .frame(height: 0.7)
-                .padding(.leading, 16)
-                .hidden()
+            if #unavailable(iOS 26.0) {
+                Divider()
+                    .frame(height: UX.dividerHeight)
+                    .padding(.leading, UX.viewPadding)
+                    .hidden()
+            }
 
             main
                 .accessibilityElement()
@@ -50,11 +58,15 @@ struct AddressAutofillToggle: View {
                     model.isEnabled = !model.isEnabled
                 }
 
-            Divider()
-                .frame(height: 0.7)
-                .padding(.leading, 16)
+            if #unavailable(iOS 26.0) {
+                Divider()
+                    .frame(height: UX.dividerHeight)
+                    .padding(.leading, UX.viewPadding)
+            }
         }
-        .background(backgroundColor)
+        .modifier(ToggleStyle(paddingSize: UX.viewPadding,
+                              cornerRadius: UX.viewCornerRadius,
+                              backgroundColor: backgroundColor))
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
@@ -75,14 +87,14 @@ struct AddressAutofillToggle: View {
                     .font(.footnote)
                     .foregroundColor(descriptionTextColor)
             }
-            .padding(.leading, 16)
+            .padding(.leading, UX.viewPadding)
 
             Spacer()
 
             Toggle(isOn: $model.isEnabled) {
                 EmptyView()
             }
-            .padding(.trailing, 16)
+            .padding(.trailing, UX.viewPadding)
             .labelsHidden()
             .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
             .frame(alignment: .trailing)

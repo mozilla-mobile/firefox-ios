@@ -19,6 +19,7 @@ struct TabTrayPanelSwipeTheme: Theme {
             actionSecondary: mixColor(\.actionSecondary),
             layerScrim: mixColor(\.layerScrim),
             layer3: mixColor(\.layer3),
+            layerEmphasis: mixColor(\.layerEmphasis),
             textOnDark: mixColor(\.textOnDark),
             borderPrimary: mixColor(\.borderPrimary),
             borderAccent: mixColor(\.borderAccent),
