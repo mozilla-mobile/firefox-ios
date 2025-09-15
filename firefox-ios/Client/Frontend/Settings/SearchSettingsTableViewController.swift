@@ -258,6 +258,39 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForAlternateEnginesAction(cell: ThemedSubtitleTableViewCell, indexPath: IndexPath) {
+        // The default engine is not an alternate search engine.
+        let index = indexPath.item + 1
+        if index < model.orderedEngines.count {
+            let engine = model.orderedEngines[index]
+            cell.showsReorderControl = true
+
+            let toggle = ThemedSwitch()
+            toggle.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            // This is an easy way to get from the toggle control to the corresponding index.
+            toggle.tag = index
+            toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
+            toggle.isOn = model.isEngineEnabled(engine)
+
+            cell.editingAccessoryView = toggle
+            cell.textLabel?.text = engine.shortName
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.textLabel?.minimumScaleFactor = 0.5
+            cell.textLabel?.numberOfLines = 0
+            cell.imageView?.image = engine.image.createScaled(IconSize)
+            cell.imageView?.layer.cornerRadius = 4
+            cell.imageView?.layer.masksToBounds = true
+            cell.selectionStyle = .none
+            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        } else {
+            cell.editingAccessoryType = .disclosureIndicator
+            cell.accessibilityLabel = .SettingsAddCustomEngineTitle
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
+            cell.textLabel?.text = .SettingsAddCustomEngine
+            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+
     private func configureCellForDefaultSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
         buildSettingWith(
             prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
