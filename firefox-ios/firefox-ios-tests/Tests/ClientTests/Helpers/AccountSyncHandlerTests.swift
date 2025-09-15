@@ -15,17 +15,18 @@ class AccountSyncHandlerTests: XCTestCase {
     private var mockWindowManager: MockWindowManager!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
+    @MainActor
     override func setUp() {
         super.setUp()
         self.profile = MockProfile()
         self.syncManager = profile.syncManager as? ClientSyncManagerSpy
         self.queue = MockDispatchQueue()
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
+        let mockTabManager =  MockTabManager()
+        mockTabManager.recentlyAccessedNormalTabs = [createTab(profile: profile)]
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
-            tabManager: MockTabManager(
-                recentlyAccessedNormalTabs: [createTab(profile: profile)]
-            )
+            tabManager: mockTabManager
         )
     }
 

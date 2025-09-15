@@ -15,16 +15,17 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var appState: AppState!
 
+    @MainActor
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         setIsHostedSummaryEnabled(false)
         mockProfile = MockProfile()
+        let mockTabManager = MockTabManager()
+        mockTabManager.recentlyAccessedNormalTabs = [createTab(profile: mockProfile)]
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
-            tabManager: MockTabManager(
-                recentlyAccessedNormalTabs: [createTab(profile: mockProfile)]
-            )
+            tabManager: mockTabManager
         )
         summarizationChecker = MockSummarizationChecker()
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)

@@ -24,6 +24,7 @@ class LegacyHomepageViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
         let tabManager = TabManagerImplementation(profile: profile,
                                                   uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
@@ -41,6 +42,7 @@ class LegacyHomepageViewControllerTests: XCTestCase {
         trackForMemoryLeaks(firefoxHomeViewController)
     }
 
+    @MainActor
     func testHomepage_viewWillAppear_sendsBehavioralTargetingEvent() {
         Experiments.events.clearEvents()
         let tabManager = TabManagerImplementation(profile: profile,

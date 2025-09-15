@@ -15,26 +15,45 @@ struct MessageCardConfiguration: Hashable {
 final class MessageCardMiddleware {
     private var message: GleanPlumbMessage?
     private let messagingManager: GleanPlumbMessageManagerProtocol
+    private let logger: Logger
 
-    init(messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging) {
+    init(
+        messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.messagingManager = messagingManager
+        self.logger = logger
     }
 
     // TODO: FXIOS-12831 We need this middleware isolated to the main actor (due to `onMessagePressed` call)
     lazy var messageCardProvider: Middleware<AppState> = { state, action in
-        let windowUUID = action.windowUUID
+        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
+        // because we dispatch to the main thread in the store. We will want to
+        // also isolate that to the @MainActor to remove this.
+        guard Thread.isMainThread else {
+            self.logger.log(
+                "MessageCardMiddleware is not being called from the main thread!",
+                level: .fatal,
+                category: .tabs
+            )
+            return
+        }
 
-        switch action.actionType {
-        case HomepageActionType.initialize:
-            self.handleInitializeMessageCardAction(windowUUID: windowUUID)
-        case MessageCardActionType.tappedOnActionButton:
-            guard let message = self.message else { return }
-            self.messagingManager.onMessagePressed(message, window: windowUUID, shouldExpire: true)
-        case MessageCardActionType.tappedOnCloseButton:
-            guard let message = self.message else { return }
-            self.messagingManager.onMessageDismissed(message)
-        default:
-           break
+        MainActor.assumeIsolated {
+            let windowUUID = action.windowUUID
+
+            switch action.actionType {
+            case HomepageActionType.initialize:
+                self.handleInitializeMessageCardAction(windowUUID: windowUUID)
+            case MessageCardActionType.tappedOnActionButton:
+                guard let message = self.message else { return }
+                self.messagingManager.onMessagePressed(message, window: windowUUID, shouldExpire: true)
+            case MessageCardActionType.tappedOnCloseButton:
+                guard let message = self.message else { return }
+                self.messagingManager.onMessageDismissed(message)
+            default:
+                break
+            }
         }
     }
 
