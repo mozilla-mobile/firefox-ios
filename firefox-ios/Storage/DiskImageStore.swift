@@ -11,7 +11,7 @@ enum DiskImageStoreErrorCase: Error {
     case cannotWrite(description: String)
 }
 
-public protocol DiskImageStore {
+public protocol DiskImageStore: Sendable {
     /// Gets an image for the given key if it is in the store.
     func getImageForKey(_ key: String) async throws -> UIImage
 
