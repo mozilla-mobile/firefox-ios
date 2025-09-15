@@ -377,7 +377,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
             } completion: { _ in
                 contentContainer.isHidden = false
-                //tabCell?.isHidden = false
+                // tabCell?.isHidden = false
                 self.view.removeFromSuperview()
                 tabSnapshot.removeFromSuperview()
                 tabTraySnapshot.removeFromSuperview()
