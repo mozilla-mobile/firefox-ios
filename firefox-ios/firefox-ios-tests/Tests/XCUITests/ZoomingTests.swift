@@ -4,20 +4,16 @@
 
 import XCTest
 
-class ZoomingTests: FeatureFlaggedTestBase {
-    let zoomInButton = XCUIApplication().buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton]
-    let zoomOutButton = XCUIApplication().buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton]
-    var zoomLevel = XCUIApplication().staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-    let zoomInLevels = ["110%", "125%", "150%"]
-    let zoomOutLevels = ["125%", "110%", "100%"]
-    let zoomOutLevelsLandscape = ["90%", "75%", "50%"]
-    let zoomInLevelsLandscape = ["75%", "90%"]
-    let bookOfMozillaTxt = XCUIApplication().staticTexts.containingText("The Book of Mozilla").element(boundBy: 1)
+final class ZoomingTestsTAE: FeatureFlaggedTestBase {
+    private var zoomBar: ZoomBarScreen!
 
-    let websites: [String] = ["http://localhost:\(serverPort)/test-fixture/find-in-page-test.html",
-                              "www.mozilla.org",
-                              "www.google.com"
-    ]
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+        setUpApp() // prepares launch arguments
+        setUpScreenGraph() // builds the MappaMundi navigator
+        zoomBar = ZoomBarScreen(app: app)
+    }
 
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
@@ -28,35 +24,54 @@ class ZoomingTests: FeatureFlaggedTestBase {
     // Smoketest
     func testZoomingActions() {
         app.launch()
-        // Regular browsing
-        validateZoomActions()
+        // Navigate to Zoom panel
+        openURLAndNavigateToZoom(index: 0)
+        XCTAssertEqual(zoomBar.currentZoomPercent(), "100%")
+
+        // Zoom In: 100 -> 110 -> 125 -> 150
+        zoomInAndAssert(levels: ["110%", "125%"])
+
+        zoomBar.assertBookTextHeightChanged {
+            zoomBar.tapZoomIn()
+        }
+
+        zoomBar.assertZoomPercent("150%")
+
+        // Zoom Out back to 100%
+        zoomOutAndAssert(levels: ["125%", "110%"])
+
+        zoomBar.assertBookTextHeightChanged {
+            zoomBar.tapZoomOut()
+        }
+        zoomBar.assertZoomPercent("100%")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
     func testZoomingActionsLandscape_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.openURL(websites[0])
-        waitUntilPageLoad()
-        // Tap on the hamburger menu -> Tap on Zoom
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(PageZoom)
-        // The zoom bar is displayed
-        waitForElementsToExist(
-            [
-                zoomInButton,
-                zoomOutButton
-            ]
-        )
+
+        openURLAndNavigateToZoom(index: 0)
+
+        XCUIDevice.shared.orientation = .landscapeLeft
         validateZoomActionsLandscape()
-        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
+
+        // Change to portrait and enter in the Tab Tray
+        XCUIDevice.shared.orientation = .portrait
+        goToTabTray()
+
+        // If "New Tab" button doesn't exist, open the tab tray
         if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         }
+
+        // Switch to the private mode and check again the zoom
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        openURLAndNavigateToZoom(index: 0)
         validateZoomActions()
+
+        // Repite the secuence again
+        XCUIDevice.shared.orientation = .landscapeLeft
         validateZoomActionsLandscape()
     }
 
@@ -64,38 +79,53 @@ class ZoomingTests: FeatureFlaggedTestBase {
     func testZoomForceCloseFirefox_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        openWebsiteAndReachZoomSetting(website: 0)
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
-        // Tap on + and - buttons
-        zoomIn()
+
+        openURLAndNavigateToZoom(index: 0)
+
+        XCTAssertEqual(zoomBar.currentZoomPercent(), "100%")
+
+        // Zoom to 150%; check visual changes in the first and last zoom
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomIn() }
+        zoomBar.assertZoomPercent("110%")
+        zoomBar.tapZoomIn()
+        zoomBar.assertZoomPercent("125%")
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomIn() }
+        zoomBar.assertZoomPercent("150%")
+
+        // Close the app from the app switcher and rerun the app
         closeFromAppSwitcherAndRelaunch()
-        openWebsiteAndReachZoomSetting(website: 0)
-        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 150%")
-        zoomOut()
-        zoomOutButton.waitAndTap()
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+
+        openURLAndNavigateToZoom(index: 0)
+
+        // 150% should persist
+        zoomBar.assertZoomPercent("150%")
+
+        // Zoom Out to 100%
+        zoomOutAndAssert(levels: ["125%", "110%"])
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomOut() } // 100%
+        zoomBar.assertZoomPercent("100%")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
     func testZoomForceCloseFirefox_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
-        openWebsiteAndReachZoomSetting(website: 0)
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+        zoomBar = ZoomBarScreen(app: app, selectors: ExperimentalZoomBarSelectors())
+        openURLAndNavigateToZoom(index: 0)
+        zoomBar.assertZoomPercent("100%")
         // Tap on + and - buttons
-        zoomIn()
+        zoomInAndAssert(levels: ["110%", "125%"])
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomIn() }
+        zoomBar.assertZoomPercent("150%")
+
         closeFromAppSwitcherAndRelaunch()
-        openWebsiteAndReachZoomSetting(website: 0)
-        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 150%")
-        zoomOut()
-        zoomOutButton.waitAndTap()
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+
+        zoomBar = ZoomBarScreen(app: app, selectors: ExperimentalZoomBarSelectors())
+        openURLAndNavigateToZoom(index: 0)
+        zoomBar.assertZoomPercent("150%")
+        zoomOutAndAssert(levels: ["125%", "110%"])
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomOut() }
+        zoomBar.assertZoomPercent("100%")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
@@ -104,8 +134,7 @@ class ZoomingTests: FeatureFlaggedTestBase {
         app.launch()
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
+        goToTabTray()
         if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         }
@@ -121,40 +150,95 @@ class ZoomingTests: FeatureFlaggedTestBase {
         validateZoomLevelOnSwitchingTabs()
     }
 
+    // Helpers
+    private func openURLAndNavigateToZoom(index: Int) {
+        let websites: [String] = ["http://localhost:\(serverPort)/test-fixture/find-in-page-test.html",
+                                  "www.mozilla.org",
+                                  "www.google.com"
+        ]
+        navigator.openURL(websites[index])
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(PageZoom)
+    }
+
+    private func validateZoomActions() {
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomIn() }
+        zoomBar.assertZoomPercent("110%")
+
+        zoomBar.tapZoomIn()
+        zoomBar.assertZoomPercent("125%")
+
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomIn() }
+        zoomBar.assertZoomPercent("150%")
+
+        zoomBar.tapZoomOut()
+        zoomBar.assertZoomPercent("125%")
+
+        zoomBar.tapZoomOut()
+        zoomBar.assertZoomPercent("110%")
+
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomOut() }
+        zoomBar.assertZoomPercent("100%")
+    }
+
+    private func validateZoomActionsLandscape() {
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomOut() }
+        zoomBar.assertZoomPercent("90%")
+
+        zoomBar.tapZoomOut()
+        zoomBar.assertZoomPercent("75%")
+
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomOut() }
+        zoomBar.assertZoomPercent("50%")
+
+        app.swipeUp()
+        app.swipeUp()
+        app.swipeDown()
+        app.swipeDown()
+
+        zoomBar.tapZoomIn()
+        zoomBar.assertZoomPercent("75%")
+
+        zoomBar.tapZoomIn()
+        zoomBar.assertZoomPercent("90%")
+
+        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomIn() }  // 100
+        zoomBar.assertZoomPercent("100%")
+    }
+
     private func validateZoomLevelOnSwitchingTabs() {
-        openWebsiteAndReachZoomSetting(website: 0)
-        tapZoomInButton(tapCount: 4)
-        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        openWebsiteAndReachZoomSetting(website: 1)
-        tapZoomInButton(tapCount: 1)
-        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 110%")
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        openWebsiteAndReachZoomSetting(website: 2)
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+        openURLAndNavigateToZoom(index: 0)
+        zoomBar.tapZoomIn(times: 4)
+        zoomBar.assertZoomPercent("175%")
+
+        openNewTab()
+        openURLAndNavigateToZoom(index: 1)
+        zoomBar.tapZoomIn(times: 1)
+        zoomBar.assertZoomPercent("110%")
+
+        // Open a new tab from the TabTray → website[2] → keep 100%
+        openNewTab()
+        openURLAndNavigateToZoom(index: 2)
+        zoomBar.assertZoomPercent("100%")
+
+        // Reopen the tab 0 (should be in 175%), then zoom out to 100%
         selectTabTrayWebsites(tab: 0)
-        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
-        tapZoomOutButton(tapCount: 4)
+        zoomBar.assertZoomPercent("175%")
+        zoomBar.tapZoomOut(times: 4)
+
+        // Open the tab 1 (should be in 110%), zoom out to 100%
         selectTabTrayWebsites(tab: 1)
-        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 110%")
-        tapZoomOutButton(tapCount: 1)
+        zoomBar.assertZoomPercent("110%")
+        zoomBar.tapZoomOut(times: 1)
+
+        // Open the tab 2 (should be in 100%)
         selectTabTrayWebsites(tab: 2)
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+        zoomBar.assertZoomPercent("100%")
     }
 
     private func selectTabTrayWebsites(tab: Int) {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
+        goToTabTray()
         let tabCollectionView = AccessibilityIdentifiers.TabTray.collectionView
         app.collectionViews[tabCollectionView].cells.element(boundBy: tab).waitAndTap()
         waitUntilPageLoad()
@@ -164,131 +248,27 @@ class ZoomingTests: FeatureFlaggedTestBase {
         navigator.goto(PageZoom)
     }
 
-    private func openWebsiteAndReachZoomSetting(website: Int) {
-        navigator.openURL(websites[website])
-        waitUntilPageLoad()
-        // Tap on the hamburger menu -> Tap on Zoom
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(PageZoom)
-        // The zoom bar is displayed
-        mozWaitForElementToExist(zoomInButton)
+    private func openNewTab() {
+        goToTabTray()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
     }
 
-    func validateZoomActions() {
-        navigator.openURL(websites[0])
-        waitUntilPageLoad()
-        // Tap on the hamburger menu -> Tap on Zoom
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(BrowserTabMenuMore)
-        navigator.goto(PageZoom)
-        // The zoom bar is displayed
-        waitForElementsToExist(
-            [
-                zoomInButton,
-                zoomOutButton
-            ]
-        )
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
-        // Tap on + and - buttons
-        zoomIn()
-        zoomOut()
-        zoomOutButton.waitAndTap()
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
-    }
-
-    func validateZoomActionsLandscape() {
-        // Switch the device orientation to landscape
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-        zoomOutLandscape()
-        swipeUp()
-        swipeDown()
-        zoomInLandscape()
-        zoomInButton.waitAndTap()
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel])
-        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
-    }
-
-    func zoomIn() {
-        // If there are multiple matches for this element, then both the normal tab and the private tab views may be
-        // in the view hierarchy simultaneously. This should not change unintentionally! Check the Debug View Hierarchy.
-        let viewCount = app.buttons.matching(identifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel).count
-        XCTAssertLessThanOrEqual(viewCount, 1, "Too many matches")
-
-        for i in 0...2 {
-            zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-            let previoustTextSize = bookOfMozillaTxt.frame.size.height
-            zoomInButton.waitAndTap()
-            mozWaitForElementToExist(bookOfMozillaTxt)
-            let currentTextSize = bookOfMozillaTxt.frame.size.height
-            XCTAssertTrue(currentTextSize != previoustTextSize)
-            XCTAssertEqual(zoomLevel.label, "Current Zoom Level: \(zoomInLevels[i])")
+    private func zoomInAndAssert(levels: [String]) {
+        for level in levels {
+            zoomBar.tapZoomIn()
+            zoomBar.assertZoomPercent(level)
         }
     }
 
-    func zoomOut() {
-        for i in 0...1 {
-            zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-            let previoustTextSize = bookOfMozillaTxt.frame.size.height
-            zoomOutButton.waitAndTap()
-            mozWaitForElementToExist(bookOfMozillaTxt)
-            let currentTextSize = bookOfMozillaTxt.frame.size.height
-            XCTAssertTrue(currentTextSize != previoustTextSize)
-            XCTAssertEqual(zoomLevel.label, "Current Zoom Level: \(zoomOutLevels[i])")
+    private func zoomOutAndAssert(levels: [String]) {
+        for level in levels {
+            zoomBar.tapZoomOut()
+            zoomBar.assertZoomPercent(level)
         }
     }
 
-    func zoomOutLandscape() {
-        for i in 0...2 {
-            zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-            let previoustTextSize = bookOfMozillaTxt.frame.size.height
-            zoomOutButton.waitAndTap()
-            mozWaitForElementToExist(bookOfMozillaTxt)
-            let currentTextSize = bookOfMozillaTxt.frame.size.height
-            XCTAssertTrue(currentTextSize != previoustTextSize)
-            XCTAssertEqual(zoomLevel.label, "Current Zoom Level: \(zoomOutLevelsLandscape[i])")
-        }
-    }
-
-    func zoomInLandscape() {
-        for i in 0...1 {
-            zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
-            let previoustTextSize = bookOfMozillaTxt.frame.size.height
-            zoomInButton.waitAndTap()
-            mozWaitForElementToExist(bookOfMozillaTxt)
-            let currentTextSize = bookOfMozillaTxt.frame.size.height
-            XCTAssertTrue(currentTextSize != previoustTextSize)
-            XCTAssertEqual(zoomLevel.label, "Current Zoom Level: \(zoomInLevelsLandscape[i])")
-        }
-    }
-
-    private func tapZoomInButton(tapCount: Int) {
-        for _ in 1...tapCount {
-            zoomInButton.waitAndTap()
-        }
-    }
-
-    private func tapZoomOutButton(tapCount: Int) {
-        for _ in 1...tapCount {
-            zoomOutButton.waitAndTap()
-        }
-    }
-
-    func swipeDown() {
-        for _ in 0...1 {
-            app.swipeDown()
-            panScreen()
-            mozWaitForElementToExist(app.staticTexts.element)
-        }
-    }
-
-    func swipeUp() {
-        for _ in 0...1 {
-            app.swipeUp()
-            panScreen()
-            mozWaitForElementToExist(app.staticTexts.element)
-        }
+    func goToTabTray() {
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
     }
 }
