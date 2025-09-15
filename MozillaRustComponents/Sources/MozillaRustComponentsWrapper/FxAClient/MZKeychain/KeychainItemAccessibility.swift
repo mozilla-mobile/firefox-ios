@@ -35,7 +35,7 @@ protocol MZKeychainAttrRepresentable {
 
 // MARK: - KeychainItemAccessibility
 
-public enum MZKeychainItemAccessibility {
+public enum MZKeychainItemAccessibility: Sendable {
     /**
       The data in the keychain item cannot be accessed after a restart until the device has been unlocked once by the user.
 

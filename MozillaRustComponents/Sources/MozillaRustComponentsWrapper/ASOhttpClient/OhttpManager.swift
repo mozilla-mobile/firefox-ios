@@ -13,7 +13,8 @@ public class OhttpManager {
     // Global cache to caching Gateway encryption keys. Stale entries are
     // ignored and on Gateway errors the key used should be purged and retrieved
     // again next at next network attempt.
-    static var keyCache = [URL: ([UInt8], Date)]()
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    static nonisolated(unsafe) var keyCache = [URL: ([UInt8], Date)]()
 
     private var configUrl: URL
     private var relayUrl: URL

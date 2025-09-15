@@ -16,7 +16,7 @@ public extension Notification.Name {
 public enum MigrationResult {}
 
 // swiftlint:disable type_body_length
-open class FxAccountManager {
+open class FxAccountManager: Sendable {
     let accountStorage: KeyChainAccountStorage
     let config: FxAConfig
     var deviceConfig: DeviceConfig
