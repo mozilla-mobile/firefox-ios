@@ -71,7 +71,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case MainMenuActionType.tapCloseMenu:
             telemetry.closeButtonTapped(isHomepage: isHomepage)
 
-        case MainMenuActionType.didInstantiateView:
+        case MainMenuActionType.viewDidLoad:
             handleDidInstantiateViewAction(action: action)
 
         case MainMenuActionType.updateMenuAppearance:

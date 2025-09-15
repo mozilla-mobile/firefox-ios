@@ -130,7 +130,7 @@ class MainMenuViewController: UIViewController,
         store.dispatchLegacy(
             MainMenuAction(
                 windowUUID: windowUUID,
-                actionType: MainMenuActionType.didInstantiateView
+                actionType: MainMenuActionType.viewDidLoad
             )
         )
 

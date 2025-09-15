@@ -167,7 +167,7 @@ struct MainMenuState: ScreenState, Equatable, Sendable {
         }
 
         switch action.actionType {
-        case MainMenuActionType.didInstantiateView:
+        case MainMenuActionType.viewDidLoad:
             return handleViewDidLoadAction(state: state)
         case MainMenuMiddlewareActionType.updateAccountHeader:
             return handleUpdateAccountHeaderAction(state: state, action: action)
