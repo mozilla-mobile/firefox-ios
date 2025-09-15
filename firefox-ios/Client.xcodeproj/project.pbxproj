@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */; };
+		033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */; };
 		033C94F72E2FBCDD00C2382F /* TermsOfUseMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C94F62E2FBCD300C2382F /* TermsOfUseMiddlewareTests.swift */; };
 		03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */; };
 		0430A545203B372D00FDF76D /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0430A544203B372D00FDF76D /* IntegrationTests.swift */; };
@@ -2503,6 +2504,7 @@
 		02E547BF89DA742677E367E6 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		02FC4A06A948593BE97BC508 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseTelemetryTests.swift; sourceTree = "<group>"; };
+		033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetTermsOfServiceAcceptancePage.swift; sourceTree = "<group>"; };
 		033C94F62E2FBCD300C2382F /* TermsOfUseMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseMiddlewareTests.swift; sourceTree = "<group>"; };
 		033D4FBDA7761FAB7C0B00B3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Storage.strings; sourceTree = "<group>"; };
 		036B499AA4BEE3FA05346002 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -12912,6 +12914,7 @@
 		8A3EF7EE2A2FCF0000796E3A /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				033A61FF2E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift */,
 				0BD049CD2DFC4A9C00614E61 /* PopupHTMLSetting.swift */,
 				1DC598B52DC53CED0037D263 /* Performance */,
 				8ABCBE622C485CAA00480A21 /* FeatureFlags */,
@@ -18821,6 +18824,7 @@
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
 				1BE7A4922C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift in Sources */,
 				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */,
+				033A62002E77FE9900A84E8A /* ResetTermsOfServiceAcceptancePage.swift in Sources */,
 				81E1914D2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift in Sources */,
 				8AB8573727D951640075C173 /* HomeLogoHeaderViewModel.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
