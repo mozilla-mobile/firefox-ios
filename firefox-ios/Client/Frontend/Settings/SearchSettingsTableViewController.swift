@@ -304,6 +304,18 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForSyncedTabsAction(cell: ThemedSubtitleTableViewCell) {
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions,
+            defaultValue: model.shouldShowSyncedTabsSuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.Suggest.SearchSyncedTabs
+            ),
+            cell: cell,
+            selector: #selector(didToggleSyncedTabsSuggestions)
+        )
+    }
+
     private func configureCellForNonSponsoredAction(cell: ThemedSubtitleTableViewCell) {
         if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
             buildSettingWith(
