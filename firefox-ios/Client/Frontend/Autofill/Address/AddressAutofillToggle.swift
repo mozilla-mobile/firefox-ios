@@ -64,9 +64,9 @@ struct AddressAutofillToggle: View {
                     .padding(.leading, UX.viewPadding)
             }
         }
-        .modifier(NewStyleToggleView(paddingSize: UX.viewPadding,
-                                     cornerRadius: UX.viewCornerRadius,
-                                     backgroundColor: backgroundColor))
+        .modifier(ToggleStyle(paddingSize: UX.viewPadding,
+                              cornerRadius: UX.viewCornerRadius,
+                              backgroundColor: backgroundColor))
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }

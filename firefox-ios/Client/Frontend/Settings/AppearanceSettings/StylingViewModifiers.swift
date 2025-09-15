@@ -40,7 +40,7 @@ struct PaddingStyle: ViewModifier {
     }
 }
 
-struct ListStyleWithColor: ViewModifier {
+struct ColoredListStyle: ViewModifier {
     let backgroundColor: Color
 
     func body(content: Content) -> some View {
@@ -142,7 +142,7 @@ struct NewStyleRoundedCorners: ViewModifier {
     }
 }
 
-struct NewStyleToggleView: ViewModifier {
+struct ToggleStyle: ViewModifier {
     let paddingSize: CGFloat
     let cornerRadius: CGFloat
     let backgroundColor: Color
