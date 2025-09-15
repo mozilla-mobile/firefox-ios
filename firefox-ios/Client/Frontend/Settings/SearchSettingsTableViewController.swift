@@ -248,15 +248,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case FirefoxSuggestItem.bookmarks.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions,
-                    defaultValue: model.shouldShowBookmarksSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.SearchBookmarks
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleBookmarksSuggestions)
-                )
+                configureCellForBookmarksAction(cell: cell)
 
             case FirefoxSuggestItem.syncedTabs.rawValue:
                 configureCellForSyncedTabsAction(cell: cell)
