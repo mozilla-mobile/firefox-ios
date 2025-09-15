@@ -296,6 +296,18 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return cell
     }
 
+    private func configureCellForBookmarksAction(cell: ThemedSubtitleTableViewCell) {
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions,
+            defaultValue: model.shouldShowBookmarksSuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.Suggest.SearchBookmarks
+            ),
+            cell: cell,
+            selector: #selector(didToggleBookmarksSuggestions)
+        )
+    }
+
     private func configureCellForSyncedTabsAction(cell: ThemedSubtitleTableViewCell) {
         buildSettingWith(
             prefKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions,
