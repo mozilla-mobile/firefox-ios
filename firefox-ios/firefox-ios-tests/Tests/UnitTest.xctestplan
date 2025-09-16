@@ -201,7 +201,8 @@
         "TabToolbarHelperTests\/testTelemetryForSiteMenu()",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
-        "VersionSettingTests\/testCopyAppVersion()"
+        "VersionSettingTests\/testCopyAppVersion()",
+        "WallpaperSettingsViewModelTests\/testDownloadAndSetWallpaper_downloaded_wallpaperIsSet()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

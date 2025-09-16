@@ -266,7 +266,7 @@ workflows:
             XCUITests/OnboardingTests
         - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
+        - test_plan: Smoketest
     - cache-push@2.7.1:
         is_always_run: true
     - slack@4.2.1:
