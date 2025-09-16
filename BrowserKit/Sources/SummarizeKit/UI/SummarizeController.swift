@@ -160,17 +160,17 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func configure() {
-        loadingLabel.text = configuration.loadingLabelViewModel.loadingLabel
-        loadingLabel.accessibilityIdentifier = configuration.loadingLabelViewModel.loadingA11yId
-        loadingLabel.accessibilityLabel = configuration.loadingLabelViewModel.loadingA11yLabel
+        loadingLabel.text = configuration.loadingLabel.loadingLabel
+        loadingLabel.accessibilityIdentifier = configuration.loadingLabel.loadingA11yId
+        loadingLabel.accessibilityLabel = configuration.loadingLabel.loadingA11yLabel
 
-        tabSnapshotContainer.accessibilityIdentifier = configuration.tabSnapshotViewModel.tabSnapshotA11yId
-        tabSnapshotContainer.accessibilityLabel = configuration.tabSnapshotViewModel.tabSnapshotA11yLabel
+        tabSnapshotContainer.accessibilityIdentifier = configuration.tabSnapshot.tabSnapshotA11yId
+        tabSnapshotContainer.accessibilityLabel = configuration.tabSnapshot.tabSnapshotA11yLabel
 
         titleLabel.largeContentTitle = webView.title
-        closeButton.accessibilityIdentifier = configuration.closeButtonModel.a11yIdentifier
-        closeButton.accessibilityLabel = configuration.closeButtonModel.a11yLabel
-        closeButton.largeContentTitle = configuration.closeButtonModel.a11yLabel
+        closeButton.accessibilityIdentifier = configuration.closeButton.a11yIdentifier
+        closeButton.accessibilityLabel = configuration.closeButton.a11yLabel
+        closeButton.largeContentTitle = configuration.closeButton.a11yLabel
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
         navigationItem.titleView = titleLabel
@@ -198,8 +198,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         tabSnapshot.pinToSuperview()
         tabSnapshotTopConstraint = tabSnapshotContainer.topAnchor.constraint(equalTo: view.topAnchor)
         tabSnapshotTopConstraint?.isActive = true
-        tabSnapshot.image = configuration.tabSnapshotViewModel.tabSnapshot
-        tabSnapshotTopConstraint?.constant = configuration.tabSnapshotViewModel.tabSnapshotTopOffset
+        tabSnapshot.image = configuration.tabSnapshot.tabSnapshot
+        tabSnapshotTopConstraint?.constant = configuration.tabSnapshot.tabSnapshotTopOffset
 
         let topHalfBoundGuide = UILayoutGuide()
         view.addLayoutGuide(topHalfBoundGuide)
@@ -283,7 +283,11 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
     }
 
     private func summarizeTask() async {
-        await viewModel.summarize(webView: webView, footNoteLabel: configuration.summaryFootnote) { [weak self] result in
+        await viewModel.summarize(
+            webView: webView,
+            footNoteLabel: configuration.summaryFootnote,
+            dateProvider: DefaultDateProvider()
+        ) { [weak self] result in
             switch result {
             case .success(let summary):
                 self?.showSummary(summary)
@@ -328,7 +332,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
                 title: webView.title,
                 titleA11yId: configuration.titleLabelA11yId,
                 compactTitleA11yId: configuration.compactTitleLabelA11yId,
-                brandViewModel: configuration.brandViewModel,
+                brandViewModel: configuration.brandView,
                 summary: formatter.format(markdown: summary),
                 summaryA11yId: configuration.summarizeViewA11yId,
                 scrollContentBottomInset: UX.tabSnapshotFinalPositionBottomPadding

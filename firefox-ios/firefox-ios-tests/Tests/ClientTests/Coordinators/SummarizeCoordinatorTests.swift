@@ -22,8 +22,8 @@ final class MockSummarizer: SummarizerProtocol, @unchecked Sendable {
 }
 
 class MockSummarizerServiceFactory: SummarizerServiceFactory {
-    var lifecycleDelegate: (any SummarizeKit.SummarizerServiceLifecycle)?
-    
+    weak var lifecycleDelegate: SummarizerServiceLifecycle?
+
     func make(isAppleSummarizerEnabled: Bool,
               isHostedSummarizerEnabled: Bool,
               config: SummarizerConfig?) -> SummarizerService? {
@@ -65,7 +65,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         super.tearDown()
     }
 
-    func testStart_showsSummarizeController() throws {
+    func test_start_showsSummarizeController() throws {
         let subject = createSubject()
 
         subject.start()
@@ -76,7 +76,7 @@ final class SummarizeCoordinatorTests: XCTestCase {
         XCTAssertTrue(presentedController.viewControllers.first is SummarizeController)
     }
 
-    func testOpenURL() {
+    func test_openURL() {
         let expectation = XCTestExpectation(description: "the open url callback should be called")
         let subject = createSubject { url in
             XCTAssertEqual(url, self.url)
@@ -86,20 +86,53 @@ final class SummarizeCoordinatorTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
-    func testAcceptToSConsent_recordsTelemetry() throws {
+    func test_acceptConsent() throws {
         let subject = createSubject()
         subject.acceptConsent()
+
+        let isConsentAccepted = try XCTUnwrap(prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService))
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertTrue(isConsentAccepted)
+    }
+
+    func test_denyConsent_recordsTelemetry() {
+        let subject = createSubject()
+        subject.denyConsent()
 
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
     }
 
-    func testDismissSummary() {
+    func test_dismissSummary() {
         let subject = createSubject()
 
         subject.dismissSummary()
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+    }
+
+    func test_summarizeServiceDidStart_recordsTelemetry() {
+        let subject = createSubject()
+
+        subject.summarizerServiceDidStart("")
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+    }
+
+    func test_summarizeServiceDidComplete_recordsTelemetry() {
+        let subject = createSubject()
+
+        subject.summarizerServiceDidComplete("", modelName: .appleSummarizer)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+    }
+
+    func test_summarizeServiceDidFail_recordsTelemetry() {
+        let subject = createSubject()
+
+        subject.summarizerServiceDidFail(.busy, modelName: .appleSummarizer)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {

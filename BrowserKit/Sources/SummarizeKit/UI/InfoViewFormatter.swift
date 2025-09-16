@@ -72,14 +72,14 @@ struct SummarizeErrorFormatter {
         case .tosConsentMissing:
             if isAccessibilityCategoryEnabled {
                 return """
-                # \(viewModel.tosViewModel.titleLabel)
-                [\(viewModel.tosViewModel.linkButtonLabel)](\(viewModel.tosViewModel.linkButtonURL?.absoluteString ?? ""))
+                # \(viewModel.termOfService.titleLabel)
+                [\(viewModel.termOfService.linkButtonLabel)](\(viewModel.termOfService.linkButtonURL?.absoluteString ?? ""))
                 """
             }
             return """
-            # \(viewModel.tosViewModel.titleLabel)
-            ### \(viewModel.tosViewModel.descriptionText)
-            [\(viewModel.tosViewModel.linkButtonLabel)](\(viewModel.tosViewModel.linkButtonURL?.absoluteString ?? ""))
+            # \(viewModel.termOfService.titleLabel)
+            ### \(viewModel.termOfService.descriptionText)
+            [\(viewModel.termOfService.linkButtonLabel)](\(viewModel.termOfService.linkButtonURL?.absoluteString ?? ""))
             """
         default:
             return """

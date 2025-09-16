@@ -14,23 +14,34 @@ extension Result {
     }
 }
 
+class MockDateProvider: DateProvider {
+    var mockDate: Date?
+
+    func currentDate() -> Date {
+        return mockDate ?? Date()
+    }
+}
+
 @MainActor
 final class SummarizeViewModelTests: XCTestCase {
     private var tosAcceptor: MockSummarizeToSAcceptor!
     private var summarizerService: MockSummarizerService!
     private var webView: MockWebView!
+    private var dateProvider: MockDateProvider!
     private let maxWords = 5000
     private let url = URL(string: "https://example.com")!
 
     override func setUp() {
         super.setUp()
         webView = MockWebView(url)
+        dateProvider = MockDateProvider()
         summarizerService = MockSummarizerService()
         tosAcceptor = MockSummarizeToSAcceptor()
     }
 
     override func tearDown() {
         tosAcceptor = nil
+        dateProvider = nil
         summarizerService = nil
         webView = nil
         super.tearDown()
@@ -40,7 +51,7 @@ final class SummarizeViewModelTests: XCTestCase {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let subject = createSubject()
 
-        await subject.summarize(webView: webView, footNoteLabel: "") { result in
+        await subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let error = try? XCTUnwrap(result.failure())
 
             XCTAssertEqual(error, .tosConsentMissing)
@@ -63,7 +74,7 @@ final class SummarizeViewModelTests: XCTestCase {
 
         subject.unblockSummarization()
 
-        await subject.summarize(webView: webView, footNoteLabel: footnote) { result in
+        await subject.summarize(webView: webView, footNoteLabel: footnote, dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.get())
 
             // The first time is called the closure it responds just with summary
@@ -92,7 +103,7 @@ final class SummarizeViewModelTests: XCTestCase {
 
         subject.unblockSummarization()
 
-        await subject.summarize(webView: webView, footNoteLabel: footnote) { result in
+        await subject.summarize(webView: webView, footNoteLabel: footnote, dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.get())
 
             // The first time is called the closure it responds just with summary
@@ -115,7 +126,7 @@ final class SummarizeViewModelTests: XCTestCase {
 
         subject.unblockSummarization()
 
-        await subject.summarize(webView: webView, footNoteLabel: "") { result in
+        await subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.failure())
 
             XCTAssertEqual(response, .unknown(error))
@@ -132,7 +143,7 @@ final class SummarizeViewModelTests: XCTestCase {
 
         subject.unblockSummarization()
 
-        await subject.summarize(webView: webView, footNoteLabel: "") { result in
+        await subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.failure())
 
             XCTAssertEqual(response, error)
@@ -168,6 +179,14 @@ final class SummarizeViewModelTests: XCTestCase {
 
         XCTAssertEqual(tosAcceptor.denyTosConsentCalled, 0)
         XCTAssertEqual(tosAcceptor.acceptTosConsentCalled, 1)
+    }
+
+    func test_closeSummarization() {
+        let subject = createSubject()
+
+        subject.closeSummarization()
+
+        XCTAssertEqual(summarizerService.closeCurrentStreamedSessionCalled, 1)
     }
 
     private func createSubject(isTosAccepted: Bool = false,

@@ -43,24 +43,24 @@ final class SummarizeControllerTests: XCTestCase {
         compactTitleLabelA11yId: "",
         summaryFootnote: "Footnote",
         summarizeViewA11yId: "",
-        tabSnapshotViewModel: TabSnapshotViewConfiguration(
+        tabSnapshot: TabSnapshotViewConfiguration(
             tabSnapshotA11yLabel: "",
             tabSnapshotA11yId: "",
             tabSnapshot: .add,
             tabSnapshotTopOffset: 0
         ),
-        loadingLabelViewModel: LoadingLabelViewConfiguration(
+        loadingLabel: LoadingLabelViewConfiguration(
             loadingLabel: "loading",
             loadingA11yLabel: "",
             loadingA11yId: ""
         ),
-        brandViewModel: BrandViewConfiguration(
+        brandView: BrandViewConfiguration(
             brandLabel: "",
             brandLabelA11yId: "",
             brandImage: nil,
             brandImageA11yId: ""
         ),
-        closeButtonModel: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
+        closeButton: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
         errorMessages: LocalizedErrorsViewConfiguration(
             rateLimitedMessage: "",
             unsafeContentMessage: "",
@@ -73,7 +73,7 @@ final class SummarizeControllerTests: XCTestCase {
             closeButtonLabel: "",
             acceptToSButtonLabel: ""
         ),
-        tosViewModel: ToSViewConfiguration(
+        termOfService: TermOfServiceViewConfiguration(
             titleLabel: "",
             titleLabelA11yId: "",
             descriptionText: "",

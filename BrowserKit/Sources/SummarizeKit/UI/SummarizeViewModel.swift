@@ -9,6 +9,7 @@ import WebKit
 public protocol SummarizeViewModel {
     func summarize(webView: WKWebView,
                    footNoteLabel: String,
+                   dateProvider: DateProvider,
                    onNewData: @escaping (Result<String, SummarizerError>) -> Void) async
 
     /// Free the lock on the summarization stream, and unlock the stream to send data to the UI.
@@ -29,65 +30,78 @@ public protocol SummarizeTermOfServiceAcceptor: AnyObject {
     func denyConsent()
 }
 
-struct SummarizeState: Sendable {
-    let isTosConsentAccepted: Bool
-    let wasTosScreenShown: Bool
-    let canSummarize: Bool
+public protocol DateProvider {
+    func currentDate() -> Date
+}
 
-    init(
-        isTosConsentAccepted: Bool,
-        wasTosScreenShown: Bool = false,
-        canSummarize: Bool = false,
-    ) {
-        self.isTosConsentAccepted = isTosConsentAccepted
-        self.canSummarize = canSummarize
-        self.wasTosScreenShown = wasTosScreenShown
-    }
-
-    func copy(
-        isTosConsentAccepted: Bool? = nil,
-        wasTosScreenShown: Bool? = nil,
-        canSummarize: Bool? = nil
-    ) -> Self {
-        return SummarizeState(
-            isTosConsentAccepted: isTosConsentAccepted ?? self.isTosConsentAccepted,
-            wasTosScreenShown: wasTosScreenShown ?? self.wasTosScreenShown,
-            canSummarize: canSummarize ?? self.canSummarize
-        )
+struct DefaultDateProvider: DateProvider {
+    func currentDate() -> Date {
+        return Date.now
     }
 }
 
 public final class DefaultSummarizeViewModel: SummarizeViewModel {
-    struct Constansts {
+    struct Configuration: Sendable {
+        let isTosConsentAccepted: Bool
+        let wasTosScreenShown: Bool
+        let canSummarize: Bool
+
+        init(
+            isTosConsentAccepted: Bool,
+            wasTosScreenShown: Bool = false,
+            canSummarize: Bool = false,
+        ) {
+            self.isTosConsentAccepted = isTosConsentAccepted
+            self.canSummarize = canSummarize
+            self.wasTosScreenShown = wasTosScreenShown
+        }
+
+        func copy(
+            isTosConsentAccepted: Bool? = nil,
+            wasTosScreenShown: Bool? = nil,
+            canSummarize: Bool? = nil
+        ) -> Self {
+            return Configuration(
+                isTosConsentAccepted: isTosConsentAccepted ?? self.isTosConsentAccepted,
+                wasTosScreenShown: wasTosScreenShown ?? self.wasTosScreenShown,
+                canSummarize: canSummarize ?? self.canSummarize
+            )
+        }
+    }
+    struct Constants {
         static let summaryDelay: CGFloat = 4.0
         static let minWordsAcceptedToShow = 2000
     }
     private let summarizerService: SummarizerService
     private var semaphoreContinuation: CheckedContinuation<Void, Never>?
-    private var state: SummarizeState
+    private var configuration: Configuration
     private let minWordsAcceptedToShow: Int
+    private let minDelayToShowSummary: TimeInterval
     private weak var tosAcceptor: SummarizeTermOfServiceAcceptor?
 
     public init(
         summarizerService: SummarizerService,
         tosAcceptor: SummarizeTermOfServiceAcceptor?,
         minWordsAcceptedToShow: Int? = nil,
+        minDelayToShowSummary: TimeInterval? = nil,
         isTosAcceppted: Bool
     ) {
         self.summarizerService = summarizerService
         self.tosAcceptor = tosAcceptor
-        self.minWordsAcceptedToShow = minWordsAcceptedToShow ?? Constansts.minWordsAcceptedToShow
-        self.state = SummarizeState(isTosConsentAccepted: isTosAcceppted)
+        self.minDelayToShowSummary = minDelayToShowSummary ?? Constants.summaryDelay
+        self.minWordsAcceptedToShow = minWordsAcceptedToShow ?? Constants.minWordsAcceptedToShow
+        self.configuration = Configuration(isTosConsentAccepted: isTosAcceppted)
     }
 
     public func summarize(webView: WKWebView,
                           footNoteLabel: String,
+                          dateProvider: DateProvider,
                           onNewData: @escaping (Result<String, SummarizerError>) -> Void) async {
-        guard state.isTosConsentAccepted else {
+        guard configuration.isTosConsentAccepted else {
             onNewData(.failure(.tosConsentMissing))
             return
         }
-        let startRevealingAt = Date().addingTimeInterval(Constansts.summaryDelay)
+        let startRevealingAt = dateProvider.currentDate().addingTimeInterval(minDelayToShowSummary)
         var lastChunk = ""
         var revealed = false
         do {
@@ -99,7 +113,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
 
             for try await aggregatedChunk in stream {
                 lastChunk = aggregatedChunk
-                guard Date() >= startRevealingAt || enoughWords(aggregatedChunk) else { continue }
+                guard dateProvider.currentDate() >= startRevealingAt || enoughWords(aggregatedChunk) else { continue }
                 await waitForUnblockSummarization()
                 revealed = true
                 onNewData(.success(aggregatedChunk))
@@ -132,7 +146,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
 
     private func waitForUnblockSummarization() async {
         await withCheckedContinuation { continuation in
-            if self.state.canSummarize {
+            if self.configuration.canSummarize {
                 continuation.resume()
             } else {
                 self.semaphoreContinuation = continuation
@@ -141,7 +155,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
     }
 
     public func unblockSummarization() {
-        state = state.copy(canSummarize: true)
+        configuration = configuration.copy(canSummarize: true)
         semaphoreContinuation?.resume()
     }
 
@@ -151,16 +165,16 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
     }
 
     public func setConsentScreenShown() {
-        state = state.copy(wasTosScreenShown: true)
+        configuration = configuration.copy(wasTosScreenShown: true)
     }
 
     public func setConsentAccepted() {
-        state = state.copy(isTosConsentAccepted: true)
+        configuration = configuration.copy(isTosConsentAccepted: true)
         tosAcceptor?.acceptConsent()
     }
 
     public func logConsentStatus() {
-        guard !state.isTosConsentAccepted, state.wasTosScreenShown else { return }
+        guard !configuration.isTosConsentAccepted, configuration.wasTosScreenShown else { return }
         tosAcceptor?.denyConsent()
     }
 }

@@ -97,7 +97,7 @@ public struct LocalizedErrorsViewConfiguration {
     }
 }
 
-public struct ToSViewConfiguration {
+public struct TermOfServiceViewConfiguration {
     let titleLabel: String
     let titleLabelA11yId: String
     let descriptionText: String
@@ -145,34 +145,34 @@ public struct SummarizeViewConfiguration {
     let compactTitleLabelA11yId: String
     let summarizeViewA11yId: String
     let summaryFootnote: String
-    let tabSnapshotViewModel: TabSnapshotViewConfiguration
-    let loadingLabelViewModel: LoadingLabelViewConfiguration
-    let brandViewModel: BrandViewConfiguration
-    let closeButtonModel: CloseButtonViewModel
+    let tabSnapshot: TabSnapshotViewConfiguration
+    let loadingLabel: LoadingLabelViewConfiguration
+    let brandView: BrandViewConfiguration
+    let closeButton: CloseButtonViewModel
     let errorMessages: LocalizedErrorsViewConfiguration
-    let tosViewModel: ToSViewConfiguration
+    let termOfService: TermOfServiceViewConfiguration
 
     public init(
         titleLabelA11yId: String,
         compactTitleLabelA11yId: String,
         summaryFootnote: String,
         summarizeViewA11yId: String,
-        tabSnapshotViewModel: TabSnapshotViewConfiguration,
-        loadingLabelViewModel: LoadingLabelViewConfiguration,
-        brandViewModel: BrandViewConfiguration,
-        closeButtonModel: CloseButtonViewModel,
+        tabSnapshot: TabSnapshotViewConfiguration,
+        loadingLabel: LoadingLabelViewConfiguration,
+        brandView: BrandViewConfiguration,
+        closeButton: CloseButtonViewModel,
         errorMessages: LocalizedErrorsViewConfiguration,
-        tosViewModel: ToSViewConfiguration
+        termOfService: TermOfServiceViewConfiguration
     ) {
         self.titleLabelA11yId = titleLabelA11yId
         self.compactTitleLabelA11yId = compactTitleLabelA11yId
         self.summarizeViewA11yId = summarizeViewA11yId
-        self.loadingLabelViewModel = loadingLabelViewModel
-        self.tabSnapshotViewModel = tabSnapshotViewModel
-        self.brandViewModel = brandViewModel
         self.summaryFootnote = summaryFootnote
-        self.closeButtonModel = closeButtonModel
+        self.tabSnapshot = tabSnapshot
+        self.loadingLabel = loadingLabel
+        self.brandView = brandView
+        self.closeButton = closeButton
         self.errorMessages = errorMessages
-        self.tosViewModel = tosViewModel
+        self.termOfService = termOfService
     }
 }

@@ -18,6 +18,7 @@ class MockSummarizeViewModel: SummarizeViewModel {
     func summarize(
         webView: WKWebView,
         footNoteLabel: String,
+        dateProvider: DateProvider,
         onNewData: @escaping (Result<String, SummarizeKit.SummarizerError>) -> Void
     ) async {
         summarizeCalled += 1

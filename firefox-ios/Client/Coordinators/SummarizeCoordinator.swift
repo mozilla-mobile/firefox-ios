@@ -95,7 +95,7 @@ final class SummarizeCoordinator: BaseCoordinator,
             acceptToSButtonLabel: .Summarizer.ToSAlertContinueButtonLabel
         )
 
-        let tosViewModel = ToSViewConfiguration(
+        let tosViewModel = TermOfServiceViewConfiguration(
             titleLabel: .Summarizer.ToSInfoPanelTitleLabel,
             titleLabelA11yId: AccessibilityIdentifiers.Summarizer.tosTitleLabel,
             descriptionText: String(format: .Summarizer.ToSInfoPanelLabel, AppName.shortName.rawValue),
@@ -115,29 +115,29 @@ final class SummarizeCoordinator: BaseCoordinator,
             compactTitleLabelA11yId: AccessibilityIdentifiers.Summarizer.compactTitleLabel,
             summaryFootnote: .Summarizer.FootnoteLabel,
             summarizeViewA11yId: AccessibilityIdentifiers.Summarizer.summaryTableView,
-            tabSnapshotViewModel: TabSnapshotViewConfiguration(
+            tabSnapshot: TabSnapshotViewConfiguration(
                 tabSnapshotA11yLabel: .Summarizer.TabSnapshotAccessibilityLabel,
                 tabSnapshotA11yId: AccessibilityIdentifiers.Summarizer.tabSnapshotView,
                 tabSnapshot: browserSnapshot,
                 tabSnapshotTopOffset: browserSnapshotTopOffset
             ),
-            loadingLabelViewModel: LoadingLabelViewConfiguration(
+            loadingLabel: LoadingLabelViewConfiguration(
                 loadingLabel: .Summarizer.LoadingLabel,
                 loadingA11yLabel: .Summarizer.LoadingAccessibilityLabel,
                 loadingA11yId: AccessibilityIdentifiers.Summarizer.loadingLabel
             ),
-            brandViewModel: BrandViewConfiguration(
+            brandView: BrandViewConfiguration(
                 brandLabel: brandLabel,
                 brandLabelA11yId: AccessibilityIdentifiers.Summarizer.brandLabel,
                 brandImage: brandImage,
                 brandImageA11yId: AccessibilityIdentifiers.Summarizer.brandImage
             ),
-            closeButtonModel: CloseButtonViewModel(
+            closeButton: CloseButtonViewModel(
                 a11yLabel: .Summarizer.CloseButtonAccessibilityLabel,
                 a11yIdentifier: AccessibilityIdentifiers.Summarizer.closeSummaryButton
             ),
             errorMessages: errorModel,
-            tosViewModel: tosViewModel
+            termOfService: tosViewModel
         )
 
         let controller = SummarizeController(
