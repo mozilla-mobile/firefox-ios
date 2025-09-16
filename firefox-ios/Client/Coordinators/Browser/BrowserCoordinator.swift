@@ -333,12 +333,7 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - ETPCoordinatorSSLStatusDelegate
 
     var showHasOnlySecureContentInTrackingPanel: Bool {
-        if browserViewController.isToolbarRefactorEnabled {
-            return browserViewController.tabManager.selectedTab?.currentWebView()?.hasOnlySecureContent ?? false
-        }
-
-        guard let bar = browserViewController.legacyUrlBar else { return false }
-        return bar.locationView.hasSecureContent
+        return browserViewController.tabManager.selectedTab?.currentWebView()?.hasOnlySecureContent ?? false
     }
 
     // MARK: - Route handling

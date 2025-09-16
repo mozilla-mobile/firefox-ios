@@ -225,10 +225,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func dismissUrlBar() {
-        if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode {
+        if addressToolbarContainer.inOverlayMode {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
-        } else if !isToolbarRefactorEnabled, let legacyUrlBar, legacyUrlBar.inOverlayMode {
-            legacyUrlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
     }
 

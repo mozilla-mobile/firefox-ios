@@ -444,10 +444,6 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             guard !url.isReaderModeURL else { return }
-            // FXIOS-10239: Reader mode icon shifts when toolbar refactor is enabled
-            if !isToolbarRefactorEnabled {
-                updateReaderModeState(for: tabManager.selectedTab, readerModeState: .unavailable)
-            }
             hideReaderModeBar(animated: false)
         }
     }
@@ -965,25 +961,21 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
             if let tab = tabManager[webView], tab === tabManager.selectedTab {
-                if isToolbarRefactorEnabled {
-                    let action = ToolbarAction(
-                        url: tab.url?.displayURL,
-                        isPrivate: tab.isPrivate,
-                        canGoBack: tab.canGoBack,
-                        canGoForward: tab.canGoForward,
-                        windowUUID: windowUUID,
-                        actionType: ToolbarActionType.urlDidChange
-                    )
-                    store.dispatchLegacy(action)
-                    let middlewareAction = ToolbarMiddlewareAction(
-                        scrollOffset: scrollController.contentOffset,
-                        windowUUID: windowUUID,
-                        actionType: ToolbarMiddlewareActionType.urlDidChange
-                    )
-                    store.dispatchLegacy(middlewareAction)
-                } else {
-                    legacyUrlBar?.currentURL = tab.url?.displayURL
-                }
+                let action = ToolbarAction(
+                    url: tab.url?.displayURL,
+                    isPrivate: tab.isPrivate,
+                    canGoBack: tab.canGoBack,
+                    canGoForward: tab.canGoForward,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.urlDidChange
+                )
+                store.dispatchLegacy(action)
+                let middlewareAction = ToolbarMiddlewareAction(
+                    scrollOffset: scrollController.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.urlDidChange
+                )
+                store.dispatchLegacy(middlewareAction)
             }
             return
         }

@@ -84,9 +84,6 @@ class BrowserViewController: UIViewController,
     weak var fullscreenDelegate: FullscreenDelegate?
 
     var urlBarView: (URLBarViewProtocol & TopBottomInterchangeable & Autocompletable) {
-        if !isToolbarRefactorEnabled, let legacyUrlBar {
-            return legacyUrlBar
-        }
         return addressToolbarContainer
     }
 
@@ -108,8 +105,6 @@ class BrowserViewController: UIViewController,
 
     var topTabsViewController: TopTabsViewController?
     var tabTrayViewController: TabTrayController?
-    var legacyUrlBar: URLBarView?
-    var legacyUrlBarHeightConstraint: Constraint?
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var searchController: SearchViewController?
@@ -217,10 +212,7 @@ class BrowserViewController: UIViewController,
     }
     private(set) lazy var toolbar = TabToolbar()
     var navigationToolbar: TabToolbarProtocol {
-        guard let legacyUrlBar else {
-            return toolbar
-        }
-        return toolbar.isHidden ? legacyUrlBar : toolbar
+        return toolbar
     }
 
     private lazy var effect: some UIVisualEffect = {
@@ -564,8 +556,7 @@ class BrowserViewController: UIViewController,
     @objc
     func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
-              let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
-              (!isToolbarRefactorEnabled && legacyUrlBar != nil) || isToolbarRefactorEnabled
+              let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
         else { return }
 
         let searchBarView: TopBottomInterchangeable = urlBarView
@@ -669,24 +660,19 @@ class BrowserViewController: UIViewController,
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = isActionNeeded
 
-        if isToolbarRefactorEnabled {
-            let shouldShowWarningBadge = store.state.screenState(
-                ToolbarState.self,
-                for: .toolbar,
-                window: windowUUID
-            )?.showMenuWarningBadge
+        let shouldShowWarningBadge = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: windowUUID
+        )?.showMenuWarningBadge
 
-            guard showWarningBadge != shouldShowWarningBadge else { return }
-            let action = ToolbarAction(
-                showMenuWarningBadge: showWarningBadge,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.showMenuWarningBadge
-            )
-            store.dispatchLegacy(action)
-        } else {
-            legacyUrlBar?.warningMenuBadge(setVisible: showWarningBadge)
-            toolbar.warningMenuBadge(setVisible: showWarningBadge)
-        }
+        guard showWarningBadge != shouldShowWarningBadge else { return }
+        let action = ToolbarAction(
+            showMenuWarningBadge: showWarningBadge,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.showMenuWarningBadge
+        )
+        store.dispatchLegacy(action)
     }
 
     private func updateAddressToolbarContainerPosition(
@@ -710,46 +696,25 @@ class BrowserViewController: UIViewController,
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = toolbarHelper.shouldShowTopTabs(for: newCollection)
 
-        switchToolbarIfNeeded()
-
-        if isToolbarRefactorEnabled {
-            if showNavToolbar {
-                navigationToolbarContainer.isHidden = false
-                navigationToolbarContainer.applyTheme(theme: currentTheme())
-                updateTabCountUsingTabManager(self.tabManager)
-                if isSwipingTabsEnabled,
-                   let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-                   !toolbarState.addressToolbar.isEditing {
-                    addressBarPanGestureHandler?.enablePanGestureRecognizer()
-                    addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-                }
-            } else {
-                navigationToolbarContainer.isHidden = true
-                if isSwipingTabsEnabled {
-                    addressBarPanGestureHandler?.disablePanGestureRecognizer()
-                    addressToolbarContainer.hideSkeletonBars()
-                }
+        if showNavToolbar {
+            navigationToolbarContainer.isHidden = false
+            navigationToolbarContainer.applyTheme(theme: currentTheme())
+            updateTabCountUsingTabManager(self.tabManager)
+            if isSwipingTabsEnabled,
+               let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+               !toolbarState.addressToolbar.isEditing {
+                addressBarPanGestureHandler?.enablePanGestureRecognizer()
+                addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
             }
-            updateToolbarStateTraitCollectionIfNecessary(newCollection)
         } else {
-            legacyUrlBar?.topTabsIsShowing = showTopTabs
-            legacyUrlBar?.setShowToolbar(!showNavToolbar)
-
-            if showNavToolbar {
-                toolbar.isHidden = false
-                toolbar.tabToolbarDelegate = self
-                toolbar.applyUIMode(
-                    isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                    theme: currentTheme()
-                )
-                toolbar.applyTheme(theme: currentTheme())
-                handleMiddleButtonState(currentMiddleButtonState ?? .search)
-                updateTabCountUsingTabManager(self.tabManager)
-            } else {
-                toolbar.tabToolbarDelegate = nil
-                toolbar.isHidden = true
+            navigationToolbarContainer.isHidden = true
+            if isSwipingTabsEnabled {
+                addressBarPanGestureHandler?.disablePanGestureRecognizer()
+                addressToolbarContainer.hideSkeletonBars()
             }
         }
+
+        updateToolbarStateTraitCollectionIfNecessary(newCollection)
         appMenuBadgeUpdate()
 
         if showTopTabs, topTabsViewController == nil {
@@ -769,14 +734,6 @@ class BrowserViewController: UIViewController,
         view.layoutSubviews()
 
         updateToolbarDisplay()
-
-        if let tab = tabManager.selectedTab,
-           let webView = tab.webView,
-           !isToolbarRefactorEnabled {
-            updateURLBarDisplayURL(tab)
-            navigationToolbar.updateBackStatus(webView.canGoBack)
-            navigationToolbar.updateForwardStatus(webView.canGoForward)
-        }
     }
 
     func dismissVisibleMenus() {
@@ -887,16 +844,6 @@ class BrowserViewController: UIViewController,
                    category: .lifecycle)
 
         NightModeHelper.cleanNightModeDefaults()
-
-        // Update lock icon without redrawing the whole locationView
-        if let tab = tabManager.selectedTab, !isToolbarRefactorEnabled {
-            // It appears this was added to fix an issue with the lock icon, so we're
-            // calling into this for some kind of beneficial side effect. We should
-            // probably explore a different solution; tab content blocking does not
-            // change every time the app is brought forward. [FXIOS-10091]
-            legacyUrlBar?.locationView.tabDidChangeContentBlocking(tab)
-        }
-
         dispatchStartAtHomeAction()
     }
 
@@ -1125,11 +1072,7 @@ class BrowserViewController: UIViewController,
         // to make them "persistent" e.g. by being stored in BVC
         pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { [weak self] () -> Bool in
             guard let self, let pasteboardContents = UIPasteboard.general.string else { return false }
-            if isToolbarRefactorEnabled {
-                openBrowser(searchTerm: pasteboardContents)
-            } else if let legacyUrlBar {
-                urlBar(legacyUrlBar, didSubmitText: pasteboardContents)
-            }
+            openBrowser(searchTerm: pasteboardContents)
             searchController?.searchTelemetry?.interactionType = .pasted
             return true
         })
@@ -1142,7 +1085,7 @@ class BrowserViewController: UIViewController,
         })
         copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { [weak self] () -> Bool in
             guard let self else { return false }
-            let fallbackURL = isToolbarRefactorEnabled ? tabManager.selectedTab?.currentURL() : legacyUrlBar?.currentURL
+            let fallbackURL = tabManager.selectedTab?.currentURL()
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? fallbackURL {
                 UIPasteboard.general.url = url
             }
@@ -1295,64 +1238,6 @@ class BrowserViewController: UIViewController,
         addressToolbarContainer.isHidden = true
     }
 
-    private func switchToolbarIfNeeded() {
-        var updateNeeded = false
-
-        // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
-        if isToolbarRefactorEnabled {
-            addressToolbarContainer.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        }
-
-        if isToolbarRefactorEnabled, addressToolbarContainer.superview == nil, let legacyUrlBar {
-            // Show toolbar refactor
-            updateNeeded = true
-            overKeyboardContainer.removeArrangedView(legacyUrlBar, animated: false)
-            header.removeArrangedView(legacyUrlBar, animated: false)
-            bottomContainer.removeArrangedView(toolbar, animated: false)
-
-            addAddressToolbar()
-        } else if !isToolbarRefactorEnabled && (legacyUrlBar == nil || legacyUrlBar?.superview == nil) {
-            // Show legacy toolbars
-            updateNeeded = true
-
-            overKeyboardContainer.removeArrangedView(addressToolbarContainer, animated: false)
-            header.removeArrangedView(addressToolbarContainer, animated: false)
-            bottomContainer.removeArrangedView(navigationToolbarContainer, animated: false)
-
-            if isSwipingTabsEnabled {
-                addressBarPanGestureHandler?.disablePanGestureRecognizer()
-            }
-            createLegacyUrlBar()
-
-            legacyUrlBar?.snp.makeConstraints { make in
-                legacyUrlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
-            }
-        }
-
-        if updateNeeded {
-            let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
-            bottomContainer.addArrangedViewToBottom(toolbarToShow, animated: false)
-            overlayManager.setURLBar(urlBarView: urlBarView)
-            updateToolbarStateForTraitCollection(traitCollection)
-            updateViewConstraints()
-        }
-    }
-
-    private func createLegacyUrlBar() {
-        guard !isToolbarRefactorEnabled else { return }
-
-        let urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
-        urlBar.translatesAutoresizingMaskIntoConstraints = false
-        urlBar.delegate = self
-        urlBar.tabToolbarDelegate = self
-        urlBar.applyTheme(theme: currentTheme())
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
-        urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
-
-        self.legacyUrlBar = urlBar
-    }
-
     private func addAddressToolbar() {
         guard isToolbarRefactorEnabled else { return }
 
@@ -1392,11 +1277,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(statusBarOverlay)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
-        if isToolbarRefactorEnabled {
-            addAddressToolbar()
-        } else {
-            createLegacyUrlBar()
-        }
+        addAddressToolbar()
 
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
@@ -1451,13 +1332,7 @@ class BrowserViewController: UIViewController,
             tabManager.restoreTabs()
         }
 
-        switchToolbarIfNeeded()
         updateTabCountUsingTabManager(tabManager, animated: false)
-
-        if !isToolbarRefactorEnabled {
-            legacyUrlBar?.searchEnginesDidUpdate()
-        }
-
         updateToolbarStateForTraitCollection(traitCollection)
     }
 
@@ -1508,7 +1383,6 @@ class BrowserViewController: UIViewController,
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         checkForJSAlerts()
-        switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
 
         // when toolbars are hidden/shown the mask on the content view that is used for
@@ -1538,11 +1412,6 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
-        guard isToolbarRefactorEnabled else {
-            adjustLegacyURLBarHeightBasedOnLocationViewHeight()
-            return
-        }
-
         // Adjustment for landscape on the urlbar
         // need to account for inset and remove it when keyboard is showing
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
@@ -1557,30 +1426,6 @@ class BrowserViewController: UIViewController,
         } else {
             overKeyboardContainer.removeBottomInsetSpacer()
         }
-    }
-
-    private func adjustLegacyURLBarHeightBasedOnLocationViewHeight() {
-        // Make sure that we have a height to actually base our calculations on
-        guard !isToolbarRefactorEnabled, let legacyUrlBar, legacyUrlBar.locationContainer.bounds.height != 0 else { return }
-        let locationViewHeight = legacyUrlBar.locationView.bounds.height
-        let heightWithPadding = locationViewHeight + UIConstants.ToolbarPadding
-
-        // Adjustment for landscape on the urlbar
-        // need to account for inset and remove it when keyboard is showing
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let isKeyboardShowing = keyboardState != nil
-
-        if !showNavToolbar && isBottomSearchBar &&
-        !isKeyboardShowing && UIDevice.current.orientation.isLandscape {
-            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
-
-            // make sure the bottom inset spacer has the right color/translucency
-            overKeyboardContainer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        } else {
-            overKeyboardContainer.removeBottomInsetSpacer()
-        }
-
-        legacyUrlBarHeightConstraint?.update(offset: heightWithPadding)
     }
 
     override func willTransition(
@@ -1663,12 +1508,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Constraints
     private func setupConstraints() {
-        if !isToolbarRefactorEnabled {
-            legacyUrlBar?.snp.makeConstraints { make in
-                legacyUrlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
-            }
-        }
-
         NSLayoutConstraint.activate([
             contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -1859,12 +1698,6 @@ class BrowserViewController: UIViewController,
     }
 
     func resetBrowserChrome() {
-        // animate and reset transform for tab chrome
-        if !isToolbarRefactorEnabled {
-            legacyUrlBar?.updateAlphaForSubviews(1)
-            toolbar.isHidden = false
-        }
-
         [header, overKeyboardContainer].forEach { view in
             view?.transform = .identity
         }
@@ -1925,11 +1758,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // Make sure reload button is hidden on homepage
-        if !isToolbarRefactorEnabled {
-            legacyUrlBar?.locationView.reloadButton.reloadButtonState = .disabled
-        }
-
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
             browserDelegate?.showHomepage(
                 overlayManager: overlayManager,
@@ -1959,11 +1787,6 @@ class BrowserViewController: UIViewController,
     }
 
     func showEmbeddedWebview() {
-        // Make sure reload button is working when showing webview
-        if !isToolbarRefactorEnabled {
-            legacyUrlBar?.locationView.reloadButton.reloadButtonState = .reload
-        }
-
         guard let selectedTab = tabManager.selectedTab,
               let webView = selectedTab.webView else {
             logger.log("Webview of selected tab was not available", level: .debug, category: .lifecycle)
@@ -2048,16 +1871,11 @@ class BrowserViewController: UIViewController,
     // Update border to hide when microsurvey is shown so that
     // it appears to belong the app and harder to spoof
     private func updateBarBordersForMicrosurvey() {
-        // TODO: FXIOS-9503 Update for Toolbar Redesign
-        guard !shouldUseiPadSetup(), !isToolbarRefactorEnabled else { return }
-        let hasMicrosurvery = microsurvey != nil
-
-        if let legacyUrlBar, isBottomSearchBar {
-            legacyUrlBar.isMicrosurveyShown = hasMicrosurvery
-            legacyUrlBar.updateTopBorderDisplay()
-        }
-        toolbar.isMicrosurveyShown = hasMicrosurvery
-        toolbar.setNeedsDisplay()
+//        guard !shouldUseiPadSetup(), !isToolbarRefactorEnabled else { return }
+//        let hasMicrosurvery = microsurvey != nil
+//
+//        toolbar.isMicrosurveyShown = hasMicrosurvery
+//        toolbar.setNeedsDisplay()
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
@@ -2103,9 +1921,6 @@ class BrowserViewController: UIViewController,
             showEmbeddedHomepage(inline: true, isPrivate: true)
         case .webview:
             showEmbeddedWebview()
-            if !isToolbarRefactorEnabled {
-                legacyUrlBar?.locationView.reloadButton.isHidden = false
-            }
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -2121,9 +1936,6 @@ class BrowserViewController: UIViewController,
 
         guard let url else {
             showEmbeddedWebview()
-            if !isToolbarRefactorEnabled {
-                legacyUrlBar?.locationView.reloadButton.reloadButtonState = .disabled
-            }
             return
         }
 
@@ -2139,9 +1951,6 @@ class BrowserViewController: UIViewController,
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
-            if !isToolbarRefactorEnabled {
-                legacyUrlBar?.locationView.reloadButton.isHidden = false
-            }
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -2245,9 +2054,6 @@ class BrowserViewController: UIViewController,
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
-        if !isToolbarRefactorEnabled {
-            legacyUrlBar?.currentURL = url
-        }
         overlayManager.finishEditing(shouldCancelLoading: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
@@ -2345,18 +2151,12 @@ class BrowserViewController: UIViewController,
     }
 
     override func accessibilityPerformMagicTap() -> Bool {
-        if isToolbarRefactorEnabled {
-            let action = GeneralBrowserAction(
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.showReaderMode
-            )
-            store.dispatchLegacy(action)
-            return true
-        } else if let legacyUrlBar, !legacyUrlBar.locationView.readerModeButton.isHidden {
-            legacyUrlBar.tabLocationViewDidTapReaderMode(legacyUrlBar.locationView)
-            return true
-        }
-        return false
+        let action = GeneralBrowserAction(
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserActionType.showReaderMode
+        )
+        store.dispatchLegacy(action)
+        return true
     }
 
     override func accessibilityPerformEscape() -> Bool {
@@ -2377,9 +2177,6 @@ class BrowserViewController: UIViewController,
 
         // No tab
         guard let tab = tabManager.selectedTab else {
-            if !isToolbarRefactorEnabled {
-                legacyUrlBar?.locationView.reloadButton.reloadButtonState = .disabled
-            }
             handleMiddleButtonState(state)
             currentMiddleButtonState = state
             return
@@ -2387,17 +2184,11 @@ class BrowserViewController: UIViewController,
 
         // Tab with starting page
         if tab.isURLStartingPage {
-            if !isToolbarRefactorEnabled {
-                legacyUrlBar?.locationView.reloadButton.reloadButtonState = .disabled
-            }
             handleMiddleButtonState(state)
             currentMiddleButtonState = state
             return
         }
 
-        if !isToolbarRefactorEnabled {
-            legacyUrlBar?.locationView.reloadButton.reloadButtonState = isLoading ? .stop : .reload
-        }
         handleMiddleButtonState(.home)
         currentMiddleButtonState = .home
     }
@@ -2473,18 +2264,10 @@ class BrowserViewController: UIViewController,
                 } else {
                     webView.estimatedProgress
                 }
-                if isToolbarRefactorEnabled {
-                    addressToolbarContainer.updateProgressBar(progress: progress)
-                } else {
-                    legacyUrlBar?.updateProgressBar(Float(progress))
-                }
+                addressToolbarContainer.updateProgressBar(progress: progress)
                 setupMiddleButtonStatus(isLoading: true)
             } else {
-                if isToolbarRefactorEnabled {
-                    addressToolbarContainer.hideProgressBar()
-                } else {
-                    legacyUrlBar?.hideProgressBar()
-                }
+                addressToolbarContainer.hideProgressBar()
                 setupMiddleButtonStatus(isLoading: false)
             }
         case .loading:
@@ -2589,10 +2372,6 @@ class BrowserViewController: UIViewController,
                   let webViewURL = webView.url,
                   selectedTabURL == webViewURL else { return }
 
-            if !isToolbarRefactorEnabled {
-                legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
-                legacyUrlBar?.locationView.showTrackingProtectionButton(for: webView.url)
-            }
             // TODO: FXIOS-12158 Add back after investigating why video player is broken
 //        case .fullscreenState:
 //            if #available(iOS 16.0, *) {
@@ -2625,79 +2404,68 @@ class BrowserViewController: UIViewController,
     }
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
-        if isToolbarRefactorEnabled {
-            if isSummarizerToolbarFeatureEnabled {
-                let action = ToolbarMiddlewareAction(
-                    readerModeState: readerModeState,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.loadSummaryState
-                )
-                store.dispatchLegacy(action)
-            } else {
-                let action = ToolbarAction(
-                    readerModeState: readerModeState,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.readerModeStateChanged
-                )
-                store.dispatchLegacy(action)
-            }
+        if isSummarizerToolbarFeatureEnabled {
+            let action = ToolbarMiddlewareAction(
+                readerModeState: readerModeState,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.loadSummaryState
+            )
+            store.dispatchLegacy(action)
         } else {
-            legacyUrlBar?.updateReaderModeState(readerModeState)
+            let action = ToolbarAction(
+                readerModeState: readerModeState,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+            store.dispatchLegacy(action)
         }
     }
 
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
-        guard !isToolbarRefactorEnabled else {
-            var safeListedURLImageName: String? {
-                return (tab.contentBlocker?.status == .safelisted) ?
-                StandardImageIdentifiers.Small.notificationDotFill : nil
-            }
-
-            var lockIconImageName: String?
-            var lockIconNeedsTheming = true
-
-            if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-                lockIconImageName = hasSecureContent ?
-                    StandardImageIdentifiers.Small.shieldCheckmarkFill :
-                    StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-                lockIconNeedsTheming = hasSecureContent
-                let isWebsiteMode = tab.url?.isReaderModeURL == false
-                lockIconImageName = isWebsiteMode ? lockIconImageName : nil
-            }
-
-            let action = ToolbarAction(
-                url: tab.url?.displayURL,
-                isPrivate: tab.isPrivate,
-                isShowingNavigationToolbar: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection),
-                canGoBack: tab.canGoBack,
-                canGoForward: tab.canGoForward,
-                lockIconImageName: lockIconImageName,
-                lockIconNeedsTheming: lockIconNeedsTheming,
-                safeListedURLImageName: safeListedURLImageName,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.urlDidChange)
-            store.dispatchLegacy(action)
-
-            // update toolbar borders
-            let middlewareAction = ToolbarMiddlewareAction(
-                scrollOffset: scrollController.contentOffset,
-                windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.urlDidChange)
-            store.dispatchLegacy(middlewareAction)
-
-            configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
-                                                 navigationToolbarView: navigationToolbarContainer)
-
-            // update the background view to ensure translucency is displayed correctly
-            applyTheme()
-            return
+        var safeListedURLImageName: String? {
+            return (tab.contentBlocker?.status == .safelisted) ?
+            StandardImageIdentifiers.Small.notificationDotFill : nil
         }
 
-        legacyUrlBar?.currentURL = tab.url?.displayURL
-        let isPage = tab.url?.displayURL?.isWebPage() ?? false
-        navigationToolbar.updatePageStatus(isPage)
+        var lockIconImageName: String?
+        var lockIconNeedsTheming = true
+
+        if let hasSecureContent = tab.webView?.hasOnlySecureContent {
+            lockIconImageName = hasSecureContent ?
+                StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+            lockIconNeedsTheming = hasSecureContent
+            let isWebsiteMode = tab.url?.isReaderModeURL == false
+            lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+        }
+
+        let action = ToolbarAction(
+            url: tab.url?.displayURL,
+            isPrivate: tab.isPrivate,
+            isShowingNavigationToolbar: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection),
+            canGoBack: tab.canGoBack,
+            canGoForward: tab.canGoForward,
+            lockIconImageName: lockIconImageName,
+            lockIconNeedsTheming: lockIconNeedsTheming,
+            safeListedURLImageName: safeListedURLImageName,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.urlDidChange)
+        store.dispatchLegacy(action)
+
+        // update toolbar borders
+        let middlewareAction = ToolbarMiddlewareAction(
+            scrollOffset: scrollController.contentOffset,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.urlDidChange)
+        store.dispatchLegacy(middlewareAction)
+
+        configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
+                                             navigationToolbarView: navigationToolbarContainer)
+
+        // update the background view to ensure translucency is displayed correctly
+        applyTheme()
     }
 
     func didSubmitSearchText(_ text: String) {
@@ -3277,11 +3045,7 @@ class BrowserViewController: UIViewController,
     func handle(query: String, isPrivate: Bool) {
         cancelEditMode()
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
-        if isToolbarRefactorEnabled {
-            openBrowser(searchTerm: query)
-        } else if let legacyUrlBar {
-            urlBar(legacyUrlBar, didSubmitText: query)
-        }
+        openBrowser(searchTerm: query)
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
@@ -3390,19 +3154,11 @@ class BrowserViewController: UIViewController,
             // This let's the user spam the Cmd+T button without lots of responder changes.
             guard tab == self.tabManager.selectedTab else { return }
 
-            if self.isToolbarRefactorEnabled {
-                let action = ToolbarAction(searchTerm: searchText,
-                                           shouldAnimate: true,
-                                           windowUUID: self.windowUUID,
-                                           actionType: ToolbarActionType.didStartEditingUrl)
-                store.dispatchLegacy(action)
-            } else if let legacyUrlBar = self.legacyUrlBar {
-                legacyUrlBar.tabLocationViewDidTapLocation(legacyUrlBar.locationView)
-
-                if let text = searchText {
-                    legacyUrlBar.setLocation(text, search: true)
-                }
-            }
+            let action = ToolbarAction(searchTerm: searchText,
+                                       shouldAnimate: true,
+                                       windowUUID: self.windowUUID,
+                                       actionType: ToolbarActionType.didStartEditingUrl)
+            store.dispatchLegacy(action)
         }
     }
 
@@ -3504,10 +3260,6 @@ class BrowserViewController: UIViewController,
 
         if webViewStatus == .finishedNavigation {
             let isSelectedTab = (tab == tabManager.selectedTab)
-            if isSelectedTab && !isToolbarRefactorEnabled {
-                // Refresh secure content state after completed navigation
-                legacyUrlBar?.locationView.hasSecureContent = webView.hasOnlySecureContent
-            }
 
             if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
@@ -3878,12 +3630,7 @@ class BrowserViewController: UIViewController,
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        if !isToolbarRefactorEnabled {
-            legacyUrlBar?.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
-        } else {
-            addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
-        }
-
+        addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         documentLoadingView?.applyTheme(theme: currentTheme)
         toolbar.applyTheme(theme: currentTheme)
 
@@ -4484,31 +4231,23 @@ extension BrowserViewController: SearchViewControllerDelegate {
     @objc
     func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
         // Update search icon when the search engine changes
-        if isToolbarRefactorEnabled {
-            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
-            store.dispatchLegacy(action)
-        } else {
-            legacyUrlBar?.searchEnginesDidUpdate()
-        }
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
+        store.dispatchLegacy(action)
         searchController?.reloadSearchEngines()
         searchController?.reloadData()
     }
 
     func setLocationView(text: String, search: Bool) {
-        if isToolbarRefactorEnabled {
-            let toolbarAction = ToolbarAction(
-                searchTerm: text,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didSetTextInLocationView
-            )
-            store.dispatchLegacy(toolbarAction)
+        let toolbarAction = ToolbarAction(
+            searchTerm: text,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSetTextInLocationView
+        )
+        store.dispatchLegacy(toolbarAction)
 
-            if search {
-                openSuggestions(searchTerm: text)
-                searchLoader?.setQueryWithoutAutocomplete(text)
-            }
-        } else {
-            legacyUrlBar?.setLocation(text, search: search)
+        if search {
+            openSuggestions(searchTerm: text)
+            searchLoader?.setQueryWithoutAutocomplete(text)
         }
     }
 
@@ -4600,11 +4339,7 @@ extension BrowserViewController: TabManagerDelegate {
 
             // TODO: [FXIOS-8907] Ideally we shouldn't create tabs as a side-effect of UI theme updates.
             var ui = [PrivateModeUI?]()
-            if isToolbarRefactorEnabled {
-                ui = [topTabsViewController]
-            } else {
-                ui = [toolbar, topTabsViewController, legacyUrlBar]
-            }
+            ui = [topTabsViewController]
             ui.forEach { $0?.applyUIMode(isPrivate: selectedTab.isPrivate, theme: currentTheme()) }
         } else {
             // Theme is applied to the tab and webView in the else case
@@ -4614,13 +4349,8 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateURLBarDisplayURL(selectedTab)
-        if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode, selectedTab.url?.displayURL != nil {
+        if addressToolbarContainer.inOverlayMode, selectedTab.url?.displayURL != nil {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
-        } else if !isToolbarRefactorEnabled,
-            let legacyUrlBar,
-            legacyUrlBar.inOverlayMode,
-            selectedTab.url?.displayURL != nil {
-            legacyUrlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
 
         if let privateModeButton = topTabsViewController?.privateModeButton,
@@ -4682,11 +4412,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
-            if isToolbarRefactorEnabled {
-                addressToolbarContainer.hideProgressBar()
-            } else {
-                legacyUrlBar?.updateProgressBar(Float(selectedTab.estimatedProgress))
-            }
+            addressToolbarContainer.hideProgressBar()
         }
 
         // When the newly selected tab is the homepage or another internal tab,
@@ -4772,11 +4498,7 @@ extension BrowserViewController: TabManagerDelegate {
                                               title: tab.lastTitle,
                                               lastExecutedTime: tab.lastExecutedTime)
         }
-        if isToolbarRefactorEnabled {
-            addressToolbarContainer.updateProgressBar(progress: 0)
-        } else {
-            legacyUrlBar?.updateProgressBar(Float(0))
-        }
+        addressToolbarContainer.updateProgressBar(progress: 0)
         updateTabCountUsingTabManager(tabManager)
     }
 
@@ -4824,17 +4546,7 @@ extension BrowserViewController: TabManagerDelegate {
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            if isToolbarRefactorEnabled {
-                updateToolbarTabCount(count)
-            } else if !isToolbarRefactorEnabled && isTabTrayUIExperimentsEnabled, let legacyUrlBar {
-                // In the case where the tab tray experiment is enabled but toolbar refactor is
-                // not we want to not animate tab counts so that the animation between tabTray and browserVC looks better
-                toolbar.updateTabCount(count, animated: false)
-                legacyUrlBar.updateTabCount(count, animated: !legacyUrlBar.inOverlayMode)
-            } else if !isToolbarRefactorEnabled, let legacyUrlBar {
-                toolbar.updateTabCount(count, animated: animated)
-                legacyUrlBar.updateTabCount(count, animated: !legacyUrlBar.inOverlayMode)
-            }
+            updateToolbarTabCount(count)
             topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
@@ -5025,9 +4737,6 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
         // Technically is not changing tabs but is loosing focus on urlbar
         overlayManager.switchTab(shouldCancelLoading: true)
-        if !isToolbarRefactorEnabled, let legacyUrlBar {
-            self.urlBarDidPressTabs(legacyUrlBar)
-        }
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
