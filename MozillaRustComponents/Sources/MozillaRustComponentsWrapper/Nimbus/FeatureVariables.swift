@@ -415,7 +415,8 @@ class JSONVariables: VariablesWithBundle {
 
 // Another implementation of `Variables` may just return nil for everything.
 public class NilVariables: Variables {
-    public static let instance = NilVariables()
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    public static nonisolated(unsafe) let instance = NilVariables()
 
     public private(set) var resourceBundles: [Bundle] = [Bundle.main]
 

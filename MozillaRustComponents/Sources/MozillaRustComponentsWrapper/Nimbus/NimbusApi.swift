@@ -271,7 +271,7 @@ public struct NimbusAppSettings {
 
 /// This error reporter is passed to `Nimbus` and any errors that are caught are reported via this type.
 ///
-public typealias NimbusErrorReporter = (Error) -> Void
+public typealias NimbusErrorReporter = @Sendable (Error) -> Void
 
 /// `ExperimentBranch` is a copy of the `Branch` without the `FeatureConfig`.
 public typealias Branch = ExperimentBranch

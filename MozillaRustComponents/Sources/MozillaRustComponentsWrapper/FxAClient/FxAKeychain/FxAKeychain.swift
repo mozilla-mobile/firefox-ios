@@ -19,7 +19,8 @@ open class FxAKeychain {
         return baseBundleIdentifier
     }
 
-    static var shared: FxAKeychain?
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    static nonisolated(unsafe) var shared: FxAKeychain?
 
     static func sharedAppContainerKeychainForFxA(keychainAccessGroup: String?) -> FxAKeychain {
         if let s = shared {

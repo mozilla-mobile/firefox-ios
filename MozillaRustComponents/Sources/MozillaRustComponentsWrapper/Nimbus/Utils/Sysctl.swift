@@ -144,7 +144,7 @@ struct Sysctl {
     }
 
     /// Always the same on Apple hardware
-    public static var manufacturer: String = "Apple"
+    public static let manufacturer: String = "Apple"
 
     /// e.g. "N71mAP"
     public static var machine: String {

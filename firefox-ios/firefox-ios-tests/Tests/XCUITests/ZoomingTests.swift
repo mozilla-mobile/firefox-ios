@@ -4,7 +4,7 @@
 
 import XCTest
 
-final class ZoomingTestsTAE: FeatureFlaggedTestBase {
+final class ZoomingTests: FeatureFlaggedTestBase {
     private var zoomBar: ZoomBarScreen!
 
     override func setUp() {
