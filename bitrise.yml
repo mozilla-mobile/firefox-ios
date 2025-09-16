@@ -257,8 +257,8 @@ workflows:
 
             echo "Running Danger"
             swift run danger-swift ci
-    # Workaround: Sanity check for iOS 26 because of UIToolbar bug
     - xcode-test-without-building@0.4.2:
+        title: Sanity check on iOS 26
         timeout: 1200
         inputs:
         - only_testing: |
@@ -266,7 +266,7 @@ workflows:
             XCUITests/OnboardingTests
         - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - test_plan: Smoketest
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - cache-push@2.7.1:
         is_always_run: true
     - slack@4.2.1:
