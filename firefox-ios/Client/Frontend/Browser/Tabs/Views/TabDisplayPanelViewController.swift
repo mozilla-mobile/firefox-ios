@@ -33,10 +33,6 @@ final class TabDisplayPanelViewController: UIViewController,
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 
-    private var isToolbarRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-    }
-
     private lazy var layout: TabTrayLayoutType = {
         return shouldUseiPadSetup() ? .regular : .compact
     }()

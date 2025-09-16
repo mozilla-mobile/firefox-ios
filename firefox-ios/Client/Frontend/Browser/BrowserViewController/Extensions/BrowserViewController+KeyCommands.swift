@@ -56,15 +56,10 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
-        guard let tab = tabManager.selectedTab else { return }
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.reloadWebsite))
-        } else {
-            if !contentContainer.hasAnyHomepage {
-                tab.reload()
-            }
-        }
+        guard tabManager.selectedTab != nil else { return }
+
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.reloadWebsite))
     }
 
     @objc
@@ -73,15 +68,10 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
-        guard let tab = tabManager.selectedTab else { return }
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
-        } else {
-            if !contentContainer.hasAnyHomepage {
-                tab.reload(bypassCache: true)
-            }
-        }
+        guard tabManager.selectedTab != nil else { return }
+
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
     }
 
     @objc
@@ -91,14 +81,9 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "go-back"])
         guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.navigateBack))
-        } else {
-            if !contentContainer.hasAnyHomepage {
-                tab.goBack()
-            }
-        }
+
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.navigateBack))
     }
 
     @objc
@@ -108,14 +93,9 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "go-forward"])
         guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.navigateForward))
-        } else {
-            if !contentContainer.hasAnyHomepage {
-                tab.goForward()
-            }
-        }
+
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.navigateForward))
     }
 
     @objc
@@ -157,14 +137,8 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
 
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.addNewTab))
-        } else {
-            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-            keyboardPressesHandler().reset()
-        }
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.addNewTab))
     }
 
     @objc

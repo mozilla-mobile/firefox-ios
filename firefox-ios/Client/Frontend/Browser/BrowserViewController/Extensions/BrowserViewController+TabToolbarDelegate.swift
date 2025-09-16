@@ -38,7 +38,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
     func startNavigationButtonDoubleTapTimer() {
-        guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
+        guard isToolbarNavigationHintEnabled else { return }
         if navigationHintDoubleTapTimer == nil {
             navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
                 self.navigationHintDoubleTapTimer = nil
@@ -51,7 +51,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureNavigationContextualHint(_ view: UIView) {
-        guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
         navigationContextHintVC.configure(
             anchor: view,
             withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
@@ -94,7 +93,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard let state = store.state.screenState(ToolbarState.self,
                                                   for: .toolbar,
                                                   window: windowUUID),
-              isToolbarRefactorEnabled,
               isToolbarUpdateHintEnabled
         else { return }
 
@@ -351,8 +349,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     private func getNewPrivateTabAction() -> PhotonRowActions {
-        let isRefactorEnabled = isToolbarRefactorEnabled && isOneTapNewTabEnabled
-        let iconString = isRefactorEnabled ? StandardImageIdentifiers.Large.privateMode : StandardImageIdentifiers.Large.plus
+        let iconString = isOneTapNewTabEnabled ? StandardImageIdentifiers.Large.privateMode :
+                                                StandardImageIdentifiers.Large.plus
         return SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
                                      iconString: iconString,
                                      iconType: .Image) { _ in
@@ -364,9 +362,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     private func getCloseTabAction() -> PhotonRowActions {
-        let isRefactorEnabled = isToolbarRefactorEnabled && isOneTapNewTabEnabled
-        let title = isRefactorEnabled ? String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton :
-                                        String.KeyboardShortcuts.CloseCurrentTab
+        let title = isOneTapNewTabEnabled ? String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton :
+                                            String.KeyboardShortcuts.CloseCurrentTab
         return SingleActionViewModel(title: title,
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      iconType: .Image) { _ in

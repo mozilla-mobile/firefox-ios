@@ -443,7 +443,6 @@ class LegacyHomepageViewController: UIViewController,
     }
 
     private func handleToolbarStateOnScroll() {
-        guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
         if let selectedTab = tabManager.selectedTab,
            selectedTab.isFxHomeTab,
@@ -458,16 +457,11 @@ class LegacyHomepageViewController: UIViewController,
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-
-        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        // or if the toolbar refactor feature is turned on
-        if WallpaperManager().currentWallpaper.hasImage || isToolbarRefactorEnabled {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
-            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
-                                                         statusBarFrame: statusBarFrame,
-                                                         theme: theme)
-        }
+        // Handle status bar overlay alpha
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                     statusBarFrame: statusBarFrame,
+                                                     theme: theme)
 
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
