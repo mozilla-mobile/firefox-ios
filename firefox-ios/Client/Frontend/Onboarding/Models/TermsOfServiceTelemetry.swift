@@ -40,7 +40,7 @@ struct TermsOfServiceTelemetry {
             touVersion: String(TermsOfUseTelemetry().termsOfUseVersion)
         )
         GleanMetrics.TermsOfUse.accepted.record(acceptedExtra)
-        GleanMetrics.TermsOfUse.versionAccepted.set(TermsOfUseTelemetry().termsOfUseVersion)
-        GleanMetrics.TermsOfUse.dateAccepted.set(acceptedDate)
+        GleanMetrics.UserTermsOfUse.versionAccepted.set(TermsOfUseTelemetry().termsOfUseVersion)
+        GleanMetrics.UserTermsOfUse.dateAccepted.set(acceptedDate)
     }
 }

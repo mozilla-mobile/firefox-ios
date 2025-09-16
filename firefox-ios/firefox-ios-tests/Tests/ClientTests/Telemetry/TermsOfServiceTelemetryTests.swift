@@ -69,9 +69,9 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         XCTAssertEqual(acceptedEventValue[0].extra?["tou_version"], expectedVersionString)
 
         // Test that ToU version and date metrics are also recorded for consistency
-        let versionValue = try XCTUnwrap(GleanMetrics.TermsOfUse.versionAccepted.testGetValue())
+        let versionValue = try XCTUnwrap(GleanMetrics.UserTermsOfUse.versionAccepted.testGetValue())
         XCTAssertEqual(versionValue, TermsOfUseTelemetry().termsOfUseVersion)
-        let dateValue = try XCTUnwrap(GleanMetrics.TermsOfUse.dateAccepted.testGetValue())
+        let dateValue = try XCTUnwrap(GleanMetrics.UserTermsOfUse.dateAccepted.testGetValue())
         XCTAssertTrue(Calendar.current.isDate(dateValue, inSameDayAs: acceptedDate))
     }
 }

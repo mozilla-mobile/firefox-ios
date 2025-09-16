@@ -25,7 +25,7 @@ struct TermsOfUseTelemetry {
             touVersion: String(termsOfUseVersion)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.shown, extras: shownExtra)
-        gleanWrapper.incrementCounter(for: GleanMetrics.TermsOfUse.shownCount)
+        gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.shownCount)
     }
 
     func termsOfUseAcceptButtonTapped(surface: Surface = .bottomSheet, acceptedDate: Date) {
@@ -34,8 +34,8 @@ struct TermsOfUseTelemetry {
             touVersion: String(termsOfUseVersion)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.accepted, extras: acceptedExtra)
-        gleanWrapper.recordQuantity(for: GleanMetrics.TermsOfUse.versionAccepted, value: termsOfUseVersion)
-        gleanWrapper.recordDatetime(for: GleanMetrics.TermsOfUse.dateAccepted, value: acceptedDate)
+        gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: termsOfUseVersion)
+        gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
     }
 
     func termsOfUseRemindMeLaterButtonTapped(surface: Surface = .bottomSheet) {
@@ -44,7 +44,7 @@ struct TermsOfUseTelemetry {
             touVersion: String(termsOfUseVersion)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.remindMeLaterButtonTapped, extras: remindMeLaterExtra)
-        gleanWrapper.incrementCounter(for: GleanMetrics.TermsOfUse.remindMeLaterCount)
+        gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.remindMeLaterCount)
     }
 
     func termsOfUseLearnMoreButtonTapped(surface: Surface = .bottomSheet) {
@@ -77,7 +77,7 @@ struct TermsOfUseTelemetry {
             touVersion: String(termsOfUseVersion)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.dismissed, extras: dismissExtra)
-        gleanWrapper.incrementCounter(for: GleanMetrics.TermsOfUse.dismissedCount)
+        gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.dismissedCount)
     }
 
     static func setUsageMetrics(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
@@ -86,11 +86,11 @@ struct TermsOfUseTelemetry {
         if hasAcceptedTermsOfUse {
             if let versionString = profile.prefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion),
                let version = Int64(versionString) {
-                gleanWrapper.recordQuantity(for: GleanMetrics.TermsOfUse.versionAccepted, value: version)
+                gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: version)
             }
             if let acceptedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate) {
                 let acceptedDate = Date.fromTimestamp(acceptedTimestamp)
-                gleanWrapper.recordDatetime(for: GleanMetrics.TermsOfUse.dateAccepted, value: acceptedDate)
+                gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
             }
         }
     }
