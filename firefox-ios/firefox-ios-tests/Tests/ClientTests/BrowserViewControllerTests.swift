@@ -122,22 +122,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     @MainActor
-    func testDidSelectedTabChange_appliesExpectedUIModeToAllUIElements_whenToolbarRefactorDisabled() {
-        let subject = createSubject()
-        let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
-        let testTab = Tab(profile: profile, isPrivate: true, windowUUID: .XCTestDefaultUUID)
-        let mockTabWebView = MockTabWebView(tab: testTab)
-        testTab.webView = mockTabWebView
-        setupNimbusToolbarRefactorTesting(isEnabled: false)
-
-        subject.topTabsViewController = topTabsViewController
-        subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
-
-        XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
-        XCTAssertFalse(subject.tabToolbar.privateModeBadge.badge.isHidden)
-    }
-
-    @MainActor
     func testDidSelectedTabChange_appliesExpectedUIModeToTopTabsViewController_whenToolbarRefactorEnabled() {
         let subject = createSubject()
         let topTabsViewController = TopTabsViewController(tabManager: tabManager, profile: profile)
