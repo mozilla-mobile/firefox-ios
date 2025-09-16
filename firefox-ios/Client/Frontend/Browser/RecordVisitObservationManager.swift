@@ -14,9 +14,9 @@ class RecordVisitObservationManager {
     nonisolated let logger: Logger
     var lastObservationRecorded: VisitObservation?
 
-    init (profile: Profile,
+    init (historyHandler: HistoryHandler,
           logger: Logger = DefaultLogger.shared) {
-        self.historyHandler = profile.places
+        self.historyHandler = historyHandler
         self.logger = logger
     }
 
@@ -35,6 +35,7 @@ class RecordVisitObservationManager {
                     )
                     return
                 }
+                print("--- YRD: Recorded visit: \(visitObservation.url)")
                 self?.lastObservationRecorded = visitObservation
             }
         }
