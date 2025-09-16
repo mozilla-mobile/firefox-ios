@@ -41,7 +41,7 @@ for lang in $LOCALES; do
         --derived_data_path l10n-screenshots-dd \
         --ios_version "26.0" \
         --erase_simulator --localize_simulator \
-        --devices "iPhone 16" --languages "$lang" \
+        --devices "iPhone 17" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
         --xcodebuild_formatter xcbeautify \
         $EXTRA_FAST_LANE_ARGS
