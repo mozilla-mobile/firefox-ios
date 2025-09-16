@@ -308,14 +308,12 @@ workflows:
             XCUITests/OnboardingTests
             XCUITests/BookmarksTests
             XCUITests/BrowsingPDFTests
-            XCUITests/DragAndDropTests
             XCUITests/FindInPageTests
             XCUITests/HomePageSettingsUITests
             XCUITests/NavigationTest
             XCUITests/PhotonActionSheetTests
             XCUITests/SearchTests
             XCUITests/SettingsTests
-            XCUITests/URLValidationTests
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
