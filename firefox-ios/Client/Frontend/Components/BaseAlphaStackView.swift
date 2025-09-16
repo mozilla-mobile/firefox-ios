@@ -119,7 +119,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        let color: UIColor =  theme.colors.layerSurfaceLow
+        let color: UIColor = theme.colors.layerSurfaceLow
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
 
         backgroundColor = isClearBackground ? .clear : color
