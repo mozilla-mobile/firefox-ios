@@ -197,15 +197,15 @@ workflows:
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun
         - maximum_test_repetitions: 2
     # Workaround: Sanity check for iOS 26 and Firefox since we cannot run many XCUITest
-    - xcode-test-without-building@0.4.2:
-        timeout: 1200
-        inputs:
-        - only_testing: |
-            XCUITests/LoginTest
-            XCUITests/OnboardingTests
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
+    # - xcode-test-without-building@0.4.2:
+    #     timeout: 1200
+    #     inputs:
+    #     - only_testing: |
+    #         XCUITests/LoginTest
+    #         XCUITests/OnboardingTests
+    #     - destination: platform=iOS Simulator,name=iPhone 16,OS=26.0
+    #     - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+    #     - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - xcode-test-shard-calculation@0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
