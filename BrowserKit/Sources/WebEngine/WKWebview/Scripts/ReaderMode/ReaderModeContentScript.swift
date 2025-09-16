@@ -9,12 +9,13 @@ public enum ReaderModeInfo: String {
     case namespace = "window.__firefox__.reader"
 }
 
+@MainActor
 public protocol ReaderModeStyleSetter {
     var style: ReaderModeStyle { get set }
 }
 
 // TODO: FXIOS-11373 - finish handling reader mode in WebEngine - this class is to be tested
-class ReaderModeContentScript: WKContentScript, ReaderModeStyleSetter {
+final class ReaderModeContentScript: WKContentScript, ReaderModeStyleSetter {
     weak var delegate: WKReaderModeDelegate?
 
     private var logger: Logger

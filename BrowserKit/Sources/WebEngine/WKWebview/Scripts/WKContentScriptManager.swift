@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 
 /// Manager used to add and remove scripts inside a WKEngineSession
+@MainActor
 protocol WKContentScriptManager: WKScriptMessageHandler {
     var scripts: [String: WKContentScript] { get }
 
@@ -24,7 +25,7 @@ protocol WKContentScriptManager: WKScriptMessageHandler {
     func uninstall(session: WKEngineSession)
 }
 
-class DefaultContentScriptManager: NSObject, WKContentScriptManager {
+final class DefaultContentScriptManager: NSObject, WKContentScriptManager {
     private(set) var scripts = [String: WKContentScript]()
 
     func addContentScript(_ script: WKContentScript,
