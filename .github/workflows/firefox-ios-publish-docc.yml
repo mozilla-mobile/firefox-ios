@@ -20,7 +20,7 @@ concurrency:
 jobs:
   deploy:
     env:
-      XCODE: '16.2'
+      XCODE: '16.4'
     runs-on: macos-15
     environment:
       name: github-pages
