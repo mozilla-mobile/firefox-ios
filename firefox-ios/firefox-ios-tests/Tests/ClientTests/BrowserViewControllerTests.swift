@@ -134,7 +134,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
 
         XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
-        XCTAssertFalse(subject.toolbar.privateModeBadge.badge.isHidden)
+        XCTAssertFalse(subject.tabToolbar.privateModeBadge.badge.isHidden)
     }
 
     @MainActor
@@ -151,7 +151,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: nil, isRestoring: false)
 
         XCTAssertEqual(topTabsViewController.privateModeButton.tintColor, DarkTheme().colors.iconOnColor)
-        XCTAssertTrue(subject.toolbar.privateModeBadge.badge.isHidden)
+        XCTAssertTrue(subject.tabToolbar.privateModeBadge.badge.isHidden)
     }
 
     func test_didSelectedTabChange_fromHomepageToHomepage_triggersAppropriateDispatchAction() throws {

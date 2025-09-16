@@ -206,7 +206,7 @@ class BrowserViewController: UIViewController,
     private lazy var navigationToolbarContainer: NavigationToolbarContainer = .build { view in
         view.windowUUID = self.windowUUID
     }
-    private(set) lazy var toolbar = TabToolbar()
+    private(set) lazy var tabToolbar = TabToolbar()
 
     private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
@@ -567,7 +567,7 @@ class BrowserViewController: UIViewController,
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         updateHeaderConstraints()
-        toolbar.setNeedsDisplay()
+        tabToolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
         updateToolbarDisplay()
@@ -1626,7 +1626,7 @@ class BrowserViewController: UIViewController,
     private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
-        } else if !toolbar.isHidden {
+        } else if !tabToolbar.isHidden {
             remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
             remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         } else {
@@ -1848,8 +1848,8 @@ class BrowserViewController: UIViewController,
 //        guard !shouldUseiPadSetup(), !isToolbarRefactorEnabled else { return }
 //        let hasMicrosurvery = microsurvey != nil
 //
-//        toolbar.isMicrosurveyShown = hasMicrosurvery
-//        toolbar.setNeedsDisplay()
+//        tabToolbar.isMicrosurveyShown = hasMicrosurvery
+//        tabToolbar.setNeedsDisplay()
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
@@ -3564,7 +3564,7 @@ class BrowserViewController: UIViewController,
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         documentLoadingView?.applyTheme(theme: currentTheme)
-        toolbar.applyTheme(theme: currentTheme)
+        tabToolbar.applyTheme(theme: currentTheme)
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
