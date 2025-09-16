@@ -149,7 +149,7 @@ final class SummarizeCoordinator: BaseCoordinator,
                 isTosAcceppted: prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false
             ),
             navigationHandler: self,
-            webView: webView,
+            webView: webView
         ) { [weak self] in
             self?.summarizerTelemetry.summarizationDisplayed()
         }
