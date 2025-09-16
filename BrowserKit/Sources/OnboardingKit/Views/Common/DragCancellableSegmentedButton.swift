@@ -11,10 +11,10 @@ struct DragCancellableSegmentedButton<Action: Equatable & Hashable & Sendable>: 
     let item: OnboardingMultipleChoiceButtonModel<Action>
     let isSelected: Bool
     let action: () -> Void
-    
+
     @State private var hasDragged = false
     @State private var startLocation: CGPoint = .zero
-    
+
     var body: some View {
         VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
             itemImage(item: item, isSelected: isSelected)
@@ -31,19 +31,19 @@ struct DragCancellableSegmentedButton<Action: Equatable & Hashable & Sendable>: 
             DragGesture(minimumDistance: 0)
                 .onChanged { value in
                     let translation = value.translation
-                    
+
                     // If this is the first change, record the start location
                     if startLocation == .zero {
                         startLocation = value.startLocation
                     }
-                    
+
                     // Check if we've moved far enough to consider it a drag
                     let distance = sqrt(pow(translation.width, 2) + pow(translation.height, 2))
                     if distance > UX.DragCancellableButton.dragThreshold && !hasDragged {
                         hasDragged = true
                     }
                 }
-                .onEnded { value in
+                .onEnded { _ in
                     // Reset drag state after a short delay
                     DispatchQueue.main.asyncAfter(deadline: .now() + UX.DragCancellableButton.resetDelay) {
                         hasDragged = false
@@ -52,7 +52,7 @@ struct DragCancellableSegmentedButton<Action: Equatable & Hashable & Sendable>: 
                 }
         )
     }
-    
+
     @ViewBuilder
     private func itemImage(item: OnboardingMultipleChoiceButtonModel<Action>, isSelected: Bool) -> some View {
         if let img = item.image(isSelected: isSelected) {

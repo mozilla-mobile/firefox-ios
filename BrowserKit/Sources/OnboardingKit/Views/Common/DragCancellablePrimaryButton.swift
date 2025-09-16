@@ -12,10 +12,10 @@ struct DragCancellablePrimaryButton: View {
     let action: () -> Void
     let theme: Theme
     let accessibilityIdentifier: String
-    
+
     @State private var hasDragged = false
     @State private var startLocation: CGPoint = .zero
-    
+
     var body: some View {
         Text(title)
             .font(UX.CardView.primaryActionFont)
@@ -38,19 +38,19 @@ struct DragCancellablePrimaryButton: View {
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
                         let translation = value.translation
-                        
+
                         // If this is the first change, record the start location
                         if startLocation == .zero {
                             startLocation = value.startLocation
                         }
-                        
+
                         // Check if we've moved far enough to consider it a drag
                         let distance = sqrt(pow(translation.width, 2) + pow(translation.height, 2))
                         if distance > UX.DragCancellableButton.dragThreshold && !hasDragged {
                             hasDragged = true
                         }
                     }
-                    .onEnded { value in
+                    .onEnded { _ in
                         // Reset drag state after a short delay
                         DispatchQueue.main.asyncAfter(deadline: .now() + UX.DragCancellableButton.resetDelay) {
                             hasDragged = false

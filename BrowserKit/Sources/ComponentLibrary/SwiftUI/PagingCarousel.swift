@@ -248,17 +248,17 @@ public struct PagingCarousel<Item, Content: View>: View {
         // Only show the currently selected item and adjacent items for better performance
         return index != selection
     }
-    
+
     /// Determines if interaction should be allowed for a card at the given index
     private func shouldAllowInteraction(for index: Int) -> Bool {
         // If interaction disabling is not enabled, allow all interactions
-        guard disableInteractionDuringTransition else { 
-            return true 
+        guard disableInteractionDuringTransition else {
+            return true
         }
-        
+
         let isSelected = index == selection
         let isStationary = !isDragging
-        
+
         // Only allow interaction on the currently selected card when not dragging
         return isSelected && isStationary
     }
