@@ -4,7 +4,7 @@
 
 import XCTest
 
-final class ZoomingTestsTAE: FeatureFlaggedTestBase {
+final class ZoomingTests: FeatureFlaggedTestBase {
     private var zoomBar: ZoomBarScreen!
 
     override func setUp() {
@@ -45,7 +45,7 @@ final class ZoomingTestsTAE: FeatureFlaggedTestBase {
         }
         zoomBar.assertZoomPercent("100%")
     }
-
+    
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
     func testZoomingActionsLandscape_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
