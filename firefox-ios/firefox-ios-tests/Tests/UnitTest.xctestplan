@@ -200,6 +200,7 @@
         "TabManagerTests\/testRestoreTabs_whenDeeplinkTabPresent_doesnAddDepplinkTabMultipleTimes()",
         "TabManagerTests\/testRestoreTabs_whenDeeplinkTabPresent_withSameURLAsRestoredTab()",
         "TabToolbarHelperTests\/testTelemetryForSiteMenu()",
+        "TelemetryWrapperTests\/test_loginWithEmail_GleanIsCalled()",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
         "VersionSettingTests\/testCopyAppVersion()",
