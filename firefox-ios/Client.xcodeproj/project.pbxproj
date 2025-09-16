@@ -35,6 +35,7 @@
 		0AC0F9482E3CA17900E826D8 /* MainMenuConfigurationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */; };
 		0AC659272BF35854005C614A /* FxAWebViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */; };
 		0AC659292BF493CE005C614A /* MockFxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */; };
+		0ACD7BD62E7961A800606222 /* MainMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACD7BD52E7961A200606222 /* MainMenuHelper.swift */; };
 		0AD3EEAC2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */; };
 		0AFE9BF12CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFE9BF02CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift */; };
 		0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F632C7784D600265214 /* MockDataCleaner.swift */; };
@@ -2572,6 +2573,7 @@
 		0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuConfigurationUtilityTests.swift; sourceTree = "<group>"; };
 		0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAWebViewModelTests.swift; sourceTree = "<group>"; };
 		0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFxAWebViewModel.swift; sourceTree = "<group>"; };
+		0ACD7BD52E7961A200606222 /* MainMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuHelper.swift; sourceTree = "<group>"; };
 		0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedCenteredTableViewCell.swift; sourceTree = "<group>"; };
 		0AE9462E8A8E05CE07D4973D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0AFE9BF02CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPreferencesViewController.swift; sourceTree = "<group>"; };
@@ -12634,6 +12636,7 @@
 		81A3F6EE2C2DAED500BDD86B /* MainMenu */ = {
 			isa = PBXGroup;
 			children = (
+				0ACD7BD52E7961A200606222 /* MainMenuHelper.swift */,
 				81F617C72C875583003799BF /* Views */,
 				81F617C52C875564003799BF /* Redux */,
 				81A3F6EF2C2DAEE200BDD86B /* MainMenuCoordinator.swift */,
@@ -18198,6 +18201,7 @@
 				C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */,
 				8AB53B3E2D41463900C97590 /* MessageCardAction.swift in Sources */,
 				8A0636F62DF0CDAD0076823A /* TabTraySelectorButtonModel.swift in Sources */,
+				0ACD7BD62E7961A800606222 /* MainMenuHelper.swift in Sources */,
 				E1AFBAF9292EA0330065E35E /* SendToDeviceHelper.swift in Sources */,
 				E17798982BD6B44B00F6F0EB /* AddressToolbarContainer.swift in Sources */,
 				21D151262AFC28960062D891 /* TabManagerMiddleware.swift in Sources */,

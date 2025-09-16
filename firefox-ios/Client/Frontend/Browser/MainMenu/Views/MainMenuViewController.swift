@@ -21,7 +21,6 @@ class MainMenuViewController: UIViewController,
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
-        static let backgroundAlpha: CGFloat = 0.80
         static let menuHeightTolerance: CGFloat = 30
         static let topMarginCFR: CGFloat = 100
     }
@@ -103,7 +102,8 @@ class MainMenuViewController: UIViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [UIContentSizeCategory.didChangeNotification]
+            observing: [UIContentSizeCategory.didChangeNotification,
+                        UIAccessibility.reduceTransparencyStatusDidChangeNotification]
         )
     }
 
@@ -199,7 +199,13 @@ class MainMenuViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustLayout()
+            ensureMainThread {
+                self.adjustLayout()
+            }
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            ensureMainThread {
+                self.applyTheme()
+            }
         default: break
         }
     }
@@ -422,7 +428,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(UX.backgroundAlpha)
+        view.backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(MainMenuHelper().backgroundAlpha())
         menuContent.applyTheme(theme: theme)
     }
 
