@@ -195,6 +195,24 @@ class MainMenuViewController: UIViewController,
         unsubscribeFromRedux()
     }
 
+    private func updateBlur() {
+        let shouldShowBlur = !MainMenuHelper().isReduceTransparencyEnabled
+
+        if shouldShowBlur {
+#if canImport(FoundationModels)
+            if #unavailable(iOS 26.0) {
+                view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+            }
+#else
+            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+#endif
+        } else {
+            view.removeVisualEffectView()
+        }
+
+        applyTheme()
+    }
+
     // MARK: Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
@@ -204,7 +222,7 @@ class MainMenuViewController: UIViewController,
             }
         case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
             ensureMainThread {
-                self.applyTheme()
+                self.updateBlur()
             }
         default: break
         }
