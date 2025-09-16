@@ -21,7 +21,8 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let buttonInsets = NSDirectionalEdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)
         static let stepperHeight: CGFloat = 36
         static let stepperTopBottomPadding: CGFloat = 12
-        static let stepperCornerRadius: CGFloat = if #available(iOS 26.0, *) { 18 } else { 6 }
+        static let stepperCornerRegularRadius: CGFloat = 6
+        static let stepperCornerGlassRadius: CGFloat = 18
         static let stepperMinTrailing: CGFloat = 10
         static let stepperSpacing: CGFloat = 8
         static let shadowRadius: CGFloat = 4
@@ -54,7 +55,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         view.alignment = .center
         view.distribution = .fillProportionally
         view.spacing = UX.stepperSpacing
-        view.layer.cornerRadius = UX.stepperCornerRadius
+        view.layer.cornerRadius = UX.stepperCornerRegularRadius
         view.layer.shadowRadius = UX.shadowRadius
         view.layer.shadowOffset = UX.stepperShadowOffset
         view.layer.shadowOpacity = UX.shadowOpacity
@@ -65,7 +66,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
             $0.effect = UIGlassEffect()
-            $0.layer.cornerRadius = UX.stepperCornerRadius
+            $0.layer.cornerRadius = UX.stepperCornerGlassRadius
         }
 #endif
     }
