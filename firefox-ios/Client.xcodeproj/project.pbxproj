@@ -10942,6 +10942,8 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		034784BA2E2690F600D04A84 /* TermsOfUse */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TermsOfUse; sourceTree = "<group>"; };
+		5FE7F1852E781EB300B0AFEC /* Selectors */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Selectors; sourceTree = "<group>"; };
+		5FE7F18C2E78224100B0AFEC /* PageScreens */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PageScreens; sourceTree = "<group>"; };
 		BCBE04E22E3A52D4004B6039 /* Summarize */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Summarize; sourceTree = "<group>"; };
 		ED85DD2C2DE669FF00487807 /* probes */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = probes; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -12108,6 +12110,8 @@
 		3BFE4B081D342FB900DDF53F /* XCUITests */ = {
 			isa = PBXGroup;
 			children = (
+				5FE7F18C2E78224100B0AFEC /* PageScreens */,
+				5FE7F1852E781EB300B0AFEC /* Selectors */,
 				5FEB88322D6F5E4A00ECE6B1 /* A11yHomePageTests.swift */,
 				5F7C8A032D09A62A00C9F89D /* A11yOnboardingTests.swift */,
 				5FACA10F2D099DCD00B289BC /* A11ySearchTest.swift */,
@@ -16399,6 +16403,10 @@
 			);
 			dependencies = (
 				3BFE4B0D1D342FB900DDF53F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5FE7F1852E781EB300B0AFEC /* Selectors */,
+				5FE7F18C2E78224100B0AFEC /* PageScreens */,
 			);
 			name = XCUITests;
 			packageProductDependencies = (
