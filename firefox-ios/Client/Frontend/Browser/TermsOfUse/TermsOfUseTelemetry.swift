@@ -20,64 +20,64 @@ struct TermsOfUseTelemetry {
     }
 
     func termsOfUseDisplayed(surface: Surface = .bottomSheet) {
-        let impressionExtra = GleanMetrics.Termsofuse.ImpressionExtra(
+        let shownExtra = GleanMetrics.TermsOfUse.ShownExtra(
             surface: surface.rawValue,
             touVersion: String(termsOfUseVersion)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Termsofuse.impression, extras: impressionExtra)
-        gleanWrapper.incrementCounter(for: GleanMetrics.Termsofuse.impressionCount)
+        gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.shown, extras: shownExtra)
+        gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.shownCount)
     }
 
     func termsOfUseAcceptButtonTapped(surface: Surface = .bottomSheet, acceptedDate: Date) {
-        let acceptedExtra = GleanMetrics.Termsofuse.AcceptedExtra(
+        let acceptedExtra = GleanMetrics.TermsOfUse.AcceptedExtra(
             surface: surface.rawValue,
             touVersion: String(termsOfUseVersion)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Termsofuse.accepted, extras: acceptedExtra)
-        gleanWrapper.recordQuantity(for: GleanMetrics.Termsofuse.version, value: termsOfUseVersion)
-        gleanWrapper.recordDatetime(for: GleanMetrics.Termsofuse.date, value: acceptedDate)
+        gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.accepted, extras: acceptedExtra)
+        gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: termsOfUseVersion)
+        gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
     }
 
     func termsOfUseRemindMeLaterButtonTapped(surface: Surface = .bottomSheet) {
-        let remindMeLaterExtra = GleanMetrics.Termsofuse.RemindMeLaterClickExtra(
+        let remindMeLaterExtra = GleanMetrics.TermsOfUse.RemindMeLaterButtonTappedExtra(
             surface: surface.rawValue,
             touVersion: String(termsOfUseVersion)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Termsofuse.remindMeLaterClick, extras: remindMeLaterExtra)
-        gleanWrapper.incrementCounter(for: GleanMetrics.Termsofuse.remindMeLaterCount)
+        gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.remindMeLaterButtonTapped, extras: remindMeLaterExtra)
+        gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.remindMeLaterCount)
     }
 
     func termsOfUseLearnMoreButtonTapped(surface: Surface = .bottomSheet) {
-        let learnMoreExtra = GleanMetrics.Termsofuse.LearnMoreClickExtra(
+        let learnMoreExtra = GleanMetrics.TermsOfUse.LearnMoreButtonTappedExtra(
             surface: surface.rawValue,
             touVersion: String(termsOfUseVersion)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Termsofuse.learnMoreClick, extras: learnMoreExtra)
+        gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.learnMoreButtonTapped, extras: learnMoreExtra)
     }
 
     func termsOfUsePrivacyNoticeLinkTapped(surface: Surface = .bottomSheet) {
-        let privacyNoticeExtra = GleanMetrics.Termsofuse.PrivacyNoticeClickExtra(
+        let privacyNoticeExtra = GleanMetrics.TermsOfUse.PrivacyNoticeTappedExtra(
             surface: surface.rawValue,
             touVersion: String(termsOfUseVersion)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Termsofuse.privacyNoticeClick, extras: privacyNoticeExtra)
+        gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.privacyNoticeTapped, extras: privacyNoticeExtra)
     }
 
     func termsOfUseTermsOfUseLinkTapped(surface: Surface = .bottomSheet) {
-        let termsOfUseExtra = GleanMetrics.Termsofuse.TermsOfUseClickExtra(
+        let termsOfUseExtra = GleanMetrics.TermsOfUse.TermsOfUseLinkTappedExtra(
             surface: surface.rawValue,
             touVersion: String(termsOfUseVersion)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Termsofuse.termsOfUseClick, extras: termsOfUseExtra)
+        gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.termsOfUseLinkTapped, extras: termsOfUseExtra)
     }
 
     func termsOfUseDismissed(surface: Surface = .bottomSheet) {
-        let dismissExtra = GleanMetrics.Termsofuse.DismissExtra(
+        let dismissExtra = GleanMetrics.TermsOfUse.DismissedExtra(
             surface: surface.rawValue,
             touVersion: String(termsOfUseVersion)
         )
-        gleanWrapper.recordEvent(for: GleanMetrics.Termsofuse.dismiss, extras: dismissExtra)
-        gleanWrapper.incrementCounter(for: GleanMetrics.Termsofuse.dismissCount)
+        gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.dismissed, extras: dismissExtra)
+        gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.dismissedCount)
     }
 
     static func setUsageMetrics(gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
@@ -86,11 +86,11 @@ struct TermsOfUseTelemetry {
         if hasAcceptedTermsOfUse {
             if let versionString = profile.prefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion),
                let version = Int64(versionString) {
-                gleanWrapper.recordQuantity(for: GleanMetrics.Termsofuse.version, value: version)
+                gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: version)
             }
             if let acceptedTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate) {
                 let acceptedDate = Date.fromTimestamp(acceptedTimestamp)
-                gleanWrapper.recordDatetime(for: GleanMetrics.Termsofuse.date, value: acceptedDate)
+                gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
             }
         }
     }
