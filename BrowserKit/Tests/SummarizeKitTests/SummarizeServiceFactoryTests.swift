@@ -9,15 +9,15 @@ final class MockSummarizerServiceLifecycle: SummarizerServiceLifecycle, @uncheck
     var summarizerServiceDidStartCalled = 0
     var summarizerServiceDidCompleteCalled = 0
     var summarizerServiceDidFailCalled = 0
-    
+
     func summarizerServiceDidStart(_ text: String) {
         summarizerServiceDidStartCalled += 1
     }
-    
+
     func summarizerServiceDidComplete(_ summary: String, modelName: SummarizeKit.SummarizerModel) {
         summarizerServiceDidCompleteCalled += 1
     }
-    
+
     func summarizerServiceDidFail(_ error: SummarizeKit.SummarizerError, modelName: SummarizeKit.SummarizerModel) {
         summarizerServiceDidFailCalled += 1
     }
@@ -25,39 +25,39 @@ final class MockSummarizerServiceLifecycle: SummarizerServiceLifecycle, @uncheck
 
 final class SummarizeServiceFactoryTests: XCTestCase {
     var serviceLifecycle: MockSummarizerServiceLifecycle!
-    
+
     override func setUp() {
         super.setUp()
         serviceLifecycle = MockSummarizerServiceLifecycle()
     }
-    
+
     override func tearDown() {
         serviceLifecycle = nil
         super.tearDown()
     }
-    
+
     func test_make_whenAppleIntelligenceAvailable() throws {
         let subject = createSubject()
-        
+
         let result = subject.make(isAppleSummarizerEnabled: true, isHostedSummarizerEnabled: false, config: nil)
         let service = try XCTUnwrap(result as? DefaultSummarizerService)
-        
+
         XCTAssertNotNil(service.summarizerLifecycle)
     }
-    
+
     func test_make_whenHostedSummarizerTrue_returnsNilForLLMConfigAvailable() throws {
         let subject = createSubject()
-        
+
         let result = subject.make(isAppleSummarizerEnabled: false, isHostedSummarizerEnabled: true, config: nil)
-        
+
         XCTAssertNil(result)
     }
-    
+
     func test_make_returnsNilWhenSummarizerAvailable() throws {
         let subject = createSubject()
-        
+
         let result = subject.make(isAppleSummarizerEnabled: false, isHostedSummarizerEnabled: false, config: nil)
-        
+
         XCTAssertNil(result)
     }
 
