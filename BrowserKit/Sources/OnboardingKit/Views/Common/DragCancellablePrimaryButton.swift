@@ -28,6 +28,7 @@ struct DragCancellablePrimaryButton: View {
             )
             .foregroundColor(Color(uiColor: theme.colors.textInverted))
             .accessibility(identifier: accessibilityIdentifier)
+            .accessibilityAddTraits(.isButton)
             .contentShape(Rectangle())
             .onTapGesture {
                 if !hasDragged {

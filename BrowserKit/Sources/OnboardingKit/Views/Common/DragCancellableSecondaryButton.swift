@@ -23,6 +23,7 @@ struct DragCancellableSecondaryButton: View {
             .padding(.top, UX.CardView.secondaryButtonTopPadding)
             .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
             .accessibility(identifier: accessibilityIdentifier)
+            .accessibilityAddTraits(.isButton)
             .contentShape(Rectangle())
             .onTapGesture {
                 if !hasDragged {

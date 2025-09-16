@@ -41,7 +41,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
-    
+
     @ViewBuilder
     private func segmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
         Group {
@@ -52,7 +52,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
             }
         }
     }
-    
+
     @ViewBuilder
     private func legacySegmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
         Button {
@@ -67,7 +67,11 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
 
                 itemContent(item: item, isSelected: isSelected)
             }
-            .frame(maxWidth: .infinity, minHeight: UX.SegmentedControl.buttonMinHeight, alignment: .top)                                                                                                    
+            .frame(
+                maxWidth: .infinity,
+                minHeight: UX.SegmentedControl.buttonMinHeight,
+                alignment: .top
+            )
         }
         .buttonStyle(PlainButtonStyle())
         .accessibilityElement()
@@ -77,7 +81,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
             item.action == selection ? .isSelected : []
         )
     }
-    
+
     @ViewBuilder
     private func dragCancellableSegmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
         DragCancellableSegmentedButton(

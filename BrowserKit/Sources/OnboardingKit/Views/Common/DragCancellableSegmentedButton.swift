@@ -21,6 +21,7 @@ struct DragCancellableSegmentedButton<Action: Equatable & Hashable & Sendable>: 
             itemContent(item: item, isSelected: isSelected)
         }
         .frame(maxWidth: .infinity, minHeight: UX.SegmentedControl.buttonMinHeight, alignment: .top)
+        .accessibilityAddTraits(.isButton)
         .contentShape(Rectangle())
         .onTapGesture {
             if !hasDragged {
