@@ -673,11 +673,7 @@ final class LocationView: UIView,
         self.theme = theme
         let colors = theme.colors
         // Get the appearance based on `isURLTextFieldCentered`
-        let appearance: LocationViewAppearanceConfiguration = if isURLTextFieldCentered {
-            .getAppearanceForVersion(theme: theme)
-        } else {
-            .getAppearanceForBaseline(theme: theme)
-        }
+        let appearance: LocationViewAppearanceConfiguration = .getAppearanceForVersion(theme: theme)
 
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary

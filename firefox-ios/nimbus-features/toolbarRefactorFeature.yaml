@@ -78,8 +78,6 @@ enums:
   ToolbarLayoutType:
     description: The type of toolbar layout.
     variants:
-      baseline:
-        description: The default layout of the toolbars.
       version1:
         description: Shows the add new tab, menu and tabs button in the navigation toolbar. The share button is displayed in the address toolbar.
       version2:

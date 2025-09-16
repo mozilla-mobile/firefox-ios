@@ -258,7 +258,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             .layout
 
         switch toolbarLayout {
-        case .version1, .version2, .baseline:
+        case .version1, .version2:
             let isToolbarBottomAction = buttonModel.action == .toolbarBottom
             let isToolbarTopAction = buttonModel.action == .toolbarTop
             if isToolbarBottomAction {

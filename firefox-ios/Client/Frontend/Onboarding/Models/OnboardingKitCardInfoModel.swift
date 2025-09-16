@@ -59,7 +59,7 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
             .value()
             .layout
 
-        let isVersionedLayout = [.version1, .version2, .baseline].contains(toolbarLayout)
+        let isVersionedLayout = [.version1, .version2].contains(toolbarLayout)
 
         if isVersionedLayout {
             return findHighestPriorityButton() ?? multipleChoiceButtons.first

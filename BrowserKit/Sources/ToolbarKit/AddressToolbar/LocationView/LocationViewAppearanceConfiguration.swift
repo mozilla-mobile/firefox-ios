@@ -27,15 +27,4 @@ struct LocationViewAppearanceConfiguration {
             ).cgColors
         )
     }
-
-    static func getAppearanceForBaseline(theme: Theme) -> Self {
-        let colors = theme.colors
-        return Self(
-            backgroundColor: colors.layerEmphasis,
-            placeholderColor: colors.textSecondary,
-            etpIconImageColor: colors.textPrimary,
-            etpIconTintColor: colors.textPrimary,
-            gradientColors: colors.layerGradientURL.cgColors.reversed()
-        )
-    }
 }
