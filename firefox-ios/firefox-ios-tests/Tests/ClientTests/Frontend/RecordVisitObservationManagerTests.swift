@@ -14,18 +14,17 @@ final class MockHistoryHandler: HistoryHandler {
     var appplyObservationCallCount = 0
     var nextResult: Result<Void, Error> = .success(())
 
-    var onApply: ((Success) -> Void)?
+    var onApply: (() -> Void)?
 
     // Success = Deferred<Maybe<Void>>
     func applyObservation(visitObservation: VisitObservation) -> Success {
-        applied.append(visitObservation)
-        let result = Success()
+        XCTFail("Should not be implemented, use completion instead of defer")
+        fatalError()
+    }
 
-        DispatchQueue.main.async {
-            result.fill(.success(()))
-            self.onApply?(result)
-        }
-        return result
+    func applyObservation(visitObservation: VisitObservation, completion: (Result<Void, any Error>) -> Void) {
+        completion(nextResult)
+        onApply?()
     }
 
     /*
@@ -69,12 +68,8 @@ final class RecordVisitObservationManagerTests: XCTestCase {
         let observation = createObservation()
 
         let exp = expectation(description: "applyObservation finished")
-        historyHandler.onApply = { deferred in
-            deferred.upon { _ in
-                DispatchQueue.main.async {
-                    exp.fulfill()
-                }
-            }
+        historyHandler.onApply = {
+           exp.fulfill()
         }
 
         subject.recordVisit(visitObservation: observation, isPrivateTab: false)

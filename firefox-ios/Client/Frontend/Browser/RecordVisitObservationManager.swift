@@ -25,18 +25,16 @@ class RecordVisitObservationManager {
 
         // Check this observation hasn't been recorded already
         if lastObservationRecorded?.url != visitObservation.url {
-            let result = historyHandler.applyObservation(visitObservation: visitObservation)
-            result.upon { [weak self] result in
-                guard result.isSuccess else {
-                    self?.logger.log(
-                        result.failureValue?.localizedDescription ?? "Unknown error adding history visit",
-                        level: .warning,
-                        category: .sync
-                    )
-                    return
+            historyHandler.applyObservation(visitObservation: visitObservation) { [weak self] result in
+                switch result {
+                case .success:
+                    print("--- YRD: Recorded visit: \(visitObservation.url)")
+                    self?.lastObservationRecorded = visitObservation
+                case .failure(let error):
+                    self?.logger.log(error.localizedDescription,
+                                     level: .warning,
+                                     category: .sync)
                 }
-                print("--- YRD: Recorded visit: \(visitObservation.url)")
-                self?.lastObservationRecorded = visitObservation
             }
         }
     }
