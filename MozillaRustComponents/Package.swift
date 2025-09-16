@@ -1,4 +1,4 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 6.0
 import PackageDescription
 
 let checksum = "02e3e42af60b8156e3c7178d431255ff82483f60490a35356a44274303a786c1"
