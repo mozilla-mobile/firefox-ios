@@ -21,7 +21,8 @@ extension MZKeychainWrapper {
         return baseBundleIdentifier
     }
 
-    static var shared: MZKeychainWrapper?
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    static nonisolated(unsafe) var shared: MZKeychainWrapper?
 
     static func sharedAppContainerKeychain(keychainAccessGroup: String?) -> MZKeychainWrapper {
         if let s = shared {

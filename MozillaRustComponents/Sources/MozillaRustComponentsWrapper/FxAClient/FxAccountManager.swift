@@ -19,10 +19,12 @@ public enum MigrationResult {}
 open class FxAccountManager {
     let accountStorage: KeyChainAccountStorage
     let config: FxAConfig
-    var deviceConfig: DeviceConfig
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    nonisolated(unsafe) var deviceConfig: DeviceConfig
     let applicationScopes: [String]
 
-    var acct: PersistedFirefoxAccount?
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    nonisolated(unsafe) var acct: PersistedFirefoxAccount?
     var account: PersistedFirefoxAccount? {
         get { return acct }
         set {
@@ -63,7 +65,7 @@ open class FxAccountManager {
     /// It is required to call this method before doing anything else with the manager.
     /// Note that as a result of this initialization, notifications such as `accountAuthenticated` might be
     /// fired.
-    public func initialize(completionHandler: @escaping (Result<Void, Error>) -> Void) {
+    public func initialize(completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void) {
         processEvent(event: .initialize) {
             DispatchQueue.main.async { completionHandler(Result.success(())) }
         }
@@ -113,7 +115,8 @@ open class FxAccountManager {
         completionHandler: @escaping (Result<URL, Error>) -> Void
     ) {
         FxALog.info("beginAuthentication")
-        var scopes = scopes
+        // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+        nonisolated(unsafe) var scopes = scopes
         if scopes.isEmpty {
             scopes = applicationScopes
         }
@@ -143,7 +146,8 @@ open class FxAccountManager {
         scopes: [String] = [],
         completionHandler: @escaping (Result<URL, Error>) -> Void
     ) {
-        var scopes = scopes
+        // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+        nonisolated(unsafe) var scopes = scopes
         if scopes.isEmpty {
             scopes = applicationScopes
         }
@@ -179,7 +183,7 @@ open class FxAccountManager {
     /// If it succeeds, a `.accountAuthenticated` notification will get fired.
     public func finishAuthentication(
         authData: FxaAuthData,
-        completionHandler: @escaping (Result<Void, Error>) -> Void
+        completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void
     ) {
         if latestOAuthStateParam == nil {
             DispatchQueue.main.async { completionHandler(.failure(FxaError.NoExistingAuthFlow(message: ""))) }
@@ -219,7 +223,7 @@ open class FxAccountManager {
     }
 
     /// The account password has been changed locally and a new session token has been sent to us through WebChannel.
-    public func handlePasswordChanged(newSessionToken: String, completionHandler: @escaping () -> Void) {
+    public func handlePasswordChanged(newSessionToken: String, completionHandler: @Sendable @escaping () -> Void) {
         processEvent(event: .changedPassword(newSessionToken: newSessionToken)) {
             DispatchQueue.main.async { completionHandler() }
         }
@@ -299,7 +303,7 @@ open class FxAccountManager {
 
     /// Log-out from the account.
     /// The `.accountLoggedOut` notification will also get fired.
-    public func logout(completionHandler: @escaping (Result<Void, Error>) -> Void) {
+    public func logout(completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void) {
         processEvent(event: .logout) {
             DispatchQueue.main.async { completionHandler(.success(())) }
         }

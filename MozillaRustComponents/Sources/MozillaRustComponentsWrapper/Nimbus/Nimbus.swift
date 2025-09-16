@@ -462,7 +462,8 @@ extension Nimbus: NimbusMessagingProtocol {
 }
 
 public class NimbusDisabled: NimbusApi {
-    public static let shared = NimbusDisabled()
+    // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+    public static nonisolated(unsafe) let shared = NimbusDisabled()
 
     public var experimentParticipation: Bool = false
     public var rolloutParticipation: Bool = false
