@@ -207,9 +207,6 @@ class BrowserViewController: UIViewController,
         view.windowUUID = self.windowUUID
     }
     private(set) lazy var toolbar = TabToolbar()
-    var navigationToolbar: TabToolbarProtocol {
-        return toolbar
-    }
 
     private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
