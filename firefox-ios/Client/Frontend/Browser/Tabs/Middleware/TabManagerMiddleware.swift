@@ -24,6 +24,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private let summarizerServiceFactory: SummarizerServiceFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
 
+    @MainActor
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
         && UIDevice.current.userInterfaceIdiom != .pad
@@ -104,6 +105,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func resolveScreenshotActions(action: ScreenshotAction, state: AppState) {
         // TODO: FXIOS-12101 this should be removed once we figure out screenshots
         guard windowManager.windows[action.windowUUID]?.tabManager != nil else {
@@ -167,6 +169,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func resolveTabTrayActions(action: TabTrayAction, state: AppState) {
         switch action.actionType {
         case TabTrayActionType.tabTrayDidLoad:
@@ -293,6 +296,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func tabTrayDidLoad(for windowUUID: WindowUUID, panelType: TabTrayPanelType?) {
         let tabManager = tabManager(for: windowUUID)
         let isPrivateModeActive = tabManager.selectedTab?.isPrivate ?? false
@@ -306,6 +310,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         store.dispatchLegacy(action)
     }
 
+    @MainActor
     private func normalTabsCountText(for windowUUID: WindowUUID) -> String {
         let tabManager = tabManager(for: windowUUID)
         return (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
@@ -337,6 +342,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     ///
     /// - Parameter panelType: The selected panelType
     /// - Returns: Initial state of TabTrayModel
+    @MainActor
     private func getTabTrayModel(for panelType: TabTrayPanelType, window: WindowUUID) -> TabTrayModel {
         let isPrivate = panelType == .privateTabs
         return TabTrayModel(isPrivateMode: isPrivate,
@@ -348,6 +354,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     /// Gets initial model for TabDisplay from `TabManager`, including list of tabs and inactive tabs.
     /// - Parameter isPrivateMode: if Private mode is enabled or not
     /// - Returns:  initial model for `TabDisplayPanel`
+    @MainActor
     private func getTabsDisplayModel(for isPrivateMode: Bool,
                                      uuid: WindowUUID) -> TabDisplayModel {
         let tabs = refreshTabs(for: isPrivateMode, uuid: uuid)
@@ -363,6 +370,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     /// Gets the list of tabs from `TabManager` and builds the array of TabModel to use in TabDisplayView
     /// - Parameter isPrivateMode: is on Private mode or not
     /// - Returns: Array of TabModel used to configure collection view
+    @MainActor
     private func refreshTabs(for isPrivateMode: Bool, uuid: WindowUUID) -> [TabModel] {
         var tabs = [TabModel]()
         let tabManager = tabManager(for: uuid)
@@ -389,6 +397,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     ///
     /// - Parameter isPrivateMode: is on Private mode or not
     /// - Returns: Array of InactiveTabsModel used to configure collection view
+    @MainActor
     private func refreshInactiveTabs(for isPrivateMode: Bool = false, uuid: WindowUUID) -> [InactiveTabsModel] {
         guard !isPrivateMode else { return [InactiveTabsModel]() }
 
@@ -441,6 +450,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     /// - Parameters:
     ///   - originIndex: from original position
     ///   - destinationIndex: to destination position
+    @MainActor
     private func moveTab(state: AppState,
                          moveTabData: MoveTabData,
                          uuid: WindowUUID) {
@@ -520,6 +530,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func setBookmarkQuickActions(with shareItem: ShareItem?, uuid: WindowUUID) {
         guard let shareItem else { return }
 
@@ -547,6 +558,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     }
 
     /// Trigger refreshTabs action after a change in `TabManager`
+    @MainActor
     private func triggerRefresh(uuid: WindowUUID, isPrivate: Bool) {
         let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
@@ -693,16 +705,15 @@ final class TabManagerMiddleware: FeatureFlaggable {
     }
 
     /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
+    @MainActor
     private func undoCloseAllInactiveTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        Task {
-            await tabManager.undoCloseInactiveTabs()
-            let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
-            let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
-                                                         windowUUID: uuid,
-                                                         actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
-            store.dispatchLegacy(refreshAction)
-        }
+        tabManager.undoCloseInactiveTabs()
+        let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
+        let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
+        store.dispatchLegacy(refreshAction)
     }
 
     @MainActor
@@ -785,6 +796,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
 
     // MARK: - Tab Peek
 
+    @MainActor
     private func didLoadTabPeek(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
@@ -819,6 +831,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         UIPasteboard.general.url = tabManager.getTabForUUID(uuid: tabID)?.canonicalURL
@@ -829,6 +842,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         closeTabFromTabPanel(with: tabID, uuid: uuid, isPrivate: isPrivate)
     }
 
+    @MainActor
     private func changePanel(_ panel: TabTrayPanelType, appState: AppState, uuid: WindowUUID) {
         tabsPanelTelemetry.tabModeSelected(mode: panel.modeForTelemetry)
         let isPrivate = panel == TabTrayPanelType.privateTabs
@@ -842,6 +856,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     }
 
     // MARK: - Main menu actions
+    @MainActor
     private func resolveMainMenuActions(with action: MainMenuAction, appState: AppState) {
         switch action.actionType {
         case MainMenuActionType.tapToggleUserAgent:
@@ -873,6 +888,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func changeUserAgent(forWindow windowUUID: WindowUUID) {
         guard let selectedTab = tabManager(for: windowUUID).selectedTab else { return }
 
@@ -893,6 +909,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let isPinned: Bool
     }
 
+    @MainActor
     private func provideTabInfo(forWindow windowUUID: WindowUUID, accountData: AccountData) {
         guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
             logger.log(
@@ -1051,6 +1068,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         )
     }
 
+    @MainActor
     private func handleDidInstantiateViewAction(action: MainMenuAction) {
         let accountData = getAccountData()
         provideTabInfo(forWindow: action.windowUUID, accountData: accountData)
@@ -1127,6 +1145,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func provideTabInfoForSiteProtectionsHeader(forWindow windowUUID: WindowUUID) {
         guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
             logger.log(
@@ -1150,6 +1169,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         )
     }
 
+    @MainActor
     private func getSiteProtectionState(for selectedTab: Tab) -> SiteProtectionsState {
         let isContentBlockingConfigEnabled = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
         guard let url = selectedTab.url,
@@ -1184,6 +1204,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     }
 
     // MARK: - Tab Manager Helper functions
+    @MainActor
     private func createShareItem(with tabID: TabUUID, and uuid: WindowUUID) -> ShareItem? {
         let tabManager = tabManager(for: uuid)
         guard let tab = tabManager.getTabForUUID(uuid: tabID),
@@ -1197,6 +1218,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         return ShareItem(url: url, title: title)
     }
 
+    @MainActor
     private func addToBookmarks(_ shareItem: ShareItem?) {
         guard let shareItem else { return }
 
@@ -1213,6 +1235,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
                                                                              toApplication: .shared)
     }
 
+    @MainActor
     private func addToShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         guard let tabID = tabID,
@@ -1225,6 +1248,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         profile.pinnedSites.addPinnedTopSite(site)
     }
 
+    @MainActor
     private func removeFromShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         guard let tabID = tabID,
@@ -1237,27 +1261,22 @@ final class TabManagerMiddleware: FeatureFlaggable {
         profile.pinnedSites.removeFromPinnedTopSites(site)
     }
 
+    @MainActor
     private func preserveTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         tabManager.preserveTabs()
     }
 
     /// Sends out updated recent tabs which is currently used for the homepage jumpBackIn section
+    @MainActor
     private func dispatchRecentlyAccessedTabs(action: Action) {
-        // TODO: FXIOS-10919 - Consider testing better with Tasks here
-        // and modifying how we fetch recentlyAccessedNormalTabs since
-        // it doesn't retrieve the proper tabs without this task block
-        // See more details on issue here [FXIOS-5149] [FXIOS-11644]
-        Task { @MainActor in
-            // [FXIOS-5149] Recent tabs need to be accessed from .main thread
-            let recentTabs = self.tabManager(for: action.windowUUID).recentlyAccessedNormalTabs
-            store.dispatchLegacy(
-                TabManagerAction(
-                    recentTabs: recentTabs,
-                    windowUUID: action.windowUUID,
-                    actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
-                )
+        let recentTabs = self.tabManager(for: action.windowUUID).recentlyAccessedNormalTabs
+        store.dispatchLegacy(
+            TabManagerAction(
+                recentTabs: recentTabs,
+                windowUUID: action.windowUUID,
+                actionType: TabManagerMiddlewareActionType.fetchedRecentTabs
             )
-        }
+        )
     }
 }

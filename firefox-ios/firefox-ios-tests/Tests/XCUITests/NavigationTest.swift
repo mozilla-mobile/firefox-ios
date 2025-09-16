@@ -145,7 +145,7 @@ class NavigationTest: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
 
-        app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].waitAndTap()
         waitForElementsToExist(
             [
                 app.navigationBars["Sync and Save Data"],
@@ -164,7 +164,7 @@ class NavigationTest: FeatureFlaggedTestBase {
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleExperimentSyncMode)
 
-        app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].waitAndTap()
         waitForElementsToExist(
             [
                 app.navigationBars["Sync and Save Data"],

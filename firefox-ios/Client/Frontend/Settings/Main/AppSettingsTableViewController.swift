@@ -46,9 +46,11 @@ protocol SettingsFlowDelegate: AnyObject,
 // MARK: - App Settings Screen Protocol
 
 protocol AppSettingsScreen: UIViewController {
+    @MainActor
     var settingsDelegate: SettingsDelegate? { get set }
+    @MainActor
     var parentCoordinator: SettingsFlowDelegate? { get set }
-
+    @MainActor
     func handle(route: Route.SettingsSection)
 }
 
@@ -473,6 +475,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ToggleInactiveTabs(settings: self, settingsDelegate: self),
             ResetContextualHints(settings: self),
             ResetWallpaperOnboardingPage(settings: self, settingsDelegate: self),
+            ResetTermsOfServiceAcceptancePage(settings: self, settingsDelegate: self),
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             TermsOfUseTimeout(settings: self, settingsDelegate: self),

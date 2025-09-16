@@ -373,7 +373,7 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         let action = MainMenuAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: MainMenuActionType.didInstantiateView
+            actionType: MainMenuActionType.viewDidLoad
         )
 
         let dispatchExpectation = XCTestExpectation(description: "Update banner visibility middleware action dispatched")

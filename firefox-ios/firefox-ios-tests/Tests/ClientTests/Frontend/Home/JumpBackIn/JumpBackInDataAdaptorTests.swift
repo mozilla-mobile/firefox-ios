@@ -8,6 +8,7 @@ import XCTest
 import WebKit
 import Common
 
+@MainActor
 final class JumpBackInDataAdaptorTests: XCTestCase {
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
@@ -38,7 +39,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testGetRecentTabs() async {
-        mockTabManager = MockTabManager(recentlyAccessedNormalTabs: createTabs())
+        mockTabManager.recentlyAccessedNormalTabs = createTabs()
         mockProfile.hasSyncableAccountMock = false
         let subject = createSubject()
         await loadNewData(for: subject)
@@ -48,7 +49,7 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     func testGetRecentTabsAndSyncedData() async {
-        mockTabManager = MockTabManager(recentlyAccessedNormalTabs: createTabs())
+        mockTabManager.recentlyAccessedNormalTabs = createTabs()
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient(type: "desktop"),
                                                        tabs: remoteTabs(idRange: 1...3))]
 

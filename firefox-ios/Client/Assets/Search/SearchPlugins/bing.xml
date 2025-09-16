@@ -8,6 +8,7 @@
 <Url type="application/x-suggestions+json" template="https://www.bing.com/osjson.aspx">
   <Param name="query" value="{searchTerms}"/>
 </Url>
+<Url type="application/x-trending+json" template="https://www.bing.com/osjson.aspx" />
 <!-- this is effectively x-moz-phonesearch, but search service expects a text/html entry -->
 <Url type="text/html" method="GET" template="https://www.bing.com/search">
   <Param name="q" value="{searchTerms}"/>

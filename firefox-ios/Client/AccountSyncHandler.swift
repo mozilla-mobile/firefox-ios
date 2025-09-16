@@ -82,9 +82,14 @@ class AccountSyncHandler: TabEventHandler {
     /// To prevent multiple tab actions to have a separate syncs, we sync after 5s of no tab activity
     private func performClientsAndTabsSync() {
         guard profile.hasSyncableAccount() else { return }
-        debouncer.call { [weak self] in self?.storeTabs() }
+        debouncer.call { [weak self] in
+            ensureMainThread {
+                self?.storeTabs()
+            }
+        }
     }
 
+    @MainActor
     private func storeTabs() {
         let tabManagers = windowManager.allWindowTabManagers()
         let windowCount = tabManagers.count

@@ -556,20 +556,20 @@
     },
     {
       "schemaVersion": "1.12.0",
-      "slug": "shake-to-summarize-apple-intelligence-rollout",
-      "id": "shake-to-summarize-apple-intelligence-rollout",
+      "slug": "summarizer-apple-intelligence-rollout-beta-test",
+      "id": "summarizer-apple-intelligence-rollout-beta-test",
       "arguments": {},
       "application": "org.mozilla.ios.Firefox",
       "appName": "firefox_ios",
       "appId": "org.mozilla.ios.Firefox",
       "channel": "release",
-      "userFacingName": "Summarizer - Apple Intelligence Rollout",
+      "userFacingName": "Summarizer - Apple Intelligence Full Release Rollout",
       "userFacingDescription": "Summarizer",
       "isEnrollmentPaused": false,
       "isRollout": true,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
-        "namespace": "ios-apple-summarizer-feature-release-ios_apple_intelligence_available_user-rollout-1",
+        "namespace": "ios-apple-summarizer-feature-release-no_targeting-rollout-1",
         "start": 0,
         "count": 10000,
         "total": 10000
@@ -601,8 +601,8 @@
           ]
         }
       ],
-      "targeting": "(is_apple_intelligence_available) && (app_version|versionCompare('143.!') >= 0) && (language in ['en'])",
-      "startDate": "2025-08-29",
+      "targeting": "(app_version|versionCompare('143.!') >= 0) && (language in ['en'])",
+      "startDate": "2025-09-11",
       "enrollmentEndDate": null,
       "endDate": null,
       "proposedDuration": 28,
@@ -611,7 +611,72 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2025-08-29T19:27:24.903506Z",
+      "publishedDate": "2025-09-11T16:58:59.108457Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": "",
+      "firefoxLabsDescription": "",
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": "",
+      "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "summarizer-mistral-model-rollout-first-run-new-users-us",
+      "id": "summarizer-mistral-model-rollout-first-run-new-users-us",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "Summarizer - Mistral Model Rollout First Run New Users US",
+      "userFacingDescription": "Summarizer",
+      "isEnrollmentPaused": false,
+      "isRollout": true,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-hosted-summarizer-feature-release-mobile_new_users-rollout-1",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "hosted-summarizer-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "hosted-summarizer-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "toolbarEntrypoint": true,
+                "shakeGesture": true
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((days_since_install < 7) && (app_version|versionCompare('143.1.0') >= 0) && (language in ['en']) && (region in ['US']) && (('summarizer-mistral-model-full-rollout' in enrollments) == false) && ((enrollments_map['summarizer-mistral-model-rollout'] == 'treatment-a') == false)))",
+      "startDate": "2025-09-15",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 14,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2025-09-15T15:04:46.880374Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": "",
       "firefoxLabsDescription": "",

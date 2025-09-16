@@ -6207,7 +6207,6 @@ lib.mn.us
 cc.mo.us
 lib.mo.us
 cc.ms.us
-lib.ms.us
 cc.mt.us
 lib.mt.us
 cc.nc.us
@@ -12420,6 +12419,7 @@ brave.io
 
 // Brendly : https://brendly.rs
 // Submitted by Dusan Radovanovic <administracija@brendly.rs>
+shop.brendly.ba
 shop.brendly.hr
 shop.brendly.rs
 
@@ -12828,10 +12828,6 @@ dreamhosters.com
 // Dreamyoungs, Inc. : https://durumis.com
 // Submitted by Infra Team <infra@durumis.com>
 durumis.com
-
-// Drobo : http://www.drobo.com/
-// Submitted by Ricardo Padilha <rpadilha@drobo.com>
-mydrobo.com
 
 // DuckDNS : http://www.duckdns.org/
 // Submitted by Richard Harper <richard@duckdns.org>
@@ -13751,6 +13747,10 @@ grayjayleagues.com
 günstigbestellen.de
 günstigliefern.de
 
+// Hackclub Nest : https://hackclub.app
+// Submitted by Cyteon <admins@hackclub.app>
+hackclub.app
+
 // Häkkinen.fi : https://www.häkkinen.fi/
 // Submitted by Eero Häkkinen <Eero+psl@Häkkinen.fi>
 häkkinen.fi
@@ -14246,10 +14246,6 @@ loginline.site
 // Lõhmus Family, The : https://lohmus.me/
 // Submitted by Heiki Lõhmus <hostmaster@lohmus.me>
 lohmus.me
-
-// Lokalized : https://lokalized.nl
-// Submitted by Noah Taheij <noah@lokalized.nl>
-servers.run
 
 // Lovable : https://lovable.dev
 // Submitted by Fabian Hedin <security@lovable.dev>

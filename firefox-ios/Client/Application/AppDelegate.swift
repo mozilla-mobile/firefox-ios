@@ -147,6 +147,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             suggestBackgroundUtility = BackgroundFirefoxSuggestIngestUtility(firefoxSuggest: firefoxSuggest)
         }
 
+        metricKitWrapper.beginObservingMXPayloads()
+
         let topSitesProvider = TopSitesProviderImplementation(
             placesFetcher: profile.places,
             pinnedSiteFetcher: profile.pinnedSites,

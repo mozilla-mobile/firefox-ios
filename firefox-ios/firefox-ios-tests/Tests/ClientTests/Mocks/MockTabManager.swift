@@ -19,7 +19,7 @@ class MockTabManager: TabManager {
     var backupCloseTab: BackupCloseTab?
     var backupCloseTabs = [Tab]()
 
-    var recentlyAccessedNormalTabs: [Tab]
+    var recentlyAccessedNormalTabs = [Tab]()
 
     var tabs = [Tab]()
 
@@ -43,12 +43,10 @@ class MockTabManager: TabManager {
     var commitChangesCalled = 0
     var selectTabExpectation: XCTestExpectation?
 
-    init(
-        windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID,
-        recentlyAccessedNormalTabs: [Tab] = [Tab]()
+    nonisolated init(
+        windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID
     ) {
         self.windowUUID = windowUUID
-        self.recentlyAccessedNormalTabs = recentlyAccessedNormalTabs
     }
 
     subscript(index: Int) -> Tab? {
@@ -86,8 +84,6 @@ class MockTabManager: TabManager {
     }
 
     func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {}
-
-    func removeTabWithCompletion(_ tabUUID: TabUUID, completion: (() -> Void)?) {}
 
     func removeTabs(_ tabs: [Tab]) {}
 
@@ -150,7 +146,8 @@ class MockTabManager: TabManager {
                 isPrivate: Bool
     ) -> Tab {
         addTabWasCalled = true
-        return Tab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID)
+        let isHomePage = request?.url?.absoluteString == "internal://local/about/home"
+        return MockTab(profile: MockProfile(), isPrivate: isPrivate, windowUUID: windowUUID, isHomePage: isHomePage)
     }
 
     func backgroundRemoveAllTabs(isPrivate: Bool,
@@ -169,7 +166,7 @@ class MockTabManager: TabManager {
 
     func removeAllInactiveTabs() {}
 
-    func undoCloseInactiveTabs() async {}
+    func undoCloseInactiveTabs() {}
 
     func notifyCurrentTabDidFinishLoading() {
         notifyCurrentTabDidFinishLoadingCalled += 1

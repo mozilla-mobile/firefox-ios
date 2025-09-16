@@ -4,7 +4,7 @@
 
 import Foundation
 
-public protocol DispatchQueueInterface {
+public protocol DispatchQueueInterface: Sendable {
     func async(group: DispatchGroup?,
                qos: DispatchQoS,
                flags: DispatchWorkItemFlags,
