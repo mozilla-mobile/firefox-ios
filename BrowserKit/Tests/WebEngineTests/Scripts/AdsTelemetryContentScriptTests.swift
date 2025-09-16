@@ -18,6 +18,7 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testDidReceiveMessageGivenEmptyMessageThenNoDelegateCalled() {
         let subject = createSubject()
 
@@ -27,6 +28,7 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
         XCTAssertNil(contentScriptDelegate.lastContentScriptEvent)
     }
 
+    @MainActor
     func testDidReceiveMessageWithNoAdURLMatchThenNoDelegateCalled() {
         let subject = createSubject()
 
@@ -40,6 +42,7 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
         XCTAssertNil(contentScriptDelegate.lastContentScriptEvent)
     }
 
+    @MainActor
     func testDidReceiveMessageWithBasicURLMatchButNoAdURLsThenNoDelegateCalled() {
         let subject = createSubject()
 
@@ -53,6 +56,7 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
         XCTAssertNil(contentScriptDelegate.lastContentScriptEvent)
     }
 
+    @MainActor
     func testDidReceiveMessageWithBasicURLMatchAndMatchingAdURLsThenTrackOnPageCalled() throws {
         let subject = createSubject()
 
@@ -68,6 +72,7 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
                                                      urls: ["https://www.mocksearch.com/pagead/aclk"]))
     }
 
+    @MainActor
     func testDidReceiveMessageWithBasicURLMatchAndMatchingAdURLsThenTrackOnPageCalledAndURLsSent() throws {
         let subject = createSubject()
 
@@ -89,6 +94,7 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
         XCTAssertEqual(provider, "mocksearch")
     }
 
+    @MainActor
     private func createSubject() -> AdsTelemetryContentScript {
         let subject = AdsTelemetryContentScript(
             delegate: contentScriptDelegate,
