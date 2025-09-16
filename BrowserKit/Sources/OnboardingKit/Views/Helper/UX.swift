@@ -89,7 +89,7 @@ enum UX {
             static let image = "firefoxLoader"
         }
     }
-    
+
     enum DragCancellableButton {
         static let verticalPadding: CGFloat = 12
         static let horizontalPadding: CGFloat = 12
