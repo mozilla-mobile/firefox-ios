@@ -24,7 +24,12 @@ final class UnitTestAppDelegate: UIResponder, UIApplicationDelegate {
         for sceneSession in application.openSessions {
             application.perform(Selector(("_removeSessionFromSessionSet:")), with: sceneSession)
         }
-        UserDefaults.standard.setValue(true, forKey: "_FennecLaunchedUnitTestDelegate")
+
+        let tmpDirectory = FileManager.default.temporaryDirectory
+        let fileURL = tmpDirectory.appendingPathComponent("_FennecLaunchedUnitTest")
+        let content = "_FennecLaunchedUnitTest".data(using: .utf8) ?? Data()
+        try? content.write(to: fileURL, options: .atomic)
+
         return true
     }
 
