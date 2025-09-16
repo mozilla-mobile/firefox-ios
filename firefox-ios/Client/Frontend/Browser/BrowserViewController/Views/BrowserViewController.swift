@@ -83,10 +83,6 @@ class BrowserViewController: UIViewController,
     weak var navigationHandler: BrowserNavigationHandler?
     weak var fullscreenDelegate: FullscreenDelegate?
 
-    var urlBarView: (URLBarViewProtocol & TopBottomInterchangeable & Autocompletable) {
-        return addressToolbarContainer
-    }
-
     nonisolated let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
     private var observedWebViews = WeakList<WKWebView>()
@@ -555,7 +551,7 @@ class BrowserViewController: UIViewController,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
         else { return }
 
-        let searchBarView: TopBottomInterchangeable = urlBarView
+        let searchBarView: TopBottomInterchangeable = addressToolbarContainer
         let newPositionIsBottom = newSearchBarPosition == .bottom
         let newParent = newPositionIsBottom ? overKeyboardContainer : header
 
@@ -1002,7 +998,7 @@ class BrowserViewController: UIViewController,
         setupNotifications()
         setupNavigationAppearance()
 
-        overlayManager.setURLBar(urlBarView: urlBarView)
+        overlayManager.setURLBar(urlBarView: addressToolbarContainer)
 
         if toolbarHelper.shouldShowTopTabs(for: traitCollection) {
             setupTopTabsViewController()
@@ -1963,7 +1959,7 @@ class BrowserViewController: UIViewController,
 
         let searchLoader = SearchLoader(
             profile: profile,
-            autocompleteView: urlBarView
+            autocompleteView: addressToolbarContainer
         )
         searchLoader.addListener(searchViewModel)
         self.searchLoader = searchLoader
@@ -3613,9 +3609,9 @@ class BrowserViewController: UIViewController,
             afterTab: self.tabManager.selectedTab,
             isPrivate: isPrivate
         )
-        // If we are showing toptabs a user can just use the top tab bar
-        // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard !topTabsVisible, !urlBarView.inOverlayMode else { return }
+        // If we are showing top tabs a user can just use the top tab bar
+        // If in overlay mode switching doesn't correctly dismiss the home panels
+        guard !topTabsVisible, !addressToolbarContainer.inOverlayMode else { return }
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
@@ -3731,7 +3727,11 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
-        locationActionsForURLBar().map { $0.accessibilityCustomAction }
+        if UIPasteboard.general.hasStrings {
+            return [pasteGoAction, pasteAction, copyAddressAction].compactMap { $0?.accessibilityCustomAction }
+        } else {
+            return [copyAddressAction].compactMap { $0?.accessibilityCustomAction }
+        }
     }
 
     func addressToolbarDidEnterOverlayMode(_ view: UIView) {

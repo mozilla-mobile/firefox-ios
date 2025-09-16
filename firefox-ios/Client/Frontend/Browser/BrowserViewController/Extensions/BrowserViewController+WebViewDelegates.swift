@@ -909,7 +909,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // Open our helper and cancel this response from the webview.
         if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
                                                                     okAction: downloadAction) {
-            presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
+            presentSheetWith(viewModel: downloadViewModel, on: self, from: addressToolbarContainer)
         }
     }
 

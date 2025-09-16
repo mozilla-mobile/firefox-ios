@@ -7,6 +7,21 @@ import Redux
 import ToolbarKit
 import UIKit
 
+protocol URLBarViewProtocol {
+    var inOverlayMode: Bool { get }
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool)
+}
+
+/// Describes the reason for leaving overlay mode.
+enum URLBarLeaveOverlayModeReason {
+    /// The user committed their edits.
+    case finished
+
+    /// The user aborted their edits.
+    case cancelled
+}
+
 protocol AddressToolbarContainerDelegate: AnyObject {
     @MainActor
     func searchSuggestions(searchTerm: String)
