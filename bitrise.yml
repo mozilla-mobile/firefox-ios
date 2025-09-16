@@ -28,6 +28,11 @@ pipelines:
             depends_on:
             - firefox_configure_build
             parallel: 5
+        run_firefox_ui_tests_ios26:
+            run_if:
+              expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
+            depends_on:
+            - firefox_configure_build
         focus_ui_test:
             run_if:
               expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
@@ -257,15 +262,6 @@ workflows:
 
             echo "Running Danger"
             swift run danger-swift ci
-    - xcode-test-without-building@0.4.2:
-        title: Sanity check on iOS 26
-        timeout: 1200
-        inputs:
-        - only_testing: |
-            XCUITests/OnboardingTests
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - cache-push@2.7.1:
         is_always_run: true
     - slack@4.2.1:
@@ -297,6 +293,32 @@ workflows:
         - channel: "#firefox-ios"
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
+
+  run_firefox_ui_tests_ios26:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    steps:
+    - pull-intermediate-files@1: {}
+    - xcode-test-without-building@0.4.2:
+        title: Sanity check on iOS 26
+        timeout: 1200
+        inputs:
+        - only_testing: |
+            XCUITests/OnboardingTests
+            XCUITests/BookmarksTests
+            XCUITests/BrowsingPDFTests
+            XCUITests/DragAndDropTests
+            XCUITests/FindInPageTests
+            XCUITests/HomePageSettingsUITests
+            XCUITests/NavigationTest
+            XCUITests/PhotonActionSheetTests
+            XCUITests/SearchTests
+            XCUITests/SettingsTests
+            XCUITests/URLValidationTests
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
 
   run_firefox_ui_tests:
     before_run:
