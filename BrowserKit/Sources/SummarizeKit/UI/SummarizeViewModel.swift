@@ -49,7 +49,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
         init(
             isTosConsentAccepted: Bool,
             wasTosScreenShown: Bool = false,
-            canSummarize: Bool = false,
+            canSummarize: Bool = false
         ) {
             self.isTosConsentAccepted = isTosConsentAccepted
             self.canSummarize = canSummarize
