@@ -45,7 +45,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
         }
         zoomBar.assertZoomPercent("100%")
     }
-    
+
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
     func testZoomingActionsLandscape_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
