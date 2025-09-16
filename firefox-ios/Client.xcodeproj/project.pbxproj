@@ -13505,7 +13505,7 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		8AD40FB727BAD1D600672675 /* Toolbar+URLBar */ = {
+		8AD40FB727BAD1D600672675 /* TabToolbar */ = {
 			isa = PBXGroup;
 			children = (
 				D314E7F51A37B98700426A76 /* TabToolbar.swift */,
@@ -13513,7 +13513,7 @@
 				8AD40FD027BADCBA00672675 /* TabToolbarButton.swift */,
 				2137786429832C8900D01309 /* OverlayModeManager.swift */,
 			);
-			path = "Toolbar+URLBar";
+			path = TabToolbar;
 			sourceTree = "<group>";
 		};
 		8AD40FB827BAD1DD00672675 /* TabContentsScripts */ = {
@@ -16029,7 +16029,7 @@
 				8AD40FB827BAD1DD00672675 /* TabContentsScripts */,
 				EB9A179720E69A7E00B12184 /* Theme */,
 				AB2AC6642BD15E2C00022AAB /* TrackingProtection */,
-				8AD40FB727BAD1D600672675 /* Toolbar+URLBar */,
+				8AD40FB727BAD1D600672675 /* TabToolbar */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
 				C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */,
 				D0FCF7EE1FE44E15004A7995 /* UserContent */,
