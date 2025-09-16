@@ -60,7 +60,7 @@ public protocol BookmarksHandler {
 public protocol HistoryHandler {
 //    Deferred<Maybe<Void>>
     func applyObservation(visitObservation: VisitObservation) -> Success
-    func applyObservation(visitObservation: VisitObservation, completion: (Result<Void, any Error>) -> Void)
+    func applyObservation(visitObservation: VisitObservation, completion: @escaping (Result<Void, any Error>) -> Void)
 }
 
 // TODO: FXIOS-13208 Make RustPlaces actually Sendable
@@ -654,7 +654,10 @@ extension RustPlaces {
         }
     }
 
-    public func applyObservation(visitObservation: VisitObservation, completion: (Result<Void, any Error>) -> Void) {
+    public func applyObservation(
+        visitObservation: VisitObservation,
+        completion: @escaping (Result<Void, any Error>) -> Void
+    ) {
         withWriter { connection in
             return try connection.applyObservation(visitObservation: visitObservation)
         } completion: { result in

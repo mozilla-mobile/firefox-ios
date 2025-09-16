@@ -24,17 +24,16 @@ class RecordVisitObservationManager {
         guard shouldRecordObservation(visitObservation: visitObservation, isPrivateTab: isPrivateTab) else { return }
 
         // Check this observation hasn't been recorded already
-        if lastObservationRecorded?.url != visitObservation.url {
-            historyHandler.applyObservation(visitObservation: visitObservation) { [weak self] result in
-                switch result {
-                case .success:
-                    print("--- YRD: Recorded visit: \(visitObservation.url)")
-                    self?.lastObservationRecorded = visitObservation
-                case .failure(let error):
-                    self?.logger.log(error.localizedDescription,
-                                     level: .warning,
-                                     category: .sync)
-                }
+        guard lastObservationRecorded?.url != visitObservation.url else { return }
+
+        historyHandler.applyObservation(visitObservation: visitObservation) { [weak self] result in
+            switch result {
+            case .success:
+                self?.lastObservationRecorded = visitObservation
+            case .failure(let error):
+                self?.logger.log(error.localizedDescription,
+                                 level: .warning,
+                                 category: .sync)
             }
         }
     }

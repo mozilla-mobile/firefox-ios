@@ -13,35 +13,19 @@ final class MockHistoryHandler: HistoryHandler {
     var applied: [VisitObservation] = []
     var appplyObservationCallCount = 0
     var nextResult: Result<Void, Error> = .success(())
-
     var onApply: (() -> Void)?
 
-    // Success = Deferred<Maybe<Void>>
     func applyObservation(visitObservation: VisitObservation) -> Success {
         XCTFail("Should not be implemented, use completion instead of defer")
         fatalError()
     }
 
     func applyObservation(visitObservation: VisitObservation, completion: (Result<Void, any Error>) -> Void) {
+        appplyObservationCallCount += 1
+        applied.append(visitObservation)
         completion(nextResult)
         onApply?()
     }
-
-    /*
-     func getBookmarksTree(rootGUID: Shared.GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
-         let deferred = Deferred<Maybe<BookmarkNodeData?>>()
-         deferred.fill(Maybe(success: bookmarkFolderData))
-         return deferred
-     }
-
-     func getBookmarksTree(
-         rootGUID: GUID,
-         recursive: Bool,
-         completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
-     ) {
-         completion(.success(bookmarkFolderData))
-     }
-     */
 }
 
 final class RecordVisitObservationManagerTests: XCTestCase {
@@ -77,7 +61,6 @@ final class RecordVisitObservationManagerTests: XCTestCase {
 
         XCTAssertEqual(historyHandler.applied.count, 1)
         XCTAssertEqual(historyHandler.applied.first?.url, observation.url)
-        print("--- YRD checking observation")
         XCTAssertEqual(subject.lastObservationRecorded?.url, observation.url)
     }
 
@@ -86,10 +69,15 @@ final class RecordVisitObservationManagerTests: XCTestCase {
         let observation1 = createObservation(url: "https://example.com/a", title: "A")
         let observation2 = createObservation(url: "https://example.com/a", title: "A again")
 
+        let exp = expectation(description: "applyObservation finished")
+        historyHandler.onApply = {
+           exp.fulfill()
+        }
+
         subject.recordVisit(visitObservation: observation1, isPrivateTab: false)
+        wait(for: [exp], timeout: 2.0)
         subject.recordVisit(visitObservation: observation2, isPrivateTab: false)
 
-        print("--- YRD checking observation")
         XCTAssertEqual(historyHandler.applied.count, 1)
         XCTAssertEqual(subject.lastObservationRecorded?.url, observation1.url)
     }
@@ -114,7 +102,7 @@ final class RecordVisitObservationManagerTests: XCTestCase {
         XCTAssertNil(subject.lastObservationRecorded)
     }
 
-    func test_recordVisit_aboutURL_doesNotRecord() {
+    func testRecordVisitAboutURLDoesNotRecord() {
         // about: scheme should be ignored by isValidURLToRecord path
         let subject = createSubject()
         let observation = createObservation(url: "about:preferences", title: "About Prefs")
