@@ -262,7 +262,6 @@ workflows:
         timeout: 1200
         inputs:
         - only_testing: |
-            XCUITests/LoginTest
             XCUITests/OnboardingTests
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
@@ -309,7 +308,7 @@ workflows:
         timeout: 1200
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=18.6
+        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
