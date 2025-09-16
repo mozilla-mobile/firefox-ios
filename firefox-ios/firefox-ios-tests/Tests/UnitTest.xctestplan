@@ -205,7 +205,8 @@
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
         "VersionSettingTests\/testCopyAppVersion()",
-        "WallpaperSettingsViewModelTests\/testDownloadAndSetWallpaper_downloaded_wallpaperIsSet()"
+        "WallpaperSettingsViewModelTests\/testDownloadAndSetWallpaper_downloaded_wallpaperIsSet()",
+        "WallpaperSettingsViewModelTests\/testNumberOfItemsInSection()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
