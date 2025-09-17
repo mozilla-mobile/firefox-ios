@@ -4,43 +4,43 @@ project_type: ios
 pipelines:
   pipeline_build_and_test:
     workflows:
-        determine_apps_affected: {}
-        firefox_configure_build:
-            run_if:
-              expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
-            depends_on:
-            - determine_apps_affected
-        focus_configure_build:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - determine_apps_affected
+      determine_apps_affected: {}
+      firefox_configure_build:
+        run_if:
+          expression: '{{ enveq "BUILD_FIREFOX_IOS" "true" }}'
+        depends_on:
+        - determine_apps_affected
+      focus_configure_build:
+        run_if:
+          expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+        depends_on:
+        - determine_apps_affected
         # We don't build klar for new PR now, bu we can still 
         # start klar_configure_build manually.
-        klar_configure_build:
-            run_if:
-              expression: false
-            depends_on:
-            - determine_apps_affected
-        run_firefox_ui_tests:
-            run_if:
-              expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
-            depends_on:
-            - firefox_configure_build
-            parallel: 5
-        focus_ui_test:
-            run_if:
-              expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
-            depends_on:
-            - focus_configure_build
-            parallel: 1
+      klar_configure_build:
+        run_if:
+          expression: false
+        depends_on:
+        - determine_apps_affected
+      run_firefox_ui_tests:
+        run_if:
+          expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
+        depends_on:
+        - firefox_configure_build
+        parallel: 5
+      focus_ui_test:
+        run_if:
+          expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+        depends_on:
+        - focus_configure_build
+        parallel: 1
   pipeline_build_and_test_focus:
     workflows:
       focus_configure_build: {}
       focus_ui_test:
-          depends_on:
-          - focus_configure_build
-          parallel: 1
+        depends_on:
+        - focus_configure_build
+        parallel: 1
 
 workflows:
   firefox_accessibility_test:
@@ -761,7 +761,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-26.0.x
         machine_type_id: g2.mac.large
   L10nBuild:
     steps:
