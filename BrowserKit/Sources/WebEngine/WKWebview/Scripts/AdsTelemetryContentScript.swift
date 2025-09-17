@@ -58,7 +58,7 @@ protocol AdsTelemetryScriptDelegate: AnyObject {
 }
 
 /// Script utility to handle tracking of ads on pages, based on provided search engine regexes. (See `searchProviderModels`)
-class AdsTelemetryContentScript: WKContentScript {
+final class AdsTelemetryContentScript: WKContentScript {
     private var logger: Logger
     private weak var delegate: ContentScriptDelegate?
     private let searchProviderModels: [EngineSearchProviderModel]

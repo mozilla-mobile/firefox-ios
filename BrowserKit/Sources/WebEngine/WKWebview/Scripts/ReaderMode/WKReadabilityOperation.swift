@@ -17,10 +17,10 @@ protocol ReaderModeNavigationDelegate: AnyObject {
 }
 
 // TODO: FXIOS-11373 - finish handling reader mode in WebEngine - this class is to be tested
-class WKReadabilityOperation: Operation,
-                              @unchecked Sendable,
-                              ReaderModeNavigationDelegate,
-                              WKReaderModeDelegate {
+final class WKReadabilityOperation: Operation,
+                                    @unchecked Sendable,
+                                    ReaderModeNavigationDelegate,
+                                    WKReaderModeDelegate {
     var url: URL
     var semaphore: DispatchSemaphore
     var result: ReadabilityOperationResult?

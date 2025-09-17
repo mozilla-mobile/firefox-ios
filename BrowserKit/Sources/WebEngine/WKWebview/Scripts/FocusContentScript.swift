@@ -4,7 +4,7 @@
 
 import Common
 
-class FocusContentScript: WKContentScript {
+final class FocusContentScript: WKContentScript {
     private let logger: Logger
     private weak var delegate: ContentScriptDelegate?
 

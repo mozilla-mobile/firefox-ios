@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 final class AdsTelemetryContentScriptTests: XCTestCase {
     private var contentScriptDelegate: MockContentScriptDelegate!
 
