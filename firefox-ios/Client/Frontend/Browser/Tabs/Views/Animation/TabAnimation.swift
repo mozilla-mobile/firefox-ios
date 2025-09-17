@@ -316,7 +316,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         }
 
         if selectedTab.screenshot == nil {
-            let cv = panelViewController.tabDisplayView.collectionView
             let contentContainer = browserVC.contentContainer
             let tabTraySnapshot = panelViewController.takeScreenshot(afterScreenUpdates: false)!
             let tabSnapshot = UIImageView(image: selectedTab.screenshot)
@@ -354,15 +353,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             context.containerView.addSubview(toView)
             context.containerView.addSubview(tabSnapshot)
 
-//            var tabCell: ExperimentTabCell?
-//            if let indexPath = dataSource.indexPath(for: item),
-//               let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
-//                tabCell = cell
-//                tabSnapshot.frame = cv.convert(cell.frame, to: browserVC.view)
-//
-//                cell.isHidden = true
-//            }
-
             UIView.animate(
                 withDuration: UX.dismissDuration,
                 delay: 0.0,
@@ -370,14 +360,12 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 tabTraySnapshot.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
                 tabSnapshot.alpha = UX.opaqueAlpha
 
-             //   tabTraySnapshot.alpha = UX.opaqueAlpha
                 tabSnapshot.frame = contentContainer.frame
                 toView.alpha = UX.opaqueAlpha
                 toView.layer.cornerRadius = UX.zeroCornerRadius
                 tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
             } completion: { _ in
                 contentContainer.isHidden = false
-                // tabCell?.isHidden = false
                 self.view.removeFromSuperview()
                 tabSnapshot.removeFromSuperview()
                 tabTraySnapshot.removeFromSuperview()
