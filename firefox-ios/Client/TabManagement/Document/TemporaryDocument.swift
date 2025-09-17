@@ -8,7 +8,7 @@ import Common
 
 private let temporaryDocumentOperationQueue = OperationQueue()
 
-protocol TemporaryDocument {
+protocol TemporaryDocument: Sendable {
     var filename: String { get }
     var sourceURL: URL? { get }
     var isDownloading: Bool { get }
@@ -26,12 +26,13 @@ protocol TemporaryDocument {
     func resumeDownload()
 }
 
-class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate {
+// TODO: FXIOS Make WeakURLSessionDelegate actually sendable
+final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
     init(delegate: URLSessionDownloadDelegate?) {
         self.delegate = delegate
     }
 
-    weak var delegate: URLSessionDownloadDelegate?
+    private weak var delegate: URLSessionDownloadDelegate?
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         delegate?.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
@@ -58,10 +59,11 @@ class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate {
     }
 }
 
-class DefaultTemporaryDocument: NSObject,
+// TODO: FXIOS Make DefaultTemporaryDocument actually sendable
+final class DefaultTemporaryDocument: NSObject,
                                 TemporaryDocument,
                                 FeatureFlaggable,
-                                URLSessionDownloadDelegate {
+                                URLSessionDownloadDelegate, @unchecked Sendable {
     private let session: URLSession
     private let request: URLRequest
     private var currentDownloadTask: URLSessionDownloadTask?

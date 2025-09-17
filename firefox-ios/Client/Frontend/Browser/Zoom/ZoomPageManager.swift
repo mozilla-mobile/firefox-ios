@@ -35,12 +35,14 @@ class ZoomPageManager: TabEventHandler, FeatureFlaggable {
         register(self, forTabEvents: .didGainFocus, .didChangeURL)
     }
 
+    @MainActor
     func getZoomLevel() -> CGFloat {
         guard let tab else { return defaultZoomLevel}
 
         return getZoomLevel(for: tab.url?.host)
     }
 
+    @MainActor
     func zoomIn() -> CGFloat {
         guard let tab = tab,
               let host = tab.url?.host else { return defaultZoomLevel}
@@ -51,6 +53,7 @@ class ZoomPageManager: TabEventHandler, FeatureFlaggable {
         return newZoom
     }
 
+    @MainActor
     func zoomOut() -> CGFloat {
         guard let tab = tab,
               let host = tab.url?.host else { return defaultZoomLevel}
@@ -64,6 +67,7 @@ class ZoomPageManager: TabEventHandler, FeatureFlaggable {
     /// Reset zoom level for a given host and saves new value
     /// - Parameters:
     ///   - shouldSave: Only false when entering reader mode where zoom resets but we don't persist the value
+    @MainActor
     func resetZoom(shouldSave: Bool = true) {
         guard let tab, let host = tab.url?.host else { return }
 
@@ -71,22 +75,26 @@ class ZoomPageManager: TabEventHandler, FeatureFlaggable {
         saveZoomLevel(for: host, zoomLevel: ZoomConstants.defaultZoomLimit)
     }
 
+    @MainActor
     func updatePageZoom() {
         guard let tab = tab else { return }
 
         tab.pageZoom = getZoomLevel(for: tab.url?.host)
     }
 
+    @MainActor
     func updateZoomChangedInOtherWindow() {
         tab?.pageZoom = getZoomLevel()
     }
 
+    @MainActor
     func setZoomAfterLeavingReaderMode() {
         guard let host = decodeReaderModeHost() else { return }
 
         tab?.pageZoom = getZoomLevel(for: host)
     }
 
+    @MainActor
     private func decodeReaderModeHost() -> String? {
         guard let tab,
               tab.readerModeAvailableOrActive,

@@ -407,6 +407,7 @@ class SearchTelemetry: @unchecked Sendable {
                                      extras: extraDetails)
     }
 
+    @MainActor
     func checkSAP(for tab: Tab?) -> SearchTelemetryValues.Sap {
         guard let tab = tab else { return .urlbar }
         if tab.isFxHomeTab || tab.isCustomHomeTab {
