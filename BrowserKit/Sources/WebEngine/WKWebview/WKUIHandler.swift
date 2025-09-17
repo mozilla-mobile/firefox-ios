@@ -63,11 +63,28 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
     private let application: Application
     private let policyDecider: WKPolicyDecider
 
+    // TODO: With Swift 6 we can use default params in the init
+    @MainActor
+    public static func factory(
+        sessionDependencies: EngineSessionDependencies,
+        sessionCreator: SessionCreator? = nil
+    ) -> DefaultUIHandler {
+        let sessionCreator = sessionCreator ?? WKSessionCreator(dependencies: sessionDependencies)
+        let policyDecider = WKPolicyDeciderFactory()
+        let application = UIApplication.shared
+        return DefaultUIHandler(
+            sessionDependencies: sessionDependencies,
+            sessionCreator: sessionCreator,
+            application: application,
+            policyDecider: policyDecider
+        )
+    }
+
     init(sessionDependencies: EngineSessionDependencies,
-         sessionCreator: SessionCreator? = nil,
-         application: Application = UIApplication.shared,
-         policyDecider: WKPolicyDecider = WKPolicyDeciderFactory()) {
-        self.sessionCreator = sessionCreator ?? WKSessionCreator(dependencies: sessionDependencies)
+         sessionCreator: SessionCreator,
+         application: Application,
+         policyDecider: WKPolicyDecider) {
+        self.sessionCreator = sessionCreator
         self.sessionDependencies = sessionDependencies
         self.policyDecider = policyDecider
         self.application = application
@@ -76,10 +93,6 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
         (self.sessionCreator as? WKSessionCreator)?.onNewSessionCreated = { [weak self] in
             self?.delegate?.onRequestOpenNewSession($0)
         }
-    }
-
-    public convenience init(sessionCreator: SessionCreator?) {
-        self.init(sessionDependencies: .empty(), sessionCreator: sessionCreator)
     }
 
     public func webView(_ webView: WKWebView,
