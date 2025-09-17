@@ -5,6 +5,7 @@
 import UIKit
 
 /// View that renders web content.
+@MainActor
 public protocol EngineView: UIView {
     /// Render the content of the given session.
     func render(session: EngineSession)

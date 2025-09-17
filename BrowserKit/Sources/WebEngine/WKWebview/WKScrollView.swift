@@ -5,6 +5,7 @@
 import UIKit
 
 /// The `WKEngineWebView` scroll view
+@MainActor
 protocol WKScrollView {
     var refreshControl: UIRefreshControl? { get set }
     func setContentOffset(
