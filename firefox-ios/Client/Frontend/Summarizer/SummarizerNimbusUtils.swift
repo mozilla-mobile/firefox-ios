@@ -65,9 +65,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     func isAppleSummarizerEnabled() -> Bool {
         #if canImport(FoundationModels)
-            let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
             let isEngLang = NSLocale.current.languageCode == "en"
-            return isEngLang && AppleIntelligenceUtil().isAppleIntelligenceAvailable && isFlagEnabled
+            return isEngLang && AppleIntelligenceUtil().isAppleIntelligenceAvailable
         #else
             return false
         #endif
@@ -78,9 +77,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
-        let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizerToolbarEntrypoint, checking: .buildOnly)
         let isEngLang = NSLocale.current.languageCode == "en"
-        return isEngLang && isAppleSummarizerEnabled() && isFlagEnabled
+        return isEngLang && isAppleSummarizerEnabled()
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
@@ -89,9 +87,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerShakeGestureEnabled() -> Bool {
-        let isShakeEnabled = featureFlags.isFeatureEnabled(.appleSummarizerShakeGesture, checking: .buildOnly)
         let isEngLang = NSLocale.current.languageCode == "en"
-        return isEngLang && isAppleSummarizerEnabled() && isShakeEnabled
+        return isEngLang && isAppleSummarizerEnabled()
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
