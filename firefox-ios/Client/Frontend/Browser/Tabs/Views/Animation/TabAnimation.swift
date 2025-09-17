@@ -318,24 +318,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         if selectedTab.screenshot == nil {
             let contentContainer = browserVC.contentContainer
             let tabTraySnapshot = panelViewController.takeScreenshot(afterScreenUpdates: false)!
-            let tabSnapshot = UIImageView(image: selectedTab.screenshot)
-            // crop the tab screenshot to the contentContainer frame so the animation
-            // and the initial transform doesn't stutter
-            if let image = tabSnapshot.image, let croppedImage = image.cgImage?.cropping(
-                to: CGRect(
-                    x: contentContainer.frame.origin.x * image.scale,
-                    y: contentContainer.frame.origin.y * image.scale,
-                    width: contentContainer.frame.width * image.scale,
-                    height: contentContainer.frame.height * image.scale
-                )
-            ) {
-                tabSnapshot.image = UIImage(cgImage: croppedImage)
-            }
-
-            tabSnapshot.clipsToBounds = true
-            tabSnapshot.contentMode = .scaleAspectFill
-            tabSnapshot.layer.cornerCurve = .continuous
-            tabSnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
 
             contentContainer.isHidden = true
 
@@ -351,23 +333,18 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
             context.containerView.addSubview(tabTraySnapshot)
             context.containerView.addSubview(toView)
-            context.containerView.addSubview(tabSnapshot)
 
             UIView.animate(
                 withDuration: UX.dismissDuration,
                 delay: 0.0,
                 options: .curveEaseOut) {
                 tabTraySnapshot.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-                tabSnapshot.alpha = UX.opaqueAlpha
 
-                tabSnapshot.frame = contentContainer.frame
                 toView.alpha = UX.opaqueAlpha
                 toView.layer.cornerRadius = UX.zeroCornerRadius
-                tabSnapshot.layer.cornerRadius = UX.zeroCornerRadius
             } completion: { _ in
                 contentContainer.isHidden = false
                 self.view.removeFromSuperview()
-                tabSnapshot.removeFromSuperview()
                 tabTraySnapshot.removeFromSuperview()
                 toView.removeFromSuperview()
                 context.completeTransition(true)
