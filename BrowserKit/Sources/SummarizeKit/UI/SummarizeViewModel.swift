@@ -10,7 +10,7 @@ public protocol SummarizeViewModel {
     func summarize(webView: WKWebView,
                    footNoteLabel: String,
                    dateProvider: DateProvider,
-                   onNewData: @escaping (Result<String, SummarizerError>) -> Void) async
+                   onNewData: @escaping (Result<String, SummarizerError>) -> Void)
 
     /// Free the lock on the summarization stream, and unlock the stream to send data to the UI.
     func unblockSummarization()
@@ -77,6 +77,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
     private var configuration: Configuration
     private let minWordsAcceptedToShow: Int
     private let minDelayToShowSummary: TimeInterval
+    private var summarizeTask: Task<Void, Never>?
     private weak var tosAcceptor: SummarizeTermOfServiceAcceptor?
 
     public init(
@@ -96,48 +97,61 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
     public func summarize(webView: WKWebView,
                           footNoteLabel: String,
                           dateProvider: DateProvider,
-                          onNewData: @escaping (Result<String, SummarizerError>) -> Void) async {
-        guard configuration.isTosConsentAccepted else {
-            onNewData(.failure(.tosConsentMissing))
-            return
-        }
-        let startRevealingAt = dateProvider.currentDate().addingTimeInterval(minDelayToShowSummary)
-        var lastChunk = ""
-        var revealed = false
-        do {
-            let stream = summarizerService.summarizeStreamed(from: webView)
-            /// NOTE1: By design the APIs send aggregated tokens instead of individual chunks.
-            /// We don't need to accumulate them.
-            /// NOTE2: Wait for the specified delay before revealing the summary.
-            /// This is done to provide a smoother user experience and avoid sudden changes.
-
-            for try await aggregatedChunk in stream {
-                lastChunk = aggregatedChunk
-                guard dateProvider.currentDate() >= startRevealingAt || enoughWords(aggregatedChunk) else { continue }
+                          onNewData: @escaping (Result<String, SummarizerError>) -> Void) {
+        summarizeTask?.cancel()
+        summarizeTask = Task {
+            guard configuration.isTosConsentAccepted else {
                 await waitForUnblockSummarization()
-                revealed = true
-                onNewData(.success(aggregatedChunk))
-            }
-            /// NOTE: Streaming especially from a request that was cached can be faster than `delay`.
-            /// This is to make sure when that happens we show the summary immediately.
-            if !revealed {
-                await waitForUnblockSummarization()
-                onNewData(.success(lastChunk))
-            }
-
-            let summaryWithNote = """
-            \(lastChunk)
-
-            ##### \(footNoteLabel)
-            """
-            onNewData(.success(summaryWithNote))
-        } catch {
-            guard let error = error as? SummarizerError else {
-                onNewData(.failure(.unknown(error)))
+                onNewData(.failure(.tosConsentMissing))
                 return
             }
-            onNewData(.failure(error))
+            let startRevealingAt = dateProvider.currentDate().addingTimeInterval(minDelayToShowSummary)
+            var lastChunk = ""
+            var revealed = false
+            do {
+                let stream = summarizerService.summarizeStreamed(from: webView)
+                // NOTE1: By design the APIs send aggregated tokens instead of individual chunks.
+                // We don't need to accumulate them.
+                // NOTE2: Wait for the specified delay before revealing the summary.
+                // This is done to provide a smoother user experience and avoid sudden changes.
+                for try await aggregatedChunk in stream {
+                    lastChunk = aggregatedChunk
+                    guard dateProvider.currentDate() >= startRevealingAt || enoughWords(aggregatedChunk) else { continue }
+                    await waitForUnblockSummarization()
+                    revealed = true
+                    try Task.checkCancellation()
+                    onNewData(.success(aggregatedChunk))
+                }
+                // NOTE: Streaming especially from a request that was cached can be faster than `delay`.
+                // This is to make sure when that happens we show the summary immediately.
+                if !revealed {
+                    await waitForUnblockSummarization()
+                    try Task.checkCancellation()
+                    onNewData(.success(lastChunk))
+                }
+                let summaryWithNote = """
+                \(lastChunk)
+
+                ##### \(footNoteLabel)
+                """
+                try Task.checkCancellation()
+                onNewData(.success(summaryWithNote))
+            } catch {
+                handleSummarizationError(error: error, onError: onNewData)
+            }
         }
+    }
+
+    private func handleSummarizationError(error: Error,
+                                          onError: @escaping (Result<String, SummarizerError>) -> Void) {
+        if error is CancellationError {
+            return
+        }
+        guard let error = error as? SummarizerError else {
+            onError(.failure(.unknown(error)))
+            return
+        }
+        onError(.failure(error))
     }
 
     private func enoughWords(_ text: String) -> Bool {

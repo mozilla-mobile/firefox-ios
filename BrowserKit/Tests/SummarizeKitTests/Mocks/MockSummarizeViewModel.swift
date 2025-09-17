@@ -20,7 +20,7 @@ class MockSummarizeViewModel: SummarizeViewModel {
         footNoteLabel: String,
         dateProvider: DateProvider,
         onNewData: @escaping (Result<String, SummarizeKit.SummarizerError>) -> Void
-    ) async {
+    ) {
         summarizeCalled += 1
         guard let injectedSummarizeResult else { return }
         onNewData(injectedSummarizeResult)

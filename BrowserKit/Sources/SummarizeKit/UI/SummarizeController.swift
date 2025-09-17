@@ -277,13 +277,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         loadingLabel.alpha = 1.0
         loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(UX.labelShimmeringColorAlpha))
         infoView.alpha = 0.0
-        Task { @MainActor [weak self] in
-            await self?.summarizeTask()
-        }
-    }
-
-    private func summarizeTask() async {
-        await viewModel.summarize(
+        viewModel.summarize(
             webView: webView,
             footNoteLabel: configuration.summaryFootnote,
             dateProvider: DefaultDateProvider()

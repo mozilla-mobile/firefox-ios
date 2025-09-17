@@ -15,10 +15,12 @@ extension Result {
 }
 
 class MockDateProvider: DateProvider {
-    var mockDate: Date?
+    var returnedDates: [Date] = []
 
     func currentDate() -> Date {
-        return mockDate ?? Date()
+        let date = Date()
+        returnedDates.append(date)
+        return date
     }
 }
 
@@ -47,20 +49,22 @@ final class SummarizeViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_summarize_whenTosNotAccepted() async {
+    func test_summarize_whenTosNotAccepted() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
-        let subject = createSubject()
+        let subject = createSubject(isTosAccepted: false)
 
-        await subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
+        subject.unblockSummarization()
+        
+        subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let error = try? XCTUnwrap(result.failure())
 
             XCTAssertEqual(error, .tosConsentMissing)
             newDataExpectation.fulfill()
         }
-        await fulfillment(of: [newDataExpectation], timeout: 0.5)
+        wait(for: [newDataExpectation], timeout: 0.5)
     }
 
-    func test_summarize_withNotEnoughStartingWords() async {
+    func test_summarize_withNotEnoughStartingWords() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let chunk = "This is the max words to proceed"
         let footnote = "Footnote"
@@ -70,11 +74,11 @@ final class SummarizeViewModelTests: XCTestCase {
 
         ##### \(footnote)
         """
-        let subject = createSubject(isTosAccepted: true, minWordsAcceptToShow: chunk.count + 1)
+        let subject = createSubject(minWordsAcceptToShow: chunk.count + 1)
 
         subject.unblockSummarization()
 
-        await subject.summarize(webView: webView, footNoteLabel: footnote, dateProvider: dateProvider) { result in
+        subject.summarize(webView: webView, footNoteLabel: footnote, dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.get())
 
             // The first time is called the closure it responds just with summary
@@ -86,10 +90,10 @@ final class SummarizeViewModelTests: XCTestCase {
             XCTAssertEqual(response, responseWithNote)
             newDataExpectation.fulfill()
         }
-        await fulfillment(of: [newDataExpectation], timeout: 0.5)
+        wait(for: [newDataExpectation], timeout: 0.5)
     }
 
-    func test_summarize_withEnoughStartingWords() async {
+    func test_summarize_withEnoughStartingWords() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let chunk = "This is the max words to proceed"
         let footnote = "Footnote"
@@ -99,11 +103,11 @@ final class SummarizeViewModelTests: XCTestCase {
 
         ##### \(footnote)
         """
-        let subject = createSubject(isTosAccepted: true, minWordsAcceptToShow: chunk.count - 1)
+        let subject = createSubject(minWordsAcceptToShow: chunk.count - 1)
 
         subject.unblockSummarization()
 
-        await subject.summarize(webView: webView, footNoteLabel: footnote, dateProvider: dateProvider) { result in
+        subject.summarize(webView: webView, footNoteLabel: footnote, dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.get())
 
             // The first time is called the closure it responds just with summary
@@ -115,41 +119,65 @@ final class SummarizeViewModelTests: XCTestCase {
             XCTAssertEqual(response, responseWithNote)
             newDataExpectation.fulfill()
         }
-        await fulfillment(of: [newDataExpectation], timeout: 0.5)
+        wait(for: [newDataExpectation], timeout: 0.5)
+    }
+    
+    func test_summarize_waitsForInitialDelay() {
+        let newDataExpectation = expectation(description: "summarize closure should be called")
+        let chunk = "This is the max words to proceed"
+        let delay = 2.0
+        summarizerService.mockChunchedResponse = [chunk]
+        summarizerService.delayStreamResultInSeconds = delay
+        // make sure enough words is false
+        let subject = createSubject(minDelayToShowSummary: delay, minWordsAcceptToShow: chunk.count + 1)
+        
+        subject.unblockSummarization()
+        
+        subject.summarize(webView: webView, footNoteLabel: "Footnote", dateProvider: dateProvider) { result in
+            let result = try? result.get()
+            // don't fulfill untill the footnote is passed
+            guard result != chunk else { return }
+            newDataExpectation.fulfill()
+        }
+        
+        wait(for: [newDataExpectation], timeout: delay + 1)
+        
+        XCTAssertEqual(dateProvider.returnedDates.count, 2)
+        XCTAssertGreaterThanOrEqual(dateProvider.returnedDates[1], dateProvider.returnedDates[0].addingTimeInterval(delay))
     }
 
-    func test_summarize_whenPassRandomError_throwsUnkownSummarizerError() async {
+    func test_summarize_whenPassRandomError_throwsUnkownSummarizerError() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let error = NSError(domain: "", code: 0)
         summarizerService.mockError = error
-        let subject = createSubject(isTosAccepted: true)
+        let subject = createSubject()
 
         subject.unblockSummarization()
 
-        await subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
+        subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.failure())
 
             XCTAssertEqual(response, .unknown(error))
             newDataExpectation.fulfill()
         }
-        await fulfillment(of: [newDataExpectation], timeout: 0.5)
+        wait(for: [newDataExpectation], timeout: 0.5)
     }
 
-    func test_summarize_throwsSummarizeError() async {
+    func test_summarize_throwsSummarizeError() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let error = SummarizerError.cancelled
         summarizerService.mockError = error
-        let subject = createSubject(isTosAccepted: true)
+        let subject = createSubject()
 
         subject.unblockSummarization()
 
-        await subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
+        subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let response = try? XCTUnwrap(result.failure())
 
             XCTAssertEqual(response, error)
             newDataExpectation.fulfill()
         }
-        await fulfillment(of: [newDataExpectation], timeout: 0.5)
+        wait(for: [newDataExpectation], timeout: 0.5)
     }
 
     func test_setTosConsentAccepted_callsTosAcceptorAllowConsent() {
@@ -161,7 +189,7 @@ final class SummarizeViewModelTests: XCTestCase {
     }
 
     func test_logTosStatus_callTosAcceptorDenyConsent() {
-        let subject = createSubject()
+        let subject = createSubject(isTosAccepted: false)
         subject.setConsentScreenShown()
 
         subject.logConsentStatus()
@@ -189,12 +217,14 @@ final class SummarizeViewModelTests: XCTestCase {
         XCTAssertEqual(summarizerService.closeCurrentStreamedSessionCalled, 1)
     }
 
-    private func createSubject(isTosAccepted: Bool = false,
+    private func createSubject(isTosAccepted: Bool = true,
+                               minDelayToShowSummary: TimeInterval? = nil,
                                minWordsAcceptToShow: Int? = nil) -> DefaultSummarizeViewModel {
         let viewModel = DefaultSummarizeViewModel(
             summarizerService: summarizerService,
             tosAcceptor: tosAcceptor,
             minWordsAcceptedToShow: minWordsAcceptToShow,
+            minDelayToShowSummary: minDelayToShowSummary,
             isTosAcceppted: isTosAccepted
         )
         trackForMemoryLeaks(viewModel)

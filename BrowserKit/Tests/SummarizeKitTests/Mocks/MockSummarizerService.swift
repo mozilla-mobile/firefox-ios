@@ -12,6 +12,7 @@ class MockSummarizerService: SummarizerService {
     var mockChunchedResponse: [String] = []
     var mockError: Error?
     var closeCurrentStreamedSessionCalled = 0
+    var delayStreamResultInSeconds: TimeInterval = 0
 
     func summarize(from webView: WKWebView) async throws -> String {
         summarizeCalled += 1
@@ -21,13 +22,20 @@ class MockSummarizerService: SummarizerService {
     func summarizeStreamed(from webView: WKWebView) -> AsyncThrowingStream<String, any Error> {
         summarizeStreamedCalled += 1
         return AsyncThrowingStream { continuation in
-            for chunck in mockChunchedResponse {
-                continuation.yield(chunck)
-            }
-            if let mockError {
-                continuation.finish(throwing: mockError)
-            } else {
-                continuation.finish()
+            Task {
+                for chunck in mockChunchedResponse {
+                    if #available(iOS 16.0, *) {
+                        try await Task.sleep(for: .seconds(delayStreamResultInSeconds))
+                    } else {
+                        try await Task.sleep(nanoseconds: UInt64(delayStreamResultInSeconds) * 1_000_000_000)
+                    }
+                    continuation.yield(chunck)
+                }
+                if let mockError {
+                    continuation.finish(throwing: mockError)
+                } else {
+                    continuation.finish()
+                }
             }
         }
     }
