@@ -193,13 +193,13 @@ class OnboardingTests: BaseTestCase {
         currentScreen += 1
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
         XCTAssertEqual("Stay encrypted when you hop between devices", app.staticTexts["\(rootA11yId)TitleLabel"].label)
-        XCTAssertEqual("Firefox encrypts your passwords, bookmarks, and more when you’re synchronised.",
+        XCTAssertEqual("Firefox encrypts your passwords, bookmarks, and more when you’re synced.",
                        app.staticTexts["\(rootA11yId)DescriptionLabel"].label)
-        XCTAssertEqual("Sign in", app.buttons["\(rootA11yId)PrimaryButton"].label)
+        XCTAssertEqual("Sign In", app.buttons["\(rootA11yId)PrimaryButton"].label)
         XCTAssertEqual("Skip", app.buttons["\(rootA11yId)SecondaryButton"].label)
         // Tap on Sign In
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
-        mozWaitForElementToExist(app.navigationBars["Synchronise and Save Data"])
+        mozWaitForElementToExist(app.navigationBars["Sync and Save Data"])
         XCTAssertTrue(app.buttons["QRCodeSignIn.button"].exists)
         XCTAssertEqual("Ready to Scan", app.buttons["QRCodeSignIn.button"].label)
         XCTAssertTrue(app.buttons["EmailSignIn.button"].exists)
