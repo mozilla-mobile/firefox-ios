@@ -138,6 +138,12 @@ final class AppLaunchUtil: Sendable {
                    category: .setup)
 
         AppEventQueue.signal(event: .preLaunchDependenciesComplete)
+
+        if #available(iOS 26, *) {
+            #if canImport(FoundationModels)
+                AppleIntelligenceUtil().processAvailabilityState()
+            #endif
+        }
     }
 
     func setUpPostLaunchDependencies() {
