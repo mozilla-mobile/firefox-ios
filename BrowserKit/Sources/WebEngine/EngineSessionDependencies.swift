@@ -5,6 +5,7 @@
 import Foundation
 
 /// Dependencies injected during engine session creation that can be session specific.
+@MainActor
 public struct EngineSessionDependencies {
     var webviewParameters: WKWebViewParameters
     var telemetryProxy: EngineTelemetryProxy?

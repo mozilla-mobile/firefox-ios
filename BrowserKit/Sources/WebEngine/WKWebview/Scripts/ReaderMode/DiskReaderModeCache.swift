@@ -20,7 +20,8 @@ struct ReaderModeError {
 /// more space. Whether that is a good idea or not is not sure. We have a bug on file to investigate
 /// and improve at a later time.
 public final class DiskReaderModeCache: ReaderModeCache {
-    public static let shared = DiskReaderModeCache()
+    // FXIOS-13517 - DiskReaderModeCache & MemoryReaderModeCache shared are not thread safe
+    public nonisolated(unsafe) static let shared = DiskReaderModeCache()
 
     public func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws {
         guard let (cacheDirectoryPath, contentFilePath) = cachePathsForURL(url) else {
