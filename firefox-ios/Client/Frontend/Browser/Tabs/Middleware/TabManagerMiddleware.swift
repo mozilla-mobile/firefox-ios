@@ -428,7 +428,9 @@ final class TabManagerMiddleware: FeatureFlaggable {
         tabManager.selectTab(tab)
 
         // We do not dispatch a refresh action here because when this method is called
-        // we are always navigating away from the view.
+        // we are always navigating away from the view, and we call ScreenshotHelper.takeScreenshot
+        // which refreshes the tabs when it has a screenshot. If we change this behaviour in the future
+        // it may require us to add a refresh action here.
 
         let dismissAction = TabTrayAction(windowUUID: uuid,
                                           actionType: TabTrayActionType.dismissTabTray)
