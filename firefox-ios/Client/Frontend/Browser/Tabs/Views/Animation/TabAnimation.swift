@@ -316,9 +316,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         }
 
         if selectedTab.screenshot == nil {
-            let contentContainer = browserVC.contentContainer
-            let tabTraySnapshot = panelViewController.takeScreenshot(afterScreenUpdates: false)!
+            guard let tabTraySnapshot = panelViewController.takeScreenshot()
+            else {
+                context.completeTransition(true)
+                return
+            }
 
+            let contentContainer = browserVC.contentContainer
             contentContainer.isHidden = true
 
             tabTraySnapshot.layer.cornerCurve = .continuous
@@ -434,9 +438,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
 extension UIViewController {
     @MainActor
-    func takeScreenshot(afterScreenUpdates: Bool = true) -> UIImageView? {
-        guard isViewLoaded else { return nil }
-        let view = self.view!
+    func takeScreenshot() -> UIImageView? {
+        guard
+            isViewLoaded,
+            let view = self.view
+        else { return nil }
 
         let format = UIGraphicsImageRendererFormat()
         format.scale = UIScreen.main.scale
@@ -444,7 +450,7 @@ extension UIViewController {
 
         let renderer = UIGraphicsImageRenderer(size: view.bounds.size, format: format)
         let image = renderer.image { _ in
-            view.drawHierarchy(in: view.bounds, afterScreenUpdates: afterScreenUpdates)
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: false)
         }
 
         let imageView = UIImageView(image: image)
