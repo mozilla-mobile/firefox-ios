@@ -58,7 +58,6 @@ public protocol BookmarksHandler {
 }
 
 public protocol HistoryHandler {
-    func applyObservation(visitObservation: VisitObservation) -> Success
     func applyObservation(visitObservation: VisitObservation,
                           completion: @escaping (Result<Void, any Error>) -> Void)
 }

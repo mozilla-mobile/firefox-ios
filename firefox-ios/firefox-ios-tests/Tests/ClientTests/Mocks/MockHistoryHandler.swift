@@ -15,11 +15,6 @@ final class MockHistoryHandler: HistoryHandler {
     var nextResult: Result<Void, Error> = .success(())
     var onApply: (() -> Void)?
 
-    func applyObservation(visitObservation: VisitObservation) -> Success {
-        XCTFail("Should not be implemented, use completion instead of defer")
-        fatalError()
-    }
-
     func applyObservation(visitObservation: VisitObservation, completion: (Result<Void, any Error>) -> Void) {
         appplyObservationCallCount += 1
         applied.append(visitObservation)

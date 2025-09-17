@@ -83,6 +83,7 @@ final class RecordVisitObservationManagerTests: XCTestCase {
 
     func testRecordVisitAboutURLDoesNotRecord() {
         // about: scheme should be ignored by isValidURLToRecord path
+        // because it is an ignored URL scheme
         let subject = createSubject()
         let observation = createObservation(url: "about:preferences", title: "About Prefs")
 
@@ -93,7 +94,8 @@ final class RecordVisitObservationManagerTests: XCTestCase {
     }
 
     func testRecordVisitLocalhostURLDoesNotRecord() {
-        // localhost should be ignored
+        // localhost should be ignored by isValidURLToRecord path
+        // because it is an ignored URL scheme (unless it's for `test-fixture`)
         let subject = createSubject()
         let observation = createObservation(url: "http://localhost:8080/", title: "Localhost")
 

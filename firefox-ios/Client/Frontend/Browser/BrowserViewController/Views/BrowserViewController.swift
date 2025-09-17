@@ -470,7 +470,6 @@ class BrowserViewController: UIViewController,
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
-        // Pass nil to have the option to use default value and no affect BVC initializers
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
 
         super.init(nibName: nil, bundle: nil)
