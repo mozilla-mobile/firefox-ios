@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
 import Storage
 import XCTest
 import Glean
@@ -19,6 +20,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var appStartupTelemetry: MockAppStartupTelemetry!
     var appState: AppState!
+    var recordVisitManager: MockRecordVisitObservationManager!
 
     override func setUp() {
         super.setUp()
@@ -36,6 +38,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         tabManager = MockTabManager()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
+        recordVisitManager = MockRecordVisitObservationManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setupStore()
     }
@@ -46,6 +49,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
+        recordVisitManager = nil
         Glean.shared.resetGlean(clearStores: true)
         DependencyHelperMock().reset()
         resetStore()
@@ -441,10 +445,65 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(screenshotHelper.takeScreenshotCalled)
     }
 
+    // MARK: - Record visit observation for History Panel
+
+    func testRecordVisitObservationIsCalledForNavigateInNewTabWithTitle() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        let url = URL(string: "https://example.com/")
+        mockTabWebView.loadedURL = url
+        tab.webView = mockTabWebView
+
+        subject.navigateInTab(tab: tab, to: nil, webViewStatus: .title)
+
+        XCTAssertEqual(recordVisitManager.recordVisitCalled, 1)
+    }
+
+    func testRecordVisitObservationIsCalledForNavigateInNewTabWithURL() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        let url = URL(string: "https://example.com/")
+        mockTabWebView.loadedURL = url
+        tab.webView = mockTabWebView
+
+        subject.navigateInTab(tab: tab, to: nil, webViewStatus: .url)
+
+        XCTAssertEqual(recordVisitManager.recordVisitCalled, 1)
+    }
+
+    func testRecordVisitObservationIsNotCalledForInternalURL() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        let url = URL(string: "http://localhost:\(AppInfo.webserverPort)/")
+        mockTabWebView.loadedURL = url
+        tab.webView = mockTabWebView
+
+        subject.navigateInTab(tab: tab, to: nil, webViewStatus: .title)
+
+        XCTAssertEqual(recordVisitManager.recordVisitCalled, 0)
+    }
+
+    func testRecordVisitObservationIsNotCalledForFileURL() {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        let url = URL(fileURLWithPath: "/tmp/test.html")
+        mockTabWebView.loadedURL = url
+        tab.webView = mockTabWebView
+
+        subject.navigateInTab(tab: tab, to: nil, webViewStatus: .title)
+
+        XCTAssertEqual(recordVisitManager.recordVisitCalled, 0)
+    }
+
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager,
-                                            appStartupTelemetry: appStartupTelemetry)
+                                            appStartupTelemetry: appStartupTelemetry,
+                                            recordVisitManager: recordVisitManager)
         screenshotHelper = MockScreenshotHelper(controller: subject)
         subject.screenshotHelper = screenshotHelper
         subject.navigationHandler = browserCoordinator
@@ -563,5 +622,20 @@ class MockAppStartupTelemetry: AppStartupTelemetry {
 
     func sendStartupTelemetry() {
         sendStartupTelemetryCalled += 1
+    }
+}
+
+class MockRecordVisitObservationManager: RecordVisitObserving {
+    private(set) var recordVisitCalled = 0
+    private(set) var resetVisitCalled = 0
+    var lastVisitObservation: VisitObservation?
+
+    func recordVisit(visitObservation: VisitObservation, isPrivateTab: Bool) {
+        recordVisitCalled += 1
+        lastVisitObservation = visitObservation
+    }
+
+    func resetRecording() {
+        resetVisitCalled += 1
     }
 }

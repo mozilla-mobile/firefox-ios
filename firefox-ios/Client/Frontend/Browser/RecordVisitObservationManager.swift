@@ -9,7 +9,12 @@ import Storage
 import WebKit
 
 // Handles recording visits to websites, which will be displayed in the History Panel.
-class RecordVisitObservationManager {
+protocol RecordVisitObserving: AnyObject {
+    func recordVisit(visitObservation: VisitObservation, isPrivateTab: Bool)
+    func resetRecording()
+}
+
+class RecordVisitObservationManager: RecordVisitObserving {
     private var historyHandler: HistoryHandler
     let logger: Logger
     var lastObservationRecorded: VisitObservation?

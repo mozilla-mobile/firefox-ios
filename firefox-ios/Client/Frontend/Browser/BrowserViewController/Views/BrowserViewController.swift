@@ -126,7 +126,7 @@ class BrowserViewController: UIViewController,
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
-    let recordVisitManager: RecordVisitObservationManager
+    let recordVisitManager: RecordVisitObserving
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -448,7 +448,8 @@ class BrowserViewController: UIViewController,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
-        userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
+        userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated),
+        recordVisitManager: RecordVisitObserving? = nil
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
@@ -469,7 +470,8 @@ class BrowserViewController: UIViewController,
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
-        self.recordVisitManager = RecordVisitObservationManager(historyHandler: profile.places)
+        // Pass nil to have the option to use default value and no affect BVC initializers
+        self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
