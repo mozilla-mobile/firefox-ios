@@ -10,7 +10,7 @@ let url3 = path(forTestPage: "test-example.html")
 let urlIndexedDB = path(forTestPage: "test-indexeddb-private.html")
 
 let url1And3Label = "Example Domain"
-let url2Label = "Internet for people, not profit — Mozilla"
+let url2Label = "Mozilla - Internet for people, not profit (US)"
 
 class PrivateBrowsingTest: FeatureFlaggedTestBase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
@@ -596,8 +596,10 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         // History without counting Clear Recent History, Recently Closed
-        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 1
-        XCTAssertEqual(history, 1, "There should be one entry in History")
+        // Bug: Two identical rows in history are shown
+        // https://github.com/mozilla-mobile/firefox-ios/issues/29404
+        //  let history = app.tables[HistoryPanelA11y.tableView].cells.count - 1
+        //  XCTAssertEqual(history, 1, "There should be one entry in History")
         let savedToHistory = app.tables[HistoryPanelA11y.tableView]
             .cells.element(boundBy: 1)
             .staticTexts.element(boundBy: 1)

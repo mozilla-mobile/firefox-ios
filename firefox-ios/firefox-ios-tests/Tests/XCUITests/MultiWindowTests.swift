@@ -42,6 +42,10 @@ class MultiWindowTests: IpadOnlyTestCase {
         let topSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
         let newTab = AccessibilityIdentifiers.Toolbar.addNewTabButton
         // A new tab is opened in the same window
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForElementToExist(app.collectionViews.firstMatch)
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites])
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
         app.links[topSites].firstMatch.waitAndTap()
         waitUntilPageLoad()
         app.buttons[newTab].firstMatch.waitAndTap()
@@ -67,6 +71,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         dotMenu.waitAndTap()
         splitView.waitAndTap()
         springboard.icons.elementContainingText("split view with Fennec").waitAndTap()
+        mozWaitForElementToNotExist(springboard.icons.elementContainingText("split view with Fennec"))
     }
 
     // Param windowsNumber - number of tab windows to open from switcher
