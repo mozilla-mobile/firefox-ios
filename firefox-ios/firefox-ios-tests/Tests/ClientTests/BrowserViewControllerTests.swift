@@ -458,6 +458,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.navigateInTab(tab: tab, to: nil, webViewStatus: .title)
 
         XCTAssertEqual(recordVisitManager.recordVisitCalled, 1)
+        XCTAssertNotNil(recordVisitManager.lastVisitObservation)
     }
 
     func testRecordVisitObservationIsCalledForNavigateInNewTabWithURL() {
@@ -471,6 +472,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.navigateInTab(tab: tab, to: nil, webViewStatus: .url)
 
         XCTAssertEqual(recordVisitManager.recordVisitCalled, 1)
+        XCTAssertNotNil(recordVisitManager.lastVisitObservation)
     }
 
     func testRecordVisitObservationIsNotCalledForInternalURL() {
@@ -484,6 +486,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.navigateInTab(tab: tab, to: nil, webViewStatus: .title)
 
         XCTAssertEqual(recordVisitManager.recordVisitCalled, 0)
+        XCTAssertNil(recordVisitManager.lastVisitObservation)
     }
 
     func testRecordVisitObservationIsNotCalledForFileURL() {
@@ -497,7 +500,23 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.navigateInTab(tab: tab, to: nil, webViewStatus: .title)
 
         XCTAssertEqual(recordVisitManager.recordVisitCalled, 0)
+        XCTAssertNil(recordVisitManager.lastVisitObservation)
     }
+
+    func testResetObservationIsCalledForAddNewTabAction() throws {
+        let subject = createSubject()
+
+        let action = GeneralBrowserAction(windowUUID: .XCTestDefaultUUID,
+                                          actionType: GeneralBrowserActionType.addNewTab)
+        let newState = BrowserViewControllerState.reducer(
+            BrowserViewControllerState(windowUUID: .XCTestDefaultUUID), action)
+        subject.newState(state: newState)
+
+        XCTAssertEqual(recordVisitManager.resetVisitCalled, 1)
+        XCTAssertNil(recordVisitManager.lastVisitObservation)
+    }
+
+    // MARK: - Private
 
     private func createSubject() -> BrowserViewController {
         let subject = BrowserViewController(profile: profile,
@@ -578,7 +597,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 
-    // MARK: StoreTestUtility
+    // MARK: - StoreTestUtility
     func setupAppState() -> Client.AppState {
         let appState = AppState(
             activeScreens: ActiveScreensState(
@@ -622,20 +641,5 @@ class MockAppStartupTelemetry: AppStartupTelemetry {
 
     func sendStartupTelemetry() {
         sendStartupTelemetryCalled += 1
-    }
-}
-
-class MockRecordVisitObservationManager: RecordVisitObserving {
-    private(set) var recordVisitCalled = 0
-    private(set) var resetVisitCalled = 0
-    var lastVisitObservation: VisitObservation?
-
-    func recordVisit(visitObservation: VisitObservation, isPrivateTab: Bool) {
-        recordVisitCalled += 1
-        lastVisitObservation = visitObservation
-    }
-
-    func resetRecording() {
-        resetVisitCalled += 1
     }
 }
