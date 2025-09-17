@@ -317,6 +317,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         let contentContainer = browserVC.contentContainer
 
+        // if the selectedTab screenshot is nil we assume we have tapped the new tab button
+        // from the tab tray, learn more in private, or opened a tab from the sync'd tabs
         if selectedTab.screenshot == nil {
             dismissWithoutTabScreenshot(panelViewController: panelViewController,
                                         contentContainer: contentContainer,
