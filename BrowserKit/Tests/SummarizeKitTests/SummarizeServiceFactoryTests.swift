@@ -46,7 +46,7 @@ final class SummarizeServiceFactoryTests: XCTestCase {
     }
     #endif
 
-    func test_make_whenHostedSummarizerTrue_returnsNilForLLMConfigAvailable() throws {
+    func test_make_whenHostedSummarizerTrue_returnsNilForLLMConfigNotAvailable() throws {
         let subject = createSubject()
 
         let result = subject.make(isAppleSummarizerEnabled: false, isHostedSummarizerEnabled: true, config: nil)
