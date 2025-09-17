@@ -435,28 +435,3 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         }
     }
 }
-
-extension UIViewController {
-    @MainActor
-    func takeScreenshot() -> UIImageView? {
-        guard
-            isViewLoaded,
-            let view = self.view
-        else { return nil }
-
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = UIScreen.main.scale
-        format.opaque = view.isOpaque
-
-        let renderer = UIGraphicsImageRenderer(size: view.bounds.size, format: format)
-        let image = renderer.image { _ in
-            view.drawHierarchy(in: view.bounds, afterScreenUpdates: false)
-        }
-
-        let imageView = UIImageView(image: image)
-        imageView.frame = view.bounds
-        imageView.isUserInteractionEnabled = false
-        imageView.contentMode = .scaleToFill  // same size as source view
-        return imageView
-    }
-}
