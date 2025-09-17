@@ -3406,11 +3406,11 @@ class BrowserViewController: UIViewController,
     }
 
     func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in
             // Without a delay, the text field fails to become first responder
             // Check that the newly created tab is still selected.
             // This let's the user spam the Cmd+T button without lots of responder changes.
-            guard tab == self.tabManager.selectedTab else { return }
+            guard let self, tab == self.tabManager.selectedTab else { return }
 
             if self.isToolbarRefactorEnabled {
                 let action = ToolbarAction(searchTerm: searchText,
