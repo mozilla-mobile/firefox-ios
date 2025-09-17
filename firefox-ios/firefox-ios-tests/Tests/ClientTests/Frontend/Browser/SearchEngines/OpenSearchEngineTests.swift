@@ -97,14 +97,14 @@ class OpenSearchEngineTests: XCTestCase {
             image: UIImage(),
             searchTemplate: "some link",
             suggestTemplate: nil,
-            trendingTemplate: "www.mozilla.org",
+            trendingTemplate: "www.example.com",
             isCustomEngine: true
         )
 
         let url = searchEngine.trendingURLForEngine()
 
         XCTAssertNotNil(url)
-        XCTAssertEqual(url?.absoluteString, "www.mozilla.org")
+        XCTAssertEqual(url?.absoluteString, "www.example.com")
     }
 
     func test_trendingURLForEngine_withNoTrendingTemplate_returnsNil() throws {

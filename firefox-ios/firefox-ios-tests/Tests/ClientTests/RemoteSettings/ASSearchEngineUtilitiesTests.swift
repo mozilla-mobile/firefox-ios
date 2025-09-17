@@ -122,12 +122,20 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
             trending: SearchEngineUrl(
                 base: "https://www.google.com/complete/search",
                 method: "GET",
-                params: [SearchUrlParam(
-                    name: "client",
-                    value: "firefox",
-                    enterpriseValue: nil,
-                    experimentConfig: nil
-                )],
+                params: [
+                    SearchUrlParam(
+                        name: "client",
+                        value: "firefox",
+                        enterpriseValue: nil,
+                        experimentConfig: nil
+                    ),
+                    SearchUrlParam(
+                        name: "channel",
+                        value: "ftr",
+                        enterpriseValue: nil,
+                        experimentConfig: nil
+                    )
+                ],
                 searchTermParamName: "q",
                 displayName: nil
             ),
@@ -151,6 +159,14 @@ class ASSearchEngineUtilitiesTests: XCTestCase {
         let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(engine.urls.suggestions,
                                                                                for: engine)
         let expected = "https://www.google.com/complete/search?client=firefox&q={searchTerms}"
+        XCTAssertEqual(result, expected)
+    }
+
+    func testConvertGoogleEngineTrendingURL() {
+        let engine = google_US_testEngine
+        let result = ASSearchEngineUtilities.convertASSearchURLToOpenSearchURL(engine.urls.trending,
+                                                                               for: engine)
+        let expected = "https://www.google.com/complete/search?client=firefox&channel=ftr&q={searchTerms}"
         XCTAssertEqual(result, expected)
     }
 
