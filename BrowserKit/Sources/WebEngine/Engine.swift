@@ -9,6 +9,7 @@ import Foundation
 public protocol Engine {
     /// Creates a new view for rendering web content.
     /// - Returns: The created `EngineView`
+    @MainActor
     func createView() -> EngineView
 
     /// Creates a new engine session.

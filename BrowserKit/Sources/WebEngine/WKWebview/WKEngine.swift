@@ -45,7 +45,7 @@ public class WKEngine: Engine {
     }
 
     public func createView() -> EngineView {
-        return WKEngineView(frame: .zero)
+        return WKEngineView.factory(frame: .zero)
     }
 
     @MainActor
