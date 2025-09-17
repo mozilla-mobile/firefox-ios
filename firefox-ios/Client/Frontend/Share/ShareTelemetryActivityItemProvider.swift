@@ -8,16 +8,16 @@ import UniformTypeIdentifiers
 /// A special `UIActivityItemProvider` which never shares additional content, but instead records telemetry based on the
 /// share activity chosen.
 class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
-    private let shareType: ShareType
+    private let shareTypeName: String
     private let shareMessage: ShareMessage?
     private let telemetry: ShareTelemetry
 
     init(
-        shareType: ShareType,
+        shareTypeName: String,
         shareMessage: ShareMessage?,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
-        self.shareType = shareType
+        self.shareTypeName = shareTypeName
         self.shareMessage = shareMessage
         self.telemetry = ShareTelemetry(gleanWrapper: gleanWrapper)
 
@@ -30,7 +30,7 @@ class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sen
     ) -> Any? {
         telemetry.sharedTo(
             activityType: activityType,
-            shareType: shareType,
+            shareTypeName: shareTypeName,
             hasShareMessage: shareMessage != nil
         )
 

@@ -36,6 +36,7 @@ class UserActivityHandler {
         searchableIndex.deleteAllSearchableItems(completionHandler: completionHandler)
     }
 
+    @MainActor
     fileprivate func setUserActivityForTab(_ tab: Tab, url: URL) {
         guard !tab.isPrivate, url.isWebPage(includeDataURIs: false),
               !InternalURL.isValid(url: url)
@@ -77,7 +78,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult) {
-        Task {
+        Task { @MainActor in
             await spotlightIndex(page, for: tab)
         }
     }
@@ -90,6 +91,7 @@ extension UserActivityHandler: TabEventHandler {
 }
 
 extension UserActivityHandler {
+    @MainActor
     func spotlightIndex(_ page: ReadabilityResult, for tab: Tab) async {
         guard let url = tab.url,
               !tab.isPrivate,

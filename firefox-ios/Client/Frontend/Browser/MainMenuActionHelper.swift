@@ -56,7 +56,7 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol,
+final class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
                             AppVersionUpdateCheckerProtocol {
@@ -203,6 +203,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
 
     // MARK: - Sections
 
+    @MainActor
     private func getNewTabSection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
         append(to: &section, action: getNewTabAction())
@@ -210,6 +211,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         return section
     }
 
+    @MainActor
     private func getLibrarySection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -271,6 +273,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         return section
     }
 
+    @MainActor
     private func getSecondMiscSection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -323,6 +326,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
 
     // MARK: - Actions
 
+    @MainActor
     private func getNewTabAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
         return SingleActionViewModel(title: tab.isPrivate ? .LegacyAppMenu.NewPrivateTab : .LegacyAppMenu.NewTab,
@@ -351,6 +355,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
 
     // MARK: Zoom
 
+    @MainActor
     private func getZoomAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
         let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
@@ -370,6 +375,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         }.items
     }
 
+    @MainActor
     private func getRequestDesktopSiteAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
 
@@ -673,7 +679,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
     }
 
     // MARK: Reading list
-
+    @MainActor
     private func getReadingListSection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -836,6 +842,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
 
     // MARK: Password
 
+    @MainActor
     private func getPasswordAction(navigationController: UINavigationController?) -> PhotonRowActions? {
         guard PasswordManagerListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs) else { return nil }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .logins)

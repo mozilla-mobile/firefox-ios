@@ -801,31 +801,34 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
         let urlString = tab?.url?.absoluteString ?? ""
+        let profile = self.profile
 
-        profile.places.isBookmarked(url: urlString) { isBookmarkedResult in
-            guard case .success(let isBookmarked) = isBookmarkedResult else {
-                return
-            }
+        profile.places.isBookmarked(url: urlString).uponQueue(.main) { isBookmarkedResult in
+            ensureMainThread {
+                guard case .success(let isBookmarked) = isBookmarkedResult else {
+                    return
+                }
 
-            let canBeSaved: Bool
-            if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
-                canBeSaved = false
-            } else {
-                canBeSaved = true
-            }
+                let canBeSaved: Bool
+                if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
+                    canBeSaved = false
+                } else {
+                    canBeSaved = true
+                }
 
-            let browserProfile = self.profile as? BrowserProfile
-            browserProfile?.tabs.getClientGUIDs { (result, error) in
-                ensureMainThread {
-                    let model = TabPeekModel(canTabBeSaved: canBeSaved,
-                                             canCopyURL: !(tab?.isFxHomeTab ?? false),
-                                             isSyncEnabled: !(result?.isEmpty ?? true),
-                                             screenshot: tab?.screenshot ?? UIImage(),
-                                             accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                    let action = TabPeekAction(tabPeekModel: model,
-                                               windowUUID: uuid,
-                                               actionType: TabPeekActionType.loadTabPeek)
-                    store.dispatchLegacy(action)
+                let browserProfile = profile as? BrowserProfile
+                browserProfile?.tabs.getClientGUIDs { (result, error) in
+                    ensureMainThread {
+                        let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                                 canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                                 isSyncEnabled: !(result?.isEmpty ?? true),
+                                                 screenshot: tab?.screenshot ?? UIImage(),
+                                                 accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
+                        let action = TabPeekAction(tabPeekModel: model,
+                                                   windowUUID: uuid,
+                                                   actionType: TabPeekActionType.loadTabPeek)
+                        store.dispatchLegacy(action)
+                    }
                 }
             }
         }
@@ -961,6 +964,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func dispatchDefaultTabInfo(windowUUID: WindowUUID, selectedTab: Tab, accountData: AccountData) {
         self.dispatchTabInfo(
             info: ProfileTabInfo(isBookmarked: false, isInReadingList: false, isPinned: false),
@@ -1023,6 +1027,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func dispatchTabInfo(
         info: ProfileTabInfo,
         selectedTab: Tab,

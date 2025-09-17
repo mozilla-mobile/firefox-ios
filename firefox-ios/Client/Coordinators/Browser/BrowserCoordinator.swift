@@ -1312,7 +1312,7 @@ class BrowserCoordinator: BaseCoordinator,
     nonisolated private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
-              let temporaryDocument = tab.temporaryDocument,
+              let temporaryDocument = await tab.temporaryDocument,
               !temporaryDocument.isDownloading else {
             return shareType
         }

@@ -68,6 +68,7 @@ class StartAtHomeHelper: FeatureFlaggable {
     ///   - tabs: The tabs to be scanned, either private, or normal, based on the last session
     ///   - profilePreferences: Preferences stored in the user's `Profile`
     /// - Returns: An optional tab, that matches the user's new tab preferences.
+    @MainActor
     public func scanForExistingHomeTab(in tabs: [Tab],
                                        with profilePreferences: Prefs) -> Tab? {
         let pagePreferences = NewTabAccessors.getHomePage(profilePreferences)

@@ -187,6 +187,7 @@ private extension JumpBackInViewModel {
 
 // MARK: - Private: Configure UI
 private extension JumpBackInViewModel {
+    @MainActor
     func configureJumpBackInCellForTab(item: Tab, cell: LegacyJumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site.createBasicSite(url: itemURL, title: item.displayTitle)
@@ -432,6 +433,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
         }
     }
 
+    @MainActor
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         guard let tileLongPressedHandler = onLongPressTileAction else { return }
 

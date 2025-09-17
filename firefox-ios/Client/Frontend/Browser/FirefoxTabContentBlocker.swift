@@ -70,6 +70,7 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         return "TrackingProtectionStats"
     }
 
+    @MainActor
     var isUserEnabled: Bool? {
         didSet {
             guard let tab = tab as? Tab else { return }
@@ -79,6 +80,7 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         }
     }
 
+    @MainActor
     override var isEnabled: Bool {
         if let enabled = isUserEnabled {
             return enabled
@@ -95,12 +97,14 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         return userPrefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .basic
     }
 
+    @MainActor
     init(tab: ContentBlockerTab, prefs: Prefs) {
         userPrefs = prefs
         super.init(tab: tab)
         setupForTab()
     }
 
+    @MainActor
     func setupForTab(completion: (() -> Void)? = nil) {
         guard let tab = tab else { return }
         let rules = BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
@@ -113,11 +117,13 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         )
     }
 
-    override func notifiedTabSetupRequired() {
-        guard let tab = self.tab as? Tab else { return }
-        logger.log("Notified tab setup required", level: .info, category: .adblock)
-        setupForTab(completion: { tab.reloadPage() })
-        TabEvent.post(.didChangeContentBlocking, for: tab)
+    override nonisolated func notifiedTabSetupRequired() {
+        ensureMainThread {
+            guard let tab = self.tab as? Tab else { return }
+            self.logger.log("Notified tab setup required", level: .info, category: .adblock)
+            self.setupForTab(completion: { tab.reloadPage() })
+            TabEvent.post(.didChangeContentBlocking, for: tab)
+        }
     }
 
     override func currentlyEnabledLists() -> [String] {
@@ -129,6 +135,7 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         TabEvent.post(.didChangeContentBlocking, for: tab)
     }
 
+    @MainActor
     func noImageMode(enabled: Bool) {
         guard let tab = tab else { return }
         ContentBlocker.shared.noImageMode(enabled: enabled, forTab: tab)
@@ -137,6 +144,7 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 
 // Static methods to access user prefs for tracking protection
 extension FirefoxTabContentBlocker {
+    @MainActor
     static func setTrackingProtection(enabled: Bool, prefs: Prefs) {
         let key = ContentBlockingConfig.Prefs.EnabledKey
         prefs.setBool(enabled, forKey: key)
@@ -147,6 +155,7 @@ extension FirefoxTabContentBlocker {
         return prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
+    @MainActor
     static func toggleTrackingProtectionEnabled(prefs: Prefs) {
         let isEnabled = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: prefs)
         setTrackingProtection(enabled: !isEnabled, prefs: prefs)

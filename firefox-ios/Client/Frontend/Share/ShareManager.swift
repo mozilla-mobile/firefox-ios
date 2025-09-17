@@ -19,6 +19,7 @@ class ShareManager: NSObject {
         UIActivity.ActivityType.addToReadingList
     ]
 
+    @MainActor
     static func createActivityViewController(
         shareType: ShareType,
         shareMessage: ShareMessage?,
@@ -44,6 +45,7 @@ class ShareManager: NSObject {
         return activityViewController
     }
 
+    @MainActor
     static func getActivityItems(
         forShareType shareType: ShareType,
         withExplicitShareMessage explicitShareMessage: ShareMessage?
@@ -108,11 +110,17 @@ class ShareManager: NSObject {
         }
 
         // For all share types, record basic telemetry
-        activityItems.append(ShareTelemetryActivityItemProvider(shareType: shareType, shareMessage: explicitShareMessage))
+        activityItems.append(
+            ShareTelemetryActivityItemProvider(
+                shareTypeName: shareType.typeName,
+                shareMessage: explicitShareMessage
+            )
+        )
 
         return activityItems
     }
 
+    @MainActor
     private static func getApplicationActivities(forShareType shareType: ShareType) -> [UIActivity] {
         var appActivities = [UIActivity]()
 

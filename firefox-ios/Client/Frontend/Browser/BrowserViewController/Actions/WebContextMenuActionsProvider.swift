@@ -93,15 +93,17 @@ class WebContextMenuActionsProvider {
             ),
             identifier: UIAction.Identifier("linkContextMenu.download")
         ) { _ in
-            // This checks if download is a blob, if yes, begin blob download process
-            if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                // if not a blob, set pendingDownloadWebView and load the request in
-                // the webview, which will trigger the WKWebView navigationResponse
-                // delegate function and eventually downloadHelper.open()
-                assignWebView(currentTab.webView)
-                let request = URLRequest(url: url)
-                currentTab.webView?.load(request)
-                self.recordOptionSelectedTelemetry(option: .downloadLink)
+            ensureMainThread {
+                // This checks if download is a blob, if yes, begin blob download process
+                if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
+                    // if not a blob, set pendingDownloadWebView and load the request in
+                    // the webview, which will trigger the WKWebView navigationResponse
+                    // delegate function and eventually downloadHelper.open()
+                    assignWebView(currentTab.webView)
+                    let request = URLRequest(url: url)
+                    currentTab.webView?.load(request)
+                    self.recordOptionSelectedTelemetry(option: .downloadLink)
+                }
             }
         })
     }

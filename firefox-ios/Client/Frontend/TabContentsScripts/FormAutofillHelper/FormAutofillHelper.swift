@@ -162,6 +162,7 @@ class FormAutofillHelper: TabContentScript {
 
     // MARK: - Injection
 
+    @MainActor
     static func injectAddressInfo(logger: Logger,
                                   address: UnencryptedAddressFields,
                                   tab: Tab,
@@ -194,6 +195,7 @@ class FormAutofillHelper: TabContentScript {
         }
     }
 
+    @MainActor
     static func injectCardInfo(logger: Logger,
                                card: UnencryptedCreditCardFields,
                                tab: Tab,

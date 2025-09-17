@@ -105,10 +105,12 @@ class TopTabDisplayManager: NSObject {
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
     // that the item has been long pressed on (and not moved yet), and this gesture recognizer
     // has been triggered
+    @MainActor
     var isDragging: Bool {
         return collectionView.hasActiveDrag || isLongPressGestureStarted
     }
 
+    @MainActor
     private var isLongPressGestureStarted: Bool {
         var started = false
         collectionView.gestureRecognizers?.forEach { recognizer in
@@ -126,6 +128,7 @@ class TopTabDisplayManager: NSObject {
         return tabManager.normalTabs.count == 1
     }
 
+    @MainActor
     func getRegularOrderedTabs() -> [Tab]? {
         // Get current order
         guard let tabDisplayOrderDecoded = TabDisplayOrder.decode() else { return nil }
@@ -157,6 +160,7 @@ class TopTabDisplayManager: NSObject {
         return !regularOrderedTabs.isEmpty ? regularOrderedTabs : nil
     }
 
+    @MainActor
     func saveRegularOrderedTabs(from tabs: [Tab]) {
         let uuids: [String] = tabs.map { $0.tabUUID }
         tabDisplayOrder.regularTabUUID = uuids
@@ -164,6 +168,7 @@ class TopTabDisplayManager: NSObject {
     }
 
     @discardableResult
+    @MainActor
     private func cancelDragAndGestures() -> Bool {
         let isActive = collectionView.hasActiveDrag || isLongPressGestureStarted
         collectionView.cancelInteractiveMovement()
@@ -308,6 +313,7 @@ class TopTabDisplayManager: NSObject {
     // unless reloadItems is explicitly called on each item.
     // Avoid calling with evenIfHidden=true, as it can cause a blink effect as the cell is updated.
     // The cause of the blinking effect is unknown (and unusual).
+    @MainActor
     private func forceReloadCollectionView() {
         var indexPaths = [IndexPath]()
         for i in 0..<self.collectionView.numberOfItems(inSection: 0) {
@@ -340,6 +346,7 @@ class TopTabDisplayManager: NSObject {
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
+    @MainActor
     func hideDisplayedTabs( completion: @escaping () -> Void) {
         let cells = collectionView.visibleCells
 
@@ -475,6 +482,7 @@ extension TopTabDisplayManager: UICollectionViewDragDelegate {
 
 // MARK: - UICollectionViewDropDelegate
 extension TopTabDisplayManager: UICollectionViewDropDelegate {
+    @MainActor
     private func dragPreviewParameters(
         _ collectionView: UICollectionView,
         dragPreviewParametersForItemAt indexPath: IndexPath
@@ -491,6 +499,7 @@ extension TopTabDisplayManager: UICollectionViewDropDelegate {
         return previewParams
     }
 
+    @MainActor
     func collectionView(
         _ collectionView: UICollectionView,
         dragPreviewParametersForItemAt indexPath: IndexPath
@@ -588,6 +597,7 @@ extension TopTabDisplayManager: TabEventHandler {
         return IndexPath(row: index, section: 0)
     }
 
+    @MainActor
     func removeAllTabsFromView() {
         operations.removeAll()
         dataStore.removeAll()
@@ -665,6 +675,7 @@ extension TopTabDisplayManager: TabManagerDelegate {
      is the one to use, and for bulk updates where it is ok to just redraw the entire view with
      the latest state, use `refreshStore()`.
      */
+    @MainActor
     private func performChainedOperations() {
         guard !performingChainedOperations,
               let (type, operation) = operations.popLast()
@@ -684,6 +695,7 @@ extension TopTabDisplayManager: TabManagerDelegate {
         })
     }
 
+    @MainActor
     private func updateWith(animationType: TabAnimationType,
                             operation: (() -> Void)?) {
         if let op = operation {
