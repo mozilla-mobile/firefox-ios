@@ -48,6 +48,29 @@ extension UIViewController {
         return false
     }
 
+    /// Can be used to take a screenshot of a ViewController's view
+    func takeScreenshot() -> UIImageView? {
+        guard
+            isViewLoaded,
+            let view = self.view
+        else { return nil }
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        format.opaque = view.isOpaque
+
+        let renderer = UIGraphicsImageRenderer(size: view.bounds.size, format: format)
+        let image = renderer.image { _ in
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: false)
+        }
+
+        let imageView = UIImageView(image: image)
+        imageView.frame = view.bounds
+        imageView.isUserInteractionEnabled = false
+        imageView.contentMode = .scaleToFill  // same size as source view
+        return imageView
+    }
+
     /// This presents a View Controller with a bar button item that can be used to dismiss the VC
     /// - Parameters:
     ///     - navItemLocation: Define whether dismiss bar button item should be on the right
