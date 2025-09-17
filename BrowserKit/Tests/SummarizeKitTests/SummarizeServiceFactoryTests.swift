@@ -35,7 +35,7 @@ final class SummarizeServiceFactoryTests: XCTestCase {
         serviceLifecycle = nil
         super.tearDown()
     }
-
+    #if canImport(FoundationModels)
     func test_make_whenAppleIntelligenceAvailable() throws {
         let subject = createSubject()
 
@@ -44,6 +44,7 @@ final class SummarizeServiceFactoryTests: XCTestCase {
 
         XCTAssertNotNil(service.summarizerLifecycle)
     }
+    #endif
 
     func test_make_whenHostedSummarizerTrue_returnsNilForLLMConfigAvailable() throws {
         let subject = createSubject()
