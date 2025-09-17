@@ -31,8 +31,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         static let swipingVelocity: CGFloat = 250
         static let webPagePreviewAddNewTabScale: CGFloat = 0.6
         static let webPagePreviewAddNewTabXOffset: CGFloat = 40.0
-        static let webPagePreviewAddNewTabScaleCoffienctA: CGFloat = 0.2
-        static let webPagePreviewAddNewTabScaleCoffienctB: CGFloat = 0.8
+        static let webPagePreviewAddNewTabScaleCoefficientA: CGFloat = 0.2
+        static let webPagePreviewAddNewTabScaleCoefficientB: CGFloat = 0.8
         static let webPagePreviewAddNewTabHeightScale: CGFloat = 0.7
     }
 
@@ -204,7 +204,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             let progress = abs(translation.x) / contentContainer.frame.width
             let width = isRTL ? -contentContainer.frame.width : contentContainer.frame.width
             let height = webPagePreview.frame.height
-            let scale = UX.webPagePreviewAddNewTabScaleCoffienctA * progress + UX.webPagePreviewAddNewTabScaleCoffienctB
+            let scale = UX.webPagePreviewAddNewTabScaleCoefficientA * progress + UX.webPagePreviewAddNewTabScaleCoefficientB
             let translationX = (1 - progress) * (width + UX.webPagePreviewAddNewTabXOffset / scale)
             let translationY = height * (UX.webPagePreviewAddNewTabHeightScale - progress)
 
