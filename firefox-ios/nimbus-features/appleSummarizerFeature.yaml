@@ -8,17 +8,17 @@ features:
         description: >
           Enables the apple summarizer feature.
         type: Boolean
-        default: false
+        default: true
       toolbarEntrypoint:
         description: >
           Enables the toolbar entrypoint for the summarizer feature.
         type: Boolean
-        default: false
+        default: true
       shakeGesture:
         description: >
           Enables the shake gesture for the summarizer feature.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
