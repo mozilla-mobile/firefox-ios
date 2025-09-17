@@ -54,7 +54,7 @@ final class SummarizeViewModelTests: XCTestCase {
         let subject = createSubject(isTosAccepted: false)
 
         subject.unblockSummarization()
-        
+
         subject.summarize(webView: webView, footNoteLabel: "", dateProvider: dateProvider) { result in
             let error = try? XCTUnwrap(result.failure())
 
@@ -121,7 +121,7 @@ final class SummarizeViewModelTests: XCTestCase {
         }
         wait(for: [newDataExpectation], timeout: 0.5)
     }
-    
+
     func test_summarize_waitsForInitialDelay() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let chunk = "This is the max words to proceed"
@@ -130,18 +130,18 @@ final class SummarizeViewModelTests: XCTestCase {
         summarizerService.delayStreamResultInSeconds = delay
         // make sure enough words is false
         let subject = createSubject(minDelayToShowSummary: delay, minWordsAcceptToShow: chunk.count + 1)
-        
+
         subject.unblockSummarization()
-        
+
         subject.summarize(webView: webView, footNoteLabel: "Footnote", dateProvider: dateProvider) { result in
             let result = try? result.get()
             // don't fulfill untill the footnote is passed
             guard result != chunk else { return }
             newDataExpectation.fulfill()
         }
-        
+
         wait(for: [newDataExpectation], timeout: delay + 1)
-        
+
         XCTAssertEqual(dateProvider.returnedDates.count, 2)
         XCTAssertGreaterThanOrEqual(dateProvider.returnedDates[1], dateProvider.returnedDates[0].addingTimeInterval(delay))
     }
