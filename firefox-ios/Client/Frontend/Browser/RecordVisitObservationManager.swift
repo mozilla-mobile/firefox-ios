@@ -11,11 +11,11 @@ import WebKit
 // Handles recording visits to websites, which will be displayed in the History Panel.
 class RecordVisitObservationManager {
     private var historyHandler: HistoryHandler
-    nonisolated let logger: Logger
+    let logger: Logger
     var lastObservationRecorded: VisitObservation?
 
-    init (historyHandler: HistoryHandler,
-          logger: Logger = DefaultLogger.shared) {
+    init(historyHandler: HistoryHandler,
+         logger: Logger = DefaultLogger.shared) {
         self.historyHandler = historyHandler
         self.logger = logger
     }

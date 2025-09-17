@@ -58,9 +58,9 @@ public protocol BookmarksHandler {
 }
 
 public protocol HistoryHandler {
-//    Deferred<Maybe<Void>>
     func applyObservation(visitObservation: VisitObservation) -> Success
-    func applyObservation(visitObservation: VisitObservation, completion: @escaping (Result<Void, any Error>) -> Void)
+    func applyObservation(visitObservation: VisitObservation,
+                          completion: @escaping (Result<Void, any Error>) -> Void)
 }
 
 // TODO: FXIOS-13208 Make RustPlaces actually Sendable
