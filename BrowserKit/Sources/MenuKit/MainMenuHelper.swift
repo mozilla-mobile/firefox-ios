@@ -3,22 +3,31 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CoreFoundation
+import UIKit
 
 protocol MainMenuInterface {
+    @MainActor
     var isReduceTransparencyEnabled: Bool { get }
+
+    @MainActor
     func backgroundAlpha() -> CGFloat
 }
 
-final class MainMenuHelper: MainMenuInterface {
+public final class MainMenuHelper: MainMenuInterface {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.80
     }
 
-    var isReduceTransparencyEnabled: Bool {
+    public init() {}
+
+    @MainActor
+    public var isReduceTransparencyEnabled: Bool {
         UIAccessibility.isReduceTransparencyEnabled
     }
 
-    func backgroundAlpha() -> CGFloat {
+    @MainActor
+    public func backgroundAlpha() -> CGFloat {
         guard !isReduceTransparencyEnabled else { return 1.0 }
 
         return UX.backgroundAlphaForBlur

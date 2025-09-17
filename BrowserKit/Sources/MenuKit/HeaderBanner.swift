@@ -18,13 +18,13 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         static let closeButtonVerticalMargin: CGFloat = 8
         static let foxImageHeight: CGFloat = 53
         static let foxImageWidth: CGFloat = 77
-        static let backgroundAlpha: CGFloat = 0.80
         static let labelsVerticalMargin: CGFloat = 8
         static let crossLarge = StandardImageIdentifiers.Large.cross
     }
 
     public var closeButtonCallback: (() -> Void)?
     public var bannerButtonCallback: (() -> Void)?
+    private var mainMenuHelper: MainMenuHelper?
 
     private lazy var headerView: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
@@ -76,7 +76,8 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupViews() {
+    private func setupViews(mainMenuHelper: MainMenuHelper = MainMenuHelper()) {
+        self.mainMenuHelper = mainMenuHelper
         addSubviews(headerView)
         headerView.addSubview(headerLabelsContainer)
         headerView.addSubview(closeButton)
@@ -144,7 +145,8 @@ public final class HeaderBanner: UIView, ThemeApplicable {
     }
 
     public func applyTheme(theme: Theme) {
-        headerView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
+        let alpha: CGFloat = mainMenuHelper?.backgroundAlpha() ?? 1.0
+        headerView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(alpha)
         headerLabelsContainer.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary

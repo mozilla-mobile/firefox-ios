@@ -43,6 +43,7 @@ class MainMenuViewController: UIViewController,
     private let profile: Profile
     private var menuState: MainMenuState
     private let logger: Logger
+    private let mainMenuHelper: MainMenuHelper
 
     var viewProvider: ContextualHintViewProvider?
 
@@ -86,13 +87,15 @@ class MainMenuViewController: UIViewController,
         profile: Profile,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        mainMenuHelper: MainMenuHelper = MainMenuHelper()
     ) {
         self.windowUUID = windowUUID
         self.profile = profile
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.logger = logger
+        self.mainMenuHelper = mainMenuHelper
         menuState = MainMenuState(windowUUID: windowUUID)
         self.lastOrientation = UIDevice.current.orientation
         super.init(nibName: nil, bundle: nil)
@@ -196,7 +199,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func updateBlur() {
-        let shouldShowBlur = !MainMenuHelper().isReduceTransparencyEnabled
+        let shouldShowBlur = !mainMenuHelper.isReduceTransparencyEnabled
 
         if shouldShowBlur {
 #if canImport(FoundationModels)
@@ -446,7 +449,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(MainMenuHelper().backgroundAlpha())
+        view.backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(mainMenuHelper.backgroundAlpha())
         menuContent.applyTheme(theme: theme)
     }
 
