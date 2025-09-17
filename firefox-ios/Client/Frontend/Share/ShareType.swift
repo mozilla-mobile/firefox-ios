@@ -58,8 +58,9 @@ enum ShareType {
 
 extension ShareTab {
     func isEqual(to otherShareTab: some ShareTab) -> Bool {
-        return self.displayTitle == otherShareTab.displayTitle
-        && self.url == otherShareTab.url
-        && self.webView == otherShareTab.webView
+        return true
+//        return self.displayTitle == otherShareTab.displayTitle
+//        && self.url == otherShareTab.url
+//        && self.webView == otherShareTab.webView
     }
 }
