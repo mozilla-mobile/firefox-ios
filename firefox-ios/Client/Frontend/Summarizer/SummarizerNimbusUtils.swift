@@ -65,13 +65,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     func isAppleSummarizerEnabled() -> Bool {
         #if canImport(FoundationModels)
-<<<<<<< HEAD
-            let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizer, checking: .buildOnly)
-            return AppleIntelligenceUtil().isAppleIntelligenceAvailable && isFlagEnabled
-=======
             let isEngLang = NSLocale.current.languageCode == "en"
             return isEngLang && AppleIntelligenceUtil().isAppleIntelligenceAvailable
->>>>>>> cbc0999d7 (Bugfix FXIOS-13476 [Summarizer] Enable apple intelligence for users with lang is english (#29395))
         #else
             return false
         #endif
@@ -82,13 +77,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
-<<<<<<< HEAD
-        let isFlagEnabled = featureFlags.isFeatureEnabled(.appleSummarizerToolbarEntrypoint, checking: .buildOnly)
-        return isAppleSummarizerEnabled() && isFlagEnabled
-=======
         let isEngLang = NSLocale.current.languageCode == "en"
         return isEngLang && isAppleSummarizerEnabled()
->>>>>>> cbc0999d7 (Bugfix FXIOS-13476 [Summarizer] Enable apple intelligence for users with lang is english (#29395))
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
@@ -97,13 +87,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerShakeGestureEnabled() -> Bool {
-<<<<<<< HEAD
-        let isShakeEnabled = featureFlags.isFeatureEnabled(.appleSummarizerShakeGesture, checking: .buildOnly)
-        return isAppleSummarizerEnabled() && isShakeEnabled
-=======
         let isEngLang = NSLocale.current.languageCode == "en"
         return isEngLang && isAppleSummarizerEnabled()
->>>>>>> cbc0999d7 (Bugfix FXIOS-13476 [Summarizer] Enable apple intelligence for users with lang is english (#29395))
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
