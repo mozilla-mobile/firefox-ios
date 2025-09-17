@@ -6,7 +6,7 @@ features:
       simplified-ui-enabled:
         description: If true, enable simplified UI part of Felt Privacy
         type: Boolean
-        default: false
+        default: true
       felt-deletion-enabled:
         description: If true, enable Felt Deletion part of Felt Privacy
         type: Boolean
@@ -21,4 +21,3 @@ features:
         value:
           simplified-ui-enabled: true
           felt-deletion-enabled: false
-
