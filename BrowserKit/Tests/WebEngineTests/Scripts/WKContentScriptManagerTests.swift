@@ -51,7 +51,6 @@ final class WKContentScriptManagerTests: XCTestCase {
         XCTAssertEqual(config.scriptNameAdded, "MockWKContentScriptHandler")
     }
 
-    @MainActor
     func testAddContentToPageGivenAddedTwiceThenOnlyAddOnce() async {
         let subject = createSubject()
         let session = await MockWKEngineSession()

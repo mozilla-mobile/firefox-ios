@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 final class FocusContentScriptTests: XCTestCase {
     private var contentScriptDelegate: MockContentScriptDelegate!
 
@@ -18,7 +19,6 @@ final class FocusContentScriptTests: XCTestCase {
         super.tearDown()
     }
 
-    @MainActor
     func testUserContentControllerGivenEmptyDataDoesNotCallContentScriptDelegate() {
         let subject = createSubject()
 
@@ -28,7 +28,6 @@ final class FocusContentScriptTests: XCTestCase {
         XCTAssertNil(contentScriptDelegate.lastContentScriptEvent)
     }
 
-    @MainActor
     func testUserContentControllerGivenFocusEventCallsContentScriptDelegate() throws {
         let subject = createSubject()
 
@@ -42,7 +41,6 @@ final class FocusContentScriptTests: XCTestCase {
         XCTAssertEqual(event, .fieldFocusChanged(true))
     }
 
-    @MainActor
     func testUserContentControllerGivenBlurEventCallsContentScriptDelegate() throws {
         let subject = createSubject()
 
@@ -56,7 +54,6 @@ final class FocusContentScriptTests: XCTestCase {
         XCTAssertEqual(event, .fieldFocusChanged(false))
     }
 
-    @MainActor
     private func createSubject() -> FocusContentScript {
         let subject = FocusContentScript(delegate: contentScriptDelegate)
         trackForMemoryLeaks(subject)
