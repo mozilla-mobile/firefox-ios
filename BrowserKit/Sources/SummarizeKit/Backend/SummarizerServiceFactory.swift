@@ -29,9 +29,9 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         let config = config ?? SummarizerConfig.defaultConfig
         #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
-            let applSummarizer = FoundationModelsSummarizer(config: config)
+            let appleSummarizer = FoundationModelsSummarizer(config: config)
             return DefaultSummarizerService(
-                summarizer: applSummarizer,
+                summarizer: appleSummarizer,
                 lifecycleDelegate: lifecycleDelegate,
                 maxWords: maxWords
             )
