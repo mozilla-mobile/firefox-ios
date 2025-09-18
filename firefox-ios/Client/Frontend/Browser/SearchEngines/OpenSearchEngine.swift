@@ -4,7 +4,7 @@
 
 import UIKit
 
-final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
+final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearchEngine {
     static let supportsSecureCoding = true
 
     struct UX {
