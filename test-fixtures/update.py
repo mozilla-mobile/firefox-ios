@@ -1,13 +1,9 @@
 import os
-import re
-import sys
-import pathlib
 from shutil import copyfile
 from ruamel.yaml import YAML
 
 
 import requests
-import semver
 from requests.exceptions import HTTPError
 
 
@@ -28,15 +24,6 @@ WORKFLOW = 'NewXcodeVersions'
 resp = requests.get(BITRISE_STACK_INFO)
 resp.raise_for_status()
 resp_json = resp.json()
-
-
-def parse_semver(raw_str):
-    parsed = raw_str.split(pattern)[1]
-    if parsed[-1] == 'x':
-        p = parsed.split('.x')[0]
-        return '{0}.0'.format(p)
-    else:
-        return False
 
 def latest_stack():
     try:
