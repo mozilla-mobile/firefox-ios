@@ -596,10 +596,8 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         // History without counting Clear Recent History, Recently Closed
-        // Bug: Two identical rows in history are shown
-        // https://github.com/mozilla-mobile/firefox-ios/issues/29404
-        //  let history = app.tables[HistoryPanelA11y.tableView].cells.count - 1
-        //  XCTAssertEqual(history, 1, "There should be one entry in History")
+        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 1
+        XCTAssertEqual(history, 1, "There should be one entry in History")
         let savedToHistory = app.tables[HistoryPanelA11y.tableView]
             .cells.element(boundBy: 1)
             .staticTexts.element(boundBy: 1)
