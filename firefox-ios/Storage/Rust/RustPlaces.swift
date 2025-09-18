@@ -376,17 +376,21 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler {
     }
 
     public func deleteBookmarksWithURL(url: String) -> Success {
-        return getBookmarksWithURL(url: url) >>== { bookmarks in
-            let deferreds = bookmarks.map({ self.deleteBookmarkNode(guid: $0.guid) })
-            return all(deferreds).bind { results in
-                if let error = results.first(where: { $0.isFailure })?.failureValue {
-                    return deferMaybe(error)
+        return getBookmarksWithURL(url: url)
+            .bind { res in
+                guard case .success(let bookmarks) = res else {
+                    return Deferred(value: Maybe(failure: res.failureValue!))
                 }
+                let deferreds = bookmarks.map({ self.deleteBookmarkNode(guid: $0.guid) })
+                return all(deferreds).bind { results in
+                    if let error = results.first(where: { $0.isFailure })?.failureValue {
+                        return deferMaybe(error)
+                    }
 
-                self.notificationCenter.post(name: .BookmarksUpdated, withObject: self)
-                return succeed()
+                    self.notificationCenter.post(name: .BookmarksUpdated, withObject: self)
+                    return succeed()
+                }
             }
-        }
     }
 
     public func createFolder(parentGUID: GUID, title: String,
