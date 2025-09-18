@@ -11,7 +11,7 @@ import semver
 from requests.exceptions import HTTPError
 
 
-BITRISE_STACK_INFO = 'https://app.bitrise.io/app/6c06d3a40422d10f/all_stack_info'
+BITRISE_STACK_INFO = 'https://api.github.com/repos/bitrise-io/stacks/contents/content/stack_reports'
 '''
 curl ${BITRISE_STACK_INFO} | jq ' . | keys'
 [
@@ -41,10 +41,11 @@ def parse_semver(raw_str):
 def latest_stack():
     try:
         resp = requests.get(BITRISE_STACK_INFO)
-        resp_json = resp.json()['available_stacks']
-        keys = sorted([key for key in resp_json.keys() if '-edge' not in key 
-                       and 'latest-stable' not in key
-                       and pattern in key], reverse=True)
+        resp_json = resp.json()
+
+        stack_names = [stack.get("name").replace(".md", "") for stack in resp_json]
+        keys = sorted([stack_name for stack_name in stack_names 
+                       if pattern in stack_name], reverse=True)
         return keys[0]
     except HTTPError as http_error:
         print('An HTTP error has occurred: {http_error}')
@@ -54,8 +55,11 @@ def latest_stack():
 def latest_stable_stack():
     try:
         resp = requests.get(BITRISE_STACK_INFO)
-        resp_json = resp.json()['available_stacks']
-        keys = sorted([key for key in resp_json.keys() if '-edge' not in key and 'latest' not in key and pattern in key], reverse=True)
+        resp_json = resp.json()
+
+        stack_names = [stack.get("name").replace(".md", "") for stack in resp_json]
+        keys = sorted([stack_name for stack_name in stack_names 
+                       if pattern in stack_name and '-edge' not in stack_name], reverse=True)
         return keys[0]
     except HTTPError as http_error:
         print('An HTTP error has occurred: {http_error}')
@@ -68,16 +72,6 @@ def write_to_bitrise_yml(yaml, version):
         obj_yaml.dump(yaml, tmpfile)
         copyfile(tmp_file, BITRISE_YML)
         os.remove(tmp_file)
-
-def default_stack():
-    try:
-        resp = requests.get(BITRISE_STACK_INFO)
-        resp_json = resp.json()
-        return resp_json['project_types_with_default_stacks']['ios']['default_stack']
-    except HTTPError as http_error:
-        print('An HTTP error has occurred: {http_error}')
-    except Exception as err:
-        print('An exception has occurred: {err}')
 
 if __name__ == '__main__':
     '''
