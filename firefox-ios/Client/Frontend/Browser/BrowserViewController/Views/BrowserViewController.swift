@@ -225,7 +225,7 @@ class BrowserViewController: UIViewController,
 
     private lazy var effect: some UIVisualEffect = {
 #if canImport(FoundationModels)
-        if #available(iOS 26, *) {
+        if #available(iOS 26, *), !DefaultBrowserUtil.isRunningLiquidGlassEarlyBeta {
             return UIGlassEffect(style: .regular)
         } else {
             return UIBlurEffect(style: .systemUltraThinMaterial)
@@ -862,7 +862,7 @@ class BrowserViewController: UIViewController,
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-            scrollController.showToolbars(animated: false)
+            if !isMinimalAddressBarEnabled { scrollController.showToolbars(animated: false) }
         }
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
         browserDidBecomeActive()
@@ -1103,6 +1103,9 @@ class BrowserViewController: UIViewController,
                                                    bottomContainer: bottomContainer,
                                                    headerContainer: header)
         }
+        let tapHandler = scrollController.createToolbarTapHandler()
+        overKeyboardContainer.onTap = tapHandler
+        header.onTap = tapHandler
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links into the view from other apps.
