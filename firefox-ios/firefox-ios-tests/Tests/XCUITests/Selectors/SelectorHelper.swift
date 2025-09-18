@@ -10,6 +10,10 @@ enum SelectorStrategy {
     case anyById(String)                 // button or label
     case staticTextLabelContains(String) // text that contains a fragment
     case predicate(NSPredicate)          // escape hatch
+    case linkById(String)
+    case collectionViewById(String)
+    case tableById(String)
+    case textFieldById(String)
 }
 
 // Selector model (with metadata)
@@ -36,7 +40,7 @@ extension Selector {
     func element(in app: XCUIApplication) -> XCUIElement {
         switch strategy {
         case .buttonById:
-            return app.buttons[value]
+                return app.buttons[value]
         case .staticTextById:
             return app.staticTexts[value]
         case .anyById:
@@ -48,6 +52,14 @@ extension Selector {
             return app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", value)).element(boundBy: 0)
         case .predicate(let p):
             return app.descendants(matching: .any).matching(p).element(boundBy: 0)
+        case .linkById:
+            return app.links[value]
+        case .collectionViewById:
+            return app.collectionViews[value]
+        case .tableById:
+            return app.tables[value]
+        case .textFieldById:
+            return app.textFields[value]
         }
     }
 
@@ -66,6 +78,14 @@ extension Selector {
             return app.staticTexts.containing(pred)
         case .predicate(let p):
             return app.descendants(matching: .any).matching(p)
+        case .linkById:
+            return app.links.matching(identifier: value)
+        case .collectionViewById:
+            return app.collectionViews.matching(identifier: value)
+        case .tableById:
+            return app.tables.matching(identifier: value)
+        case .textFieldById:
+            return app.textFields.matching(identifier: value)
         }
     }
 }

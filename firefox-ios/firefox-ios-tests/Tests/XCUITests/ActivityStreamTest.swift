@@ -16,6 +16,11 @@ let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
 let tabsTray = AccessibilityIdentifiers.TabTray.tabsTray
 
 class ActivityStreamTest: FeatureFlaggedTestBase {
+    private var topSites: TopSitesScreen!
+    private var contextMenu: ContextMenuScreen!
+    private var tabTray: TabTrayScreen!
+    private var browser: BrowserScreen!
+
     typealias TopSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites
     let TopSiteCellgroup = XCUIApplication().links[TopSites.itemCell]
     let testWithDB = ["testTopSites2Add", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
@@ -36,6 +41,10 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         launchArguments.append(LaunchArguments.SkipAddingGoogleTopSite)
         launchArguments.append(LaunchArguments.SkipSponsoredShortcuts)
         super.setUp()
+        topSites = TopSitesScreen(app: app)
+        contextMenu = ContextMenuScreen(app: app)
+        tabTray = TabTrayScreen(app: app)
+        browser = BrowserScreen(app: app)
     }
     override func tearDown() {
         XCUIDevice.shared.orientation = .portrait
@@ -62,6 +71,20 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
                 app.collectionViews.links.staticTexts["Facebook"]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2273342
+    // Smoketest
+    func testDefaultSites_TAE() throws {
+        app.launch()
+
+        XCTExpectFailure("The app was not launched", strict: false) {
+            topSites.assertVisible()
+        }
+
+        topSites.assertVisible()
+        topSites.assertTopSitesCount(5)
+        topSites.assertDefaultTopSites()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2272218
@@ -263,6 +286,46 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
+    func testTopSitesOpenInNewPrivateTab_tabTrayExperimentOff_swipingTabsExperimentOff_TAE() throws {
+        addLaunchArgument(jsonFileName: "swipingTabsOff", featureName: "toolbar-refactor-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
+
+        XCTExpectFailure("The app was not launched", strict: false) {
+            topSites.assertVisible()
+        }
+
+        // Esperar a que se cargue la Toolbar
+        BaseTestCase().mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+
+        // Long tap en Wikipedia
+        topSites.longPressOnSite(named: "Wikipedia")
+
+        // Context menu → Open in Private Tab
+        contextMenu.openInPrivateTab()
+
+        // Vuelve a existir TopSiteCellGroup (homepage)
+        topSites.assertVisible()
+
+        // Activar modo privado
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.goto(TabTray)
+
+        // Validar primera celda y abrir Wikipedia
+        tabTray.assertFirstCellVisible()
+        navigator.nowAt(TabTray)
+        tabTray.tapOnCell(named: "Wikipedia")
+
+        // Validar que se abre la web
+        topSites.assertNotVisibleTopSites()
+        waitForValueContains(
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+            value: "wikipedia.org"
+        )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2273338
+    // Smoketest
     func testTopSitesOpenInNewPrivateTab_tabTrayToolbarOnHomepageOff() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
@@ -292,6 +355,50 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
                              value: "wikipedia.org")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2273338
+    // Smoketest
+    func testTopSitesOpenInNewPrivateTab_tabTrayToolbarOnHomepageOff_TAE() throws {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
+        app.launch()
+
+        // Assert that the Top Sites are visible upon launch
+        XCTExpectFailure("The app was not launched", strict: false) {
+            topSites.assertVisible()
+        }
+
+        // Wait for the toolbar to exist, which includes the settings menu button
+        BaseTestCase().mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+
+        // Long press on the Wikipedia top site using the screen object
+        topSites.longPressOnSite(named: "Wikipedia")
+
+        // Open the private tab using the context menu screen object
+        contextMenu.openInPrivateTab()
+
+        // Assert the homepage is visible again after the context menu action
+        topSites.assertVisible()
+
+        // Toggle private mode and navigate to the Tab Tray
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.goto(TabTray)
+
+        // Assert that the first cell in the Tab Tray is visible and that the navigator is now at the Tab Tray
+        tabTray.assertFirstCellVisible()
+        navigator.nowAt(TabTray)
+
+        // Use the new method from the TopSitesScreen object to check the hittable status
+        topSites.assertNotHittable()
+
+        // Tap on the Wikipedia cell in the Tab Tray and ensure the website is open
+        tabTray.tapOnCell(named: "Wikipedia")
+
+        // Use the new BrowserScreen to validate the URL in the address bar
+        browser.assertAddressBarContains(value: "wikipedia.org")
+    }
+
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
@@ -318,6 +425,40 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         waitForExistence(app.otherElements[tabsTray].collectionViews.cells.firstMatch)
         let numTabsOpen = app.otherElements[tabsTray].collectionViews.cells.count
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
+    }
+
+    // SmokeTest
+    func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOn_TAE() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+        app.launch()
+
+        XCTExpectFailure("The app was not launched", strict: false) {
+            topSites.assertVisible()
+        }
+
+        BaseTestCase().mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+
+        // Long tap on the default Top Site
+        let siteName = defaultTopSite["bookmarkLabel"]!
+        topSites.longPressOnSite(named: siteName)
+
+        contextMenu.openInPrivateTab()
+
+        navigator.nowAt(HomePanelsScreen)
+        BaseTestCase().waitForTabsButton()
+
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+
+        tabTray.assertCellExists(named: siteName)
+
+        if iPad() {
+            navigator.goto(TabTray)
+        }
+
+        tabTray.assertFirstCellVisible()
+
+        tabTray.assertTabCount(1)
     }
 
     // Smoketest
@@ -349,6 +490,44 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             waitForExistence(app.collectionViews.element(boundBy: 1).cells.firstMatch)
         }
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
+    }
+
+    func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff_TAE() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+        app.launch()
+
+        XCTExpectFailure("The app was not launched", strict: false) {
+            topSites.assertVisible()
+        }
+
+        BaseTestCase().mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+
+        // Long-press a default top site using the screen object
+        let siteName = defaultTopSite["bookmarkLabel"]!
+        topSites.longPressOnSite(named: siteName)
+
+        // Select the context menu option
+        contextMenu.openInPrivateTab()
+
+        navigator.nowAt(HomePanelsScreen)
+        BaseTestCase().waitForTabsButton()
+
+        // Toggle private mode
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+
+        // Assert that the new tab exists in the tab tray
+        tabTray.assertCellExists(named: siteName)
+
+        if iPad() {
+            navigator.goto(TabTray)
+            tabTray.assertFirstCellVisible()
+            tabTray.assertTabCount(1)
+        } else {
+            // Assert the number of open tabs on iPhone, assuming a different tab UI
+            BaseTestCase().mozWaitForElementToExist(app.collectionViews.element(boundBy: 1).cells.firstMatch)
+            XCTAssertEqual(app.collectionViews.element(boundBy: 1).cells.count, 1, "New tab not open")
+        }
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
