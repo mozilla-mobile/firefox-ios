@@ -40,7 +40,7 @@ extension Selector {
     func element(in app: XCUIApplication) -> XCUIElement {
         switch strategy {
         case .buttonById:
-                return app.buttons[value]
+            return app.buttons[value]
         case .staticTextById:
             return app.staticTexts[value]
         case .anyById:

@@ -7,6 +7,7 @@ import XCTest
 protocol TabTraySelectorsSet {
     var TABSTRAY_CONTAINER: Selector { get }
     var COLLECTION_VIEW: Selector { get }
+    var IPHONE_TAB_TRAY_COLLECTION_VIEW: Selector { get }
     var FIRST_CELL: Selector { get }
     func cell(named name: String) -> Selector
     var all: [Selector] { get }
@@ -32,6 +33,13 @@ struct TabTraySelectors: TabTraySelectorsSet {
         groups: ["tabtray"]
     )
 
+    let IPHONE_TAB_TRAY_COLLECTION_VIEW = Selector(
+        strategy: .predicate(NSPredicate(format: "identifier == %@ AND elementType == %d", IDs.collectionView, XCUIElement.ElementType.collectionView.rawValue)),
+        value: "iPhoneTabTrayCollectionView",
+        description: "The main collection view for the tab tray on iPhone",
+        groups: ["tabtray"]
+    )
+
     let FIRST_CELL = Selector(
         strategy: .predicate(NSPredicate(format: "elementType == %d", XCUIElement.ElementType.cell.rawValue)),
         value: "firstCell",
@@ -48,5 +56,5 @@ struct TabTraySelectors: TabTraySelectorsSet {
         )
     }
 
-    var all: [Selector] { [TABSTRAY_CONTAINER, COLLECTION_VIEW, FIRST_CELL] }
+    var all: [Selector] { [TABSTRAY_CONTAINER, COLLECTION_VIEW, IPHONE_TAB_TRAY_COLLECTION_VIEW, FIRST_CELL] }
 }

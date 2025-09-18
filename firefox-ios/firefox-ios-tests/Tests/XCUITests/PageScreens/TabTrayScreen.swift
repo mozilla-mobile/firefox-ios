@@ -43,4 +43,16 @@ final class TabTrayScreen {
         BaseTestCase().mozWaitForElementToExist(cells.firstMatch)
         XCTAssertEqual(cells.count, expected, "The number of tabs is not correct", file: file, line: line)
     }
+
+    func assertiPhoneTabCount(_ expected: Int, file: StaticString = #filePath, line: UInt = #line) {
+        let iPhoneTabTray = sel.IPHONE_TAB_TRAY_COLLECTION_VIEW.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(iPhoneTabTray.cells.firstMatch)
+        XCTAssertEqual(
+            iPhoneTabTray.cells.count,
+            expected,
+            "The number of tabs is not correct on iPhone",
+            file: file,
+            line: line
+        )
+    }
 }
