@@ -8,7 +8,7 @@ public extension Notification.Name {
     static let constellationStateUpdate = Notification.Name("constellationStateUpdate")
 }
 
-public struct ConstellationState {
+public struct ConstellationState: Sendable {
     public let localDevice: Device?
     public let remoteDevices: [Device]
 }
