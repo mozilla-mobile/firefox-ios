@@ -6,7 +6,7 @@ import Common
 import CoreFoundation
 import UIKit
 
-protocol MainMenuInterface {
+public protocol MainMenuInterface {
     @MainActor
     var isReduceTransparencyEnabled: Bool { get }
 

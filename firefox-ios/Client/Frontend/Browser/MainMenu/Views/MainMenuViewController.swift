@@ -43,7 +43,7 @@ class MainMenuViewController: UIViewController,
     private let profile: Profile
     private var menuState: MainMenuState
     private let logger: Logger
-    private let mainMenuHelper: MainMenuHelper
+    private let mainMenuHelper: MainMenuInterface
 
     var viewProvider: ContextualHintViewProvider?
 
@@ -88,7 +88,7 @@ class MainMenuViewController: UIViewController,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared,
-        mainMenuHelper: MainMenuHelper = MainMenuHelper()
+        mainMenuHelper: MainMenuInterface = MainMenuHelper()
     ) {
         self.windowUUID = windowUUID
         self.profile = profile

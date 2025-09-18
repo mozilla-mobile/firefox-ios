@@ -52,7 +52,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Properties
     var model: MenuElement?
 
-    private var mainMenuHelper: MainMenuHelper?
+    private var mainMenuHelper: MainMenuInterface?
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -74,7 +74,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         infoLabelView.text = nil
     }
 
-    func configureCellWith(model: MenuElement, mainMenuHelper: MainMenuHelper = MainMenuHelper()) {
+    func configureCellWith(model: MenuElement, mainMenuHelper: MainMenuInterface = MainMenuHelper()) {
         self.model = model
         self.mainMenuHelper = mainMenuHelper
         self.titleLabel.text = model.title

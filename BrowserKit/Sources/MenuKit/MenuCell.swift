@@ -48,7 +48,7 @@ final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private var isFirstCell = false
     private var isLastCell = false
 
-    private var mainMenuHelper: MainMenuHelper?
+    private var mainMenuHelper: MainMenuInterface?
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -77,7 +77,7 @@ final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         theme: Theme,
         isFirstCell: Bool,
         isLastCell: Bool,
-        mainMenuHelper: MainMenuHelper = MainMenuHelper()
+        mainMenuHelper: MainMenuInterface = MainMenuHelper()
     ) {
         self.model = model
         self.mainMenuHelper = mainMenuHelper

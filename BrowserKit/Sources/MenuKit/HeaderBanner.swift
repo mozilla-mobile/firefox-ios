@@ -24,7 +24,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
 
     public var closeButtonCallback: (() -> Void)?
     public var bannerButtonCallback: (() -> Void)?
-    private var mainMenuHelper: MainMenuHelper?
+    public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
 
     private lazy var headerView: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
@@ -76,8 +76,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupViews(mainMenuHelper: MainMenuHelper = MainMenuHelper()) {
-        self.mainMenuHelper = mainMenuHelper
+    private func setupViews() {
         addSubviews(headerView)
         headerView.addSubview(headerLabelsContainer)
         headerView.addSubview(closeButton)
@@ -145,8 +144,7 @@ public final class HeaderBanner: UIView, ThemeApplicable {
     }
 
     public func applyTheme(theme: Theme) {
-        let alpha: CGFloat = mainMenuHelper?.backgroundAlpha() ?? 1.0
-        headerView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(alpha)
+        headerView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper.backgroundAlpha())
         headerLabelsContainer.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary

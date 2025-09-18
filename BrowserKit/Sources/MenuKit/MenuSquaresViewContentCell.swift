@@ -20,7 +20,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
     private var menuData: [MenuSection]
     private var theme: Theme?
 
-    private var mainMenuHelper: MainMenuHelper?
+    private var mainMenuHelper: MainMenuInterface?
 
     private var horizontalTabsSection: MenuSection? {
         return menuData.first(where: { $0.isHorizontalTabsSection })
@@ -52,7 +52,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         return nil
     }
 
-    private func setupUI(mainMenuHelper: MainMenuHelper = MainMenuHelper()) {
+    private func setupUI(mainMenuHelper: MainMenuInterface = MainMenuHelper()) {
         self.mainMenuHelper = mainMenuHelper
 
         self.addSubview(contentStackView)

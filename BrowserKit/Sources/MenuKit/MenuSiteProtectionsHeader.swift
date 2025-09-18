@@ -26,7 +26,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
     public var closeButtonCallback: (() -> Void)?
     public var siteProtectionsButtonCallback: (() -> Void)?
-    private var mainMenuHelper: MainMenuHelper?
+    public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
 
     private var contentLabels: UIStackView = .build { stack in
         stack.distribution = .fillProportionally
@@ -114,8 +114,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         }
     }
 
-    private func setupViews(mainMenuHelper: MainMenuHelper = MainMenuHelper()) {
-        self.mainMenuHelper = mainMenuHelper
+    private func setupViews() {
         contentLabels.addArrangedSubview(titleLabel)
         contentLabels.addArrangedSubview(subtitleLabel)
         addSubviews(contentLabels, favicon, closeButton, siteProtectionsContent)
@@ -198,12 +197,11 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
         closeButton.tintColor = theme.colors.iconSecondary
-        let alpha = mainMenuHelper?.backgroundAlpha() ?? 1.0
-        closeButton.backgroundColor = theme.colors.actionCloseButton.withAlphaComponent(alpha)
+        closeButton.backgroundColor = theme.colors.actionCloseButton.withAlphaComponent(mainMenuHelper.backgroundAlpha())
         siteProtectionsLabel.textColor = theme.colors.textSecondary
         siteProtectionsContent.layer.borderColor = theme.colors.actionSecondaryHover.cgColor
         if #available(iOS 26.0, *) {
-            let backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(alpha)
+            let backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper.backgroundAlpha())
             siteProtectionsContent.backgroundColor = backgroundColor
         } else {
             siteProtectionsContent.backgroundColor = .clear

@@ -44,7 +44,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
     private var shouldShowDivider = true
     var cellTapCallback: (() -> Void)?
 
-    private var mainMenuHelper: MainMenuHelper?
+    private var mainMenuHelper: MainMenuInterface?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -71,7 +71,7 @@ final class MenuSquareView: UIView, ThemeApplicable {
     func configureCellWith(
         model: MenuElement,
         shouldShowDivider: Bool = true,
-        mainMenuHelper: MainMenuHelper = MainMenuHelper()
+        mainMenuHelper: MainMenuInterface = MainMenuHelper()
     ) {
         self.model = model
         self.mainMenuHelper = mainMenuHelper
