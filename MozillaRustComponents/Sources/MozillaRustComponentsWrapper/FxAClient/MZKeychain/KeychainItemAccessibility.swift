@@ -35,7 +35,7 @@ protocol MZKeychainAttrRepresentable {
 
 // MARK: - KeychainItemAccessibility
 
-public enum MZKeychainItemAccessibility {
+public enum MZKeychainItemAccessibility: Sendable {
     /**
       The data in the keychain item cannot be accessed after a restart until the device has been unlocked once by the user.
 
@@ -99,7 +99,8 @@ public enum MZKeychainItemAccessibility {
     }
 }
 
-private let keychainItemAccessibilityLookup: [MZKeychainItemAccessibility: CFString] =
+// FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
+private nonisolated(unsafe) let keychainItemAccessibilityLookup: [MZKeychainItemAccessibility: CFString] =
     [
         .afterFirstUnlock: kSecAttrAccessibleAfterFirstUnlock,
         .afterFirstUnlockThisDeviceOnly: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,

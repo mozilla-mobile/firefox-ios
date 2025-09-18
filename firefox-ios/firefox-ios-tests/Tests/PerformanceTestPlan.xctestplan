@@ -148,7 +148,14 @@
         "URLValidationTests",
         "UrlBarTests",
         "WhatsNewTest",
-        "ZoomingTests"
+        "ZoomingTests",
+        "ZoomingTestsTAE",
+        "ZoomingTestsTAE\/testSwitchingZoomedTabsLandscape_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testSwitchingZoomedTabs_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testZoomForceCloseFirefox_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testZoomForceCloseFirefox_tabTrayExperimentOn()",
+        "ZoomingTestsTAE\/testZoomingActions()",
+        "ZoomingTestsTAE\/testZoomingActionsLandscape_tabTrayExperimentOff()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

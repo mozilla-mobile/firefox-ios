@@ -67,7 +67,8 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     private var legacyPagingCarousel: some View {
         PagingCarousel(
             selection: $viewModel.pageCount,
-            items: viewModel.onboardingCards
+            items: viewModel.onboardingCards,
+            disableInteractionDuringTransition: false
         ) { card in
             OnboardingCardViewCompact(
                 viewModel: card,

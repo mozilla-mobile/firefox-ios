@@ -15,4 +15,4 @@ features:
           status: true
       - channel: developer
         value:
-          status: false
+          status: true

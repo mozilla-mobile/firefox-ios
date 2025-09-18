@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-private struct PagingCarouselUX {
+internal struct PagingCarouselUX {
     static let itemWidthRatio: CGFloat = 0.85
     static let interItemSpacing: CGFloat = 12
     static let scrollAnimationDuration: CGFloat = 0.3
@@ -25,7 +25,8 @@ private struct PagingCarouselUX {
 ///
 /// PagingCarousel(
 ///     selection: $selectedIndex,
-///     items: items
+///     items: items,
+///     disableInteractionDuringTransition: true
 /// ) { item in
 ///     Text(item)
 ///         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -37,6 +38,7 @@ public struct PagingCarousel<Item, Content: View>: View {
     @Binding public var selection: Int
     public let items: [Item]
     public let content: (Item) -> Content
+    public let disableInteractionDuringTransition: Bool
 
     @State private var dragOffset: CGFloat = 0
     @State private var isDragging = false
@@ -46,10 +48,12 @@ public struct PagingCarousel<Item, Content: View>: View {
     public init(
         selection: Binding<Int>,
         items: [Item],
+        disableInteractionDuringTransition: Bool = false,
         @ViewBuilder content: @escaping (Item) -> Content
     ) {
         self._selection = selection
         self.items = items
+        self.disableInteractionDuringTransition = disableInteractionDuringTransition
         self.content = content
     }
 
@@ -87,6 +91,7 @@ public struct PagingCarousel<Item, Content: View>: View {
     private func carouselItem(index: Int, item: Item, geometry: GeometryProxy) -> some View {
         content(item)
             .frame(width: itemWidth(for: geometry))
+            .allowsHitTesting(shouldAllowInteraction(for: index))
             .accessibilityElement(children: .contain)
             .accessibilitySortPriority(index == selection ? 1 : 0)
             .accessibilityHidden(shouldHideItem(at: index))
@@ -242,6 +247,20 @@ public struct PagingCarousel<Item, Content: View>: View {
     private func shouldHideItem(at index: Int) -> Bool {
         // Only show the currently selected item and adjacent items for better performance
         return index != selection
+    }
+
+    /// Determines if interaction should be allowed for a card at the given index
+    private func shouldAllowInteraction(for index: Int) -> Bool {
+        // If interaction disabling is not enabled, allow all interactions
+        guard disableInteractionDuringTransition else {
+            return true
+        }
+
+        let isSelected = index == selection
+        let isStationary = !isDragging
+
+        // Only allow interaction on the currently selected card when not dragging
+        return isSelected && isStationary
     }
 
     /// Forces VoiceOver to refocus on the new content

@@ -10,6 +10,8 @@
   ],
   "defaultOptions" : {
     "codeCoverage" : false,
+    "language" : "en-US",
+    "region" : "US",
     "testRepetitionMode" : "retryOnFailure"
   },
   "testTargets" : [
@@ -494,7 +496,14 @@
         "ZoomingTests\/testZoomForceCloseFirefox_tabTrayExperimentOff()",
         "ZoomingTests\/testZoomForceCloseFirefox_tabTrayExperimentOn()",
         "ZoomingTests\/testZoomingActionsLandscape()",
-        "ZoomingTests\/testZoomingActionsLandscape_tabTrayExperimentOff()"
+        "ZoomingTests\/testZoomingActionsLandscape_tabTrayExperimentOff()",
+        "ZoomingTestsTAE",
+        "ZoomingTestsTAE\/testSwitchingZoomedTabsLandscape_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testSwitchingZoomedTabs_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testZoomForceCloseFirefox_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testZoomForceCloseFirefox_tabTrayExperimentOn()",
+        "ZoomingTestsTAE\/testZoomingActions()",
+        "ZoomingTestsTAE\/testZoomingActionsLandscape_tabTrayExperimentOff()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

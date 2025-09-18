@@ -19,7 +19,7 @@ public let defaultErrorReporter: NimbusErrorReporter = { err in
     }
 }
 
-class GleanMetricsHandler: MetricsHandler {
+final class GleanMetricsHandler: MetricsHandler {
     func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef]) {
         for extra in enrollmentStatusExtras {
             GleanMetrics.NimbusEvents.enrollmentStatus
@@ -119,8 +119,20 @@ public extension Nimbus {
     static func buildExperimentContext(
         _ appSettings: NimbusAppSettings,
         bundle: Bundle = Bundle.main,
-        device: UIDevice = .current
+        device currentDevice: UIDevice? = nil
     ) -> AppContext {
+        // FIXME: FXIOS-13512 Questionable workaround to get main actor isolated UIDevice.current; rearchitect later
+        let device: UIDevice =
+            if Thread.isMainThread {
+                MainActor.assumeIsolated {
+                    return currentDevice ?? UIDevice.current
+                }
+            } else {
+                DispatchQueue.main.sync {
+                    return currentDevice ?? UIDevice.current
+                }
+            }
+
         let info = bundle.infoDictionary ?? [:]
         var inferredDateInstalledOn: Date? {
             guard

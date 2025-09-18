@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum FxAKeychainItemAccessibility: String {
+public enum FxAKeychainItemAccessibility: String, Sendable {
     /**
       The data in the keychain item cannot be accessed after a restart until the device has been unlocked once by
       the user.

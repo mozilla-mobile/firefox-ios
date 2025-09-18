@@ -55,6 +55,7 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         XCTAssertEqual(error, WKInternalPageSchemeHandlerError.noResponder)
     }
 
+    @MainActor
     func testSchemeStartIsCalledWithPrivilegedURLWithCorrectResponder() throws {
         setupFakeInternalHandlers()
         let subject = createSubject()
@@ -80,6 +81,7 @@ final class WKInternalSchemeHandlerTests: XCTestCase {
         return subject
     }
 
+    @MainActor
     func setupFakeInternalHandlers() {
         let responders: [(String, WKInternalSchemeResponse)] = [(MockSchemeHandler.path, MockSchemeHandler())]
         responders.forEach { (path, responder) in
