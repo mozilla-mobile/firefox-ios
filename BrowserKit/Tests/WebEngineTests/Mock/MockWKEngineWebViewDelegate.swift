@@ -20,6 +20,7 @@ class MockWKEngineWebViewDelegate: WKEngineWebViewDelegate {
     }
 
     func webViewPropertyChanged(_ property: WKEngineWebViewProperty) {
+        print("--- YRD propery \(property)")
         webViewPropertyChangedCalled += 1
         lastWebViewPropertyChanged = property
         webViewPropertyChangedCallback?(property)

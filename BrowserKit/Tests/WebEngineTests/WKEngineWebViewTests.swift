@@ -177,16 +177,16 @@ final class WKEngineWebViewTests: XCTestCase {
         let expectation = expectation(description: "Wait for the decision handler to be called")
 
         XCTAssertNil(subject.currentBackForwardListItem())
-        delegate.webViewPropertyChangedCallback = { [weak subject] webEngineViewProperty in
-            guard webEngineViewProperty == .loading(false) else {return}
-            XCTAssertNotNil(subject?.currentBackForwardListItem())
-            self.delegate.webViewPropertyChangedCallback = nil
+        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
+            guard webEngineViewProperty == .loading(false) else { return }
+
             expectation.fulfill()
         }
 
         subject.load(URLRequest(url: testURL))
-
         wait(for: [expectation], timeout: 10)
+        XCTAssertNotNil(subject.currentBackForwardListItem())
+        self.delegate.webViewPropertyChangedCallback = nil
     }
 
     @MainActor
