@@ -122,6 +122,18 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         siteProtectionsContent.addArrangedSubview(siteProtectionsLabel)
         siteProtectionsContent.addArrangedSubview(siteProtectionsMoreSettingsIcon)
 
+        let siteProtectionsTopFromFavicon = siteProtectionsContent.topAnchor.constraint(
+                    greaterThanOrEqualTo: favicon.bottomAnchor,
+                    constant: UX.siteProtectionsContentTopMargin
+                )
+
+                let siteProtectionsTopFromLabels = siteProtectionsContent.topAnchor.constraint(
+                    equalTo: contentLabels.bottomAnchor,
+                    constant: UX.siteProtectionsContentTopMargin
+                )
+                siteProtectionsTopFromLabels.priority = .defaultHigh
+
+        let iconAlignmentOffset = -UX.siteProtectionsContentHorizontalPadding
         NSLayoutConstraint.activate([
             contentLabels.topAnchor.constraint(equalTo: self.topAnchor),
             contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
@@ -139,14 +151,17 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             siteProtectionsIcon.widthAnchor.constraint(equalToConstant: UX.siteProtectionsIcon),
             siteProtectionsMoreSettingsIcon.widthAnchor.constraint(equalToConstant: UX.siteProtectionsMoreSettingsIcon),
 
-            siteProtectionsContent.topAnchor.constraint(equalTo: favicon.bottomAnchor,
-                                                        constant: UX.siteProtectionsContentTopMargin),
+            siteProtectionsTopFromLabels,
+            siteProtectionsTopFromFavicon,
             siteProtectionsContent.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
             siteProtectionsContent.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            siteProtectionsContent.leadingAnchor.constraint(equalTo: favicon.leadingAnchor)
+            siteProtectionsContent.leadingAnchor.constraint(
+                equalTo: contentLabels.leadingAnchor,
+                constant: iconAlignmentOffset
+            )
         ])
 
         closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
