@@ -101,24 +101,24 @@ public class NimbusBuilder {
      * experiments recipes.
      */
     @discardableResult
-    public func onApply(callback: @escaping (NimbusInterface) -> Void) -> NimbusBuilder {
+    public func onApply(callback: @Sendable @escaping (NimbusInterface) -> Void) -> NimbusBuilder {
         onApplyCallback = callback
         return self
     }
 
-    var onApplyCallback: ((NimbusInterface) -> Void)?
+    var onApplyCallback: (@Sendable (NimbusInterface) -> Void)?
 
     /**
      * Optional callback to be called after the fetch of new experiments has completed.
      * experiments recipes.
      */
     @discardableResult
-    public func onFetch(callback: @escaping (NimbusInterface) -> Void) -> NimbusBuilder {
+    public func onFetch(callback: @Sendable @escaping (NimbusInterface) -> Void) -> NimbusBuilder {
         onFetchCallback = callback
         return self
     }
 
-    var onFetchCallback: ((NimbusInterface) -> Void)?
+    var onFetchCallback: (@Sendable (NimbusInterface) -> Void)?
 
     /**
      * Resource bundles used to look up bundled text and images. Defaults to `[Bundle.main]`.
