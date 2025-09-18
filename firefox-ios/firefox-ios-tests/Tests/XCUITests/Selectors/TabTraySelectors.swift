@@ -34,7 +34,13 @@ struct TabTraySelectors: TabTraySelectorsSet {
     )
 
     let IPHONE_TAB_TRAY_COLLECTION_VIEW = Selector(
-        strategy: .predicate(NSPredicate(format: "identifier == %@ AND elementType == %d", IDs.collectionView, XCUIElement.ElementType.collectionView.rawValue)),
+        strategy: .predicate(
+            NSPredicate(
+                format: "identifier == %@ AND elementType == %d",
+                IDs.collectionView,
+                XCUIElement.ElementType.collectionView.rawValue
+            )
+        ),
         value: "iPhoneTabTrayCollectionView",
         description: "The main collection view for the tab tray on iPhone",
         groups: ["tabtray"]
