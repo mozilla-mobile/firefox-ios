@@ -20,7 +20,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
     private var menuData: [MenuSection]
     private var theme: Theme?
 
-    private var mainMenuHelper: MainMenuInterface?
+    public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
 
     private var horizontalTabsSection: MenuSection? {
         return menuData.first(where: { $0.isHorizontalTabsSection })
@@ -52,9 +52,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         return nil
     }
 
-    private func setupUI(mainMenuHelper: MainMenuInterface = MainMenuHelper()) {
-        self.mainMenuHelper = mainMenuHelper
-
+    private func setupUI() {
         self.addSubview(contentStackView)
 
         NSLayoutConstraint.activate([
@@ -97,7 +95,7 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         self.theme = theme
         backgroundColor = .clear
         if #available(iOS 26.0, *) {
-            let alpha: CGFloat = mainMenuHelper?.backgroundAlpha() ?? 1.0
+            let alpha: CGFloat = mainMenuHelper.backgroundAlpha()
             contentStackView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(alpha)
         } else {
             contentStackView.backgroundColor = .clear
