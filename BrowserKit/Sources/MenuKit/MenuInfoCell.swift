@@ -13,7 +13,6 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let infoLabelHorizontalMargin: CGFloat = 8
         static let infoLabelVerticalPadding: CGFloat = 7
         static let infoLabelHorizontalPadding: CGFloat = 14
-        static let backgroundAlpha: CGFloat = 0.80
     }
 
     // MARK: - UI Elements
@@ -53,6 +52,8 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Properties
     var model: MenuElement?
 
+    private var mainMenuHelper: MainMenuInterface?
+
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -73,8 +74,9 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
         infoLabelView.text = nil
     }
 
-    func configureCellWith(model: MenuElement) {
+    func configureCellWith(model: MenuElement, mainMenuHelper: MainMenuInterface = MainMenuHelper()) {
         self.model = model
+        self.mainMenuHelper = mainMenuHelper
         self.titleLabel.text = model.title
         self.infoLabelView.text = model.infoTitle
         self.isAccessibilityElement = true
@@ -112,7 +114,7 @@ final class MenuInfoCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         guard let model else { return }
-        backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
+        backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper?.backgroundAlpha() ?? 1.0)
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             infoLabelView.textColor = theme.colors.textPrimary

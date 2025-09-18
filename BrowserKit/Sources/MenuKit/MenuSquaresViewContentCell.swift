@@ -20,6 +20,8 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
     private var menuData: [MenuSection]
     private var theme: Theme?
 
+    public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
+
     private var horizontalTabsSection: MenuSection? {
         return menuData.first(where: { $0.isHorizontalTabsSection })
     }
@@ -93,7 +95,8 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         self.theme = theme
         backgroundColor = .clear
         if #available(iOS 26.0, *) {
-            contentStackView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
+            let alpha: CGFloat = mainMenuHelper.backgroundAlpha()
+            contentStackView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(alpha)
         } else {
             contentStackView.backgroundColor = .clear
         }
