@@ -266,15 +266,12 @@ final class LegacyTabScrollController: NSObject,
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
                                bottomContainer: BaseAlphaStackView?,
                                headerContainer: BaseAlphaStackView?) {
-        let tapHandler = createToolbarTapHandler()
-        overKeyboardContainer?.onTap = tapHandler
-        headerContainer?.onTap = tapHandler
         self.overKeyboardContainer = overKeyboardContainer
         self.bottomContainer = bottomContainer
         self.headerContainer = headerContainer
     }
 
-    private func createToolbarTapHandler() -> (() -> Void) {
+    func createToolbarTapHandler() -> (() -> Void) {
         return { [unowned self] in
             guard isMinimalAddressBarEnabled && toolbarState == .collapsed else { return }
             showToolbars(animated: true)

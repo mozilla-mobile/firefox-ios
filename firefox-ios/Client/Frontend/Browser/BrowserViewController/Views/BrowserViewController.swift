@@ -1103,6 +1103,9 @@ class BrowserViewController: UIViewController,
                                                    bottomContainer: bottomContainer,
                                                    headerContainer: header)
         }
+        let tapHandler = scrollController.createToolbarTapHandler()
+        overKeyboardContainer.onTap = tapHandler
+        header.onTap = tapHandler
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links into the view from other apps.

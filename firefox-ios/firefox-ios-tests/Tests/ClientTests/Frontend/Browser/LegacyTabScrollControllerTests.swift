@@ -304,6 +304,10 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
+        // Manually setup onTap handler
+        let handler = subject.createToolbarTapHandler()
+        overKeyboardContainer.onTap = handler
+
         subject.toolbarState = .collapsed
         overKeyboardContainer.onTap?()
 
@@ -313,6 +317,10 @@ final class LegacyTabScrollControllerTests: XCTestCase {
     func testToolbarTapHandler_WhenToolbarVisible_DoesNothing() {
         let subject = createSubject()
         setupTabScroll(with: subject)
+
+        // Manually setup onTap handler
+        let handler = subject.createToolbarTapHandler()
+        overKeyboardContainer.onTap = handler
 
         subject.toolbarState = .visible
         overKeyboardContainer.onTap?()
