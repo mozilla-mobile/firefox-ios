@@ -17,6 +17,7 @@ protocol TabScrollHandlerProtocol: AnyObject {
     func beginObserving(scrollView: UIScrollView)
     func stopObserving(scrollView: UIScrollView)
     func traitCollectionDidChange()
+    func createToolbarTapHandler() -> (() -> Void)
 }
 
 final class TabScrollHandler: NSObject,
@@ -290,11 +291,14 @@ final class TabScrollHandler: NSObject,
         isStatusBarScrollToTop = false
     }
 
-    // MARK: - Private
+    func createToolbarTapHandler() -> (() -> Void) {
+        return { [unowned self] in
+            guard isMinimalAddressBarEnabled && toolbarDisplayState.isCollapsed  else { return }
+            showToolbars(animated: true)
+        }
+    }
 
-    func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
-                               bottomContainer: BaseAlphaStackView?,
-                               headerContainer: BaseAlphaStackView? ) {}
+    // MARK: - Private
 
     private func handleOnTabContentLoading() {
         if tabIsLoading() || (tabProvider?.isFxHomeTab ?? false) {
