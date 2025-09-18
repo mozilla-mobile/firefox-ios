@@ -227,6 +227,8 @@ class ToolbarTests: FeatureFlaggedTestBase {
         // Swipe up to close the app does not work on iOS 15.
         if #available(iOS 16, *) {
             closeFromAppSwitcherAndRelaunch()
+            mozWaitForElementToExist(app.textFields["AddressToolbar.address"])
+            mozWaitForElementToExist(app.buttons["TabToolbar.menuButton"])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
             app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
