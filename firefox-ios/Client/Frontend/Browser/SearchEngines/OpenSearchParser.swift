@@ -15,6 +15,7 @@ class OpenSearchParser {
     private let userInterfaceIdiom: UIUserInterfaceIdiom
     private let typeSearch = "text/html"
     private let typeSuggest = "application/x-suggestions+json"
+    private let typeTrending = "application/x-trending+json"
 
     init(pluginMode: Bool, userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         self.pluginMode = pluginMode
@@ -48,13 +49,15 @@ class OpenSearchParser {
 
         var searchTemplate: String?
         var suggestTemplate: String?
+        var trendingTemplate: String?
+
         for urlIndexer in urlIndexers {
             let type = urlIndexer.attributes["type"]
             if type == nil {
                 return nil
             }
 
-            if type != typeSearch && type != typeSuggest {
+            if type != typeSearch && type != typeSuggest && type != typeTrending {
                 // Not a supported search type.
                 continue
             }
@@ -95,6 +98,8 @@ class OpenSearchParser {
 
             if type == typeSearch {
                 searchTemplate = template
+            } else if type == typeTrending {
+                trendingTemplate = template
             } else {
                 suggestTemplate = template
             }
@@ -143,6 +148,7 @@ class OpenSearchParser {
             image: uiImage,
             searchTemplate: searchTemplate,
             suggestTemplate: suggestTemplate,
+            trendingTemplate: trendingTemplate,
             isCustomEngine: false
         )
     }
