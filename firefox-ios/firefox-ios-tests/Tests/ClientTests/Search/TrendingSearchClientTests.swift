@@ -40,7 +40,7 @@ final class TrendingSearchClientTest: XCTestCase {
         await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
             try await subject.getTrendingSearches()
         } verify: { err in
-             XCTAssertEqual(err, .invalidParsingJsonData)
+             XCTAssertEqual(err, .unableToParseJsonData)
         }
     }
 

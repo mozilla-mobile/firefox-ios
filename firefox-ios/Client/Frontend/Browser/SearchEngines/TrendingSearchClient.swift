@@ -14,7 +14,7 @@ public protocol TrendingSearchEngine {
 
 enum TrendingSearchClientError: Error {
     case invalidHTTPResponse
-    case invalidParsingJsonData
+    case unableToParseJsonData
 }
 
 /// A service responsible for retrieving trending searches from a given search engine.
@@ -39,23 +39,20 @@ final class TrendingSearchClient {
         self.urlSession = session
     }
 
-    /// Retrieves the list of trending searches.
-    ///
-    /// - Returns: An array of trending search strings.
-    /// - Throws: `TrendingSearchClientError` if the response is invalid, cannot be retrieved,
-    ///           or JSON parsing fails.
     func getTrendingSearches() async throws -> [String] {
         do {
             guard let url = searchEngine.trendingURLForEngine() else { return [] }
             let data = try await fetch(from: url)
+
             guard let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [Any],
                   let suggestions = json[1] as? [String]
             else {
                 self.logger.log("Response was not able to be parsed appropriately.",
                                 level: .debug,
                                 category: .searchEngines)
-                throw TrendingSearchClientError.invalidParsingJsonData
+                throw TrendingSearchClientError.unableToParseJsonData
             }
+
             return suggestions
         } catch {
             throw error
