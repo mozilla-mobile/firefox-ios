@@ -344,6 +344,7 @@ class WKEngineSession: NSObject,
 
     // MARK: - Content scripts
 
+    @MainActor
     private func addContentScripts(readerModeDelegate: WKReaderModeDelegate?) {
         scriptResponder.session = self
         let searchProviders = delegate?.adsSearchProviderModels() ?? []

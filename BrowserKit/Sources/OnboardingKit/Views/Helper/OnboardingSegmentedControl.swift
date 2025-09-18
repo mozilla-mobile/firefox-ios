@@ -28,27 +28,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
         VStack(alignment: .leading, spacing: UX.SegmentedControl.containerSpacing) {
             HStack(alignment: .top, spacing: UX.SegmentedControl.containerSpacing) {
                 ForEach(Array(items.enumerated()), id: \.element.action) { index, item in
-                    Button {
-                        withAnimation(.easeInOut) {
-                            selection = item.action
-                        }
-                    } label: {
-                        VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
-                            let isSelected = item.action == selection
-
-                            itemImage(item: item, isSelected: isSelected)
-
-                            itemContent(item: item, isSelected: isSelected)
-                        }
-                        .frame(maxWidth: .infinity, minHeight: UX.SegmentedControl.buttonMinHeight, alignment: .top)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .accessibilityElement()
-                    .accessibilityLabel("\(item.title)")
-                    .accessibilityAddTraits(.isButton)
-                    .accessibilityAddTraits(
-                        item.action == selection ? .isSelected : []
-                    )
+                    segmentedButton(for: item)
                 }
             }
         }
@@ -60,6 +40,65 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
             guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
+    }
+
+    @ViewBuilder
+    private func segmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
+        Group {
+            if #available(iOS 17.0, *) {
+                legacySegmentedButton(for: item)
+            } else {
+                dragCancellableSegmentedButton(for: item)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func legacySegmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
+        Button {
+            withAnimation(.easeInOut) {
+                selection = item.action
+            }
+        } label: {
+            VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
+                let isSelected = item.action == selection
+
+                itemImage(item: item, isSelected: isSelected)
+
+                itemContent(item: item, isSelected: isSelected)
+            }
+            .frame(
+                maxWidth: .infinity,
+                minHeight: UX.SegmentedControl.buttonMinHeight,
+                alignment: .top
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+        .accessibilityElement()
+        .accessibilityLabel("\(item.title)")
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAddTraits(
+            item.action == selection ? .isSelected : []
+        )
+    }
+
+    @ViewBuilder
+    private func dragCancellableSegmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
+        DragCancellableSegmentedButton(
+            item: item,
+            isSelected: item.action == selection,
+            action: {
+                withAnimation(.easeInOut) {
+                    selection = item.action
+                }
+            }
+        )
+        .accessibilityElement()
+        .accessibilityLabel("\(item.title)")
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAddTraits(
+            item.action == selection ? .isSelected : []
+        )
     }
 
     @ViewBuilder

@@ -14,9 +14,21 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(LibraryPanel_Bookmarks)
         snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
         // Tap on each of the library buttons
-        for i in 1...3 {
-            app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: i).tap()
-            snapshot("PanelsEmptyState-\(i)")
+        if #unavailable(iOS 26) {
+            for i in 1...3 {
+                app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: i).tap()
+                snapshot("PanelsEmptyState-\(i)")
+            }
+        } else {
+            // iOS 26: Unable to tap buttons under toolbar
+            app.navigationBars.buttons[AccessibilityIdentifiers.LibraryPanels.topRightButton].waitAndTap()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(LibraryPanel_History)
+            snapshot("PanelsEmptyState-1")
+            app.navigationBars.buttons[AccessibilityIdentifiers.LibraryPanels.topRightButton].waitAndTap()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(LibraryPanel_Downloads)
+            snapshot("PanelsEmptyState-2")
         }
     }
 

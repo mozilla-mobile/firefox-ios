@@ -18,7 +18,7 @@
         "argument" : "FIREFOX_TEST"
       }
     ],
-    "language" : "en",
+    "language" : "en-US",
     "region" : "US",
     "targetForVariableExpansion" : {
       "containerPath" : "container:Client.xcodeproj",
