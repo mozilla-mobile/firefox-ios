@@ -80,7 +80,7 @@
 "Back" = "后退";
 
 /* Block pop-up windows setting */
-"Block Pop-up Windows" = "阻止弹出窗口";
+"Block Pop-up Windows" = "阻止弹出式窗口";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "标题";

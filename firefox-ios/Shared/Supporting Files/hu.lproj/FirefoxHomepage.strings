@@ -1,6 +1,9 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle.v140" = "Történetek";
 
+/* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
+"FirefoxHome.ScreenTitle.v144" = "Kezdőlap";
+
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "Történetek";
 
