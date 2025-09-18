@@ -8,12 +8,12 @@ import UserNotifications
 import Shared
 
 protocol NotificationManagerProtocol {
-    func requestAuthorization(completion: @escaping (Bool, Error?) -> Void)
-    func requestAuthorization(completion: @escaping (Result<Bool, Error>) -> Void)
+    func requestAuthorization(completion: @escaping @Sendable (Bool, Error?) -> Void)
+    func requestAuthorization(completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
     func requestAuthorization() async throws -> Bool
-    func getNotificationSettings(sendTelemetry: Bool, completion: @escaping (UNNotificationSettings) -> Void)
-    func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings
-    func hasPermission(completion: @escaping (Bool) -> Void)
+    func getNotificationSettings(sendTelemetry: Bool, completion: @escaping @Sendable (NotificationSettingsSnapshot) -> Void)
+    func getNotificationSettings(sendTelemetry: Bool) async -> NotificationSettingsSnapshot
+    func hasPermission(completion: @escaping @Sendable (Bool) -> Void)
     func hasPermission() async -> Bool
     func schedule(title: String,
                   body: String,
@@ -29,8 +29,8 @@ protocol NotificationManagerProtocol {
                   categoryIdentifier: String,
                   interval: TimeInterval,
                   repeats: Bool)
-    func findDeliveredNotifications(completion: @escaping ([UNNotification]) -> Void)
-    func findDeliveredNotificationForId(id: String, completion: @escaping (UNNotification?) -> Void)
+    func findDeliveredNotifications(completion: @escaping @Sendable ([NotificationSnapshot]) -> Void)
+    func findDeliveredNotificationForId(id: String, completion: @escaping @Sendable (NotificationSnapshot?) -> Void)
     func removeAllPendingNotifications()
     func removePendingNotificationsWithId(ids: [String])
 }
@@ -43,7 +43,7 @@ class NotificationManager: NotificationManagerProtocol {
     }
 
     // Requests the user’s authorization to allow local and remote notifications and sends Telemetry
-    func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
+    func requestAuthorization(completion: @escaping @Sendable (Bool, Error?) -> Void) {
         center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             completion(granted, error)
 
@@ -59,7 +59,7 @@ class NotificationManager: NotificationManagerProtocol {
     }
 
     @available(*, renamed: "requestAuthorization()")
-    func requestAuthorization(completion: @escaping (Result<Bool, Error>) -> Void) {
+    func requestAuthorization(completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
         self.requestAuthorization { granted, error in
             if let error = error {
                 completion(.failure(error))
@@ -79,16 +79,17 @@ class NotificationManager: NotificationManagerProtocol {
 
     // Retrieves the authorization and feature-related notification settings and sends Telemetry
     func getNotificationSettings(sendTelemetry: Bool = false,
-                                 completion: @escaping (UNNotificationSettings) -> Void) {
+                                 completion: @escaping @Sendable (NotificationSettingsSnapshot) -> Void) {
         center.getNotificationSettings { settings in
-            completion(settings)
+            let settingSnapshot = NotificationSettingsSnapshot(from: settings)
+            completion(settingSnapshot)
 
             guard sendTelemetry else { return }
-            self.sendTelemetry(settings: settings)
+            NotificationManagerTelemetry.sendTelemetry(settings: settingSnapshot)
         }
     }
 
-    func getNotificationSettings(sendTelemetry: Bool = false) async -> UNNotificationSettings {
+    func getNotificationSettings(sendTelemetry: Bool = false) async -> NotificationSettingsSnapshot {
         return await withCheckedContinuation { continuation in
             getNotificationSettings(sendTelemetry: sendTelemetry) { result in
                 continuation.resume(returning: result)
@@ -97,7 +98,7 @@ class NotificationManager: NotificationManagerProtocol {
     }
 
     // Determines if the user has allowed notifications
-    func hasPermission(completion: @escaping (Bool) -> Void) {
+    func hasPermission(completion: @escaping @Sendable (Bool) -> Void) {
         getNotificationSettings { settings in
             var hasPermission = false
             switch settings.authorizationStatus {
@@ -169,18 +170,19 @@ class NotificationManager: NotificationManagerProtocol {
     }
 
     // Fetches all delivered notifications that are still present in Notification Center.
-    func findDeliveredNotifications(completion: @escaping ([UNNotification]) -> Void) {
+    func findDeliveredNotifications(completion: @escaping @Sendable ([NotificationSnapshot]) -> Void) {
         center.getDeliveredNotifications { notificationList in
-            completion(notificationList)
+            let snapshots = notificationList.map(NotificationSnapshot.init)
+            completion(snapshots)
         }
     }
 
     // Fetches all delivered notifications that are still present in Notification Center by id
     func findDeliveredNotificationForId(id: String,
-                                        completion: @escaping (UNNotification?) -> Void) {
+                                        completion: @escaping @Sendable (NotificationSnapshot?) -> Void) {
         findDeliveredNotifications { notificationList in
             let notification = notificationList.first(where: { notification -> Bool in
-                notification.request.identifier == id
+                notification.id == id
             })
             completion(notification)
         }
@@ -221,34 +223,24 @@ class NotificationManager: NotificationManagerProtocol {
                                             trigger: trigger)
         center.add(request, withCompletionHandler: nil)
     }
+}
 
-    private func sendTelemetry(settings: UNNotificationSettings) {
-        guard !AppConstants.isRunningUnitTest else { return }
+// Taking snapshots of non-Sendable objects so they can be sent across boundaries
 
-        var authorizationStatus = ""
-        switch settings.authorizationStatus {
-        case .authorized: authorizationStatus = "authorized"
-        case .denied: authorizationStatus = "denied"
-        case .ephemeral: authorizationStatus = "ephemeral"
-        case .provisional: authorizationStatus = "provisional"
-        case .notDetermined: authorizationStatus = "notDetermined"
-        @unknown default: authorizationStatus = "notDetermined"
-        }
+struct NotificationSettingsSnapshot: Sendable {
+    let authorizationStatus: UNAuthorizationStatus
+    let alertSetting: UNNotificationSetting
 
-        var alertSetting = ""
-        switch settings.alertSetting {
-        case .enabled: alertSetting = "enabled"
-        case .disabled: alertSetting = "disabled"
-        case .notSupported: alertSetting = "notSupported"
-        @unknown default: alertSetting = "notSupported"
-        }
+    init(from settings: UNNotificationSettings) {
+        self.authorizationStatus = settings.authorizationStatus
+        self.alertSetting = settings.alertSetting
+    }
+}
 
-        let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue: authorizationStatus,
-                      TelemetryWrapper.EventExtraKey.notificationPermissionAlertSetting.rawValue: alertSetting]
+struct NotificationSnapshot: Sendable {
+    let id: String
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .notificationPermission,
-                                     extras: extras)
+    init(from notification: UNNotification) {
+        self.id = notification.request.identifier
     }
 }

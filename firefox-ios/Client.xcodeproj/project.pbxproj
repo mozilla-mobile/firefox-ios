@@ -873,6 +873,7 @@
 		8A1A93592B757C7C0069C190 /* landscape.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93532B757C7B0069C190 /* landscape.json */; };
 		8A1A935A2B757C7C0069C190 /* portrait.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93542B757C7B0069C190 /* portrait.json */; };
 		8A1A935B2B757C7C0069C190 /* wave.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93552B757C7B0069C190 /* wave.json */; };
+		8A1AB6BB2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1AB6BA2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift */; };
 		8A1C0B8F2E723EDF0030DCC8 /* AppLaunchUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C0B8E2E723EDC0030DCC8 /* AppLaunchUtilTests.swift */; };
 		8A1CBB952BE017D3008BE4D4 /* MicrosurveyPromptAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CBB942BE017D3008BE4D4 /* MicrosurveyPromptAction.swift */; };
 		8A1CBB972BE0182C008BE4D4 /* MicrosurveyPromptMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CBB962BE0182C008BE4D4 /* MicrosurveyPromptMiddleware.swift */; };
@@ -8597,6 +8598,7 @@
 		8A1A93532B757C7B0069C190 /* landscape.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = landscape.json; sourceTree = "<group>"; };
 		8A1A93542B757C7B0069C190 /* portrait.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = portrait.json; sourceTree = "<group>"; };
 		8A1A93552B757C7B0069C190 /* wave.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wave.json; sourceTree = "<group>"; };
+		8A1AB6BA2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTelemetry.swift; sourceTree = "<group>"; };
 		8A1C0B8E2E723EDC0030DCC8 /* AppLaunchUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtilTests.swift; sourceTree = "<group>"; };
 		8A1CBB942BE017D3008BE4D4 /* MicrosurveyPromptAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyPromptAction.swift; sourceTree = "<group>"; };
 		8A1CBB962BE0182C008BE4D4 /* MicrosurveyPromptMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyPromptMiddleware.swift; sourceTree = "<group>"; };
@@ -15580,6 +15582,7 @@
 		E69DB0B91E97E301008A67E6 /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
+				8A1AB6BA2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift */,
 				8A732A812DE8AFCA0099F575 /* FxSuggestTelemetry.swift */,
 				8A0DF2C12D6D1C670066EC00 /* AutoplaySettingTelemetry.swift */,
 				43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */,
@@ -18465,6 +18468,7 @@
 				63F7A9AA2C7529ED005846F5 /* NativeErrorPageModel.swift in Sources */,
 				8A6E63CF2D4A7FB70040D355 /* SectionHeaderConfiguration.swift in Sources */,
 				63F7A9AC2C752BB0005846F5 /* NativeErrorPageViewController.swift in Sources */,
+				8A1AB6BB2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift in Sources */,
 				0E65573E2D81CD1A00D7F017 /* DownloadQueue.swift in Sources */,
 				C88E7A572A0553360072E638 /* OnboardingButtonInfoModel.swift in Sources */,
 				AB9A0C012C6CBC9100BFA22A /* TrackingProtectionDetailsViewController.swift in Sources */,
