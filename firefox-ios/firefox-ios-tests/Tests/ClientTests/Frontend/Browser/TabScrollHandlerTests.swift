@@ -17,6 +17,10 @@ final class TabScrollHandlerTests: XCTestCase {
     var delegate: MockTabScrollHandlerDelegate!
     var tabProvider: MockTabProviderProtocol!
 
+    var header: BaseAlphaStackView = .build()
+    var overKeyboardContainer: BaseAlphaStackView = .build()
+    var bottomContainer: BaseAlphaStackView = .build()
+
     override func setUp() {
         super.setUp()
 
@@ -367,6 +371,34 @@ final class TabScrollHandlerTests: XCTestCase {
         XCTAssertEqual(delegate.hideCount, 2, "After jump completes, hides work again")
     }
 
+    // MARK: - OnTap
+
+    func testToolbarTapHandler_WhenMinimalAddressBarEnabledAndCollapsed_ShowsToolbar() {
+        let subject = createSubject()
+
+        // Manually setup onTap handler
+        let handler = subject.createToolbarTapHandler()
+        overKeyboardContainer.onTap = handler
+
+        subject.hideToolbars(animated: false)
+        overKeyboardContainer.onTap?()
+
+        XCTAssertTrue(subject.toolbarDisplayState.isExpanded)
+    }
+
+    func testToolbarTapHandler_WhenToolbarVisible_DoesNothing() {
+        let subject = createSubject()
+
+        // Manually setup onTap handler
+        let handler = subject.createToolbarTapHandler()
+        overKeyboardContainer.onTap = handler
+
+        subject.showToolbars(animated: false)
+        overKeyboardContainer.onTap?()
+
+        XCTAssertTrue(subject.toolbarDisplayState.isExpanded)
+    }
+
     // MARK: - Setup
 
     private func createSubject(contentSize: CGSize = CGSize(width: 200, height: 2000)) -> TabScrollHandler {
@@ -380,15 +412,10 @@ final class TabScrollHandlerTests: XCTestCase {
         tabProvider = MockTabProviderProtocol(tab)
         subject.tabProvider = tabProvider
 
-        let header: BaseAlphaStackView = .build()
-        let overKeyboardContainer: BaseAlphaStackView = .build()
-        let bottomContainer: BaseAlphaStackView = .build()
-
+        header.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         overKeyboardContainer.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
+        bottomContainer.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
 
-        subject.configureToolbarViews(overKeyboardContainer: overKeyboardContainer,
-                                      bottomContainer: bottomContainer,
-                                      headerContainer: header)
         trackForMemoryLeaks(subject)
         return subject
     }
