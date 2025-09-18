@@ -43,6 +43,32 @@ final class RecordVisitObservationManagerTests: XCTestCase {
         XCTAssertEqual(subject.lastObservationRecorded?.url, observation.url)
     }
 
+    func testRecordVisitRecordsTwoUniqueURLsAndLastObservationIsCorrect() {
+        let subject = createSubject()
+        let observation1 = createObservation(url: "https://example.com/first", title: "First site")
+        let observation2 = createObservation(url: "https://example.com/second", title: "Second site")
+        let appliedTwice = expectation(description: "onApply called twice")
+        appliedTwice.expectedFulfillmentCount = 2
+
+        historyHandler.onApply = {
+            appliedTwice.fulfill()
+        }
+
+        subject.recordVisit(visitObservation: observation1, isPrivateTab: false)
+        subject.recordVisit(visitObservation: observation2, isPrivateTab: false)
+
+        wait(for: [appliedTwice], timeout: 2.0)
+
+        // Assert
+        XCTAssertEqual(historyHandler.applied.count, 2, "onApply should be called once per unique URL")
+        XCTAssertEqual(historyHandler.applied[0].url, observation1.url)
+        XCTAssertEqual(historyHandler.applied[1].url, observation2.url)
+
+        if let latest = subject.lastObservationRecorded {
+            XCTAssertEqual(latest.url, observation2.url)
+        }
+    }
+
     func testRecordVisitDedupesSameURLNotRecordedTwice() {
         let subject = createSubject()
         let observation1 = createObservation(url: "https://example.com/a", title: "A")
@@ -54,8 +80,8 @@ final class RecordVisitObservationManagerTests: XCTestCase {
         }
 
         subject.recordVisit(visitObservation: observation1, isPrivateTab: false)
-        wait(for: [exp], timeout: 2.0)
         subject.recordVisit(visitObservation: observation2, isPrivateTab: false)
+        wait(for: [exp], timeout: 2.0)
 
         XCTAssertEqual(historyHandler.applied.count, 1)
         XCTAssertEqual(subject.lastObservationRecorded?.url, observation1.url)
