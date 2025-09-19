@@ -98,7 +98,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
     }
 
     private func createSubject() -> ScreenshotHelper {
-        let subject = DefaultScreenshotHelper(controller: mockVC)
+        let subject = ScreenshotHelper(controller: mockVC)
         trackForMemoryLeaks(subject)
         return subject
     }
