@@ -19,17 +19,18 @@ concurrency:
 
 jobs:
   deploy:
-    env:
-      XCODE: '16.4'
     runs-on: macos-15
+    strategy:
+      matrix:
+        xcode: ["16.4"]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Switch to Xcode ${{env.XCODE}}
+      - name: Switch to Xcode ${{ matrix.xcode }}
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: ${{env.XCODE}}
+          xcode-version: ${{ matrix.xcode }}
       - name: Checkout
         uses: actions/checkout@v5
       - name: Build DocC
