@@ -31,13 +31,13 @@ func checkForFunMetrics() {
     if !testFiles.isEmpty {
         markdown("""
         ### 💪 **Quality guardian**
-        New tests spotted in **\(testFiles.count)** file(s). You're a champion of test coverage! 🚀
+        **\(testFiles.count)** tests files modified. You're a champion of test coverage! 🚀
         """)
     }
 
     let additions = danger.github?.pullRequest.additions ?? 0
     let deletions = danger.github?.pullRequest.deletions ?? 0
-    if deletions > additions && (additions + deletions) > 20 {
+    if deletions > additions && (additions + deletions) > 50 {
         markdown("""
         ### 🗑️ **Tossing out clutter**
         **\(deletions - additions)** line(s) removed. Fewer lines, fewer bugs 🐛!
@@ -45,7 +45,7 @@ func checkForFunMetrics() {
     }
 
     let filesChanged = danger.github?.pullRequest.changedFiles ?? 0
-    if filesChanged > 0 && filesChanged <= 3 {
+    if filesChanged > 0 && filesChanged <= 5 {
         markdown("""
         ### 🧹 **Tidy commit**
         Just **\(filesChanged)** file(s) touched. Thanks for keeping it clean and review-friendly!
@@ -67,6 +67,16 @@ func checkForFunMetrics() {
         Thanks for pushing us across the finish line this week! 🙌
         """)
     }
+
+    let docTouched = edited.contains { $0.contains(".md") }
+    if docTouched {
+        markdown("""
+        ### 🌟 **Documentation star**
+        Great documentation touches. Future you says thank you! 📚
+        """)
+    }
+
+    checkDescriptionSection()
 }
 
 func changedFiles() {
@@ -340,5 +350,42 @@ func checkStringsFile() {
 
     if touchedStrings {
         danger.message("✍️ Please ask a member of [@mozilla-mobile/firefox-ios-l10n](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) team for Strings review ✍️")
+    }
+}
+
+func checkDescriptionSection() {
+    guard let body = danger.github.pullRequest.body else { return }
+
+    // Regex to capture everything between "## :bulb: Description" and "## :pencil: Checklist"
+    let regex = try! NSRegularExpression(
+        pattern: #"(?s)## :bulb: Description\s*(.*?)## :pencil: Checklist"#,
+        options: []
+    )
+
+    if let match = regex.firstMatch(in: body, options: [], range: NSRange(location: 0, length: body.utf16.count)),
+       let range = Range(match.range(at: 1), in: body) {
+
+        // extract description content
+        var desc = String(body[range])
+        // strip out HTML comments so `<!--- ... -->` placeholders don't count
+        desc = desc.replacingOccurrences(of: #"<!--.*?-->"#, with: "", options: .regularExpression)
+
+        let count = desc.trimmingCharacters(in: .whitespacesAndNewlines).count
+        if count == 0 {
+            warn("""
+            💡 **More details help!**
+            Your description section is empty. Adding a bit more context will make reviews smoother. 🙌
+            """)
+        } else if count < 10 {
+            warn("""
+            💡 **More details help!**
+            Your description section is a bit short (\(count) characters). Adding a bit more context will make reviews smoother. 🙌
+            """)
+        } else if count >= 350 {
+            markdown("""
+            ### 💬 **Description craftsman**
+            Great PR description! Reviewers salute you 🫡
+            """)
+        }
     }
 }
