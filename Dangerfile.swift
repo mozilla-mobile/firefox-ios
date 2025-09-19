@@ -357,14 +357,13 @@ func checkDescriptionSection() {
     guard let body = danger.github.pullRequest.body else { return }
 
     // Regex to capture everything between "## :bulb: Description" and "## :pencil: Checklist"
-    let regex = try! NSRegularExpression(
+    guard let regex = try? NSRegularExpression(
         pattern: #"(?s)## :bulb: Description\s*(.*?)## :pencil: Checklist"#,
         options: []
-    )
+    ) else { return }
 
     if let match = regex.firstMatch(in: body, options: [], range: NSRange(location: 0, length: body.utf16.count)),
        let range = Range(match.range(at: 1), in: body) {
-
         // extract description content
         var desc = String(body[range])
         // strip out HTML comments so `<!--- ... -->` placeholders don't count
