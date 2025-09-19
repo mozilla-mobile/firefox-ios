@@ -245,7 +245,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             toolbar.topAnchor.constraint(equalTo: topAnchor, constant: offset),
             toolbar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -offset)
         ])
-        
     }
 
     func applyTheme() {
