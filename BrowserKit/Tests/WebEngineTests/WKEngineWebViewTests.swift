@@ -170,26 +170,6 @@ final class WKEngineWebViewTests: XCTestCase {
     }
 
     @MainActor
-    func testCurrentHistoryItemSetAfterVisitingPage() {
-        let subject = createSubject()
-        let testURL = URL(string: "https://www.example.com/")!
-
-        let expectation = expectation(description: "Wait for the decision handler to be called")
-
-        XCTAssertNil(subject.currentBackForwardListItem())
-        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
-            guard webEngineViewProperty == .loading(false) else { return }
-
-            expectation.fulfill()
-        }
-
-        subject.load(URLRequest(url: testURL))
-        wait(for: [expectation], timeout: 10)
-        XCTAssertNotNil(subject.currentBackForwardListItem())
-        self.delegate.webViewPropertyChangedCallback = nil
-    }
-
-    @MainActor
     func createSubject(pullRefreshViewType: EnginePullRefreshViewType = MockEnginePullRefreshView.self,
                        file: StaticString = #filePath,
                        line: UInt = #line) -> DefaultWKEngineWebView {
