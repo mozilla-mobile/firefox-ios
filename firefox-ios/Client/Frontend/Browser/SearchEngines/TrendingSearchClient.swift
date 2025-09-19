@@ -47,9 +47,9 @@ final class TrendingSearchClient {
             guard let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [Any],
                   let suggestions = json[1] as? [String]
             else {
-                self.logger.log("Response was not able to be parsed appropriately.",
-                                level: .debug,
-                                category: .searchEngines)
+                logger.log("Response was not able to be parsed appropriately.",
+                           level: .debug,
+                           category: .searchEngines)
                 throw TrendingSearchClientError.unableToParseJsonData
             }
 
@@ -64,9 +64,9 @@ final class TrendingSearchClient {
         let isValidResponse = validatedHTTPResponse(response, statusCode: 200..<300)
 
         guard isValidResponse != nil else {
-            self.logger.log("Response isn't valid based on status codes.",
-                            level: .debug,
-                            category: .searchEngines)
+            logger.log("Response isn't valid based on status codes.",
+                       level: .debug,
+                       category: .searchEngines)
             throw TrendingSearchClientError.invalidHTTPResponse
         }
         return data
