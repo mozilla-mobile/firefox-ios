@@ -247,7 +247,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let backgroundColor: UIColor = if #available(iOS 26.0, *) {
             // Use the same color that uses the toolbar
-            searchBarPosition == .top ? .clear : theme.colors.layerSurfaceLow
+            theme.colors.layerSurfaceLow
         } else {
             theme.colors.layer5
         }
