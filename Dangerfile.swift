@@ -10,6 +10,7 @@ import Foundation
 let danger = Danger()
 let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
+checkForFunMetrics()
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkBigPullRequest()
 checkCodeCoverage()
@@ -19,6 +20,54 @@ checkForWebEngineFileChange()
 checkForCodeUsage()
 changedFiles()
 checkStringsFile()
+
+// Add some fun comments in Danger to have positive feedback on PRs
+func checkForFunMetrics() {
+    let edited = danger.git.modifiedFiles + danger.git.createdFiles
+    let testFiles = edited.filter { path in
+        path.localizedCaseInsensitiveContains("Tests.swift")
+    }
+
+    if !testFiles.isEmpty {
+        markdown("""
+        ### 💪 **Quality guardian**
+        New tests spotted in **\(testFiles.count)** file(s). You're a champion of test coverage! 🚀
+        """)
+    }
+
+    let additions = danger.github?.pullRequest.additions ?? 0
+    let deletions = danger.github?.pullRequest.deletions ?? 0
+    if deletions > additions && (additions + deletions) > 20 {
+        markdown("""
+        ### 🗑️ **Tossing out clutter**
+        **\(deletions - additions)** line(s) removed. Fewer lines, fewer bugs 🐛!
+        """)
+    }
+
+    let filesChanged = danger.github?.pullRequest.changedFiles ?? 0
+    if filesChanged > 0 && filesChanged <= 3 {
+        markdown("""
+        ### 🧹 **Tidy commit**
+        Just **\(filesChanged)** file(s) touched. Thanks for keeping it clean and review-friendly!
+        """)
+    }
+
+    let totalLines = deletions + additions
+    if totalLines < 50 {
+        markdown("""
+        ### 🌱 **Tiny but mighty**
+        Only **\(totalLines)** line(s) changed. Fast to review, faster to land! 🚀
+        """)
+    }
+
+    let weekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) // 6 = Friday
+    if weekday == 6 {
+        markdown("""
+        ### 🙌 **Friday high-five**
+        Thanks for pushing us across the finish line this week! 🙌
+        """)
+    }
+}
 
 func changedFiles() {
     message("Edited \(danger.git.modifiedFiles.count) files")
