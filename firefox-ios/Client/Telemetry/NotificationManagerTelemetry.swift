@@ -6,7 +6,13 @@ import Common
 import Glean
 
 struct NotificationManagerTelemetry {
-    static func sendTelemetry(settings: NotificationSettingsSnapshot) {
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
+    func sendNotificationPermission(settings: NotificationSettingsSnapshot) {
         guard !AppConstants.isRunningUnitTest else { return }
 
         var authorizationStatus = ""
@@ -27,12 +33,17 @@ struct NotificationManagerTelemetry {
         @unknown default: alertSetting = "notSupported"
         }
 
-        let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue: authorizationStatus,
-                      TelemetryWrapper.EventExtraKey.notificationPermissionAlertSetting.rawValue: alertSetting]
+        let permissionExtra = GleanMetrics.App.NotificationPermissionExtra(
+            alertSetting: alertSetting,
+            status: authorizationStatus
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.App.notificationPermission,
+                                 extras: permissionExtra)
+    }
 
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .notificationPermission,
-                                     extras: extras)
+    func sendNotificationPermissionPrompt(isPermissionGranted: Bool) {
+        let permissionExtra = GleanMetrics.Onboarding.NotificationPermissionPromptExtra(granted: isPermissionGranted)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.notificationPermissionPrompt,
+                                 extras: permissionExtra)
     }
 }

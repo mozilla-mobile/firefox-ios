@@ -36,10 +36,13 @@ protocol NotificationManagerProtocol {
 }
 
 class NotificationManager: NotificationManagerProtocol {
+    private let telemetry: NotificationManagerTelemetry
     private var center: UserNotificationCenterProtocol
 
-    init(center: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
+    init(center: UserNotificationCenterProtocol = UNUserNotificationCenter.current(),
+         telemetry: NotificationManagerTelemetry = NotificationManagerTelemetry()) {
         self.center = center
+        self.telemetry = telemetry
     }
 
     // Requests the user’s authorization to allow local and remote notifications and sends Telemetry
@@ -49,12 +52,7 @@ class NotificationManager: NotificationManagerProtocol {
 
             guard !AppConstants.isRunningUnitTest else { return }
 
-            let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionIsGranted.rawValue:
-                            granted]
-            TelemetryWrapper.recordEvent(category: .prompt,
-                                         method: .tap,
-                                         object: .notificationPermission,
-                                         extras: extras)
+            self.telemetry.sendNotificationPermissionPrompt(isPermissionGranted: granted)
         }
     }
 
@@ -85,7 +83,7 @@ class NotificationManager: NotificationManagerProtocol {
             completion(settingSnapshot)
 
             guard sendTelemetry else { return }
-            NotificationManagerTelemetry.sendTelemetry(settings: settingSnapshot)
+            self.telemetry.sendNotificationPermission(settings: settingSnapshot)
         }
     }
 
@@ -234,6 +232,12 @@ struct NotificationSettingsSnapshot: Sendable {
     init(from settings: UNNotificationSettings) {
         self.authorizationStatus = settings.authorizationStatus
         self.alertSetting = settings.alertSetting
+    }
+
+    init(authorizationStatus: UNAuthorizationStatus,
+         alertSetting: UNNotificationSetting) {
+        self.authorizationStatus = authorizationStatus
+        self.alertSetting = alertSetting
     }
 }
 
