@@ -10,19 +10,71 @@ import Foundation
 let danger = Danger()
 let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
+checkForFunMetrics()
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkBigPullRequest()
 checkCodeCoverage()
 failOnNewFilesWithoutCoverage()
-checkForPRDescription()
 checkForWebEngineFileChange()
 checkForCodeUsage()
-changedFiles()
 checkStringsFile()
 
-func changedFiles() {
-    message("Edited \(danger.git.modifiedFiles.count) files")
-    message("Created \(danger.git.createdFiles.count) files")
+// Add some fun comments in Danger to have positive feedback on PRs
+func checkForFunMetrics() {
+    let edited = danger.git.modifiedFiles + danger.git.createdFiles
+    let testFiles = edited.filter { path in
+        path.localizedCaseInsensitiveContains("Tests.swift")
+    }
+
+    if !testFiles.isEmpty {
+        markdown("""
+        ### 💪 **Quality guardian**
+        **\(testFiles.count)** tests files modified. You're a champion of test coverage! 🚀
+        """)
+    }
+
+    let additions = danger.github?.pullRequest.additions ?? 0
+    let deletions = danger.github?.pullRequest.deletions ?? 0
+    if deletions > additions && (additions + deletions) > 50 {
+        markdown("""
+        ### 🗑️ **Tossing out clutter**
+        **\(deletions - additions)** line(s) removed. Fewer lines, fewer bugs 🐛!
+        """)
+    }
+
+    let filesChanged = danger.github?.pullRequest.changedFiles ?? 0
+    if filesChanged > 0 && filesChanged <= 5 {
+        markdown("""
+        ### 🧹 **Tidy commit**
+        Just **\(filesChanged)** file(s) touched. Thanks for keeping it clean and review-friendly!
+        """)
+    }
+
+    let totalLines = deletions + additions
+    if totalLines < 50 {
+        markdown("""
+        ### 🌱 **Tiny but mighty**
+        Only **\(totalLines)** line(s) changed. Fast to review, faster to land! 🚀
+        """)
+    }
+
+    let weekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) // 6 = Friday
+    if weekday == 6 {
+        markdown("""
+        ### 🙌 **Friday high-five**
+        Thanks for pushing us across the finish line this week! 🙌
+        """)
+    }
+
+    let docTouched = edited.contains { $0.contains(".md") }
+    if docTouched {
+        markdown("""
+        ### 🌟 **Documentation star**
+        Great documentation touches. Future you says thank you! 📚
+        """)
+    }
+
+    checkDescriptionSection()
 }
 
 func checkCodeCoverage() {
@@ -94,15 +146,6 @@ func checkBigPullRequest() {
     let additionsAndDeletions = additions + deletions
     if additionsAndDeletions > bigPRThreshold {
         warn("This Pull Request seems quite large. If it consists of multiple changes, try splitting them into separate PRs for a faster review process. Consider using epic branches for work impacting main.")
-    }
-}
-
-// Encourage writing up some reasoning about the PR, rather than just leaving a title.
-func checkForPRDescription() {
-    let body = danger.github.pullRequest.body?.count ?? 0
-    let linesOfCode = danger.github.pullRequest.additions ?? 0
-    if body < 3 && linesOfCode > 10 {
-        warn("Please provide a summary of your changes in the Pull Request description. This helps reviewers to understand your code and technical decisions. Please also include the JIRA issue number and the GitHub ticket number (if available).")
     }
 }
 
@@ -290,6 +333,45 @@ func checkStringsFile() {
     let touchedStrings = edited.contains(where: { $0 == "firefox-ios/Shared/Strings.swift" })
 
     if touchedStrings {
-        danger.message("✍️ Please ask a member of [@mozilla-mobile/firefox-ios-l10n](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) team for Strings review ✍️")
+        markdown("""
+        ### ✍️ **Strings file changed**
+        "Please ask a member of [@mozilla-mobile/firefox-ios-l10n](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) team for Strings review ✍️"
+        """)
+    }
+}
+
+func checkDescriptionSection() {
+    guard let body = danger.github.pullRequest.body else { return }
+
+    // Regex to capture everything between "## :bulb: Description" and "## :pencil: Checklist"
+    guard let regex = try? NSRegularExpression(
+        pattern: #"(?s)## :bulb: Description\s*(.*?)## :pencil: Checklist"#,
+        options: []
+    ) else { return }
+
+    if let match = regex.firstMatch(in: body, options: [], range: NSRange(location: 0, length: body.utf16.count)),
+       let range = Range(match.range(at: 1), in: body) {
+        // extract description content
+        var desc = String(body[range])
+        // strip out HTML comments so `<!--- ... -->` placeholders don't count
+        desc = desc.replacingOccurrences(of: #"<!--.*?-->"#, with: "", options: .regularExpression)
+
+        let count = desc.trimmingCharacters(in: .whitespacesAndNewlines).count
+        if count == 0 {
+            warn("""
+            💡 **More details help!**
+            Your description section is empty. Adding a bit more context will make reviews smoother. 🙌
+            """)
+        } else if count < 10 {
+            warn("""
+            💡 **More details help!**
+            Your description section is a bit short (\(count) characters). Adding a bit more context will make reviews smoother. 🙌
+            """)
+        } else if count >= 350 {
+            markdown("""
+            ### 💬 **Description craftsman**
+            Great PR description! Reviewers salute you 🫡
+            """)
+        }
     }
 }
