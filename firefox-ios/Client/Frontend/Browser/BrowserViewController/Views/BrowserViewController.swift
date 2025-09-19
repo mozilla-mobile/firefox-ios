@@ -1479,17 +1479,30 @@ class BrowserViewController: UIViewController,
     }
 
     func willNavigateAway(from tab: Tab?) {
-        if let tab {
+        guard let tab else {
+            return
+        }
+
+        let screenshotHelper = self.screenshotHelper
+        let windowUUID = self.windowUUID
+        let screenshotBounds = CGRect(
+            x: self.contentContainer.frame.origin.x,
+            y: -self.contentContainer.frame.origin.y,
+            width: self.view.frame.width,
+            height: self.view.frame.height
+        )
+
+        let takeScreenshot = {
             screenshotHelper.takeScreenshot(
                 tab,
                 windowUUID: windowUUID,
-                screenshotBounds: CGRect(
-                    x: contentContainer.frame.origin.x,
-                    y: -contentContainer.frame.origin.y,
-                    width: view.frame.width,
-                    height: view.frame.height
-                )
+                screenshotBounds: screenshotBounds
             )
+        }
+
+        // Take screenshot asynchronously to avoid blocking navigation
+        DispatchQueue.main.async {
+            takeScreenshot()
         }
     }
 
