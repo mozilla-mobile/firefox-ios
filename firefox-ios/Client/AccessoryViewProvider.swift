@@ -216,6 +216,8 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
+        toolbar.layer.cornerRadius = 20.0
+
         toolbar.items = [
             currentAccessoryView,
             flexibleSpacer,
@@ -235,12 +237,15 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
         addSubview(toolbar)
 
+        let offset = CGFloat(2)
+
         NSLayoutConstraint.activate([
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
-            toolbar.topAnchor.constraint(equalTo: topAnchor),
-            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor)
+            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: offset),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -offset),
+            toolbar.topAnchor.constraint(equalTo: topAnchor, constant: offset),
+            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -offset)
         ])
+        
     }
 
     func applyTheme() {
@@ -257,7 +262,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             theme.colors.layer5Hover
         }
 
-        self.backgroundColor = backgroundColor
+        toolbar.backgroundColor = backgroundColor
         [previousButton, nextButton, doneButton].forEach {
             $0.tintColor = theme.colors.iconAccentBlue
             $0.customView?.tintColor = theme.colors.iconAccentBlue
