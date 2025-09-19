@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import MozillaAppServices
+import Common
 import XCTest
 
 @testable import Client
@@ -124,6 +125,18 @@ final class RecordVisitObservationManagerTests: XCTestCase {
         // because it is an ignored URL scheme (unless it's for `test-fixture`)
         let subject = createSubject()
         let observation = createObservation(url: "http://localhost:8080/", title: "Localhost")
+
+        subject.recordVisit(visitObservation: observation, isPrivateTab: false)
+
+        XCTAssertTrue(historyHandler.applied.isEmpty)
+        XCTAssertNil(subject.lastObservationRecorded)
+    }
+
+    func testRecordVisitReaderModeURLDoesNotRecord() {
+        // reader-mode should be ignored by isValidURLToRecord
+        let subject = createSubject()
+        let url = "http://localhost:\(AppInfo.webserverPort)/reader-mode/page"
+        let observation = createObservation(url: url, title: "Reader Mode")
 
         subject.recordVisit(visitObservation: observation, isPrivateTab: false)
 
