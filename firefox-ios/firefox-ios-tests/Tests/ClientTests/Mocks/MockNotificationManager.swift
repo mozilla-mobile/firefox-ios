@@ -23,11 +23,7 @@ class MockNotificationManager: NotificationManagerProtocol {
         return wasAuthorizationSuccessful
     }
 
-    func getNotificationSettings(sendTelemetry: Bool,
-                                 completion: @escaping @Sendable (NotificationSettingsSnapshot) -> Void) {
-    }
-
-    func getNotificationSettings(sendTelemetry: Bool) async -> NotificationSettingsSnapshot {
+    func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings {
         return await NotificationManager().getNotificationSettings()
     }
 
@@ -65,11 +61,12 @@ class MockNotificationManager: NotificationManagerProtocol {
         scheduleWithIntervalWasCalled = true
     }
 
-    func findDeliveredNotifications(completion: @escaping @Sendable ([NotificationSnapshot]) -> Void) {
+    func findDeliveredNotifications() async -> [UNNotification] {
+        return []
     }
 
-    func findDeliveredNotificationForId(id: String, completion: @escaping @Sendable (NotificationSnapshot?) -> Void) {
-        completion(nil)
+    func findDeliveredNotificationForId(id: String) async -> UNNotification? {
+        return nil
     }
 
     var removeAllPendingNotificationsWasCalled = false

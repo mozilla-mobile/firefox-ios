@@ -11,9 +11,7 @@ protocol NotificationManagerProtocol {
     func requestAuthorization(completion: @escaping @Sendable (Bool, Error?) -> Void)
     func requestAuthorization(completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
     func requestAuthorization() async throws -> Bool
-    func getNotificationSettings(sendTelemetry: Bool, completion: @escaping @Sendable (NotificationSettingsSnapshot) -> Void)
-    func getNotificationSettings(sendTelemetry: Bool) async -> NotificationSettingsSnapshot
-    func hasPermission(completion: @escaping @Sendable (Bool) -> Void)
+    func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings
     func hasPermission() async -> Bool
     func schedule(title: String,
                   body: String,
@@ -29,8 +27,8 @@ protocol NotificationManagerProtocol {
                   categoryIdentifier: String,
                   interval: TimeInterval,
                   repeats: Bool)
-    func findDeliveredNotifications(completion: @escaping @Sendable ([NotificationSnapshot]) -> Void)
-    func findDeliveredNotificationForId(id: String, completion: @escaping @Sendable (NotificationSnapshot?) -> Void)
+    func findDeliveredNotifications() async -> [UNNotification]
+    func findDeliveredNotificationForId(id: String) async -> UNNotification?
     func removeAllPendingNotifications()
     func removePendingNotificationsWithId(ids: [String])
 }
@@ -49,8 +47,6 @@ class NotificationManager: NotificationManagerProtocol {
     func requestAuthorization(completion: @escaping @Sendable (Bool, Error?) -> Void) {
         center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             completion(granted, error)
-
-            guard !AppConstants.isRunningUnitTest else { return }
 
             self.telemetry.sendNotificationPermissionPrompt(isPermissionGranted: granted)
         }
@@ -76,57 +72,29 @@ class NotificationManager: NotificationManagerProtocol {
     }
 
     // Retrieves the authorization and feature-related notification settings and sends Telemetry
-    func getNotificationSettings(sendTelemetry: Bool = false,
-                                 completion: @escaping @Sendable (NotificationSettingsSnapshot) -> Void) {
-        center.getNotificationSettings { settings in
-            let settingSnapshot = NotificationSettingsSnapshot(from: settings)
-            completion(settingSnapshot)
+    func getNotificationSettings(sendTelemetry: Bool = false) async -> UNNotificationSettings {
+        let settings = await center.notificationSettings()
 
-            guard sendTelemetry else { return }
-            self.telemetry.sendNotificationPermission(settings: settingSnapshot)
+        if sendTelemetry {
+            telemetry.sendNotificationPermission(settings: settings)
         }
-    }
 
-    func getNotificationSettings(sendTelemetry: Bool = false) async -> NotificationSettingsSnapshot {
-        return await withCheckedContinuation { continuation in
-            getNotificationSettings(sendTelemetry: sendTelemetry) { result in
-                continuation.resume(returning: result)
-            }
-        }
-    }
-
-    // Determines if the user has allowed notifications
-    func hasPermission(completion: @escaping @Sendable (Bool) -> Void) {
-        getNotificationSettings { settings in
-            var hasPermission = false
-            switch settings.authorizationStatus {
-            case .authorized, .ephemeral, .provisional:
-                hasPermission = true
-            case .notDetermined, .denied:
-                fallthrough
-            @unknown default:
-                hasPermission = false
-            }
-            completion(hasPermission)
-        }
+        return settings
     }
 
     // Determines if the user has allowed notifications
     func hasPermission() async -> Bool {
-        // FXIOS-11895 Temporary test for reverting continuation workaround we put in place for iOS 18.0 (beta?) users
-        if ContinuationsChecker.shouldUseCheckedContinuation {
-            await withCheckedContinuation { continuation in
-                hasPermission { hasPermission in
-                    continuation.resume(returning: hasPermission)
-                }
-            }
-        } else {
-            await withUnsafeContinuation { continuation in
-                hasPermission { hasPermission in
-                    continuation.resume(returning: hasPermission)
-                }
-            }
+        let settings = await getNotificationSettings()
+        var hasPermission = false
+        switch settings.authorizationStatus {
+        case .authorized, .ephemeral, .provisional:
+            hasPermission = true
+        case .notDetermined, .denied:
+            fallthrough
+        @unknown default:
+            hasPermission = false
         }
+        return hasPermission
     }
 
     // Scheduling push notification based on the Date trigger (Ex 25 December at 10:00PM)
@@ -168,22 +136,17 @@ class NotificationManager: NotificationManagerProtocol {
     }
 
     // Fetches all delivered notifications that are still present in Notification Center.
-    func findDeliveredNotifications(completion: @escaping @Sendable ([NotificationSnapshot]) -> Void) {
-        center.getDeliveredNotifications { notificationList in
-            let snapshots = notificationList.map(NotificationSnapshot.init)
-            completion(snapshots)
-        }
+    func findDeliveredNotifications() async -> [UNNotification] {
+        return await center.deliveredNotifications()
     }
 
     // Fetches all delivered notifications that are still present in Notification Center by id
-    func findDeliveredNotificationForId(id: String,
-                                        completion: @escaping @Sendable (NotificationSnapshot?) -> Void) {
-        findDeliveredNotifications { notificationList in
-            let notification = notificationList.first(where: { notification -> Bool in
-                notification.id == id
-            })
-            completion(notification)
-        }
+    func findDeliveredNotificationForId(id: String) async -> UNNotification? {
+        let notificationList: [UNNotification] = await findDeliveredNotifications()
+        let notification = notificationList.first(where: { notification -> Bool in
+            notification.request.identifier == id
+        })
+        return notification
     }
 
     // Remove all pending notifications
@@ -220,31 +183,5 @@ class NotificationManager: NotificationManagerProtocol {
                                             content: notificationContent,
                                             trigger: trigger)
         center.add(request, withCompletionHandler: nil)
-    }
-}
-
-// Taking snapshots of non-Sendable objects so they can be sent across boundaries
-
-struct NotificationSettingsSnapshot: Sendable {
-    let authorizationStatus: UNAuthorizationStatus
-    let alertSetting: UNNotificationSetting
-
-    init(from settings: UNNotificationSettings) {
-        self.authorizationStatus = settings.authorizationStatus
-        self.alertSetting = settings.alertSetting
-    }
-
-    init(authorizationStatus: UNAuthorizationStatus,
-         alertSetting: UNNotificationSetting) {
-        self.authorizationStatus = authorizationStatus
-        self.alertSetting = alertSetting
-    }
-}
-
-struct NotificationSnapshot: Sendable {
-    let id: String
-
-    init(from notification: UNNotification) {
-        self.id = notification.request.identifier
     }
 }

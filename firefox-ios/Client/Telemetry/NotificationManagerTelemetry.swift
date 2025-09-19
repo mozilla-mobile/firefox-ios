@@ -12,9 +12,7 @@ struct NotificationManagerTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func sendNotificationPermission(settings: NotificationSettingsSnapshot) {
-        guard !AppConstants.isRunningUnitTest else { return }
-
+    func sendNotificationPermission(settings: NotificationSettings) {
         var authorizationStatus = ""
         switch settings.authorizationStatus {
         case .authorized: authorizationStatus = "authorized"
@@ -47,3 +45,10 @@ struct NotificationManagerTelemetry {
                                  extras: permissionExtra)
     }
 }
+
+protocol NotificationSettings {
+    var authorizationStatus: UNAuthorizationStatus { get }
+    var alertSetting: UNNotificationSetting { get }
+}
+
+extension UNNotificationSettings: NotificationSettings {}

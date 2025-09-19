@@ -28,8 +28,7 @@ final class NotificationManagerTelemetryTests: XCTestCase {
 
     func test_appNotificationPermission_GleanIsCalled() {
         let subject = createSubject()
-        let settings = NotificationSettingsSnapshot(authorizationStatus: .authorized,
-                                                    alertSetting: .enabled)
+        let settings = MockUNNotificationSettings(authorizationStatus: .authorized, alertSetting: .enabled)
 
         subject.sendNotificationPermission(settings: settings)
 
@@ -38,5 +37,15 @@ final class NotificationManagerTelemetryTests: XCTestCase {
 
     func createSubject() -> NotificationManagerTelemetry {
         return NotificationManagerTelemetry()
+    }
+}
+
+class MockUNNotificationSettings: NotificationSettings {
+    var authorizationStatus: UNAuthorizationStatus
+    var alertSetting: UNNotificationSetting
+
+    init(authorizationStatus: UNAuthorizationStatus, alertSetting: UNNotificationSetting) {
+        self.authorizationStatus = authorizationStatus
+        self.alertSetting = alertSetting
     }
 }
