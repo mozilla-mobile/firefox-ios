@@ -1049,6 +1049,8 @@ class BrowserViewController: UIViewController,
         subscribeToRedux()
         enqueueTabRestoration()
 
+        // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
+        guard !AppConstants.isRunningUnitTest else { return }
         Task(priority: .background) { [weak self] in
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
             await self?.trackStartupTelemetry()
