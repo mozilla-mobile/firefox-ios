@@ -676,7 +676,7 @@ workflows:
             # Test Helpers
             #   test-fixtures/.py$ -> matches all files whose file extension begin with 'py'
 
-            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|firefox-ios/firefox-ios-tests/Tests/Sync*/*|fastlane/*|taskcluster/*|firefox-ios/firefox-ios-tests/Tests/L10nSnapshotTests/*|test-fixtures/.*.py$)'
+            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|firefox-ios/firefox-ios-tests/Tests/Sync*/*|fastlane/*|taskcluster/*|firefox-ios/firefox-ios-tests/Tests/L10nSnapshotTests/*|test-fixtures/|focus-ios/|.*.py$)'
 
             # Pass the FILES_CHANGED to grep to find any matches for the regex DO_NOT_RUN_TESTS
             # -v inverts the filtered results, returning any files not filtered by the regex
