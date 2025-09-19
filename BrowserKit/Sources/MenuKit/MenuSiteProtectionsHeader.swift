@@ -123,16 +123,15 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         siteProtectionsContent.addArrangedSubview(siteProtectionsMoreSettingsIcon)
 
         let siteProtectionsTopFromFavicon = siteProtectionsContent.topAnchor.constraint(
-                    greaterThanOrEqualTo: favicon.bottomAnchor,
-                    constant: UX.siteProtectionsContentTopMargin
-                )
+            greaterThanOrEqualTo: favicon.bottomAnchor,
+            constant: UX.siteProtectionsContentTopMargin
+        )
 
-                let siteProtectionsTopFromLabels = siteProtectionsContent.topAnchor.constraint(
-                    equalTo: contentLabels.bottomAnchor,
-                    constant: UX.siteProtectionsContentTopMargin
-                )
-                siteProtectionsTopFromLabels.priority = .defaultHigh
-
+        let siteProtectionsTopFromLabels = siteProtectionsContent.topAnchor.constraint(
+            equalTo: contentLabels.bottomAnchor,
+            constant: UX.siteProtectionsContentTopMargin
+        )
+        siteProtectionsTopFromLabels.priority = .defaultHigh
         let iconAlignmentOffset = -UX.siteProtectionsContentHorizontalPadding
         NSLayoutConstraint.activate([
             contentLabels.topAnchor.constraint(equalTo: self.topAnchor),
