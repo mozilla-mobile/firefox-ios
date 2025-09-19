@@ -13,7 +13,7 @@ enum AccessoryType {
 class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
     // MARK: - Constants
     private struct UX {
-        static let toolbarHeight: CGFloat = 50
+        static let accessoryViewHeight: CGFloat = 50
         static let fixedSpacerWidth: CGFloat = 10
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
@@ -157,7 +157,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         self.notificationCenter = notificationCenter
 
         super.init(frame: CGRect(width: UIScreen.main.bounds.width,
-                                 height: UX.toolbarHeight))
+                                 height: UX.accessoryViewHeight))
 
         setupLayout()
 
@@ -216,7 +216,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
-        toolbar.layer.cornerRadius = 20.0
+        toolbar.layer.cornerRadius = 24.0
 
         toolbar.items = [
             currentAccessoryView,
@@ -237,13 +237,14 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
         addSubview(toolbar)
 
-        let offset = CGFloat(2)
+        let topBottomOffset = CGFloat(2)
+        let sideOffset = CGFloat(6)
 
         NSLayoutConstraint.activate([
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: offset),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -offset),
-            toolbar.topAnchor.constraint(equalTo: topAnchor, constant: offset),
-            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -offset)
+            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: sideOffset),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -sideOffset),
+            toolbar.topAnchor.constraint(equalTo: topAnchor, constant: topBottomOffset),
+            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -topBottomOffset)
         ])
     }
 
