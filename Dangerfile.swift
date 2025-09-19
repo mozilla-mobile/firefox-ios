@@ -15,10 +15,8 @@ checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkBigPullRequest()
 checkCodeCoverage()
 failOnNewFilesWithoutCoverage()
-checkForPRDescription()
 checkForWebEngineFileChange()
 checkForCodeUsage()
-changedFiles()
 checkStringsFile()
 
 // Add some fun comments in Danger to have positive feedback on PRs
@@ -77,11 +75,6 @@ func checkForFunMetrics() {
     }
 
     checkDescriptionSection()
-}
-
-func changedFiles() {
-    message("Edited \(danger.git.modifiedFiles.count) files")
-    message("Created \(danger.git.createdFiles.count) files")
 }
 
 func checkCodeCoverage() {
@@ -153,15 +146,6 @@ func checkBigPullRequest() {
     let additionsAndDeletions = additions + deletions
     if additionsAndDeletions > bigPRThreshold {
         warn("This Pull Request seems quite large. If it consists of multiple changes, try splitting them into separate PRs for a faster review process. Consider using epic branches for work impacting main.")
-    }
-}
-
-// Encourage writing up some reasoning about the PR, rather than just leaving a title.
-func checkForPRDescription() {
-    let body = danger.github.pullRequest.body?.count ?? 0
-    let linesOfCode = danger.github.pullRequest.additions ?? 0
-    if body < 3 && linesOfCode > 10 {
-        warn("Please provide a summary of your changes in the Pull Request description. This helps reviewers to understand your code and technical decisions. Please also include the JIRA issue number and the GitHub ticket number (if available).")
     }
 }
 
@@ -349,7 +333,10 @@ func checkStringsFile() {
     let touchedStrings = edited.contains(where: { $0 == "firefox-ios/Shared/Strings.swift" })
 
     if touchedStrings {
-        danger.message("✍️ Please ask a member of [@mozilla-mobile/firefox-ios-l10n](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) team for Strings review ✍️")
+        markdown("""
+        ### ✍️ **Strings file changed**
+        "Please ask a member of [@mozilla-mobile/firefox-ios-l10n](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) team for Strings review ✍️"
+        """)
     }
 }
 
