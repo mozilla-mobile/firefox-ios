@@ -66,7 +66,7 @@ open class FxAccountManager: @unchecked Sendable {
     /// It is required to call this method before doing anything else with the manager.
     /// Note that as a result of this initialization, notifications such as `accountAuthenticated` might be
     /// fired.
-    public func initialize(completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void) {
+    public func initialize(completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void) {
         processEvent(event: .initialize) {
             DispatchQueue.main.async { completionHandler(Result.success(())) }
         }
@@ -113,7 +113,7 @@ open class FxAccountManager: @unchecked Sendable {
     public func beginAuthentication(
         entrypoint: String,
         scopes: [String] = [],
-        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Result<URL, Error>) -> Void
     ) {
         FxALog.info("beginAuthentication")
         // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
@@ -184,7 +184,7 @@ open class FxAccountManager: @unchecked Sendable {
     /// If it succeeds, a `.accountAuthenticated` notification will get fired.
     public func finishAuthentication(
         authData: FxaAuthData,
-        completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void
     ) {
         if latestOAuthStateParam == nil {
             DispatchQueue.main.async { completionHandler(.failure(FxaError.NoExistingAuthFlow(message: ""))) }
@@ -224,7 +224,10 @@ open class FxAccountManager: @unchecked Sendable {
     }
 
     /// The account password has been changed locally and a new session token has been sent to us through WebChannel.
-    public func handlePasswordChanged(newSessionToken: String, completionHandler: @Sendable @escaping () -> Void) {
+    public func handlePasswordChanged(
+        newSessionToken: String,
+        completionHandler: @escaping @MainActor @Sendable () -> Void
+    ) {
         processEvent(event: .changedPassword(newSessionToken: newSessionToken)) {
             DispatchQueue.main.async { completionHandler() }
         }
@@ -247,7 +250,7 @@ open class FxAccountManager: @unchecked Sendable {
 
     /// Get the pairing URL to navigate to on the Auth side (typically a computer).
     public func getPairingAuthorityURL(
-        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {
@@ -261,7 +264,7 @@ open class FxAccountManager: @unchecked Sendable {
 
     /// Get the token server URL with `1.0/sync/1.5` appended at the end.
     public func getTokenServerEndpointURL(
-        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {
@@ -304,7 +307,7 @@ open class FxAccountManager: @unchecked Sendable {
 
     /// Log-out from the account.
     /// The `.accountLoggedOut` notification will also get fired.
-    public func logout(completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void) {
+    public func logout(completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void) {
         processEvent(event: .logout) {
             DispatchQueue.main.async { completionHandler(.success(())) }
         }

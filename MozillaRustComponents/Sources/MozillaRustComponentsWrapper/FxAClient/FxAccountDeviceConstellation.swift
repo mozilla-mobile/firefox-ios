@@ -81,7 +81,9 @@ public final class DeviceConstellation: @unchecked Sendable {
 
     /// Poll for device events we might have missed (e.g. Push notification missed, or device offline).
     /// Your app should probably call this on a regular basic (e.g. once a day).
-    public func pollForCommands(completionHandler: @Sendable @escaping (Result<[IncomingDeviceCommand], Error>) -> Void) {
+    public func pollForCommands(
+        completionHandler: @escaping @MainActor @Sendable (Result<[IncomingDeviceCommand], Error>) -> Void
+    ) {
         DispatchQueue.global().async {
             do {
                 let events = try self.account.pollDeviceCommands()
@@ -134,7 +136,7 @@ public final class DeviceConstellation: @unchecked Sendable {
     /// Once Push has decrypted a payload, send the payload to this method
     /// which will tell the app what to do with it in form of  an `AccountEvent`.
     public func handlePushMessage(pushPayload: String,
-                                  completionHandler: @Sendable @escaping (Result<AccountEvent, Error>) -> Void)
+                                  completionHandler: @escaping @MainActor @Sendable (Result<AccountEvent, Error>) -> Void)
     {
         DispatchQueue.global().async {
             do {
