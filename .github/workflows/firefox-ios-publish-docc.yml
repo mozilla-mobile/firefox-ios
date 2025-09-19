@@ -1,4 +1,4 @@
-name: Deploy Docc
+name: Deploy DocC
 on:
   workflow_dispatch: # Allow manual runs
   push:
@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true # Allow just the most recent deployment
 
 jobs:
-  deploy:
+  docs:
     runs-on: macos-15
     strategy:
       matrix:
@@ -44,7 +44,7 @@ jobs:
             --hosting-base-path "firefox-ios" \
             --output-path docs;
           echo "<script>window.location.href += \"/documentation/componentlibrary\"</script>" > docs/index.html;
-      - name: Upload artifact
+      - name: Store docs artifact
         uses: actions/upload-pages-artifact@v4
         with:
           # Upload only docs directory
