@@ -156,7 +156,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         super.viewDidAppear(animated)
         animateTabSnapshotToMidScreen()
         // Ensure that the layout is resolved before shimmering
-        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(UX.labelShimmeringColorAlpha))
+        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textOnDark
+        loadingLabel.startShimmering(light: textColor, dark: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha))
     }
 
     private func configure() {
@@ -275,7 +276,8 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
     private func summarize() {
         loadingLabel.alpha = 1.0
-        loadingLabel.startShimmering(light: .white, dark: .white.withAlphaComponent(UX.labelShimmeringColorAlpha))
+        let textColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.textOnDark
+        loadingLabel.startShimmering(light: textColor, dark: textColor.withAlphaComponent(UX.labelShimmeringColorAlpha))
         infoView.alpha = 0.0
         viewModel.summarize(
             webView: webView,
