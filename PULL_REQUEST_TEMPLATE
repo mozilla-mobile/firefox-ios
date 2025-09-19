@@ -27,5 +27,6 @@
 - [ ] I ensured unit tests pass and wrote tests for new code
 - [ ] If working on UI, I checked and implemented accessibility (Dynamic Text and VoiceOver)
 - [ ] If adding telemetry, I read the [data stewardship requirements](https://github.com/mozilla-mobile/firefox-ios/wiki/Adding-Glean-Telemetry-Events) and will request a data review
+- [ ] If adding or modifying strings, I read the [guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings) and will request a string review from l10n
 - [ ] If needed, I updated documentation and added comments to complex code
 - [ ] If needed, I added a backport comment (example `@Mergifyio backport release/v150.0`)

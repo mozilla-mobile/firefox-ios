@@ -18,6 +18,7 @@ checkForPRDescription()
 checkForWebEngineFileChange()
 checkForCodeUsage()
 changedFiles()
+checkStringsFile()
 
 func changedFiles() {
     message("Edited \(danger.git.modifiedFiles.count) files")
@@ -280,5 +281,15 @@ func checkAlphabeticalOrder(inFile filePath: String) {
         }
     } catch {
         danger.warn("Failed to read or process file \(filePath): \(error)")
+    }
+}
+
+// Check if there's String file changes, and if so ask the l10n reviewers
+func checkStringsFile() {
+    let edited = danger.git.modifiedFiles
+    let touchedStrings = edited.contains(where: { $0 == "firefox-ios/Shared/Strings.swift" })
+
+    if touchedStrings {
+        danger.message("✍️ Please ask a member of [@mozilla-mobile/firefox-ios-l10n](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) team for Strings review ✍️")
     }
 }
