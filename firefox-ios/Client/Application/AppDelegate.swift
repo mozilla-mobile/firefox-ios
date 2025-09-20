@@ -313,13 +313,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         // Corrects an issue for development when running Fennec target in
         // the simulator after having run unit tests locally.
         #if targetEnvironment(simulator) && MOZ_CHANNEL_developer
-        let key = "_FennecLaunchedUnitTestDelegate"
-        guard let flagSet = UserDefaults.standard.value(forKey: key) as? Bool, flagSet else { return }
+
+        let tmpDirectory = FileManager.default.temporaryDirectory
+        let fileURL = tmpDirectory.appendingPathComponent("_FennecLaunchedUnitTest")
+        guard FileManager.default.fileExists(atPath: fileURL.path) else { return }
+        try? FileManager.default.removeItem(at: fileURL)
+
         // Private API. This code is not present in release builds.
         application.openSessions.forEach {
             application.perform(Selector(("_removeSessionFromSessionSet:")), with: $0)
         }
-        UserDefaults.standard.removeObject(forKey: key)
         #endif
     }
 }
