@@ -15,9 +15,14 @@ import Glean
 /// enrollment will mostly use `NimbusUserConfiguration` methods. Application developers integrating
 /// `Nimbus` into their app should use the methods in `NimbusStartup`.
 ///
-public protocol NimbusInterface: FeaturesInterface, NimbusStartup,
-    NimbusUserConfiguration, NimbusBranchInterface, NimbusMessagingProtocol,
-    NimbusEventStore, NimbusQueues {}
+public protocol NimbusInterface: FeaturesInterface,
+                                 NimbusStartup,
+                                 NimbusUserConfiguration,
+                                 NimbusBranchInterface,
+                                 NimbusMessagingProtocol,
+                                 NimbusEventStore,
+                                 NimbusQueues,
+                                 Sendable {}
 
 public typealias NimbusApi = NimbusInterface
 
