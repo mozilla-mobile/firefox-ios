@@ -1053,9 +1053,11 @@ class BrowserViewController: UIViewController,
         subscribeToRedux()
         enqueueTabRestoration()
 
+        // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
+        guard !AppConstants.isRunningUnitTest else { return }
         Task(priority: .background) { [weak self] in
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
-            self?.trackStartupTelemetry()
+            await self?.trackStartupTelemetry()
         }
     }
 
@@ -5123,11 +5125,11 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 }
 
 extension BrowserViewController {
-    func trackStartupTelemetry() {
+    func trackStartupTelemetry() async {
         let toolbarLocation: SearchBarPosition = self.isBottomSearchBar ? .bottom : .top
         SearchBarSettingsViewModel.recordLocationTelemetry(for: toolbarLocation)
         trackAccessibility()
-        trackNotificationPermission()
+        await trackNotificationPermission()
         appStartupTelemetry.sendStartupTelemetry()
         creditCardInitialSetupTelemetry()
     }
@@ -5178,7 +5180,7 @@ extension BrowserViewController {
         }
     }
 
-    func trackNotificationPermission() {
-        NotificationManager().getNotificationSettings(sendTelemetry: true) { _ in }
+    func trackNotificationPermission() async {
+        _ = await NotificationManager().getNotificationSettings(sendTelemetry: true)
     }
 }

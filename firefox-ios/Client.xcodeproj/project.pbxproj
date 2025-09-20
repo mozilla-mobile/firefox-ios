@@ -877,6 +877,7 @@
 		8A1A93592B757C7C0069C190 /* landscape.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93532B757C7B0069C190 /* landscape.json */; };
 		8A1A935A2B757C7C0069C190 /* portrait.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93542B757C7B0069C190 /* portrait.json */; };
 		8A1A935B2B757C7C0069C190 /* wave.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93552B757C7B0069C190 /* wave.json */; };
+		8A1AB6BB2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1AB6BA2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift */; };
 		8A1C0B8F2E723EDF0030DCC8 /* AppLaunchUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C0B8E2E723EDC0030DCC8 /* AppLaunchUtilTests.swift */; };
 		8A1CBB952BE017D3008BE4D4 /* MicrosurveyPromptAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CBB942BE017D3008BE4D4 /* MicrosurveyPromptAction.swift */; };
 		8A1CBB972BE0182C008BE4D4 /* MicrosurveyPromptMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1CBB962BE0182C008BE4D4 /* MicrosurveyPromptMiddleware.swift */; };
@@ -1237,6 +1238,7 @@
 		8AD40FD127BADCBA00672675 /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD027BADCBA00672675 /* ToolbarButton.swift */; };
 		8AD40FD327BB068F00672675 /* MainMenuActionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */; };
 		8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD427BB1C1000672675 /* LockButton.swift */; };
+		8ADA19A22E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */; };
 		8ADAA6D42CD175FB00E3D3E8 /* StickersCatalog.xcstickers in Resources */ = {isa = PBXBuildFile; fileRef = 8ADAA6D32CD175FB00E3D3E8 /* StickersCatalog.xcstickers */; };
 		8ADAE41E2A33A0E2007BF926 /* ShowIntroductionSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAE41D2A33A0E2007BF926 /* ShowIntroductionSetting.swift */; };
 		8ADAE4202A33A0FD007BF926 /* SendFeedbackSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADAE41F2A33A0FD007BF926 /* SendFeedbackSetting.swift */; };
@@ -8605,6 +8607,7 @@
 		8A1A93532B757C7B0069C190 /* landscape.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = landscape.json; sourceTree = "<group>"; };
 		8A1A93542B757C7B0069C190 /* portrait.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = portrait.json; sourceTree = "<group>"; };
 		8A1A93552B757C7B0069C190 /* wave.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wave.json; sourceTree = "<group>"; };
+		8A1AB6BA2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTelemetry.swift; sourceTree = "<group>"; };
 		8A1C0B8E2E723EDC0030DCC8 /* AppLaunchUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtilTests.swift; sourceTree = "<group>"; };
 		8A1CBB942BE017D3008BE4D4 /* MicrosurveyPromptAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyPromptAction.swift; sourceTree = "<group>"; };
 		8A1CBB962BE0182C008BE4D4 /* MicrosurveyPromptMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyPromptMiddleware.swift; sourceTree = "<group>"; };
@@ -8948,6 +8951,7 @@
 		8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuActionHelper.swift; sourceTree = "<group>"; };
 		8AD40FD427BB1C1000672675 /* LockButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockButton.swift; sourceTree = "<group>"; };
 		8AD440CBBF202B15E74E186D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Search.strings; sourceTree = "<group>"; };
+		8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTelemetryTests.swift; sourceTree = "<group>"; };
 		8ADAA6D32CD175FB00E3D3E8 /* StickersCatalog.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; path = StickersCatalog.xcstickers; sourceTree = "<group>"; };
 		8ADAE41D2A33A0E2007BF926 /* ShowIntroductionSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowIntroductionSetting.swift; sourceTree = "<group>"; };
 		8ADAE41F2A33A0FD007BF926 /* SendFeedbackSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendFeedbackSetting.swift; sourceTree = "<group>"; };
@@ -13526,6 +13530,7 @@
 		8AC225632B6D3F9600CDA7FD /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
+				8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */,
 				C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */,
 				8A87E98B2E70792F006F0239 /* FxSuggestTelemetryTests.swift */,
 				C7F0514F2D95EA5C00EC52C0 /* HistoryDeletionUtilityTelemetryTests.swift */,
@@ -15592,6 +15597,7 @@
 		E69DB0B91E97E301008A67E6 /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
+				8A1AB6BA2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift */,
 				8A732A812DE8AFCA0099F575 /* FxSuggestTelemetry.swift */,
 				8A0DF2C12D6D1C670066EC00 /* AutoplaySettingTelemetry.swift */,
 				43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */,
@@ -18478,6 +18484,7 @@
 				63F7A9AA2C7529ED005846F5 /* NativeErrorPageModel.swift in Sources */,
 				8A6E63CF2D4A7FB70040D355 /* SectionHeaderConfiguration.swift in Sources */,
 				63F7A9AC2C752BB0005846F5 /* NativeErrorPageViewController.swift in Sources */,
+				8A1AB6BB2E7B8D5C00167FF5 /* NotificationManagerTelemetry.swift in Sources */,
 				0E65573E2D81CD1A00D7F017 /* DownloadQueue.swift in Sources */,
 				C88E7A572A0553360072E638 /* OnboardingButtonInfoModel.swift in Sources */,
 				AB9A0C012C6CBC9100BFA22A /* TrackingProtectionDetailsViewController.swift in Sources */,
@@ -19227,6 +19234,7 @@
 				212985E72A72B39D00546684 /* ThemeSettingsControllerTests.swift in Sources */,
 				8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */,
 				216424D42E56175100A3AF40 /* MockTabScrollHandlerDelegate.swift in Sources */,
+				8ADA19A22E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift in Sources */,
 				8A1A66072CDD168A00DD883C /* MockTopSiteHistoryManager.swift in Sources */,
 				8A5189C92C1B614E00CDB668 /* SearchViewModelTests.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
