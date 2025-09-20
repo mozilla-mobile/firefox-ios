@@ -35,7 +35,7 @@ pipelines:
         - firefox_configure_build
       focus_ui_test:
         run_if:
-          expression: '{{ enveq "BUILD_FOCUS_IOS" "true" }}'
+          expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
         depends_on:
         - focus_configure_build
         parallel: 1
@@ -676,7 +676,7 @@ workflows:
             # Test Helpers
             #   test-fixtures/.py$ -> matches all files whose file extension begin with 'py'
 
-            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|firefox-ios/firefox-ios-tests/Tests/Sync*/*|fastlane/*|taskcluster/*|firefox-ios/firefox-ios-tests/Tests/L10nSnapshotTests/*|test-fixtures/.*.py$)'
+            DO_NOT_RUN_TESTS='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|firefox-ios/firefox-ios-tests/Tests/Sync*/*|fastlane/*|taskcluster/*|firefox-ios/firefox-ios-tests/Tests/L10nSnapshotTests/*|test-fixtures/|focus-ios/|.*.py$)'
 
             # Pass the FILES_CHANGED to grep to find any matches for the regex DO_NOT_RUN_TESTS
             # -v inverts the filtered results, returning any files not filtered by the regex
@@ -1609,20 +1609,17 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - xcode-build-for-test@3:
+    - xcode-test@6.0.1:
+        timeout: 6000
         inputs:
+        - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - configuration: Fennec_Testing
-        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
-    - xcode-test-without-building@0.4.0:
-        timeout: 1200
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun
-        - maximum_test_repetitions: 2
+        - test_plan: UnitTest
+        - test_repetition_mode: until_failure
+        - maximum_test_repetitions: 10
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
 
   #
