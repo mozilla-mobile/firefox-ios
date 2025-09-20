@@ -208,6 +208,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     }
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
+        if let existingImage = configuration?.image { return existingImage }
         guard let iconName = element.iconName else { return nil }
         let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
         return element.isFlippedForRTL ? image?.imageFlippedForRightToLeftLayoutDirection() : image
