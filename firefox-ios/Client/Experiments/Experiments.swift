@@ -59,7 +59,7 @@ enum Experiments {
 
     static func setStudiesSetting(_ setting: Bool) {
         studiesSetting = setting
-        updateGlobalUserParticipation()
+        updateUserParticipation()
     }
 
     static func setTelemetrySetting(_ setting: Bool) {
@@ -67,17 +67,19 @@ enum Experiments {
         if !setting {
             shared.resetTelemetryIdentifiers()
         }
-        updateGlobalUserParticipation()
+        updateUserParticipation()
     }
 
-    private static func updateGlobalUserParticipation() {
-        // we only want to reset the globalUserParticipation flag if both settings have been
+    private static func updateUserParticipation() {
+        // we only want to reset the participation flags if both settings have been
         // initialized.
         if let studiesSetting = studiesSetting, let telemetrySetting = telemetrySetting {
-            // we only enable experiments if users are opting in BOTH
+            // we only enable experiments and rollouts if users are opting in BOTH
             // telemetry and studies. If either is opted-out, we make
-            // sure users are not enrolled in any experiments
-            shared.globalUserParticipation = studiesSetting && telemetrySetting
+            // sure users are not enrolled in any experiments or rollouts
+            let participationEnabled = studiesSetting && telemetrySetting
+            shared.experimentParticipation = participationEnabled
+            shared.rolloutParticipation = participationEnabled
         }
     }
 
