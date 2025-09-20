@@ -13,7 +13,7 @@ enum AccessoryType {
 class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
     // MARK: - Constants
     private struct UX {
-        static let accessoryViewHeight: CGFloat = 50
+        static let accessoryViewHeight: CGFloat = 70
         static let fixedSpacerWidth: CGFloat = 10
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
@@ -44,9 +44,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     }
 
     // MARK: - UI Elements
-    private let toolbar: UIToolbar = .build {
-        $0.sizeToFit()
-    }
+    private let toolbar: UIToolbar = .build()
 
     private lazy var previousButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
@@ -239,6 +237,11 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
         let topBottomOffset = CGFloat(2)
         let sideOffset = CGFloat(6)
+
+        NSLayoutConstraint.activate([
+              widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+              heightAnchor.constraint(equalToConstant: UX.accessoryViewHeight)
+          ])
 
         NSLayoutConstraint.activate([
             toolbar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: sideOffset),
