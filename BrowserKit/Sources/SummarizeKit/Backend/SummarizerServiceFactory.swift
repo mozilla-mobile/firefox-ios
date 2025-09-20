@@ -5,6 +5,9 @@
 import Foundation
 
 public protocol SummarizerServiceFactory {
+    /// An object which responds to Summarize activities.
+    var lifecycleDelegate: SummarizerServiceLifecycle? { get set }
+
     func make(isAppleSummarizerEnabled: Bool,
               isHostedSummarizerEnabled: Bool,
               config: SummarizerConfig?) -> SummarizerService?
@@ -14,6 +17,8 @@ public protocol SummarizerServiceFactory {
 }
 
 public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
+    public weak var lifecycleDelegate: SummarizerServiceLifecycle?
+
     public init() {}
 
     public func make(isAppleSummarizerEnabled: Bool,
@@ -24,15 +29,23 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         let config = config ?? SummarizerConfig.defaultConfig
         #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
-            let applSummarizer = FoundationModelsSummarizer(config: config)
-            return SummarizerService(summarizer: applSummarizer, maxWords: maxWords)
+            let appleSummarizer = FoundationModelsSummarizer(config: config)
+            return DefaultSummarizerService(
+                summarizer: appleSummarizer,
+                lifecycleDelegate: lifecycleDelegate,
+                maxWords: maxWords
+            )
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
                   let model = config.options["model"] as? String, !model.isEmpty,
                   let key = LiteLLMConfig.apiKey else { return nil }
             let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
             let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
-            return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
+            return DefaultSummarizerService(
+                summarizer: llmSummarizer,
+                lifecycleDelegate: lifecycleDelegate,
+                maxWords: maxWords
+            )
         }
         #else
         guard isHostedSummarizerEnabled,
@@ -41,7 +54,11 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
               let key = LiteLLMConfig.apiKey else { return nil }
         let llmClient = LiteLLMClient(apiKey: key, baseURL: endPoint)
         let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
-        return SummarizerService(summarizer: llmSummarizer, maxWords: maxWords)
+        return DefaultSummarizerService(
+            summarizer: llmSummarizer,
+            lifecycleDelegate: lifecycleDelegate,
+            maxWords: maxWords
+        )
         #endif
     }
 

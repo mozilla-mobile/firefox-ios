@@ -82,9 +82,10 @@ final class SummarizerServiceTests: XCTestCase {
             shouldThrowError: nil
         ),
         maxWords: Int = maxWords
-    ) -> SummarizerService {
-        SummarizerService(
+    ) -> DefaultSummarizerService {
+        DefaultSummarizerService(
             summarizer: summarizer,
+            lifecycleDelegate: nil,
             checker: checker,
             maxWords: maxWords
         )

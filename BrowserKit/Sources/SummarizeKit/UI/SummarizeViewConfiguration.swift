@@ -5,7 +5,7 @@
 import UIKit
 import ComponentLibrary
 
-public struct BrandViewModel {
+public struct BrandViewConfiguration {
     let brandLabel: String
     let brandLabelA11yId: String
     let brandImage: UIImage?
@@ -24,7 +24,7 @@ public struct BrandViewModel {
     }
 }
 
-public struct LoadingLabelViewModel {
+public struct LoadingLabelViewConfiguration {
     let loadingLabel: String
     let loadingA11yLabel: String
     let loadingA11yId: String
@@ -40,7 +40,7 @@ public struct LoadingLabelViewModel {
     }
 }
 
-public struct TabSnapshotViewModel {
+public struct TabSnapshotViewConfiguration {
     let tabSnapshotA11yLabel: String
     let tabSnapshotA11yId: String
     let tabSnapshot: UIImage
@@ -59,7 +59,7 @@ public struct TabSnapshotViewModel {
     }
 }
 
-public struct LocalizedErrorsViewModel {
+public struct LocalizedErrorsViewConfiguration {
     let rateLimitedMessage: String
     let unsafeContentMessage: String
     let summarizationNotAvailableMessage: String
@@ -97,7 +97,7 @@ public struct LocalizedErrorsViewModel {
     }
 }
 
-public struct ToSBottomSheetViewModel {
+public struct TermOfServiceViewConfiguration {
     let titleLabel: String
     let titleLabelA11yId: String
     let descriptionText: String
@@ -140,39 +140,39 @@ public struct ToSBottomSheetViewModel {
     }
 }
 
-public struct SummarizeViewModel {
+public struct SummarizeViewConfiguration {
     let titleLabelA11yId: String
     let compactTitleLabelA11yId: String
     let summarizeViewA11yId: String
     let summaryFootnote: String
-    let tabSnapshotViewModel: TabSnapshotViewModel
-    let loadingLabelViewModel: LoadingLabelViewModel
-    let brandViewModel: BrandViewModel
-    let closeButtonModel: CloseButtonViewModel
-    let errorMessages: LocalizedErrorsViewModel
-    let tosViewModel: ToSBottomSheetViewModel
+    let tabSnapshot: TabSnapshotViewConfiguration
+    let loadingLabel: LoadingLabelViewConfiguration
+    let brandView: BrandViewConfiguration
+    let closeButton: CloseButtonViewModel
+    let errorMessages: LocalizedErrorsViewConfiguration
+    let termOfService: TermOfServiceViewConfiguration
 
     public init(
         titleLabelA11yId: String,
         compactTitleLabelA11yId: String,
         summaryFootnote: String,
         summarizeViewA11yId: String,
-        tabSnapshotViewModel: TabSnapshotViewModel,
-        loadingLabelViewModel: LoadingLabelViewModel,
-        brandViewModel: BrandViewModel,
-        closeButtonModel: CloseButtonViewModel,
-        errorMessages: LocalizedErrorsViewModel,
-        tosViewModel: ToSBottomSheetViewModel
+        tabSnapshot: TabSnapshotViewConfiguration,
+        loadingLabel: LoadingLabelViewConfiguration,
+        brandView: BrandViewConfiguration,
+        closeButton: CloseButtonViewModel,
+        errorMessages: LocalizedErrorsViewConfiguration,
+        termOfService: TermOfServiceViewConfiguration
     ) {
         self.titleLabelA11yId = titleLabelA11yId
         self.compactTitleLabelA11yId = compactTitleLabelA11yId
         self.summarizeViewA11yId = summarizeViewA11yId
-        self.loadingLabelViewModel = loadingLabelViewModel
-        self.tabSnapshotViewModel = tabSnapshotViewModel
-        self.brandViewModel = brandViewModel
         self.summaryFootnote = summaryFootnote
-        self.closeButtonModel = closeButtonModel
+        self.tabSnapshot = tabSnapshot
+        self.loadingLabel = loadingLabel
+        self.brandView = brandView
+        self.closeButton = closeButton
         self.errorMessages = errorMessages
-        self.tosViewModel = tosViewModel
+        self.termOfService = termOfService
     }
 }
