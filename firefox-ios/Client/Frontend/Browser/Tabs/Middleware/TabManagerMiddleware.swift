@@ -427,11 +427,10 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
         tabManager.selectTab(tab)
 
-        let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatchLegacy(refreshAction)
+        // We do not dispatch a refresh action here because when this method is called
+        // we are always navigating away from the view, and we call ScreenshotHelper.takeScreenshot
+        // which refreshes the tabs when it has a screenshot. If we change this behaviour in the future
+        // it may require us to add a refresh action here.
 
         let dismissAction = TabTrayAction(windowUUID: uuid,
                                           actionType: TabTrayActionType.dismissTabTray)
