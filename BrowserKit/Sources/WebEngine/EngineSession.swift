@@ -34,6 +34,7 @@ public protocol EngineSession: NSObject {
     func goForward()
 
     /// Scroll the session to the top.
+    @MainActor
     func scrollToTop()
 
     /// Show the web view's built-in find interaction.

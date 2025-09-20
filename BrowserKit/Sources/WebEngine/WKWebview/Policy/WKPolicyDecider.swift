@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 
 /// An object that decides the policy for a navigation request by `WebKit`'s delegate methods.
+@MainActor
 protocol WKPolicyDecider {
     /// The next decider in the chain, that can eventually respond with a `WKPolicy`
     /// when this decider is not able to handle it.
@@ -18,6 +19,7 @@ protocol WKPolicyDecider {
     func policyForPopupNavigation(action: NavigationAction) -> WKPolicy
 }
 
+@MainActor
 protocol NavigationAction {
     var url: URL? { get }
     var request: URLRequest { get }
@@ -27,6 +29,7 @@ protocol NavigationAction {
     var targetFrameInfo: FrameInfo? { get }
 }
 
+@MainActor
 protocol NavigationResponse {
     var url: URL? { get }
     var response: URLResponse { get }
@@ -53,6 +56,7 @@ extension WKNavigationResponse: NavigationResponse {
     }
 }
 
+@MainActor
 protocol FrameInfo {
     var isMainFrame: Bool { get }
     var request: URLRequest { get }

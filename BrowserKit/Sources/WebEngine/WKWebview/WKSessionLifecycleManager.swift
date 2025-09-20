@@ -7,6 +7,7 @@ import Foundation
 
 /// Lifecycle manager purpose is to properly activate or deactive engine sessions whenever they
 /// are shown or removed from the engine view
+@MainActor
 protocol WKSessionLifecycleManager {
     func activate(_ session: WKEngineSession)
     func deactivate(_ session: WKEngineSession)

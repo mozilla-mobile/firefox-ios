@@ -585,7 +585,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testUIHandlerIsActiveSetTrue() {
-        let uiHandler = DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies)
+        let uiHandler = DefaultUIHandler.factory(sessionDependencies: DefaultTestDependencies().sessionDependencies)
 
         let subject = createSubject(uiHandler: uiHandler)
 
@@ -595,7 +595,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testUIHandlerIsActiveSetFalse() {
-        let uiHandler = DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies)
+        let uiHandler = DefaultUIHandler.factory(sessionDependencies: DefaultTestDependencies().sessionDependencies)
 
         let subject = createSubject(uiHandler: uiHandler)
 
@@ -606,7 +606,7 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testSettingEngineSessionDelegateSetsUIHandlerDelegate() {
-        let uiHandler = DefaultUIHandler(sessionDependencies: DefaultTestDependencies().sessionDependencies)
+        let uiHandler = DefaultUIHandler.factory(sessionDependencies: DefaultTestDependencies().sessionDependencies)
         let subject = createSubject(uiHandler: uiHandler)
 
         subject?.delegate = engineSessionDelegate
@@ -620,7 +620,7 @@ final class WKEngineSessionTests: XCTestCase {
                        line: UInt = #line,
                        uiHandler: WKUIHandler? = nil) -> WKEngineSession? {
         let sessionDependencies = DefaultTestDependencies().sessionDependencies
-        let defaultUIHandler = uiHandler ?? DefaultUIHandler(sessionDependencies: sessionDependencies)
+        let defaultUIHandler = uiHandler ?? DefaultUIHandler.factory(sessionDependencies: sessionDependencies)
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
                                             dependencies: DefaultTestDependencies().sessionDependencies,
                                             configurationProvider: configurationProvider,

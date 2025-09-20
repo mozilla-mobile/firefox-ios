@@ -7,6 +7,7 @@ import UIKit
 
 public typealias EnginePullRefreshViewType = EnginePullRefreshView.Type
 
+@MainActor
 public protocol EnginePullRefreshView: UIView {
     func configure(with scrollView: UIScrollView, onRefresh: @escaping () -> Void)
 }

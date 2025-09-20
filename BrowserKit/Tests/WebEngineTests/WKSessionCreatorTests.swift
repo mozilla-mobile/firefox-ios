@@ -8,8 +8,8 @@ import XCTest
 import Common
 @testable import WebEngine
 
+@MainActor
 final class WKSessionCreatorTests: XCTestCase {
-    @MainActor
     func testCreatePopupSession_callsClosureWithValidSession() {
         let subject = createSubject()
         let expectation = expectation(description: "wait for session to be created")
