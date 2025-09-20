@@ -24,6 +24,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isDefaultBrowser: true,
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -36,6 +37,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isDefaultBrowser: true,
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -63,6 +65,10 @@ class RecordedNimbusContextTests: XCTestCase {
             recordedContext.hasEnabledTipsNotifications
         )
         XCTAssertEqual(
+            json?.removeValue(forKey: "has_accepted_terms_of_use") as? Bool,
+            recordedContext.hasAcceptedTermsOfUse
+        )
+        XCTAssertEqual(
             json?.removeValue(forKey: "is_apple_intelligence_available") as? Bool,
             recordedContext.isAppleIntelligenceAvailable
         )
@@ -85,6 +91,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isDefaultBrowser: true,
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -116,6 +123,10 @@ class RecordedNimbusContextTests: XCTestCase {
             value?.hasEnabledTipsNotifications,
             recordedContext.hasEnabledTipsNotifications
         )
+        XCTAssertEqual(
+            value?.hasAcceptedTermsOfUse,
+            recordedContext.hasAcceptedTermsOfUse
+        )
 
         XCTAssertNotNil(value?.eventQueryValues)
         XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
@@ -127,6 +138,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isDefaultBrowser: true,
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
+            hasAcceptedTermsOfUse: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )

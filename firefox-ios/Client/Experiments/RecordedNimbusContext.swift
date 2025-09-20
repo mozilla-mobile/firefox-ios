@@ -45,6 +45,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
     var isDefaultBrowser: Bool
     var isBottomToolbarUser: Bool
     var hasEnabledTipsNotifications: Bool
+    var hasAcceptedTermsOfUse: Bool
     var isAppleIntelligenceAvailable: Bool
     var cannotUseAppleIntelligence: Bool
     var appVersion: String?
@@ -63,6 +64,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
          isDefaultBrowser: Bool,
          isBottomToolbarUser: Bool,
          hasEnabledTipsNotifications: Bool,
+         hasAcceptedTermsOfUse: Bool,
          isAppleIntelligenceAvailable: Bool,
          cannotUseAppleIntelligence: Bool,
          eventQueries: [String: String] = RecordedNimbusContext.EVENT_QUERIES,
@@ -78,6 +80,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
         self.isDefaultBrowser = isDefaultBrowser
         self.isBottomToolbarUser = isBottomToolbarUser
         self.hasEnabledTipsNotifications = hasEnabledTipsNotifications
+        self.hasAcceptedTermsOfUse = hasAcceptedTermsOfUse
         self.isAppleIntelligenceAvailable = isAppleIntelligenceAvailable
         self.cannotUseAppleIntelligence = cannotUseAppleIntelligence
 
@@ -149,6 +152,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
                 isDefaultBrowser: isDefaultBrowser,
                 isBottomToolbarUser: isBottomToolbarUser,
                 hasEnabledTipsNotifications: hasEnabledTipsNotifications,
+                hasAcceptedTermsOfUse: hasAcceptedTermsOfUse,
                 isAppleIntelligenceAvailable: isAppleIntelligenceAvailable,
                 cannotUseAppleIntelligence: cannotUseAppleIntelligence
             )
@@ -193,6 +197,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
             "is_default_browser": isDefaultBrowser,
             "is_bottom_toolbar_user": isBottomToolbarUser,
             "has_enabled_tips_notifications": hasEnabledTipsNotifications,
+            "has_accepted_terms_of_use": hasAcceptedTermsOfUse,
             "is_apple_intelligence_available": isAppleIntelligenceAvailable,
             "cannot_use_apple_intelligence": cannotUseAppleIntelligence
         ]),
