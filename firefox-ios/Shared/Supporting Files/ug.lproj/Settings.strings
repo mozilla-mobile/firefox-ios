@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "كۆز يۈرگۈرتۈش";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "تەپسىلاتى.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "تەپسىلاتى";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "يىمىرىلىش دوكلاتى توركۆرگۈدىكى مەسىلىگە دىياگنوز قويۇپ ۋە ئوڭشىشىمىزغا يول قويىدۇ.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "بۇ توركۆرگۈدىكى مەسىلىگە دىياگنوز قويۇپ ۋە ئوڭشىشىمىزغا ياردەم بېرىدۇ.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "يىمىرىلىش دوكلاتىنى ئۆزلۈكىدىن يوللايدۇ";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "تەپسىلاتى.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "تەپسىلاتى";
@@ -263,19 +254,10 @@
 "Settings.Summarize.Title.v142" = "بەت خۇلاسىلە";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "تەپسىلاتى.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "تەپسىلاتى";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ پەقەت كۆپچىلىككە تەمىنلەيدىغان ۋە %2$@ نى ياخشىلاش ئۈچۈن زۆرۈر بولغان ئۇچۇرلارنىلا توپلايدۇ.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "ئۈسكۈنە، قاتتىق دېتال سەپلىمىسى ۋە ئىشلىتىش ئۇسۇلىڭىز ھەققىدىكى سانلىق مەلۇمات %@ نىڭ ئىقتىدارى، ئۈنۈمى ۋە مۇقىملىقىنى ئاشۇرۇپ ياخشىلىشىمىزغا ياردەم بېرىدۇ.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "تېخنىكىلىق ۋە تەسىرلىشىش سانلىق مەلۇماتى";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "تېخنىكىلىق ۋە تەسىرلىشىشچان سانلىق مەلۇماتنى يوللايدۇ";

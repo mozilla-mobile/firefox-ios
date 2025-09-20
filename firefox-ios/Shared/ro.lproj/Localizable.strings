@@ -764,10 +764,10 @@
 "Menu.Passwords.Label" = "Parole";
 
 /* The title for the button that lets you paste into the location bar */
-"Menu.Paste.Title" = "Lipește";
+"Menu.Paste.Title" = "Inserează";
 
 /* The title for the button that lets you paste and go to a URL */
-"Menu.PasteAndGo.Title" = "Lipește și accesează";
+"Menu.PasteAndGo.Title" = "Inserează și accesează";
 
 /* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "Listă de lectură";
@@ -1754,7 +1754,7 @@
 "Twitter" = "Twitter";
 
 /* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
-"UIMenuItem.PasteGo" = "Lipește și accesează";
+"UIMenuItem.PasteGo" = "Inserează și accesează";
 
 /* Search in New Tab Text selection menu item */
 "UIMenuItem.SearchWithFirefox" = "Caută cu Firefox";

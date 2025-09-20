@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "ການທ່ອງເວັບ";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "ບົດລາຍງານການຂັດຂ້ອງອະນຸຍາດໃຫ້ພວກເຮົາວິນິດໄສ ແລະ ແກ້ໄຂບັນຫາກັບຕົວທ່ອງເວັບ.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "ນີ້ຈະຊ່ວຍໃຫ້ພວກເຮົາວິນິດໄສ ແລະ ແກ້ໄຂບັນຫາກັບຕົວທ່ອງເວັບ.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "ສົ່ງລາຍງານການຂັດຂ້ອງໂດຍອັດຕະໂນມັດ";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
@@ -263,19 +254,10 @@
 "Settings.Summarize.Title.v142" = "ບົດສະຫຼຸບຂອງໜ້າ";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "ຮຽນຮູ້ເພີ່ມເຕີມ.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ ພະຍາຍາມເກັບເອົາແຕ່ສິ່ງທີ່ພວກເຮົາຕ້ອງການເພື່ອສະໜອງ ແລະ ປັບປຸງ %2$@ ສໍາລັບທຸກຄົນ.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "ຂໍ້​ມູນ​ກ່ຽວ​ກັບ​ອຸ​ປະ​ກອນ​ຂອງ​ທ່ານ​, ການ​ຕັ້ງ​ຄ່າ​ຮາດ​ແວ​, ແລະ ​ການ​ນໍາ​ໃຊ້​ຊ່ວຍ​ໃຫ້​ພວກ​ເຮົາ​ປັບ​ປຸງ %@ ຄຸນ​ນະ​ສົມ​ບັດ​, ປະ​ສິດ​ທິ​ພາບ​ ແລະ​ ຄວາມ​ສະຖຽນ.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "ຂໍ້ມູນດ້ານເຕັກນິກ ແລະ ການໂຕ້ຕອບ";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "ສົ່ງຂໍ້ມູນດ້ານວິຊາການ ແລະ ການໂຕ້ຕອບ";

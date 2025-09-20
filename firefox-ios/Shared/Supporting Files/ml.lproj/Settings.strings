@@ -110,22 +110,13 @@
 "Settings.Browsing.Title.v137" = "തിരച്ചിൽ";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "കൂടുതൽ അറിയുക.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "കൂടുതല്‍ അറിയുക";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "തകർച്ച റിപ്പോർട്ടുകൾ അന്വേഷിയന്ത്രത്തിന്റെ കൂടെയുള്ള എല്ലാ കുഴപ്പങ്ങളും കണ്ടെത്താനും പരിഹരിക്കാനും സഹായിക്കാരുണ്ടു്.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "ഇതു് അന്വേഷിയന്ത്ര കുഴപ്പങ്ങളെ കണ്ടുപിടിക്കാനും അവയെ പരിഹരിക്കാനും തുണയ്ക്കുന്നു.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "തകർച്ച വിവരങ്ങൾ തന്നെതാന്നെ അയയ്ക്കുക";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "കൂടുതൽ അറിയുക.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "കൂടുതല്‍ അറിയുക";
@@ -221,13 +212,7 @@
 "Settings.Summarize.Title.v142" = "താൾ ചുരുക്കം";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "കൂടുതൽ അറിയുക.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "കൂടുതല്‍ അറിയുക";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "സാങ്കേതിയും ഇടപാടുനീയ ദത്ത";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "സാങ്കേതിയും ഇടപാടുനീയ ദത്ത അയയ്ക്കുക";

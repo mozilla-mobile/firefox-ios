@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "Nettlesing";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "Les meir.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Les meir";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Krasjrapportar tillèt oss å diagnostisere og fikse problem med nettlesaren.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Dette hjelper oss med å diagnostisere og fikse problem med nettlesaren.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Send inn krasjrapportar automatisk";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "Les meir.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Les meir";
@@ -245,37 +236,28 @@
 "Settings.Studies.Title.v136" = "Installer og køyr studium";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.FooterTitle.v142" = "Gir tilgang til å oppsummere sider.";
+"Settings.Summarize.FooterTitle.v142" = "Gir tilgang til å samanfatte sider.";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Rist eininga frå side til side for å oppsummere ei side.";
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Rist eininga frå side til side for å samanfatte ei side.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Rist for å oppsummere";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Rist for å samanfatte";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Rørsler";
 
 /* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
-"Settings.Summarize.SummarizePagesTitle.v142" = "Oppsummer sider";
+"Settings.Summarize.SummarizePagesTitle.v142" = "Samanfatt sider";
 
 /* In the settings menu, in the General section, this is the title for the Summarize settings section. */
 "Settings.Summarize.Title.v142" = "Sidesamandrag";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "Les meir.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Les meir";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ strevar etter å berre samle inn det vi treng for å tilby og forbetre %2$@ for alle.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Data om eininga di, maskinvarekonfigurasjon og bruk hjelper oss med å forbetre %@ funksjonar, yting og stabilitet.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "Tekniske data og samhandlingsdata";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Send tekniske data og samhandlingsdata";

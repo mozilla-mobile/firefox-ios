@@ -1,5 +1,5 @@
 /* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
-"Summarizer.AppleBrand.Label.v142" = "Oppsummert av Apple Intelligence";
+"Summarizer.AppleBrand.Label.v142" = "Samanfatta av Apple Intelligence";
 
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "Lat att";
@@ -23,7 +23,7 @@
 "Summarizer.Footnote.Label.v144" = "Merk: Oppsummeringar kan innehalde feil.";
 
 /* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
-"Summarizer.HostedBrand.Label.v142" = "Oppsummert av %@";
+"Summarizer.HostedBrand.Label.v142" = "Samanfatta av %@";
 
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "Samanfattar…";
@@ -35,17 +35,32 @@
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "Tillat";
 
 /* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ brukar Apple Intelligence for å oppsummere sider.";
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ brukar Apple Intelligence for å samanfatte sider.";
 
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "Avbryt";
 
+/* The label for the continue button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Hald fram";
+
 /* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ brukar skybasert AI til å oppsummere sider, og returnerer desse samandraga til eininga di.";
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ brukar skybasert AI til å samanfatte sider, og returnerer desse samandraga til eininga di.";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Les meir";
 
 /* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
 "Summarizer.ToS.Alert.Title.Label.v142" = "Tillate sideoppsummering?";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Korleis det fungerer";
+
+/* The label for the accept button on the Terms of Service information panel in the summarizer. */
+"Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Hald fram";
+
+/* The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.InfoPanel.Label.v143" = "Sjå hovudpunkta på få sekund med %@.";
+
+/* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
+"Summarizer.ToS.InfoPanel.Title.Label.v143" = "Samanfatte denne sida?";
 

@@ -1,5 +1,5 @@
 /* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
-"Summarizer.AppleBrand.Label.v142" = "Revisado pela Apple Inteligência";
+"Summarizer.AppleBrand.Label.v142" = "Resumida pelo Apple Intelligence";
 
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "Fechar";
@@ -8,44 +8,59 @@
 "Summarizer.Error.MissingPageContent.Message.v142" = "A página ainda está a carregar. Aguarde pela conclusão e clique em resumir.";
 
 /* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
-"Summarizer.Error.RateLimited.Message.v142" = "Não é possível gerir este problema neste momento. Tentar novamente mais tarde!";
+"Summarizer.Error.RateLimited.Message.v142" = "Não é possível realizar esta ação neste momento. Tente novamente mais tarde!";
 
 /* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
 "Summarizer.Error.Unknown.Message.v142" = "Erro ao resumir a página. Tente novamente mais tarde.";
 
 /* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
-"Summarizer.Error.UnsafeWebsite.Message.v142" = "Conteúdo limitado detetado. Esta página pode ser restrita ou maioritariamente visual.";
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "Foi detetado conteúdo limitado. Esta página pode estar sujeita a restrições ou ser maioritariamente visual.";
 
 /* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
-"Summarizer.Error.UnsupportedContent.Message.v142" = "Este site não permite a resumo de conteúdo. Tentar uma página diferente.";
+"Summarizer.Error.UnsupportedContent.Message.v142" = "Este site não permite o resumo de conteúdo. Experimente uma página diferente.";
 
 /* The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors. */
-"Summarizer.Footnote.Label.v144" = "Nota: A somação pode conter erros.";
+"Summarizer.Footnote.Label.v144" = "Nota: o resumo pode apresentar erros.";
 
 /* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
-"Summarizer.HostedBrand.Label.v142" = "Resumo por %@";
+"Summarizer.HostedBrand.Label.v142" = "Resumida por %@";
 
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "A resumir…";
 
 /* The label for the error button that allows the user to retry summarizing the page. */
-"Summarizer.RetryButton.Label.v142" = "Voltar a tentar";
+"Summarizer.RetryButton.Label.v142" = "Tentar novamente";
 
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "Permitir";
 
 /* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "O %@ utiliza a Apple Inteligência para resumir páginas.";
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "O %@ utiliza o Apple Intelligence para resumir páginas.";
 
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "Cancelar";
 
+/* The label for the continue button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Continuar";
+
 /* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "O %@ utiliza IA baseada na nuvem para resumir páginas e devolve esses resumos para o seu dispositivo.";
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "O %@ recorre a IA na nuvem para resumir páginas e envia esses resumos novamente para o seu dispositivo.";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Saber mais";
 
 /* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
 "Summarizer.ToS.Alert.Title.Label.v142" = "Permitir resumos de páginas?";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Como funciona";
+
+/* The label for the accept button on the Terms of Service information panel in the summarizer. */
+"Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Continuar";
+
+/* The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.InfoPanel.Label.v143" = "Descubra os pontos essenciais em poucos segundos com o %@.";
+
+/* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
+"Summarizer.ToS.InfoPanel.Title.Label.v143" = "Resumir esta página?";
 

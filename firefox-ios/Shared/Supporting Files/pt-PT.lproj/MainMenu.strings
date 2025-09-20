@@ -14,7 +14,7 @@
 "MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "Adicionar página aos marcadores";
 
 /* The accessibility label for the close button in the Main menu. */
-"MainMenu.AccessibilityLabels.CloseButton.142" = "Fechar Menu";
+"MainMenu.AccessibilityLabels.CloseButton.142" = "Fechar menu";
 
 /* The accessibility label for the dismiss button, for header banner, on top of the menu. */
 "MainMenu.AccessibilityLabels.DismissBanner.142" = "Ignorar faixa";
@@ -244,6 +244,9 @@
 /* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v132" = "Partilhar";
 
+/* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v144" = "Partilhar";
+
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool and is indicating that under the Tools submenu, a Zoom (apply zoom on a page) action is available. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "Zoom";
 
@@ -292,6 +295,9 @@
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v131" = "Partilhar";
 
+/* On the main menu, the title for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.Share.Title.v144" = "Partilhar";
+
 /* On the main menu, the title for the action that will turn Website's Dark Mode off in the application. */
 "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137" = "Desativar o modo escuro para o site";
 
@@ -335,7 +341,7 @@
 "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Site para computador";
 
 /* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
-"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "Expandida";
+"MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "Expandido";
 
 /* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Localizar na página";

@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "Navicazzioni";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "Cchiù nfurmazzioni.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Cchiù nfurmazzioni";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "I signalijazzioni dî scasci ni pirmèttinu di diagnusticari e abbirsari i prubblemi dû navicaturi.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Chistu ni pirmetti di diagnusticari e abbirsari i prubblemi dû navicaturi.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Manna ’n autumàticu i signalijazzioni di scasciu";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "Cchiù nfurmazzioni.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Cchiù nfurmazzioni";
@@ -245,19 +236,10 @@
 "Settings.Studies.Title.v136" = "Nzita e abbìa studi";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "Cchiù nfurmazzioni.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Cchiù nfurmazzioni";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ cerca di ricògghiri sulu chiḍḍu chi ci serbi pi fari megghiu %2$@ pi tutti.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Dati supra ô to dispusitivu, a cunfijurazzioni hardware e ncapu a comu usi %@ n’ajuta a ’mmigghiuràrinni i funzioni, i pristazzioni e a stabbilità.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "Dati tècnici e di ntirazzioni";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Manna dati tècnici e di ntirazzioni";

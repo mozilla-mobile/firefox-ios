@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "Meramban";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "Pelajari Lebih Lanjut.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Pelajari Lebih Lanjut";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Laporan kerusakan memungkinkan kami mendiagnosis dan memperbaiki masalah pada peramban.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Ini membantu kami mendiagnosis dan memperbaiki masalah pada peramban.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Kirim Laporan Kerusakan Secara Otomatis";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "Pelajari Lebih Lanjut.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Pelajari Lebih Lanjut";
@@ -263,19 +254,10 @@
 "Settings.Summarize.Title.v142" = "Ringkasan Laman";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "Pelajari Lebih Lanjut.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Pelajari Lebih Lanjut";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ berusaha untuk hanya mengumpulkan apa yang kami butuhkan untuk menyediakan dan meningkatkan %2$@ untuk semua orang.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Data tentang perangkat, konfigurasi perangkat keras, dan penggunaan Anda membantu kami meningkatkan fitur, kinerja, dan stabilitas %@.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "Data Teknis dan Interaksi";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Kirim Data Teknis dan Interaksi";
