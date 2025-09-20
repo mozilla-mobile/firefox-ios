@@ -20,7 +20,7 @@
 "About.rowHelp" = "Hjelp";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Personvernerklæring";
+"About.rowPrivacy" = "Personvernfråsegn";
 
 /* Label for row in About screen */
 "About.rowRights" = "Dine rettar";
