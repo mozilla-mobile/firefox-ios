@@ -62,6 +62,7 @@ public protocol EngineSession: NSObject {
     func restore(state: Data)
 
     /// Close the session. This may free underlying objects. Call this when you are finished using this session.
+    @MainActor
     func close()
 
     /// Switch to standard tracking protection mode.

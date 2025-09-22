@@ -18,7 +18,7 @@
         "argument" : "FIREFOX_TEST"
       }
     ],
-    "language" : "en",
+    "language" : "en-US",
     "region" : "US",
     "targetForVariableExpansion" : {
       "containerPath" : "container:Client.xcodeproj",
@@ -72,13 +72,20 @@
         "A11yUtils",
         "ActivityStreamTest\/testActivityStreamPages()",
         "ActivityStreamTest\/testDefaultSites()",
+        "ActivityStreamTest\/testDefaultSitesTAE()",
+        "ActivityStreamTest\/testDefaultSites_TAE()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff()",
+        "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff_TAE()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOn()",
+        "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOn_TAE()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab_tabTrayExperimentOff()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab_tabTrayExperimentOff_swipingTabsExperimentOff()",
+        "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab_tabTrayExperimentOff_swipingTabsExperimentOffTAE()",
+        "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab_tabTrayExperimentOff_swipingTabsExperimentOff_TAE()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab_tabTrayToolbarOnHomepageOff()",
+        "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab_tabTrayToolbarOnHomepageOff_TAE()",
         "ActivityStreamTest\/testTopSitesOpenInNewTabDefaultTopSite()",
         "AddressesTests\/testAddNewAddressAllFieldsFilled()",
         "AddressesTests\/testAddressOptionIsAvailableInSettingsMenu()",
@@ -243,7 +250,14 @@
         "TrackingProtectionTests\/testTrackingProtection()",
         "URLValidationTests",
         "ZoomingTests\/testZommingActions()",
-        "ZoomingTests\/testZoomingActions()"
+        "ZoomingTests\/testZoomingActions()",
+        "ZoomingTestsTAE",
+        "ZoomingTestsTAE\/testSwitchingZoomedTabsLandscape_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testSwitchingZoomedTabs_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testZoomForceCloseFirefox_tabTrayExperimentOff()",
+        "ZoomingTestsTAE\/testZoomForceCloseFirefox_tabTrayExperimentOn()",
+        "ZoomingTestsTAE\/testZoomingActions()",
+        "ZoomingTestsTAE\/testZoomingActionsLandscape_tabTrayExperimentOff()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

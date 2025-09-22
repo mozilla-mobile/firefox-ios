@@ -6,6 +6,7 @@ import Common
 import XCTest
 @testable import Client
 
+@MainActor
 class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
     private var tabManager: MockTabManager!

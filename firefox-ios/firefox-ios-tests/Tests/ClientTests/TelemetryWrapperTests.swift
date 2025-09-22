@@ -226,17 +226,6 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelected)
     }
 
-    func test_onboardingNotificationPermission_GleanIsCalled() {
-        let isGrantedKey = TelemetryWrapper.EventExtraKey.notificationPermissionIsGranted.rawValue
-        let extras = [isGrantedKey: true]
-        TelemetryWrapper.recordEvent(category: .prompt,
-                                     method: .tap,
-                                     object: .notificationPermission,
-                                     extras: extras)
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.notificationPermissionPrompt)
-    }
-
     func test_onboardingEngagementNotificationTapped_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
@@ -892,19 +881,6 @@ class TelemetryWrapperTests: XCTestCase {
         testQuantityMetricSuccess(metric: GleanMetrics.CreditCard.savedAll,
                                   expectedValue: expectedCreditCardsCount,
                                   failureMessage: "Should have \(expectedCreditCardsCount) credit cards")
-    }
-    // MARK: - App
-
-    func test_appNotificationPermission_GleanIsCalled() {
-        let statusKey = TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue
-        let alertSettingKey = TelemetryWrapper.EventExtraKey.notificationPermissionAlertSetting.rawValue
-        let extras = [statusKey: "authorized", alertSettingKey: "enabled"]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .notificationPermission,
-                                     extras: extras)
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.App.notificationPermission)
     }
 
     // MARK: - Nimbus Calls

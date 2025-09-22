@@ -10,13 +10,13 @@ import enum MozillaAppServices.SyncManagerError
 import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
 
-open class RustSyncManagerAPI {
+public final class RustSyncManagerAPI: Sendable {
     private let logger: Logger
     private let dispatchQueue: DispatchQueueInterface
     let api: SyncManagerComponent
 
     // Names of collections that can be enabled/disabled locally.
-    public enum TogglableEngine: String, CaseIterable {
+    public enum TogglableEngine: String, CaseIterable, Sendable {
         case tabs
         case passwords
         case bookmarks
@@ -25,7 +25,7 @@ open class RustSyncManagerAPI {
         case addresses
     }
 
-    public var rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history, .creditcards, .addresses]
+    public let rustTogglableEngines: [TogglableEngine] = [.tabs, .passwords, .bookmarks, .history, .creditcards, .addresses]
     public init(logger: Logger = DefaultLogger.shared, dispatchQueue: DispatchQueueInterface = DispatchQueue.global()) {
         self.api = SyncManagerComponent()
         self.logger = logger
@@ -39,7 +39,7 @@ open class RustSyncManagerAPI {
     }
 
     public func sync(params: SyncParams,
-                     completion: @escaping (SyncResult) -> Void) {
+                     completion: @escaping @Sendable (SyncResult) -> Void) {
         dispatchQueue.async { [weak self] in
             do {
                 guard let result = try self?.api.sync(params: params) else { return }
@@ -65,7 +65,7 @@ open class RustSyncManagerAPI {
     }
 
     public func reportSyncTelemetry(syncResult: SyncResult,
-                                    completion: @escaping (String) -> Void) {
+                                    completion: @escaping @Sendable (String) -> Void) {
         DispatchQueue.global().async { [unowned self] in
             do {
                 try SyncManagerComponent.reportSyncTelemetry(syncResult: syncResult)
@@ -95,7 +95,7 @@ open class RustSyncManagerAPI {
         }
     }
 
-    public func getAvailableEngines(completion: @escaping ([String]) -> Void) {
+    public func getAvailableEngines(completion: @escaping @Sendable ([String]) -> Void) {
         DispatchQueue.global().async { [unowned self] in
             let engines = self.api.getAvailableEngines()
             completion(engines)

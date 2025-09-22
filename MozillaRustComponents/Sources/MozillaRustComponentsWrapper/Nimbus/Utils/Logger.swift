@@ -5,7 +5,7 @@
 import Foundation
 import os.log
 
-class Logger {
+final class Logger: Sendable {
     private let log: OSLog
 
     /// Creates a new logger instance with the specified tag value

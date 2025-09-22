@@ -26,11 +26,13 @@ $tags:
 ###############################################################################
 
 # Terms of Use metrics
-termsofuse:
-  impression:
+terms_of_use:
+  shown:
     type: event
     description: |
       User viewed the terms of use bottom sheet.
+      
+      **Developer Note**: This replaces the old `termsofuse.impression` metric.
     extra_keys: &tou_extra_keys
       tou_version:
         type: string
@@ -52,6 +54,8 @@ termsofuse:
     type: event
     description: |
       User accepted the terms of use.
+      
+      **Developer Note**: This replaces the old `termsofuse.accepted` metric.
     extra_keys: *tou_extra_keys
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
@@ -61,10 +65,85 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  version:
+  remind_me_later_button_tapped:
+    type: event
+    description: |
+      User tapped the "remind me later" button in the Terms of Use bottom sheet.
+      
+      **Developer Note**: This replaces the old `termsofuse.remind_me_later_click` metric.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  learn_more_button_tapped:
+    type: event
+    description: |
+      User tapped the "learn more" button in the Terms of Use bottom sheet.
+      
+      **Developer Note**: This replaces the old `termsofuse.learn_more_click` metric.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  privacy_notice_tapped:
+    type: event
+    description: |
+      User tapped the privacy notice link in the Terms of Use bottom sheet.
+      
+      **Developer Note**: This replaces the old `termsofuse.privacy_notice_click` metric.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  terms_of_use_link_tapped:
+    type: event
+    description: |
+      User tapped the terms of use link in the Terms of Use bottom sheet.
+      
+      **Developer Note**: This replaces the old `termsofuse.terms_of_use_click` metric.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  dismissed:
+    type: event
+    description: |
+      User dismissed the Terms of Use bottom sheet without accepting or tapping remind me later.
+      
+      **Developer Note**: This replaces the old `termsofuse.dismiss` metric.
+    extra_keys: *tou_extra_keys
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+
+# User-scoped Terms of Use metrics
+user.terms_of_use:
+  version_accepted:
     type: quantity
     description: >
       The version of the Terms of Use the user accepted.
+      
+      **Developer Note**: This replaces the old `termsofuse.version` metric.
     unit: version
     lifetime: application
     send_in_pings:
@@ -78,10 +157,12 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  date:
+  date_accepted:
     type: datetime
     description: >
       The timestamp when the user accepted the Terms of Use.
+      
+      **Developer Note**: This replaces the old `termsofuse.date` metric.
     time_unit: millisecond
     lifetime: application
     send_in_pings:
@@ -95,70 +176,12 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  remind_me_later_click:
-    type: event
-    description: |
-      User clicked the "remind me later" button in the Terms of Use bottom sheet.
-    extra_keys: *tou_extra_keys
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  learn_more_click:
-    type: event
-    description: |
-      User clicked the "learn more" button in the Terms of Use bottom sheet.
-    extra_keys: *tou_extra_keys
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  privacy_notice_click:
-    type: event
-    description: |
-      User clicked the privacy notice link in the Terms of Use bottom sheet.
-    extra_keys: *tou_extra_keys
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  terms_of_use_click:
-    type: event
-    description: |
-      User clicked the terms of use link in the Terms of Use bottom sheet.
-    extra_keys: *tou_extra_keys
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  dismiss:
-    type: event
-    description: |
-      User dismissed the Terms of Use bottom sheet without accepting or clicking remind me later.
-    extra_keys: *tou_extra_keys
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-12829
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/29019
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
-  impression_count:
+  shown_count:
     type: counter
     description: >
       Records the number of ToU impressions the user has had.
+      
+      **Developer Note**: This replaces the old `termsofuse.impression_count` metric.
     lifetime: application
     send_in_pings:
       - metrics
@@ -172,7 +195,9 @@ termsofuse:
   remind_me_later_count:
     type: counter
     description: >
-      Records the number of times a user clicks "remind me later".
+      Records the number of times a user taps "remind me later".
+      
+      **Developer Note**: This replaces the old `termsofuse.remind_me_later_count` metric.
     lifetime: application
     send_in_pings:
       - metrics
@@ -183,10 +208,12 @@ termsofuse:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  dismiss_count:
+  dismissed_count:
     type: counter
     description: >
-      Records the number of times a user clicks to dismiss (does not include tapping accept or remind me later).
+      Records the number of times a user taps to dismiss (does not include tapping accept or remind me later).
+      
+      **Developer Note**: This replaces the old `termsofuse.dismiss_count` metric.
     lifetime: application
     send_in_pings:
       - metrics

@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-public protocol TabSessionStore {
+public protocol TabSessionStore: Sendable {
     /// Saves the session data associated with a tab
     /// - Parameters:
     ///   - tabID: an ID that uniquely identifies the tab
@@ -21,7 +21,7 @@ public protocol TabSessionStore {
     func deleteUnusedTabSessionData(keeping: [UUID]) async
 }
 
-public class DefaultTabSessionStore: TabSessionStore {
+public final class DefaultTabSessionStore: TabSessionStore {
     let fileManager: TabFileManager
     let logger: Logger
     let filePrefix = "tab-"

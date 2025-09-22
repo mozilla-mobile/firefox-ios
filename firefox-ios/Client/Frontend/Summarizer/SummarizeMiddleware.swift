@@ -46,6 +46,7 @@ final class SummarizerMiddleware {
         return SummarizerConfigManager().getConfig(summarizerType, contentType: contentType)
     }
 
+    @MainActor
     func checkSummarizationResult(_ tab: Tab) async -> SummarizationCheckResult? {
         guard let webView = tab.webView else { return nil }
         let result = await summarizationChecker.check(on: webView, maxWords: maxWords)
@@ -59,6 +60,7 @@ final class SummarizerMiddleware {
         )
     }
 
+    @MainActor
     private func dispatchSummarizeConfigurationAction(for action: Action) async {
         guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
         let result = await checkSummarizationResult(tab)

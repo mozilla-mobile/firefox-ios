@@ -11,7 +11,7 @@ protocol WKUserScriptManager {
     func injectUserScriptsIntoWebView(_ webView: WKEngineWebView)
 }
 
-class DefaultUserScriptManager: WKUserScriptManager {
+final class DefaultUserScriptManager: WKUserScriptManager {
     // Scripts can use this to verify the application (not JS on the web) is calling into them
     private let appIdToken = UUID().uuidString
     private let scriptProvider: UserScriptProvider

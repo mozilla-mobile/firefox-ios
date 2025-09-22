@@ -8,9 +8,9 @@ class KeyChainAccountStorage {
     var useRustKeychainForFxA: Bool
     var legacyKeychainWrapper: MZKeychainWrapper
     var keychainWrapper: FxAKeychain
-    static var keychainKey: String = "accountJSON"
-    static var legacyAccessibility: MZKeychainItemAccessibility = .afterFirstUnlock
-    static var accessibility: FxAKeychainItemAccessibility = .afterFirstUnlock
+    static let keychainKey: String = "accountJSON"
+    static let legacyAccessibility: MZKeychainItemAccessibility = .afterFirstUnlock
+    static let accessibility: FxAKeychainItemAccessibility = .afterFirstUnlock
 
     init(keychainAccessGroup: String?, useRustKeychainForFxA: Bool = false) {
         self.useRustKeychainForFxA = useRustKeychainForFxA

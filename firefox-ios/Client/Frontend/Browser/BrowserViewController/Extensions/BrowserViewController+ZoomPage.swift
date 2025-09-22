@@ -20,11 +20,11 @@ extension BrowserViewController: ZoomPageBarDelegate {
         zoomPageBar.delegate = self
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            header.addArrangedViewToBottom(zoomPageBar, completion: {
+            header.addArrangedViewToBottom(zoomPageBar, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
         } else {
-            overKeyboardContainer.addArrangedViewToTop(zoomPageBar, completion: {
+            overKeyboardContainer.addArrangedViewToTop(zoomPageBar, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
         }

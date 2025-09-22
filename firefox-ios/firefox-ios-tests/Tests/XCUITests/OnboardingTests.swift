@@ -35,6 +35,8 @@ class OnboardingTests: BaseTestCase {
 
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
+        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
         waitForElementsToExist(
             [
                 app.images["\(rootA11yId)ImageView"],
@@ -101,6 +103,9 @@ class OnboardingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2793818
     func testFirstRunTourDarkMode() {
+        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+
         app.buttons["CloseButton"].waitAndTap()
         // Dismiss new changes pop up if exists
         app.buttons["Close"].tapIfExists()
@@ -109,6 +114,9 @@ class OnboardingTests: BaseTestCase {
         app.launch()
         // Check that the first's tour screen is shown as well as all the elements in there
         navigator.nowAt(FirstRun)
+        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+
         waitForElementsToExist(
             [
                 app.images["\(rootA11yId)ImageView"],
@@ -176,6 +184,9 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306814
     func testOnboardingSignIn() {
+        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
@@ -200,6 +211,9 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testCloseTour() {
+        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].waitAndTap()
         // Dismiss new changes pop up if exists
         app.buttons["Close"].tapIfExists()
@@ -248,6 +262,9 @@ class OnboardingTests: BaseTestCase {
     // TOOLBAR THEME
     // https://mozilla.testrail.io/index.php?/cases/view/2575175
     func testSelectTopPlacement() {
+        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+
         let toolbar = app.textFields["url"]
 
         // Wait for the initial title label to appear
@@ -296,6 +313,9 @@ class OnboardingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575176
     func testSelectBottomPlacement() throws {
+        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+
         guard !iPad() else {
             throw XCTSkip("Toolbar option not available for iPad")
         }
@@ -342,6 +362,9 @@ class OnboardingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575177
     func testCloseOptionToolbarCard() {
+        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
+        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+
         // Wait for the initial title label to appear
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
 

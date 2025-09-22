@@ -20,13 +20,17 @@ jobs:
           path: firefox-ios
           ref: main
           fetch-depth: 0
+      # Get the timestamp and use it when fetching experiments to break cache
+      - name: Get current Unix timestamp
+        id: get-timestamp
+        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
       - name: "Update Experiments JSON"
         id: update-experiments-json
         uses: mozilla-mobile/update-experiments@v3
         with:
           repo-path: firefox-ios
           output-path: firefox-ios/Client/Experiments/initial_experiments.json
-          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/?ts=12312312
+          experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/?ts=${{ steps.get-timestamp.outputs.timestamp }}
           app-name: firefox_ios
           branch: automation/update-nimbus-experiments
       - name: "Debug - workaround issue: 23215"

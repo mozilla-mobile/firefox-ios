@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Glean
 import Storage
+import Common
 
 /// Type-specific information to record in telemetry about a visible search
 /// suggestion.
@@ -138,7 +139,8 @@ enum SearchTelemetryValues {
     }
 }
 
-class SearchTelemetry {
+// TODO: FXIOS-13477 Make SearchTelemetry actually sendable
+class SearchTelemetry: @unchecked Sendable {
     var code = ""
     var provider: SearchEngine = .none
     var shouldSetGoogleTopSiteSearch = false
@@ -196,7 +198,7 @@ class SearchTelemetry {
     }
 
     // MARK: Track Regular and Follow-on SAP from Tab and TopSite
-
+    @MainActor
     func trackTabAndTopSiteSAP(_ tab: Tab, webView: WKWebView) {
         let provider = tab.getProviderForUrl()
         let code = SearchPartner.getCode(
@@ -238,18 +240,19 @@ class SearchTelemetry {
     // MARK: Impression Telemetry
     func startImpressionTimer() {
         impressionTelemetryTimer?.invalidate()
-        impressionTelemetryTimer = Timer.scheduledTimer(timeInterval: 1.0,
-                                                        target: self,
-                                                        selector: #selector(recordURLBarSearchImpressionTelemetryEvent),
-                                                        userInfo: nil,
-                                                        repeats: false)
+        impressionTelemetryTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false, block: { [weak self] _ in
+            guard let self = self else { return }
+            ensureMainThread {
+                self.recordURLBarSearchImpressionTelemetryEvent()
+            }
+        })
     }
 
     func stopImpressionTimer() {
         impressionTelemetryTimer?.invalidate()
     }
 
-    @objc
+    @MainActor
     func recordURLBarSearchImpressionTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }
         let reasonKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.reason.rawValue
@@ -298,6 +301,7 @@ class SearchTelemetry {
     }
 
     // MARK: Engagement Telemetry
+    @MainActor
     func recordURLBarSearchEngagementTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -358,6 +362,7 @@ class SearchTelemetry {
                                      extras: extraDetails)
     }
 
+    @MainActor
     func recordURLBarSearchAbandonmentTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }
 
