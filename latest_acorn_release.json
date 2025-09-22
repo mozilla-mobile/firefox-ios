@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/240598973",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/240598973/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/240598973/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.49.1",
-    "id": 240598973,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/245890580",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/245890580/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/245890580/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.50.0",
+    "id": 245890580,
     "author": {
         "login": "cwzilla",
         "id": 87655586,
@@ -25,18 +25,18 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84OVz-9",
-    "tag_name": "v1.49.1",
+    "node_id": "RE_kwDOI1CID84Op_4U",
+    "tag_name": "v1.50.0",
     "target_commitish": "main",
-    "name": "v1.49.1",
+    "name": "v1.50.0",
     "draft": false,
     "immutable": false,
     "prerelease": false,
     "created_at": "2025-08-18T13:05:38Z",
-    "updated_at": "2025-08-18T13:06:39Z",
-    "published_at": "2025-08-18T13:06:39Z",
+    "updated_at": "2025-09-09T15:24:48Z",
+    "published_at": "2025-09-09T15:24:48Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.49.1",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.49.1",
-    "body": "# [Changelog]\r\n### [1.49.1]\r\n### Changed\r\n\r\n- PDF\r\n  - globeSmall.pdf\r\n  - globeMedium.pdf\r\n  - globeLarge.pdf\r\n\r\n- SVG\r\n  - globe-16.svg\r\n  - globe-20.svg\r\n  - globe-24.svg\r\n\r\n- XML\r\n  - ic_globe_16.xml\r\n  - ic_globe_20.xml\r\n  - ic_globe_24.xml"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.50.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.50.0",
+    "body": "# [Changelog]\r\n### [1.50.0]\r\n### Added\r\n#### Desktop\r\n- SVG\r\n  - add-16.svg\r\n  - all-tabs-16.svg\r\n  - app-menu-16.svg\r\n  - app-menu-space-16.svg\r\n  - arrow-clockwise-16.svg\r\n  - bookmark-16.svg\r\n  - bookmarks-tray-16.svg\r\n  - chevron-double-right-16.svg\r\n  - chevron-down-16.svg\r\n  - chevron-left-16.svg\r\n  - chevron-right-16.svg\r\n  - close-16.svg\r\n  - downloads-16.svg\r\n  - extension-16.svg\r\n  - extension-critical-16.svg\r\n  - extension-cut-16.svg\r\n  - extension-fill-16.svg\r\n  - extension-warning-16.svg\r\n  - folder-16.svg\r\n  - folder-arrow-down-16.svg\r\n  - folder-fill-16.svg\r\n  - fullscreen-expand-16.svg\r\n  - fx-view-16.svg\r\n  - globe-16.svg\r\n  - globe-slash-16.svg\r\n  - help-16.svg\r\n  - help-fill-16.svg\r\n  - history-16.svg\r\n  - home-16.svg\r\n  - import-data-16.svg\r\n  - library-16.svg\r\n  - lock-insecure-16.svg\r\n  - lock-warning-16.svg\r\n  - page-actions-16.svg\r\n  - permission-16.svg\r\n  - print-16.svg\r\n  - reader-mode-16.svg\r\n  - search-16.svg\r\n  - settings-16.svg\r\n  - shield-16.svg\r\n  - shield-checkmark-16.svg\r\n  - shield-cross-16.svg\r\n  - shield-exclamation-mark-16.svg\r\n  - shield-slash-16.svg\r\n  - sidebar-collapsed-16.svg\r\n  - sidebar-collapsed-right-16.svg\r\n  - sidebar-expanded-16.svg\r\n  - sidebar-expanded-right-16.svg\r\n  - sidebar-hidden-16.svg\r\n  - sidebar-left-16.svg\r\n  - sidebar-right-16.svg\r\n  - synced-tabs-16.svg\r\n  - tab-16.svg\r\n  - update-circle-fill-16.svg\r\n  - window-16.svg"
 }
