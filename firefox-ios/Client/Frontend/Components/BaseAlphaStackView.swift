@@ -14,6 +14,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isClearBackground = false
     var isSpacerClearBackground = false
     lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
+    var onTap: (() -> Void)?
 
     private var isToolbarTranslucencyEnabled: Bool {
         return FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
@@ -23,6 +24,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         super.init(frame: frame)
 
         setupStyle()
+        setupTapGesture()
     }
 
     required init(coder: NSCoder) {
@@ -40,6 +42,16 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         axis = .vertical
         distribution = .fill
         alignment = .fill
+    }
+
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        addGestureRecognizer(tapGesture)
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
     }
 
     // MARK: - Spacer view

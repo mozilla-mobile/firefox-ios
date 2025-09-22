@@ -4,7 +4,7 @@
 
 import UIKit
 
-final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
+final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearchEngine {
     static let supportsSecureCoding = true
 
     struct UX {
@@ -35,6 +35,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
     }
 
     private let suggestTemplate: String?
+    private let trendingTemplate: String?
     private let searchTermComponent = "{searchTerms}"
     private let searchQueryComponentKey: String?
     private let googleEngineID = {
@@ -74,11 +75,13 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
          image: UIImage,
          searchTemplate: String,
          suggestTemplate: String?,
+         trendingTemplate: String? = nil,
          isCustomEngine: Bool) {
         self.shortName = shortName
         self.image = image
         self.searchTemplate = searchTemplate
         self.suggestTemplate = suggestTemplate
+        self.trendingTemplate = trendingTemplate
         self.telemetrySuffix = telemetrySuffix
         self.isCustomEngine = isCustomEngine
         self.engineID = engineID
@@ -111,6 +114,7 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
         Self.generateCustomEngineID()
         self.telemetrySuffix = aDecoder.decodeObject(forKey: CodingKeys.telemetrySuffix.rawValue) as? String
         self.suggestTemplate = nil
+        self.trendingTemplate = nil
 
         self.searchQueryComponentKey = OpenSearchEngine.getQueryArgFromTemplate(
             searchTemplate: self.searchTemplate,
@@ -146,6 +150,12 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable {
             return getURLFromTemplate(suggestTemplate, query: query)
         }
         return nil
+    }
+
+    /// Returns the trending search URL for the specific search engine.
+    func trendingURLForEngine() -> URL? {
+        guard let trendingTemplate else { return nil }
+        return URL(string: trendingTemplate)
     }
 
     /// Returns the query that was used to construct a given search URL

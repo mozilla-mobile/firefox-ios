@@ -71,8 +71,7 @@ final class CookiePersistenceTests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
         mozWaitForElementToExist(app.buttons["Private"])
         app.buttons["Private"].tap()
-        let toolbar = app.toolbars["Toolbar"]
-        toolbar.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
 
         // Open URL for Cookie login
         openCookieSite()
@@ -88,8 +87,12 @@ final class CookiePersistenceTests: BaseTestCase {
         // navigate to website and expect not to be login
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
         mozWaitForElementToExist(app.buttons["Private"])
-        app.buttons["Tabs"].tap()
-        toolbar.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
+        if iPad() {
+            app.segmentedControls.buttons.firstMatch.waitAndTap()
+        } else {
+            app.buttons["Tabs"].tap()
+        }
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
 
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])

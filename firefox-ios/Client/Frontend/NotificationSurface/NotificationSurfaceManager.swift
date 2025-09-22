@@ -50,18 +50,17 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     // MARK: - Functionality
     /// Checks whether a message exists, and is not expired, and schedules
     /// a notification to be presented.
-    func showNotificationSurface() {
+    func showNotificationSurface() async {
         guard let message = message, !message.isExpired else { return }
 
         let notificationId = Constant.notificationBaseId + ".\(message.id)"
 
         // Check if message is already getting displayed
-        notificationManager.findDeliveredNotificationForId(id: notificationId) { [weak self] notification in
-            // Don't schedule the notification again if it was already delivered
-            guard notification == nil else { return }
+        let notification = await notificationManager.findDeliveredNotificationForId(id: notificationId)
+        // Don't schedule the notification again if it was already delivered
+        guard notification == nil else { return }
 
-            self?.scheduleNotification(message: message, notificationId: notificationId)
-        }
+        scheduleNotification(message: message, notificationId: notificationId)
     }
 
     // MARK: NotificationSurfaceDelegate

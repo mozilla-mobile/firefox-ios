@@ -54,6 +54,9 @@ public enum LoggerCategory: String {
     /// Related to redux library or integration
     case redux
 
+    /// Related to the search engines
+    case searchEngines
+
     /// Related to the settings
     case settings
 

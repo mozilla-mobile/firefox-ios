@@ -14,7 +14,6 @@ final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
         static let cornerRadius: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.80
     }
 
     // MARK: - UI Elements
@@ -49,6 +48,8 @@ final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private var isFirstCell = false
     private var isLastCell = false
 
+    private var mainMenuHelper: MainMenuInterface?
+
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -71,8 +72,15 @@ final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         isLastCell = false
     }
 
-    func configureCellWith(model: MenuElement, theme: Theme, isFirstCell: Bool, isLastCell: Bool) {
+    func configureCellWith(
+        model: MenuElement,
+        theme: Theme,
+        isFirstCell: Bool,
+        isLastCell: Bool,
+        mainMenuHelper: MainMenuInterface = MainMenuHelper()
+    ) {
         self.model = model
+        self.mainMenuHelper = mainMenuHelper
         self.isFirstCell = isFirstCell
         self.isLastCell = isLastCell
         self.titleLabel.text = model.title
@@ -126,7 +134,7 @@ final class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         guard let model else { return }
-        backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
+        backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper?.backgroundAlpha() ?? 1.0)
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             descriptionLabel.textColor = theme.colors.textSecondary

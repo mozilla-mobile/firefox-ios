@@ -10,11 +10,11 @@ class MockUserNotificationCenter: UserNotificationCenterProtocol {
     var pendingRequests = [UNNotificationRequest]()
 
     var getSettingsWasCalled = false
-    func getNotificationSettings(completionHandler: @escaping (UNNotificationSettings) -> Void) {
+    func notificationSettings() async -> UNNotificationSettings {
         getSettingsWasCalled = true
 
         // calling UNUserNotificationCenter as UNNotificationSettings can't be created otherwise
-        UNUserNotificationCenter.current().getNotificationSettings(completionHandler: completionHandler)
+        return await UNUserNotificationCenter.current().notificationSettings()
     }
 
     var requestAuthorizationWasCalled = false
@@ -50,9 +50,9 @@ class MockUserNotificationCenter: UserNotificationCenterProtocol {
     }
 
     var getDeliveredWasCalled = false
-    func getDeliveredNotifications(completionHandler: @escaping ([UNNotification]) -> Void) {
+    func deliveredNotifications() async -> [UNNotification] {
         getDeliveredWasCalled = true
-        completionHandler([UNNotification]())
+        return []
     }
 
     var removeDeliveredWithIdsWasCalled = false

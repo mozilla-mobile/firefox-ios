@@ -8,7 +8,7 @@ features:
         description: >
           If true, enables the tab tray UI experiments.
         type: Boolean
-        default: false
+        default: true
       translucency:
         description: >
           If true, enables translucency for tab tray actions at the bottom.

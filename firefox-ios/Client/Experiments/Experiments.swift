@@ -200,6 +200,11 @@ enum Experiments {
         return prefsReader.hasEnabledTipsNotifications()
     }
 
+    private static func hasAcceptedTermsOfUse() -> Bool {
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.hasAcceptedTermsOfUse()
+    }
+
     private static func isAppleIntelligenceAvailable() -> Bool {
         guard #available(iOS 26, *) else { return false }
         #if canImport(FoundationModels)
@@ -233,6 +238,7 @@ enum Experiments {
             isDefaultBrowser: isDefaultBrowser(),
             isBottomToolbarUser: isBottomToolbarUser(),
             hasEnabledTipsNotifications: hasEnabledTipsNotifications(),
+            hasAcceptedTermsOfUse: hasAcceptedTermsOfUse(),
             isAppleIntelligenceAvailable: isAppleIntelligenceAvailable(),
             cannotUseAppleIntelligence: cannotUseAppleIntelligence()
         )

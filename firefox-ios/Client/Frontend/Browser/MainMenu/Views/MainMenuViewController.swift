@@ -21,7 +21,6 @@ class MainMenuViewController: UIViewController,
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
-        static let backgroundAlpha: CGFloat = 0.80
         static let menuHeightTolerance: CGFloat = 30
         static let topMarginCFR: CGFloat = 100
     }
@@ -44,6 +43,7 @@ class MainMenuViewController: UIViewController,
     private let profile: Profile
     private var menuState: MainMenuState
     private let logger: Logger
+    private let mainMenuHelper: MainMenuInterface
 
     var viewProvider: ContextualHintViewProvider?
 
@@ -87,13 +87,15 @@ class MainMenuViewController: UIViewController,
         profile: Profile,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        logger: Logger = DefaultLogger.shared
+        logger: Logger = DefaultLogger.shared,
+        mainMenuHelper: MainMenuInterface = MainMenuHelper()
     ) {
         self.windowUUID = windowUUID
         self.profile = profile
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.logger = logger
+        self.mainMenuHelper = mainMenuHelper
         menuState = MainMenuState(windowUUID: windowUUID)
         self.lastOrientation = UIDevice.current.orientation
         super.init(nibName: nil, bundle: nil)
@@ -103,7 +105,8 @@ class MainMenuViewController: UIViewController,
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [UIContentSizeCategory.didChangeNotification]
+            observing: [UIContentSizeCategory.didChangeNotification,
+                        UIAccessibility.reduceTransparencyStatusDidChangeNotification]
         )
     }
 
@@ -195,11 +198,35 @@ class MainMenuViewController: UIViewController,
         unsubscribeFromRedux()
     }
 
+    private func updateBlur() {
+        let shouldShowBlur = !mainMenuHelper.isReduceTransparencyEnabled
+
+        if shouldShowBlur {
+#if canImport(FoundationModels)
+            if #unavailable(iOS 26.0) {
+                view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+            }
+#else
+            view.addBlurEffectWithClearBackgroundAndClipping(using: .regular)
+#endif
+        } else {
+            view.removeVisualEffectView()
+        }
+
+        applyTheme()
+    }
+
     // MARK: Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustLayout()
+            ensureMainThread {
+                self.adjustLayout()
+            }
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            ensureMainThread {
+                self.updateBlur()
+            }
         default: break
         }
     }
@@ -422,7 +449,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(UX.backgroundAlpha)
+        view.backgroundColor = theme.colors.layerSurfaceLow.withAlphaComponent(mainMenuHelper.backgroundAlpha())
         menuContent.applyTheme(theme: theme)
     }
 

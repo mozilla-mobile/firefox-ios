@@ -270,6 +270,13 @@ final class LegacyTabScrollController: NSObject,
         self.headerContainer = headerContainer
     }
 
+    func createToolbarTapHandler() -> (() -> Void) {
+        return { [unowned self] in
+            guard isMinimalAddressBarEnabled && toolbarState == .collapsed else { return }
+            showToolbars(animated: true)
+        }
+    }
+
     @MainActor
     private func handleOnTabContentLoading() {
         if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
