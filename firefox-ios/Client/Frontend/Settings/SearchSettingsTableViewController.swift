@@ -255,7 +255,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             cell.editingAccessoryView = toggle
             cell.textLabel?.text = engine.shortName
             cell.textLabel?.adjustsFontSizeToFitWidth = true
-            cell.textLabel?.minimumScaleFactor = 0.5
+            cell.textLabel?.minimumScaleFactor = UX.textLabelMinimumScaleFactor
             cell.textLabel?.numberOfLines = 0
             cell.imageView?.image = engine.image.createScaled(IconSize)
             cell.imageView?.layer.cornerRadius = UX.imageViewCornerRadius
