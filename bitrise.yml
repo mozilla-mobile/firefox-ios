@@ -1609,17 +1609,20 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - xcode-test@6.0.1:
-        timeout: 6000
+    - xcode-build-for-test@3:
         inputs:
-        - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - configuration: Fennec_Testing
+        - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
-        - test_plan: UnitTest
-        - test_repetition_mode: until_failure
-        - maximum_test_repetitions: 10
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
+    - xcode-test-without-building@0.4.0:
+        timeout: 1200
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.0-arm64.xctestrun
+        - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2.10.0: {}
 
   #

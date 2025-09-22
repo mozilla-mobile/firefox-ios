@@ -22,6 +22,7 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import struct MozillaAppServices.Login
 import enum MozillaAppServices.BookmarkRoots
+import struct MozillaAppServices.VisitObservation
 import enum MozillaAppServices.VisitType
 
 class BrowserViewController: UIViewController,
@@ -125,6 +126,7 @@ class BrowserViewController: UIViewController,
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
+    let recordVisitManager: RecordVisitObserving
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -446,7 +448,8 @@ class BrowserViewController: UIViewController,
         documentLogger: DocumentLogger = AppContainer.shared.resolve(),
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
-        userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated)
+        userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated),
+        recordVisitManager: RecordVisitObserving? = nil
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
@@ -467,6 +470,7 @@ class BrowserViewController: UIViewController,
         self.zoomManager = ZoomPageManager(windowUUID: tabManager.windowUUID)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
+        self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -1049,9 +1053,11 @@ class BrowserViewController: UIViewController,
         subscribeToRedux()
         enqueueTabRestoration()
 
+        // FXIOS-13551 - testWillNavigateAway calls into viewDidLoad during unit tests, creates a leak
+        guard !AppConstants.isRunningUnitTest else { return }
         Task(priority: .background) { [weak self] in
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
-            self?.trackStartupTelemetry()
+            await self?.trackStartupTelemetry()
         }
     }
 
@@ -1479,17 +1485,30 @@ class BrowserViewController: UIViewController,
     }
 
     func willNavigateAway(from tab: Tab?) {
-        if let tab {
+        guard let tab else {
+            return
+        }
+
+        let screenshotHelper = self.screenshotHelper
+        let windowUUID = self.windowUUID
+        let screenshotBounds = CGRect(
+            x: self.contentContainer.frame.origin.x,
+            y: -self.contentContainer.frame.origin.y,
+            width: self.view.frame.width,
+            height: self.view.frame.height
+        )
+
+        let takeScreenshot = {
             screenshotHelper.takeScreenshot(
                 tab,
                 windowUUID: windowUUID,
-                screenshotBounds: CGRect(
-                    x: contentContainer.frame.origin.x,
-                    y: -contentContainer.frame.origin.y,
-                    width: view.frame.width,
-                    height: view.frame.height
-                )
+                screenshotBounds: screenshotBounds
             )
+        }
+
+        // Take screenshot asynchronously to avoid blocking navigation
+        DispatchQueue.main.async {
+            takeScreenshot()
         }
     }
 
@@ -2918,6 +2937,7 @@ class BrowserViewController: UIViewController,
         case .newTab:
             willNavigateAway(from: tabManager.selectedTab)
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
+            recordVisitManager.resetRecording()
         }
     }
 
@@ -3387,11 +3407,11 @@ class BrowserViewController: UIViewController,
     }
 
     func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in
             // Without a delay, the text field fails to become first responder
             // Check that the newly created tab is still selected.
             // This let's the user spam the Cmd+T button without lots of responder changes.
-            guard tab == self.tabManager.selectedTab else { return }
+            guard let self, tab == self.tabManager.selectedTab else { return }
 
             if self.isToolbarRefactorEnabled {
                 let action = ToolbarAction(searchTerm: searchText,
@@ -3461,16 +3481,11 @@ class BrowserViewController: UIViewController,
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
-    fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
-        let notificationCenter = NotificationCenter.default
-        var info = [AnyHashable: Any]()
-        info["url"] = tab.url?.displayURL
-        info["title"] = tab.title
-        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
-            info["visitType"] = visitType
-        }
-        info["isPrivate"] = tab.isPrivate
-        notificationCenter.post(name: .OnLocationChange, object: self, userInfo: info)
+    fileprivate func recordVisitForLocationChange(_ tab: Tab, navigation: WKNavigation?) {
+        let visitType = getVisitTypeForTab(tab, navigation: navigation) ?? .link
+        let url = tab.url?.displayURL?.description ?? ""
+        let visitObservation = VisitObservation(url: url, title: tab.title, visitType: visitType)
+        recordVisitManager.recordVisit(visitObservation: visitObservation, isPrivateTab: tab.isPrivate)
     }
 
     /// Enum to represent the WebView observation or delegate that triggered calling `navigateInTab`
@@ -3495,7 +3510,7 @@ class BrowserViewController: UIViewController,
 
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
-                postLocationChangeNotificationForTab(tab, navigation: navigation)
+                recordVisitForLocationChange(tab, navigation: navigation)
                 tab.readabilityResult = nil
                 webView.evaluateJavascriptInDefaultContentWorld(
                     "\(ReaderModeInfo.namespace.rawValue).checkReadability()"
@@ -5110,11 +5125,11 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 }
 
 extension BrowserViewController {
-    func trackStartupTelemetry() {
+    func trackStartupTelemetry() async {
         let toolbarLocation: SearchBarPosition = self.isBottomSearchBar ? .bottom : .top
         SearchBarSettingsViewModel.recordLocationTelemetry(for: toolbarLocation)
         trackAccessibility()
-        trackNotificationPermission()
+        await trackNotificationPermission()
         appStartupTelemetry.sendStartupTelemetry()
         creditCardInitialSetupTelemetry()
     }
@@ -5165,7 +5180,7 @@ extension BrowserViewController {
         }
     }
 
-    func trackNotificationPermission() {
-        NotificationManager().getNotificationSettings(sendTelemetry: true) { _ in }
+    func trackNotificationPermission() async {
+        _ = await NotificationManager().getNotificationSettings(sendTelemetry: true)
     }
 }
