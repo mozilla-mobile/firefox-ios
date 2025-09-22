@@ -155,7 +155,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getNavigationBrowserAction(for: .tapOnLink, destination: .link, url: url)
         let newState = reducer(initialState, action)
 
-
         let destination = newState.navigationDestination?.destination
         switch destination {
         case .link:
@@ -191,7 +190,12 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let destination = newState.navigationDestination?.destination
         switch destination {
         case .shareSheet(let configuration):
-            break
+            switch configuration.shareType {
+            case .site(let url):
+                XCTAssertEqual(url, try XCTUnwrap(URL(string: "www.example.com")))
+            default:
+                XCTFail("shareType is not the right type")
+            }
         default:
             XCTFail("destination is not the right type")
         }
