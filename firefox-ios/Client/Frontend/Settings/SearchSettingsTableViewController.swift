@@ -232,7 +232,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         cell.accessibilityValue = engine.shortName
         cell.textLabel?.text = engine.shortName
         cell.imageView?.image = engine.image.createScaled(IconSize)
-        cell.imageView?.layer.cornerRadius = 4
+        cell.imageView?.layer.cornerRadius = UX.imageViewCornerRadius
         cell.imageView?.layer.masksToBounds = true
         cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
@@ -257,7 +257,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             cell.textLabel?.minimumScaleFactor = 0.5
             cell.textLabel?.numberOfLines = 0
             cell.imageView?.image = engine.image.createScaled(IconSize)
-            cell.imageView?.layer.cornerRadius = 4
+            cell.imageView?.layer.cornerRadius = UX.imageViewCornerRadius
             cell.imageView?.layer.masksToBounds = true
             cell.selectionStyle = .none
             cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -381,7 +381,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             .Settings.Search.Suggest.LearnAboutSuggestions,
             AppName.shortName.rawValue
         )
-        cell.imageView?.layer.cornerRadius = 4
+        cell.imageView?.layer.cornerRadius = UX.imageViewCornerRadius
         cell.imageView?.layer.masksToBounds = true
         cell.selectionStyle = .none
         cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
