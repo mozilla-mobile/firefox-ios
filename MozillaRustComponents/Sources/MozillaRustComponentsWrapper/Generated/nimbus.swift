@@ -994,7 +994,7 @@ open func optOut(experimentSlug: String)throws  -> [EnrollmentChangeEvent]  {
      * This function is used to record and persist data used for the behavioral
      * targeting such as "core-active" user targeting.
      */
-open func recordEvent(eventId: String, count: Int64 = Int64(1))throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
+open func recordEvent(eventId: String, count: Int64 = Int64(1)) throws   {try rustCallWithError(FfiConverterTypeNimbusError_lift) {
     uniffi_nimbus_fn_method_nimbusclient_record_event(self.uniffiClonePointer(),
         FfiConverterString.lower(eventId),
         FfiConverterInt64.lower(count),$0
