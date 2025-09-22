@@ -252,15 +252,11 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            heightAnchor.constraint(equalToConstant: UX.accessoryViewHeight)
-        ])
+            heightAnchor.constraint(equalToConstant: UX.accessoryViewHeight),
 
-        NSLayoutConstraint.activate([
             toolbarTopHeightSpacer.topAnchor.constraint(equalTo: topAnchor),
-            toolbarTopHeightSpacer.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
-        ])
+            toolbarTopHeightSpacer.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
 
-        NSLayoutConstraint.activate([
             toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
             toolbar.topAnchor.constraint(equalTo: toolbarTopHeightSpacer.bottomAnchor),
