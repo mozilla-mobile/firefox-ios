@@ -1,3 +1,12 @@
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescription" = "Adaugă o comandă rapidă %@ în ecranul de pornire. După ce ai adăugat widgetul, ține-l atins pentru editare și selectează o comandă rapidă diferită.";
 
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Începe o căutare privată în %@ cu motorul de căutare prestabilit.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Acțiuni rapide";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Caută în %@";
+
