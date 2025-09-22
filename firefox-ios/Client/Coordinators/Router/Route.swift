@@ -5,7 +5,7 @@
 import Foundation
 
 /// An enumeration representing different navigational routes in an application.
-enum Route: Equatable {
+enum Route {
     /// Represents a search route that takes a URL, a boolean value indicating whether the search
     /// is private or not and an optional set of search options.
     ///
