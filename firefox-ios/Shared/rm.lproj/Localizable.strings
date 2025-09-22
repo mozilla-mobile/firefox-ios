@@ -1025,7 +1025,7 @@
 "Search.ThirdPartyEngines.Cancel" = "Interrumper";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Ina maschina da tschertgar cun quest titel u questa URL è gia vegnida agiuntada.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Ina maschina da tschertgar cun quest titel u quest URL è gia vegnida agiuntada.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Betg reussì";

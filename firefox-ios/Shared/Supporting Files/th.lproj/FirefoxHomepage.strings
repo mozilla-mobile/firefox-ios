@@ -7,6 +7,9 @@
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "เรื่องราว";
 
+/* This is the title that appears in the navigation bar for the Top Stories view, a screen that displays a collection of trending news articles */
+"FirefoxHome.Stories.TopStoriesViewTitle.v144" = "เรื่องราวเด่น";
+
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "ลบข้อมูลการเรียกดูแบบส่วนตัวแล้ว";
 

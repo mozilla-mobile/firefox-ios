@@ -11,5 +11,5 @@
 "NativeErrorPage.NoInternetConnection.Description.v131" = "სცადეთ დაკავშირება სხვა მოწყობილობიდან. შეამოწმეთ თქვენი მოდემი ან როუტერი. გამოთიშეთ და კვლავ დაუკავშირეთ WiFi.";
 
 /* On error page, this is the title for no internet connection */
-"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "როგორც ჩანს, რაღაც ხარვეზია ქსელთან კავშირისას.";
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "რაღაც ხარვეზია ქსელთან კავშირისას.";
 
