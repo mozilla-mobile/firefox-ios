@@ -247,12 +247,9 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         addSubview(toolbarTopHeightSpacer)
         addSubview(toolbar)
 
-        let topBottomOffset = CGFloat(2)
-        let sideOffset = CGFloat(8)
-
         NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: sideOffset),
-            trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -sideOffset),
+            leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             heightAnchor.constraint(equalToConstant: UX.accessoryViewHeight)
         ])
 
@@ -265,7 +262,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
             toolbar.topAnchor.constraint(equalTo: toolbarTopHeightSpacer.bottomAnchor),
-            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -topBottomOffset)
+            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
