@@ -376,7 +376,7 @@ final class TabScrollHandlerTests: XCTestCase {
     func testToolbarTapHandler_WhenMinimalAddressBarEnabledAndCollapsed_ShowsToolbar() {
         let subject = createSubject()
         subject.hideToolbars(animated: false)
-        
+
         let handler = subject.createToolbarTapHandler()
         handler()
 

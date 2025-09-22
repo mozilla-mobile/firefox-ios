@@ -316,7 +316,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         setupTabScroll(with: subject)
 
         subject.toolbarState = .visible
-        
+
         let handler = subject.createToolbarTapHandler()
         handler()
 
