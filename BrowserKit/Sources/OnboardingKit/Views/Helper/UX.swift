@@ -26,12 +26,20 @@ enum UX {
                 return 32
             }
         }
-        static let titleTopPadding: CGFloat = 80
+        static func titleTopPadding(for screenHeight: CGFloat) -> CGFloat {
+            // iPhone SE and similar small devices (height <= 667)
+            if screenHeight <= 667 {
+                return 80
+            }
+            // Larger iPhones
+            return 100
+        }
         static let titleAlignmentMinHeightPadding: CGFloat = 80
         static let cardHeightRatio: CGFloat = 0.8
         static let spacing: CGFloat = 24
         static let regularSizeSpacing: CGFloat = 48
         static let tosSpacing: CGFloat = 48
+        static let pageControlHeight: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150
@@ -78,6 +86,10 @@ enum UX {
         struct Layout {
             static let logoSize = CGSize(width: 150, height: 150)
             static let buttonCornerRadius: CGFloat = 12
+        }
+
+        struct Animation {
+            static let gradientSpeed: Float = 2
         }
     }
 

@@ -5,6 +5,7 @@
 import SwiftUI
 import MetalKit
 import Common
+import UIKit
 
 struct GradientPalette {
     var gradientOnboardingStop1: SIMD3<Float>
@@ -51,6 +52,10 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private weak var metalView: MTKView?
 
     private var palette = GradientPalette.defaultColors
+
+    // Texture holding the previous frame to support motion blur in the shader
+    private var previousFrameTexture: MTLTexture?
+    private var didClearPreviousFrameTexture: Bool = false
 
     // Configurable animation speed multiplier (1.0 = normal, 2.0 = 2x faster, etc.)
     var animationSpeedMultiplier: Float = 1.0 {
@@ -148,7 +153,9 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        // Simple implementation - no complex texture management
+        // Recreate the previous frame texture to match the new drawable size
+        previousFrameTexture = makePreviousFrameTexture(for: view)
+        didClearPreviousFrameTexture = false
     }
 
     func draw(in view: MTKView) {
@@ -184,6 +191,24 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
             return
         }
 
+        // Ensure previous frame texture exists and matches the drawable size
+        if previousFrameTexture == nil ||
+            previousFrameTexture?.width != currentDrawable.texture.width ||
+            previousFrameTexture?.height != currentDrawable.texture.height {
+            previousFrameTexture = makePreviousFrameTexture(for: view)
+            didClearPreviousFrameTexture = false
+        }
+
+        // Clear the previous frame texture once after creation to avoid sampling garbage
+        if let prevTex = previousFrameTexture, didClearPreviousFrameTexture == false {
+            if let clearPassDesc = makeClearPassDescriptor(for: prevTex) {
+                if let clearEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: clearPassDesc) {
+                    clearEncoder.endEncoding()
+                    didClearPreviousFrameTexture = true
+                }
+            }
+        }
+
         guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else {
             logger.log(
                 "Failed to create render command encoder",
@@ -193,8 +218,30 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
             return
         }
 
+        // Bind previous frame texture for the fragment shader (index 0)
+        if let prevTex = previousFrameTexture {
+            renderEncoder.setFragmentTexture(prevTex, index: 0)
+        }
+
         encodeRenderCommands(with: renderEncoder)
         renderEncoder.endEncoding()
+
+        // Copy current drawable into previousFrameTexture for use in the next frame
+        if let prevTex = previousFrameTexture,
+           let blitEncoder = commandBuffer.makeBlitCommandEncoder() {
+            let src = currentDrawable.texture
+            let srcSize = MTLSize(width: src.width, height: src.height, depth: 1)
+            blitEncoder.copy(from: src,
+                             sourceSlice: 0,
+                             sourceLevel: 0,
+                             sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
+                             sourceSize: srcSize,
+                             to: prevTex,
+                             destinationSlice: 0,
+                             destinationLevel: 0,
+                             destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0))
+            blitEncoder.endEncoding()
+        }
 
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
@@ -233,7 +280,33 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     }
 
     private func advanceAnimationTime() {
+        // If speed is zero, freeze the animation
+        guard animationSpeedMultiplier != 0 else { return }
         currentTime += AnimatedGradientUX.timeIncrementPerFrame * animationSpeedMultiplier
+    }
+
+    // MARK: - Helpers
+
+    private func makePreviousFrameTexture(for view: MTKView) -> MTLTexture? {
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: view.colorPixelFormat,
+            width: max(Int(view.drawableSize.width), 1),
+            height: max(Int(view.drawableSize.height), 1),
+            mipmapped: false
+        )
+        descriptor.usage = [.shaderRead, .renderTarget]
+        descriptor.storageMode = .private
+        return metalDevice.makeTexture(descriptor: descriptor)
+    }
+
+    private func makeClearPassDescriptor(for texture: MTLTexture) -> MTLRenderPassDescriptor? {
+        let desc = MTLRenderPassDescriptor()
+        guard let colorAttachment = desc.colorAttachments[0] else { return nil }
+        colorAttachment.texture = texture
+        colorAttachment.loadAction = .clear
+        colorAttachment.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+        colorAttachment.storeAction = .store
+        return desc
     }
 }
 
@@ -268,6 +341,7 @@ struct AnimatedGradientMetalView: View {
     @StateObject private var rendererStore: RendererStore
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
         metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice(),
@@ -276,7 +350,13 @@ struct AnimatedGradientMetalView: View {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        _rendererStore = StateObject(wrappedValue: RendererStore(device: metalDevice, speed: 3.0))
+        let initialSpeed: Float = UIAccessibility.isReduceMotionEnabled ? 0 : UX.Onboarding.Animation.gradientSpeed
+        _rendererStore = StateObject(
+            wrappedValue: RendererStore(
+                device: metalDevice,
+                speed: initialSpeed
+            )
+        )
     }
 
     var body: some View {
@@ -284,10 +364,14 @@ struct AnimatedGradientMetalView: View {
             AnimatedGradientMetalViewRepresentable(delegate: delegate)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                    delegate.animationSpeedMultiplier = reduceMotion ? 0 : UX.Onboarding.Animation.gradientSpeed
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
                     guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onChange(of: reduceMotion) { newValue in
+                    delegate.animationSpeedMultiplier = newValue ? 0 : UX.Onboarding.Animation.gradientSpeed
                 }
         } else {
             LinearGradient(

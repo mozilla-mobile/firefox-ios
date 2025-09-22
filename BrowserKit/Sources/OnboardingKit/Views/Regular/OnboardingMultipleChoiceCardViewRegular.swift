@@ -36,33 +36,35 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
     }
 
     var body: some View {
-        VStack {
-            ScrollView {
-                VStack(spacing: UX.CardView.regularSizeSpacing) {
-                    titleView
-                        .padding(.top, UX.CardView.titleTopPadding)
-                    OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
-                        selection: $selectedAction,
-                        items: viewModel.multipleChoiceButtons,
-                        windowUUID: windowUUID,
-                        themeManager: themeManager
-                    )
-                    .onChange(of: selectedAction) { newAction in
-                        onMultipleChoiceAction(newAction, viewModel.name)
+        GeometryReader { geometry in
+            VStack {
+                ScrollView {
+                    VStack(spacing: UX.CardView.regularSizeSpacing) {
+                        titleView
+                            .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
+                        OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
+                            selection: $selectedAction,
+                            items: viewModel.multipleChoiceButtons,
+                            windowUUID: windowUUID,
+                            themeManager: themeManager
+                        )
+                        .onChange(of: selectedAction) { newAction in
+                            onMultipleChoiceAction(newAction, viewModel.name)
+                        }
                     }
+                    .padding(UX.CardView.verticalPadding)
                 }
-                .padding(UX.CardView.verticalPadding)
+                .scrollBounceBehavior(basedOnSize: true)
+                primaryButton
+                    .padding(.bottom, UX.CardView.verticalPadding)
             }
-            .scrollBounceBehavior(basedOnSize: true)
-            primaryButton
-                .padding(.bottom, UX.CardView.verticalPadding)
-        }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            .onAppear {
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
         }
     }
 

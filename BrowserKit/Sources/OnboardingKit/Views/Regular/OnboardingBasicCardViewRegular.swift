@@ -30,28 +30,30 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     var body: some View {
-        VStack {
-            ScrollView {
-                VStack(spacing: UX.CardView.regularSizeSpacing) {
-                    titleView
-                        .padding(.top, UX.CardView.titleTopPadding)
-                    imageView
-                    bodyView
-                }
-                .padding(UX.CardView.verticalPadding)
-            }
-            .scrollBounceBehavior(basedOnSize: true)
+        GeometryReader { geometry in
             VStack {
-                primaryButton
-                secondaryButton
+                ScrollView {
+                    VStack(spacing: UX.CardView.regularSizeSpacing) {
+                        titleView
+                            .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
+                        imageView
+                        bodyView
+                    }
+                    .padding(UX.CardView.verticalPadding)
+                }
+                .scrollBounceBehavior(basedOnSize: true)
+                VStack {
+                    primaryButton
+                    secondaryButton
+                }
             }
-        }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            .onAppear {
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            }
         }
     }
 
