@@ -36,25 +36,25 @@ class NotificationSurfaceManagerTests: XCTestCase {
         XCTAssertTrue(subject.shouldShowSurface)
     }
 
-    func testShowSurface_noMessage() {
+    func testShowSurface_noMessage() async {
         let subject = createSubject()
 
         XCTAssertFalse(subject.shouldShowSurface)
 
-        subject.showNotificationSurface()
+        await subject.showNotificationSurface()
 
         XCTAssertFalse(notificationManager.scheduleWithIntervalWasCalled)
         XCTAssertEqual(notificationManager.scheduledNotifications, 0)
     }
 
-    func testShowSurface_validMessage() {
+    func testShowSurface_validMessage() async {
         let subject = createSubject()
         let message = createMessage()
         messageManager.message = message
 
         XCTAssertTrue(subject.shouldShowSurface)
 
-        subject.showNotificationSurface()
+        await subject.showNotificationSurface()
 
         XCTAssertTrue(notificationManager.scheduleWithIntervalWasCalled)
         XCTAssertEqual(notificationManager.scheduledNotifications, 1)

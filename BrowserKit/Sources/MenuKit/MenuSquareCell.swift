@@ -15,7 +15,6 @@ final class MenuSquareView: UIView, ThemeApplicable {
         static let contentViewBottomMargin: CGFloat = 8
         static let contentViewHorizontalMargin: CGFloat = 4
         static let cornerRadius: CGFloat = 16
-        static let backgroundAlpha: CGFloat = 0.80
         static let hyphenationFactor: Float = 1.0
         static let dividerWidth: CGFloat = 0.5
     }
@@ -45,6 +44,8 @@ final class MenuSquareView: UIView, ThemeApplicable {
     private var shouldShowDivider = true
     var cellTapCallback: (() -> Void)?
 
+    private var mainMenuHelper: MainMenuInterface?
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -67,8 +68,13 @@ final class MenuSquareView: UIView, ThemeApplicable {
         }
     }
 
-    func configureCellWith(model: MenuElement, shouldShowDivider: Bool = true) {
+    func configureCellWith(
+        model: MenuElement,
+        shouldShowDivider: Bool = true,
+        mainMenuHelper: MainMenuInterface = MainMenuHelper()
+    ) {
         self.model = model
+        self.mainMenuHelper = mainMenuHelper
         self.setTitle(with: model.title)
         self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
         self.backgroundContentView.layer.cornerRadius = UX.backgroundViewCornerRadius
@@ -158,7 +164,8 @@ final class MenuSquareView: UIView, ThemeApplicable {
             backgroundContentView.backgroundColor = .clear
             dividerView.backgroundColor = shouldShowDivider ? theme.colors.borderPrimary : .clear
         } else {
-            backgroundContentView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(UX.backgroundAlpha)
+            let alpha: CGFloat = mainMenuHelper?.backgroundAlpha() ?? 1.0
+            backgroundContentView.backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(alpha)
         }
         icon.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textSecondary

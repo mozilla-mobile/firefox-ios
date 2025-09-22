@@ -49,7 +49,7 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
         let hasPermission = await notificationManager.hasPermission()
 
         if hasPermission, surfaceManager.shouldShowSurface {
-            surfaceManager.showNotificationSurface()
+            await surfaceManager.showNotificationSurface()
         }
     }
 
