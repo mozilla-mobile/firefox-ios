@@ -270,11 +270,11 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let backgroundColor: UIColor = if #available(iOS 26.0, *) {
+        let accessoryViewBackgroundColor: UIColor = if #available(iOS 26.0, *) {
             // Use the same color that uses the toolbar
             theme.colors.layerSurfaceLow
         } else {
-            theme.colors.layer5
+            .clear
         }
         let buttonsBackgroundColor: UIColor = if #available(iOS 26.0, *) {
             .clear
@@ -282,7 +282,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             theme.colors.layer5Hover
         }
 
-        self.backgroundColor = backgroundColor
+        self.backgroundColor = accessoryViewBackgroundColor
         [previousButton, nextButton, doneButton].forEach {
             $0.tintColor = theme.colors.iconAccentBlue
             $0.customView?.tintColor = theme.colors.iconAccentBlue
