@@ -19,7 +19,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     private struct UX {
         static let imageViewCornerRadius: CGFloat = 4
         static let textLabelMinimumScaleFactor: CGFloat = 0.5
-        static let textLabelLinesLimit: Int = 0
+        static let textLabelLinesLimit = 0
     }
 
     // MARK: - Properties
