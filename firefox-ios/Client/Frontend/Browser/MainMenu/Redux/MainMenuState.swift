@@ -70,7 +70,7 @@ struct MainMenuTabInfo: Equatable {
     let accountData: AccountData
 }
 
-struct MainMenuState: ScreenState, Equatable, Sendable {
+struct MainMenuState: ScreenState, Sendable {
     let windowUUID: WindowUUID
     let menuElements: [MenuSection]
 

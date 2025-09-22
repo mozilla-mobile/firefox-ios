@@ -33,9 +33,29 @@ class RouteBuilderTests: XCTestCase {
             userActivity: randomActivity
         )
 
-        XCTAssertEqual(route, .search(url: testURL, isPrivate: false))
-        XCTAssertEqual(universalLinkRoute, .search(url: testURL, isPrivate: false))
-        XCTAssertEqual(randomRoute, .search(url: testURL, isPrivate: false))
+        switch route {
+        case .search(let url, let isPrivate, _):
+            XCTAssertEqual(url, testURL)
+            XCTAssertFalse(isPrivate)
+        default:
+            break
+        }
+
+        switch universalLinkRoute {
+        case .search(let url, let isPrivate, _):
+            XCTAssertEqual(url, testURL)
+            XCTAssertFalse(isPrivate)
+        default:
+            break
+        }
+
+        switch randomRoute {
+        case .search(let url, let isPrivate, _):
+            XCTAssertEqual(url, testURL)
+            XCTAssertFalse(isPrivate)
+        default:
+            break
+        }
     }
 
     func test_makeRoute_ResetsShouldOpenNewTabAfterDelay() {
