@@ -16,6 +16,10 @@ protocol SearchEnginePickerDelegate: AnyObject {
 }
 
 final class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable {
+    private struct UX {
+        static let imageViewCornerRadius: CGFloat = 4
+    }
+
     // MARK: - Properties
     private enum Section: Int, CaseIterable {
         case defaultEngine
