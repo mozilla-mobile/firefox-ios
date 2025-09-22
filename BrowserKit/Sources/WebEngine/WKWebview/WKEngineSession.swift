@@ -63,7 +63,7 @@ class WKEngineSession: NSObject,
         let scriptResponder = EngineSessionScriptResponder()
         let metadataFetcher = DefaultMetadataFetcherHelper()
         let navigationHandler = DefaultNavigationHandler()
-        let uiHandler = DefaultUIHandler(sessionDependencies: dependencies)
+        let uiHandler = DefaultUIHandler(sessionDependencies: dependencies, alertPresenter: AlertPresenter(presenter: nil))
 
         return WKEngineSession(
             userScriptManager: userScriptManager,

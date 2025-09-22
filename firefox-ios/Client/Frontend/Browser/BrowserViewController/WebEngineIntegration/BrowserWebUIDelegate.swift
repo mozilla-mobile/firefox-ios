@@ -62,22 +62,36 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
             completionHandler: completionHandler
         )
     }
-
+    
     func webView(
         _ webView: WKWebView,
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor @Sendable (String?) -> Void
-    ) {
-        legacyResponder?.webView?(
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> String? {
+        return await engineResponder.webView(
             webView,
             runJavaScriptTextInputPanelWithPrompt: prompt,
             defaultText: defaultText,
-            initiatedByFrame: frame,
-            completionHandler: completionHandler
+            initiatedByFrame: frame
         )
     }
+
+//    func webView(
+//        _ webView: WKWebView,
+//        runJavaScriptTextInputPanelWithPrompt prompt: String,
+//        defaultText: String?,
+//        initiatedByFrame frame: WKFrameInfo,
+//        completionHandler: @escaping @MainActor @Sendable (String?) -> Void
+//    ) {
+//        legacyResponder?.webView?(
+//            webView,
+//            runJavaScriptTextInputPanelWithPrompt: prompt,
+//            defaultText: defaultText,
+//            initiatedByFrame: frame,
+//            completionHandler: completionHandler
+//        )
+//    }
 
     func webViewDidClose(_ webView: WKWebView) {
         legacyResponder?.webViewDidClose?(webView)

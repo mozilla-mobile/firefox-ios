@@ -292,7 +292,8 @@ class BrowserViewController: UIViewController,
     var copyAddressAction: AccessibleAction?
 
     private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
-        engineResponder: DefaultUIHandler(sessionCreator: tabManager as? SessionCreator),
+        engineResponder: DefaultUIHandler(sessionCreator: tabManager as? SessionCreator,
+                                          alertPresenter: AlertPresenter(presenter: self)),
         legacyResponder: self
     )
     /// The ui delegate used by a `WKWebView`

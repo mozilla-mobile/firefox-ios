@@ -167,7 +167,7 @@ class ShareSheetCoordinator: BaseCoordinator,
     // MARK: DevicePickerViewControllerDelegate
 
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
-        router.dismiss()
+        router.dismiss()  
         parentCoordinator?.didFinish(from: self)
     }
 

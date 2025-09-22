@@ -8,7 +8,8 @@ import Common
 
 public protocol WKUIHandler: WKUIDelegate {
     var delegate: EngineSessionDelegate? { get set }
-    var isActive: Bool {get set}
+    /// Wether the session attacched to this handler is active or not.
+    var isActive: Bool { get set }
 
     func webView(_ webView: WKWebView,
                  createWebViewWith configuration: WKWebViewConfiguration,
@@ -29,13 +30,13 @@ public protocol WKUIHandler: WKUIDelegate {
         completionHandler: @escaping @MainActor (Bool) -> Void
     )
 
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptTextInputPanelWithPrompt prompt: String,
-        defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (String?) -> Void
-    )
+//    func webView(
+//        _ webView: WKWebView,
+//        runJavaScriptTextInputPanelWithPrompt prompt: String,
+//        defaultText: String?,
+//        initiatedByFrame frame: WKFrameInfo,
+//        completionHandler: @escaping @MainActor (String?) -> Void
+//    )
 
     func webViewDidClose(_ webView: WKWebView)
 
@@ -52,6 +53,30 @@ public protocol WKUIHandler: WKUIDelegate {
         type: WKMediaCaptureType,
         decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
     )
+    
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptTextInputPanelWithPrompt prompt: String,
+        defaultText: String?,
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> String?
+}
+
+public class AlertPresenter {
+    weak var presenter: UIViewController?
+    
+    public init(presenter: UIViewController?) {
+        self.presenter = presenter
+    }
+    
+    @MainActor
+    func present(_ alert: UIAlertController) async {
+        await withCheckedContinuation { continuation in
+            self.presenter?.present(alert, animated: true) {
+                continuation.resume()
+            }
+        }
+    }
 }
 
 public class DefaultUIHandler: NSObject, WKUIHandler {
@@ -62,8 +87,10 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
     private let sessionDependencies: EngineSessionDependencies
     private let application: Application
     private let policyDecider: WKPolicyDecider
+    private let alertPresenter: AlertPresenter
 
     init(sessionDependencies: EngineSessionDependencies,
+         alertPresenter: AlertPresenter,
          sessionCreator: SessionCreator? = nil,
          application: Application = UIApplication.shared,
          policyDecider: WKPolicyDecider = WKPolicyDeciderFactory()) {
@@ -71,6 +98,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
         self.sessionDependencies = sessionDependencies
         self.policyDecider = policyDecider
         self.application = application
+        self.alertPresenter = alertPresenter
         super.init()
 
         (self.sessionCreator as? WKSessionCreator)?.onNewSessionCreated = { [weak self] in
@@ -78,8 +106,12 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
         }
     }
 
-    public convenience init(sessionCreator: SessionCreator?) {
-        self.init(sessionDependencies: .empty(), sessionCreator: sessionCreator)
+    public convenience init(sessionCreator: SessionCreator?, alertPresenter: AlertPresenter) {
+        self.init(
+            sessionDependencies: .empty(),
+            alertPresenter: alertPresenter,
+            sessionCreator: sessionCreator
+        )
     }
 
     public func webView(_ webView: WKWebView,
@@ -116,7 +148,9 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor () -> Void
     ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+        
+        
+        
     }
 
     public func webView(
@@ -127,15 +161,20 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
     ) {
         // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     }
-
+    
+    let store = DefaultJavscriptAlertStore()
+    
+    // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     public func webView(
         _ webView: WKWebView,
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor (String?) -> Void
-    ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+        initiatedByFrame frame: WKFrameInfo
+    ) async -> String? {
+        // assume cannot show.
+        let alert = MessageAlert(message: prompt, frame: frame) {}
+        await alertPresenter.present(alert.alertController())
+        return nil
     }
 
     public func webViewDidClose(_ webView: WKWebView) {
