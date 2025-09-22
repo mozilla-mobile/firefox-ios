@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "Gezinti";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "Daha fazla bilgi alın.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Daha fazla bilgi alın";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Çökme raporları tarayıcıyla ilgili sorunları teşhis etmemize ve düzeltmemize olanak tanır.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Bu, tarayıcıyla ilgili sorunları teşhis edip düzeltmemize yardımcı olur.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Çökme raporlarını otomatik olarak gönder";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "Daha fazla bilgi alın.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Daha fazla bilgi alın";
@@ -263,19 +254,10 @@
 "Settings.Summarize.Title.v142" = "Sayfa özetleri";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "Daha fazla bilgi alın.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Daha fazla bilgi alın";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@, yalnızca %2$@ tarayıcısını daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Cihazınız, donanım yapılandırmanız ve kullanımınızla ilgili veriler %@ tarayıcısının özelliklerini, performansını ve kararlılığını geliştirmemize yardımcı olur.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "Teknik veriler ve etkileşim verileri";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Teknik verileri ve etkileşim verilerini gönder";

@@ -40,6 +40,9 @@
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "Přetorhnyć";
 
+/* The label for the continue button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Dale";
+
 /* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
 "Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ KI wužiwa, kotraž na mróčeli bazuje, zo by strony zjimał a wróća wašemu gratej te zjeća.";
 
@@ -48,4 +51,16 @@
 
 /* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
 "Summarizer.ToS.Alert.Title.Label.v142" = "Zjeća stronow dowolić?";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Kak funguje";
+
+/* The label for the accept button on the Terms of Service information panel in the summarizer. */
+"Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Dale";
+
+/* The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.InfoPanel.Label.v143" = "Hlejće hłowne dypki w sekundach z %@.";
+
+/* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
+"Summarizer.ToS.InfoPanel.Title.Label.v143" = "Tutu stronu zjimać?";
 
