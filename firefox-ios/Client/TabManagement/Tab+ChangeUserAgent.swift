@@ -13,6 +13,11 @@ extension Tab {
             return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
         }()
 
+        private static let oldUAFileLocation: URL = {
+            let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
+        }()
+
         // TODO: FXIOS-12594 This global property is not concurrency safe
         nonisolated(unsafe) private static var baseDomainList: Set<String> = {
             if let data = getDataFromFile(),
@@ -85,19 +90,11 @@ extension Tab {
             return components.url ?? url
         }
 
-        private static func getOldUAFileLocation() -> URL {
-            let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
-        }
-
         private static func getDataFromFile() -> Data? {
-            if FileManager.default.fileExists(atPath: getOldUAFileLocation().path) {
-                let data = try? Data(contentsOf: getOldUAFileLocation())
-                try? FileManager.default.removeItem(at: getOldUAFileLocation())
-                return data
-            } else {
-                return try? Data(contentsOf: ChangeUserAgent.file)
+            if FileManager.default.fileExists(atPath: oldUAFileLocation.path) {
+                try? FileManager.default.moveItem(at: oldUAFileLocation, to: file)
             }
+            return try? Data(contentsOf: ChangeUserAgent.file)
         }
     }
 }
