@@ -37,5 +37,3 @@ public struct SecondaryButtonStyle: ButtonStyle {
             .foregroundColor(Color(uiColor: theme.colors.textSecondary))
     }
 }
-
-
