@@ -13,7 +13,7 @@ enum AccessoryType {
 class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
     // MARK: - Constants
     private struct UX {
-        static let accessoryViewHeight: CGFloat = 70
+        static let accessoryViewHeight: CGFloat = 56
         static let fixedSpacerWidth: CGFloat = 10
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
@@ -45,6 +45,8 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
 
     // MARK: - UI Elements
     private let toolbar: UIToolbar = .build()
+
+    private let toolbarTopHeightSpacer: UIView = .build()
 
     private lazy var previousButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
@@ -210,11 +212,20 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         spacer.accessibilityElementsHidden = true
     }
 
+    private func setupHeightSpacer(_ spacer: UIView, height: CGFloat) {
+        NSLayoutConstraint.activate([
+            spacer.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            spacer.heightAnchor.constraint(equalToConstant: height)
+        ])
+        spacer.accessibilityElementsHidden = true
+    }
+
     private func setupLayout() {
+        setupHeightSpacer(toolbarTopHeightSpacer, height: 4)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
-        toolbar.layer.cornerRadius = 24.0
+        layer.cornerRadius = 24.0
 
         toolbar.items = [
             currentAccessoryView,
@@ -233,20 +244,27 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             doneButton.customView
         ].compactMap { $0 }
 
+        addSubview(toolbarTopHeightSpacer)
         addSubview(toolbar)
 
         let topBottomOffset = CGFloat(2)
-        let sideOffset = CGFloat(6)
+        let sideOffset = CGFloat(8)
 
         NSLayoutConstraint.activate([
-              widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-              heightAnchor.constraint(equalToConstant: UX.accessoryViewHeight)
-          ])
+            leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: sideOffset),
+            trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -sideOffset),
+            heightAnchor.constraint(equalToConstant: UX.accessoryViewHeight)
+        ])
 
         NSLayoutConstraint.activate([
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: sideOffset),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -sideOffset),
-            toolbar.topAnchor.constraint(equalTo: topAnchor, constant: topBottomOffset),
+            toolbarTopHeightSpacer.topAnchor.constraint(equalTo: topAnchor),
+            toolbarTopHeightSpacer.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
+        ])
+
+        NSLayoutConstraint.activate([
+            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toolbar.topAnchor.constraint(equalTo: toolbarTopHeightSpacer.bottomAnchor),
             toolbar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -topBottomOffset)
         ])
     }
@@ -265,7 +283,8 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             theme.colors.layer5Hover
         }
 
-        toolbar.backgroundColor = backgroundColor
+        //toolbar.backgroundColor = backgroundColor
+        self.backgroundColor = backgroundColor
         [previousButton, nextButton, doneButton].forEach {
             $0.tintColor = theme.colors.iconAccentBlue
             $0.customView?.tintColor = theme.colors.iconAccentBlue
