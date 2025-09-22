@@ -3596,6 +3596,8 @@ nimbus_system:
           type: boolean
         has_enabled_tips_notifications:
           type: boolean
+        has_accepted_terms_of_use:
+          type: boolean
         is_apple_intelligence_available:
           type: boolean
         cannot_use_apple_intelligence:
