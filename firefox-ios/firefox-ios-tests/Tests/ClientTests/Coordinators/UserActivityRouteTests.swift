@@ -15,7 +15,13 @@ class UserActivityRouteTests: XCTestCase {
 
         let route = subject.makeRoute(userActivity: userActivity)
 
-        XCTAssertEqual(route, .search(url: nil, isPrivate: false))
+        switch route {
+        case .search(let url, let isPrivate, _):
+            XCTAssertFalse(isPrivate)
+            XCTAssertNil(url)
+        default:
+            XCTFail("route was not of expected type")
+        }
     }
 
     // Test the Route initializer with a deep link user activity.
@@ -26,7 +32,13 @@ class UserActivityRouteTests: XCTestCase {
 
         let route = subject.makeRoute(userActivity: userActivity)
 
-        XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), isPrivate: false))
+        switch route {
+        case .search(let url, let isPrivate, _):
+            XCTAssertFalse(isPrivate)
+            XCTAssertEqual(url?.absoluteString, "https://www.example.com")
+        default:
+            XCTFail("route was not of expected type")
+        }
     }
 
     // Test the Route initializer with a CoreSpotlight user activity.
@@ -37,7 +49,13 @@ class UserActivityRouteTests: XCTestCase {
 
         let route = subject.makeRoute(userActivity: userActivity)
 
-        XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), isPrivate: false))
+        switch route {
+        case .search(let url, let isPrivate, _):
+            XCTAssertFalse(isPrivate)
+            XCTAssertEqual(url?.absoluteString, "https://www.example.com")
+        default:
+            XCTFail("route was not of expected type")
+        }
     }
 
     // Test the Route initializer with an unsupported user activity.

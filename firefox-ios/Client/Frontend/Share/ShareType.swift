@@ -13,7 +13,7 @@ import Foundation
 ///           __SPECIAL NOTE__: If you download a PDF, you can view that in a tab. In that case, the URL may have a `file://`
 ///            scheme instead of `http(s)://`, so certain options, like Send to Device / Add to Home Screen, may not be
 ///            available.
-enum ShareType: Equatable {
+enum ShareType {
     case file(url: URL)
     case site(url: URL)
     case tab(url: URL, tab: any ShareTab)

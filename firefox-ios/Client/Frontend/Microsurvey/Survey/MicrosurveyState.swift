@@ -5,7 +5,7 @@
 import Redux
 import Common
 
-struct MicrosurveyState: ScreenState, Equatable {
+struct MicrosurveyState: ScreenState {
     var windowUUID: WindowUUID
     var shouldDismiss: Bool
     var showPrivacy: Bool
