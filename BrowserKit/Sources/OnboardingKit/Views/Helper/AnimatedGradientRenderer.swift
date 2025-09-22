@@ -77,7 +77,7 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private weak var metalView: MTKView?
     private var palette = GradientPalette.defaultColors
     private var previousFrameTexture: MTLTexture?
-    private var didClearPreviousFrameTexture: Bool = false
+    private var didClearPreviousFrameTexture = false
 
     var animationSpeedMultiplier: Float = 1.0 {
         didSet {
