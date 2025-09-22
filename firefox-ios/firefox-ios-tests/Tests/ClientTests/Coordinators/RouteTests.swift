@@ -369,7 +369,7 @@ class RouteTests: XCTestCase {
         switch route {
         case .search(let url, let isPrivate, let options):
             XCTAssertEqual(url, URL(string: "https://google.com")!)
-            XCTAssertFalse(isPrivate)
+            XCTAssertTrue(isPrivate)
             XCTAssertEqual(options, [.focusLocationField])
         default:
             XCTFail("The route should be a search route")
