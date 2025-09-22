@@ -28,7 +28,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         super.init(frame: frame)
 
         setupStyle()
-        setupTapGesture()
     }
 
     required init(coder: NSCoder) {
@@ -46,16 +45,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         axis = .vertical
         distribution = .fill
         alignment = .fill
-    }
-
-    private func setupTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        addGestureRecognizer(tapGesture)
-    }
-
-    @objc
-    private func handleTap() {
-        onTap?()
     }
 
     // MARK: - Spacer view
