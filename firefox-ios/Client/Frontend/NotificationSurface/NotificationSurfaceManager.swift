@@ -13,7 +13,8 @@ protocol NotificationSurfaceDelegate: AnyObject {
     func didDismissNotification(_ userInfo: [AnyHashable: Any])
 }
 
-class NotificationSurfaceManager: NotificationSurfaceDelegate {
+// TODO: FXIOS-FXIOS-13583 - NotificationSurfaceManager should be concurrency safe
+class NotificationSurfaceManager: NotificationSurfaceDelegate, @unchecked Sendable {
     struct Constant {
         static let notificationBaseId = "org.mozilla.ios.notification"
         static let notificationCategoryId = "org.mozilla.ios.notification.category"
@@ -97,6 +98,8 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
                                      interval: TimeInterval(Constant.messageDelay),
                                      repeats: false)
 
+        // TODO: FXIOS-13583 - Capture of 'message' with non-Sendable type 'GleanPlumbMessage' in a '@Sendable' closure
+        nonisolated(unsafe) let message = message
         // Schedule notification telemetry for when notification gets displayed
         DispatchQueue.global().asyncAfter(deadline: .now() + Constant.messageDelay) { [weak self] in
             self?.didDisplayMessage(message)
