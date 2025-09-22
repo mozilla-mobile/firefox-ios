@@ -1868,11 +1868,7 @@ class BrowserViewController: UIViewController,
     // Update border to hide when microsurvey is shown so that
     // it appears to belong the app and harder to spoof
     private func updateBarBordersForMicrosurvey() {
-//        guard !shouldUseiPadSetup(), !isToolbarRefactorEnabled else { return }
-//        let hasMicrosurvery = microsurvey != nil
-//
-//        tabToolbar.isMicrosurveyShown = hasMicrosurvery
-//        tabToolbar.setNeedsDisplay()
+        guard !shouldUseiPadSetup() else { return }
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
