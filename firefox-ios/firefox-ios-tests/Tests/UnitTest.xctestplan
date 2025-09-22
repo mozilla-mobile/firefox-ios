@@ -110,9 +110,6 @@
       }
     },
     {
-      "skippedTests" : [
-        "WKEngineWebViewTests\/testCurrentHistoryItemSetAfterVisitingPage()"
-      ],
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "WebEngineTests",
