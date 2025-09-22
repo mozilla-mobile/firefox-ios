@@ -283,7 +283,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             theme.colors.layer5Hover
         }
 
-        //toolbar.backgroundColor = backgroundColor
+        // toolbar.backgroundColor = backgroundColor
         self.backgroundColor = backgroundColor
         [previousButton, nextButton, doneButton].forEach {
             $0.tintColor = theme.colors.iconAccentBlue
