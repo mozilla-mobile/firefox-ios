@@ -57,9 +57,15 @@ class TabTraySelectorView: UIView,
     }
 
     private lazy var visualEffectView: UIVisualEffectView = .build { view in
+#if canImport(FoundationModels)
         if #available(iOS 26, *) {
             view.effect = UIGlassEffect(style: .regular)
+        } else {
+            return UIBlurEffect(style: .systemUltraThinMaterial)
         }
+#else
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+#endif
     }
 
     init(selectedIndex: Int,
