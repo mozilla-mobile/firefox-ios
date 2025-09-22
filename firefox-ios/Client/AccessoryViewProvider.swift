@@ -18,6 +18,8 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
+        static let spacerViewHeight: CGFloat = 4
+        static let cornerRadius: CGFloat = 24.0
     }
 
     // MARK: - Properties
@@ -221,11 +223,11 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     }
 
     private func setupLayout() {
-        setupHeightSpacer(toolbarTopHeightSpacer, height: 4)
+        setupHeightSpacer(toolbarTopHeightSpacer, height: UX.spacerViewHeight)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
 
-        layer.cornerRadius = 24.0
+        layer.cornerRadius = UX.cornerRadius
 
         toolbar.items = [
             currentAccessoryView,
