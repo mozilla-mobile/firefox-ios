@@ -75,7 +75,7 @@ class CopyPasteTest: BaseTestCase {
         } else {
             waitForHittable(app.buttons["Forward"].firstMatch)
         }
-        if iPad() {
+        if iPad(), #available(iOS 26, *) {
             app.buttons["Forward"].firstMatch.tap()
             XCTAssertTrue(app.buttons["Copy"].isEnabled)
             app.buttons["Copy"].tap()
