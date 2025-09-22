@@ -327,7 +327,7 @@ final class AddressToolbarContainer: UIView,
     private func setupLayout() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onContainerTapped))
         addGestureRecognizer(tapGesture)
-        
+
         addSubview(progressBar)
 
         NSLayoutConstraint.activate([
@@ -428,7 +428,7 @@ final class AddressToolbarContainer: UIView,
         }
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false, theme: theme)
     }
-    
+
     // MARK: - GestureRecognizer
     @objc
     private func onContainerTapped() {
