@@ -1068,8 +1068,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return false }
 
+        let isTraitCollectionDidChangeAction = action.actionType as? ToolbarActionType == .traitCollectionDidChange
+        let isShowingNavigationToolbar = if isTraitCollectionDidChangeAction {
+            action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        } else {
+            toolbarState.isShowingNavigationToolbar
+        }
+        let isShowingTopTabs = if isTraitCollectionDidChangeAction {
+            action.isShowingTopTabs ?? toolbarState.isShowingTopTabs
+        } else {
+            toolbarState.isShowingTopTabs
+        }
+
         let toolbarPosition = toolbarPosition(action: action)
-        return toolbarPosition == .top && !toolbarState.isShowingTopTabs && toolbarState.isShowingNavigationToolbar
+        return toolbarPosition == .top && !isShowingTopTabs && isShowingNavigationToolbar
     }
 
     private static func tabsAction(
