@@ -120,12 +120,12 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
     const float kBasePulsationSpeed = 1.2f;
 
     // Animation constants
-    const float kControlPointAnimationRadius = 0.2f;  // ACTUAL CHANGE: 0.25f -> 0.2f
-    const float kBaseInfluenceRadius = 0.725f;        // ACTUAL CHANGE: 0.8f -> 0.725f
-    const float kPulsationAmplitude = 0.05f;          // ACTUAL CHANGE: 0.1f -> 0.05f
+    const float kControlPointAnimationRadius = 0.2f;
+    const float kBaseInfluenceRadius = 0.725f;
+    const float kPulsationAmplitude = 0.05f;
     const float kPulsationOffset = 0.15f;
-    const float kNoiseScale = 10.0f;                  // ACTUAL CHANGE: 12.0f -> 10.0f
-    const float kNoiseInfluence = 0.1f;               // ACTUAL CHANGE: 0.15f -> 0.1f
+    const float kNoiseScale = 10.0f;
+    const float kNoiseInfluence = 0.1f;
     const float kNoiseTimeScale = 0.5f;
 
     // Motion blur constants
