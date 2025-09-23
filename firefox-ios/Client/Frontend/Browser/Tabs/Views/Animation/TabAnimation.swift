@@ -416,12 +416,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         toView: UIView,
         context: UIViewControllerContextTransitioning
     ) {
-        // Take a screenshot of the tab tray before the view is refreshed so that we don't
-        // see the tab appearing in the collection view before we are done animating
-        guard let tabTraySnapshot = panelViewController.takeScreenshot() else {
-            context.completeTransition(true)
-            return
-        }
+        let snapshot = panelViewController.view.snapshot
+        let tabTraySnapshot = UIImageView(image: snapshot)
+        tabTraySnapshot.frame = view.bounds
+        tabTraySnapshot.isUserInteractionEnabled = false
+        tabTraySnapshot.contentMode = .scaleToFill
 
         contentContainer.isHidden = true
 
