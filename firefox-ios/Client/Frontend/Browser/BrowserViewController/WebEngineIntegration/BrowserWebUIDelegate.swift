@@ -41,7 +41,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor @Sendable () -> Void
     ) {
-        legacyResponder?.webView?(
+        engineResponder.webView(
             webView,
             runJavaScriptAlertPanelWithMessage: message,
             initiatedByFrame: frame,
@@ -62,36 +62,22 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
             completionHandler: completionHandler
         )
     }
-    
+
     func webView(
         _ webView: WKWebView,
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo
-    ) async -> String? {
-        return await engineResponder.webView(
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping @MainActor @Sendable (String?) -> Void
+    ) {
+        legacyResponder?.webView?(
             webView,
             runJavaScriptTextInputPanelWithPrompt: prompt,
             defaultText: defaultText,
-            initiatedByFrame: frame
+            initiatedByFrame: frame,
+            completionHandler: completionHandler
         )
     }
-
-//    func webView(
-//        _ webView: WKWebView,
-//        runJavaScriptTextInputPanelWithPrompt prompt: String,
-//        defaultText: String?,
-//        initiatedByFrame frame: WKFrameInfo,
-//        completionHandler: @escaping @MainActor @Sendable (String?) -> Void
-//    ) {
-//        legacyResponder?.webView?(
-//            webView,
-//            runJavaScriptTextInputPanelWithPrompt: prompt,
-//            defaultText: defaultText,
-//            initiatedByFrame: frame,
-//            completionHandler: completionHandler
-//        )
-//    }
 
     func webViewDidClose(_ webView: WKWebView) {
         legacyResponder?.webViewDidClose?(webView)

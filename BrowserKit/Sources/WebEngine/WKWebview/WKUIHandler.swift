@@ -30,13 +30,13 @@ public protocol WKUIHandler: WKUIDelegate {
         completionHandler: @escaping @MainActor (Bool) -> Void
     )
 
-//    func webView(
-//        _ webView: WKWebView,
-//        runJavaScriptTextInputPanelWithPrompt prompt: String,
-//        defaultText: String?,
-//        initiatedByFrame frame: WKFrameInfo,
-//        completionHandler: @escaping @MainActor (String?) -> Void
-//    )
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptTextInputPanelWithPrompt prompt: String,
+        defaultText: String?,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping @MainActor (String?) -> Void
+    )
 
     func webViewDidClose(_ webView: WKWebView)
 
@@ -53,13 +53,6 @@ public protocol WKUIHandler: WKUIDelegate {
         type: WKMediaCaptureType,
         decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void
     )
-    
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptTextInputPanelWithPrompt prompt: String,
-        defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo
-    ) async -> String?
 }
 
 public class AlertPresenter {
@@ -70,16 +63,16 @@ public class AlertPresenter {
     }
     
     @MainActor
-    func present(_ alert: UIAlertController) async {
-        await withCheckedContinuation { continuation in
-            self.presenter?.present(alert, animated: true) {
-                continuation.resume()
-            }
-        }
+    func present(_ alert: UIAlertController) {
+        presenter?.present(alert, animated: true)
+    }
+    
+    func canPresent() -> Bool {
+        return presenter?.presentedViewController == nil
     }
 }
 
-public class DefaultUIHandler: NSObject, WKUIHandler {
+public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertControllerDelegate {
     public weak var delegate: EngineSessionDelegate?
     private var sessionCreator: SessionCreator?
 
@@ -88,6 +81,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
     private let application: Application
     private let policyDecider: WKPolicyDecider
     private let alertPresenter: AlertPresenter
+    private let store = DefaultJavscriptAlertStore()
 
     init(sessionDependencies: EngineSessionDependencies,
          alertPresenter: AlertPresenter,
@@ -142,15 +136,24 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
         }
     }
 
+    let logger = DefaultLogger.shared
+    
     public func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor () -> Void
     ) {
-        
-        
-        
+        let alert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
+        if alertPresenter.canPresent() {
+            let controller = alert.alertController()
+            controller.delegate = self
+            logger.log("Presenting alert controller", level: .fatal, category: .webview)
+            alertPresenter.present(controller)
+        } else {
+            logger.log("storing alert controller", level: .fatal, category: .webview)
+            store.add(alert)
+        }
     }
 
     public func webView(
@@ -162,19 +165,15 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
         // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     }
     
-    let store = DefaultJavscriptAlertStore()
-    
     // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     public func webView(
         _ webView: WKWebView,
         runJavaScriptTextInputPanelWithPrompt prompt: String,
         defaultText: String?,
-        initiatedByFrame frame: WKFrameInfo
-    ) async -> String? {
-        // assume cannot show.
-        let alert = MessageAlert(message: prompt, frame: frame) {}
-        await alertPresenter.present(alert.alertController())
-        return nil
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping @MainActor (String?) -> Void
+    ) {
+        
     }
 
     public func webViewDidClose(_ webView: WKWebView) {
@@ -199,5 +198,11 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
             return
         }
         decisionHandler(.prompt)
+    }
+    
+    // MARK: - WKJavaScriptPromptAlertControllerDelegate
+    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
+        guard let alert = store.popFirst(), alertPresenter.canPresent() else { return }
+        alertPresenter.present(alert.alertController())
     }
 }

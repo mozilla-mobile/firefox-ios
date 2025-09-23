@@ -4,12 +4,13 @@
 
 import Foundation
 
-protocol WKJavscriptAlertStore: Actor {
+@MainActor
+protocol WKJavscriptAlertStore {
     func add(_ alert: WKJavaScriptAlertInfo)
     func popFirst() -> WKJavaScriptAlertInfo?
 }
 
-actor DefaultJavscriptAlertStore: WKJavscriptAlertStore {
+class DefaultJavscriptAlertStore: WKJavscriptAlertStore {
     private var alerts: [WKJavaScriptAlertInfo] = []
     
     func add(_ alert: WKJavaScriptAlertInfo) {

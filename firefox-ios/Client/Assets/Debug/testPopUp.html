@@ -15,8 +15,16 @@
 
     <br><br>
 
-    <button onclick="alert('This is an Alert')">SHOW ALERT</button>
+    <button onclick="showAlertWithDelay(2000)">2 SECONDS DELAY SHOW ALERT</button>
+    <button onclick="showAlertWithDelay(0)">SHOW ALERT</button>
     <button onclick="confirm('This is a Confirmation')">SHOW CONFIRM</button>
     <button onclick="prompt('This is a Prompt')">SHOW PROMPT</button>
+    <script>
+        function showAlertWithDelay(delay) {
+            setTimeout(function () {
+                  alert("This is an alert (after delay)");
+                }, delay);
+        }
+    </script>
 </body>
 </html>
