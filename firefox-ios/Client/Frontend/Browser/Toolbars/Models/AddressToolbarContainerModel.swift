@@ -34,6 +34,7 @@ final class AddressToolbarContainerModel: Equatable {
     let canShowNavigationHint: Bool
     let shouldAnimate: Bool
     let scrollAlpha: Float
+    let isTopToolbar: Bool
 
     let windowUUID: UUID
 
@@ -43,7 +44,8 @@ final class AddressToolbarContainerModel: Equatable {
         let shouldBlur = toolbarHelper.shouldBlur()
         let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
                                                                          scrollAlpha: CGFloat(scrollAlpha),
-                                                                         shouldBlur: shouldBlur)
+                                                                         shouldBlur: shouldBlur,
+                                                                         isTopToolbar: isTopToolbar)
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {
@@ -229,6 +231,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
         self.scrollAlpha = state.scrollAlpha
+        self.isTopToolbar = state.toolbarPosition == .top && !state.isShowingTopTabs
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
     }

@@ -37,6 +37,7 @@ final class LocationView: UIView,
     private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
     private var scrollAlpha: CGFloat = 1
+    private var isTopToolbar = false
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -146,6 +147,8 @@ final class LocationView: UIView,
                    uxConfig: AddressToolbarUXConfiguration,
                    addressBarPosition: AddressToolbarPosition) {
         isURLTextFieldCentered = uxConfig.isLocationTextCentered
+        isTopToolbar = uxConfig.isTopToolbar
+
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
@@ -178,6 +181,9 @@ final class LocationView: UIView,
         onLongPress = config.onLongPress
 
         layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
+
+        guard let theme else { return }
+        applyTheme(theme: theme)
     }
 
     private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
@@ -673,17 +679,18 @@ final class LocationView: UIView,
         self.theme = theme
         let colors = theme.colors
 
+        let mainBackgroundColor = isTopToolbar ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = Gradient(
             colors: [
-                colors.layerSurfaceMedium.withAlphaComponent(1),
-                colors.layerSurfaceMedium.withAlphaComponent(0)
+                mainBackgroundColor.withAlphaComponent(1),
+                mainBackgroundColor.withAlphaComponent(0)
             ]
         ).cgColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : colors.layerSurfaceMedium
-        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : colors.layerSurfaceMedium
+        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
+        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
