@@ -26,6 +26,8 @@ private enum AnimatedGradientUX {
     static let fragmentShaderFunctionName = "animatedGradientFragment"
     static let fullScreenQuadVertexCount = 4
     static let timeBufferIndex = 0
+    static let normalAnimationSpeed: Float = 2.0
+    static let reducedMotionSpeed: Float = 0.0
 }
 
 extension SIMD3 where Scalar == Float {
@@ -233,7 +235,10 @@ class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     }
 
     private func advanceAnimationTime() {
-        currentTime += AnimatedGradientUX.timeIncrementPerFrame * animationSpeedMultiplier
+        // Only advance time if speed multiplier is greater than 0
+        if animationSpeedMultiplier > 0 {
+            currentTime += AnimatedGradientUX.timeIncrementPerFrame * animationSpeedMultiplier
+        }
     }
 }
 
@@ -276,7 +281,9 @@ struct AnimatedGradientMetalView: View {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        _rendererStore = StateObject(wrappedValue: RendererStore(device: metalDevice, speed: 3.0))
+        // Set speed to 0 if reduce motion is enabled, otherwise use normal speed
+        let speed: Float = UIAccessibility.isReduceMotionEnabled ? AnimatedGradientUX.reducedMotionSpeed : AnimatedGradientUX.normalAnimationSpeed
+        _rendererStore = StateObject(wrappedValue: RendererStore(device: metalDevice, speed: speed))
     }
 
     var body: some View {
@@ -284,10 +291,14 @@ struct AnimatedGradientMetalView: View {
             AnimatedGradientMetalViewRepresentable(delegate: delegate)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                    updateAnimationSpeedForReduceMotion()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
                     guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIAccessibility.reduceMotionStatusDidChangeNotification)) { _ in
+                    updateAnimationSpeedForReduceMotion()
                 }
         } else {
             LinearGradient(
@@ -305,6 +316,11 @@ struct AnimatedGradientMetalView: View {
                 applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
         }
+    }
+
+    private func updateAnimationSpeedForReduceMotion() {
+        let speed: Float = UIAccessibility.isReduceMotionEnabled ? AnimatedGradientUX.reducedMotionSpeed : AnimatedGradientUX.normalAnimationSpeed
+        rendererStore.renderer?.animationSpeedMultiplier = speed
     }
 
     private func applyTheme(theme: Theme) {
