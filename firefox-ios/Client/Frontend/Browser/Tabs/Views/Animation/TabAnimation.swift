@@ -428,7 +428,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabTraySnapshot.layer.cornerCurve = .continuous
         tabTraySnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
         tabTraySnapshot.clipsToBounds = true
-        tabTraySnapshot.alpha = UX.opaqueAlpha
 
         toView.layer.cornerCurve = .continuous
         toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
