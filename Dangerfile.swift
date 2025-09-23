@@ -148,33 +148,33 @@ func checkBigPullRequest() {
     let additionsAndDeletions = additions + deletions
     if additionsAndDeletions > monsterPRThreshold {
         fail("""
-        Heads up reviewers: this PR is very large (\(additionsAndDeletions) lines).  
-        Consider taking extra time, asking for a high-level summary, or reviewing in focused passes.  
+        Heads up reviewers: this PR is very large (\(additionsAndDeletions) lines).
+        Consider taking extra time, asking for a high-level summary, or reviewing in focused passes.
         Splitting into smaller PRs or using an epic branch might also help with clarity.
         """)
 
         markdown("""
         ### 🧟‍♂️ **Monster PR**
-        Wow, this PR is **huge** — \(additionsAndDeletions) lines changed!  
-        Thanks for powering through such a big task 🙌.  
+        Wow, this PR is **huge** — \(additionsAndDeletions) lines changed!
+        Thanks for powering through such a big task 🙌.
         Reviewers: feel free to ask for extra context, screenshots, or a breakdown to make reviewing smoother.
         """)
     } else if additionsAndDeletions > bigPRThreshold {
         warn("""
-        Note for reviewers: this PR is larger than usual (\(additionsAndDeletions) lines).  
+        Note for reviewers: this PR is larger than usual (\(additionsAndDeletions) lines).
         It may help to request a quick overview or suggest splitting if multiple concerns are bundled together.
         """)
 
         markdown("""
         ### 🏔️ **Summit Climber**
-        This PR is a **big climb** — \(additionsAndDeletions) lines changed!  
-        Thanks for taking on the heavy lifting 💪.  
+        This PR is a **big climb** — \(additionsAndDeletions) lines changed!
+        Thanks for taking on the heavy lifting 💪.
         Reviewers: a quick overview or walkthrough will make the ascent smoother.
         """)
     } else if additionsAndDeletions > mediumPRThreshold {
         markdown("""
         ### 🧩 **Neat Piece**
-        Nice! This PR changes \(additionsAndDeletions) lines — a substantial update,  
+        Nice! This PR changes \(additionsAndDeletions) lines — a substantial update,
         but still review-friendly if there’s a clear description. Thanks for keeping things moving! 🚀
         """)
     }
@@ -368,8 +368,8 @@ func checkStringsFile() {
     if touchedStrings {
         markdown("""
         ### ✍️ **Strings Updated**
-        Detected changes in `Shared/Strings.swift`.  
-        To keep strings up to standard, please tag a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) for review. 🌍  
+        Detected changes in `Shared/Strings.swift`.
+        To keep strings up to standard, please tag a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) for review. 🌍
         """)
     }
 }
@@ -400,8 +400,8 @@ func checkDescriptionSection() {
 
         commentDescriptionSection(desc: desc)
     } else if let match = regexDescriptionChecklist.firstMatch(in: body,
-                                                          options: [],
-                                                          range: NSRange(location: 0, length: body.utf16.count)),
+                                                               options: [],
+                                                               range: NSRange(location: 0, length: body.utf16.count)),
               let range = Range(match.range(at: 1), in: body) {
         // Extract description content
         var desc = String(body[range])
