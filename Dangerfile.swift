@@ -85,6 +85,8 @@ func checkCodeCoverage() {
         .xcresultBundle(xcresult),
         minimumCoverage: 50
     )
+
+    Coverage.spmCoverage(minimumCoverage: 50)
 }
 
 func failOnNewFilesWithoutCoverage() {
@@ -363,7 +365,7 @@ func checkDescriptionSection() {
         desc = desc.replacingOccurrences(of: #"<!--.*?-->"#, with: "", options: .regularExpression)
 
         commentDescriptionSection(desc: desc)
-    } else if let match = regexDescriptionDemo.firstMatch(in: body,
+    } else if let match = regexDescriptionChecklist.firstMatch(in: body,
                                                           options: [],
                                                           range: NSRange(location: 0, length: body.utf16.count)),
               let range = Range(match.range(at: 1), in: body) {
