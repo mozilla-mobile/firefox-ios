@@ -85,8 +85,6 @@ func checkCodeCoverage() {
         .xcresultBundle(xcresult),
         minimumCoverage: 50
     )
-
-    Coverage.spmCoverage(minimumCoverage: 50)
 }
 
 func failOnNewFilesWithoutCoverage() {
