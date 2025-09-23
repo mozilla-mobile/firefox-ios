@@ -139,13 +139,44 @@ func failOnNewFilesWithoutCoverage() {
 // swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
+    let thisIsStartingToBeBigThreshold = 500
     let bigPRThreshold = 800
+    let monsterPRThreshold = 2000
     guard let additions = danger.github.pullRequest.additions,
           let deletions = danger.github.pullRequest.deletions else { return }
 
     let additionsAndDeletions = additions + deletions
-    if additionsAndDeletions > bigPRThreshold {
-        warn("This Pull Request seems quite large. If it consists of multiple changes, try splitting them into separate PRs for a faster review process. Consider using epic branches for work impacting main.")
+    if additionsAndDeletions > monsterPRThreshold {
+        fail("""
+        Heads up reviewers: this PR is very large (\(additionsAndDeletions) lines).  
+        Consider taking extra time, asking for a high-level summary, or reviewing in focused passes.  
+        Splitting into smaller PRs or using an epic branch might also help with clarity.
+        """)
+
+        markdown("""
+        ### 🧟‍♂️ **Monster PR**
+        Wow, this PR is **huge** — \(additionsAndDeletions) lines changed!  
+        Thanks for powering through such a big task 🙌.  
+        Reviewers: feel free to ask for extra context, screenshots, or a breakdown to make reviewing smoother.
+        """)
+    } else if additionsAndDeletions > bigPRThreshold {
+        warn("""
+        Note for reviewers: this PR is larger than usual (\(additionsAndDeletions) lines).  
+        It may help to request a quick overview or suggest splitting if multiple concerns are bundled together.
+        """)
+
+        markdown("""
+        ### 🏔️ **Summit Climber**
+        This PR is a **big climb** — \(additionsAndDeletions) lines changed!  
+        Thanks for taking on the heavy lifting 💪.  
+        Reviewers: a quick overview or walkthrough will make the ascent smoother.
+        """)
+    } else if additionsAndDeletions > mediumPRThreshold {
+        markdown("""
+        ### 🧩 **Neat Piece**
+        Nice! This PR changes \(additionsAndDeletions) lines — a substantial update,  
+        but still review-friendly if there’s a clear description. Thanks for keeping things moving! 🚀
+        """)
     }
 }
 
@@ -330,12 +361,15 @@ func checkAlphabeticalOrder(inFile filePath: String) {
 // Check if there's String file changes, and if so ask the l10n reviewers
 func checkStringsFile() {
     let edited = danger.git.modifiedFiles
-    let touchedStrings = edited.contains(where: { $0 == "firefox-ios/Shared/Strings.swift" })
+    let touchedStrings = edited.filter { path in
+        path.localizedCaseInsensitiveContains("/Strings.swift")
+    }
 
     if touchedStrings {
         markdown("""
-        ### ✍️ **Strings file changed**
-        "Please ask a member of [@mozilla-mobile/firefox-ios-l10n](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) team for Strings review ✍️"
+        ### ✍️ **Strings Updated**
+        Detected changes in `Shared/Strings.swift`.  
+        To keep strings up to standard, please tag a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) for review. 🌍  
         """)
     }
 }
