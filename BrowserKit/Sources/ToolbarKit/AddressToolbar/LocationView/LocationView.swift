@@ -672,28 +672,27 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
-        // Get the appearance based on `isURLTextFieldCentered`
-        let appearance: LocationViewAppearanceConfiguration = if isURLTextFieldCentered {
-            .getAppearanceForVersion(theme: theme)
-        } else {
-            .getAppearanceForBaseline(theme: theme)
-        }
 
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
-        gradientLayer.colors = appearance.gradientColors
+        gradientLayer.colors = Gradient(
+            colors: [
+                colors.layerSurfaceMedium.withAlphaComponent(1),
+                colors.layerSurfaceMedium.withAlphaComponent(0)
+            ]
+        ).cgColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
-        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
+        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : colors.layerSurfaceMedium
+        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : colors.layerSurfaceMedium
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
-            attributes: [.foregroundColor: appearance.placeholderColor]
+            attributes: [.foregroundColor: colors.textPrimary]
         )
 
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = appearance.etpIconTintColor
-        lockIconImageColor = appearance.etpIconImageColor
+        lockIconButton.tintColor = colors.textSecondary
+        lockIconImageColor = colors.textSecondary
 
         setLockIconImage()
         // Applying the theme to urlTextField can cause the url formatting to get removed
