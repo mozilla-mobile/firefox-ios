@@ -282,7 +282,9 @@ struct AnimatedGradientMetalView: View {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         // Set speed to 0 if reduce motion is enabled, otherwise use normal speed
-        let speed: Float = UIAccessibility.isReduceMotionEnabled ? AnimatedGradientUX.reducedMotionSpeed : AnimatedGradientUX.normalAnimationSpeed
+        let speed: Float = UIAccessibility.isReduceMotionEnabled
+        ? AnimatedGradientUX.reducedMotionSpeed
+        : AnimatedGradientUX.normalAnimationSpeed
         _rendererStore = StateObject(wrappedValue: RendererStore(device: metalDevice, speed: speed))
     }
 
@@ -297,7 +299,11 @@ struct AnimatedGradientMetalView: View {
                     guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
-                .onReceive(NotificationCenter.default.publisher(for: UIAccessibility.reduceMotionStatusDidChangeNotification)) { _ in
+                .onReceive(
+                    NotificationCenter.default.publisher(
+                        for: UIAccessibility.reduceMotionStatusDidChangeNotification
+                    )
+                ) { _ in
                     updateAnimationSpeedForReduceMotion()
                 }
         } else {
@@ -319,7 +325,9 @@ struct AnimatedGradientMetalView: View {
     }
 
     private func updateAnimationSpeedForReduceMotion() {
-        let speed: Float = UIAccessibility.isReduceMotionEnabled ? AnimatedGradientUX.reducedMotionSpeed : AnimatedGradientUX.normalAnimationSpeed
+        let speed: Float = UIAccessibility.isReduceMotionEnabled
+        ? AnimatedGradientUX.reducedMotionSpeed
+        : AnimatedGradientUX.normalAnimationSpeed
         rendererStore.renderer?.animationSpeedMultiplier = speed
     }
 
