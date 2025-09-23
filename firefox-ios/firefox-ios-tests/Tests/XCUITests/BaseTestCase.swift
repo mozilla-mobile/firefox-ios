@@ -600,11 +600,13 @@ extension XCUIElement {
     /// Waits for the UI element and then taps if it exists.
     func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        Thread.sleep(forTimeInterval: 0.5) // Allow animations to settle
         self.tap()
     }
     /// Waits for the UI element and then taps and types the provided text if it exists.
     func tapAndTypeText(_ text: String, timeout: TimeInterval? = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        Thread.sleep(forTimeInterval: 0.5) // Allow animations to settle
         self.tap()
         self.typeText(text)
     }
