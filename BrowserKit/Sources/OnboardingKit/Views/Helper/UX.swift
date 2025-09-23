@@ -26,6 +26,14 @@ enum UX {
                 return 32
             }
         }
+        static func titleTopPadding(for screenHeight: CGFloat) -> CGFloat {
+            // iPhone SE and similar small devices (height <= 667)
+            if screenHeight <= 667 {
+                return 80
+            }
+            // Larger iPhones
+            return 100
+        }
         static let titleTopPadding: CGFloat = 80
         static let titleAlignmentMinHeightPadding: CGFloat = 80
         static let cardHeightRatio: CGFloat = 0.8
