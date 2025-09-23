@@ -41,6 +41,8 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 VStack {
                     cardContent(geometry: geometry, scale: scale)
                     Spacer()
+                        .frame(height: UX.CardView.pageControlHeight)
+                        .padding(.bottom)
                 }
                 .padding(.top, UX.CardView.cardTopPadding)
                 .onAppear {
@@ -78,7 +80,6 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
         .background(
             RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                 .fill(cardBackgroundColor)
@@ -86,6 +87,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         )
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
         .accessibilityElement(children: .contain)
+        .padding(.vertical)
     }
 
     // MARK: - Subviews

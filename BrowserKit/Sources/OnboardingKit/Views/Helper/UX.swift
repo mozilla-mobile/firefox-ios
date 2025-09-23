@@ -32,6 +32,7 @@ enum UX {
         static let spacing: CGFloat = 24
         static let regularSizeSpacing: CGFloat = 48
         static let tosSpacing: CGFloat = 48
+        static let pageControlHeight: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
         static let verticalPadding: CGFloat = 24
         static let imageHeight: CGFloat = 150
