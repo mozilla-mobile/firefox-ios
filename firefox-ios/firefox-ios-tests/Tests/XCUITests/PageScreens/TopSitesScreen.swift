@@ -72,4 +72,32 @@ final class TopSitesScreen {
             "TopSites should not be visible or interactable on the current screen"
         )
     }
+
+    // Asserts a top site with a specific label exists.
+    func assertTopSiteExists(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
+        let linkElement = app.links.staticTexts[name]
+        BaseTestCase().mozWaitForElementToExist(linkElement, timeout: timeout)
+    }
+
+    // Asserts a top site with a specific label does not exist.
+    func assertTopSiteDoesNotExist(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
+        let linkElement = app.links.staticTexts[name]
+        BaseTestCase().mozWaitForElementToNotExist(linkElement, timeout: timeout)
+    }
+
+    // Taps on a pinned top site.
+    func tapOnPinnedSite(named name: String) {
+        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+            .links["Pinned: \(name)"]
+        BaseTestCase().mozWaitForElementToExist(pinnedSite)
+        pinnedSite.waitAndTap()
+    }
+
+    // Long-presses on a pinned top site to show the context menu.
+    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 1.0) {
+        let pinnedSite = app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
+            .links["Pinned: \(name)"]
+        BaseTestCase().mozWaitForElementToExist(pinnedSite)
+        pinnedSite.press(forDuration: duration)
+    }
 }
