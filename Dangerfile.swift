@@ -137,7 +137,7 @@ func failOnNewFilesWithoutCoverage() {
 // swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
-    let mediumPRThreshold = 500
+    let mediumPRThreshold = 400
     let bigPRThreshold = 800
     let monsterPRThreshold = 2000
     guard let additions = danger.github.pullRequest.additions,
@@ -153,7 +153,7 @@ func checkBigPullRequest() {
 
         markdown("""
         ### 🧟‍♂️ **Monster PR**
-        Wow, this PR is **huge** — \(additionsAndDeletions) lines changed!
+        Wow, this PR is **huge** with \(additionsAndDeletions) lines changed!
         Thanks for powering through such a big task 🙌.
         Reviewers: feel free to ask for extra context, screenshots, or a breakdown to make reviewing smoother.
         """)
@@ -165,15 +165,20 @@ func checkBigPullRequest() {
 
         markdown("""
         ### 🏔️ **Summit Climber**
-        This PR is a **big climb** — \(additionsAndDeletions) lines changed!
+        This PR is a **big climb** with \(additionsAndDeletions) lines changed!
         Thanks for taking on the heavy lifting 💪.
         Reviewers: a quick overview or walkthrough will make the ascent smoother.
         """)
     } else if additionsAndDeletions > mediumPRThreshold {
         markdown("""
         ### 🧩 **Neat Piece**
-        Nice! This PR changes \(additionsAndDeletions) lines — a substantial update,
+        This PR changes \(additionsAndDeletions) lines. It's a substantial update,
         but still review-friendly if there’s a clear description. Thanks for keeping things moving! 🚀
+        """)
+    } else {
+        markdown("""
+        ### 🥇 **Perfect PR size**
+        Smaller PRs are easier to review. Thanks for making life easy for reviewers! ✨
         """)
     }
 }
@@ -367,7 +372,7 @@ func checkStringsFile() {
         markdown("""
         ### ✍️ **Strings Updated**
         Detected changes in `Shared/Strings.swift`.
-        To keep strings up to standard, please tag a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) for review. 🌍
+        To keep strings up to standards, please tag a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) for review. 🌍
         """)
     }
 }
@@ -412,14 +417,12 @@ func checkDescriptionSection() {
 func commentDescriptionSection(desc: String) {
     let count = desc.trimmingCharacters(in: .whitespacesAndNewlines).count
     if count == 0 {
-        warn("""
-            💡 **More details help!**
-            Your description section is empty. Adding a bit more context will make reviews smoother. 🙌
+        fail("""
+            Details needed! Your description section is empty. Adding a bit more context will make reviews smoother.
             """)
     } else if count < 10 {
         warn("""
-            💡 **More details help!**
-            Your description section is a bit short (\(count) characters). Adding a bit more context will make reviews smoother. 🙌
+            Extra details help! Your description section is a bit short (\(count) characters). Adding a bit more context will make reviews smoother.
             """)
     } else if count >= 300 {
         markdown("""
