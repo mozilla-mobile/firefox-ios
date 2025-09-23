@@ -41,13 +41,13 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
         GeometryReader { geometry in
             scrollViewContent(geometry: geometry)
                 .padding(.top, UX.CardView.cardTopPadding)
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
+                .onAppear {
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                    guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
         }
     }
 
@@ -81,11 +81,27 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             }
             .padding(UX.CardView.verticalPadding)
         }
-        .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-        )
+        .if(isIOS26OrLater) { view in
+            Group {
+                if #available(iOS 26.0, *) {
+                    view.glassEffect(.regular.tint(.white), in: .rect(cornerRadius: UX.CardView.cornerRadius))
+                } else {
+                    view.background(
+                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                            .fill(cardBackgroundColor)
+                            .accessibilityHidden(true)
+                    )
+                }
+            }
+        }
+    }
+
+    private var isIOS26OrLater: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
     }
 
     var titleView: some View {

@@ -10,6 +10,8 @@ import ComponentLibrary
 struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
+    @State private var primaryBackgroundColor: Color = .clear
+    @State private var primaryForegroundColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
@@ -66,11 +68,27 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             }
             .padding(UX.CardView.verticalPadding)
         }
-        .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-        )
+        .if(isIOS26OrLater) { view in
+            Group {
+                if #available(iOS 26.0, *) {
+                    view.glassEffect(.regular.tint(.white), in: .rect(cornerRadius: UX.CardView.cornerRadius))
+                } else {
+                    view.background(
+                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                            .fill(cardBackgroundColor)
+                            .accessibilityHidden(true)
+                    )
+                }
+            }
+        }
+    }
+
+    private var isIOS26OrLater: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
     }
 
     var titleView: some View {
@@ -174,5 +192,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
+        primaryBackgroundColor = Color(color.actionPrimary)
+        primaryForegroundColor = Color(color.textInverted)
     }
 }

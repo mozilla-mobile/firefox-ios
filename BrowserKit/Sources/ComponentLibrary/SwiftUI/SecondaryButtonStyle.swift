@@ -25,15 +25,30 @@ public struct SecondaryButtonStyle: ButtonStyle {
             .padding(.vertical, UX.verticalPadding)
             .padding(.horizontal, UX.horizontalPadding)
             .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: UX.cornerRadius)
-                    .fill(Color(uiColor: theme.colors.actionSecondary))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: UX.cornerRadius)
-                    .stroke(Color(uiColor: theme.colors.layer1), lineWidth: 0)
-            )
             .scaleEffect(configuration.isPressed ? UX.pressedScale : UX.defaultScale)
             .foregroundColor(Color(uiColor: theme.colors.textSecondary))
+            .if(isIOS26OrLater) { view in
+                Group {
+                    if #available(iOS 26.0, *) {
+                        view.background(
+                            Capsule(style: .continuous)
+                                .fill(Color(uiColor: theme.colors.actionSecondary))
+                        )
+                    } else {
+                        view.background(
+                            RoundedRectangle(cornerRadius: UX.cornerRadius)
+                                .fill(Color(uiColor: theme.colors.actionSecondary))
+                        )
+                    }
+                }
+            }
+    }
+
+    private var isIOS26OrLater: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
     }
 }

@@ -55,9 +55,12 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     .bold()
                     .foregroundColor(skipTextColor)
             }
-            .padding(.top, UX.Onboarding.Spacing.vertical)
+            .if(isIOS26OrLater) { view in
+                Group {
+                    if #available(iOS 26.0, *) {view.buttonStyle(.glass)} else { view.buttonStyle(.plain) }
+                }
+            }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
-            .buttonStyle(.plain)
         }
         .onAppear {
             applyTheme()
@@ -65,6 +68,14 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme()
+        }
+    }
+
+    private var isIOS26OrLater: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
         }
     }
 
@@ -108,6 +119,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     private func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        skipTextColor = Color(theme.colors.textInverted)
+        skipTextColor = Color(theme.colors.textSecondary)
     }
 }

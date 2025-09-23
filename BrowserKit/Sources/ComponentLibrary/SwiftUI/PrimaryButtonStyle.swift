@@ -27,11 +27,30 @@ public struct PrimaryButtonStyle: ButtonStyle {
             .padding(.vertical, UX.verticalPadding)
             .padding(.horizontal, UX.horizontalPadding)
             .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: UX.cornerRadius)
-                    .fill(Color(uiColor: theme.colors.actionPrimary))
-            )
             .scaleEffect(configuration.isPressed ? UX.pressedScale : UX.defaultScale)
             .foregroundColor(Color(uiColor: theme.colors.textInverted))
+            .if(isIOS26OrLater) { view in
+                Group {
+                    if #available(iOS 26.0, *) {
+                        view.background(
+                            Capsule(style: .continuous)
+                                .fill(Color(uiColor: theme.colors.actionPrimary))
+                        )
+                    } else {
+                        view.background(
+                            RoundedRectangle(cornerRadius: UX.cornerRadius)
+                                .fill(Color(uiColor: theme.colors.actionPrimary))
+                        )
+                    }
+                }
+            }
+    }
+
+    private var isIOS26OrLater: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
     }
 }

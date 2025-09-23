@@ -80,17 +80,33 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-        )
+        .if(isIOS26OrLater) { view in
+            Group {
+                if #available(iOS 26.0, *) {
+                    view.glassEffect(.regular.tint(.white), in: .rect(cornerRadius: UX.CardView.cornerRadius))
+                } else {
+                    view.background(
+                        RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                            .fill(cardBackgroundColor)
+                            .accessibilityHidden(true)
+                    )
+                }
+            }
+        }
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
         .accessibilityElement(children: .contain)
         .padding(.vertical)
     }
 
     // MARK: - Subviews
+
+    private var isIOS26OrLater: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
+    }
 
     var links: some View {
         VStack(alignment: .center, spacing: UX.Onboarding.Spacing.standard) {
