@@ -23,9 +23,8 @@ checkStringsFile()
 func checkForFunMetrics() {
     let edited = danger.git.modifiedFiles + danger.git.createdFiles
     let testFiles = edited.filter { path in
-        path.localizedCaseInsensitiveContains("Tests.swift")
+        path.localizedCaseInsensitiveContains("Tests/")
     }
-
     if !testFiles.isEmpty {
         markdown("""
         ### 💪 **Quality guardian**
@@ -42,16 +41,15 @@ func checkForFunMetrics() {
         """)
     }
 
+    // Either comment for the small number of files changed or small number of lines changed, otherwise it gets crowded.
     let filesChanged = danger.github?.pullRequest.changedFiles ?? 0
+    let totalLines = deletions + additions
     if filesChanged > 0 && filesChanged <= 5 {
         markdown("""
         ### 🧹 **Tidy commit**
         Just **\(filesChanged)** file(s) touched. Thanks for keeping it clean and review-friendly!
         """)
-    }
-
-    let totalLines = deletions + additions
-    if totalLines < 50 {
+    } else if totalLines > 0 && totalLines < 50 {
         markdown("""
         ### 🌱 **Tiny but mighty**
         Only **\(totalLines)** line(s) changed. Fast to review, faster to land! 🚀
@@ -319,11 +317,11 @@ func checkAlphabeticalOrder(inFile filePath: String) {
             // Iterate through the list and report all variables that are out of order
             for (index, varName) in varNames.enumerated() where varName.lowercased() != sortedVarNames[index].lowercased() {
                 let message = "Variable '\(varName)' in \(structName) is out of alphabetical order."
-                danger.warn(message)
+                warn(message)
             }
         }
     } catch {
-        danger.warn("Failed to read or process file \(filePath): \(error)")
+        warn("Failed to read or process file \(filePath): \(error)")
     }
 }
 
@@ -343,35 +341,56 @@ func checkStringsFile() {
 func checkDescriptionSection() {
     guard let body = danger.github.pullRequest.body else { return }
 
+    // Regex to capture everything between "## :bulb: Description" and "## :movie_camera: Demos"
+    guard let regexDescriptionDemo = try? NSRegularExpression(
+        pattern: #"(?s)## :bulb: Description\s*(.*?)## :movie_camera: Demos"#,
+        options: []
+    ) else { return }
+
     // Regex to capture everything between "## :bulb: Description" and "## :pencil: Checklist"
-    guard let regex = try? NSRegularExpression(
+    guard let regexDescriptionChecklist = try? NSRegularExpression(
         pattern: #"(?s)## :bulb: Description\s*(.*?)## :pencil: Checklist"#,
         options: []
     ) else { return }
 
-    if let match = regex.firstMatch(in: body, options: [], range: NSRange(location: 0, length: body.utf16.count)),
+    if let match = regexDescriptionDemo.firstMatch(in: body,
+                                                   options: [],
+                                                   range: NSRange(location: 0, length: body.utf16.count)),
        let range = Range(match.range(at: 1), in: body) {
-        // extract description content
+        // Extract description content
         var desc = String(body[range])
-        // strip out HTML comments so `<!--- ... -->` placeholders don't count
+        // Strip out HTML comments so `<!--- ... -->` placeholders don't count
         desc = desc.replacingOccurrences(of: #"<!--.*?-->"#, with: "", options: .regularExpression)
 
-        let count = desc.trimmingCharacters(in: .whitespacesAndNewlines).count
-        if count == 0 {
-            warn("""
+        commentDescriptionSection(desc: desc)
+    } else if let match = regexDescriptionDemo.firstMatch(in: body,
+                                                          options: [],
+                                                          range: NSRange(location: 0, length: body.utf16.count)),
+              let range = Range(match.range(at: 1), in: body) {
+        // Extract description content
+        var desc = String(body[range])
+        // Strip out HTML comments so `<!--- ... -->` placeholders don't count
+        desc = desc.replacingOccurrences(of: #"<!--.*?-->"#, with: "", options: .regularExpression)
+        commentDescriptionSection(desc: desc)
+    }
+}
+
+func commentDescriptionSection(desc: String) {
+    let count = desc.trimmingCharacters(in: .whitespacesAndNewlines).count
+    if count == 0 {
+        warn("""
             💡 **More details help!**
             Your description section is empty. Adding a bit more context will make reviews smoother. 🙌
             """)
-        } else if count < 10 {
-            warn("""
+    } else if count < 10 {
+        warn("""
             💡 **More details help!**
             Your description section is a bit short (\(count) characters). Adding a bit more context will make reviews smoother. 🙌
             """)
-        } else if count >= 350 {
-            markdown("""
+    } else if count >= 300 {
+        markdown("""
             ### 💬 **Description craftsman**
             Great PR description! Reviewers salute you 🫡
             """)
-        }
     }
 }
