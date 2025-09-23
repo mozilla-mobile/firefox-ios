@@ -6,11 +6,11 @@ features:
       enabled:
         description: Determines whether the top sites visual refresh is shown.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
       - channel: developer
         value:
           enabled: true

@@ -1,0 +1,24 @@
+# The configuration for the recentSearchesFeature feature
+features:
+  recent-searches-feature:
+    description: >
+      Enables recent searches.
+    variables:
+      enabled:
+        description: >
+          Whether or not to enable recent searches.
+        type: Boolean
+        default: false
+      max-suggestions:
+        description: The number of maximum suggestions.
+        type: Int
+        default: 5
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+          max-suggestions: 5
+      - channel: developer
+        value:
+          enabled: false
+          max-suggestions: 5

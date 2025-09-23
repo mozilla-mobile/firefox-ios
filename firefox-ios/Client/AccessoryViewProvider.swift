@@ -13,11 +13,13 @@ enum AccessoryType {
 class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
     // MARK: - Constants
     private struct UX {
-        static let toolbarHeight: CGFloat = 50
+        static let accessoryViewHeight: CGFloat = 56
         static let fixedSpacerWidth: CGFloat = 10
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
+        static let spacerViewHeight: CGFloat = 4
+        static let cornerRadius: CGFloat = 24.0
     }
 
     // MARK: - Properties
@@ -44,9 +46,9 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
     }
 
     // MARK: - UI Elements
-    private let toolbar: UIToolbar = .build {
-        $0.sizeToFit()
-    }
+    private let toolbar: UIToolbar = .build()
+
+    private let toolbarTopHeightSpacer: UIView = .build()
 
     private lazy var previousButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
@@ -157,7 +159,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         self.notificationCenter = notificationCenter
 
         super.init(frame: CGRect(width: UIScreen.main.bounds.width,
-                                 height: UX.toolbarHeight))
+                                 height: UX.accessoryViewHeight))
 
         setupLayout()
 
@@ -212,9 +214,20 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
         spacer.accessibilityElementsHidden = true
     }
 
+    private func setupHeightSpacer(_ spacer: UIView, height: CGFloat) {
+        NSLayoutConstraint.activate([
+            spacer.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            spacer.heightAnchor.constraint(equalToConstant: height)
+        ])
+        spacer.accessibilityElementsHidden = true
+    }
+
     private func setupLayout() {
+        setupHeightSpacer(toolbarTopHeightSpacer, height: UX.spacerViewHeight)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
+
+        layer.cornerRadius = UX.cornerRadius
 
         toolbar.items = [
             currentAccessoryView,
@@ -233,23 +246,31 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             doneButton.customView
         ].compactMap { $0 }
 
+        addSubview(toolbarTopHeightSpacer)
         addSubview(toolbar)
 
         NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            heightAnchor.constraint(equalToConstant: UX.accessoryViewHeight),
+
+            toolbarTopHeightSpacer.topAnchor.constraint(equalTo: topAnchor),
+            toolbarTopHeightSpacer.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
+
             toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
-            toolbar.topAnchor.constraint(equalTo: topAnchor),
+            toolbar.topAnchor.constraint(equalTo: toolbarTopHeightSpacer.bottomAnchor),
             toolbar.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let backgroundColor: UIColor = if #available(iOS 26.0, *) {
+        let accessoryViewBackgroundColor: UIColor = if #available(iOS 26.0, *) {
             // Use the same color that uses the toolbar
-            searchBarPosition == .top ? .clear : theme.colors.layerSurfaceLow
+            theme.colors.layerSurfaceLow
         } else {
-            theme.colors.layer5
+            .clear
         }
         let buttonsBackgroundColor: UIColor = if #available(iOS 26.0, *) {
             .clear
@@ -257,7 +278,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, F
             theme.colors.layer5Hover
         }
 
-        self.backgroundColor = backgroundColor
+        self.backgroundColor = accessoryViewBackgroundColor
         [previousButton, nextButton, doneButton].forEach {
             $0.tintColor = theme.colors.iconAccentBlue
             $0.customView?.tintColor = theme.colors.iconAccentBlue

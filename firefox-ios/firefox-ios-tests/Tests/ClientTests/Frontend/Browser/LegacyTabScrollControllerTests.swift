@@ -303,13 +303,10 @@ final class LegacyTabScrollControllerTests: XCTestCase {
     func testToolbarTapHandler_WhenMinimalAddressBarEnabledAndCollapsed_ShowsToolbar() {
         let subject = createSubject()
         setupTabScroll(with: subject)
-
-        // Manually setup onTap handler
-        let handler = subject.createToolbarTapHandler()
-        overKeyboardContainer.onTap = handler
-
         subject.toolbarState = .collapsed
-        overKeyboardContainer.onTap?()
+
+        let handler = subject.createToolbarTapHandler()
+        handler()
 
         XCTAssertEqual(subject.toolbarState, .visible)
     }
@@ -318,12 +315,10 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         let subject = createSubject()
         setupTabScroll(with: subject)
 
-        // Manually setup onTap handler
-        let handler = subject.createToolbarTapHandler()
-        overKeyboardContainer.onTap = handler
-
         subject.toolbarState = .visible
-        overKeyboardContainer.onTap?()
+
+        let handler = subject.createToolbarTapHandler()
+        handler()
 
         XCTAssertEqual(subject.toolbarState, .visible)
     }

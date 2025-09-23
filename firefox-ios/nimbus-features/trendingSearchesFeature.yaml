@@ -1,0 +1,25 @@
+# The configuration for the trendingSearchesFeature feature
+
+features:
+  trending-searches-feature:
+    description: >
+      Enables trending searches.
+    variables:
+      enabled:
+        description: >
+          Whether or not to enable trending searches.
+        type: Boolean
+        default: false
+      max-suggestions:
+        description: The number of maximum suggestions.
+        type: Int
+        default: 5
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+          max-suggestions: 5
+      - channel: developer
+        value:
+          enabled: false
+          max-suggestions: 5
