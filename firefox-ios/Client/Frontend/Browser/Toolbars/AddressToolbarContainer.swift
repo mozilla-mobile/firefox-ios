@@ -467,9 +467,11 @@ final class AddressToolbarContainer: UIView,
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)
 
-        if shouldShowSuggestions {
-            delegate?.openSuggestions(searchTerm: locationText ?? "")
-        }
+//        if shouldShowSuggestions {
+        delegate?.openSuggestions(searchTerm: locationText ?? "")
+//        } else {
+//            delegate?.openSuggestions(searchTerm: "")
+//        }
     }
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {

@@ -23,6 +23,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     var filteredOpenedTabs = [Tab]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
+    var firefoxTrendingSearches = [String]()
+    var firefoxRecentSearches = [String]()
+    
     let model: SearchEnginesManager
     var suggestions: [String]? = []
     // TODO: FXIOS-12588 This global property is not concurrency safe
@@ -132,8 +135,17 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         hasBookmarksSuggestions &&
         hasHistorySuggestions
     }
+    
+    var shouldShowTrendingSearches: Bool {
+        return searchQuery.isEmpty
+    }
+    
+    var shouldShowRecentSearches: Bool {
+        return searchQuery.isEmpty
+    }
 
     var hasFirefoxSuggestions: Bool {
+        guard !searchQuery.isEmpty else { return false }
         return hasBookmarksSuggestions
                || hasHistorySuggestions
                || hasHistoryAndBookmarksSuggestions
@@ -142,7 +154,6 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
                || (!firefoxSuggestions.isEmpty && (shouldShowNonSponsoredSuggestions
                                                    || shouldShowSponsoredSuggestions))
     }
-
     init(isPrivate: Bool, isBottomSearchBar: Bool,
          profile: Profile,
          model: SearchEnginesManager,
@@ -215,6 +226,11 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         })
     }
 
+    func querySearchUtilityClient() {
+        Task {
+            await loadTrendingSearches()
+        }
+    }
     /// Provides suggestions from external suggestion providers other than the local ones (history, bookmarks, etc.). For now
     /// this includes suggestions from `amp` (sponsored ads) and `wikipedia`. Application Services supports the other ones.
     /// This behaviour is currently geo-locked to the US, so to debug locally ensure your simulator region is set to US.
@@ -257,6 +273,28 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         else { return }
 
         firefoxSuggestions = suggestions
+        delegate?.reloadTableView()
+    }
+
+    /// Provides suggestions from external suggestion providers other than the local ones (history, bookmarks, etc.). For now
+    /// this includes suggestions from `amp` (sponsored ads) and `wikipedia`. Application Services supports the other ones.
+    /// This behaviour is currently geo-locked to the US, so to debug locally ensure your simulator region is set to US.
+    @MainActor
+    private func loadTrendingSearches() async {
+        guard let defaultEngine = searchEnginesManager?.defaultEngine else {
+            // add logger
+            return
+        }
+        let searchClient = TrendingSearchClient(searchEngine: defaultEngine)
+    
+        do {
+            let results = try await searchClient.getTrendingSearches()
+            firefoxTrendingSearches = results
+        } catch {
+            // add error logger
+            firefoxTrendingSearches = []
+        }
+
         delegate?.reloadTableView()
     }
 

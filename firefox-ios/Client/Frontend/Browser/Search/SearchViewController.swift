@@ -247,6 +247,7 @@ class SearchViewController: SiteTableViewController,
 
     override func reloadData() {
         viewModel.querySuggestClient()
+        viewModel.querySearchUtilityClient()
     }
 
     private func layoutTable() {
@@ -437,6 +438,10 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
+        case .trendingSearches:
+            break
+        case .recentSearches:
+            break
         case .searchSuggestions:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
@@ -517,6 +522,10 @@ class SearchViewController: SiteTableViewController,
 
         var title: String
         switch section {
+        case SearchListSection.trendingSearches.rawValue:
+            title = "Trending Searches"
+        case SearchListSection.recentSearches.rawValue:
+            title = "Recent Searches"
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
@@ -560,6 +569,10 @@ class SearchViewController: SiteTableViewController,
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let section = SearchListSection(rawValue: indexPath.section) {
             switch section {
+            case .trendingSearches:
+                break
+            case .recentSearches:
+                break
             case .searchSuggestions:
                 if let site = viewModel.suggestions?[indexPath.row] {
                     if searchTelemetry?.visibleSuggestions.contains(site) == false {
@@ -612,7 +625,7 @@ class SearchViewController: SiteTableViewController,
             guard let count = viewModel.suggestions?.count else { return 0 }
             return count < 4 ? count : 4
         case .openedTabs:
-            return viewModel.filteredOpenedTabs.count
+            return !viewModel.searchQuery.isEmpty ? viewModel.filteredOpenedTabs.count : 0
         case .remoteTabs:
             return viewModel.shouldShowSyncedTabsSuggestions ? viewModel.filteredRemoteClientTabs.count : 0
         case .history:
@@ -621,6 +634,10 @@ class SearchViewController: SiteTableViewController,
             return viewModel.shouldShowBookmarksSuggestions ? viewModel.bookmarkSites.count : 0
         case .firefoxSuggestions:
             return viewModel.firefoxSuggestions.count
+        case .trendingSearches:
+            return viewModel.shouldShowTrendingSearches ? viewModel.firefoxTrendingSearches.count : 0
+        case .recentSearches:
+            return viewModel.shouldShowTrendingSearches ? viewModel.firefoxTrendingSearches.count : 0
         }
     }
 
@@ -683,6 +700,19 @@ class SearchViewController: SiteTableViewController,
                                    _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
+        case .trendingSearches:
+            if viewModel.shouldShowTrendingSearches {
+                let title = viewModel.firefoxTrendingSearches[indexPath.row]
+                oneLineCell.titleLabel.text = title
+                oneLineCell.leftImageView.image = nil
+                oneLineCell.accessoryView = nil
+                cell = oneLineCell
+            }
+        case .recentSearches:
+            if viewModel.shouldShowRecentSearches {
+                oneLineCell.titleLabel.text = "Recent Search 1"
+                cell = oneLineCell
+            }
         case .searchSuggestions:
             if let site = viewModel.suggestions?[indexPath.row] {
                 oneLineCell.titleLabel.text = site
@@ -711,6 +741,7 @@ class SearchViewController: SiteTableViewController,
                 cell = oneLineCell
             }
         case .openedTabs:
+            guard !viewModel.searchQuery.isEmpty else { return cell }
             if viewModel.filteredOpenedTabs.count > indexPath.row {
                 let openedTab = viewModel.filteredOpenedTabs[indexPath.row]
                 twoLineCell.descriptionLabel.isHidden = false

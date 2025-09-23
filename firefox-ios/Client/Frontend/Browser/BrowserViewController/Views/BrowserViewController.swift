@@ -4033,7 +4033,11 @@ class BrowserViewController: UIViewController,
 
     func openSuggestions(searchTerm: String) {
         if searchTerm.isEmpty {
-            hideSearchController()
+//            if contentContainer.hasWebView {
+                showSearchController()
+//            } else {
+//                hideSearchController()
+//            }
         } else {
             configureOverlayView()
         }
