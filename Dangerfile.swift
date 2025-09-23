@@ -139,7 +139,7 @@ func failOnNewFilesWithoutCoverage() {
 // swiftlint:disable line_length
 // Encourage smaller PRs
 func checkBigPullRequest() {
-    let thisIsStartingToBeBigThreshold = 500
+    let mediumPRThreshold = 500
     let bigPRThreshold = 800
     let monsterPRThreshold = 2000
     guard let additions = danger.github.pullRequest.additions,
@@ -365,7 +365,7 @@ func checkStringsFile() {
         path.localizedCaseInsensitiveContains("/Strings.swift")
     }
 
-    if touchedStrings {
+    if !touchedStrings.isEmpty {
         markdown("""
         ### ✍️ **Strings Updated**
         Detected changes in `Shared/Strings.swift`.
