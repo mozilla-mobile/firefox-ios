@@ -11,7 +11,7 @@ protocol PDFSelectorsSet {
 }
 
 struct PDFSelectors: PDFSelectorsSet {
-    let WEB_VIEW: Selector = Selector.webView(
+    let WEB_VIEW = Selector.webView(
         description: "The main web view for displaying the PDF",
         groups: ["pdf"]
     )
