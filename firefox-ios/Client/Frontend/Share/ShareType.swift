@@ -18,19 +18,6 @@ enum ShareType {
     case site(url: URL)
     case tab(url: URL, tab: any ShareTab)
 
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case let (.file(lhsURL), .file(rhsURL)):
-            return lhsURL == rhsURL
-        case let (.site(lhsURL), .site(rhsURL)):
-            return lhsURL == rhsURL
-        case let (.tab(lhsURL, lhsTab), .tab(rhsURL, rhsTab)):
-            return lhsURL == rhsURL && lhsTab.isEqual(to: rhsTab)
-        default:
-            return false
-        }
-    }
-
     /// The share URL wrapped by the given type.
     var wrappedURL: URL {
         switch self {
@@ -53,14 +40,5 @@ enum ShareType {
         case .tab:
             return "tab"
         }
-    }
-}
-
-extension ShareTab {
-    func isEqual(to otherShareTab: some ShareTab) -> Bool {
-        return true
-//        return self.displayTitle == otherShareTab.displayTitle
-//        && self.url == otherShareTab.url
-//        && self.webView == otherShareTab.webView
     }
 }

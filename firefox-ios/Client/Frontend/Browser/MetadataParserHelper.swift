@@ -7,6 +7,7 @@ import Shared
 import Storage
 import WebKit
 
+@MainActor
 class MetadataParserHelper: TabEventHandler {
     let tabEventWindowResponseType: TabEventHandlerWindowResponseType = .allWindows
 

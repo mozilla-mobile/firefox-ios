@@ -69,11 +69,13 @@ enum TabEventHandlerWindowResponseType {
 }
 
 protocol TabEventHandler: AnyObject {
+    @MainActor
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { get }
     @MainActor
     func tab(_ tab: Tab, didChangeURL url: URL)
     @MainActor
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
+    @MainActor
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
     @MainActor
     func tabDidGainFocus(_ tab: Tab)
@@ -200,9 +202,9 @@ extension TabEventHandler {
             center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
                 guard let self else { return }
                 let object = notification.object
-                let eventWindowResponseType = self.tabEventWindowResponseType
                 let tabEvent = notification.userInfo?["payload"] as? TabEvent
                 ensureMainThread {
+                    let eventWindowResponseType = self.tabEventWindowResponseType
                     guard let tab = object as? Tab,
                           let event = tabEvent,
                           eventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID)  else {

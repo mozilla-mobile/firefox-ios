@@ -465,7 +465,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
 
-    var onWebViewLoadingStateChanged: VoidReturnCallback?
+    var onWebViewLoadingStateChanged: (@MainActor () -> Void)?
     private var webViewLoadingObserver: NSKeyValueObservation?
 
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
@@ -599,8 +599,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
             tabDelegate?.tab(self, didCreateWebView: webView)
             webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
+                guard let self else { return }
                 ensureMainThread {
-                    self?.onWebViewLoadingStateChanged?()
+                    self.onWebViewLoadingStateChanged?()
                 }
             }
         }

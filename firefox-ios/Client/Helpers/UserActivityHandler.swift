@@ -16,6 +16,7 @@ let browsingActivityType = "org.mozilla.ios.firefox.browsing"
 
 private let searchableIndex = CSSearchableIndex.default()
 
+@MainActor
 class UserActivityHandler {
     private let logger: Logger
 
@@ -32,7 +33,7 @@ class UserActivityHandler {
         )
     }
 
-    class func clearSearchIndex(completionHandler: ((Error?) -> Void)? = nil) {
+    class func clearSearchIndex(completionHandler: (@Sendable (Error?) -> Void)? = nil) {
         searchableIndex.deleteAllSearchableItems(completionHandler: completionHandler)
     }
 
