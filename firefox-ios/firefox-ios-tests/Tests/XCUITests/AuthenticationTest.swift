@@ -40,7 +40,6 @@ class AuthenticationTest: BaseTestCase {
         )
         app.alerts.textFields["Username"].typeText("guest")
         app.alerts.secureTextFields["Password"].tapAndTypeText("guest")
-        mozWaitElementHittable(element: app.alerts.buttons["Log in"], timeout: TIMEOUT)
         app.alerts.buttons["Log in"].waitAndTap()
         /* There is no other way to verify basic auth is successful as the webview is
          inaccessible after sign in to verify the success text. */
