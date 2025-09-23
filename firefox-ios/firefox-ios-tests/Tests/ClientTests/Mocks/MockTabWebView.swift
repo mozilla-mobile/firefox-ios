@@ -95,6 +95,7 @@ final class MockTabWebView: TabWebView {
     }
 }
 
+@MainActor
 class MockTab: Tab {
     private var isHomePage: Bool
     var enqueueDocumentCalled = 0
@@ -108,7 +109,7 @@ class MockTab: Tab {
         return isHomePage
     }
 
-    override func getSessionCookies(_ completion: @escaping ([HTTPCookie]) -> Void) {
+    override func getSessionCookies(_ completion: @escaping @MainActor @Sendable ([HTTPCookie]) -> Void) {
         completion([])
     }
 

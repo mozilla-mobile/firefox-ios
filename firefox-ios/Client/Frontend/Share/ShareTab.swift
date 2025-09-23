@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol ShareTab: Equatable {
+protocol ShareTab {
     @MainActor
     var displayTitle: String { get }
     @MainActor

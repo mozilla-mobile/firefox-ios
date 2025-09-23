@@ -1751,6 +1751,7 @@ class TabManagerTests: XCTestCase {
         case privateAny // `private` alone is a reserved compiler keyword
     }
 
+    @MainActor
     private func generateTabs(ofType type: TabType = .normalActive, count: Int) -> [Tab] {
         var tabs = [Tab]()
         for i in 0..<count {

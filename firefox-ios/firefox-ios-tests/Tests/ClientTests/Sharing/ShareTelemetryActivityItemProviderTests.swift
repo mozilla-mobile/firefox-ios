@@ -32,7 +32,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         let mockGleanWrapper = MockGleanWrapper()
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
-            shareType: testShareType,
+            shareTypeName: testShareType.typeName,
             shareMessage: testShareMessage,
             gleanWrapper: mockGleanWrapper
         )
@@ -53,7 +53,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         let mockGleanWrapper = MockGleanWrapper()
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
-            shareType: testShareType,
+            shareTypeName: testShareType.typeName,
             shareMessage: testShareMessage,
             gleanWrapper: mockGleanWrapper
         )

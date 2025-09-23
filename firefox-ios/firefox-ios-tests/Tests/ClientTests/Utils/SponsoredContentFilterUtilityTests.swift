@@ -56,6 +56,7 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
 
     // MARK: - Tabs
 
+    @MainActor
     func testNoNormalTabsFilter() {
         let subject = SponsoredContentFilterUtility()
         let tabs = createTabs(normalTabsCount: 5,
@@ -66,6 +67,7 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
         XCTAssertEqual(result.count, 5, "No tabs were removed")
     }
 
+    @MainActor
     func testNoEmptyURLsTabsFilter() {
         let subject = SponsoredContentFilterUtility()
         let tabs = createTabs(normalTabsCount: 0,
@@ -76,6 +78,7 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
         XCTAssertEqual(result.count, 5, "No tabs were removed")
     }
 
+    @MainActor
     func testSponsoredTabsFilter() {
         let subject = SponsoredContentFilterUtility()
         let tabs = createTabs(normalTabsCount: 0,
@@ -86,6 +89,7 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
         XCTAssertEqual(result.count, 0, "All sponsored tabs were removed")
     }
 
+    @MainActor
     func testSponsoredTabsFilterMixed() {
         let subject = SponsoredContentFilterUtility()
         let tabs = createTabs(normalTabsCount: 4,
@@ -117,6 +121,7 @@ extension SponsoredContentFilterUtilityTests {
         return sites
     }
 
+    @MainActor
     func createTabs(normalTabsCount: Int,
                     emptyURLTabsCount: Int,
                     sponsoredTabsCount: Int) -> [Tab] {

@@ -91,6 +91,7 @@ class StartAtHomeHelperTests: XCTestCase {
         XCTAssertFalse(helper.shouldStartAtHome(with: Date()), "Expected to fail for disabled state")
     }
 
+    @MainActor
     func testScanForExistingHomeTab_ForEmptyTabs() {
         setupHelper()
         let homeTab = helper.scanForExistingHomeTab(in: [], with: profile.prefs)
