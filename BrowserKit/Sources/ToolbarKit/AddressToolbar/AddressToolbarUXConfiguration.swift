@@ -9,7 +9,7 @@ public struct AddressToolbarUXConfiguration {
     private(set) var toolbarCornerRadius: CGFloat = if #available(iOS 26, *) { 22 } else { 12 }
     let browserActionsAddressBarDividerWidth: CGFloat
     let isLocationTextCentered: Bool
-    let isTopToolbar: Bool
+    let hasAlternativeLocationColor: Bool
     let locationTextFieldTrailingPadding: CGFloat
     let shouldBlur: Bool
     let backgroundAlpha: CGFloat
@@ -20,11 +20,11 @@ public struct AddressToolbarUXConfiguration {
     public static func experiment(backgroundAlpha: CGFloat = 1.0,
                                   scrollAlpha: CGFloat = 1.0,
                                   shouldBlur: Bool = false,
-                                  isTopToolbar: Bool = false) -> AddressToolbarUXConfiguration {
+                                  hasAlternativeLocationColor: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             browserActionsAddressBarDividerWidth: 0.0,
             isLocationTextCentered: true,
-            isTopToolbar: isTopToolbar,
+            hasAlternativeLocationColor: hasAlternativeLocationColor,
             locationTextFieldTrailingPadding: 0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
@@ -35,12 +35,12 @@ public struct AddressToolbarUXConfiguration {
     public static func `default`(backgroundAlpha: CGFloat = 1.0,
                                  scrollAlpha: CGFloat = 1.0,
                                  shouldBlur: Bool = false,
-                                 isTopToolbar: Bool = false) -> AddressToolbarUXConfiguration {
+                                 hasAlternativeLocationColor: Bool = false) -> AddressToolbarUXConfiguration {
         AddressToolbarUXConfiguration(
             toolbarCornerRadius: 8.0,
             browserActionsAddressBarDividerWidth: 4.0,
             isLocationTextCentered: false,
-            isTopToolbar: isTopToolbar,
+            hasAlternativeLocationColor: hasAlternativeLocationColor,
             locationTextFieldTrailingPadding: 8.0,
             shouldBlur: shouldBlur,
             backgroundAlpha: backgroundAlpha,
@@ -60,7 +60,7 @@ public struct AddressToolbarUXConfiguration {
     func locationContainerBackgroundColor(theme: some Theme) -> UIColor {
         guard !scrollAlpha.isZero else { return .clear }
 
-        if isTopToolbar {
+        if hasAlternativeLocationColor {
             return isLocationTextCentered ? theme.colors.layerSurfaceMediumAlt : theme.colors.layerEmphasis
         } else {
             return isLocationTextCentered ? theme.colors.layerSurfaceMedium : theme.colors.layerEmphasis

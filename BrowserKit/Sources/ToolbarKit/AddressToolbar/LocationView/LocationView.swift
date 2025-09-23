@@ -37,7 +37,7 @@ final class LocationView: UIView,
     private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
     private var scrollAlpha: CGFloat = 1
-    private var isTopToolbar = false
+    private var hasAlternativeLocationColor = false
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -147,7 +147,7 @@ final class LocationView: UIView,
                    uxConfig: AddressToolbarUXConfiguration,
                    addressBarPosition: AddressToolbarPosition) {
         isURLTextFieldCentered = uxConfig.isLocationTextCentered
-        isTopToolbar = uxConfig.isTopToolbar
+        hasAlternativeLocationColor = uxConfig.hasAlternativeLocationColor
 
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
@@ -679,7 +679,7 @@ final class LocationView: UIView,
         self.theme = theme
         let colors = theme.colors
 
-        let mainBackgroundColor = isTopToolbar ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
+        let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = Gradient(
