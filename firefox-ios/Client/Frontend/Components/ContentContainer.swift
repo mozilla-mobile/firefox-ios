@@ -120,14 +120,14 @@ class ContentContainer: UIView,
     }
 
     private func addToView(content: ContentContainable) {
-        let testView = ((content as? HomepageNavigationController)?.topViewController?.view ?? content.view)!
-        addSubview(testView)
-        testView.translatesAutoresizingMaskIntoConstraints = false
+        let homepageView = ((content as? HomepageNavigationController)?.view ?? content.view)!
+        addSubview(homepageView)
+        homepageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            testView.topAnchor.constraint(equalTo: topAnchor),
-            testView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            testView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            testView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            homepageView.topAnchor.constraint(equalTo: topAnchor),
+            homepageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            homepageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            homepageView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 }

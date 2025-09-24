@@ -1353,6 +1353,26 @@ class BrowserCoordinator: BaseCoordinator,
     }
 }
 
-class HomepageNavigationController: UINavigationController, ContentContainable {
+class HomepageNavigationController: UINavigationController, ContentContainable, Screenshotable {
     var contentType: ContentType = .homepage
+
+    func screenshot(bounds: CGRect) -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+
+        return renderer.image { context in
+            view.drawHierarchy(
+                in: CGRect(
+                    x: bounds.origin.x,
+                    y: -bounds.origin.y,
+                    width: bounds.width,
+                    height: view.bounds.height
+                ),
+                afterScreenUpdates: false
+            )
+        }
+    }
+
+    func screenshot(quality: CGFloat) -> UIImage? {
+        screenshot(bounds: view.bounds)
+    }
 }
