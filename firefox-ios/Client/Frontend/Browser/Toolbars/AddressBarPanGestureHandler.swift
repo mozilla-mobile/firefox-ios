@@ -33,7 +33,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         static let webPagePreviewAddNewTabXOffset: CGFloat = 40.0
         static let webPagePreviewAddNewTabScaleCoefficientA: CGFloat = 0.2
         static let webPagePreviewAddNewTabScaleCoefficientB: CGFloat = 0.8
-        static let webPagePreviewAddNewTabHeightScale: CGFloat = 0.7
+        static let webPagePreviewAddNewTabHeightConstant: CGFloat = 0.4
+        static let webPagePreviewAddNewTabHeightProgressConstant: CGFloat = 0.25
     }
 
     // MARK: - UI Properties
@@ -206,9 +207,11 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             let height = webPagePreview.frame.height
             let scale = UX.webPagePreviewAddNewTabScaleCoefficientA * progress + UX.webPagePreviewAddNewTabScaleCoefficientB
             let translationX = (1 - progress) * (width + UX.webPagePreviewAddNewTabXOffset / scale)
-            let translationY = height * (UX.webPagePreviewAddNewTabHeightScale - progress)
+            let translationY = height * (
+                UX.webPagePreviewAddNewTabHeightConstant - UX.webPagePreviewAddNewTabHeightProgressConstant * progress
+            )
 
-            webPagePreview.transform = .identity.scaledBy(x: scale, y: scale).translatedBy(x: translationX, y: translationY)
+            webPagePreview.transform = .identity.translatedBy(x: translationX, y: translationY)
             webPagePreview.alpha = scale
             let pageSetting = newTabSettingsProvider?()
             switch pageSetting {
