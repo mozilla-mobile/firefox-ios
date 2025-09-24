@@ -69,12 +69,19 @@ enum TabEventHandlerWindowResponseType {
 }
 
 protocol TabEventHandler: AnyObject {
+    @MainActor
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { get }
+    @MainActor
     func tab(_ tab: Tab, didChangeURL url: URL)
+    @MainActor
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
+    @MainActor
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
+    @MainActor
     func tabDidGainFocus(_ tab: Tab)
+    @MainActor
     func tabDidLoseFocus(_ tab: Tab)
+    @MainActor
     func tabDidClose(_ tab: Tab)
     func tabDidToggleDesktopMode(_ tab: Tab)
     func tabDidChangeContentBlocking(_ tab: Tab)
@@ -124,6 +131,7 @@ enum TabEvent {
         return result
     }
 
+    @MainActor
     func handle(_ tab: Tab, with handler: TabEventHandler) {
         switch self {
         case .didChangeURL(let url):
@@ -193,13 +201,18 @@ extension TabEventHandler {
         wrapper.observers = events.map { [weak self] eventType in
             center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
                 guard let self else { return }
-                guard let tab = notification.object as? Tab,
-                      let event = notification.userInfo?["payload"] as? TabEvent,
-                      self.tabEventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID) else {
-                    return
-                }
+                let object = notification.object
+                let tabEvent = notification.userInfo?["payload"] as? TabEvent
+                ensureMainThread {
+                    let eventWindowResponseType = self.tabEventWindowResponseType
+                    guard let tab = object as? Tab,
+                          let event = tabEvent,
+                          eventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID)  else {
+                        return
+                    }
 
-                event.handle(tab, with: self)
+                    event.handle(tab, with: self)
+                }
             }
         }
 

@@ -310,6 +310,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         return tab
     }
 
+    @MainActor
     private func createTab(isPrivate: Bool = false) -> Tab {
         let tab = Tab(
             profile: profile,
