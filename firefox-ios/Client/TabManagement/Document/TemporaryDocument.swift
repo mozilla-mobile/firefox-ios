@@ -26,7 +26,7 @@ protocol TemporaryDocument: Sendable {
     func resumeDownload()
 }
 
-// TODO: FXIOS Make WeakURLSessionDelegate actually sendable
+// TODO: FXIOS-13618 Make WeakURLSessionDelegate actually sendable
 final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
     init(delegate: URLSessionDownloadDelegate?) {
         self.delegate = delegate
@@ -59,7 +59,7 @@ final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unche
     }
 }
 
-// TODO: FXIOS Make DefaultTemporaryDocument actually sendable
+// TODO: FXIOS-13619 Make DefaultTemporaryDocument actually sendable
 final class DefaultTemporaryDocument: NSObject,
                                 TemporaryDocument,
                                 FeatureFlaggable,

@@ -118,7 +118,7 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
     return regex
 }
 
-// TODO: FXIOS TPStatsBlocklists is not actually Sendable
+// TODO: FXIOS-13617 TPStatsBlocklists is not actually Sendable
 class TPStatsBlocklists: @unchecked Sendable {
     class Rule {
         let regex: String
