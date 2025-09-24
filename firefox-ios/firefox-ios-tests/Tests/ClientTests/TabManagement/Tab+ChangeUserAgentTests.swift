@@ -147,6 +147,27 @@ class ChangeUserAgentTests: XCTestCase {
         XCTAssertFalse(Tab.ChangeUserAgent.contains(url: url, isPrivate: false))
     }
 
+    func testMigration() {
+        let url = URL(string: "https://www.google.com")!
+        Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: true, isPrivate: false)
+        XCTAssert(Tab.ChangeUserAgent.contains(url: url, isPrivate: false))
+
+        // Move file back to the old location so that migration can take place
+        let oldFile = {
+            let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
+        }()
+        let file = {
+            let root = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+            return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
+        }()
+        try? FileManager.default.moveItem(at: file, to: oldFile)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: file.path))
+
+        Tab.ChangeUserAgent.performMigration()
+        XCTAssert(Tab.ChangeUserAgent.contains(url: url, isPrivate: false))
+    }
+
     // MARK: removeMobilePrefixFrom tests
 
     func testWithoutMobilePrefixRemovesMobilePrefixes() {

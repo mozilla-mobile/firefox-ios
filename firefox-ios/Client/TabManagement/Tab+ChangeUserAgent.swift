@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+
 extension Tab {
     class ChangeUserAgent {
         // Track these in-memory only
@@ -38,6 +40,15 @@ extension Tab {
         static func contains(url: URL, isPrivate: Bool) -> Bool {
             guard let baseDomain = url.baseDomain else { return false }
             return isPrivate ? privateModeHostList.contains(baseDomain) : baseDomainList.contains(baseDomain)
+        }
+
+        static func performMigration() {
+            guard FileManager.default.fileExists(atPath: oldUAFileLocation.path) else { return }
+            do {
+                try FileManager.default.moveItem(at: oldUAFileLocation, to: file)
+            } catch {
+                DefaultLogger.shared.log("Migration of changed UA file failed", level: .info, category: .tabs)
+            }
         }
 
         static func updateDomainList(forUrl url: URL, isChangedUA: Bool, isPrivate: Bool) {
@@ -91,9 +102,6 @@ extension Tab {
         }
 
         private static func getDataFromFile() -> Data? {
-            if FileManager.default.fileExists(atPath: oldUAFileLocation.path) {
-                try? FileManager.default.moveItem(at: oldUAFileLocation, to: file)
-            }
             return try? Data(contentsOf: ChangeUserAgent.file)
         }
     }
