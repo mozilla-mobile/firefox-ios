@@ -201,9 +201,7 @@
         "TelemetryWrapperTests\/test_loginWithEmail_GleanIsCalled()",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
-        "VersionSettingTests\/testCopyAppVersion()",
-        "WallpaperSettingsViewModelTests\/testDownloadAndSetWallpaper_downloaded_wallpaperIsSet()",
-        "WallpaperSettingsViewModelTests\/testNumberOfItemsInSection()"
+        "VersionSettingTests\/testCopyAppVersion()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
