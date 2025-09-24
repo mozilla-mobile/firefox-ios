@@ -473,7 +473,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
-            handleAdTelemetryForNavigation(url: url, tab: tab)
+            handleAdsTelemetryForNavigation(url: url, tab: tab)
         }
 
         if InternalURL.isValid(url: url) {
@@ -663,7 +663,7 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.cancel)
     }
 
-    private func handleAdTelemetryForNavigation(url: URL, tab: Tab) {
+    private func handleAdsTelemetryForNavigation(url: URL, tab: Tab) {
         let adUrl = url.absoluteString
         if tab.adsTelemetryUrlList.contains(adUrl) {
             if !tab.adsProviderName.isEmpty {
