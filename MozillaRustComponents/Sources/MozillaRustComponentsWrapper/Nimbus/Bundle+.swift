@@ -14,7 +14,18 @@ public extension Array where Element == Bundle {
     func getImage(named name: String) -> UIImage? {
         for bundle in self {
             if let image = UIImage(named: name, in: bundle, compatibleWith: nil) {
-                image.accessibilityIdentifier = name
+                // FIXME: FXIOS-13512 Questionable workaround to set main actor isolated accessibilityIdentifier; rearchitect
+                // later
+                if Thread.isMainThread {
+                    MainActor.assumeIsolated {
+                        image.accessibilityIdentifier = name
+                    }
+                } else {
+                    DispatchQueue.main.sync {
+                        image.accessibilityIdentifier = name
+                    }
+                }
+
                 return image
             }
         }
@@ -86,6 +97,16 @@ public extension UIImage {
     /// The ``accessibilityIdentifier`` is set when images are loaded via Nimbus, so this
     /// really to make the compiler happy with the generated code.
     var encodableImageName: String {
-        accessibilityIdentifier ?? "unknown-image"
+        // FIXME: FXIOS-13512 Questionable workaround to get main actor isolated accessibilityIdentifier; rearchitect
+        // later
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                return accessibilityIdentifier ?? "unknown-image"
+            }
+        } else {
+            DispatchQueue.main.sync {
+                return accessibilityIdentifier ?? "unknown-image"
+            }
+        }
     }
 }
