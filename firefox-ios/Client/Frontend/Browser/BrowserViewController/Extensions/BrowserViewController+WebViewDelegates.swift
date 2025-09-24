@@ -522,25 +522,7 @@ extension BrowserViewController: WKNavigationDelegate {
 //                }
 
         if isStoreURL(url) {
-            decisionHandler(.cancel)
-
-            // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
-            // Otherwise the AppStoreAlert is shown on the wrong tab
-            let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
-            DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
-                self?.showAppStoreAlert { isOpened in
-                    if isOpened {
-                        UIApplication.shared.open(url, options: [:])
-                    }
-                    // If a new window was opened for this URL, close it
-                    if let currentTab = self?.tabManager.selectedTab,
-                       currentTab.historyList.count == 1,
-                       self?.isStoreURL(currentTab.historyList[0]) ?? false {
-                        self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
-                        self?.tabManager.removeTab(currentTab.tabUUID)
-                    }
-                }
-            }
+            handleStoreURLNavigation(url: url, decisionHandler: decisionHandler)
             return
         }
 
