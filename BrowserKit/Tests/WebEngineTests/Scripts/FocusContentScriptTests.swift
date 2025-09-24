@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 final class FocusContentScriptTests: XCTestCase {
     private var contentScriptDelegate: MockContentScriptDelegate!
 

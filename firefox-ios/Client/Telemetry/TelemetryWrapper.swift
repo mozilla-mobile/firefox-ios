@@ -458,7 +458,6 @@ extension TelemetryWrapper {
         case creditCardSavedAll = "creditCard-saved-all"
         case creditCardDeleted = "creditCard-deleted"
         case creditCardModified = "creditCard-modified"
-        case notificationPermission = "notificationPermission"
         case defaultBrowser = "defaultBrowser"
         case choiceScreenAcquisition = "choiceScreenAcquisition"
         case engagementNotification = "engagementNotification"
@@ -707,11 +706,6 @@ extension TelemetryWrapper {
         case flowType = "flow-type"
         case buttonAction = "button-action"
         case multipleChoiceButtonAction = "mutiple-choice-button-action"
-
-        // Notification permission
-        case notificationPermissionIsGranted = "is-granted"
-        case notificationPermissionStatus = "status"
-        case notificationPermissionAlertSetting = "alert-setting"
 
         // Credit card
         case isCreditCardAutofillToggleEnabled = "is-credit-card-autofill-toggle-enabled"
@@ -1135,20 +1129,6 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
-        case(.action, .view, .notificationPermission, _, let extras):
-            if let status = extras?[EventExtraKey.notificationPermissionStatus.rawValue] as? String,
-               let alertSetting = extras?[EventExtraKey.notificationPermissionAlertSetting.rawValue] as? String {
-                let permissionExtra = GleanMetrics.App.NotificationPermissionExtra(alertSetting: alertSetting,
-                                                                                   status: status)
-                GleanMetrics.App.notificationPermission.record(permissionExtra)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
         case (.action, .open, .defaultBrowser, _, let extras):
             if let isDefaultBrowser = extras?[EventExtraKey.isDefaultBrowser.rawValue] as? Bool {
                 GleanMetrics.App.defaultBrowser.set(isDefaultBrowser)
@@ -1280,18 +1260,6 @@ extension TelemetryWrapper {
             GleanMetrics.Onboarding.wallpaperSelectorView.record()
         case (.action, .close, .onboardingWallpaperSelector, _, _):
             GleanMetrics.Onboarding.wallpaperSelectorClose.record()
-        case(.prompt, .tap, .notificationPermission, _, let extras):
-            if let isPermissionGranted = extras?[EventExtraKey.notificationPermissionIsGranted.rawValue] as? Bool {
-                let permissionExtra = GleanMetrics.Onboarding.NotificationPermissionPromptExtra(granted: isPermissionGranted)
-                GleanMetrics.Onboarding.notificationPermissionPrompt.record(permissionExtra)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
 
         // MARK: Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):

@@ -13,12 +13,14 @@ struct ASSearchEngineUtilities {
         let telemetrySuffix = engine.telemetrySuffix
         let searchTemplate = convertASSearchURLToOpenSearchURL(engine.urls.search, for: engine) ?? ""
         let suggestTemplate = convertASSearchURLToOpenSearchURL(engine.urls.suggestions, for: engine) ?? ""
+        let trendingTemplate = convertASSearchURLToOpenSearchURL(engine.urls.trending, for: engine) ?? ""
         let converted = OpenSearchEngine(engineID: engineID,
                                          shortName: name,
                                          telemetrySuffix: telemetrySuffix,
                                          image: image,
                                          searchTemplate: searchTemplate,
                                          suggestTemplate: suggestTemplate,
+                                         trendingTemplate: trendingTemplate,
                                          isCustomEngine: false)
         return converted
     }

@@ -262,12 +262,16 @@ class IntegrationTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
+        // Bug: We can't toggle modes from the tab tray on iOS 26
+        // https://github.com/mozilla-mobile/firefox-ios/issues/29114
+        /*
         navigator.performAction(Action.ToggleSyncMode)
 
         // Need to swipe to get the data on the screen on focus
         app.swipeDown()
         mozWaitForElementToExist(app.tables.otherElements["profile1"])
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
+        */
     }
 
     func testFxADisconnectConnect() {

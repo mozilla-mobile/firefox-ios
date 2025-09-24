@@ -1,4 +1,4 @@
-name: Deploy Docc
+name: Deploy DocC
 on:
   workflow_dispatch: # Allow manual runs
   push:
@@ -8,34 +8,31 @@ on:
       - BrowserKit/Sources/ComponentLibrary/**
       - .github/workflows/firefox-ios-publish-docc.yml
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
-  id-token: write
+  id-token: write # Uses GitHub API to get GitHub Pages configuration outputs
 
-# Allow one concurrent deployment
 concurrency:
   group: github-pages
-  cancel-in-progress: true
+  cancel-in-progress: true # Allow just the most recent deployment
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
+  docs:
+    runs-on: macos-15
+    strategy:
+      matrix:
+        xcode: ["16.4"]
     environment:
-      # Must be set to this for deploying to GitHub Pages
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: macos-15
-    env:
-      XCODE: '16.2'
     steps:
-      - name: Switch to Xcode ${{env.XCODE}}
+      - name: Switch to Xcode ${{ matrix.xcode }}
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: ${{env.XCODE}}
+          xcode-version: ${{ matrix.xcode }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Build DocC
         run: |
           xcodebuild docbuild -project firefox-ios/Client.xcodeproj \
@@ -47,8 +44,8 @@ jobs:
             --hosting-base-path "firefox-ios" \
             --output-path docs;
           echo "<script>window.location.href += \"/documentation/componentlibrary\"</script>" > docs/index.html;
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Store docs artifact
+        uses: actions/upload-pages-artifact@v4
         with:
           # Upload only docs directory
           path: 'docs'

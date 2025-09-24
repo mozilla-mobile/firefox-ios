@@ -300,6 +300,29 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         XCTAssertEqual(result, .zero)
     }
 
+    func testToolbarTapHandler_WhenMinimalAddressBarEnabledAndCollapsed_ShowsToolbar() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+        subject.toolbarState = .collapsed
+
+        let handler = subject.createToolbarTapHandler()
+        handler()
+
+        XCTAssertEqual(subject.toolbarState, .visible)
+    }
+
+    func testToolbarTapHandler_WhenToolbarVisible_DoesNothing() {
+        let subject = createSubject()
+        setupTabScroll(with: subject)
+
+        subject.toolbarState = .visible
+
+        let handler = subject.createToolbarTapHandler()
+        handler()
+
+        XCTAssertEqual(subject.toolbarState, .visible)
+    }
+
     // MARK: - Setup
     private func setupTabScroll(with subject: LegacyTabScrollController) {
         tab.createWebview(configuration: .init())

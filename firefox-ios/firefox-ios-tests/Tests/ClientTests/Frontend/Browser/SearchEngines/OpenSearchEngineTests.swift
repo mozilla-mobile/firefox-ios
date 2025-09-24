@@ -89,6 +89,41 @@ class OpenSearchEngineTests: XCTestCase {
         )
     }
 
+    func test_trendingURLForEngine_returnsExpectedURL() throws {
+        let searchEngine = OpenSearchEngine(
+            engineID: "Bing_Test",
+            shortName: "Bing",
+            telemetrySuffix: nil,
+            image: UIImage(),
+            searchTemplate: "some link",
+            suggestTemplate: nil,
+            trendingTemplate: "www.example.com",
+            isCustomEngine: true
+        )
+
+        let url = searchEngine.trendingURLForEngine()
+
+        XCTAssertNotNil(url)
+        XCTAssertEqual(url?.absoluteString, "www.example.com")
+    }
+
+    func test_trendingURLForEngine_withNoTrendingTemplate_returnsNil() throws {
+        let searchEngine = OpenSearchEngine(
+            engineID: "Bing_Test",
+            shortName: "Bing",
+            telemetrySuffix: nil,
+            image: UIImage(),
+            searchTemplate: "some link",
+            suggestTemplate: nil,
+            trendingTemplate: nil,
+            isCustomEngine: true
+        )
+
+        let url = searchEngine.trendingURLForEngine()
+
+        XCTAssertNil(url)
+    }
+
     /// For generating test `OpenSearchEngine` data.
     public enum TestSearchEngine {
         case youtube, wikipedia
@@ -139,6 +174,7 @@ class OpenSearchEngineTests: XCTestCase {
             image: testImage,
             searchTemplate: "some link",
             suggestTemplate: nil,
+            trendingTemplate: nil,
             isCustomEngine: true
         )
     }

@@ -75,8 +75,14 @@ class CopyPasteTest: BaseTestCase {
         } else {
             waitForHittable(app.buttons["Forward"].firstMatch)
         }
-        XCTAssertTrue(app.menuItems["Copy"].isEnabled)
-        app.menuItems["Copy"].tap()
+        if iPad(), #available(iOS 26, *) {
+            app.buttons["Forward"].firstMatch.tap()
+            XCTAssertTrue(app.buttons["Copy"].isEnabled)
+            app.buttons["Copy"].tap()
+        } else {
+            XCTAssertTrue(app.menuItems["Copy"].isEnabled)
+            app.menuItems["Copy"].tap()
+        }
 
         // Clear and start typing on the URL field again, verify the clipboard suggestion changes
         // If it's a URL, do not prefix "Search For"

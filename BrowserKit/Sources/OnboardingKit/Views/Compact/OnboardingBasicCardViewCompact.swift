@@ -112,36 +112,68 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     var primaryButton: some View {
-        Button(
-            viewModel.buttons.primary.title,
-            action: {
-                onBottomButtonAction(
-                    viewModel.buttons.primary.action,
-                    viewModel.name
+        Group {
+            if #available(iOS 17.0, *) {
+                Button(
+                    viewModel.buttons.primary.title,
+                    action: {
+                        onBottomButtonAction(
+                            viewModel.buttons.primary.action,
+                            viewModel.name
+                        )
+                    }
+                )
+                .font(UX.CardView.primaryActionFont)
+                .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
+                .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+            } else {
+                DragCancellablePrimaryButton(
+                    title: viewModel.buttons.primary.title,
+                    action: {
+                        onBottomButtonAction(
+                            viewModel.buttons.primary.action,
+                            viewModel.name
+                        )
+                    },
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
                 )
             }
-        )
-        .font(UX.CardView.primaryActionFont)
-        .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+        }
     }
 
     @ViewBuilder
     var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
-            Button(
-                secondary.title,
-                action: {
-                    onBottomButtonAction(
-                        secondary.action,
-                        viewModel.name
+            Group {
+                if #available(iOS 17.0, *) {
+                    Button(
+                        secondary.title,
+                        action: {
+                            onBottomButtonAction(
+                                secondary.action,
+                                viewModel.name
+                            )
+                        })
+                    .font(UX.CardView.secondaryActionFont)
+                    .foregroundColor(secondaryActionColor)
+                    .padding(.top, UX.CardView.secondaryButtonTopPadding)
+                    .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
+                    .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
+                } else {
+                    DragCancellableSecondaryButton(
+                        title: secondary.title,
+                        action: {
+                            onBottomButtonAction(
+                                secondary.action,
+                                viewModel.name
+                            )
+                        },
+                        accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
+                        secondaryActionColor: secondaryActionColor
                     )
-                })
-            .font(UX.CardView.secondaryActionFont)
-            .foregroundColor(secondaryActionColor)
-            .padding(.top, UX.CardView.secondaryButtonTopPadding)
-            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
-            .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
+                }
+            }
         }
     }
 

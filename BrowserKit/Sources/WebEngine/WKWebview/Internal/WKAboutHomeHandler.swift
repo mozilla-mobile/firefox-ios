@@ -4,7 +4,7 @@
 
 import WebKit
 
-class WKAboutHomeHandler: WKInternalSchemeResponse {
+struct WKAboutHomeHandler: WKInternalSchemeResponse {
     static let path = "about/home"
 
     // Return a blank page, the webview delegate will look at the current URL and load the home panel based on that

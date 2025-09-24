@@ -89,4 +89,12 @@ enum UX {
             static let image = "firefoxLoader"
         }
     }
+
+    enum DragCancellableButton {
+        static let verticalPadding: CGFloat = 12
+        static let horizontalPadding: CGFloat = 12
+        static let cornerRadius: CGFloat = 8
+        static let dragThreshold: CGFloat = 5
+        static let resetDelay: TimeInterval = 0.1
+    }
 }

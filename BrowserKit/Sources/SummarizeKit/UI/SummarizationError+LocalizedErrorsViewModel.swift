@@ -23,7 +23,7 @@ extension SummarizerError {
         }
     }
 
-    func description(for localizedErrors: LocalizedErrorsViewModel) -> String {
+    func description(for localizedErrors: LocalizedErrorsViewConfiguration) -> String {
         return switch self {
         case .rateLimited:
             localizedErrors.rateLimitedMessage

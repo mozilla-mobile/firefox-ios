@@ -179,6 +179,7 @@
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "HistoryHighlightsTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
+        "OnboardingTelemetryUtilityTests\/testSendOnboardingCardView_WelcomeCard_Success()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",
@@ -196,9 +197,13 @@
         "TabManagerTests\/testRestoreTabs_whenDeeplinkTabPresent_doesnAddDepplinkTabMultipleTimes()",
         "TabManagerTests\/testRestoreTabs_whenDeeplinkTabPresent_withSameURLAsRestoredTab()",
         "TabToolbarHelperTests\/testTelemetryForSiteMenu()",
+        "TelemetryWrapperTests\/test_error_cpuExceptionIsCalled()",
+        "TelemetryWrapperTests\/test_loginWithEmail_GleanIsCalled()",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
-        "VersionSettingTests\/testCopyAppVersion()"
+        "VersionSettingTests\/testCopyAppVersion()",
+        "WallpaperSettingsViewModelTests\/testDownloadAndSetWallpaper_downloaded_wallpaperIsSet()",
+        "WallpaperSettingsViewModelTests\/testNumberOfItemsInSection()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

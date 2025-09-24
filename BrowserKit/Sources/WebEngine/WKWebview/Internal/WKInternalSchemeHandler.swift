@@ -11,6 +11,7 @@ enum WKInternalPageSchemeHandlerError: Error {
     case notAuthorized
 }
 
+@MainActor
 protocol WKInternalSchemeResponse {
     func response(forRequest: URLRequest) -> (URLResponse, Data)?
 }
