@@ -8,6 +8,7 @@ import UIKit
 class MockRouter: NSObject, Router {
     var navigationController: NavigationController
     var rootViewController: UIViewController?
+    var onPresent: (() -> Void)?
 
     var isPresenting: Bool {
         return presentCalled != 0
@@ -34,6 +35,7 @@ class MockRouter: NSObject, Router {
         savedCompletion = completion
         presentedViewController = viewController
         presentCalled += 1
+        onPresent?()
     }
 
     func present(_ viewController: UIViewController,
