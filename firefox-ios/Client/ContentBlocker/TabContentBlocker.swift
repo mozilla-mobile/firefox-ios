@@ -11,20 +11,25 @@ extension Notification.Name {
 }
 
 protocol ContentBlockerTab: AnyObject {
+    @MainActor
     func currentURL() -> URL?
+    @MainActor
     func currentWebView() -> WKWebView?
+    @MainActor
     func imageContentBlockingEnabled() -> Bool
 }
 
 class TabContentBlocker {
     weak var tab: ContentBlockerTab?
     let logger: Logger
+
+    @MainActor
     var isEnabled: Bool {
         return false
     }
 
     @objc
-    func notifiedTabSetupRequired() {}
+    nonisolated func notifiedTabSetupRequired() {}
 
     func currentlyEnabledLists() -> [String] {
         return []
@@ -32,6 +37,7 @@ class TabContentBlocker {
 
     func notifyContentBlockingChanged() {}
 
+    @MainActor
     var status: BlockerStatus {
         guard isEnabled else {
             return .disabled

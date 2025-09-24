@@ -13,6 +13,7 @@ class DownloadHelper: NSObject {
     private let preflightResponse: URLResponse
     private let cookieStore: WKHTTPCookieStore
 
+    @MainActor
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
         tab.webView?.evaluateJavascriptInDefaultContentWorld(

@@ -206,6 +206,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
+    @MainActor
     func test_updateSnapshot_withValidState_returnJumpBackInSection() throws {
         setupNimbusHomepageRedesignTesting(storiesRedesignEnabled: false)
         let dataSource = try XCTUnwrap(diffableDataSource)
@@ -288,6 +289,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
     }
 
+    @MainActor
     private func createTab(urlString: String) -> Tab {
         let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: urlString)!
