@@ -672,6 +672,19 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.cancel)
     }
 
+    private func handleAdTelemetryForNavigation(url: URL, tab: Tab) {
+        let adUrl = url.absoluteString
+        if tab.adsTelemetryUrlList.contains(adUrl) {
+            if !tab.adsProviderName.isEmpty {
+                AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
+            }
+
+            tab.adsTelemetryUrlList.removeAll()
+            tab.adsTelemetryRedirectUrlList.removeAll()
+            tab.adsProviderName = ""
+        }
+    }
+
     func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
         guard let downloadHelper else {
             logger.log("Unable to access downloadHelper, it is nil", level: .warning, category: .webview)
