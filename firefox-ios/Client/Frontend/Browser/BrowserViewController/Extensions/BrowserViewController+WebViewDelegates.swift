@@ -473,16 +473,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
-            let adUrl = url.absoluteString
-            if tab.adsTelemetryUrlList.contains(adUrl) {
-                if !tab.adsProviderName.isEmpty {
-                    AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
-                }
-
-                tab.adsTelemetryUrlList.removeAll()
-                tab.adsTelemetryRedirectUrlList.removeAll()
-                tab.adsProviderName = ""
-            }
+            handleAdTelemetryForNavigation(url: url, tab: tab)
         }
 
         if InternalURL.isValid(url: url) {
