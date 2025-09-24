@@ -676,6 +676,19 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func handleSpecialSchemeNavigation(url: URL,
+                                               decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void) {
+        if url.scheme == "sms" { // All the other types show a native prompt
+            showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
+                UIApplication.shared.open(url, options: [:])
+            }
+        } else {
+            UIApplication.shared.open(url, options: [:])
+        }
+
+        decisionHandler(.cancel)
+    }
+
     func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
         guard let downloadHelper else {
             logger.log("Unable to access downloadHelper, it is nil", level: .warning, category: .webview)
