@@ -61,7 +61,7 @@ class TabTraySelectorView: UIView,
         if #available(iOS 26, *), !DefaultBrowserUtil.isRunningLiquidGlassEarlyBeta {
             view.effect = UIGlassEffect(style: .regular)
         } else {
-            return UIBlurEffect(style: .systemUltraThinMaterial)
+            view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         }
 #else
         view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
