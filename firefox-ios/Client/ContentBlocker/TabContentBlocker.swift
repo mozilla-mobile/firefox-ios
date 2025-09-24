@@ -37,6 +37,7 @@ class TabContentBlocker {
 
     func notifyContentBlockingChanged() {}
 
+    @MainActor
     var status: BlockerStatus {
         guard isEnabled else {
             return .disabled
