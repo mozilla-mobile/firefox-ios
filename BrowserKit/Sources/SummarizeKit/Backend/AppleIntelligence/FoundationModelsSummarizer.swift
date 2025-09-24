@@ -14,7 +14,7 @@ import Foundation
 /// TODO(FXIOS-12927): This should only be called when the model is available.
 @available(iOS 26, *)
 final class FoundationModelsSummarizer: SummarizerProtocol {
-    typealias SessionFactory = (String) -> LanguageModelSessionProtocol
+    typealias SessionFactory = @Sendable (String) -> LanguageModelSessionProtocol
 
     public let modelName: SummarizerModel = .appleSummarizer
 
@@ -29,7 +29,7 @@ final class FoundationModelsSummarizer: SummarizerProtocol {
         self.config = config
     }
 
-    private static func defaultSessionFactory(modelInstructions: String) -> LanguageModelSessionProtocol {
+    private static var defaultSessionFactory: SessionFactory = { modelInstructions in
         LanguageModelSessionAdapter(instructions: modelInstructions)
     }
 
