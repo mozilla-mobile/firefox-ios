@@ -268,6 +268,7 @@ final class LaunchCoordinator: BaseCoordinator,
             themeManager: themeManager,
             viewModel: OnboardingFlowViewModel(
                 onboardingCards: onboardingCards,
+                skipText: .Onboarding.LaterAction,
                 onActionTap: { @MainActor [weak self] action, cardName, completion in
                     self?.onboardingService.handleAction(
                         action,
