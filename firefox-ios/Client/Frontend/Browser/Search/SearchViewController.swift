@@ -704,13 +704,26 @@ class SearchViewController: SiteTableViewController,
             if viewModel.shouldShowTrendingSearches {
                 let title = viewModel.firefoxTrendingSearches[indexPath.row]
                 oneLineCell.titleLabel.text = title
-                oneLineCell.leftImageView.image = nil
+                oneLineCell.leftImageView.contentMode = .center
+                oneLineCell.leftImageView.layer.borderWidth = 0
+                oneLineCell.leftImageView.manuallySetImage(
+                    UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+                )
+                oneLineCell.leftImageView.tintColor = currentTheme().colors.iconPrimary
+                oneLineCell.leftImageView.backgroundColor = nil
                 oneLineCell.accessoryView = nil
                 cell = oneLineCell
             }
         case .recentSearches:
             if viewModel.shouldShowRecentSearches {
                 oneLineCell.titleLabel.text = "Recent Search 1"
+                oneLineCell.leftImageView.contentMode = .center
+                oneLineCell.leftImageView.layer.borderWidth = 0
+                oneLineCell.leftImageView.manuallySetImage(
+                    UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+                )
+                oneLineCell.leftImageView.tintColor = currentTheme().colors.iconPrimary
+                oneLineCell.leftImageView.backgroundColor = nil
                 cell = oneLineCell
             }
         case .searchSuggestions:

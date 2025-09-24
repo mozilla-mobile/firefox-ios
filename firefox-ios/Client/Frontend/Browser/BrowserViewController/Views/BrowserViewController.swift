@@ -2828,6 +2828,7 @@ class BrowserViewController: UIViewController,
                 return
             }
             navigationHandler?.openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+            hideSearchController()
         case .shareSheet(let config):
             navigationHandler?.showShareSheet(
                 shareType: config.shareType,
@@ -2938,6 +2939,7 @@ class BrowserViewController: UIViewController,
             willNavigateAway(from: tabManager.selectedTab)
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
             recordVisitManager.resetRecording()
+            hideSearchController()
         }
     }
 
@@ -4033,11 +4035,11 @@ class BrowserViewController: UIViewController,
 
     func openSuggestions(searchTerm: String) {
         if searchTerm.isEmpty {
-//            if contentContainer.hasWebView {
+            if contentContainer.hasWebView {
                 showSearchController()
-//            } else {
-//                hideSearchController()
-//            }
+            } else {
+                hideSearchController()
+            }
         } else {
             configureOverlayView()
         }
@@ -4086,7 +4088,7 @@ class BrowserViewController: UIViewController,
                 toast.removeFromSuperview()
             }
 
-            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+//            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         }
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())

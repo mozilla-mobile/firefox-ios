@@ -175,6 +175,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
             return shouldShowSearchEngineSuggestions
+        case SearchListSection.trendingSearches.rawValue:
+            return shouldShowTrendingSearches
+        case SearchListSection.recentSearches.rawValue:
+            return shouldShowRecentSearches
         default:
             return false
         }
@@ -286,7 +290,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             return
         }
         let searchClient = TrendingSearchClient(searchEngine: defaultEngine)
-    
+
         do {
             let results = try await searchClient.getTrendingSearches()
             firefoxTrendingSearches = results
