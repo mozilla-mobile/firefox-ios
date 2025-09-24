@@ -119,6 +119,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func showTermsOfUse(context: TriggerContext)
+
+    @MainActor
+    func showTopStories()
 }
 
 extension BrowserNavigationHandler {

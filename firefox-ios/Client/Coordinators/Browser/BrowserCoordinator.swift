@@ -1148,6 +1148,11 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(shortcutsLibraryViewController)
     }
 
+    func showTopStories() {
+        let topStoriesViewController = TopStoriesViewController(windowUUID: windowUUID)
+        homepageRouter?.push(topStoriesViewController, animated: true)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {

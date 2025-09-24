@@ -150,6 +150,7 @@ final class HomepageViewController: UIViewController,
         applyTheme()
 
         addTapGestureRecognizerToDismissKeyboard()
+        title = .SettingsHomePageSectionName
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -163,6 +164,7 @@ final class HomepageViewController: UIViewController,
             )
         )
         termsOfUseDelegate?.showTermsOfUse(context: .homepageOpened)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {

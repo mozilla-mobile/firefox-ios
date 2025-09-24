@@ -2851,7 +2851,7 @@ class BrowserViewController: UIViewController,
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
         case .topStories:
-            break
+            navigationHandler?.showTopStories()
         }
     }
 
