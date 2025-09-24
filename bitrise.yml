@@ -147,6 +147,7 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - restore-spm-cache@2.1.1:
         is_always_run: true
+    - activate-build-cache-for-xcode@0: {}
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
@@ -1609,6 +1610,7 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
+    - activate-build-cache-for-xcode@0: {}
     - xcode-test@6.0.1:
         timeout: 6000
         inputs:
