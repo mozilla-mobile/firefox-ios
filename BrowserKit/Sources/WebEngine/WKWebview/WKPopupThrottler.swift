@@ -4,54 +4,55 @@
 
 import Foundation
 
+@MainActor
 protocol WKPopupThrottler {
-    func canShowAlert() -> Bool
-    
-    func willShowAlert()
+    func canShowAlert(type: WKPopupType) -> Bool
+
+    func willShowAlert(type: WKPopupType)
+}
+
+enum WKPopupType {
+    /// Javascript alert()
+    case alert
+    /// Popup window (window.open)
+    case popupWindow
+
+    /// Max consecutive popups allowed within a given time period (below)
+    /// after which throttling begins.
+    var maxPopupThreshold: Int {
+        switch self {
+        case .alert: return 5
+        case .popupWindow: return 2
+        }
+    }
+
+    /// The time within which the popup threshold may be reached. After this
+    /// many seconds since the first alert, the time and alert count are reset.
+    var resetTime: TimeInterval {
+        switch self {
+        case .alert: return 20
+        case .popupWindow: return 2
+        }
+    }
+
+    static let defaultResetTimes = [WKPopupType.alert: WKPopupType.alert.resetTime,
+                                   WKPopupType.popupWindow: WKPopupType.popupWindow.resetTime]
 }
 
 /// Utility for tracking various types of popups that may be presented
 /// over a short time. Used to prevent Javascript abuse or DOS attacks.
-final class PopupThrottler {
-    enum PopupType {
-        /// Javascript alert()
-        case alert
-        /// Popup window (window.open)
-        case popupWindow
+final class DefaultPopupThrottler: WKPopupThrottler {
+    private var alertCount = [WKPopupType.alert: 0, WKPopupType.popupWindow: 0]
+    private var lastAlertDate = [WKPopupType.alert: Date.distantPast, WKPopupType.popupWindow: Date.distantPast]
+    private let resetTime: [WKPopupType: TimeInterval]
 
-        /// Max consecutive popups allowed within a given time period (below)
-        /// after which throttling begins.
-        var maxPopupThreshold: Int {
-            switch self {
-            case .alert: return 5
-            case .popupWindow: return 2
-            }
-        }
-
-        /// The time within which the popup threshold may be reached. After this
-        /// many seconds since the first alert, the time and alert count are reset.
-        var resetTime: TimeInterval {
-            switch self {
-            case .alert: return 20
-            case .popupWindow: return 2
-            }
-        }
-
-        static let defaultResetTimes = [PopupType.alert: PopupType.alert.resetTime,
-                                       PopupType.popupWindow: PopupType.popupWindow.resetTime]
-    }
-
-    var alertCount = [PopupType.alert: 0, PopupType.popupWindow: 0]
-    var lastAlertDate = [PopupType.alert: Date.distantPast, PopupType.popupWindow: Date.distantPast]
-    private let resetTime: [PopupType: TimeInterval]
-
-    init(resetTime: [PopupType: TimeInterval] = PopupType.defaultResetTimes) {
+    init(resetTime: [WKPopupType: TimeInterval] = WKPopupType.defaultResetTimes) {
         self.resetTime = resetTime
     }
 
     // MARK: - Public API
 
-    func canShowAlert(type: PopupThrottler.PopupType) -> Bool {
+    func canShowAlert(type: WKPopupType) -> Bool {
         guard let count = alertCount[type] else { return true }
         guard let date = lastAlertDate[type] else { return true }
         guard let time = resetTime[type] else { return true }
@@ -61,7 +62,7 @@ final class PopupThrottler {
         return alertCountOK || timeOK
     }
 
-    func willShowAlert(type: PopupThrottler.PopupType) {
+    func willShowAlert(type: WKPopupType) {
         guard let count = alertCount[type] else { return }
         guard let date = lastAlertDate[type] else { return }
         guard let time = resetTime[type] else { return }

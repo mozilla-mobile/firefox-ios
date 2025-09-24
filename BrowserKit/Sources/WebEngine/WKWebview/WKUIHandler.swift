@@ -57,16 +57,16 @@ public protocol WKUIHandler: WKUIDelegate {
 
 public class AlertPresenter {
     weak var presenter: UIViewController?
-    
+
     public init(presenter: UIViewController?) {
         self.presenter = presenter
     }
-    
+
     @MainActor
     func present(_ alert: UIAlertController) {
         presenter?.present(alert, animated: true)
     }
-    
+
     func canPresent() -> Bool {
         return presenter?.presentedViewController == nil
     }
@@ -81,7 +81,8 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
     private let application: Application
     private let policyDecider: WKPolicyDecider
     private let alertPresenter: AlertPresenter
-    private let store = DefaultJavscriptAlertStore()
+    private let store: WKJavscriptAlertStore
+    private let popupThrottler: WKPopupThrottler
 
     init(sessionDependencies: EngineSessionDependencies,
          alertPresenter: AlertPresenter,
@@ -93,6 +94,8 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         self.policyDecider = policyDecider
         self.application = application
         self.alertPresenter = alertPresenter
+        self.store = DefaultJavscriptAlertStore()
+        self.popupThrottler = DefaultPopupThrottler()
         super.init()
 
         (self.sessionCreator as? WKSessionCreator)?.onNewSessionCreated = { [weak self] in
@@ -137,7 +140,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
     }
 
     let logger = DefaultLogger.shared
-    
+
     public func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
@@ -145,6 +148,12 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         completionHandler: @escaping @MainActor () -> Void
     ) {
         let alert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
+        guard popupThrottler.canShowAlert(type: .alert) else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                completionHandler()
+            }
+            return
+        }
         if alertPresenter.canPresent() {
             let controller = alert.alertController()
             controller.delegate = self
@@ -164,7 +173,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
     ) {
         // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     }
-    
+
     // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     public func webView(
         _ webView: WKWebView,
@@ -173,7 +182,6 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (String?) -> Void
     ) {
-        
     }
 
     public func webViewDidClose(_ webView: WKWebView) {
@@ -199,7 +207,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         }
         decisionHandler(.prompt)
     }
-    
+
     // MARK: - WKJavaScriptPromptAlertControllerDelegate
     func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
         guard let alert = store.popFirst(), alertPresenter.canPresent() else { return }

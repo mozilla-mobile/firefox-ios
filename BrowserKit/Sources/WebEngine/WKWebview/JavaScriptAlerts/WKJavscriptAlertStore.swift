@@ -12,11 +12,11 @@ protocol WKJavscriptAlertStore {
 
 class DefaultJavscriptAlertStore: WKJavscriptAlertStore {
     private var alerts: [WKJavaScriptAlertInfo] = []
-    
+
     func add(_ alert: WKJavaScriptAlertInfo) {
         alerts.append(alert)
     }
-    
+
     func popFirst() -> WKJavaScriptAlertInfo? {
         return alerts.popLast()
     }

@@ -103,7 +103,7 @@ struct TextInputAlert: WKJavaScriptAlertInfo {
         alertController.addTextField { textField in
             textField.text = self.defaultText
         }
-        
+
         // TODO: - Strings localized
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
             let result = alertController.textFields?.first?.text
