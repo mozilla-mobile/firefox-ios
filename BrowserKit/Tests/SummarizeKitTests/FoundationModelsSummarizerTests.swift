@@ -117,28 +117,3 @@ final class FoundationModelsSummarizerTests: XCTestCase {
 }
 
 #endif
-
-/// NOTE: Conforming Equatable to make checks in tests simpler.
-extension SummarizerError: Equatable {
-    public static func == (lhs: SummarizerError, rhs: SummarizerError) -> Bool {
-        switch (lhs, rhs) {
-        case (.tooLong, .tooLong),
-             (.rateLimited, .rateLimited),
-             (.busy, .busy),
-             (.safetyBlocked, .safetyBlocked),
-             (.unsupportedLanguage, .unsupportedLanguage),
-             (.invalidResponse, .invalidResponse),
-             (.unableToExtractContent, .unableToExtractContent),
-             (.invalidChunk, .invalidChunk),
-             (.noContent, .noContent),
-             (.cancelled, .cancelled):
-            return true
-
-        case (.unknown(let lhsError), .unknown(let rhsError)):
-            return String(describing: lhsError) == String(describing: rhsError)
-
-        default:
-            return false
-        }
-    }
-}
