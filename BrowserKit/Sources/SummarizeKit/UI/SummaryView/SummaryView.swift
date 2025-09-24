@@ -12,7 +12,7 @@ struct SummaryViewModel {
     let titleA11yId: String
     let compactTitleA11yId: String
 
-    let brandViewModel: BrandViewModel
+    let brandViewModel: BrandViewConfiguration
 
     let summary: NSAttributedString?
     let summaryA11yId: String

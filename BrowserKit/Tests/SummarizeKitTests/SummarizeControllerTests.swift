@@ -37,30 +37,31 @@ final class SummarizeControllerTests: XCTestCase {
     private var summarizer: MockSummarizer!
     private var navigationHandler: MockSummarizeNavigationHandler!
     private var webView: MockWebView!
-    private let viewModel = SummarizeViewModel(
+    private var viewModel: MockSummarizeViewModel!
+    private let configuration = SummarizeViewConfiguration(
         titleLabelA11yId: "",
         compactTitleLabelA11yId: "",
         summaryFootnote: "Footnote",
         summarizeViewA11yId: "",
-        tabSnapshotViewModel: TabSnapshotViewModel(
+        tabSnapshot: TabSnapshotViewConfiguration(
             tabSnapshotA11yLabel: "",
             tabSnapshotA11yId: "",
             tabSnapshot: .add,
             tabSnapshotTopOffset: 0
         ),
-        loadingLabelViewModel: LoadingLabelViewModel(
+        loadingLabel: LoadingLabelViewConfiguration(
             loadingLabel: "loading",
             loadingA11yLabel: "",
             loadingA11yId: ""
         ),
-        brandViewModel: BrandViewModel(
+        brandView: BrandViewConfiguration(
             brandLabel: "",
             brandLabelA11yId: "",
             brandImage: nil,
             brandImageA11yId: ""
         ),
-        closeButtonModel: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
-        errorMessages: LocalizedErrorsViewModel(
+        closeButton: CloseButtonViewModel(a11yLabel: "", a11yIdentifier: ""),
+        errorMessages: LocalizedErrorsViewConfiguration(
             rateLimitedMessage: "",
             unsafeContentMessage: "",
             summarizationNotAvailableMessage: "",
@@ -72,7 +73,7 @@ final class SummarizeControllerTests: XCTestCase {
             closeButtonLabel: "",
             acceptToSButtonLabel: ""
         ),
-        tosViewModel: ToSBottomSheetViewModel(
+        termOfService: TermOfServiceViewConfiguration(
             titleLabel: "",
             titleLabelA11yId: "",
             descriptionText: "",
@@ -95,6 +96,7 @@ final class SummarizeControllerTests: XCTestCase {
         summarizer = MockSummarizer(shouldRespond: ["Response"], shouldThrowError: nil)
         navigationHandler = MockSummarizeNavigationHandler()
         webView = MockWebView(URL(string: "https://www.example.com")!)
+        viewModel = MockSummarizeViewModel()
         AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
     }
 
@@ -103,51 +105,67 @@ final class SummarizeControllerTests: XCTestCase {
         summarizer = nil
         navigationHandler = nil
         webView = nil
+        viewModel = nil
         AppContainer.shared.reset()
         super.tearDown()
     }
 
-    func test_dismiss_callsNavigationHandler() {
+    func test_viewDidLoad_startSummarizing() async {
+        let subject = createSubject()
+
+        // Calls view did load just once, instead of calling directly viewDidLoad()
+        _ = subject.view
+
+        await MainActor.run {
+            XCTAssertEqual(viewModel.summarizeCalled, 1)
+        }
+    }
+
+    func test_viewDidLoad_whenTosIsNotShown() async {
+        let subject = createSubject()
+        viewModel.injectedSummarizeResult = .failure(.tosConsentMissing)
+
+        _ = subject.view
+
+        await MainActor.run {
+            XCTAssertEqual(viewModel.summarizeCalled, 1)
+            XCTAssertEqual(viewModel.setTosScreenShownCalled, 1)
+        }
+    }
+
+    func test_viewDidAppear_unblocksSummarization() async {
+        let subject = createSubject()
+
+        subject.viewDidAppear(false)
+
+        await MainActor.run {
+            XCTAssertEqual(viewModel.unblockSummarizationCalled, 1)
+        }
+    }
+
+    func test_dismiss() {
         let subject = createSubject()
 
         subject.dismiss(animated: false)
 
         XCTAssertEqual(navigationHandler.dismissSummaryCalled, 1)
-        XCTAssertEqual(navigationHandler.denyToSConsentCalled, 0)
-    }
-
-    func test_dismiss_denyTos_whenTosIsShown() {
-        let expectation = XCTestExpectation(description: "ToS should be displayed")
-        let subject = createSubject {
-            expectation.fulfill()
-        }
-
-        subject.viewDidLoad()
-        subject.viewWillAppear(false)
-
-        wait(for: [expectation], timeout: 0.5)
-
-        subject.dismiss(animated: false)
-
-        XCTAssertEqual(navigationHandler.denyToSConsentCalled, 1)
-        XCTAssertEqual(navigationHandler.acceptToSConsentCalled, 0)
-        XCTAssertEqual(navigationHandler.dismissSummaryCalled, 1)
+        XCTAssertEqual(viewModel.closeSummariationCalled, 1)
+        XCTAssertEqual(viewModel.logTosStatusCalled, 1)
     }
 
     private func createSubject(
         isTosAccepted: Bool = false,
         onSummaryDisplayed: @escaping () -> Void = {}
     ) -> SummarizeController {
-        let service = SummarizerService(summarizer: summarizer, maxWords: maxWords)
         let controller = SummarizeController(
             windowUUID: .XCTestDefaultUUID,
+            configuration: configuration,
             viewModel: viewModel,
-            summarizerService: service,
             navigationHandler: navigationHandler,
             webView: webView,
-            isTosAccepted: isTosAccepted,
             onSummaryDisplayed: onSummaryDisplayed
         )
+        trackForMemoryLeaks(controller)
         return controller
     }
 }

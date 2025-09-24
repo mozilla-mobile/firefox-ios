@@ -10,8 +10,9 @@ import ComponentLibrary
 struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
+    @State private var primaryBackgroundColor: Color = .clear
+    @State private var primaryForegroundColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var secondaryActionColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
 
@@ -48,35 +49,30 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
 
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy) -> some View {
-        VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
-            VStack {
-                ScrollView {
-                    VStack(spacing: UX.CardView.spacing) {
-                        titleView
-                            .padding(.top, UX.CardView.titleTopPadding)
-                        imageView
-                        bodyView
-                        Spacer()
-                    }
-                    .padding(.horizontal, UX.CardView.horizontalPadding)
+        VStack {
+            ScrollView {
+                VStack(spacing: UX.CardView.spacing) {
+                    titleView
+                        .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
+                    imageView
+                    bodyView
+                    Spacer()
                 }
-                .scrollBounceBehavior(basedOnSize: true)
-
-                primaryButton
-                    .padding(UX.CardView.verticalPadding)
+                .padding(.horizontal, UX.CardView.horizontalPadding)
             }
-            .frame(
-                width: geometry.size.width,
-                height: geometry.size.height * UX.CardView.cardHeightRatio
-            )
-            .background(
-                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                    .fill(cardBackgroundColor)
-                    .accessibilityHidden(true)
-            )
-            secondaryButton
-            Spacer()
+            .scrollBounceBehavior(basedOnSize: true)
+
+            VStack {
+                primaryButton
+                secondaryButton
+            }
+            .padding(UX.CardView.verticalPadding)
         }
+        .background(
+            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
+                .fill(cardBackgroundColor)
+                .accessibilityHidden(true)
+        )
     }
 
     var titleView: some View {
@@ -156,10 +152,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                             )
                         })
                     .font(UX.CardView.secondaryActionFont)
-                    .foregroundColor(secondaryActionColor)
-                    .padding(.top, UX.CardView.secondaryButtonTopPadding)
-                    .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
                     .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
+                    .buttonStyle(SecondaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
                 } else {
                     DragCancellableSecondaryButton(
                         title: secondary.title,
@@ -169,8 +163,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                                 viewModel.name
                             )
                         },
-                        accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
-                        secondaryActionColor: secondaryActionColor
+                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                        accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
                     )
                 }
             }
@@ -182,6 +176,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
-        secondaryActionColor = Color(color.textOnDark)
+        primaryBackgroundColor = Color(color.actionPrimary)
+        primaryForegroundColor = Color(color.textInverted)
     }
 }
