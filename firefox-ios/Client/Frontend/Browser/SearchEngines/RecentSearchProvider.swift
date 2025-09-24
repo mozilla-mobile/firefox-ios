@@ -13,7 +13,7 @@ struct RecentSearchProvider {
     private let baseKey = PrefsKeys.Search.recentSearchesCache
     private let maxNumberOfSuggestions = 5
 
-    // Namespaced key = "recentSearches.[engineID]"
+    // Namespaced key = "recentSearchesCacheBaseKey.[engineID]"
     private var recentSearchesKey: String {
         "\(baseKey).\(searchEngineID)"
     }
