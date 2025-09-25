@@ -428,7 +428,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabTraySnapshot.clipsToBounds = true
 
         toView.layer.cornerCurve = .continuous
-        toView.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
         toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
 
@@ -443,7 +442,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             tabTraySnapshot.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
             toView.alpha = UX.opaqueAlpha
             contentContainer.alpha = UX.opaqueAlpha
-            toView.layer.cornerRadius = UX.zeroCornerRadius
         } completion: { _ in
             self.view.removeFromSuperview()
             tabTraySnapshot.removeFromSuperview()
