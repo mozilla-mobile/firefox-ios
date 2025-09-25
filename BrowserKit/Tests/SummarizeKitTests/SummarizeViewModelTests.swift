@@ -63,7 +63,7 @@ final class SummarizeViewModelTests: XCTestCase {
         }
         wait(for: [newDataExpectation], timeout: 0.5)
     }
-    
+
     func test_summarizer_whenTosNotAcceppted_whenTriggerIsNotShake_startsSummarizer() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let chunk = "This is the max words to proceed"
