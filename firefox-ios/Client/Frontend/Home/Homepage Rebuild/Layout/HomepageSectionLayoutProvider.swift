@@ -586,7 +586,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// Creates a "dummy" top sites section and returns its height
     private func getShortcutsSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
-        
         let topSitesState = state.topSitesState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let measurementKey = LayoutMeasurementCache.TopSitesMeasurement.Key(
@@ -633,7 +632,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         var totalHeight: CGFloat = 0
-        
         // Add header height
         totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
 
@@ -661,7 +659,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Add section insets
         totalHeight += UX.TopSitesConstants.getBottomInset()
-        
         measurementsCache.topSites = LayoutMeasurementCache.TopSitesMeasurement(
             key: measurementKey,
             height: totalHeight
@@ -672,7 +669,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" stories section and returns its height
     private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        
         let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
             collectionViewWidth: environment.container.contentSize.width
         )
