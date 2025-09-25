@@ -145,12 +145,6 @@ func checkBigPullRequest() {
 
     let additionsAndDeletions = additions + deletions
     if additionsAndDeletions > monsterPRThreshold {
-        fail("""
-        Heads up reviewers: this PR is very large (\(additionsAndDeletions) lines).
-        Consider taking extra time, asking for a high-level summary, or reviewing in focused passes.
-        Splitting into smaller PRs or using an epic branch might also help with clarity.
-        """)
-
         markdown("""
         ### 🧟‍♂️ **Monster PR**
         Wow, this PR is **huge** with \(additionsAndDeletions) lines changed!
@@ -158,11 +152,6 @@ func checkBigPullRequest() {
         Reviewers: feel free to ask for extra context, screenshots, or a breakdown to make reviewing smoother.
         """)
     } else if additionsAndDeletions > bigPRThreshold {
-        warn("""
-        Note for reviewers: this PR is larger than usual (\(additionsAndDeletions) lines).
-        It may help to request a quick overview or suggest splitting if multiple concerns are bundled together.
-        """)
-
         markdown("""
         ### 🏔️ **Summit Climber**
         This PR is a **big climb** with \(additionsAndDeletions) lines changed!
