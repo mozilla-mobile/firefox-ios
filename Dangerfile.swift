@@ -17,6 +17,7 @@ failOnNewFilesWithoutCoverage()
 checkForWebEngineFileChange()
 checkForCodeUsage()
 checkStringsFile()
+checkReleaseBranch()
 BrowserViewControllerChecker().failsOnAddedExtension()
 
 // Add some fun comments in Danger to have positive feedback on PRs
@@ -444,6 +445,15 @@ func commentDescriptionSection(desc: String) {
             ### 💬 **Description craftsman**
             Great PR description! Reviewers salute you 🫡
             """)
+    }
+}
+
+func checkReleaseBranch() {
+    if danger.github.pullRequest.base.ref.hasPrefix("release/") {
+        markdown("""
+        ### 🎯 This PR targets a **release branch**.
+        Please ensure you've followed the [uplift request process](https://github.com/mozilla-mobile/firefox-ios/wiki/Requesting-an-uplift-to-a-release-branch).
+        """)
     }
 }
 
