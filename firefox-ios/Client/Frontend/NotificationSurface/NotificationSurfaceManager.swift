@@ -9,8 +9,8 @@ import Shared
 protocol NotificationSurfaceDelegate: AnyObject {
     func didDisplayMessage(_ message: GleanPlumbMessage)
     @MainActor
-    func didTapNotification(_ userInfo: [AnyHashable: Any])
-    func didDismissNotification(_ userInfo: [AnyHashable: Any])
+    func didTapNotification(_ messageId: String)
+    func didDismissNotification(_ messageId: String)
 }
 
 // TODO: FXIOS-FXIOS-13583 - NotificationSurfaceManager should be concurrency safe
@@ -69,17 +69,15 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate, @unchecked Sendab
         messagingManager.onMessageDisplayed(message)
     }
 
-    func didTapNotification(_ userInfo: [AnyHashable: Any]) {
-        guard let messageId = userInfo[Constant.messageIdKey] as? String,
-              let message = messagingManager.messageForId(messageId)
+    func didTapNotification(_ messageId: String) {
+        guard let message = messagingManager.messageForId(messageId)
         else { return }
 
         messagingManager.onMessagePressed(message, window: nil, shouldExpire: true)
     }
 
-    func didDismissNotification(_ userInfo: [AnyHashable: Any]) {
-        guard let messageId = userInfo[Constant.messageIdKey] as? String,
-              let message = messagingManager.messageForId(messageId)
+    func didDismissNotification(_ messageId: String) {
+        guard let message = messagingManager.messageForId(messageId)
         else { return }
 
         messagingManager.onMessageDismissed(message)
