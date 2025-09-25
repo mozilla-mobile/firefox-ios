@@ -16,6 +16,7 @@ enum BrowserNavigationDestination: Equatable {
     case bookmarksPanel
     case zeroSearch
     case shortcutsLibrary
+    case storiesFeed
     case summarizer(config: SummarizerConfig)
 
     // Webpage views

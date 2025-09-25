@@ -2850,6 +2850,8 @@ class BrowserViewController: UIViewController,
             configureZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
+        case .storiesFeed:
+            navigationHandler?.showStoriesFeed()
         }
     }
 
