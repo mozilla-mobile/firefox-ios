@@ -422,6 +422,13 @@ class BaseTestCase: XCTestCase {
         XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
 
+    func mozWaitElementEnabled(element: XCUIElement, timeout: Double) {
+        let predicate = NSPredicate(format: "exists == true && hittable == true && enabled == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed, "Element did not become enabled in time.")
+    }
+
     // Theme settings has been replaced with Appearance screen
     func switchThemeToDarkOrLight(theme: String) {
         if !app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].isHittable {
@@ -599,16 +606,20 @@ extension XCUIElement {
     }
     /// Waits for the UI element and then taps if it exists.
     func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout ?? TIMEOUT)
-        if self.elementType == .button || self.elementType == .link {
-            BaseTestCase().mozWaitElementHittable(element: self, timeout: timeout ?? TIMEOUT)
+        if self.elementType == .button || self.elementType == .menuItem 
+            || self.elementType == .switch || self.elementType == .cell
+            || self.elementType == .link {
+            BaseTestCase().mozWaitElementEnabled(element: self, timeout: timeout ?? TIMEOUT)
+        } else {
+            BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         }
         self.tap()
     }
     /// Waits for the UI element and then taps and types the provided text if it exists.
     func tapAndTypeText(_ text: String, timeout: TimeInterval? = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout ?? TIMEOUT)
+        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         self.tap()
+        BaseTestCase().mozWaitElementEnabled(element: self, timeout: timeout ?? TIMEOUT)
         self.typeText(text)
     }
 
