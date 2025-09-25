@@ -68,7 +68,7 @@ public final class DefaultSummarizerService: SummarizerService {
     public func summarizeStreamed(from webView: WKWebView) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in
             streamContinuation = continuation
-            // FIXME: FXIOS-13418 Passing closure as a 'sending' parameter risks causing data races
+            // TODO: FXIOS-13418 Passing closure as a 'sending' parameter risks causing data races
             Task {
                 do {
                     let text = try await self.extractSummarizableText(from: webView)

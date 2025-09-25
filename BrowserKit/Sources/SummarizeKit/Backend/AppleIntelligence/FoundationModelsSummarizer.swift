@@ -62,7 +62,7 @@ final class FoundationModelsSummarizer: SummarizerProtocol {
         let session = makeSession(config.instructions)
         let userPrompt = Prompt(contentToSummarize)
 
-        // FIXME: FXIOS-13418 Capture of 'responseStream' with non-Sendable type in a '@Sendable' closure
+        // TODO: FXIOS-13418 Capture of 'responseStream' with non-Sendable type in a '@Sendable' closure
         nonisolated(unsafe) var responseStream = session
             .streamResponse(to: userPrompt, options: config.toGenerationOptions())
             .makeAsyncIterator()
