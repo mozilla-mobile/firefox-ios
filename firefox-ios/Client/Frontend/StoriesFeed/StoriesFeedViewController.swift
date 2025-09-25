@@ -6,7 +6,7 @@ import Common
 import Foundation
 
 class StoriesFeedViewController: UIViewController,
-                                Themeable {
+                                 Themeable {
     // MARK: - Themeable Properties
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -38,6 +38,11 @@ class StoriesFeedViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupNavigationBar(animated: animated)
+    }
+
+    // MARK: Helper functions
+    private func setupNavigationBar(animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: animated)
         title = .FirefoxHomepage.Pocket.TopStories.TopStoriesViewTitle
     }
