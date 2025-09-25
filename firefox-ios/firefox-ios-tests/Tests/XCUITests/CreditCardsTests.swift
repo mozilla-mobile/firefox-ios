@@ -415,6 +415,7 @@ class CreditCardsTests: BaseTestCase {
         // Fill in the form with the card details of a new (unsaved) credit card.
         fillCardDetailsOnWebsite(fillNewInfo: true)
         // Tap on "Submit"
+        app.webViews.firstMatch.swipeRight()
         app.buttons["Submit"].waitAndTap()
         // Securely save this card prompt is displayed
         waitForElementsToExist(
@@ -441,6 +442,7 @@ class CreditCardsTests: BaseTestCase {
         waitUntilPageLoad()
         // Fill in the form with the card details of a new (unsaved) credit card.
         fillCardDetailsOnWebsite(fillNewInfo: true)
+        app.webViews.firstMatch.swipeRight()
         app.buttons["Submit"].waitAndTap()
         app.buttons["Save"].waitAndTap()
         // The prompt is dismissed. And a toast message is displayed: "New card saved"
@@ -478,6 +480,7 @@ class CreditCardsTests: BaseTestCase {
         // Modify the card details
         fillCardDetailsOnWebsite(fillNewInfo: false)
         // Tap on "Submit"
+        app.webViews.firstMatch.swipeRight()
         let submitButton = app.buttons["Submit"]
         submitButton.waitAndTap()
         // The "Update this card?" prompt is displayed.
@@ -521,6 +524,7 @@ class CreditCardsTests: BaseTestCase {
         // Modify the card details
         fillCardDetailsOnWebsite(fillNewInfo: false)
         // Tap on "Submit"
+        app.webViews.firstMatch.swipeRight()
         submitButton.waitAndTap()
         // The "Update this card?" prompt is displayed.
         // The prompt contains two buttons: "Save" and "x".
