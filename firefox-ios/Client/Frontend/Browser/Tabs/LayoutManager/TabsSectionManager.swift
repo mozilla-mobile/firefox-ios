@@ -18,7 +18,7 @@ final class TabsSectionManager: FeatureFlaggable {
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
         static let verticalInset: CGFloat = 20
-        static let experimentEstimatedTitleHeight: CGFloat = 20
+        static let experimentTitleHeight: CGFloat = 20
     }
 
     static func leadingInset(traitCollection: UITraitCollection,
@@ -88,7 +88,7 @@ final class TabsSectionManager: FeatureFlaggable {
 
         let titleSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(UX.experimentEstimatedTitleHeight)
+            heightDimension: .absolute(UX.experimentTitleHeight)
         )
 
         let titleSupplementary = NSCollectionLayoutSupplementaryItem(

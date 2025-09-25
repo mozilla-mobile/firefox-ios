@@ -88,4 +88,19 @@ extension Selector {
             return app.textFields.matching(identifier: value)
         }
     }
+
+    static func webView(description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d", XCUIElement.ElementType.webView.rawValue)
+        return Selector(strategy: .predicate(p), value: "webView", description: description, groups: groups)
+    }
+
+    static func link(description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label != ''", XCUIElement.ElementType.link.rawValue)
+        return Selector(strategy: .predicate(p), value: "link", description: description, groups: groups)
+    }
+
+    static func linkByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label == %@", XCUIElement.ElementType.link.rawValue, label)
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
 }

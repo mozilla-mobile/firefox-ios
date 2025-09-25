@@ -11,12 +11,6 @@ struct VertexOutput {
     float2 textureCoordinate;
 };
 
-struct GradientControlPoint {
-    float2 position;
-    half3 color;
-    float influence;
-};
-
 // MARK: - Gradient Palette Struct
 struct GradientPalette {
     float3 gradientOnboardingStop1;
@@ -67,13 +61,10 @@ static float generatePerlinNoise(float2 coordinate) {
 /**
  * Calculates animated position for a control point using circular motion
  */
-static float2 calculateAnimatedControlPointPosition(float2 basePosition, float currentTime, float animationSpeed) {
-    // Control point animation radius
-    const float kControlPointAnimationRadius = 0.2f;
-
+static float2 calculateAnimatedControlPointPosition(float2 basePosition, float currentTime, float animationSpeed, float radius) {
     const float2 circularOffset = float2(
-        kControlPointAnimationRadius * sin(currentTime * animationSpeed),
-        kControlPointAnimationRadius * cos(currentTime * animationSpeed)
+        radius * sin(currentTime * animationSpeed),
+        radius * cos(currentTime * animationSpeed)
     );
     return basePosition + circularOffset;
 }
@@ -116,12 +107,12 @@ vertex VertexOutput animatedGradientVertex(uint vertexID [[vertex_id]]) {
 
 // MARK: - Fragment Shader
 fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
-                                       constant float &currentTime [[buffer(0)]],
-                                       constant GradientPalette &palette [[buffer(1)]],
-                                       constant float &speedMultiplier [[buffer(2)]],
-                                       texture2d<half> previousFrameTexture [[texture(0)]]) {
+                                        constant float &currentTime [[buffer(0)]],
+                                        constant GradientPalette &palette [[buffer(1)]],
+                                        constant float &speedMultiplier [[buffer(2)]],
+                                        texture2d<half> previousFrameTexture [[texture(0)]]) {
 
-    // Base animation speeds (configurable multiplier will be applied)
+    // Animation speed constants
     const float kBaseFirstPointAnimationSpeed = 0.8f;
     const float kBaseSecondPointAnimationSpeed = 0.6f;
     const float kBaseThirdPointAnimationSpeed = 1.5f;
@@ -129,16 +120,22 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
     const float kBasePulsationSpeed = 1.2f;
 
     // Animation constants
+    const float kControlPointAnimationRadius = 0.2f;
     const float kBaseInfluenceRadius = 0.725f;
     const float kPulsationAmplitude = 0.05f;
+    const float kPulsationOffset = 0.15f;
     const float kNoiseScale = 10.0f;
     const float kNoiseInfluence = 0.1f;
+    const float kNoiseTimeScale = 0.5f;
 
     // Motion blur constants
     const float kCurrentFrameWeight = 0.85f; // 85% current frame, 15% previous
 
     // Smoothing constants
     const float kMinInfluenceThreshold = 0.001f;
+
+    // Calculate adjusted time with speed multiplier
+    const float adjustedTime = currentTime * speedMultiplier;
 
     // Control point animation speeds - now configurable with speed multiplier
     const float kFirstPointAnimationSpeed = kBaseFirstPointAnimationSpeed * speedMultiplier;
@@ -147,11 +144,11 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
     const float kFourthPointAnimationSpeed = kBaseFourthPointAnimationSpeed * speedMultiplier;
     const float kPulsationSpeed = kBasePulsationSpeed * speedMultiplier;
 
-    // Use colors from Swift
-    const half3 kGradientOnboardingStop1  = half3(palette.gradientOnboardingStop1);
+    // Use colors from the injected palette
+    const half3 kGradientOnboardingStop1 = half3(palette.gradientOnboardingStop1);
     const half3 kGradientOnboardingStop2 = half3(palette.gradientOnboardingStop2);
-    const half3 kGradientOnboardingStop3   = half3(palette.gradientOnboardingStop3);
-    const half3 kGradientOnboardingStop4  = half3(palette.gradientOnboardingStop4);
+    const half3 kGradientOnboardingStop3 = half3(palette.gradientOnboardingStop3);
+    const half3 kGradientOnboardingStop4 = half3(palette.gradientOnboardingStop4);
 
     // Define base positions for gradient control points
     const float2 firstControlPointBase = float2(0.2f, 0.3f);
@@ -161,18 +158,18 @@ fragment half4 animatedGradientFragment(VertexOutput fragmentInput [[stage_in]],
 
     // Calculate animated control point positions
     const float2 firstControlPointPosition = calculateAnimatedControlPointPosition(
-        firstControlPointBase, currentTime, kFirstPointAnimationSpeed);
+        firstControlPointBase, adjustedTime, kFirstPointAnimationSpeed, kControlPointAnimationRadius);
     const float2 secondControlPointPosition = calculateAnimatedControlPointPosition(
-        secondControlPointBase, currentTime, kSecondPointAnimationSpeed);
+        secondControlPointBase, adjustedTime, kSecondPointAnimationSpeed, kControlPointAnimationRadius);
     const float2 thirdControlPointPosition = calculateAnimatedControlPointPosition(
-        thirdControlPointBase, currentTime, kThirdPointAnimationSpeed);
+        thirdControlPointBase, adjustedTime, kThirdPointAnimationSpeed, kControlPointAnimationRadius);
     const float2 fourthControlPointPosition = calculateAnimatedControlPointPosition(
-        fourthControlPointBase, currentTime, kFourthPointAnimationSpeed);
+        fourthControlPointBase, adjustedTime, kFourthPointAnimationSpeed, kControlPointAnimationRadius);
 
     // Calculate dynamic influence radius with pulsation and noise variation
-    const float pulsationEffect = kPulsationAmplitude * sin(currentTime * kPulsationSpeed);
-    const float noiseVariation = generatePerlinNoise(fragmentInput.textureCoordinate * kNoiseScale + currentTime) * kNoiseInfluence;
-    const float dynamicInfluenceRadius = kBaseInfluenceRadius + pulsationEffect + noiseVariation;
+    const float pulsationEffect = kPulsationAmplitude * sin(adjustedTime * kPulsationSpeed);
+    const float noiseVariation = generatePerlinNoise(fragmentInput.textureCoordinate * kNoiseScale + adjustedTime * kNoiseTimeScale) * kNoiseInfluence;
+    const float dynamicInfluenceRadius = kBaseInfluenceRadius + kPulsationOffset + pulsationEffect + noiseVariation;
 
     // Calculate influence weights for each control point
     const float firstPointInfluence = calculateDistanceInfluence(fragmentInput.textureCoordinate, firstControlPointPosition, dynamicInfluenceRadius);

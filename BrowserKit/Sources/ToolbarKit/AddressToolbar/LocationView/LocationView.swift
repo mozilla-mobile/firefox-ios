@@ -37,6 +37,7 @@ final class LocationView: UIView,
     private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
     private var scrollAlpha: CGFloat = 1
+    private var hasAlternativeLocationColor = false
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -146,6 +147,8 @@ final class LocationView: UIView,
                    uxConfig: AddressToolbarUXConfiguration,
                    addressBarPosition: AddressToolbarPosition) {
         isURLTextFieldCentered = uxConfig.isLocationTextCentered
+        hasAlternativeLocationColor = uxConfig.hasAlternativeLocationColor
+
         // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
         // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
         searchEngineContentView = isUnifiedSearchEnabled
@@ -178,6 +181,9 @@ final class LocationView: UIView,
         onLongPress = config.onLongPress
 
         layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
+
+        guard let theme else { return }
+        applyTheme(theme: theme)
     }
 
     private func layoutContainerView(isEditing: Bool, isURLTextFieldCentered: Bool) {
@@ -672,24 +678,28 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
-        // Get the appearance based on `isURLTextFieldCentered`
-        let appearance: LocationViewAppearanceConfiguration = .getAppearanceForVersion(theme: theme)
 
+        let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
-        gradientLayer.colors = appearance.gradientColors
+        gradientLayer.colors = Gradient(
+            colors: [
+                mainBackgroundColor.withAlphaComponent(1),
+                mainBackgroundColor.withAlphaComponent(0)
+            ]
+        ).cgColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
-        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : appearance.backgroundColor
+        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
+        lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
             string: urlTextField.placeholder ?? "",
-            attributes: [.foregroundColor: appearance.placeholderColor]
+            attributes: [.foregroundColor: colors.textPrimary]
         )
 
         safeListedURLImageColor = colors.iconAccentBlue
-        lockIconButton.tintColor = appearance.etpIconTintColor
-        lockIconImageColor = appearance.etpIconImageColor
+        lockIconButton.tintColor = colors.textSecondary
+        lockIconImageColor = colors.textSecondary
 
         setLockIconImage()
         // Applying the theme to urlTextField can cause the url formatting to get removed
