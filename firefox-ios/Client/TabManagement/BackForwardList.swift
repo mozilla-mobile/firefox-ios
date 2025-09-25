@@ -12,12 +12,16 @@ typealias BackForwardListItem = EngineSessionBackForwardListItem
 /// It allows to decouple `Tab`'s clients from `WebKit`.
 @MainActor
 protocol BackForwardList {
+    @MainActor
     var currentItem: BackForwardListItem? { get }
 
+    @MainActor
     var backList: [BackForwardListItem] { get }
+    @MainActor
     var forwardList: [BackForwardListItem] { get }
 
     /// Returns the first item in the back and forward list that matches the provided URL.
+    @MainActor
     func firstItem(with url: URL) -> BackForwardListItem?
 }
 
@@ -25,6 +29,7 @@ protocol BackForwardList {
 ///
 /// The object is built upon a source `WKBackForwardList`
 /// and maps any local temporary document items with their correct online source URL.
+@MainActor
 class TabBackForwardList: BackForwardList {
     var currentItem: BackForwardListItem?
     var backList: [BackForwardListItem]

@@ -41,9 +41,12 @@ protocol TopTabCellDelegate: AnyObject {
 
 protocol TabDisplayerDelegate: AnyObject {
     typealias TabCellIdentifier = String
+    @MainActor
     var tabCellIdentifier: TabCellIdentifier { get set }
 
+    @MainActor
     func focusSelectedTab()
+    @MainActor
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell
 }
 

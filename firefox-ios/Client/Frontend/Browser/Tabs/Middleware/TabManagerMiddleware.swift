@@ -1123,7 +1123,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsBookmarked(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.places.isBookmarked(url: url).uponQueue(dataQueue) { result in
             completion(result.successValue ?? false)
@@ -1133,7 +1133,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsPinned(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.pinnedSites.isPinnedTopSite(url).uponQueue(dataQueue) { result in
             completion(result.successValue ?? false)
@@ -1143,7 +1143,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsInReadingList(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.readingList.getRecordWithURL(url).uponQueue(dataQueue) { result in
             completion(result.successValue != nil)
