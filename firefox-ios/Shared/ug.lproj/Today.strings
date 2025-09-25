@@ -2,7 +2,7 @@
 "TodayWidget.ClosePrivateTabsButton" = "شەخسىي بەتكۈچنى ياپ";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV2" = "شەخسىي \nبەتكۈچنى ياپ";
+"TodayWidget.ClosePrivateTabsLabelV2" = "شەخسىي\nبەتكۈچنى ياپ";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "باش بېتىڭىزگە Firefox تېزلەتمىسىنى قوشىدۇ.";
@@ -47,7 +47,7 @@
 "TodayWidget.SearchInFirefoxV2" = "Firefox تا\nئىزدە";
 
 /* Search in private tab */
-"TodayWidget.SearchInPrivateTabLabelV2" = "شەخسىي \nبەتكۈچتە ئىزدە";
+"TodayWidget.SearchInPrivateTabLabelV2" = "شەخسىي\nبەتكۈچتە ئىزدە";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryDescription" = "دائىم ۋە يېقىندا زىيارەت قىلغان تور بېكەتلەرگە تېزلەتمە قوشىدۇ.";

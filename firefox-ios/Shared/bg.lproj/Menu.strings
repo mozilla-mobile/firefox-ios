@@ -1,6 +1,18 @@
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "Затваряне на всички раздели";
 
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "Копиране на препратката";
+
+/* Toast displayed to user after downlaod pdf was pressed. */
+"Menu.DownloadPDF.Confirm.v129" = "PDF е изтеглен успешно";
+
+/* Label for the button, displayed in the menu, downloads a pdf when pressed. */
+"Menu.DownloadPDF.Label.v129" = "Изтегляне на PDF";
+
+/* Label for the edit bookmark button in the legacy menu. Pressing this button opens the bookmark editing screen for the current page's bookmark. Please keep the text as short as possible for this label. */
+"Menu.EditBookmark.Label.v135" = "Редактиране";
+
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Търсене в страницата";
 
@@ -10,11 +22,29 @@
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "Отваряне в раздел";
 
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. */
+"Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Отметки";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. */
+"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Изтегляния";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. */
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "История";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. */
+"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Списък за четене";
+
 /* Label for the button, displayed in the menu, used to open the Settings menu. */
 "Menu.OpenSettingsAction.Title" = "Настройки";
 
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. */
+"Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Синхронизирани раздели";
+
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
 "Menu.ReportSiteIssueAction.Title" = "Докладване на проблем със страницата";
+
+/* Label for the button, displayed in Firefox Home, used to see all Library panels. */
+"Menu.SeeAllAction.Title" = "Вижте всички";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "Споделяне на страницата…";
@@ -24,4 +54,7 @@
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Мобилна версия на сайта";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "Страница";
 
