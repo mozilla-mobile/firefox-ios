@@ -99,7 +99,7 @@ class BaseTestCase: XCTestCase {
 
     func setUpLaunchArguments() {
         if !launchArguments.contains("FIREFOX_PERFORMANCE_TEST") {
-            app.launchArguments = [LaunchArguments.Test, LaunchArguments.DisableAnimations] + launchArguments
+            app.launchArguments = [LaunchArguments.Test] + launchArguments
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
         }
@@ -600,7 +600,7 @@ extension XCUIElement {
     /// Waits for the UI element and then taps if it exists.
     func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout ?? TIMEOUT)
-        if self.elementType == .button {
+        if self.elementType == .button || self.elementType == .link {
             BaseTestCase().mozWaitElementHittable(element: self, timeout: timeout ?? TIMEOUT)
         }
         self.tap()
