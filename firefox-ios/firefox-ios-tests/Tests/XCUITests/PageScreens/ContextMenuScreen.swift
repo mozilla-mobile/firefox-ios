@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 final class ContextMenuScreen {
     private let app: XCUIApplication
@@ -20,5 +21,11 @@ final class ContextMenuScreen {
         let option = menuTable.cells.buttons[sel.OPEN_IN_PRIVATE_TAB.value]
         BaseTestCase().mozWaitForElementToExist(option, timeout: timeout)
         option.tap()
+    }
+
+    func unpinFromTopSites() {
+        let unpinButton = app.buttons[StandardImageIdentifiers.Large.pinSlash]
+        BaseTestCase().mozWaitForElementToExist(unpinButton)
+        unpinButton.waitAndTap()
     }
 }

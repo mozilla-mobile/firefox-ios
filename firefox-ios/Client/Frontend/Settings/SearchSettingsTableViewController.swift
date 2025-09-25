@@ -16,6 +16,12 @@ protocol SearchEnginePickerDelegate: AnyObject {
 }
 
 final class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable {
+    private struct UX {
+        static let imageViewCornerRadius: CGFloat = 4
+        static let textLabelMinimumScaleFactor: CGFloat = 0.5
+        static let textLabelLinesLimit = 0
+    }
+
     // MARK: - Properties
     private enum Section: Int, CaseIterable {
         case defaultEngine
@@ -161,147 +167,37 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         switch section {
         case .defaultEngine:
             guard let engine = model.defaultEngine else { break }
-            cell.editingAccessoryType = .disclosureIndicator
-            cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
-            cell.accessibilityValue = engine.shortName
-            cell.textLabel?.text = engine.shortName
-            cell.imageView?.image = engine.image.createScaled(IconSize)
-            cell.imageView?.layer.cornerRadius = 4
-            cell.imageView?.layer.masksToBounds = true
-            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            configureCellForDefaultEngineAction(cell: cell, engine: engine)
 
         case .alternateEngines:
-            // The default engine is not an alternate search engine.
-            let index = indexPath.item + 1
-            if index < model.orderedEngines.count {
-                let engine = model.orderedEngines[index]
-                cell.showsReorderControl = true
-
-                let toggle = ThemedSwitch()
-                toggle.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                // This is an easy way to get from the toggle control to the corresponding index.
-                toggle.tag = index
-                toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
-                toggle.isOn = model.isEngineEnabled(engine)
-
-                cell.editingAccessoryView = toggle
-                cell.textLabel?.text = engine.shortName
-                cell.textLabel?.adjustsFontSizeToFitWidth = true
-                cell.textLabel?.minimumScaleFactor = 0.5
-                cell.textLabel?.numberOfLines = 0
-                cell.imageView?.image = engine.image.createScaled(IconSize)
-                cell.imageView?.layer.cornerRadius = 4
-                cell.imageView?.layer.masksToBounds = true
-                cell.selectionStyle = .none
-                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            } else {
-                cell.editingAccessoryType = .disclosureIndicator
-                cell.accessibilityLabel = .SettingsAddCustomEngineTitle
-                cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
-                cell.textLabel?.text = .SettingsAddCustomEngine
-                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
+            configureCellForAlternateEnginesAction(cell: cell, indexPath: indexPath)
 
         case .searchEnginesSuggestions:
             switch indexPath.item {
             case SearchSuggestItem.defaultSuggestions.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
-                    defaultValue: model.shouldShowSearchSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.ShowSearchSuggestions
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleSearchSuggestions)
-                )
+                configureCellForDefaultSuggestionsAction(cell: cell)
 
             case SearchSuggestItem.privateSuggestions.rawValue:
-                if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-                    buildSettingWith(
-                        prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
-                        defaultValue: model.shouldShowPrivateModeSearchSuggestions,
-                        titleText: String.localizedStringWithFormat(
-                            .Settings.Search.PrivateSessionSetting
-                        ),
-                        statusText: String.localizedStringWithFormat(
-                            .Settings.Search.PrivateSessionDescription
-                        ),
-                        cell: cell,
-                        selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
-                    )
-                    cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showPrivateSuggestions
-                }
+                configureCellForPrivateSuggestionsAction(cell: cell)
             default: break
             }
 
         case .firefoxSuggestSettings:
             switch indexPath.item {
             case FirefoxSuggestItem.browsingHistory.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions,
-                    defaultValue: model.shouldShowBrowsingHistorySuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.SearchBrowsingHistory
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleBrowsingHistorySuggestions)
-                )
+                configureCellForBrowsingHistoryAction(cell: cell)
 
             case FirefoxSuggestItem.bookmarks.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions,
-                    defaultValue: model.shouldShowBookmarksSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.SearchBookmarks
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleBookmarksSuggestions)
-                )
+                configureCellForBookmarksAction(cell: cell)
 
             case FirefoxSuggestItem.syncedTabs.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions,
-                    defaultValue: model.shouldShowSyncedTabsSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.SearchSyncedTabs
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleSyncedTabsSuggestions)
-                )
+                configureCellForSyncedTabsAction(cell: cell)
 
             case FirefoxSuggestItem.nonSponsored.rawValue:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                    buildSettingWith(
-                        prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
-                        defaultValue: model.shouldShowFirefoxSuggestions,
-                        titleText: String.localizedStringWithFormat(
-                            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
-                        ),
-                        statusText: String.localizedStringWithFormat(
-                            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
-                            AppName.shortName.rawValue
-                        ),
-                        cell: cell,
-                        selector: #selector(didToggleEnableNonSponsoredSuggestions)
-                    )
-                }
+                configureCellForNonSponsoredAction(cell: cell)
 
             case FirefoxSuggestItem.sponsored.rawValue:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                    buildSettingWith(
-                        prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
-                        defaultValue: model.shouldShowSponsoredSuggestions,
-                        titleText: String.localizedStringWithFormat(
-                            .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
-                        ),
-                        statusText: String.localizedStringWithFormat(
-                            .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
-                            AppName.shortName.rawValue
-                        ),
-                        cell: cell,
-                        selector: #selector(didToggleEnableSponsoredSuggestions)
-                    )
-                }
+                configureCellForSponsoredAction(cell: cell)
 
 //            case FirefoxSuggestItem.privateSuggestions.rawValue:
 //                buildSettingWith(
@@ -319,18 +215,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 //                cell.isHidden = shouldHidePrivateModeFirefoxSuggestSetting
 
             case FirefoxSuggestItem.suggestionLearnMore.rawValue:
-                cell.accessibilityLabel = String.localizedStringWithFormat(
-                    .Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
-                    AppName.shortName.rawValue
-                )
-                cell.textLabel?.text = String.localizedStringWithFormat(
-                    .Settings.Search.Suggest.LearnAboutSuggestions,
-                    AppName.shortName.rawValue
-                )
-                cell.imageView?.layer.cornerRadius = 4
-                cell.imageView?.layer.masksToBounds = true
-                cell.selectionStyle = .none
-                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                configureCellForSuggestionLearnMoreAction(cell: cell)
 
             default:
                 break
@@ -338,9 +223,170 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         }
 
         // So that the separator line goes all the way to the left edge.
-        cell.separatorInset = UX.cellSeparatorInsetForCurrentOS
+        cell.separatorInset = ThemedTableViewController.UX.cellSeparatorInsetForCurrentOS
 
         return cell
+    }
+
+    private func configureCellForDefaultEngineAction(cell: ThemedSubtitleTableViewCell, engine: OpenSearchEngine) {
+        cell.editingAccessoryType = .disclosureIndicator
+        cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
+        cell.accessibilityValue = engine.shortName
+        cell.textLabel?.text = engine.shortName
+        cell.imageView?.image = engine.image.createScaled(IconSize)
+        cell.imageView?.layer.cornerRadius = UX.imageViewCornerRadius
+        cell.imageView?.layer.masksToBounds = true
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
+    private func configureCellForAlternateEnginesAction(cell: ThemedSubtitleTableViewCell, indexPath: IndexPath) {
+        // The default engine is not an alternate search engine.
+        let index = indexPath.item + 1
+        if index < model.orderedEngines.count {
+            let engine = model.orderedEngines[index]
+            cell.showsReorderControl = true
+
+            let toggle = ThemedSwitch()
+            toggle.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            // This is an easy way to get from the toggle control to the corresponding index.
+            toggle.tag = index
+            toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
+            toggle.isOn = model.isEngineEnabled(engine)
+
+            cell.editingAccessoryView = toggle
+            cell.textLabel?.text = engine.shortName
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.textLabel?.minimumScaleFactor = UX.textLabelMinimumScaleFactor
+            cell.textLabel?.numberOfLines = UX.textLabelLinesLimit
+            cell.imageView?.image = engine.image.createScaled(IconSize)
+            cell.imageView?.layer.cornerRadius = UX.imageViewCornerRadius
+            cell.imageView?.layer.masksToBounds = true
+            cell.selectionStyle = .none
+            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        } else {
+            cell.editingAccessoryType = .disclosureIndicator
+            cell.accessibilityLabel = .SettingsAddCustomEngineTitle
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
+            cell.textLabel?.text = .SettingsAddCustomEngine
+            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+
+    private func configureCellForDefaultSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
+            defaultValue: model.shouldShowSearchSuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.ShowSearchSuggestions
+            ),
+            cell: cell,
+            selector: #selector(didToggleSearchSuggestions)
+        )
+    }
+
+    private func configureCellForPrivateSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            buildSettingWith(
+                prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
+                defaultValue: model.shouldShowPrivateModeSearchSuggestions,
+                titleText: String.localizedStringWithFormat(
+                    .Settings.Search.PrivateSessionSetting
+                ),
+                statusText: String.localizedStringWithFormat(
+                    .Settings.Search.PrivateSessionDescription
+                ),
+                cell: cell,
+                selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
+            )
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showPrivateSuggestions
+        }
+    }
+
+    private func configureCellForBrowsingHistoryAction(cell: ThemedSubtitleTableViewCell) {
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions,
+            defaultValue: model.shouldShowBrowsingHistorySuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.Suggest.SearchBrowsingHistory
+            ),
+            cell: cell,
+            selector: #selector(didToggleBrowsingHistorySuggestions)
+        )
+    }
+
+    private func configureCellForBookmarksAction(cell: ThemedSubtitleTableViewCell) {
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions,
+            defaultValue: model.shouldShowBookmarksSuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.Suggest.SearchBookmarks
+            ),
+            cell: cell,
+            selector: #selector(didToggleBookmarksSuggestions)
+        )
+    }
+
+    private func configureCellForSyncedTabsAction(cell: ThemedSubtitleTableViewCell) {
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions,
+            defaultValue: model.shouldShowSyncedTabsSuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.Suggest.SearchSyncedTabs
+            ),
+            cell: cell,
+            selector: #selector(didToggleSyncedTabsSuggestions)
+        )
+    }
+
+    private func configureCellForNonSponsoredAction(cell: ThemedSubtitleTableViewCell) {
+        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+            buildSettingWith(
+                prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
+                defaultValue: model.shouldShowFirefoxSuggestions,
+                titleText: String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
+                ),
+                statusText: String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
+                    AppName.shortName.rawValue
+                ),
+                cell: cell,
+                selector: #selector(didToggleEnableNonSponsoredSuggestions)
+            )
+        }
+    }
+
+    private func configureCellForSponsoredAction(cell: ThemedSubtitleTableViewCell) {
+        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+            buildSettingWith(
+                prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
+                defaultValue: model.shouldShowSponsoredSuggestions,
+                titleText: String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
+                ),
+                statusText: String.localizedStringWithFormat(
+                    .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+                    AppName.shortName.rawValue
+                ),
+                cell: cell,
+                selector: #selector(didToggleEnableSponsoredSuggestions)
+            )
+        }
+    }
+
+    private func configureCellForSuggestionLearnMoreAction(cell: ThemedSubtitleTableViewCell) {
+        cell.accessibilityLabel = String.localizedStringWithFormat(
+            .Settings.Search.AccessibilityLabels.LearnAboutSuggestions,
+            AppName.shortName.rawValue
+        )
+        cell.textLabel?.text = String.localizedStringWithFormat(
+            .Settings.Search.Suggest.LearnAboutSuggestions,
+            AppName.shortName.rawValue
+        )
+        cell.imageView?.layer.cornerRadius = UX.imageViewCornerRadius
+        cell.imageView?.layer.masksToBounds = true
+        cell.selectionStyle = .none
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {

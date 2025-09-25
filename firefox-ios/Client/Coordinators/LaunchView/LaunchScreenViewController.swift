@@ -30,7 +30,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     }
 
     override var prefersStatusBarHidden: Bool {
-        return true
+        return false
     }
 
     required init?(coder: NSCoder) {

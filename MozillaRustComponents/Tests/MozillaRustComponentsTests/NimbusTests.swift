@@ -475,7 +475,7 @@ class NimbusTests: XCTestCase {
 
         // Opt out of all experiments, which should generate a "disqualification" event for the enrolled
         // experiment
-        try nimbus.setGlobalUserParticipationOnThisThread(false)
+        try nimbus.setExperimentParticipationOnThisThread(false)
 
         // Use the Glean test API to check that the valid event is present
         XCTAssertNotNil(GleanMetrics.NimbusEvents.disqualification.testGetValue(), "Event must have a value")

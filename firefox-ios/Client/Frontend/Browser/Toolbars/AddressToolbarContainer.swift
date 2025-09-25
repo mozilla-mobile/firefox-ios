@@ -100,6 +100,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     var parent: UIStackView?
+    var onContainerTap: (() -> Void)?
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private lazy var leftSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
     private lazy var rightSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
@@ -339,6 +340,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func setupLayout() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onContainerTapped))
+        addGestureRecognizer(tapGesture)
+
         addSubview(progressBar)
 
         NSLayoutConstraint.activate([
@@ -438,6 +442,12 @@ final class AddressToolbarContainer: UIView,
             addNewTabView.applyTheme(theme: theme)
         }
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false, theme: theme)
+    }
+
+    // MARK: - GestureRecognizer
+    @objc
+    private func onContainerTapped() {
+        onContainerTap?()
     }
 
     // MARK: - AddressToolbarDelegate

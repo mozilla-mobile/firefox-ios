@@ -28,11 +28,14 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             VStack {
-                if #available(iOS 17.0, *) {
-                    modernScrollViewCarousel
-                } else {
-                    legacyPagingCarousel
+                Group {
+                    if #available(iOS 17.0, *) {
+                        modernScrollViewCarousel
+                    } else {
+                        legacyPagingCarousel
+                    }
                 }
+                .padding(.vertical)
 
                 Spacer()
 

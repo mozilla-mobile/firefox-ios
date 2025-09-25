@@ -375,26 +375,20 @@ final class TabScrollHandlerTests: XCTestCase {
 
     func testToolbarTapHandler_WhenMinimalAddressBarEnabledAndCollapsed_ShowsToolbar() {
         let subject = createSubject()
-
-        // Manually setup onTap handler
-        let handler = subject.createToolbarTapHandler()
-        overKeyboardContainer.onTap = handler
-
         subject.hideToolbars(animated: false)
-        overKeyboardContainer.onTap?()
+
+        let handler = subject.createToolbarTapHandler()
+        handler()
 
         XCTAssertTrue(subject.toolbarDisplayState.isExpanded)
     }
 
     func testToolbarTapHandler_WhenToolbarVisible_DoesNothing() {
         let subject = createSubject()
-
-        // Manually setup onTap handler
-        let handler = subject.createToolbarTapHandler()
-        overKeyboardContainer.onTap = handler
-
         subject.showToolbars(animated: false)
-        overKeyboardContainer.onTap?()
+
+        let handler = subject.createToolbarTapHandler()
+        handler()
 
         XCTAssertTrue(subject.toolbarDisplayState.isExpanded)
     }

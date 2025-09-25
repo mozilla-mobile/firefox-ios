@@ -1185,11 +1185,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
 
         translatesAutoresizingMaskIntoConstraints = false
 
-        NSLayoutConstraint.activate([
-            accessoryView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            accessoryView.heightAnchor.constraint(equalToConstant: 50)
-        ])
-
         return accessoryView
     }
 
