@@ -164,6 +164,9 @@ final class NimbusFeatureFlagLayer {
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
 
+        case .trendingSearches:
+            return checkTrendingSearches(from: nimbus)
+
         case .revertUnsafeContinuationsRefactor:
             return checkRevertUnsafeContinuationsRefactor(from: nimbus)
 
@@ -314,6 +317,10 @@ final class NimbusFeatureFlagLayer {
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.trackingProtectionRefactor.value()
         return config.enabled
+    }
+
+    private func checkTrendingSearches(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.trendingSearchesFeature.value().enabled
     }
 
     private func checkFeltPrivacyFeature(
