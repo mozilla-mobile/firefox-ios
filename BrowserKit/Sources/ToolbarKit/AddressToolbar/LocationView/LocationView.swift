@@ -86,8 +86,6 @@ final class LocationView: UIView,
         view.alignment = .center
     }
 
-    private lazy var iconContainerBackgroundView: UIView = .build()
-
     // TODO FXIOS-10210 Once the Unified Search experiment is complete, we will only need to use `DropDownSearchEngineView`
     // and we can remove `PlainSearchEngineView` from the project.
     private lazy var plainSearchEngineView: PlainSearchEngineView = .build()
@@ -240,7 +238,7 @@ final class LocationView: UIView,
 
     private func setupLayout() {
         addSubview(containerView)
-        containerView.addSubviews(urlTextField, iconContainerBackgroundView, iconContainerStackView, gradientView)
+        containerView.addSubviews(urlTextField, iconContainerStackView, gradientView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor)
@@ -268,11 +266,6 @@ final class LocationView: UIView,
 
             urlTextField.topAnchor.constraint(equalTo: containerView.topAnchor),
             urlTextField.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-
-            iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
-            iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
-            iconContainerBackgroundView.leadingAnchor.constraint(equalTo: iconContainerStackView.leadingAnchor),
-            iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
 
             iconContainerStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             iconContainerStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
@@ -332,7 +325,6 @@ final class LocationView: UIView,
     private func updateIconContainer(iconContainerCornerRadius: CGFloat,
                                      isURLTextFieldCentered: Bool,
                                      locationTextFieldTrailingPadding: CGFloat) {
-        iconContainerBackgroundView.layer.cornerRadius = iconContainerCornerRadius
         guard !isEditing else {
             updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
             urlTextFieldTrailingConstraint?.constant = 0
@@ -689,7 +681,6 @@ final class LocationView: UIView,
             ]
         ).cgColors
         searchEngineContentView.applyTheme(theme: theme)
-        iconContainerBackgroundView.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
         lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
         urlTextField.attributedPlaceholder = NSAttributedString(
