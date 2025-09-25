@@ -1508,7 +1508,7 @@
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "უქმი ჩანართები";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
-"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "ორი კვირის მოუნახულებელი ჩანართები გადმოვა უქმეების არეში.";
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "ორი კვირის მოუნახულებელი ჩანართები გადავა უქმეთა არეში.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "ჩანართის ჯგუფები";
@@ -1565,10 +1565,10 @@
 "Settings.TrackingProtection.SectionName" = "თვალთვალისგან დაცვა";
 
 /* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "ჩვეულებრივი (ნაგულისხმევი)";
+"Settings.TrackingProtectionOption.BasicBlockList" = "საშუალო (ნაგულისხმევი)";
 
 /* Tracking protection settings status showing the current option selected. */
-"Settings.TrackingProtectionOption.BasicBlockList.Status" = "ჩვეულებრივი";
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "საშუალო";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "მკაცრი";

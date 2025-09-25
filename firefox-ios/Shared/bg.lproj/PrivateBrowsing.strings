@@ -1,6 +1,9 @@
 /* Setting for closing private tabs */
 "Close Private Tabs" = "Затваряне на поверителните раздели";
 
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Отваряне в поверителен раздел";
+
 /* Description text displayed when there are no open tabs while in private mode */
 "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox няма да запази нищо от вашата история или бисквитки, но новите отметки ще бъдат запазени.";
 
@@ -18,6 +21,9 @@
 
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Личен режим";
+
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Поверително разглеждане";
 
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "Включва или изключва личен режим";
