@@ -49,9 +49,9 @@ final class SummarizeViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_summarize_whenTosNotAccepted() {
+    func test_summarize_whenTosNotAccepted_whenTriggerIsShake_showsToSScreen() {
         let newDataExpectation = expectation(description: "summarize closure should be called")
-        let subject = createSubject(isTosAccepted: false)
+        let subject = createSubject(isTosAccepted: false, trigger: .shakeGesture)
 
         subject.unblockSummarization()
 
@@ -59,6 +59,35 @@ final class SummarizeViewModelTests: XCTestCase {
             let error = try? XCTUnwrap(result.failure())
 
             XCTAssertEqual(error, .tosConsentMissing)
+            newDataExpectation.fulfill()
+        }
+        wait(for: [newDataExpectation], timeout: 0.5)
+    }
+    
+    func test_summarizer_whenTosNotAcceppted_whenTriggerIsNotShake_startsSummarizer() {
+        let newDataExpectation = expectation(description: "summarize closure should be called")
+        let chunk = "This is the max words to proceed"
+        let footnote = "Footnote"
+        summarizerService.mockChunchedResponse = [chunk]
+        let responseWithNote = """
+        \(chunk)
+
+        ##### \(footnote)
+        """
+        let subject = createSubject(isTosAccepted: false, trigger: .mainMenu)
+
+        subject.unblockSummarization()
+
+        subject.summarize(webView: webView, footNoteLabel: footnote, dateProvider: dateProvider) { result in
+            let response = try? XCTUnwrap(result.get())
+
+            // The first time is called the closure it responds just with summary
+            // then it fires again with the note appended.
+            if response == chunk {
+                XCTAssertEqual(self.summarizerService.summarizeStreamedCalled, 1)
+                return
+            }
+            XCTAssertEqual(response, responseWithNote)
             newDataExpectation.fulfill()
         }
         wait(for: [newDataExpectation], timeout: 0.5)
@@ -167,7 +196,7 @@ final class SummarizeViewModelTests: XCTestCase {
         let newDataExpectation = expectation(description: "summarize closure should be called")
         let error = SummarizerError.cancelled
         summarizerService.mockError = error
-        let subject = createSubject()
+        let subject = createSubject(minDelayToShowSummary: 0)
 
         subject.unblockSummarization()
 
@@ -218,10 +247,12 @@ final class SummarizeViewModelTests: XCTestCase {
     }
 
     private func createSubject(isTosAccepted: Bool = true,
+                               trigger: SummarizerTrigger = .toolbarIcon,
                                minDelayToShowSummary: TimeInterval? = nil,
                                minWordsAcceptToShow: Int? = nil) -> DefaultSummarizeViewModel {
         let viewModel = DefaultSummarizeViewModel(
             summarizerService: summarizerService,
+            summarizerTrigger: trigger,
             tosAcceptor: tosAcceptor,
             minWordsAcceptedToShow: minWordsAcceptToShow,
             minDelayToShowSummary: minDelayToShowSummary,
