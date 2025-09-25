@@ -25,14 +25,14 @@ final class TrendingSearchClientTest: XCTestCase {
         let result = try await subject.getTrendingSearches()
 
         let expectedResult = [
-            "jimmy kimmel monologue last night",
-            "claudia cardinale",
-            "travis kelce",
-            "blue jays magic number",
-            "john reardon",
-            "stm strike schedule",
-            "glen powell",
-            "boston bruins"
+            "funny cat videos",
+            "easy pasta recipes",
+            "golden retriever tricks",
+            "best travel destinations 2025",
+            "cozy coffee shops",
+            "sleepy kittens",
+            "board game night ideas",
+            "dogs wearing sunglasses"
         ]
         XCTAssertEqual(result, expectedResult)
     }
@@ -139,14 +139,14 @@ final class TrendingSearchClientTest: XCTestCase {
         [
           "",
           [
-            "jimmy kimmel monologue last night",
-            "claudia cardinale",
-            "travis kelce",
-            "blue jays magic number",
-            "john reardon",
-            "stm strike schedule",
-            "glen powell",
-            "boston bruins"
+            "funny cat videos",
+           "easy pasta recipes",
+           "golden retriever tricks",
+           "best travel destinations 2025",
+           "cozy coffee shops",
+           "sleepy kittens",
+           "board game night ideas",
+           "dogs wearing sunglasses"
           ]
         ]
         """#

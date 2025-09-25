@@ -46,6 +46,8 @@ final class TrendingSearchClient: TrendingSearchClientProvider, Sendable {
 
     func getTrendingSearches() async throws -> [String] {
         do {
+            // We expect some engines to not have a trending url,
+            // so return empty instead of always returning an error
             guard let searchEngine, let url = searchEngine.trendingURLForEngine() else { return [] }
             let data = try await fetch(from: url)
 
