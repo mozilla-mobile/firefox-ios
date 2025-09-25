@@ -12,12 +12,12 @@ let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/Standa
 
 checkForFunMetrics()
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
-checkBigPullRequest()
 checkCodeCoverage()
 failOnNewFilesWithoutCoverage()
 checkForWebEngineFileChange()
 checkForCodeUsage()
 checkStringsFile()
+BrowserViewControllerChecker().failsOnAddedExtension()
 
 // Add some fun comments in Danger to have positive feedback on PRs
 func checkForFunMetrics() {
@@ -34,7 +34,7 @@ func checkForFunMetrics() {
 
     let additions = danger.github?.pullRequest.additions ?? 0
     let deletions = danger.github?.pullRequest.deletions ?? 0
-    if deletions > additions && (additions + deletions) > 50 {
+    if deletions > additions && (additions - deletions) > 50 {
         markdown("""
         ### 🗑️ **Tossing out clutter**
         **\(deletions - additions)** line(s) removed. Fewer lines, fewer bugs 🐛!
@@ -54,6 +54,8 @@ func checkForFunMetrics() {
         ### 🌱 **Tiny but mighty**
         Only **\(totalLines)** line(s) changed. Fast to review, faster to land! 🚀
         """)
+    } else {
+        checkBigPullRequest()
     }
 
     let weekday = Calendar(identifier: .gregorian).component(.weekday, from: Date()) // 6 = Friday
@@ -227,19 +229,15 @@ enum CodeUsageToDetect: CaseIterable {
 // Detects CodeUsageToDetect in PR so certain functions are not used in new code.
 func checkForCodeUsage() {
     let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
-
-    // We look at the diff between the source and destination branches
-    let destinationSha = "\(danger.github.pullRequest.base.sha)"
-    let sourceSha = "\(danger.github.pullRequest.head.sha)"
-    let diffBranches = "\(destinationSha)..\(sourceSha)"
-
     // Iterate through each added and modified file, running the checks on swift files only
-    for file in editedFiles {
-        guard file.contains(".swift") else { return }
-        let diff = danger.utils.diff(forFile: file, sourceBranch: diffBranches)
+    for file in editedFiles where file.contains(".swift") {
         // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
-        switch diff {
+        switch saferFileDiff(for: file) {
         case let .success(diff):
+            if file == BrowserViewControllerChecker.bvcPath {
+                BrowserViewControllerChecker().checkBrowserViewControllerSize(fileDiff: diff)
+            }
+
             switch diff.changes {
             case let .modified(hunks), let .renamed(_, hunks):
                 detect(keywords: CodeUsageToDetect.allCases, inHunks: hunks, file: file)
@@ -253,6 +251,35 @@ func checkForCodeUsage() {
         }
     }
 }
+
+private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
+    let baseSHA = danger.github.pullRequest.base.sha
+    let headSHA = danger.github.pullRequest.head.sha
+    let baseRef = danger.github.pullRequest.base.ref // e.g. "main"
+
+    // Try the SHA range first
+    let range = "\(baseSHA)..\(headSHA)"
+    switch danger.utils.diff(forFile: file, sourceBranch: range) {
+    case .success(let result): return .success(result)
+    case .failure(let error):
+        break
+    }
+
+    // Fallback 1: remote tracking branch
+    switch danger.utils.diff(forFile: file, sourceBranch: "origin/\(baseRef)") {
+    case .success(let result): return .success(result)
+    case .failure(let error):
+        break
+    }
+
+    // Fallback 2: local branch name (if present)
+    switch danger.utils.diff(forFile: file, sourceBranch: baseRef) {
+    case .success(let result): return .success(result)
+    case .failure(let error):
+        return .failure(error)
+    }
+}
+
 
 // MARK: - Detect keyword helpers
 func detect(keywords: [CodeUsageToDetect], inHunks hunks: [FileDiff.Hunk], file: String) {
@@ -418,5 +445,93 @@ func commentDescriptionSection(desc: String) {
             ### 💬 **Description craftsman**
             Great PR description! Reviewers salute you 🫡
             """)
+    }
+}
+
+class BrowserViewControllerChecker {
+    static let bvcPath = "firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift"
+    private let bvcExtPattern = try! NSRegularExpression(
+        pattern: #"firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController\+.+\.swift$"#,
+        options: []
+    )
+
+    // Fail on new BrowserViewController extensions
+    func failsOnAddedExtension() {
+        let created = danger.git.createdFiles
+        let newBvcExtensions = created.filter { matches(bvcExtPattern, $0) }
+        if newBvcExtensions.count == 1 {
+            fail("""
+            New `BrowserViewController+*.swift` file detected: \(newBvcExtensions)
+            """)
+        } else if !newBvcExtensions.isEmpty {
+            let bullets = newBvcExtensions.map { "• `\($0)`" }.joined(separator: "\n")
+            fail("""
+            New `BrowserViewController+*.swift` files detected:
+            \(bullets)
+            """)
+        }
+    }
+
+    // Apply soft size rule to BrowserViewController.swift using Danger's diff API
+    func checkBrowserViewControllerSize(fileDiff: FileDiff) {
+        let counts = addedRemoved(from: fileDiff.changes)
+        let delta = counts.added - counts.removed
+        if delta < 0 {
+            let plural = abs(delta) == 1 ? "" : "s"
+            markdown("""
+            ### 🎉 **BrowserViewController got smaller**
+            Nice! `BrowserViewController.swift` got smaller by \(delta) line\(plural).
+            """)
+            return
+        } else if delta > 0 {
+            let plural = delta == 1 ? "" : "s"
+            markdown("""
+            ### 🦊 BrowserViewController Check
+            We’re tracking the size of `BrowserViewController.swift` to keep it healthy.
+            - ✨ Change in file size: **+\(delta) line\(plural)**
+            """)
+        }
+    }
+
+    private func matches(_ regex: NSRegularExpression, _ string: String) -> Bool {
+        let range = NSRange(location: 0, length: (string as NSString).length)
+        return regex.firstMatch(in: string, options: [], range: range) != nil
+    }
+
+    private func addedRemoved(from changes: FileDiff.Changes) -> (added: Int, removed: Int) {
+        switch changes {
+        case .created(let newLines):
+            // All lines are additions in a created file
+            return (added: newLines.count, removed: 0)
+
+        case .deleted:
+            // Entire file deleted; we can’t easily know how many lines existed here, treat as big shrink
+            // Returning a negative value ensures we celebrate shrinkage.
+            return (added: 0, removed: 1) // minimal negative delta
+
+        case .modified(let hunks):
+            return countInHunks(hunks)
+
+        case .renamed(_, let hunks):
+            return countInHunks(hunks)
+        }
+    }
+
+    private func countInHunks(_ hunks: [FileDiff.Hunk]) -> (added: Int, removed: Int) {
+        var added = 0
+        var removed = 0
+        for hunk in hunks {
+            for line in hunk.lines {
+                // Danger’s line type is printable; use its string form.
+                let s = String(describing: line)
+                // Count “real” content lines; skip file headers just in case.
+                if s.hasPrefix("+") && !s.hasPrefix("+++") {
+                    added += 1
+                } else if s.hasPrefix("-") && !s.hasPrefix("---") {
+                    removed += 1
+                }
+            }
+        }
+        return (added, removed)
     }
 }
