@@ -261,14 +261,14 @@ private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
     let range = "\(baseSHA)..\(headSHA)"
     switch danger.utils.diff(forFile: file, sourceBranch: range) {
     case .success(let result): return .success(result)
-    case .failure(let error):
+    case .failure:
         break
     }
 
     // Fallback 1: remote tracking branch
     switch danger.utils.diff(forFile: file, sourceBranch: "origin/\(baseRef)") {
     case .success(let result): return .success(result)
-    case .failure(let error):
+    case .failure:
         break
     }
 
@@ -279,7 +279,6 @@ private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
         return .failure(error)
     }
 }
-
 
 // MARK: - Detect keyword helpers
 func detect(keywords: [CodeUsageToDetect], inHunks hunks: [FileDiff.Hunk], file: String) {
@@ -450,15 +449,21 @@ func commentDescriptionSection(desc: String) {
 
 class BrowserViewControllerChecker {
     static let bvcPath = "firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController.swift"
-    private let bvcExtPattern = try! NSRegularExpression(
+    private lazy var bvcExtRegex: NSRegularExpression? = try? NSRegularExpression(
         pattern: #"firefox-ios/Client/Frontend/Browser/BrowserViewController/Views/BrowserViewController\+.+\.swift$"#,
         options: []
     )
 
     // Fail on new BrowserViewController extensions
     func failsOnAddedExtension() {
+        guard let regex = bvcExtRegex else {
+            warn("BVC extension regex failed to compile; skipping BVC extension check.")
+            return
+        }
+
         let created = danger.git.createdFiles
-        let newBvcExtensions = created.filter { matches(bvcExtPattern, $0) }
+        let newBvcExtensions = created.filter { matches(regex, $0) }
+
         if newBvcExtensions.count == 1 {
             fail("""
             New `BrowserViewController+*.swift` file detected: \(newBvcExtensions)
@@ -477,10 +482,11 @@ class BrowserViewControllerChecker {
         let counts = addedRemoved(from: fileDiff.changes)
         let delta = counts.added - counts.removed
         if delta < 0 {
-            let plural = abs(delta) == 1 ? "" : "s"
+            let number = abs(delta)
+            let plural = number == 1 ? "" : "s"
             markdown("""
             ### 🎉 **BrowserViewController got smaller**
-            Nice! `BrowserViewController.swift` got smaller by \(delta) line\(plural).
+            Nice! `BrowserViewController.swift` got smaller by \(number) line\(plural).
             """)
             return
         } else if delta > 0 {
