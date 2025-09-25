@@ -728,8 +728,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     /// Creates a "dummy" header and returns its height
-    private func getHeaderHeight(headerState: SectionHeaderConfiguration,
-                                 environment: NSCollectionLayoutEnvironment) -> CGFloat {
+    private func getHeaderHeight(
+        headerState: SectionHeaderConfiguration,
+        environment: NSCollectionLayoutEnvironment
+    ) -> CGFloat {
         let width = normalizedDimension(environment.container.contentSize.width)
         let cacheKey = HeaderMeasurementKey(configuration: headerState, containerWidth: width)
 
@@ -821,7 +823,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return result
     }
 
-                private func normalizedDimension(_ value: CGFloat) -> Double {
-                    return Double((value * 1000).rounded() / 1000)
+    private func normalizedDimension(_ value: CGFloat) -> Double {
+        return Double((value * 1000).rounded() / 1000)
     }
 }
