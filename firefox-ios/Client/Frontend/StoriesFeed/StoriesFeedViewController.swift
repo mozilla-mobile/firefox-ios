@@ -39,7 +39,7 @@ class StoriesFeedViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
-        title = "Top Stories"
+        title = .FirefoxHomepage.Pocket.TopStories.TopStoriesViewTitle
     }
 
     // MARK: - Themeable
