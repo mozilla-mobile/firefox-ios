@@ -439,7 +439,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             delay: 0.0,
             options: .curveEaseOut
         ) {
-            tabTraySnapshot.transform = .init(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+            tabTraySnapshot.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
             toView.alpha = UX.opaqueAlpha
             contentContainer.alpha = UX.opaqueAlpha
         } completion: { _ in
