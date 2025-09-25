@@ -27,6 +27,7 @@ class ZoomPageManagerTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testTabNil_AfterInit() {
         let subject = createSubject()
         XCTAssertNil(subject.tab)
@@ -137,6 +138,7 @@ class ZoomPageManagerTests: XCTestCase {
     }
 
     // MARK: - Private
+    @MainActor
     private func createSubject() -> ZoomPageManager {
         let subject = ZoomPageManager(windowUUID: .XCTestDefaultUUID,
                                       zoomStore: zoomStore)
