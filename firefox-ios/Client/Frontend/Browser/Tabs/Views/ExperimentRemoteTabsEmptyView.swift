@@ -8,6 +8,7 @@ import UIKit
 import Shared
 
 protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable, InsetUpdatable {
+    @MainActor
     var needsSafeArea: Bool { get }
 
     @MainActor

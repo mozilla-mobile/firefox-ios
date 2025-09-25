@@ -56,6 +56,7 @@ struct TabDisplayOrder: Codable {
 
 /// This class is only used in top tabs, but it was used beforehand in the tab tray. Some clean up was done,
 /// but the code is not as clear as it could be since this class had multiple purposes.
+@MainActor
 class TopTabDisplayManager: NSObject {
     private struct UX {
         static let tabCornerRadius: CGFloat = 8
@@ -731,11 +732,10 @@ extension TopTabDisplayManager: Notifiable {
     func handleNotifications(_ notification: Notification) {
         let name = notification.name
         let windowUUID = notification.windowUUID
-        let tabManagerWindowUUID = tabManager.windowUUID
         ensureMainThread {
             switch name {
             case .DidTapUndoCloseAllTabToast:
-                guard tabManagerWindowUUID == windowUUID else { return }
+                guard self.tabManager.windowUUID == windowUUID else { return }
                 self.refreshStore()
                 self.collectionView.reloadData()
             default:

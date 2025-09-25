@@ -130,6 +130,7 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         return BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
     }
 
+    @MainActor
     override func notifyContentBlockingChanged() {
         guard let tab = tab as? Tab else { return }
         TabEvent.post(.didChangeContentBlocking, for: tab)
