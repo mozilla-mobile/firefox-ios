@@ -171,6 +171,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+        webviewController?.update(webView: nil)
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
