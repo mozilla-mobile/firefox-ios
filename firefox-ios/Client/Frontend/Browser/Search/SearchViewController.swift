@@ -152,6 +152,7 @@ class SearchViewController: SiteTableViewController,
         super.viewWillAppear(animated)
         reloadSearchEngines()
         reloadData()
+        loadTrendingSearches()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -343,6 +344,13 @@ class SearchViewController: SiteTableViewController,
             }
 
             leftEdge = engineButton.trailingAnchor
+        }
+    }
+
+    private func loadTrendingSearches() {
+        guard viewModel.shouldShowTrendingSearches else { return }
+        Task {
+            await viewModel.retrieveTrendingSearches()
         }
     }
 
