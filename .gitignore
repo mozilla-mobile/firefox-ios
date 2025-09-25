@@ -2,6 +2,9 @@
 build/
 !taskcluster/kinds/build
 .build/
+
+# Preview target symlink directory
+firefox-ios/ClientPreview/
 *.pbxuser
 !default.pbxuser
 *.mode1v3

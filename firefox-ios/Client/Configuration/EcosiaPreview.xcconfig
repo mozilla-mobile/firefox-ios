@@ -1,0 +1,23 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+// Configuration for SwiftUI Previews Target - excludes BrazeKit and heavy dependencies
+
+#include "EcosiaBetaDebug.xcconfig"
+
+MOZ_BUNDLE_DISPLAY_NAME = Ecosia Preview
+MOZ_PRODUCT_NAME = EcosiaPreview
+
+// Include Settings.bundle for previews (symlink created at ClientPreview/Application -> Client/Application)
+INCLUDE_SETTINGS_BUNDLE = YES
+
+// Compilation conditions for preview target
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+
+// Optimize for fast compilation and previews
+SWIFT_COMPILATION_MODE = singlefile
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+GCC_OPTIMIZATION_LEVEL = 0
+ENABLE_TESTABILITY = YES
+ENABLE_BITCODE = NO

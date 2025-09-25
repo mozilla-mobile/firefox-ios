@@ -5,6 +5,6 @@
 	<key>BuildSystemType</key>
 	<string>Latest</string>
 	<key>PreviewsEnabled</key>
-	<false/>
+	<true/>
 </dict>
 </plist>
