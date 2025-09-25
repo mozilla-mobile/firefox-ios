@@ -5,6 +5,7 @@
 import XCTest
 @testable import OnboardingKit
 
+@MainActor
 class OnboardingFlowViewModelTests: XCTestCase {
     var viewModel: OnboardingFlowViewModel<MockOnboardingCardInfoModel>!
     var mockCards: [MockOnboardingCardInfoModel]!
@@ -44,6 +45,7 @@ class OnboardingFlowViewModelTests: XCTestCase {
     private func createViewModel() {
         viewModel = OnboardingFlowViewModel(
             onboardingCards: mockCards,
+            skipText: "Skip",
             onActionTap: { [weak self] action, cardName, completion in
                 self?.actionCallbacks.forEach { $0(action, cardName, completion) }
             },
@@ -253,6 +255,7 @@ class OnboardingFlowViewModelTests: XCTestCase {
     func testEmptyOnboardingCards() {
         let emptyViewModel = OnboardingFlowViewModel<MockOnboardingCardInfoModel>(
             onboardingCards: [],
+            skipText: "Skip",
             onActionTap: { _, _, completion in
                 completion(.success(.advance(numberOfPages: 1)))
             },
@@ -270,6 +273,7 @@ class OnboardingFlowViewModelTests: XCTestCase {
         // Start from the last card
         viewModel = OnboardingFlowViewModel(
             onboardingCards: mockCards,
+            skipText: "Skip",
             onActionTap: { _, _, completion in
                 completion(.success(.advance(numberOfPages: 1)))
             },
@@ -293,6 +297,7 @@ class OnboardingFlowViewModelTests: XCTestCase {
     func testWeakSelfInClosures() {
         var localViewModel: OnboardingFlowViewModel<MockOnboardingCardInfoModel>? = OnboardingFlowViewModel(
             onboardingCards: mockCards,
+            skipText: "Skip",
             onActionTap: { _, _, completion in
                 completion(.success(.advance(numberOfPages: 1)))
             },
