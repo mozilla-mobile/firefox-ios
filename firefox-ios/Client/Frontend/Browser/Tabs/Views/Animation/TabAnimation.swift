@@ -422,13 +422,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         tabTraySnapshot.contentMode = .scaleToFill
 
         contentContainer.alpha = UX.clearAlpha
-
-        tabTraySnapshot.layer.cornerCurve = .continuous
-        tabTraySnapshot.layer.cornerRadius = ExperimentTabCell.UX.cornerRadius
-        tabTraySnapshot.clipsToBounds = true
-
-        toView.layer.cornerCurve = .continuous
-        toView.clipsToBounds = true
         toView.alpha = UX.clearAlpha
 
         context.containerView.addSubview(tabTraySnapshot)
