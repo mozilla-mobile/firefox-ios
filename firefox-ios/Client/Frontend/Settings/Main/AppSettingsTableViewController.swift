@@ -137,7 +137,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         case .creditCard:
             authenticateUserFor(route: route)
         case .rateApp:
-            RatingPromptManager.goToAppStoreReview()
+            openHelpDialogOrRateApp()
         default:
             break
         }
@@ -153,7 +153,25 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
     }
 
-    // MARK: - User Authentication
+    // MARK: Ecosia
+
+    private func openHelpDialogOrRateApp() {
+        let rateAction = UIAlertAction(title: .localized(.settingsRatingPromptYes), style: .default) { _ in
+            UIApplication.shared.open(Environment.current.urlProvider.storeWriteReviewPage)
+        }
+
+        let helpAction = UIAlertAction(title: .localized(.settingsRatingPromptNo), style: .destructive) { [weak self] _ in
+            self?.settingsDelegate?.settingsOpenURLInNewTab(Environment.current.urlProvider.helpPage)
+            self?.dismissVC()
+        }
+
+        let alertController = UIAlertController(title: .localized(.settingsRatingPromptTitle), message: nil, preferredStyle: .alert)
+        alertController.addAction(rateAction)
+        alertController.addAction(helpAction)
+        present(alertController, animated: true)
+    }
+
+    // MARK: - User AutheSntication
 
     // Authenticates the user prior to allowing access to sensitive sections
     private func authenticateUserFor(route: Route.SettingsSection) {

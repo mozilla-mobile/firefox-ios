@@ -153,6 +153,17 @@ public enum URLProvider {
         }
     }
 
+    public var helpPage: URL {
+        switch Language.current {
+        case .de:
+            return URL(string: "https://de.support.ecosia.org/category/695-ecosia-ios-app")!
+        case .fr:
+            return URL(string: "https://fr.support.ecosia.org/category/805-ecosia-ios-app")!
+        default:
+            return URL(string: "https://support.ecosia.org/category/827-ecosia-ios-app")!
+        }
+    }
+
     public var notifications: URL {
         var components = URLComponents(url: URL(string: "https://api.ecosia.org/v1/notifications")!, resolvingAgainstBaseURL: false)!
         components.queryItems = [
@@ -165,5 +176,9 @@ public enum URLProvider {
 
     public var aiSearch: URL {
         root.appendingPathComponent("ai-search")
+    }
+
+    public var storeWriteReviewPage: URL {
+        URL(string: "https://itunes.apple.com/app/id1474845552/action=write-review")!
     }
 }
