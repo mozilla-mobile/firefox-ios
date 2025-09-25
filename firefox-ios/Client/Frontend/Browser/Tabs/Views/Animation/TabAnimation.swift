@@ -419,7 +419,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         let snapshot = panelViewController.view.snapshot
         let tabTraySnapshot = UIImageView(image: snapshot)
         tabTraySnapshot.frame = view.bounds
-        tabTraySnapshot.isUserInteractionEnabled = false
         tabTraySnapshot.contentMode = .scaleToFill
 
         contentContainer.isHidden = true
