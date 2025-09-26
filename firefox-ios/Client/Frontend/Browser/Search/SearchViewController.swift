@@ -152,7 +152,7 @@ class SearchViewController: SiteTableViewController,
         super.viewWillAppear(animated)
         reloadSearchEngines()
         reloadData()
-        loadTrendingSearches()
+        loadZeroSearchData()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -345,6 +345,15 @@ class SearchViewController: SiteTableViewController,
 
             leftEdge = engineButton.trailingAnchor
         }
+    }
+
+    /// Loads data for the zero search state (when the user hasn't typed anything yet, but address url bar is highlighted).
+    /// In this state, we surface two types of content:
+    /// - Trending searches: popular or curated terms shown to inspire discovery.
+    /// - Recent searches: the user’s own past searches for quick re-access.
+    private func loadZeroSearchData() {
+        loadTrendingSearches()
+        viewModel.retrieveRecentSearches()
     }
 
     private func loadTrendingSearches() {
