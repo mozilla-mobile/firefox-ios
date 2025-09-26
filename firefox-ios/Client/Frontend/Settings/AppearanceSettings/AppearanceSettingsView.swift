@@ -150,28 +150,6 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         }
     }
 
-    private struct NavigationToolbarSection: View {
-        let theme: Theme?
-        let selectedOption: NavigationBarMiddleButtonType
-        let onChange: (NavigationBarMiddleButtonType) -> Void
-        let cornerRadius: CGFloat
-
-        var body: some View {
-            GenericSectionView(
-                theme: theme,
-                title: .Settings.Appearance.NavigationToolbar.SectionHeader,
-                description: .Settings.Appearance.NavigationToolbar.SectionDescription,
-                identifier: AccessibilityIdentifiers.Settings.Appearance.navigationToolbarSectionTitle
-            ) {
-                NavigationBarMiddleButtonSelectionView(
-                    theme: theme,
-                    selectedMiddleButton: selectedOption,
-                    onSelected: onChange)
-                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
-            }
-        }
-    }
-
     private struct PageZoomSection: View {
         let theme: Theme?
         let cornerRadius: CGFloat
@@ -213,6 +191,30 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             // TODO(FXIOS-11584): Add telemetry here
         } else {
             // TODO(FXIOS-11584): Add telemetry here
+        }
+    }
+
+    // MARK: NavigationToolbarSection
+
+    private struct NavigationToolbarSection: View {
+        let theme: Theme?
+        let selectedOption: NavigationBarMiddleButtonType
+        let onChange: (NavigationBarMiddleButtonType) -> Void
+        let cornerRadius: CGFloat
+
+        var body: some View {
+            GenericSectionView(
+                theme: theme,
+                title: .Settings.Appearance.NavigationToolbar.SectionHeader,
+                description: .Settings.Appearance.NavigationToolbar.SectionDescription,
+                identifier: AccessibilityIdentifiers.Settings.Appearance.navigationToolbarSectionTitle
+            ) {
+                NavigationBarMiddleButtonSelectionView(
+                    theme: theme,
+                    selectedMiddleButton: selectedOption,
+                    onSelected: onChange)
+                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+            }
         }
     }
 

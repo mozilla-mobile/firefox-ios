@@ -10,20 +10,20 @@ enum NavigationBarMiddleButtonType: String, Equatable, CaseIterable {
     case newTab
 
     var label: String {
-        switch self {
+        return switch self {
         case .home:
-            return .Settings.Appearance.NavigationToolbar.Home
+            .Settings.Appearance.NavigationToolbar.Home
         case .newTab:
-            return .Settings.Appearance.NavigationToolbar.NewTab
+            .Settings.Appearance.NavigationToolbar.NewTab
         }
     }
 
     var imageName: String {
-        switch self {
+        return switch self {
         case .home:
-            return StandardImageIdentifiers.Large.home
+            StandardImageIdentifiers.Large.home
         case .newTab:
-            return StandardImageIdentifiers.Large.plus
+            StandardImageIdentifiers.Large.plus
         }
     }
 }
