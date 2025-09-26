@@ -4,9 +4,14 @@
 
 import Common
 import Foundation
+import Redux
 
 class StoriesFeedViewController: UIViewController,
+                                 StoreSubscriber,
                                  Themeable {
+    // MARK: - Private variables
+    private var storiesFeedState: StoriesFeedState
+
     // MARK: - Themeable Properties
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -22,6 +27,7 @@ class StoriesFeedViewController: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.storiesFeedState = StoriesFeedState(windowUUID: windowUUID)
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -39,6 +45,39 @@ class StoriesFeedViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigationBar(animated: animated)
+    }
+
+    // MARK: - Redux
+    func subscribeToRedux() {
+        let action = ScreenAction(
+            windowUUID: windowUUID,
+            actionType: ScreenActionType.showScreen,
+            screen: .storiesFeed
+        )
+        store.dispatchLegacy(action)
+
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return StoriesFeedState(
+                    appState: appState,
+                    uuid: uuid
+                )
+            })
+        })
+    }
+
+    func newState(state: StoriesFeedState) {
+        self.storiesFeedState = state
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(
+            windowUUID: windowUUID,
+            actionType: ScreenActionType.closeScreen,
+            screen: .shortcutsLibrary
+        )
+        store.dispatchLegacy(action)
     }
 
     // MARK: Helper functions
