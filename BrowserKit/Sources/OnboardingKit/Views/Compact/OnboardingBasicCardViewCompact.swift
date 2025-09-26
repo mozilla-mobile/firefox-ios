@@ -10,10 +10,6 @@ import ComponentLibrary
 struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
-    @State private var primaryBackgroundColor: Color = .clear
-    @State private var primaryForegroundColor: Color = .clear
-    @State private var secondaryBackgroundColor: Color = .clear
-    @State private var secondaryForegroundColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
@@ -108,8 +104,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     var primaryButton: some View {
         Group {
             if #available(iOS 17.0, *) {
-                ThemedBorderedProminentButton(
-                    title: viewModel.buttons.primary.title,
+                OnboardingButton.primary(
+                    viewModel.buttons.primary.title,
                     action: {
                         onBottomButtonAction(
                             viewModel.buttons.primary.action,
@@ -117,8 +113,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                         )
                     },
                     accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-                    backgroundColor: primaryBackgroundColor,
-                    foregroundColor: primaryForegroundColor
+                    windowUUID: windowUUID,
+                    themeManager: themeManager
                 )
             } else {
                 DragCancellablePrimaryButton(
@@ -141,8 +137,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         if let secondary = viewModel.buttons.secondary {
             Group {
                 if #available(iOS 17.0, *) {
-                    ThemedBorderedProminentButton(
-                        title: secondary.title,
+                    OnboardingButton.secondary(
+                        secondary.title,
                         action: {
                             onBottomButtonAction(
                                 secondary.action,
@@ -150,8 +146,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                             )
                         },
                         accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
-                        backgroundColor: secondaryBackgroundColor,
-                        foregroundColor: secondaryForegroundColor
+                        windowUUID: windowUUID,
+                        themeManager: themeManager
                     )
                 } else {
                     DragCancellableSecondaryButton(
@@ -175,9 +171,5 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
-        primaryBackgroundColor = Color(color.actionPrimary)
-        primaryForegroundColor = Color(color.textInverted)
-        secondaryBackgroundColor = Color(color.actionSecondary)
-        secondaryForegroundColor = Color(color.textSecondary)
     }
 }

@@ -9,8 +9,6 @@ import ComponentLibrary
 struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var primaryBackgroundColor: Color = .clear
-    @State private var primaryForegroundColor: Color = .clear
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
 
     let windowUUID: WindowUUID
@@ -80,8 +78,8 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
     }
 
     var primaryButton: some View {
-        ThemedBorderedProminentButton(
-            title: viewModel.buttons.primary.title,
+        OnboardingButton.primary(
+            viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
@@ -89,9 +87,9 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
                 )
             },
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-            backgroundColor: primaryBackgroundColor,
-            foregroundColor: primaryForegroundColor,
-            width: UX.CardView.primaryButtonWidthiPad
+            width: UX.CardView.primaryButtonWidthiPad,
+            windowUUID: windowUUID,
+            themeManager: themeManager
         )
     }
 
@@ -99,7 +97,5 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
         let color = theme.colors
         textColor = Color(color.textPrimary)
         cardBackgroundColor = Color(color.layer2)
-        primaryBackgroundColor = Color(color.actionPrimary)
-        primaryForegroundColor = Color(color.textInverted)
     }
 }

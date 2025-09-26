@@ -11,8 +11,6 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var primaryActionColor: Color = .clear
-    @State private var primaryBackgroundColor: Color = .clear
-    @State private var primaryForegroundColor: Color = .clear
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -88,8 +86,8 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     var primaryButton: some View {
-        ThemedBorderedProminentButton(
-            title: viewModel.buttons.primary.title,
+        OnboardingButton.primary(
+            viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
@@ -97,27 +95,28 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
                 )
             },
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-            backgroundColor: primaryBackgroundColor,
-            foregroundColor: primaryForegroundColor,
-            width: UX.CardView.primaryButtonWidthiPad
+            width: UX.CardView.primaryButtonWidthiPad,
+            windowUUID: windowUUID,
+            themeManager: themeManager
         )
     }
 
     @ViewBuilder var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
-            Button(
+            OnboardingButton.secondary(
                 secondary.title,
                 action: {
                     onBottomButtonAction(
                         secondary.action,
                         viewModel.name
                     )
-                })
-            .font(UX.CardView.secondaryActionFont)
-            .foregroundColor(primaryActionColor)
+                },
+                accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
+                windowUUID: windowUUID,
+                themeManager: themeManager
+            )
             .padding(.top, UX.CardView.secondaryButtonTopPadding)
             .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
-            .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
         }
     }
 
@@ -127,7 +126,5 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
         primaryActionColor = Color(color.actionPrimary)
-        primaryBackgroundColor = Color(color.actionPrimary)
-        primaryForegroundColor = Color(color.textInverted)
     }
 }

@@ -9,8 +9,6 @@ import ComponentLibrary
 struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var primaryBackgroundColor: Color = .clear
-    @State private var primaryForegroundColor: Color = .clear
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
     @Environment(\.sizeCategory)
     var sizeCategory
@@ -102,8 +100,8 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     var primaryButton: some View {
         Group {
             if #available(iOS 17.0, *) {
-                ThemedBorderedProminentButton(
-                    title: viewModel.buttons.primary.title,
+                OnboardingButton.primary(
+                    viewModel.buttons.primary.title,
                     action: {
                         onBottomButtonAction(
                             viewModel.buttons.primary.action,
@@ -111,8 +109,8 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                         )
                     },
                     accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-                    backgroundColor: primaryBackgroundColor,
-                    foregroundColor: primaryForegroundColor
+                    windowUUID: windowUUID,
+                    themeManager: themeManager
                 )
             } else {
                 DragCancellablePrimaryButton(
@@ -134,7 +132,5 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
         let color = theme.colors
         textColor = Color(color.textPrimary)
         cardBackgroundColor = Color(color.layer2)
-        primaryBackgroundColor = Color(color.actionPrimary)
-        primaryForegroundColor = Color(color.textInverted)
     }
 }
