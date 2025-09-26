@@ -10,6 +10,7 @@ typealias BackForwardListItem = EngineSessionBackForwardListItem
 
 /// An interface that mimic a `WKBackForwardList` from `WebKit`.
 /// It allows to decouple `Tab`'s clients from `WebKit`.
+@MainActor
 protocol BackForwardList {
     var currentItem: BackForwardListItem? { get }
 

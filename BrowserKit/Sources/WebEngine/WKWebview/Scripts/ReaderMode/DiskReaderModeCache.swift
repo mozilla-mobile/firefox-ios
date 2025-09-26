@@ -19,7 +19,7 @@ struct ReaderModeError {
 /// This currently lives in ~/Library/Caches so that the data can be pruned in case the OS needs
 /// more space. Whether that is a good idea or not is not sure. We have a bug on file to investigate
 /// and improve at a later time.
-public final class DiskReaderModeCache: ReaderModeCache {
+public final class DiskReaderModeCache: ReaderModeCache, Sendable {
     public static let shared = DiskReaderModeCache()
 
     public func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws {

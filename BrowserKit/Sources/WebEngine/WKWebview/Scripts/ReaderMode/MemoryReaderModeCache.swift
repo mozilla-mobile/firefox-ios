@@ -4,9 +4,10 @@
 
 import Foundation
 
+// FXIOS-13517 - MemoryReaderModeCache is not thread safe
 /// A non-persistent cache for reader mode content for times when you don't want to write reader data to disk.
 /// For example, when the user is in a private tab, we want to make sure that we leave no trace on the file system
-public final class MemoryReaderModeCache: ReaderModeCache {
+public final class MemoryReaderModeCache: ReaderModeCache, @unchecked Sendable {
     public static let shared = MemoryReaderModeCache()
     private var cache: NSCache<AnyObject, AnyObject>
 
