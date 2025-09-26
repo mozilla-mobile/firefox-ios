@@ -19,23 +19,30 @@ struct NavigationBarMiddleButtonSelectionView: View {
 
     private struct UX {
         static let spacing: CGFloat = 36
-        static let sectionPadding: CGFloat = 16
-        static let dividerHeight: CGFloat = 0.7
+        static let sectionPadding: CGFloat = 8
     }
 
     var body: some View {
-        HStack(spacing: UX.spacing) {
-            ForEach(NavigationBarMiddleButtonType.allCases, id: \.label) { middleButtonType in
-                GenericImageOption(
-                    isSelected: selectedMiddleButton == middleButtonType,
-                    onSelected: {
-                        selectedMiddleButton = middleButtonType
-                        onSelected?(selectedMiddleButton)
-                    },
-                    label: middleButtonType.label,
-                    imageName: middleButtonType.imageName,
-                    a11yIdentifier: identifierName(for: middleButtonType)
-                )
+        VStack(alignment: .leading) {
+            GenericSelectableItemCellView(
+                title: NavigationBarMiddleButtonType.home.label,
+                isSelected: selectedMiddleButton == NavigationBarMiddleButtonType.home,
+                theme: theme
+            ) {
+                selectedMiddleButton = NavigationBarMiddleButtonType.home
+                onSelected?(selectedMiddleButton)
+            }
+
+            Divider()
+                .padding(UX.sectionPadding)
+
+            GenericSelectableItemCellView(
+                title: NavigationBarMiddleButtonType.newTab.label,
+                isSelected: selectedMiddleButton == NavigationBarMiddleButtonType.newTab,
+                theme: theme
+            ) {
+                selectedMiddleButton = NavigationBarMiddleButtonType.newTab
+                onSelected?(selectedMiddleButton)
             }
         }
         .padding(.vertical, UX.sectionPadding)
