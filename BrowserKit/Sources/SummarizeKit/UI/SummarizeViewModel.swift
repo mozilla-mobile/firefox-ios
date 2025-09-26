@@ -140,6 +140,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
                 try Task.checkCancellation()
                 onNewData(.success(summaryWithNote))
             } catch {
+                await waitForUnblockSummarization()
                 handleSummarizationError(error: error, onError: onNewData)
             }
         }
