@@ -6,12 +6,14 @@ import Common
 import Foundation
 @preconcurrency import WebKit
 
+@MainActor
 protocol SessionHandler: AnyObject {
     func commitURLChange()
     func fetchMetadata(withURL url: URL)
     func received(error: NSError, forURL url: URL)
 }
 
+@MainActor
 protocol WKJavascriptInterface: AnyObject {
     /// Calls a javascript method.
     /// - Parameter method: The method signature to be called in javascript world.
@@ -19,6 +21,7 @@ protocol WKJavascriptInterface: AnyObject {
     func callJavascriptMethod(_ method: String, scope: String?)
 }
 
+@MainActor
 class WKEngineSession: NSObject,
                        EngineSession,
                        WKEngineWebViewDelegate,
@@ -30,7 +33,7 @@ class WKEngineSession: NSObject,
             uiHandler.delegate = delegate
         }
     }
-    weak var telemetryProxy: EngineTelemetryProxy?
+    nonisolated(unsafe) weak var telemetryProxy: EngineTelemetryProxy?
     weak var fullscreenDelegate: FullscreenDelegate?
 
     private(set) var webView: WKEngineWebView

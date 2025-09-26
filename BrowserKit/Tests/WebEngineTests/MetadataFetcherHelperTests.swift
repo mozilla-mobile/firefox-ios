@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 @available(iOS 16.0, *)
 final class MetadataFetcherHelperTests: XCTestCase {
     var metadataDelegate: MockMetadataFetcherDelegate!
@@ -63,7 +64,7 @@ final class MetadataFetcherHelperTests: XCTestCase {
 
         subject.fetch(fromSession: session, url: url)
 
-        let savedJavaScript = await session.webviewProvider.webView.savedJavaScript
+        let savedJavaScript = session.webviewProvider.webView.savedJavaScript
         XCTAssertEqual(savedJavaScript, expectedJavascript)
         XCTAssertEqual(metadataDelegate.didLoadPageMetadataCalled, 0)
     }

@@ -151,7 +151,8 @@ let package = Package(
             name: "WebEngine",
             dependencies: ["Common",
                            .product(name: "GCDWebServers", package: "GCDWebServer")],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"]),
+                            .enableExperimentalFeature("StrictConcurrency")]),
         .testTarget(
             name: "WebEngineTests",
             dependencies: ["WebEngine"]),

@@ -6,6 +6,7 @@ import Common
 import Foundation
 import WebKit
 
+@MainActor
 protocol WKEngineWebViewDelegate: AnyObject {
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String)
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String)
@@ -16,6 +17,7 @@ protocol WKEngineWebViewDelegate: AnyObject {
 }
 
 /// Abstraction on top of the `WKWebView`
+@MainActor
 protocol WKEngineWebView: UIView {
     var navigationDelegate: WKNavigationDelegate? { get set }
     var uiDelegate: WKUIDelegate? { get set }
@@ -177,7 +179,15 @@ final class DefaultWKEngineWebView: WKWebView,
     }
 
     deinit {
-        close()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("DevicePickerViewController was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            close()
+        }
     }
 
     func close() {
@@ -317,17 +327,23 @@ final class DefaultWKEngineWebView: WKWebView,
         configuration.userContentController.removeAllScriptMessageHandlers()
     }
 
-    func menuHelperFindInPage() {
-        evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
-            let selection = result as? String ?? ""
-            self.delegate?.tabWebView(self, findInPageSelection: selection)
+    @objc
+    nonisolated func menuHelperFindInPage() {
+        ensureMainThread {
+            self.evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
+                let selection = result as? String ?? ""
+                self.delegate?.tabWebView(self, findInPageSelection: selection)
+            }
         }
     }
 
-    func menuHelperSearchWith() {
-        evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
-            let selection = result as? String ?? ""
-            self.delegate?.tabWebView(self, searchSelection: selection)
+    @objc
+    nonisolated func menuHelperSearchWith() {
+        ensureMainThread {
+            self.evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
+                let selection = result as? String ?? ""
+                self.delegate?.tabWebView(self, searchSelection: selection)
+            }
         }
     }
 

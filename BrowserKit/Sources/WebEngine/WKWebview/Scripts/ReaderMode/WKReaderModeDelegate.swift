@@ -6,6 +6,7 @@ import Common
 import Foundation
 
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
+@MainActor
 public protocol WKReaderModeDelegate: AnyObject {
     func readerMode(
         _ readerMode: ReaderModeStyleSetter,
