@@ -122,5 +122,4 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
             .accessibilityHidden(true)
         }
     }
-
 }
