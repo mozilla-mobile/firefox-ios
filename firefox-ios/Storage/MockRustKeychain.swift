@@ -26,6 +26,11 @@ class MockRustKeychain: @unchecked Sendable, KeychainProtocol {
         removeObject(key: loginsCanaryKeyIdentifier)
     }
 
+    public func removeAutofillKeysForDebugMenuItem() {
+        removeObject(key: creditCardKeyIdentifier)
+        removeObject(key: creditCardCanaryKeyIdentifier)
+    }
+
     public func removeAllKeys() {
         storage.removeAll()
     }
