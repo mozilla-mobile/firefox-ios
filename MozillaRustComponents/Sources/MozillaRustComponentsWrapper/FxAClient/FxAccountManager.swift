@@ -16,7 +16,8 @@ public extension Notification.Name {
 public enum MigrationResult {}
 
 // swiftlint:disable type_body_length
-open class FxAccountManager {
+// FIXME: FXIOS-13537 Make this type actually Sendable, or isolate or otherwise protect any mutable state
+open class FxAccountManager: @unchecked Sendable {
     let accountStorage: KeyChainAccountStorage
     let config: FxAConfig
     // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
@@ -65,7 +66,7 @@ open class FxAccountManager {
     /// It is required to call this method before doing anything else with the manager.
     /// Note that as a result of this initialization, notifications such as `accountAuthenticated` might be
     /// fired.
-    public func initialize(completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void) {
+    public func initialize(completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void) {
         processEvent(event: .initialize) {
             DispatchQueue.main.async { completionHandler(Result.success(())) }
         }
@@ -95,7 +96,7 @@ open class FxAccountManager {
     }
 
     /// Set the user data before completing their authentication
-    public func setUserData(userData: UserData, completion: @escaping () -> Void) {
+    public func setUserData(userData: UserData, completion: @Sendable @escaping () -> Void) {
         DispatchQueue.global().async {
             self.account?.setUserData(userData: userData)
             completion()
@@ -112,7 +113,7 @@ open class FxAccountManager {
     public func beginAuthentication(
         entrypoint: String,
         scopes: [String] = [],
-        completionHandler: @escaping (Result<URL, Error>) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Result<URL, Error>) -> Void
     ) {
         FxALog.info("beginAuthentication")
         // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
@@ -144,7 +145,7 @@ open class FxAccountManager {
         pairingUrl: String,
         entrypoint: String,
         scopes: [String] = [],
-        completionHandler: @escaping (Result<URL, Error>) -> Void
+        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
     ) {
         // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
         nonisolated(unsafe) var scopes = scopes
@@ -183,7 +184,7 @@ open class FxAccountManager {
     /// If it succeeds, a `.accountAuthenticated` notification will get fired.
     public func finishAuthentication(
         authData: FxaAuthData,
-        completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void
     ) {
         if latestOAuthStateParam == nil {
             DispatchQueue.main.async { completionHandler(.failure(FxaError.NoExistingAuthFlow(message: ""))) }
@@ -200,7 +201,7 @@ open class FxAccountManager {
     public func getAccessToken(
         scope: String,
         ttl: UInt64? = nil,
-        completionHandler: @escaping (Result<AccessTokenInfo, Error>) -> Void
+        completionHandler: @Sendable @escaping (Result<AccessTokenInfo, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {
@@ -223,7 +224,10 @@ open class FxAccountManager {
     }
 
     /// The account password has been changed locally and a new session token has been sent to us through WebChannel.
-    public func handlePasswordChanged(newSessionToken: String, completionHandler: @Sendable @escaping () -> Void) {
+    public func handlePasswordChanged(
+        newSessionToken: String,
+        completionHandler: @escaping @MainActor @Sendable () -> Void
+    ) {
         processEvent(event: .changedPassword(newSessionToken: newSessionToken)) {
             DispatchQueue.main.async { completionHandler() }
         }
@@ -232,7 +236,7 @@ open class FxAccountManager {
     /// Get the account management URL.
     public func getManageAccountURL(
         entrypoint: String,
-        completionHandler: @escaping (Result<URL, Error>) -> Void
+        completionHandler: @Sendable @escaping (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {
@@ -246,7 +250,7 @@ open class FxAccountManager {
 
     /// Get the pairing URL to navigate to on the Auth side (typically a computer).
     public func getPairingAuthorityURL(
-        completionHandler: @escaping (Result<URL, Error>) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {
@@ -260,7 +264,7 @@ open class FxAccountManager {
 
     /// Get the token server URL with `1.0/sync/1.5` appended at the end.
     public func getTokenServerEndpointURL(
-        completionHandler: @escaping (Result<URL, Error>) -> Void
+        completionHandler: @escaping @MainActor @Sendable (Result<URL, Error>) -> Void
     ) {
         DispatchQueue.global().async {
             do {
@@ -303,7 +307,7 @@ open class FxAccountManager {
 
     /// Log-out from the account.
     /// The `.accountLoggedOut` notification will also get fired.
-    public func logout(completionHandler: @Sendable @escaping (Result<Void, Error>) -> Void) {
+    public func logout(completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void) {
         processEvent(event: .logout) {
             DispatchQueue.main.async { completionHandler(.success(())) }
         }
@@ -322,7 +326,7 @@ open class FxAccountManager {
 
     let fxaFsmQueue = DispatchQueue(label: "com.mozilla.fxa-mgr-queue")
 
-    func processEvent(event: Event, completionHandler: @escaping () -> Void) {
+    func processEvent(event: Event, completionHandler: @Sendable @escaping () -> Void) {
         fxaFsmQueue.async {
             var toProcess: Event? = event
             while let evt = toProcess {
@@ -624,7 +628,7 @@ class FxAStatePersistenceCallback: PersistCallback {
     }
 }
 
-public enum FxaAuthType {
+public enum FxaAuthType: Sendable {
     case existingAccount
     case signin
     case signup
@@ -642,12 +646,12 @@ public enum FxaAuthType {
     }
 }
 
-public struct FxaAuthData {
+public struct FxaAuthData: Sendable {
     public let code: String
     public let state: String
     public let authType: FxaAuthType
 
-    /// These constructor paramers shall be extracted from the OAuth final redirection URL query
+    /// These constructor parameters shall be extracted from the OAuth final redirection URL query
     /// parameters.
     public init(code: String, state: String, actionQueryParam: String) {
         self.code = code

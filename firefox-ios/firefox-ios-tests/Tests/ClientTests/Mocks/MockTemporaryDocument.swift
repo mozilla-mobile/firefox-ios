@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Client
 
-class MockTemporaryDocument: TemporaryDocument {
+final class MockTemporaryDocument: TemporaryDocument, @unchecked Sendable {
     var sourceURL: URL? {
         return request?.url
     }

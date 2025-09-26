@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 
 /// Abstraction on top of `WKWebViewConfiguration` and the `WKUserContentController`
+@MainActor
 public protocol WKEngineConfiguration {
     var webViewConfiguration: WKWebViewConfiguration { get set }
 

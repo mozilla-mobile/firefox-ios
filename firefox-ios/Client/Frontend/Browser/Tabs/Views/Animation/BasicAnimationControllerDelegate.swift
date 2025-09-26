@@ -9,8 +9,9 @@ protocol BasicAnimationControllerDelegate: AnyObject {
     /// Animate the presentation of a controller
     ///
     /// - parameter context: The transitioning context
+    @MainActor
     func animatePresentation(context: UIViewControllerContextTransitioning)
-
+    @MainActor
     func animateDismissal(context: UIViewControllerContextTransitioning)
 }
 

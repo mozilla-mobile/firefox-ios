@@ -9,7 +9,7 @@ import Common
 import WebKit
 import SummarizeKit
 
-struct BrowserViewControllerState: ScreenState, Equatable {
+struct BrowserViewControllerState: ScreenState {
     enum NavigationType {
         case home
         case back

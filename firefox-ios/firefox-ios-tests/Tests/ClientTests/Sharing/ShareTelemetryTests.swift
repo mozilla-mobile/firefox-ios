@@ -32,7 +32,7 @@ final class ShareTelemetryTests: XCTestCase {
 
         subject.sharedTo(
             activityType: testActivityType,
-            shareType: testShareType,
+            shareTypeName: testShareType.typeName,
             hasShareMessage: testHasShareMessage
         )
 
@@ -52,7 +52,7 @@ final class ShareTelemetryTests: XCTestCase {
 
         subject.sharedTo(
             activityType: testActivityType,
-            shareType: testShareType,
+            shareTypeName: testShareType.typeName,
             hasShareMessage: testHasShareMessage
         )
 

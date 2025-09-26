@@ -22,6 +22,7 @@ class TabEventHandlerTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testEventDelivery() {
         let tab = Tab(profile: MockProfile(),
                       windowUUID: windowUUID)
