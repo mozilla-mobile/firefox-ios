@@ -11,16 +11,14 @@ protocol ContextMenuSelectorsSet {
 }
 
 struct ContextMenuSelectors: ContextMenuSelectorsSet {
-    let CONTEXT_MENU_TABLE = Selector(
-        strategy: .tableById("Context Menu"),
-        value: "Context Menu",
+    let CONTEXT_MENU_TABLE = Selector.tableIdOrLabel(
+        "Context Menu",
         description: "Context Menu table",
         groups: ["contextmenu"]
     )
 
-    let OPEN_IN_PRIVATE_TAB = Selector(
-        strategy: .buttonById("Open in a Private Tab"),
-        value: "Open in a Private Tab",
+    let OPEN_IN_PRIVATE_TAB = Selector.buttonId(
+        "Open in a Private Tab",
         description: "Context menu option: Open in a Private Tab",
         groups: ["contextmenu"]
     )

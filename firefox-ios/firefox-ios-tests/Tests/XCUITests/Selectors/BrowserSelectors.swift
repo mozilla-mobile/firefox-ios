@@ -14,9 +14,8 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let addressBar = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
     }
 
-    let ADDRESS_BAR = Selector(
-        strategy: .textFieldById(IDs.addressBar),
-        value: IDs.addressBar,
+    let ADDRESS_BAR = Selector.textFieldId(
+        IDs.addressBar,
         description: "Browser address bar",
         groups: ["browser"]
     )

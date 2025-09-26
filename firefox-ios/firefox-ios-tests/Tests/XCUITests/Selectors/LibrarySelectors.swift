@@ -14,9 +14,8 @@ struct LibrarySelectors: LibrarySelectorsSet {
         static let bookmarksList = "Bookmarks List"
     }
 
-    let BOOKMARKS_LIST = Selector(
-        strategy: .tableById(IDs.bookmarksList),
-        value: IDs.bookmarksList,
+    let BOOKMARKS_LIST = Selector.tableIdOrLabel(
+        IDs.bookmarksList,
         description: "Bookmarks List table",
         groups: ["library", "bookmarks"]
     )

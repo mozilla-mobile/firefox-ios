@@ -16,16 +16,14 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         static let itemCell = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
     }
 
-    let TOP_SITE_ITEM_CELL = Selector(
-        strategy: .linkById(IDs.itemCell),
-        value: IDs.itemCell,
+    let TOP_SITE_ITEM_CELL = Selector.anyId(
+        IDs.itemCell,
         description: "Generic Top Site cell group",
         groups: ["homepage", "topsites"]
     )
 
-    let COLLECTION_VIEW = Selector(
-        strategy: .collectionViewById(IDs.collectionView),
-        value: IDs.collectionView,
+    let COLLECTION_VIEW = Selector.collectionViewIdOrLabel(
+        IDs.collectionView,
         description: "Top Sites collection view",
         groups: ["homepage", "topsites"]
     )

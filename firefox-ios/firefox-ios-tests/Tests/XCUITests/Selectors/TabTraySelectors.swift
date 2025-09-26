@@ -33,30 +33,21 @@ struct TabTraySelectors: TabTraySelectorsSet {
         groups: ["tabtray"]
     )
 
-    let IPHONE_TAB_TRAY_COLLECTION_VIEW = Selector(
-        strategy: .predicate(
-            NSPredicate(
-                format: "identifier == %@ AND elementType == %d",
-                IDs.collectionView,
-                XCUIElement.ElementType.collectionView.rawValue
-            )
-        ),
-        value: "iPhoneTabTrayCollectionView",
+    let IPHONE_TAB_TRAY_COLLECTION_VIEW = Selector.collectionViewIdOrLabel(
+        IDs.collectionView,
         description: "The main collection view for the tab tray on iPhone",
         groups: ["tabtray"]
     )
 
-    let FIRST_CELL = Selector(
-        strategy: .predicate(NSPredicate(format: "elementType == %d", XCUIElement.ElementType.cell.rawValue)),
-        value: "firstCell",
+    let FIRST_CELL = Selector.staticTextByLabel(
+        "firstCell",
         description: "First Tab cell",
         groups: ["tabtray"]
     )
 
     func cell(named name: String) -> Selector {
-        return Selector(
-            strategy: .predicate(NSPredicate(format: "label == %@", name)),
-            value: name,
+        Selector.staticTextByLabel(
+            name,
             description: "Tab cell named \(name)",
             groups: ["tabtray"]
         )
