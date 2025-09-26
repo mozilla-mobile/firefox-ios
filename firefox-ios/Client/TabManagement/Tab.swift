@@ -1235,16 +1235,20 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     }
 
     func menuHelperFindInPage() {
-        evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
-            let selection = result as? String ?? ""
-            self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
+        ensureMainThread {
+            evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
+                let selection = result as? String ?? ""
+                self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
+            }
         }
     }
 
     func menuHelperSearchWith() {
-        evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
-            let selection = result as? String ?? ""
-            self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)
+        ensureMainThread {
+            evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
+                let selection = result as? String ?? ""
+                self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)
+            }
         }
     }
 

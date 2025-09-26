@@ -55,6 +55,7 @@ final class WKEngineTests: XCTestCase {
         XCTAssertEqual(webServerUtil.setUpWebServerCalled, 1)
     }
 
+    @MainActor
     func testIdleEngineCallsStopEngine() async {
         let subject = await createSubject()
         subject.idleEngine()

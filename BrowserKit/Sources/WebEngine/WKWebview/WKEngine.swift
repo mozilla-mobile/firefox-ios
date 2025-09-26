@@ -6,6 +6,7 @@ import Common
 import Foundation
 import WebKit
 
+@MainActor
 public class WKEngine: Engine {
     private let sourceTimerFactory: DispatchSourceTimerFactory
     private var shutdownWebServerTimer: DispatchSourceInterface?
@@ -15,7 +16,6 @@ public class WKEngine: Engine {
     private let configProvider: WKEngineConfigurationProvider
 
     // TODO: FXIOS-13670 With Swift 6 we can use default params in the init
-    @MainActor
     public static func factory(engineDependencies: EngineDependencies) -> WKEngine {
         let configProvider = DefaultWKEngineConfigurationProvider()
         let userScriptManager = DefaultUserScriptManager()
@@ -29,7 +29,6 @@ public class WKEngine: Engine {
         )
     }
 
-    @MainActor
     init(userScriptManager: WKUserScriptManager,
          webServerUtil: WKWebServerUtil,
          sourceTimerFactory: DispatchSourceTimerFactory,
@@ -48,7 +47,6 @@ public class WKEngine: Engine {
         return WKEngineView.factory(frame: .zero)
     }
 
-    @MainActor
     public func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession {
         guard let session = WKEngineSession.sessionFactory(userScriptManager: userScriptManager,
                                                            dependencies: dependencies,
@@ -59,7 +57,6 @@ public class WKEngine: Engine {
         return session
     }
 
-    @MainActor
     public func warmEngine() {
         shutdownWebServerTimer?.cancel()
         shutdownWebServerTimer = nil
