@@ -994,9 +994,10 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let group = DispatchGroup()
         let dataQueue = DispatchQueue.global()
 
-        var isBookmarkedResult = false
-        var isPinnedResult = false
-        var isInReadingListResult = false
+        // TODO: FXIOS-13675 These should be made actually threadsafe
+        nonisolated(unsafe) var isBookmarkedResult = false
+        nonisolated(unsafe) var isPinnedResult = false
+        nonisolated(unsafe) var isInReadingListResult = false
 
         group.enter()
         getIsBookmarked(url: url, dataQueue: dataQueue) { result in
