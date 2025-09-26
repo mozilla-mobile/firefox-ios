@@ -7,7 +7,6 @@ import Common
 
 struct TabWebViewPreviewAppearanceConfiguration {
     private struct UX {
-        static let baselineAddressBarCornerRadius: CGFloat = 8
         static let versionAddressBarCornerRadius: CGFloat = 12
     }
     let containerStackViewBackgroundColor: UIColor

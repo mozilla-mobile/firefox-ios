@@ -54,18 +54,7 @@ struct OnboardingKitCardInfoModel: OnboardingKit.OnboardingCardInfoModelProtocol
     var defaultSelectedButton: OnboardingKit.OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction>? {
         guard !multipleChoiceButtons.isEmpty else { return nil }
 
-        let toolbarLayout = FxNimbus.shared.features
-            .toolbarRefactorFeature
-            .value()
-            .layout
-
-        let isVersionedLayout = [.version1, .version2, .baseline].contains(toolbarLayout)
-
-        if isVersionedLayout {
-            return findHighestPriorityButton() ?? multipleChoiceButtons.first
-        }
-
-        return multipleChoiceButtons.first
+        return findHighestPriorityButton() ?? multipleChoiceButtons.first
     }
 
     private func findHighestPriorityButton()
