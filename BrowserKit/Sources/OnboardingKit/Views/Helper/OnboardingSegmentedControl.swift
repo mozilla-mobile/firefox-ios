@@ -6,22 +6,15 @@ import SwiftUI
 import Common
 
 struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View {
-    @State private var actionPrimary: Color = .clear
     @Binding var selection: Action
     let items: [OnboardingMultipleChoiceButtonModel<Action>]
-    let windowUUID: WindowUUID
-    var themeManager: ThemeManager
 
     init(
         selection: Binding<Action>,
-        items: [OnboardingMultipleChoiceButtonModel<Action>],
-        windowUUID: WindowUUID,
-        themeManager: ThemeManager
+        items: [OnboardingMultipleChoiceButtonModel<Action>]
     ) {
         self._selection = selection
         self.items = items
-        self.windowUUID = windowUUID
-        self.themeManager = themeManager
     }
 
     var body: some View {
@@ -33,13 +26,6 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
             }
         }
         .accessibilityElement(children: .contain)
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
     }
 
     @ViewBuilder
@@ -137,8 +123,4 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
         }
     }
 
-    private func applyTheme(theme: Theme) {
-        actionPrimary = Color(theme.colors.actionPrimary)
-            .opacity(UX.SegmentedControl.selectedColorOpacity)
-    }
 }

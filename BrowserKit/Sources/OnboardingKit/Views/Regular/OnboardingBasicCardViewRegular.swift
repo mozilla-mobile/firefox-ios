@@ -10,7 +10,6 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var primaryActionColor: Color = .clear
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -125,6 +124,5 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
-        primaryActionColor = Color(color.actionPrimary)
     }
 }

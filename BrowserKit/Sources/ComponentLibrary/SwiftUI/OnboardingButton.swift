@@ -72,7 +72,7 @@ public struct OnboardingButton: View {
         }
     }
 
-    static func primary(
+    public static func primary(
         _ title: String,
         action: @escaping () -> Void,
         accessibilityIdentifier: String,
@@ -91,7 +91,7 @@ public struct OnboardingButton: View {
         )
     }
 
-    static func secondary(
+    public static func secondary(
         _ title: String,
         action: @escaping () -> Void,
         accessibilityIdentifier: String,

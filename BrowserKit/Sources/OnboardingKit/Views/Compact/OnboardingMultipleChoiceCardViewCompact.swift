@@ -59,9 +59,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                         .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                         selection: $selectedAction,
-                        items: viewModel.multipleChoiceButtons,
-                        windowUUID: windowUUID,
-                        themeManager: themeManager
+                        items: viewModel.multipleChoiceButtons
                     )
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
