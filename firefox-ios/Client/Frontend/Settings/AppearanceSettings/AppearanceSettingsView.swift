@@ -44,7 +44,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
     }
 
     var selectedMiddleButtonType: NavigationBarMiddleButtonType {
-        if let rawValue = prefs.stringForKey(AppConstants.prefNavigationToolbarMiddleButton),
+        if let rawValue = prefs.stringForKey(PrefsKeys.Settings.navigationToolbarMiddleButton),
            let selectedButton = NavigationBarMiddleButtonType(rawValue: rawValue) {
             return selectedButton
         }
@@ -219,7 +219,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
     /// Updates the middle button in navigation toolbar based on the user's selection.
     /// - Parameter selectedOption: The selected theme option from ThemeSelectionView.
     private func updateMiddleNavigationToolbarButton(to selectedOption: NavigationBarMiddleButtonType) {
-        prefs.setString(selectedOption.rawValue, forKey: AppConstants.prefNavigationToolbarMiddleButton)
+        prefs.setString(selectedOption.rawValue, forKey: PrefsKeys.Settings.navigationToolbarMiddleButton)
 
         let action = ToolbarAction(middleButton: selectedOption,
                                    windowUUID: windowUUID,

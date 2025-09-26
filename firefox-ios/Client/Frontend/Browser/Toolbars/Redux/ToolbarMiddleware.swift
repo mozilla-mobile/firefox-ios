@@ -90,7 +90,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let borderPosition = getAddressBorderPosition(toolbarPosition: position)
             let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
 
-            let middleButton = if let rawValue = prefs.stringForKey(AppConstants.prefNavigationToolbarMiddleButton),
+            let middleButton = if let rawValue = prefs.stringForKey(PrefsKeys.Settings.navigationToolbarMiddleButton),
                                   let selectedButton = NavigationBarMiddleButtonType(rawValue: rawValue) {
                 selectedButton
             } else {
