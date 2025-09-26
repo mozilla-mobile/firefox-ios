@@ -140,10 +140,8 @@ class TodayWidgetTests: BaseTestCase {
                 return
         }
         if #unavailable(iOS 16) {
-            mozWaitElementHittable(element: springboard.buttons["Remove Widget"], timeout: TIMEOUT)
             springboard.buttons["Remove Widget"].waitAndTap()
         } else {
-            mozWaitElementHittable(element: springboard.buttons[removeWidgetButton], timeout: TIMEOUT)
             springboard.buttons[removeWidgetButton].waitAndTap()
         }
 
@@ -154,7 +152,6 @@ class TodayWidgetTests: BaseTestCase {
             ]
         )
 
-        mozWaitElementHittable(element: springboard.alerts.buttons["Remove"], timeout: TIMEOUT)
         springboard.alerts.buttons["Remove"].waitAndTap()
     }
 
@@ -210,13 +207,11 @@ class TodayWidgetTests: BaseTestCase {
             pressAndHoldWidget(matching: "Firefox")
         }
 
-        mozWaitElementHittable(element: springboard.buttons[removeWidgetButton], timeout: TIMEOUT)
         springboard.buttons[removeWidgetButton].waitAndTap()
 
         mozWaitForElementToExist(springboard.alerts.buttons["Remove"])
         mozWaitForElementToExist(springboard.alerts.buttons["Cancel"])
 
-        mozWaitElementHittable(element: springboard.alerts.buttons["Remove"], timeout: TIMEOUT)
         springboard.alerts.buttons["Remove"].waitAndTap()
     }
 
@@ -257,7 +252,6 @@ class TodayWidgetTests: BaseTestCase {
 
     private func tapOnWidget(widgetType: String) {
         let widget = springboard.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", widgetType)).element
-        mozWaitElementHittable(element: widget, timeout: TIMEOUT)
         widget.waitAndTap()
     }
 
