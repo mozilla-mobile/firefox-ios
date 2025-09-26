@@ -433,6 +433,7 @@ struct AccessibilityIdentifiers {
         struct Appearance {
             static let browserThemeSectionTitle = "BrowserThemeSectionTitle"
             static let websiteAppearanceSectionTitle = "WebsiteAppearanceSectionTitle"
+            static let navigationToolbarSectionTitle = "NavigationToolbarSectionTitle"
             static let pageZoomTitle = "PageZoomTitle"
             static let specificSiteSettings = "SpecificSiteSettings"
             static let automaticThemeView = "AutomaticThemeView"

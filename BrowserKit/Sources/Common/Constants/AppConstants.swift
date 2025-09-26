@@ -40,6 +40,7 @@ public class AppConstants {
     public static let prefSendCrashReports = "settings.sendCrashReports"
     public static let prefSendDailyUsagePing = "settings.sendDailyUsagePing"
     public static let prefStudiesToggle = "settings.studiesToggle"
+    public static let prefNavigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
 
     /// Build Channel.
     public static let buildChannel: AppBuildChannel = {

@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Common
+import Shared
 
 /// Child settings pages appearance actions
 protocol AppearanceSettingsDelegate: AnyObject {
@@ -19,10 +20,16 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
     @Environment(\.themeManager)
     var themeManager
 
+    var prefs: Prefs
+
     @State private var currentTheme: Theme?
 
     var shouldShowPageZoom: Bool {
         return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
+    }
+
+    var shouldShowNavigationBarConfig: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarMiddleButtonCustomization, checking: .buildOnly)
     }
 
     /// Compute the theme option to display in the ThemeSelectionView.
@@ -34,6 +41,15 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         } else {
             return themeManager.getUserManualTheme() == .light ? .light : .dark
         }
+    }
+
+    var selectedMiddleButtonType: NavigationBarMiddleButtonType {
+        if let rawValue = prefs.stringForKey(AppConstants.prefNavigationToolbarMiddleButton),
+           let selectedButton = NavigationBarMiddleButtonType(rawValue: rawValue) {
+            return selectedButton
+        }
+
+        return .newTab
     }
 
     private var viewBackground: Color {
@@ -59,6 +75,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                     onThemeSelected: updateBrowserTheme,
                     cornerRadius: UX.cornerRadius
                 )
+
                 // Section for toggling website appearance (e.g., dark mode).
                 WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 
@@ -66,6 +83,13 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                     PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
                         delegate?.pressedPageZoom()
                     }
+                }
+
+                if shouldShowNavigationBarConfig {
+                    NavigationToolbarSection(theme: currentTheme,
+                                             selectedOption: selectedMiddleButtonType,
+                                             onChange: updateMiddleNavigationToolbarButton,
+                                             cornerRadius: UX.cornerRadius)
                 }
                 Spacer()
             }
@@ -126,6 +150,28 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         }
     }
 
+    private struct NavigationToolbarSection: View {
+        let theme: Theme?
+        let selectedOption: NavigationBarMiddleButtonType
+        let onChange: (NavigationBarMiddleButtonType) -> Void
+        let cornerRadius: CGFloat
+
+        var body: some View {
+            GenericSectionView(
+                theme: theme,
+                title: .Settings.Appearance.NavigationToolbar.SectionHeader,
+                description: .Settings.Appearance.NavigationToolbar.SectionDescription,
+                identifier: AccessibilityIdentifiers.Settings.Appearance.navigationToolbarSectionTitle
+            ) {
+                NavigationBarMiddleButtonSelectionView(
+                    theme: theme,
+                    selectedMiddleButton: selectedOption,
+                    onSelected: onChange)
+                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+            }
+        }
+    }
+
     private struct PageZoomSection: View {
         let theme: Theme?
         let cornerRadius: CGFloat
@@ -135,7 +181,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             GenericSectionView(
                 theme: theme,
                 title: .Settings.Appearance.PageZoom.SectionHeader,
-                identifier: .Settings.Appearance.PageZoom.SectionHeader
+                identifier: AccessibilityIdentifiers.Settings.Appearance.pageZoomTitle
             ) {
                 GenericItemCellView(
                     title: .Settings.Appearance.PageZoom.PageZoomTitle,
@@ -169,4 +215,9 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             // TODO(FXIOS-11584): Add telemetry here
         }
     }
+
+    /// Updates the middle button in navigation toolbar based on the user's selection.
+    /// - Parameter selectedOption: The selected theme option from ThemeSelectionView.
+    private func updateMiddleNavigationToolbarButton(to selectedOption: NavigationBarMiddleButtonType) {
+        prefs.setString(selectedOption.rawValue, forKey: AppConstants.prefNavigationToolbarMiddleButton)
 }

@@ -2660,6 +2660,28 @@ extension String {
                     value: "Reset Site Settings",
                     comment: "Button to reset specific zoom site levels back to default")
             }
+            public struct NavigationToolbar {
+                public static let SectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.NavigationToolbar.SectionHeader.v143",
+                    tableName: "Settings",
+                    value: "Navigation Toolbar",
+                    comment: "Navigation toolbar section header title in Appearance settings")
+                public static let SectionDescription = MZLocalizedString(
+                    key: "Settings.Appearance.NavigationToolbar.Description.v143",
+                    tableName: "Settings",
+                    value: "Choose which button should be displayed in the middle of the bottom toolbar.",
+                    comment: "") // todo
+                public static let Home = MZLocalizedString(
+                    key: "Settings.Toolbar.Navigation.MiddleButton.Home",
+                    tableName: "Settings",
+                    value: "Home",
+                    comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen.") // todo
+                public static let NewTab = MZLocalizedString(
+                    key: "Settings.Toolbar.Navigation.MiddleButton.NewTab",
+                    tableName: "Settings",
+                    value: "New Tab",
+                    comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.") // todo
+            }
         }
 
         public struct AutofillAndPassword {
