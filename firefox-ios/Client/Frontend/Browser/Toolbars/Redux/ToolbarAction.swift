@@ -120,6 +120,7 @@ enum ToolbarActionType: ActionType {
     case didSetSearchTerm
     case didStartTyping
     case translucencyDidChange
+    case navigationMiddleButtonDidChange
 }
 
 struct ToolbarMiddlewareAction: Action {

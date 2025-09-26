@@ -220,4 +220,10 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
     /// - Parameter selectedOption: The selected theme option from ThemeSelectionView.
     private func updateMiddleNavigationToolbarButton(to selectedOption: NavigationBarMiddleButtonType) {
         prefs.setString(selectedOption.rawValue, forKey: AppConstants.prefNavigationToolbarMiddleButton)
+
+        let action = ToolbarAction(middleButton: selectedOption,
+                                   windowUUID: windowUUID,
+                                   actionType: ToolbarActionType.navigationMiddleButtonDidChange)
+        store.dispatchLegacy(action)
+    }
 }

@@ -5,9 +5,27 @@
 import Common
 import Redux
 
-enum NavigationBarMiddleButtonType: Equatable {
+enum NavigationBarMiddleButtonType: String, Equatable, CaseIterable {
     case home
     case newTab
+
+    var label: String {
+        switch self {
+        case .home:
+            return .Settings.Appearance.NavigationToolbar.Home
+        case .newTab:
+            return .Settings.Appearance.NavigationToolbar.NewTab
+        }
+    }
+
+    var imageName: String {
+        switch self {
+        case .home:
+            return StandardImageIdentifiers.Large.home
+        case .newTab:
+            return StandardImageIdentifiers.Large.plus
+        }
+    }
 }
 
 struct NavigationBarState: StateType, Equatable {
@@ -88,6 +106,9 @@ struct NavigationBarState: StateType, Equatable {
             ToolbarActionType.toolbarPositionChanged:
             return handlePositionChangedAction(state: state, action: action)
 
+        case ToolbarActionType.navigationMiddleButtonDidChange:
+            return handleNavigationMiddleButtonDidChange(state: state, action: action)
+
         default:
             return defaultState(from: state)
         }
@@ -167,6 +188,19 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    private static func handleNavigationMiddleButtonDidChange(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction,
+              let middleButton = toolbarAction.middleButton
+        else { return defaultState(from: state) }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder,
+            middleButton: middleButton
+        )
+    }
+
     static func defaultState(from state: NavigationBarState) -> NavigationBarState {
         return NavigationBarState(
             windowUUID: state.windowUUID,
@@ -192,11 +226,14 @@ struct NavigationBarState: StateType, Equatable {
         let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
+        let isMiddleButtonChangeAction = action.actionType as? ToolbarActionType == .navigationMiddleButtonDidChange
+        let middleButton = isMiddleButtonChangeAction ? action.middleButton ?? .newTab : navigationBarState.middleButton
+
         let middleAction = getMiddleButtonAction(url: url,
                                                  isPrivateMode: toolbarState.isPrivateMode,
                                                  canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
                                                  isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
-                                                 middleButton: navigationBarState.middleButton)
+                                                 middleButton: middleButton)
 
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
