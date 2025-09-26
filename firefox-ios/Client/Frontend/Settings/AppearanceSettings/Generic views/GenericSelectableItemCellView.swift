@@ -8,7 +8,6 @@ import Common
 struct GenericSelectableItemCellView: View {
     private struct UX {
         static let horizontalSpacing: CGFloat = 16
-        static let verticalSpacing: CGFloat = 8
         static let minHeight: CGFloat = 24
     }
 

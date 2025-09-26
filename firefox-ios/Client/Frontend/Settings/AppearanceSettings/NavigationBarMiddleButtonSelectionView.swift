@@ -18,7 +18,6 @@ struct NavigationBarMiddleButtonSelectionView: View {
     }
 
     private struct UX {
-        static let spacing: CGFloat = 36
         static let sectionPadding: CGFloat = 8
     }
 
