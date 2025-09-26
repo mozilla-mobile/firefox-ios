@@ -75,7 +75,7 @@ class StoriesFeedViewController: UIViewController,
         let action = ScreenAction(
             windowUUID: windowUUID,
             actionType: ScreenActionType.closeScreen,
-            screen: .shortcutsLibrary
+            screen: .storiesFeed
         )
         store.dispatchLegacy(action)
     }
