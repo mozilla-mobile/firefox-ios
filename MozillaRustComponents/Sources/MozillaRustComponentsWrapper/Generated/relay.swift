@@ -481,15 +481,74 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
+/**
+ * Represents a client for the Relay API.
+ *
+ * Use this struct to connect and authenticate with a Relay server,
+ * managing authorization to call protected endpoints.
+ *
+ * # Authorization
+ * - Clients should use the [fxa_client::FirefoxAccount::getAccessToken()] function
+ * to obtain a relay-scoped access token (scope: `https://identity.mozilla.com/apps/relay`).
+ * - Then, construct the [`RelayClient`] with the access token.
+ * All requests will then be authenticated to the Relay server via `Authorization: Bearer {fxa-access-token}`.
+ * - The Relay server verifies this token with the FxA OAuth `/verify` endpoint.
+ * - Clients are responsible for getting a new access token when needed.
+ */
 public protocol RelayClientProtocol: AnyObject, Sendable {
     
+    /**
+     * Creates a Relay user record in the Relay service database.
+     *
+     * This function was originally used to signal acceptance of terms and privacy notices,
+     * but now primarily serves to provision (create) the Relay user record if one does not exist.
+     * Returns `Ok(())` on success, or an error if the server call fails.
+     */
     func acceptTerms() throws 
     
+    /**
+     * Creates a new Relay mask (alias) with the specified metadata.
+     *
+     * This is used to generate a new alias for use in an email field.
+     *
+     * - `description`: A label shown in the Relay dashboard; defaults to `generated_for`, user-editable later.
+     * - `generated_for`: The website for which the address is generated.
+     * - `used_on`: Comma-separated list of all websites where this address is used. Only updated by some clients.
+     *
+     * ## Open Questions
+     * - See the spike doc and project Jira for clarifications on field semantics.
+     * - Returned error codes are not fully documented.
+     *
+     * Returns the newly created [`RelayAddress`] on success, or an error.
+     */
     func createAddress(description: String, generatedFor: String, usedOn: String) throws  -> RelayAddress
     
+    /**
+     * Retrieves all Relay addresses associated with the current account.
+     *
+     * Returns a vector of [`RelayAddress`] objects on success, or an error if the request fails.
+     *
+     * ## Known Limitations
+     * - Will return an error if the Relay user record doesn't exist yet (see [`accept_terms`]).
+     * - Error variants are subject to server-side changes.
+     */
     func fetchAddresses() throws  -> [RelayAddress]
     
 }
+/**
+ * Represents a client for the Relay API.
+ *
+ * Use this struct to connect and authenticate with a Relay server,
+ * managing authorization to call protected endpoints.
+ *
+ * # Authorization
+ * - Clients should use the [fxa_client::FirefoxAccount::getAccessToken()] function
+ * to obtain a relay-scoped access token (scope: `https://identity.mozilla.com/apps/relay`).
+ * - Then, construct the [`RelayClient`] with the access token.
+ * All requests will then be authenticated to the Relay server via `Authorization: Bearer {fxa-access-token}`.
+ * - The Relay server verifies this token with the FxA OAuth `/verify` endpoint.
+ * - Clients are responsible for getting a new access token when needed.
+ */
 open class RelayClient: RelayClientProtocol, @unchecked Sendable {
     fileprivate let pointer: UnsafeMutableRawPointer!
 
@@ -529,6 +588,16 @@ open class RelayClient: RelayClientProtocol, @unchecked Sendable {
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
         return try! rustCall { uniffi_relay_fn_clone_relayclient(self.pointer, $0) }
     }
+    /**
+     * Creates a new `RelayClient` instance.
+     *
+     * # Parameters
+     * - `server_url`: Base URL for the Relay API.
+     * - `auth_token`: Optional relay-scoped access token (see struct docs).
+     *
+     * # Returns
+     * A new [`RelayClient`] configured for the specified server and token.
+     */
 public convenience init(serverUrl: String, authToken: String?)throws  {
     let pointer =
         try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
@@ -551,12 +620,34 @@ public convenience init(serverUrl: String, authToken: String?)throws  {
     
 
     
+    /**
+     * Creates a Relay user record in the Relay service database.
+     *
+     * This function was originally used to signal acceptance of terms and privacy notices,
+     * but now primarily serves to provision (create) the Relay user record if one does not exist.
+     * Returns `Ok(())` on success, or an error if the server call fails.
+     */
 open func acceptTerms()throws   {try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_method_relayclient_accept_terms(self.uniffiClonePointer(),$0
     )
 }
 }
     
+    /**
+     * Creates a new Relay mask (alias) with the specified metadata.
+     *
+     * This is used to generate a new alias for use in an email field.
+     *
+     * - `description`: A label shown in the Relay dashboard; defaults to `generated_for`, user-editable later.
+     * - `generated_for`: The website for which the address is generated.
+     * - `used_on`: Comma-separated list of all websites where this address is used. Only updated by some clients.
+     *
+     * ## Open Questions
+     * - See the spike doc and project Jira for clarifications on field semantics.
+     * - Returned error codes are not fully documented.
+     *
+     * Returns the newly created [`RelayAddress`] on success, or an error.
+     */
 open func createAddress(description: String, generatedFor: String, usedOn: String)throws  -> RelayAddress  {
     return try  FfiConverterTypeRelayAddress_lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_method_relayclient_create_address(self.uniffiClonePointer(),
@@ -567,6 +658,15 @@ open func createAddress(description: String, generatedFor: String, usedOn: Strin
 })
 }
     
+    /**
+     * Retrieves all Relay addresses associated with the current account.
+     *
+     * Returns a vector of [`RelayAddress`] objects on success, or an error if the request fails.
+     *
+     * ## Known Limitations
+     * - Will return an error if the Relay user record doesn't exist yet (see [`accept_terms`]).
+     * - Error variants are subject to server-side changes.
+     */
 open func fetchAddresses()throws  -> [RelayAddress]  {
     return try  FfiConverterSequenceTypeRelayAddress.lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_method_relayclient_fetch_addresses(self.uniffiClonePointer(),$0
@@ -630,6 +730,15 @@ public func FfiConverterTypeRelayClient_lower(_ value: RelayClient) -> UnsafeMut
 
 
 
+/**
+ * Represents a Relay email address object returned by the Relay API.
+ *
+ * Includes metadata and statistics for an alias, such as its status,
+ * usage stats, and identifying information.
+ *
+ * See:
+ * https://mozilla.github.io/fx-private-relay/api_docs.html
+ */
 public struct RelayAddress {
     public var maskType: String
     public var enabled: Bool
@@ -987,16 +1096,16 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 14409) {
+    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 27228) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_create_address() != 24773) {
+    if (uniffi_relay_checksum_method_relayclient_create_address() != 37395) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 28546) {
+    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 30285) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_constructor_relayclient_new() != 6164) {
+    if (uniffi_relay_checksum_constructor_relayclient_new() != 25664) {
         return InitializationResult.apiChecksumMismatch
     }
 
