@@ -7,10 +7,9 @@ import ComponentLibrary
 import UIKit
 import Shared
 
+@MainActor
 protocol RemoteTabsEmptyViewProtocol: UIView, ThemeApplicable, InsetUpdatable {
     var needsSafeArea: Bool { get }
-
-    @MainActor
     func configure(config: RemoteTabsPanelEmptyStateReason,
                    delegate: RemoteTabsEmptyViewDelegate?)
 }
