@@ -4805,6 +4805,9 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
+        if isSwipingTabsEnabled, isToolbarRefactorEnabled, isDeeplinkOptimizationRefactorEnabled {
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+        }
     }
 
     func show(toast: Toast,
