@@ -2186,13 +2186,20 @@ class BrowserViewController: UIViewController,
         guard self.searchController == nil else { return }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+
         let trendingClient = TrendingSearchClient(searchEngine: searchEnginesManager.defaultEngine)
-        let searchViewModel = SearchViewModel(isPrivate: isPrivate,
-                                              isBottomSearchBar: isBottomSearchBar,
-                                              profile: profile,
-                                              model: searchEnginesManager,
-                                              tabManager: tabManager,
-                                              trendingSearchClient: trendingClient)
+
+        let recentSearchProvider = getRecentSearchProvider(with: searchEnginesManager.defaultEngine?.engineID)
+
+        let searchViewModel = SearchViewModel(
+            isPrivate: isPrivate,
+            isBottomSearchBar: isBottomSearchBar,
+            profile: profile,
+            model: searchEnginesManager,
+            tabManager: tabManager,
+            trendingSearchClient: trendingClient,
+            recentSearchProvider: recentSearchProvider
+        )
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
                                                     tabManager: tabManager)
@@ -2208,6 +2215,18 @@ class BrowserViewController: UIViewController,
 
         self.searchController = searchController
         self.searchSessionState = .active
+    }
+
+    private func getRecentSearchProvider(with engineID: String?) -> RecentSearchProvider? {
+        guard let engineID else {
+            logger.log(
+                "Unable to retrieve engineID",
+                level: .warning,
+                category: .searchEngines
+            )
+            return nil
+        }
+        return DefaultRecentSearchProvider(searchEngineID: engineID)
     }
 
     func showSearchController() {

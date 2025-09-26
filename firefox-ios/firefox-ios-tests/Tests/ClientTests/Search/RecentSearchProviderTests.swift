@@ -6,7 +6,7 @@ import XCTest
 import Shared
 @testable import Client
 
-final class RecentSearchProviderTests: XCTestCase {
+final class DefaultRecentSearchProviderTests: XCTestCase {
     var mockProfile: MockProfile!
 
     override func setUp() {
@@ -113,7 +113,7 @@ final class RecentSearchProviderTests: XCTestCase {
     }
 
     func createSubject(for searchEngineID: String) -> RecentSearchProvider {
-        let subject = RecentSearchProvider(
+        let subject = DefaultRecentSearchProvider(
             profile: mockProfile,
             searchEngineID: searchEngineID,
         )

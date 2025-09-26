@@ -5,8 +5,15 @@
 import Common
 import Shared
 
+/// Abstraction for any search client that can return trending searches. Able to mock for testing.
+protocol RecentSearchProvider {
+    func addRecentSearch(_ term: String)
+    func recentSearches() -> [String]
+    func clearRecentSearches()
+}
+
 /// A provider that manages recent search terms for a specific search engine.
-struct RecentSearchProvider {
+struct DefaultRecentSearchProvider: RecentSearchProvider {
     private let searchEngineID: String
     private let prefs: Prefs
 
