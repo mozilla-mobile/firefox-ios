@@ -53,9 +53,9 @@ struct NavigationBarMiddleButtonSelectionView: View {
     func identifierName(for middleButtonType: NavigationBarMiddleButtonType) -> String {
         switch middleButtonType {
         case .home:
-            return AccessibilityIdentifiers.Settings.SearchBar.topSetting
+            return AccessibilityIdentifiers.Settings.NavigationToolbar.homeButton
         case .newTab:
-            return AccessibilityIdentifiers.Settings.SearchBar.bottomSetting
+            return AccessibilityIdentifiers.Settings.NavigationToolbar.newTabButton
         }
     }
 }

@@ -626,6 +626,11 @@ struct AccessibilityIdentifiers {
             static let bottomSetting = "BottomSearchBar"
         }
 
+        struct NavigationToolbar {
+            static let homeButton = "HomeButton"
+            static let newTabButton = "NewTabButton"
+        }
+
         struct SendData {
             static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
