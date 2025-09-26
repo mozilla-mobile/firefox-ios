@@ -202,46 +202,62 @@ final class DefaultWKEngineWebView: WKWebView,
 
     private func setupObservers() {
         let loadingToken = observe(\.isLoading, options: [.new]) { [weak self] _, change in
-            guard let isLoading = change.newValue else { return }
-            self?.handleWebsiteLoadingChanged(isLoading)
-            self?.delegate?.webViewPropertyChanged(.loading(isLoading))
+            guard let isLoading = change.newValue, let self else { return }
+            ensureMainThread {
+                self.handleWebsiteLoadingChanged(isLoading)
+                self.delegate?.webViewPropertyChanged(.loading(isLoading))
+            }
         }
 
         let progressObserver = observe(\.estimatedProgress, options: [.new]) { [weak self] _, change in
-            guard let progress = change.newValue else { return }
-            self?.delegate?.webViewPropertyChanged(.estimatedProgress(progress))
+            guard let progress = change.newValue, let self else { return }
+            ensureMainThread {
+                self.delegate?.webViewPropertyChanged(.estimatedProgress(progress))
+            }
         }
 
         let urlObserver = observe(\.url, options: [.new]) { [weak self] _, change in
-            guard let url = change.newValue else { return }
-            self?.delegate?.webViewPropertyChanged(.URL(url))
+            guard let url = change.newValue, let self else { return }
+            ensureMainThread {
+                self.delegate?.webViewPropertyChanged(.URL(url))
+            }
         }
 
         let titleObserver = observe(\.title, options: [.new]) { [weak self] _, change in
-            guard let title = change.newValue as? String else { return }
-            self?.delegate?.webViewPropertyChanged(.title(title))
+            guard let title = change.newValue as? String, let self else { return }
+            ensureMainThread {
+                self.delegate?.webViewPropertyChanged(.title(title))
+            }
         }
 
         let canGoBackObserver = observe(\.canGoBack, options: [.new]) { [weak self] _, change in
-            guard let canGoBack = change.newValue else { return }
-            self?.delegate?.webViewPropertyChanged(.canGoBack(canGoBack))
+            guard let canGoBack = change.newValue, let self else { return }
+            ensureMainThread {
+                self.delegate?.webViewPropertyChanged(.canGoBack(canGoBack))
+            }
         }
 
         let canGoForwardObserver = observe(\.canGoForward, options: [.new]) { [weak self] _, change in
-            guard let canGoForward = change.newValue else { return }
-            self?.delegate?.webViewPropertyChanged(.canGoForward(canGoForward))
+            guard let canGoForward = change.newValue, let self else { return }
+            ensureMainThread {
+                self.delegate?.webViewPropertyChanged(.canGoForward(canGoForward))
+            }
         }
 
         let hasOnlySecureBrowserObserver = observe(\.hasOnlySecureContent, options: [.new]) { [weak self] _, change in
-            guard let hasOnlySecureContent = change.newValue else { return }
-            self?.delegate?.webViewPropertyChanged(.hasOnlySecureContent(hasOnlySecureContent))
+            guard let hasOnlySecureContent = change.newValue, let self else { return }
+            ensureMainThread {
+                self.delegate?.webViewPropertyChanged(.hasOnlySecureContent(hasOnlySecureContent))
+            }
         }
 
         let contentSizeObserver = scrollView.observe(\.contentSize, options: [.new]) { [weak self] _, change in
-            guard let newSize = change.newValue else { return }
-            self?.pullRefreshViewHeightConstraint?.constant = newSize.height
-            self?.pullRefreshViewWidthConstraint?.constant = newSize.width
-            self?.delegate?.webViewPropertyChanged(.contentSize(newSize))
+            guard let newSize = change.newValue, let self else { return }
+            ensureMainThread {
+                self.pullRefreshViewHeightConstraint?.constant = newSize.height
+                self.pullRefreshViewWidthConstraint?.constant = newSize.width
+                self.delegate?.webViewPropertyChanged(.contentSize(newSize))
+            }
         }
 
         observedTokens.append(
@@ -261,11 +277,14 @@ final class DefaultWKEngineWebView: WKWebView,
         // and `.exitingFullscreen` only. When the view is on fullscreen is removed from the view hierarchy
         // so we add it back for `.exitingFullscreen`
         if #available(iOS 16.0, *) {
-            let fullscreenObserver = observe(\.fullscreenState, options: [.new]) {  [weak self] object, change in
-                guard object.fullscreenState == .enteringFullscreen ||
-                        object.fullscreenState == .exitingFullscreen else { return }
+            let fullscreenObserver = observe(\.fullscreenState, options: [.new]) { [weak self] object, change in
+                guard let self else { return }
+                ensureMainThread {
+                    guard object.fullscreenState == .enteringFullscreen ||
+                            object.fullscreenState == .exitingFullscreen else { return }
 
-                self?.delegate?.webViewPropertyChanged(.isFullScreen(object.fullscreenState == .enteringFullscreen))
+                    self.delegate?.webViewPropertyChanged(.isFullScreen(object.fullscreenState == .enteringFullscreen))
+                }
             }
             observedTokens.append(fullscreenObserver)
         }
