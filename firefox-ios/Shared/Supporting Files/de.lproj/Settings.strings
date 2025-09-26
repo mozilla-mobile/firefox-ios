@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "Surfen";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "Weitere Informationen";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Weitere Informationen";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Absturzberichte ermöglichen es uns, Probleme mit dem Browser zu diagnostizieren und zu beheben.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Dies hilft uns beim Diagnostizieren und Beheben von Problemen mit dem Browser.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Absturzberichte automatisch senden";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "Weitere Informationen";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Weitere Informationen";
@@ -263,19 +254,10 @@
 "Settings.Summarize.Title.v142" = "Seitenzusammenfassungen";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "Weitere Informationen";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Weitere Informationen";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ ist bestrebt, nur die Informationen zu sammeln, mit denen wir %2$@ anbieten und für alle Nutzer verbessern können.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Daten über Ihr Gerät, Hardware-Konfiguration und -Nutzung helfen uns, Funktionen, Leistung und Stabilität von %@ zu verbessern.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "Technische Daten und Interaktionsdaten";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Technische Daten und Interaktionsdaten senden";

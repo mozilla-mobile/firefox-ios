@@ -315,6 +315,33 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
+        let contentContainer = browserVC.contentContainer
+
+        // if the selectedTab screenshot is nil we assume we have tapped the new tab button
+        // from the tab tray, learn more in private, or opened a tab from the sync'd tabs
+        if selectedTab.screenshot == nil {
+            dismissWithoutTabScreenshot(panelViewController: panelViewController,
+                                        contentContainer: contentContainer,
+                                        toView: toView,
+                                        context: context)
+        } else {
+            dismissWithTabScreenshot(panelViewController: panelViewController,
+                                     contentContainer: contentContainer,
+                                     toView: toView,
+                                     context: context,
+                                     selectedTab: selectedTab,
+                                     browserVC: browserVC)
+        }
+    }
+
+    private func dismissWithTabScreenshot(
+        panelViewController: TabDisplayPanelViewController,
+        contentContainer: UIView,
+        toView: UIView,
+        context: UIViewControllerContextTransitioning,
+        selectedTab: Tab,
+        browserVC: BrowserViewController
+    ) {
         let cv = panelViewController.tabDisplayView.collectionView
         guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
               let item = findItem(by: selectedTab.tabUUID, dataSource: dataSource)
@@ -324,7 +351,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             return
         }
 
-        let contentContainer = browserVC.contentContainer
         let tabSnapshot = UIImageView(image: selectedTab.screenshot)
         // crop the tab screenshot to the contentContainer frame so the animation
         // and the initial transform doesn't stutter
@@ -379,6 +405,39 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             tabCell?.isHidden = false
             self.view.removeFromSuperview()
             tabSnapshot.removeFromSuperview()
+            toView.removeFromSuperview()
+            context.completeTransition(true)
+        }
+    }
+
+    private func dismissWithoutTabScreenshot(
+        panelViewController: UIViewController,
+        contentContainer: UIView,
+        toView: UIView,
+        context: UIViewControllerContextTransitioning
+    ) {
+        let snapshot = panelViewController.view.snapshot
+        let tabTraySnapshot = UIImageView(image: snapshot)
+        tabTraySnapshot.frame = view.bounds
+        tabTraySnapshot.contentMode = .scaleToFill
+
+        contentContainer.alpha = UX.clearAlpha
+        toView.alpha = UX.clearAlpha
+
+        context.containerView.addSubview(tabTraySnapshot)
+        context.containerView.addSubview(toView)
+
+        UIView.animate(
+            withDuration: UX.dismissDuration,
+            delay: 0.0,
+            options: .curveEaseOut
+        ) {
+            tabTraySnapshot.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+            toView.alpha = UX.opaqueAlpha
+            contentContainer.alpha = UX.opaqueAlpha
+        } completion: { _ in
+            self.view.removeFromSuperview()
+            tabTraySnapshot.removeFromSuperview()
             toView.removeFromSuperview()
             context.completeTransition(true)
         }

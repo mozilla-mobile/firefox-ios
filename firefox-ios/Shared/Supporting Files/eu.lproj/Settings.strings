@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "Nabigatzea";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "Argibide gehiago.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Argibide gehiago";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Hutsegite-txostenek nabigatzailearen arazoak diagnostikatzen laguntzen digute.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Nabigatzailearen arazoak diagnostikatzen eta konpontzen laguntzen digu honek.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Bidali automatikoki hutsegite-txostenak";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "Argibide gehiago.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Argibide gehiago";
@@ -263,19 +254,10 @@
 "Settings.Summarize.Title.v142" = "Orrien laburpenak";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "Argibide gehiago.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Argibide gehiago";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%2$@ denontzat eskaini eta hobetzeko beharrezkoa dena soilik biltzen ahalegintzen da %1$@.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Zure gailuaren, hardware-konfigurazioaren eta erabilpenaren inguruko datuek guztientzat %@(e)n eginbideak, errendimendua eta egonkortasuna hobetzen laguntzen dute.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "Datu tekniko eta interakziozkoak";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Bidali datu tekniko eta interakziozkoak";

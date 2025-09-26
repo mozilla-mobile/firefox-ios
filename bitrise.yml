@@ -386,12 +386,13 @@ workflows:
                 exit 0
             fi
 
-            # Skip building on only markdown and/or LICENSE file changes
+            # Skip building on only markdown, LICENSE, and PR template changes
             TOTAL_CHANGED_FILES_COUNT=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | wc -l | xargs)
-            MD_AND_LICENSE_FILE_COUNT=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" | grep -Eci '(\.md$|^LICENSE$)' | xargs)
+            DOCS_ONLY_FILE_COUNT=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT" \
+                | grep -Eci '(\.md$|^LICENSE$|^PULL_REQUEST_TEMPLATE$)' | xargs)
 
-            if [ "$TOTAL_CHANGED_FILES_COUNT" -eq "$MD_AND_LICENSE_FILE_COUNT" ] && [ "$MD_AND_LICENSE_FILE_COUNT" -ne 0 ]; then
-                echo "Only Markdown and/or LICENSE files have been changed. No build will be triggered."
+            if [ "$TOTAL_CHANGED_FILES_COUNT" -eq "$DOCS_ONLY_FILE_COUNT" ] && [ "$DOCS_ONLY_FILE_COUNT" -ne 0 ]; then
+                echo "Only Markdown, LICENSE or template files have been changed. No build will be triggered."
                 exit 0
             fi
 
@@ -403,7 +404,7 @@ workflows:
                 if [[ "$app" == "." ]]; then
                     CHANGED_FILES=$(git diff --name-only $BASE_BRANCH..."$BITRISE_GIT_COMMIT")
                     echo "Project root changes detected: $CHANGED_FILES"
-                    ROOT_SPECIFIC_FILES=$(echo "$CHANGED_FILES" | grep -E '^(bootstrap\.sh|content_blocker_update\.sh|Dangerfile|Dangerfile\.swift|Info\.plist|iOSNimbusFeatureUtility\.sh|package\.lock|Package\.json|Package\.resolved|Package\.swift|rust_components_local\.sh|setup_build_tools\.sh|update_version\.sh|\.swiftlint\.yml)$' || true)
+                    ROOT_SPECIFIC_FILES=$(echo "$CHANGED_FILES" | grep -E '^(bootstrap\.sh|content_blocker_update\.sh|Dangerfile\.swift|Info\.plist|iOSNimbusFeatureUtility\.sh|package\.lock|Package\.json|Package\.resolved|Package\.swift|rust_components_local\.sh|setup_build_tools\.sh|update_version\.sh|\.swiftlint\.yml)$' || true)
                     echo "Root specific files: $ROOT_SPECIFIC_FILES"
                     if [ ! -z "$ROOT_SPECIFIC_FILES" ]; then
                         BUILD_FIREFOX_IOS="true"

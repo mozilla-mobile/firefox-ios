@@ -10,8 +10,26 @@
 /* Copy password text selection menu item */
 "Copy" = "Копиране";
 
+/* Label describing when the current login was created. %@ is the timestamp. */
+"Created %@" = "Създаден на %@";
+
 /* Label for the button used to delete the current login. */
 "Delete" = "Изтриване";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Отказ";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Премахване";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Това действие е необратимо.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Това ще премахне паролата от всичките ви синхронизирани устройства.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Премахване на паролата?";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Отмяна всички";
@@ -22,14 +40,23 @@
 /* Hide password text selection menu item */
 "Hide" = "Скриване";
 
+/* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
+"LoginList.DeleteToast.v135" = "Паролата е премахната";
+
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
 "Logins will be permanently removed." = "Вписванията ще бъдат безвъзвратно загубени.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "Logins will be removed from all connected devices." = "Вписванията ще бъдат премахнати от всички свързани устройства.";
 
+/* Label describing when the current login was last modified. %@ is the timestamp. */
+"Modified %@" = "Променен %@";
+
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Няма намерени вписвания";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Няма намерени пароли";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Отваряне и попълване";
@@ -46,9 +73,15 @@
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "Поле за търсене";
 
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Търсене";
+
 /* Label for the button used to select all logins. */
 "Select All" = "Избери всичко";
 
 /* Label displayed above the username row in Login Detail View. */
 "Username" = "Потребителско име";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Уебсайт";
 

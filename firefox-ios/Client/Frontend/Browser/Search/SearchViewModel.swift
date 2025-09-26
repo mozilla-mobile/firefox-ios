@@ -18,11 +18,14 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
     private var suggestClient: SearchSuggestClient?
+    private let trendingSearchClient: TrendingSearchClientProvider
+    private let logger: Logger
 
     var remoteClientTabs = [ClientTabsSearchWrapper]()
     var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
     var filteredOpenedTabs = [Tab]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
+    var trendingSearches = [String]()
     let model: SearchEnginesManager
     var suggestions: [String]? = []
     // TODO: FXIOS-12588 This global property is not concurrency safe
@@ -143,10 +146,18 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
                                                    || shouldShowSponsoredSuggestions))
     }
 
+    // Show list of trending searches if user puts focus in the address bar but does not enter any text.
+    var shouldShowTrendingSearches: Bool {
+        let isOn = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        return isOn && searchQuery.isEmpty
+    }
+
     init(isPrivate: Bool, isBottomSearchBar: Bool,
          profile: Profile,
          model: SearchEnginesManager,
          tabManager: TabManager,
+         trendingSearchClient: TrendingSearchClientProvider,
+         logger: Logger = DefaultLogger.shared,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search
     ) {
         self.isPrivate = isPrivate
@@ -154,6 +165,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         self.profile = profile
         self.model = model
         self.tabManager = tabManager
+        self.trendingSearchClient = trendingSearchClient
+        self.logger = logger
         self.searchFeature = featureConfig
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
     }
@@ -258,6 +271,25 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
         firefoxSuggestions = suggestions
         delegate?.reloadTableView()
+    }
+
+    // MARK: - Trending Searches Feature
+
+    // Loads trending searches from the default search engine and updates `trendingSearches`.
+    // Falls back to an empty list on error.
+    @MainActor
+    func retrieveTrendingSearches() async {
+        do {
+            let results = try await trendingSearchClient.getTrendingSearches()
+            trendingSearches = results
+        } catch {
+            logger.log(
+                "Trending searches errored out, return empty list.",
+                level: .info,
+                category: .searchEngines
+            )
+            trendingSearches = []
+        }
     }
 
     @MainActor

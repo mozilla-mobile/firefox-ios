@@ -104,6 +104,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
                    level: .info,
                    category: .lifecycle)
 
+        // Perform migration of changed UA file
+        Tab.ChangeUserAgent.performMigration()
+
         return true
     }
 
