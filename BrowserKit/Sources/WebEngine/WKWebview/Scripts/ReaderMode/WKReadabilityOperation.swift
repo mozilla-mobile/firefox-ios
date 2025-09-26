@@ -24,7 +24,9 @@ final class WKReadabilityOperation: Operation,
                                     ReaderModeNavigationDelegate,
                                     WKReaderModeDelegate {
     var url: URL
-    var semaphore: DispatchSemaphore
+//    TODO: FXIOS-11373 - The original code had a semaphore, but it's removed here since with @MainActor we
+//    don't want to suspense the main thread. So this class needs to be retought if this project is picked back again.
+//    var semaphore: DispatchSemaphore
     var result: ReadabilityOperationResult?
     var session: WKEngineSession?
     var readerModeCache: ReaderModeCache
@@ -38,7 +40,6 @@ final class WKReadabilityOperation: Operation,
         logger: Logger = DefaultLogger.shared
     ) {
         self.url = url
-        self.semaphore = DispatchSemaphore(value: 0)
         self.readerModeCache = readerModeCache
         self.mainQueue = mainQueue
         self.logger = logger
@@ -69,11 +70,6 @@ final class WKReadabilityOperation: Operation,
 //            let context = BrowsingContext(type: .internalNavigation, url: self.url)
 //            guard let browserURL = BrowserURL(browsingContext: context) else { return }
 //            session?.load(browserURL: browserURL)
-//        }
-//
-//        let timeout = DispatchTime.now() + .seconds(10)
-//        if semaphore.wait(timeout: timeout) == .timedOut {
-//            result = ReadabilityOperationResult.timeout
 //        }
 //
 //        processResult()
@@ -109,7 +105,7 @@ final class WKReadabilityOperation: Operation,
 
     func didFailWithError(error: Error) {
         result = ReadabilityOperationResult.error(error as NSError)
-        semaphore.signal()
+//        semaphore.signal()
     }
 
     func didFinish() {
@@ -143,6 +139,6 @@ final class WKReadabilityOperation: Operation,
         guard session == self.session else { return }
 
         result = ReadabilityOperationResult.success(readabilityResult)
-        semaphore.signal()
+//        semaphore.signal()
     }
 }
