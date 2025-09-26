@@ -26,4 +26,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            PR merged to `main`, targeting: `${{ steps.get_version.outputs.version }}`
+            🚀 PR merged to `main`, targeting version: `${{ steps.get_version.outputs.version }}`
