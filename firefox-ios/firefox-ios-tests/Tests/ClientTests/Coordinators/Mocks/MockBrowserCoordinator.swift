@@ -47,6 +47,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
+    var showStoriesFeedCalled = 0
     var showTermsOfUseCalled = 0
     var shouldShowNewTabToastCalled = 0
 
@@ -208,6 +209,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showShortcutsLibrary() {
         showShortcutsLibraryCalled += 1
+    }
+
+    func showStoriesFeed() {
+        showStoriesFeedCalled += 1
     }
 
     func shouldShowNewTabToast(tab: Client.Tab) -> Bool {

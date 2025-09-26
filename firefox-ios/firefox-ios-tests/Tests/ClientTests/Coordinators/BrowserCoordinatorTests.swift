@@ -662,6 +662,17 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
+    // MARK: - Stories Feed
+
+    func testStoriesFeed_showsStoriesFeed() throws {
+        let subject = createSubject()
+
+        subject.showStoriesFeed()
+
+        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesFeedViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
     func testShouldShowNewTabToast_returnsTrue() throws {
         let subject = createSubject()
 
