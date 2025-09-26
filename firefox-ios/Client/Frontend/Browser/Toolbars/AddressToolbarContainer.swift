@@ -38,6 +38,7 @@ final class AddressToolbarContainer: UIView,
                                      AddressToolbarDelegate,
                                      Autocompletable,
                                      URLBarViewProtocol,
+                                     FeatureFlaggable,
                                      PrivateModeUI {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
@@ -482,7 +483,7 @@ final class AddressToolbarContainer: UIView,
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)
 
-        if shouldShowSuggestions {
+        if shouldShowSuggestions || featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly) {
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         }
     }

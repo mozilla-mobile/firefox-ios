@@ -351,6 +351,7 @@ class SearchViewController: SiteTableViewController,
         guard viewModel.shouldShowTrendingSearches else { return }
         Task {
             await viewModel.retrieveTrendingSearches()
+            reloadTableView()
         }
     }
 
@@ -445,6 +446,8 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
+        case .trendingSearches:
+            break
         case .searchSuggestions:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
@@ -525,6 +528,9 @@ class SearchViewController: SiteTableViewController,
 
         var title: String
         switch section {
+        case SearchListSection.trendingSearches.rawValue:
+            // TODO: FXIOS-13644 - Add proper strings when finalized
+            title = "Trending Searches"
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
@@ -610,6 +616,8 @@ class SearchViewController: SiteTableViewController,
                         searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
                     }
                 }
+            case .trendingSearches:
+                break
             }
         }
     }
@@ -620,7 +628,7 @@ class SearchViewController: SiteTableViewController,
             guard let count = viewModel.suggestions?.count else { return 0 }
             return count < 4 ? count : 4
         case .openedTabs:
-            return viewModel.filteredOpenedTabs.count
+            return !viewModel.searchQuery.isEmpty ? viewModel.filteredOpenedTabs.count : 0
         case .remoteTabs:
             return viewModel.shouldShowSyncedTabsSuggestions ? viewModel.filteredRemoteClientTabs.count : 0
         case .history:
@@ -629,6 +637,8 @@ class SearchViewController: SiteTableViewController,
             return viewModel.shouldShowBookmarksSuggestions ? viewModel.bookmarkSites.count : 0
         case .firefoxSuggestions:
             return viewModel.firefoxSuggestions.count
+        case .trendingSearches:
+            return viewModel.shouldShowTrendingSearches ? viewModel.trendingSearches.count : 0
         }
     }
 
@@ -691,6 +701,26 @@ class SearchViewController: SiteTableViewController,
                                    _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
+        case .trendingSearches:
+            let trendingSearch = viewModel.trendingSearches[safe: indexPath.row]
+            oneLineCell.titleLabel.text = trendingSearch
+            oneLineCell.leftImageView.contentMode = .center
+            oneLineCell.leftImageView.layer.borderWidth = 0
+            oneLineCell.leftImageView.manuallySetImage(
+                UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+            )
+            oneLineCell.leftImageView.tintColor = currentTheme().colors.iconPrimary
+            oneLineCell.leftImageView.backgroundColor = nil
+            let appendButton = UIButton(type: .roundedRect)
+            appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
+            appendButton.tintColor = currentTheme().colors.iconPrimary
+            appendButton.frame = CGRect(width: SearchViewControllerUX.AppendButtonSize,
+                                        height: SearchViewControllerUX.AppendButtonSize)
+            oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
+            oneLineCell.isAccessoryViewInteractive = true
+            cell = oneLineCell
+
         case .searchSuggestions:
             if let site = viewModel.suggestions?[indexPath.row] {
                 oneLineCell.titleLabel.text = site

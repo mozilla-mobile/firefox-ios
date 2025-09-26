@@ -4034,7 +4034,7 @@ class BrowserViewController: UIViewController,
 
     func openSuggestions(searchTerm: String) {
         if searchTerm.isEmpty {
-            hideSearchController()
+            showZeroSearchView()
         } else {
             configureOverlayView()
         }
@@ -4042,6 +4042,17 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.searchQuery = searchTerm
         searchController?.searchTelemetry?.clearVisibleResults()
         searchController?.searchTelemetry?.determineInteractionType()
+    }
+
+    /// Zero search describes the state in which the user highlights the address bar, but no
+    /// text has been entered.
+    /// We only want to display if webview, user has either trending searches or recent searches enabled.
+    private func showZeroSearchView() {
+        guard featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly) else {
+            hideSearchController()
+            return
+        }
+        showSearchController()
     }
 
     // Also implements

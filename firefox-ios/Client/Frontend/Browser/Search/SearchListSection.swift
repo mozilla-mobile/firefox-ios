@@ -11,4 +11,5 @@ enum SearchListSection: Int, CaseIterable {
     case bookmarks
     case remoteTabs
     case history
+    case trendingSearches
 }
