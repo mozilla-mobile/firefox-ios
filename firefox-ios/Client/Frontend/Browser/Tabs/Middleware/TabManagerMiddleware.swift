@@ -994,9 +994,10 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let group = DispatchGroup()
         let dataQueue = DispatchQueue.global()
 
-        var isBookmarkedResult = false
-        var isPinnedResult = false
-        var isInReadingListResult = false
+        // TODO: FXIOS-13675 These should be made actually threadsafe
+        nonisolated(unsafe) var isBookmarkedResult = false
+        nonisolated(unsafe) var isPinnedResult = false
+        nonisolated(unsafe) var isInReadingListResult = false
 
         group.enter()
         getIsBookmarked(url: url, dataQueue: dataQueue) { result in
@@ -1123,7 +1124,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsBookmarked(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.places.isBookmarked(url: url).uponQueue(dataQueue) { result in
             completion(result.successValue ?? false)
@@ -1133,7 +1134,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsPinned(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.pinnedSites.isPinnedTopSite(url).uponQueue(dataQueue) { result in
             completion(result.successValue ?? false)
@@ -1143,7 +1144,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsInReadingList(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.readingList.getRecordWithURL(url).uponQueue(dataQueue) { result in
             completion(result.successValue != nil)

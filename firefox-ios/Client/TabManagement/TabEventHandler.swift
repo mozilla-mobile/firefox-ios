@@ -68,20 +68,14 @@ enum TabEventHandlerWindowResponseType {
     }
 }
 
-protocol TabEventHandler: AnyObject {
-    @MainActor
+@MainActor
+protocol TabEventHandler: AnyObject, Sendable {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { get }
-    @MainActor
     func tab(_ tab: Tab, didChangeURL url: URL)
-    @MainActor
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
-    @MainActor
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
-    @MainActor
     func tabDidGainFocus(_ tab: Tab)
-    @MainActor
     func tabDidLoseFocus(_ tab: Tab)
-    @MainActor
     func tabDidClose(_ tab: Tab)
     func tabDidToggleDesktopMode(_ tab: Tab)
     func tabDidChangeContentBlocking(_ tab: Tab)
@@ -89,6 +83,7 @@ protocol TabEventHandler: AnyObject {
 
 // Provide default implementations, because we don't want to litter the code with
 // empty methods, and `@objc optional` doesn't really work very well.
+@MainActor
 extension TabEventHandler {
     func tab(_ tab: Tab, didChangeURL url: URL) {}
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {}
@@ -113,6 +108,7 @@ enum TabEventLabel: String {
 }
 
 // Names of events must be unique!
+@MainActor
 enum TabEvent {
     case didChangeURL(URL)
     case didLoadPageMetadata(PageMetadata)
@@ -131,7 +127,6 @@ enum TabEvent {
         return result
     }
 
-    @MainActor
     func handle(_ tab: Tab, with handler: TabEventHandler) {
         switch self {
         case .didChangeURL(let url):
@@ -198,20 +193,17 @@ extension TabEventHandler {
     /// `TabObservers` should be preserved for unregistering later.
     func register(_ observer: AnyObject, forTabEvents events: TabEventLabel...) {
         let wrapper = ObserverWrapper()
-        wrapper.observers = events.map { [weak self] eventType in
-            center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
-                guard let self else { return }
-                let object = notification.object
-                let tabEvent = notification.userInfo?["payload"] as? TabEvent
-                ensureMainThread {
-                    let eventWindowResponseType = self.tabEventWindowResponseType
-                    guard let tab = object as? Tab,
-                          let event = tabEvent,
-                          eventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID)  else {
+        wrapper.observers = events.map { eventType in
+            center.addObserver(forName: eventType.name, object: nil, queue: .main) { [weak self] notification in
+                guard let tab = notification.object as? Tab,
+                      let tabEvent = notification.userInfo?["payload"] as? TabEvent,
+                      let self else { return }
+                MainActor.assumeIsolated {
+                    guard self.tabEventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID) else {
                         return
                     }
 
-                    event.handle(tab, with: self)
+                    tabEvent.handle(tab, with: self)
                 }
             }
         }

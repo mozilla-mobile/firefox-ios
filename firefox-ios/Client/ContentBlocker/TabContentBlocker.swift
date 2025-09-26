@@ -19,11 +19,11 @@ protocol ContentBlockerTab: AnyObject {
     func imageContentBlockingEnabled() -> Bool
 }
 
+@MainActor
 class TabContentBlocker {
     weak var tab: ContentBlockerTab?
     let logger: Logger
 
-    @MainActor
     var isEnabled: Bool {
         return false
     }
@@ -37,7 +37,6 @@ class TabContentBlocker {
 
     func notifyContentBlockingChanged() {}
 
-    @MainActor
     var status: BlockerStatus {
         guard isEnabled else {
             return .disabled

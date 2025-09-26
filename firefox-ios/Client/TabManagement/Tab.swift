@@ -31,7 +31,9 @@ func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
 }
 
 protocol TabContentScript {
+    @MainActor
     static func name() -> String
+    @MainActor
     func scriptMessageHandlerNames() -> [String]?
 
     @MainActor

@@ -79,7 +79,7 @@ open class ClientSyncManagerSpy: ClientSyncManager {
     }
 }
 
-final class MockTabQueue: TabQueue {
+final class MockTabQueue: TabQueue, @unchecked Sendable {
     var queuedTabs = [ShareItem]()
     var getQueuedTabsCalled = 0
     var addToQueueCalled = 0

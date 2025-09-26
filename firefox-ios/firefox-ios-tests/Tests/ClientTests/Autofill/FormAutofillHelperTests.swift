@@ -297,6 +297,7 @@ class FormAutofillHelperTests: XCTestCase {
         tab.close()
     }
 
+    @MainActor
     func testScriptMessageHandlerNames() {
         let formAutofillHelper = FormAutofillHelper(tab: tab)
         let handlerNames = formAutofillHelper.scriptMessageHandlerNames()
