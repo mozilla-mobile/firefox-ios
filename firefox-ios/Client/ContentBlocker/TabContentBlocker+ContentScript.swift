@@ -10,7 +10,6 @@ extension TabContentBlocker {
         stats = TPPageStats()
     }
 
-    @MainActor
     func userContentController(
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage

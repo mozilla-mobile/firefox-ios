@@ -71,17 +71,11 @@ enum TabEventHandlerWindowResponseType {
 @MainActor
 protocol TabEventHandler: AnyObject, Sendable {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { get }
-    @MainActor
     func tab(_ tab: Tab, didChangeURL url: URL)
-    @MainActor
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
-    @MainActor
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
-    @MainActor
     func tabDidGainFocus(_ tab: Tab)
-    @MainActor
     func tabDidLoseFocus(_ tab: Tab)
-    @MainActor
     func tabDidClose(_ tab: Tab)
     func tabDidToggleDesktopMode(_ tab: Tab)
     func tabDidChangeContentBlocking(_ tab: Tab)
@@ -133,7 +127,6 @@ enum TabEvent {
         return result
     }
 
-    @MainActor
     func handle(_ tab: Tab, with handler: TabEventHandler) {
         switch self {
         case .didChangeURL(let url):
