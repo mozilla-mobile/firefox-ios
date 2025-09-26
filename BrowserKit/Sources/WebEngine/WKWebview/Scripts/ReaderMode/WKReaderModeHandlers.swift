@@ -124,6 +124,7 @@ class WKReaderModeHandlers: WKReaderModeHandlersProtocol, Notifiable {
         }
     }
 
+    @MainActor
     private func handleReaderModeError(url: URL,
                                        readerModeConfiguration: ReaderModeConfiguration) -> GCDWebServerResponse? {
         WKReadabilityService().process(url, cache: readerModeCache)

@@ -11,12 +11,14 @@ public enum ReadabilityOperationResult {
     case timeout
 }
 
+@MainActor
 protocol ReaderModeNavigationDelegate: AnyObject {
     func didFailWithError(error: Error)
     func didFinish()
 }
 
 // TODO: FXIOS-11373 - finish handling reader mode in WebEngine - this class is to be tested
+@MainActor
 final class WKReadabilityOperation: Operation,
                                     @unchecked Sendable,
                                     ReaderModeNavigationDelegate,
@@ -46,34 +48,35 @@ final class WKReadabilityOperation: Operation,
         if self.isCancelled {
             return
         }
+        // TODO: FXIOS-11373 - finish handling reader mode in WebEngine - This isn't concurrency safe
 
         // Setup a new session and kick all this off on the main thread since UIKit
         // and WebKit are not safe from other threads.
-        Task { @MainActor in
-            let configProvider = DefaultWKEngineConfigurationProvider()
-            let parameters = WKWebViewParameters()
-            let dependencies = EngineSessionDependencies(webviewParameters: parameters)
-            let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
-                                                         dependencies: dependencies,
-                                                         configurationProvider: configProvider,
-                                                         readerModeDelegate: self)
-            session?.navigationHandler.readerModeNavigationDelegate = self
-            self.session = session
-
-            // Load the page in the session. This either fails with a navigation error, or we
-            // get a readability callback. Or it takes too long, in which case the semaphore
-            // times out. The script on the page will retry every 500ms for 10 seconds.
-            let context = BrowsingContext(type: .internalNavigation, url: self.url)
-            guard let browserURL = BrowserURL(browsingContext: context) else { return }
-            session?.load(browserURL: browserURL)
-        }
-
-        let timeout = DispatchTime.now() + .seconds(10)
-        if semaphore.wait(timeout: timeout) == .timedOut {
-            result = ReadabilityOperationResult.timeout
-        }
-
-        processResult()
+//        Task { @MainActor in
+//            let configProvider = DefaultWKEngineConfigurationProvider()
+//            let parameters = WKWebViewParameters()
+//            let dependencies = EngineSessionDependencies(webviewParameters: parameters)
+//            let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
+//                                                         dependencies: dependencies,
+//                                                         configurationProvider: configProvider,
+//                                                         readerModeDelegate: self)
+//            session?.navigationHandler.readerModeNavigationDelegate = self
+//            self.session = session
+//
+//            // Load the page in the session. This either fails with a navigation error, or we
+//            // get a readability callback. Or it takes too long, in which case the semaphore
+//            // times out. The script on the page will retry every 500ms for 10 seconds.
+//            let context = BrowsingContext(type: .internalNavigation, url: self.url)
+//            guard let browserURL = BrowserURL(browsingContext: context) else { return }
+//            session?.load(browserURL: browserURL)
+//        }
+//
+//        let timeout = DispatchTime.now() + .seconds(10)
+//        if semaphore.wait(timeout: timeout) == .timedOut {
+//            result = ReadabilityOperationResult.timeout
+//        }
+//
+//        processResult()
     }
 
     private func processResult() {

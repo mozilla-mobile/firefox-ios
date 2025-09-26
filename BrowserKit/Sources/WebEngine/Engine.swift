@@ -6,20 +6,18 @@ import Foundation
 
 /// The engine used to create an `EngineView` and `EngineSession`.
 /// There is only when engine view to be created, but multiple sessions can exists.
+@MainActor
 public protocol Engine {
     /// Creates a new view for rendering web content.
     /// - Returns: The created `EngineView`
-    @MainActor
     func createView() -> EngineView
 
     /// Creates a new engine session.
     /// - Parameter dependencies: Pass in the required session dependencies on creation
     /// - Returns: The created `EngineSession`
-    @MainActor
     func createSession(dependencies: EngineSessionDependencies) throws -> EngineSession
 
     /// Warm the `Engine` whenever we move the application to foreground
-    @MainActor
     func warmEngine()
 
     /// Idle the `Engine` whenever we move the application to background
