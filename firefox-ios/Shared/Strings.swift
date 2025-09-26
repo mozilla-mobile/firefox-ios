@@ -2664,23 +2664,23 @@ extension String {
                 public static let SectionHeader = MZLocalizedString(
                     key: "Settings.Appearance.NavigationToolbar.SectionHeader.v143",
                     tableName: "Settings",
-                    value: "Navigation Toolbar",
-                    comment: "Navigation toolbar section header title in Appearance settings")
+                    value: "Toolbar Button",
+                    comment: "Section header title in Appearance settings that configures the middle button of the bottom toolbar.")
                 public static let SectionDescription = MZLocalizedString(
                     key: "Settings.Appearance.NavigationToolbar.Description.v143",
                     tableName: "Settings",
-                    value: "Choose which button should be displayed in the middle of the bottom toolbar.",
-                    comment: "") // todo
+                    value: "Changes the button in the center of the toolbar.",
+                    comment: "Section description in Appearance settings for middle button configuration of the bottom toolbar.")
                 public static let Home = MZLocalizedString(
                     key: "Settings.Toolbar.Navigation.MiddleButton.Home",
                     tableName: "Settings",
                     value: "Home",
-                    comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen.") // todo
+                    comment: "In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar.")
                 public static let NewTab = MZLocalizedString(
                     key: "Settings.Toolbar.Navigation.MiddleButton.NewTab",
                     tableName: "Settings",
                     value: "New Tab",
-                    comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.") // todo
+                    comment: "In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar.")
             }
         }
 
