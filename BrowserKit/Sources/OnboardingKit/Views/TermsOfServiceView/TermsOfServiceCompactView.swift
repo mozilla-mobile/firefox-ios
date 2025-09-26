@@ -80,11 +80,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-        )
+        .backport.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
         .accessibilityElement(children: .contain)
         .padding(.vertical)

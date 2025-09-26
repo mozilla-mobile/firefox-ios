@@ -81,11 +81,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             }
             .padding(UX.CardView.verticalPadding)
         }
-        .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-        )
+        .backport.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
     }
 
     var titleView: some View {
