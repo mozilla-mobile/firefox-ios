@@ -24,7 +24,17 @@ final class TrendingSearchClientTest: XCTestCase {
 
         let result = try await subject.getTrendingSearches()
 
-        XCTAssertEqual(result, ["cats", "dogs"])
+        let expectedResult = [
+            "funny cat videos",
+            "easy pasta recipes",
+            "golden retriever tricks",
+            "best travel destinations 2025",
+            "cozy coffee shops",
+            "sleepy kittens",
+            "board game night ideas",
+            "dogs wearing sunglasses"
+        ]
+        XCTAssertEqual(result, expectedResult)
     }
 
     func test_getTrendingSearches_forEngineWithNoTrendingURL_returnsEmptySearches() async throws {
@@ -67,6 +77,28 @@ final class TrendingSearchClientTest: XCTestCase {
         }
     }
 
+    func test_getTrendingSearches_withMalformedJsonResponse_returnsExpectedSearches() async throws {
+        loadStubResponse(response: malformedResponse, statusCode: 200, error: nil)
+        let subject = createSubject()
+
+        await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
+            try await subject.getTrendingSearches()
+        } verify: { err in
+             XCTAssertEqual(err, .unableToParseJsonData)
+        }
+    }
+
+    func test_getTrendingSearches_withEmptyArrayResponse_returnsExpectedSearches() async throws {
+        loadStubResponse(response: emptyResponse, statusCode: 200, error: nil)
+        let subject = createSubject()
+
+        await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
+            try await subject.getTrendingSearches()
+        } verify: { err in
+            XCTAssertEqual(err, .unableToParseJsonData)
+        }
+    }
+
     // MARK: - Helpers
     private func createSubject(
         for searchEngine: TrendingSearchEngine = MockTrendingSearchEngine()
@@ -103,7 +135,29 @@ final class TrendingSearchClientTest: XCTestCase {
 
     // MARK: URLProtocolStub
     private var sampleResponse: String {
-        return #"["",["cats","dogs"],[],[],{}]"#
+        #"""
+        [
+          "",
+          [
+            "funny cat videos",
+           "easy pasta recipes",
+           "golden retriever tricks",
+           "best travel destinations 2025",
+           "cozy coffee shops",
+           "sleepy kittens",
+           "board game night ideas",
+           "dogs wearing sunglasses"
+          ]
+        ]
+        """#
+    }
+
+    private var emptyResponse: String {
+        return #"[]"#
+    }
+
+    private var malformedResponse: String {
+        return #"[["booo","incorrect"}"#
     }
 
     private func clearState() {

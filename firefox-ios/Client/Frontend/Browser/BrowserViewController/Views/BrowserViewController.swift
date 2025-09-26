@@ -1961,11 +1961,13 @@ class BrowserViewController: UIViewController,
         guard self.searchController == nil else { return }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        let trendingClient = TrendingSearchClient(searchEngine: searchEnginesManager.defaultEngine)
         let searchViewModel = SearchViewModel(isPrivate: isPrivate,
                                               isBottomSearchBar: isBottomSearchBar,
                                               profile: profile,
                                               model: searchEnginesManager,
-                                              tabManager: tabManager)
+                                              tabManager: tabManager,
+                                              trendingSearchClient: trendingClient)
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
                                                     tabManager: tabManager)

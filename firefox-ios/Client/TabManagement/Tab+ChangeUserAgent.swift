@@ -2,20 +2,31 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+
 extension Tab {
     class ChangeUserAgent {
         // Track these in-memory only
         // TODO: FXIOS-12594 This global property is not concurrency safe
         nonisolated(unsafe) private static var privateModeHostList = Set<String>()
 
+        // Default to prod filename; tests can override it
+        // Not concurrency safe, this should only ever be changed for tests
+        nonisolated(unsafe) static var pathComponent = "changed-ua-set-of-hosts.xcarchive"
+
         private static let file: URL = {
+            let root = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+            return root.appendingPathComponent(pathComponent)
+        }()
+
+        private static let oldUAFileLocation: URL = {
             let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            return root.appendingPathComponent("changed-ua-set-of-hosts.xcarchive")
+            return root.appendingPathComponent(pathComponent)
         }()
 
         // TODO: FXIOS-12594 This global property is not concurrency safe
         nonisolated(unsafe) private static var baseDomainList: Set<String> = {
-            if let data = try? Data(contentsOf: ChangeUserAgent.file),
+            if let data = getDataFromFile(),
                let hosts = try? NSKeyedUnarchiver.unarchivedObject(
                 ofClasses: [NSSet.self, NSArray.self, NSString.self],
                 from: data
@@ -33,6 +44,15 @@ extension Tab {
         static func contains(url: URL, isPrivate: Bool) -> Bool {
             guard let baseDomain = url.baseDomain else { return false }
             return isPrivate ? privateModeHostList.contains(baseDomain) : baseDomainList.contains(baseDomain)
+        }
+
+        static func performMigration() {
+            guard FileManager.default.fileExists(atPath: oldUAFileLocation.path) else { return }
+            do {
+                try FileManager.default.moveItem(at: oldUAFileLocation, to: file)
+            } catch {
+                DefaultLogger.shared.log("Migration of changed UA file failed", level: .info, category: .tabs)
+            }
         }
 
         static func updateDomainList(forUrl url: URL, isChangedUA: Bool, isPrivate: Bool) {
@@ -83,6 +103,10 @@ extension Tab {
             components.host = host
 
             return components.url ?? url
+        }
+
+        private static func getDataFromFile() -> Data? {
+            return try? Data(contentsOf: ChangeUserAgent.file)
         }
     }
 }
