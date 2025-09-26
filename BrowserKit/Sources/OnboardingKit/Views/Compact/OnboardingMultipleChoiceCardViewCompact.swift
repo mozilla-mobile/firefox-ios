@@ -9,6 +9,8 @@ import ComponentLibrary
 struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
+    @State private var primaryBackgroundColor: Color = .clear
+    @State private var primaryForegroundColor: Color = .clear
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
     @Environment(\.sizeCategory)
     var sizeCategory
@@ -74,7 +76,8 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                 primaryButton
                 Button(" ", action: {})
                     .font(UX.CardView.secondaryActionFont)
-                    .buttonStyle(SecondaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
                     .opacity(0)
                     .accessibilityHidden(true)
                     .disabled(true)
@@ -99,18 +102,18 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     var primaryButton: some View {
         Group {
             if #available(iOS 17.0, *) {
-                Button(
-                    viewModel.buttons.primary.title,
+                ThemedBorderedProminentButton(
+                    title: viewModel.buttons.primary.title,
                     action: {
                         onBottomButtonAction(
                             viewModel.buttons.primary.action,
                             viewModel.name
                         )
-                    }
+                    },
+                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+                    backgroundColor: primaryBackgroundColor,
+                    foregroundColor: primaryForegroundColor
                 )
-                .font(UX.CardView.primaryActionFont)
-                .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-                .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
             } else {
                 DragCancellablePrimaryButton(
                     title: viewModel.buttons.primary.title,
@@ -131,5 +134,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
         let color = theme.colors
         textColor = Color(color.textPrimary)
         cardBackgroundColor = Color(color.layer2)
+        primaryBackgroundColor = Color(color.actionPrimary)
+        primaryForegroundColor = Color(color.textInverted)
     }
 }

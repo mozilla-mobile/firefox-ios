@@ -9,6 +9,8 @@ import ComponentLibrary
 struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
+    @State private var primaryBackgroundColor: Color = .clear
+    @State private var primaryForegroundColor: Color = .clear
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
 
     let windowUUID: WindowUUID
@@ -78,24 +80,26 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
     }
 
     var primaryButton: some View {
-        Button(
-            viewModel.buttons.primary.title,
+        ThemedBorderedProminentButton(
+            title: viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
                     viewModel.name
                 )
-            }
+            },
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+            backgroundColor: primaryBackgroundColor,
+            foregroundColor: primaryForegroundColor,
+            width: UX.CardView.primaryButtonWidthiPad
         )
-        .font(UX.CardView.primaryActionFont)
-        .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
-        .frame(width: UX.CardView.primaryButtonWidthiPad)
     }
 
     private func applyTheme(theme: Theme) {
         let color = theme.colors
         textColor = Color(color.textPrimary)
         cardBackgroundColor = Color(color.layer2)
+        primaryBackgroundColor = Color(color.actionPrimary)
+        primaryForegroundColor = Color(color.textInverted)
     }
 }

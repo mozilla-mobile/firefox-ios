@@ -11,6 +11,8 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @State private var primaryActionColor: Color = .clear
+    @State private var primaryBackgroundColor: Color = .clear
+    @State private var primaryForegroundColor: Color = .clear
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -86,19 +88,19 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     var primaryButton: some View {
-        Button(
-            viewModel.buttons.primary.title,
+        ThemedBorderedProminentButton(
+            title: viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
                     viewModel.name
                 )
-            }
+            },
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+            backgroundColor: primaryBackgroundColor,
+            foregroundColor: primaryForegroundColor,
+            width: UX.CardView.primaryButtonWidthiPad
         )
-        .font(UX.CardView.primaryActionFont)
-        .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
-        .frame(width: UX.CardView.primaryButtonWidthiPad)
     }
 
     @ViewBuilder var secondaryButton: some View {
@@ -125,5 +127,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
         primaryActionColor = Color(color.actionPrimary)
+        primaryBackgroundColor = Color(color.actionPrimary)
+        primaryForegroundColor = Color(color.textInverted)
     }
 }

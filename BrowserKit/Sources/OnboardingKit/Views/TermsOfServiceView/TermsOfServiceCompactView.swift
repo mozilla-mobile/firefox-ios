@@ -10,6 +10,8 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
+    @State private var primaryBackgroundColor: Color = .clear
+    @State private var primaryForegroundColor: Color = .clear
 
     @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
@@ -136,17 +138,17 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     }
 
     var primaryButton: some View {
-        Button(
-            viewModel.configuration.buttons.primary.title,
+        ThemedBorderedProminentButton(
+            title: viewModel.configuration.buttons.primary.title,
             action: {
                 viewModel.handleEmbededLinkAction(
                     action: .accept
                 )
-            }
+            },
+            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton",
+            backgroundColor: primaryBackgroundColor,
+            foregroundColor: primaryForegroundColor
         )
-        .font(UX.CardView.primaryActionFont)
-        .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton")
-        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
 
     private func applyTheme(theme: Theme) {
@@ -154,5 +156,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
+        primaryBackgroundColor = Color(color.actionPrimary)
+        primaryForegroundColor = Color(color.textInverted)
     }
 }
