@@ -171,6 +171,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+        // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
+        webviewController?.update(webView: nil)
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
