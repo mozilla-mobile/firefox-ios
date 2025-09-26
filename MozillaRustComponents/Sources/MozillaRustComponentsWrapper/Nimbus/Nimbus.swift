@@ -56,8 +56,9 @@ private extension Nimbus {
 
     func catchAll(_ queue: OperationQueue, thunk: @Sendable @escaping (Operation) throws -> Void) -> Operation {
         let op = BlockOperation()
-        op.addExecutionBlock {
-            self.catchAll {
+        op.addExecutionBlock { [weak self, weak op] in
+            guard let self, let op else { return }
+            catchAll {
                 try thunk(op)
             }
         }
