@@ -5,10 +5,16 @@
 import Common
 import Redux
 
+enum NavigationBarMiddleButtonType: Equatable {
+    case home
+    case newTab
+}
+
 struct NavigationBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     var actions: [ToolbarActionConfiguration]
     var displayBorder: Bool
+    var middleButton: NavigationBarMiddleButtonType
 
     private static let searchAction = ToolbarActionConfiguration(
         actionType: .search,
@@ -42,15 +48,18 @@ struct NavigationBarState: StateType, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
                   actions: [],
-                  displayBorder: false)
+                  displayBorder: false,
+                  middleButton: .newTab)
     }
 
     init(windowUUID: WindowUUID,
          actions: [ToolbarActionConfiguration],
-         displayBorder: Bool) {
+         displayBorder: Bool,
+         middleButton: NavigationBarMiddleButtonType) {
         self.windowUUID = windowUUID
         self.actions = actions
         self.displayBorder = displayBorder
+        self.middleButton = middleButton
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -85,8 +94,9 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
-        guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder,
-              let toolbarAction = action as? ToolbarAction
+        guard let toolbarAction = action as? ToolbarAction,
+              let displayBorder = toolbarAction.displayNavBorder,
+              let middleButton = toolbarAction.middleButton
         else {
             return defaultState(from: state)
         }
@@ -94,7 +104,8 @@ struct NavigationBarState: StateType, Equatable {
         return NavigationBarState(
             windowUUID: state.windowUUID,
             actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: displayBorder
+            displayBorder: displayBorder,
+            middleButton: middleButton
         )
     }
 
@@ -104,7 +115,8 @@ struct NavigationBarState: StateType, Equatable {
         return NavigationBarState(
             windowUUID: state.windowUUID,
             actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -114,7 +126,8 @@ struct NavigationBarState: StateType, Equatable {
         return NavigationBarState(
             windowUUID: state.windowUUID,
             actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -124,7 +137,8 @@ struct NavigationBarState: StateType, Equatable {
         return NavigationBarState(
             windowUUID: state.windowUUID,
             actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -134,7 +148,8 @@ struct NavigationBarState: StateType, Equatable {
         return NavigationBarState(
             windowUUID: state.windowUUID,
             actions: navigationActions(action: toolbarAction, navigationBarState: state),
-            displayBorder: state.displayBorder
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -147,7 +162,8 @@ struct NavigationBarState: StateType, Equatable {
         return NavigationBarState(
             windowUUID: state.windowUUID,
             actions: state.actions,
-            displayBorder: displayBorder
+            displayBorder: displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -155,7 +171,8 @@ struct NavigationBarState: StateType, Equatable {
         return NavigationBarState(
             windowUUID: state.windowUUID,
             actions: state.actions,
-            displayBorder: state.displayBorder
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -178,7 +195,8 @@ struct NavigationBarState: StateType, Equatable {
         let middleAction = getMiddleButtonAction(url: url,
                                                  isPrivateMode: toolbarState.isPrivateMode,
                                                  canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
-                                                 isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled)
+                                                 isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
+                                                 middleButton: navigationBarState.middleButton)
 
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
@@ -212,12 +230,15 @@ struct NavigationBarState: StateType, Equatable {
     private static func getMiddleButtonAction(url: URL?,
                                               isPrivateMode: Bool,
                                               canShowDataClearanceAction: Bool,
-                                              isNewTabFeatureEnabled: Bool)
+                                              isNewTabFeatureEnabled: Bool,
+                                              middleButton: NavigationBarMiddleButtonType)
     -> ToolbarActionConfiguration {
+        let customizedMiddleButton = switch middleButton {
+        case .home: homeAction
+        case .newTab: newTabAction
+        }
         let canShowDataClearanceAction = canShowDataClearanceAction && isPrivateMode
-        let isNewTabEnabled = isNewTabFeatureEnabled
-        let middleActionForWebpage = canShowDataClearanceAction ?
-                                     dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
+        let middleActionForWebpage = canShowDataClearanceAction ? dataClearanceAction : customizedMiddleButton
         let middleActionForHomepage = searchAction
         let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
 
