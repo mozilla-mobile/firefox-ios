@@ -13,7 +13,10 @@ public class OnboardingBottomSheetViewController: BottomSheetViewController {
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Move animation from viewDidAppear to viewWillAppear for onboarding
+
+        // For onboarding flows, we animate the bottom sheet presentation earlier in the lifecycle
+        // This ensures the animation starts before the view becomes visible, creating a smoother
+        // user experience during onboarding transitions
         contentViewBottomConstraint?.constant = 0
         UIView.animate(withDuration: viewModel.animationTransitionDuration) {
             self.view.backgroundColor = self.viewModel.backgroundColor
@@ -24,6 +27,8 @@ public class OnboardingBottomSheetViewController: BottomSheetViewController {
     // swiftlint:disable:next unneeded_override
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // No animation here - it's handled in viewWillAppear to prevent double animation
+        // Override viewDidAppear without additional animation logic since we handle
+        // all presentation animations in viewWillAppear. This prevents duplicate
+        // animations that could cause visual glitches in onboarding flows.
     }
 }
