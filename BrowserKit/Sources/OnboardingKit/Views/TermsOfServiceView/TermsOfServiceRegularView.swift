@@ -75,13 +75,8 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
                 }
                 .scrollBounceBehavior(basedOnSize: true)
             }
-            .background(
-                RoundedRectangle(
-                    cornerRadius: UX.CardView.cornerRadius
-                )
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-            )
+            .backport
+            .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
             .padding(.horizontal, UX.CardView.horizontalPadding)
             .accessibilityElement(children: .contain)
         }

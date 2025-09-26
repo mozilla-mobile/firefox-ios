@@ -5,7 +5,6 @@
 import SwiftUI
 import Common
 
-// MARK: - ThemedBorderedProminentButton
 struct ThemedBorderedProminentButton: View {
     let title: String
     let action: () -> Void
@@ -13,7 +12,7 @@ struct ThemedBorderedProminentButton: View {
     let backgroundColor: Color
     let foregroundColor: Color
     let width: CGFloat?
-    
+
     init(
         title: String,
         action: @escaping () -> Void,
@@ -29,7 +28,7 @@ struct ThemedBorderedProminentButton: View {
         self.foregroundColor = foregroundColor
         self.width = width
     }
-    
+
     var body: some View {
         Button(action: action) {
             Text(title)
