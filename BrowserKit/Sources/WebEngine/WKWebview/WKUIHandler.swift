@@ -63,7 +63,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler {
     private let application: Application
     private let policyDecider: WKPolicyDecider
 
-    // TODO: With Swift 6 we can use default params in the init
+    // TODO: FXIOS-13670 With Swift 6 we can use default params in the init
     @MainActor
     public static func factory(
         sessionDependencies: EngineSessionDependencies,
