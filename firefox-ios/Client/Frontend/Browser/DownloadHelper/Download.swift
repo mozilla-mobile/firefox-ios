@@ -75,6 +75,12 @@ class Download: NSObject {
         }
         return true
     }
+
+    // Used to avoid name spoofing using Unicode RTL char to change file extension
+    public static func stripUnicode(fromFilename string: String) -> String {
+        let allowed = CharacterSet.alphanumerics.union(CharacterSet.punctuationCharacters)
+        return string.components(separatedBy: allowed.inverted).joined()
+     }
 }
 
 class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate {
@@ -90,12 +96,6 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
     fileprivate(set) var cookieStore: WKHTTPCookieStore
 
     private var resumeData: Data?
-
-    // Used to avoid name spoofing using Unicode RTL char to change file extension
-    public static func stripUnicode(fromFilename string: String) -> String {
-        let allowed = CharacterSet.alphanumerics.union(CharacterSet.punctuationCharacters)
-        return string.components(separatedBy: allowed.inverted).joined()
-     }
 
     init?(originWindow: WindowUUID,
           cookieStore: WKHTTPCookieStore,
@@ -119,7 +119,7 @@ class HTTPDownload: Download, URLSessionTaskDelegate, URLSessionDownloadDelegate
         super.init(originWindow: originWindow)
 
         if let filename = preflightResponse.suggestedFilename {
-            self.filename = HTTPDownload.stripUnicode(fromFilename: filename)
+            self.filename = Download.stripUnicode(fromFilename: filename)
         }
 
         if let mimeType = preflightResponse.mimeType {
@@ -214,7 +214,7 @@ class BlobDownload: Download {
 
         super.init(originWindow: originWindow)
 
-        self.filename = filename
+        self.filename = Download.stripUnicode(fromFilename: filename)
         self.mimeType = mimeType
 
         self.totalBytesExpected = size
