@@ -25,13 +25,13 @@ fileprivate extension RustBuffer {
     }
 
     static func from(_ ptr: UnsafeBufferPointer<UInt8>) -> RustBuffer {
-        try! rustCall { ffi_relay_rustbuffer_from_bytes(ForeignBytes(bufferPointer: ptr), $0) }
+        try! rustCall { ffi_context_id_rustbuffer_from_bytes(ForeignBytes(bufferPointer: ptr), $0) }
     }
 
     // Frees the buffer in place.
     // The buffer must not be used after this is called.
     func deallocate() {
-        try! rustCall { ffi_relay_rustbuffer_free(self, $0) }
+        try! rustCall { ffi_context_id_rustbuffer_free(self, $0) }
     }
 }
 
@@ -281,7 +281,7 @@ private func makeRustCall<T, E: Swift.Error>(
     _ callback: (UnsafeMutablePointer<RustCallStatus>) -> T,
     errorHandler: ((RustBuffer) throws -> E)?
 ) throws -> T {
-    uniffiEnsureRelayInitialized()
+    uniffiEnsureContextIdInitialized()
     var callStatus = RustCallStatus.init()
     let returnedVal = callback(&callStatus)
     try uniffiCheckCallStatus(callStatus: callStatus, errorHandler: errorHandler)
@@ -395,7 +395,29 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterUInt8: FfiConverterPrimitive {
+    typealias FfiType = UInt8
+    typealias SwiftType = UInt8
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt8 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: UInt8, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -482,74 +504,31 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 /**
- * Represents a client for the Relay API.
- *
- * Use this struct to connect and authenticate with a Relay server,
- * managing authorization to call protected endpoints.
- *
- * # Authorization
- * - Clients should use the [fxa_client::FirefoxAccount::getAccessToken()] function
- * to obtain a relay-scoped access token (scope: `https://identity.mozilla.com/apps/relay`).
- * - Then, construct the [`RelayClient`] with the access token.
- * All requests will then be authenticated to the Relay server via `Authorization: Bearer {fxa-access-token}`.
- * - The Relay server verifies this token with the FxA OAuth `/verify` endpoint.
- * - Clients are responsible for getting a new access token when needed.
+ * Top-level API for the context_id component
  */
-public protocol RelayClientProtocol: AnyObject, Sendable {
+public protocol ContextIdComponentProtocol: AnyObject, Sendable {
     
     /**
-     * Creates a Relay user record in the Relay service database.
-     *
-     * This function was originally used to signal acceptance of terms and privacy notices,
-     * but now primarily serves to provision (create) the Relay user record if one does not exist.
-     * Returns `Ok(())` on success, or an error if the server call fails.
+     * Regenerate the context ID.
      */
-    func acceptTerms() throws 
+    func forceRotation() throws 
     
     /**
-     * Creates a new Relay mask (alias) with the specified metadata.
-     *
-     * This is used to generate a new alias for use in an email field.
-     *
-     * - `description`: A label shown in the Relay dashboard; defaults to `generated_for`, user-editable later.
-     * - `generated_for`: The website for which the address is generated.
-     * - `used_on`: Comma-separated list of all websites where this address is used. Only updated by some clients.
-     *
-     * ## Open Questions
-     * - See the spike doc and project Jira for clarifications on field semantics.
-     * - Returned error codes are not fully documented.
-     *
-     * Returns the newly created [`RelayAddress`] on success, or an error.
+     * Return the current context ID string.
      */
-    func createAddress(description: String, generatedFor: String, usedOn: String) throws  -> RelayAddress
+    func request(rotationDaysInS: UInt8) throws  -> String
     
     /**
-     * Retrieves all Relay addresses associated with the current account.
-     *
-     * Returns a vector of [`RelayAddress`] objects on success, or an error if the request fails.
-     *
-     * ## Known Limitations
-     * - Will return an error if the Relay user record doesn't exist yet (see [`accept_terms`]).
-     * - Error variants are subject to server-side changes.
+     * Unset the callbacks set during construction, and use a default
+     * no-op ContextIdCallback instead.
      */
-    func fetchAddresses() throws  -> [RelayAddress]
+    func unsetCallback() throws 
     
 }
 /**
- * Represents a client for the Relay API.
- *
- * Use this struct to connect and authenticate with a Relay server,
- * managing authorization to call protected endpoints.
- *
- * # Authorization
- * - Clients should use the [fxa_client::FirefoxAccount::getAccessToken()] function
- * to obtain a relay-scoped access token (scope: `https://identity.mozilla.com/apps/relay`).
- * - Then, construct the [`RelayClient`] with the access token.
- * All requests will then be authenticated to the Relay server via `Authorization: Bearer {fxa-access-token}`.
- * - The Relay server verifies this token with the FxA OAuth `/verify` endpoint.
- * - Clients are responsible for getting a new access token when needed.
+ * Top-level API for the context_id component
  */
-open class RelayClient: RelayClientProtocol, @unchecked Sendable {
+open class ContextIdComponent: ContextIdComponentProtocol, @unchecked Sendable {
     fileprivate let pointer: UnsafeMutableRawPointer!
 
     /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
@@ -586,24 +565,21 @@ open class RelayClient: RelayClientProtocol, @unchecked Sendable {
     @_documentation(visibility: private)
 #endif
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_relay_fn_clone_relayclient(self.pointer, $0) }
+        return try! rustCall { uniffi_context_id_fn_clone_contextidcomponent(self.pointer, $0) }
     }
     /**
-     * Creates a new `RelayClient` instance.
+     * Construct a new [ContextIDComponent].
      *
-     * # Parameters
-     * - `server_url`: Base URL for the Relay API.
-     * - `auth_token`: Optional relay-scoped access token (see struct docs).
-     *
-     * # Returns
-     * A new [`RelayClient`] configured for the specified server and token.
+     * If no creation timestamp is provided, the current time will be used.
      */
-public convenience init(serverUrl: String, authToken: String?)throws  {
+public convenience init(initContextId: String, creationTimestampS: Int64, runningInTestAutomation: Bool, callback: ContextIdCallback) {
     let pointer =
-        try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
-    uniffi_relay_fn_constructor_relayclient_new(
-        FfiConverterString.lower(serverUrl),
-        FfiConverterOptionString.lower(authToken),$0
+        try! rustCall() {
+    uniffi_context_id_fn_constructor_contextidcomponent_new(
+        FfiConverterString.lower(initContextId),
+        FfiConverterInt64.lower(creationTimestampS),
+        FfiConverterBool.lower(runningInTestAutomation),
+        FfiConverterCallbackInterfaceContextIdCallback_lower(callback),$0
     )
 }
     self.init(unsafeFromRawPointer: pointer)
@@ -614,64 +590,40 @@ public convenience init(serverUrl: String, authToken: String?)throws  {
             return
         }
 
-        try! rustCall { uniffi_relay_fn_free_relayclient(pointer, $0) }
+        try! rustCall { uniffi_context_id_fn_free_contextidcomponent(pointer, $0) }
     }
 
     
 
     
     /**
-     * Creates a Relay user record in the Relay service database.
-     *
-     * This function was originally used to signal acceptance of terms and privacy notices,
-     * but now primarily serves to provision (create) the Relay user record if one does not exist.
-     * Returns `Ok(())` on success, or an error if the server call fails.
+     * Regenerate the context ID.
      */
-open func acceptTerms()throws   {try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
-    uniffi_relay_fn_method_relayclient_accept_terms(self.uniffiClonePointer(),$0
+open func forceRotation()throws   {try rustCallWithError(FfiConverterTypeApiError_lift) {
+    uniffi_context_id_fn_method_contextidcomponent_force_rotation(self.uniffiClonePointer(),$0
     )
 }
 }
     
     /**
-     * Creates a new Relay mask (alias) with the specified metadata.
-     *
-     * This is used to generate a new alias for use in an email field.
-     *
-     * - `description`: A label shown in the Relay dashboard; defaults to `generated_for`, user-editable later.
-     * - `generated_for`: The website for which the address is generated.
-     * - `used_on`: Comma-separated list of all websites where this address is used. Only updated by some clients.
-     *
-     * ## Open Questions
-     * - See the spike doc and project Jira for clarifications on field semantics.
-     * - Returned error codes are not fully documented.
-     *
-     * Returns the newly created [`RelayAddress`] on success, or an error.
+     * Return the current context ID string.
      */
-open func createAddress(description: String, generatedFor: String, usedOn: String)throws  -> RelayAddress  {
-    return try  FfiConverterTypeRelayAddress_lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
-    uniffi_relay_fn_method_relayclient_create_address(self.uniffiClonePointer(),
-        FfiConverterString.lower(description),
-        FfiConverterString.lower(generatedFor),
-        FfiConverterString.lower(usedOn),$0
+open func request(rotationDaysInS: UInt8)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeApiError_lift) {
+    uniffi_context_id_fn_method_contextidcomponent_request(self.uniffiClonePointer(),
+        FfiConverterUInt8.lower(rotationDaysInS),$0
     )
 })
 }
     
     /**
-     * Retrieves all Relay addresses associated with the current account.
-     *
-     * Returns a vector of [`RelayAddress`] objects on success, or an error if the request fails.
-     *
-     * ## Known Limitations
-     * - Will return an error if the Relay user record doesn't exist yet (see [`accept_terms`]).
-     * - Error variants are subject to server-side changes.
+     * Unset the callbacks set during construction, and use a default
+     * no-op ContextIdCallback instead.
      */
-open func fetchAddresses()throws  -> [RelayAddress]  {
-    return try  FfiConverterSequenceTypeRelayAddress.lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
-    uniffi_relay_fn_method_relayclient_fetch_addresses(self.uniffiClonePointer(),$0
+open func unsetCallback()throws   {try rustCallWithError(FfiConverterTypeApiError_lift) {
+    uniffi_context_id_fn_method_contextidcomponent_unset_callback(self.uniffiClonePointer(),$0
     )
-})
+}
 }
     
 
@@ -681,20 +633,20 @@ open func fetchAddresses()throws  -> [RelayAddress]  {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public struct FfiConverterTypeRelayClient: FfiConverter {
+public struct FfiConverterTypeContextIDComponent: FfiConverter {
 
     typealias FfiType = UnsafeMutableRawPointer
-    typealias SwiftType = RelayClient
+    typealias SwiftType = ContextIdComponent
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> RelayClient {
-        return RelayClient(unsafeFromRawPointer: pointer)
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> ContextIdComponent {
+        return ContextIdComponent(unsafeFromRawPointer: pointer)
     }
 
-    public static func lower(_ value: RelayClient) -> UnsafeMutableRawPointer {
+    public static func lower(_ value: ContextIdComponent) -> UnsafeMutableRawPointer {
         return value.uniffiClonePointer()
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RelayClient {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ContextIdComponent {
         let v: UInt64 = try readInt(&buf)
         // The Rust code won't compile if a pointer won't fit in a UInt64.
         // We have to go via `UInt` because that's the thing that's the size of a pointer.
@@ -705,7 +657,7 @@ public struct FfiConverterTypeRelayClient: FfiConverter {
         return try lift(ptr!)
     }
 
-    public static func write(_ value: RelayClient, into buf: inout [UInt8]) {
+    public static func write(_ value: ContextIdComponent, into buf: inout [UInt8]) {
         // This fiddling is because `Int` is the thing that's the same size as a pointer.
         // The Rust code won't compile if a pointer won't fit in a `UInt64`.
         writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
@@ -716,235 +668,24 @@ public struct FfiConverterTypeRelayClient: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRelayClient_lift(_ pointer: UnsafeMutableRawPointer) throws -> RelayClient {
-    return try FfiConverterTypeRelayClient.lift(pointer)
+public func FfiConverterTypeContextIDComponent_lift(_ pointer: UnsafeMutableRawPointer) throws -> ContextIdComponent {
+    return try FfiConverterTypeContextIDComponent.lift(pointer)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRelayClient_lower(_ value: RelayClient) -> UnsafeMutableRawPointer {
-    return FfiConverterTypeRelayClient.lower(value)
+public func FfiConverterTypeContextIDComponent_lower(_ value: ContextIdComponent) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeContextIDComponent.lower(value)
 }
 
 
 
 
-/**
- * Represents a Relay email address object returned by the Relay API.
- *
- * Includes metadata and statistics for an alias, such as its status,
- * usage stats, and identifying information.
- *
- * See:
- * https://mozilla.github.io/fx-private-relay/api_docs.html
- */
-public struct RelayAddress {
-    public var maskType: String
-    public var enabled: Bool
-    public var description: String
-    public var generatedFor: String
-    public var blockListEmails: Bool
-    public var usedOn: String?
-    public var id: Int64
-    public var address: String
-    public var domain: Int64
-    public var fullAddress: String
-    public var createdAt: String
-    public var lastModifiedAt: String
-    public var lastUsedAt: String?
-    public var numForwarded: Int64
-    public var numBlocked: Int64
-    public var numLevelOneTrackersBlocked: Int64
-    public var numReplied: Int64
-    public var numSpam: Int64
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(maskType: String, enabled: Bool, description: String, generatedFor: String, blockListEmails: Bool, usedOn: String?, id: Int64, address: String, domain: Int64, fullAddress: String, createdAt: String, lastModifiedAt: String, lastUsedAt: String?, numForwarded: Int64, numBlocked: Int64, numLevelOneTrackersBlocked: Int64, numReplied: Int64, numSpam: Int64) {
-        self.maskType = maskType
-        self.enabled = enabled
-        self.description = description
-        self.generatedFor = generatedFor
-        self.blockListEmails = blockListEmails
-        self.usedOn = usedOn
-        self.id = id
-        self.address = address
-        self.domain = domain
-        self.fullAddress = fullAddress
-        self.createdAt = createdAt
-        self.lastModifiedAt = lastModifiedAt
-        self.lastUsedAt = lastUsedAt
-        self.numForwarded = numForwarded
-        self.numBlocked = numBlocked
-        self.numLevelOneTrackersBlocked = numLevelOneTrackersBlocked
-        self.numReplied = numReplied
-        self.numSpam = numSpam
-    }
-}
-
-#if compiler(>=6)
-extension RelayAddress: Sendable {}
-#endif
-
-
-extension RelayAddress: Equatable, Hashable {
-    public static func ==(lhs: RelayAddress, rhs: RelayAddress) -> Bool {
-        if lhs.maskType != rhs.maskType {
-            return false
-        }
-        if lhs.enabled != rhs.enabled {
-            return false
-        }
-        if lhs.description != rhs.description {
-            return false
-        }
-        if lhs.generatedFor != rhs.generatedFor {
-            return false
-        }
-        if lhs.blockListEmails != rhs.blockListEmails {
-            return false
-        }
-        if lhs.usedOn != rhs.usedOn {
-            return false
-        }
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.address != rhs.address {
-            return false
-        }
-        if lhs.domain != rhs.domain {
-            return false
-        }
-        if lhs.fullAddress != rhs.fullAddress {
-            return false
-        }
-        if lhs.createdAt != rhs.createdAt {
-            return false
-        }
-        if lhs.lastModifiedAt != rhs.lastModifiedAt {
-            return false
-        }
-        if lhs.lastUsedAt != rhs.lastUsedAt {
-            return false
-        }
-        if lhs.numForwarded != rhs.numForwarded {
-            return false
-        }
-        if lhs.numBlocked != rhs.numBlocked {
-            return false
-        }
-        if lhs.numLevelOneTrackersBlocked != rhs.numLevelOneTrackersBlocked {
-            return false
-        }
-        if lhs.numReplied != rhs.numReplied {
-            return false
-        }
-        if lhs.numSpam != rhs.numSpam {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(maskType)
-        hasher.combine(enabled)
-        hasher.combine(description)
-        hasher.combine(generatedFor)
-        hasher.combine(blockListEmails)
-        hasher.combine(usedOn)
-        hasher.combine(id)
-        hasher.combine(address)
-        hasher.combine(domain)
-        hasher.combine(fullAddress)
-        hasher.combine(createdAt)
-        hasher.combine(lastModifiedAt)
-        hasher.combine(lastUsedAt)
-        hasher.combine(numForwarded)
-        hasher.combine(numBlocked)
-        hasher.combine(numLevelOneTrackersBlocked)
-        hasher.combine(numReplied)
-        hasher.combine(numSpam)
-    }
-}
-
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeRelayAddress: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RelayAddress {
-        return
-            try RelayAddress(
-                maskType: FfiConverterString.read(from: &buf), 
-                enabled: FfiConverterBool.read(from: &buf), 
-                description: FfiConverterString.read(from: &buf), 
-                generatedFor: FfiConverterString.read(from: &buf), 
-                blockListEmails: FfiConverterBool.read(from: &buf), 
-                usedOn: FfiConverterOptionString.read(from: &buf), 
-                id: FfiConverterInt64.read(from: &buf), 
-                address: FfiConverterString.read(from: &buf), 
-                domain: FfiConverterInt64.read(from: &buf), 
-                fullAddress: FfiConverterString.read(from: &buf), 
-                createdAt: FfiConverterString.read(from: &buf), 
-                lastModifiedAt: FfiConverterString.read(from: &buf), 
-                lastUsedAt: FfiConverterOptionString.read(from: &buf), 
-                numForwarded: FfiConverterInt64.read(from: &buf), 
-                numBlocked: FfiConverterInt64.read(from: &buf), 
-                numLevelOneTrackersBlocked: FfiConverterInt64.read(from: &buf), 
-                numReplied: FfiConverterInt64.read(from: &buf), 
-                numSpam: FfiConverterInt64.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: RelayAddress, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.maskType, into: &buf)
-        FfiConverterBool.write(value.enabled, into: &buf)
-        FfiConverterString.write(value.description, into: &buf)
-        FfiConverterString.write(value.generatedFor, into: &buf)
-        FfiConverterBool.write(value.blockListEmails, into: &buf)
-        FfiConverterOptionString.write(value.usedOn, into: &buf)
-        FfiConverterInt64.write(value.id, into: &buf)
-        FfiConverterString.write(value.address, into: &buf)
-        FfiConverterInt64.write(value.domain, into: &buf)
-        FfiConverterString.write(value.fullAddress, into: &buf)
-        FfiConverterString.write(value.createdAt, into: &buf)
-        FfiConverterString.write(value.lastModifiedAt, into: &buf)
-        FfiConverterOptionString.write(value.lastUsedAt, into: &buf)
-        FfiConverterInt64.write(value.numForwarded, into: &buf)
-        FfiConverterInt64.write(value.numBlocked, into: &buf)
-        FfiConverterInt64.write(value.numLevelOneTrackersBlocked, into: &buf)
-        FfiConverterInt64.write(value.numReplied, into: &buf)
-        FfiConverterInt64.write(value.numSpam, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeRelayAddress_lift(_ buf: RustBuffer) throws -> RelayAddress {
-    return try FfiConverterTypeRelayAddress.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeRelayAddress_lower(_ value: RelayAddress) -> RustBuffer {
-    return FfiConverterTypeRelayAddress.lower(value)
-}
-
-
-public enum RelayApiError: Swift.Error {
+public enum ApiError: Swift.Error {
 
     
     
-    case Network(reason: String
-    )
-    case RelayApi(detail: String
-    )
     case Other(reason: String
     )
 }
@@ -953,23 +694,17 @@ public enum RelayApiError: Swift.Error {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public struct FfiConverterTypeRelayApiError: FfiConverterRustBuffer {
-    typealias SwiftType = RelayApiError
+public struct FfiConverterTypeApiError: FfiConverterRustBuffer {
+    typealias SwiftType = ApiError
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RelayApiError {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ApiError {
         let variant: Int32 = try readInt(&buf)
         switch variant {
 
         
 
         
-        case 1: return .Network(
-            reason: try FfiConverterString.read(from: &buf)
-            )
-        case 2: return .RelayApi(
-            detail: try FfiConverterString.read(from: &buf)
-            )
-        case 3: return .Other(
+        case 1: return .Other(
             reason: try FfiConverterString.read(from: &buf)
             )
 
@@ -977,25 +712,15 @@ public struct FfiConverterTypeRelayApiError: FfiConverterRustBuffer {
         }
     }
 
-    public static func write(_ value: RelayApiError, into buf: inout [UInt8]) {
+    public static func write(_ value: ApiError, into buf: inout [UInt8]) {
         switch value {
 
         
 
         
         
-        case let .Network(reason):
-            writeInt(&buf, Int32(1))
-            FfiConverterString.write(reason, into: &buf)
-            
-        
-        case let .RelayApi(detail):
-            writeInt(&buf, Int32(2))
-            FfiConverterString.write(detail, into: &buf)
-            
-        
         case let .Other(reason):
-            writeInt(&buf, Int32(3))
+            writeInt(&buf, Int32(1))
             FfiConverterString.write(reason, into: &buf)
             
         }
@@ -1006,24 +731,24 @@ public struct FfiConverterTypeRelayApiError: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRelayApiError_lift(_ buf: RustBuffer) throws -> RelayApiError {
-    return try FfiConverterTypeRelayApiError.lift(buf)
+public func FfiConverterTypeApiError_lift(_ buf: RustBuffer) throws -> ApiError {
+    return try FfiConverterTypeApiError.lift(buf)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRelayApiError_lower(_ value: RelayApiError) -> RustBuffer {
-    return FfiConverterTypeRelayApiError.lower(value)
+public func FfiConverterTypeApiError_lower(_ value: ApiError) -> RustBuffer {
+    return FfiConverterTypeApiError.lower(value)
 }
 
 
-extension RelayApiError: Equatable, Hashable {}
+extension ApiError: Equatable, Hashable {}
 
 
 
 
-extension RelayApiError: Foundation.LocalizedError {
+extension ApiError: Foundation.LocalizedError {
     public var errorDescription: String? {
         String(reflecting: self)
     }
@@ -1032,53 +757,148 @@ extension RelayApiError: Foundation.LocalizedError {
 
 
 
+
+
+
+public protocol ContextIdCallback: AnyObject, Sendable {
+    
+    func persist(contextId: String, creationDate: Int64) 
+    
+    func rotated(oldContextId: String) 
+    
+}
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceContextIdCallback {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // This creates 1-element array, since this seems to be the only way to construct a const
+    // pointer that we can pass to the Rust code.
+    static let vtable: [UniffiVTableCallbackInterfaceContextIdCallback] = [UniffiVTableCallbackInterfaceContextIdCallback(
+        persist: { (
+            uniffiHandle: UInt64,
+            contextId: RustBuffer,
+            creationDate: Int64,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterCallbackInterfaceContextIdCallback.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.persist(
+                     contextId: try FfiConverterString.lift(contextId),
+                     creationDate: try FfiConverterInt64.lift(creationDate)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        rotated: { (
+            uniffiHandle: UInt64,
+            oldContextId: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterCallbackInterfaceContextIdCallback.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.rotated(
+                     oldContextId: try FfiConverterString.lift(oldContextId)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            let result = try? FfiConverterCallbackInterfaceContextIdCallback.handleMap.remove(handle: uniffiHandle)
+            if result == nil {
+                print("Uniffi callback interface ContextIdCallback: handle missing in uniffiFree")
+            }
+        }
+    )]
+}
+
+private func uniffiCallbackInitContextIdCallback() {
+    uniffi_context_id_fn_init_callback_vtable_contextidcallback(UniffiCallbackInterfaceContextIdCallback.vtable)
+}
+
+// FfiConverter protocol for callback interfaces
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
-    typealias SwiftType = String?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterString.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterString.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
+fileprivate struct FfiConverterCallbackInterfaceContextIdCallback {
+    fileprivate static let handleMap = UniffiHandleMap<ContextIdCallback>()
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterSequenceTypeRelayAddress: FfiConverterRustBuffer {
-    typealias SwiftType = [RelayAddress]
+extension FfiConverterCallbackInterfaceContextIdCallback : FfiConverter {
+    typealias SwiftType = ContextIdCallback
+    typealias FfiType = UInt64
 
-    public static func write(_ value: [RelayAddress], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for item in value {
-            FfiConverterTypeRelayAddress.write(item, into: &buf)
-        }
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func lift(_ handle: UInt64) throws -> SwiftType {
+        try handleMap.get(handle: handle)
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [RelayAddress] {
-        let len: Int32 = try readInt(&buf)
-        var seq = [RelayAddress]()
-        seq.reserveCapacity(Int(len))
-        for _ in 0 ..< len {
-            seq.append(try FfiConverterTypeRelayAddress.read(from: &buf))
-        }
-        return seq
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func lower(_ v: SwiftType) -> UInt64 {
+        return handleMap.insert(obj: v)
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(v))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterCallbackInterfaceContextIdCallback_lift(_ handle: UInt64) throws -> ContextIdCallback {
+    return try FfiConverterCallbackInterfaceContextIdCallback.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterCallbackInterfaceContextIdCallback_lower(_ v: ContextIdCallback) -> UInt64 {
+    return FfiConverterCallbackInterfaceContextIdCallback.lower(v)
 }
 
 private enum InitializationResult {
@@ -1092,29 +912,36 @@ private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
     let bindings_contract_version = 29
     // Get the scaffolding contract version by calling the into the dylib
-    let scaffolding_contract_version = ffi_relay_uniffi_contract_version()
+    let scaffolding_contract_version = ffi_context_id_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 27228) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_force_rotation() != 57248) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_create_address() != 37395) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_request() != 62689) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 30285) {
+    if (uniffi_context_id_checksum_method_contextidcomponent_unset_callback() != 21655) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_constructor_relayclient_new() != 25664) {
+    if (uniffi_context_id_checksum_constructor_contextidcomponent_new() != 28490) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_context_id_checksum_method_contextidcallback_persist() != 51609) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_context_id_checksum_method_contextidcallback_rotated() != 3858) {
         return InitializationResult.apiChecksumMismatch
     }
 
+    uniffiCallbackInitContextIdCallback()
     return InitializationResult.ok
 }()
 
 // Make the ensure init function public so that other modules which have external type references to
 // our types can call it.
-public func uniffiEnsureRelayInitialized() {
+public func uniffiEnsureContextIdInitialized() {
     switch initializationResult {
     case .ok:
         break
