@@ -19,26 +19,45 @@ class StoriesFeedViewController: UIViewController,
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
+    // MARK: - Private constants
+    private let logger: Logger
+
     // MARK: Initializers
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.logger = logger
         self.storiesFeedState = StoriesFeedState(windowUUID: windowUUID)
 
         super.init(nibName: nil, bundle: nil)
+
+        subscribeToRedux()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        unsubscribeFromRedux()
+    }
+
     // MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        store.dispatchLegacy(
+            StoriesFeedAction(
+                windowUUID: windowUUID,
+                actionType: StoriesFeedActionType.initialize
+            )
+        )
+
         applyTheme()
     }
 
