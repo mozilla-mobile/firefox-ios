@@ -50,7 +50,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy) -> some View {
         VStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: UX.CardView.spacing) {
                     titleView
                         .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))

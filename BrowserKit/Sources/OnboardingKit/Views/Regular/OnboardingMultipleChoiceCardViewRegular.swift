@@ -37,7 +37,7 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
 
     var body: some View {
         VStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: UX.CardView.regularSizeSpacing) {
                     titleView
                         .padding(.top, UX.CardView.titleTopPadding)

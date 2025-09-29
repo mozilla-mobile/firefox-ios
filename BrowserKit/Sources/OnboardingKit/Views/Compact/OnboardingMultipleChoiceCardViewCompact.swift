@@ -53,7 +53,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
 
     private func scrollViewContent(geometry: GeometryProxy) -> some View {
         VStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: UX.CardView.spacing) {
                     titleView
                         .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
