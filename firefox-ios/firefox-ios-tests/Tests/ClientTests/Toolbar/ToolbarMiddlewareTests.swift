@@ -72,7 +72,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.middleButton, .newTab)
     }
 
-    func testBrowserDidLoad_withCustomMiddleButton_dispatchesDidLoadToolbars() throws {
+    func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {
         profile.prefs.setString(NavigationBarMiddleButtonType.home.rawValue,
                                 forKey: PrefsKeys.Settings.navigationToolbarMiddleButton)
         let subject = createSubject(manager: toolbarManager)
