@@ -1,0 +1,51 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import XCTest
+
+extension Selector {
+    // For elements with id
+    static func anyId(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .anyById(id), value: id, description: description, groups: groups)
+    }
+
+    static func buttonId(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .buttonById(id), value: id, description: description, groups: groups)
+    }
+
+    static func staticTextId(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .staticTextById(id), value: id, description: description, groups: groups)
+    }
+
+    static func textFieldId(_ id: String, description: String, groups: [String] = []) -> Selector {
+         Selector(strategy: .textFieldById(id), value: id, description: description, groups: groups)
+    }
+
+    // For searching for text (label) instead of the id
+    static func staticTextByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label == %@", XCUIElement.ElementType.staticText.rawValue, label)
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
+
+    // For containers
+    static func collectionViewIdOrLabel(_ value: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.collectionView.rawValue,
+            value,
+            value
+        )
+        return Selector(strategy: .predicate(p), value: value, description: description, groups: groups)
+    }
+
+    static func tableIdOrLabel(_ value: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "elementType == %d AND (identifier == %@ OR label == %@)",
+            XCUIElement.ElementType.table.rawValue,
+            value,
+            value
+        )
+        return Selector(strategy: .predicate(p), value: value, description: description, groups: groups)
+    }
+}
