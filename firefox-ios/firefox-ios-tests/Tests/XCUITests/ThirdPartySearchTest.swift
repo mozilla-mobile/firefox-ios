@@ -137,7 +137,6 @@ class ThirdPartySearchTest: BaseTestCase {
         }
 
         app.buttons["customEngineSaveButton"].waitAndTap()
-        // app.navigationBars["Add Search Engine"].buttons["Save"].waitAndTap()
 
         // The alert appears on iOS 15 but it disappears by itself immediately.
         if #available(iOS 16, *) {
