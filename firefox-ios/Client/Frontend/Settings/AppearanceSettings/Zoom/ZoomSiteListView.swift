@@ -14,9 +14,9 @@ struct ZoomSiteListView: View {
 
     private struct UX {
         static let sectionPadding: CGFloat = 16
+        static let textPadding: CGFloat = 16
         static let footerBottomPadding: CGFloat = 32
         static let footerTopPadding: CGFloat = 8
-        static let cellHeight: CGFloat = 48
         static let listPadding: CGFloat = 5
         static let dividerHeight: CGFloat = 0.5
         static let cornerRadius: CGFloat = 24
@@ -30,23 +30,6 @@ struct ZoomSiteListView: View {
         return theme.colors.layer1.color
     }
 
-    var footerTopPadding: CGFloat {
-        if #available(iOS 26.0, *) {
-            return 0
-        } else {
-            return UX.footerTopPadding
-        }
-    }
-
-    // Calculate list height to avoid scroll in inner list view
-    // Base height calculation with cell height and extra padding
-    var listViewHeight: CGFloat {
-        let baseHeight = CGFloat(domainZoomLevels.count) * UX.cellHeight
-        let extraPadding = CGFloat(domainZoomLevels.count) * UX.listPadding
-
-        return baseHeight + extraPadding
-    }
-
     init(theme: Theme,
          domainZoomLevels: Binding<[DomainZoomLevel]>,
          onDelete: @escaping (IndexSet) -> Void,
@@ -58,92 +41,41 @@ struct ZoomSiteListView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            if #available(iOS 26.0, *) {
-                GenericSectionView(
-                    theme: theme,
-                    title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader,
-                    identifier: AccessibilityIdentifiers.Settings.Appearance.specificSiteSettings
-                ) {
-                    zoomSitesListView
+        Section(
+            content: {
+                ForEach(domainZoomLevels, id: \.host) { zoomItem in
+                    ZoomLevelCellView(domainZoomLevel: zoomItem,
+                                      textColor: theme.colors.textPrimary.color)
+                    .modifier(CellStyle(textPadding: UX.textPadding))
                 }
-            } else {
-                // Header
+                .onDelete(perform: onDelete)
+                .listRowInsets(.init())
+            },
+            header: {
                 GenericSectionHeaderView(title: .Settings.Appearance.PageZoom.SpecificSiteSectionHeader.uppercased(),
                                          sectionTitleColor: theme.colors.textSecondary.color)
-                    .padding([.leading, .trailing, .top], UX.sectionPadding)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(sectionBackground)
+                .modifier(HeaderStyle(sectionPadding: UX.sectionPadding, sectionBackground: sectionBackground))
+            },
+            footer: {
+                VStack {
+                    Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
+                        .font(.caption)
+                        .foregroundColor(theme.colors.textSecondary.color)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(EdgeInsets(top: UX.footerTopPadding,
+                                            leading: UX.sectionPadding,
+                                            bottom: UX.footerBottomPadding,
+                                            trailing: UX.sectionPadding))
+                        .background(sectionBackground)
 
-                // Top divider for the list
-                Divider()
-                    .frame(height: UX.dividerHeight)
-                    .background(theme.colors.borderPrimary.color)
-
-                zoomSitesListView
+                    // Reset button
+                    GenericButtonCellView(theme: theme,
+                                          title: String.Settings.Appearance.PageZoom.ResetButtonTitle,
+                                          onTap: resetDomain)
+                    .modifier(ResetButtonStyle(theme: theme))
+                }
             }
-
-            // Footer
-            Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
-                .font(.caption)
-                .foregroundColor(theme.colors.textSecondary.color)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: footerTopPadding,
-                                    leading: UX.sectionPadding,
-                                    bottom: UX.footerBottomPadding,
-                                    trailing: UX.sectionPadding))
-                .background(sectionBackground)
-
-            // Reset button
-            GenericButtonCellView(theme: theme,
-                                  title: String.Settings.Appearance.PageZoom.ResetButtonTitle,
-                                  onTap: resetDomain)
-                .modifier(ResetButtonStyle(theme: theme))
-        }
-    }
-
-    private var zoomSitesListView: some View {
-        List {
-            ForEach(domainZoomLevels, id: \.host) { zoomItem in
-                ZoomLevelCellView(domainZoomLevel: zoomItem,
-                                  textColor: theme.colors.textPrimary.color)
-                .listRowBackground(cellBackground)
-                .listRowInsets(EdgeInsets())
-                .modifier(CellStyle(theme: theme))
-            }
-            .onDelete(perform: onDelete)
-        }
-        .frame(height: listViewHeight)
-        .listStyle(.plain)
-        .modifier(ListStyle(theme: theme, cellBackground: cellBackground))
-    }
-
-    private struct CellStyle: ViewModifier {
-        let theme: Theme?
-
-        func body(content: Content) -> some View {
-            if #available(iOS 26.0, *) {
-                content
-            } else {
-                content
-                    .background(theme?.colors.layer5.color)
-            }
-        }
-    }
-
-    private struct ListStyle: ViewModifier {
-        let theme: Theme?
-        let cellBackground: Color
-
-        func body(content: Content) -> some View {
-            if #available(iOS 26.0, *) {
-                content
-                    .modifier(SectionStyle(theme: theme, cornerRadius: UX.cornerRadius))
-            } else {
-                content
-                    .background(cellBackground)
-            }
-        }
+        )
     }
 
     private struct ResetButtonStyle: ViewModifier {
@@ -157,6 +89,36 @@ struct ZoomSiteListView: View {
             } else {
                 content
                     .background(theme?.colors.layer5.color)
+            }
+        }
+    }
+
+    private struct HeaderStyle: ViewModifier {
+        let sectionPadding: CGFloat
+        let sectionBackground: Color
+
+        func body(content: Content) -> some View {
+            if #available(iOS 26.0, *) {
+                content
+            } else {
+                content
+                    .padding([.leading, .trailing, .top], sectionPadding)
+                    .background(sectionBackground)
+            }
+        }
+    }
+
+    private struct CellStyle: ViewModifier {
+        let textPadding: CGFloat
+
+        func body(content: Content) -> some View {
+            if #available(iOS 26.0, *) {
+                content
+                    .alignmentGuide(.listRowSeparatorTrailing) {
+                        $0[.listRowSeparatorTrailing] - textPadding
+                    }
+            } else {
+                content
             }
         }
     }
