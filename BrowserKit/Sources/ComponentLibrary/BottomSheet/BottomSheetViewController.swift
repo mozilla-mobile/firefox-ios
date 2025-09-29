@@ -37,7 +37,7 @@ public class BottomSheetViewController: UIViewController,
     public var themeManager: ThemeManager
     public var themeListenerCancellable: Any?
 
-    private let viewModel: BottomSheetViewModel
+    internal let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
     private let childViewController: BottomSheetChild
 
@@ -62,7 +62,7 @@ public class BottomSheetViewController: UIViewController,
     private lazy var sheetView: UIView = .build { _ in }
     private lazy var contentView: UIView = .build { _ in }
     private lazy var scrollContentView: UIView = .build { _ in }
-    private var contentViewBottomConstraint: NSLayoutConstraint?
+    internal var contentViewBottomConstraint: NSLayoutConstraint?
     private var viewTranslation = CGPoint(x: 0, y: 0)
     private let windowUUID: WindowUUID
     private var glassEffectView: UIVisualEffectView?
