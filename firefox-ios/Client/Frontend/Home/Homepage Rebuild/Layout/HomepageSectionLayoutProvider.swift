@@ -8,6 +8,10 @@ import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
+    /// Each section stores a single cached measurement keyed by the layout inputs (including
+    /// dynamic type) so that we can detect when the environment has changed. The keys capture
+    /// the relevant state for each section, preventing stale heights from being reused when any
+    /// of the inputs differ between layout passes.
     private struct LayoutMeasurementCache {
         struct TopSitesMeasurement: Equatable {
             struct Key: Equatable {
@@ -604,6 +608,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             contentSizeCategory: contentSizeCategory
         )
 
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
         if let cachedMeasurement = measurementsCache.topSites,
            cachedMeasurement.key == measurementKey {
             return cachedMeasurement.height
@@ -697,6 +702,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
         )
 
+        // Reuse the cached result when the key matches,  overwrite it when inputs change.
         if let cachedMeasurement = measurementsCache.searchBar,
            cachedMeasurement.key == measurementKey {
             return cachedMeasurement.height
@@ -786,6 +792,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             isStoriesRedesignEnabled: isStoriesRedesignEnabled,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory        )
 
+        // Reuse the cached result when the key matches,overwrite it when inputs change.
         if let cachedMeasurement = measurementsCache.stories,
            cachedMeasurement.key == key {
             return cachedMeasurement.result
