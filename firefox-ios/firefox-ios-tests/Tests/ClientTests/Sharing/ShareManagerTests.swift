@@ -8,6 +8,7 @@ import Shared
 
 @testable import Client
 
+@MainActor
 final class ShareManagerTests: XCTestCase {
     let testMessage = "Test message"
     let testSubtitle = "Test subtitle"

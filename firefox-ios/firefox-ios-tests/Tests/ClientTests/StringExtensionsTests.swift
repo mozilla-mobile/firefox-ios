@@ -39,7 +39,7 @@ class StringExtensionsTests: XCTestCase {
         let file = "foo-\u{200F}cod.jpg" // Unicode RTL-switch code, becomes "foo-gpj.doc"
         let nounicode = "foo-cod.jpg"
         XCTAssert(file != nounicode)
-        let strip = HTTPDownload.stripUnicode(fromFilename: file)
+        let strip = Download.stripUnicode(fromFilename: file)
         XCTAssert(strip == nounicode)
     }
 

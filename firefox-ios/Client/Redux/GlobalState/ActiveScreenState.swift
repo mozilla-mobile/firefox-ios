@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-enum AppScreenState: Equatable {
+enum AppScreenState {
     case browserViewController(BrowserViewControllerState)
     case homepage(HomepageState)
     case mainMenu(MainMenuState)
@@ -108,7 +108,7 @@ enum AppScreenState: Equatable {
     }
 }
 
-struct ActiveScreensState: Equatable {
+struct ActiveScreensState {
     let screens: [AppScreenState]
 
     init() {

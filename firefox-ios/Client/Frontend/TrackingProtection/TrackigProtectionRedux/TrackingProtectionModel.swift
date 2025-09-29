@@ -155,12 +155,14 @@ class TrackingProtectionModel {
             .withRenderingMode(.alwaysTemplate)
     }
 
+    @MainActor
     func toggleSiteSafelistStatus() {
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
         ContentBlocker.shared.safelist(enable: contentBlockerStatus != .safelisted, url: url) {
         }
     }
 
+    @MainActor
     func isURLSafelisted() -> Bool {
         return ContentBlocker.shared.isSafelisted(url: url)
     }

@@ -5,18 +5,24 @@
 import Foundation
 
 protocol TabTrayUtils {
+    @MainActor
     var isTabTrayUIExperimentsEnabled: Bool { get }
+    @MainActor
     var isTabTrayTranslucencyEnabled: Bool { get }
+    @MainActor
     var isReduceTransparencyEnabled: Bool { get }
-
+    @MainActor
     var segmentedControlHeight: CGFloat { get }
-
+    @MainActor
     func shouldDisplayExperimentUI() -> Bool
+    @MainActor
     func shouldBlur() -> Bool
+    @MainActor
     func backgroundAlpha() -> CGFloat
 }
 
 /// Tiny utility to simplify checking for availability of the tab tray features
+@MainActor
 struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85

@@ -433,6 +433,7 @@ struct AccessibilityIdentifiers {
         struct Appearance {
             static let browserThemeSectionTitle = "BrowserThemeSectionTitle"
             static let websiteAppearanceSectionTitle = "WebsiteAppearanceSectionTitle"
+            static let navigationToolbarSectionTitle = "NavigationToolbarSectionTitle"
             static let pageZoomTitle = "PageZoomTitle"
             static let specificSiteSettings = "SpecificSiteSettings"
             static let automaticThemeView = "AutomaticThemeView"
@@ -623,6 +624,11 @@ struct AccessibilityIdentifiers {
             static let searchBarSetting = "SearchBarSetting"
             static let topSetting = "TopSearchBar"
             static let bottomSetting = "BottomSearchBar"
+        }
+
+        struct NavigationToolbar {
+            static let homeButton = "HomeButton"
+            static let newTabButton = "NewTabButton"
         }
 
         struct SendData {

@@ -7,7 +7,7 @@ import enum MozillaAppServices.VisitType
 import SummarizeKit
 
 /// View types that the browser coordinator can navigate to
-enum BrowserNavigationDestination: Equatable {
+enum BrowserNavigationDestination {
     // Native views
     case contextMenu
     case settings(Route.SettingsSection)
@@ -26,7 +26,7 @@ enum BrowserNavigationDestination: Equatable {
     case shareSheet(ShareSheetConfiguration)
 }
 
-struct ShareSheetConfiguration: Equatable {
+struct ShareSheetConfiguration {
     let shareType: ShareType
     let shareMessage: ShareMessage?
     let sourceView: UIView
@@ -36,7 +36,7 @@ struct ShareSheetConfiguration: Equatable {
 }
 
 /// This type exists as a field on the BrowserViewControllerState
-struct NavigationDestination: Equatable {
+struct NavigationDestination {
     let destination: BrowserNavigationDestination
     let url: URL?
     let isPrivate: Bool?

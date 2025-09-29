@@ -611,6 +611,7 @@ extension JumpBackInViewModelTests {
         return subject
     }
 
+    @MainActor
     func createTab(profile: MockProfile,
                    urlString: String? = "www.website.com") -> Tab {
         let tab = Tab(profile: profile, windowUUID: windowUUID)

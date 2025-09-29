@@ -53,6 +53,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(newUrl.host, "mozilla.org")
     }
 
+    @MainActor
     func testDisplayTitle_ForHomepageURL() {
         let url = URL(string: "internal://local/about/home")!
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
@@ -61,6 +62,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(tab.displayTitle, expectedDisplayTitle)
     }
 
+    @MainActor
     func testTitle_WhenWebViewTitleIsNil_ThenShouldReturnNil() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         let mockTabWebView = MockTabWebView(tab: tab)
@@ -69,6 +71,7 @@ class TabTests: XCTestCase {
         XCTAssertNil(tab.title, "Expected title to be nil when webView.title is nil")
     }
 
+    @MainActor
     func testTitle_WhenWebViewTitleIsEmpty_ThenShouldReturnNil() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         let mockTabWebView = MockTabWebView(tab: tab)
@@ -77,6 +80,7 @@ class TabTests: XCTestCase {
         XCTAssertNil(tab.title, "Expected title to be nil when webView.title is empty")
     }
 
+    @MainActor
     func testTitle_WhenWebViewTitleIsValid_ThenShouldReturnTitle() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         let mockTabWebView = MockTabWebView(tab: tab)
@@ -85,18 +89,21 @@ class TabTests: XCTestCase {
         XCTAssertEqual(tab.title, "Test Page Title", "Expected title to return the webView's title")
     }
 
+    @MainActor
     func testTabDoesntLeak() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         tab.tabDelegate = tabDelegate
         trackForMemoryLeaks(tab)
     }
 
+    @MainActor
     func testIsDownloadingDocument_whenDocumentIsNil_returnsFalse() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
 
         XCTAssertFalse(tab.isDownloadingDocument())
     }
 
+    @MainActor
     func testIsDownloadingDocument_whenDocumentIsDownloading_returnsTrue() {
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         let document = MockTemporaryDocument(withFileURL: URL(string: "https://www.example.com")!)
@@ -108,7 +115,7 @@ class TabTests: XCTestCase {
     }
 
     // MARK: - isActive, isInactive
-
+    @MainActor
     func testTabIsActive_within14Days() {
         // Tabs use the current date by default, so this one should be considered recent and active on initialization
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
@@ -117,6 +124,7 @@ class TabTests: XCTestCase {
         XCTAssertFalse(tab.isInactive)
     }
 
+    @MainActor
     func testTabIsInactive_outside14Days() {
         let lastMonthDate = Date().lastMonth
         let tab = Tab(profile: mockProfile, windowUUID: windowUUID, tabCreatedTime: lastMonthDate)
@@ -126,7 +134,7 @@ class TabTests: XCTestCase {
     }
 
     // MARK: - isSameTypeAs
-
+    @MainActor
     func testIsSameTypeAs_trueForTwoPrivateTabs_oneActive_oneInactive() {
         let lastMonthDate = Date().lastMonth
 
@@ -147,6 +155,7 @@ class TabTests: XCTestCase {
         XCTAssertTrue(privateInactiveTab.isSameTypeAs(privateActiveTab))
     }
 
+    @MainActor
     func testIsSameTypeAs_trueForTwoPrivateTabs_bothActive() {
         let privateActiveTab1 = Tab(
             profile: mockProfile,
@@ -163,6 +172,7 @@ class TabTests: XCTestCase {
         XCTAssertTrue(privateActiveTab2.isSameTypeAs(privateActiveTab1))
     }
 
+    @MainActor
     func testIsSameTypeAs_trueForTwoPrivateTabs_bothInactive() {
         let lastMonthDate = Date().lastMonth
 
@@ -183,6 +193,7 @@ class TabTests: XCTestCase {
         XCTAssertTrue(privateInactiveTab2.isSameTypeAs(privateInactiveTab1))
     }
 
+    @MainActor
     func testIsSameTypeAs_falseForNormalTabAndPrivateTab() {
         let lastMonthDate = Date().lastMonth
 
@@ -208,6 +219,7 @@ class TabTests: XCTestCase {
         XCTAssertFalse(normalInactiveTab.isSameTypeAs(privateTab))
     }
 
+    @MainActor
     func testIsSameTypeAs_falseForNormalActiveTab_andNormalInactiveTab() {
         let lastMonthDate = Date().lastMonth
 
@@ -226,6 +238,7 @@ class TabTests: XCTestCase {
         XCTAssertFalse(normalInactiveTab.isSameTypeAs(normalActiveTab))
     }
 
+    @MainActor
     func testIsSameTypeAs_trueForTwoNormalTabs_bothActive() {
         let normalActiveTab1 = Tab(
             profile: mockProfile,
@@ -240,6 +253,7 @@ class TabTests: XCTestCase {
         XCTAssertTrue(normalActiveTab2.isSameTypeAs(normalActiveTab1))
     }
 
+    @MainActor
     func testIsSameTypeAs_trueForTwoNormalTabs_bothInactive() {
         let lastMonthDate = Date().lastMonth
 
@@ -259,7 +273,7 @@ class TabTests: XCTestCase {
     }
 
     // MARK: - Document Handling
-
+    @MainActor
     func testEnqueueDocument() {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
@@ -270,6 +284,7 @@ class TabTests: XCTestCase {
         XCTAssertNotNil(subject.temporaryDocument)
     }
 
+    @MainActor
     func testLoadDocumentRequest() {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url, request: URLRequest(url: url))
@@ -280,6 +295,7 @@ class TabTests: XCTestCase {
         XCTAssertNotNil(subject.temporaryDocument)
     }
 
+    @MainActor
     func testReload_whenDocumentIsDownloading_cancelDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
@@ -297,6 +313,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
     }
 
+    @MainActor
     func testGoBack_whenDocumentIsDownloading_cancelDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
@@ -318,6 +335,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockTabWebView.goBackCalled, 0)
     }
 
+    @MainActor
     func testGoForward_whenDocumentIsDownloading_cancelDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
@@ -338,6 +356,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockTabWebView.goForwardCalled, 0)
     }
 
+    @MainActor
     func testLoadRequest_whenDocumentIsDownloading_cancelDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
@@ -366,6 +385,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 0)
     }
 
+    @MainActor
     func testStop_whenDocumentIsDownloading_cancelDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
@@ -383,6 +403,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockTabWebView.reloadFromOriginCalled, 1)
     }
 
+    @MainActor
     func testSetURL_showsOnlineURLForLocalDocument_whenPDFRefactorEnabled() {
         let subject = createSubject()
         let request = URLRequest(url: URL(string: "https://www.example.com")!)
@@ -397,6 +418,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(subject.url, request.url)
     }
 
+    @MainActor
     func testPauseDocumentDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument()
@@ -407,6 +429,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(document.pauseDownloadCalled, 1)
     }
 
+    @MainActor
     func testResumeDocumentDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument()
@@ -417,6 +440,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(document.resumeDownloadCalled, 1)
     }
 
+    @MainActor
     func testCancelDocumentDownload() {
         let subject = createSubject()
         let document = MockTemporaryDocument()
@@ -427,6 +451,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(document.cancelDownloadCalled, 1)
     }
 
+    @MainActor
     func testShouldDownloadDocument_whenDocumentInSession_addsTemporaryDocument() {
         let subject = createSubject()
 
@@ -442,6 +467,7 @@ class TabTests: XCTestCase {
         XCTAssertTrue(result, "result should be the opposite fileManager.fileExists")
     }
 
+    @MainActor
     func testShouldDownloadDocument_whenDocumentNotInSession_returnsTrueForNilTemporaryDocument() {
         let subject = createSubject()
 
@@ -453,6 +479,7 @@ class TabTests: XCTestCase {
         XCTAssertTrue(result)
     }
 
+    @MainActor
     func testShouldDownloadDocument_whenDocumentNotInSession_forwardRequestToTemporaryDocument() {
         let subject = createSubject()
         let document = MockTemporaryDocument()
@@ -465,6 +492,7 @@ class TabTests: XCTestCase {
         XCTAssertEqual(document.canDownloadCalled, 1)
     }
 
+    @MainActor
     func testDeinit_removesAllDocumentInSession() {
         var subject: Tab? = createSubject()
         let session = [
@@ -482,6 +510,7 @@ class TabTests: XCTestCase {
     }
 
     // MARK: - Helpers
+    @MainActor
     private func createSubject() -> Tab {
         let subject = Tab(
             profile: mockProfile,

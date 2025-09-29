@@ -32,6 +32,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.jumpBackInTabs, [])
     }
 
+    @MainActor
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = jumpBackInSectionReducer()
@@ -162,6 +163,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
         return JumpBackInSectionState.reducer
     }
 
+    @MainActor
     func createTab(urlString: String) -> Tab {
         let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)
         tab.url = URL(string: urlString)!

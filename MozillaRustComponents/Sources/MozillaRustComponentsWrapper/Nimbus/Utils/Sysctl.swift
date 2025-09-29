@@ -123,7 +123,7 @@ struct Sysctl {
     /// This function will throw `Error.malformedUTF8` if the buffer returned from `sysctl` cannot be interpreted as a UTF8 buffer.
     public static func string(for keys: [Int32]) throws -> String {
         let optionalString = try data(for: keys).withUnsafeBufferPointer { dataPointer -> String? in
-            dataPointer.baseAddress.flatMap { String(validatingUTF8: $0) }
+            dataPointer.baseAddress.flatMap { String(validatingCString: $0) }
         }
         guard let s = optionalString else {
             throw Error.malformedUTF8

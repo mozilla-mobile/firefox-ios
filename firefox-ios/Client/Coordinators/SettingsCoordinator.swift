@@ -161,7 +161,8 @@ final class SettingsCoordinator: BaseCoordinator,
         case .theme:
             if themeManager.isNewAppearanceMenuOn {
                 let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                            delegate: self)
+                                                            delegate: self,
+                                                            prefs: profile.prefs)
                 return UIHostingController(rootView: appearanceView)
             } else {
                 return ThemeSettingsController(windowUUID: windowUUID)
@@ -416,7 +417,8 @@ final class SettingsCoordinator: BaseCoordinator,
 
         if themeManager.isNewAppearanceMenuOn {
             let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                        delegate: self)
+                                                        delegate: self,
+                                                        prefs: profile.prefs)
             let viewController = UIHostingController(rootView: appearanceView)
             viewController.title = .SettingsAppearanceTitle
             router.push(viewController)

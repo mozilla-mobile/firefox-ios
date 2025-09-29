@@ -1053,7 +1053,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         else { return nil }
 
         guard action.actionType as? ToolbarActionType == .toolbarPositionChanged,
-              let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition
+              let toolbarPosition = action.toolbarPosition
         else {
             return toolbarState.toolbarPosition
         }

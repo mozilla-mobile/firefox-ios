@@ -4,7 +4,7 @@
 
 import Foundation
 
-public protocol FeatureManifestInterface {
+public protocol FeatureManifestInterface: Sendable {
     // The `associatedtype``, and the `features`` getter require existential types, in Swift 5.7.
     // associatedtype Features
 
