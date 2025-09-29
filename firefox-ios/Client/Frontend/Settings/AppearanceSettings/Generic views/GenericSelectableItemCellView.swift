@@ -31,7 +31,7 @@ struct GenericSelectableItemCellView: View {
     var body: some View {
         HStack {
             Text(title)
-                .font(.body)
+                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                 .foregroundColor(textColor)
 
             Spacer()

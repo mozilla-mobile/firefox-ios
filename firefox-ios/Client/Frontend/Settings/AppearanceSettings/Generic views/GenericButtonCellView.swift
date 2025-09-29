@@ -43,7 +43,7 @@ struct GenericButtonCellView: View {
         }) {
             Text(title)
                 .foregroundColor(theme.colors.textCritical.color)
-                .font(.callout)
+                .font(FXFontStyles.Regular.callout.scaledSwiftUIFont())
         }
         .padding([.top, .bottom], UX.buttonPadding)
     }

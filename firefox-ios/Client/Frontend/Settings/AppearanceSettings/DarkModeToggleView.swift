@@ -37,7 +37,7 @@ struct DarkModeToggleView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(String.WebsiteDarkModeToggleTitle)
-                        .font(.body)
+                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                         .foregroundColor(textColor)
                 }
                 Spacer()
