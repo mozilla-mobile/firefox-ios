@@ -686,6 +686,25 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func handleMailToNavigation(url: URL,
+                                        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void) {
+        showExternalAlert(withText: .ExternalMailLinkConfirmation) { _ in
+            if let mailToMetadata = url.mailToMetadata(),
+               let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
+               mailScheme != "mailto" {
+                self.mailtoLinkHandler.launchMailClientForScheme(
+                    mailScheme,
+                    metadata: mailToMetadata,
+                    defaultMailtoURL: url
+                )
+            } else {
+                UIApplication.shared.open(url, options: [:])
+            }
+        }
+
+        decisionHandler(.cancel)
+    }
+
     func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
         guard let downloadHelper else {
             logger.log("Unable to access downloadHelper, it is nil", level: .warning, category: .webview)
