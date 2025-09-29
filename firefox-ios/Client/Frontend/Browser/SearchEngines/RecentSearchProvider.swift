@@ -7,8 +7,8 @@ import Shared
 
 /// Abstraction for any search client that can return trending searches. Able to mock for testing.
 protocol RecentSearchProvider {
+    var recentSearches: [String] { get }
     func addRecentSearch(_ term: String)
-    func recentSearches() -> [String]
     func clearRecentSearches()
 }
 
@@ -25,6 +25,10 @@ struct DefaultRecentSearchProvider: RecentSearchProvider {
         "\(baseKey).\(searchEngineID)"
     }
 
+    var recentSearches: [String] {
+        prefs.objectForKey(recentSearchesKey) ?? []
+    }
+
     init(profile: Profile = AppContainer.shared.resolve(),
          searchEngineID: String) {
         self.searchEngineID = searchEngineID
@@ -39,7 +43,7 @@ struct DefaultRecentSearchProvider: RecentSearchProvider {
         let trimmed = term.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
-        var searches = recentSearches()
+        var searches = recentSearches
 
         searches.removeAll { $0.caseInsensitiveCompare(trimmed) == .orderedSame }
         searches.insert(trimmed, at: 0)
@@ -49,10 +53,6 @@ struct DefaultRecentSearchProvider: RecentSearchProvider {
         }
 
         prefs.setObject(searches, forKey: recentSearchesKey)
-    }
-
-    func recentSearches() -> [String] {
-        prefs.objectForKey(recentSearchesKey) ?? []
     }
 
     func clearRecentSearches() {

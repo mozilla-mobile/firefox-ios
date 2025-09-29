@@ -11,13 +11,13 @@ final class MockRecentSearchProvider: RecentSearchProvider {
     private(set) var recentSearchesCalledCount = 0
     private(set) var clearRecentSearchesCalledCount = 0
 
-    func addRecentSearch(_ term: String) {
-        addRecentSearchCalledCount += 1
-    }
-
-    func recentSearches() -> [String] {
+    var recentSearches: [String] {
         recentSearchesCalledCount += 1
         return ["foo", "bar"]
+    }
+
+    func addRecentSearch(_ term: String) {
+        addRecentSearchCalledCount += 1
     }
 
     func clearRecentSearches() {

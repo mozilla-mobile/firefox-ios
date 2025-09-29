@@ -321,7 +321,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             recentSearches = []
             return
         }
-        let results = recentSearchProvider.recentSearches()
+        let results = recentSearchProvider.recentSearches
         recentSearches = results
     }
 
