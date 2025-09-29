@@ -206,7 +206,7 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.actions[2].actionType, .search)
     }
 
-    func test_navigationMiddleButtonDidChangeAction_onWebsite_returnsExpectedState() {
+    func test_navigationMiddleButtonDidChangeAction_onWebsite_hasHomeButton() {
         let initialState = createSubject()
         let reducer = navigationBarReducer()
 
@@ -222,6 +222,24 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.actions[2].actionType, .home)
+    }
+
+    func test_navigationMiddleButtonDidChangeAction_onWebsite_hasNewTabButton() {
+        let initialState = createSubject()
+        let reducer = navigationBarReducer()
+
+        let navigationMiddleButtonDidChangeState = reducer(
+            initialState,
+            ToolbarAction(
+                middleButton: .newTab,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.navigationMiddleButtonDidChange
+            )
+        )
+        let newState = loadWebsiteAction(state: navigationMiddleButtonDidChangeState, reducer: reducer)
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.actions[2].actionType, .newTab)
     }
 
     // MARK: - Private
