@@ -33,6 +33,7 @@ struct ToolbarAction: Action {
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
     let shouldAnimate: Bool?
+    let middleButton: NavigationBarMiddleButtonType?
 
     init(toolbarPosition: SearchBarPosition? = nil,
          toolbarLayout: ToolbarLayoutStyle? = nil,
@@ -58,6 +59,7 @@ struct ToolbarAction: Action {
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
          shouldAnimate: Bool? = nil,
+         middleButton: NavigationBarMiddleButtonType? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -86,6 +88,7 @@ struct ToolbarAction: Action {
         self.canShowDataClearanceAction = canShowDataClearanceAction
         self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
+        self.middleButton = middleButton
     }
 }
 
@@ -117,6 +120,7 @@ enum ToolbarActionType: ActionType {
     case didSetSearchTerm
     case didStartTyping
     case translucencyDidChange
+    case navigationMiddleButtonDidChange
 }
 
 struct ToolbarMiddlewareAction: Action {

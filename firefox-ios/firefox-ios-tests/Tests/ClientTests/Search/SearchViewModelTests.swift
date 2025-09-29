@@ -43,8 +43,8 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        super.tearDown()
     }
 
     func testHasFirefoxSuggestionsWhenAllConditionsAreFalse() {
@@ -367,9 +367,26 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(quickSearchEngines.count, 6)
     }
 
+    // MARK: Trending Searches
+    func test_retrieveTrendingSearches_withSuccess_hasExpectedList() async {
+        let mockClient = MockTrendingSearchClient(result: .success(["foo", "bar"]))
+        let subject = createSubject(mockTrendingClient: mockClient)
+        await subject.retrieveTrendingSearches()
+        XCTAssertEqual(subject.trendingSearches, ["foo", "bar"])
+    }
+
+    func test_retrieveTrendingSearches_withError_hasEmptyList() async {
+        enum TestError: Error { case example }
+        let mockClient = MockTrendingSearchClient(result: .failure(TestError.example))
+        let subject = createSubject(mockTrendingClient: mockClient)
+        await subject.retrieveTrendingSearches()
+        XCTAssertEqual(subject.trendingSearches, [])
+    }
+
     private func createSubject(
         isPrivate: Bool = false,
         isBottomSearchBar: Bool = false,
+        mockTrendingClient: TrendingSearchClientProvider = MockTrendingSearchClient(),
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> SearchViewModel {
@@ -378,7 +395,8 @@ final class SearchViewModelTests: XCTestCase {
             isBottomSearchBar: isBottomSearchBar,
             profile: profile,
             model: searchEnginesManager,
-            tabManager: MockTabManager()
+            tabManager: MockTabManager(),
+            trendingSearchClient: mockTrendingClient
         )
         subject.delegate = mockDelegate
         return subject

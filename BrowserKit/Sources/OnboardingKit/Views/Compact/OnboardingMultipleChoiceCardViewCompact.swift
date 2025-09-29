@@ -41,13 +41,13 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
         GeometryReader { geometry in
             scrollViewContent(geometry: geometry)
                 .padding(.top, UX.CardView.cardTopPadding)
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
+                .onAppear {
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+                    guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
         }
     }
 
@@ -56,7 +56,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             ScrollView {
                 VStack(spacing: UX.CardView.spacing) {
                     titleView
-                        .padding(.top, UX.CardView.titleTopPadding)
+                        .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                         selection: $selectedAction,
                         items: viewModel.multipleChoiceButtons,
@@ -70,10 +70,17 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                 .padding(.horizontal, UX.CardView.horizontalPadding)
             }
             .scrollBounceBehavior(basedOnSize: true)
-            primaryButton
-                .padding(UX.CardView.verticalPadding)
+            VStack {
+                primaryButton
+                Button(" ", action: {})
+                    .font(UX.CardView.secondaryActionFont)
+                    .buttonStyle(SecondaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+                    .opacity(0)
+                    .accessibilityHidden(true)
+                    .disabled(true)
+            }
+            .padding(UX.CardView.verticalPadding)
         }
-        .frame(height: geometry.size.height * UX.CardView.cardHeightRatio)
         .background(
             RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
                 .fill(cardBackgroundColor)

@@ -84,12 +84,28 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
     private let store: WKJavscriptAlertStore
     private let popupThrottler: WKPopupThrottler
 
+    // TODO: FXIOS-13670 With Swift 6 we can use default params in the init
+    @MainActor
+    public static func factory(
+        sessionDependencies: EngineSessionDependencies,
+        sessionCreator: SessionCreator? = nil
+    ) -> DefaultUIHandler {
+        let sessionCreator = sessionCreator ?? WKSessionCreator(dependencies: sessionDependencies)
+        let policyDecider = WKPolicyDeciderFactory()
+        let application = UIApplication.shared
+        return DefaultUIHandler(
+            sessionDependencies: sessionDependencies,
+            sessionCreator: sessionCreator,
+            application: application,
+            policyDecider: policyDecider
+        )
+    }
+
     init(sessionDependencies: EngineSessionDependencies,
-         alertPresenter: AlertPresenter,
-         sessionCreator: SessionCreator? = nil,
-         application: Application = UIApplication.shared,
-         policyDecider: WKPolicyDecider = WKPolicyDeciderFactory()) {
-        self.sessionCreator = sessionCreator ?? WKSessionCreator(dependencies: sessionDependencies)
+         sessionCreator: SessionCreator,
+         application: Application,
+         policyDecider: WKPolicyDecider) {
+        self.sessionCreator = sessionCreator
         self.sessionDependencies = sessionDependencies
         self.policyDecider = policyDecider
         self.application = application

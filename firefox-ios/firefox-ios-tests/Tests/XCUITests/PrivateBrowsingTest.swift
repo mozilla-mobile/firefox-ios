@@ -11,6 +11,7 @@ let urlIndexedDB = path(forTestPage: "test-indexeddb-private.html")
 
 let url1And3Label = "Example Domain"
 let url2Label = "Mozilla - Internet for people, not profit (US)"
+let url3Label = "Internet for people, not profit — Mozilla"
 
 class PrivateBrowsingTest: FeatureFlaggedTestBase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
@@ -109,7 +110,7 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         XCTAssertNotNil(
             app.otherElements[tabsTray].collectionViews.cells.staticTexts
                 .element(boundBy: 1).label
-                .range(of: url2Label)
+                .range(of: url3Label)
         )
         let numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 2, "The number of regular tabs is not correct")
@@ -135,7 +136,7 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         XCTAssertNotNil(
             app.otherElements[tabsTray].collectionViews.cells.staticTexts
                 .element(boundBy: 1).label
-                .range(of: url2Label)
+                .range(of: url3Label)
         )
         mozWaitForElementToNotExist(app.otherElements[tabsTray].collectionViews.cells.staticTexts[url1And3Label])
         let numRegularTabs = app.otherElements[tabsTray].cells.count
@@ -153,7 +154,7 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.otherElements[tabsTray])
-        mozWaitForElementToExist(app.cells.elementContainingText(url2Label))
+        mozWaitForElementToExist(app.cells.elementContainingText(url3Label))
         let numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 2, "The number of regular tabs is not correct")
 
@@ -175,7 +176,7 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
 
         mozWaitForElementToExist(app.otherElements[tabsTray])
-        mozWaitForElementToExist(app.cells.elementContainingText(url2Label))
+        mozWaitForElementToExist(app.cells.elementContainingText(url3Label))
         let numRegularTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }

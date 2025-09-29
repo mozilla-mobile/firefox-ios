@@ -10,6 +10,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
+    @State private var skipTextColor: Color = .clear
 
     init(
         windowUUID: WindowUUID,
@@ -24,15 +25,18 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topTrailing) {
             AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             VStack {
-                if #available(iOS 17.0, *) {
-                    modernScrollViewCarousel
-                } else {
-                    legacyPagingCarousel
+                Group {
+                    if #available(iOS 17.0, *) {
+                        modernScrollViewCarousel
+                    } else {
+                        legacyPagingCarousel
+                    }
                 }
+                .padding(.vertical)
 
                 Spacer()
 
@@ -45,6 +49,21 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 )
                 .padding(.bottom)
             }
+
+            Button(action: skipOnboarding) {
+                Text(viewModel.skipText)
+                    .bold()
+                    .foregroundColor(skipTextColor)
+            }
+            .buttonStyle(.plain)
+            .padding(.trailing, UX.Onboarding.Spacing.standard)
+        }
+        .onAppear {
+            applyTheme()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            applyTheme()
         }
     }
 
@@ -78,5 +97,16 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
             )
         }
+    }
+
+    private func skipOnboarding() {
+        let currentIndex = min(max(viewModel.pageCount, 0), viewModel.onboardingCards.count - 1)
+        let currentCardName = viewModel.onboardingCards[currentIndex].name
+        viewModel.onComplete(currentCardName)
+    }
+
+    private func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        skipTextColor = Color(theme.colors.textInverted)
     }
 }

@@ -85,6 +85,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     var parent: UIStackView?
+    var onContainerTap: (() -> Void)?
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private lazy var leftSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
     private lazy var rightSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
@@ -324,6 +325,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func setupLayout() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onContainerTapped))
+        addGestureRecognizer(tapGesture)
+
         addSubview(progressBar)
 
         NSLayoutConstraint.activate([
@@ -411,6 +415,11 @@ final class AddressToolbarContainer: UIView,
             }
             let isRTL = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft
             addNewTabLeadingConstraint?.constant = isRTL ? -transform.tx : transform.tx
+        // if the add new tab was modified but we are not adding a new tab then restore it.
+        } else if addNewTabLeadingConstraint?.constant != 0 {
+            addNewTabLeadingConstraint?.constant = 0
+            addNewTabTrailingConstraint?.constant = 0
+            addNewTabView.showHideAddTabIcon(shouldShow: false)
         }
     }
 
@@ -423,6 +432,12 @@ final class AddressToolbarContainer: UIView,
             addNewTabView.applyTheme(theme: theme)
         }
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false, theme: theme)
+    }
+
+    // MARK: - GestureRecognizer
+    @objc
+    private func onContainerTapped() {
+        onContainerTap?()
     }
 
     // MARK: - AddressToolbarDelegate

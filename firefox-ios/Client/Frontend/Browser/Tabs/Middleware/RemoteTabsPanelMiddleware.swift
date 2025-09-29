@@ -26,15 +26,26 @@ class RemoteTabsPanelMiddleware {
     }
 
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { [self] state, action in
-        let uuid = action.windowUUID
-        if let action = action as? RemoteTabsPanelAction {
-            self.resolveRemoteTabsPanelActions(action: action, state: state)
-        } else {
-            self.resolveHomepageActions(action: action, state: state)
+        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
+        // because we dispatch to the main thread in the store. We will want to
+        // also isolate that to the @MainActor to remove this.
+        guard Thread.isMainThread else {
+            assertionFailure("RemoteTabsPanelMiddleware is not being called from the main thread!")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            let uuid = action.windowUUID
+            if let action = action as? RemoteTabsPanelAction {
+                self.resolveRemoteTabsPanelActions(action: action, state: state)
+            } else {
+                self.resolveHomepageActions(action: action, state: state)
+            }
         }
     }
 
     // MARK: - Internal Utilities
+    @MainActor
     private func resolveRemoteTabsPanelActions(action: RemoteTabsPanelAction, state: AppState) {
         let uuid = action.windowUUID
         switch action.actionType {
@@ -66,34 +77,33 @@ class RemoteTabsPanelMiddleware {
         }
     }
 
+    @MainActor
     private func getSyncState(window: WindowUUID, useCache: Bool = false) {
-        ensureMainThread { [self] in
-            guard self.hasSyncableAccount else {
-                let action = RemoteTabsPanelAction(reason: .notLoggedIn,
-                                                   windowUUID: window,
-                                                   actionType: RemoteTabsPanelActionType.refreshDidFail)
-                store.dispatchLegacy(action)
-                return
-            }
-
-            let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
-            guard syncEnabled else {
-                let action = RemoteTabsPanelAction(reason: .syncDisabledByUser,
-                                                   windowUUID: window,
-                                                   actionType: RemoteTabsPanelActionType.refreshDidFail)
-                store.dispatchLegacy(action)
-                return
-            }
-
-            // If above checks have succeeded, we know we can perform the tab refresh. We
-            // need to update the State to .refreshing since there are implications for being
-            // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
-            let action = RemoteTabsPanelAction(windowUUID: window,
-                                               actionType: RemoteTabsPanelActionType.refreshDidBegin)
+        guard self.hasSyncableAccount else {
+            let action = RemoteTabsPanelAction(reason: .notLoggedIn,
+                                               windowUUID: window,
+                                               actionType: RemoteTabsPanelActionType.refreshDidFail)
             store.dispatchLegacy(action)
-
-            getTabsAndDevices(window: window, useCache: useCache)
+            return
         }
+
+        let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
+        guard syncEnabled else {
+            let action = RemoteTabsPanelAction(reason: .syncDisabledByUser,
+                                               windowUUID: window,
+                                               actionType: RemoteTabsPanelActionType.refreshDidFail)
+            store.dispatchLegacy(action)
+            return
+        }
+
+        // If above checks have succeeded, we know we can perform the tab refresh. We
+        // need to update the State to .refreshing since there are implications for being
+        // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
+        let action = RemoteTabsPanelAction(windowUUID: window,
+                                           actionType: RemoteTabsPanelActionType.refreshDidBegin)
+        store.dispatchLegacy(action)
+
+        getTabsAndDevices(window: window, useCache: useCache)
     }
 
     private func getTabsAndDevices(window: WindowUUID, useCache: Bool = false) {

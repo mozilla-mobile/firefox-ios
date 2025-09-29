@@ -6,6 +6,7 @@ import UIKit
 import Common
 
 protocol TabTraySelectorDelegate: AnyObject {
+    @MainActor
     func didSelectSection(panelType: TabTrayPanelType)
 }
 
@@ -37,10 +38,16 @@ class TabTraySelectorView: UIView,
 
     private var tabTrayUtils: TabTrayUtils
 
-    private lazy var containerView: UIView = .build()
+    private lazy var containerView: UIView = .build { view in
+        if #available(iOS 26, *) {
+            view.clipsToBounds = true
+        }
+    }
 
     private lazy var selectionBackgroundView: UIView = .build { view in
-        view.layer.cornerRadius = TabTraySelectorUX.cornerRadius
+        if #unavailable(iOS 26) {
+            view.layer.cornerRadius = TabTraySelectorUX.cornerRadius
+        }
     }
 
     private lazy var stackView: UIStackView = .build { stackView in
@@ -48,6 +55,18 @@ class TabTraySelectorView: UIView,
         stackView.spacing = TabTraySelectorUX.horizontalSpacing
         stackView.distribution = .fill
         stackView.alignment = .center
+    }
+
+    private lazy var visualEffectView: UIVisualEffectView = .build { view in
+#if canImport(FoundationModels)
+        if #available(iOS 26, *), !DefaultBrowserUtil.isRunningLiquidGlassEarlyBeta {
+            view.effect = UIGlassEffect(style: .regular)
+        } else {
+            view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        }
+#else
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+#endif
     }
 
     init(selectedIndex: Int,
@@ -69,6 +88,11 @@ class TabTraySelectorView: UIView,
     override func layoutSubviews() {
         super.layoutSubviews()
         updateEdgeFadeMask()
+
+        if #available(iOS 26, *) {
+            selectionBackgroundView.layer.cornerRadius = selectionBackgroundView.frame.height / 2
+            visualEffectView.layer.cornerRadius = containerView.frame.height / 2
+        }
     }
 
     func updateSelectionProgress(fromIndex: Int, toIndex: Int, progress: CGFloat) {
@@ -82,6 +106,9 @@ class TabTraySelectorView: UIView,
     }
 
     private func setup() {
+        if #available(iOS 26, *) {
+            addSubview(visualEffectView)
+        }
         addSubview(containerView)
         containerView.addSubview(selectionBackgroundView)
         containerView.addSubview(stackView)
@@ -114,6 +141,15 @@ class TabTraySelectorView: UIView,
             selectionBackgroundView.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
             selectionBackgroundView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
         ])
+
+        if #available(iOS 26, *) {
+            NSLayoutConstraint.activate([
+                visualEffectView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                visualEffectView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                visualEffectView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                visualEffectView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+            ])
+        }
 
         applyInitialConstraints()
         addSwipeGestureRecognizer(direction: .right)
@@ -338,8 +374,11 @@ class TabTraySelectorView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
 
-        let backgroundAlpha: CGFloat = tabTrayUtils.backgroundAlpha()
-        backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+        if #unavailable(iOS 26) {
+            let backgroundAlpha: CGFloat = tabTrayUtils.backgroundAlpha()
+            backgroundColor = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
+        }
+
         selectionBackgroundView.backgroundColor = theme.colors.layerEmphasis
 
         for button in buttons {

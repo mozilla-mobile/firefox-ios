@@ -4,8 +4,17 @@
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "Beranda";
 
+/* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
+"FirefoxHome.Stories.AllStoriesButtonTitle.v144" = "Semua cerita";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.PopularTodaySectionTitle.v144" = "Populer hari ini";
+
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "Cerita";
+
+/* This is the title that appears in the navigation bar for the Top Stories view, a screen that displays a collection of trending news articles */
+"FirefoxHome.Stories.TopStoriesViewTitle.v144" = "Cerita puncak";
 
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "Data Penjelajahan Pribadi Dihapus";

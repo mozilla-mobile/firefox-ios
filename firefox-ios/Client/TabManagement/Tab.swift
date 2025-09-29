@@ -15,6 +15,7 @@ import TabDataStore
 private var debugTabCount = 0
 #endif
 
+@MainActor
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     guard var recent = tabs.first else {
         return nil
@@ -30,7 +31,9 @@ func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
 }
 
 protocol TabContentScript {
+    @MainActor
     static func name() -> String
+    @MainActor
     func scriptMessageHandlerNames() -> [String]?
 
     @MainActor
@@ -39,6 +42,7 @@ protocol TabContentScript {
         didReceiveScriptMessage message: WKScriptMessage
     )
 
+    @MainActor
     func prepareForDeinit()
 }
 
@@ -73,6 +77,7 @@ enum TabUrlType: String {
 
 typealias TabUUID = String
 
+@MainActor
 class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
@@ -105,6 +110,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     let windowUUID: WindowUUID
 
     var urlType: TabUrlType = .regular
+
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
     }
@@ -282,7 +288,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
     // TODO: FXIOS-13297 Keep track of new DispatchQueueInterface usages
-    private var removeDispatchQueue: DispatchQueueInterface
+    private nonisolated let removeDispatchQueue: DispatchQueueInterface
     var faviconURL: String? {
         didSet {
             guard let url = url,
@@ -461,7 +467,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
 
-    var onWebViewLoadingStateChanged: VoidReturnCallback?
+    var onWebViewLoadingStateChanged: (@MainActor () -> Void)?
     private var webViewLoadingObserver: NSKeyValueObservation?
 
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
@@ -595,7 +601,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
             tabDelegate?.tab(self, didCreateWebView: webView)
             webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
-                self?.onWebViewLoadingStateChanged?()
+                guard let self else { return }
+                ensureMainThread {
+                    self.onWebViewLoadingStateChanged?()
+                }
             }
         }
     }
@@ -616,9 +625,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     deinit {
-        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
         webViewLoadingObserver?.invalidate()
-        webView?.navigationDelegate = nil
+        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
 
 #if DEBUG
         debugTabCount -= 1
@@ -761,7 +769,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
     }
 
-    @objc
     func reloadPage() {
         reload()
     }
@@ -856,6 +863,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
     }
 
+    @MainActor
     func getProviderForUrl() -> SearchEngine {
         guard let url = self.webView?.url else {
             return .none
@@ -903,7 +911,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     // MARK: - Temporary Document handling - PDF Refactor
 
     /// Retrieves the session cookies attached to the current `WKWebView` managed by the `Tab`
-    func getSessionCookies(_ completion: @escaping ([HTTPCookie]) -> Void) {
+    func getSessionCookies(_ completion: @Sendable @MainActor @escaping ([HTTPCookie]) -> Void) {
         webView?.configuration.websiteDataStore.httpCookieStore.getAllCookies(completion)
     }
 
@@ -931,7 +939,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return false
     }
 
-    private func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
+    private nonisolated func deleteDownloadedDocuments(docsURL: TemporaryDocumentSession) {
         guard !docsURL.isEmpty else { return }
         removeDispatchQueue.async { [fileManager] in
             docsURL.forEach { url in
@@ -964,19 +972,21 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         temporaryDocument = document
 
         temporaryDocument?.download { [weak self] url in
-            guard let url else { return }
+            ensureMainThread {
+                guard let url else { return }
 
-            // Prevent the WebView to load a new item so it doesn't add a new entry to the back and forward list.
-            if let item = self?.backForwardList?.firstItem(with: url) as? WKBackForwardListItem {
-                self?.webView?.go(to: item)
-            } else {
-                self?.webView?.loadFileURL(url, allowingReadAccessTo: url)
+                // Prevent the WebView to load a new item so it doesn't add a new entry to the back and forward list.
+                if let item = self?.backForwardList?.firstItem(with: url) as? WKBackForwardListItem {
+                    self?.webView?.go(to: item)
+                } else {
+                    self?.webView?.loadFileURL(url, allowingReadAccessTo: url)
+                }
+
+                // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
+                guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
+                self?.temporaryDocumentsSession[url] = sourceURL
+                self?.documentLogger.registerDownloadFinish(url: sourceURL)
             }
-
-            // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
-            guard let sourceURL = document.sourceURL, document.sourceURL?.isFileURL == false else { return }
-            self?.temporaryDocumentsSession[url] = sourceURL
-            self?.documentLogger.registerDownloadFinish(url: sourceURL)
         }
     }
 
@@ -1153,11 +1163,14 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 }
 
 protocol TabWebViewDelegate: AnyObject {
+    @MainActor
     func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String)
+    @MainActor
     func tabWebViewSearchWithFirefox(
         _ tabWebViewSearchWithFirefox: TabWebView,
         didSelectSearchWithFirefoxForSelection selection: String
     )
+    @MainActor
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
@@ -1184,11 +1197,6 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
 
         translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            accessoryView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            accessoryView.heightAnchor.constraint(equalToConstant: 50)
-        ])
 
         return accessoryView
     }

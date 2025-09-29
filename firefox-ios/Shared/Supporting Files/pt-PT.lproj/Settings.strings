@@ -119,22 +119,13 @@
 "Settings.Browsing.Title.v137" = "Navegação";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "Saber mais.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Saber mais";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Os relatórios de falha permitem-nos diagnosticar e corrigir problemas com o navegador.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Isto ajuda-nos a diagnosticar e a corrigir problemas com o navegador.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Enviar relatórios de falha automaticamente";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "Saber mais.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Saber mais";
@@ -248,10 +239,10 @@
 "Settings.Summarize.FooterTitle.v142" = "Fornece acesso para resumir páginas.";
 
 /* This is the footer text for the gestures features under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Balance o seu dispositivo de um lado para o outro para resumir uma página.";
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Abane o seu dispositivo de um lado para o outro para obter um resumo de uma página.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Balancear para resumir";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Abanar para resumir";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Gestos";
@@ -260,22 +251,13 @@
 "Settings.Summarize.SummarizePagesTitle.v142" = "Resumo de páginas";
 
 /* In the settings menu, in the General section, this is the title for the Summarize settings section. */
-"Settings.Summarize.Title.v142" = "Resumos da página";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "Saber mais.";
+"Settings.Summarize.Title.v142" = "Resumos de páginas";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Saber mais";
 
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "O %1$@ esforça-se para apenas recolher o que precisamos para melhorar o %2$@ para todos.";
-
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Os dados sobre o seu dispositivo, configuração de hardware e utilização ajudam-nos a melhorar as funcionalidades, desempenho e estabilidade do %@.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "Dados técnicos e de interação";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Enviar dados técnicos e de interação";

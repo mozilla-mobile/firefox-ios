@@ -1,48 +1,48 @@
 /* (No Comment) */
-"2GqvPe" = "Go to Copied Link";
+"2GqvPe" = "Отидете на Копирана връзка";
 
 /* (No Comment) */
-"ctDNmu" = "Quick access to various Firefox actions";
+"ctDNmu" = "Бърз достъп до различни действия на Firefox";
 
 /* (No Comment) */
-"eHmH1H" = "Clear Private Tabs";
+"eHmH1H" = "Изчистване на поверителни раздели";
 
 /* (No Comment) */
-"eqyNJg" = "Quick Action";
+"eqyNJg" = "Бързо действие";
 
 /* (No Comment) */
-"eV8mOT" = "Quick Action Type";
+"eV8mOT" = "Вид за бързо действие";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+"fi3W24-2GqvPe" = "Има ${count} опции, съответстващи на „Към копираната връзка“.";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Private Tabs’.";
+"fi3W24-eHmH1H" = "Има ${count} опции, съответстващи на „Изчистване на поверителните раздели“.";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "There are ${count} options matching ‘New Private Search’.";
+"fi3W24-scEmjs" = "Има ${count} опции, съответстващи на „Ново частно търсене“.";
 
 /* (No Comment) */
-"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+"fi3W24-xRJbBP" = "Има ${count} опции, съответстващи на „Ново търсене“.";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+"PzSrmZ-2GqvPe" = "Само за да потвърдите, искате „Go to Copied Link“?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Private Tabs’?";
+"PzSrmZ-eHmH1H" = "Само за да потвърдите, искате „Изчистване на личните раздели“?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Private Search’?";
+"PzSrmZ-scEmjs" = "Само за да потвърдите, искате „Ново частно търсене“?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
+"PzSrmZ-xRJbBP" = "Само за да потвърдите, искате „Ново търсене“?";
 
 /* (No Comment) */
-"scEmjs" = "New Private Search";
+"scEmjs" = "Ново частно търсене";
 
 /* (No Comment) */
-"w9jdPK" = "Quick Action";
+"w9jdPK" = "Бързо действие";
 
 /* (No Comment) */
-"xRJbBP" = "New Search";
+"xRJbBP" = "Ново търсене";
 

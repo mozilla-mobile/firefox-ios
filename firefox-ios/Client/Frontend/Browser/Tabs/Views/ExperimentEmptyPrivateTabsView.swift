@@ -8,10 +8,9 @@ import Foundation
 import Shared
 import ComponentLibrary
 
+@MainActor
 protocol EmptyPrivateTabView: UIView, ThemeApplicable, InsetUpdatable {
     var needsSafeArea: Bool { get }
-
-    @MainActor
     var delegate: EmptyPrivateTabsViewDelegate? { get set }
 }
 

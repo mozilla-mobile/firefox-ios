@@ -15,10 +15,10 @@ protocol BackgroundTabLoader {
     func loadBackgroundTabs()
 }
 
-final class DefaultBackgroundTabLoader: BackgroundTabLoader {
-    private var tabQueue: TabQueue
-    private var backgroundQueue: DispatchQueueInterface
-    private var applicationHelper: ApplicationHelper
+final class DefaultBackgroundTabLoader: BackgroundTabLoader, Sendable {
+    private let tabQueue: TabQueue
+    private let backgroundQueue: DispatchQueueInterface
+    private let applicationHelper: ApplicationHelper
 
     init(tabQueue: TabQueue,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),

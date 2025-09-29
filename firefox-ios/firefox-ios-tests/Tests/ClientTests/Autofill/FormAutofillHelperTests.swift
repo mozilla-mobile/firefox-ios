@@ -45,6 +45,7 @@ class FormAutofillHelperTests: XCTestCase {
         }
     """
 
+    @MainActor
     override func setUp() {
         super.setUp()
         profile = MockProfile()
@@ -280,6 +281,7 @@ class FormAutofillHelperTests: XCTestCase {
         trackForMemoryLeaks(subject)
     }
 
+    @MainActor
     func test_formAutofillHelper_foundFieldValuesClosure_doesntLeak() {
         let tab = Tab(profile: profile, windowUUID: windowUUID)
         let subject = FormAutofillHelper(tab: tab)
@@ -295,6 +297,7 @@ class FormAutofillHelperTests: XCTestCase {
         tab.close()
     }
 
+    @MainActor
     func testScriptMessageHandlerNames() {
         let formAutofillHelper = FormAutofillHelper(tab: tab)
         let handlerNames = formAutofillHelper.scriptMessageHandlerNames()

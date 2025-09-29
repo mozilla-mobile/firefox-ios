@@ -124,6 +124,10 @@ public struct PrefsKeys {
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
     }
 
+    public struct Search {
+        public static let recentSearchesCache = "recentSearchesCacheBaseKey"
+    }
+
     public struct RemoteSettings {
         public static let lastRemoteSettingsServiceSyncTimestamp =
         "LastRemoteSettingsServiceSyncTimestamp"
@@ -161,6 +165,7 @@ public struct PrefsKeys {
     public struct Settings {
         public static let closePrivateTabs = "ClosePrivateTabs"
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
+        public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
     }
 
     // Activity Stream

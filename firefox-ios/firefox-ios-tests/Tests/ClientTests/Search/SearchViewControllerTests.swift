@@ -31,7 +31,8 @@ class SearchViewControllerTest: XCTestCase {
             isBottomSearchBar: false,
             profile: profile,
             model: searchEnginesManager,
-            tabManager: MockTabManager()
+            tabManager: MockTabManager(),
+            trendingSearchClient: MockTrendingSearchClient()
         )
 
         searchViewController = SearchViewController(

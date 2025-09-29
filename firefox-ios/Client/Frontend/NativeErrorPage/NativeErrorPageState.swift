@@ -5,7 +5,7 @@
 import Redux
 import Common
 
-struct NativeErrorPageState: ScreenState, Equatable {
+struct NativeErrorPageState: ScreenState {
     var windowUUID: WindowUUID
     var title: String
     var description: String

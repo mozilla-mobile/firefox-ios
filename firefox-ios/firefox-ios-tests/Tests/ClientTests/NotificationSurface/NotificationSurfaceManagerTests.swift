@@ -63,7 +63,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
     @MainActor
     func testDidTapNotification_noMessageId() {
         let subject = createSubject()
-        subject.didTapNotification([:])
+        subject.didTapNotification("")
 
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
@@ -71,7 +71,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
     @MainActor
     func testDidTapNotification_noMessageFound() {
         let subject = createSubject()
-        subject.didTapNotification([NotificationSurfaceManager.Constant.messageIdKey: "test"])
+        subject.didTapNotification("test")
 
         XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
@@ -84,7 +84,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
         XCTAssertTrue(subject.shouldShowSurface)
 
-        subject.didTapNotification([NotificationSurfaceManager.Constant.messageIdKey: "test-notification"])
+        subject.didTapNotification("test-notification")
 
         XCTAssertEqual(messageManager.onMessagePressedCalled, 1)
     }
@@ -97,7 +97,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
         XCTAssertTrue(subject.shouldShowSurface)
 
-        subject.didTapNotification([NotificationSurfaceManager.Constant.messageIdKey: "test-notification"])
+        subject.didTapNotification("test-notification")
 
         XCTAssertEqual(messageManager.onMessagePressedCalled, 1)
     }

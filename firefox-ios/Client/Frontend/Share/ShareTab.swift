@@ -4,12 +4,17 @@
 
 import Foundation
 
-protocol ShareTab: Equatable {
+protocol ShareTab {
+    @MainActor
     var displayTitle: String { get }
+    @MainActor
     var url: URL? { get }
+    @MainActor
     var canonicalURL: URL? { get }
+    @MainActor
     var webView: TabWebView? { get }
 
     // Tabs displaying content other than HTML mime type can optionally be downloaded and treated as files when shared
+    @MainActor
     var temporaryDocument: TemporaryDocument? { get }
 }

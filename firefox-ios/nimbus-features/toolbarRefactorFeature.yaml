@@ -33,7 +33,7 @@ features:
         description: >
           Enables swipe gestures to switch between browser tabs.
         type: Boolean
-        default: false
+        default: true
       translucency:
         description: >
           Enables translucency for toolbars.
@@ -42,6 +42,11 @@ features:
       minimal_address_bar:
         description: >
           Enables minimal address bar mode on scroll to ensure the url is always visible.
+        type: Boolean
+        default: false
+      middle_button_customization:
+        description: >
+          Enables the middle button customization for navigation toolbar.
         type: Boolean
         default: false
       layout:
@@ -61,6 +66,7 @@ features:
           swiping_tabs: true
           translucency: true
           minimal_address_bar: false
+          middle_button_customization: false
           layout: version1
       - channel: developer
         value:
@@ -72,6 +78,7 @@ features:
           swiping_tabs: true
           translucency: true
           minimal_address_bar: true
+          middle_button_customization: true
           layout: version1
 
 enums:

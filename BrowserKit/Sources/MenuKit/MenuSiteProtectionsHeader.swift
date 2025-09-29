@@ -132,7 +132,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             constant: UX.siteProtectionsContentTopMargin
         )
         siteProtectionsTopFromLabels.priority = .defaultHigh
-        let iconAlignmentOffset = -UX.siteProtectionsContentHorizontalPadding
         NSLayoutConstraint.activate([
             contentLabels.topAnchor.constraint(equalTo: self.topAnchor),
             contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
@@ -157,10 +156,7 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
 
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            siteProtectionsContent.leadingAnchor.constraint(
-                equalTo: contentLabels.leadingAnchor,
-                constant: iconAlignmentOffset
-            )
+            siteProtectionsContent.leadingAnchor.constraint(equalTo: favicon.leadingAnchor)
         ])
 
         closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize

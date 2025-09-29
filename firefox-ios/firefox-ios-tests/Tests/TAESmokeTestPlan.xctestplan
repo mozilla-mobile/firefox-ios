@@ -90,7 +90,6 @@
         "BookmarksTests\/testLongTapRecentlySavedLink_tabTrayExperimentOff()",
         "BookmarksTests\/testLongTapRecentlySavedLink_tabTrayExperimentOn()",
         "BookmarksTests\/testRecentlyBookmarked()",
-        "BrowsingPDFTests",
         "BrowsingPDFTests\/testBookmarkPDF()",
         "BrowsingPDFTests\/testLongPressOnPDFLink()",
         "BrowsingPDFTests\/testLongPressOnPDFLinkToAddToReadingList()",

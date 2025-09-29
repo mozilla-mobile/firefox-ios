@@ -4,6 +4,7 @@
 
 @testable import WebEngine
 
+@MainActor
 struct DefaultTestDependencies {
     var mockTelemetryProxy: MockEngineTelemetryProxy
     var webviewParameters = WKWebViewParameters(blockPopups: true,

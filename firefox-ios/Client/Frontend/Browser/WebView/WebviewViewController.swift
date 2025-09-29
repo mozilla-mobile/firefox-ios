@@ -12,7 +12,7 @@ class WebviewViewController: UIViewController,
                              ContentContainable,
                              ScreenshotableView,
                              FullscreenDelegate {
-    private var webView: WKWebView
+    private var webView: WKWebView?
     var contentType: ContentType = .webview
     // TODO: FXIOS-12158 Add back after investigating why video player is broken
 //    var isFullScreen = false
@@ -32,11 +32,12 @@ class WebviewViewController: UIViewController,
     }
 
     private func setupWebView() {
+        guard let webView else { return }
         view.addSubview(webView)
         webView.pinToSuperview()
     }
 
-    func update(webView: WKWebView) {
+    func update(webView: WKWebView?) {
         self.webView = webView
 
         // Avoid updating constraints while on fullscreen mode
@@ -48,7 +49,7 @@ class WebviewViewController: UIViewController,
     // MARK: - ScreenshotableView
 
     func getScreenshotData(completionHandler: @escaping (ScreenshotData?) -> Void) {
-        guard let url = webView.url,
+        guard let webView, let url = webView.url,
               InternalURL(url) == nil else {
             completionHandler(nil)
             return

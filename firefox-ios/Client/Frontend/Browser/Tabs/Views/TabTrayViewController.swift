@@ -13,7 +13,9 @@ protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
                             UIPopoverPresentationControllerDelegate,
                             Themeable {
+    @MainActor
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)? { get set }
+    @MainActor
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
 
@@ -473,6 +475,8 @@ final class TabTrayViewController: UIViewController,
     private func setupToolBarAppearance(theme: Theme) {
         guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
 
+        if #available(iOS 26, *) { return }
+
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
         let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
 
@@ -579,6 +583,8 @@ final class TabTrayViewController: UIViewController,
     private func setupBlurView() {
         guard tabTrayUtils.isTabTrayUIExperimentsEnabled, tabTrayUtils.isTabTrayTranslucencyEnabled else { return }
 
+        if #available(iOS 26, *) { return }
+
         // Should use Regular layout used for iPad
         if isRegularLayout {
             containerView.insertSubview(blurView, aboveSubview: containerView)
@@ -604,8 +610,10 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func updateBlurView() {
-        blurView.isHidden = !tabTrayUtils.shouldBlur()
         applyTheme()
+
+        if #available(iOS 26, *) { return }
+        blurView.isHidden = !tabTrayUtils.shouldBlur()
     }
 
     private func updateTitle() {

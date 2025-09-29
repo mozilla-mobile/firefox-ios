@@ -27,11 +27,13 @@ class ZoomPageManagerTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testTabNil_AfterInit() {
         let subject = createSubject()
         XCTAssertNil(subject.tab)
     }
 
+    @MainActor
     func testTabNotNil_WhenTabGainFocus() {
         let subject = createSubject()
         let tab = createTab()
@@ -40,6 +42,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertNotNil(subject.tab)
     }
 
+    @MainActor
     func testTabZoomChange_WhenZoomInIsCalled() {
         let subject = createSubject()
         let tab = createTab()
@@ -51,6 +54,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertEqual(tab.pageZoom, expectedZoom)
     }
 
+    @MainActor
     func testTabZoomChange_WhenZoomOutIsCalled() {
         let subject = createSubject()
         let tab = createTab()
@@ -62,6 +66,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertEqual(tab.pageZoom, expectedZoom)
     }
 
+    @MainActor
     func testTabZoomReset_WhenResetZoomIsCalled() {
         let subject = createSubject()
         let tab = createTab()
@@ -72,6 +77,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertEqual(tab.pageZoom, expectedZoom)
     }
 
+    @MainActor
     func testTabZoomDoesntChange_WhenZoomInIsCalledForUpperLimit() {
         let subject = createSubject()
         let domainZoomLevel = DomainZoomLevel(host: "www.website.com",
@@ -86,6 +92,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertEqual(tab.pageZoom, expectedZoom)
     }
 
+    @MainActor
     func testTabZoomDoesntChange_WhenZoomOutIsCalledForLowerLimit() {
         let subject = createSubject()
         let domainZoomLevel = DomainZoomLevel(host: "www.website.com",
@@ -100,6 +107,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertEqual(tab.pageZoom, expectedZoom)
     }
 
+    @MainActor
     func testZoomStoreSaved_WhenZoomInIsCalled() {
         let subject = createSubject()
         let tab = createTab()
@@ -109,6 +117,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertEqual(zoomStore.saveCalledCount, 1)
     }
 
+    @MainActor
     func testZoomStoreSaved_WhenZoomResetIsCalled() {
         let subject = createSubject()
         let tab = createTab()
@@ -118,6 +127,7 @@ class ZoomPageManagerTests: XCTestCase {
         XCTAssertEqual(zoomStore.saveCalledCount, 1)
     }
 
+    @MainActor
     func testFindZoomStore_WhenZoomInIsCalled() {
         let subject = createSubject()
         let tab = createTab()
@@ -128,6 +138,7 @@ class ZoomPageManagerTests: XCTestCase {
     }
 
     // MARK: - Private
+    @MainActor
     private func createSubject() -> ZoomPageManager {
         let subject = ZoomPageManager(windowUUID: .XCTestDefaultUUID,
                                       zoomStore: zoomStore)
@@ -135,6 +146,7 @@ class ZoomPageManagerTests: XCTestCase {
         return subject
     }
 
+    @MainActor
     func createTab() -> Tab {
         let tab = Tab(profile: profile, windowUUID: windowUUID)
 

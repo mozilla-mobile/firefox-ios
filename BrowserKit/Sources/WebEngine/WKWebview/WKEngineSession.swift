@@ -49,7 +49,7 @@ class WKEngineSession: NSObject,
         }
     }
 
-    // TODO: With Swift 6 we can use default params in the init
+    // TODO: FXIOS-13670 With Swift 6 we can use default params in the init
     @MainActor
     public static func sessionFactory(
         userScriptManager: WKUserScriptManager,
@@ -63,7 +63,7 @@ class WKEngineSession: NSObject,
         let scriptResponder = EngineSessionScriptResponder()
         let metadataFetcher = DefaultMetadataFetcherHelper()
         let navigationHandler = DefaultNavigationHandler()
-        let uiHandler = DefaultUIHandler(sessionDependencies: dependencies, alertPresenter: AlertPresenter(presenter: nil))
+        let uiHandler = DefaultUIHandler.factory(sessionDependencies: dependencies)
 
         return WKEngineSession(
             userScriptManager: userScriptManager,

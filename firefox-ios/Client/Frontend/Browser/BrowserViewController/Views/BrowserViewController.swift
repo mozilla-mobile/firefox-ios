@@ -291,9 +291,10 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction?
     var copyAddressAction: AccessibleAction?
 
+    // TODO: FXIOS-13669 The session dependencies shouldn't be empty
     private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
-        engineResponder: DefaultUIHandler(sessionCreator: tabManager as? SessionCreator,
-                                          alertPresenter: AlertPresenter(presenter: self)),
+        engineResponder: DefaultUIHandler.factory(sessionDependencies: .empty(),
+                                                  sessionCreator: tabManager as? SessionCreator),
         legacyResponder: self
     )
     /// The ui delegate used by a `WKWebView`
@@ -1111,8 +1112,7 @@ class BrowserViewController: UIViewController,
                                                    headerContainer: header)
         }
         let tapHandler = scrollController.createToolbarTapHandler()
-        overKeyboardContainer.onTap = tapHandler
-        header.onTap = tapHandler
+        addressToolbarContainer.onContainerTap = tapHandler
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links into the view from other apps.
@@ -2183,11 +2183,13 @@ class BrowserViewController: UIViewController,
         guard self.searchController == nil else { return }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        let trendingClient = TrendingSearchClient(searchEngine: searchEnginesManager.defaultEngine)
         let searchViewModel = SearchViewModel(isPrivate: isPrivate,
                                               isBottomSearchBar: isBottomSearchBar,
                                               profile: profile,
                                               model: searchEnginesManager,
-                                              tabManager: tabManager)
+                                              tabManager: tabManager,
+                                              trendingSearchClient: trendingClient)
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
                                                     tabManager: tabManager)

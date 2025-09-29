@@ -7,7 +7,9 @@ import Redux
 import UIKit
 
 protocol TabDisplayViewDragAndDropInteraction: AnyObject {
+    @MainActor
     func dragAndDropStarted()
+    @MainActor
     func dragAndDropEnded()
 }
 
