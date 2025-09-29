@@ -419,14 +419,17 @@ private extension TabLocationView {
 
 extension TabLocationView: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        guard let notificationUUID = notification.object as? UUID else { return }
-        guard windowUUID == notificationUUID else { return }
-        switch notification.name {
-        case .TrackingProtectionViewControllerDidDismiss:
-            isTrackingProtectionDisplayed = false
-        case .TrackingProtectionViewControllerDidAppear:
-            isTrackingProtectionDisplayed = true
-        default: break
+        guard let notificationUUID = notification.object as? UUID,
+              windowUUID == notificationUUID else { return }
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case .TrackingProtectionViewControllerDidDismiss:
+                self.isTrackingProtectionDisplayed = false
+            case .TrackingProtectionViewControllerDidAppear:
+                self.isTrackingProtectionDisplayed = true
+            default: break
+            }
         }
     }
 }

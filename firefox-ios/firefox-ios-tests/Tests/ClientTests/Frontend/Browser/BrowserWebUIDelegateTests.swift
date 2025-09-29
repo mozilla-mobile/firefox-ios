@@ -7,9 +7,11 @@ import WebEngine
 import WebKit
 @testable import Client
 
+@MainActor
 final class BrowserWebUIDelegateTests: XCTestCase {
     private var mockLegacyResponder: MockLegacyResponder!
     private var engineResponder: MockWKUIHandler!
+
     private var webView: WKWebView {
         return MockTabWebView(
             tab: MockTab(

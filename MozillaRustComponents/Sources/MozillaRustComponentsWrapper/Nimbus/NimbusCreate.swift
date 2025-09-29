@@ -121,17 +121,21 @@ public extension Nimbus {
         bundle: Bundle = Bundle.main,
         device currentDevice: UIDevice? = nil
     ) -> AppContext {
+        var systemName = ""
+        var systemVersion = ""
+
         // FIXME: FXIOS-13512 Questionable workaround to get main actor isolated UIDevice.current; rearchitect later
-        let device: UIDevice =
-            if Thread.isMainThread {
-                MainActor.assumeIsolated {
-                    return currentDevice ?? UIDevice.current
-                }
-            } else {
-                DispatchQueue.main.sync {
-                    return currentDevice ?? UIDevice.current
-                }
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                systemName = (currentDevice ?? UIDevice.current).systemName
+                systemVersion = (currentDevice ?? UIDevice.current).systemVersion
             }
+        } else {
+            DispatchQueue.main.sync {
+                systemName = (currentDevice ?? UIDevice.current).systemName
+                systemVersion = (currentDevice ?? UIDevice.current).systemVersion
+            }
+        }
 
         let info = bundle.infoDictionary ?? [:]
         var inferredDateInstalledOn: Date? {
@@ -155,8 +159,8 @@ public extension Nimbus {
             deviceManufacturer: Sysctl.manufacturer,
             deviceModel: Sysctl.model,
             locale: getLocaleTag(), // from Glean utils
-            os: device.systemName,
-            osVersion: device.systemVersion,
+            os: systemName,
+            osVersion: systemVersion,
             androidSdkVersion: nil,
             debugTag: "Nimbus.rs",
             installationDate: installationDateSinceEpoch,

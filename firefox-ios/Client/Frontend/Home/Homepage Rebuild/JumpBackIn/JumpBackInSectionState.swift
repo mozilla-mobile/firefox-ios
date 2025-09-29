@@ -53,23 +53,34 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
-        else {
+        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
+        // because we dispatch to the main thread in the store. We will want to
+        // also isolate that to the @MainActor to remove this.
+        guard Thread.isMainThread else {
+            assertionFailure("JumpBackInSectionState reducer is not being called from the main thread!")
             return defaultState(from: state)
         }
 
-        switch action.actionType {
-        case TabManagerMiddlewareActionType.fetchedRecentTabs:
-            return handleInitializeAction(for: state, with: action)
-        case RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab:
-            return handleRemoteTabsAction(for: state, with: action)
-        case JumpBackInActionType.toggleShowSectionSetting:
-            return handleToggleShowSectionSettingAction(action: action, state: state)
-        default:
-            return defaultState(from: state)
+        return MainActor.assumeIsolated {
+            guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+            else {
+                return defaultState(from: state)
+            }
+
+            switch action.actionType {
+            case TabManagerMiddlewareActionType.fetchedRecentTabs:
+                return handleInitializeAction(for: state, with: action)
+            case RemoteTabsMiddlewareActionType.fetchedMostRecentSyncedTab:
+                return handleRemoteTabsAction(for: state, with: action)
+            case JumpBackInActionType.toggleShowSectionSetting:
+                return handleToggleShowSectionSettingAction(action: action, state: state)
+            default:
+                return defaultState(from: state)
+            }
         }
     }
 
+    @MainActor
     private static func handleInitializeAction(
         for state: JumpBackInSectionState,
         with action: Action

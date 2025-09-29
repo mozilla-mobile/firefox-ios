@@ -19,13 +19,13 @@ class ShareTelemetry {
 
     func sharedTo(
         activityType: UIActivity.ActivityType?,
-        shareType: ShareType,
+        shareTypeName: String,
         hasShareMessage: Bool
     ) {
         let extra = GleanMetrics.ShareSheet.SharedToExtra(
             activityIdentifier: activityType?.rawValue ?? "unknown",
             hasShareMessage: hasShareMessage,
-            shareType: shareType.typeName
+            shareType: shareTypeName
         )
         gleanWrapper.recordEvent(for: GleanMetrics.ShareSheet.sharedTo, extras: extra)
     }

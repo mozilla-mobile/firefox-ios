@@ -6,6 +6,7 @@ import UIKit
 import Common
 
 public protocol BrowserNavigationToolbarDelegate: AnyObject {
+    @MainActor
     func configureContextualHint(for button: UIButton, with contextualHintType: String)
 }
 

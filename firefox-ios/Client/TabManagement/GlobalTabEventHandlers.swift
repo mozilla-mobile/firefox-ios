@@ -14,6 +14,7 @@ class GlobalTabEventHandlers {
     ///
     /// For anything that needs to react to tab events notifications (see `TabEventLabel`), the
     /// pattern is to implement a handler and specify which events to observe.
+    @MainActor
     static func configure(with profile: Profile) {
         guard globalHandlers.isEmpty else { return }
         globalHandlers = [

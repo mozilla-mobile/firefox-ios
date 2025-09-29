@@ -4,6 +4,7 @@
 import Foundation
 import WebKit
 
+@MainActor
 public protocol EngineSessionBackForwardListItem {
     var url: URL { get }
 

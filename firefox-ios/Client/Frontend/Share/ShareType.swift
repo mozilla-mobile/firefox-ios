@@ -13,23 +13,10 @@ import Foundation
 ///           __SPECIAL NOTE__: If you download a PDF, you can view that in a tab. In that case, the URL may have a `file://`
 ///            scheme instead of `http(s)://`, so certain options, like Send to Device / Add to Home Screen, may not be
 ///            available.
-enum ShareType: Equatable {
+enum ShareType {
     case file(url: URL)
     case site(url: URL)
     case tab(url: URL, tab: any ShareTab)
-
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case let (.file(lhsURL), .file(rhsURL)):
-            return lhsURL == rhsURL
-        case let (.site(lhsURL), .site(rhsURL)):
-            return lhsURL == rhsURL
-        case let (.tab(lhsURL, lhsTab), .tab(rhsURL, rhsTab)):
-            return lhsURL == rhsURL && lhsTab.isEqual(to: rhsTab)
-        default:
-            return false
-        }
-    }
 
     /// The share URL wrapped by the given type.
     var wrappedURL: URL {
@@ -53,13 +40,5 @@ enum ShareType: Equatable {
         case .tab:
             return "tab"
         }
-    }
-}
-
-extension ShareTab {
-    func isEqual(to otherShareTab: some ShareTab) -> Bool {
-        return self.displayTitle == otherShareTab.displayTitle
-        && self.url == otherShareTab.url
-        && self.webView == otherShareTab.webView
     }
 }
