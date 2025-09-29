@@ -6,6 +6,7 @@ import UIKit
 import Common
 
 protocol TabTraySelectorDelegate: AnyObject {
+    @MainActor
     func didSelectSection(panelType: TabTrayPanelType)
 }
 

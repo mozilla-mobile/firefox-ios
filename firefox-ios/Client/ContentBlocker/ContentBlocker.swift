@@ -111,6 +111,7 @@ struct NoImageModeDefaults {
     static let ScriptName = "images"
 }
 
+@MainActor
 class ContentBlocker {
     var safelistedDomains = SafelistedDomains()
     let ruleStore = WKContentRuleListStore.default()
@@ -230,11 +231,8 @@ class ContentBlocker {
             tab.currentWebView()?.configuration.userContentController.remove(rule)
         }
 
-        // Async required here to ensure remove() call is processed.
-        DispatchQueue.main.async { [weak tab] in
-            tab?.currentWebView()?
-                .evaluateJavascriptInDefaultContentWorld("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
-        }
+        tab.currentWebView()?
+            .evaluateJavascriptInDefaultContentWorld("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
     }
 }
 

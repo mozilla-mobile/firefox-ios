@@ -6,6 +6,7 @@ import UIKit
 import Common
 
 /// Helper utility that aims to detect potential bugs in production which could result in tab loss.
+@MainActor
 final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
     private let telemetryWrapper: TelemetryWrapperProtocol
@@ -54,29 +55,26 @@ final class TabErrorTelemetryHelper {
     /// Records the window's tab count upon the app being backgrounded.
     /// This count is then checked again upon foregrounding in an attempt to
     /// identify potential tab-loss errors.
-    func recordTabCountForBackgroundedScene(_ window: WindowUUID) {
+    nonisolated func recordTabCountForBackgroundedScene(_ window: WindowUUID) {
         ensureMainThread { self.recordTabCount(window, entryPoint: .backgroundForeground) }
     }
 
     /// Validates the tab count when the app is foregrounded to ensure the
     /// count is consistent with the count upon backgrounding.
-    func validateTabCountForForegroundedScene(_ window: WindowUUID) {
+    nonisolated func validateTabCountForForegroundedScene(_ window: WindowUUID) {
         ensureMainThread { self.validateTabCount(window, entryPoint: .backgroundForeground) }
     }
 
-    @MainActor
     func recordTabCountAfterPreservingTabs(_ window: WindowUUID) {
         recordTabCount(window, entryPoint: .preserveRestore)
     }
 
-    @MainActor
     func validateTabCountAfterRestoringTabs(_ window: WindowUUID) {
         validateTabCount(window, entryPoint: .preserveRestore)
     }
 
     // MARK: - Internal Utility
 
-    @MainActor
     private func recordTabCount(_ window: WindowUUID, entryPoint: EntryPoint) {
         guard self.tabManagerAvailable(for: window) else { return }
         var tabCounts = defaults.object(forKey: entryPoint.defaultsKey) as? [String: Int] ?? [String: Int]()
@@ -85,7 +83,6 @@ final class TabErrorTelemetryHelper {
         defaults.set(tabCounts, forKey: entryPoint.defaultsKey)
     }
 
-    @MainActor
     private func validateTabCount(_ window: WindowUUID, entryPoint: EntryPoint) {
         defer {
             // After validating the tab count, we make sure to remove the count
@@ -133,7 +130,6 @@ final class TabErrorTelemetryHelper {
         return true
     }
 
-    @MainActor
     private func getTotalTabCount(window: WindowUUID) -> Int {
         assert(tabManagerAvailable(for: window), "getTabCount() should not be called prior to TabManager config.")
         return windowManager.tabManager(for: window).normalTabs.count

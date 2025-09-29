@@ -14,7 +14,7 @@ public class WKEngine: Engine {
     private let engineDependencies: EngineDependencies
     private let configProvider: WKEngineConfigurationProvider
 
-    // TODO: With Swift 6 we can use default params in the init
+    // TODO: FXIOS-13670 With Swift 6 we can use default params in the init
     @MainActor
     public static func factory(engineDependencies: EngineDependencies) -> WKEngine {
         let configProvider = DefaultWKEngineConfigurationProvider()
@@ -45,7 +45,7 @@ public class WKEngine: Engine {
     }
 
     public func createView() -> EngineView {
-        return WKEngineView(frame: .zero)
+        return WKEngineView.factory(frame: .zero)
     }
 
     @MainActor

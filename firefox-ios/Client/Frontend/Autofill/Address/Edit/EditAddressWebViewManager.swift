@@ -5,11 +5,15 @@
 import WebKit
 
 protocol WebViewPreloadManaging {
+    @MainActor
     var webView: WKWebView? { get }
+    @MainActor
     func preloadWebView()
+    @MainActor
     func teardownWebView()
 }
 
+@MainActor
 class EditAddressWebViewManager: WebViewPreloadManaging {
     private(set) var webView: WKWebView?
 

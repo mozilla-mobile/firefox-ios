@@ -1,11 +1,14 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
+import Common
 
 protocol TabTrayAnimationDelegate: AnyObject {
+    @MainActor
     func applyTheme(fromIndex: Int, toIndex: Int, progress: CGFloat)
 }
 
+@MainActor
 class TabTrayThemeAnimator {
     struct UX {
         static let animationDuration: CFTimeInterval = 0.25
@@ -34,15 +37,21 @@ class TabTrayThemeAnimator {
     }
 
     @objc
-    private func handleThemeAnimationTick() {
-        let elapsed = CACurrentMediaTime() - animationStartTime
-        let progress = min(max(elapsed / UX.animationDuration, 0), 1)
+    private nonisolated func handleThemeAnimationTick() {
+        ensureMainThread {
+            let elapsed = CACurrentMediaTime() - self.animationStartTime
+            let progress = min(max(elapsed / UX.animationDuration, 0), 1)
 
-        delegate?.applyTheme(fromIndex: themeFromIndex, toIndex: themeToIndex, progress: CGFloat(progress))
+            self.delegate?.applyTheme(
+                fromIndex: self.themeFromIndex,
+                toIndex: self.themeToIndex,
+                progress: CGFloat(progress)
+            )
 
-        if progress >= 1 {
-            animationDisplayLink?.invalidate()
-            animationDisplayLink = nil
+            if progress >= 1 {
+                self.animationDisplayLink?.invalidate()
+                self.animationDisplayLink = nil
+            }
         }
     }
 }

@@ -63,6 +63,7 @@ class ReaderMode: TabContentScript {
         delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 
+    @MainActor
     fileprivate func handleReaderContentParsed(_ readabilityResult: ReadabilityResult) {
         guard let tab = tab else { return }
         logger.log("Reader content parsed",

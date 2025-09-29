@@ -14,14 +14,15 @@ final class WKUserScriptManagerTests: XCTestCase {
         XCTAssertEqual(userScripts.count, 8)
     }
 
+    @MainActor
     func testInjectUserScriptThenScriptsAreAddedInWebView() async {
-        let webview = await MockWKEngineWebView(frame: .zero,
-                                                configurationProvider: MockWKEngineConfigurationProvider(),
-                                                parameters: DefaultTestDependencies().webviewParameters)!
+        let webview = MockWKEngineWebView(frame: .zero,
+                                          configurationProvider: MockWKEngineConfigurationProvider(),
+                                          parameters: DefaultTestDependencies().webviewParameters)!
         let subject = await createSubject()
 
-        await subject.injectUserScriptsIntoWebView(webview)
-        guard let config = await webview.engineConfiguration as? MockWKEngineConfiguration else {
+        subject.injectUserScriptsIntoWebView(webview)
+        guard let config = webview.engineConfiguration as? MockWKEngineConfiguration else {
             XCTFail("Failed to cast webview engine configuration to MockWKEngineConfiguration")
             return
         }

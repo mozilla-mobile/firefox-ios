@@ -44,6 +44,11 @@ features:
           Enables minimal address bar mode on scroll to ensure the url is always visible.
         type: Boolean
         default: false
+      middle_button_customization:
+        description: >
+          Enables the middle button customization for navigation toolbar.
+        type: Boolean
+        default: false
       layout:
         description: >
           The type of layout of the toolbars.
@@ -61,6 +66,7 @@ features:
           swiping_tabs: true
           translucency: true
           minimal_address_bar: false
+          middle_button_customization: false
           layout: version1
       - channel: developer
         value:
@@ -72,14 +78,13 @@ features:
           swiping_tabs: true
           translucency: true
           minimal_address_bar: true
+          middle_button_customization: true
           layout: version1
 
 enums:
   ToolbarLayoutType:
     description: The type of toolbar layout.
     variants:
-      baseline:
-        description: The default layout of the toolbars.
       version1:
         description: Shows the add new tab, menu and tabs button in the navigation toolbar. The share button is displayed in the address toolbar.
       version2:

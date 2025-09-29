@@ -3,5 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 protocol InsetUpdatable {
+    @MainActor
     func updateInsets(top: CGFloat, bottom: CGFloat)
 }

@@ -7,7 +7,9 @@ import Redux
 import UIKit
 
 protocol TabTrayThemeable {
+    @MainActor
     func retrieveTheme() -> Theme
+    @MainActor
     func applyTheme(_ theme: Theme)
 }
 
