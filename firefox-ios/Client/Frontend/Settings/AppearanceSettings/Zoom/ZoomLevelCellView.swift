@@ -22,13 +22,13 @@ struct ZoomLevelCellView: View {
     var body: some View {
         HStack {
             Text(domainZoomLevel.host)
-                .font(.body)
+                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                 .foregroundColor(textColor)
 
             Spacer()
 
             Text(ZoomLevel(from: domainZoomLevel.zoomLevel).displayName)
-                .font(.body)
+                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                 .foregroundColor(textColor)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
