@@ -246,7 +246,9 @@ class TabManagerImplementation: NSObject,
 
     func removeAllTabs(isPrivateMode: Bool) {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
+        guard !currentModeTabs.isEmpty else { return }
         var currentSelectedTab: BackupCloseTab?
+        let previouslySelectedTab = selectedTab
 
         // Backup the selected tab in separate variable as the `removeTab` method called below for each tab will
         // automatically update tab selection as if there was a single tab removal.
@@ -258,7 +260,15 @@ class TabManagerImplementation: NSObject,
         backupCloseTabs = tabs
 
         for tab in currentModeTabs {
-            self.removeTab(tab.tabUUID)
+            removeTab(tab, flushToDisk: false)
+                    }
+
+                    if let selectedTabBackup = currentSelectedTab {
+                        let deletedIndex = selectedTabBackup.restorePosition ?? selectedIndex
+                        updateSelectedTabAfterRemovalOf(selectedTabBackup.tab, deletedIndex: deletedIndex)
+                    } else if let previousTab = previouslySelectedTab,
+                              tabs.contains(where: { $0 === previousTab }) {
+                        selectTab(previousTab, previous: previousTab)
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
