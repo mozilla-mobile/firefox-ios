@@ -353,6 +353,11 @@ class SearchViewController: SiteTableViewController,
     /// - Recent searches: the user’s own past searches for quick re-access.
     private func loadZeroSearchData() {
         loadTrendingSearches()
+        loadRecentSearches()
+    }
+
+    private func loadRecentSearches() {
+        guard viewModel.shouldShowRecentSearches else { return }
         viewModel.retrieveRecentSearches()
     }
 

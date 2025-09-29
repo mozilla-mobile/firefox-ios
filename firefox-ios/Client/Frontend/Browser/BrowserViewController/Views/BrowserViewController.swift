@@ -2218,6 +2218,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func getRecentSearchProvider(with engineID: String?) -> RecentSearchProvider? {
+        // TODO: FXIOS-13684 We should investigate in making defaultSearchEngine non-nil
         guard let engineID else {
             logger.log(
                 "Unable to retrieve engineID",
