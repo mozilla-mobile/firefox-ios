@@ -34,7 +34,7 @@ struct GenericItemCellView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(title)
-                        .font(.body)
+                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                         .foregroundColor(textColor)
                 }
 

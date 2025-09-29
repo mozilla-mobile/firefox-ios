@@ -85,7 +85,7 @@ struct ZoomSiteListView: View {
 
             // Footer
             Text(String.Settings.Appearance.PageZoom.SpecificSiteFooterTitle)
-                .font(.caption)
+                .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                 .foregroundColor(theme.colors.textSecondary.color)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(EdgeInsets(top: footerTopPadding,

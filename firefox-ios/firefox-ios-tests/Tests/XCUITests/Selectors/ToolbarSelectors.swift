@@ -14,9 +14,8 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let settingsMenuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
     }
 
-    let SETTINGS_MENU_BUTTON = Selector(
-        strategy: .buttonById(IDs.settingsMenuButton),
-        value: IDs.settingsMenuButton,
+    let SETTINGS_MENU_BUTTON = Selector.buttonId(
+        IDs.settingsMenuButton,
         description: "Settings menu button on the toolbar",
         groups: ["toolbar"]
     )
