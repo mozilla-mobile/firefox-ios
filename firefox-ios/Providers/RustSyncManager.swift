@@ -445,6 +445,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     category: .sync
                 )
                 loginKey = nil
+                self.logins.reportPreSyncKeyRetrievalFailure(err: err.localizedDescription)
             }
 
             self.autofill.getStoredKey { creditCardResult in
@@ -458,14 +459,37 @@ public class RustSyncManager: NSObject, SyncManager {
                         level: .warning,
                         category: .sync
                     )
+                    creditCardKey = nil
+                    self.autofill.reportPreSyncKeyRetrievalFailure(err: err.localizedDescription)
                 }
-                self.registerSyncEngines(engines: engines,
+
+                // calling `getEnginesWithRetrievedKeys` to remove engines that will fail to sync because
+                // the encryption key is missing
+                let enginesToSync = self.getEnginesWithRetrievedKeys(creditCardKey, loginKey, engines)
+                self.registerSyncEngines(engines: enginesToSync,
                                          dispatchGroup: dispatchGroup,
                                          loginKey: loginKey,
                                          creditCardKey: creditCardKey,
                                          completion: completion)
             }
         }
+    }
+
+   func getEnginesWithRetrievedKeys(_ creditCardKey: String?,
+                                    _ loginKey: String?,
+                                    _ engines: [RustSyncManagerAPI.TogglableEngine]
+                                   ) -> [RustSyncManagerAPI.TogglableEngine] {
+       var enginesToSync = engines
+
+       if loginKey == nil {
+           enginesToSync = enginesToSync.filter { $0 != RustSyncManagerAPI.TogglableEngine.passwords }
+       }
+
+       if creditCardKey == nil {
+           enginesToSync = enginesToSync.filter { $0 != RustSyncManagerAPI.TogglableEngine.creditcards }
+       }
+
+       return enginesToSync
     }
 
     private func doSync(params: SyncParams, completion: @escaping (SyncResult) -> Void) {
