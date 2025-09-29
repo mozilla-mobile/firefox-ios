@@ -4,7 +4,7 @@
 
 import Foundation
 import Common
-
+import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
@@ -18,6 +18,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 let containerWidth: Double
                 let isLandscape: Bool
                 let shouldShowSection: Bool
+                let contentSizeCategory: UIContentSizeCategory
             }
 
             let key: Key
@@ -32,6 +33,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 let containerWidth: Double
                 let shouldShowSection: Bool
                 let isStoriesRedesignEnabled: Bool
+                let contentSizeCategory: UIContentSizeCategory
             }
 
             struct Result: Equatable {
@@ -47,6 +49,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             struct Key: Equatable {
                 let shouldShowSearchBar: Bool
                 let containerWidth: Double
+                let contentSizeCategory: UIContentSizeCategory
             }
 
             let key: Key
@@ -61,6 +64,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private struct HeaderMeasurementKey: Hashable {
         let configuration: SectionHeaderConfiguration
         let containerWidth: Double
+        let contentSizeCategory: UIContentSizeCategory
     }
 
     struct UX {
@@ -588,6 +592,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
         let topSitesState = state.topSitesState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let contentSizeCategory = environment.traitCollection.preferredContentSizeCategory
         let measurementKey = LayoutMeasurementCache.TopSitesMeasurement.Key(
             topSites: topSitesState.topSitesData,
             numberOfRows: topSitesState.numberOfRows,
@@ -595,7 +600,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             headerState: topSitesState.sectionHeaderState,
             containerWidth: containerWidth,
             isLandscape: UIDevice.current.orientation.isLandscape,
-            shouldShowSection: topSitesState.shouldShowSection
+            shouldShowSection: topSitesState.shouldShowSection,
+            contentSizeCategory: contentSizeCategory
         )
 
         if let cachedMeasurement = measurementsCache.topSites,
@@ -687,7 +693,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let measurementKey = LayoutMeasurementCache.SearchBarMeasurement.Key(
             shouldShowSearchBar: searchState.shouldShowSearchBar,
-            containerWidth: containerWidth
+            containerWidth: containerWidth,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
         )
 
         if let cachedMeasurement = measurementsCache.searchBar,
@@ -729,7 +736,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         environment: NSCollectionLayoutEnvironment
     ) -> CGFloat {
         let width = normalizedDimension(environment.container.contentSize.width)
-        let cacheKey = HeaderMeasurementKey(configuration: headerState, containerWidth: width)
+        let cacheKey = HeaderMeasurementKey(
+            configuration: headerState,
+            containerWidth: width,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
 
         if let cachedHeight = headerHeightCache[cacheKey] {
             return cachedHeight
@@ -772,8 +783,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             cellWidth: normalizedDimension(cellWidth),
             containerWidth: normalizedDimension(environment.container.contentSize.width),
             shouldShowSection: storiesState.shouldShowSection,
-            isStoriesRedesignEnabled: isStoriesRedesignEnabled
-        )
+            isStoriesRedesignEnabled: isStoriesRedesignEnabled,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory        )
 
         if let cachedMeasurement = measurementsCache.stories,
            cachedMeasurement.key == key {
