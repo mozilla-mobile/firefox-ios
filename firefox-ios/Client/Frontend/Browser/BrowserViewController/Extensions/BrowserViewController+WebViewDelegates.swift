@@ -691,6 +691,23 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.cancel)
     }
 
+    private func handleCustomSchemeURLNavigation(url: URL, navigationAction: WKNavigationAction) {
+        // Try to open the custom scheme URL, if it doesn't work we show an error alert
+        UIApplication.shared.open(url, options: [:]) { openedURL in
+            // Do not show error message for JS navigated links or
+            // redirect as it's not the result of a user action.
+            if !openedURL, navigationAction.navigationType == .linkActivated {
+                let alert = UIAlertController(
+                    title: nil,
+                    message: .ExternalInvalidLinkMessage,
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+
     func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
         guard let downloadHelper else {
             logger.log("Unable to access downloadHelper, it is nil", level: .warning, category: .webview)
