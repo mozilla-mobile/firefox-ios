@@ -192,7 +192,10 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {
-        return NavigationBarState(windowUUID: windowUUID, actions: [], displayBorder: false)
+        return NavigationBarState(windowUUID: windowUUID,
+                                  actions: [],
+                                  displayBorder: false,
+                                  middleButton: .newTab)
     }
 
     private func createToolbarState(toolbarPosition: AddressToolbarPosition = .top,

@@ -165,6 +165,7 @@ public struct PrefsKeys {
     public struct Settings {
         public static let closePrivateTabs = "ClosePrivateTabs"
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
+        public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
     }
 
     // Activity Stream

@@ -349,12 +349,16 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .TabsTrayDidClose:
-            guard windowUUID == notification.windowUUID else { return }
-            refreshTabs()
-        default:
-            break
+        let name = notification.name
+        let windowUUID = notification.windowUUID
+        ensureMainThread {
+            switch name {
+            case .TabsTrayDidClose:
+                guard self.windowUUID == windowUUID else { return }
+                self.refreshTabs()
+            default:
+                break
+            }
         }
     }
 }

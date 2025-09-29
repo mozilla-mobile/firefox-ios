@@ -323,7 +323,6 @@ final class TabScrollHandler: NSObject,
         return isSignificantScroll  // || isFastEnough
     }
 
-    @objc
     private func reload() {
         guard let tabProvider = tabProvider else { return }
         tabProvider.reloadPage()

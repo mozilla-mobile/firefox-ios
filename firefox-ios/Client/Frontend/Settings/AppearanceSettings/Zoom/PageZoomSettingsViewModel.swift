@@ -5,6 +5,7 @@
 import Common
 import Storage
 
+@MainActor
 class PageZoomSettingsViewModel: ObservableObject {
     let zoomManager: ZoomPageManager
     private let zoomTelemetry = ZoomTelemetry()

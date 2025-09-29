@@ -13,7 +13,9 @@ protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
                             UIPopoverPresentationControllerDelegate,
                             Themeable {
+    @MainActor
     var openInNewTab: ((_ url: URL, _ isPrivate: Bool) -> Void)? { get set }
+    @MainActor
     var didSelectUrl: ((_ url: URL, _ visitType: VisitType) -> Void)? { get set }
 }
 

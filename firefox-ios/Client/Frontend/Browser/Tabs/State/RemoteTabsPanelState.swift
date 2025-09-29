@@ -46,7 +46,7 @@ enum RemoteTabsPanelEmptyStateReason {
 }
 
 /// State for RemoteTabsPanel. WIP.
-struct RemoteTabsPanelState: ScreenState, Equatable, Sendable {
+struct RemoteTabsPanelState: ScreenState, Sendable {
     let refreshState: RemoteTabsPanelRefreshState
     let allowsRefresh: Bool
     let clientAndTabs: [ClientAndTabs]

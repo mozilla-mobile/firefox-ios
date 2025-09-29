@@ -924,12 +924,14 @@ extension LegacyHomepageViewController: Notifiable {
         switch notification.name {
         case .TabsPrivacyModeChanged:
             let notificationWindowUUID = notification.windowUUID
-            guard let dict = notification.object as? NSDictionary,
-                  let isPrivate = dict[Tab.privateModeKey] as? Bool
-            else { return }
+            let object = notification.object as AnyObject?
 
             ensureMainThread {
-                guard self.windowUUID == notificationWindowUUID else { return }
+                guard
+                    let dict = object as? NSDictionary,
+                    let isPrivate = dict[Tab.privateModeKey] as? Bool,
+                    self.windowUUID == notificationWindowUUID
+                else { return }
                 self.adjustPrivacySensitiveSections(isPrivate: isPrivate)
             }
         case .HomePanelPrefsChanged,

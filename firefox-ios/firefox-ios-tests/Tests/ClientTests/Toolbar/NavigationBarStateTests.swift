@@ -42,7 +42,14 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(
             initialState,
             ToolbarAction(
+                toolbarPosition: .bottom,
+                toolbarLayout: .version1,
+                isTranslucent: true,
+                addressBorderPosition: .none,
                 displayNavBorder: true,
+                isNewTabFeatureEnabled: true,
+                canShowDataClearanceAction: false,
+                middleButton: .newTab,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars
             )
@@ -74,7 +81,7 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.actions[0].isEnabled, true)
         XCTAssertEqual(newState.actions[1].actionType, .forward)
         XCTAssertEqual(newState.actions[1].isEnabled, false)
-        XCTAssertEqual(newState.actions[2].actionType, .home)
+        XCTAssertEqual(newState.actions[2].actionType, .newTab)
         XCTAssertEqual(newState.actions[3].actionType, .menu)
         XCTAssertEqual(newState.actions[4].actionType, .tabs)
     }

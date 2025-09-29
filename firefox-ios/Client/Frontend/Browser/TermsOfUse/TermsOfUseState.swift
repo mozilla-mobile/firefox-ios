@@ -5,7 +5,7 @@
 import Common
 import Redux
 
-struct TermsOfUseState: ScreenState, Equatable {
+struct TermsOfUseState: ScreenState {
     let windowUUID: WindowUUID
     var hasAccepted: Bool
     var wasDismissed: Bool

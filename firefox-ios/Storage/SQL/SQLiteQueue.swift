@@ -5,14 +5,14 @@
 import Foundation
 import Shared
 
-open class SQLiteQueue: TabQueue {
+public final class SQLiteQueue: TabQueue {
     let db: BrowserDB
 
     public init(db: BrowserDB) {
         self.db = db
     }
 
-    open func addToQueue(_ tab: ShareItem) -> Success {
+    public func addToQueue(_ tab: ShareItem) -> Success {
         return db.run("INSERT OR IGNORE INTO queue (url) VALUES (?)", withArgs: [tab.url])
     }
 
@@ -21,7 +21,7 @@ open class SQLiteQueue: TabQueue {
         return ShareItem(url: url, title: "")
     }
 
-    open func getQueuedTabs(completion: @MainActor @Sendable @escaping ([ShareItem]) -> Void) {
+    public func getQueuedTabs(completion: @MainActor @Sendable @escaping ([ShareItem]) -> Void) {
         let sql = "SELECT url FROM queue"
         db.runQuery(sql, args: nil, factory: self.factory)
             .uponQueue(.main) { result in
@@ -33,7 +33,7 @@ open class SQLiteQueue: TabQueue {
             }
     }
 
-    open func clearQueuedTabs() -> Success {
+    public func clearQueuedTabs() -> Success {
         return db.run("DELETE FROM queue")
     }
 }

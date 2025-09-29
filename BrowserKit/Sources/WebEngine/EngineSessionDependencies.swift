@@ -5,6 +5,7 @@
 import Foundation
 
 /// Dependencies injected during engine session creation that can be session specific.
+@MainActor
 public struct EngineSessionDependencies {
     var webviewParameters: WKWebViewParameters
     var telemetryProxy: EngineTelemetryProxy?
@@ -18,7 +19,7 @@ public struct EngineSessionDependencies {
         self.telemetryProxy = telemetryProxy
     }
 
-    static func empty() -> EngineSessionDependencies {
+    public static func empty() -> EngineSessionDependencies {
         return EngineSessionDependencies(webviewParameters: WKWebViewParameters())
     }
 }

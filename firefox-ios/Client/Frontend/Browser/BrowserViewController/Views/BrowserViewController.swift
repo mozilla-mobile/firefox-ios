@@ -277,8 +277,10 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction?
     var copyAddressAction: AccessibleAction?
 
+    // TODO: FXIOS-13669 The session dependencies shouldn't be empty
     private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
-        engineResponder: DefaultUIHandler(sessionCreator: tabManager as? SessionCreator),
+        engineResponder: DefaultUIHandler.factory(sessionDependencies: .empty(),
+                                                  sessionCreator: tabManager as? SessionCreator),
         legacyResponder: self
     )
     /// The ui delegate used by a `WKWebView`

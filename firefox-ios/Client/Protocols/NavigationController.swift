@@ -4,6 +4,7 @@
 
 import Foundation
 
+@MainActor
 protocol NavigationController {
     var viewControllers: [UIViewController] { get }
     var delegate: UINavigationControllerDelegate? { get set }
