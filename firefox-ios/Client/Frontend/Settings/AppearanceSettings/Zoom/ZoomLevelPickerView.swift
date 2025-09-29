@@ -86,7 +86,7 @@ struct ZoomLevelPickerView: View {
     var pickerContent: some View {
         HStack {
             Text(pickerText)
-                .font(.body)
+                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                 .foregroundColor(theme.colors.textPrimary.color)
 
             Spacer()
@@ -105,12 +105,12 @@ struct ZoomLevelPickerView: View {
             } label: {
                 HStack(spacing: UX.pickerLabelSpacing) {
                     Text(selectedZoomLevel.displayName)
-                        .font(.body)
+                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                         .foregroundColor(theme.colors.textPrimary.color)
 
                     Image(systemName: UX.chevronImageIdentifier)
                         .renderingMode(.template)
-                        .font(.caption)
+                        .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                         .foregroundColor(theme.colors.textPrimary.color)
                         .accessibilityHidden(true)
                 }
