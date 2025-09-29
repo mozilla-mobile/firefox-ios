@@ -322,7 +322,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let newState = BrowserViewControllerState.reducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.zeroSearch),
+                navigationDestination: NavigationDestination(.homepageZeroSearch),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )

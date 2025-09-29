@@ -921,7 +921,7 @@ final class HomepageViewController: UIViewController,
             )
         case .searchBar:
             dispatchNavigationBrowserAction(
-                with: NavigationDestination(.zeroSearch),
+                with: NavigationDestination(.homepageZeroSearch),
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):

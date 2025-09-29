@@ -376,6 +376,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
+    var isTrendingSearchEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -2844,14 +2848,16 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showSummarizePanel(.shakeGesture, config: config)
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
-        case .zeroSearch:
+        case .homepageZeroSearch:
             store.dispatchLegacy(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
                     actionType: GeneralBrowserActionType.enteredZeroSearchScreen)
             )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
-            configureZeroSearchView()
+            configureHomepageZeroSearchView()
+        case .zeroSearch:
+            showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
         }
@@ -3808,8 +3814,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Configures the scrim area for zero search state
-    private func configureZeroSearchView() {
+    /// Configures the scrim area for zero search state on homepage which is simply a dimming view
+    private func configureHomepageZeroSearchView() {
         addressToolbarContainer.isHidden = false
 
         zeroSearchDimmingView.alpha = 0
@@ -4036,7 +4042,7 @@ class BrowserViewController: UIViewController,
 
     func openSuggestions(searchTerm: String) {
         if searchTerm.isEmpty {
-            hideSearchController()
+            showZeroSearchView()
         } else {
             configureOverlayView()
         }
@@ -4044,6 +4050,17 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.searchQuery = searchTerm
         searchController?.searchTelemetry?.clearVisibleResults()
         searchController?.searchTelemetry?.determineInteractionType()
+    }
+
+    /// Zero search describes the state in which the user highlights the address bar, but no
+    /// text has been entered.
+    /// We only want to display if webview, user has either trending searches or recent searches enabled.
+    private func showZeroSearchView() {
+        guard contentContainer.hasWebView, isTrendingSearchEnabled else {
+            hideSearchController()
+            return
+        }
+        showSearchController()
     }
 
     // Also implements
@@ -4084,8 +4101,11 @@ class BrowserViewController: UIViewController,
             if let toast = clipboardBarDisplayHandler?.clipboardToast {
                 toast.removeFromSuperview()
             }
-
-            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            // Instead of showing homepage when user enters overlay mode,
+            // we want to show the zero search state with trending searches
+            if !featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly) {
+                showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            }
         }
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())

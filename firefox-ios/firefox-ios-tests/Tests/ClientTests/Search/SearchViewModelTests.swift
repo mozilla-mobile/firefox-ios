@@ -70,13 +70,24 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(subject.hasFirefoxSuggestions)
     }
 
-    func testHasFirefoxSuggestionsWhenFirefoxSuggestionsExistAndShouldShowIsTrue() {
+    func test_hasFirefoxSuggestions_whenFirefoxSuggestionsExist_andSearchTermIsNotEmpty_shouldShowIsTrue() {
         let subject = createSubject()
+        subject.searchQuery = "searchTerm"
         subject.firefoxSuggestions = [
             RustFirefoxSuggestion(title: "Test", url: URL(string: "https://google.com")!, isSponsored: true, iconImage: nil)
         ]
         searchEnginesManager.shouldShowFirefoxSuggestions = true
         XCTAssertTrue(subject.hasFirefoxSuggestions)
+    }
+
+    func testHasFirefoxSuggestions_whenFirefoxSuggestionsExist_andSearchTermIsEmpty_shouldShowIsTrue() {
+        let subject = createSubject()
+        subject.searchQuery = ""
+        subject.firefoxSuggestions = [
+            RustFirefoxSuggestion(title: "Test", url: URL(string: "https://google.com")!, isSponsored: true, iconImage: nil)
+        ]
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        XCTAssertFalse(subject.hasFirefoxSuggestions)
     }
 
     @MainActor
@@ -368,6 +379,29 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     // MARK: Trending Searches
+    func test_shouldShowHeader_forTrendingSearches_withFFOn_andSearchTerm_doesNotShowHeader() async {
+        setupNimbusTrendingSearchesTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.searchQuery = "hello"
+        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        XCTAssertFalse(shouldShowHeader)
+    }
+
+    func test_shouldShowHeader_forTrendingSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() async {
+        setupNimbusTrendingSearchesTesting(isEnabled: true)
+        let subject = createSubject()
+        subject.searchQuery = ""
+        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        XCTAssertTrue(shouldShowHeader)
+    }
+
+    func test_shouldShowHeader_forTrendingSearches_withoutFeatureFlagOn_doesNotShowHeader() async {
+        setupNimbusTrendingSearchesTesting(isEnabled: false)
+        let subject = createSubject()
+        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        XCTAssertFalse(shouldShowHeader)
+    }
+
     func test_retrieveTrendingSearches_withSuccess_hasExpectedList() async {
         let mockClient = MockTrendingSearchClient(result: .success(["foo", "bar"]))
         let subject = createSubject(mockTrendingClient: mockClient)
@@ -400,6 +434,14 @@ final class SearchViewModelTests: XCTestCase {
         )
         subject.delegate = mockDelegate
         return subject
+    }
+
+    private func setupNimbusTrendingSearchesTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.trendingSearchesFeature.with { _, _ in
+            return TrendingSearchesFeature(
+                enabled: isEnabled
+            )
+        }
     }
 }
 

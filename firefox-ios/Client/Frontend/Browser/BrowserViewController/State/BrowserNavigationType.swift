@@ -14,6 +14,7 @@ enum BrowserNavigationDestination {
     case trackingProtectionSettings
     case tabTray(TabTrayPanelType)
     case bookmarksPanel
+    case homepageZeroSearch
     case zeroSearch
     case shortcutsLibrary
     case summarizer(config: SummarizerConfig)
