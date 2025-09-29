@@ -2,9 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import Common
+import Foundation
+import MozillaAppServices
 import Shared
+import Storage
 
 typealias ContileResult = Swift.Result<[Contile], Error>
 
@@ -13,11 +15,11 @@ protocol ContileProviderInterface: Sendable {
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
     ///   - completion: Returns an array of Contile, can be empty
-    func fetchContiles(timestamp: Timestamp, completion: @escaping (ContileResult) -> Void)
+    func fetchContiles(timestamp: Shared.Timestamp, completion: @escaping (ContileResult) -> Void)
 }
 
 extension ContileProviderInterface {
-    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
+    func fetchContiles(timestamp: Shared.Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
         fetchContiles(timestamp: timestamp, completion: completion)
     }
 }
@@ -25,12 +27,10 @@ extension ContileProviderInterface {
 /// `Contile` is short for contextual tiles. This provider returns data that is used in
 /// Shortcuts (Top Sites) section on the Firefox home page.
 final class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
-    private static let contileProdResourceEndpoint = "https://ads.mozilla.org/v1/tiles"
-    static let contileStagingResourceEndpoint = "https://ads.allizom.org/v1/tiles"
-
     let urlCache: URLCache
     private let logger: Logger
     private let networking: ContileNetworking
+    private let adsClient: MozAdsClient = RustAdsClient.shared
 
     init(
         networking: ContileNetworking = DefaultContileNetwork(
@@ -48,63 +48,53 @@ final class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlagga
         case noDataAvailable
     }
 
-    func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
-        guard let resourceEndpoint = resourceEndpoint else {
-            logger.log("The Contile resource URL is invalid: \(String(describing: resourceEndpoint))",
-                       level: .warning,
-                       category: .legacyHomepage)
-            completion(.failure(Error.noDataAvailable))
-            return
-        }
-
-        let request = URLRequest(url: resourceEndpoint,
-                                 cachePolicy: .reloadIgnoringCacheData,
-                                 timeoutInterval: 5)
-
-        if let cachedData = findCachedData(for: request, timestamp: timestamp) {
-            decode(data: cachedData, completion: completion)
-        } else {
-            fetchContiles(request: request, completion: completion)
+    func fetchContiles(timestamp: Shared.Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.performContileFetch(completion: completion)
         }
     }
 
-    private func fetchContiles(request: URLRequest, completion: @escaping (ContileResult) -> Void) {
-        networking.data(from: request) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let result):
-                self.cache(response: result.response, for: request, with: result.data)
-                self.decode(data: result.data, completion: completion)
-            case .failure:
-                completion(.failure(Error.noDataAvailable))
-            }
-        }
-    }
+    private func performContileFetch(completion: @escaping (ContileResult) -> Void) {
+        let placementIds = [
+            "newtab_mobile_tile_1",
+            "newtab_mobile_tile_2"
+        ]
+        let configs = placementIds.map { MozAdsPlacementConfig(placementId: $0, fixedSize: nil, iabContent: nil) }
 
-    private func decode(data: Data, completion: @escaping (ContileResult) -> Void) {
         do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let rootNote = try decoder.decode(Contiles.self, from: data)
-            var contiles = rootNote.tiles
-            guard !contiles.isEmpty else {
+            let response = try adsClient.requestAds(mozAdConfigs: configs)
+            let items: [Contile] = placementIds.enumerated().compactMap { index, key in
+                guard let placement = response[key] else { return nil }
+                let content = placement.content
+                guard
+                    let url = content.url,
+                    let imageUrl = content.imageUrl,
+                    let callbacks = content.callbacks,
+                    let click = callbacks.click,
+                    let impression = callbacks.impression
+                else { return nil }
+
+                let name = content.altText ?? ""
+                return Contile(
+                    id: 0,
+                    name: name,
+                    url: url,
+                    clickUrl: click,
+                    imageUrl: imageUrl,
+                    imageSize: 0,
+                    impressionUrl: impression,
+                    position: index + 1
+                )
+            }
+
+            guard !items.isEmpty else {
                 completion(.failure(Error.noDataAvailable))
                 return
             }
-            contiles.sort { $0.position ?? 0 < $1.position ?? 0 }
-            completion(.success(contiles))
-        } catch let error {
-            self.logger.log("Unable to parse with error: \(error)",
-                            level: .warning,
-                            category: .legacyHomepage)
+            completion(.success(items))
+        } catch {
+            logger.log("Contile ads client request failed", level: .warning, category: .legacyHomepage)
             completion(.failure(Error.noDataAvailable))
         }
-    }
-
-    private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
-            return URL(string: ContileProvider.contileStagingResourceEndpoint)
-        }
-        return URL(string: ContileProvider.contileProdResourceEndpoint)
     }
 }

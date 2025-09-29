@@ -7,6 +7,7 @@ import Common
 import Redux
 import Shared
 import Storage
+import MozillaAppServices
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
