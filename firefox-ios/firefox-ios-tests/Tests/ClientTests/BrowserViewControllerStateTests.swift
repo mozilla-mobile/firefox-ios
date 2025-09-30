@@ -362,11 +362,11 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertNil(initialState.navigationDestination)
 
-        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .zeroSearch)
+        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .homepageZeroSearch)
         let newState = reducer(initialState, action)
         let destination = newState.navigationDestination?.destination
         switch destination {
-        case .zeroSearch:
+        case .homepageZeroSearch:
             break
         default:
             XCTFail("destination is not the right type")
@@ -390,7 +390,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(initialState, action)
         let destination = newState.navigationDestination?.destination
         switch destination {
-        case .zeroSearch:
+        case .homepageZeroSearch:
             break
         default:
             XCTFail("destination is not the right type")
