@@ -128,7 +128,42 @@ open class DefaultSuggestedSites {
                 // FXIOS-11064 We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "https://corporate.jd.com/favicon.ico")!)
             )
-         ]
+         ],
+        "ja_JP": [ // FXIOS-11064 Do we still want this as a special case localization? Android doesn't compile this anymore
+            Site.createSuggestedSite(
+                url: "https://tenki.jp/",
+                title: "日本気象協会",
+                trackingId: 800,
+                faviconResource: .bundleAsset(
+                    name: "tenki",
+                    forRemoteResource: URL(string: "https://tenki.jp/favicon.ico")!
+                )
+            ),
+            Site.createSuggestedSite(
+                url: "https://www.yahoo.co.jp/",
+                title: "ヤフー",
+                trackingId: 801,
+                faviconResource: .remoteURL(url: URL(string: "https://www.yahoo.co.jp/favicon.ico")!)
+            ),
+            Site.createSuggestedSite(
+                url: "https://ameblo.jp/",
+                title: "アメブロ",
+                trackingId: 802,
+                faviconResource: .bundleAsset(
+                    name: "ameba",
+                    forRemoteResource: URL(string: "https://stat100.ameba.jp/common_style/img/sp/apple-touch-icon.png")!
+                )
+            ),
+            Site.createSuggestedSite(
+                url: "https://ja.wikipedia.org/wiki/",
+                title: "ウィキペディア",
+                trackingId: 803,
+                faviconResource: .bundleAsset(
+                    name: "wikipedia",
+                    forRemoteResource: URL(string: "https://www.wikipedia.org/static/apple-touch/wikipedia.png")!
+                )
+            )
+         ],
     ]
 
     public static func defaultSites() -> [Site] {
