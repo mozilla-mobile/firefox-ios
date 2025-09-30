@@ -380,7 +380,6 @@ final class TabDisplayView: UIView,
             }
         }
     }
-    
     func performCloseAllTabsAnimation(completion: @escaping () -> Void) {
             guard !UIAccessibility.isReduceMotionEnabled else {
                 completion()
