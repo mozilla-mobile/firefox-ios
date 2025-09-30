@@ -1236,7 +1236,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
 
     func menuHelperFindInPage() {
         ensureMainThread {
-            evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
+            self.evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
                 let selection = result as? String ?? ""
                 self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
             }
@@ -1245,7 +1245,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
 
     func menuHelperSearchWith() {
         ensureMainThread {
-            evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
+            self.evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
                 let selection = result as? String ?? ""
                 self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)
             }
