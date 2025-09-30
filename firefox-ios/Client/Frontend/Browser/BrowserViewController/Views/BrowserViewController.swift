@@ -4103,7 +4103,7 @@ class BrowserViewController: UIViewController,
             }
             // Instead of showing homepage when user enters overlay mode,
             // we want to show the zero search state with trending searches
-            if !featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly) {
+            if !isTrendingSearchEnabled {
                 showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             }
         }
