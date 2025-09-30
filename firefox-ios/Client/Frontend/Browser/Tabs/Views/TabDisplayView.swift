@@ -32,6 +32,8 @@ final class TabDisplayView: UIView,
                       InsetUpdatable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
+        static let closeAllTabsAnimationDuration: TimeInterval = 0.25
+        static let closeAllTabsAnimationScale: CGFloat = 0.2
     }
 
     let panelType: TabTrayPanelType
@@ -378,6 +380,38 @@ final class TabDisplayView: UIView,
             }
         }
     }
+    
+    func performCloseAllTabsAnimation(completion: @escaping () -> Void) {
+            guard !UIAccessibility.isReduceMotionEnabled else {
+                completion()
+                return
+            }
+
+            let visibleCells = collectionView.visibleCells
+            guard !visibleCells.isEmpty else {
+                completion()
+                return
+            }
+
+            let animator = UIViewPropertyAnimator(duration: UX.closeAllTabsAnimationDuration, curve: .easeInOut) {
+                visibleCells.forEach { cell in
+                    cell.transform = CGAffineTransform(scaleX: UX.closeAllTabsAnimationScale,
+                                                       y: UX.closeAllTabsAnimationScale)
+                    cell.alpha = 0
+                }
+            }
+
+            animator.addCompletion { position in
+                completion()
+                guard position != .end else { return }
+                visibleCells.forEach { cell in
+                    cell.transform = .identity
+                    cell.alpha = 1
+                }
+            }
+
+            animator.startAnimation()
+        }
 
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,

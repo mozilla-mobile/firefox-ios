@@ -109,6 +109,8 @@ final class TabTrayViewController: UIViewController,
 
     var shownToast: Toast?
     var logger: Logger
+    private var isClosingAllTabs = false
+    private weak var closeAllConfirmationAlert: UIAlertController?
 
     // MARK: - UI
     private var titleWidthConstraint: NSLayoutConstraint?
@@ -878,6 +880,7 @@ final class TabTrayViewController: UIViewController,
         )
         alert.popoverPresentationController?.barButtonItem = deleteButton
         present(alert, animated: true, completion: nil)
+        closeAllConfirmationAlert = alert
     }
 
     private func showTabsDeletionPicker() {
@@ -927,6 +930,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func cancelCloseAll() {
+        closeAllConfirmationAlert = nil
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.cancelCloseAllTabs)
@@ -934,6 +938,47 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func confirmCloseAll() {
+        launchCloseAllTabsAnimation()
+            }
+
+            private func launchCloseAllTabsAnimation() {
+                guard !isClosingAllTabs else { return }
+
+                isClosingAllTabs = true
+
+                let startAnimation: () -> Void = { [weak self] in
+                    DispatchQueue.main.async { [weak self] in
+                        self?.performCloseAllTabsAnimation()
+                    }
+                }
+
+                if let alert = closeAllConfirmationAlert, alert.presentingViewController != nil {
+                    closeAllConfirmationAlert = nil
+                    alert.dismiss(animated: true, completion: startAnimation)
+                } else if let presented = presentedViewController {
+                    presented.dismiss(animated: true, completion: startAnimation)
+                } else {
+                    startAnimation()
+                }
+            }
+
+            private func performCloseAllTabsAnimation() {
+                let activePanelController = tabTrayUtils.shouldDisplayExperimentUI() ? currentExperimentPanel : currentPanel
+
+                guard let tabPanel = activePanelController?.topViewController as? TabDisplayPanelViewController else {
+                    finishClosingAllTabs()
+                    return
+                }
+
+                tabPanel.tabDisplayView.performCloseAllTabsAnimation { [weak self] in
+                    self?.finishClosingAllTabs()
+                }
+            }
+
+            private func finishClosingAllTabs() {
+                guard isClosingAllTabs else { return }
+
+                closeAllConfirmationAlert = nil
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.confirmCloseAllTabs)
@@ -946,6 +991,7 @@ final class TabTrayViewController: UIViewController,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.deleteTabsOlderThan)
         store.dispatchLegacy(action)
+        isClosingAllTabs = false
     }
 
     @objc
