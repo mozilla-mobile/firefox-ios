@@ -88,6 +88,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
     @MainActor
     public static func factory(
         sessionDependencies: EngineSessionDependencies,
+        alertPresenter: AlertPresenter = AlertPresenter(presenter: nil),
         sessionCreator: SessionCreator? = nil
     ) -> DefaultUIHandler {
         let sessionCreator = sessionCreator ?? WKSessionCreator(dependencies: sessionDependencies)
@@ -96,6 +97,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         return DefaultUIHandler(
             sessionDependencies: sessionDependencies,
             sessionCreator: sessionCreator,
+            alertPresenter: alertPresenter,
             application: application,
             policyDecider: policyDecider
         )
@@ -103,6 +105,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
 
     init(sessionDependencies: EngineSessionDependencies,
          sessionCreator: SessionCreator,
+         alertPresenter: AlertPresenter,
          application: Application,
          policyDecider: WKPolicyDecider) {
         self.sessionCreator = sessionCreator
@@ -117,14 +120,6 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         (self.sessionCreator as? WKSessionCreator)?.onNewSessionCreated = { [weak self] in
             self?.delegate?.onRequestOpenNewSession($0)
         }
-    }
-
-    public convenience init(sessionCreator: SessionCreator?, alertPresenter: AlertPresenter) {
-        self.init(
-            sessionDependencies: .empty(),
-            alertPresenter: alertPresenter,
-            sessionCreator: sessionCreator
-        )
     }
 
     public func webView(_ webView: WKWebView,
