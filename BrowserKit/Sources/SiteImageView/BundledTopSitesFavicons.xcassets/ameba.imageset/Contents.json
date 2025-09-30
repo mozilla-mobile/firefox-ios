@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ameba-icon-filled-256.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
