@@ -477,7 +477,13 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getNavigationBrowserAction(for: .tapOnAllStoriesButton, destination: .storiesFeed)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .storiesFeed)
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .storiesFeed:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
     }
 
     // MARK: - Private
