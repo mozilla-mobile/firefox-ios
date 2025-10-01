@@ -31,17 +31,26 @@ final class TrendingSearchClient: TrendingSearchClientProvider, Sendable {
     private let searchEngine: TrendingSearchEngine?
     private let logger: Logger
     private let urlSession: URLSession
+    private let nimbus: FxNimbus
 
-    init(searchEngine: TrendingSearchEngine?,
-         logger: Logger = DefaultLogger.shared,
-         session: URLSession = makeURLSession(
-            userAgent: UserAgent.mobileUserAgent(),
+    private var maxCount: Int {
+        return nimbus.features.trendingSearchesFeature.value().maxSuggestions
+    }
+
+    init(
+        searchEngine: TrendingSearchEngine?,
+        logger: Logger = DefaultLogger.shared,
+        session: URLSession = makeURLSession(
+            userAgent: UserAgent
+                .mobileUserAgent(),
             configuration: URLSessionConfiguration.ephemeralMPTCP
-         )
+        ),
+        nimbus: FxNimbus = FxNimbus.shared
     ) {
         self.searchEngine = searchEngine
         self.logger = logger
         self.urlSession = session
+        self.nimbus = nimbus
     }
 
     func getTrendingSearches() async throws -> [String] {
@@ -62,7 +71,7 @@ final class TrendingSearchClient: TrendingSearchClientProvider, Sendable {
                 throw TrendingSearchClientError.unableToParseJsonData
             }
 
-            return suggestions
+            return Array(suggestions.prefix(maxCount))
         } catch {
             throw error
         }

@@ -16,9 +16,9 @@ protocol RecentSearchProvider {
 struct DefaultRecentSearchProvider: RecentSearchProvider {
     private let searchEngineID: String
     private let prefs: Prefs
+    private let nimbus: FxNimbus
 
     private let baseKey = PrefsKeys.Search.recentSearchesCache
-    private let maxNumberOfSuggestions = 5
 
     // Namespaced key = "recentSearchesCacheBaseKey.[engineID]"
     private var recentSearchesKey: String {
@@ -29,10 +29,18 @@ struct DefaultRecentSearchProvider: RecentSearchProvider {
         prefs.objectForKey(recentSearchesKey) ?? []
     }
 
-    init(profile: Profile = AppContainer.shared.resolve(),
-         searchEngineID: String) {
+    private var maxNumberOfSuggestions: Int {
+        return nimbus.features.recentSearchesFeature.value().maxSuggestions
+    }
+
+    init(
+        profile: Profile = AppContainer.shared.resolve(),
+        searchEngineID: String,
+        nimbus: FxNimbus = FxNimbus.shared
+    ) {
         self.searchEngineID = searchEngineID
         self.prefs = profile.prefs
+        self.nimbus = nimbus
     }
 
     /// Adds a search term to the persisted recent searches list, ensuring it avoid duplicates,
