@@ -161,6 +161,7 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
+    @MainActor
     func response(forRequest request: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)? {
         guard let url = request.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
@@ -198,6 +199,7 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         return (response, data)
     }
 
+    @MainActor
     func responseForErrorWebPage(request: URLRequest) -> (URLResponse, Data)? {
         guard let requestUrl = request.url,
               let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage

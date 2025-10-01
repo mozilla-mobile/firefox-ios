@@ -12,6 +12,7 @@ public enum PresentationStyle {
     case popover // when displayed on the iPad
 }
 
+@MainActor
 class PhotonActionSheetViewModel: FeatureFlaggable {
     // MARK: - Properties
     var actions: [[PhotonRowActions]]
