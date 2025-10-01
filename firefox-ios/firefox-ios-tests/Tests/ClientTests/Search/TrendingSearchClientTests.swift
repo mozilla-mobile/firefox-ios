@@ -29,10 +29,7 @@ final class TrendingSearchClientTest: XCTestCase {
             "easy pasta recipes",
             "golden retriever tricks",
             "best travel destinations 2025",
-            "cozy coffee shops",
-            "sleepy kittens",
-            "board game night ideas",
-            "dogs wearing sunglasses"
+            "dogs wearing sunglasses",
         ]
         XCTAssertEqual(result, expectedResult)
     }
@@ -143,10 +140,10 @@ final class TrendingSearchClientTest: XCTestCase {
            "easy pasta recipes",
            "golden retriever tricks",
            "best travel destinations 2025",
-           "cozy coffee shops",
+           "dogs wearing sunglasses",
            "sleepy kittens",
            "board game night ideas",
-           "dogs wearing sunglasses"
+           "cozy coffee shops"
           ]
         ]
         """#
