@@ -45,7 +45,7 @@ struct AppIconSelectionView: View, ThemeApplicable {
                         windowUUID: windowUUID,
                         setAppIcon: setAppIcon
                     )
-                }.listRowBackground(themeColors.layer2.color)
+                }.listRowBackground(themeColors.layer5.color)
             }
             .modifier(ListStyle())
             .alert(isPresented: $isShowingErrorAlert) {
