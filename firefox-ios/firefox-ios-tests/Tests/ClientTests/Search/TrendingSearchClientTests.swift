@@ -139,7 +139,7 @@ final class TrendingSearchClientTest: XCTestCase {
         [
           "",
           [
-            "funny cat videos",
+           "funny cat videos",
            "easy pasta recipes",
            "golden retriever tricks",
            "best travel destinations 2025",

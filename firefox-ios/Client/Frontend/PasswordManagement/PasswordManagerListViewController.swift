@@ -342,7 +342,7 @@ private extension PasswordManagerListViewController {
         selectionButton.isHidden = true
         self.view.layoutIfNeeded()
 
-        tableView.setEditing(false, animated: true)
+        tableView.setEditing(false, animated: false)
         setupDefaultNavButtons()
         tableView.reloadData()
     }

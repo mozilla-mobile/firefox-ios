@@ -5,7 +5,8 @@
 import Foundation
 import Storage
 
-struct BookmarkConfiguration: Equatable, Hashable {
+struct BookmarkConfiguration: Identifiable, Equatable, Hashable {
+    let id = UUID()
     let site: Site
     var accessibilityLabel: String {
         return "\(site.title)"

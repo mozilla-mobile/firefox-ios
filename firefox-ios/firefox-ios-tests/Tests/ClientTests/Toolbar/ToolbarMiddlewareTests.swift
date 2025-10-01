@@ -6,6 +6,7 @@ import Common
 import Glean
 import Redux
 import ToolbarKit
+import Shared
 import XCTest
 
 @testable import Client
@@ -18,14 +19,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     var summarizationChecker: MockSummarizationChecker!
     var windowManager: MockWindowManager!
     var tabManager: MockTabManager!
+    var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
         setIsHostedSummaryEnabled(false)
         mockGleanWrapper = MockGleanWrapper()
         summarizationChecker = MockSummarizationChecker()
-
         tabManager = MockTabManager()
+        profile = MockProfile()
         windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
                                                      injectedTabManager: tabManager)
@@ -33,13 +35,14 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         // We must reset the global mock store prior to each test
         setupStore()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
         mockGleanWrapper = nil
         summarizationChecker = nil
         tabManager = nil
+        profile = nil
         windowManager = nil
         DependencyHelperMock().reset()
         resetStore()
@@ -66,6 +69,31 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
+        XCTAssertEqual(actionCalled.middleButton, .newTab)
+    }
+
+    func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {
+        profile.prefs.setString(NavigationBarMiddleButtonType.home.rawValue,
+                                forKey: PrefsKeys.Settings.navigationToolbarMiddleButton)
+        let subject = createSubject(manager: toolbarManager)
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
+        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
+        XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
+        XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
+        XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
+        XCTAssertEqual(actionCalled.middleButton, .home)
     }
 
     func testWebsiteDidScroll_dispatchesBorderPositionChanged() throws {
@@ -768,6 +796,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         return ToolbarMiddleware(
             manager: manager,
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
+            profile: profile,
             summarizationChecker: summarizationChecker,
             windowManager: windowManager
         )

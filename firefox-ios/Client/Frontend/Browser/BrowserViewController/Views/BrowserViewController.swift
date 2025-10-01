@@ -358,6 +358,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
+    var isTrendingSearchEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -669,15 +673,8 @@ class BrowserViewController: UIViewController,
         store.dispatchLegacy(action)
     }
 
-    private func updateAddressToolbarContainerPosition(
-        for traitCollection: UITraitCollection,
-        previousTraitCollection: UITraitCollection?) {
-            // Only update position if device size class changed (rotation, split view, etc.)
-            // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
-        guard traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
-                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass else { return }
-
-        guard searchBarPosition == .bottom, isSearchBarLocationFeatureEnabled else { return }
+    private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
+        guard searchBarPosition == .bottom, isToolbarRefactorEnabled, isSearchBarLocationFeatureEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top
@@ -1328,6 +1325,7 @@ class BrowserViewController: UIViewController,
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         updateToolbarStateForTraitCollection(traitCollection)
+        updateAddressToolbarContainerPosition(for: traitCollection)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1478,7 +1476,12 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
-            updateAddressToolbarContainerPosition(for: traitCollection, previousTraitCollection: previousTraitCollection)
+            // Only update position if device size class changed (rotation, split view, etc.)
+            // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
+            if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
+                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+                updateAddressToolbarContainerPosition(for: traitCollection)
+            }
             updateToolbarStateForTraitCollection(traitCollection)
         }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
@@ -2564,14 +2567,16 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showSummarizePanel(.shakeGesture, config: config)
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
-        case .zeroSearch:
+        case .homepageZeroSearch:
             store.dispatchLegacy(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
                     actionType: GeneralBrowserActionType.enteredZeroSearchScreen)
             )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
-            configureZeroSearchView()
+            configureHomepageZeroSearchView()
+        case .zeroSearch:
+            showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
         }
@@ -3524,8 +3529,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Configures the scrim area for zero search state
-    private func configureZeroSearchView() {
+    /// Configures the scrim area for zero search state on homepage which is simply a dimming view
+    private func configureHomepageZeroSearchView() {
         addressToolbarContainer.isHidden = false
 
         zeroSearchDimmingView.alpha = 0
@@ -3743,7 +3748,7 @@ class BrowserViewController: UIViewController,
 
     func openSuggestions(searchTerm: String) {
         if searchTerm.isEmpty {
-            hideSearchController()
+            showZeroSearchView()
         } else {
             configureOverlayView()
         }
@@ -3751,6 +3756,17 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.searchQuery = searchTerm
         searchController?.searchTelemetry?.clearVisibleResults()
         searchController?.searchTelemetry?.determineInteractionType()
+    }
+
+    /// Zero search describes the state in which the user highlights the address bar, but no
+    /// text has been entered.
+    /// We only want to display if webview, user has either trending searches or recent searches enabled.
+    private func showZeroSearchView() {
+        guard contentContainer.hasWebView, isTrendingSearchEnabled else {
+            hideSearchController()
+            return
+        }
+        showSearchController()
     }
 
     // Also implements
@@ -3795,8 +3811,11 @@ class BrowserViewController: UIViewController,
             if let toast = clipboardBarDisplayHandler?.clipboardToast {
                 toast.removeFromSuperview()
             }
-
-            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            // Instead of showing homepage when user enters overlay mode,
+            // we want to show the zero search state with trending searches
+            if !isTrendingSearchEnabled {
+                showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            }
         }
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())

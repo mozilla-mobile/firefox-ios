@@ -432,7 +432,7 @@ func checkDescriptionSection() {
 
 func commentDescriptionSection(desc: String) {
     let count = desc.trimmingCharacters(in: .whitespacesAndNewlines).count
-    if count == 0 {
+    if count == 0 { // swiftlint:disable:this empty_count
         fail("""
             Details needed! Your description section is empty. Adding a bit more context will make reviews smoother.
             """)

@@ -97,8 +97,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     }
 
     /// Whether to show suggestions from the search engine.
+    /// Does not show when search term in url is empty (aka zero search state).
     var shouldShowSearchEngineSuggestions: Bool {
-        return searchEnginesManager?.shouldShowSearchSuggestions ?? false
+        let shouldShowSuggestions = searchEnginesManager?.shouldShowSearchSuggestions ?? false
+        return shouldShowSuggestions && !searchQuery.isEmpty
     }
 
     var shouldShowSyncedTabsSuggestions: Bool {
@@ -136,7 +138,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         hasHistorySuggestions
     }
 
+    /// Does not show when search term in url is empty (aka zero search state).
     var hasFirefoxSuggestions: Bool {
+        guard !searchQuery.isEmpty else { return false }
         return hasBookmarksSuggestions
                || hasHistorySuggestions
                || hasHistoryAndBookmarksSuggestions
@@ -173,6 +177,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     func shouldShowHeader(for section: Int) -> Bool {
         switch section {
+        case SearchListSection.trendingSearches.rawValue:
+            return shouldShowTrendingSearches
         case SearchListSection.firefoxSuggestions.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:

@@ -12,6 +12,7 @@ public extension UIImage {
     }
 }
 
+// swiftlint:disable force_unwrapping
 public extension UIImage {
     // MARK: Tracking Protection
     static let trackingProtectionOff = UIImage(named: "tracking_protection_off")!
