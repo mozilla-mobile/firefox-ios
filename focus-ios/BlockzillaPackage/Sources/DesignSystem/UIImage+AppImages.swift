@@ -52,3 +52,4 @@ public extension UIImage {
     static let findPrevious = UIImage(named: "find_previous")!
     static let findNext = UIImage(named: "find_next")!
 }
+// swiftlint:enable force_unwrapping
