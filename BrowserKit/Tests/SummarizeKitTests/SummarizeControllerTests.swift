@@ -33,7 +33,7 @@ final class MockSummarizeNavigationHandler: SummarizeNavigationHandler {
 }
 
 @MainActor
-final class SummarizeControllerTests: XCTestCase {
+final class SummarizeControllerTests: XCTestCase, @unchecked Sendable {
     private var summarizer: MockSummarizer!
     private var navigationHandler: MockSummarizeNavigationHandler!
     private var webView: MockWebView!
@@ -89,20 +89,24 @@ final class SummarizeControllerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        UIView.setAnimationsEnabled(false)
-        summarizer = MockSummarizer(shouldRespond: ["Response"], shouldThrowError: nil)
-        navigationHandler = MockSummarizeNavigationHandler()
-        webView = MockWebView(URL(string: "https://www.example.com")!)
-        viewModel = MockSummarizeViewModel()
-        AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
+        ensureMainThread {
+            UIView.setAnimationsEnabled(false)
+            self.summarizer = MockSummarizer(shouldRespond: ["Response"], shouldThrowError: nil)
+            self.navigationHandler = MockSummarizeNavigationHandler()
+            self.webView = MockWebView(URL(string: "https://www.example.com")!)
+            self.viewModel = MockSummarizeViewModel()
+            AppContainer.shared.register(service: DefaultThemeManager(sharedContainerIdentifier: "") as ThemeManager)
+        }
     }
 
     override func tearDown() {
-        UIView.setAnimationsEnabled(true)
-        summarizer = nil
-        navigationHandler = nil
-        webView = nil
-        viewModel = nil
+        ensureMainThread {
+            UIView.setAnimationsEnabled(true)
+            self.summarizer = nil
+            self.navigationHandler = nil
+            self.webView = nil
+            self.viewModel = nil
+        }
         AppContainer.shared.reset()
         super.tearDown()
     }
