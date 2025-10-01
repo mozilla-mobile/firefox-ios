@@ -51,10 +51,9 @@ extension PhotonActionSheetProtocol {
             title: .PasteAndGoTitle,
             iconString: StandardImageIdentifiers.Large.clipboard,
             tapHandler: { _ in
-                if let pasteboardContents = UIPasteboard.general.string {
-                    if let toolbar = view as? AddressToolbarContainer {
-                        toolbar.delegate?.openBrowser(searchTerm: pasteboardContents)
-                    }
+                if let pasteboardContents = UIPasteboard.general.string,
+                   let toolbar = view as? AddressToolbarContainer {
+                    toolbar.delegate?.openBrowser(searchTerm: pasteboardContents)
                 }
             },
             accessibilityId: AccessibilityIdentifiers.Photon.pasteAndGoAction

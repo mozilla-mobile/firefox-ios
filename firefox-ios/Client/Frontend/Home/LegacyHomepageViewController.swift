@@ -457,11 +457,13 @@ class LegacyHomepageViewController: UIViewController,
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
-        // Handle status bar overlay alpha
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
-                                                     statusBarFrame: statusBarFrame,
-                                                     theme: theme)
+        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
+        if WallpaperManager().currentWallpaper.hasImage {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                         statusBarFrame: statusBarFrame,
+                                                         theme: theme)
+        }
 
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated

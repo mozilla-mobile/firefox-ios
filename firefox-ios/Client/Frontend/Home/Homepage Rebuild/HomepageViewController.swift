@@ -234,13 +234,15 @@ final class HomepageViewController: UIViewController,
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
-        // Handle status bar overlay alpha
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        statusBarScrollDelegate?.scrollViewDidScroll(
-            scrollView,
-            statusBarFrame: statusBarFrame,
-            theme: theme
-        )
+        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
+        if homepageState.wallpaperState.wallpaperConfiguration.hasImage {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            statusBarScrollDelegate?.scrollViewDidScroll(
+                scrollView,
+                statusBarFrame: statusBarFrame,
+                theme: theme
+            )
+        }
 
         // We only want to proceed if content exceeds the frame (aka scrollable),
         // otherwise we will spamming the redux action (GeneralBrowserMiddlewareAction) below

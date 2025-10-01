@@ -674,7 +674,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
-        guard searchBarPosition == .bottom, isToolbarRefactorEnabled, isSearchBarLocationFeatureEnabled else { return }
+        guard searchBarPosition == .bottom, isSearchBarLocationFeatureEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top
@@ -691,23 +691,36 @@ class BrowserViewController: UIViewController,
             navigationToolbarContainer.isHidden = false
             navigationToolbarContainer.applyTheme(theme: currentTheme())
             updateTabCountUsingTabManager(self.tabManager)
-            if isSwipingTabsEnabled,
-               let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-               !toolbarState.addressToolbar.isEditing {
-                addressBarPanGestureHandler?.enablePanGestureRecognizer()
-                addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-            }
         } else {
             navigationToolbarContainer.isHidden = true
-            if isSwipingTabsEnabled {
-                addressBarPanGestureHandler?.disablePanGestureRecognizer()
-                addressToolbarContainer.hideSkeletonBars()
-            }
         }
 
         updateToolbarStateTraitCollectionIfNecessary(newCollection)
         appMenuBadgeUpdate()
+        updateSwipingTabs(showNavToolbar: showNavToolbar)
+        updateTopTabs(showTopTabs: showTopTabs)
 
+        header.setNeedsLayout()
+        view.layoutSubviews()
+
+        updateToolbarDisplay()
+    }
+
+    private func updateSwipingTabs(showNavToolbar: Bool) {
+        guard isSwipingTabsEnabled else { return }
+
+        if showNavToolbar,
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           !toolbarState.addressToolbar.isEditing {
+            addressBarPanGestureHandler?.enablePanGestureRecognizer()
+            addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
+        } else if showNavToolbar == false {
+            addressBarPanGestureHandler?.disablePanGestureRecognizer()
+            addressToolbarContainer.hideSkeletonBars()
+        }
+    }
+
+    private func updateTopTabs(showTopTabs: Bool) {
         if showTopTabs, topTabsViewController == nil {
             setupTopTabsViewController()
             topTabsViewController?.applyTheme()
@@ -720,11 +733,6 @@ class BrowserViewController: UIViewController,
             topTabsViewController?.removeFromParent()
             topTabsViewController = nil
         }
-
-        header.setNeedsLayout()
-        view.layoutSubviews()
-
-        updateToolbarDisplay()
     }
 
     func dismissVisibleMenus() {

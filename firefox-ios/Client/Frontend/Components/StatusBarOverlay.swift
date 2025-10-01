@@ -142,7 +142,7 @@ final class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        savedBackgroundColor = theme.colors.layerSurfaceLow
+        savedBackgroundColor = hasTopTabs ? theme.colors.layerSurfaceLow : theme.colors.layer1
         let isHomepage: Bool = savedIsHomepage ?? false
         let needsNoStatusBar = needsNoStatusBar(isHomepage: isHomepage)
         updateStatusBarAlpha(isHomepage: isHomepage, needsNoStatusBar: needsNoStatusBar)
