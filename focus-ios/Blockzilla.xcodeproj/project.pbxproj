@@ -96,9 +96,6 @@
 		C21CC2842E5E161800F1E66E /* FocusRustComponents in Frameworks */ = {isa = PBXBuildFile; productRef = C21CC2832E5E161800F1E66E /* FocusRustComponents */; };
 		C809130E2A08F245000889B0 /* Licenses in Frameworks */ = {isa = PBXBuildFile; productRef = C809130D2A08F245000889B0 /* Licenses */; };
 		C80F901C26C554B800F5112B /* PhotonActionSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */; };
-		C817A35722CE73B4002529FF /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35322CE73B4002529FF /* Deferred.swift */; };
-		C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35522CE73B4002529FF /* ReadWriteLock.swift */; };
-		C817A35922CE73B4002529FF /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817A35622CE73B4002529FF /* LockProtected.swift */; };
 		C824D2D628EEBF9100DEA5DE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E56FB76D28C0DF96005CF1B9 /* WidgetKit.framework */; };
 		C824D2D728EEBF9100DEA5DE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E56FB76F28C0DF96005CF1B9 /* SwiftUI.framework */; };
 		C824D2DA28EEBF9B00DEA5DE /* Widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C824D2D928EEBF9B00DEA5DE /* Widgets.swift */; };
@@ -743,10 +740,6 @@
 		BDEEF248297AC0D500D43345 /* RequestHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestHandlerTests.swift; sourceTree = "<group>"; };
 		C652A61E213D254A86DF5736 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C80F901B26C554B800F5112B /* PhotonActionSheetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetCell.swift; sourceTree = "<group>"; };
-		C817A35322CE73B4002529FF /* Deferred.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deferred.swift; sourceTree = "<group>"; };
-		C817A35422CE73B4002529FF /* Deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deferred.h; sourceTree = "<group>"; };
-		C817A35522CE73B4002529FF /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
-		C817A35622CE73B4002529FF /* LockProtected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockProtected.swift; sourceTree = "<group>"; };
 		C824D2D528EEBF9100DEA5DE /* WidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C824D2D928EEBF9B00DEA5DE /* Widgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widgets.swift; sourceTree = "<group>"; };
 		C824D2DB28EEBF9D00DEA5DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1451,17 +1444,6 @@
 			path = DomainCompletion;
 			sourceTree = "<group>";
 		};
-		C817A35222CE73B4002529FF /* Deferred */ = {
-			isa = PBXGroup;
-			children = (
-				C817A35322CE73B4002529FF /* Deferred.swift */,
-				C817A35422CE73B4002529FF /* Deferred.h */,
-				C817A35522CE73B4002529FF /* ReadWriteLock.swift */,
-				C817A35622CE73B4002529FF /* LockProtected.swift */,
-			);
-			path = Deferred;
-			sourceTree = "<group>";
-		};
 		C824D2D828EEBF9B00DEA5DE /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
@@ -1884,7 +1866,6 @@
 				8A0E7F2B2BA0F0C2006BC6B6 /* BrowserKit */,
 				D446C1802AF3B6EE00A230DF /* focus-ios-tests */,
 				C8FB1E6227F59BC600C60DC6 /* BlockzillaPackage */,
-				C817A35222CE73B4002529FF /* Deferred */,
 				E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */,
 				E4BF2DED1BACE92400DA9D68 /* ContentBlocker */,
 				745DC5DB1F39221100661635 /* OpenInFocus */,
@@ -2710,7 +2691,6 @@
 				E5E4504E28CF4548005A01F1 /* TipsPageViewController.swift in Sources */,
 				C8337DF62710898800093D42 /* TrackingProtectionState.swift in Sources */,
 				D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */,
-				C817A35922CE73B4002529FF /* LockProtected.swift in Sources */,
 				2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */,
 				D3426AED1DB846310016DA5A /* DomainCompletion.swift in Sources */,
 				D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */,
@@ -2749,7 +2729,6 @@
 				1D96A2D92BA2490D00EF7CC7 /* WebEngineRefactorFlagManager.swift in Sources */,
 				840057582735309500E48144 /* SettingsTableViewToggleCell.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
-				C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */,
 				C8337DF92710898800093D42 /* TrackingProtectionViewController.swift in Sources */,
 				C89AA970271720330089838F /* Theme.swift in Sources */,
 				C89AA96C271720330089838F /* ThemeViewController.swift in Sources */,
@@ -2807,7 +2786,6 @@
 				C8EADCD42742A0AB00E76AE6 /* MenuItemProvider.swift in Sources */,
 				840057562735305600E48144 /* SettingsTableViewAccessoryCell.swift in Sources */,
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,
-				C817A35722CE73B4002529FF /* Deferred.swift in Sources */,
 				D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */,
 				C82F45F528193DA5000D7D84 /* ShortcutView+UIContextMenuInteractionDelegate.swift in Sources */,
 				C83FB7DC273BE4BC00B78CC5 /* Metadata.swift in Sources */,
