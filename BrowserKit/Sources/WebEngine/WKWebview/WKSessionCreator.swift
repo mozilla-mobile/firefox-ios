@@ -8,27 +8,12 @@ public protocol SessionCreator: AnyObject {
     /// Creates a popup WKWebView given a configuration and the source WebView for the popup.
     @MainActor
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView?
+
+    func alertStore(for webView: WKWebView) -> WKJavscriptAlertStore?
+
+    func isSessionActive(for webView: WKWebView) -> Bool
+
+    func currentActiveStore() -> WKJavscriptAlertStore?
 }
 
 typealias VoidReturnCallback<T> = (T) -> Void
-
-class WKSessionCreator: SessionCreator {
-    private let dependencies: EngineSessionDependencies
-    var onNewSessionCreated: VoidReturnCallback<EngineSession>?
-
-    init(dependencies: EngineSessionDependencies) {
-        self.dependencies = dependencies
-    }
-
-    func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
-        // TODO: FXIOS-13668 The newly created popup session should have the parent privacy settings
-        let configurationProvider = DefaultWKEngineConfigurationProvider(configuration: configuration)
-        let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
-                                                     dependencies: dependencies,
-                                                     configurationProvider: configurationProvider)
-
-        guard let session, let webView = session.webView as? WKWebView else { return nil }
-        onNewSessionCreated?(session)
-        return webView
-    }
-}

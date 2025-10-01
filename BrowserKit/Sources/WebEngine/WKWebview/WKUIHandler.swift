@@ -74,15 +74,14 @@ public class AlertPresenter {
 
 public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertControllerDelegate {
     public weak var delegate: EngineSessionDelegate?
-    private var sessionCreator: SessionCreator?
+    private weak var sessionCreator: SessionCreator?
 
     public var isActive = false
     private let sessionDependencies: EngineSessionDependencies
     private let application: Application
     private let policyDecider: WKPolicyDecider
     private let alertPresenter: AlertPresenter
-    private let store: WKJavscriptAlertStore
-    private let popupThrottler: WKPopupThrottler
+    private let logger: Logger
 
     // TODO: FXIOS-13670 With Swift 6 we can use default params in the init
     @MainActor
@@ -91,7 +90,6 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         alertPresenter: AlertPresenter = AlertPresenter(presenter: nil),
         sessionCreator: SessionCreator? = nil
     ) -> DefaultUIHandler {
-        let sessionCreator = sessionCreator ?? WKSessionCreator(dependencies: sessionDependencies)
         let policyDecider = WKPolicyDeciderFactory()
         let application = UIApplication.shared
         return DefaultUIHandler(
@@ -104,22 +102,19 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
     }
 
     init(sessionDependencies: EngineSessionDependencies,
-         sessionCreator: SessionCreator,
+         sessionCreator: SessionCreator?,
          alertPresenter: AlertPresenter,
          application: Application,
-         policyDecider: WKPolicyDecider) {
+         policyDecider: WKPolicyDecider,
+         logger: Logger = DefaultLogger.shared
+    ) {
         self.sessionCreator = sessionCreator
         self.sessionDependencies = sessionDependencies
         self.policyDecider = policyDecider
         self.application = application
         self.alertPresenter = alertPresenter
-        self.store = DefaultJavscriptAlertStore()
-        self.popupThrottler = DefaultPopupThrottler()
+        self.logger = logger
         super.init()
-
-        (self.sessionCreator as? WKSessionCreator)?.onNewSessionCreated = { [weak self] in
-            self?.delegate?.onRequestOpenNewSession($0)
-        }
     }
 
     public func webView(_ webView: WKWebView,
@@ -150,7 +145,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         }
     }
 
-    let logger = DefaultLogger.shared
+    // MARK: - JavaScript Alerts Handling
 
     public func webView(
         _ webView: WKWebView,
@@ -159,21 +154,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         completionHandler: @escaping @MainActor () -> Void
     ) {
         let alert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
-        guard popupThrottler.canShowAlert(type: .alert) else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                completionHandler()
-            }
-            return
-        }
-        if alertPresenter.canPresent() {
-            let controller = alert.alertController()
-            controller.delegate = self
-            logger.log("Presenting alert controller", level: .fatal, category: .webview)
-            alertPresenter.present(controller)
-        } else {
-            logger.log("storing alert controller", level: .fatal, category: .webview)
-            store.add(alert)
-        }
+        handleJavaScriptAlert(alert, for: webView, spamCallback: completionHandler)
     }
 
     public func webView(
@@ -182,10 +163,16 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (Bool) -> Void
     ) {
-        // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
+        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame) { [weak self] confirm in
+            self?.logger.log("JavaScript confirm panel was completed with result: \(confirm)", level: .info, category: .webview)
+            completionHandler(confirm)
+        }
+
+        handleJavaScriptAlert(confirmAlert, for: webView) {
+            completionHandler(false)
+        }
     }
 
-    // TODO: FXIOS-8244 - Handle Javascript panel messages in WebEngine (epic part 3)
     public func webView(
         _ webView: WKWebView,
         runJavaScriptTextInputPanelWithPrompt prompt: String,
@@ -193,6 +180,48 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (String?) -> Void
     ) {
+        let textInputAlert = TextInputAlert(message: prompt, frame: frame, defaultText: defaultText) { [weak self] input in
+            self?.logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
+            completionHandler(input)
+        }
+
+        handleJavaScriptAlert(textInputAlert, for: webView) {
+            completionHandler("")
+        }
+    }
+
+    private func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
+        guard sessionCreator?.isSessionActive(for: webView) == true,
+              let store = sessionCreator?.alertStore(for: webView) else {
+            return false
+        }
+        let canShow = store.popupThrottler.canShowAlert(type: .alert)
+        if canShow {
+            store.popupThrottler.willShowAlert(type: .alert)
+        }
+        return !canShow
+    }
+
+    private func handleJavaScriptAlert<T: WKJavaScriptAlertInfo & WKJavaScriptAlertProtocol>(
+        _ alert: T,
+        for webView: WKWebView,
+        spamCallback: @escaping () -> Void
+    ) {
+        if jsAlertExceedsSpamLimits(webView) {
+            // User is being spammed. Squelch alert. Note that we have to do this after
+            // a delay to avoid JS that could spin the CPU endlessly.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                spamCallback()
+            }
+        } else if sessionCreator?.isSessionActive(for: webView) == true, alertPresenter.canPresent() {
+            logger.log("JavaScript \(T.alertType) panel will be presented.", level: .info, category: .webview)
+            let alertController = alert.alertController()
+            alertController.delegate = self
+            alertPresenter.present(alertController)
+        } else if let store = sessionCreator?.alertStore(for: webView) {
+            logger.log("JavaScript \(T.alertType) panel is queued.", level: .info, category: .webview)
+            store.queueJavascriptAlertPrompt(alert)
+        }
     }
 
     public func webViewDidClose(_ webView: WKWebView) {
@@ -220,8 +249,24 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavaScriptPromptAlertCon
     }
 
     // MARK: - WKJavaScriptPromptAlertControllerDelegate
-    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
-        guard let alert = store.popFirst(), alertPresenter.canPresent() else { return }
-        alertPresenter.present(alert.alertController())
+    public func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
+        checkForJSAlerts()
+    }
+
+    private func checkForJSAlerts() {
+        guard let store = sessionCreator?.currentActiveStore(), store.hasJavascriptAlertPrompt() else { return }
+
+        if alertPresenter.canPresent() {
+            guard let nextAlert = store.dequeueJavascriptAlertPrompt() else { return }
+            let controller = nextAlert.alertController()
+            controller.delegate = self
+            alertPresenter.present(controller)
+        } else {
+            // We cannot show the alert right now but there is one queued on the selected tab
+            // check after a delay if we can show it
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.checkForJSAlerts()
+            }
+        }
     }
 }

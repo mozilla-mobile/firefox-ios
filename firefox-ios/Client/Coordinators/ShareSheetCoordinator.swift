@@ -6,11 +6,12 @@ import Foundation
 import Common
 import Shared
 import Storage
+import WebEngine
 
 class ShareSheetCoordinator: BaseCoordinator,
                              DevicePickerViewControllerDelegate,
                              InstructionsViewDelegate,
-                             JSPromptAlertControllerDelegate {
+                             WKJavaScriptPromptAlertControllerDelegate {
     // MARK: - Properties
 
     private let tabManager: TabManager
@@ -167,7 +168,7 @@ class ShareSheetCoordinator: BaseCoordinator,
     // MARK: DevicePickerViewControllerDelegate
 
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
-        router.dismiss()  
+        router.dismiss()
         parentCoordinator?.didFinish(from: self)
     }
 
@@ -224,7 +225,7 @@ class ShareSheetCoordinator: BaseCoordinator,
 
     // MARK: - JSPromptAlertControllerDelegate
 
-    func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
+    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
         dequeueNotShownJSAlert()
     }
 }

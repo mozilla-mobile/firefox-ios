@@ -5,13 +5,13 @@
 import Foundation
 
 @MainActor
-protocol WKPopupThrottler {
+public protocol WKPopupThrottler {
     func canShowAlert(type: WKPopupType) -> Bool
 
     func willShowAlert(type: WKPopupType)
 }
 
-enum WKPopupType {
+public enum WKPopupType {
     /// Javascript alert()
     case alert
     /// Popup window (window.open)
@@ -35,24 +35,24 @@ enum WKPopupType {
         }
     }
 
-    static let defaultResetTimes = [WKPopupType.alert: WKPopupType.alert.resetTime,
-                                   WKPopupType.popupWindow: WKPopupType.popupWindow.resetTime]
+    public static let defaultResetTimes = [WKPopupType.alert: WKPopupType.alert.resetTime,
+                                           WKPopupType.popupWindow: WKPopupType.popupWindow.resetTime]
 }
 
 /// Utility for tracking various types of popups that may be presented
 /// over a short time. Used to prevent Javascript abuse or DOS attacks.
-final class DefaultPopupThrottler: WKPopupThrottler {
+public final class DefaultPopupThrottler: WKPopupThrottler {
     private var alertCount = [WKPopupType.alert: 0, WKPopupType.popupWindow: 0]
     private var lastAlertDate = [WKPopupType.alert: Date.distantPast, WKPopupType.popupWindow: Date.distantPast]
     private let resetTime: [WKPopupType: TimeInterval]
 
-    init(resetTime: [WKPopupType: TimeInterval] = WKPopupType.defaultResetTimes) {
+    public init(resetTime: [WKPopupType: TimeInterval] = WKPopupType.defaultResetTimes) {
         self.resetTime = resetTime
     }
 
     // MARK: - Public API
 
-    func canShowAlert(type: WKPopupType) -> Bool {
+    public func canShowAlert(type: WKPopupType) -> Bool {
         guard let count = alertCount[type] else { return true }
         guard let date = lastAlertDate[type] else { return true }
         guard let time = resetTime[type] else { return true }
@@ -62,7 +62,7 @@ final class DefaultPopupThrottler: WKPopupThrottler {
         return alertCountOK || timeOK
     }
 
-    func willShowAlert(type: WKPopupType) {
+    public func willShowAlert(type: WKPopupType) {
         guard let count = alertCount[type] else { return }
         guard let date = lastAlertDate[type] else { return }
         guard let time = resetTime[type] else { return }

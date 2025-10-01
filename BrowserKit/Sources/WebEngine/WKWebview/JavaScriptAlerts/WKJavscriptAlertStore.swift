@@ -5,19 +5,14 @@
 import Foundation
 
 @MainActor
-protocol WKJavscriptAlertStore {
-    func add(_ alert: WKJavaScriptAlertInfo)
-    func popFirst() -> WKJavaScriptAlertInfo?
-}
+public protocol WKJavscriptAlertStore {
+    var popupThrottler: WKPopupThrottler { get }
 
-class DefaultJavscriptAlertStore: WKJavscriptAlertStore {
-    private var alerts: [WKJavaScriptAlertInfo] = []
+    func cancelQueuedAlerts()
 
-    func add(_ alert: WKJavaScriptAlertInfo) {
-        alerts.append(alert)
-    }
+    func queueJavascriptAlertPrompt(_ alert: WKJavaScriptAlertInfo)
 
-    func popFirst() -> WKJavaScriptAlertInfo? {
-        return alerts.popLast()
-    }
+    func dequeueJavascriptAlertPrompt() -> WKJavaScriptAlertInfo?
+
+    func hasJavascriptAlertPrompt() -> Bool
 }

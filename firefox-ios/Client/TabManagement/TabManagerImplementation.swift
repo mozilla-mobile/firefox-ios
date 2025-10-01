@@ -1264,6 +1264,20 @@ class TabManagerImplementation: NSObject,
         guard let parentTab = self[parent] else { return nil }
         return addPopupForParentTab(profile: profile, parentTab: parentTab, configuration: configuration).webView
     }
+
+    func alertStore(for webView: WKWebView) -> (any WKJavscriptAlertStore)? {
+        guard let tab = self[webView] else { return nil }
+        return tab
+    }
+
+    func isSessionActive(for webView: WKWebView) -> Bool {
+        guard let tab = self[webView] else { return false }
+        return tab.webView === selectedTab?.webView
+    }
+
+    func currentActiveStore() -> (any WKJavscriptAlertStore)? {
+        return selectedTab
+    }
 }
 
 // MARK: - Notifiable

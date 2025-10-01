@@ -293,8 +293,11 @@ class BrowserViewController: UIViewController,
 
     // TODO: FXIOS-13669 The session dependencies shouldn't be empty
     private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
-        engineResponder: DefaultUIHandler.factory(sessionDependencies: .empty(),
-                                                  sessionCreator: tabManager as? SessionCreator),
+        engineResponder: DefaultUIHandler.factory(
+            sessionDependencies: .empty(),
+            alertPresenter: AlertPresenter(presenter: self),
+            sessionCreator: tabManager as? SessionCreator
+        ),
         legacyResponder: self
     )
     /// The ui delegate used by a `WKWebView`
@@ -3481,7 +3484,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func isShowingJSPromptAlert() -> Bool {
-        return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
+        return navigationController?.topViewController?.presentedViewController as? WKJavaScriptPromptAlertController != nil
     }
 
     fileprivate func recordVisitForLocationChange(_ tab: Tab, navigation: WKNavigation?) {
@@ -5032,8 +5035,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 // MARK: JSPromptAlertControllerDelegate
 
-extension BrowserViewController: JSPromptAlertControllerDelegate {
-    func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
+extension BrowserViewController: WKJavaScriptPromptAlertControllerDelegate {
+    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
         logger.log("JS prompt was dismissed. Will dequeue next alert.",
                    level: .info,
                    category: .webview)

@@ -9,6 +9,7 @@ import Shared
 import UIKit
 import Photos
 import SafariServices
+import WebEngine
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
@@ -72,7 +73,7 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    private func handleJavaScriptAlert<T: JavaScriptAlertProtocol & JSAlertInfo>(
+    private func handleJavaScriptAlert<T: WKJavaScriptAlertProtocol & WKJavaScriptAlertInfo>(
         _ alert: T,
         for webView: WKWebView,
         spamCallback: @escaping () -> Void

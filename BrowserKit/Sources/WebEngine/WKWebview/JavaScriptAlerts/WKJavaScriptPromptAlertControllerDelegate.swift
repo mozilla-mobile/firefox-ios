@@ -7,7 +7,7 @@ import Foundation
 import WebKit
 
 @objc
-protocol WKJavaScriptPromptAlertControllerDelegate: AnyObject {
+public protocol WKJavaScriptPromptAlertControllerDelegate: AnyObject {
     @MainActor
     func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController)
 }
@@ -16,9 +16,9 @@ protocol WKJavaScriptPromptAlertControllerDelegate: AnyObject {
 /// to allow forwarding the event. The reason this is needed for prompts from Javascript is we
 /// need to invoke the completionHandler passed to us from the WKWebView delegate or else
 /// a runtime exception is thrown.
-class WKJavaScriptPromptAlertController: UIAlertController {
+public class WKJavaScriptPromptAlertController: UIAlertController {
     var alertInfo: WKJavaScriptAlertInfo?
-    weak var delegate: WKJavaScriptPromptAlertControllerDelegate?
+    public weak var delegate: WKJavaScriptPromptAlertControllerDelegate?
     private var handledAction = false
     private var dismissalResult: Any?
 
@@ -38,7 +38,7 @@ class WKJavaScriptPromptAlertController: UIAlertController {
         dismissalResult = result
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
+    override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
         // The alert controller is dismissed before the UIAlertAction handler is called so a delay is needed
