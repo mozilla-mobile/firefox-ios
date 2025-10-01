@@ -142,6 +142,10 @@ final class AppLaunchUtil: Sendable {
                    level: .debug,
                    category: .setup)
 
+        // Migrate legacy ToS users who don't have date/version preferences saved
+        // This must be done after telemetry is set up
+        termsOfServiceManager.migrateLegacyToSAcceptance()
+
         AppEventQueue.signal(event: .preLaunchDependenciesComplete)
 
         if #available(iOS 26, *) {
