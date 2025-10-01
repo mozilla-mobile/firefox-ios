@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import BrowserKit
 import Shared
-import UIKit
 import Storage
+import UIKit
 
 import enum MozillaAppServices.FrecencyThresholdOption
 
@@ -32,7 +33,7 @@ extension TopSitesProvider {
     }
 
     static var numberOfMaxItems: Int {
-        return UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
+        return UIDeviceDetails.userInterfaceIdiom == .pad ? 32 : 16
     }
 
     var defaultSuggestedSitesKey: String {

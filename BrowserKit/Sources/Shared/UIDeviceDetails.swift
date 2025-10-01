@@ -9,14 +9,14 @@ import UIKit
 /// This makes it easier for code that runs on a background thread (without an asynchronous context) to use these values.
 ///
 /// **Never put values in here that might change during runtime.**
-struct UIDeviceDetails {
+public struct UIDeviceDetails {
     /// The model of the device.
     static let model = {
         getMainThreadDataSynchronously { UIDevice.current.model }
     }()
 
     /// The style of interface to use on the current device.
-    static let userInterfaceIdiom = {
+    public static let userInterfaceIdiom = {
         getMainThreadDataSynchronously { UIDevice.current.userInterfaceIdiom }
     }()
 
