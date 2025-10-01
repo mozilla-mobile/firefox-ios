@@ -417,10 +417,26 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(subject.trendingSearches, [])
     }
 
+    func test_retrieveRecentSearches_withSuccess_hasExpectedList() {
+        let mockRecentSearchProvider = MockRecentSearchProvider()
+        let subject = createSubject(mockRecentSearchProvider: mockRecentSearchProvider)
+        subject.retrieveRecentSearches()
+        XCTAssertEqual(mockRecentSearchProvider.recentSearchesCalledCount, 1)
+        XCTAssertEqual(subject.recentSearches, ["foo", "bar"])
+    }
+
+    func test_retrieveRecentSearches_withNilProvider_hasEmptyList() {
+        enum TestError: Error { case example }
+        let subject = createSubject(mockRecentSearchProvider: nil)
+        subject.retrieveRecentSearches()
+        XCTAssertEqual(subject.recentSearches, [])
+    }
+
     private func createSubject(
         isPrivate: Bool = false,
         isBottomSearchBar: Bool = false,
         mockTrendingClient: TrendingSearchClientProvider = MockTrendingSearchClient(),
+        mockRecentSearchProvider: RecentSearchProvider? = MockRecentSearchProvider(),
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> SearchViewModel {
@@ -430,7 +446,8 @@ final class SearchViewModelTests: XCTestCase {
             profile: profile,
             model: searchEnginesManager,
             tabManager: MockTabManager(),
-            trendingSearchClient: mockTrendingClient
+            trendingSearchClient: mockTrendingClient,
+            recentSearchProvider: mockRecentSearchProvider
         )
         subject.delegate = mockDelegate
         return subject

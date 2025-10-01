@@ -18,6 +18,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
     private var suggestClient: SearchSuggestClient?
+    private let recentSearchProvider: RecentSearchProvider?
     private let trendingSearchClient: TrendingSearchClientProvider
     private let logger: Logger
 
@@ -26,6 +27,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     var filteredOpenedTabs = [Tab]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
     var trendingSearches = [String]()
+    var recentSearches = [String]()
     let model: SearchEnginesManager
     var suggestions: [String]? = []
     // TODO: FXIOS-12588 This global property is not concurrency safe
@@ -121,6 +123,12 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         )
     }
 
+    // Show list of recent searches if user puts focus in the address bar but does not enter any text.
+    var shouldShowRecentSearches: Bool {
+        let isOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return isOn && searchQuery.isEmpty
+    }
+
     private var hasBookmarksSuggestions: Bool {
         return !bookmarkSites.isEmpty &&
         shouldShowBookmarksSuggestions
@@ -161,6 +169,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
          model: SearchEnginesManager,
          tabManager: TabManager,
          trendingSearchClient: TrendingSearchClientProvider,
+         recentSearchProvider: RecentSearchProvider?,
          logger: Logger = DefaultLogger.shared,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search
     ) {
@@ -170,6 +179,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         self.model = model
         self.tabManager = tabManager
         self.trendingSearchClient = trendingSearchClient
+        self.recentSearchProvider = recentSearchProvider
         self.logger = logger
         self.searchFeature = featureConfig
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
@@ -279,7 +289,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         delegate?.reloadTableView()
     }
 
-    // MARK: - Trending Searches Feature
+    // MARK: - Zero Search State Feature
+    // The zero search state refers to when user puts focus in the address bar but does not enter any text.
 
     // Loads trending searches from the default search engine and updates `trendingSearches`.
     // Falls back to an empty list on error.
@@ -296,6 +307,22 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
             )
             trendingSearches = []
         }
+    }
+
+    // Loads recent searches from the default search engine and updates `recentSearches`.
+    // Falls back to an empty list on error.
+    func retrieveRecentSearches() {
+        guard let recentSearchProvider else {
+            logger.log(
+                "Recent searches provider is nil, return empty list.",
+                level: .info,
+                category: .searchEngines
+            )
+            recentSearches = []
+            return
+        }
+        let results = recentSearchProvider.recentSearches
+        recentSearches = results
     }
 
     @MainActor
