@@ -1556,6 +1556,8 @@
 		C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */; };
 		C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */; };
 		C796E22A2E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */; };
+		C7B376E82E871095006B2D32 /* StoriesFeedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B376E72E871095006B2D32 /* StoriesFeedState.swift */; };
+		C7B376EA2E8715A1006B2D32 /* StoriesFeedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B376E92E8715A1006B2D32 /* StoriesFeedAction.swift */; };
 		C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */; };
 		C7D736312E85DCA0000ECE41 /* StoriesFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D736302E85DCA0000ECE41 /* StoriesFeedViewController.swift */; };
 		C7F051522D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051512D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift */; };
@@ -9779,6 +9781,8 @@
 		C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewControllerTests.swift; sourceTree = "<group>"; };
 		C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewController.swift; sourceTree = "<group>"; };
 		C7A6413B89FE82B94F735FFD /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		C7B376E72E871095006B2D32 /* StoriesFeedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedState.swift; sourceTree = "<group>"; };
+		C7B376E92E8715A1006B2D32 /* StoriesFeedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedAction.swift; sourceTree = "<group>"; };
 		C7C54345A164D550CF2BC575 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksFolderEmptyStateView.swift; sourceTree = "<group>"; };
 		C7D341F8BA6A9E44518C11C8 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -14304,6 +14308,15 @@
 			path = Redux;
 			sourceTree = "<group>";
 		};
+		C7B376E62E871053006B2D32 /* Redux */ = {
+			isa = PBXGroup;
+			children = (
+				C7B376E72E871095006B2D32 /* StoriesFeedState.swift */,
+				C7B376E92E8715A1006B2D32 /* StoriesFeedAction.swift */,
+			);
+			path = Redux;
+			sourceTree = "<group>";
+		};
 		C7C6CD742E54BBB2002C6495 /* Redux */ = {
 			isa = PBXGroup;
 			children = (
@@ -14317,6 +14330,7 @@
 		C7D7362F2E85DC73000ECE41 /* StoriesFeed */ = {
 			isa = PBXGroup;
 			children = (
+				C7B376E62E871053006B2D32 /* Redux */,
 				C7D736302E85DCA0000ECE41 /* StoriesFeedViewController.swift */,
 			);
 			path = StoriesFeed;
@@ -18464,6 +18478,7 @@
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetView.swift in Sources */,
 				8A8D12142DD671DC00E0B8BB /* TabTrayPanelSwipePalette.swift in Sources */,
 				8C2447EC2DFADF6800BD2C91 /* OnboardingNavigationDelegate.swift in Sources */,
+				C7B376E82E871095006B2D32 /* StoriesFeedState.swift in Sources */,
 				E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */,
 				ED232EA02DFA3BF30046DA47 /* UserTelemetry.swift in Sources */,
 				8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */,
@@ -18773,6 +18788,7 @@
 				8A454D362CB86993009436D9 /* MerinoStoryConfiguration.swift in Sources */,
 				61CEFF5E2DA8BC78000B88A7 /* TabsPanelTelemetry.swift in Sources */,
 				8AE459922CEFB1DC002D6679 /* InactiveTabsTelemetry.swift in Sources */,
+				C7B376EA2E8715A1006B2D32 /* StoriesFeedAction.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				8A46F5AC2C9E4389005B6422 /* RemoteDataType.swift in Sources */,
