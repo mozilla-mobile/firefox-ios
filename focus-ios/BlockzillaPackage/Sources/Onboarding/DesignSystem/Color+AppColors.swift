@@ -13,3 +13,4 @@ extension Color {
     static let systemBackground = Color(UIColor.systemBackground)
     static let accent = Color("Accent", bundle: .module)
 }
+// swiftlint:enable force_unwrapping
