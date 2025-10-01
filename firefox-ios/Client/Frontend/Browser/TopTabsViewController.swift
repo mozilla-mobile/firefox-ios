@@ -408,6 +408,7 @@ extension TopTabsViewController: TabDisplayerDelegate {
 extension TopTabsViewController: TopTabCellDelegate {
     @MainActor
     func tabCellDidClose(_ cell: UICollectionViewCell) {
+        store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit))
         topTabDisplayManager.closeActionPerformed(forCell: cell)
         delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
