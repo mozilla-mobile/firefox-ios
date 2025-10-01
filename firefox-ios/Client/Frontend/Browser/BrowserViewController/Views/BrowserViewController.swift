@@ -1645,10 +1645,10 @@ class BrowserViewController: UIViewController,
         DispatchQueue.main.async { [self] in
             // Only update position if device size class changed (rotation, split view, etc.)
             // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
-        if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
-            traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
-            updateAddressToolbarContainerPosition(for: traitCollection)
-        }
+            if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
+                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+                updateAddressToolbarContainerPosition(for: traitCollection)
+            }
             updateToolbarStateForTraitCollection(traitCollection)
         }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
