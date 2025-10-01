@@ -699,14 +699,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateAddressToolbarContainerPosition(
-        for traitCollection: UITraitCollection,
-        previousTraitCollection: UITraitCollection?) {
-            // Only update position if device size class changed (rotation, split view, etc.)
-            // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
-        guard traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
-                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass else { return }
-
+    private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
         guard searchBarPosition == .bottom, isToolbarRefactorEnabled, isSearchBarLocationFeatureEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
@@ -1473,6 +1466,7 @@ class BrowserViewController: UIViewController,
         }
 
         updateToolbarStateForTraitCollection(traitCollection)
+        updateAddressToolbarContainerPosition(for: traitCollection)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1653,7 +1647,12 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
-            updateAddressToolbarContainerPosition(for: traitCollection, previousTraitCollection: previousTraitCollection)
+            // Only update position if device size class changed (rotation, split view, etc.)
+            // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
+            if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
+                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+                updateAddressToolbarContainerPosition(for: traitCollection)
+            }
             updateToolbarStateForTraitCollection(traitCollection)
         }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
