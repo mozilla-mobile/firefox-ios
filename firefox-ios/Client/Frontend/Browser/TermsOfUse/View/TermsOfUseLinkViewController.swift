@@ -78,8 +78,6 @@ final class TermsOfUseLinkViewController: UIViewController,
         applyTheme()
 
         webView.load(URLRequest(url: url))
-        let loadingAction = TermsOfUseLinkAction(windowUUID: windowUUID, actionType: .linkLoading)
-        store.dispatchLegacy(loadingAction)
     }
 
     private func setupViews() {
