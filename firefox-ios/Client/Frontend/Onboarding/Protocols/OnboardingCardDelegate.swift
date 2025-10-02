@@ -152,10 +152,9 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             windowUUID: windowUUID)
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
-            style: .plain,
+            style: .done,
             target: self,
             action: selector)
-        buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
 

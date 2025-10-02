@@ -63,7 +63,10 @@ struct FocusWidgets_Previews: PreviewProvider {
 
 fileprivate extension String {
     static var appNameForBundle: String {
-        var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
+        var isKlar: Bool {
+            guard let string = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String else { return false }
+            return string.contains("Klar")
+        }
         return isKlar ? "Klar" : "Focus"
     }
     // Quick Action - Small Size - Gallery View
@@ -100,7 +103,7 @@ fileprivate extension Bool {
 }
 
 fileprivate extension URL {
-    static let deepLinkURL = URL(string: "firefox-focus://widget")!
+    static let deepLinkURL = URL(string: "firefox-focus://widget")
 }
 
 fileprivate extension View {

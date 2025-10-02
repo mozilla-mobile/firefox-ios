@@ -6,6 +6,7 @@
 @preconcurrency import WebKit
 import Common
 
+@MainActor
 public protocol WKUIHandler: WKUIDelegate {
     var delegate: EngineSessionDelegate? { get set }
     var isActive: Bool {get set}

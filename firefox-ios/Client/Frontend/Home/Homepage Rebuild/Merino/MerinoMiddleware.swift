@@ -25,6 +25,7 @@ final class MerinoMiddleware {
     lazy var pocketSectionProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case HomepageActionType.initialize,
+            StoriesFeedActionType.initialize,
             HomepageMiddlewareActionType.enteredForeground,
             MerinoActionType.toggleShowSectionSetting:
             self.getPocketDataAndUpdateState(for: action)

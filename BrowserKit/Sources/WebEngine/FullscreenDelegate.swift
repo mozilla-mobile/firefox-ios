@@ -12,6 +12,7 @@ import Foundation
 ///
 /// Due to limited documentation on this behavior, the following methods handle
 /// fullscreen transitions based on trial and error.
+@MainActor
 public protocol FullscreenDelegate: AnyObject {
     /// Called when the web view enters fullscreen mode.
     ///

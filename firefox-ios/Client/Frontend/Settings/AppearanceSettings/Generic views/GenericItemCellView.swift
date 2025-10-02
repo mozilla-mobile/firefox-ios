@@ -26,7 +26,7 @@ struct GenericItemCellView: View {
     }
 
     var backgroundColor: Color {
-        return Color(theme?.colors.layer2 ?? UIColor.clear)
+        return Color(theme?.colors.layer5 ?? UIColor.clear)
     }
 
     var body: some View {
@@ -34,7 +34,7 @@ struct GenericItemCellView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(title)
-                        .font(.body)
+                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                         .foregroundColor(textColor)
                 }
 

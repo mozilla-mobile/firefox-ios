@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Common
 
 /// A view that represents a selectable option with an image and a radio button.
 struct GenericImageOption: View {
@@ -67,7 +68,7 @@ struct GenericImageOption: View {
     /// The text label displaying the theme option's name.
     private var selectableOptionLabel: some View {
         Text(label)
-            .font(.caption)
+            .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
             .foregroundColor(UX.textColor)
     }
 

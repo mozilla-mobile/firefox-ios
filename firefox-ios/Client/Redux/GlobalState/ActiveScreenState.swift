@@ -25,41 +25,32 @@ enum AppScreenState {
     case passwordGenerator(PasswordGeneratorState)
     case nativeErrorPage(NativeErrorPageState)
     case shortcutsLibrary(ShortcutsLibraryState)
+    case storiesFeed(StoriesFeedState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
         case .browserViewController(let state):
             return .browserViewController(BrowserViewControllerState.reducer(state, action))
-        case .homepage(let state):
-            return .homepage(HomepageState.reducer(state, action))
-        case .mainMenu(let state):
-            return .mainMenu(MainMenuState.reducer(state, action))
-        case .microsurvey(let state):
-            return .microsurvey(MicrosurveyState.reducer(state, action))
+        case .homepage(let state): return .homepage(HomepageState.reducer(state, action))
+        case .mainMenu(let state): return .mainMenu(MainMenuState.reducer(state, action))
+        case .microsurvey(let state): return .microsurvey(MicrosurveyState.reducer(state, action))
         case .onboardingViewController(let state):
             return .onboardingViewController(OnboardingViewControllerState.reducer(state, action))
-        case .remoteTabsPanel(let state):
-            return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
-        case .tabPeek(let state):
-            return .tabPeek(TabPeekState.reducer(state, action))
+        case .remoteTabsPanel(let state): return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
+        case .tabPeek(let state): return .tabPeek(TabPeekState.reducer(state, action))
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
         case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
         case .termsOfUse(let state): return .termsOfUse(TermsOfUseState.reducer(state, action))
         case .termsOfUseLink(let state): return .termsOfUseLink(TermsOfUseLinkState.reducer(state, action))
-        case .themeSettings(let state):
-            return .themeSettings(ThemeSettingsState.reducer(state, action))
-        case .trackingProtection(let state):
-            return .trackingProtection(TrackingProtectionState.reducer(state, action))
-        case .toolbar(let state):
-            return .toolbar(ToolbarState.reducer(state, action))
+        case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
+        case .trackingProtection(let state): return .trackingProtection(TrackingProtectionState.reducer(state, action))
+        case .toolbar(let state): return .toolbar(ToolbarState.reducer(state, action))
         case .searchEngineSelection(let state):
             return .searchEngineSelection(SearchEngineSelectionState.reducer(state, action))
-        case .passwordGenerator(let state):
-            return .passwordGenerator(PasswordGeneratorState.reducer(state, action))
-        case .nativeErrorPage(let state):
-            return .nativeErrorPage(NativeErrorPageState.reducer(state, action))
-        case .shortcutsLibrary(let state):
-            return .shortcutsLibrary(ShortcutsLibraryState.reducer(state, action))
+        case .passwordGenerator(let state): return .passwordGenerator(PasswordGeneratorState.reducer(state, action))
+        case .nativeErrorPage(let state): return .nativeErrorPage(NativeErrorPageState.reducer(state, action))
+        case .shortcutsLibrary(let state): return .shortcutsLibrary(ShortcutsLibraryState.reducer(state, action))
+        case .storiesFeed(let state): return .storiesFeed(StoriesFeedState.reducer(state, action))
         }
     }
 
@@ -84,6 +75,7 @@ enum AppScreenState {
         case .passwordGenerator: return .passwordGenerator
         case .nativeErrorPage: return .nativeErrorPage
         case .shortcutsLibrary: return .shortcutsLibrary
+        case .storiesFeed: return .storiesFeed
         }
     }
 
@@ -107,6 +99,7 @@ enum AppScreenState {
         case .passwordGenerator(let state): return state.windowUUID
         case .nativeErrorPage(let state): return state.windowUUID
         case .shortcutsLibrary(let state): return state.windowUUID
+        case .storiesFeed(let state): return state.windowUUID
         }
     }
 }
@@ -181,6 +174,8 @@ struct ActiveScreensState {
                 screens.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
             case .shortcutsLibrary:
                 screens.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
+            case .storiesFeed:
+                screens.append(.storiesFeed(StoriesFeedState(windowUUID: uuid)))
             }
         default:
             return screens
