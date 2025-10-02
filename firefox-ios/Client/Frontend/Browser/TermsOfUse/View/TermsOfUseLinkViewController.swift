@@ -106,8 +106,6 @@ final class TermsOfUseLinkViewController: UIViewController,
     }
 
     @objc private func closeTapped() {
-        let action = TermsOfUseLinkAction(windowUUID: windowUUID, actionType: .linkDismissed)
-        store.dispatchLegacy(action)
         dismiss(animated: true)
     }
 
