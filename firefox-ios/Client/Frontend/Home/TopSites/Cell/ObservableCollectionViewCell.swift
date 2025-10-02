@@ -5,16 +5,15 @@
 import UIKit
 
 class ObservableCollectionViewCell: UICollectionViewCell {
-
-    var visibilityDebugLabel: String = ""
-    var isVisibilityMonitoringEnabled: Bool = false
+    var visibilityDebugLabel = ""
+    var isVisibilityMonitoringEnabled = false
     var visibilityThreshold: CGFloat = 0.5
     var onBecomeVisible: ((ObservableCollectionViewCell) -> Void)?
 
     var isVisible: Bool { visibleAreaFraction >= visibilityThreshold }
 
     private var observedScrollViews: Set<UIScrollView> = []
-    private var wasPreviouslyVisible: Bool = false
+    private var wasPreviouslyVisible = false
 
     private var visibleAreaFraction: CGFloat {
         guard let window = window, !isHidden, alpha > 0.01, !bounds.isEmpty
@@ -60,8 +59,7 @@ class ObservableCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         for scrollView in scrollViews {
             if !observedScrollViews.contains(scrollView)
-                && isVisibilityMonitoringEnabled
-            {
+                && isVisibilityMonitoringEnabled {
                 scrollView.addObserver(
                     self,
                     forKeyPath: "contentOffset",
