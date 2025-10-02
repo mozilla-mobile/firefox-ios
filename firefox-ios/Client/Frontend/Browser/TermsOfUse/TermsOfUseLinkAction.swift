@@ -17,7 +17,5 @@ struct TermsOfUseLinkAction: Action {
 
 enum TermsOfUseLinkActionType: ActionType {
     case linkLoading
-    case linkShown
-    case linkError
     case linkDismissed
 }

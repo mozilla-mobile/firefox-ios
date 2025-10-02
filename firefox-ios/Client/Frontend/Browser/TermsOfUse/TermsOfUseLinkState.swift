@@ -9,23 +9,19 @@ struct TermsOfUseLinkState: ScreenState {
     let windowUUID: WindowUUID
     var shouldDismiss: Bool
     var isLoading: Bool
-    var hasError: Bool
 
     init(windowUUID: WindowUUID,
          shouldDismiss: Bool = false,
-         isLoading: Bool = true,
-         hasError: Bool = false) {
+         isLoading: Bool = true) {
         self.windowUUID = windowUUID
         self.shouldDismiss = shouldDismiss
         self.isLoading = isLoading
-        self.hasError = hasError
     }
 
     static func defaultState(from state: TermsOfUseLinkState) -> TermsOfUseLinkState {
         return TermsOfUseLinkState(windowUUID: state.windowUUID,
                                    shouldDismiss: state.shouldDismiss,
-                                   isLoading: state.isLoading,
-                                   hasError: state.hasError)
+                                   isLoading: state.isLoading)
     }
 
     static let reducer: Reducer<TermsOfUseLinkState> = { state, action in
@@ -37,23 +33,11 @@ struct TermsOfUseLinkState: ScreenState {
         case .linkLoading:
             return TermsOfUseLinkState(windowUUID: state.windowUUID,
                                        shouldDismiss: false,
-                                       isLoading: true,
-                                       hasError: false)
-        case .linkShown:
-            return TermsOfUseLinkState(windowUUID: state.windowUUID,
-                                       shouldDismiss: state.shouldDismiss,
-                                       isLoading: false,
-                                       hasError: state.hasError)
-        case .linkError:
-            return TermsOfUseLinkState(windowUUID: state.windowUUID,
-                                       shouldDismiss: state.shouldDismiss,
-                                       isLoading: false,
-                                       hasError: true)
+                                       isLoading: true)
         case .linkDismissed:
             return TermsOfUseLinkState(windowUUID: state.windowUUID,
                                        shouldDismiss: true,
-                                       isLoading: state.isLoading,
-                                       hasError: state.hasError)
+                                       isLoading: state.isLoading)
         }
     }
 }

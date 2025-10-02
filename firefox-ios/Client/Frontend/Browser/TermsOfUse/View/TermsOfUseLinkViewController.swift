@@ -10,10 +10,8 @@ import Redux
 
 final class TermsOfUseLinkViewController: UIViewController,
                                           Themeable,
-                                          WKNavigationDelegate,
-                                          StoreSubscriber {
+                                          WKNavigationDelegate {
     weak var coordinator: TermsOfUseCoordinatorDelegate?
-    typealias StoreSubscriberStateType = TermsOfUseLinkState
 
     private struct UX {
         static let headerHeight: CGFloat = 44
@@ -80,42 +78,8 @@ final class TermsOfUseLinkViewController: UIViewController,
         applyTheme()
 
         webView.load(URLRequest(url: url))
-        subscribeToRedux()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        unsubscribeFromRedux()
-    }
-
-    func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .termsOfUseLink)
-        store.dispatchLegacy(action)
-
         let loadingAction = TermsOfUseLinkAction(windowUUID: windowUUID, actionType: .linkLoading)
         store.dispatchLegacy(loadingAction)
-
-        store.subscribe(self) {
-            $0.select { appState in
-                appState.screenState(TermsOfUseLinkState.self, for: .termsOfUseLink, window: self.windowUUID)
-                ?? TermsOfUseLinkState(windowUUID: self.windowUUID)
-            }
-        }
-    }
-
-    func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .termsOfUseLink)
-        store.dispatchLegacy(action)
-    }
-
-    func newState(state: TermsOfUseLinkState) {
-        if state.shouldDismiss {
-            dismiss(animated: true)
-        }
     }
 
     private func setupViews() {
@@ -146,6 +110,7 @@ final class TermsOfUseLinkViewController: UIViewController,
     @objc private func closeTapped() {
         let action = TermsOfUseLinkAction(windowUUID: windowUUID, actionType: .linkDismissed)
         store.dispatchLegacy(action)
+        dismiss(animated: true)
     }
 
     private func currentTheme() -> Theme {
@@ -154,15 +119,7 @@ final class TermsOfUseLinkViewController: UIViewController,
 
     // MARK: WebKit Navigation Delegate
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
-        let action = TermsOfUseLinkAction(windowUUID: windowUUID, actionType: .linkShown)
-        store.dispatchLegacy(action)
-    }
-
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
-        let action = TermsOfUseLinkAction(windowUUID: windowUUID, actionType: .linkError)
-        store.dispatchLegacy(action)
-
         let nsError = error as NSError
         if nsError.code == CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue {
             ErrorPageHelper(certStore: nil).loadPage(nsError, forUrl: url, inWebView: webView)

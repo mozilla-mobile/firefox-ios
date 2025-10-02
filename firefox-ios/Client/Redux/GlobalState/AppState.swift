@@ -28,7 +28,6 @@ struct AppState: StateType {
                 case (.tabPeek(let state), .tabPeek): return state as? S
                 case (.tabsTray(let state), .tabsTray): return state as? S
                 case (.termsOfUse(let state), .termsOfUse): return state as? S
-                case (.termsOfUseLink(let state), .termsOfUseLink): return state as? S
                 case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
                 case (.searchEngineSelection(let state), .searchEngineSelection): return state as? S

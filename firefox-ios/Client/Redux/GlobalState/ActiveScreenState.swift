@@ -18,7 +18,6 @@ enum AppScreenState {
     case tabsTray(TabTrayState)
     case themeSettings(ThemeSettingsState)
     case termsOfUse(TermsOfUseState)
-    case termsOfUseLink(TermsOfUseLinkState)
     case trackingProtection(TrackingProtectionState)
     case toolbar(ToolbarState)
     case searchEngineSelection(SearchEngineSelectionState)
@@ -41,7 +40,6 @@ enum AppScreenState {
         case .tabsTray(let state): return .tabsTray(TabTrayState.reducer(state, action))
         case .tabsPanel(let state): return .tabsPanel(TabsPanelState.reducer(state, action))
         case .termsOfUse(let state): return .termsOfUse(TermsOfUseState.reducer(state, action))
-        case .termsOfUseLink(let state): return .termsOfUseLink(TermsOfUseLinkState.reducer(state, action))
         case .themeSettings(let state): return .themeSettings(ThemeSettingsState.reducer(state, action))
         case .trackingProtection(let state): return .trackingProtection(TrackingProtectionState.reducer(state, action))
         case .toolbar(let state): return .toolbar(ToolbarState.reducer(state, action))
@@ -68,7 +66,6 @@ enum AppScreenState {
         case .tabsTray: return .tabsTray
         case .themeSettings: return .themeSettings
         case .termsOfUse: return .termsOfUse
-        case .termsOfUseLink: return .termsOfUseLink
         case .trackingProtection: return .trackingProtection
         case .toolbar: return .toolbar
         case .searchEngineSelection: return .searchEngineSelection
@@ -92,7 +89,6 @@ enum AppScreenState {
         case .tabsTray(let state): return state.windowUUID
         case .themeSettings(let state): return state.windowUUID
         case .termsOfUse(let state): return state.windowUUID
-        case .termsOfUseLink(let state): return state.windowUUID
         case .trackingProtection(let state): return state.windowUUID
         case .toolbar(let state): return state.windowUUID
         case .searchEngineSelection(let state): return state.windowUUID
@@ -160,8 +156,6 @@ struct ActiveScreensState {
                 screens.append(.themeSettings(ThemeSettingsState(windowUUID: uuid)))
             case .termsOfUse:
                 screens.append(.termsOfUse(TermsOfUseState(windowUUID: uuid)))
-            case .termsOfUseLink:
-                screens.append(.termsOfUseLink(TermsOfUseLinkState(windowUUID: uuid)))
             case .trackingProtection:
                 screens.append(.trackingProtection(TrackingProtectionState(windowUUID: uuid)))
             case .toolbar:
