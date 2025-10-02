@@ -60,7 +60,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
         VStack {
             GeometryReader { geometry in
-                ScrollView(.vertical) {
+                ScrollView(showsIndicators: false) {
                     VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()
                         imageView(scale: scale)

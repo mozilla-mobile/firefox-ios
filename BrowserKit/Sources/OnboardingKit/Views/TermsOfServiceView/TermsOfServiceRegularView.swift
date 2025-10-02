@@ -52,7 +52,7 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     private var termsContent: some View {
         SheetSizedCard {
             GeometryReader { geometry in
-                ScrollView(.vertical) {
+                ScrollView(showsIndicators: false) {
                     VStack {
                         VStack(spacing: UX.CardView.tosSpacing) {
                             VStack(spacing: UX.CardView.spacing) {
