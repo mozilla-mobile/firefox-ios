@@ -24,6 +24,7 @@ import struct MozillaAppServices.TopFrecentSiteInfo
 import struct MozillaAppServices.Url
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.VisitTransitionSet
+import struct MozillaAppServices.HistoryMetadata
 
 // TODO: FXIOS-12903 Bookmark Data from Rust components is not Sendable
 extension BookmarkNodeData: @unchecked @retroactive Sendable {}
@@ -60,6 +61,16 @@ public protocol BookmarksHandler {
 public protocol HistoryHandler {
     func applyObservation(visitObservation: VisitObservation,
                           completion: @escaping (Result<Void, any Error>) -> Void)
+    func getHistoryMetadataSince(
+        since startDate: Int64,
+        completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
+    )
+
+    func noteHistoryMetadata(
+        for searchTerm: String,
+        and urlString: String,
+        completion: @Sendable @escaping (Result<(), any Error>) -> Void
+    )
 }
 
 // TODO: FXIOS-13208 Make RustPlaces actually Sendable
@@ -538,6 +549,38 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     }
 
     // MARK: History metadata
+    /// Currently only used to get the recent searches from the user's history storage.
+    public func getHistoryMetadataSince(
+        since startDate: Int64,
+        completion: @Sendable @escaping (Result<[HistoryMetadata], any Error>) -> Void
+    ) {
+        withReader({ connection in
+            return try connection.getHistoryMetadataSince(since: startDate)
+        }, completion: completion)
+    }
+
+    /// As part of the recent searches work, we are interesting in saving the search term in our history storage.
+    /// - Parameters:
+    ///   - searchTerm: The search term used to find a page.
+    ///   - urlString: The url of the page.
+    public func noteHistoryMetadata(
+        for searchTerm: String,
+        and urlString: String,
+        completion: @Sendable @escaping (Result<(), any Error>) -> Void
+    ) {
+        withWriter(
+            { connection in
+                return try connection.noteHistoryMetadataObservationViewTime(
+                    key: HistoryMetadataKey(
+                        url: urlString,
+                        searchTerm: searchTerm,
+                        referrerUrl: nil
+                    ), viewTime: nil
+                )
+            },
+            completion: completion)
+    }
+
     // We are not collecting history metadata anymore since FXIOS-6729, but let's keep the possibility
     // to delete metadata for a while.
     public func deleteHistoryMetadataOlderThan(olderThan: Int64) -> Deferred<Maybe<Void>> {

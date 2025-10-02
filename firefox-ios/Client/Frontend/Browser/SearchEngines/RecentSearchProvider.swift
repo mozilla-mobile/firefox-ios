@@ -4,66 +4,55 @@
 
 import Common
 import Shared
+import Storage
 
 /// Abstraction for any search client that can return trending searches. Able to mock for testing.
 protocol RecentSearchProvider {
-    var recentSearches: [String] { get }
-    func addRecentSearch(_ term: String)
-    func clearRecentSearches()
+    func addRecentSearch(_ term: String, url: String?)
+    func loadRecentSearches(completion: @escaping ([String]) -> Void)
 }
 
 /// A provider that manages recent search terms for a specific search engine.
 struct DefaultRecentSearchProvider: RecentSearchProvider {
-    private let searchEngineID: String
-    private let prefs: Prefs
+    private let historyStorage: HistoryHandler
     private let nimbus: FxNimbus
-
-    private let baseKey = PrefsKeys.Search.recentSearchesCache
-
-    // Namespaced key = "recentSearchesCacheBaseKey.[engineID]"
-    private var recentSearchesKey: String {
-        "\(baseKey).\(searchEngineID)"
-    }
-
-    var recentSearches: [String] {
-        prefs.objectForKey(recentSearchesKey) ?? []
-    }
 
     private var maxNumberOfSuggestions: Int {
         return nimbus.features.recentSearchesFeature.value().maxSuggestions
     }
 
+    func loadRecentSearches(completion: @escaping ([String]) -> Void) {
+      historyStorage.getHistoryMetadataSince(since: Int64.min) { result in
+          if case .success(let historyMetadata) = result {
+              let searches = historyMetadata.compactMap { $0.searchTerm }
+              let recentSearches = Array(searches.prefix(maxNumberOfSuggestions))
+              completion(recentSearches)
+          } else {
+              completion([])
+          }
+      }
+    }
+
     init(
-        profile: Profile = AppContainer.shared.resolve(),
-        searchEngineID: String,
+        historyStorage: HistoryHandler,
         nimbus: FxNimbus = FxNimbus.shared
     ) {
-        self.searchEngineID = searchEngineID
-        self.prefs = profile.prefs
+        self.historyStorage = historyStorage
         self.nimbus = nimbus
     }
 
-    /// Adds a search term to the persisted recent searches list, ensuring it avoid duplicates,
+    // Adds a search term to the persisted recent searches list, ensuring it avoid duplicates,
     /// and does not exceed `maxNumberOfSuggestions`.
     ///
     /// - Parameter term: The search term to store.
-    func addRecentSearch(_ term: String) {
+    func addRecentSearch(_ term: String, url: String?) {
+        guard let url else {
+            // logg error
+            return
+        }
         let trimmed = term.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
-        var searches = recentSearches
-
-        searches.removeAll { $0.caseInsensitiveCompare(trimmed) == .orderedSame }
-        searches.insert(trimmed, at: 0)
-
-        if searches.count > maxNumberOfSuggestions {
-            searches = Array(searches.prefix(maxNumberOfSuggestions))
-        }
-
-        prefs.setObject(searches, forKey: recentSearchesKey)
-    }
-
-    func clearRecentSearches() {
-        prefs.removeObjectForKey(recentSearchesKey)
+        historyStorage.noteHistoryMetadata(for: term, and: url, completion: { _ in })
     }
 }

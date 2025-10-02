@@ -117,6 +117,7 @@ enum ToolbarActionType: ActionType {
     case clearSearch
     case didDeleteSearchTerm
     case didEnterSearchTerm
+    case didSubmitSearchTerm
     case didSetSearchTerm
     case didStartTyping
     case translucencyDidChange
