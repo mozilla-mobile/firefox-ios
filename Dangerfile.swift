@@ -169,7 +169,7 @@ class CodeCoverageGate {
         let header = """
         ### ❌ Per-file test coverage gate
         The following changed file(s) are below **\(formatPct(threshold))** coverage:
-        
+
         | File | Coverage | Required |
         |---|---:|---:|
         \(rows.joined(separator: "\n"))
@@ -181,7 +181,8 @@ class CodeCoverageGate {
 //        if hasBypass {
 //            warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
 //        } else {
-//            fail("\(header)\n\n*Tip:* In exceptional cases, add the `\(coverageBypassLabel)` label with a short justification.")
+//            let tip = "*Tip:* Add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
+//            fail("\(header)\n\n\(tip)")
 //        }
     }
 
