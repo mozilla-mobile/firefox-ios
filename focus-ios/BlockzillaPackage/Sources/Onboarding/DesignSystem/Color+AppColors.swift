@@ -4,6 +4,7 @@
 
 import SwiftUI
 
+// swiftlint:disable force_unwrapping
 extension Color {
     static let actionButton = Color(UIColor(named: "actionButton", in: Bundle.module, compatibleWith: nil)!)
     static let secondOnboardingScreenBackground = Color(UIColor(named: "secondOnboardingScreenBackground", in: Bundle.module, compatibleWith: nil)!)
@@ -12,3 +13,4 @@ extension Color {
     static let systemBackground = Color(UIColor.systemBackground)
     static let accent = Color("Accent", bundle: .module)
 }
+// swiftlint:enable force_unwrapping

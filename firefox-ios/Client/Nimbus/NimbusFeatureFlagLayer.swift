@@ -86,6 +86,9 @@ final class NimbusFeatureFlagLayer {
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
 
+        case .recentSearches:
+            return checkRecentSearchesFeature(from: nimbus)
+
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
@@ -378,6 +381,10 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
+    }
+
+    private func checkRecentSearchesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.recentSearchesFeature.value().enabled
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
