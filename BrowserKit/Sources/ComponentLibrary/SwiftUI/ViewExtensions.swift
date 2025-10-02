@@ -34,5 +34,5 @@ extension View {
         }
     }
 
-    public var backport: Backport<Self> { Backport(content: self) }
+    public var bridge: CompatibilityBridge<Self> { CompatibilityBridge(content: self) }
 }

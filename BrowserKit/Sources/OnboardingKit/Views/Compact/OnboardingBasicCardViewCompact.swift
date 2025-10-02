@@ -66,7 +66,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             }
             .padding(UX.CardView.verticalPadding)
         }
-        .backport.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
+        .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
     }
 
     var titleView: some View {

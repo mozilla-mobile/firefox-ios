@@ -4,11 +4,11 @@
 
 import SwiftUI
 
-public struct Backport<Content> {
+public struct CompatibilityBridge<Content> {
     let content: Content
 }
 
-public extension Backport where Content: View {
+public extension CompatibilityBridge where Content: View {
     @MainActor
     @ViewBuilder
     func glassButtonStyle() -> some View {

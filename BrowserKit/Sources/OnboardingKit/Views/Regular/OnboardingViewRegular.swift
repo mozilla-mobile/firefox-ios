@@ -34,7 +34,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     tabView
                     pageControl
                 }
-                .backport
+                .bridge
                 .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
             }
         }

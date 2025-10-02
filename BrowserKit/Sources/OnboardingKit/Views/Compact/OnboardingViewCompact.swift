@@ -56,7 +56,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     .foregroundColor(skipTextColor)
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
-            .backport.glassButtonStyle()
+            .bridge.glassButtonStyle()
         }
         .onAppear {
             applyTheme()
