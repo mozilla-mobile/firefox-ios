@@ -6,9 +6,6 @@ import Foundation
 import class MozillaAppServices.MozAdsClient
 
 public final class RustAdsClient {
-    public static let shared: MozAdsClient = {
-        return MozAdsClient()
-    }()
-
+    public static let shared = MozAdsClient()
     private init() {}
 }
