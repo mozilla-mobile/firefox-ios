@@ -718,14 +718,14 @@ class SearchViewController: SiteTableViewController,
         switch section {
         case .trendingSearches:
             if let trendingSearch = viewModel.trendingSearches[safe: indexPath.row] {
-                let oneLineCellViewModel = configureOneLineCellForSearch(with: trendingSearch)
+                let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch)
                 oneLineCell.configure(viewModel: oneLineCellViewModel)
                 cell = oneLineCell
             }
 
         case .searchSuggestions:
             if let site = viewModel.suggestions?[indexPath.row] {
-                let oneLineCellViewModel = configureOneLineCellForSearch(
+                let oneLineCellViewModel = oneLineCellModelForSearch(
                     with: site,
                     shouldShowAccessoryView: indexPath.row > 0
                 )
@@ -817,7 +817,7 @@ class SearchViewController: SiteTableViewController,
         return cell
     }
 
-    private func configureOneLineCellForSearch(
+    private func oneLineCellModelForSearch(
         with text: String,
         shouldShowAccessoryView: Bool = true
     ) -> OneLineTableViewCellViewModel {
