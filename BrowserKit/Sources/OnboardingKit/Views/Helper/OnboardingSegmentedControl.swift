@@ -56,7 +56,9 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     @ViewBuilder
     private func legacySegmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
         Button {
-            withAnimation(.easeInOut) {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
                 selection = item.action
             }
         } label: {
@@ -88,7 +90,9 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
             item: item,
             isSelected: item.action == selection,
             action: {
-                withAnimation(.easeInOut) {
+                var transaction = Transaction()
+                transaction.disablesAnimations = true
+                withTransaction(transaction) {
                     selection = item.action
                 }
             }
