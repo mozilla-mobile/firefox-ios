@@ -518,7 +518,7 @@ class NimbusTests: XCTestCase {
         XCTAssertEqual(nil, enrolledExtra["conflict_slug"], "conflictSlug must match")
     }
 
-    class TestRecordedContext: RecordedContext {
+    class TestRecordedContext: RecordedContext, @unchecked Sendable {
         var recorded: [[String: Any]] = []
         var enabled: Bool
         var eventQueries: [String: String]? = nil
