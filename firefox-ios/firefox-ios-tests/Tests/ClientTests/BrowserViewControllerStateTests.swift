@@ -362,11 +362,11 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertNil(initialState.navigationDestination)
 
-        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .zeroSearch)
+        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .homepageZeroSearch)
         let newState = reducer(initialState, action)
         let destination = newState.navigationDestination?.destination
         switch destination {
-        case .zeroSearch:
+        case .homepageZeroSearch:
             break
         default:
             XCTFail("destination is not the right type")
@@ -390,7 +390,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(initialState, action)
         let destination = newState.navigationDestination?.destination
         switch destination {
-        case .zeroSearch:
+        case .homepageZeroSearch:
             break
         default:
             XCTFail("destination is not the right type")
@@ -460,6 +460,26 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let destination = newState.navigationDestination?.destination
         switch destination {
         case .shortcutsLibrary:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+    }
+
+    // MARK: - Stories Feed
+
+    func test_tapOnAllStoriesButton_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnAllStoriesButton, destination: .storiesFeed)
+        let newState = reducer(initialState, action)
+
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .storiesFeed:
             break
         default:
             XCTFail("destination is not the right type")

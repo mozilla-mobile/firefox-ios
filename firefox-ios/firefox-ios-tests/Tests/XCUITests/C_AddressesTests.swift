@@ -590,7 +590,6 @@ class O_AddressesTests: BaseTestCase {
         if !app.navigationBars[addresses.title].exists {
             navigator.goto(AddressesSettings)
         }
-        mozWaitElementHittable(element: app.navigationBars[addresses.title], timeout: TIMEOUT)
         app.buttons[addresses.addAddress].waitAndTap()
         mozWaitForElementToExist(app.navigationBars[addresses.addAddress])
         var attempts = 3

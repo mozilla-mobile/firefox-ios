@@ -1397,6 +1397,7 @@
 		AA24AD302E7C37C6008659A3 /* TrendingSearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD2F2E7C37BF008659A3 /* TrendingSearchClient.swift */; };
 		AA24AD322E7C3A8F008659A3 /* TrendingSearchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */; };
 		AA24AD342E7C3AD2008659A3 /* MockTrendingSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */; };
+		AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */; };
 		AAB4321B2E8187190075E47F /* RecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321A2E8187130075E47F /* RecentSearchProvider.swift */; };
 		AAB4321D2E8189390075E47F /* RecentSearchProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321C2E8189310075E47F /* RecentSearchProviderTests.swift */; };
 		AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */; };
@@ -1555,7 +1556,10 @@
 		C787D8C32C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */; };
 		C78FC19E2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */; };
 		C796E22A2E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */; };
+		C7B376E82E871095006B2D32 /* StoriesFeedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B376E72E871095006B2D32 /* StoriesFeedState.swift */; };
+		C7B376EA2E8715A1006B2D32 /* StoriesFeedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B376E92E8715A1006B2D32 /* StoriesFeedAction.swift */; };
 		C7CDBEFD2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */; };
+		C7D736312E85DCA0000ECE41 /* StoriesFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D736302E85DCA0000ECE41 /* StoriesFeedViewController.swift */; };
 		C7F051522D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051512D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift */; };
 		C7F051562D9EF87D00EC52C0 /* ContextMenuTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051552D9EF87D00EC52C0 /* ContextMenuTelemetry.swift */; };
 		C7F051582D9F098200EC52C0 /* ContextMenuTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F051572D9F098200EC52C0 /* ContextMenuTelemetryTests.swift */; };
@@ -9427,6 +9431,7 @@
 		AA24AD2F2E7C37BF008659A3 /* TrendingSearchClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingSearchClient.swift; sourceTree = "<group>"; };
 		AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingSearchClientTests.swift; sourceTree = "<group>"; };
 		AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrendingSearchEngine.swift; sourceTree = "<group>"; };
+		AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentSearchProvider.swift; sourceTree = "<group>"; };
 		AA80494199BED7BAA77241A9 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Storage.strings"; sourceTree = "<group>"; };
 		AAAB41FC97F6C8F8A1506603 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		AAB4321A2E8187130075E47F /* RecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchProvider.swift; sourceTree = "<group>"; };
@@ -9775,9 +9780,12 @@
 		C78FC19D2E62448400B077DA /* ShortcutsLibraryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewControllerTests.swift; sourceTree = "<group>"; };
 		C796E2292E3D48D3005D6A1D /* ShortcutsLibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryViewController.swift; sourceTree = "<group>"; };
 		C7A6413B89FE82B94F735FFD /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		C7B376E72E871095006B2D32 /* StoriesFeedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedState.swift; sourceTree = "<group>"; };
+		C7B376E92E8715A1006B2D32 /* StoriesFeedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedAction.swift; sourceTree = "<group>"; };
 		C7C54345A164D550CF2BC575 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C7CDBEFC2CE6926900826A92 /* BookmarksFolderEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksFolderEmptyStateView.swift; sourceTree = "<group>"; };
 		C7D341F8BA6A9E44518C11C8 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
+		C7D736302E85DCA0000ECE41 /* StoriesFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesFeedViewController.swift; sourceTree = "<group>"; };
 		C7DB49358A6A84AA7391EEE6 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/Intro.strings; sourceTree = "<group>"; };
 		C7F0514F2D95EA5C00EC52C0 /* HistoryDeletionUtilityTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDeletionUtilityTelemetryTests.swift; sourceTree = "<group>"; };
 		C7F051512D95EACF00EC52C0 /* HistoryDeletionUtilityTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDeletionUtilityTelemetry.swift; sourceTree = "<group>"; };
@@ -13101,6 +13109,7 @@
 		8A5189C62C1B5F6C00CDB668 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */,
 				AAB4321C2E8189310075E47F /* RecentSearchProviderTests.swift */,
 				AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */,
 				AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */,
@@ -14297,6 +14306,15 @@
 			path = Redux;
 			sourceTree = "<group>";
 		};
+		C7B376E62E871053006B2D32 /* Redux */ = {
+			isa = PBXGroup;
+			children = (
+				C7B376E72E871095006B2D32 /* StoriesFeedState.swift */,
+				C7B376E92E8715A1006B2D32 /* StoriesFeedAction.swift */,
+			);
+			path = Redux;
+			sourceTree = "<group>";
+		};
 		C7C6CD742E54BBB2002C6495 /* Redux */ = {
 			isa = PBXGroup;
 			children = (
@@ -14305,6 +14323,15 @@
 				C7F5331D2E57A8A00089DEC7 /* ShortcutsLibraryMiddleware.swift */,
 			);
 			path = Redux;
+			sourceTree = "<group>";
+		};
+		C7D7362F2E85DC73000ECE41 /* StoriesFeed */ = {
+			isa = PBXGroup;
+			children = (
+				C7B376E62E871053006B2D32 /* Redux */,
+				C7D736302E85DCA0000ECE41 /* StoriesFeedViewController.swift */,
+			);
+			path = StoriesFeed;
 			sourceTree = "<group>";
 		};
 		C7FA9B672E4B9A13004F2CA1 /* Layout */ = {
@@ -16161,6 +16188,7 @@
 				2F44FC551A9E83E200FD20CC /* Settings */,
 				D3972BF01C22412B00035B87 /* Share */,
 				C714D27C2E45388D00FC02E6 /* ShortcutsLibrary */,
+				C7D7362F2E85DC73000ECE41 /* StoriesFeed */,
 				C855728029AE7EF900AF32B0 /* SurveySurface */,
 				8AD40FB827BAD1DD00672675 /* TabContentsScripts */,
 				EB9A179720E69A7E00B12184 /* Theme */,
@@ -18447,6 +18475,7 @@
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetView.swift in Sources */,
 				8A8D12142DD671DC00E0B8BB /* TabTrayPanelSwipePalette.swift in Sources */,
 				8C2447EC2DFADF6800BD2C91 /* OnboardingNavigationDelegate.swift in Sources */,
+				C7B376E82E871095006B2D32 /* StoriesFeedState.swift in Sources */,
 				E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */,
 				ED232EA02DFA3BF30046DA47 /* UserTelemetry.swift in Sources */,
 				8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */,
@@ -18684,6 +18713,7 @@
 				211046C92A7ADE9000A7309F /* BlockPopupSetting.swift in Sources */,
 				1DAEEE002D93532900F4B42D /* UIImage+RenderingUtilities.swift in Sources */,
 				8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */,
+				C7D736312E85DCA0000ECE41 /* StoriesFeedViewController.swift in Sources */,
 				E1CEC2022A28C3F100B177D5 /* LoginDetailCenteredTableViewCell.swift in Sources */,
 				C2D71B972A384F40003DEC7A /* ThemedSubtitleTableViewCell.swift in Sources */,
 				2122EE552DDCFD8C00D42716 /* PageZoomSettingsViewModel.swift in Sources */,
@@ -18754,6 +18784,7 @@
 				8A454D362CB86993009436D9 /* MerinoStoryConfiguration.swift in Sources */,
 				61CEFF5E2DA8BC78000B88A7 /* TabsPanelTelemetry.swift in Sources */,
 				8AE459922CEFB1DC002D6679 /* InactiveTabsTelemetry.swift in Sources */,
+				C7B376EA2E8715A1006B2D32 /* StoriesFeedAction.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				8A46F5AC2C9E4389005B6422 /* RemoteDataType.swift in Sources */,
@@ -19381,6 +19412,7 @@
 				E1EAA5F12D49470900D3039C /* ToolbarStateTests.swift in Sources */,
 				5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */,
 				C80C11F028B3C9150062922A /* MockUserDefaults.swift in Sources */,
+				AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */,
 				D8BA1790206D47830023AC00 /* DeferredTestUtils.swift in Sources */,
 				ED4294852CF1286E0077D7CB /* ShareManagerTests.swift in Sources */,
 				5AA75A652A46274A00533F8D /* MockThemeManager.swift in Sources */,

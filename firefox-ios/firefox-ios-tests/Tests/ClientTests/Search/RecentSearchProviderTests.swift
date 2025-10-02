@@ -6,7 +6,7 @@ import XCTest
 import Shared
 @testable import Client
 
-final class RecentSearchProviderTests: XCTestCase {
+final class DefaultRecentSearchProviderTests: XCTestCase {
     var mockProfile: MockProfile!
 
     override func setUp() {
@@ -26,7 +26,7 @@ final class RecentSearchProviderTests: XCTestCase {
         sut.addRecentSearch("combine")
         sut.addRecentSearch("async await")
 
-        XCTAssertEqual(sut.recentSearches(), ["async await", "combine", "swift enums"])
+        XCTAssertEqual(sut.recentSearches, ["async await", "combine", "swift enums"])
     }
 
     func test_addRecentSearch_withTwoDifferentEngines_areIsolatedAndDoNotOverlap() {
@@ -36,8 +36,8 @@ final class RecentSearchProviderTests: XCTestCase {
         subjectA.addRecentSearch("swift")
         subjectB.addRecentSearch("kotlin")
 
-        XCTAssertEqual(subjectA.recentSearches(), ["swift"])
-        XCTAssertEqual(subjectB.recentSearches(), ["kotlin"])
+        XCTAssertEqual(subjectA.recentSearches, ["swift"])
+        XCTAssertEqual(subjectB.recentSearches, ["kotlin"])
     }
 
     func test_addRecentSearch_withWhitespaces_trimsAndReturnsValidSearchTerm() {
@@ -47,7 +47,7 @@ final class RecentSearchProviderTests: XCTestCase {
         sut.addRecentSearch("   ")
         sut.addRecentSearch("")
 
-        XCTAssertEqual(sut.recentSearches(), ["swift"])
+        XCTAssertEqual(sut.recentSearches, ["swift"])
     }
 
     func test_addRecentSearch_withCaseSensitivity_returnsSingleSearchTerm() {
@@ -57,7 +57,7 @@ final class RecentSearchProviderTests: XCTestCase {
         sut.addRecentSearch("swift")
         sut.addRecentSearch("SWIFT")
 
-        XCTAssertEqual(sut.recentSearches(), ["SWIFT"])
+        XCTAssertEqual(sut.recentSearches, ["SWIFT"])
     }
 
     func test_addRecentSearch_movesExistingValueToFront_doesNotReturnDuplicateSearchTerm() {
@@ -68,7 +68,7 @@ final class RecentSearchProviderTests: XCTestCase {
         sut.addRecentSearch("c")
         sut.addRecentSearch("b")
 
-        XCTAssertEqual(sut.recentSearches(), ["b", "c", "a"])
+        XCTAssertEqual(sut.recentSearches, ["b", "c", "a"])
     }
 
     func test_addRecentSearch_withMoreThanMax10_returnsOnlyMostRecentSearchTerm() {
@@ -76,7 +76,7 @@ final class RecentSearchProviderTests: XCTestCase {
 
         for i in 1...15 { sut.addRecentSearch("search term \(i)") }
 
-        let result = sut.recentSearches()
+        let result = sut.recentSearches
         XCTAssertEqual(result.count, 5)
         XCTAssertEqual(result.first, "search term 15")
         XCTAssertEqual(result.last, "search term 11")
@@ -87,10 +87,10 @@ final class RecentSearchProviderTests: XCTestCase {
 
         sut.addRecentSearch("one")
         sut.addRecentSearch("two")
-        XCTAssertFalse(sut.recentSearches().isEmpty)
+        XCTAssertFalse(sut.recentSearches.isEmpty)
 
         sut.clearRecentSearches()
-        XCTAssertTrue(sut.recentSearches().isEmpty)
+        XCTAssertTrue(sut.recentSearches.isEmpty)
     }
 
     func test_recentSearches_persistAcrossInstances() {
@@ -99,7 +99,7 @@ final class RecentSearchProviderTests: XCTestCase {
         a = nil
 
         let b = createSubject(for: "engineA")
-        XCTAssertEqual(b.recentSearches(), ["first"])
+        XCTAssertEqual(b.recentSearches, ["first"])
     }
 
     func test_addRecentSearch_usesCorrectNameSpacedKey() {
@@ -113,7 +113,7 @@ final class RecentSearchProviderTests: XCTestCase {
     }
 
     func createSubject(for searchEngineID: String) -> RecentSearchProvider {
-        let subject = RecentSearchProvider(
+        let subject = DefaultRecentSearchProvider(
             profile: mockProfile,
             searchEngineID: searchEngineID,
         )

@@ -77,7 +77,7 @@ struct GenericSectionView<Content: View>: View {
     private func footerView(_ text: String) -> some View {
         HStack {
             Text(text)
-                .font(.caption)
+                .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                 .foregroundColor(descriptionTextColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

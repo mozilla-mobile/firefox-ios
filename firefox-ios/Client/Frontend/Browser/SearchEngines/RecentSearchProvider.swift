@@ -5,23 +5,42 @@
 import Common
 import Shared
 
+/// Abstraction for any search client that can return trending searches. Able to mock for testing.
+protocol RecentSearchProvider {
+    var recentSearches: [String] { get }
+    func addRecentSearch(_ term: String)
+    func clearRecentSearches()
+}
+
 /// A provider that manages recent search terms for a specific search engine.
-struct RecentSearchProvider {
+struct DefaultRecentSearchProvider: RecentSearchProvider {
     private let searchEngineID: String
     private let prefs: Prefs
+    private let nimbus: FxNimbus
 
     private let baseKey = PrefsKeys.Search.recentSearchesCache
-    private let maxNumberOfSuggestions = 5
 
     // Namespaced key = "recentSearchesCacheBaseKey.[engineID]"
     private var recentSearchesKey: String {
         "\(baseKey).\(searchEngineID)"
     }
 
-    init(profile: Profile = AppContainer.shared.resolve(),
-         searchEngineID: String) {
+    var recentSearches: [String] {
+        prefs.objectForKey(recentSearchesKey) ?? []
+    }
+
+    private var maxNumberOfSuggestions: Int {
+        return nimbus.features.recentSearchesFeature.value().maxSuggestions
+    }
+
+    init(
+        profile: Profile = AppContainer.shared.resolve(),
+        searchEngineID: String,
+        nimbus: FxNimbus = FxNimbus.shared
+    ) {
         self.searchEngineID = searchEngineID
         self.prefs = profile.prefs
+        self.nimbus = nimbus
     }
 
     /// Adds a search term to the persisted recent searches list, ensuring it avoid duplicates,
@@ -32,7 +51,7 @@ struct RecentSearchProvider {
         let trimmed = term.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
-        var searches = recentSearches()
+        var searches = recentSearches
 
         searches.removeAll { $0.caseInsensitiveCompare(trimmed) == .orderedSame }
         searches.insert(trimmed, at: 0)
@@ -42,10 +61,6 @@ struct RecentSearchProvider {
         }
 
         prefs.setObject(searches, forKey: recentSearchesKey)
-    }
-
-    func recentSearches() -> [String] {
-        prefs.objectForKey(recentSearchesKey) ?? []
     }
 
     func clearRecentSearches() {

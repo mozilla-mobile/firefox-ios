@@ -15,7 +15,7 @@ struct SectionStyle: ViewModifier {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .fill(Color(theme?.colors.layer2 ?? UIColor.clear))
+                        .fill(Color(theme?.colors.layer5 ?? UIColor.clear))
                 )
         } else {
             content

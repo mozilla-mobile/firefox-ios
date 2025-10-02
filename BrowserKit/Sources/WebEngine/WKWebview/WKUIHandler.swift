@@ -6,6 +6,7 @@
 @preconcurrency import WebKit
 import Common
 
+@MainActor
 public protocol WKUIHandler: WKUIDelegate {
     var delegate: EngineSessionDelegate? { get set }
     /// Wether the session attacched to this handler is active or not.
