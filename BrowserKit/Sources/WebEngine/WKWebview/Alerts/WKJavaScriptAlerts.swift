@@ -12,7 +12,7 @@ public protocol WKJavascriptPromptAlertControllerDelegate: AnyObject {
 public protocol WKJavaScriptPromptAlertController: UIViewController {
     var alertInfo: WKJavaScriptAlertInfo? { get }
     var delegate: WKJavascriptPromptAlertControllerDelegate? { get set }
-    
+
     func setDismissalResult(_ result: Any?)
 }
 
@@ -24,7 +24,7 @@ public enum WKJavaScriptAlertType: String {
 
 public protocol WKJavaScriptAlertInfo {
     var type: WKJavaScriptAlertType { get }
-    
+
     @MainActor
     func alertController() -> WKJavaScriptPromptAlertController
     func cancel()

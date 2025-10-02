@@ -65,7 +65,7 @@ class PopupThrottlerTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 4.0)
     }
-    
+
     private func createSubject(resetTime: [PopupType: TimeInterval] = PopupType.defaultResetTimes) -> DefaultPopupThrottler {
         let throttler = DefaultPopupThrottler(resetTime: resetTime)
         trackForMemoryLeaks(throttler)
