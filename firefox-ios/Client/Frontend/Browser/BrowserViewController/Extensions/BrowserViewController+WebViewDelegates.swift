@@ -530,7 +530,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            handleMailToNavigation(url: url, decisionHandler: decisionHandler)
+            handleMailToNavigation(url: url)
             decisionHandler(.cancel)
             return
         }
@@ -656,8 +656,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    private func handleMailToNavigation(url: URL,
-                                        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void) {
+    private func handleMailToNavigation(url: URL) {
         showExternalAlert(withText: .ExternalMailLinkConfirmation) { _ in
             if let mailToMetadata = url.mailToMetadata(),
                let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
