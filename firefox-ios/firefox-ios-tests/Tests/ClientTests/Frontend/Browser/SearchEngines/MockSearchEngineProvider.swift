@@ -5,7 +5,7 @@
 import Foundation
 @testable import Client
 
-class MockSearchEngineProvider: SearchEngineProvider {
+class MockSearchEngineProvider: SearchEngineProvider, @unchecked Sendable {
     var unorderedEngines: (([OpenSearchEngine]) -> Void)?
 
     var mockEngines: [OpenSearchEngine] = [
@@ -69,12 +69,13 @@ class MockSearchEngineProvider: SearchEngineProvider {
         unorderedEngines?(mockEngines)
     }
 
-    func getOrderedEngines(
-        customEngines: [OpenSearchEngine],
-        engineOrderingPrefs: SearchEnginePrefs,
-        prefsMigrator: any SearchEnginePreferencesMigrator,
-        completion: @escaping SearchEngineCompletion) {
-        completion(engineOrderingPrefs, mockEngines)
+    func getOrderedEngines(customEngines: [OpenSearchEngine],
+                           engineOrderingPrefs: SearchEnginePrefs,
+                           prefsMigrator: any SearchEnginePreferencesMigrator,
+                           completion: @escaping SearchEngineCompletion) {
+        DispatchQueue.main.async {
+            completion(engineOrderingPrefs, self.mockEngines)
+        }
     }
 
     let preferencesVersion: SearchEngineOrderingPrefsVersion = .v1
