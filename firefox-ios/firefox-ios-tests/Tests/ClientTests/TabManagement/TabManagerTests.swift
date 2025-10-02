@@ -1733,7 +1733,7 @@ class TabManagerTests: XCTestCase {
             return DeeplinkOptimizationRefactorFeature(enabled: enabled)
         }
     }
-    
+
     enum TabType {
         case normalActive
         case normalInactive

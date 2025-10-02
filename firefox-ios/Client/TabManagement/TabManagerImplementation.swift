@@ -877,9 +877,8 @@ class TabManagerImplementation: NSObject,
                                        actionType: PrivateModeActionType.setPrivateModeTo)
         store.dispatchLegacy(action)
 
-        
         tab.resumeDocumentDownload()
-        
+
         didSelectTab(url)
         updateMenuItemsForSelectedTab()
 
