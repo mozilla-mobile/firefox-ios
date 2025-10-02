@@ -10,17 +10,15 @@ import Foundation
 let danger = Danger()
 let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
+checkReleaseBranch()
+checkStringsFile()
 checkForFunMetrics()
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkForWebEngineFileChange()
-checkStringsFile()
-checkReleaseBranch()
 CodeUsageDetector().checkForCodeUsage()
-BrowserViewControllerChecker().failsOnAddedExtension()
-
-// Code coverage
-checkCodeCoverage()
 CodeCoverageGate().failOnNewFilesWithoutCoverage()
+BrowserViewControllerChecker().failsOnAddedExtension()
+checkCodeCoverage()
 
 // Add some fun comments in Danger to have positive feedback on PRs
 func checkForFunMetrics() {
