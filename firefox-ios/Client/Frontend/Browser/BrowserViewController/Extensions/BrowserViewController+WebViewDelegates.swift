@@ -501,6 +501,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
             handleSpecialSchemeNavigation(url: url, decisionHandler: decisionHandler)
+            decisionHandler(.cancel)
             return
         }
 
@@ -632,8 +633,6 @@ extension BrowserViewController: WKNavigationDelegate {
         } else {
             UIApplication.shared.open(url, options: [:])
         }
-
-        decisionHandler(.cancel)
     }
 
     private func handleStoreURLNavigation(url: URL,
