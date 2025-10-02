@@ -34,24 +34,20 @@ final class SummarizeViewModelTests: XCTestCase, @unchecked Sendable {
     private let maxWords = 5000
     private let url = URL(string: "https://example.com")!
 
-    override func setUp() {
-        super.setUp()
-        ensureMainThread { [self] in
-            webView = MockWebView(url)
-            dateProvider = MockDateProvider()
-            summarizerService = MockSummarizerService()
-            tosAcceptor = MockSummarizeToSAcceptor()
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        webView = MockWebView(url)
+        dateProvider = MockDateProvider()
+        summarizerService = MockSummarizerService()
+        tosAcceptor = MockSummarizeToSAcceptor()
     }
 
-    override func tearDown() {
-        ensureMainThread { [self] in
-            tosAcceptor = nil
-            dateProvider = nil
-            summarizerService = nil
-            webView = nil
-        }
-        super.tearDown()
+    override func tearDown() async throws {
+        tosAcceptor = nil
+        dateProvider = nil
+        summarizerService = nil
+        webView = nil
+        try await super.tearDown()
     }
 
     func test_summarize_whenTosNotAccepted_whenTriggerIsShake_showsToSScreen() {
