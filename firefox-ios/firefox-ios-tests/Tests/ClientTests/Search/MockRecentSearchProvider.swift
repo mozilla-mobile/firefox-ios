@@ -9,18 +9,13 @@ import Foundation
 final class MockRecentSearchProvider: RecentSearchProvider {
     private(set) var addRecentSearchCalledCount = 0
     private(set) var recentSearchesCalledCount = 0
-    private(set) var clearRecentSearchesCalledCount = 0
+    private(set) var loadRecentSearchesCalledCount = 0
 
-    var recentSearches: [String] {
-        recentSearchesCalledCount += 1
-        return ["foo", "bar"]
-    }
-
-    func addRecentSearch(_ term: String) {
+    func addRecentSearch(_ term: String, url: String?) {
         addRecentSearchCalledCount += 1
     }
 
-    func clearRecentSearches() {
-        clearRecentSearchesCalledCount += 1
+    func loadRecentSearches(completion: @escaping ([String]) -> Void) {
+        loadRecentSearchesCalledCount += 1
     }
 }

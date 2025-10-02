@@ -157,6 +157,15 @@ extension BrowserViewController: URLBarDelegate {
         searchTelemetry.shouldSetUrlTypeSearch = true
 
         finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
+
+        guard isRecentSearchEnabled else { return }
+        let action = ToolbarAction(
+            url: searchURL,
+            searchTerm: text,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+        store.dispatch(action)
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
