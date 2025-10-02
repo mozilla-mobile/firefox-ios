@@ -1389,6 +1389,7 @@
 		96EB6C3827D821B800A9D159 /* HistoryPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3727D821B800A9D159 /* HistoryPanelViewModel.swift */; };
 		96EB6C3E27D9266500A9D159 /* HistoryActionables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3D27D9266500A9D159 /* HistoryActionables.swift */; };
 		96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F8DA48280452CA00E53239 /* GleanPlumbContextProvider.swift */; };
+		A2BC4C042E8EF51A00459792 /* ObservableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BC4C032E8EF50A00459792 /* ObservableCollectionViewCell.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
@@ -9364,6 +9365,7 @@
 		A26C435BB698CC43D73D3ACA /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		A27945ADA7E27D8296CEB772 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		A2884783AB373E4A0320E33E /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		A2BC4C032E8EF50A00459792 /* ObservableCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableCollectionViewCell.swift; sourceTree = "<group>"; };
 		A2C9430F8D3A454B81045BA2 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		A2D6479F8C533A108065AEDC /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Storage.strings; sourceTree = "<group>"; };
 		A2E7448D9546B86303F12903 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
@@ -12803,6 +12805,7 @@
 		8A032951288F27CA00AD9B89 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				A2BC4C032E8EF50A00459792 /* ObservableCollectionViewCell.swift */,
 				8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */,
 				3BB50E101D6274CD004B33DF /* TopSiteItemCell.swift */,
 			);
@@ -18641,6 +18644,7 @@
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
 				D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */,
 				210972702DCBA50F001162A2 /* GenericItemCellView.swift in Sources */,
+				A2BC4C042E8EF51A00459792 /* ObservableCollectionViewCell.swift in Sources */,
 				ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */,
 				8CA4E80D2D22C066007207C1 /* GleanUsageReporting.swift in Sources */,
 				1D05C9832D9CCF720081540C /* RemoteSettingsServiceSyncCoordinator.swift in Sources */,

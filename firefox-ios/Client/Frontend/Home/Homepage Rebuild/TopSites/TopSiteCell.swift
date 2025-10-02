@@ -10,7 +10,7 @@ import Storage
 import UIKit
 
 /// The TopSite cell that appears for the homepage rebuild project.
-class TopSiteCell: UICollectionViewCell, ReusableCell {
+class TopSiteCell: ObservableCollectionViewCell, ReusableCell {
     // MARK: - Variables
 
     private var homeTopSite: TopSiteConfiguration?
@@ -149,6 +149,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         self.theme = theme
         homeTopSite = topSite
         titleLabel.text = topSite.title
+        visibilityDebugLabel = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
         accessibilityTraits = .link
 
@@ -157,6 +158,11 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
         switch topSite.type {
         case .sponsoredSite(let siteInfo):
+            onBecomeVisible = { [weak self] cell in
+                print("isVisible", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false, topSite.type)
+            } // This will eventually become the impression callback
+            visibilityThreshold = 0.5
+            isVisibilityMonitoringEnabled = true
             if let url = URL(string: siteInfo.imageURL) {
                 imageResource = .remoteURL(url: url)
             }
