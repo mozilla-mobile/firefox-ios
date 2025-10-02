@@ -24,14 +24,16 @@ class MockSearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func getOrderedEngines(completion: @escaping SearchEngineCompletion) {
-        completion(
-            SearchEnginePrefs(
-                engineIdentifiers: searchEngines.map {
-                    $0.shortName
-                },
-                disabledEngines: [],
-                version: .v1),
-            searchEngines
-        )
+        DispatchQueue.main.async {
+            completion(
+                SearchEnginePrefs(
+                    engineIdentifiers: self.searchEngines.map {
+                        $0.shortName
+                    },
+                    disabledEngines: [],
+                    version: .v1),
+                self.searchEngines
+            )
+        }
     }
 }
