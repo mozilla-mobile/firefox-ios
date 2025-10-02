@@ -59,9 +59,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                         .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                         selection: $selectedAction,
-                        items: viewModel.multipleChoiceButtons,
-                        windowUUID: windowUUID,
-                        themeManager: themeManager
+                        items: viewModel.multipleChoiceButtons
                     )
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
@@ -74,18 +72,15 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                 primaryButton
                 Button(" ", action: {})
                     .font(UX.CardView.secondaryActionFont)
-                    .buttonStyle(SecondaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
                     .opacity(0)
                     .accessibilityHidden(true)
                     .disabled(true)
             }
             .padding(UX.CardView.verticalPadding)
         }
-        .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-        )
+        .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
     }
 
     var titleView: some View {
@@ -103,18 +98,18 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     var primaryButton: some View {
         Group {
             if #available(iOS 17.0, *) {
-                Button(
+                OnboardingButton.primary(
                     viewModel.buttons.primary.title,
                     action: {
                         onBottomButtonAction(
                             viewModel.buttons.primary.action,
                             viewModel.name
                         )
-                    }
+                    },
+                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+                    windowUUID: windowUUID,
+                    themeManager: themeManager
                 )
-                .font(UX.CardView.primaryActionFont)
-                .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-                .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
             } else {
                 DragCancellablePrimaryButton(
                     title: viewModel.buttons.primary.title,

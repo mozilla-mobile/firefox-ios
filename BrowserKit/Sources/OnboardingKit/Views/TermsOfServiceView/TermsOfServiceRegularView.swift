@@ -73,13 +73,8 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
                 }
                 .scrollBounceBehavior(basedOnSize: true)
             }
-            .background(
-                RoundedRectangle(
-                    cornerRadius: UX.CardView.cornerRadius
-                )
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-            )
+            .bridge
+            .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
             .padding(.horizontal, UX.CardView.horizontalPadding)
             .accessibilityElement(children: .contain)
         }
@@ -133,17 +128,18 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     }
 
     var primaryButton: some View {
-        Button(
+        OnboardingButton.primary(
             viewModel.configuration.buttons.primary.title,
             action: {
                 viewModel.handleEmbededLinkAction(
                     action: .accept
                 )
-            }
+            },
+            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton",
+            width: UX.CardView.primaryButtonWidthiPad,
+            windowUUID: windowUUID,
+            themeManager: themeManager
         )
-        .font(UX.CardView.primaryActionFont)
-        .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton")
-        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
 
     private func applyTheme(theme: Theme) {

@@ -34,10 +34,8 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     tabView
                     pageControl
                 }
-                .background(
-                    RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                        .fill(cardBackgroundColor)
-                )
+                .bridge
+                .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
             }
         }
         .onAppear {
