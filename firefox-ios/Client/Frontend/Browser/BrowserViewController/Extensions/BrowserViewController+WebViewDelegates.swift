@@ -531,6 +531,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
             handleMailToNavigation(url: url, decisionHandler: decisionHandler)
+            decisionHandler(.cancel)
             return
         }
 
@@ -670,8 +671,6 @@ extension BrowserViewController: WKNavigationDelegate {
                 UIApplication.shared.open(url, options: [:])
             }
         }
-
-        decisionHandler(.cancel)
     }
 
     private func handleCustomSchemeURLNavigation(url: URL, navigationAction: WKNavigationAction) {
