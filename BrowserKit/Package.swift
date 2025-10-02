@@ -117,7 +117,10 @@ let package = Package(
                 .copy("Resources/mozilla.ico"),
                 .copy("Resources/inf-nan.svg"),
                 .copy("Resources/hackernews.svg")
-            ]
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ],
         ),
         .target(
             name: "Common",
