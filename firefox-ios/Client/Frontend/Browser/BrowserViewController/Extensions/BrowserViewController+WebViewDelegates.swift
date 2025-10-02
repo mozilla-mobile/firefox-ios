@@ -524,7 +524,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if isStoreURL(url) {
             decisionHandler(.cancel)
-            handleStoreURLNavigation(url: url, decisionHandler: decisionHandler)
+            handleStoreURLNavigation(url: url)
             return
         }
 
@@ -635,8 +635,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    private func handleStoreURLNavigation(url: URL,
-                                          decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void) {
+    private func handleStoreURLNavigation(url: URL) {
         // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
         // Otherwise the AppStoreAlert is shown on the wrong tab
         let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
