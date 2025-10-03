@@ -190,7 +190,7 @@ class FxAccountManagerTests: XCTestCase {
     func testNewAccountLogIn() {
         let mgr = mockFxAManager()
         let beginAuthDone = expectation(description: "beginAuthDone")
-        var authURL: String?
+        nonisolated(unsafe) var authURL: String?
         mgr.initialize { _ in
             mgr.beginAuthentication(entrypoint: "test_new_account_log_in") { url in
                 authURL = try! url.get().absoluteString
@@ -223,7 +223,7 @@ class FxAccountManagerTests: XCTestCase {
     func testAuthStateVerification() {
         let mgr = mockFxAManager()
         let beginAuthDone = expectation(description: "beginAuthDone")
-        var authURL: String?
+        nonisolated(unsafe) var authURL: String?
         mgr.initialize { _ in
             mgr.beginAuthentication(entrypoint: "test_auth_state_verification") { url in
                 authURL = try! url.get().absoluteString
