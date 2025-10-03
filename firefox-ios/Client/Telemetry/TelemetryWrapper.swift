@@ -757,8 +757,14 @@ extension TelemetryWrapper {
         gleanRecordEvent(category: category, method: method, object: object, value: value, extras: extras)
     }
 
+    // Use this override to unit tests TelemetryWrapper. Only use this for unit tests!
+    static nonisolated(unsafe) var hasTelemetryOverride = false
+
     // swiftlint:disable:next function_body_length
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
+        // FXIOS-TODO Laurie - Disable unit tests with side-effect telemetry events
+        guard !AppConstants.isRunningTest || hasTelemetryOverride else { return }
+
         switch (category, method, object, value, extras) {
         // MARK: Bookmarks
         case (.action, .view, .bookmarksPanel, let from?, _):

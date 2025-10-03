@@ -12,62 +12,57 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
-        DependencyHelperMock().bootstrapDependencies()
+        setupTelemetry(with: MockProfile())
     }
 
     override func tearDown() {
-        DependencyHelperMock().reset()
+        tearDownTelemetry()
         super.tearDown()
     }
 
     // MARK: - Card View telemetry
-    func testSendOnboardingCardView_WelcomeCard_Success() {
+    func testSendOnboardingCardView_WelcomeCard_Success() throws {
         let subject = createTelemetryUtility(for: .freshInstall)
 
         subject.sendCardViewTelemetry(from: CardNames.welcome.rawValue)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
-    func testSendOnboardingCardView_SyncCard_Success() {
+    func testSendOnboardingCardView_SyncCard_Success() throws {
         let subject = createTelemetryUtility(for: .freshInstall)
 
         subject.sendCardViewTelemetry(from: CardNames.sync.rawValue)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
-    func testSendOnboardingCardView_NotificationsCard_Success() {
+    func testSendOnboardingCardView_NotificationsCard_Success() throws {
         let subject = createTelemetryUtility(for: .freshInstall)
 
         subject.sendCardViewTelemetry(from: CardNames.notifications.rawValue)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
-    func testSendOnboardingCardView_UpgradeSyncCard_Success() {
+    func testSendOnboardingCardView_UpgradeSyncCard_Success() throws {
         let subject = createTelemetryUtility(for: .upgrade)
 
         subject.sendCardViewTelemetry(from: CardNames.updateSync.rawValue)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
-    func testSendOnboardingCardView_UpgradeWelcomeCard_Success() {
+    func testSendOnboardingCardView_UpgradeWelcomeCard_Success() throws {
         let subject = createTelemetryUtility(for: .upgrade)
 
         subject.sendCardViewTelemetry(from: CardNames.updateWelcome.rawValue)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
     // MARK: - Primary tap
-    func testSendOnboardingPrimaryTap_WelcomeCard() {
+    func testSendOnboardingPrimaryTap_WelcomeCard() throws {
         let isPrimaryButton = true
         let subject = createTelemetryUtility(for: .freshInstall)
 
@@ -75,10 +70,10 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
                                           with: .forwardOneCard,
                                           and: isPrimaryButton)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
     }
 
-    func testSendOnboardingPrimaryTap_UpgradeWelcomeCard() {
+    func testSendOnboardingPrimaryTap_UpgradeWelcomeCard() throws {
         let isPrimaryButton = true
         let subject = createTelemetryUtility(for: .upgrade)
 
@@ -86,11 +81,11 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
                                           with: .setDefaultBrowser,
                                           and: isPrimaryButton)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
     }
 
     // MARK: - Secondary tap
-    func testSendOnboardingSecondaryTap_SyncCard() {
+    func testSendOnboardingSecondaryTap_SyncCard() throws {
         let isPrimaryButton = false
         let subject = createTelemetryUtility(for: .freshInstall)
 
@@ -98,10 +93,10 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
                                           with: .forwardOneCard,
                                           and: isPrimaryButton)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
     }
 
-    func testSendOnboardingSecondaryTap_UpdateSyncCard() {
+    func testSendOnboardingSecondaryTap_UpdateSyncCard() throws {
         let isPrimaryButton = false
         let subject = createTelemetryUtility(for: .upgrade)
 
@@ -109,26 +104,26 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
                                           with: .forwardOneCard,
                                           and: isPrimaryButton)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
     }
 
     // MARK: - Multiple Choice Buttons
-    func testSendOnboardingMultipleChoiceButton() {
+    func testSendOnboardingMultipleChoiceButton() throws {
         let subject = createTelemetryUtility(for: .freshInstall)
 
         subject.sendMultipleChoiceButtonActionTelemetry(from: CardNames.welcome.rawValue,
                                                         with: .themeDark)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.multipleChoiceButtonTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.multipleChoiceButtonTap)
     }
 
     // MARK: - Close
-    func testSendOnboardingClose_NotificationsCard() {
+    func testSendOnboardingClose_NotificationsCard() throws {
         let subject = createTelemetryUtility(for: .freshInstall)
 
         subject.sendDismissOnboardingTelemetry(from: CardNames.notifications.rawValue)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
     }
 
     // MARK: Private

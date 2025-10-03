@@ -8,23 +8,21 @@ import Glean
 import Common
 import Shared
 
+// TODO: FXIOS-TODO Laurie - Migrate TermsOfUseTelemetryTests to use mock telemetry or GleanWrapper
 @MainActor
 final class TermsOfUseTelemetryTests: XCTestCase {
     private var telemetry: TermsOfUseTelemetry!
 
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
         telemetry = TermsOfUseTelemetry()
+        setupTelemetry(with: MockProfile())
     }
 
     override func tearDown() {
         super.tearDown()
         telemetry = nil
+        tearDownTelemetry()
     }
 
     func testTermsOfUseBottomSheetDisplayed() throws {
