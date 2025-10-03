@@ -6,6 +6,11 @@ import XCTest
 import Common
 
 class JumpBackInTests: FeatureFlaggedTestBase {
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        throw XCTSkip("Skipping all JumpBackInTests. The option is not available on the new homepage")
+    }
+
     func closeKeyboard() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)

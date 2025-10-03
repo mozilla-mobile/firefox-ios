@@ -12,6 +12,8 @@ class ReadingListTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -79,7 +81,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
         // Add item to reading list and check that it appears
         addContentToReaderView()
-        navigator.goto(BrowserTabMenu)
+        navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_ReadingList)
 
         // Check that there is one item

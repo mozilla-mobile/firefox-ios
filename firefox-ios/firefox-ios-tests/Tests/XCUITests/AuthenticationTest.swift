@@ -9,6 +9,8 @@ let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
 class AuthenticationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisibleAndLogin() {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(testBasicHTTPAuthURL)
 
         // Predicate to wait for element to exist
@@ -48,6 +50,8 @@ class AuthenticationTest: BaseTestCase {
         // Added this check to ensure the BasicAuth login is persisting after app restart as well.
         app.terminate()
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(testBasicHTTPAuthURL)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         navigator.nowAt(NewTabScreen)

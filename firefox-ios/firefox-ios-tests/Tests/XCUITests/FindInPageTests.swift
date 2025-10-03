@@ -6,6 +6,8 @@ import XCTest
 
 class FindInPageTests: FeatureFlaggedTestBase {
     private func openFindInPageFromMenu(openSite: String) {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(openSite)
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -29,6 +31,8 @@ class FindInPageTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2323463
     func testFindInLargeDoc() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -119,6 +123,8 @@ class FindInPageTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2323714
     func testFindInPageTwoWordsSearchLargeDoc() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)

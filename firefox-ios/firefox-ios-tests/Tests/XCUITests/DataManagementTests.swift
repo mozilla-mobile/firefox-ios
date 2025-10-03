@@ -26,8 +26,10 @@ class DataManagementTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307015
     func testWebSiteDataOptions() {
         cleanAllData()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-example.html"))
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -89,9 +91,10 @@ class DataManagementTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2802088
     func testFilterWebsiteData() {
         cleanAllData()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        navigator.goto(NewTabScreen)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-example.html"))
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()

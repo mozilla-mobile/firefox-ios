@@ -29,10 +29,13 @@ class SwipingTabsTests: FeatureFlaggedTestBase {
         }
         selectToolbarBottom()
         navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)

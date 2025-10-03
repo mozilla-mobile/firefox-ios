@@ -20,10 +20,12 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     func testPrivateTabDoesNotTrackHistory_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(url1)
         waitForTabsButton()
-        navigator.goto(BrowserTabMenu)
         // Go to History screen
+        navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_History)
         waitForElementsToExist(
             [
@@ -60,6 +62,8 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
     func testPrivateTabDoesNotTrackHistory_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(url1)
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
@@ -102,7 +106,9 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         app.launch()
         // Open two tabs in normal browsing and check the number of tabs open
         navigator.nowAt(NewTabScreen)
-        navigator.openNewURL(urlString: url2)
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL(url2)
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -148,10 +154,13 @@ class PrivateBrowsingTest: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         // Open two tabs in normal browsing and check the number of tabs open
-        navigator.nowAt(NewTabScreen)
-        navigator.openNewURL(urlString: url2)
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
+        navigator.openURL(url2)
         waitUntilPageLoad()
-        waitForTabsButton()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.otherElements[tabsTray])
         mozWaitForElementToExist(app.cells.elementContainingText(url3Label))

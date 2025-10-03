@@ -273,7 +273,10 @@ class SettingsTests: FeatureFlaggedTestBase {
     func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         let summarizeContentMenuOption = app.tables.cells[AccessibilityIdentifiers.MainMenu.summarizePage]
         mozWaitForElementToExist(summarizeContentMenuOption)

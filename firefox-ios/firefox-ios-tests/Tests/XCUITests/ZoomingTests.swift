@@ -24,6 +24,10 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     // Smoketest
     func testZoomingActions() {
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Navigate to Zoom panel
         openURLAndNavigateToZoom(index: 0)
         XCTAssertEqual(zoomBar.currentZoomPercent(), "100%")
@@ -50,6 +54,10 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     func testZoomingActionsLandscape_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
 
         openURLAndNavigateToZoom(index: 0)
 
@@ -79,6 +87,10 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     func testZoomForceCloseFirefox_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
 
         openURLAndNavigateToZoom(index: 0)
 
@@ -110,6 +122,10 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     func testZoomForceCloseFirefox_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         zoomBar = ZoomBarScreen(app: app, selectors: ExperimentalZoomBarSelectors())
         openURLAndNavigateToZoom(index: 0)
         zoomBar.assertZoomPercent("100%")
@@ -132,6 +148,10 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     func testSwitchingZoomedTabs_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing
         goToTabTray()
@@ -158,6 +178,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
         ]
         navigator.openURL(websites[index])
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         navigator.goto(PageZoom)
     }
