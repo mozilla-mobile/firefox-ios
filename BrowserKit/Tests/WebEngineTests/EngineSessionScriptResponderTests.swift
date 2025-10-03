@@ -7,7 +7,7 @@ import XCTest
 
 @MainActor
 @available(iOS 16, *)
-class EngineSessionScriptResponderTests: XCTestCase {
+final class EngineSessionScriptResponderTests: XCTestCase {
     private var session: MockWKEngineSession!
 
     override func setUp() async throws {

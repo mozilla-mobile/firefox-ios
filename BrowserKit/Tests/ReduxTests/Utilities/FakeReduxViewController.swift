@@ -8,7 +8,7 @@ import UIKit
 
 let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
-class FakeReduxViewController: UIViewController, StoreSubscriber {
+final class FakeReduxViewController: UIViewController, StoreSubscriber {
     typealias SubscriberStateType = FakeReduxState
 
     var label = UILabel(frame: .zero)

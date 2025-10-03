@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 @testable import WebEngine
 
-class MockWKSecurityOrigin: WKSecurityOrigin {
+final class MockWKSecurityOrigin: WKSecurityOrigin {
     var overridenProtocol: String!
     var overridenHost: String!
     var overridenPort: Int!

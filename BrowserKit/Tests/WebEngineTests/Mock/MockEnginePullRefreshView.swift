@@ -5,7 +5,7 @@
 import WebEngine
 import UIKit
 
-class MockEnginePullRefreshView: UIView, EnginePullRefreshView {
+final class MockEnginePullRefreshView: UIView, EnginePullRefreshView {
     var configureCalled = 0
     var onRefresh: (() -> Void)?
 

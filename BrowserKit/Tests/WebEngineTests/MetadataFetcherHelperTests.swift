@@ -120,7 +120,7 @@ final class MetadataFetcherHelperTests: XCTestCase {
     }
 }
 
-class MockMetadataFetcherDelegate: MetadataFetcherDelegate {
+final class MockMetadataFetcherDelegate: MetadataFetcherDelegate {
     var didLoadPageMetadataCalled = 0
 
     func didLoad(pageMetadata: EnginePageMetadata) {

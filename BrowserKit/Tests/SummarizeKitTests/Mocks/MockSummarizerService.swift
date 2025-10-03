@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 @testable import SummarizeKit
 
-class MockSummarizerService: SummarizerService {
+final class MockSummarizerService: SummarizerService {
     var summarizeCalled = 0
     var summarizeStreamedCalled = 0
     var mockChunchedResponse: [String] = []

@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 @testable import SummarizeKit
 
-class MockSummarizeViewModel: SummarizeViewModel {
+final class MockSummarizeViewModel: SummarizeViewModel {
     var summarizeCalled = 0
     var injectedSummarizeResult: Result<String, SummarizeKit.SummarizerError>?
     var unblockSummarizationCalled = 0

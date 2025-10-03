@@ -5,7 +5,7 @@
 import Foundation
 @testable import WebEngine
 
-class MockWKContentScript: WKContentScript {
+final class MockWKContentScript: WKContentScript {
     var userContentControllerCalled = 0
     var scriptMessageHandlerNamesCalled = 0
     var prepareForDeinitCalled = 0

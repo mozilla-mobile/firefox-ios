@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 @testable import WebEngine
 
-class MockWKFrameInfo: WKFrameInfo {
+final class MockWKFrameInfo: WKFrameInfo {
     let overridenWebView: WKWebView?
     let overridenIsMainFrame: Bool
 

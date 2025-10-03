@@ -55,7 +55,7 @@ public protocol WKUIHandler: WKUIDelegate {
     )
 }
 
-public class DefaultUIHandler: NSObject, WKUIHandler {
+final public class DefaultUIHandler: NSObject, WKUIHandler {
     public weak var delegate: EngineSessionDelegate?
     private var sessionCreator: SessionCreator?
 

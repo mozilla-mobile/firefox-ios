@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 @testable import WebEngine
 
-class MockWKUserScriptManager: WKUserScriptManager {
+final class MockWKUserScriptManager: WKUserScriptManager {
     var injectUserScriptsIntoWebViewCalled = 0
 
     func injectUserScriptsIntoWebView(_ webView: WKEngineWebView) {

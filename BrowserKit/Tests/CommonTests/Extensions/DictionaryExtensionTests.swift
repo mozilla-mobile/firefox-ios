@@ -4,7 +4,7 @@
 
 import XCTest
 
-class DictionaryExtensionTests: XCTestCase {
+final class DictionaryExtensionTests: XCTestCase {
     // MARK: merge:withDictionary
 
     func test_mergeTwoEmptyDict_returnEmptyDict() {

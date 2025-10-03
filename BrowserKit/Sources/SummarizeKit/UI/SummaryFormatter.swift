@@ -7,7 +7,7 @@ import Common
 import Down
 import UIKit
 
-class CustomStyler: DownStyler {
+final class CustomStyler: DownStyler {
     // NOTE: The content is produced by an LLM; generated links may be unsafe or unreachable.
     // To keep the MVP safe, link rendering is disabled.
     override func style(link str: NSMutableAttributedString, title: String?, url: String?) {}

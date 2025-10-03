@@ -8,7 +8,7 @@ import SwiftDraw
 import Kingfisher
 import GCDWebServers
 
-class SVGImageProcessorTests: XCTestCase {
+final class SVGImageProcessorTests: XCTestCase {
     func testDownloadingSVGImage_withKingfisherProcessor_forStandardSVGCase() async {
         let assetType: AssetType = .svgCase1
         let expectedRasterSize = CGSize(width: 360, height: 360)

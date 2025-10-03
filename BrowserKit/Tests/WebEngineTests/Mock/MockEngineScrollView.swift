@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 @testable import WebEngine
 
-class MockEngineScrollView: WKScrollView {
+final class MockEngineScrollView: WKScrollView {
     var refreshControl: UIRefreshControl?
     var setContentOffsetCalled = 0
     var savedContentOffset: CGPoint?

@@ -4,7 +4,7 @@
 
 @testable import WebEngine
 
-class MockEngineSessionScriptResponder: EngineSessionScriptResponder {
+final class MockEngineSessionScriptResponder: EngineSessionScriptResponder {
     var contentScriptDidSendEventCalled = 0
     var lastContentScriptEvent: ScriptEvent?
 

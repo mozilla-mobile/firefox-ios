@@ -5,7 +5,7 @@
 import Foundation
 @testable import WebEngine
 
-class MockAdsTelemetryDelegate: AdsTelemetryScriptDelegate {
+final class MockAdsTelemetryDelegate: AdsTelemetryScriptDelegate {
     var trackAdsFoundOnPageCalled = 0
     var trackAdsClickedOnPageCalled = 0
 

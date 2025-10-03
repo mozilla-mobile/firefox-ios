@@ -4,5 +4,5 @@
 
 import UIKit
 
-public class RegularBrowserAddressToolbar: BrowserAddressToolbar {
+final public class RegularBrowserAddressToolbar: BrowserAddressToolbar {
 }

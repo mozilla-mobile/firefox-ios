@@ -5,7 +5,7 @@
 import Foundation
 @testable import WebEngine
 
-class MockUserScriptProvider: UserScriptProvider {
+final class MockUserScriptProvider: UserScriptProvider {
     func getScript(for name: String) -> String? {
         return "A script in a string format"
     }

@@ -14,7 +14,7 @@ import Common
 ///     - Can be set through `setHeroImage(_ viewModel: SiteImageViewHeroImageModel)`
 ///     - The layout size is set through the properties of SiteImageViewHeroImageModel
 ///     - Need to setup theme calls through `updateHeroImageTheme(with colors: SiteImageViewColor)`
-public class HeroImageView: UIView, SiteImageView {
+final public class HeroImageView: UIView, SiteImageView {
     // MARK: - Properties
     var uniqueID: UUID?
     var imageFetcher: SiteImageHandler

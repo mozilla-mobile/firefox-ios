@@ -4,7 +4,7 @@
 
 import Foundation
 
-class ErrorPage {
+final class ErrorPage {
     let error: NSError
 
     init(error: Error) {

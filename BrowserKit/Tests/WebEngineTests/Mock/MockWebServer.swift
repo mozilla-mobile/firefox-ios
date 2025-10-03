@@ -6,7 +6,7 @@ import Foundation
 @testable import WebEngine
 import GCDWebServers
 
-class MockWebServer: WKEngineWebServerProtocol {
+final class MockWebServer: WKEngineWebServerProtocol {
     var isRunning = false
     var startCalled = 0
     var stopCalled = 0

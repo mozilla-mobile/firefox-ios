@@ -6,7 +6,7 @@ import WebKit
 
 /// Used in some tests cases instead of `MockWKEngineWebView` since some delegate methods need a concrete `WKWebView` object
 /// and an abstraction cannot be used.
-class MockWKWebView: WKWebView {
+final class MockWKWebView: WKWebView {
     var mockURL: URL?
     var loadCalled = 0
     var reloadCalled = 0

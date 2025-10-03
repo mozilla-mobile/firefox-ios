@@ -5,7 +5,7 @@
 import Foundation
 @testable import WebEngine
 
-class MockSessionHandler: SessionHandler {
+final class MockSessionHandler: SessionHandler {
     var commitURLChangeCalled = 0
     var fetchMetadataCalled = 0
     var receivedErrorCalled = 0

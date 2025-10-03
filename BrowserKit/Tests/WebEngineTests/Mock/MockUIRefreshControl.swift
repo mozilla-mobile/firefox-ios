@@ -4,7 +4,7 @@
 
 import UIKit
 
-class MockUIRefreshControl: UIRefreshControl {
+final class MockUIRefreshControl: UIRefreshControl {
     var beginRefreshingCalled = 0
     var endRefreshingCalled = 0
 

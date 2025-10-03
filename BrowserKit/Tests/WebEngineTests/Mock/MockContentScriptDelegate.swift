@@ -4,7 +4,7 @@
 
 @testable import WebEngine
 
-class MockContentScriptDelegate: ContentScriptDelegate {
+final class MockContentScriptDelegate: ContentScriptDelegate {
     var contentScriptDidSendEventCalled = 0
     var lastContentScriptEvent: ScriptEvent?
 

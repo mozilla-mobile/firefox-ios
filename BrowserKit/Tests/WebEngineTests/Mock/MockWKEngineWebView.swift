@@ -9,7 +9,7 @@ import WebKit
 /// Necessary since some methods of `WKWebView` cannot be overriden. An abstraction need to be used to be able
 /// to mock all methods.
 @available(iOS 16.0, *)
-class MockWKEngineWebView: UIView, WKEngineWebView {
+final class MockWKEngineWebView: UIView, WKEngineWebView {
     weak var delegate: WKEngineWebViewDelegate?
     weak var uiDelegate: WKUIDelegate?
     weak var navigationDelegate: WKNavigationDelegate?

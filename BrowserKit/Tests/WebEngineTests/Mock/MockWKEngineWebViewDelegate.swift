@@ -5,7 +5,7 @@
 import UIKit
 @testable import WebEngine
 
-class MockWKEngineWebViewDelegate: WKEngineWebViewDelegate {
+final class MockWKEngineWebViewDelegate: WKEngineWebViewDelegate {
     var webViewNeedsReloadCalled = 0
     var webViewPropertyChangedCalled = 0
     var lastWebViewPropertyChanged: WKEngineWebViewProperty?

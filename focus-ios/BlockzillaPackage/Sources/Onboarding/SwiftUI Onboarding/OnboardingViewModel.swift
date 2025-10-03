@@ -10,7 +10,7 @@ enum Screen: CaseIterable {
     case `default`
 }
 
-public class OnboardingViewModel: ObservableObject {
+final public class OnboardingViewModel: ObservableObject {
     public enum Action {
         case getStartedAppeared
         case getStartedCloseTapped

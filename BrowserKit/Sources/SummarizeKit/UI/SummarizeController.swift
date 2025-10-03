@@ -16,7 +16,7 @@ public protocol SummarizeNavigationHandler: AnyObject {
     func dismissSummary()
 }
 
-public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
+final public class SummarizeController: UIViewController, Themeable, CAAnimationDelegate {
     private struct UX {
         @MainActor // `CAMediaTimingFunction` is not Sendable, so isolate it to the main actor
         static let initialTransformTimingCurve = CAMediaTimingFunction(controlPoints: 1, 0, 0, 1)

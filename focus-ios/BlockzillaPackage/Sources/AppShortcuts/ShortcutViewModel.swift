@@ -12,7 +12,7 @@ public enum ShortcutAction {
     case dismiss
 }
 
-public class ShortcutViewModel {
+final public class ShortcutViewModel {
     @Published public var shortcut: Shortcut
     public var onTap: (() -> Void)?
     public var onShowRenameAlert: ((Shortcut) -> Void)?

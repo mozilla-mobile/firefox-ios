@@ -4,7 +4,7 @@
 
 @testable import WebEngine
 
-class MockEngineTelemetryProxy: EngineTelemetryProxy {
+final class MockEngineTelemetryProxy: EngineTelemetryProxy {
     var lastTelemetryEvent: EngineTelemetryEvent?
     var handleTelemetryCalled = 0
 

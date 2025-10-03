@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 @testable import WebEngine
 
-class MockNavigationAction: NavigationAction {
+final class MockNavigationAction: NavigationAction {
     var sourceFrameInfo: any FrameInfo {
         MockFrameInfo(isMainFrame: isMainFrame, request: request)
     }
@@ -30,7 +30,7 @@ class MockNavigationAction: NavigationAction {
     }
 }
 
-class MockFrameInfo: FrameInfo {
+final class MockFrameInfo: FrameInfo {
     var isMainFrame: Bool
     var request: URLRequest
 

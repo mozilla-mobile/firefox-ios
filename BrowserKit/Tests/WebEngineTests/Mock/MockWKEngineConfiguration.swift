@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 @testable import WebEngine
 
-class MockWKEngineConfiguration: WKEngineConfiguration {
+final class MockWKEngineConfiguration: WKEngineConfiguration {
     var webViewConfiguration: WKWebViewConfiguration
     var scriptNameAdded: String?
     var addUserScriptCalled = 0

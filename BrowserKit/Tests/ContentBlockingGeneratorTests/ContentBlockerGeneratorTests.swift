@@ -61,7 +61,7 @@ final class ContentBlockerGeneratorTests: XCTestCase {
 }
 
 // MARK: - MockContentBlockerFileManager
-class MockContentBlockerFileManager: ContentBlockerFileManager {
+final class MockContentBlockerFileManager: ContentBlockerFileManager {
     var entityList = [String: Any]()
     func getEntityList() -> [String: Any] {
         return entityList

@@ -5,7 +5,7 @@
 import XCTest
 @testable import SiteImageView
 
-class SiteImageModelTests: XCTestCase {
+final class SiteImageModelTests: XCTestCase {
     let siteURL = URL(string: "https://www.mozilla.org")!
     let faviconURL = URL(string: "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png")!
 

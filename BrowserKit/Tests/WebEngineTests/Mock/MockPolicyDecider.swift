@@ -5,7 +5,7 @@
 import WebKit
 @testable import WebEngine
 
-class MockPolicyDecider: WKPolicyDecider {
+final class MockPolicyDecider: WKPolicyDecider {
     var nextDecider: (any WKPolicyDecider)?
 
     var policyForNavigationActionCalled = 0

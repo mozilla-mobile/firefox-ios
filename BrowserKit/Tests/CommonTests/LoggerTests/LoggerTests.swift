@@ -227,7 +227,7 @@ private extension LoggerTests {
 }
 
 // MARK: - SwiftyBeaverBuilder
-class MockSwiftyBeaverBuilder: SwiftyBeaverBuilder {
+final class MockSwiftyBeaverBuilder: SwiftyBeaverBuilder {
     func setup(with destination: URL?) -> SwiftyBeaverWrapper.Type {
         return MockSwiftyBeaver.self
     }

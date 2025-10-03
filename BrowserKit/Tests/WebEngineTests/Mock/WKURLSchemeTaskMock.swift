@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
+final class WKURLSchemeTaskMock: NSObject, WKURLSchemeTask {
     var mockRequest: URLRequest
     var didReceiveResponseCalled = 0
     var didReceiveDataCalled = 0

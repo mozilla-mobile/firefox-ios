@@ -8,7 +8,7 @@ import WebKit
 
 @MainActor
 @available(iOS 16.0, *)
-class MockWKEngineSession: WKEngineSession {
+final class MockWKEngineSession: WKEngineSession {
     let webviewProvider: MockWKWebViewProvider!
     let mockTelemetryProxy = MockEngineTelemetryProxy()
     nonisolated(unsafe) var callJavascriptMethodCalled = 0
