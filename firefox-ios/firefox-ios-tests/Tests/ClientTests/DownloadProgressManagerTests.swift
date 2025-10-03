@@ -7,6 +7,7 @@ import XCTest
 @testable import Client
 import Common
 
+@MainActor
 class DownloadProgressManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
@@ -73,7 +74,6 @@ class DownloadProgressManagerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Wait for 0.5 seconds")
 
             DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-                self.trackForMemoryLeaks(downloadProgressManager)
                 expectation.fulfill()
             }
 
@@ -81,7 +81,10 @@ class DownloadProgressManagerTests: XCTestCase {
     }
 
     func createSubject(downloads: [Download]) -> DownloadProgressManager {
-        return DownloadProgressManager(downloads: downloads)
+        let subject = DownloadProgressManager(downloads: downloads)
+        self.trackForMemoryLeaks(subject)
+
+        return subject
     }
 }
 

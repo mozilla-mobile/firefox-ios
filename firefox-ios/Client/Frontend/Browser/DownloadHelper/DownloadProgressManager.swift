@@ -4,8 +4,9 @@
 
 import Foundation
 protocol DownloadProgressDelegate: AnyObject {
+    @MainActor
     func updateCombinedBytesDownloaded(value: Int64)
-
+    @MainActor
     func updateCombinedTotalBytesExpected(value: Int64?)
 }
 
@@ -23,6 +24,7 @@ class WeakDownloadProgressDelegate {
     }
 }
 
+@MainActor
 class DownloadProgressManager {
     var downloads: [Download] = []
     private var delegates: [WeakDownloadProgressDelegate] = []
