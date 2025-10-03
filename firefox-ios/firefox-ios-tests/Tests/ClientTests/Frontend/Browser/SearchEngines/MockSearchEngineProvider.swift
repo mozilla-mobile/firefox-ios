@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 @testable import Client
 
 class MockSearchEngineProvider: SearchEngineProvider, @unchecked Sendable {
@@ -73,7 +74,7 @@ class MockSearchEngineProvider: SearchEngineProvider, @unchecked Sendable {
                            engineOrderingPrefs: SearchEnginePrefs,
                            prefsMigrator: any SearchEnginePreferencesMigrator,
                            completion: @escaping SearchEngineCompletion) {
-        DispatchQueue.main.async {
+        ensureMainThread {
             completion(engineOrderingPrefs, self.mockEngines)
         }
     }
