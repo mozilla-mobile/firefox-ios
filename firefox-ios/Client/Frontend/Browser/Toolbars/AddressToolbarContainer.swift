@@ -488,7 +488,7 @@ final class AddressToolbarContainer: UIView,
         let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
         let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
         let isZeroSearchEnabled = isTrendingSearchEnabled || isRecentSearchEnabled
-        
+
         if shouldShowSuggestions || isZeroSearchEnabled {
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         }

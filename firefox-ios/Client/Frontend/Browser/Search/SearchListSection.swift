@@ -8,7 +8,7 @@ enum SearchListSection: Int, CaseIterable {
     // Zero search state
     case recentSearches
     case trendingSearches
-    
+
     // User enter search term
     case searchSuggestions
     case firefoxSuggestions
