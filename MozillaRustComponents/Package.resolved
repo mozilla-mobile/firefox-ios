@@ -1,4 +1,5 @@
 {
+  "originHash" : "0b3b133588d441754b48063b0d4b1cd15d7db83f16087b2b639c07d634de8bfd",
   "pins" : [
     {
       "identity" : "glean-swift",
@@ -10,5 +11,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

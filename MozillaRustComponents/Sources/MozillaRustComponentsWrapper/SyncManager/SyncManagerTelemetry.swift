@@ -10,6 +10,7 @@ typealias LoginsMetrics = GleanMetrics.LoginsSyncV2
 typealias BookmarksMetrics = GleanMetrics.BookmarksSyncV2
 typealias HistoryMetrics = GleanMetrics.HistorySyncV2
 typealias CreditcardsMetrics = GleanMetrics.CreditcardsSyncV2
+typealias AddressesMetrics = GleanMetrics.AddressesSyncV2
 typealias TabsMetrics = GleanMetrics.TabsSyncV2
 
 enum SupportedEngines: String {
@@ -17,6 +18,7 @@ enum SupportedEngines: String {
     case Bookmarks = "bookmarks"
     case Logins = "passwords"
     case CreditCards = "creditcards"
+    case Addresses = "addresses"
     case Tabs = "tabs"
 }
 
@@ -34,6 +36,8 @@ func processSyncTelemetry(syncTelemetry: RustSyncTelemetryPing,
                               = GleanMetrics.Pings.shared.loginsSync.submit,
                           submitCreditCardsPing: (NoReasonCodes?) -> Void
                               = GleanMetrics.Pings.shared.creditcardsSync.submit,
+                          submitAddressesPing: (NoReasonCodes?) -> Void
+                              = GleanMetrics.Pings.shared.addressesSync.submit,
                           submitTabsPing: (NoReasonCodes?) -> Void = GleanMetrics.Pings.shared.tabsSync.submit) throws
 {
     for syncInfo in syncTelemetry.syncs {
@@ -62,6 +66,10 @@ func processSyncTelemetry(syncTelemetry: RustSyncTelemetryPing,
                 try individualCreditCardsSync(hashedFxaUid: syncTelemetry.uid,
                                               engineInfo: engineInfo)
                 submitCreditCardsPing(nil)
+            case SupportedEngines.Addresses.rawValue:
+                try individualAddressesSync(hashedFxaUid: syncTelemetry.uid,
+                                              engineInfo: engineInfo)
+                submitAddressesPing(nil)
             case SupportedEngines.Tabs.rawValue:
                 try individualTabsSync(hashedFxaUid: syncTelemetry.uid,
                                        engineInfo: engineInfo)
@@ -242,6 +250,47 @@ private func individualCreditCardsSync(hashedFxaUid: String, engineInfo: EngineI
     if let reason = base.failureReason {
         recordFailureReason(reason: reason,
                             failureReasonMetric: CreditcardsMetrics.failureReason)
+    }
+}
+
+private func individualAddressesSync(hashedFxaUid: String, engineInfo: EngineInfo) throws {
+    guard engineInfo.name == SupportedEngines.Addresses.rawValue else {
+        let message = "Expected 'addresses', got \(engineInfo.name)"
+        throw TelemetryReportingError.InvalidEngine(message: message)
+    }
+
+    let base = BaseGleanSyncPing.fromEngineInfo(uid: hashedFxaUid, info: engineInfo)
+    AddressesMetrics.uid.set(base.uid)
+    AddressesMetrics.startedAt.set(base.startedAt)
+    AddressesMetrics.finishedAt.set(base.finishedAt)
+
+    if base.applied > 0 {
+        AddressesMetrics.incoming["applied"].add(base.applied)
+    }
+
+    if base.failedToApply > 0 {
+        AddressesMetrics.incoming["failed_to_apply"].add(base.failedToApply)
+    }
+
+    if base.reconciled > 0 {
+        AddressesMetrics.incoming["reconciled"].add(base.reconciled)
+    }
+
+    if base.uploaded > 0 {
+        AddressesMetrics.outgoing["uploaded"].add(base.uploaded)
+    }
+
+    if base.failedToUpload > 0 {
+        AddressesMetrics.outgoing["failed_to_upload"].add(base.failedToUpload)
+    }
+
+    if base.outgoingBatches > 0 {
+        AddressesMetrics.outgoingBatches.add(base.outgoingBatches)
+    }
+
+    if let reason = base.failureReason {
+        recordFailureReason(reason: reason,
+                            failureReasonMetric: AddressesMetrics.failureReason)
     }
 }
 
