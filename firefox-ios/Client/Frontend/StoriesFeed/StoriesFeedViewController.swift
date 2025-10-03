@@ -114,7 +114,7 @@ class StoriesFeedViewController: UIViewController,
 
     // MARK: Helper functions
     private func setupNavigationBar(animated: Bool) {
-        title = .FirefoxHomepage.Pocket.TopStories.TopStoriesViewTitle
+        title = .FirefoxHomepage.Pocket.AllStories.AllStoriesViewTitle
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 
