@@ -722,7 +722,6 @@ class SearchViewController: SiteTableViewController,
                                    _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
-            
         case .recentSearches:
             if let recentSearch = viewModel.recentSearches[safe: indexPath.row] {
                 let oneLineCellViewModel = configureOneLineCellForSearch(with: recentSearch, and: StandardImageIdentifiers.Large.history)

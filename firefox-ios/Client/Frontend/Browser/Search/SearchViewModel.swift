@@ -152,9 +152,9 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
                || (!firefoxSuggestions.isEmpty && (shouldShowNonSponsoredSuggestions
                                                    || shouldShowSponsoredSuggestions))
     }
-    
+
     // MARK: Zero Search State Variables
-    
+
     // Show list of recent searches if user puts focus in the address bar but does not enter any text.
     var shouldShowRecentSearches: Bool {
         let isOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
