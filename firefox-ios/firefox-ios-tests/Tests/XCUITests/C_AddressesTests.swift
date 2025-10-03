@@ -911,7 +911,7 @@ class O_AddressesTests: BaseTestCase {
         }
     }
 
-    private func  tapEdit() {
+    private func tapEdit() {
         app.buttons["Edit"].waitAndTap()
     }
 
