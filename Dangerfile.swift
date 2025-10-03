@@ -266,7 +266,7 @@ class CodeUsageDetector {
     func checkForCodeUsage() {
         let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
         // Iterate through each added and modified file, running the checks on swift files only
-        for file in editedFiles where file.contains(".swift") {
+        for file in editedFiles where file.contains(".swift") && !file.contains("Dangerfile") {
             // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
             switch saferFileDiff(for: file) {
             case let .success(diff):
