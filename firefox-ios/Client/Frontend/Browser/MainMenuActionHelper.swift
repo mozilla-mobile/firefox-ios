@@ -68,9 +68,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
-    private var isToolbarRefactorEnabled: Bool {
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
-    }
 
     let themeManager: ThemeManager
     var bookmarksHandler: BookmarksHandler
@@ -249,10 +246,8 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
             let desktopSiteAction = getRequestDesktopSiteAction()
             append(to: &section, action: desktopSiteAction)
 
-            if isToolbarRefactorEnabled {
-                let trackingProtectionAction = getTrackingProtectionAction()
-                append(to: &section, action: trackingProtectionAction)
-            }
+            let trackingProtectionAction = getTrackingProtectionAction()
+            append(to: &section, action: trackingProtectionAction)
         }
 
         /// In the new experiment, where website theming is different from app theming homepage menu should not show

@@ -11,12 +11,12 @@ class TabToolbar: UIView, SearchBarLocationProvider {
     weak var tabToolbarDelegate: TabToolbarDelegate?
 
     let tabsButton = TabsButton()
-    let addNewTabButton = ToolbarButton()
-    let appMenuButton = ToolbarButton()
-    let bookmarksButton = ToolbarButton()
-    let forwardButton = ToolbarButton()
-    let backButton = ToolbarButton()
-    let multiStateButton = ToolbarButton()
+    let addNewTabButton = TabToolbarButton()
+    let appMenuButton = TabToolbarButton()
+    let bookmarksButton = TabToolbarButton()
+    let forwardButton = TabToolbarButton()
+    let backButton = TabToolbarButton()
+    let multiStateButton = TabToolbarButton()
     let actionButtons: [ThemeApplicable & UIButton]
 
     let privateModeBadge = BadgeWithBackdrop(

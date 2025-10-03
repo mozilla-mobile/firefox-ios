@@ -25,11 +25,7 @@ struct SearchBarLocationSaver: SearchBarLocationProvider, FeatureFlaggable, Sear
         // no search bar position saved for existing user (not fresh install)
         guard !isFreshInstall && !hasSearchBarPosition else { return }
 
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-        let layout = FxNimbus.shared.features.toolbarRefactorFeature.value().layout
-        let isVersionLayout = layout == .version1 || layout == .version2
-
-        guard userInterfaceIdiom != .pad, isToolbarRefactorEnabled, isVersionLayout else {
+        guard userInterfaceIdiom != .pad else {
             let isAtBottom = isBottomSearchBar
             let searchBarPosition: SearchBarPosition = isAtBottom ? .bottom : .top
             featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)

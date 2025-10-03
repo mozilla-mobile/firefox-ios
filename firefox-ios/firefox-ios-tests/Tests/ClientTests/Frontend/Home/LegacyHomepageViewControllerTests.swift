@@ -28,9 +28,9 @@ class LegacyHomepageViewControllerTests: XCTestCase {
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
         let tabManager = TabManagerImplementation(profile: profile,
                                                   uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
-        let urlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let addressToolbar = AddressToolbarContainer(isSwipingTabsEnabled: false, isMinimalAddressBarEnabled: false)
         let overlayManager = MockOverlayModeManager()
-        overlayManager.setURLBar(urlBarView: urlBar)
+        overlayManager.setURLBar(urlBarView: addressToolbar)
 
         let firefoxHomeViewController = LegacyHomepageViewController(
             profile: profile,
@@ -47,9 +47,9 @@ class LegacyHomepageViewControllerTests: XCTestCase {
         Experiments.events.clearEvents()
         let tabManager = TabManagerImplementation(profile: profile,
                                                   uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
-        let urlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let addressToolbar = AddressToolbarContainer(isSwipingTabsEnabled: false, isMinimalAddressBarEnabled: false)
         let overlayManager = MockOverlayModeManager()
-        overlayManager.setURLBar(urlBarView: urlBar)
+        overlayManager.setURLBar(urlBarView: addressToolbar)
 
         let subject = LegacyHomepageViewController(
             profile: profile,

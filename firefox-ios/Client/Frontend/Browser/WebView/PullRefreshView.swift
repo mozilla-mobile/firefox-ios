@@ -46,9 +46,6 @@ class PullRefreshView: UIView,
         // the smallest window possible has horizontalSizeClass equal to compact, thus behaving like an iPhone.
         return traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
-    private var isToolbarRefactorEnabled: Bool {
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
-    }
 
     init(parentScrollView: UIScrollView?,
          isPortraitOrientation: Bool,
@@ -247,7 +244,7 @@ class PullRefreshView: UIView,
 
     func applyTheme(theme: any Theme) {
         currentTheme = theme
-        backgroundColor = isToolbarRefactorEnabled ? theme.colors.layerSurfaceLow : theme.colors.layer1
+        backgroundColor = theme.colors.layerSurfaceLow
         progressView.tintColor = theme.colors.iconPrimary
     }
 
