@@ -5,6 +5,7 @@
 import XCTest
 @testable import Common
 
+@MainActor
 final class UIViewExtensionTests: XCTestCase {
     final class CustomView: UIView {
         var customProperty: String
