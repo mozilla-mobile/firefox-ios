@@ -1398,6 +1398,8 @@
 		AA24AD322E7C3A8F008659A3 /* TrendingSearchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */; };
 		AA24AD342E7C3AD2008659A3 /* MockTrendingSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */; };
 		AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */; };
+		AA742C7A2E90358400CF55B3 /* MockMicrosurveyTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */; };
+		AA742C7C2E904B9B00CF55B3 /* MicrosurveyTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C7B2E904B9500CF55B3 /* MicrosurveyTelemetryTests.swift */; };
 		AAB4321B2E8187190075E47F /* RecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321A2E8187130075E47F /* RecentSearchProvider.swift */; };
 		AAB4321D2E8189390075E47F /* RecentSearchProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321C2E8189310075E47F /* RecentSearchProviderTests.swift */; };
 		AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */; };
@@ -9433,6 +9435,8 @@
 		AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingSearchClientTests.swift; sourceTree = "<group>"; };
 		AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrendingSearchEngine.swift; sourceTree = "<group>"; };
 		AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentSearchProvider.swift; sourceTree = "<group>"; };
+		AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMicrosurveyTelemetry.swift; sourceTree = "<group>"; };
+		AA742C7B2E904B9500CF55B3 /* MicrosurveyTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyTelemetryTests.swift; sourceTree = "<group>"; };
 		AA80494199BED7BAA77241A9 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Storage.strings"; sourceTree = "<group>"; };
 		AAAB41FC97F6C8F8A1506603 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		AAB4321A2E8187130075E47F /* RecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchProvider.swift; sourceTree = "<group>"; };
@@ -13324,6 +13328,7 @@
 		8A827E332C20C8C0008D5E3C /* Mock */ = {
 			isa = PBXGroup;
 			children = (
+				AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */,
 				8A827E312C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift */,
 				8A4EA0D72C01125100E4E4F1 /* MicrosurveyMockModel.swift */,
 			);
@@ -13344,6 +13349,7 @@
 			children = (
 				8A827E332C20C8C0008D5E3C /* Mock */,
 				8A4EA0D22C010BF800E4E4F1 /* MicrosurveySurfaceManagerTests.swift */,
+				AA742C7B2E904B9500CF55B3 /* MicrosurveyTelemetryTests.swift */,
 				8AAEB9FD2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift */,
 				8A8482EE2BE15FFE00F9007B /* MicrosurveyPromptStateTests.swift */,
 				8AAEBA092BF53AB5000C02B5 /* MicrosurveyStateTests.swift */,
@@ -19202,6 +19208,7 @@
 				2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */,
 				5A3A7DDC2889EC5D0065F81A /* BookmarksHandlerMock.swift in Sources */,
 				8015C8B52D0A31FE0093AED0 /* RecordedNimbusContextTests.swift in Sources */,
+				AA742C7A2E90358400CF55B3 /* MockMicrosurveyTelemetry.swift in Sources */,
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
 				8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */,
 				21D8EA932ABE04F7003FF16E /* TabTrayViewControllerTests.swift in Sources */,
@@ -19407,6 +19414,7 @@
 				C83B7DD629BBB49D005565C2 /* SurveySurfaceManagerTests.swift in Sources */,
 				E1E6F8CE29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift in Sources */,
 				8AC884212D5262070033ABF5 /* CrashTrackerTests.swift in Sources */,
+				AA742C7C2E904B9B00CF55B3 /* MicrosurveyTelemetryTests.swift in Sources */,
 				C8DC90D02A067C5B0008832B /* MarkupParseUtilityTests.swift in Sources */,
 				21EEAA1B2D3AE3B300595119 /* BookmarksTelemetryTests.swift in Sources */,
 				8AF3B15C2AF99C77009BB262 /* ReadingListPanelTests.swift in Sources */,

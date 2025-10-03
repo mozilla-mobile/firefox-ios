@@ -5,7 +5,15 @@
 import Foundation
 import Glean
 
-struct MicrosurveyTelemetry {
+protocol MicrosurveyTelemetryProtocol {
+    func surveyViewed(surveyId: String)
+    func privacyNoticeTapped(surveyId: String)
+    func dismissButtonTapped(surveyId: String)
+    func userResponseSubmitted(surveyId: String, userSelection: String)
+    func confirmationShown(surveyId: String)
+}
+
+struct MicrosurveyTelemetry: MicrosurveyTelemetryProtocol {
     private let gleanWrapper: GleanWrapper
 
     init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
