@@ -7,6 +7,7 @@ import Glean
 
 @testable import Client
 
+// TODO: FXIOS-13514 - Migrate OnboardingTelemetryUtilityTests to use mock telemetry or GleanWrapper
 class OnboardingTelemetryUtilityTests: XCTestCase {
     typealias CardNames = NimbusOnboardingTestingConfigUtility.CardOrder
 

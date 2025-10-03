@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Client
 
-// TODO: FXIOS-TODO Laurie - Migrate NotificationManagerTelemetryTests to use mock telemetry or GleanWrapper
+// TODO: FXIOS-13744 - Migrate NotificationManagerTelemetryTests to use mock telemetry or GleanWrapper
 final class NotificationManagerTelemetryTests: XCTestCase {
     func test_onboardingNotificationPermission_GleanIsCalled() throws {
         let isGranted = true

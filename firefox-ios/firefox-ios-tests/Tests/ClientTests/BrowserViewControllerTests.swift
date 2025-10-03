@@ -12,7 +12,7 @@ import Shared
 
 @testable import Client
 
-// TODO: FXIOS-TODO Laurie - Migrate BrowserViewControllerTests to use mock telemetry or GleanWrapper
+// TODO: FXIOS-13741 - Migrate BrowserViewControllerTests to use mock telemetry or GleanWrapper
 class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var profile: MockProfile!
     var tabManager: MockTabManager!

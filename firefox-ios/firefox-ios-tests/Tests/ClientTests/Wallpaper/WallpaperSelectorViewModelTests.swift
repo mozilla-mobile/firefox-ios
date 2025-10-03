@@ -53,6 +53,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         }
     }
 
+    // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
     func testRecordsWallpaperSelectorView() throws {
         setupTelemetry(with: MockProfile())
         wallpaperManager = WallpaperManager()
@@ -62,6 +63,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorView)
     }
 
+    // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
     func testRecordsWallpaperSelectorClose() throws {
         setupTelemetry(with: MockProfile())
         wallpaperManager = WallpaperManager()

@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Client
 
-// TODO: FXIOS-TODO Laurie - Migrate TermsOfServiceTelemetryTests to use mock telemetry or GleanWrapper
+// TODO: FXIOS-13745 - Migrate TermsOfServiceTelemetryTests to use mock telemetry or GleanWrapper
 final class TermsOfServiceTelemetryTests: XCTestCase {
     var subject: TermsOfServiceTelemetry?
 
