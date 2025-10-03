@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-typealias SearchEngineCompletion = @Sendable (SearchEnginePrefs, [OpenSearchEngine]) -> Void
+typealias SearchEngineCompletion = @MainActor @Sendable (SearchEnginePrefs, [OpenSearchEngine]) -> Void
 
 protocol SearchEngineProvider {
     /// Takes a list of custom search engines (added by the user) along with an ordered
