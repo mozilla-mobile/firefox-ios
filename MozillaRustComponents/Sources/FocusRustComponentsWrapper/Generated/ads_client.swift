@@ -400,22 +400,6 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterUInt16: FfiConverterPrimitive {
-    typealias FfiType = UInt16
-    typealias SwiftType = UInt16
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt16 {
-        return try lift(readInt(&buf))
-    }
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(value))
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
 fileprivate struct FfiConverterUInt32: FfiConverterPrimitive {
     typealias FfiType = UInt32
     typealias SwiftType = UInt32
@@ -1253,14 +1237,12 @@ public func FfiConverterTypeMozAdsPlacement_lower(_ value: MozAdsPlacement) -> R
 
 public struct MozAdsPlacementConfig {
     public var placementId: String
-    public var fixedSize: MozAdsSize?
     public var iabContent: IabContent?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(placementId: String, fixedSize: MozAdsSize?, iabContent: IabContent?) {
+    public init(placementId: String, iabContent: IabContent?) {
         self.placementId = placementId
-        self.fixedSize = fixedSize
         self.iabContent = iabContent
     }
 }
@@ -1275,9 +1257,6 @@ extension MozAdsPlacementConfig: Equatable, Hashable {
         if lhs.placementId != rhs.placementId {
             return false
         }
-        if lhs.fixedSize != rhs.fixedSize {
-            return false
-        }
         if lhs.iabContent != rhs.iabContent {
             return false
         }
@@ -1286,7 +1265,6 @@ extension MozAdsPlacementConfig: Equatable, Hashable {
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(placementId)
-        hasher.combine(fixedSize)
         hasher.combine(iabContent)
     }
 }
@@ -1301,14 +1279,12 @@ public struct FfiConverterTypeMozAdsPlacementConfig: FfiConverterRustBuffer {
         return
             try MozAdsPlacementConfig(
                 placementId: FfiConverterString.read(from: &buf), 
-                fixedSize: FfiConverterOptionTypeMozAdsSize.read(from: &buf), 
                 iabContent: FfiConverterOptionTypeIABContent.read(from: &buf)
         )
     }
 
     public static func write(_ value: MozAdsPlacementConfig, into buf: inout [UInt8]) {
         FfiConverterString.write(value.placementId, into: &buf)
-        FfiConverterOptionTypeMozAdsSize.write(value.fixedSize, into: &buf)
         FfiConverterOptionTypeIABContent.write(value.iabContent, into: &buf)
     }
 }
@@ -1326,76 +1302,6 @@ public func FfiConverterTypeMozAdsPlacementConfig_lift(_ buf: RustBuffer) throws
 #endif
 public func FfiConverterTypeMozAdsPlacementConfig_lower(_ value: MozAdsPlacementConfig) -> RustBuffer {
     return FfiConverterTypeMozAdsPlacementConfig.lower(value)
-}
-
-
-public struct MozAdsSize {
-    public var width: UInt16
-    public var height: UInt16
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(width: UInt16, height: UInt16) {
-        self.width = width
-        self.height = height
-    }
-}
-
-#if compiler(>=6)
-extension MozAdsSize: Sendable {}
-#endif
-
-
-extension MozAdsSize: Equatable, Hashable {
-    public static func ==(lhs: MozAdsSize, rhs: MozAdsSize) -> Bool {
-        if lhs.width != rhs.width {
-            return false
-        }
-        if lhs.height != rhs.height {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(width)
-        hasher.combine(height)
-    }
-}
-
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeMozAdsSize: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsSize {
-        return
-            try MozAdsSize(
-                width: FfiConverterUInt16.read(from: &buf), 
-                height: FfiConverterUInt16.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: MozAdsSize, into buf: inout [UInt8]) {
-        FfiConverterUInt16.write(value.width, into: &buf)
-        FfiConverterUInt16.write(value.height, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeMozAdsSize_lift(_ buf: RustBuffer) throws -> MozAdsSize {
-    return try FfiConverterTypeMozAdsSize.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeMozAdsSize_lower(_ value: MozAdsSize) -> RustBuffer {
-    return FfiConverterTypeMozAdsSize.lower(value)
 }
 
 
@@ -1817,30 +1723,6 @@ fileprivate struct FfiConverterOptionTypeIABContent: FfiConverterRustBuffer {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterTypeIABContent.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeMozAdsSize: FfiConverterRustBuffer {
-    typealias SwiftType = MozAdsSize?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeMozAdsSize.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeMozAdsSize.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
