@@ -106,9 +106,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     }
 
     var shouldShowSyncedTabsSuggestions: Bool {
-        return shouldShowFirefoxSuggestions(
+        let shouldShowSyncedTabs = shouldShowFirefoxSuggestions(
             model.shouldShowSyncedTabsSuggestions
         )
+        return shouldShowSyncedTabs && !searchQuery.isEmpty
     }
 
     var shouldShowBookmarksSuggestions: Bool {
@@ -121,12 +122,6 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         return shouldShowFirefoxSuggestions(
             model.shouldShowBrowsingHistorySuggestions
         )
-    }
-
-    // Show list of recent searches if user puts focus in the address bar but does not enter any text.
-    var shouldShowRecentSearches: Bool {
-        let isOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
-        return isOn && searchQuery.isEmpty
     }
 
     private var hasBookmarksSuggestions: Bool {
@@ -156,6 +151,14 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
                || (!filteredRemoteClientTabs.isEmpty && shouldShowSyncedTabsSuggestions)
                || (!firefoxSuggestions.isEmpty && (shouldShowNonSponsoredSuggestions
                                                    || shouldShowSponsoredSuggestions))
+    }
+    
+    // MARK: Zero Search State Variables
+    
+    // Show list of recent searches if user puts focus in the address bar but does not enter any text.
+    var shouldShowRecentSearches: Bool {
+        let isOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return isOn && searchQuery.isEmpty
     }
 
     // Show list of trending searches if user puts focus in the address bar but does not enter any text.
@@ -189,6 +192,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         switch section {
         case SearchListSection.trendingSearches.rawValue:
             return shouldShowTrendingSearches
+        case SearchListSection.recentSearches.rawValue:
+            return shouldShowRecentSearches
         case SearchListSection.firefoxSuggestions.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
