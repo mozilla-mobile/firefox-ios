@@ -196,7 +196,9 @@ class BrowserViewController: UIViewController,
     private(set) lazy var contentContainer: ContentContainer = .build { _ in }
 
     // A view for displaying a preview of the web page.
-    private lazy var webPagePreview: TabWebViewPreview = .build()
+    private lazy var webPagePreview: TabWebViewPreview = .build {
+        $0.isHidden = true
+    }
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
