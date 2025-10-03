@@ -33,7 +33,6 @@ include:
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
-  - nimbus-features/pdfRefactorFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/rustFxAKeychainEnabled.yaml

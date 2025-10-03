@@ -147,9 +147,13 @@ final class TemporaryDocumentTests: XCTestCase {
         subject = nil
     }
 
-    func testDeinit_removeTempFile_whenPDFRefactorDisabled() async throws {
-        setIsPDFRefactorFeature(isEnabled: false)
-        subject = createSubject(filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF)
+    func testDeinit_removeTempFile_whenFileIsNotPDF() async throws {
+        subject = createSubject(
+            filename: "test.json",
+            request: request,
+            session: mockURLSession,
+            mimeType: "application/json"
+        )
         let url = try await unwrapAsync {
             return await subject.download()
         }
@@ -159,8 +163,7 @@ final class TemporaryDocumentTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
     }
 
-    func testDeinit_doesNotRemoveTempPDFFile_whenPDFRefactorEnabled() async throws {
-        setIsPDFRefactorFeature(isEnabled: true)
+    func testDeinit_doesNotRemoveTempPDFFile() async throws {
         // Make sure is a PDF, otherwise it falls back to remove the file
         subject = createSubject(filename: filename, request: request, session: mockURLSession, mimeType: mimeTypePDF)
         let url = try await unwrapAsync {
@@ -204,11 +207,5 @@ final class TemporaryDocumentTests: XCTestCase {
         )
         trackForMemoryLeaks(subject)
         return subject
-    }
-
-    private func setIsPDFRefactorFeature(isEnabled: Bool) {
-        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
-            PdfRefactorFeature(enabled: isEnabled)
-        }
     }
 }

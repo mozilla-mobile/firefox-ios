@@ -164,7 +164,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var canonicalURL: URL? {
-        if isPDFRefactorEnabled, temporaryDocument?.isDownloading ?? false {
+        if temporaryDocument?.isDownloading ?? false {
             return url
         }
         if let string = pageMetadata?.siteURL,
@@ -305,7 +305,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var pendingScreenshot = false
     var url: URL? {
         didSet {
-            if isPDFRefactorEnabled, let _url = url, let sourceURL = temporaryDocumentsSession[_url] {
+            if let _url = url, let sourceURL = temporaryDocumentsSession[_url] {
                 url = sourceURL
             }
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
@@ -473,10 +473,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
 
     // MARK: - Feature flags
-
-    private var isPDFRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-    }
 
     var isInactiveTabsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
@@ -670,35 +666,27 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func goBack() {
-        if isPDFRefactorEnabled {
-            // if the file was cancelled then return and avoid calling webView.goBack
-            // since the previous page is already there
-            guard !cancelTemporaryDocumentDownload() else { return }
-        }
+        // if the file was cancelled then return and avoid calling webView.goBack
+        // since the previous page is already there
+        guard !cancelTemporaryDocumentDownload() else { return }
         _ = webView?.goBack()
     }
 
     func goForward() {
-        if isPDFRefactorEnabled {
-            // if the file was cancelled then return and avoid calling webView.goForward
-            // since the previous page is already there
-            guard !cancelTemporaryDocumentDownload() else { return }
-        }
+        // if the file was cancelled then return and avoid calling webView.goForward
+        // since the previous page is already there
+        guard !cancelTemporaryDocumentDownload() else { return }
         _ = webView?.goForward()
     }
 
     func goToBackForwardListItem(_ item: WKBackForwardListItem) {
-        if isPDFRefactorEnabled {
-            cancelTemporaryDocumentDownload()
-        }
+        cancelTemporaryDocumentDownload()
         _ = webView?.go(to: item)
     }
 
     @discardableResult
     func loadRequest(_ request: URLRequest) -> WKNavigation? {
-        if isPDFRefactorEnabled {
-            cancelTemporaryDocumentDownload(forceReload: false)
-        }
+        cancelTemporaryDocumentDownload(forceReload: false)
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url,
@@ -721,16 +709,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func stop() {
         webView?.stopLoading()
-        if isPDFRefactorEnabled {
-            cancelTemporaryDocumentDownload()
-        }
+        cancelTemporaryDocumentDownload()
     }
 
     func reload(bypassCache: Bool = false) {
-        if isPDFRefactorEnabled {
-            if cancelTemporaryDocumentDownload() {
-                return
-            }
+        if cancelTemporaryDocumentDownload() {
+            return
         }
         // If the current page is an error page, and the reload button is tapped, load the original URL
         if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
@@ -1180,14 +1164,12 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     private weak var delegate: TabWebViewDelegate?
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
-    private var isPDFRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-    }
     private var theme: Theme?
 
     override var hasOnlySecureContent: Bool {
-        // When PDF refactor enabled we show the online URL for a local PDF so secure content should be true
-        if isPDFRefactorEnabled, let url, url.isFileURL, url.lastPathComponent.hasSuffix(".pdf") {
+        // TODO: - FXIOS-11721 Understand how it should be showed the lock icon for a local PDF
+        // When PDF is shown we display the online URL for a local PDF so secure content should be true
+        if let url, url.isFileURL, url.lastPathComponent.hasSuffix(".pdf") {
             return true
         }
         return super.hasOnlySecureContent
