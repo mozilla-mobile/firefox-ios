@@ -11,14 +11,62 @@ import XCTest
 
 final class MockHistoryHandler: HistoryHandler {
     var applied: [VisitObservation] = []
-    var appplyObservationCallCount = 0
+    var applyObservationCallCount = 0
     var nextResult: Result<Void, Error> = .success(())
     var onApply: (() -> Void)?
 
+    // MARK: History Metadata
+    var getHistoryMetadataSinceCallCount = 0
+    var noteHistoryMetadataCallCount = 0
+    var result: Result<[MozillaAppServices.HistoryMetadata], Error> = .success(
+        [
+            HistoryMetadata(
+                url: "https://example.com",
+                title: nil,
+                previewImageUrl: nil,
+                createdAt: 1,
+                updatedAt: 1,
+                totalViewTime: 1,
+                searchTerm: "search term 1",
+                documentType: .regular,
+                referrerUrl: nil
+            ),
+            HistoryMetadata(
+                url: "https://example.com",
+                title: nil,
+                previewImageUrl: nil,
+                createdAt: 2,
+                updatedAt: 2,
+                totalViewTime: 2,
+                searchTerm: "search term 2",
+                documentType: .regular,
+                referrerUrl: nil
+            )
+        ]
+    )
+    var searchTermList: [String] = []
+
     func applyObservation(visitObservation: VisitObservation, completion: (Result<Void, any Error>) -> Void) {
-        appplyObservationCallCount += 1
+        applyObservationCallCount += 1
         applied.append(visitObservation)
         completion(nextResult)
         onApply?()
+    }
+
+    func getHistoryMetadataSince(
+        since startDate: Int64,
+        completion: @escaping @Sendable (Result<[MozillaAppServices.HistoryMetadata], any Error>) -> Void
+    ) {
+        getHistoryMetadataSinceCallCount += 1
+        completion(result)
+    }
+
+    func noteHistoryMetadata(
+        for searchTerm: String,
+        and urlString: String,
+        completion: @escaping @Sendable (Result<(), any Error>) -> Void
+    ) {
+        noteHistoryMetadataCallCount += 1
+        searchTermList.append(searchTerm)
     }
 }
