@@ -58,6 +58,9 @@
 /* The label for the accept button on the Terms of Service information panel in the summarizer. */
 "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "继续";
 
+/* The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.InfoPanel.Label.v143" = "通过 %@ 即刻掌握核心要点。";
+
 /* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
 "Summarizer.ToS.InfoPanel.Title.Label.v143" = "总结此页面？";
 

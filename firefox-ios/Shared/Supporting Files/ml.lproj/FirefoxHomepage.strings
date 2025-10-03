@@ -1,8 +1,17 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle.v140" = "കഥകൾ";
 
+/* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
+"FirefoxHome.ScreenTitle.v144" = "പൂമുഖം";
+
+/* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
+"FirefoxHome.Stories.AllStoriesButtonTitle.v144" = "എല്ലാ കഥകളും";
+
 /* This is the title of the Stories section on Firefox Homepage. */
 "FirefoxHome.Stories.SectionTitle.v140" = "കഥകൾ";
+
+/* This is the title that appears in the navigation bar for the Top Stories view, a screen that displays a collection of trending news articles */
+"FirefoxHome.Stories.TopStoriesViewTitle.v144" = "പ്രധാന വാർത്തകൾ";
 
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
 "FirefoxHomepage.FeltDeletion.Link.v122" = "സ്വകാര്യ തിരച്ചിൽ ദത്ത മായിച്ചു";

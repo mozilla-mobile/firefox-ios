@@ -26,7 +26,7 @@
 "Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "წარმდგენის დასახელება";
 
 /* The title for the certificates screen inside the certificates screen. */
-"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "სერთიფიკატი";
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "სერტიფიკატი";
 
 /* The title for the certificate validity section inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "ძალამოსილობა";
