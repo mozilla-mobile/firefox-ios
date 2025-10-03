@@ -356,8 +356,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
-    var isTrendingSearchEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+    var isRecentOrTrendingSearchEnabled: Bool {
+        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
     var isRecentSearchEnabled: Bool {
@@ -3798,7 +3800,7 @@ class BrowserViewController: UIViewController,
     /// text has been entered.
     /// We only want to display if webview, user has either trending searches or recent searches enabled.
     private func showZeroSearchView() {
-        guard contentContainer.hasWebView, isTrendingSearchEnabled else {
+        guard contentContainer.hasWebView, isRecentOrTrendingSearchEnabled else {
             hideSearchController()
             return
         }
@@ -3849,7 +3851,7 @@ class BrowserViewController: UIViewController,
             }
             // Instead of showing homepage when user enters overlay mode,
             // we want to show the zero search state with trending searches
-            if !isTrendingSearchEnabled {
+            if !isRecentOrTrendingSearchEnabled {
                 showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             }
         }

@@ -498,9 +498,12 @@ final class AddressToolbarContainer: UIView,
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)
 
-        // We want to show suggestions if we turn on the trending searches
+        // We want to show suggestions if we turn on the trending searches or recent searches
         // which displays the zero search state.
-        let isZeroSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isZeroSearchEnabled = isTrendingSearchEnabled || isRecentSearchEnabled
+        
         if shouldShowSuggestions || isZeroSearchEnabled {
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         }

@@ -460,7 +460,7 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
-        case .trendingSearches:
+        case .recentSearches, .trendingSearches:
             // TODO: FXIOS-13689 - Implement tapping on trending search
             break
         case .searchSuggestions:
@@ -543,9 +543,13 @@ class SearchViewController: SiteTableViewController,
 
         var title: String
         switch section {
+        case SearchListSection.recentSearches.rawValue:
+            // TODO: FXIOS-13644 - Add proper strings when finalized
+            title = "Recent Searches"
         case SearchListSection.trendingSearches.rawValue:
             // TODO: FXIOS-13644 - Add proper strings when finalized
-            title = "Trending Searches"
+            let engineName = viewModel.searchEnginesManager?.defaultEngine?.shortName ?? ""
+            title = "Trending on \(engineName)"
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
@@ -589,6 +593,8 @@ class SearchViewController: SiteTableViewController,
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let section = SearchListSection(rawValue: indexPath.section) {
             switch section {
+            case .recentSearches, .trendingSearches:
+                break
             case .searchSuggestions:
                 if let site = viewModel.suggestions?[indexPath.row] {
                     if searchTelemetry?.visibleSuggestions.contains(site) == false {
@@ -631,14 +637,16 @@ class SearchViewController: SiteTableViewController,
                         searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
                     }
                 }
-            case .trendingSearches:
-                break
             }
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
+        case .recentSearches:
+            return viewModel.shouldShowRecentSearches ? viewModel.recentSearches.count : 0
+        case .trendingSearches:
+            return viewModel.shouldShowTrendingSearches ? viewModel.trendingSearches.count : 0
         case .searchSuggestions:
             guard let count = viewModel.suggestions?.count else { return 0 }
             return count < 4 ? count : 4
@@ -652,8 +660,6 @@ class SearchViewController: SiteTableViewController,
             return viewModel.shouldShowBookmarksSuggestions ? viewModel.bookmarkSites.count : 0
         case .firefoxSuggestions:
             return viewModel.firefoxSuggestions.count
-        case .trendingSearches:
-            return viewModel.shouldShowTrendingSearches ? viewModel.trendingSearches.count : 0
         }
     }
 
@@ -716,6 +722,14 @@ class SearchViewController: SiteTableViewController,
                                    _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
+            
+        case .recentSearches:
+            if let recentSearch = viewModel.recentSearches[safe: indexPath.row] {
+                let oneLineCellViewModel = configureOneLineCellForSearch(with: recentSearch, and: StandardImageIdentifiers.Large.history)
+                oneLineCell.configure(viewModel: oneLineCellViewModel)
+                cell = oneLineCell
+            }
+
         case .trendingSearches:
             if let trendingSearch = viewModel.trendingSearches[safe: indexPath.row] {
                 let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch)
@@ -819,6 +833,7 @@ class SearchViewController: SiteTableViewController,
 
     private func oneLineCellModelForSearch(
         with text: String,
+        and leftImageName: String = SearchViewControllerUX.SearchImage,
         shouldShowAccessoryView: Bool = true
     ) -> OneLineTableViewCellViewModel {
         let appendButton = UIButton(type: .roundedRect)
@@ -829,7 +844,7 @@ class SearchViewController: SiteTableViewController,
         appendButton.addAction(action, for: .touchUpInside)
         let viewModel = OneLineTableViewCellViewModel(
             title: text,
-            leftImageView: UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate),
+            leftImageView: UIImage(named: leftImageName)?.withRenderingMode(.alwaysTemplate),
             accessoryView: shouldShowAccessoryView ? appendButton : nil,
             accessoryType: .none,
             editingAccessoryView: nil)
