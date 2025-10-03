@@ -129,33 +129,36 @@ open class DefaultSuggestedSites {
                 faviconResource: .remoteURL(url: URL(string: "https://corporate.jd.com/favicon.ico")!)
             )
          ],
-        "ja_JP": [ // FXIOS-11064 Do we still want this as a special case localization? Android doesn't compile this anymore
+        "ja_JP": [
             Site.createSuggestedSite(
                 url: "https://tenki.jp/",
                 title: "日本気象協会",
                 trackingId: 800,
                 faviconResource: .bundleAsset(
                     name: "tenki",
-                    forRemoteResource: URL(string: "https://tenki.jp/favicon.ico")!
+                    forRemoteResource: URL(string: "https://static.tenki.jp/images/icon/bookmark/tenkijp_bookmark_icon_114_114.png")!
                 )
-            ),
-            Site.createSuggestedSite(
-                url: "https://www.yahoo.co.jp/",
-                title: "ヤフー",
-                trackingId: 801,
-                faviconResource: .remoteURL(url: URL(string: "https://www.yahoo.co.jp/favicon.ico")!)
             ),
             Site.createSuggestedSite(
                 url: "https://ameblo.jp/",
                 title: "アメブロ",
-                trackingId: 802,
+                trackingId: 801,
                 faviconResource: .bundleAsset(
-                    name: "ameba",
+                    name: "ameblo",
                     forRemoteResource: URL(string: "https://stat100.ameba.jp/common_style/img/sp/apple-touch-icon.png")!
                 )
             ),
             Site.createSuggestedSite(
-                url: "https://ja.wikipedia.org/wiki/",
+                url: "https://m.yahoo.co.jp/",
+                title: "ヤフー",
+                trackingId: 802,
+                faviconResource: .bundleAsset(
+                    name: "yahoo",
+                    forRemoteResource: URL(string: "https://s.yimg.jp/c/icon/s/bsc/2.0/y120.png")!
+                )
+            ),
+            Site.createSuggestedSite(
+                url: "https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8",
                 title: "ウィキペディア",
                 trackingId: 803,
                 faviconResource: .bundleAsset(
@@ -168,7 +171,7 @@ open class DefaultSuggestedSites {
 
     public static func defaultSites() -> [Site] {
         let locale = Locale.current
-        let defaultSites = sites[locale.identifier] ?? sites["default"]
+        let defaultSites = sites[locale.identifier] ?? sites["ja_JP"]
         return defaultSites?.map { site in
             // Override default suggested site URLs with a localized URL for domains in `urlMap` (e.g. localized Amazon)
             if let domainMap = DefaultSuggestedSites.urlMap[site.url],
