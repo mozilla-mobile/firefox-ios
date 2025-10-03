@@ -7,7 +7,7 @@
 import Glean
 import XCTest
 
-// TODO: FXIOS-TODO Laurie - Migrate WebviewTelemetryTests to use mock telemetry or GleanWrapper
+// TODO: FXIOS-13747 - Migrate WebviewTelemetryTests to use mock telemetry or GleanWrapper
 class WebviewTelemetryTests: XCTestCase {
     func testLoadMeasurement() throws {
         let subject = WebViewLoadMeasurementTelemetry()

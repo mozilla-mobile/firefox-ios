@@ -8,7 +8,7 @@ import Glean
 import Common
 import Shared
 
-// TODO: FXIOS-TODO Laurie - Migrate TermsOfUseTelemetryTests to use mock telemetry or GleanWrapper
+// TODO: FXIOS-13746 - Migrate TermsOfUseTelemetryTests to use mock telemetry or GleanWrapper
 @MainActor
 final class TermsOfUseTelemetryTests: XCTestCase {
     private var telemetry: TermsOfUseTelemetry!

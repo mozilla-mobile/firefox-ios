@@ -8,7 +8,7 @@ import Glean
 @testable import Client
 import MozillaAppServices
 
-// TODO: FXIOS-TODO Laurie - Migrate GleanPlumbMessageManagerTests to use mock telemetry or GleanWrapper
+// TODO: FXIOS-13565 - Migrate GleanPlumbMessageManagerTests to use mock telemetry or GleanWrapper
 // Note: There seems to be runtime warnings related to Nimbus, and not just Glean. This needs to be investigated
 // before enabling again those unit tests
 // DISABLED TESTS:

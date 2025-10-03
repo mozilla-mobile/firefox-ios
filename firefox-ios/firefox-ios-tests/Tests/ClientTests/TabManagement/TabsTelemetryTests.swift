@@ -8,7 +8,7 @@ import Glean
 import XCTest
 import Common
 
-// TODO: FXIOS-TODO Laurie - Migrate TabsTelemetryTests to use mock telemetry or GleanWrapper
+// TODO: FXIOS-13742 - Migrate TabsTelemetryTests to use mock telemetry or GleanWrapper
 class TabsTelemetryTests: XCTestCase {
     var profile: Profile!
     var inactiveTabsManager: MockInactiveTabsManager!

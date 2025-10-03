@@ -7,7 +7,7 @@ import XCTest
 
 @testable import Client
 
-// TODO: FXIOS-TODO Laurie - Migrate ShareTelemetryTests to use mock telemetry or GleanWrapper
+// TODO: FXIOS-13742 - Migrate ShareTelemetryTests to use mock telemetry or GleanWrapper
 final class ShareTelemetryTests: XCTestCase {
     private let testWebURL = URL(string: "https://mozilla.org")!
     var gleanWrapper: MockGleanWrapper!
