@@ -23,64 +23,54 @@ final class MicrosurveyTelemetryTests: XCTestCase {
         let subject = createSubject()
         let event = GleanMetrics.Microsurvey.shown
         typealias EventExtrasType = GleanMetrics.Microsurvey.ShownExtra
-        let expectedMetricType = type(of: event)
         let expectedSurveyId = "microsurvey-id"
 
         subject.surveyViewed(surveyId: expectedSurveyId)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.surveyId, "microsurvey-id")
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordEvent_WhenPrivacyNoticeTapped_ThenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.Microsurvey.privacyNoticeTapped
         typealias EventExtrasType = GleanMetrics.Microsurvey.PrivacyNoticeTappedExtra
-        let expectedMetricType = type(of: event)
         let expectedSurveyId = "microsurvey-id"
 
         subject.privacyNoticeTapped(surveyId: expectedSurveyId)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.surveyId, expectedSurveyId)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordEvent_WhenDismissButtonTapped_ThenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.Microsurvey.dismissButtonTapped
         typealias EventExtrasType = GleanMetrics.Microsurvey.DismissButtonTappedExtra
-        let expectedMetricType = type(of: event)
         let expectedSurveyId = "microsurvey-id"
 
         subject.dismissButtonTapped(surveyId: expectedSurveyId)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.surveyId, expectedSurveyId)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordEvent_WhenUserResponseSubmitted_ThenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.Microsurvey.submitButtonTapped
         typealias EventExtrasType = GleanMetrics.Microsurvey.SubmitButtonTappedExtra
-        let expectedMetricType = type(of: event)
         let expectedSurveyId = "microsurvey-id"
         let expectedSelection = "Neutral"
 
@@ -88,32 +78,27 @@ final class MicrosurveyTelemetryTests: XCTestCase {
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.surveyId, expectedSurveyId)
         XCTAssertEqual(savedExtras.userSelection, expectedSelection)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordEvent_WhenConfirmationShown_ThenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.Microsurvey.confirmationShown
         typealias EventExtrasType = GleanMetrics.Microsurvey.ConfirmationShownExtra
-        let expectedMetricType = type(of: event)
         let expectedSurveyId = "microsurvey-id"
 
         subject.confirmationShown(surveyId: expectedSurveyId)
 
         let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
         let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.surveyId, expectedSurveyId)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     private func createSubject() -> MicrosurveyTelemetry {
