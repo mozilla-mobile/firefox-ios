@@ -718,29 +718,18 @@ class SearchViewController: SiteTableViewController,
         switch section {
         case .trendingSearches:
             if let trendingSearch = viewModel.trendingSearches[safe: indexPath.row] {
-                // TODO: FXIOS-13690 - Add one line cell configuration to be reusable.
-                oneLineCell.titleLabel.text = trendingSearch
-                oneLineCell.leftImageView.contentMode = .center
-                oneLineCell.leftImageView.layer.borderWidth = 0
-                oneLineCell.leftImageView.manuallySetImage(
-                    UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
-                )
-                oneLineCell.leftImageView.tintColor = currentTheme().colors.iconPrimary
-                oneLineCell.leftImageView.backgroundColor = nil
-                let appendButton = UIButton(type: .roundedRect)
-                appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
-                // TODO: FXIOS-13689 - Implement tapping on trending search
-                appendButton.tintColor = currentTheme().colors.iconPrimary
-                appendButton.frame = CGRect(width: SearchViewControllerUX.AppendButtonSize,
-                                            height: SearchViewControllerUX.AppendButtonSize)
-                oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
-                oneLineCell.isAccessoryViewInteractive = true
+                let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch)
+                oneLineCell.configure(viewModel: oneLineCellViewModel)
                 cell = oneLineCell
             }
 
         case .searchSuggestions:
             if let site = viewModel.suggestions?[indexPath.row] {
-                oneLineCell.titleLabel.text = site
+                let oneLineCellViewModel = oneLineCellModelForSearch(
+                    with: site,
+                    shouldShowAccessoryView: indexPath.row > 0
+                )
+                oneLineCell.configure(viewModel: oneLineCellViewModel)
                 if Locale.current.languageCode == "en",
                    let attributedString = getAttributedBoldSearchSuggestions(
                     searchPhrase: site,
@@ -748,21 +737,6 @@ class SearchViewController: SiteTableViewController,
                    ) {
                     oneLineCell.titleLabel.attributedText = attributedString
                 }
-                oneLineCell.leftImageView.contentMode = .center
-                oneLineCell.leftImageView.layer.borderWidth = 0
-                oneLineCell.leftImageView.manuallySetImage(
-                    UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
-                )
-                oneLineCell.leftImageView.tintColor = currentTheme().colors.iconPrimary
-                oneLineCell.leftImageView.backgroundColor = nil
-                let appendButton = UIButton(type: .roundedRect)
-                appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
-                appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
-                appendButton.tintColor = currentTheme().colors.iconPrimary
-                appendButton.frame = CGRect(width: SearchViewControllerUX.AppendButtonSize,
-                                            height: SearchViewControllerUX.AppendButtonSize)
-                oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
-                oneLineCell.isAccessoryViewInteractive = true
                 cell = oneLineCell
             }
         case .openedTabs:
@@ -843,6 +817,25 @@ class SearchViewController: SiteTableViewController,
         return cell
     }
 
+    private func oneLineCellModelForSearch(
+        with text: String,
+        shouldShowAccessoryView: Bool = true
+    ) -> OneLineTableViewCellViewModel {
+        let appendButton = UIButton(type: .roundedRect)
+        appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        let action = UIAction { [weak self] _ in
+            self?.appendSearch(with: text)
+        }
+        appendButton.addAction(action, for: .touchUpInside)
+        let viewModel = OneLineTableViewCellViewModel(
+            title: text,
+            leftImageView: UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate),
+            accessoryView: shouldShowAccessoryView ? appendButton : nil,
+            accessoryType: .none,
+            editingAccessoryView: nil)
+        return viewModel
+    }
+
     private func configureBookmarksAndHistoryCell(
         _ cell: TwoLineImageOverlayCell,
         _ title: String,
@@ -859,15 +852,10 @@ class SearchViewController: SiteTableViewController,
         cell.accessoryView = nil
     }
 
-    func append(_ sender: UIButton) {
-        let buttonPosition = sender.convert(CGPoint(), to: tableView)
-        if let indexPath = tableView.indexPathForRow(
-            at: buttonPosition
-        ), let newQuery = viewModel.suggestions?[indexPath.row] {
-            searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
-            viewModel.searchQuery = newQuery + " "
-            searchTelemetry?.searchQuery = viewModel.searchQuery
-        }
+    func appendSearch(with newQuery: String) {
+        searchDelegate?.searchViewController(self, didAppend: newQuery + " ")
+        viewModel.searchQuery = newQuery + " "
+        searchTelemetry?.searchQuery = viewModel.searchQuery
     }
 
     private var searchAppendImage: UIImage? {
