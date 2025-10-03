@@ -228,7 +228,10 @@ let package = Package(
             ]),
         .testTarget(
             name: "OnboardingKitTests",
-            dependencies: ["OnboardingKit"]),
+            dependencies: ["OnboardingKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
             dependencies: ["ContentBlockingGenerator"]),
