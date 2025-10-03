@@ -47,14 +47,15 @@ extension XCTestCase {
     /// - We should us GleanWrapper or mock objects instead of concrete type testing for Glean
     func setupTelemetry(with profile: Profile) {
         TelemetryWrapper.hasTelemetryOverride = true
+
+        DependencyHelperMock().bootstrapDependencies()
+        TelemetryWrapper().initGlean(profile, sendUsageData: false)
+
         // Due to changes allow certain custom pings to implement their own opt-out
         // independent of Glean, custom pings may need to be registered manually in
         // tests in order to put them in a state in which they can collect data.
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
-
-        DependencyHelperMock().bootstrapDependencies()
-        TelemetryWrapper().initGlean(profile, sendUsageData: false)
     }
 
     /// Helper function to ensure Glean telemetry is properly teardown for unit tests
