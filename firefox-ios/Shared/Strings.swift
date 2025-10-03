@@ -1036,14 +1036,14 @@ extension String {
                 value: "Stories",
                 comment: "This is the title of the Stories section on Firefox Homepage.")
             public static let PopularTodaySectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.PopularTodaySectionTitle.v144",
+                key: "FirefoxHome.Stories.PopularTodaySectionTitle.v145",
                 tableName: "FirefoxHomepage",
-                value: "Popular today",
+                value: "Popular Today",
                 comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
             public static let AllStoriesButtonTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.AllStoriesButtonTitle.v144",
+                key: "FirefoxHome.Stories.AllStoriesButtonTitle.v145",
                 tableName: "FirefoxHomepage",
-                value: "All stories",
+                value: "All Stories",
                 comment: "This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles.")
             public static let NumberOfMinutes = MZLocalizedString(
                 key: "FirefoxHome.Stories.Minutes.v140",
@@ -1073,12 +1073,12 @@ extension String {
                 value: "%@ of %@",
                 comment: "On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5'")
 
-            public struct TopStories {
-                public static let TopStoriesViewTitle = MZLocalizedString(
-                    key: "FirefoxHome.Stories.TopStoriesViewTitle.v144",
+            public struct AllStories {
+                public static let AllStoriesViewTitle = MZLocalizedString(
+                    key: "FirefoxHome.Stories.AllStoriesViewTitle.v145",
                     tableName: "FirefoxHomepage",
-                    value: "Top stories",
-                    comment: "This is the title that appears in the navigation bar for the Top Stories view, a screen that displays a collection of trending news articles")
+                    value: "All Stories",
+                    comment: "This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles")
             }
         }
 
