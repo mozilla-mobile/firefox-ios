@@ -62,8 +62,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Notifiable {
     // MARK: Notifications
 
     private func addObservers() {
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
-                                                          UIApplication.didEnterBackgroundNotification])
+        startObservingNotifications(withNotificationCenter: notificationCenter,
+                                    forObserver: self,
+                                    observing: [UIApplication.didBecomeActiveNotification,
+                                                UIApplication.didEnterBackgroundNotification])
     }
 
     /// When migrated to Scenes, these methods aren't called so using the same as in Firefox iOS application.
