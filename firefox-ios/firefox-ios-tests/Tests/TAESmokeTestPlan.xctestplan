@@ -366,7 +366,6 @@
         "NewTabSettingsTest\/testNewTabCustomURLKeyboardNotRaised()",
         "NightModeTests",
         "NightModeTests\/testNightModeUI()",
-        "O_AddressesTests",
         "O_AddressesTests\/testAddNewAddressAllFieldsFilled()",
         "O_AddressesTests\/testAddNewAddressCityFilled()",
         "O_AddressesTests\/testAddNewAddressCountry()",

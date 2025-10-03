@@ -29,4 +29,21 @@ final class BrowserScreen {
         let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         backButton.waitAndTap()
     }
+
+    func assertAutofillOptionNotAvailable(
+            forFieldsCount count: Int,
+            autofillButtonID: String,
+            timeout: TimeInterval = TIMEOUT) {
+        let textFieldsQuery = app.webViews.textFields
+        let addressAutofillButton = app.buttons[autofillButtonID]
+
+        for index in 0..<count {
+            let textField = textFieldsQuery.element(boundBy: index)
+
+            BaseTestCase().mozWaitForElementToExist(textField)
+            textField.waitAndTap()
+
+            BaseTestCase().mozWaitForElementToNotExist(addressAutofillButton, timeout: timeout)
+        }
+    }
 }

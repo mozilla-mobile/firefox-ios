@@ -48,4 +48,33 @@ extension Selector {
         )
         return Selector(strategy: .predicate(p), value: value, description: description, groups: groups)
     }
+
+    static func buttonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(
+            format: "elementType == %d AND (label == %@ OR identifier == %@)",
+            XCUIElement.ElementType.button.rawValue,
+            label,
+            label
+        )
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
+
+    static func navigationBarId(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .predicate(
+            NSPredicate(
+                format: "elementType == %d AND identifier == %@",
+                XCUIElement.ElementType.navigationBar.rawValue,
+                id
+            )
+        ),
+        value: id,
+        description: description,
+        groups: groups
+        )
+    }
+
+    static func firstTable(description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d", XCUIElement.ElementType.table.rawValue)
+        return Selector(strategy: .predicate(p), value: "firstTable", description: description, groups: groups)
+    }
 }
