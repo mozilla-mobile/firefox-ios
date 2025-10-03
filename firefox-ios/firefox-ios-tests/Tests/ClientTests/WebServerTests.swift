@@ -43,6 +43,9 @@ class WebServerTests: XCTestCase {
         XCTAssertTrue(webServer.isRunning)
     }
 
+    // TODO: FXIOS-13751 - Synchronous URL loading of http://localhost:60138/hello should not occur on this
+    // application's main thread as it may lead to UI unresponsiveness. Please switch to an asynchronous
+    // networking API such as URLSession.
     func testWebServerIsServingRequests() {
         let response = try? String(contentsOf: URL(string: "\(webServerBase!)/hello")!, encoding: .utf8)
         XCTAssertNotNil(response)

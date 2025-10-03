@@ -53,7 +53,7 @@ struct GleanHttpUploader: PingUploaderProtocol {
             uploadTask.countOfBytesClientExpectsToReceive = 512
             uploadTask.resume()
         } else {
-            logger.log("Rejected ohttp ping since couldn't build request", level: .info, category: .telemetry)
+            logger.log("Rejected http ping since couldn't build request", level: .info, category: .telemetry)
             callback(.unrecoverableFailure(unused: 0))
         }
     }

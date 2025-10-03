@@ -21,17 +21,13 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
         profile = MockProfile()
 
         featureFlags.initializeDeveloperFeatures(with: profile)
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
         super.tearDown()
         adaptor = nil
         profile = nil
+        tearDownTelemetry()
     }
 
     func testDefaultPocketViewModelProtocolValues_withEmptyData() {
@@ -50,6 +46,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testRecordSectionHasShown() throws {
+        setupTelemetry(with: profile)
         adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
@@ -108,6 +105,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
 
     @MainActor
     func testClickingStandardCell_recordsTapOnStory() {
+        setupTelemetry(with: profile)
         adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
@@ -143,10 +141,9 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
         subject.handleLongPress(with: collectionView,
                                 indexPath: IndexPath(item: 0, section: 0))
     }
-}
 
 // MARK: Helpers
-extension StoryViewModelTests {
+
     func createStories(numberOfStories: Int) -> [MerinoStory] {
         var stories = [MerinoStory]()
         (0..<numberOfStories).forEach { index in

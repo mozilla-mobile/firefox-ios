@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+// TODO: FXIOS-13742 - Migrate ShareTelemetryTests to use mock telemetry or GleanWrapper
 final class ShareTelemetryTests: XCTestCase {
     private let testWebURL = URL(string: "https://mozilla.org")!
 
@@ -15,16 +16,13 @@ final class ShareTelemetryTests: XCTestCase {
     let shareTypeKey = "share_type"
     let hasShareMessageKey = "has_share_message"
 
-    override func setUp() {
-        super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
+    override func tearDown() {
+        tearDownTelemetry()
+        super.tearDown()
     }
 
     func testSharedTo_withNoActivityType() throws {
+        setupTelemetry(with: MockProfile())
         let subject = createSubject()
         let testActivityType: UIActivity.ActivityType? = nil
         let testShareType: ShareType = .site(url: testWebURL)
@@ -36,7 +34,7 @@ final class ShareTelemetryTests: XCTestCase {
             hasShareMessage: testHasShareMessage
         )
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.ShareSheet.sharedTo)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.ShareSheet.sharedTo)
 
         let resultValue = try XCTUnwrap(GleanMetrics.ShareSheet.sharedTo.testGetValue())
         XCTAssertEqual(resultValue[0].extra?[activityIdentifierKey], "unknown")
@@ -45,6 +43,7 @@ final class ShareTelemetryTests: XCTestCase {
     }
 
     func testSharedTo_withActivityType() throws {
+        setupTelemetry(with: MockProfile())
         let subject = createSubject()
         let testActivityType = UIActivity.ActivityType("com.some.activity.identifier")
         let testShareType: ShareType = .site(url: testWebURL)
@@ -56,7 +55,7 @@ final class ShareTelemetryTests: XCTestCase {
             hasShareMessage: testHasShareMessage
         )
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.ShareSheet.sharedTo)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.ShareSheet.sharedTo)
 
         let resultValue = try XCTUnwrap(GleanMetrics.ShareSheet.sharedTo.testGetValue())
         XCTAssertEqual(resultValue[0].extra?[activityIdentifierKey], testActivityType.rawValue)

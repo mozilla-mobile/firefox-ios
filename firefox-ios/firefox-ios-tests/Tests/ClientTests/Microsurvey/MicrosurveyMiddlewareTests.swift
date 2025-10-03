@@ -13,17 +13,12 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
 
     override func tearDown() {
-        DependencyHelperMock().reset()
+        tearDownTelemetry()
         resetStore()
         super.tearDown()
     }
@@ -34,7 +29,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.dismissButtonTapped)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.dismissButtonTapped)
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.dismissButtonTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
 
@@ -51,7 +46,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.privacyNoticeTapped)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.privacyNoticeTapped)
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.privacyNoticeTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
 
@@ -69,7 +64,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.submitButtonTapped)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.submitButtonTapped)
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.submitButtonTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
         XCTAssertEqual(resultValue[0].extra?["user_selection"], "Neutral")
@@ -87,7 +82,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.shown)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.shown)
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.shown.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
     }
@@ -98,7 +93,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.confirmationShown)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.confirmationShown)
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.confirmationShown.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
     }
