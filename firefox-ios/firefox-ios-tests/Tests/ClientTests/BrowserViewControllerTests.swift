@@ -12,6 +12,7 @@ import Shared
 
 @testable import Client
 
+// TODO: FXIOS-TODO Laurie - Migrate BrowserViewControllerTests to use mock telemetry or GleanWrapper
 class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var profile: MockProfile!
     var tabManager: MockTabManager!
@@ -27,12 +28,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
-        TelemetryContextualIdentifier.setupContextId()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
 
         profile = MockProfile()
         tabManager = MockTabManager()
@@ -44,19 +39,18 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     override func tearDown() {
-        TelemetryContextualIdentifier.clearUserDefaults()
+        tearDownTelemetry()
         profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
         recordVisitManager = nil
-        Glean.shared.resetGlean(clearStores: true)
-        DependencyHelperMock().reset()
         resetStore()
         super.tearDown()
     }
 
     func testTrackVisibleSuggestion() {
+        TelemetryContextualIdentifier.setupContextId()
         let subject = createSubject()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
 

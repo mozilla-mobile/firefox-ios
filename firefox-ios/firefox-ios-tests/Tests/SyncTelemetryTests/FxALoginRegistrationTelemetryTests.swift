@@ -14,6 +14,7 @@ struct MockFxAUrls {
     static let mockSignInTockenUrl =  URL(string: "https://accounts.firefox.com/oauth/signin_token_code/")!
 }
 
+// TODO: FXIOS-TODO Laurie - Migrate SyncTelemetryTests to use mock telemetry or GleanWrapper
 class SyncTelemetryTests: XCTestCase {
     var fxaWebViewTelemetry: FxAWebViewTelemetry!
 

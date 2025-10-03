@@ -31,22 +31,18 @@ class PasswordManagerViewModelTests: XCTestCase {
         self.mockDelegate = MockLoginViewModelDelegate()
         self.viewModel.delegate = mockDelegate
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
+        tearDownTelemetry()
         viewModel = nil
         mockLoginProvider = nil
         mockDelegate = nil
-        DependencyHelperMock().reset()
         super.tearDown()
     }
 
     func testaddLoginWithEmptyString() {
+        setupTelemetry(with: MockProfile())
         let login = LoginEntry(fromJSONDict: [
                         "hostname": "https://example.com",
                         "formSubmitUrl": "https://example.com",
@@ -63,6 +59,7 @@ class PasswordManagerViewModelTests: XCTestCase {
     }
 
     func testaddLoginWithString() {
+        setupTelemetry(with: MockProfile())
         let login = LoginEntry(fromJSONDict: [
                         "hostname": "https://example.com",
                         "formSubmitUrl": "https://example.com",
