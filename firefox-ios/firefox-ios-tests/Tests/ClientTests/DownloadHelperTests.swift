@@ -122,6 +122,7 @@ class DownloadHelperTests: XCTestCase {
         }
     }
 
+    @MainActor
     func test_downloadViewModel_whenRequestURLIsWrong_deliversEmptyResult() {
         let request = anyRequest(urlString: "wrong-url.com")
         let subject = createSubject(request: request,
@@ -133,6 +134,7 @@ class DownloadHelperTests: XCTestCase {
         XCTAssertNil(downloadViewModel)
     }
 
+    @MainActor
     func test_downloadViewModel_deliversCorrectTitle() {
         let response = anyResponse(urlString: "http://some-domain.com/some-image.jpg")
         let subject = createSubject(request: anyRequest(),
@@ -144,6 +146,7 @@ class DownloadHelperTests: XCTestCase {
         XCTAssertEqual(downloadViewModel!.title!, "some-image.jpg")
     }
 
+    @MainActor
     func test_downloadViewModel_deliversCorrectCancelButtonTitle() {
         let subject = createSubject(request: anyRequest(),
                                     response: anyResponse(mimeType: nil),
