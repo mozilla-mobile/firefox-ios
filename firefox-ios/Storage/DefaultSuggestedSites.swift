@@ -171,7 +171,7 @@ open class DefaultSuggestedSites {
 
     public static func defaultSites() -> [Site] {
         let locale = Locale.current
-        let defaultSites = sites[locale.identifier] ?? sites["ja_JP"]
+        let defaultSites = sites[locale.identifier] ?? sites["default"]
         return defaultSites?.map { site in
             // Override default suggested site URLs with a localized URL for domains in `urlMap` (e.g. localized Amazon)
             if let domainMap = DefaultSuggestedSites.urlMap[site.url],
