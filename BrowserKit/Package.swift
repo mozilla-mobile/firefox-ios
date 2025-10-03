@@ -203,7 +203,7 @@ let package = Package(
             name: "ContentBlockingGeneratorTests",
             dependencies: ["ContentBlockingGenerator"],
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
+                .enableExperimentalFeature("StrictConcurrency")
             ]),
         .target(
             name: "OnboardingKit",
