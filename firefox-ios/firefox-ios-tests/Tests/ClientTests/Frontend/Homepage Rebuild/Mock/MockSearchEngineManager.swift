@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-
+import Common
 @testable import Client
 
 class MockSearchEnginesManager: SearchEnginesManagerProvider {
@@ -24,7 +24,7 @@ class MockSearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     func getOrderedEngines(completion: @escaping SearchEngineCompletion) {
-        DispatchQueue.main.async {
+        ensureMainThread {
             completion(
                 SearchEnginePrefs(
                     engineIdentifiers: self.searchEngines.map {
