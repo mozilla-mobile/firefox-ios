@@ -6,7 +6,7 @@ import Foundation
 @testable import WebEngine
 
 @available(iOS 16.0, *)
-class MockWKWebViewProvider: WKWebViewProvider {
+final class MockWKWebViewProvider: WKWebViewProvider {
     var webView: MockWKEngineWebView!
 
     func createWebview(configurationProvider: WKEngineConfigurationProvider,

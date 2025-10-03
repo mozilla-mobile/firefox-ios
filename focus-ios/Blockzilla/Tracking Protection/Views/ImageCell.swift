@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ImageCell: UITableViewCell {
+final class ImageCell: UITableViewCell {
     convenience init(image: UIImage, title: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
         imageView?.image = image

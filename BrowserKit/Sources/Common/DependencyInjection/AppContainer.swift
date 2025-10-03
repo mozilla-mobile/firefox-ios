@@ -8,7 +8,7 @@ import Dip
 
 /// This is our concrete dependency container. It holds all dependencies / services the app would need through
 /// a session.
-public class AppContainer: ServiceProvider {
+final public class AppContainer: ServiceProvider {
     /// FIXME: FXIOS-13125 Shared state for the app should not be stored in the Common package.
     nonisolated(unsafe) public static let shared: ServiceProvider = AppContainer()
 

@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ThemeManager {
+final class ThemeManager {
     enum Theme: Int {
         case device
         case light

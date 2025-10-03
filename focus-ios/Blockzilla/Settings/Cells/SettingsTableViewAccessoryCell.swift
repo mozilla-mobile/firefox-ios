@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SettingsTableViewAccessoryCell: SettingsTableViewCell {
+final class SettingsTableViewAccessoryCell: SettingsTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryView = UIImageView(image: UIImage(systemName: "chevron.right")?.imageFlippedForRightToLeftLayoutDirection())

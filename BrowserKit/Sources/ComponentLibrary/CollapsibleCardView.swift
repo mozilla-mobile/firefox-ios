@@ -50,7 +50,7 @@ public struct CollapsibleCardViewModel {
     }
 }
 
-public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
+final public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
     private struct UX {
         static let verticalPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 8

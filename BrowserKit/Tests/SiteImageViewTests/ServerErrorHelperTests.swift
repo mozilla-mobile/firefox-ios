@@ -5,7 +5,7 @@
 import XCTest
 @testable import SiteImageView
 
-class ServerErrorHelperTests {
+final class ServerErrorHelperTests {
     func testIsClientError_whenNetworkError() async {
         let networkError = URLError(.notConnectedToInternet)
 

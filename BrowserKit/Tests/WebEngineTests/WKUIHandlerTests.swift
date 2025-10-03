@@ -179,7 +179,7 @@ final class WKUIHandlerTests: XCTestCase {
     }
 }
 
-class MockSessionCreator: SessionCreator {
+final class MockSessionCreator: SessionCreator {
     var createPopupSessionCalled = 0
 
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {

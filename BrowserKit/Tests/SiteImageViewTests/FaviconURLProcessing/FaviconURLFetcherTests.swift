@@ -5,7 +5,7 @@
 import XCTest
 @testable import SiteImageView
 
-class FaviconURLFetcherTests: XCTestCase {
+final class FaviconURLFetcherTests: XCTestCase {
     var subject: DefaultFaviconURLFetcher!
     var networkMock: MockHTMLDataRequest!
 

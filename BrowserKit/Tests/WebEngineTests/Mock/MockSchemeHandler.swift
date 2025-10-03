@@ -5,7 +5,7 @@
 import Foundation
 @testable import WebEngine
 
-class MockSchemeHandler: WKInternalSchemeResponse {
+final class MockSchemeHandler: WKInternalSchemeResponse {
     static let path = "about/test"
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {

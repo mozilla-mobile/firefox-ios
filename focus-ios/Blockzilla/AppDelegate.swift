@@ -22,7 +22,7 @@ enum AppPhase {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var authenticationManager = AuthenticationManager()
     @Published private var appPhase: AppPhase = .notRunning
 

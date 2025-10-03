@@ -12,7 +12,7 @@ import Combine
 import Licenses
 import DesignSystem
 
-class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
         case defaultBrowser, general, privacy, usageData, crashReports, studies, dailyUsagePing, search, siri, integration, mozilla, secret
 

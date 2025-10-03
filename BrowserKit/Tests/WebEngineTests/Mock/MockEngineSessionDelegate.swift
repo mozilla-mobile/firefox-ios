@@ -6,7 +6,7 @@ import Foundation
 import UIKit.UIContextMenuConfiguration
 @testable import WebEngine
 
-class MockEngineSessionDelegate: EngineSessionDelegate {
+final class MockEngineSessionDelegate: EngineSessionDelegate {
     var onTitleChangeCalled = 0
     var onProgressCalled = 0
     var onHideProgressCalled = 0

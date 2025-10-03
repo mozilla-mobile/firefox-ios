@@ -5,7 +5,7 @@
 import Foundation
 @testable import WebEngine
 
-class MockWKWebServerUtil: WKWebServerUtil {
+final class MockWKWebServerUtil: WKWebServerUtil {
     var setUpWebServerCalled = 0
     var stopWebServerCalled = 0
 

@@ -5,7 +5,7 @@
 import WebKit
 
 @available(iOS 16, *)
-class MockUIFindInteraction: UIFindInteraction {
+final class MockUIFindInteraction: UIFindInteraction {
     let findDelegate = MockUIFindInteractionDelegate()
     var presentFindNavigatorCalled = 0
 
@@ -19,7 +19,7 @@ class MockUIFindInteraction: UIFindInteraction {
 }
 
 @available(iOS 16, *)
-class MockUIFindInteractionDelegate: NSObject, UIFindInteractionDelegate {
+final class MockUIFindInteractionDelegate: NSObject, UIFindInteractionDelegate {
     var findInteractionCalled = 0
     func findInteraction(_ interaction: UIFindInteraction, sessionFor view: UIView) -> UIFindSession? {
         findInteractionCalled += 1

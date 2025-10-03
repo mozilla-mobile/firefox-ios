@@ -42,7 +42,7 @@ extension SIMD3 where Scalar == Float {
 }
 
 @MainActor
-class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
+final class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
     private let logger: Logger
     private let commandQueue: MTLCommandQueue
     private let renderPipelineState: MTLRenderPipelineState
@@ -353,7 +353,7 @@ struct AnimatedGradientMetalView: View {
 
 // Wrapper class to manage the optional renderer
 @MainActor
-class RendererStore: ObservableObject {
+final class RendererStore: ObservableObject {
     let renderer: AnimatedGradientRenderer?
 
     init(device: MTLDevice?, speed: Float) {

@@ -10,7 +10,7 @@ protocol ContentBlockerParser {
     func parseCategoryList(_ categoryList: [String], actionType: ActionType) -> [String]
 }
 
-class DefaultContentBlockerParser: ContentBlockerParser {
+final class DefaultContentBlockerParser: ContentBlockerParser {
     // Key is each resource of an entity, so each properties for an entity's resource is easily accessible
     private var entities = [String: Entity]()
 

@@ -6,7 +6,7 @@ import XCTest
 @testable import OnboardingKit
 
 @MainActor
-class OnboardingFlowViewModelTests: XCTestCase {
+final class OnboardingFlowViewModelTests: XCTestCase {
     var viewModel: OnboardingFlowViewModel<MockOnboardingCardInfoModel>!
     var mockCards: [MockOnboardingCardInfoModel]!
 

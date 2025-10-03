@@ -5,7 +5,7 @@
 import Common
 @testable import WebEngine
 
-class MockWKReaderModeDelegate: WKReaderModeDelegate {
+final class MockWKReaderModeDelegate: WKReaderModeDelegate {
     var didChangeReaderModeStateCalled = 0
     var didDisplayReaderizedContentForSessionCalled = 0
     var didParseReadabilityResultCalled = 0

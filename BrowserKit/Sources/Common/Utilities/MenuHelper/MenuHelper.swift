@@ -12,7 +12,7 @@ public protocol MenuHelper {
                   urlBarModel: MenuHelperURLBarModel?)
 }
 
-public class DefaultMenuHelper: NSObject, MenuHelper {
+final public class DefaultMenuHelper: NSObject, MenuHelper {
     @MainActor
     public func setItems(webViewModel: MenuHelperWebViewModel?,
                          loginModel: MenuHelperLoginModel?,

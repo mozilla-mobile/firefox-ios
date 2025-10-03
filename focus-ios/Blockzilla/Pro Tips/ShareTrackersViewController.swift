@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ShareTrackersViewController: UIViewController {
+final class ShareTrackersViewController: UIViewController {
     private let trackerTitle: String
     private let shareTap: (UIButton) -> Void
     init(trackerTitle: String, shareTap: @escaping (UIButton) -> Void) {

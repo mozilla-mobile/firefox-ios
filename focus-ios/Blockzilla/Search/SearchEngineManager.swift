@@ -4,7 +4,7 @@
 
 import Foundation
 
-class SearchEngineManager {
+final class SearchEngineManager {
     public static let prefKeyEngine = "prefKeyEngine"
     public static let prefKeyDisabledEngines = "prefKeyDisabledEngines"
     public static let prefKeyCustomEngines = "prefKeyCustomEngines"

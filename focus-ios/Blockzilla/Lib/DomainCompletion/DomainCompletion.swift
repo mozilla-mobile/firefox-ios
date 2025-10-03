@@ -25,7 +25,7 @@ public protocol CustomAutocompleteSource: AutocompleteSource {
     func remove(at index: Int) -> CustomCompletionResult
 }
 
-public class CustomCompletionSource: CustomAutocompleteSource {
+final public class CustomCompletionSource: CustomAutocompleteSource {
     private lazy var regex = getRegex()
     var enableCustomDomainAutocomplete: () -> Bool
     var getCustomDomainSetting: () -> AutoCompleteSuggestions
@@ -103,7 +103,7 @@ public class CustomCompletionSource: CustomAutocompleteSource {
     }
 }
 
-class TopDomainsCompletionSource: AutocompleteSource {
+final class TopDomainsCompletionSource: AutocompleteSource {
     var enableDomainAutocomplete: () -> Bool
 
     init(
@@ -127,7 +127,7 @@ class TopDomainsCompletionSource: AutocompleteSource {
     }
 }
 
-class DomainCompletion: AutocompleteTextFieldCompletionSource {
+final class DomainCompletion: AutocompleteTextFieldCompletionSource {
     private var completionSources: [AutocompleteSource]
 
     init(completionSources: [AutocompleteSource]) {

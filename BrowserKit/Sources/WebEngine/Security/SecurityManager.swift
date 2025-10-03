@@ -9,7 +9,7 @@ public protocol SecurityManager {
     func canNavigateWith(browsingContext: BrowsingContext) -> NavigationDecisionType
 }
 
-public class DefaultSecurityManager: SecurityManager {
+final public class DefaultSecurityManager: SecurityManager {
     public init() {}
 
     public func canNavigateWith(browsingContext: BrowsingContext) -> NavigationDecisionType {

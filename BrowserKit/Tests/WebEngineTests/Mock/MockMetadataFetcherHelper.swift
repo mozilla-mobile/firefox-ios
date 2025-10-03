@@ -5,7 +5,7 @@
 import Foundation
 @testable import WebEngine
 
-class MockMetadataFetcherHelper: MetadataFetcherHelper {
+final class MockMetadataFetcherHelper: MetadataFetcherHelper {
     weak var delegate: MetadataFetcherDelegate?
     var fetchFromSessionCalled = 0
     var savedURL: URL?

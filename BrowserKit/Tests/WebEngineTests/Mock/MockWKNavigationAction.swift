@@ -4,7 +4,7 @@
 
 import WebKit
 
-class MockWKNavigationAction: WKNavigationAction {
+final class MockWKNavigationAction: WKNavigationAction {
     private let _url: URL
 
     override var request: URLRequest {

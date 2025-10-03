@@ -6,14 +6,14 @@ import Common
 import Foundation
 @testable import WebEngine
 
-class MockDispatchSourceTimerFactory: DispatchSourceTimerFactory {
+final class MockDispatchSourceTimerFactory: DispatchSourceTimerFactory {
     var dispatchSource = MockDispatchSourceInterface()
     func createDispatchSource() -> DispatchSourceInterface {
         return dispatchSource
     }
 }
 
-class MockDispatchSourceInterface: DispatchSourceInterface {
+final class MockDispatchSourceInterface: DispatchSourceInterface {
     var scheduleCalled = 0
     var setEventHandlerCalled = 0
     var resumeCalled = 0
