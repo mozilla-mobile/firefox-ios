@@ -130,9 +130,8 @@ let package = Package(
             name: "CommonTests",
             dependencies: ["Common"],
             swiftSettings: [
-                            .enableExperimentalFeature("StrictConcurrency")
-            ]
-        ),
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .target(
             name: "TabDataStore",
             dependencies: ["Common"],
