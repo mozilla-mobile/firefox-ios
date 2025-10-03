@@ -274,6 +274,7 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
     var deleteAddressesCalled = false
     var getStoredKeyCalledCount = 0
     var registerWithSyncManagerCalled = 0
+    var reportPreSyncKeyRetrievalFailureCalled = 0
 
     func deleteAddress(
         id: String,
@@ -320,5 +321,9 @@ final class MockAutofill: AddressProvider, SyncAutofillProvider {
 
     func registerWithSyncManager() {
         registerWithSyncManagerCalled += 1
+    }
+
+    func reportPreSyncKeyRetrievalFailure(err: String) {
+        reportPreSyncKeyRetrievalFailureCalled += 1
     }
 }
