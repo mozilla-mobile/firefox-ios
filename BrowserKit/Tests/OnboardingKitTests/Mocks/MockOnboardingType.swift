@@ -48,7 +48,7 @@ enum MockOnboardingActionType: String, CaseIterable, RawRepresentable {
 }
 
 // MARK: - Mock Protocol Implementation
-final class MockOnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
+final class MockOnboardingCardInfoModel: OnboardingCardInfoModelProtocol, @unchecked Sendable {
     typealias OnboardingType = MockOnboardingType
     typealias OnboardingPopupActionType = MockOnboardingPopupActionType
     typealias OnboardingMultipleChoiceActionType = MockOnboardingMultipleChoiceActionType

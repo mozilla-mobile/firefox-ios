@@ -18,8 +18,8 @@ class OnboardingFlowViewModelTests: XCTestCase {
     ) -> Void] = []
     var multipleChoiceCallbacks: [(MockOnboardingCardInfoModel.OnboardingMultipleChoiceActionType, String) -> Void] = []
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         mockCards = [
             MockOnboardingCardInfoModel(name: "card1"),
             MockOnboardingCardInfoModel(name: "card2"),
@@ -33,13 +33,13 @@ class OnboardingFlowViewModelTests: XCTestCase {
         createViewModel()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         viewModel = nil
         mockCards = nil
         completionCallbacks = []
         actionCallbacks = []
         multipleChoiceCallbacks = []
-        super.tearDown()
+        try await super.tearDown()
     }
 
     private func createViewModel() {
@@ -83,9 +83,8 @@ class OnboardingFlowViewModelTests: XCTestCase {
 
         viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 1)
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.pageCount, 1)
     }
 
     func testHandleBottomButtonAction_AdvanceByMultiple() {
@@ -100,9 +99,8 @@ class OnboardingFlowViewModelTests: XCTestCase {
 
         viewModel.handleBottomButtonAction(action: .skip, cardName: "card1")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 2)
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.pageCount, 2)
     }
 
     func testHandleBottomButtonAction_NoAdvance() {
@@ -115,9 +113,8 @@ class OnboardingFlowViewModelTests: XCTestCase {
 
         viewModel.handleBottomButtonAction(action: .complete, cardName: "card1")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 0) // Should remain unchanged
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.pageCount, 0) // Should remain unchanged
     }
 
     func testHandleBottomButtonAction_ErrorHandling() {
@@ -130,9 +127,8 @@ class OnboardingFlowViewModelTests: XCTestCase {
 
         viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 0) // Should remain unchanged
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.pageCount, 0) // Should remain unchanged
     }
 
     func testHandleBottomButtonAction_CompletionWhenAdvancingBeyondCards() {
@@ -151,9 +147,8 @@ class OnboardingFlowViewModelTests: XCTestCase {
 
         viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 0) // Should remain unchanged when completing
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.pageCount, 0) // Should remain unchanged when completing}
     }
 
     func testHandleBottomButtonAction_InvalidCardName() {
@@ -166,9 +161,8 @@ class OnboardingFlowViewModelTests: XCTestCase {
 
         viewModel.handleBottomButtonAction(action: .next, cardName: "nonexistent")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 0) // Should remain unchanged
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.pageCount, 0) // Should remain unchanged
     }
 
     // MARK: - Multiple Choice Action Tests
@@ -184,9 +178,8 @@ class OnboardingFlowViewModelTests: XCTestCase {
 
         viewModel.handleMultipleChoiceAction(action: .optionA, cardName: "card1")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections["card1"], .optionA)
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.multipleChoiceSelections["card1"], .optionA)
     }
 
     func testHandleMultipleChoiceAction_MultipleSelections() {
@@ -204,10 +197,9 @@ class OnboardingFlowViewModelTests: XCTestCase {
         viewModel.handleMultipleChoiceAction(action: .optionA, cardName: "card1")
         viewModel.handleMultipleChoiceAction(action: .optionB, cardName: "card2")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections["card1"], .optionA)
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections["card2"], .optionB)
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.multipleChoiceSelections["card1"], .optionA)
+        XCTAssertEqual(viewModel.multipleChoiceSelections["card2"], .optionB)
     }
 
     func testHandleMultipleChoiceAction_OverwriteSelection() {
@@ -225,10 +217,9 @@ class OnboardingFlowViewModelTests: XCTestCase {
         viewModel.handleMultipleChoiceAction(action: .optionA, cardName: "card1")
         viewModel.handleMultipleChoiceAction(action: .optionB, cardName: "card1")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections["card1"], .optionB)
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections.count, 1)
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(viewModel.multipleChoiceSelections["card1"], .optionB)
+        XCTAssertEqual(viewModel.multipleChoiceSelections.count, 1)
     }
 
     // MARK: - PageCount Change Tests
@@ -244,10 +235,9 @@ class OnboardingFlowViewModelTests: XCTestCase {
         let initialPageCount = viewModel.pageCount
         viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
 
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(initialPageCount, 0)
-            XCTAssertEqual(self.viewModel.pageCount, 1)
-        }
+        waitForExpectations(timeout: 1.0)
+        XCTAssertEqual(initialPageCount, 0)
+        XCTAssertEqual(viewModel.pageCount, 1)
     }
 
     // MARK: - Edge Cases
