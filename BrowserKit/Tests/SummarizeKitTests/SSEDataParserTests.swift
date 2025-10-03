@@ -5,6 +5,7 @@
 import XCTest
 @testable import SummarizeKit
 
+@MainActor
 final class SSEDataParserTests: XCTestCase {
     private struct EventExampleType: Decodable, Equatable {
         let id: Int
