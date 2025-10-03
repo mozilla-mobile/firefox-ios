@@ -46,7 +46,7 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testRecordSectionHasShown() throws {
-        TelemetryWrapper.hasTelemetryOverride = true
+        setupTelemetry(with: profile)
         adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
@@ -106,7 +106,6 @@ final class StoryViewModelTests: XCTestCase, FeatureFlaggable {
     @MainActor
     func testClickingStandardCell_recordsTapOnStory() {
         setupTelemetry(with: profile)
-        TelemetryWrapper.hasTelemetryOverride = true
         adaptor.merinoStories = createStories(numberOfStories: 1)
         let subject = createSubject()
         subject.didLoadNewData()
