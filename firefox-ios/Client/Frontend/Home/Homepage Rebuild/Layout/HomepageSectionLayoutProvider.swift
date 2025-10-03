@@ -524,7 +524,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" top sites section and returns its height
     private func getShortcutsSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+                  state.topSitesState.shouldShowSection else { return 0 }
         var totalHeight: CGFloat = 0
         let topSitesState = state.topSitesState
         let maxRows = topSitesState.numberOfRows
