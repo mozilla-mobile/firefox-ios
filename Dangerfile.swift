@@ -15,7 +15,7 @@ checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkCodeCoverage()
 failOnNewFilesWithoutCoverage()
 checkForWebEngineFileChange()
-checkForCodeUsage()
+CodeUsageDetector().checkForCodeUsage()
 checkStringsFile()
 checkReleaseBranch()
 BrowserViewControllerChecker().failsOnAddedExtension()
@@ -190,69 +190,6 @@ func checkForWebEngineFileChange() {
     }
 }
 
-// MARK: Detect code usage
-enum CodeUsageToDetect: CaseIterable {
-    static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
-
-    case print
-    case nsLog
-    case osLog
-    case deferred
-
-    var message: String {
-        switch self {
-        case .print:
-            return "Print() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
-        case .nsLog:
-            return "NSLog() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
-        case .osLog:
-            return "os_log() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
-        case .deferred:
-            return "Deferred class seems to be used in file %@ at line %d. Please consider replacing with completion handler instead."
-        }
-    }
-
-    var keyword: String {
-        switch self {
-        case .print:
-            return "print("
-        case .nsLog:
-            return "NSLog("
-        case .osLog:
-            return "os_log("
-        case .deferred:
-            return "Deferred<"
-        }
-    }
-}
-// swiftlint:enable line_length
-
-// Detects CodeUsageToDetect in PR so certain functions are not used in new code.
-func checkForCodeUsage() {
-    let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
-    // Iterate through each added and modified file, running the checks on swift files only
-    for file in editedFiles where file.contains(".swift") {
-        // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
-        switch saferFileDiff(for: file) {
-        case let .success(diff):
-            if file == BrowserViewControllerChecker.bvcPath {
-                BrowserViewControllerChecker().checkBrowserViewControllerSize(fileDiff: diff)
-            }
-
-            switch diff.changes {
-            case let .modified(hunks), let .renamed(_, hunks):
-                detect(keywords: CodeUsageToDetect.allCases, inHunks: hunks, file: file)
-            case let .created(newLines):
-                detect(keywords: CodeUsageToDetect.allCases, inLines: newLines, file: file)
-            case .deleted:
-                break // do not warn on deleted lines
-            }
-        case .failure:
-            break
-        }
-    }
-}
-
 private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
     let baseSHA = danger.github.pullRequest.base.sha
     let headSHA = danger.github.pullRequest.head.sha
@@ -281,42 +218,112 @@ private func saferFileDiff(for file: String) -> Result<FileDiff, Error> {
     }
 }
 
-// MARK: - Detect keyword helpers
-func detect(keywords: [CodeUsageToDetect], inHunks hunks: [FileDiff.Hunk], file: String) {
-    for keyword in keywords {
-        detect(keyword: keyword.keyword, inHunks: hunks, file: file, message: keyword.message)
-    }
-}
+// MARK: - Detect code usage
 
-func detect(keyword: String, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
-    for hunk in hunks {
-        var newLineCount = 0
-        for line in hunk.lines {
-            let isAddedLine = "\(line)".starts(with: "+")
-            let isRemovedLine = "\(line)".starts(with: "-")
-            // Make sure our newLineCount is proper to warn on correct line number
-            guard isAddedLine || !isRemovedLine else { continue }
-            newLineCount += 1
+// Detects Keywords in PR so certain functions are not used in new code.
+class CodeUsageDetector {
+    private enum Keywords: CaseIterable {
+        static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
 
-            // Warn only on added line having the particular keyword
-            guard isAddedLine && String(describing: line).contains(keyword) else { continue }
+        case print
+        case nsLog
+        case osLog
+        case deferred
+        case swiftUIText
 
-            let lineNumber = hunk.newLineStart + newLineCount - 1
-            warn(String(format: message, file, lineNumber))
+        var message: String {
+            switch self {
+            case .print:
+                return "Print() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+            case .nsLog:
+                return "NSLog() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+            case .osLog:
+                return "os_log() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+            case .deferred:
+                return "Deferred class is used in file %@ at line %d. Please replace with completion handler instead."
+            case .swiftUIText:
+                return "SwiftUI 'Text(\"\"' needs to be avoided, use Strings.swift localization instead."
+            }
+        }
+
+        var keyword: String {
+            switch self {
+            case .print:
+                return "print("
+            case .nsLog:
+                return "NSLog("
+            case .osLog:
+                return "os_log("
+            case .deferred:
+                return "Deferred<"
+            case .swiftUIText:
+                return "Text(\""
+            }
         }
     }
-}
+    // swiftlint:enable line_length
 
-func detect(keywords: [CodeUsageToDetect], inLines lines: [String], file: String) {
-    for keyword in keywords {
-        detect(keyword: keyword.keyword, inLines: lines, file: file, message: keyword.message)
+    func checkForCodeUsage() {
+        let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
+        // Iterate through each added and modified file, running the checks on swift files only
+        for file in editedFiles where file.contains(".swift") {
+            // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
+            switch saferFileDiff(for: file) {
+            case let .success(diff):
+                if file == BrowserViewControllerChecker.bvcPath {
+                    BrowserViewControllerChecker().checkBrowserViewControllerSize(fileDiff: diff)
+                }
+
+                switch diff.changes {
+                case let .modified(hunks), let .renamed(_, hunks):
+                    detect(keywords: Keywords.allCases, inHunks: hunks, file: file)
+                case let .created(newLines):
+                    detect(keywords: Keywords.allCases, inLines: newLines, file: file)
+                case .deleted:
+                    break // do not warn on deleted lines
+                }
+            case .failure:
+                break
+            }
+        }
     }
-}
 
-func detect(keyword: String, inLines lines: [String], file: String, message: String) {
-    for (index, line) in lines.enumerated() where line.contains(keyword) {
-        let lineNumber = index + 1
-        warn(String(format: message, file, lineNumber))
+    private func detect(keywords: [Keywords], inHunks hunks: [FileDiff.Hunk], file: String) {
+        for keyword in keywords {
+            detect(keyword: keyword.keyword, inHunks: hunks, file: file, message: keyword.message)
+        }
+    }
+
+    private func detect(keyword: String, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
+        for hunk in hunks {
+            var newLineCount = 0
+            for line in hunk.lines {
+                let isAddedLine = "\(line)".starts(with: "+")
+                let isRemovedLine = "\(line)".starts(with: "-")
+                // Make sure our newLineCount is proper to fail on correct line number
+                guard isAddedLine || !isRemovedLine else { continue }
+                newLineCount += 1
+
+                // Fail only on added line having the particular keyword
+                guard isAddedLine && String(describing: line).contains(keyword) else { continue }
+
+                let lineNumber = hunk.newLineStart + newLineCount - 1
+                fail(String(format: message, file, lineNumber))
+            }
+        }
+    }
+
+    private func detect(keywords: [Keywords], inLines lines: [String], file: String) {
+        for keyword in keywords {
+            detect(keyword: keyword.keyword, inLines: lines, file: file, message: keyword.message)
+        }
+    }
+
+    private func detect(keyword: String, inLines lines: [String], file: String, message: String) {
+        for (index, line) in lines.enumerated() where line.contains(keyword) {
+            let lineNumber = index + 1
+            fail(String(format: message, file, lineNumber))
+        }
     }
 }
 
