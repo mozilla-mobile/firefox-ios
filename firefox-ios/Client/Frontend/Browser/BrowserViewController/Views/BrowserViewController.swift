@@ -3003,7 +3003,11 @@ class BrowserViewController: UIViewController,
         generator.impactOccurred()
 
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let style: UIModalPresentationStyle = if #available(iOS 26.0, *) {
+            .overCurrentContext
+        } else {
+            !shouldSuppress ? .popover : .overCurrentContext
+        }
         let viewModel = PhotonActionSheetViewModel(
             actions: [urlActions],
             closeButtonTitle: .CloseButtonTitle,
