@@ -26,28 +26,29 @@ protocol TopSitesProvider {
 }
 
 extension TopSitesProvider {
-    func getTopSites(numberOfMaxItems: Int = Self.numberOfMaxItems,
-                     completion: @escaping ([Site]?) -> Void) {
-        getTopSites(numberOfMaxItems: numberOfMaxItems, completion: completion)
-    }
-
+    @MainActor
     static var numberOfMaxItems: Int {
         return UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
     }
 
-    var defaultSuggestedSitesKey: String {
-        return "topSites.deletedSuggestedSites"
+    func getTopSites(numberOfMaxItems: Int = Self.numberOfMaxItems,
+                     completion: @escaping ([Site]?) -> Void) {
+        getTopSites(numberOfMaxItems: numberOfMaxItems, completion: completion)
     }
 }
 
 // TODO: FXIOS-13706 TopSitesProviderImplementation should be concurrency safe
-class TopSitesProviderImplementation: TopSitesProvider, @unchecked Sendable {
+class TopSitesProviderImplementation: @MainActor TopSitesProvider, @unchecked Sendable {
     private let pinnedSiteFetcher: PinnedSites
     private let placesFetcher: RustPlaces
     private let prefs: Prefs
 
     private var frecencySites = [Site]()
     private var pinnedSites = [Site]()
+
+    var defaultSuggestedSitesKey: String {
+        return "topSites.suggestedSites"
+    }
 
     init(
         placesFetcher: RustPlaces,
