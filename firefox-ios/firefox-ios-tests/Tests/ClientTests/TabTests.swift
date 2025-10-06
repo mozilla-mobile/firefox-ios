@@ -37,7 +37,6 @@ class TabTests: XCTestCase {
         mockTabWebView = nil
         mockFileManager = nil
         mockDispatchQueue = nil
-        setIsPDFRefactorFeature(isEnabled: false)
         DependencyHelperMock().reset()
         super.tearDown()
     }
@@ -300,7 +299,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         document.isDownloading = true
         subject.webView = mockTabWebView
         subject.enqueueDocument(document)
@@ -318,7 +316,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         subject.url = url
         document.isDownloading = true
@@ -340,7 +337,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
         subject.enqueueDocument(document)
@@ -361,7 +357,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
         subject.enqueueDocument(document)
@@ -390,7 +385,6 @@ class TabTests: XCTestCase {
         let subject = createSubject()
         let document = MockTemporaryDocument(withFileURL: url)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.webView = mockTabWebView
         document.isDownloading = true
 
@@ -404,13 +398,12 @@ class TabTests: XCTestCase {
     }
 
     @MainActor
-    func testSetURL_showsOnlineURLForLocalDocument_whenPDFRefactorEnabled() {
+    func testSetURL_showsOnlineURLForLocalDocument() {
         let subject = createSubject()
         let request = URLRequest(url: URL(string: "https://www.example.com")!)
         let localURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("test.pdf")
         let document = MockTemporaryDocument(withFileURL: localURL, request: request)
 
-        setIsPDFRefactorFeature(isEnabled: true)
         subject.enqueueDocument(document)
 
         subject.url = localURL
@@ -520,12 +513,6 @@ class TabTests: XCTestCase {
         )
         trackForMemoryLeaks(subject)
         return subject
-    }
-
-    private func setIsPDFRefactorFeature(isEnabled: Bool) {
-        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
-            PdfRefactorFeature(enabled: isEnabled)
-        }
     }
 }
 

@@ -352,10 +352,6 @@ class BrowserViewController: UIViewController,
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    var isPDFRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-    }
-
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
@@ -2509,7 +2505,7 @@ class BrowserViewController: UIViewController,
         switch path {
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
-            let isLoadingDocument = isPDFRefactorEnabled && tab.isDownloadingDocument()
+            let isLoadingDocument = tab.isDownloadingDocument()
             let isValidURL = if let url = webView.url {
                 !InternalURL.isValid(url: url)
             } else {
@@ -2537,7 +2533,7 @@ class BrowserViewController: UIViewController,
             }
         case .loading:
             guard var loading = change?[.newKey] as? Bool else { break }
-            if isPDFRefactorEnabled, let doc = tab.temporaryDocument {
+            if let doc = tab.temporaryDocument {
                 loading = doc.isDownloading
             }
             setupMiddleButtonStatus(isLoading: loading)
@@ -2561,7 +2557,7 @@ class BrowserViewController: UIViewController,
             // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
             let url: URL? = if let webURL = webView.url {
                 webURL
-            } else if let changeURL = change?[.newKey] as? URL, isPDFRefactorEnabled {
+            } else if let changeURL = change?[.newKey] as? URL {
                 changeURL
             } else {
                 nil
@@ -4643,12 +4639,10 @@ extension BrowserViewController: TabManagerDelegate {
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
 
-        if isPDFRefactorEnabled {
-            if selectedTab.isDownloadingDocument() {
-                navigationHandler?.showDocumentLoading()
-            } else {
-                navigationHandler?.removeDocumentLoading()
-            }
+        if selectedTab.isDownloadingDocument() {
+            navigationHandler?.showDocumentLoading()
+        } else {
+            navigationHandler?.removeDocumentLoading()
         }
 
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
@@ -4782,7 +4776,7 @@ extension BrowserViewController: TabManagerDelegate {
             needsReload = true
         }
 
-        if selectedTab.temporaryDocument != nil, isPDFRefactorEnabled {
+        if selectedTab.temporaryDocument != nil {
             needsReload = false
         }
 
