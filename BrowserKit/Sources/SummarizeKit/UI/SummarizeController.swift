@@ -167,6 +167,7 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
 
         tabSnapshotContainer.accessibilityIdentifier = configuration.tabSnapshot.tabSnapshotA11yId
         tabSnapshotContainer.accessibilityLabel = configuration.tabSnapshot.tabSnapshotA11yLabel
+        tabSnapshotContainer.accessibilityTraits = [.button, .adjustable]
 
         titleLabel.largeContentTitle = webView.title
         closeButton.accessibilityIdentifier = configuration.closeButton.a11yIdentifier
@@ -346,26 +347,19 @@ public class SummarizeController: UIViewController, Themeable, CAAnimationDelega
         if case .tosConsentMissing = error {
             viewModel.setConsentScreenShown()
         }
-        let actionButtonLabel: String = switch error.shouldRetrySummarizing {
-        case .acceptToS:
-            configuration.errorMessages.acceptToSButtonLabel
-        case .retry:
-            configuration.errorMessages.retryButtonLabel
-        case .close:
-            configuration.errorMessages.closeButtonLabel
-        }
 
         let formatter = SummarizeErrorFormatter(
             theme: themeManager.getCurrentTheme(for: currentWindowUUID),
             isAccessibilityCategoryEnabled: traitCollection.preferredContentSizeCategory.isAccessibilityCategory,
-            viewModel: configuration
+            configuration: configuration
         )
         infoView.configure(
             viewModel: InfoViewModel(
-                title: formatter.format(error: error),
-                titleA11yId: configuration.errorMessages.errorLabelA11yId,
-                actionButtonLabel: actionButtonLabel,
-                actionButtonA11yId: configuration.errorMessages.errorButtonA11yId,
+                content: formatter.format(error: error),
+                contentA11yId: configuration.errorMessages.errorContentA11yId,
+                actionButtonLabel: error.errorButtonLabel(for: configuration),
+                actionButtonA11yId: error.errorButtonA11yId(for: configuration),
+                actionButtonA11yLabel: error.errorButtonA11yLabel(for: configuration),
                 actionButtonCallback: { [weak self] in
                     switch error.shouldRetrySummarizing {
                     case .retry:

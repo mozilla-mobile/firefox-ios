@@ -88,11 +88,13 @@ final class SummarizeCoordinator: BaseCoordinator,
             summarizationNotAvailableMessage: .Summarizer.UnsupportedContentErrorMessage,
             pageStillLoadingMessage: .Summarizer.MissingPageContentErrorMessage,
             genericErrorMessage: .Summarizer.UnknownErrorMessage,
-            errorLabelA11yId: AccessibilityIdentifiers.Summarizer.errorLabel,
-            errorButtonA11yId: AccessibilityIdentifiers.Summarizer.errorButton,
+            errorContentA11yId: AccessibilityIdentifiers.Summarizer.errorContentView,
             retryButtonLabel: .Summarizer.RetryButtonLabel,
+            retryButtonA11yLabel: .Summarizer.RetryButtonAccessibilityLabel,
+            retryButtonA11yId: AccessibilityIdentifiers.Summarizer.retryErrorButton,
             closeButtonLabel: .Summarizer.CloseButtonLabel,
-            acceptToSButtonLabel: .Summarizer.ToSAlertContinueButtonLabel
+            closeButtonA11yLabel: .Summarizer.CloseButtonAccessibilityLabel,
+            closeButtonA11yId: AccessibilityIdentifiers.Summarizer.closeSummaryErrorButton
         )
 
         let tosViewModel = TermOfServiceViewConfiguration(
@@ -105,9 +107,6 @@ final class SummarizeCoordinator: BaseCoordinator,
             allowButtonTitle: .Summarizer.ToSInfoPanelContinueButtonLabel,
             allowButtonA11yId: AccessibilityIdentifiers.Summarizer.tosAllowButton,
             allowButtonA11yLabel: .Summarizer.ToSAlertAllowButtonAccessibilityLabel,
-            cancelButtonTitle: .Summarizer.ToSAlertCancelButtonLabel,
-            cancelButtonA11yId: AccessibilityIdentifiers.Summarizer.tosCancelButton,
-            cancelButtonA11yLabel: .Summarizer.ToSAlertCancelButtonAccessibilityLabel
         )
 
         let model = SummarizeViewConfiguration(

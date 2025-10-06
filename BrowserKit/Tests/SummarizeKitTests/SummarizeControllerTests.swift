@@ -67,11 +67,13 @@ final class SummarizeControllerTests: XCTestCase {
             summarizationNotAvailableMessage: "",
             pageStillLoadingMessage: "",
             genericErrorMessage: "",
-            errorLabelA11yId: "",
-            errorButtonA11yId: "",
+            errorContentA11yId: "",
             retryButtonLabel: "",
+            retryButtonA11yLabel: "",
+            retryButtonA11yId: "",
             closeButtonLabel: "",
-            acceptToSButtonLabel: ""
+            closeButtonA11yLabel: "",
+            closeButtonA11yId: ""
         ),
         termOfService: TermOfServiceViewConfiguration(
             titleLabel: "",
@@ -82,10 +84,7 @@ final class SummarizeControllerTests: XCTestCase {
             linkButtonURL: nil,
             allowButtonTitle: "",
             allowButtonA11yId: "",
-            allowButtonA11yLabel: "",
-            cancelButtonTitle: "",
-            cancelButtonA11yId: "",
-            cancelButtonA11yLabel: ""
+            allowButtonA11yLabel: ""
         )
     )
     private let maxWords = 5000
