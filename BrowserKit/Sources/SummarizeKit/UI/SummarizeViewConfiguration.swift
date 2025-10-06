@@ -105,9 +105,7 @@ public struct LocalizedErrorsViewConfiguration {
 
 public struct TermOfServiceViewConfiguration {
     let titleLabel: String
-    let titleLabelA11yId: String
     let descriptionText: String
-    let descriptionTextA11yId: String
     let linkButtonLabel: String
     let linkButtonURL: URL?
     let allowButtonTitle: String
@@ -116,19 +114,15 @@ public struct TermOfServiceViewConfiguration {
 
     public init(
         titleLabel: String,
-        titleLabelA11yId: String,
         descriptionText: String,
-        descriptionTextA11yId: String,
         linkButtonLabel: String,
         linkButtonURL: URL?,
         allowButtonTitle: String,
         allowButtonA11yId: String,
-        allowButtonA11yLabel: String,
+        allowButtonA11yLabel: String
     ) {
         self.titleLabel = titleLabel
-        self.titleLabelA11yId = titleLabelA11yId
         self.descriptionText = descriptionText
-        self.descriptionTextA11yId = descriptionTextA11yId
         self.linkButtonLabel = linkButtonLabel
         self.linkButtonURL = linkButtonURL
         self.allowButtonTitle = allowButtonTitle

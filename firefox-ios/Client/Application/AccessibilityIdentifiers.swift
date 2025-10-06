@@ -740,11 +740,7 @@ struct AccessibilityIdentifiers {
         static let errorContentView = "errorContentView"
         static let retryErrorButton = "retryErrorButton"
         static let closeSummaryErrorButton = "closeSummaryErrorButton"
-        static let tosTitleLabel = "tosTitleLabel"
-        static let tosDescriptionText = "tosDescriptionText"
-        static let tosCloseButton = "tosCloseButton"
         static let tosAllowButton = "tosAllowButton"
-        static let tosLinkButton = "tosLinkButton"
     }
 
     struct ShareTo {

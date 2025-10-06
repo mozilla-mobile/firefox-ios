@@ -46,9 +46,7 @@ final class SummarizeErrorExtensionTests: XCTestCase {
         ),
         termOfService: TermOfServiceViewConfiguration(
             titleLabel: "",
-            titleLabelA11yId: "",
             descriptionText: "",
-            descriptionTextA11yId: "",
             linkButtonLabel: "",
             linkButtonURL: nil,
             allowButtonTitle: "allowButtonTitle",

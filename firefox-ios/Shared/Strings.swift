@@ -2297,31 +2297,31 @@ extension String {
             comment: "The label for the learn more link button on the Terms of Service alert for the summarizer."
         )
         public static let ToSAlertAllowButtonAccessibilityLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.AllowButton.Accessibility.Label.v142",
+            key: "Summarizer.ToS.Alert.AllowButton.Accessibility.Label.v145",
             tableName: "Summarizer",
             value: "Agree to Term of Service",
             comment: "The a11y label for the allow button on the Terms of Service alert."
         )
         public static let LoadingAccessibilityLabel = MZLocalizedString(
-            key: "Summarizer.Loading.Accessibility.Label.v144",
+            key: "Summarizer.Loading.Accessibility.Label.v145",
             tableName: "Summarizer",
             value: "Loading summary",
             comment: "The a11y label for the loading label on the summarize loading screen."
         )
         public static let RetryButtonAccessibilityLabel = MZLocalizedString(
-            key: "Summarizer.RetryButton.Accessibility.Label.v144",
+            key: "Summarizer.RetryButton.Accessibility.Label.v145",
             tableName: "Summarizer",
             value: "Retry to summarize web page",
             comment: "The a11y label for the retry button in the summary view when the summarizer fails with an error that allows retrying to summarize the page."
         )
         public static let CloseButtonAccessibilityLabel = MZLocalizedString(
-            key: "Summarizer.CloseButton.Accessibility.Label.v142",
+            key: "Summarizer.CloseButton.Accessibility.Label.v145",
             tableName: "Summarizer",
             value: "Close Summary",
             comment: "The a11y label for the close button in the summary view."
         )
         public static let TabSnapshotAccessibilityLabel = MZLocalizedString(
-            key: "Summarizer.TabSnapshot.Accessibility.Label.v144",
+            key: "Summarizer.TabSnapshot.Accessibility.Label.v145",
             tableName: "Summarizer",
             value: "Drag or tap the web page to close the summary",
             comment: "The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page."

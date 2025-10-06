@@ -99,9 +99,7 @@ final class SummarizeCoordinator: BaseCoordinator,
 
         let tosViewModel = TermOfServiceViewConfiguration(
             titleLabel: .Summarizer.ToSInfoPanelTitleLabel,
-            titleLabelA11yId: AccessibilityIdentifiers.Summarizer.tosTitleLabel,
             descriptionText: String(format: .Summarizer.ToSInfoPanelLabel, AppName.shortName.rawValue),
-            descriptionTextA11yId: AccessibilityIdentifiers.Summarizer.tosDescriptionText,
             linkButtonLabel: .Summarizer.ToSInfoLabelLinkButtonLabel,
             linkButtonURL: SupportUtils.URLForTopic("summarize-pages-ios"),
             allowButtonTitle: .Summarizer.ToSInfoPanelContinueButtonLabel,
