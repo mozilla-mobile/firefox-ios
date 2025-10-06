@@ -10,15 +10,15 @@ import Foundation
 let danger = Danger()
 let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
+checkReleaseBranch()
+checkStringsFile()
 checkForFunMetrics()
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
-checkCodeCoverage()
-failOnNewFilesWithoutCoverage()
 checkForWebEngineFileChange()
 CodeUsageDetector().checkForCodeUsage()
-checkStringsFile()
-checkReleaseBranch()
+CodeCoverageGate().failOnNewFilesWithoutCoverage()
 BrowserViewControllerChecker().failsOnAddedExtension()
+checkCodeCoverage()
 
 // Add some fun comments in Danger to have positive feedback on PRs
 func checkForFunMetrics() {
@@ -78,6 +78,8 @@ func checkForFunMetrics() {
     checkDescriptionSection()
 }
 
+// MARK: Code coverage
+
 func checkCodeCoverage() {
     guard let xcresult = ProcessInfo.processInfo.environment["BITRISE_XCRESULT_PATH"]?.escapeString() else {
         fail("Could not get the BITRISE_XCRESULT_PATH to generate code coverage")
@@ -90,47 +92,126 @@ func checkCodeCoverage() {
     )
 }
 
-func failOnNewFilesWithoutCoverage() {
-    let jsonPath = "coverage.json"
+class CodeCoverageGate {
+    private let coverageBypassLabel = "coverage-exception"
+    private let jsonPath = "coverage.json"
+    private let threshold: Double = 35
+    private let minimumAddedLines = 5
 
-    guard let data = FileManager.default.contents(atPath: jsonPath),
-          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-          let targets = json["targets"] as? [[String: Any]] else {
-        fail("Could not parse coverage.json for per-file coverage")
-        return
-    }
+    func failOnNewFilesWithoutCoverage() {
+        guard let data = FileManager.default.contents(atPath: jsonPath),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let targets = json["targets"] as? [[String: Any]] else {
+            fail("Could not parse coverage.json for per-file coverage")
+            return
+        }
 
-    // Build an array with files with 0 coverage
-    var filesWithoutCoverage = [String]()
-    for target in targets {
-        if let files = target["files"] as? [[String: Any]] {
-            for file in files {
-                if let path = file["name"] as? String,
-                      let coverage = file["lineCoverage"] as? Double, coverage == 0 {
-                    filesWithoutCoverage.append(path)
+        let coverageFiles: [[String: Any]] = targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
+        // Consider created + modified Swift files, excluding Tests & Generated
+        let candidates = (danger.git.createdFiles + danger.git.modifiedFiles).filter {
+            $0.hasSuffix(".swift") &&
+            !$0.contains("Tests/") &&
+            !$0.contains("/Generated/") &&
+            !$0.contains("/Strings.swift") &&
+            !$0.contains("/AccessibilityIdentifiers.swift")
+        }
+
+        // Ignore tiny edits: only gate files with at least `minimumAddedLines`
+        func addedLines(_ file: String) -> Int {
+            switch saferFileDiff(for: file) {
+            case .success(let diff):
+                switch diff.changes {
+                case .created(let newLines):
+                    return newLines.count
+                case .deleted:
+                    return 0
+                case .modified(let hunks), .renamed(_, let hunks):
+                    return hunks.reduce(0) { acc, h in
+                        acc + h.lines.filter {
+                            let s = String(describing: $0)
+                            return s.hasPrefix("+") && !s.hasPrefix("+++")
+                        }.count
+                    }
                 }
+            case .failure:
+                return 999 // if diff fails, be conservative and mention it
             }
         }
-    }
 
-    // Get new files filtering Test and Generated
-    let newSwiftFiles = danger.git.createdFiles.filter {
-        $0.hasSuffix(".swift") &&
-        !$0.contains("Tests") &&
-        !$0.contains("/Generated/")
-    }
+        let gated = candidates.filter { addedLines($0) >= minimumAddedLines }
+        // Collect failures
+        var rows: [String] = []
+        for file in gated {
+            // Find matching coverage entry
+            let entry = coverageMatch(repoPath: file, coverageFiles: coverageFiles)
 
-    let contactMessage = "Please add unit tests. (cc: @cyndichin @yoanarios)."
-    for file in newSwiftFiles {
-        let cleanedFile = URL(fileURLWithPath: file).lastPathComponent
+            // Extract percentage (supports 0..1 or 0..100 in lineCoverage)
+            let percent: Double = {
+                guard let entry, let raw = entry["lineCoverage"] as? Double else { return 0 }
+                return raw <= 1.000001 ? raw * 100.0 : raw
+            }()
 
-        // Try to find a file in coverage report that ends with this file
-        let matchingFile = filesWithoutCoverage.first { coveragePath in
-            coveragePath.hasSuffix(cleanedFile)
+            if percent + 0.0001 < threshold { // epsilon for float stability
+                rows.append("| `\(file)` | \(formatPct(percent)) | \(formatPct(threshold)) |")
+            }
         }
 
-        if let file = matchingFile {
-            warn("New file `\(file)` has 0% test coverage. \(contactMessage)")
+        guard !rows.isEmpty else {
+            markdown("""
+            ### ✅ Per-file coverage
+            All changed files meet the threshold of **\(formatPct(threshold))**.
+            """)
+            return
+        }
+
+        let header = """
+        ### ❌ Per-file test coverage gate
+        The following changed file(s) are below **\(formatPct(threshold))** coverage:
+
+        | File | Coverage | Required |
+        |---|---:|---:|
+        \(rows.joined(separator: "\n"))
+        """
+
+        markdown("\(header)")
+        // If we want to fail the PRs at one point, then uncomment this and remove the markdown
+//        let hasBypass = danger.github.issue.labels.contains { $0.name == coverageBypassLabel }
+//        if hasBypass {
+//            warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
+//        } else {
+//            let tip = "*Tip:* Add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
+//            fail("\(header)\n\n\(tip)")
+//        }
+    }
+
+    // Small helper to format percentages
+    private func formatPct(_ value: Double) -> String {
+        String(format: "%.1f%%", value)
+    }
+
+    // Match repo file to coverage entry by filename/suffix
+    private func coverageMatch(repoPath: String, coverageFiles: [[String: Any]]) -> [String: Any]? {
+        let repoFile = URL(fileURLWithPath: repoPath).lastPathComponent
+        // Exact filename match first
+        let sameName = coverageFiles.filter {
+            URL(fileURLWithPath: ($0["name"] as? String) ?? "").lastPathComponent == repoFile
+        }
+        if sameName.count == 1 { return sameName.first }
+        if sameName.count > 1 {
+            // Disambiguate by longest common suffix with repoPath
+            func commonSuffixLen(_ a: String, _ b: String) -> Int {
+                let ar = Array(a.reversed()), br = Array(b.reversed())
+                var i = 0; while i < ar.count && i < br.count && ar[i] == br[i] { i += 1 }; return i
+            }
+            return sameName.max { a, b in
+                let sa = (a["name"] as? String) ?? "", sb = (b["name"] as? String) ?? ""
+                return commonSuffixLen(sa, repoPath) < commonSuffixLen(sb, repoPath)
+            }
+        }
+        // Fallback: raw suffix match
+        return coverageFiles.first { entry in
+            guard let name = entry["name"] as? String else { return false }
+            return name.hasSuffix(repoPath) || repoPath.hasSuffix(name)
         }
     }
 }
