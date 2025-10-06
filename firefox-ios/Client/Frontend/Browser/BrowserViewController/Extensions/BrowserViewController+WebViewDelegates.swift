@@ -9,6 +9,7 @@ import Shared
 import UIKit
 import Photos
 import SafariServices
+import WebEngine
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
@@ -72,7 +73,7 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    private func handleJavaScriptAlert<T: JavaScriptAlertProtocol & JSAlertInfo>(
+    private func handleJavaScriptAlert<T: WKJavaScriptAlertInfo>(
         _ alert: T,
         for webView: WKWebView,
         spamCallback: @escaping () -> Void
@@ -80,12 +81,12 @@ extension BrowserViewController: WKUIDelegate {
         if jsAlertExceedsSpamLimits(webView) {
             handleSpammedJSAlert(spamCallback)
         } else if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript \(T.alertType) panel will be presented.", level: .info, category: .webview)
+            logger.log("JavaScript \(alert.type.rawValue) panel will be presented.", level: .info, category: .webview)
             let alertController = alert.alertController()
             alertController.delegate = self
             present(alertController, animated: true)
         } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript \(T.alertType) panel is queued.", level: .info, category: .webview)
+            logger.log("JavaScript \(alert.type.rawValue) panel is queued.", level: .info, category: .webview)
             promptingTab.queueJavascriptAlertPrompt(alert)
         }
     }
