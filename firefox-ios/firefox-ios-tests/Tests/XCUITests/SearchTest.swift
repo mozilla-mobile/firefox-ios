@@ -165,7 +165,7 @@ class SearchTests: FeatureFlaggedTestBase {
         typeOnSearchBar(text: "moz")
         mozWaitForValueContains(urlBarAddress, value: "moz")
         let value = urlBarAddress.value
-        XCTAssertEqual(value as? String, "moz")
+        XCTAssertEqual(value as? String, "mozilla.org")
     }
 
     private func changeSearchEngine(searchEngine: String) {
