@@ -374,7 +374,6 @@ extension TelemetryWrapper {
         case defaultSearchEngine = "default-search-engine"
         case showPullRefreshEasterEgg = "show-pull-refresh-easter-egg"
         case keyCommand = "key-command"
-        case locationBar = "location-bar"
         case messaging = "messaging"
         case qrCodeText = "qr-code-text"
         case qrCodeURL = "qr-code-url"
@@ -1594,8 +1593,7 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .awesomebarLocation, .awesomebarShareTap, _):
             GleanMetrics.Awesomebar.shareButtonTapped.record()
-        case (.action, .drag, .locationBar, _, _):
-            GleanMetrics.Awesomebar.dragLocationBar.record()
+
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
             guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,

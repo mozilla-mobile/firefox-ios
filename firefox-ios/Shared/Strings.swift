@@ -4585,11 +4585,6 @@ extension String {
 
 // MARK: - Reader Mode
 extension String {
-    public static let ReaderModeAvailableVoiceOverAnnouncement = MZLocalizedString(
-        key: "ReaderMode.Available.VoiceOverAnnouncement",
-        tableName: nil,
-        value: "Reader Mode available",
-        comment: "Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available.")
     public static let ReaderModeResetFontSizeAccessibilityLabel = MZLocalizedString(
         key: "Reset text size",
         tableName: nil,
@@ -6610,16 +6605,6 @@ extension String {
         tableName: "TabLocation",
         value: "Share this page",
         comment: "Accessibility label for the share button in url bar")
-    public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.ETP.On.Secure.A11y.Label.v119",
-        tableName: "TabLocation",
-        value: "Secure connection",
-        comment: "Accessibility label for the security icon in url bar")
-    public static let TabLocationETPOnNotSecureAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.ETP.On.NotSecure.A11y.Label.v119",
-        tableName: "TabLocation",
-        value: "Connection not secure",
-        comment: "Accessibility label for the security icon in url bar")
     public static let TabsButtonShowTabsLargeContentTitle = MZLocalizedString(
         key: "TabsButton.Accessibility.LargeContentTitle.v122",
         tableName: "TabLocation",
@@ -7960,6 +7945,21 @@ extension String {
                 key: "TabLocation.ETP.Off.NotSecure.A11y.Label.v119",
                 tableName: "TabLocation",
                 value: "Connection not secure. Enhanced Tracking Protection is off.",
+                comment: "Accessibility label for the security icon in url bar")
+            public static let ReaderModeAvailableVoiceOverAnnouncement = MZLocalizedString(
+                key: "ReaderMode.Available.VoiceOverAnnouncement",
+                tableName: nil,
+                value: "Reader Mode available",
+                comment: "Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available.")
+            public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
+                key: "TabLocation.ETP.On.Secure.A11y.Label.v119",
+                tableName: "TabLocation",
+                value: "Secure connection",
+                comment: "Accessibility label for the security icon in url bar")
+            public static let TabLocationETPOnNotSecureAccessibilityLabel = MZLocalizedString(
+                key: "TabLocation.ETP.On.NotSecure.A11y.Label.v119",
+                tableName: "TabLocation",
+                value: "Connection not secure",
                 comment: "Accessibility label for the security icon in url bar")
         }
     }
