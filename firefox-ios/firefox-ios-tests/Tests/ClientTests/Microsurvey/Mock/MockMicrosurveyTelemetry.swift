@@ -12,23 +12,33 @@ final class MockMicrosurveyTelemetry: MicrosurveyTelemetryProtocol {
     var userResponseSubmittedCalledCount = 0
     var confirmationShownCalledCount = 0
 
+    // Saves only the last captured argument, can be expanded as needed
+    var lastSurveyId: String?
+    var lastUserSelection: String?
+
     func surveyViewed(surveyId: String) {
         surveyViewedCalledCount += 1
+        lastSurveyId = surveyId
     }
 
     func privacyNoticeTapped(surveyId: String) {
         privacyNoticeTappedCalledCount += 1
+        lastSurveyId = surveyId
     }
 
     func dismissButtonTapped(surveyId: String) {
         dismissButtonTappedCalledCount += 1
+        lastSurveyId = surveyId
     }
 
     func userResponseSubmitted(surveyId: String, userSelection: String) {
         userResponseSubmittedCalledCount += 1
+        lastSurveyId = surveyId
+        lastUserSelection = userSelection
     }
 
     func confirmationShown(surveyId: String) {
         confirmationShownCalledCount += 1
+        lastSurveyId = surveyId
     }
 }

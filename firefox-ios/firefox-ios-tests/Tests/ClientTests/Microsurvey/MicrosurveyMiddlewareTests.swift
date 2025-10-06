@@ -32,6 +32,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
+        XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.dismissButtonTappedCalledCount, 1)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MicrosurveyPromptAction)
@@ -47,6 +48,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
+        XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.privacyNoticeTappedCalledCount, 1)
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
@@ -62,6 +64,8 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
+        XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
+        XCTAssertEqual(mockMicrosurveyTelemetry.lastUserSelection, "Neutral")
         XCTAssertEqual(mockMicrosurveyTelemetry.userResponseSubmittedCalledCount, 1)
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MicrosurveyPromptAction)
@@ -77,6 +81,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
+        XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.surveyViewedCalledCount, 1)
     }
 
@@ -86,6 +91,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
         subject.microsurveyProvider(AppState(), action)
 
+        XCTAssertEqual(mockMicrosurveyTelemetry.lastSurveyId, "microsurvey-id")
         XCTAssertEqual(mockMicrosurveyTelemetry.confirmationShownCalledCount, 1)
     }
 
