@@ -11,7 +11,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
-        let homepageSearchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
         if !iPad() {
             homepageSearchBar.waitAndTap()
@@ -22,7 +21,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090298
     func testSwitchFromTopToBottomToolbarShowsExpectedBehavior_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -32,8 +30,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -49,15 +45,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090299
     func testSwitchFromBottomToTopToolbarShowsExpectedBehavior_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.nowAt(NewTabScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         if iPad() {
@@ -78,7 +71,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090300
     func testFromPortraitToLandscapeShowsOnlyInPortrait_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -86,8 +78,7 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard #available(iOS 17, *) else {
             throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
         }
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
+
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         XCUIDevice.shared.orientation = .landscapeLeft
@@ -103,15 +94,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090301
     func testTappingOnShowsZeroSearchState_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.nowAt(NewTabScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -130,7 +118,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090302
     func testTappingOnHomepageSearchBarShowsZeroSearchState_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -140,8 +127,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         }
         navigator.nowAt(NewTabScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -160,15 +145,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090303
     func testTappingOnSearchButtonForNavigationToolbarShowsZeroSearchState_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.nowAt(NewTabScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         let searchButton = app.buttons[AccessibilityIdentifiers.Toolbar.searchButton]
@@ -188,15 +170,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090304
     func testOpenNewTabFromTabTrayHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.nowAt(NewTabScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -237,15 +216,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090306
     func testOpenNewTabFromLongPressHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.nowAt(NewTabScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -261,15 +237,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3105073
     func testCloseTabFromLongPressHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.nowAt(NewTabScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -285,7 +258,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090307
     func testOpenNewTabFromNavigationToolbarFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -294,8 +266,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
             throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
         }
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -309,13 +279,10 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090308
     func testOpenNewTabFromTabTrayFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -355,13 +322,10 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090310
     func testOpenNewTabFromLongPressFromWebpageHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -376,7 +340,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090324
     func testNavigateBackFromWebpageToHomepageForTopToolbar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -384,8 +347,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard #available(iOS 17, *) else {
             throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
         }
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -409,7 +370,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         homepageSearchBar.waitAndTap()
@@ -419,7 +379,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090312
     func testHomepageSearchBarForBottomToolbarShowsOnlyInPortrait_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -430,8 +389,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         XCUIDevice.shared.orientation = .landscapeLeft
@@ -447,7 +404,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090313
     func testTappingOnHomepageSearchBarForBottomToolbarShowsZeroSearchState_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -456,8 +412,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
 
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -477,7 +431,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3090314
     func testTappingOnSearchButtonForNavigationToolbarForBottomToolbarShowsZeroSearchState_homepageSearchBarExperimentOn()
         throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -485,8 +438,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         let searchButton = app.buttons[AccessibilityIdentifiers.Toolbar.searchButton]
@@ -506,7 +457,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090315
     func testOpenNewTabFromTabTrayForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -514,8 +464,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -557,7 +505,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090317
     func testOpenNewTabFromLongPressForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -565,8 +512,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         mozWaitForElementToExist(homepageSearchBar)
@@ -583,15 +528,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3090318
     func testOpenNewTabFromNavigationToolbarFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn()
         throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -605,15 +547,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090319
     func testOpenNewTabFromTabTrayFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -655,15 +594,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090321
     func testOpenNewTabFromLongPressFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -677,14 +613,12 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
     }
 
     func testCloseTabFromLongPressFromWebpageForBottomToolbarHidesSearchBar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
         }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)
@@ -698,7 +632,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
     }
 
     func testNavigateBackFromWebpageToHomepageForBottomToolbar_homepageSearchBarExperimentOn() throws {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOn", featureName: "homepage-redesign-feature")
         app.launch()
         guard !iPad() else {
             throw XCTSkip("Not supported on iPad")
@@ -708,8 +641,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         }
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        let homepageSearchBar = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell).element
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
 
         navigateToWebPage(with: homepageSearchBar, searchTextFieldA11y: searchTextFieldA11y)

@@ -28,6 +28,8 @@ class SwipingTabsTests: FeatureFlaggedTestBase {
             throw XCTSkip("Swiping tabs is not available for iPad")
         }
         selectToolbarBottom()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
