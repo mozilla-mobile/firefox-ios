@@ -102,67 +102,33 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     var primaryButton: some View {
-        Group {
-            if #available(iOS 17.0, *) {
-                OnboardingButton.primary(
-                    viewModel.buttons.primary.title,
-                    action: {
-                        onBottomButtonAction(
-                            viewModel.buttons.primary.action,
-                            viewModel.name
-                        )
-                    },
-                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-                    windowUUID: windowUUID,
-                    themeManager: themeManager
+        DragCancellablePrimaryButton(
+            title: viewModel.buttons.primary.title,
+            action: {
+                onBottomButtonAction(
+                    viewModel.buttons.primary.action,
+                    viewModel.name
                 )
-            } else {
-                DragCancellablePrimaryButton(
-                    title: viewModel.buttons.primary.title,
-                    action: {
-                        onBottomButtonAction(
-                            viewModel.buttons.primary.action,
-                            viewModel.name
-                        )
-                    },
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
-                )
-            }
-        }
+            },
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
+        )
     }
 
     @ViewBuilder
     var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
-            Group {
-                if #available(iOS 17.0, *) {
-                    OnboardingButton.secondary(
-                        secondary.title,
-                        action: {
-                            onBottomButtonAction(
-                                secondary.action,
-                                viewModel.name
-                            )
-                        },
-                        accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
-                        windowUUID: windowUUID,
-                        themeManager: themeManager
+            DragCancellableSecondaryButton(
+                title: secondary.title,
+                action: {
+                    onBottomButtonAction(
+                        secondary.action,
+                        viewModel.name
                     )
-                } else {
-                    DragCancellableSecondaryButton(
-                        title: secondary.title,
-                        action: {
-                            onBottomButtonAction(
-                                secondary.action,
-                                viewModel.name
-                            )
-                        },
-                        theme: themeManager.getCurrentTheme(for: windowUUID),
-                        accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
-                    )
-                }
-            }
+                },
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
+            )
         }
     }
 
