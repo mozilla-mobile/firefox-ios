@@ -54,6 +54,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 Text(viewModel.skipText)
                     .bold()
                     .foregroundColor(skipTextColor)
+                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
             .bridge.glassButtonStyle()
@@ -107,6 +108,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     private func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        skipTextColor = Color(theme.colors.textInverted)
+        skipTextColor = Color(theme.colors.textOnDark)
     }
 }

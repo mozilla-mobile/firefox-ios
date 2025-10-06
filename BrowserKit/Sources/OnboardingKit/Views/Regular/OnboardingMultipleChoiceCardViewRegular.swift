@@ -52,8 +52,18 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
                 .padding(UX.CardView.verticalPadding)
             }
             .scrollBounceBehavior(basedOnSize: true)
-            primaryButton
-                .padding(.bottom, UX.CardView.verticalPadding)
+
+            VStack {
+                primaryButton
+                Button(" ", action: {})
+                    .font(UX.CardView.secondaryActionFont)
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .opacity(0)
+                    .accessibilityHidden(true)
+                    .disabled(true)
+            }
+            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
