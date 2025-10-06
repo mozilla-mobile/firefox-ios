@@ -56,8 +56,6 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
-        guard tabManager.selectedTab != nil else { return }
-
         store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
                                                   actionType: GeneralBrowserActionType.reloadWebsite))
     }
@@ -68,8 +66,6 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
-        guard tabManager.selectedTab != nil else { return }
-
         store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
                                                   actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
     }
