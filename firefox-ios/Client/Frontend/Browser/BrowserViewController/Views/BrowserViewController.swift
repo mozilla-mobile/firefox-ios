@@ -2233,7 +2233,7 @@ class BrowserViewController: UIViewController,
             window: windowUUID
         )?.shouldAnimate
 
-        guard !shouldAnimate else { return }
+        guard shouldAnimate == false else { return }
         store.dispatchLegacy(
             ToolbarAction(
                 shouldAnimate: true,
