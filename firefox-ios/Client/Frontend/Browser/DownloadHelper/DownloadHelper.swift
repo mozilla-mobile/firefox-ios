@@ -60,6 +60,7 @@ class DownloadHelper: NSObject {
         return isAttachment
     }
 
+    @MainActor
     func downloadViewModel(windowUUID: WindowUUID,
                            okAction: @Sendable @MainActor @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
         var requestUrl = request.url

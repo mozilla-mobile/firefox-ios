@@ -11,6 +11,7 @@ let page1 = "http://localhost:\(serverPort)/test-fixture/find-in-page-test.html"
 let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
 let serverPort = ProcessInfo.processInfo.environment["WEBSERVER_PORT"] ?? "\(Int.random(in: 1025..<65000))"
 let urlBarAddress = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+let homepageSearchBar = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
 
 func path(forTestPage page: String) -> String {
     return "http://localhost:\(serverPort)/test-fixture/\(page)"
@@ -103,10 +104,6 @@ class BaseTestCase: XCTestCase {
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
         }
-
-        // FXIOS-13129: Remove these arguments once we migrate existing tests to support homepage redesign
-        app.launchArguments.append("\(LaunchArguments.LoadExperiment)\("homepageRedesignOff")")
-        app.launchArguments.append("\(LaunchArguments.ExperimentFeatureName)\("homepage-redesign-feature")")
     }
 
     override func setUp() {
@@ -309,6 +306,8 @@ class BaseTestCase: XCTestCase {
     func addContentToReaderView() {
         updateScreenGraph()
         userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         app.buttons["Reader View"].waitAndTap()
@@ -360,8 +359,10 @@ class BaseTestCase: XCTestCase {
     func waitUntilPageLoad() {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
-
-        mozWaitForElementToNotExist(progressIndicator, timeout: 90.0)
+        if progressIndicator.waitForExistence(timeout: 5) {
+            // Wait for the loading indicator to disappear
+            _ = progressIndicator.waitForNonExistence(timeout: 10)
+        }
     }
 
     func waitForTabsButton() {
@@ -459,6 +460,9 @@ class BaseTestCase: XCTestCase {
         app.buttons["Cancel"].waitAndTap()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
+        if !iPad() {
+            homepageSearchBar.waitAndTap()
+        }
         urlBar.press(forDuration: 2)
         if !pasteAction.exists {
             urlBar.press(forDuration: 2)

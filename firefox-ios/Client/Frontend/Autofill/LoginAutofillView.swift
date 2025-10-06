@@ -42,14 +42,6 @@ struct LoginAutofillView: View {
         }
     }
 
-    private var isIOS26OrLater: Bool {
-        if #available(iOS 26.0, *) {
-            return true
-        } else {
-            return false
-        }
-    }
-
     func applyTheme(theme: Theme) {
         let color = theme.colors
         backgroundColor = Color(color.layer1)

@@ -10,8 +10,6 @@ import ComponentLibrary
 struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
-    @State private var primaryBackgroundColor: Color = .clear
-    @State private var primaryForegroundColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
@@ -50,7 +48,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy) -> some View {
         VStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: UX.CardView.spacing) {
                     titleView
                         .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
@@ -68,11 +66,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             }
             .padding(UX.CardView.verticalPadding)
         }
-        .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-        )
+        .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
     }
 
     var titleView: some View {
@@ -110,18 +104,18 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     var primaryButton: some View {
         Group {
             if #available(iOS 17.0, *) {
-                Button(
+                OnboardingButton.primary(
                     viewModel.buttons.primary.title,
                     action: {
                         onBottomButtonAction(
                             viewModel.buttons.primary.action,
                             viewModel.name
                         )
-                    }
+                    },
+                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+                    windowUUID: windowUUID,
+                    themeManager: themeManager
                 )
-                .font(UX.CardView.primaryActionFont)
-                .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-                .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
             } else {
                 DragCancellablePrimaryButton(
                     title: viewModel.buttons.primary.title,
@@ -143,17 +137,18 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         if let secondary = viewModel.buttons.secondary {
             Group {
                 if #available(iOS 17.0, *) {
-                    Button(
+                    OnboardingButton.secondary(
                         secondary.title,
                         action: {
                             onBottomButtonAction(
                                 secondary.action,
                                 viewModel.name
                             )
-                        })
-                    .font(UX.CardView.secondaryActionFont)
-                    .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
-                    .buttonStyle(SecondaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+                        },
+                        accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
+                        windowUUID: windowUUID,
+                        themeManager: themeManager
+                    )
                 } else {
                     DragCancellableSecondaryButton(
                         title: secondary.title,
@@ -176,7 +171,5 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
-        primaryBackgroundColor = Color(color.actionPrimary)
-        primaryForegroundColor = Color(color.textInverted)
     }
 }

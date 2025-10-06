@@ -8,11 +8,11 @@ import Foundation
 public protocol MenuHelperWebViewInterface {
     /// Used to add a find in page menu option on webview textfields
     @objc
-    optional func menuHelperFindInPage()
+    optional nonisolated func menuHelperFindInPage()
 
     /// Used to add a search with "client" menu option on the webview textfields
     @objc
-    optional func menuHelperSearchWith()
+    optional nonisolated func menuHelperSearchWith()
 }
 
 /// Used to pass in the Client strings for the webview textfields menu options

@@ -17,6 +17,7 @@ enum BrowserNavigationDestination {
     case homepageZeroSearch
     case zeroSearch
     case shortcutsLibrary
+    case storiesFeed
     case summarizer(config: SummarizerConfig)
 
     // Webpage views

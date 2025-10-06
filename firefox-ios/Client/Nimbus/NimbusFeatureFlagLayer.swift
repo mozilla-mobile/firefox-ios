@@ -86,8 +86,8 @@ final class NimbusFeatureFlagLayer {
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
 
-        case .pdfRefactor:
-            return checkPdfRefactorFeature(from: nimbus)
+        case .recentSearches:
+            return checkRecentSearchesFeature(from: nimbus)
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
@@ -383,8 +383,8 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkPdfRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.pdfRefactorFeature.value().enabled
+    private func checkRecentSearchesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.recentSearchesFeature.value().enabled
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {

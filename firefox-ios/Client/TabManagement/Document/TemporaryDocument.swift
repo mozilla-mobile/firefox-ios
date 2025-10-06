@@ -81,9 +81,6 @@ final class DefaultTemporaryDocument: NSObject,
     private(set) var filename: String
     private let logger: Logger
 
-    private var isPDFRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-    }
     var sourceURL: URL? {
         return request.url
     }
@@ -218,10 +215,7 @@ final class DefaultTemporaryDocument: NSObject,
 
     private func shouldRetainTempFile() -> Bool {
         // Retain the PDF so when the tab gets restored it still has the PDFs from the previous session
-        if isPDFRefactorEnabled {
-            return mimeType == MIMEType.PDF
-        }
-        return false
+        return mimeType == MIMEType.PDF
     }
 
     deinit {

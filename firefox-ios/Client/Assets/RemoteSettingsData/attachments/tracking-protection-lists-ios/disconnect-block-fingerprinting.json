@@ -71,8 +71,6 @@
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?onevision\\.com\\.tw","load-type":["third-party"],"unless-domain":["*onead.com.tw"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?online-metrix\\.net","load-type":["third-party"],"unless-domain":["*online-metrix.net"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?openfpcdn\\.io","load-type":["third-party"],"unless-domain":["*fingerprint.com"]}},
-{"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?perfdrive\\.com","load-type":["third-party"],"unless-domain":["*radware.com"]}},
-{"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?perimeterx\\.net","load-type":["third-party"],"unless-domain":["*adzmath.com","*humansecurity.com","*perimeterx.com","*whiteops.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?pixanalytics\\.com","load-type":["third-party"],"unless-domain":["*pixanalytics.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?pixlee\\.com","load-type":["third-party"],"unless-domain":["*pixlee.com","*turntonetworks.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?ppcprotect\\.com","load-type":["third-party"],"unless-domain":["*lunio.ai","*ppcprotect.com"]}},

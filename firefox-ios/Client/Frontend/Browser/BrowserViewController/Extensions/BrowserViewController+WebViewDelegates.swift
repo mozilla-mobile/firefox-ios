@@ -614,8 +614,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
 
-            if isPDFRefactorEnabled,
-               url.isFileURL,
+            if url.isFileURL,
                tab.shouldDownloadDocument(navigationAction.request),
                let sourceURL = tab.getTemporaryDocumentsSession()[url] {
                 let request = URLRequest(url: sourceURL)
@@ -790,7 +789,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if isPDFRefactorEnabled, response.mimeType == MIMEType.PDF, let request {
+            if response.mimeType == MIMEType.PDF, let request {
                 if !tab.shouldDownloadDocument(request) {
                     decisionHandler(.allow)
                     return
@@ -1126,10 +1125,8 @@ extension BrowserViewController: WKNavigationDelegate {
             tabManager.commitChanges()
         }
 
-        if isPDFRefactorEnabled {
-            scrollController.configureRefreshControl()
-            navigationHandler?.removeDocumentLoading()
-        }
+        scrollController.configureRefreshControl()
+        navigationHandler?.removeDocumentLoading()
 
         if let tab = tabManager[webView] {
             if tab == tabManager.selectedTab {

@@ -96,7 +96,9 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = .LoginsListSearchPlaceholder
         searchController.delegate = self
-        navigationItem.hidesSearchBarWhenScrolling = false
+        if #unavailable(iOS 26.0) {
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
         navigationItem.searchController = searchController
         definesPresentationContext = true
         // No need to hide the navigation bar on iPad to make room, and hiding makes the search bar too close to the top

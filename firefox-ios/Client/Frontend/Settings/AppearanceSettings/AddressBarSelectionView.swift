@@ -14,7 +14,7 @@ struct AddressBarSelectionView: View {
     var onSelected: ((SearchBarPosition) -> Void)?
 
     var backgroundColor: Color {
-        return Color(theme?.colors.layer2 ?? UIColor.clear)
+        return Color(theme?.colors.layer5 ?? UIColor.clear)
     }
 
     private struct UX {

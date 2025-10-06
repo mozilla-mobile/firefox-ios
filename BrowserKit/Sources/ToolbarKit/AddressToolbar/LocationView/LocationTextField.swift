@@ -285,6 +285,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        text = ""
         removeCompletion()
         return autocompleteDelegate?.locationTextFieldShouldClear(self) ?? true
     }

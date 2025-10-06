@@ -664,6 +664,9 @@ final class HomepageViewController: UIViewController,
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.merinoState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToStoriesFeed()
+                },
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -833,6 +836,16 @@ final class HomepageViewController: UIViewController,
                 navigationDestination: NavigationDestination(.shortcutsLibrary),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnShortcutsShowAllButton
+            )
+        )
+    }
+
+    private func navigateToStoriesFeed() {
+        store.dispatchLegacy(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.storiesFeed),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnAllStoriesButton
             )
         )
     }

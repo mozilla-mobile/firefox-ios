@@ -4,6 +4,7 @@
 
 import UIKit
 
+@MainActor
 class MenuBuilderHelper {
     struct MenuIdentifiers {
         static let history = UIMenu.Identifier("com.mozilla.firefox.menus.history")

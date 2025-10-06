@@ -1134,6 +1134,11 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(shortcutsLibraryViewController)
     }
 
+    func showStoriesFeed() {
+        let storiesFeedViewController = StoriesFeedViewController(windowUUID: windowUUID)
+        router.push(storiesFeedViewController)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {

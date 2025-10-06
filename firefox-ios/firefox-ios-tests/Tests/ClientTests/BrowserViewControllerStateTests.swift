@@ -466,6 +466,26 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    // MARK: - Stories Feed
+
+    func test_tapOnAllStoriesButton_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnAllStoriesButton, destination: .storiesFeed)
+        let newState = reducer(initialState, action)
+
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .storiesFeed:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)

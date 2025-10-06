@@ -5,7 +5,7 @@
 import SwiftUI
 
 /// Extensions to SwiftUI's View protocol providing conditional view modifiers.
-public extension View {
+extension View {
     /// Conditionally applies a transformation when the condition is true.
     ///
     /// - Parameters:
@@ -18,11 +18,21 @@ public extension View {
     ///     .if(isHighlighted) { $0.foregroundColor(.red) }
     /// ```
     @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+    public func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
         if condition {
             transform(self)
         } else {
             self
         }
     }
+
+    public var isIOS26OrLater: Bool {
+        if #available(iOS 26.0, *) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    public var bridge: CompatibilityBridge<Self> { CompatibilityBridge(content: self) }
 }
