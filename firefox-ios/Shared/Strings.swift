@@ -2230,29 +2230,11 @@ extension String {
             value: "Note: Summarization can make errors.",
             comment: "The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors."
         )
-        public static let ToSAlertTitleLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.Title.Label.v142",
-            tableName: "Summarizer",
-            value: "Allow Page Summaries?",
-            comment: "The title for the Terms of Service alert that asks the user if they want to allow page summaries."
-        )
         public static let ToSInfoPanelTitleLabel = MZLocalizedString(
             key: "Summarizer.ToS.InfoPanel.Title.Label.v143",
             tableName: "Summarizer",
             value: "Summarize this page?",
             comment: "The title for the Terms of Service information panel that asks the user if they want to summarize this page."
-        )
-        public static let ToSAlertMessageFirefoxLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v144",
-            tableName: "Summarizer",
-            value: "%@ uses cloud-based AI to summarize pages, and returns those summaries to your device.",
-            comment: "The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox)."
-        )
-        public static let ToSAlertMessageAppleLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.AppleMessage.Label.v142",
-            tableName: "Summarizer",
-            value: "%@ uses Apple Intelligence to summarize pages.",
-            comment: "The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox)."
         )
         public static let ToSInfoPanelLabel = MZLocalizedString(
             key: "Summarizer.ToS.InfoPanel.Label.v143",
@@ -2260,47 +2242,23 @@ extension String {
             value: "See the main points in seconds with %@.",
             comment: "The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox)."
         )
-        public static let ToSAlertAllowButtonLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.AllowButton.Label.v142",
-            tableName: "Summarizer",
-            value: "Allow",
-            comment: "The label for the allow button on the Terms of Service alert."
-        )
-        public static let ToSAlertContinueButtonLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.ContinueButton.Label.v144",
-            tableName: "Summarizer",
-            value: "Continue",
-            comment: "The label for the continue button on the Terms of Service alert."
-        )
         public static let ToSInfoPanelContinueButtonLabel = MZLocalizedString(
             key: "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143",
             tableName: "Summarizer",
             value: "Continue",
-            comment: "The label for the accept button on the Terms of Service information panel in the summarizer."
+            comment: "The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS."
         )
-        public static let ToSAlertCancelButtonLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.CancelButton.Label.v142",
-            tableName: "Summarizer",
-            value: "Cancel",
-            comment: "The label for the cancel button on the Terms of Service alert for the summarizer."
-        )
-        public static let ToSAlertLinkButtonLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.LearnMoreButton.Label.v142",
-            tableName: "Summarizer",
-            value: "Learn more",
-            comment: "The label for the learn more link button on the Terms of Service alert for the summarizer."
-        )
-        public static let ToSInfoLabelLinkButtonLabel = MZLocalizedString(
-            key: "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143",
+        public static let ToSInfoPanelLinkButtonLabel = MZLocalizedString(
+            key: "Summarizer.ToS.InfoPanel.LearnMoreButton.Label.v143",
             tableName: "Summarizer",
             value: "How it works",
             comment: "The label for the learn more link button on the Terms of Service alert for the summarizer."
         )
-        public static let ToSAlertAllowButtonAccessibilityLabel = MZLocalizedString(
-            key: "Summarizer.ToS.Alert.AllowButton.Accessibility.Label.v145",
+        public static let ToSInfoPanelAllowButtonAccessibilityLabel = MZLocalizedString(
+            key: "Summarizer.ToS.InfoPanel.AllowButton.Accessibility.Label.v145",
             tableName: "Summarizer",
-            value: "Agree to Term of Service",
-            comment: "The a11y label for the allow button on the Terms of Service alert."
+            value: "Accept consent",
+            comment: "The a11y label for the allow button on the info panel when the user has not yet accepted the ToS."
         )
         public static let LoadingAccessibilityLabel = MZLocalizedString(
             key: "Summarizer.Loading.Accessibility.Label.v145",
