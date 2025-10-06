@@ -29,7 +29,7 @@ class PopupThrottlerTests: XCTestCase {
     }
 
     func testThatAlertsShownAfterSufficientDelayDoNotPreventAddtlAlerts() {
-        let throttler = createSubject(resetTime: [.alert: 1.0, .popupWindow: 1.0])
+        let throttler = createSubject(resetTime: [.alert: 0.1, .popupWindow: 0.1])
         let threshold = popupType.maxPopupThreshold
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
@@ -38,15 +38,15 @@ class PopupThrottlerTests: XCTestCase {
 
         // Wait longer than the necessary threshold, and then make sure alerts are allowed
         let expectation = XCTestExpectation(description: "Throttle expectation")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             XCTAssertTrue(throttler.canShowAlert(type: .alert))
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 4.0)
+        wait(for: [expectation], timeout: 0.5)
     }
 
     func testThatAlertsShownAfterSufficientDelayResetAlertCount() {
-        let throttler = createSubject(resetTime: [.alert: 1.0, .popupWindow: 1.0])
+        let throttler = createSubject(resetTime: [.alert: 0.1, .popupWindow: 0.1])
         let threshold = popupType.maxPopupThreshold
         // Show alerts up to the max threshold
         for _ in 0..<threshold {
@@ -56,14 +56,14 @@ class PopupThrottlerTests: XCTestCase {
 
         // Wait longer than the necessary threshold, and then make sure alerts are allowed
         let expectation = XCTestExpectation(description: "Throttle expectation")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             XCTAssertTrue(throttler.canShowAlert(type: .alert))
             // Now make sure that any immediate alerts are also allowed
             throttler.willShowAlert(type: .alert)
             XCTAssertTrue(throttler.canShowAlert(type: .alert))
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 4.0)
+        wait(for: [expectation], timeout: 0.5)
     }
 
     private func createSubject(resetTime: [PopupType: TimeInterval] = PopupType.defaultResetTimes) -> DefaultPopupThrottler {

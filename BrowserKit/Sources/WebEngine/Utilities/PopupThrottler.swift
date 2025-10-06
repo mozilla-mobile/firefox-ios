@@ -41,8 +41,8 @@ public enum PopupType: Sendable {
 /// Utility for tracking various types of popups that may be presented
 /// over a short time. Used to prevent Javascript abuse or DOS attacks.
 public final class DefaultPopupThrottler: PopupThrottler {
-    var alertCount = [PopupType.alert: 0, PopupType.popupWindow: 0]
-    var lastAlertDate = [PopupType.alert: Date.distantPast, PopupType.popupWindow: Date.distantPast]
+    private var alertCount = [PopupType.alert: 0, PopupType.popupWindow: 0]
+    private var lastAlertDate = [PopupType.alert: Date.distantPast, PopupType.popupWindow: Date.distantPast]
     private let resetTime: [PopupType: TimeInterval]
 
     public init(resetTime: [PopupType: TimeInterval] = PopupType.defaultResetTimes) {
