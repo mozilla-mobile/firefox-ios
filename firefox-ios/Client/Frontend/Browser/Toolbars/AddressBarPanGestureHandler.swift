@@ -166,6 +166,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
 
         switch gesture.state {
         case .began:
+            webPagePreview.isHidden = false
             screenshotHelper?.takeScreenshot(
                 selectedTab,
                 windowUUID: windowUUID,
@@ -259,6 +260,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         } completion: { [self] _ in
             webPagePreview.transitionDidEnd()
             homepageScreenshot = nil
+            webPagePreview.isHidden = true
 
             if shouldCompleteTransition {
                 store.dispatchLegacy(

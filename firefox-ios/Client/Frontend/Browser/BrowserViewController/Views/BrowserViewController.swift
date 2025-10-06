@@ -188,7 +188,9 @@ class BrowserViewController: UIViewController,
     private(set) lazy var contentContainer: ContentContainer = .build { _ in }
 
     // A view for displaying a preview of the web page.
-    private lazy var webPagePreview: TabWebViewPreview = .build()
+    private lazy var webPagePreview: TabWebViewPreview = .build {
+        $0.isHidden = true
+    }
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
@@ -4745,8 +4747,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 // MARK: JSPromptAlertControllerDelegate
 
-extension BrowserViewController: JSPromptAlertControllerDelegate {
-    func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
+extension BrowserViewController: WKJavascriptPromptAlertControllerDelegate {
+    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
         logger.log("JS prompt was dismissed. Will dequeue next alert.",
                    level: .info,
                    category: .webview)

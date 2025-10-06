@@ -126,7 +126,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var readabilityResult: ReadabilityResult?
 
     var consecutiveCrashes: UInt = 0
-    let popupThrottler = PopupThrottler()
+    let popupThrottler = DefaultPopupThrottler()
 
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
@@ -465,7 +465,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
-    private var alertQueue = [JSAlertInfo]()
+    private var alertQueue = [WKJavaScriptAlertInfo]()
 
     var onWebViewLoadingStateChanged: (@MainActor () -> Void)?
     private var webViewLoadingObserver: NSKeyValueObservation?
@@ -830,11 +830,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     /// Queues a JS Alert for later display
     /// Do not call completionHandler until the alert is displayed and dismissed
-    func queueJavascriptAlertPrompt(_ alert: JSAlertInfo) {
+    func queueJavascriptAlertPrompt(_ alert: WKJavaScriptAlertInfo) {
         alertQueue.append(alert)
     }
 
-    func dequeueJavascriptAlertPrompt() -> JSAlertInfo? {
+    func dequeueJavascriptAlertPrompt() -> WKJavaScriptAlertInfo? {
         guard !alertQueue.isEmpty else { return nil }
         return alertQueue.removeFirst()
     }
