@@ -8,63 +8,6 @@ import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
-    /// Each section stores a single cached measurement keyed by the layout inputs (including
-    /// dynamic type) so that we can detect when the environment has changed. The keys capture
-    /// the relevant state for each section, preventing stale heights from being reused when any
-    /// of the inputs differ between layout passes.
-    private struct LayoutMeasurementCache {
-        struct TopSitesMeasurement: Equatable {
-            struct Key: Equatable {
-                let topSites: [TopSiteConfiguration]
-                let numberOfRows: Int
-                let numberOfTilesPerRow: Int
-                let headerState: SectionHeaderConfiguration
-                let containerWidth: Double
-                let isLandscape: Bool
-                let shouldShowSection: Bool
-                let contentSizeCategory: UIContentSizeCategory
-            }
-
-            let key: Key
-            let height: CGFloat
-        }
-
-        struct StoriesMeasurement: Equatable {
-            struct Key: Equatable {
-                let stories: [MerinoStoryConfiguration]
-                let headerState: SectionHeaderConfiguration
-                let cellWidth: Double
-                let containerWidth: Double
-                let shouldShowSection: Bool
-                let isStoriesRedesignEnabled: Bool
-                let contentSizeCategory: UIContentSizeCategory
-            }
-
-            struct Result: Equatable {
-                let tallestCellHeight: CGFloat
-                let totalHeight: CGFloat
-            }
-
-            let key: Key
-            let result: Result
-        }
-
-        struct SearchBarMeasurement: Equatable {
-            struct Key: Equatable {
-                let shouldShowSearchBar: Bool
-                let containerWidth: Double
-                let contentSizeCategory: UIContentSizeCategory
-            }
-
-            let key: Key
-            let height: CGFloat
-        }
-
-        var topSites: TopSitesMeasurement?
-        var stories: StoriesMeasurement?
-        var searchBar: SearchBarMeasurement?
-    }
-
     private struct HeaderMeasurementKey: Hashable {
         let configuration: SectionHeaderConfiguration
         let containerWidth: Double
@@ -191,7 +134,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
-    private var measurementsCache = LayoutMeasurementCache()
+    /// Each section stores a single cached measurement keyed by the layout inputs (including
+   /// dynamic type) so that we can detect when the environment has changed. The keys capture
+   /// the relevant state for each section, preventing stale heights from being reused when any
+   /// of the inputs differ between layout passes.
+   private var measurementsCache = HomepageLayoutMeasurementCache()
     private var headerHeightCache: [HeaderMeasurementKey: CGFloat] = [:]
     private var isStoriesRedesignEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
@@ -597,7 +544,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let topSitesState = state.topSitesState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let contentSizeCategory = environment.traitCollection.preferredContentSizeCategory
-        let measurementKey = LayoutMeasurementCache.TopSitesMeasurement.Key(
+        let measurementKey = HomepageLayoutMeasurementCache.TopSitesMeasurement.Key(
             topSites: topSitesState.topSitesData,
             numberOfRows: topSitesState.numberOfRows,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
@@ -609,16 +556,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
 
         // Reuse the cached result when the key matches, overwrite it when inputs change.
-        if let cachedMeasurement = measurementsCache.topSites,
-           cachedMeasurement.key == measurementKey {
-            return cachedMeasurement.height
+        if let cachedHeight = measurementsCache.height(for: measurementKey) {
+                    return cachedHeight
         }
 
         guard topSitesState.shouldShowSection else {
-            measurementsCache.topSites = LayoutMeasurementCache.TopSitesMeasurement(
-                key: measurementKey,
-                height: 0
-            )
+            measurementsCache.setHeight(0, for: measurementKey)
             return 0
         }
         let maxRows = topSitesState.numberOfRows
@@ -626,19 +569,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let maxCells = maxRows * cols
 
         guard maxRows > 0, cols > 0, maxCells > 0 else {
-            measurementsCache.topSites = LayoutMeasurementCache.TopSitesMeasurement(
-                key: measurementKey,
-                height: 0
-            )
+            measurementsCache.setHeight(0, for: measurementKey)
             return 0
         }
 
         let cellsData = topSitesState.topSitesData.prefix(maxCells)
         guard !cellsData.isEmpty else {
-            measurementsCache.topSites = LayoutMeasurementCache.TopSitesMeasurement(
-                key: measurementKey,
-                height: 0
-            )
+            measurementsCache.setHeight(0, for: measurementKey)
             return 0
         }
 
@@ -670,10 +607,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Add section insets
         totalHeight += UX.TopSitesConstants.getBottomInset()
-        measurementsCache.topSites = LayoutMeasurementCache.TopSitesMeasurement(
-            key: measurementKey,
-            height: totalHeight
-        )
+        measurementsCache.setHeight(totalHeight, for: measurementKey)
 
         return totalHeight
     }
@@ -696,23 +630,19 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let searchState = state.searchState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
-        let measurementKey = LayoutMeasurementCache.SearchBarMeasurement.Key(
+        let measurementKey = HomepageLayoutMeasurementCache.SearchBarMeasurement.Key(
             shouldShowSearchBar: searchState.shouldShowSearchBar,
             containerWidth: containerWidth,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
         )
 
-        // Reuse the cached result when the key matches,  overwrite it when inputs change.
-        if let cachedMeasurement = measurementsCache.searchBar,
-           cachedMeasurement.key == measurementKey {
-            return cachedMeasurement.height
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedHeight = measurementsCache.height(for: measurementKey) {
+            return cachedHeight
         }
 
         guard searchState.shouldShowSearchBar else {
-            measurementsCache.searchBar = LayoutMeasurementCache.SearchBarMeasurement(
-                key: measurementKey,
-                height: 0
-            )
+            measurementsCache.setHeight(0, for: measurementKey)
             return 0
         }
 
@@ -728,10 +658,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += UX.standardInset
         totalHeight += UX.HeaderConstants.bottomSpacing
 
-        measurementsCache.searchBar = LayoutMeasurementCache.SearchBarMeasurement(
-            key: measurementKey,
-            height: totalHeight
-        )
+        measurementsCache.setHeight(totalHeight, for: measurementKey)
 
         return totalHeight
     }
@@ -774,39 +701,36 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func getStoriesMeasurement(
         environment: NSCollectionLayoutEnvironment,
         cellWidth: CGFloat
-    ) -> LayoutMeasurementCache.StoriesMeasurement.Result {
+    ) -> HomepageLayoutMeasurementCache.StoriesMeasurement.Result {
         guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else {
-            return LayoutMeasurementCache.StoriesMeasurement.Result(
+            return HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
                 tallestCellHeight: 0,
                 totalHeight: 0
             )
         }
 
         let storiesState = state.merinoState
-        let key = LayoutMeasurementCache.StoriesMeasurement.Key(
+        let key = HomepageLayoutMeasurementCache.StoriesMeasurement.Key(
             stories: storiesState.merinoData,
             headerState: storiesState.sectionHeaderState,
             cellWidth: normalizedDimension(cellWidth),
             containerWidth: normalizedDimension(environment.container.contentSize.width),
             shouldShowSection: storiesState.shouldShowSection,
             isStoriesRedesignEnabled: isStoriesRedesignEnabled,
-            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory        )
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+            )
 
-        // Reuse the cached result when the key matches,overwrite it when inputs change.
-        if let cachedMeasurement = measurementsCache.stories,
-           cachedMeasurement.key == key {
-            return cachedMeasurement.result
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedResult = measurementsCache.result(for: key) {
+            return cachedResult
         }
 
         guard storiesState.shouldShowSection, !storiesState.merinoData.isEmpty else {
-            let result = LayoutMeasurementCache.StoriesMeasurement.Result(
+            let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
                 tallestCellHeight: 0,
                 totalHeight: 0
             )
-            measurementsCache.stories = LayoutMeasurementCache.StoriesMeasurement(
-                key: key,
-                result: result
-            )
+            measurementsCache.setResult(result, for: key)
             return result
         }
 
@@ -826,14 +750,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             + max(tallestCellHeight, UX.PocketConstants.redesignedMinimumCellHeight)
             + UX.standardInset
 
-        let result = LayoutMeasurementCache.StoriesMeasurement.Result(
+        let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
             tallestCellHeight: tallestCellHeight,
             totalHeight: totalHeight
         )
-        measurementsCache.stories = LayoutMeasurementCache.StoriesMeasurement(
-            key: key,
-            result: result
-        )
+        measurementsCache.setResult(result, for: key)
         return result
     }
 
