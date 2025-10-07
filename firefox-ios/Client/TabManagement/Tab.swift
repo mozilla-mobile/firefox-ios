@@ -78,7 +78,7 @@ enum TabUrlType: String {
 typealias TabUUID = String
 
 @MainActor
-class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
+class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab, WKJavaScriptAlertStore {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
@@ -126,7 +126,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     var readabilityResult: ReadabilityResult?
 
     var consecutiveCrashes: UInt = 0
-    let popupThrottler = DefaultPopupThrottler()
+    let popupThrottler: PopupThrottler = DefaultPopupThrottler()
 
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
@@ -821,6 +821,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
         TabEvent.post(.didToggleDesktopMode, for: self)
     }
+    
+    // MARK: - WKJavaScriptAlertStore
 
     func cancelQueuedAlerts() {
         alertQueue.forEach { alert in

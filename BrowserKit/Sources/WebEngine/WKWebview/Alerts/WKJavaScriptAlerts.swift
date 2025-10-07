@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import WebKit
 
 public protocol WKJavascriptPromptAlertControllerDelegate: AnyObject {
     @MainActor
@@ -29,4 +30,39 @@ public protocol WKJavaScriptAlertInfo {
     func alertController() -> WKJavaScriptPromptAlertController
     func cancel()
     func handleAlertDismissal(_ result: Any?)
+}
+
+@MainActor
+public protocol WKJavaScriptAlertStore {
+    var popupThrottler: PopupThrottler { get }
+
+    func cancelQueuedAlerts()
+
+    func queueJavascriptAlertPrompt(_ alert: WKJavaScriptAlertInfo)
+
+    func dequeueJavascriptAlertPrompt() -> WKJavaScriptAlertInfo?
+
+    func hasJavascriptAlertPrompt() -> Bool
+}
+
+@MainActor
+public protocol WKJavaScriptAlertInfoFactory {
+    func makeMessageAlert(
+        message: String,
+        frame: WKFrameInfo,
+        completion: @escaping @MainActor () -> Void
+    ) -> WKJavaScriptAlertInfo
+    
+    func makeConfirmationAlert(
+        message: String,
+        frame: WKFrameInfo,
+        completion: @escaping @MainActor (Bool) -> Void
+    ) -> WKJavaScriptAlertInfo
+    
+    func makeTextInputAlert(
+        message: String,
+        frame: WKFrameInfo,
+        defaultText: String?,
+        completion: @escaping @MainActor (String?) -> Void
+    ) -> WKJavaScriptAlertInfo
 }
