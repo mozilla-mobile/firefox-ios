@@ -236,6 +236,10 @@ struct AccessibilityIdentifiers {
             static let favIconImage = "SyncedTabFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
         }
+
+        struct StoriesFeed {
+            static let storiesFeedCell = "StoriesFeedCell"
+        }
     }
 
     struct GeneralizedIdentifiers {
