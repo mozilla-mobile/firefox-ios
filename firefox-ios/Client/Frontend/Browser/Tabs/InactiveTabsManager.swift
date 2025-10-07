@@ -8,10 +8,12 @@ protocol InactiveTabsManagerProtocol {
     /// Returns inactive normal (non-private) tabs filtered from the given tabs array.
     /// - Parameter tabs: The array of tabs to filter.
     /// - Returns: The non-private, inactive tabs inside the `tabs` array.
+    @MainActor
     func getInactiveTabs(tabs: [Tab]) -> [Tab]
 }
 
 class InactiveTabsManager: InactiveTabsManagerProtocol {
+    @MainActor
     func getInactiveTabs(tabs: [Tab]) -> [Tab] {
         return tabs.filter({ !$0.isPrivate && $0.isInactive })
     }

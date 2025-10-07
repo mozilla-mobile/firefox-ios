@@ -145,6 +145,7 @@ final class SummarizeCoordinator: BaseCoordinator,
             configuration: model,
             viewModel: DefaultSummarizeViewModel(
                 summarizerService: service,
+                summarizerTrigger: trigger,
                 tosAcceptor: self,
                 isTosAcceppted: prefs.boolForKey(PrefsKeys.Summarizer.didAgreeTermsOfService) ?? false
             ),

@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 @available(iOS 16, *)
 class EngineSessionScriptResponderTests: XCTestCase {
     private var session: MockWKEngineSession!

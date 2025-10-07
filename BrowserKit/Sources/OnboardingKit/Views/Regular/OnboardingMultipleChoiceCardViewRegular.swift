@@ -37,15 +37,13 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
 
     var body: some View {
         VStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: UX.CardView.regularSizeSpacing) {
                     titleView
                         .padding(.top, UX.CardView.titleTopPadding)
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                         selection: $selectedAction,
-                        items: viewModel.multipleChoiceButtons,
-                        windowUUID: windowUUID,
-                        themeManager: themeManager
+                        items: viewModel.multipleChoiceButtons
                     )
                     .onChange(of: selectedAction) { newAction in
                         onMultipleChoiceAction(newAction, viewModel.name)
@@ -78,19 +76,19 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
     }
 
     var primaryButton: some View {
-        Button(
+        OnboardingButton.primary(
             viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
                     viewModel.name
                 )
-            }
+            },
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+            width: UX.CardView.primaryButtonWidthiPad,
+            windowUUID: windowUUID,
+            themeManager: themeManager
         )
-        .font(UX.CardView.primaryActionFont)
-        .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
-        .frame(width: UX.CardView.primaryButtonWidthiPad)
     }
 
     private func applyTheme(theme: Theme) {

@@ -6,6 +6,7 @@ import Common
 import Foundation
 
 protocol PhotonActionSheetContainerCellDelegate: AnyObject {
+    @MainActor
     func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void)
 }
 

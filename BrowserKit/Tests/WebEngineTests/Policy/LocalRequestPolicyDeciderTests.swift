@@ -5,6 +5,7 @@
 import XCTest
 @testable import WebEngine
 
+@MainActor
 final class LocalRequestPolicyDeciderTests: XCTestCase {
     private var mockDecider: MockPolicyDecider!
 

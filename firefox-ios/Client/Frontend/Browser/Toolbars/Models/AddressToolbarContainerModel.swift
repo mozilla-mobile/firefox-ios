@@ -34,6 +34,7 @@ final class AddressToolbarContainerModel: Equatable {
     let canShowNavigationHint: Bool
     let shouldAnimate: Bool
     let scrollAlpha: Float
+    let hasAlternativeLocationColor: Bool
 
     let windowUUID: UUID
 
@@ -41,9 +42,11 @@ final class AddressToolbarContainerModel: Equatable {
         let term = searchTerm ?? searchTermFromURL(url)
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
         let shouldBlur = toolbarHelper.shouldBlur()
-        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
-                                                                         scrollAlpha: CGFloat(scrollAlpha),
-                                                                         shouldBlur: shouldBlur)
+        let uxConfiguration: AddressToolbarUXConfiguration = .experiment(
+            backgroundAlpha: backgroundAlpha,
+            scrollAlpha: CGFloat(scrollAlpha),
+            shouldBlur: shouldBlur,
+            hasAlternativeLocationColor: hasAlternativeLocationColor)
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {
@@ -209,6 +212,9 @@ final class AddressToolbarContainerModel: Equatable {
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
         let searchEngineModel = state.addressToolbar.alternativeSearchEngine
                                 ?? searchEnginesManager.defaultEngine?.generateModel()
+        let hasAlternativeLocationColor = state.toolbarPosition == .top &&
+                                            !state.isShowingTopTabs &&
+                                            state.isShowingNavigationToolbar
 
         self.windowUUID = windowUUID
         self.searchEngineName = searchEngineModel?.name ?? ""
@@ -229,6 +235,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
         self.shouldAnimate = state.shouldAnimate
         self.scrollAlpha = state.scrollAlpha
+        self.hasAlternativeLocationColor = hasAlternativeLocationColor
         self.toolbarLayoutStyle = state.toolbarLayout
         self.toolbarHelper = toolbarHelper
     }
@@ -328,6 +335,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.canShowNavigationHint == rhs.canShowNavigationHint &&
         lhs.shouldAnimate == rhs.shouldAnimate &&
         lhs.scrollAlpha == rhs.scrollAlpha &&
+        lhs.hasAlternativeLocationColor == rhs.hasAlternativeLocationColor &&
 
         lhs.windowUUID == rhs.windowUUID
     }

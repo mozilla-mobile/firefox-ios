@@ -755,7 +755,8 @@ fileprivate struct FfiConverterOptionCallbackInterfaceAppServicesLogger: FfiConv
 /**
  * Set the logger to forward to.
  *
- * Pass in None to disable logging.
+ * Once a logger is passed in, it cannot be changed.
+ * However, you can pass in `None` to disable logging.
  */
 public func setLogger(logger: AppServicesLogger?)  {try! rustCall() {
     uniffi_rust_log_forwarder_fn_func_set_logger(
@@ -789,7 +790,7 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_rust_log_forwarder_checksum_func_set_logger() != 8393) {
+    if (uniffi_rust_log_forwarder_checksum_func_set_logger() != 26223) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_rust_log_forwarder_checksum_func_set_max_level() != 57087) {

@@ -483,7 +483,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
     }
@@ -620,7 +620,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             sender.isOn = false
             sender.isEnabled = false
             sender.alpha = 0.5
-            NimbusWrapper.shared.nimbus.globalUserParticipation = false
+            NimbusWrapper.shared.nimbus.experimentParticipation = false
+            NimbusWrapper.shared.nimbus.rolloutParticipation = false
             updateSetting(false, forToggle: .studies)
         }
 
@@ -657,7 +658,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         } else if toggle.setting == .studies {
             // Ensure 'studies' is disabled if 'sendAnonymousUsageData' is turned off, even when 'studies' is being enabled.
             if sendAnonymousUsageDataToggle?.isOn == true {
-                NimbusWrapper.shared.nimbus.globalUserParticipation = sender.isOn
+                NimbusWrapper.shared.nimbus.experimentParticipation = sender.isOn
+                NimbusWrapper.shared.nimbus.rolloutParticipation = sender.isOn
             } else {
                 disableAndTurnOffStudiesToggle(sender)
             }

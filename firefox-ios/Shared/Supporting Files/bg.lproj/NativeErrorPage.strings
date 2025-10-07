@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Презареждане";
+
+/* On error page, this is the description for a generic error. %@ is the site url. */
+"NativeErrorPage.GenericError.Description.v134" = "Собственикът на %@ не го е настроил правилно и не може да бъде създадена защитена връзка.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Бъдете внимателни. Нещо не изглежда както трябва.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Опитайте да се свържете от друго устройство. Проверете модема или рутера. Изключете и се свържете отново с безжичната мрежа.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Изглежда, че има проблем с интернет връзката ви.";
+

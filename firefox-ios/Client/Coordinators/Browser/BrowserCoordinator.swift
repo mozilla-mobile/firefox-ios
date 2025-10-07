@@ -171,6 +171,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+        // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
+        webviewController?.update(webView: nil)
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
@@ -1137,6 +1139,11 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(shortcutsLibraryViewController)
     }
 
+    func showStoriesFeed() {
+        let storiesFeedViewController = StoriesFeedViewController(windowUUID: windowUUID)
+        router.push(storiesFeedViewController)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {
@@ -1312,7 +1319,7 @@ class BrowserCoordinator: BaseCoordinator,
     nonisolated private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
-              let temporaryDocument = tab.temporaryDocument,
+              let temporaryDocument = await tab.temporaryDocument,
               !temporaryDocument.isDownloading else {
             return shareType
         }

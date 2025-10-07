@@ -66,6 +66,7 @@ class EnhancedTrackingProtectionMenuVM {
                                                    connectionSecure: connectionSecure)
     }
 
+    @MainActor
     func toggleSiteSafelistStatus() {
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
         ContentBlocker.shared.safelist(enable: contentBlockerStatus != .safelisted, url: url) { [weak self] in

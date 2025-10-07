@@ -5,6 +5,7 @@
 import Foundation
 
 protocol TopTabsScrollDelegate: AnyObject {
+    @MainActor
     func collectionViewDidScroll(_ scrollView: UIScrollView)
 }
 

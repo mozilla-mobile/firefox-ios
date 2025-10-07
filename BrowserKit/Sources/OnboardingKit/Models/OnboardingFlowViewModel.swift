@@ -8,6 +8,7 @@ import SwiftUI
 public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
     public let onboardingCards: [ViewModel]
+    public let skipText: String
     public let onActionTap: @MainActor (
         ViewModel.OnboardingActionType,
         String,
@@ -28,6 +29,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
 
     public init(
         onboardingCards: [ViewModel],
+        skipText: String,
         onActionTap: @MainActor @escaping (
             ViewModel.OnboardingActionType,
             String,
@@ -39,6 +41,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         onComplete: @escaping (String) -> Void
     ) {
         self.onboardingCards = onboardingCards
+        self.skipText = skipText
         self.onActionTap = onActionTap
         self.onMultipleChoiceActionTap = onMultipleChoiceActionTap
         self.onComplete = onComplete

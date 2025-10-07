@@ -668,6 +668,9 @@ final class HomepageViewController: UIViewController,
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.merinoState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToStoriesFeed()
+                },
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -841,6 +844,16 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func navigateToStoriesFeed() {
+        store.dispatchLegacy(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.storiesFeed),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnAllStoriesButton
+            )
+        )
+    }
+
     private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
         store.dispatchLegacy(
             NavigationBrowserAction(
@@ -921,7 +934,7 @@ final class HomepageViewController: UIViewController,
             )
         case .searchBar:
             dispatchNavigationBrowserAction(
-                with: NavigationDestination(.zeroSearch),
+                with: NavigationDestination(.homepageZeroSearch),
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):

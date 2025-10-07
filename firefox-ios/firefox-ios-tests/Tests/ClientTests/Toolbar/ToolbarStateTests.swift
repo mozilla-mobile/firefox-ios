@@ -394,6 +394,23 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
+    func test_navigationMiddleButtonDidChangeAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = toolbarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                middleButton: .home,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.navigationMiddleButtonDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.addressToolbar, initialState.addressToolbar)
+        XCTAssertNotEqual(newState.navigationToolbar, initialState.navigationToolbar)
+    }
+
     func test_backForwardButtonStateChangedAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()

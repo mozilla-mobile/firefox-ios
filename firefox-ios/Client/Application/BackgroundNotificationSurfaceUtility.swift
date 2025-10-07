@@ -3,11 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import BackgroundTasks
+// TODO: FXIOS-13582 - Capture of non-Sendable type BGAppRefreshTask in @Sendable closure
+@preconcurrency import BackgroundTasks
 import Common
 import Shared
 
-class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
+// TODO: FXIOS-13582 - BackgroundNotificationSurfaceUtility should be concurrency safe
+class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol, @unchecked Sendable {
     let taskIdentifier = "org.mozilla.ios.surface.notification.refresh"
     var surfaceManager: NotificationSurfaceManager
     var notificationManager: NotificationManagerProtocol

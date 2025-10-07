@@ -13,3 +13,9 @@
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
 "LibraryPanel.History.LastSevenDaysOption.v138" = "Последните 7 дни";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Последните 24 часа";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "Изтрива история (включително синхронизирана история от други устройства), бисквитки и друга информация за сърфирането.";
+

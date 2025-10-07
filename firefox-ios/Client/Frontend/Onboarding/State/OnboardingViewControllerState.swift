@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-struct OnboardingViewControllerState: ScreenState, Equatable {
+struct OnboardingViewControllerState: ScreenState {
     let windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {

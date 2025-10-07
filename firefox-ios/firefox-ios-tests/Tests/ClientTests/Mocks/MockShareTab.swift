@@ -6,6 +6,7 @@ import Foundation
 
 @testable import Client
 
+@MainActor
 class MockShareTab: ShareTab {
     var canonicalURL: URL?
     var displayTitle: String
@@ -25,17 +26,5 @@ class MockShareTab: ShareTab {
         self.canonicalURL = canonicalURL
         self.webView = TabWebView(frame: CGRect.zero, configuration: .init(), windowUUID: .XCTestDefaultUUID)
         self.temporaryDocument = withTemporaryDocument
-    }
-
-    static func == (lhs: MockShareTab, rhs: MockShareTab) -> Bool {
-        guard let lhsTempDoc = lhs.temporaryDocument as? MockTemporaryDocument,
-              let rhsTempDoc = rhs.temporaryDocument as? MockTemporaryDocument else {
-            return false
-        }
-
-        return lhs.displayTitle == rhs.displayTitle
-        && lhs.url == rhs.url
-        && lhs.webView === rhs.webView
-        && lhsTempDoc === rhsTempDoc
     }
 }

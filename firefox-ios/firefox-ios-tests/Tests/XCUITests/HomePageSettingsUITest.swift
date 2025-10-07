@@ -60,12 +60,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
         // Include on Homepage
         mozWaitForElementToExist(app.tables.cells["TopSitesSettings"].staticTexts["On"])
-        let jumpBackIn = app.tables.cells.switches["Jump Back In"].value
-        XCTAssertEqual("1", jumpBackIn as? String)
-        let bookmarks = app.tables.cells.switches["Bookmarks"].value
-        XCTAssertEqual("1", bookmarks as? String)
-        let sponsoredStories = app.tables.cells.switches["Stories"].value
-        XCTAssertEqual("1", sponsoredStories as? String)
 
         // Current Homepage
         XCTAssertTrue(app.tables.cells["Firefox Home"].isSelected)
@@ -137,6 +131,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.tables.cells["HomeAsFirefoxHome"].isSelected, "Firefox Home is not selected by default")
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -220,9 +216,14 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307033
-    func testJumpBackIn_tabTrayExperimentOff() {
+    func testJumpBackIn_tabTrayExperimentOff() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Jump back in removed from the new home panel")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
         navigator.goto(TabTray)
@@ -253,9 +254,14 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307033
-    func testJumpBackIn_tabTrayExperimentOn() {
+    func testJumpBackIn_tabTrayExperimentOn() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Jump back in removed from the new home panel")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
         navigator.goto(TabTray)
@@ -282,12 +288,18 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
-    func testRecentlySaved_tabTrayExperimentOff() {
+    func testRecentlySaved_tabTrayExperimentOff() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Recently saved was removed from the new home panel")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
+        navigator.nowAt(BrowserTab)
         bookmarkPages()
         // iOS 15 does not have the Reader View button available (when experiment Off)
         if #available(iOS 16, *) {
@@ -333,7 +345,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306871
     // Smoketest
-    func testCustomizeHomepage() {
+    func testCustomizeHomepage() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest,
+                      "Customize homepage was removed from the new home panel")
         if !iPad() {
             mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
             app.collectionViews["FxCollectionView"].swipeUp()
@@ -384,8 +399,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         if !iPad() {
             validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 5)
             validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 4, maxBoundary: 9)
-            validateNumberOfTopSitesDisplayed(row: 2, minBoundary: 8, maxBoundary: 13)
-            validateNumberOfTopSitesDisplayed(row: 3, minBoundary: 12, maxBoundary: 17)
         } else {
             validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 8)
             validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 15)
@@ -396,8 +409,8 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         navigator.goto(HomeSettings)
         app.cells[AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Shortcuts.settingsPage].waitAndTap()
         app.staticTexts["Rows"].waitAndTap()
-        let expectedRowValues = ["1", "2", "3", "4"]
-        for i in 0...3 {
+        let expectedRowValues = ["1", "2"]
+        for i in 0...1 {
             XCTAssertEqual(app.tables.cells.element(boundBy: i).label, expectedRowValues[i])
         }
         app.tables.cells.element(boundBy: row).waitAndTap()
@@ -411,9 +424,11 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     private func addWebsitesToShortcut(website: String) {
-        navigator.goto(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(website)
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         // Tap on Save item
         navigator.performAction(Action.PinToTopSitesPAM)

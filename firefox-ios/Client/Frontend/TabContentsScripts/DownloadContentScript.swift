@@ -34,6 +34,7 @@ class DownloadContentScript: TabContentScript {
     /// - Parameters:
     ///     - url: URL of item to be downloaded
     ///     - tab: Tab item is being downloaded from
+    @MainActor
     static func requestBlobDownload(url: URL, tab: Tab) -> Bool {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
         guard url.scheme == "blob" else {

@@ -38,6 +38,7 @@ final class AddressToolbarContainer: UIView,
                                      AddressToolbarDelegate,
                                      Autocompletable,
                                      URLBarViewProtocol,
+                                     FeatureFlaggable,
                                      PrivateModeUI {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
@@ -415,6 +416,11 @@ final class AddressToolbarContainer: UIView,
             }
             let isRTL = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft
             addNewTabLeadingConstraint?.constant = isRTL ? -transform.tx : transform.tx
+        // if the add new tab was modified but we are not adding a new tab then restore it.
+        } else if addNewTabLeadingConstraint?.constant != 0 {
+            addNewTabLeadingConstraint?.constant = 0
+            addNewTabTrailingConstraint?.constant = 0
+            addNewTabView.showHideAddTabIcon(shouldShow: false)
         }
     }
 
@@ -477,7 +483,10 @@ final class AddressToolbarContainer: UIView,
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)
 
-        if shouldShowSuggestions {
+        // We want to show suggestions if we turn on the trending searches
+        // which displays the zero search state.
+        let isZeroSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        if shouldShowSuggestions || isZeroSearchEnabled {
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         }
     }

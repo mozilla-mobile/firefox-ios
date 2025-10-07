@@ -60,7 +60,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     private func cardContent(geometry: GeometryProxy, scale: CGFloat) -> some View {
         VStack {
             GeometryReader { geometry in
-                ScrollView(.vertical) {
+                ScrollView(showsIndicators: false) {
                     VStack(spacing: UX.CardView.spacing * scale) {
                         Spacer()
                         imageView(scale: scale)
@@ -80,11 +80,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .background(
-            RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                .fill(cardBackgroundColor)
-                .accessibilityHidden(true)
-        )
+        .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
         .accessibilityElement(children: .contain)
         .padding(.vertical)
@@ -140,17 +136,17 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     }
 
     var primaryButton: some View {
-        Button(
+        OnboardingButton.primary(
             viewModel.configuration.buttons.primary.title,
             action: {
                 viewModel.handleEmbededLinkAction(
                     action: .accept
                 )
-            }
+            },
+            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton",
+            windowUUID: windowUUID,
+            themeManager: themeManager
         )
-        .font(UX.CardView.primaryActionFont)
-        .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton")
-        .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
 
     private func applyTheme(theme: Theme) {

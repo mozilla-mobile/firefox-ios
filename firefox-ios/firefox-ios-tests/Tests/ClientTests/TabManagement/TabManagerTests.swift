@@ -42,7 +42,6 @@ class TabManagerTests: XCTestCase {
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
         setIsDeeplinkOptimizationRefactorEnabled(false)
-        setIsPDFRefactorEnabled(false)
     }
 
     override func tearDown() {
@@ -166,8 +165,6 @@ class TabManagerTests: XCTestCase {
     // MARK: - Document pause - restore
     @MainActor
     func testSelectTab_pauseCurrentDocumentDownload() throws {
-        setIsPDFRefactorEnabled(true)
-
         let tabs = generateTabs(count: 2)
         let document = MockTemporaryDocument(withFileURL: URL(string: "https://www.example.com")!)
         let subject = createSubject(tabs: tabs)
@@ -1737,12 +1734,6 @@ class TabManagerTests: XCTestCase {
         }
     }
 
-    private func setIsPDFRefactorEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.pdfRefactorFeature.with { _, _ in
-            return PdfRefactorFeature(enabled: enabled)
-        }
-    }
-
     enum TabType {
         case normalActive
         case normalInactive
@@ -1751,6 +1742,7 @@ class TabManagerTests: XCTestCase {
         case privateAny // `private` alone is a reserved compiler keyword
     }
 
+    @MainActor
     private func generateTabs(ofType type: TabType = .normalActive, count: Int) -> [Tab] {
         var tabs = [Tab]()
         for i in 0..<count {

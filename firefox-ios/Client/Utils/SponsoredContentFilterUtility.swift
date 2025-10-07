@@ -25,6 +25,7 @@ struct SponsoredContentFilterUtility {
         return url.query?.split(separator: "&").contains { $0 == hideWithSearchParam } ?? false
     }
 
+    @MainActor
     func filterSponsoredTabs(from tabs: [Tab]) -> [Tab] {
         return tabs.filter { !($0.lastKnownUrl?.absoluteString.contains(hideWithSearchParam) ?? false) }
     }

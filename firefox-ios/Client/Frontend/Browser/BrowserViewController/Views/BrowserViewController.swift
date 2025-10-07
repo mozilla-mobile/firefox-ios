@@ -196,7 +196,9 @@ class BrowserViewController: UIViewController,
     private(set) lazy var contentContainer: ContentContainer = .build { _ in }
 
     // A view for displaying a preview of the web page.
-    private lazy var webPagePreview: TabWebViewPreview = .build()
+    private lazy var webPagePreview: TabWebViewPreview = .build {
+        $0.isHidden = true
+    }
 
     private lazy var topTouchArea: UIButton = .build { topTouchArea in
         topTouchArea.isAccessibilityElement = false
@@ -291,8 +293,10 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction?
     var copyAddressAction: AccessibleAction?
 
+    // TODO: FXIOS-13669 The session dependencies shouldn't be empty
     private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
-        engineResponder: DefaultUIHandler(sessionCreator: tabManager as? SessionCreator),
+        engineResponder: DefaultUIHandler.factory(sessionDependencies: .empty(),
+                                                  sessionCreator: tabManager as? SessionCreator),
         legacyResponder: self
     )
     /// The ui delegate used by a `WKWebView`
@@ -350,10 +354,6 @@ class BrowserViewController: UIViewController,
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    var isPDFRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-    }
-
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
@@ -372,6 +372,10 @@ class BrowserViewController: UIViewController,
 
     var isTabScrollRefactoringEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
+    }
+
+    var isTrendingSearchEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
     }
 
     // MARK: Computed vars
@@ -693,14 +697,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateAddressToolbarContainerPosition(
-        for traitCollection: UITraitCollection,
-        previousTraitCollection: UITraitCollection?) {
-            // Only update position if device size class changed (rotation, split view, etc.)
-            // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
-        guard traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
-                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass else { return }
-
+    private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
         guard searchBarPosition == .bottom, isToolbarRefactorEnabled, isSearchBarLocationFeatureEnabled else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
@@ -1467,6 +1464,7 @@ class BrowserViewController: UIViewController,
         }
 
         updateToolbarStateForTraitCollection(traitCollection)
+        updateAddressToolbarContainerPosition(for: traitCollection)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1647,7 +1645,12 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
-            updateAddressToolbarContainerPosition(for: traitCollection, previousTraitCollection: previousTraitCollection)
+            // Only update position if device size class changed (rotation, split view, etc.)
+            // Skip other trait changes like Dark Mode, App Moving to Background State that don't affect layout.
+            if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass ||
+                traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+                updateAddressToolbarContainerPosition(for: traitCollection)
+            }
             updateToolbarStateForTraitCollection(traitCollection)
         }
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
@@ -2181,11 +2184,20 @@ class BrowserViewController: UIViewController,
         guard self.searchController == nil else { return }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let searchViewModel = SearchViewModel(isPrivate: isPrivate,
-                                              isBottomSearchBar: isBottomSearchBar,
-                                              profile: profile,
-                                              model: searchEnginesManager,
-                                              tabManager: tabManager)
+
+        let trendingClient = TrendingSearchClient(searchEngine: searchEnginesManager.defaultEngine)
+
+        let recentSearchProvider = getRecentSearchProvider(with: searchEnginesManager.defaultEngine?.engineID)
+
+        let searchViewModel = SearchViewModel(
+            isPrivate: isPrivate,
+            isBottomSearchBar: isBottomSearchBar,
+            profile: profile,
+            model: searchEnginesManager,
+            tabManager: tabManager,
+            trendingSearchClient: trendingClient,
+            recentSearchProvider: recentSearchProvider
+        )
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
                                                     tabManager: tabManager)
@@ -2201,6 +2213,19 @@ class BrowserViewController: UIViewController,
 
         self.searchController = searchController
         self.searchSessionState = .active
+    }
+
+    private func getRecentSearchProvider(with engineID: String?) -> RecentSearchProvider? {
+        // TODO: FXIOS-13684 We should investigate in making defaultSearchEngine non-nil
+        guard let engineID else {
+            logger.log(
+                "Unable to retrieve engineID",
+                level: .warning,
+                category: .searchEngines
+            )
+            return nil
+        }
+        return DefaultRecentSearchProvider(searchEngineID: engineID)
     }
 
     func showSearchController() {
@@ -2482,7 +2507,7 @@ class BrowserViewController: UIViewController,
         switch path {
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
-            let isLoadingDocument = isPDFRefactorEnabled && tab.isDownloadingDocument()
+            let isLoadingDocument = tab.isDownloadingDocument()
             let isValidURL = if let url = webView.url {
                 !InternalURL.isValid(url: url)
             } else {
@@ -2510,7 +2535,7 @@ class BrowserViewController: UIViewController,
             }
         case .loading:
             guard var loading = change?[.newKey] as? Bool else { break }
-            if isPDFRefactorEnabled, let doc = tab.temporaryDocument {
+            if let doc = tab.temporaryDocument {
                 loading = doc.isDownloading
             }
             setupMiddleButtonStatus(isLoading: loading)
@@ -2534,7 +2559,7 @@ class BrowserViewController: UIViewController,
             // If the URL is coming from the observer and PDF refactor is enabled then take URL from there
             let url: URL? = if let webURL = webView.url {
                 webURL
-            } else if let changeURL = change?[.newKey] as? URL, isPDFRefactorEnabled {
+            } else if let changeURL = change?[.newKey] as? URL {
                 changeURL
             } else {
                 nil
@@ -2840,16 +2865,20 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showSummarizePanel(.shakeGesture, config: config)
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
-        case .zeroSearch:
+        case .homepageZeroSearch:
             store.dispatchLegacy(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
                     actionType: GeneralBrowserActionType.enteredZeroSearchScreen)
             )
             overlayManager.openNewTab(url: nil, newTabSettings: .topSites)
-            configureZeroSearchView()
+            configureHomepageZeroSearchView()
+        case .zeroSearch:
+            showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
+        case .storiesFeed:
+            navigationHandler?.showStoriesFeed()
         }
     }
 
@@ -2972,7 +3001,11 @@ class BrowserViewController: UIViewController,
         generator.impactOccurred()
 
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let style: UIModalPresentationStyle = if #available(iOS 26.0, *) {
+            .overCurrentContext
+        } else {
+            !shouldSuppress ? .popover : .overCurrentContext
+        }
         let viewModel = PhotonActionSheetViewModel(
             actions: [urlActions],
             closeButtonTitle: .CloseButtonTitle,
@@ -3804,8 +3837,8 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Configures the scrim area for zero search state
-    private func configureZeroSearchView() {
+    /// Configures the scrim area for zero search state on homepage which is simply a dimming view
+    private func configureHomepageZeroSearchView() {
         addressToolbarContainer.isHidden = false
 
         zeroSearchDimmingView.alpha = 0
@@ -4032,7 +4065,7 @@ class BrowserViewController: UIViewController,
 
     func openSuggestions(searchTerm: String) {
         if searchTerm.isEmpty {
-            hideSearchController()
+            showZeroSearchView()
         } else {
             configureOverlayView()
         }
@@ -4040,6 +4073,17 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.searchQuery = searchTerm
         searchController?.searchTelemetry?.clearVisibleResults()
         searchController?.searchTelemetry?.determineInteractionType()
+    }
+
+    /// Zero search describes the state in which the user highlights the address bar, but no
+    /// text has been entered.
+    /// We only want to display if webview, user has either trending searches or recent searches enabled.
+    private func showZeroSearchView() {
+        guard contentContainer.hasWebView, isTrendingSearchEnabled else {
+            hideSearchController()
+            return
+        }
+        showSearchController()
     }
 
     // Also implements
@@ -4080,8 +4124,11 @@ class BrowserViewController: UIViewController,
             if let toast = clipboardBarDisplayHandler?.clipboardToast {
                 toast.removeFromSuperview()
             }
-
-            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            // Instead of showing homepage when user enters overlay mode,
+            // we want to show the zero search state with trending searches
+            if !isTrendingSearchEnabled {
+                showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            }
         }
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
@@ -4594,12 +4641,10 @@ extension BrowserViewController: TabManagerDelegate {
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
 
-        if isPDFRefactorEnabled {
-            if selectedTab.isDownloadingDocument() {
-                navigationHandler?.showDocumentLoading()
-            } else {
-                navigationHandler?.removeDocumentLoading()
-            }
+        if selectedTab.isDownloadingDocument() {
+            navigationHandler?.showDocumentLoading()
+        } else {
+            navigationHandler?.removeDocumentLoading()
         }
 
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
@@ -4733,7 +4778,7 @@ extension BrowserViewController: TabManagerDelegate {
             needsReload = true
         }
 
-        if selectedTab.temporaryDocument != nil, isPDFRefactorEnabled {
+        if selectedTab.temporaryDocument != nil {
             needsReload = false
         }
 
@@ -5028,8 +5073,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 // MARK: JSPromptAlertControllerDelegate
 
-extension BrowserViewController: JSPromptAlertControllerDelegate {
-    func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
+extension BrowserViewController: WKJavascriptPromptAlertControllerDelegate {
+    func promptAlertControllerDidDismiss(_ alertController: WKJavaScriptPromptAlertController) {
         logger.log("JS prompt was dismissed. Will dequeue next alert.",
                    level: .info,
                    category: .webview)

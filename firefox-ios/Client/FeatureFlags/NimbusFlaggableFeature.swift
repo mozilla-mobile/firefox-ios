@@ -37,7 +37,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case noInternetConnectionErrorPage
-    case pdfRefactor
+    case recentSearches
     case reportSiteIssue
     case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
@@ -59,9 +59,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarSwipingTabs
     case toolbarTranslucency
     case toolbarMinimalAddressBar
+    case toolbarMiddleButtonCustomization
     case tosFeature
     case touFeature
     case trackingProtectionRefactor
+    case trendingSearches
     case unifiedAds
     case unifiedSearch
     case updatedPasswordManager
@@ -91,7 +93,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
-                .pdfRefactor,
                 .downloadLiveActivities,
                 .appleSummarizer,
                 .hostedSummarizer,
@@ -157,7 +158,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .modernOnboardingUI,
                 .nativeErrorPage,
                 .noInternetConnectionErrorPage,
-                .pdfRefactor,
+                .recentSearches,
                 .reportSiteIssue,
                 .revertUnsafeContinuationsRefactor,
                 .searchEngineConsolidation,
@@ -178,9 +179,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarSwipingTabs,
                 .toolbarTranslucency,
                 .toolbarMinimalAddressBar,
+                .toolbarMiddleButtonCustomization,
                 .tosFeature,
                 .touFeature,
                 .trackingProtectionRefactor,
+                .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,
                 .updatedPasswordManager,

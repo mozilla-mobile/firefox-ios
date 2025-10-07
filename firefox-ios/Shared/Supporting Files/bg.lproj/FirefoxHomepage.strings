@@ -1,0 +1,45 @@
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle.v140" = "Истории";
+
+/* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
+"FirefoxHome.ScreenTitle.v144" = "Страница";
+
+/* This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles. */
+"FirefoxHome.Stories.AllStoriesButtonTitle.v144" = "Всички истории";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.PopularTodaySectionTitle.v144" = "Популярни днес";
+
+/* This is the title of the Stories section on Firefox Homepage. */
+"FirefoxHome.Stories.SectionTitle.v140" = "Истории";
+
+/* This is the title that appears in the navigation bar for the Top Stories view, a screen that displays a collection of trending news articles */
+"FirefoxHome.Stories.TopStoriesViewTitle.v144" = "Популярни новини";
+
+/* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
+"FirefoxHomepage.FeltDeletion.Link.v122" = "Данните за частното сърфиране са изтрити";
+
+/* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. %@ is the app name (e.g. Firefox). */
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@ изтрива бисквитките, историята и данните от страниците, когато затворите всичките ви поверителни раздели.";
+
+/* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Кой би могъл да види моята дейност?";
+
+/* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Без никакви следи на устройството";
+
+/* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
+"FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "Търсете или въведете адрес";
+
+/* This is the navigation title for the Shortcuts Library view */
+"FirefoxHomepage.Shortcuts.Library.Title.v143" = "Бързи клавиши";
+
+/* Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website. */
+"FirefoxHomepage.Shortcuts.Pinned.AccessibilityLabel.v139" = "Фиксирана: %@";
+
+/* This is the section title for the Shortcuts section on Firefox Homepage. */
+"FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Бързи клавиши";
+
+/* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
+"FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ от %2$@";
+

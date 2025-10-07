@@ -40,6 +40,9 @@
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "ਰੱਦ ਕਰੋ";
 
+/* The label for the continue button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "ਜਾਰੀ ਰੱਖੋ";
+
 /* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
 "Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "ਸਫ਼ਿਆਂ ਦਾ ਸਾਰ ਤਿਆਰ ਕਰਨ ਅਤੇ ਉਸ ਸਾਰ ਨੂੰ ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਤੱਕ ਪਹੁੰਚਣ ਲਈ %@ ਕਲਾਉਡ ਅਧਾਰਿਤ AI ਨੂੰ ਵਰਤਦਾ ਹੈ।";
 
@@ -48,4 +51,13 @@
 
 /* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
 "Summarizer.ToS.Alert.Title.Label.v142" = "ਸਫ਼ਾ ਸਾਰ ਦੀ ਮਨਜ਼ੂਰੀ ਦੇਣੀ ਹੈ?";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ";
+
+/* The label for the accept button on the Terms of Service information panel in the summarizer. */
+"Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "ਜਾਰੀ ਰੱਖੋ";
+
+/* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
+"Summarizer.ToS.InfoPanel.Title.Label.v143" = "ਸਫ਼ੇ ਦਾ ਸਾਰ ਬਣਾਉਣਾ ਹੈ?";
 

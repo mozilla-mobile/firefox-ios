@@ -32,12 +32,12 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     func testSearchWordFromURLWhenUrlIsNilThenSearchWordIsNil() {
-        let viewModel = createSubject(withState: createBasicToolbarState())
+        let viewModel = createSubject(withState: createToolbarState())
         XCTAssertNil(viewModel.searchTermFromURL(nil))
     }
 
     func testSearchWordFromURLWhenUsingGoogleSearchThenSearchWordIsCorrect() {
-        let viewModel = createSubject(withState: createBasicToolbarState())
+        let viewModel = createSubject(withState: createToolbarState())
         let searchTerm = "test"
         let url = URL(string: "http://firefox.com/find?q=\(searchTerm)")
         let result = viewModel.searchTermFromURL(url)
@@ -45,14 +45,14 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     func testSearchWordFromURLWhenUsingInternalUrlThenSearchWordIsNil() {
-        let viewModel = createSubject(withState: createBasicToolbarState())
+        let viewModel = createSubject(withState: createToolbarState())
         let searchTerm = "test"
         let url = URL(string: "internal://local?q=\(searchTerm)")
         XCTAssertNil(viewModel.searchTermFromURL(url))
     }
 
     func testUsesDefaultSearchEngine_WhenNoSearchEngineSelected() {
-        let viewModel = createSubject(withState: createBasicToolbarState())
+        let viewModel = createSubject(withState: createToolbarState())
 
         guard let defaultEngine = searchEnginesManager.defaultEngine else {
             XCTFail("No default search engine")
@@ -78,7 +78,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     func testConfigureSkeletonAddressBar_withNilParameters() {
-        let model = createSubject(withState: createBasicToolbarState())
+        let model = createSubject(withState: createToolbarState())
         let config = model.configureSkeletonAddressBar(with: nil, isReaderModeAvailableOrActive: nil)
 
         XCTAssertTrue(config.leadingPageActions.isEmpty)
@@ -87,7 +87,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     func testConfigureSkeletonAddressBar_withNilURL_andReaderModeAvailable() {
-        let model = createSubject(withState: createBasicToolbarState())
+        let model = createSubject(withState: createToolbarState())
         let config = model.configureSkeletonAddressBar(with: nil, isReaderModeAvailableOrActive: true)
 
         XCTAssertTrue(config.leadingPageActions.isEmpty)
@@ -96,7 +96,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     func testConfigureSkeletonAddressBar_withURL_andReaderModeAvailable() {
-        let model = createSubject(withState: createBasicToolbarState())
+        let model = createSubject(withState: createToolbarState())
         let testURL = URL(string: "https://example.com")
         let config = model.configureSkeletonAddressBar(with: testURL, isReaderModeAvailableOrActive: true)
 
@@ -106,13 +106,58 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     func testConfigureSkeletonAddressBar_withURL_andReaderModeNotAvailable() {
-        let model = createSubject(withState: createBasicToolbarState())
+        let model = createSubject(withState: createToolbarState())
         let testURL = URL(string: "https://example.com")
         let config = model.configureSkeletonAddressBar(with: testURL, isReaderModeAvailableOrActive: false)
 
         XCTAssertEqual(config.leadingPageActions.count, 1)
         XCTAssertEqual(config.trailingPageActions.count, 1)
         XCTAssertEqual(config.locationViewConfiguration.url, testURL)
+    }
+
+    func testToolbarColor_withTopToolbar_andNavigationToolbar_andNoTopTabs_hasAlternativeColor() {
+        let viewModel = createSubject(withState: createToolbarState(isShowingTopTabs: false))
+        XCTAssertTrue(viewModel.hasAlternativeLocationColor)
+    }
+
+    func testToolbarColor_withTopToolbar_andNavigationToolbar_andTopTabs_hasNormalColor() {
+        let viewModel = createSubject(withState: createToolbarState())
+        XCTAssertFalse(viewModel.hasAlternativeLocationColor)
+    }
+
+    func testToolbarColor_withTopToolbar_andNoNavigationToolbar_andTopTabs_hasNormalColor() {
+        let viewModel = createSubject(withState: createToolbarState(isShowingNavigationToolbar: false))
+        XCTAssertFalse(viewModel.hasAlternativeLocationColor)
+    }
+
+    func testToolbarColor_withTopToolbar_andNoNavigationToolbar_andNoTopTabs_hasNormalColor() {
+        let viewModel = createSubject(withState: createToolbarState(isShowingNavigationToolbar: false,
+                                                                    isShowingTopTabs: false))
+        XCTAssertFalse(viewModel.hasAlternativeLocationColor)
+    }
+
+    func testToolbarColor_withBottomToolbar_andNavigationToolbar_andTopTabs_hasNormalColor() {
+        let viewModel = createSubject(withState: createToolbarState(toolbarPosition: .bottom))
+        XCTAssertFalse(viewModel.hasAlternativeLocationColor)
+    }
+
+    func testToolbarColor_withBottomToolbar_andNoNavigationToolbar_andTopTabs_hasNormalColor() {
+        let viewModel = createSubject(withState: createToolbarState(toolbarPosition: .bottom,
+                                                                    isShowingNavigationToolbar: false))
+        XCTAssertFalse(viewModel.hasAlternativeLocationColor)
+    }
+
+    func testToolbarColor_withBottomToolbar_andNoNavigationToolbar_andNoTopTabs_hasNormalColor() {
+        let viewModel = createSubject(withState: createToolbarState(toolbarPosition: .bottom,
+                                                                    isShowingNavigationToolbar: false,
+                                                                    isShowingTopTabs: false))
+        XCTAssertFalse(viewModel.hasAlternativeLocationColor)
+    }
+
+    func testToolbarColor_withBottomToolbar_andNavigationToolbar_andNoTopTabs_hasNormalColor() {
+        let viewModel = createSubject(withState: createToolbarState(toolbarPosition: .bottom,
+                                                                    isShowingTopTabs: false))
+        XCTAssertFalse(viewModel.hasAlternativeLocationColor)
     }
 
     // MARK: - Private helpers
@@ -147,18 +192,23 @@ final class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {
-        return NavigationBarState(windowUUID: windowUUID, actions: [], displayBorder: false)
+        return NavigationBarState(windowUUID: windowUUID,
+                                  actions: [],
+                                  displayBorder: false,
+                                  middleButton: .newTab)
     }
 
-    private func createBasicToolbarState() -> ToolbarState {
+    private func createToolbarState(toolbarPosition: AddressToolbarPosition = .top,
+                                    isShowingNavigationToolbar: Bool = true,
+                                    isShowingTopTabs: Bool = true) -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID,
-                            toolbarPosition: .top,
+                            toolbarPosition: toolbarPosition,
                             toolbarLayout: .version1,
                             isPrivateMode: false,
                             addressToolbar: createAddressBarState(withSearchEngine: nil),
                             navigationToolbar: createBasicNavigationBarState(),
-                            isShowingNavigationToolbar: true,
-                            isShowingTopTabs: true,
+                            isShowingNavigationToolbar: isShowingNavigationToolbar,
+                            isShowingTopTabs: isShowingTopTabs,
                             canGoBack: true,
                             canGoForward: true,
                             numberOfTabs: 1,

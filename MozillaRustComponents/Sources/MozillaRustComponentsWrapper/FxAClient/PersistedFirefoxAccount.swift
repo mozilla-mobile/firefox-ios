@@ -117,7 +117,7 @@ class PersistedFirefoxAccount {
         supportedCapabilities: [DeviceCapability]
     ) throws {
         defer { tryPersistState() }
-        try notifyAuthErrors {
+        _ = try notifyAuthErrors {
             try self.inner.initializeDevice(name: name,
                                             deviceType: deviceType,
                                             supportedCapabilities: supportedCapabilities)
@@ -144,7 +144,7 @@ class PersistedFirefoxAccount {
 
     func setDeviceName(_ name: String) throws {
         defer { tryPersistState() }
-        try notifyAuthErrors {
+        _ = try notifyAuthErrors {
             try self.inner.setDeviceName(displayName: name)
         }
     }
@@ -158,13 +158,13 @@ class PersistedFirefoxAccount {
 
     func ensureCapabilities(supportedCapabilities: [DeviceCapability]) throws {
         defer { tryPersistState() }
-        try notifyAuthErrors {
+        _ = try notifyAuthErrors {
             try self.inner.ensureCapabilities(supportedCapabilities: supportedCapabilities)
         }
     }
 
     func setDevicePushSubscription(sub: DevicePushSubscription) throws {
-        try notifyAuthErrors {
+        _ = try notifyAuthErrors {
             try self.inner.setPushSubscription(subscription: sub)
         }
     }

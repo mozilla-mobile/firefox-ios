@@ -41,7 +41,7 @@ terms_of_use:
       surface:
         type: string
         description: |
-          The surface where ToU was shown (e.g., bottom_sheet, onboarding).
+          The surface where ToU was shown (e.g. bottom_sheet, onboarding).
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12151
     data_reviews:
@@ -50,6 +50,7 @@ terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   accepted:
     type: event
     description: |
@@ -65,6 +66,7 @@ terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   remind_me_later_button_tapped:
     type: event
     description: |
@@ -79,6 +81,7 @@ terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   learn_more_button_tapped:
     type: event
     description: |
@@ -93,6 +96,7 @@ terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   privacy_notice_tapped:
     type: event
     description: |
@@ -107,6 +111,7 @@ terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   terms_of_use_link_tapped:
     type: event
     description: |
@@ -121,6 +126,7 @@ terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   dismissed:
     type: event
     description: |
@@ -140,7 +146,7 @@ terms_of_use:
 user.terms_of_use:
   version_accepted:
     type: quantity
-    description: >
+    description: |
       The version of the Terms of Use the user accepted.
       
       **Developer Note**: This replaces the old `termsofuse.version` metric.
@@ -157,14 +163,14 @@ user.terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   date_accepted:
     type: datetime
-    description: >
+    description: |
       The timestamp when the user accepted the Terms of Use.
       
       **Developer Note**: This replaces the old `termsofuse.date` metric.
     time_unit: millisecond
-    lifetime: application
     send_in_pings:
       - metrics
       - usage-reporting
@@ -176,13 +182,13 @@ user.terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   shown_count:
     type: counter
-    description: >
+    description: |
       Records the number of ToU impressions the user has had.
       
       **Developer Note**: This replaces the old `termsofuse.impression_count` metric.
-    lifetime: application
     send_in_pings:
       - metrics
     bugs:
@@ -192,13 +198,13 @@ user.terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   remind_me_later_count:
     type: counter
-    description: >
+    description: |
       Records the number of times a user taps "remind me later".
       
       **Developer Note**: This replaces the old `termsofuse.remind_me_later_count` metric.
-    lifetime: application
     send_in_pings:
       - metrics
     bugs:
@@ -208,13 +214,13 @@ user.terms_of_use:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    
   dismissed_count:
     type: counter
-    description: >
+    description: |
       Records the number of times a user taps to dismiss (does not include tapping accept or remind me later).
       
       **Developer Note**: This replaces the old `termsofuse.dismiss_count` metric.
-    lifetime: application
     send_in_pings:
       - metrics
     bugs:

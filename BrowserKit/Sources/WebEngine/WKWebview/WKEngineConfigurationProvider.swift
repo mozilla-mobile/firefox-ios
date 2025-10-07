@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 
+@MainActor
 public struct WKWebViewParameters {
     /// A boolean value customizable with a user preference indicating whether JavaScript can
     /// open windows without user interaction.

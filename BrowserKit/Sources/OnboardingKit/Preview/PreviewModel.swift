@@ -231,7 +231,9 @@ extension PreviewModel {
         themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.all,
-            onActionTap: { _, _, _ in },
+            skipText: "Skip",
+            onActionTap: { _, _, _ in
+            },
             onMultipleChoiceActionTap: { _, _ in },
             onComplete: { _ in }
         )

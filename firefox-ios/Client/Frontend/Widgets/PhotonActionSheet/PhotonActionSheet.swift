@@ -9,12 +9,15 @@ import Common
 
 extension PhotonActionSheet: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .ProfileDidFinishSyncing, .ProfileDidStartSyncing:
-            stopRotateSyncIcon()
-        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
-            reduceTransparencyChanged()
-        default: break
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case .ProfileDidFinishSyncing, .ProfileDidStartSyncing:
+                self.stopRotateSyncIcon()
+            case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+                self.reduceTransparencyChanged()
+            default: break
+            }
         }
     }
 }

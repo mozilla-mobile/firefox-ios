@@ -13,6 +13,7 @@ class DownloadHelper: NSObject {
     private let preflightResponse: URLResponse
     private let cookieStore: WKHTTPCookieStore
 
+    @MainActor
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
         tab.webView?.evaluateJavascriptInDefaultContentWorld(
@@ -59,6 +60,7 @@ class DownloadHelper: NSObject {
         return isAttachment
     }
 
+    @MainActor
     func downloadViewModel(windowUUID: WindowUUID,
                            okAction: @Sendable @MainActor @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
         var requestUrl = request.url

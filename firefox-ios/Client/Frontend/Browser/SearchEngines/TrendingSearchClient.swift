@@ -8,8 +8,13 @@ import Shared
 /// A protocol that defines a provider for fetching trending searches.
 /// Conforming types are responsible for supplying the URL endpoint
 /// used to fetch trending searches from a specific search engine.
-public protocol TrendingSearchEngine {
+public protocol TrendingSearchEngine: Sendable {
     func trendingURLForEngine() -> URL?
+}
+
+/// Abstraction for any search client that can return trending searches. Able to mock for testing.
+public protocol TrendingSearchClientProvider: Sendable {
+    func getTrendingSearches() async throws -> [String]
 }
 
 enum TrendingSearchClientError: Error {
@@ -22,30 +27,43 @@ enum TrendingSearchClientError: Error {
 /// This class uses a `TrendingSearchEngine` to provide the URL of the trending
 /// searches endpoint, fetches the data over the network, and parses it into
 /// a list of searches.
-final class TrendingSearchClient {
-    private let searchEngine: TrendingSearchEngine
+final class TrendingSearchClient: TrendingSearchClientProvider, Sendable {
+    private let searchEngine: TrendingSearchEngine?
     private let logger: Logger
-    private var urlSession: URLSession
+    private let urlSession: URLSession
+    private let nimbus: FxNimbus
 
-    init(searchEngine: TrendingSearchEngine,
-         logger: Logger = DefaultLogger.shared,
-         session: URLSession = makeURLSession(
-            userAgent: UserAgent.mobileUserAgent(),
+    private var maxCount: Int {
+        return nimbus.features.trendingSearchesFeature.value().maxSuggestions
+    }
+
+    init(
+        searchEngine: TrendingSearchEngine?,
+        logger: Logger = DefaultLogger.shared,
+        session: URLSession = makeURLSession(
+            userAgent: UserAgent
+                .mobileUserAgent(),
             configuration: URLSessionConfiguration.ephemeralMPTCP
-         )
+        ),
+        nimbus: FxNimbus = FxNimbus.shared
     ) {
         self.searchEngine = searchEngine
         self.logger = logger
         self.urlSession = session
+        self.nimbus = nimbus
     }
 
     func getTrendingSearches() async throws -> [String] {
         do {
-            guard let url = searchEngine.trendingURLForEngine() else { return [] }
+            // We expect some engines to not have a trending url,
+            // so return empty instead of always returning an error
+            guard let searchEngine, let url = searchEngine.trendingURLForEngine() else { return [] }
             let data = try await fetch(from: url)
 
+            // Due to how the response data is formatted, we use index of 1 to parse the list of searches from response data.
+            // Can test what the response is using `https://www.bing.com/osjson.aspx.`
             guard let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [Any],
-                  let suggestions = json[1] as? [String]
+                  let suggestions = json[safe: 1] as? [String]
             else {
                 logger.log("Response was not able to be parsed appropriately.",
                            level: .debug,
@@ -53,7 +71,7 @@ final class TrendingSearchClient {
                 throw TrendingSearchClientError.unableToParseJsonData
             }
 
-            return suggestions
+            return Array(suggestions.prefix(maxCount))
         } catch {
             throw error
         }

@@ -77,11 +77,13 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
     private var configuration: Configuration
     private let minWordsAcceptedToShow: Int
     private let minDelayToShowSummary: TimeInterval
+    private let trigger: SummarizerTrigger
     private var summarizeTask: Task<Void, Never>?
     private weak var tosAcceptor: SummarizeTermOfServiceAcceptor?
 
     public init(
         summarizerService: SummarizerService,
+        summarizerTrigger: SummarizerTrigger,
         tosAcceptor: SummarizeTermOfServiceAcceptor?,
         minWordsAcceptedToShow: Int? = nil,
         minDelayToShowSummary: TimeInterval? = nil,
@@ -92,6 +94,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
         self.minDelayToShowSummary = minDelayToShowSummary ?? Constants.summaryDelay
         self.minWordsAcceptedToShow = minWordsAcceptedToShow ?? Constants.minWordsAcceptedToShow
         self.configuration = Configuration(isTosConsentAccepted: isTosAcceppted)
+        self.trigger = summarizerTrigger
     }
 
     public func summarize(webView: WKWebView,
@@ -100,7 +103,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
                           onNewData: @escaping (Result<String, SummarizerError>) -> Void) {
         summarizeTask?.cancel()
         summarizeTask = Task {
-            guard configuration.isTosConsentAccepted else {
+            guard configuration.isTosConsentAccepted || trigger != .shakeGesture else {
                 await waitForUnblockSummarization()
                 onNewData(.failure(.tosConsentMissing))
                 return
@@ -137,6 +140,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
                 try Task.checkCancellation()
                 onNewData(.success(summaryWithNote))
             } catch {
+                await waitForUnblockSummarization()
                 handleSummarizationError(error: error, onError: onNewData)
             }
         }
