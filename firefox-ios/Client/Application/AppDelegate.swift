@@ -148,10 +148,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          */
         Task {
             await FeatureManagement.fetchConfiguration()
-            // Ecosia: Braze Service Initialization after feature flags are fetched
+            // Ecosia: Braze Service Initialization after feature flags are fetched for conditional initialization
             BrazeService.shared.initialize()
-            // Ecosia: Directly ask for consent
-            await APNConsent.requestIfNeeded()
             // Ecosia: Lifecycle tracking. Needs to happen after Unleash start so that the flags are correctly added to the analytics context.
             Analytics.shared.activity(.launch)
         }

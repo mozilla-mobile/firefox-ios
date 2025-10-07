@@ -7,13 +7,8 @@ import Foundation
 public struct APNConsent {
     private init() {}
 
-    private static var isEnabled: Bool {
-        // Depends on Braze Integration being enabled
-        BrazeIntegrationExperiment.isEnabled
-    }
-
     public static func requestIfNeeded() async {
-        guard isEnabled, BrazeService.shared.notificationAuthorizationStatus == .notDetermined else {
+        guard BrazeService.shared.notificationAuthorizationStatus == .notDetermined else {
             return
         }
         Analytics.shared.apnConsent(.view)

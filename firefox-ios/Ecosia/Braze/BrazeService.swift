@@ -40,6 +40,7 @@ public final class BrazeService: NSObject {
             try initBraze(userId: userId)
             Task {
                 await refreshAPNRegistrationIfNeeded()
+                await APNConsent.requestIfNeeded()
             }
         } catch {
             debugPrint(error)
