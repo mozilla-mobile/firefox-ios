@@ -57,6 +57,7 @@ struct DefaultRecentSearchProvider: RecentSearchProvider {
     /// Only care about returning the `maxNumberOfSuggestions`.
     /// We don't have an interface to fetch only a certain amount, so we follow what Android does for now.
     func loadRecentSearches(completion: @escaping ([String]) -> Void) {
+      // TODO: FXIOS-13782 Use get_most_recent method to fetch history
       historyStorage.getHistoryMetadataSince(since: Int64.min) { result in
           if case .success(let historyMetadata) = result {
               let searches = historyMetadata.compactMap { $0.searchTerm }
