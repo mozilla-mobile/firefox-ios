@@ -215,7 +215,7 @@ class WebContextMenuActionsProvider {
                        error == nil {
                         pasteboard.addImageWithData(imageData, forURL: url)
                     }
-  
+
                     application.endBackgroundTask(self.taskId)
                 }
             }.resume()

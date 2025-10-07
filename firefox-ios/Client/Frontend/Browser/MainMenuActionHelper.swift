@@ -146,6 +146,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     // MARK: - Update data
 
     private let dataQueue = DispatchQueue(label: "com.moz.mainMenuAction.queue")
+    // TODO: FXIOS-13791 These properties need to be noniolsated because this work is put on its own queue
     private nonisolated(unsafe) var isInReadingList = false
     private nonisolated(unsafe) var isBookmarked = false
     private nonisolated(unsafe) var isPinned = false
