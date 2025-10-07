@@ -188,6 +188,7 @@
         "CreditCardsTests\/testVerifyThatTheEditedCreditCardIsSaved()",
         "CronTabsPerformanceTest",
         "DataManagementTests\/testFilterWebsiteData()",
+        "DataManagementTests\/testWebSiteDataEnterFirstTime_TAE()",
         "DataManagementTests\/testWebSiteDataOptions()",
         "DatabaseFixtureTest",
         "DesktopModeTestsIphone\/testClearPrivateData()",
