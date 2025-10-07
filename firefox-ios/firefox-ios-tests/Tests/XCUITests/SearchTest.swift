@@ -405,8 +405,7 @@ class SearchTests: FeatureFlaggedTestBase {
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
         // Delete the text and type "g"
-        app.textFields.firstMatch.waitAndTap()
-        app.buttons["Clear text"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the text letter "g"
@@ -427,6 +426,7 @@ class SearchTests: FeatureFlaggedTestBase {
         // Enable "Show search suggestions" from Settings and type text in a new tab
         app.tables.cells.firstMatch.waitAndTap()
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: true)
 
         // Search suggestions are displayed
@@ -486,7 +486,8 @@ class SearchTests: FeatureFlaggedTestBase {
     private func createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: Bool) {
         navigator.goto(SearchSettings)
         turnOnOffSearchSuggestions(turnOnSwitch: turnOnSwitch)
-        navigator.goto(NewTabScreen)
+        navigator.nowAt(SearchSettings)
+        navigator.goto(BrowserTab)
         navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
     }
