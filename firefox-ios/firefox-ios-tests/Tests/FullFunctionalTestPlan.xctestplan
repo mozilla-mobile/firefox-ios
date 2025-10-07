@@ -121,6 +121,7 @@
         "CreditCardsTests\/testEditSavedCardsUI()",
         "CronTabsPerformanceTest",
         "DataManagementTests\/testWebSiteDataEnterFirstTime()",
+        "DataManagementTests\/testWebSiteDataEnterFirstTime_TAE()",
         "DatabaseFixtureTest\/testPerBookmarks1000openMenu()",
         "DatabaseFixtureTest\/testPerBookmarks1000startUp()",
         "DatabaseFixtureTest\/testPerfHistory4000openMenu()",
