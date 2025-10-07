@@ -317,6 +317,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
+    - deploy-to-bitrise-io@2.10.0: {}
 
   run_firefox_ui_tests:
     before_run:
