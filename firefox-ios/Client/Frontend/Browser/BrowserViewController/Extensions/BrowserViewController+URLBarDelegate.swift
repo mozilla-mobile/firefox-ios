@@ -158,10 +158,14 @@ extension BrowserViewController: URLBarDelegate {
 
         finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
 
+        dispatchSubmitSearchTermAction(with: searchURL, searchTerm: text)
+    }
+
+    private func dispatchSubmitSearchTermAction(with searchURL: URL, searchTerm: String) {
         guard isRecentSearchEnabled else { return }
         let action = ToolbarAction(
             url: searchURL,
-            searchTerm: text,
+            searchTerm: searchTerm,
             windowUUID: windowUUID,
             actionType: ToolbarActionType.didSubmitSearchTerm
         )
