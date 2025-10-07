@@ -175,4 +175,25 @@ class A11yOnboardingTests: BaseTestCase {
         // Generate Report
         A11yUtils.generateAndAttachReport(missingLabels: missingLabels, testName: sanitizedTestName, generateCsv: false)
     }
+
+    private func checkMissingLabels(missingLabels: inout [A11yUtils.MissingAccessibilityElement]) {
+        A11yUtils.checkMissingLabels(
+            in: app.buttons.allElementsBoundByIndex,
+            screenName: "Onboarding \(rootA11yId) Screen",
+            missingLabels: &missingLabels,
+            elementType: "Button"
+        )
+        A11yUtils.checkMissingLabels(
+            in: app.images.allElementsBoundByIndex,
+            screenName: "Onboarding \(rootA11yId) Screen",
+            missingLabels: &missingLabels,
+            elementType: "Image"
+        )
+        A11yUtils.checkMissingLabels(
+            in: app.staticTexts.allElementsBoundByIndex,
+            screenName: "Onboarding \(rootA11yId) Screen",
+            missingLabels: &missingLabels,
+            elementType: "StaticText"
+        )
+    }
 }
