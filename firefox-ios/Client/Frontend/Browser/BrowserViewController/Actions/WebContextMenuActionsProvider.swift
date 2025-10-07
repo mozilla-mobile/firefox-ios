@@ -8,6 +8,7 @@ import Photos
 import Shared
 import Storage
 
+@MainActor
 class WebContextMenuActionsProvider {
     enum MenuType {
         case web
@@ -26,6 +27,7 @@ class WebContextMenuActionsProvider {
         return actions
     }
 
+    @MainActor
     func addOpenInNewTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void) {
         actions.append(
             UIAction(
@@ -38,6 +40,7 @@ class WebContextMenuActionsProvider {
             })
     }
 
+    @MainActor
     func addOpenInNewPrivateTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void) {
         actions.append(
             UIAction(
@@ -50,6 +53,7 @@ class WebContextMenuActionsProvider {
             })
     }
 
+    @MainActor
     func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?, Site?) -> Void) {
         actions.append(
             UIAction(
@@ -64,6 +68,7 @@ class WebContextMenuActionsProvider {
         )
     }
 
+    @MainActor
     func addRemoveBookmarkLink(
         urlString: String,
         title: String?,
@@ -85,6 +90,7 @@ class WebContextMenuActionsProvider {
         )
     }
 
+    @MainActor
     func addDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void) {
         actions.append(UIAction(
             title: .ContextMenuDownloadLink,
@@ -108,6 +114,7 @@ class WebContextMenuActionsProvider {
         })
     }
 
+    @MainActor
     func addCopyLink(url: URL) {
         actions.append(UIAction(
             title: .ContextMenuCopyLink,
@@ -151,9 +158,10 @@ class WebContextMenuActionsProvider {
         })
     }
 
+    @MainActor
     func addSaveImage(url: URL,
                       getImageData: @escaping (URL, @Sendable @escaping (Data) -> Void) -> Void,
-                      writeToPhotoAlbum: @escaping (UIImage) -> Void) {
+                      writeToPhotoAlbum: @Sendable @escaping (UIImage) -> Void) {
         actions.append(UIAction(
             title: .ContextMenuSaveImage,
             identifier: UIAction.Identifier("linkContextMenu.saveImage")
@@ -173,6 +181,7 @@ class WebContextMenuActionsProvider {
         })
     }
 
+    @MainActor
     func addCopyImage(url: URL) {
         actions.append(UIAction(
             title: .ContextMenuCopyImage,
@@ -192,26 +201,29 @@ class WebContextMenuActionsProvider {
                 userAgent: UserAgent.fxaUserAgent,
                 configuration: URLSessionConfiguration.defaultMPTCP
             ).dataTask(with: url) { (data, response, error) in
-                guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
+                ensureMainThread {
+                    guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
+                        application.endBackgroundTask(self.taskId)
+                        return
+                    }
+
+                    // Only set the image onto the pasteboard if the pasteboard hasn't changed since
+                    // fetching the image; otherwise, in low-bandwidth situations,
+                    // we might be overwriting something that the user has subsequently added.
+                    if changeCount == pasteboard.changeCount,
+                       let imageData = data,
+                       error == nil {
+                        pasteboard.addImageWithData(imageData, forURL: url)
+                    }
+  
                     application.endBackgroundTask(self.taskId)
-                    return
                 }
-
-                // Only set the image onto the pasteboard if the pasteboard hasn't changed since
-                // fetching the image; otherwise, in low-bandwidth situations,
-                // we might be overwriting something that the user has subsequently added.
-                if changeCount == pasteboard.changeCount,
-                   let imageData = data,
-                   error == nil {
-                    pasteboard.addImageWithData(imageData, forURL: url)
-                }
-
-                application.endBackgroundTask(self.taskId)
             }.resume()
             self.recordOptionSelectedTelemetry(option: .copyImage)
         })
     }
 
+    @MainActor
     func addCopyImageLink(url: URL) {
         actions.append(UIAction(
             title: .ContextMenuCopyImageLink,
