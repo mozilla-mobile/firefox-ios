@@ -80,24 +80,7 @@ class A11yOnboardingTests: BaseTestCase {
         currentScreen += 1
         mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         try app.performAccessibilityAudit()
-        A11yUtils.checkMissingLabels(
-            in: app.buttons.allElementsBoundByIndex,
-            screenName: "Onboarding \(rootA11yId) Screen",
-            missingLabels: &missingLabels,
-            elementType: "Button"
-        )
-        A11yUtils.checkMissingLabels(
-            in: app.images.allElementsBoundByIndex,
-            screenName: "Onboarding \(rootA11yId) Screen",
-            missingLabels: &missingLabels,
-            elementType: "Image"
-        )
-        A11yUtils.checkMissingLabels(
-            in: app.staticTexts.allElementsBoundByIndex,
-            screenName: "Onboarding \(rootA11yId) Screen",
-            missingLabels: &missingLabels,
-            elementType: "StaticText"
-        )
+        checkMissingLabels(missingLabels: &missingLabels)
 
         // Finish onboarding
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
