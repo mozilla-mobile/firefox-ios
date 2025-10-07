@@ -484,6 +484,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     private func createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: Bool) {
+        navigator.nowAt(BrowserTab)
         navigator.goto(SearchSettings)
         turnOnOffSearchSuggestions(turnOnSwitch: turnOnSwitch)
         navigator.nowAt(SearchSettings)
