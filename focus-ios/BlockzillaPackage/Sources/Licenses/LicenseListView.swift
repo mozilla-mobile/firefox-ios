@@ -26,8 +26,8 @@ public struct LicenseListView: View {
 
 public extension LicenseListView {
     init() {
-        let focusLicense = licenseList(for: "focus-ios")
-        let libraries = licenseList(for: "license-list")
+        let focusLicense = LicenseManager.licenseList(for: "focus-ios")
+        let libraries = LicenseManager.licenseList(for: "license-list")
         self.libraries = focusLicense + libraries
     }
 }
@@ -42,13 +42,15 @@ struct LicenseListView_Previews: PreviewProvider {
 }
 
 // MARK: - Private
-private func licenseList(for resource: String) -> [Library] {
-    guard let url = Bundle.module.url(forResource: resource, withExtension: "plist") else { return [] }
-    return (try? decodePropertyList(LicenseList.self, from: url).libraries) ?? []
-}
+private enum LicenseManager {
+    static func licenseList(for resource: String) -> [Library] {
+        guard let url = Bundle.module.url(forResource: resource, withExtension: "plist") else { return [] }
+        return (try? decodePropertyList(LicenseList.self, from: url).libraries) ?? []
+    }
 
-private func decodePropertyList<T: Decodable>(_ type: T.Type, from url: URL) throws -> T {
-    let data = try Data(contentsOf: url)
-    let decoder = PropertyListDecoder()
-    return try decoder.decode(type.self, from: data)
+    private static func decodePropertyList<T: Decodable>(_ type: T.Type, from url: URL) throws -> T {
+        let data = try Data(contentsOf: url)
+        let decoder = PropertyListDecoder()
+        return try decoder.decode(type.self, from: data)
+    }
 }
