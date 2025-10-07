@@ -7593,6 +7593,36 @@ extension String {
                 comment: "On the main menu, a title for a label that indicate the current option/action state is off.")
         }
         struct v142 {
+            public static let ToSAlertCancelButtonLabel = MZLocalizedString(
+               key: "Summarizer.ToS.Alert.CancelButton.Label.v142",
+               tableName: "Summarizer",
+               value: "Cancel",
+               comment: "The label for the cancel button on the Terms of Service alert for the summarizer."
+           )
+           public static let ToSAlertLinkButtonLabel = MZLocalizedString(
+               key: "Summarizer.ToS.Alert.LearnMoreButton.Label.v142",
+               tableName: "Summarizer",
+               value: "Learn more",
+               comment: "The label for the learn more link button on the Terms of Service alert for the summarizer."
+           )
+            public static let ToSAlertMessageFirefoxLabel = MZLocalizedString(
+                key: "Summarizer.ToS.Alert.FirefoxMessage.Label.v144",
+                tableName: "Summarizer",
+                value: "%@ uses cloud-based AI to summarize pages, and returns those summaries to your device.",
+                comment: "The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox)."
+            )
+            public static let ToSAlertMessageAppleLabel = MZLocalizedString(
+                key: "Summarizer.ToS.Alert.AppleMessage.Label.v142",
+                tableName: "Summarizer",
+                value: "%@ uses Apple Intelligence to summarize pages.",
+                comment: "The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox)."
+            )
+            public static let ToSAlertTitleLabel = MZLocalizedString(
+                key: "Summarizer.ToS.Alert.Title.Label.v142",
+                tableName: "Summarizer",
+                value: "Allow Page Summaries?",
+                comment: "The title for the Terms of Service alert that asks the user if they want to allow page summaries."
+            )
             public static let LegacyBookmarksFolderTitleMobile = MZLocalizedString(
                 key: "Mobile Bookmarks",
                 tableName: "Storage",
