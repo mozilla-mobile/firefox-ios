@@ -42,6 +42,9 @@ final class PrivacyPreferencesViewController: UIViewController,
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.setTitle(.SettingsSearchDoneButton, for: .normal)
         button.setContentHuggingPriority(.required, for: .horizontal)
+        if #available(iOS 26.0, *) {
+            button.configuration = .glass()
+        }
     }
 
     private lazy var contentScrollView: UIScrollView = .build()
