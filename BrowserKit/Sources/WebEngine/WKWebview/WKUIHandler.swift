@@ -80,7 +80,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
     private let sessionDependencies: EngineSessionDependencies
     private let application: Application
     private let policyDecider: WKPolicyDecider
-    private let alertFactory: WKJavaScriptAlertInfoFactory
+    private let alertFactory: WKJavaScriptAlertInfoFactory?
     private let alertPresenter: AlertPresenter
     private let logger: Logger
 
@@ -88,8 +88,8 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
     @MainActor
     public static func factory(
         sessionDependencies: EngineSessionDependencies,
-        alertFactory: WKJavaScriptAlertInfoFactory,
-        alertPresenter: AlertPresenter,
+        alertFactory: WKJavaScriptAlertInfoFactory? = nil,
+        alertPresenter: AlertPresenter = AlertPresenter(presenter: nil),
         sessionCreator: SessionCreator? = nil
     ) -> DefaultUIHandler {
         let policyDecider = WKPolicyDeciderFactory()
@@ -106,7 +106,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
 
     init(sessionDependencies: EngineSessionDependencies,
          sessionCreator: SessionCreator?,
-         alertFactory: WKJavaScriptAlertInfoFactory,
+         alertFactory: WKJavaScriptAlertInfoFactory? = nil,
          alertPresenter: AlertPresenter,
          application: Application,
          policyDecider: WKPolicyDecider,
@@ -156,6 +156,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor () -> Void
     ) {
+        guard let alertFactory else { return }
         let alert = alertFactory.makeMessageAlert(message: message, frame: frame, completion: completionHandler)
         handleJavaScriptAlert(alert, for: webView) {
             completionHandler()
@@ -168,6 +169,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (Bool) -> Void
     ) {
+        guard let alertFactory else { return }
         let alert = alertFactory.makeConfirmationAlert(message: message, frame: frame) { confirm in
             self.logger.log("JavaScript confirm panel was completed with result: \(confirm)", level: .info, category: .webview)
             completionHandler(confirm)
@@ -184,6 +186,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (String?) -> Void
     ) {
+        guard let alertFactory else { return }
         let alert = alertFactory.makeTextInputAlert(message: prompt, frame: frame, defaultText: defaultText) { input in
             self.logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
             completionHandler(input)
