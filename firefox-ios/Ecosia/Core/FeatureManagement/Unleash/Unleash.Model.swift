@@ -20,7 +20,6 @@ extension Unleash {
 
     public struct Toggle: Codable, Hashable {
         public enum Name: String {
-            case apnConsent = "mob_ios_apn_consent_on_launch_rollout"
             case brazeIntegration = "mob_ios_braze_integration"
             case configTest = "mob_ios_staging_config"
             case seedCounterNTP = "mob_ios_seed_counter_ntp"

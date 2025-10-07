@@ -8,6 +8,10 @@ import UserNotifications
 import BrazeKit
 import BrazeUI
 
+public protocol BrazeBrowserDelegate: AnyObject {
+    func openBrazeURLInNewTab(_ url: URL?)
+}
+
 public final class BrazeService: NSObject {
     override private init() {}
 
@@ -18,6 +22,7 @@ public final class BrazeService: NSObject {
     private(set) var notificationAuthorizationStatus: UNAuthorizationStatus?
     private static var apiKey = EnvironmentFetcher.valueFromMainBundleOrProcessInfo(forKey: "BRAZE_API_KEY") ?? ""
     public static let shared = BrazeService()
+    public weak var browserDelegate: BrazeBrowserDelegate?
 
     enum Error: Swift.Error {
         case invalidConfiguration
@@ -28,10 +33,14 @@ public final class BrazeService: NSObject {
         case empty = ""
     }
 
-    public func initialize() async {
+    public func initialize() {
+        guard BrazeIntegrationExperiment.isEnabled else { return }
+
         do {
-            try await initBraze(userId: userId)
-            await refreshAPNRegistrationIfNeeded()
+            try initBraze(userId: userId)
+            Task {
+                await refreshAPNRegistrationIfNeeded()
+            }
         } catch {
             debugPrint(error)
         }
@@ -39,9 +48,7 @@ public final class BrazeService: NSObject {
 
     public func registerDeviceToken(_ deviceToken: Data) {
         braze?.notifications.register(deviceToken: deviceToken)
-        Task.detached(priority: .medium) { [weak self] in
-            await self?.updateID(self?.userId)
-        }
+        updateID(userId)
     }
 
     public func logCustomEvent(_ event: CustomEvent) {
@@ -72,15 +79,23 @@ public final class BrazeService: NSObject {
 extension BrazeService {
     // MARK: - Init Braze
 
-    @MainActor
     private func initBraze(userId: String) throws {
-        self.braze = Braze(configuration: try getBrazeConfiguration())
-        let inAppMessageUI = BrazeInAppMessageUI()
-        inAppMessageUI.delegate = self
-        self.braze?.inAppMessagePresenter = inAppMessageUI
-        Task.detached(priority: .medium) { [weak self] in
-            await self?.updateID(self?.userId)
+        braze = Braze(configuration: try getBrazeConfiguration())
+        braze?.delegate = self
+        Task { @MainActor in
+            let inAppMessageUI = BrazeInAppMessageUI()
+            inAppMessageUI.delegate = self
+            braze?.inAppMessagePresenter = inAppMessageUI
         }
+        updateID(userId)
+    }
+}
+
+extension BrazeService {
+    // MARK: - Braze proxy function
+
+    public static func prepareForDelayedInitialization() {
+        Braze.prepareForDelayedInitialization()
     }
 }
 
@@ -104,12 +119,12 @@ extension BrazeService {
 extension BrazeService {
     // MARK: - ID Update
 
-    private func updateID(_ id: String?) async {
+    private func updateID(_ id: String?) {
         guard let id else { return }
         #if MOZ_CHANNEL_FENNEC
         print("📣🆔 Braze Identifier Updating To: \(id)")
         #endif
-        let brazeID = await braze?.user.id()
+        let brazeID = braze?.user.id
         guard id != brazeID else { return }
         braze?.changeUser(userId: id)
     }
@@ -156,6 +171,26 @@ extension BrazeService: BrazeInAppMessageUIDelegate {
     public func inAppMessage(_ ui: BrazeInAppMessageUI, shouldProcess clickAction: Braze.InAppMessage.ClickAction, buttonId: String?, message: Braze.InAppMessage, view: any InAppMessageView) -> Bool {
         Analytics.shared.brazeIAM(action: .click, messageOrButtonId: buttonId)
         return true
+    }
+}
+
+extension BrazeService: BrazeDelegate {
+    public func braze(_ braze: Braze, shouldOpenURL context: Braze.URLContext) -> Bool {
+        let isInternal: Bool = {
+            let contextUrl = context.url
+            let rootUrl = Environment.current.urlProvider.root
+            if #available(iOS 16.0, *) {
+                return contextUrl.host() == rootUrl.host()
+            } else {
+                return contextUrl.host == rootUrl.host
+            }
+        }()
+
+        // Braze should handle external URLs (or as a fallback with no delegate)
+        guard isInternal, let browserDelegate = self.browserDelegate else { return true }
+
+        browserDelegate.openBrazeURLInNewTab(context.url)
+        return false
     }
 }
 

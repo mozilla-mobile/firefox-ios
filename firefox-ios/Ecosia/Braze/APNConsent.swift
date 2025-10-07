@@ -7,13 +7,9 @@ import Foundation
 public struct APNConsent {
     private init() {}
 
-    private static var toggleName: Unleash.Toggle.Name {
-        .apnConsent
-    }
-
     private static var isEnabled: Bool {
-        // Depends on Braze Integration being enabled - we should make sure targets on Unleash match
-        Unleash.isEnabled(toggleName) && BrazeIntegrationExperiment.isEnabled
+        // Depends on Braze Integration being enabled
+        BrazeIntegrationExperiment.isEnabled
     }
 
     public static func requestIfNeeded() async {

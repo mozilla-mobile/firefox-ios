@@ -265,16 +265,6 @@ final class UnleashBrazeIntegrationSetting: UnleashVariantResetSetting {
     }
 }
 
-final class UnleashAPNConsent: UnleashVariantResetSetting {
-    override var titleName: String? {
-        "APN Consent Feature Rollout"
-    }
-
-    override var variant: Unleash.Variant? {
-        Unleash.getVariant(.apnConsent)
-    }
-}
-
 final class UnleashNativeSRPVAnalyticsSetting: UnleashVariantResetSetting {
     override var titleName: String? {
         "Native SRPV Analytics"

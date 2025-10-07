@@ -130,6 +130,9 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
                                                     screenshotService: screenshotService,
                                                     tabManager: tabManager)
 
+        // Ecosia: Set BrowserCoordinator as Braze's browserDelegate to handle push urls
+        BrazeService.shared.browserDelegate = browserCoordinator
+
         let windowInfo = AppWindowInfo(tabManager: tabManager, sceneCoordinator: self)
         windowManager.newBrowserWindowConfigured(windowInfo, uuid: windowUUID)
 

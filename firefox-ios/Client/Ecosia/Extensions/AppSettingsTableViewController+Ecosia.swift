@@ -162,7 +162,6 @@ extension AppSettingsTableViewController {
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             UnleashSeedCounterNTPSetting(settings: self),
             UnleashBrazeIntegrationSetting(settings: self),
-            UnleashAPNConsent(settings: self),
             UnleashNativeSRPVAnalyticsSetting(settings: self),
             UnleashAISearchMVPSetting(settings: self),
             UnleashIdentifierSetting(settings: self),
