@@ -43,6 +43,31 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3090298
+    func testSwitchFromTopToBottomToolbarShowsExpectedBehavior_homepageSearchBarExperimentOff() throws {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else {
+            throw XCTSkip("Not supported on iPad")
+        }
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(ToolbarSettings)
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+
+        navigator.goto(ToolbarSettings)
+        navigator.performAction(Action.SelectToolbarTop)
+        navigator.goto(HomePanelsScreen)
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/3090299
     func testSwitchFromBottomToTopToolbarShowsExpectedBehavior_homepageSearchBarExperimentOn() throws {
         app.launch()
@@ -90,6 +115,30 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
 
         mozWaitForElementToExist(homepageSearchBar)
         mozWaitForElementToNotExist(app.textFields[searchTextFieldA11y])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3090300
+    func testFromPortraitToLandscapeShowsOnlyInPortrait_homepageSearchBarExperimentOff() throws {
+        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
+        app.launch()
+        guard !iPad() else {
+            throw XCTSkip("Not supported on iPad")
+        }
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Test not supported on iOS versions prior to iOS 17")
+        }
+
+        let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+
+        XCUIDevice.shared.orientation = .landscapeLeft
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
+
+        XCUIDevice.shared.orientation = .portrait
+
+        mozWaitForElementToNotExist(homepageSearchBar)
+        mozWaitForElementToExist(app.textFields[searchTextFieldA11y])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3090301
