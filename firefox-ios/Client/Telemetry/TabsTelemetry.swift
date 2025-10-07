@@ -17,12 +17,12 @@ final class TabsTelemetry {
     }
 
     func startTabSwitchMeasurement() {
-        tabSwitchTimerId = GleanMetrics.Tabs.tabSwitch.start()
+        tabSwitchTimerId = gleanWrapper.startTiming(for: GleanMetrics.Tabs.tabSwitch)
     }
 
     func stopTabSwitchMeasurement() {
         guard let timerId = tabSwitchTimerId else { return }
-        GleanMetrics.Tabs.tabSwitch.stopAndAccumulate(timerId)
+        gleanWrapper.stopAndAccumulateTiming(for: GleanMetrics.Tabs.tabSwitch, timerId: timerId)
         tabSwitchTimerId = nil
     }
 
