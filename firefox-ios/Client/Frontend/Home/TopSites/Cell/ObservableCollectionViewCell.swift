@@ -5,85 +5,92 @@
 import UIKit
 
 class ObservableCollectionViewCell: UICollectionViewCell {
+    // MARK: Public config
     var visibilityDebugLabel = ""
-    var isVisibilityMonitoringEnabled = false
-    var visibilityThreshold: CGFloat = 0.5
+    var isVisibilityMonitoringEnabled = false {
+        didSet {
+            if isVisibilityMonitoringEnabled {
+                startObservingIfNeeded()
+                checkVisibility()
+            } else {
+                stopObserving()
+                resetVisibilityState()
+                stopDwellTimer()
+            }
+        }
+    }
+    var visibilityFractionThreshold: CGFloat = 0.5
     var onBecomeVisible: ((ObservableCollectionViewCell) -> Void)?
+    var dwellThresholdSeconds: TimeInterval = 1.0
+    var onDwellMet: ((ObservableCollectionViewCell) -> Void)?
 
-    var isVisible: Bool { visibleAreaFraction >= visibilityThreshold }
-
-    private var observedScrollViews: Set<UIScrollView> = []
+    // MARK: Visibility state
+    var isVisible: Bool { visibleAreaFraction >= visibilityFractionThreshold }
     private var wasPreviouslyVisible = false
 
+    // MARK: Dwell state
+    private var dwellTimer: Timer?
+    private var dwellFiredForThisLifetime = false
+
+    // MARK: KVO / ancestry
+    private var observedScrollViews: Set<UIScrollView> = []
+
     private var visibleAreaFraction: CGFloat {
-        guard let window = window, !isHidden, alpha > 0.01, !bounds.isEmpty
-        else { return 0 }
-
-        var visibleRect = convert(bounds, to: window)
-        visibleRect = visibleRect.intersection(window.bounds)
-        if visibleRect.isNull { return 0 }
-
-        var ancestor = superview
-        while let a = ancestor, a !== window {
-            if a.clipsToBounds {
-                let clip = a.convert(a.bounds, to: window)
-                visibleRect = visibleRect.intersection(clip)
-                if visibleRect.isNull { return 0 }
+        guard let window = window, !isHidden, alpha > 0.01, !bounds.isEmpty else { return 0 }
+        var rect = convert(bounds, to: window).intersection(window.bounds)
+        if rect.isNull { return 0 }
+        var a = superview
+        while let s = a, s !== window {
+            if s.clipsToBounds {
+                rect = rect.intersection(s.convert(s.bounds, to: window))
+                if rect.isNull { return 0 }
             }
-            ancestor = a.superview
+            a = s.superview
         }
-        let visibleArea = visibleRect.width * visibleRect.height
-        let totalArea = bounds.width * bounds.height
-        guard totalArea > 0 else { return 0 }
-        return max(0, min(1, visibleArea / totalArea))
+        let total = bounds.width * bounds.height
+        guard total > 0 else { return 0 }
+        return max(0, min(1, (rect.width * rect.height) / total))
     }
 
     private var scrollViews: [UIScrollView] {
-        let superviews = Array(
-            sequence(first: superview, next: { $0?.superview })
-        )
-        return superviews.filter({ $0 is UIScrollView }) as? [UIScrollView]
-            ?? []
+        let chain = sequence(first: superview, next: { $0?.superview })
+        return Array(chain).compactMap { $0 as? UIScrollView }
     }
 
+    // MARK: Lifecycle
     override func prepareForReuse() {
-        for observedScrollView in observedScrollViews {
-            observedScrollView.removeObserver(self, forKeyPath: "contentOffset")
-        }
-
-        observedScrollViews.removeAll()
-
+        stopObserving()
+        resetVisibilityState()
+        stopDwellTimer()
         super.prepareForReuse()
     }
 
+    private func resetVisibilityState() {
+        wasPreviouslyVisible = false
+        dwellFiredForThisLifetime = false
+    }
+
     override func layoutSubviews() {
-        for scrollView in scrollViews {
-            if !observedScrollViews.contains(scrollView)
-                && isVisibilityMonitoringEnabled {
-                scrollView.addObserver(
-                    self,
-                    forKeyPath: "contentOffset",
-                    context: nil
-                )
-                observedScrollViews.insert(scrollView)
-            }
+        if isVisibilityMonitoringEnabled {
+            startObservingIfNeeded()
+            checkVisibility()
         }
-
-        checkVisibility()
-
         super.layoutSubviews()
     }
 
-    private func checkVisibility() {
-        if wasPreviouslyVisible != isVisible {
-            print(
-                "isVisible",
-                visibilityDebugLabel,
-                isVisible,
-                visibleAreaFraction
-            )
-            onBecomeVisible?(self)
-            wasPreviouslyVisible = isVisible
+    override func willMove(toWindow newWindow: UIWindow?) {
+        // If the cell leaves te screen without prepareForReuse() being called we want to make sure we stop the timer
+        if newWindow == nil {
+            stopDwellTimer()
+        }
+        super.willMove(toWindow: newWindow)
+    }
+
+    // MARK: Observing Logic
+    private func startObservingIfNeeded() {
+        for sv in scrollViews where !observedScrollViews.contains(sv) && isVisibilityMonitoringEnabled {
+            sv.addObserver(self, forKeyPath: "contentOffset", context: nil)
+            observedScrollViews.insert(sv)
         }
     }
 
@@ -94,12 +101,51 @@ class ObservableCollectionViewCell: UICollectionViewCell {
         observedScrollViews.removeAll()
     }
 
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey: Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+                               change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        guard isVisibilityMonitoringEnabled, keyPath == "contentOffset" else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            return
+        }
         checkVisibility()
+    }
+
+    private func checkVisibility() {
+        let nowVisible = isVisible
+
+        // Cell coming into view (not visible -> visible)
+        if !wasPreviouslyVisible && nowVisible {
+            onBecomeVisible?(self)
+            startDwellTimerIfNeeded()
+        }
+
+        // Cell leaving view (visible -> not visible)
+        if wasPreviouslyVisible && !nowVisible {
+            stopDwellTimer()
+        }
+
+        wasPreviouslyVisible = nowVisible
+    }
+
+    // MARK: Dwell timer
+    private func startDwellTimerIfNeeded() {
+        guard dwellTimer == nil, !dwellFiredForThisLifetime else { return }
+        let t = Timer(timeInterval: dwellThresholdSeconds, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
+            // Ensure still visible above threshold
+            if self.isVisible && !self.dwellFiredForThisLifetime {
+                self.dwellFiredForThisLifetime = true
+                self.onDwellMet?(self)
+            }
+            self.stopDwellTimer()
+        }
+        t.tolerance = dwellThresholdSeconds * 0.1
+        RunLoop.main.add(t, forMode: .common)
+        dwellTimer = t
+    }
+
+    private func stopDwellTimer() {
+        dwellTimer?.invalidate()
+        dwellTimer = nil
     }
 }

@@ -158,11 +158,6 @@ class TopSiteCell: ObservableCollectionViewCell, ReusableCell {
 
         switch topSite.type {
         case .sponsoredSite(let siteInfo):
-            onBecomeVisible = { [weak self] cell in
-                print("isVisible", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false, topSite.type)
-            } // This will eventually become the impression callback
-            visibilityThreshold = 0.5
-            isVisibilityMonitoringEnabled = true
             if let url = URL(string: siteInfo.imageURL) {
                 imageResource = .remoteURL(url: url)
             }
@@ -255,6 +250,17 @@ class TopSiteCell: ObservableCollectionViewCell, ReusableCell {
         guard topSite.isSponsored else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
+        visibilityFractionThreshold = 0.5
+        dwellThresholdSeconds = 1.0
+        isVisibilityMonitoringEnabled = true
+
+        onBecomeVisible = { [weak self] cell in
+            print("isVisible", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false)
+        } // This will eventually become the impression callback
+
+        onDwellMet = { [weak self] cell in
+            print("Viewed for 1 Second!", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false)
+        } // This will eventually become the impression callback
     }
 
     // Add insets to favicons with transparent backgrounds
