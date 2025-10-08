@@ -10,13 +10,13 @@ import Common
 protocol TabToolbarProtocol: AnyObject {
     var tabToolbarDelegate: TabToolbarDelegate? { get set }
 
-    var addNewTabButton: ToolbarButton { get }
+    var addNewTabButton: TabToolbarButton { get }
     var tabsButton: TabsButton { get }
-    var appMenuButton: ToolbarButton { get }
-    var bookmarksButton: ToolbarButton { get }
-    var forwardButton: ToolbarButton { get }
-    var backButton: ToolbarButton { get }
-    var multiStateButton: ToolbarButton { get }
+    var appMenuButton: TabToolbarButton { get }
+    var bookmarksButton: TabToolbarButton { get }
+    var forwardButton: TabToolbarButton { get }
+    var backButton: TabToolbarButton { get }
+    var multiStateButton: TabToolbarButton { get }
     var actionButtons: [ThemeApplicable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
