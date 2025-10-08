@@ -31,7 +31,24 @@ class EditFolderViewController: UIViewController,
 
     private let viewModel: EditFolderViewModel
 
-    private var tableView: UITableView
+    private lazy var tableView: UITableView = .build({ view in
+        view.dataSource = self
+        view.delegate = self
+        view.register(cellType: EditFolderCell.self)
+        view.register(cellType: OneLineTableViewCell.self)
+        view.register(UITableViewHeaderFooterView.self,
+                      forHeaderFooterViewReuseIdentifier: UX.parentFolderHeaderIdentifier)
+        let headerSpacerView = UIView(frame: CGRect(origin: .zero,
+                                                    size: CGSize(width: 0, height: UX.editFolderCellTopPadding)))
+        view.tableHeaderView = headerSpacerView
+        view.keyboardDismissMode = .onDrag
+    }, {
+        if #available(iOS 26.0, *) {
+            UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            UITableView()
+        }
+    })
 
     private lazy var saveBarButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
@@ -52,13 +69,7 @@ class EditFolderViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.viewModel = viewModel
-        if #available(iOS 26.0, *) {
-            self.tableView = UITableView(frame: .zero, style: .insetGrouped)
-        } else {
-            self.tableView = UITableView(frame: .zero, style: .plain)
-        }
         super.init(nibName: nil, bundle: nil)
-        setupTableView()
     }
 
     required init?(coder: NSCoder) {
@@ -107,20 +118,6 @@ class EditFolderViewController: UIViewController,
         if isMovingFromParent {
             viewModel.save()
         }
-    }
-
-    private func setupTableView() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(cellType: EditFolderCell.self)
-        tableView.register(cellType: OneLineTableViewCell.self)
-        tableView.register(UITableViewHeaderFooterView.self,
-                           forHeaderFooterViewReuseIdentifier: UX.parentFolderHeaderIdentifier)
-        let headerSpacerView = UIView(frame: CGRect(origin: .zero,
-                                                    size: CGSize(width: 0, height: UX.editFolderCellTopPadding)))
-        tableView.tableHeaderView = headerSpacerView
-        tableView.keyboardDismissMode = .onDrag
     }
 
     private func setupSubviews() {

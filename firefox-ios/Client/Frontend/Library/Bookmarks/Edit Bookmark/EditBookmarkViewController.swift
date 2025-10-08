@@ -24,7 +24,24 @@ class EditBookmarkViewController: UIViewController,
         return themeManager.getCurrentTheme(for: currentWindowUUID)
     }
 
-    private var tableView: UITableView
+    private lazy var tableView: UITableView = .build({ view in
+        view.delegate = self
+        view.register(cellType: EditBookmarkCell.self)
+        view.register(cellType: OneLineTableViewCell.self)
+        view.register(UITableViewHeaderFooterView.self,
+                      forHeaderFooterViewReuseIdentifier: UX.folderHeaderIdentifier)
+        view.separatorStyle = .none
+        let headerSpacerView = UIView(frame: CGRect(origin: .zero,
+                                                    size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
+        view.tableHeaderView = headerSpacerView
+        view.keyboardDismissMode = .onDrag
+    }, {
+        if #available(iOS 26.0, *) {
+            UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            UITableView()
+        }
+    })
 
     private lazy var saveBarButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
@@ -56,13 +73,7 @@ class EditBookmarkViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
-        if #available(iOS 26.0, *) {
-            self.tableView = UITableView(frame: .zero, style: .insetGrouped)
-        } else {
-            self.tableView = UITableView(frame: .zero, style: .plain)
-        }
         super.init(nibName: nil, bundle: nil)
-        setupTableView()
     }
 
     required init?(coder: NSCoder) {
@@ -120,20 +131,6 @@ class EditBookmarkViewController: UIViewController,
     }
 
     // MARK: - Setup
-    private func setupTableView() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.delegate = self
-        tableView.register(cellType: EditBookmarkCell.self)
-        tableView.register(cellType: OneLineTableViewCell.self)
-        tableView.register(UITableViewHeaderFooterView.self,
-                           forHeaderFooterViewReuseIdentifier: UX.folderHeaderIdentifier)
-        tableView.separatorStyle = .none
-        let headerSpacerView = UIView(frame: CGRect(origin: .zero,
-                                                    size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
-        tableView.tableHeaderView = headerSpacerView
-        tableView.keyboardDismissMode = .onDrag
-    }
-
     private func setupSubviews() {
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
