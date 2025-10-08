@@ -5,14 +5,7 @@
 import Foundation
 import XCTest
 
-class SwipingTabsTests: FeatureFlaggedTestBase {
-    override func setUp() {
-        addLaunchArgument(jsonFileName: "swipingTabsOn", featureName: "toolbar-refactor-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        super.setUp()
-        app.launch()
-    }
-
+class SwipingTabsTests: BaseTestCase {
     override func tearDown() {
         XCUIDevice.shared.orientation = .portrait
         super.tearDown()
