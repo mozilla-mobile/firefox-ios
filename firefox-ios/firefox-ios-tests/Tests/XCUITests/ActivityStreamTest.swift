@@ -118,7 +118,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             navigator.nowAt(ClearPrivateDataSettings)
             navigator.goto(BrowserTab)
         }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         mozWaitForElementToNotExist(app.cells.staticTexts[newTopSite["bookmarkLabel"]!])
     }
 

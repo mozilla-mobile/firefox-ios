@@ -20,7 +20,7 @@ let secondWebsiteUnselected = (
     tabName: "The Book of Mozilla"
 )
 let homeTabName = "Homepage"
-let websiteWithSearchField = "developer.mozilla.org"
+let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 let tabTrayCollectionView = AccessibilityIdentifiers.TabTray.collectionView
 
 class DragAndDropTests: FeatureFlaggedTestBase {
@@ -416,19 +416,17 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
         navigator.openURL("developer.mozilla.org/en-US")
         waitUntilPageLoad()
-        let searchField = app.webViews["Web content"].otherElements["search"]
-        mozWaitForElementToExist(searchField)
+        let searchField = app.webViews["Web content"].searchFields.firstMatch
+        app.webViews["Web content"].buttons["Search"].waitAndTap()
 
         // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
-        app.textFields[searchTextField].press(forDuration: 1, thenDragTo: searchField)
+        mozWaitForElementToExist(searchField)
+        let centerSearchField = searchField.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let addressBarLocation = app.textFields[searchTextField].coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        addressBarLocation.press(forDuration: 1, thenDragTo: centerSearchField)
 
         // Verify that the text in the search field is the same as the text in the url text field
-        searchField.waitAndTap()
-        guard let textValue = app.textFields[searchTextField].value as? String, textValue == websiteWithSearchField
-        else {
-            XCTFail("The url text field value is not equal to \(websiteWithSearchField)")
-            return
-        }
+        XCTAssertEqual(searchField.value as? String, websiteWithSearchField, "The url has not been dropped correctly")
     }
 }

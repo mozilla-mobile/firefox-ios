@@ -26,7 +26,7 @@
 "ActivityStream.ContextMenu.UnpinTopsite" = "Откачане";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
-"ActivityStream.JumpBackIn.SectionTitle" = "Влезте отново";
+"ActivityStream.JumpBackIn.SectionTitle" = "Влизане отново";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Раздели: %d";

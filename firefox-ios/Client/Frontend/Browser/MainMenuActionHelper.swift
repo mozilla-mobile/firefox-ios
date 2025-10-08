@@ -56,6 +56,7 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
+@MainActor
 final class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
@@ -86,7 +87,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     ///   - buttonView: the view from which the menu will be shown
     ///   - toastContainer: the view hosting a toast alert
     ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
-    @MainActor
+
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
@@ -106,7 +107,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         self.themeManager = themeManager
     }
 
-    @MainActor
     func getToolbarActions(navigationController: UINavigationController?,
                            completion: @escaping @Sendable @MainActor ([[PhotonRowActions]]) -> Void) {
         var actions: [[PhotonRowActions]] = []
@@ -143,9 +143,10 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     // MARK: - Update data
 
     private let dataQueue = DispatchQueue(label: "com.moz.mainMenuAction.queue")
-    private var isInReadingList = false
-    private var isBookmarked = false
-    private var isPinned = false
+    // TODO: FXIOS-13791 These properties need to be noniolsated because this work is put on its own queue
+    private nonisolated(unsafe) var isInReadingList = false
+    private nonisolated(unsafe) var isBookmarked = false
+    private nonisolated(unsafe) var isPinned = false
 
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
@@ -200,7 +201,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // MARK: - Sections
 
-    @MainActor
     private func getNewTabSection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
         append(to: &section, action: getNewTabAction())
@@ -208,7 +208,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         return section
     }
 
-    @MainActor
     private func getLibrarySection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -232,7 +231,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         return section
     }
 
-    @MainActor
     private func getFirstMiscSection(_ navigationController: UINavigationController?) -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -268,7 +266,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         return section
     }
 
-    @MainActor
     private func getSecondMiscSection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -321,7 +318,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // MARK: - Actions
 
-    @MainActor
     private func getNewTabAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
         return SingleActionViewModel(title: tab.isPrivate ? .LegacyAppMenu.NewPrivateTab : .LegacyAppMenu.NewTab,
@@ -350,7 +346,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     // MARK: Zoom
 
-    @MainActor
     private func getZoomAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
         let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
@@ -370,7 +365,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         }.items
     }
 
-    @MainActor
     private func getRequestDesktopSiteAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
 
@@ -493,7 +487,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         return openSettings
     }
 
-    @MainActor
     private func getNightModeTitle(_ isNightModeOn: Bool) -> String {
         if themeManager.isNewAppearanceMenuOn {
             return isNightModeOn
@@ -506,7 +499,6 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         }
     }
 
-    @MainActor
     private func getNightModeAction() -> [PhotonRowActions] {
         var items: [PhotonRowActions] = []
 
@@ -537,7 +529,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func syncMenuButton() -> PhotonRowActions? {
-        let action: @Sendable (SingleActionViewModel) -> Void = { [weak self] action in
+        let action: @Sendable @MainActor (SingleActionViewModel) -> Void = { [weak self] action in
             let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
             let parameters = FxASignInViewParameters(launchParameters: fxaParams,
                                                      flowType: .emailLoginFlow,
