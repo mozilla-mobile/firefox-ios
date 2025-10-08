@@ -32,7 +32,7 @@ class ObservableCollectionViewCell: UICollectionViewCell {
     private var dwellTimer: Timer?
     private var dwellFiredForThisLifetime = false
 
-    // MARK: KVO / ancestry
+    // MARK: Visibility Logic
     private var observedScrollViews: Set<UIScrollView> = []
 
     private var visibleAreaFraction: CGFloat {
