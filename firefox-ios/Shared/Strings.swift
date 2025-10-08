@@ -7950,6 +7950,18 @@ extension String {
                 value: "Allow Page Summaries?",
                 comment: "The title for the Terms of Service alert that asks the user if they want to allow page summaries."
             )
+            public static let ToSAlertAllowButtonLabel = MZLocalizedString(
+                key: "Summarizer.ToS.Alert.AllowButton.Label.v142",
+                tableName: "Summarizer",
+                value: "Allow",
+                comment: "The label for the allow button on the Terms of Service alert."
+            )
+            public static let ToSAlertContinueButtonLabel = MZLocalizedString(
+                key: "Summarizer.ToS.Alert.ContinueButton.Label.v144",
+                tableName: "Summarizer",
+                value: "Continue",
+                comment: "The label for the continue button on the Terms of Service alert."
+            )
         }
     }
 }
