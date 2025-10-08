@@ -280,8 +280,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
 
     func testFxADisconnectConnect() {
         app.launch()
-        waitForTabsButton()
-        navigator.nowAt(HomePanelsScreen)
         // Sign into Mozilla Account
         signInFxAccounts()
 
