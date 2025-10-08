@@ -1761,7 +1761,7 @@ extension String {
             }
         }
 
-        public struct ModernV2 {
+        public struct JapanStrings {
             public struct General {
                 public static let Skip = MZLocalizedString(
                     key: "Onboarding.Modern.General.Skip.v145",
