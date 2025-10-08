@@ -7,7 +7,6 @@ import XCTest
 
 @MainActor
 final class OnboardingFlowViewModelTests: XCTestCase {
-
     // MARK: - Properties
     private var testHelper: OnboardingTestHelper!
 
