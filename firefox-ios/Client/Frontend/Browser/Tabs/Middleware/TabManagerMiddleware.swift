@@ -401,7 +401,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     ///   - urlRequest: URL request to load
     ///   - isPrivate: if the tab should be created in private mode or not
     private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool, showOverlay: Bool, for uuid: WindowUUID) {
-        assert(Thread.isMainThread)
+        MainActor.assertIsolated("Expected to be called only on main actor.")
         // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled,
         // check if change is still needed
         let tabManager = tabManager(for: uuid)
@@ -877,30 +877,32 @@ final class TabManagerMiddleware: FeatureFlaggable {
         dispatchDefaultTabInfo(windowUUID: windowUUID, selectedTab: selectedTab, accountData: accountData)
         let isSummarizerEnabled = isSummarizerEnabled
         fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
-            if isSummarizerEnabled {
-                Task {
-                    let summarizeMiddleware = SummarizerMiddleware()
-                    let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
-                    let contentType = summarizationCheckResult?.contentType ?? .generic
+            ensureMainThread {
+                if isSummarizerEnabled {
+                    Task {
+                        let summarizeMiddleware = SummarizerMiddleware()
+                        let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
+                        let contentType = summarizationCheckResult?.contentType ?? .generic
+                        self?.dispatchTabInfo(
+                            info: profileTabInfo,
+                            selectedTab: selectedTab,
+                            windowUUID: windowUUID,
+                            accountData: accountData,
+                            canSummarize: summarizationCheckResult?.canSummarize ?? false,
+                            summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
+                        )
+                        self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
+                    }
+                } else {
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
-                        canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
+                        canSummarize: false
                     )
                     self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
                 }
-            } else {
-                self?.dispatchTabInfo(
-                    info: profileTabInfo,
-                    selectedTab: selectedTab,
-                    windowUUID: windowUUID,
-                    accountData: accountData,
-                    canSummarize: false
-                )
-                self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
             }
         }
     }
