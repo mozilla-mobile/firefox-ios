@@ -158,10 +158,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             prefs: profile.prefs
         )
 
-        Task {
-            print("Testing Danger")
-        }
-
         widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
 
         addObservers()

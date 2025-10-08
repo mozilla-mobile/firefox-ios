@@ -333,7 +333,7 @@ class CodeUsageDetector {
                 let contacts = "@Cramsden @ih-codes @lmarceau"
                 return """
                 ### 🧑‍💻 New `Task {}` detected
-                New `Task {}` added in file %@ at line %d. 
+                New `Task {}` added in file %@ at line %d.
                 Please tag a concurrency reviewer: \(contacts)
                 """
             }
