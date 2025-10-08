@@ -8,8 +8,11 @@ import Shared
 import UIKit
 
 protocol PhotonActionSheetProtocol {
+    @MainActor
     var tabManager: TabManager { get }
+    @MainActor
     var profile: Profile { get }
+    @MainActor
     var themeManager: ThemeManager { get }
 }
 
