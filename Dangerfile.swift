@@ -545,7 +545,7 @@ struct ReleaseBranchCheck {
         danger.github.pullRequest.base.ref.hasPrefix("release/")
     }
 
-    func postReleaseBranchComment() -> Bool {
+    func postReleaseBranchComment() {
         markdown("""
         # ‼️ ATTENTION ‼️
         ### 🎯 This PR targets a **release branch**.
