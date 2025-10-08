@@ -374,7 +374,6 @@ extension TelemetryWrapper {
         case defaultSearchEngine = "default-search-engine"
         case showPullRefreshEasterEgg = "show-pull-refresh-easter-egg"
         case keyCommand = "key-command"
-        case locationBar = "location-bar"
         case messaging = "messaging"
         case qrCodeText = "qr-code-text"
         case qrCodeURL = "qr-code-url"
@@ -773,11 +772,6 @@ extension TelemetryWrapper {
             if let quantity = extras?[EventExtraKey.mobileBookmarksQuantity.rawValue] as? Int64 {
                 GleanMetrics.Bookmarks.mobileBookmarksCount.set(quantity)
             }
-        // MARK: Reader Mode
-        case (.action, .tap, .readerModeOpenButton, _, _):
-            GleanMetrics.ReaderMode.open.add()
-        case (.action, .tap, .readerModeCloseButton, _, _):
-            GleanMetrics.ReaderMode.close.add()
         // MARK: Reading List
         case (.action, .add, .readingListItem, let from?, _):
             GleanMetrics.ReadingList.add[from.rawValue].add()
@@ -838,8 +832,6 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.navigateTabHistoryForward.add()
         case(.action, .swipe, .navigateTabHistoryBackSwipe, _, _):
             GleanMetrics.Tabs.navigateTabBackSwipe.add()
-        case(.action, .tap, .reloadFromUrlBar, _, _):
-            GleanMetrics.Tabs.reloadFromUrlBar.add()
         case(.information, .background, .iPadWindowCount, _, let extras):
             if let quantity = extras?[EventExtraKey.windowCount.rawValue] as? Int64 {
                 GleanMetrics.Windows.ipadWindowCount.set(quantity)
@@ -1003,18 +995,6 @@ extension TelemetryWrapper {
                     extras: extras)
             }
 
-        // MARK: - Search Engine
-        case(.information, .change, .defaultSearchEngine, _, let extras):
-            if let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? ?? "custom" {
-                GleanMetrics.Search.defaultEngine.set(searchEngineID)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
@@ -1613,8 +1593,7 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .awesomebarLocation, .awesomebarShareTap, _):
             GleanMetrics.Awesomebar.shareButtonTapped.record()
-        case (.action, .drag, .locationBar, _, _):
-            GleanMetrics.Awesomebar.dragLocationBar.record()
+
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
             guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
