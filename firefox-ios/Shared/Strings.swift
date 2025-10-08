@@ -4536,11 +4536,6 @@ extension String {
 
 // MARK: - Reader Mode
 extension String {
-    public static let ReaderModeAvailableVoiceOverAnnouncement = MZLocalizedString(
-        key: "ReaderMode.Available.VoiceOverAnnouncement",
-        tableName: nil,
-        value: "Reader Mode available",
-        comment: "Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available.")
     public static let ReaderModeResetFontSizeAccessibilityLabel = MZLocalizedString(
         key: "Reset text size",
         tableName: nil,
@@ -6541,11 +6536,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the Reader View button")
-    public static let TabLocationAddressBarAccessibilityLabel = MZLocalizedString(
-        key: "Address.Bar.v99",
-        tableName: nil,
-        value: "Address Bar",
-        comment: "Accessibility label for the Address Bar, where a user can enter the search they wish to make")
     public static let TabLocationReaderModeAddToReadingListAccessibilityLabel = MZLocalizedString(
         key: "Address.Bar.ReadingList.v106",
         tableName: nil,
@@ -6566,36 +6556,6 @@ extension String {
         tableName: "TabLocation",
         value: "Share this page",
         comment: "Accessibility label for the share button in url bar")
-    public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.ETP.On.Secure.A11y.Label.v119",
-        tableName: "TabLocation",
-        value: "Secure connection",
-        comment: "Accessibility label for the security icon in url bar")
-    public static let TabLocationETPOnNotSecureAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.ETP.On.NotSecure.A11y.Label.v119",
-        tableName: "TabLocation",
-        value: "Connection not secure",
-        comment: "Accessibility label for the security icon in url bar")
-    public static let TabLocationETPOffNotSecureAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.ETP.Off.NotSecure.A11y.Label.v119",
-        tableName: "TabLocation",
-        value: "Connection not secure. Enhanced Tracking Protection is off.",
-        comment: "Accessibility label for the security icon in url bar")
-    public static let TabLocationETPOffSecureAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.ETP.Off.Secure.A11y.Label.v119",
-        tableName: "TabLocation",
-        value: "Secure connection. Enhanced Tracking Protection is off.",
-        comment: "Accessibility label for the security icon in url bar")
-    public static let TabLocationLockButtonLargeContentTitle = MZLocalizedString(
-        key: "TabLocation.LockButton.LargeContentTitle.v122",
-        tableName: "TabLocation",
-        value: "Tracking Protection",
-        comment: "Large content title for the lock button. This title is displayed when accessible font sizes are enabled")
-    public static let TabLocationLockButtonAccessibilityLabel = MZLocalizedString(
-        key: "TabLocation.LockButton.AccessibilityLabel.v122",
-        tableName: "TabLocation",
-        value: "Tracking Protection",
-        comment: "Accessibility label for the lock / tracking protection button on the URL bar")
     public static let TabsButtonShowTabsLargeContentTitle = MZLocalizedString(
         key: "TabsButton.Accessibility.LargeContentTitle.v122",
         tableName: "TabLocation",
@@ -6664,15 +6624,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
-}
-
-// MARK: - URL Bar
-extension String {
-    public static let URLBarLocationAccessibilityLabel = MZLocalizedString(
-        key: "Address and Search",
-        tableName: nil,
-        value: nil,
-        comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
 }
 
 extension String {
@@ -7177,15 +7128,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for the tabs button in the (top) tab toolbar")
-}
-
-// MARK: - TabTrayButtons
-extension String {
-    public static let TabTrayButtonShowTabsAccessibilityLabel = MZLocalizedString(
-        key: "TabTrayButtons.Accessibility.ShowTabs.v106",
-        tableName: nil,
-        value: "Show Tabs",
-        comment: "Accessibility Label for the tabs button in the tab toolbar")
 }
 
 // MARK: - MenuHelper
@@ -7962,6 +7904,56 @@ extension String {
                 value: "Continue",
                 comment: "The label for the continue button on the Terms of Service alert."
             )
+            public static let TabTrayButtonShowTabsAccessibilityLabel = MZLocalizedString(
+                key: "TabTrayButtons.Accessibility.ShowTabs.v106",
+                tableName: nil,
+                value: "Show Tabs",
+                comment: "Accessibility Label for the tabs button in the tab toolbar")
+            public static let URLBarLocationAccessibilityLabel = MZLocalizedString(
+                key: "Address and Search",
+                tableName: nil,
+                value: nil,
+                comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+            public static let TabLocationAddressBarAccessibilityLabel = MZLocalizedString(
+                key: "Address.Bar.v99",
+                tableName: nil,
+                value: "Address Bar",
+                comment: "Accessibility label for the Address Bar, where a user can enter the search they wish to make")
+            public static let TabLocationLockButtonLargeContentTitle = MZLocalizedString(
+                key: "TabLocation.LockButton.LargeContentTitle.v122",
+                tableName: "TabLocation",
+                value: "Tracking Protection",
+                comment: "Large content title for the lock button. This title is displayed when accessible font sizes are enabled")
+            public static let TabLocationLockButtonAccessibilityLabel = MZLocalizedString(
+                key: "TabLocation.LockButton.AccessibilityLabel.v122",
+                tableName: "TabLocation",
+                value: "Tracking Protection",
+                comment: "Accessibility label for the lock / tracking protection button on the URL bar")
+            public static let TabLocationETPOffSecureAccessibilityLabel = MZLocalizedString(
+                key: "TabLocation.ETP.Off.Secure.A11y.Label.v119",
+                tableName: "TabLocation",
+                value: "Secure connection. Enhanced Tracking Protection is off.",
+                comment: "Accessibility label for the security icon in url bar")
+            public static let TabLocationETPOffNotSecureAccessibilityLabel = MZLocalizedString(
+                key: "TabLocation.ETP.Off.NotSecure.A11y.Label.v119",
+                tableName: "TabLocation",
+                value: "Connection not secure. Enhanced Tracking Protection is off.",
+                comment: "Accessibility label for the security icon in url bar")
+            public static let ReaderModeAvailableVoiceOverAnnouncement = MZLocalizedString(
+                key: "ReaderMode.Available.VoiceOverAnnouncement",
+                tableName: nil,
+                value: "Reader Mode available",
+                comment: "Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available.")
+            public static let TabLocationETPOnSecureAccessibilityLabel = MZLocalizedString(
+                key: "TabLocation.ETP.On.Secure.A11y.Label.v119",
+                tableName: "TabLocation",
+                value: "Secure connection",
+                comment: "Accessibility label for the security icon in url bar")
+            public static let TabLocationETPOnNotSecureAccessibilityLabel = MZLocalizedString(
+                key: "TabLocation.ETP.On.NotSecure.A11y.Label.v119",
+                tableName: "TabLocation",
+                value: "Connection not secure",
+                comment: "Accessibility label for the security icon in url bar")
         }
     }
 }

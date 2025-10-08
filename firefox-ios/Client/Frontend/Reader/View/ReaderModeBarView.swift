@@ -170,11 +170,9 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     func applyTheme(theme: Theme) {
         let colors = theme.colors
 
-        let isToolbarRefactorEnabled = toolbarHelper.isToolbarRefactorEnabled
-        let color: UIColor = isToolbarRefactorEnabled ? colors.layerSurfaceLow : colors.layer1
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
 
-        backgroundColor = color.withAlphaComponent(backgroundAlpha)
+        backgroundColor = colors.layerSurfaceLow.withAlphaComponent(backgroundAlpha)
         buttonTintColor = colors.textPrimary
         contextStrokeColor = colors.textSecondary
     }

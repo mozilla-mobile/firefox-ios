@@ -2429,20 +2429,6 @@ tabs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
-  reload_from_url_bar:
-    type: counter
-    description: |
-      This counts the number of times a user taps the reload
-      button in the URL bar.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9278
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9785
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2026-01-01"
   press_tab_toolbar:
     type: event
     description: |

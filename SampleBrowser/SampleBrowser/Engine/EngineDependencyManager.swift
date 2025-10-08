@@ -5,6 +5,7 @@
 import Common
 import WebEngine
 
+@MainActor
 class EngineDependencyManager {
     let sessionDependencies: EngineSessionDependencies
     let engineDependencies: EngineDependencies

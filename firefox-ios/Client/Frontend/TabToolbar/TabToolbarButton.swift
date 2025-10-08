@@ -3,15 +3,17 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Foundation
-import Shared
+import UIKit
 
-class LockButton: UIButton {
+class TabToolbarButton: UIButton {
     // MARK: - Variables
 
-    var selectedTintColor: UIColor?
-    var unselectedTintColor: UIColor?
-    var disabledTintColor: UIColor?
+    private var selectedTintColor: UIColor?
+    private var unselectedTintColor: UIColor?
+    private var disabledTintColor: UIColor?
+
+    // Optionally can associate a separator line that hide/shows along with the button
+    weak var separatorLine: UIView?
 
     override open var isHighlighted: Bool {
         didSet {
@@ -31,14 +33,19 @@ class LockButton: UIButton {
         }
     }
 
+    override var isHidden: Bool {
+        didSet {
+            separatorLine?.isHidden = isHidden
+        }
+    }
+
     // MARK: - Initializers
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        clipsToBounds = false
-        setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.lock), for: .normal)
-        imageView?.contentMode = .scaleAspectFill
+        selectedTintColor = tintColor
+        unselectedTintColor = tintColor
+        imageView?.contentMode = .scaleAspectFit
         configuration = .plain()
     }
 
@@ -48,11 +55,13 @@ class LockButton: UIButton {
 }
 
 // MARK: - Theme protocols
-extension LockButton: ThemeApplicable {
+
+extension TabToolbarButton: ThemeApplicable {
     func applyTheme(theme: Theme) {
         selectedTintColor = theme.colors.actionPrimary
         disabledTintColor = theme.colors.iconDisabled
-        unselectedTintColor = theme.colors.textPrimary
+        unselectedTintColor = theme.colors.iconPrimary
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
+        imageView?.tintColor = tintColor
     }
 }

@@ -30,7 +30,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
     func testLandscapeNavigationWithTabSwitch_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.nowAt(NewTabScreen)
+        homepageSearchBar.tapIfExists()
         waitForTabsButton()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
@@ -43,6 +43,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
@@ -89,6 +90,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
     func testLandscapeNavigationWithTabSwitch_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        homepageSearchBar.tapIfExists()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
         XCTAssert(app.textFields[searchTextField].exists)
@@ -100,6 +102,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
+        navigator.nowAt(NewTabScreen)
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
@@ -204,6 +207,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
     func testOpenNewTabButtonOnToolbar_tabTrayExperimentOff() throws {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        homepageSearchBar.tapIfExists()
         if iPad() {
             throw XCTSkip("iPhone only test")
         } else {
