@@ -41,7 +41,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor @Sendable () -> Void
     ) {
-        legacyResponder?.webView?(
+        engineResponder.webView(
             webView,
             runJavaScriptAlertPanelWithMessage: message,
             initiatedByFrame: frame,
@@ -55,7 +55,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor @Sendable (Bool) -> Void
     ) {
-        legacyResponder?.webView?(
+        engineResponder.webView(
             webView,
             runJavaScriptConfirmPanelWithMessage: message,
             initiatedByFrame: frame,
@@ -70,7 +70,7 @@ class BrowserWebUIDelegate: NSObject, WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor @Sendable (String?) -> Void
     ) {
-        legacyResponder?.webView?(
+        engineResponder.webView(
             webView,
             runJavaScriptTextInputPanelWithPrompt: prompt,
             defaultText: defaultText,
