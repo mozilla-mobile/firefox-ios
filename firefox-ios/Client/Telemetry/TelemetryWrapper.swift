@@ -762,7 +762,7 @@ extension TelemetryWrapper {
 
     // swiftlint:disable:next function_body_length
     static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
-        // Disabled unit tests so we're not calling telemetry events as a side-effect, see PR #29799
+        // Disabled for unit tests so we're not calling telemetry events as a side-effect, see PR #29799
         guard !AppConstants.isRunningTest || hasTelemetryOverride else { return }
 
         switch (category, method, object, value, extras) {
