@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+// TODO: FXIOS-13742 - Migrate ShareTelemetryTests to use mock telemetry or GleanWrapper
 final class ShareTelemetryTests: XCTestCase {
     private let testWebURL = URL(string: "https://mozilla.org")!
     var gleanWrapper: MockGleanWrapper!
@@ -28,6 +29,7 @@ final class ShareTelemetryTests: XCTestCase {
     }
 
     func testSharedTo_withNoActivityType() throws {
+        setupTelemetry(with: MockProfile())
         let subject = createSubject()
         let event = GleanMetrics.ShareSheet.sharedTo
         let testActivityType: UIActivity.ActivityType? = nil
@@ -51,6 +53,7 @@ final class ShareTelemetryTests: XCTestCase {
     }
 
     func testSharedTo_withActivityType() throws {
+        setupTelemetry(with: MockProfile())
         let subject = createSubject()
         let event = GleanMetrics.ShareSheet.sharedTo
         let testActivityType = UIActivity.ActivityType("com.some.activity.identifier")

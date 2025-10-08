@@ -8,6 +8,7 @@ import Glean
 import XCTest
 import Common
 
+// TODO: FXIOS-13742 - Migrate TabsTelemetryTests to use mock telemetry or GleanWrapper
 class TabsTelemetryTests: XCTestCase {
     var profile: Profile!
     var inactiveTabsManager: MockInactiveTabsManager!
@@ -18,17 +19,12 @@ class TabsTelemetryTests: XCTestCase {
         profile = MockProfile()
         inactiveTabsManager = MockInactiveTabsManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
-        DependencyHelperMock().bootstrapDependencies()
+        setupTelemetry(with: profile)
     }
 
     override func tearDown() {
         profile = nil
-        DependencyHelperMock().reset()
+        tearDownTelemetry()
         super.tearDown()
     }
 

@@ -14,23 +14,18 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
-        DependencyHelperMock().bootstrapDependencies()
+        setupTelemetry(with: MockProfile())
         nimbusUtility = NimbusOnboardingTestingConfigUtility()
         nimbusUtility.setupNimbus(withOrder: cards.allCards)
     }
 
     override func tearDown() {
         nimbusUtility = nil
-        DependencyHelperMock().reset()
+        tearDownTelemetry()
         super.tearDown()
     }
 
-    func testOnboardingCard_viewDidAppear_viewSendsCardView() {
+    func testOnboardingCard_viewDidAppear_viewSendsCardView() throws {
         let subject = createSubject()
         guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
             XCTFail("expected a view controller, but got nothing")
@@ -38,10 +33,10 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
         }
         firstVC.viewDidAppear(true)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
-    func testOnboardingCard_callsPrimaryButtonTap() {
+    func testOnboardingCard_callsPrimaryButtonTap() throws {
         let subject = createSubject()
         guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
             XCTFail("expected a view controller, but got nothing")
@@ -50,10 +45,10 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
         firstVC.primaryAction()
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
     }
 
-    func testOnboardingCard_callsSecondaryButtonTap() {
+    func testOnboardingCard_callsSecondaryButtonTap() throws {
         let subject = createSubject()
         guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
             XCTFail("expected a view controller, but got nothing")
@@ -72,15 +67,15 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
         result.secondaryAction()
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
     }
 
-    func testOnboardingCard_callsCloseTap() {
+    func testOnboardingCard_callsCloseTap() throws {
         let subject = createSubject()
 
         subject.closeOnboarding()
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
     }
 
     // MARK: - Private Helpers
