@@ -10,15 +10,19 @@ import Foundation
 let danger = Danger()
 let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
-checkReleaseBranch()
-checkStringsFile()
-checkForFunMetrics()
-checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
-checkForWebEngineFileChange()
-CodeUsageDetector().checkForCodeUsage()
-CodeCoverageGate().failOnNewFilesWithoutCoverage()
-BrowserViewControllerChecker().failsOnAddedExtension()
-checkCodeCoverage()
+let releaseCheck = ReleaseBranchCheck()
+if releaseCheck.isReleaseBranch {
+    releaseCheck.postReleaseBranchComment()
+} else {
+    checkStringsFile()
+    checkForFunMetrics()
+    checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
+    checkForWebEngineFileChange()
+    CodeUsageDetector().checkForCodeUsage()
+    CodeCoverageGate().failOnNewFilesWithoutCoverage()
+    BrowserViewControllerChecker().failsOnAddedExtension()
+    checkCodeCoverage()
+}
 
 // Add some fun comments in Danger to have positive feedback on PRs
 func checkForFunMetrics() {
@@ -536,9 +540,14 @@ func commentDescriptionSection(desc: String) {
     }
 }
 
-func checkReleaseBranch() {
-    if danger.github.pullRequest.base.ref.hasPrefix("release/") {
+struct ReleaseBranchCheck {
+    var isReleaseBranch: Bool {
+        danger.github.pullRequest.base.ref.hasPrefix("release/")
+    }
+
+    func postReleaseBranchComment() {
         markdown("""
+        # ‼️ ATTENTION ‼️
         ### 🎯 This PR targets a **release branch**.
         Please ensure you've followed the [uplift request process](https://github.com/mozilla-mobile/firefox-ios/wiki/Requesting-an-uplift-to-a-release-branch).
         """)
