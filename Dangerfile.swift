@@ -330,10 +330,11 @@ class CodeUsageDetector {
             case .swiftUIText:
                 return "SwiftUI 'Text(\"\"'  in file %@ at line %d needs to be avoided, use Strings.swift localization instead."
             case .task:
-                let contacts = "(@Cramsden @ih-codes @lmarceau)."
+                let contacts = "@Cramsden @ih-codes @lmarceau"
                 return """
                 ### 🧑‍💻 New `Task {}` detected
-                New `Task {}`  in file %@ at line %d added, please tag a concurrency reviewer: \(contacts)
+                New `Task {}` added in file %@ at line %d. 
+                Please tag a concurrency reviewer: \(contacts)
                 """
             }
         }
