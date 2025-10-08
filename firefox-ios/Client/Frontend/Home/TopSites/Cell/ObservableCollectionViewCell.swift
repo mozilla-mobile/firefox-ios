@@ -79,7 +79,7 @@ class ObservableCollectionViewCell: UICollectionViewCell {
     }
 
     override func willMove(toWindow newWindow: UIWindow?) {
-        // If the cell leaves te screen without prepareForReuse() being called we want to make sure we stop the timer
+        // If the cell leaves the screen without prepareForReuse() being called we want to make sure we stop the timer
         if newWindow == nil {
             stopDwellTimer()
         }
