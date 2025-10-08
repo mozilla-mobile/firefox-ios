@@ -28,7 +28,7 @@ final class StoryProvider: FeatureFlaggable, Sendable {
     }
 
     func fetchDiscoverMoreStories() async -> [MerinoStory] {
-        return await fetchStories(Constants.defaultNumberOfDiscoverMoreStories)
+        return await fetchStories(Constants.defaultNumberOfDiscoverMoreStories).shuffled()
     }
 
     private func fetchStories(_ numberOfRequestedStories: Int) async -> [MerinoStory] {
