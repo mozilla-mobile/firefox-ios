@@ -37,7 +37,7 @@ public struct TextStyling: Sendable {
 
     // MARK: - SwiftUI Font Methods
 
-    public func scaledSwiftUIFont(sizeCap: CGFloat? = nil) -> Font {
+    public func scaledSwiftUIFont(sizeCap: CGFloat? = nil) -> DynamicFont {
         return DefaultDynamicFontHelper.preferredSwiftUIFont(withTextStyle: toSwiftUITextStyle(textStyle),
                                                              size: size,
                                                              sizeCap: sizeCap,
@@ -48,7 +48,7 @@ public struct TextStyling: Sendable {
         return Font.system(size: size, weight: toSwiftUIWeight(weight))
     }
 
-    public func monospacedSwiftUIFont() -> Font {
+    public func monospacedSwiftUIFont() -> DynamicFont {
         return DefaultDynamicFontHelper.preferredSwiftUIFont(withTextStyle: toSwiftUITextStyle(textStyle),
                                                              size: size,
                                                              weight: toSwiftUIWeight(weight),

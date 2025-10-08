@@ -27,22 +27,22 @@ public protocol DynamicFontHelper {
                                   size: CGFloat
     ) -> UIFont
 
-    /// Returns a SwiftUI `Font` that scales with Dynamic Type.
+    /// Returns a SwiftUI `DynamicFont` that scales with Dynamic Type.
     ///
     /// - Parameters:
     ///   - textStyle: The text style to base scaling on.
     ///   - size: The base font size (points).
     ///   - sizeCap: Optional maximum size (points) after scaling.
-    ///   - weight: Optional font weight (uses style’s default if `nil`).
+    ///   - weight: Optional font weight (uses style's default if `nil`).
     ///   - design: The font design to apply.
     static func preferredSwiftUIFont(withTextStyle textStyle: Font.TextStyle,
                                      size: CGFloat,
                                      sizeCap: CGFloat?,
                                      weight: Font.Weight?,
                                      design: Font.Design
-    ) -> Font
+    ) -> DynamicFont
 
-    /// Returns a bold SwiftUI `Font` that scales with Dynamic Type.
+    /// Returns a bold SwiftUI `DynamicFont` that scales with Dynamic Type.
     ///
     /// - Parameters:
     ///   - textStyle: The text style to base scaling on.
@@ -51,7 +51,7 @@ public protocol DynamicFontHelper {
     static func preferredBoldSwiftUIFont(withTextStyle textStyle: Font.TextStyle,
                                          size: CGFloat,
                                          design: Font.Design
-    ) -> Font
+    ) -> DynamicFont
 }
 
 public extension DynamicFontHelper {
@@ -116,31 +116,19 @@ public struct DefaultDynamicFontHelper: DynamicFontHelper {
                                             size: CGFloat,
                                             sizeCap: CGFloat? = nil,
                                             weight: Font.Weight? = nil,
-                                            design: Font.Design = .default) -> Font {
-        // Convert SwiftUI TextStyle to UIKit TextStyle using TextStyling
-        let uiTextStyle = TextStyling.toUIFontTextStyle(textStyle)
-
-        // Convert SwiftUI weight to UIKit weight using TextStyling
-        let uiWeight = weight.map { TextStyling.toUIFontWeight($0) }
-
-        // Use the existing preferredFont method to get proper scaling with size cap
-        let uiFont = preferredFont(withTextStyle: uiTextStyle,
-                                   size: size,
-                                   sizeCap: sizeCap,
-                                   weight: uiWeight,
-                                   symbolicTraits: nil)
-
-        // Convert back to SwiftUI Font with the calculated size
-        var font = Font.system(size: uiFont.pointSize, design: design)
-        if let weight = weight {
-            font = font.weight(weight)
-        }
-        return font
+                                            design: Font.Design = .default) -> DynamicFont {
+        return DynamicFont(
+            textStyle: textStyle,
+            size: size,
+            sizeCap: sizeCap,
+            weight: weight,
+            design: design
+        )
     }
 
     public static func preferredBoldSwiftUIFont(withTextStyle textStyle: Font.TextStyle,
                                                 size: CGFloat,
-                                                design: Font.Design = .default) -> Font {
+                                                design: Font.Design = .default) -> DynamicFont {
         return preferredSwiftUIFont(withTextStyle: textStyle,
                                     size: size,
                                     weight: .bold,
