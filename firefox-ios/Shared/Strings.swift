@@ -2249,7 +2249,7 @@ extension String {
             comment: "The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS."
         )
         public static let ToSInfoPanelLinkButtonLabel = MZLocalizedString(
-            key: "Summarizer.ToS.InfoPanel.LearnMoreButton.Label.v143",
+            key: "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143",
             tableName: "Summarizer",
             value: "How it works",
             comment: "The label for the learn more link button on the Terms of Service alert for the summarizer."
