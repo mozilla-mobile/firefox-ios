@@ -5,6 +5,8 @@
 import XCTest
 
 class DataManagementTests: BaseTestCase {
+    private var webSitesDataScreen: WebsiteDataScreen!
+
     func cleanAllData() {
         navigator.goto(WebsiteDataSettings)
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
@@ -86,6 +88,22 @@ class DataManagementTests: BaseTestCase {
         } else {
             XCTAssertTrue(app.cells.staticTexts.elementContainingText("example.com").exists)
         }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307017
+    // Smoketest TAE
+    func testWebSiteDataEnterFirstTime_TAE() {
+        webSitesDataScreen = WebsiteDataScreen(app: app)
+        navigator.goto(WebsiteDataSettings)
+        webSitesDataScreen.clearAllWebsiteData()
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL("example.com")
+        waitUntilPageLoad()
+        navigator.goto(WebsiteDataSettings)
+        webSitesDataScreen.waitUntilListIsReady()
+        webSitesDataScreen.expandShowMoreIfNeeded()
+        webSitesDataScreen.waitForExampleDomain()
+        webSitesDataScreen.assertWebsiteDataVisible()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2802088

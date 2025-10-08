@@ -13,9 +13,21 @@
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "റദ്ദാക്കുക";
 
+/* The label for the continue button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "തുടരുക";
+
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "കൂടുതലറിയുക";
 
 /* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
 "Summarizer.ToS.Alert.Title.Label.v142" = "താൾ സംഗ്രഹം അനുവദിക്കണോ?";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "ഇതു് എങ്ങനെയാണു പ്രവൎത്തിക്കുന്നതു് ";
+
+/* The label for the accept button on the Terms of Service information panel in the summarizer. */
+"Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "തുടരുക";
+
+/* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
+"Summarizer.ToS.InfoPanel.Title.Label.v143" = "താൾ വിവരം ചുരുക്കിപ്പറയണോ?";
 

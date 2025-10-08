@@ -9,6 +9,7 @@ import Shared
 import UIKit
 import Photos
 import SafariServices
+import WebEngine
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
@@ -72,7 +73,7 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    private func handleJavaScriptAlert<T: JavaScriptAlertProtocol & JSAlertInfo>(
+    private func handleJavaScriptAlert<T: WKJavaScriptAlertInfo>(
         _ alert: T,
         for webView: WKWebView,
         spamCallback: @escaping () -> Void
@@ -80,12 +81,12 @@ extension BrowserViewController: WKUIDelegate {
         if jsAlertExceedsSpamLimits(webView) {
             handleSpammedJSAlert(spamCallback)
         } else if shouldDisplayJSAlertForWebView(webView) {
-            logger.log("JavaScript \(T.alertType) panel will be presented.", level: .info, category: .webview)
+            logger.log("JavaScript \(alert.type.rawValue) panel will be presented.", level: .info, category: .webview)
             let alertController = alert.alertController()
             alertController.delegate = self
             present(alertController, animated: true)
         } else if let promptingTab = tabManager[webView] {
-            logger.log("JavaScript \(T.alertType) panel is queued.", level: .info, category: .webview)
+            logger.log("JavaScript \(alert.type.rawValue) panel is queued.", level: .info, category: .webview)
             promptingTab.queueJavascriptAlertPrompt(alert)
         }
     }
@@ -444,10 +445,6 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             guard !url.isReaderModeURL else { return }
-            // FXIOS-10239: Reader mode icon shifts when toolbar refactor is enabled
-            if !isToolbarRefactorEnabled {
-                updateReaderModeState(for: tabManager.selectedTab, readerModeState: .unavailable)
-            }
             hideReaderModeBar(animated: false)
         }
     }
@@ -473,16 +470,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
-            let adUrl = url.absoluteString
-            if tab.adsTelemetryUrlList.contains(adUrl) {
-                if !tab.adsProviderName.isEmpty {
-                    AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
-                }
-
-                tab.adsTelemetryUrlList.removeAll()
-                tab.adsTelemetryRedirectUrlList.removeAll()
-                tab.adsProviderName = ""
-            }
+            handleAdsTelemetryForNavigation(url: url, tab: tab)
         }
 
         if InternalURL.isValid(url: url) {
@@ -509,14 +497,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
-            if url.scheme == "sms" { // All the other types show a native prompt
-                showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
-                    UIApplication.shared.open(url, options: [:])
-                }
-            } else {
-                UIApplication.shared.open(url, options: [:])
-            }
-
+            handleSpecialSchemeNavigation(url: url)
             decisionHandler(.cancel)
             return
         }
@@ -540,43 +521,13 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if isStoreURL(url) {
             decisionHandler(.cancel)
-
-            // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
-            // Otherwise the AppStoreAlert is shown on the wrong tab
-            let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
-            DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
-                self?.showAppStoreAlert { isOpened in
-                    if isOpened {
-                        UIApplication.shared.open(url, options: [:])
-                    }
-                    // If a new window was opened for this URL, close it
-                    if let currentTab = self?.tabManager.selectedTab,
-                       currentTab.historyList.count == 1,
-                       self?.isStoreURL(currentTab.historyList[0]) ?? false {
-                        self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
-                        self?.tabManager.removeTab(currentTab.tabUUID)
-                    }
-                }
-            }
+            handleStoreURLNavigation(url: url)
             return
         }
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            showExternalAlert(withText: .ExternalMailLinkConfirmation) { _ in
-                if let mailToMetadata = url.mailToMetadata(),
-                   let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
-                   mailScheme != "mailto" {
-                    self.mailtoLinkHandler.launchMailClientForScheme(
-                        mailScheme,
-                        metadata: mailToMetadata,
-                        defaultMailtoURL: url
-                    )
-                } else {
-                    UIApplication.shared.open(url, options: [:])
-                }
-            }
-
+            handleMailToNavigation(url: url)
             decisionHandler(.cancel)
             return
         }
@@ -652,23 +603,86 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if let scheme = url.scheme, !scheme.contains("firefox"), !shouldBlockExternalApps, !tab.isPrivate {
-            // Try to open the custom scheme URL, if it doesn't work we show an error alert
-            UIApplication.shared.open(url, options: [:]) { openedURL in
-                // Do not show error message for JS navigated links or
-                // redirect as it's not the result of a user action.
-                if !openedURL, navigationAction.navigationType == .linkActivated {
-                    let alert = UIAlertController(
-                        title: nil,
-                        message: .ExternalInvalidLinkMessage,
-                        preferredStyle: .alert
-                    )
-                    alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                }
-            }
+            handleCustomSchemeURLNavigation(url: url, navigationAction: navigationAction)
         }
 
         decisionHandler(.cancel)
+    }
+
+    private func handleAdsTelemetryForNavigation(url: URL, tab: Tab) {
+        let adUrl = url.absoluteString
+        if tab.adsTelemetryUrlList.contains(adUrl) {
+            if !tab.adsProviderName.isEmpty {
+                AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
+            }
+
+            tab.adsTelemetryUrlList.removeAll()
+            tab.adsTelemetryRedirectUrlList.removeAll()
+            tab.adsProviderName = ""
+        }
+    }
+
+    private func handleSpecialSchemeNavigation(url: URL) {
+        if url.scheme == "sms" { // All the other types show a native prompt
+            showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
+                UIApplication.shared.open(url, options: [:])
+            }
+        } else {
+            UIApplication.shared.open(url, options: [:])
+        }
+    }
+
+    private func handleStoreURLNavigation(url: URL) {
+        // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
+        // Otherwise the AppStoreAlert is shown on the wrong tab
+        let delay: DispatchTime = .now() + tabManager.delaySelectingNewPopupTab + 0.1
+        DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
+            self?.showAppStoreAlert { isOpened in
+                if isOpened {
+                    UIApplication.shared.open(url, options: [:])
+                }
+                // If a new window was opened for this URL, close it
+                if let currentTab = self?.tabManager.selectedTab,
+                   currentTab.historyList.count == 1,
+                   self?.isStoreURL(currentTab.historyList[0]) ?? false {
+                    self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
+                    self?.tabManager.removeTab(currentTab.tabUUID)
+                }
+            }
+        }
+    }
+
+    private func handleMailToNavigation(url: URL) {
+        showExternalAlert(withText: .ExternalMailLinkConfirmation) { _ in
+            if let mailToMetadata = url.mailToMetadata(),
+               let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption),
+               mailScheme != "mailto" {
+                self.mailtoLinkHandler.launchMailClientForScheme(
+                    mailScheme,
+                    metadata: mailToMetadata,
+                    defaultMailtoURL: url
+                )
+            } else {
+                UIApplication.shared.open(url, options: [:])
+            }
+        }
+    }
+
+    private func handleCustomSchemeURLNavigation(url: URL, navigationAction: WKNavigationAction) {
+        // Try to open the custom scheme URL, if it doesn't work we show an error alert
+        UIApplication.shared.open(url, options: [:]) { openedURL in
+            // Do not show error message for JS navigated links or
+            // redirect as it's not the result of a user action.
+            if !openedURL, navigationAction.navigationType == .linkActivated {
+                let alert = UIAlertController(
+                    title: nil,
+                    message: .ExternalInvalidLinkMessage,
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: .OKString, style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
 
     func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
@@ -912,7 +926,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // Open our helper and cancel this response from the webview.
         if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
                                                                     okAction: downloadAction) {
-            presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
+            presentSheetWith(viewModel: downloadViewModel, on: self, from: addressToolbarContainer)
         }
     }
 
@@ -964,25 +978,21 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
             if let tab = tabManager[webView], tab === tabManager.selectedTab {
-                if isToolbarRefactorEnabled {
-                    let action = ToolbarAction(
-                        url: tab.url?.displayURL,
-                        isPrivate: tab.isPrivate,
-                        canGoBack: tab.canGoBack,
-                        canGoForward: tab.canGoForward,
-                        windowUUID: windowUUID,
-                        actionType: ToolbarActionType.urlDidChange
-                    )
-                    store.dispatchLegacy(action)
-                    let middlewareAction = ToolbarMiddlewareAction(
-                        scrollOffset: scrollController.contentOffset,
-                        windowUUID: windowUUID,
-                        actionType: ToolbarMiddlewareActionType.urlDidChange
-                    )
-                    store.dispatchLegacy(middlewareAction)
-                } else {
-                    legacyUrlBar?.currentURL = tab.url?.displayURL
-                }
+                let action = ToolbarAction(
+                    url: tab.url?.displayURL,
+                    isPrivate: tab.isPrivate,
+                    canGoBack: tab.canGoBack,
+                    canGoForward: tab.canGoForward,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.urlDidChange
+                )
+                store.dispatchLegacy(action)
+                let middlewareAction = ToolbarMiddlewareAction(
+                    scrollOffset: scrollController.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.urlDidChange
+                )
+                store.dispatchLegacy(middlewareAction)
             }
             return
         }

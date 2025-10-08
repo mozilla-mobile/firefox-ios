@@ -8,8 +8,11 @@ import Shared
 import UIKit
 
 protocol PhotonActionSheetProtocol {
+    @MainActor
     var tabManager: TabManager { get }
+    @MainActor
     var profile: Profile { get }
+    @MainActor
     var themeManager: ThemeManager { get }
 }
 
@@ -51,12 +54,9 @@ extension PhotonActionSheetProtocol {
             title: .PasteAndGoTitle,
             iconString: StandardImageIdentifiers.Large.clipboard,
             tapHandler: { _ in
-                if let pasteboardContents = UIPasteboard.general.string {
-                    if let urlBar = view as? URLBarView {
-                        urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
-                    } else if let toolbar = view as? AddressToolbarContainer {
-                        toolbar.delegate?.openBrowser(searchTerm: pasteboardContents)
-                    }
+                if let pasteboardContents = UIPasteboard.general.string,
+                   let toolbar = view as? AddressToolbarContainer {
+                    toolbar.delegate?.openBrowser(searchTerm: pasteboardContents)
                 }
             },
             accessibilityId: AccessibilityIdentifiers.Photon.pasteAndGoAction
@@ -66,12 +66,9 @@ extension PhotonActionSheetProtocol {
             title: .PasteTitle,
             iconString: StandardImageIdentifiers.Large.clipboard,
             tapHandler: { _ in
-                if let pasteboardContents = UIPasteboard.general.string {
-                    if let urlBar = view as? URLBarView {
-                        urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
-                    } else if let toolbar = view as? AddressToolbarContainer {
+                if let pasteboardContents = UIPasteboard.general.string,
+                   let toolbar = view as? AddressToolbarContainer {
                         toolbar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
-                    }
                 }
             },
             accessibilityId: AccessibilityIdentifiers.Photon.pasteAction

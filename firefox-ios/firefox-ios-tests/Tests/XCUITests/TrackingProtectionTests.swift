@@ -206,52 +206,6 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SwitchETP)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2319381
-    func testLockIconMenu_menuRefactorFeatureOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "menu-refactor-feature")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(differentWebsite)
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
-        if #unavailable(iOS 16) {
-            XCTAssert(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].isHittable)
-            sleep(2)
-        }
-        navigator.nowAt(BrowserTab)
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Connection not secure"], timeout: 5)
-        var switchValue = app.switches.firstMatch.value!
-        // Need to make sure first the setting was not turned off previously
-        if switchValue as? String == "0" {
-            app.switches.firstMatch.waitAndTap()
-        }
-        switchValue = app.switches.firstMatch.value!
-        XCTAssertEqual(switchValue as? String, "1")
-
-        app.switches.firstMatch.waitAndTap()
-        let switchValueOFF = app.switches.firstMatch.value!
-        XCTAssertEqual(switchValueOFF as? String, "0")
-
-        // Open TP Settings menu
-        app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection
-            .MainScreen.trackingProtectionSettingsButton].waitAndTap()
-        mozWaitForElementToExist(app.navigationBars["Tracking Protection"], timeout: 5)
-        let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
-        XCTAssertEqual(switchSettingsValue as? String, "1")
-        app.switches["prefkey.trackingprotection.normalbrowsing"].waitAndTap()
-        // Disable ETP from setting and check that it applies to the site
-        app.buttons["Settings"].waitAndTap()
-        app.buttons["Done"].waitAndTap()
-        navigator.nowAt(BrowserTab)
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Connection not secure"], timeout: 5)
-        XCTAssertFalse(app.switches.element.exists)
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
     func testProtectionLevelMoreInfoMenu() {
         app.launch()
@@ -279,82 +233,6 @@ class TrackingProtectionTests: FeatureFlaggedTestBase {
 
         // Go back to TP settings
         app.buttons["Tracking Protection"].waitAndTap()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307061
-    func testLockIconSecureConnection_menuRefactorFeatureOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "menu-refactor-feature")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL("https://www.mozilla.org")
-        waitUntilPageLoad()
-        // iOS 15 displays a toast for the paste. The toast may cover areas to be
-        // tapped in the next step.
-        if #unavailable(iOS 16) {
-            sleep(2)
-        }
-        // Tap "Secure connection"
-        navigator.nowAt(BrowserTab)
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        // A page displaying the connection is secure
-        waitForElementsToExist(
-            [
-                app.staticTexts["mozilla.org"],
-                app.staticTexts["Secure connection"]
-            ]
-        )
-        XCTAssertEqual(
-            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
-            secureTrackingProtectionOnLabel
-        )
-        // Dismiss the view and visit "badssl.com". Tap on "expired"
-        navigator.performAction(Action.CloseTPContextMenu)
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL("https://www.badssl.com")
-        waitUntilPageLoad()
-        app.links.staticTexts["expired"].waitAndTap()
-        waitUntilPageLoad()
-        // The page is correctly displayed with the lock icon disabled
-        mozWaitForElementToExist(
-            app.staticTexts["This Connection is Untrusted"],
-            timeout: TIMEOUT_LONG
-        )
-        mozWaitForElementToExist(app.staticTexts.elementContainingText("Firefox has not connected to this website."))
-
-        XCTAssertEqual(
-            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
-            secureTrackingProtectionOnLabel
-        )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2693741
-    func testLockIconCloseMenu_menuRefactorFeatureOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "menu-refactor-feature")
-        app.launch()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL("https://www.mozilla.org")
-        waitUntilPageLoad()
-        // iOS 15 displays a toast for the paste. The toast may cover areas to be
-        // tapped in the next step.
-        if #unavailable(iOS 16) {
-            sleep(2)
-        }
-        // Tap "Secure connection"
-        navigator.nowAt(BrowserTab)
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton])
-        navigator.performAction(Action.CloseTPContextMenu)
-        mozWaitForElementToNotExist(
-            app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusButton])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307063
