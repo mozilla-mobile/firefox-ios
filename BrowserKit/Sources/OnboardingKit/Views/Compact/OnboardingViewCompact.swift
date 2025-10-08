@@ -45,6 +45,8 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 )
                 .padding(.bottom)
             }
+            .accessibilitySortPriority(1)
+            .accessibilityElement(children: .contain)
 
             Button(action: skipOnboarding) {
                 Text(viewModel.skipText)
@@ -53,6 +55,8 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
             .bridge.glassButtonStyle()
+            .accessibilitySortPriority(2)
+            .accessibilityLabel(viewModel.skipText)
         }
         .onAppear {
             applyTheme()
