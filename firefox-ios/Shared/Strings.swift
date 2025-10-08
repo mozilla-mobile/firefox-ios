@@ -1761,6 +1761,166 @@ extension String {
             }
         }
 
+        public struct JapanStrings {
+            public struct General {
+                public static let Skip = MZLocalizedString(
+                    key: "Onboarding.Modern.General.Skip.v145",
+                    tableName: "Onboarding",
+                    value: "Skip",
+                    comment: "Button to skip the entire onboarding flow.")
+            }
+
+            public struct Welcome {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.Welcome.Title.v145",
+                    tableName: "Onboarding",
+                    value: "Say goodbye to creepy trackers",
+                    comment: "Title for the welcome card in the v2 onboarding flow.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Modern.Welcome.Description.v145",
+                    tableName: "Onboarding",
+                    value: "One choice protects you everywhere you go on the web. You can always change it later.",
+                    comment: "Description for the welcome card in the v2 onboarding flow.")
+                public static let ActionTreatementA = MZLocalizedString(
+                    key: "Onboarding.Modern.Welcome.ActionTreatmentA.v145",
+                    tableName: "Onboarding",
+                    value: "Set as Default Browser",
+                    comment: "Action button to set the app as the default browser.")
+                public static let Skip = MZLocalizedString(
+                    key: "Onboarding.Modern.Welcome.Skip.v145",
+                    tableName: "Onboarding",
+                    value: "Not Now",
+                    comment: "Button to skip the welcome card.")
+            }
+
+            public struct Toolbar {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Toolbar.Title.v145",
+                    tableName: "Onboarding",
+                    value: "Choose your address bar",
+                    comment: "Title for the toolbar customization card.")
+                public static let BottomAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145",
+                    tableName: "Onboarding",
+                    value: "Bottom",
+                    comment: "Action to set the toolbar to the bottom.")
+                public static let TopAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Toolbar.Top.Action.v145",
+                    tableName: "Onboarding",
+                    value: "Top",
+                    comment: "Action to set the toolbar to the top.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Toolbar.Description.v145",
+                    tableName: "Onboarding",
+                    value: "Start typing to get search suggestions, your top sites, bookmarks, history and search engines – all in one place.",
+                    comment: "Description for the toolbar customization card.")
+                public static let ContinueAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145",
+                    tableName: "Onboarding",
+                    value: "Continue",
+                    comment: "Continue button on the toolbar customization card.")
+            }
+
+            public struct Theme {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Theme.Title.v145",
+                    tableName: "Onboarding",
+                    value: "Pick your theme",
+                    comment: "Title for the theme selection card.")
+                public static let Automatic = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Theme.Automatic.v145",
+                    tableName: "Onboarding",
+                    value: "Automatic",
+                    comment: "Option for the automatic theme.")
+                public static let Light = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Theme.Light.v145",
+                    tableName: "Onboarding",
+                    value: "Light",
+                    comment: "Option for the light theme.")
+                public static let Dark = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Theme.Dark.v145",
+                    tableName: "Onboarding",
+                    value: "Dark",
+                    comment: "Option for the dark theme.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Modern.Customization.Theme.Description.v145",
+                    tableName: "Onboarding",
+                    value: "Pick your favorite theme or have %@ match your device, putting you in control.",
+                    comment: "Description for the theme selection card. %@ is the app name (e.g. Firefox).")
+            }
+
+            public struct Sync {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.Sync.Title.v145",
+                    tableName: "Onboarding",
+                    value: "Take %@ on all your browsing adventures",
+                    comment: "Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox).")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Modern.Sync.Description.v145",
+                    tableName: "Onboarding",
+                    value: "Your bookmarks, passwords, and more sync on any device. Everything’s protected with encryption, so only you can access it.",
+                    comment: "Description for the Sync card in the v2 onboarding flow.")
+                public static let SignInAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Sync.SignIn.Action.v145",
+                    tableName: "Onboarding",
+                    value: "Start Syncing",
+                    comment: "Button to start the Sync setup process.")
+                public static let SkipAction = MZLocalizedString(
+                    key: "Onboarding.Modern.Sync.Skip.Action.v145",
+                    tableName: "Onboarding",
+                    value: "Not now",
+                    comment: "Button to skip the Sync setup during onboarding.")
+            }
+
+            public struct TermsOfService {
+                public static let Title = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.Title.v145",
+                    tableName: "Onboarding",
+                    value: "Take charge of the internet",
+                    comment: "Title for the Terms of Service screen in the v2 onboarding flow.")
+                public static let Description = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.Description.v145",
+                    tableName: "Onboarding",
+                    value: "Automatic protection of your personal info\nLoad sites fast and search smarter\nBrought to you by the non-profit %@, trusted for over 20 years",
+                    comment: "Description for the Terms of Service screen in the v2 onboarding flow. The '\\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla)")
+                public static let AgreementButtonTitle = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145",
+                    tableName: "Onboarding",
+                    value: "Continue",
+                    comment: "Title for the confirmation button on the Terms of Service screen.")
+                public static let TermsOfServiceAgreement = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145",
+                    tableName: "Onboarding",
+                    value: "By continuing, you agree to the %@",
+                    comment: "Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link.")
+                public static let TermsOfUseLink = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.TermsOfUseLink.v145",
+                    tableName: "Onboarding",
+                    value: "%@ Terms of Use.",
+                    comment: "The text for the Terms of Use link button. %@ is the app name (e.g. Firefox).")
+                public static let PrivacyNoticeAgreement = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145",
+                    tableName: "Onboarding",
+                    value: "%1$@ cares about your privacy. Read more in our %2$@",
+                    comment: "Agreement text for Privacy Notice. %1$@ is the app name (e.g. Firefox), %2$@ is the placeholder for the Privacy Notice link.")
+                public static let PrivacyNoticeLink = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145",
+                    tableName: "Onboarding",
+                    value: "Privacy Notice.",
+                    comment: "The text for the Privacy Notice link button.")
+                public static let ManagePreferenceAgreement = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145",
+                    tableName: "Onboarding",
+                    value: "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
+                    comment: "Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link.")
+                public static let ManageLink = MZLocalizedString(
+                    key: "Onboarding.Modern.TermsOfService.ManageLink.v145",
+                    tableName: "Onboarding",
+                    value: "Manage settings",
+                    comment: "The text for the Manage settings link button.")
+            }
+        }
+
         public struct TermsOfService {
             public static let Title = MZLocalizedString(
                 key: "Onboarding.TermsOfService.Title.v135",
