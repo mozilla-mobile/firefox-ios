@@ -6,9 +6,7 @@ import XCTest
 
 final class HomepageSearchBarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/3090297
-    func testDoesNotShowSearchBarTabTrayToolbarOnHomepageOff_homepageSearchBarExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
+    func testDoesNotShowSearchBar() {
         app.launch()
         navigator.nowAt(NewTabScreen)
         let searchTextFieldA11y = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
@@ -413,8 +411,6 @@ final class HomepageSearchBarTests: FeatureFlaggedTestBase {
         guard !iPad() else {
             throw XCTSkip("Bottom address bar is not available for iPad")
         }
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectToolbarBottom)

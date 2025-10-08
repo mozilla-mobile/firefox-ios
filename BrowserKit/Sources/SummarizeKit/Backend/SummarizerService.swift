@@ -95,7 +95,7 @@ public final class DefaultSummarizerService: SummarizerService {
     }
 
     public func closeCurrentStreamedSession() {
-        streamContinuation?.finish()
+        streamContinuation?.finish(throwing: CancellationError())
         streamContinuation = nil
     }
 

@@ -4,12 +4,9 @@
 
 import Foundation
 
-class PrintTests: FeatureFlaggedTestBase {
+class PrintTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/3082504
     func testValidatePrintOption() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         openUrlAndValidatePrintOptions()

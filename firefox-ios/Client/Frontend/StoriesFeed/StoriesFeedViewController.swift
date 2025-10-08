@@ -5,19 +5,25 @@
 import Common
 import Foundation
 import Redux
+import UIKit
 
 class StoriesFeedViewController: UIViewController,
                                  StoreSubscriber,
                                  Themeable {
-    // MARK: - Private variables
-    private var storiesFeedState: StoriesFeedState
-
     // MARK: - Themeable Properties
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
+
+    // MARK: - Private variables
+    private var collectionView: UICollectionView?
+    private var dataSource: StoriesFeedDiffableDataSource?
+    private var storiesFeedState: StoriesFeedState
+    private var currentTheme: Theme {
+        themeManager.getCurrentTheme(for: windowUUID)
+    }
 
     // MARK: - Private constants
     private let logger: Logger
@@ -51,6 +57,10 @@ class StoriesFeedViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureCollectionView()
+        setupLayout()
+        configureDataSource()
+
         store.dispatchLegacy(
             StoriesFeedAction(
                 windowUUID: windowUUID,
@@ -58,6 +68,7 @@ class StoriesFeedViewController: UIViewController,
             )
         )
 
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
@@ -88,6 +99,8 @@ class StoriesFeedViewController: UIViewController,
 
     func newState(state: StoriesFeedState) {
         self.storiesFeedState = state
+
+        dataSource?.updateSnapshot(state: state)
     }
 
     func unsubscribeFromRedux() {
@@ -101,13 +114,93 @@ class StoriesFeedViewController: UIViewController,
 
     // MARK: Helper functions
     private func setupNavigationBar(animated: Bool) {
-        navigationController?.setNavigationBarHidden(false, animated: animated)
         title = .FirefoxHomepage.Pocket.TopStories.TopStoriesViewTitle
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+
+    private func configureCollectionView() {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+
+        StoriesFeedItem.cellTypes.forEach {
+            collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
+        }
+
+        collectionView.backgroundColor = .clear
+
+        self.collectionView = collectionView
+    }
+
+    private func setupLayout() {
+        guard let collectionView else {
+            logger.log(
+                "StoriesFeed collectionview should not have been nil, something went wrong",
+                level: .fatal,
+                category: .storiesFeed
+            )
+            return
+        }
+
+        view.addSubview(collectionView)
+
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+    }
+
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment)
+            -> NSCollectionLayoutSection? in
+            let section = StoriesFeedSectionLayoutProvider.createStoriesFeedSectionLayout(
+                for: environment
+            )
+            return section
+        }
+        return layout
+    }
+
+    private func configureDataSource() {
+        guard let collectionView else {
+            logger.log(
+                "StoriesFeed collectionview should not have been nil, something went wrong",
+                level: .fatal,
+                category: .storiesFeed
+            )
+            return
+        }
+
+        dataSource = StoriesFeedDiffableDataSource(
+            collectionView: collectionView
+        ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
+            return self?.configureCell(for: item, at: indexPath)
+        }
+    }
+
+    private func configureCell(
+        for item: StoriesFeedItem,
+        at indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        switch item {
+        case .stories(let story):
+            guard let storiesCell = collectionView?.dequeueReusableCell(cellType: StoriesFeedCell.self,
+                                                                        for: indexPath) else {
+                return UICollectionViewCell()
+            }
+
+            let position = indexPath.item + 1
+            let totalCount = dataSource?.snapshot().numberOfItems(inSection: .stories)
+            storiesCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
+            return storiesCell
+        }
     }
 
     // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
+        collectionView?.backgroundColor = .clear
     }
 }

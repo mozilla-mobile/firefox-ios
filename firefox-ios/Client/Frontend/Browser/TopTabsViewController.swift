@@ -77,8 +77,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-        if self.featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly) &&
-           self.featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) {
+        if self.featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly) {
             let longPressRecognizer = UILongPressGestureRecognizer(
                 target: self,
                 action: #selector(TopTabsViewController.newTabLongPressed)
@@ -211,10 +210,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = currentTheme.colors
 
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-
-        if isToolbarRefactorEnabled,
-           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+        if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            toolbarState.isTranslucent {
             view.backgroundColor = .clear
             collectionView.backgroundColor = .clear
@@ -306,11 +302,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
 
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-        if !isToolbarRefactorEnabled {
-            view.addSubview(tabsButton)
-        }
-
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
 
@@ -337,19 +328,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
             collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
         ])
 
-        if isToolbarRefactorEnabled {
-            newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                             constant: -UX.trailingEdgeSpace).isActive = true
-        } else {
-            NSLayoutConstraint.activate([
-                newTab.trailingAnchor.constraint(equalTo: tabsButton.leadingAnchor),
-
-                tabsButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                tabsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.trailingEdgeSpace),
-                tabsButton.widthAnchor.constraint(equalTo: view.heightAnchor),
-                tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor),
-            ])
-        }
+        newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.trailingEdgeSpace).isActive = true
     }
 
     private func handleFadeOutAfterTabSelection() {
