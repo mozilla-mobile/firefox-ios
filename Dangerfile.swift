@@ -315,6 +315,7 @@ class CodeUsageDetector {
         case osLog
         case deferred
         case swiftUIText
+        case task
 
         var message: String {
             switch self {
@@ -327,7 +328,13 @@ class CodeUsageDetector {
             case .deferred:
                 return "Deferred class is used in file %@ at line %d. Please replace with completion handler instead."
             case .swiftUIText:
-                return "SwiftUI 'Text(\"\"' needs to be avoided, use Strings.swift localization instead."
+                return "SwiftUI 'Text(\"\"'  in file %@ at line %d needs to be avoided, use Strings.swift localization instead."
+            case .task:
+                let contacts = "(@Cramsden @ih-codes @lmarceau)."
+                return """
+                ### 🧑‍💻 New `Task {}` detected
+                New `Task {}`  in file %@ at line %d added, please tag a concurrency reviewer: \(contacts)
+                """
             }
         }
 
@@ -343,6 +350,17 @@ class CodeUsageDetector {
                 return "Deferred<"
             case .swiftUIText:
                 return "Text(\""
+            case .task:
+                return " Task {"
+            }
+        }
+
+        var shouldComment: Bool {
+            switch self {
+            case .task:
+                return true
+            default:
+                return false
             }
         }
     }
@@ -375,11 +393,11 @@ class CodeUsageDetector {
 
     private func detect(keywords: [Keywords], inHunks hunks: [FileDiff.Hunk], file: String) {
         for keyword in keywords {
-            detect(keyword: keyword.keyword, inHunks: hunks, file: file, message: keyword.message)
+            detect(keyword: keyword, inHunks: hunks, file: file, message: keyword.message)
         }
     }
 
-    private func detect(keyword: String, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
+    private func detect(keyword: Keywords, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
         for hunk in hunks {
             var newLineCount = 0
             for line in hunk.lines {
@@ -390,10 +408,14 @@ class CodeUsageDetector {
                 newLineCount += 1
 
                 // Fail only on added line having the particular keyword
-                guard isAddedLine && String(describing: line).contains(keyword) else { continue }
+                guard isAddedLine && String(describing: line).contains(keyword.keyword) else { continue }
 
                 let lineNumber = hunk.newLineStart + newLineCount - 1
-                fail(String(format: message, file, lineNumber))
+                if keyword.shouldComment {
+                    markdown(String(format: message, file, lineNumber))
+                } else {
+                    fail(String(format: message, file, lineNumber))
+                }
             }
         }
     }
