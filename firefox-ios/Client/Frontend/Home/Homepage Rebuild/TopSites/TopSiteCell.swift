@@ -260,7 +260,7 @@ class TopSiteCell: ObservableCollectionViewCell, ReusableCell {
 
         onDwellMet = { [weak self] cell in
             print("Viewed for 1 Second!", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false)
-        } // This will eventually become the impression callback
+        } // This will eventually become the click callback
     }
 
     // Add insets to favicons with transparent backgrounds
