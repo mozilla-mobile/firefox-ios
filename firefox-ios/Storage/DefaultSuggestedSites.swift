@@ -132,7 +132,7 @@ open class DefaultSuggestedSites {
         "ja_JP": [
             Site.createSuggestedSite(
                 url: "https://tenki.jp/",
-                title: "日本気象協会",
+                title: "tenki.jp",
                 trackingId: 800,
                 faviconResource: .bundleAsset(
                     name: "tenki",
@@ -150,7 +150,7 @@ open class DefaultSuggestedSites {
             ),
             Site.createSuggestedSite(
                 url: "https://m.yahoo.co.jp/",
-                title: "ヤフー",
+                title: "Yahoo! JAPAN",
                 trackingId: 802,
                 faviconResource: .bundleAsset(
                     name: "yahoo",
