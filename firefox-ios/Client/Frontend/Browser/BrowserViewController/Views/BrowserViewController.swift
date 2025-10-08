@@ -3016,10 +3016,10 @@ class BrowserViewController: UIViewController,
         searchTelemetry.shouldSetUrlTypeSearch = true
 
         finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
-        
+
         dispatchSubmitSearchTermAction(with: searchURL, searchTerm: text)
     }
-    
+
     private func dispatchSubmitSearchTermAction(with searchURL: URL, searchTerm: String) {
         guard isRecentSearchEnabled else { return }
         let action = ToolbarAction(
