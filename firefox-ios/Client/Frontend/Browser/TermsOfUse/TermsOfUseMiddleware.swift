@@ -74,6 +74,10 @@ class TermsOfUseMiddleware {
 
         // Record telemetry for ToU acceptance
         telemetry.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: acceptedDate)
+
+        // Refresh Nimbus enrollment after ToU acceptance
+        Experiments.shared.fetchExperiments()
+        _ = Experiments.shared.applyPendingExperiments()
     }
 
     private func recordImpression() {

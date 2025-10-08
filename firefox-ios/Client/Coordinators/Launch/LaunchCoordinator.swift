@@ -215,6 +215,10 @@ final class LaunchCoordinator: BaseCoordinator,
             manager.setAccepted(acceptedDate: acceptedDate)
             TermsOfServiceTelemetry().termsOfServiceAcceptButtonTapped(acceptedDate: acceptedDate)
 
+            // Refresh Nimbus enrollment after ToU acceptance
+            Experiments.shared.fetchExperiments()
+            _ = Experiments.shared.applyPendingExperiments()
+
             let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
             let sendStudies = profile.prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true
             manager.shouldSendTechnicalData(telemetryValue: sendTechnicalData, studiesValue: sendStudies)
