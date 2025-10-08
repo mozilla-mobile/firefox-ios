@@ -84,6 +84,10 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
     }
 
     public func skipOnboarding() {
+        guard !onboardingCards.isEmpty else {
+            return
+        }
+
         let currentIndex = min(max(pageCount, 0), onboardingCards.count - 1)
         let currentCardName = onboardingCards[currentIndex].name
         onComplete(currentCardName)

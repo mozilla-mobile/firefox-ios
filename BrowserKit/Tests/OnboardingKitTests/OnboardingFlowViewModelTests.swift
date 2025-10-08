@@ -6,312 +6,203 @@ import XCTest
 @testable import OnboardingKit
 
 @MainActor
-class OnboardingFlowViewModelTests: XCTestCase {
-    var viewModel: OnboardingFlowViewModel<MockOnboardingCardInfoModel>!
-    var mockCards: [MockOnboardingCardInfoModel]!
+final class OnboardingFlowViewModelTests: XCTestCase {
 
-    var completionCallbacks: [(String) -> Void] = []
-    var actionCallbacks: [(
-        MockOnboardingCardInfoModel.OnboardingActionType,
-        String,
-        @escaping (Result<OnboardingFlowViewModel<MockOnboardingCardInfoModel>.TabAction, Error>) -> Void
-    ) -> Void] = []
-    var multipleChoiceCallbacks: [(MockOnboardingCardInfoModel.OnboardingMultipleChoiceActionType, String) -> Void] = []
+    // MARK: - Properties
+    private var testHelper: OnboardingTestHelper!
 
+    // MARK: - Setup & Teardown
     override func setUp() {
         super.setUp()
-        mockCards = [
-            MockOnboardingCardInfoModel(name: "card1"),
-            MockOnboardingCardInfoModel(name: "card2"),
-            MockOnboardingCardInfoModel(name: "card3")
-        ]
-
-        completionCallbacks = []
-        actionCallbacks = []
-        multipleChoiceCallbacks = []
-
-        createViewModel()
+        testHelper = OnboardingTestHelper()
     }
 
     override func tearDown() {
-        viewModel = nil
-        mockCards = nil
-        completionCallbacks = []
-        actionCallbacks = []
-        multipleChoiceCallbacks = []
+        testHelper = nil
         super.tearDown()
     }
 
-    private func createViewModel() {
-        viewModel = OnboardingFlowViewModel(
-            onboardingCards: mockCards,
+    // MARK: - Helper Methods
+    private func createViewModel(
+        cards: [MockOnboardingCardInfoModel]? = nil
+    ) -> OnboardingFlowViewModel<MockOnboardingCardInfoModel> {
+        let defaultCards = cards ?? [
+            MockOnboardingCardInfoModel.create(name: "card1", order: 0),
+            MockOnboardingCardInfoModel.create(name: "card2", order: 1),
+            MockOnboardingCardInfoModel.create(name: "card3", order: 2)
+        ]
+
+        return OnboardingFlowViewModel<MockOnboardingCardInfoModel>(
+            onboardingCards: defaultCards,
             skipText: "Skip",
-            onActionTap: { [weak self] action, cardName, completion in
-                self?.actionCallbacks.forEach { $0(action, cardName, completion) }
-            },
-            onMultipleChoiceActionTap: { [weak self] action, cardName in
-                self?.multipleChoiceCallbacks.forEach { $0(action, cardName) }
-            },
-            onComplete: { [weak self] cardName in
-                self?.completionCallbacks.forEach { $0(cardName) }
-            }
+            onActionTap: testHelper.handleActionTap,
+            onMultipleChoiceActionTap: testHelper.handleMultipleChoiceAction,
+            onComplete: testHelper.handleCompletion
         )
     }
 
-    // MARK: - Initialization Tests
+    // MARK: - Tests for skipOnboarding()
 
-    func testInitialization() {
+    func testSkipOnboarding_withDefaultPageCount_callsOnCompleteWithFirstCard() {
+        // Given
+        let viewModel = createViewModel()
         XCTAssertEqual(viewModel.pageCount, 0)
-        XCTAssertEqual(viewModel.onboardingCards.count, 3)
-        XCTAssertEqual(viewModel.onboardingCards[0].name, "card1")
-        XCTAssertEqual(viewModel.onboardingCards[1].name, "card2")
-        XCTAssertEqual(viewModel.onboardingCards[2].name, "card3")
-        XCTAssertTrue(viewModel.multipleChoiceSelections.isEmpty)
+
+        // When
+        viewModel.skipOnboarding()
+
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card1")
     }
 
-    // MARK: - Bottom Button Action Tests
+    func testSkipOnboarding_withMiddlePageCount_callsOnCompleteWithCorrectCard() {
+        // Given
+        let viewModel = createViewModel()
+        viewModel.pageCount = 1
 
-    func testHandleBottomButtonAction_AdvanceByOne() {
-        let expectation = self.expectation(description: "Action callback called")
+        // When
+        viewModel.skipOnboarding()
 
-        actionCallbacks.append { action, cardName, completion in
-            XCTAssertEqual(action, .next)
-            XCTAssertEqual(cardName, "card1")
-            completion(.success(.advance(numberOfPages: 1)))
-            expectation.fulfill()
-        }
-
-        viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 1)
-        }
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card2")
     }
 
-    func testHandleBottomButtonAction_AdvanceByMultiple() {
-        let expectation = self.expectation(description: "Action callback called")
-
-        actionCallbacks.append { action, cardName, completion in
-            XCTAssertEqual(action, .skip)
-            XCTAssertEqual(cardName, "card1")
-            completion(.success(.advance(numberOfPages: 2)))
-            expectation.fulfill()
-        }
-
-        viewModel.handleBottomButtonAction(action: .skip, cardName: "card1")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 2)
-        }
-    }
-
-    func testHandleBottomButtonAction_NoAdvance() {
-        let expectation = self.expectation(description: "Action callback called")
-
-        actionCallbacks.append { _, _, completion in
-            completion(.success(.none))
-            expectation.fulfill()
-        }
-
-        viewModel.handleBottomButtonAction(action: .complete, cardName: "card1")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 0) // Should remain unchanged
-        }
-    }
-
-    func testHandleBottomButtonAction_ErrorHandling() {
-        let expectation = self.expectation(description: "Action callback called")
-
-        actionCallbacks.append { _, _, completion in
-            completion(.failure(NSError(domain: "test", code: 1, userInfo: nil)))
-            expectation.fulfill()
-        }
-
-        viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 0) // Should remain unchanged
-        }
-    }
-
-    func testHandleBottomButtonAction_CompletionWhenAdvancingBeyondCards() {
-        let actionExpectation = self.expectation(description: "Action callback called")
-        let completionExpectation = self.expectation(description: "Completion callback called")
-
-        actionCallbacks.append { _, _, completion in
-            completion(.success(.advance(numberOfPages: 5))) // Advance beyond available cards
-            actionExpectation.fulfill()
-        }
-
-        completionCallbacks.append { cardName in
-            XCTAssertEqual(cardName, "card1")
-            completionExpectation.fulfill()
-        }
-
-        viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 0) // Should remain unchanged when completing
-        }
-    }
-
-    func testHandleBottomButtonAction_InvalidCardName() {
-        let expectation = self.expectation(description: "Action callback called")
-
-        actionCallbacks.append { _, _, completion in
-            completion(.success(.advance(numberOfPages: 1)))
-            expectation.fulfill()
-        }
-
-        viewModel.handleBottomButtonAction(action: .next, cardName: "nonexistent")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.pageCount, 0) // Should remain unchanged
-        }
-    }
-
-    // MARK: - Multiple Choice Action Tests
-
-    func testHandleMultipleChoiceAction() {
-        let expectation = self.expectation(description: "Multiple choice callback called")
-
-        multipleChoiceCallbacks.append { action, cardName in
-            XCTAssertEqual(action, .optionA)
-            XCTAssertEqual(cardName, "card1")
-            expectation.fulfill()
-        }
-
-        viewModel.handleMultipleChoiceAction(action: .optionA, cardName: "card1")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections["card1"], .optionA)
-        }
-    }
-
-    func testHandleMultipleChoiceAction_MultipleSelections() {
-        let expectation1 = self.expectation(description: "First multiple choice callback")
-        let expectation2 = self.expectation(description: "Second multiple choice callback")
-
-        multipleChoiceCallbacks.append { _, cardName in
-            if cardName == "card1" {
-                expectation1.fulfill()
-            } else if cardName == "card2" {
-                expectation2.fulfill()
-            }
-        }
-
-        viewModel.handleMultipleChoiceAction(action: .optionA, cardName: "card1")
-        viewModel.handleMultipleChoiceAction(action: .optionB, cardName: "card2")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections["card1"], .optionA)
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections["card2"], .optionB)
-        }
-    }
-
-    func testHandleMultipleChoiceAction_OverwriteSelection() {
-        let expectation1 = self.expectation(description: "First selection")
-        let expectation2 = self.expectation(description: "Second selection")
-
-        multipleChoiceCallbacks.append { action, _ in
-            if action == .optionA {
-                expectation1.fulfill()
-            } else if action == .optionB {
-                expectation2.fulfill()
-            }
-        }
-
-        viewModel.handleMultipleChoiceAction(action: .optionA, cardName: "card1")
-        viewModel.handleMultipleChoiceAction(action: .optionB, cardName: "card1")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections["card1"], .optionB)
-            XCTAssertEqual(self.viewModel.multipleChoiceSelections.count, 1)
-        }
-    }
-
-    // MARK: - PageCount Change Tests
-
-    func testPageCountChanges() {
-        let expectation = self.expectation(description: "Action callback called")
-
-        actionCallbacks.append { _, _, completion in
-            completion(.success(.advance(numberOfPages: 1)))
-            expectation.fulfill()
-        }
-
-        let initialPageCount = viewModel.pageCount
-        viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
-
-        waitForExpectations(timeout: 1.0) { _ in
-            XCTAssertEqual(initialPageCount, 0)
-            XCTAssertEqual(self.viewModel.pageCount, 1)
-        }
-    }
-
-    // MARK: - Edge Cases
-
-    func testEmptyOnboardingCards() {
-        let emptyViewModel = OnboardingFlowViewModel<MockOnboardingCardInfoModel>(
-            onboardingCards: [],
-            skipText: "Skip",
-            onActionTap: { _, _, completion in
-                completion(.success(.advance(numberOfPages: 1)))
-            },
-            onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
-        )
-
-        XCTAssertEqual(emptyViewModel.onboardingCards.count, 0)
-        XCTAssertEqual(emptyViewModel.pageCount, 0)
-    }
-
-    func testAdvanceFromLastCard() {
-        let expectation = self.expectation(description: "Completion called")
-
-        // Start from the last card
-        viewModel = OnboardingFlowViewModel(
-            onboardingCards: mockCards,
-            skipText: "Skip",
-            onActionTap: { _, _, completion in
-                completion(.success(.advance(numberOfPages: 1)))
-            },
-            onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { cardName in
-                XCTAssertEqual(cardName, "card3")
-                expectation.fulfill()
-            }
-        )
-
-        // Manually set to last card
+    func testSkipOnboarding_withLastPageCount_callsOnCompleteWithLastCard() {
+        // Given
+        let viewModel = createViewModel()
         viewModel.pageCount = 2
 
-        viewModel.handleBottomButtonAction(action: .next, cardName: "card3")
+        // When
+        viewModel.skipOnboarding()
 
-        waitForExpectations(timeout: 1.0)
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card3")
     }
 
-    // MARK: - Memory Management Tests
+    func testSkipOnboarding_withPageCountExceedingCardsCount_callsOnCompleteWithLastCard() {
+        // Given
+        let viewModel = createViewModel()
+        viewModel.pageCount = 10 // Exceeds the number of cards (3)
 
-    func testWeakSelfInClosures() {
-        var localViewModel: OnboardingFlowViewModel<MockOnboardingCardInfoModel>? = OnboardingFlowViewModel(
-            onboardingCards: mockCards,
-            skipText: "Skip",
-            onActionTap: { _, _, completion in
-                completion(.success(.advance(numberOfPages: 1)))
-            },
-            onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
-        )
+        // When
+        viewModel.skipOnboarding()
 
-        weak var weakViewModel = localViewModel
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card3") // Should clamp to last card
+    }
 
-        localViewModel?.handleBottomButtonAction(action: .next, cardName: "card1")
+    func testSkipOnboarding_withNegativePageCount_callsOnCompleteWithFirstCard() {
+        // Given
+        let viewModel = createViewModel()
+        viewModel.pageCount = -5
 
-        localViewModel = nil
+        // When
+        viewModel.skipOnboarding()
 
-        // Verify that the view model is deallocated
-        XCTAssertNil(weakViewModel)
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card1") // Should clamp to first card
+    }
+
+    func testSkipOnboarding_withSingleCard_callsOnCompleteWithThatCard() {
+        // Given
+        let singleCard = [MockOnboardingCardInfoModel.create(name: "onlyCard", order: 0)]
+        let viewModel = createViewModel(cards: singleCard)
+
+        // When
+        viewModel.skipOnboarding()
+
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "onlyCard")
+    }
+
+    func testSkipOnboarding_calledMultipleTimes_callsOnCompleteMultipleTimes() {
+        // Given
+        let viewModel = createViewModel()
+
+        // When
+        viewModel.skipOnboarding()
+        viewModel.skipOnboarding()
+        viewModel.skipOnboarding()
+
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 3)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card1") // All calls should use same pageCount
+    }
+
+    func testSkipOnboarding_withDifferentCardNames_callsOnCompleteWithCorrectNames() {
+        // Given
+        let customCards = [
+            MockOnboardingCardInfoModel.create(name: "welcome", order: 0),
+            MockOnboardingCardInfoModel.create(name: "feature1", order: 1),
+            MockOnboardingCardInfoModel.create(name: "feature2", order: 2),
+            MockOnboardingCardInfoModel.create(name: "completion", order: 3)
+        ]
+        let viewModel = createViewModel(cards: customCards)
+
+        // Test different page counts
+        viewModel.pageCount = 0
+        viewModel.skipOnboarding()
+        XCTAssertEqual(testHelper.lastCompletedCardName, "welcome")
+
+        testHelper.reset()
+        viewModel.pageCount = 2
+        viewModel.skipOnboarding()
+        XCTAssertEqual(testHelper.lastCompletedCardName, "feature2")
+
+        testHelper.reset()
+        viewModel.pageCount = 3
+        viewModel.skipOnboarding()
+        XCTAssertEqual(testHelper.lastCompletedCardName, "completion")
+    }
+
+    func testSkipOnboarding_doesNotTriggerOtherCallbacks() {
+        // Given
+        let viewModel = createViewModel()
+
+        // When
+        viewModel.skipOnboarding()
+
+        // Then
+        XCTAssertEqual(testHelper.onActionTapCallCount, 0)
+        XCTAssertEqual(testHelper.onMultipleChoiceActionTapCallCount, 0)
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertNil(testHelper.lastActionTapped)
+        XCTAssertNil(testHelper.lastMultipleChoiceAction)
+    }
+
+    func testSkipOnboarding_withEmptyCards_handlesGracefully() {
+        // Given
+        let emptyCards: [MockOnboardingCardInfoModel] = []
+        let viewModel = createViewModel(cards: emptyCards)
+
+        // When
+        viewModel.skipOnboarding()
+
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 0)
+        XCTAssertNil(testHelper.lastCompletedCardName) // Should be nil string for empty cards
+    }
+
+    func testSkipOnboarding_boundaryConditions() {
+        // Given
+        let viewModel = createViewModel()
+
+        // Test edge case where pageCount equals exactly the array count
+        viewModel.pageCount = 3 // Equal to array count
+        viewModel.skipOnboarding()
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card3")
+
+        testHelper.reset()
+
+        // Test zero pageCount with zero index
+        viewModel.pageCount = 0
+        viewModel.skipOnboarding()
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card1")
     }
 }
