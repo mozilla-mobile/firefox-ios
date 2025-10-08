@@ -14,8 +14,8 @@ class ObservableCollectionViewCell: UICollectionViewCell {
                 checkVisibility()
             } else {
                 stopObserving()
-                resetVisibilityState()
                 stopDwellTimer()
+                wasPreviouslyVisible = false
             }
         }
     }
@@ -60,14 +60,10 @@ class ObservableCollectionViewCell: UICollectionViewCell {
     // MARK: Lifecycle
     override func prepareForReuse() {
         stopObserving()
-        resetVisibilityState()
-        stopDwellTimer()
-        super.prepareForReuse()
-    }
-
-    private func resetVisibilityState() {
         wasPreviouslyVisible = false
         dwellFiredForThisLifetime = false
+        stopDwellTimer()
+        super.prepareForReuse()
     }
 
     override func layoutSubviews() {
