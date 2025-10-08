@@ -24,6 +24,8 @@ extension BrowserViewController: WKUIDelegate {
             logger.log("Popup window disallowed for exceeding threshold for tab.", level: .info, category: .webview)
             return nil
         }
+        // TODO: - Add to BrowserWebViewDelegates epic
+        // TODO: - Add implementation to WebEngine
         parentTab.popupThrottler.willShowAlert(type: .popupWindow)
 
         guard !navigationAction.isInternalUnprivileged,

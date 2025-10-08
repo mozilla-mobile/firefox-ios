@@ -4,6 +4,7 @@
 
 import WebKit
 
+/// Intent to bridge WebEngine code to Client
 public protocol SessionCreator: AnyObject {
     /// Creates a popup WKWebView given a configuration and the source WebView for the popup.
     @MainActor
@@ -26,6 +27,7 @@ public protocol SessionCreator: AnyObject {
 //
 //    func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
 //        // TODO: FXIOS-13668 The newly created popup session should have the parent privacy settings
+// Add comment to ticket for SampleBrowser
 //        let configurationProvider = DefaultWKEngineConfigurationProvider(configuration: configuration)
 //        let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
 //                                                     dependencies: dependencies,
