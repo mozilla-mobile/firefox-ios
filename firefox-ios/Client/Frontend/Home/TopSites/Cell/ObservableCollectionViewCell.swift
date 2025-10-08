@@ -60,9 +60,9 @@ class ObservableCollectionViewCell: UICollectionViewCell {
     // MARK: Lifecycle
     override func prepareForReuse() {
         stopObserving()
+        stopDwellTimer()
         wasPreviouslyVisible = false
         dwellFiredForThisLifetime = false
-        stopDwellTimer()
         super.prepareForReuse()
     }
 
