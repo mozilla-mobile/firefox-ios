@@ -162,7 +162,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         }
    }
 
-    // refers to reader mode bar and findInPage
+    // Checks if minimal address bar is enabled and tab is on reader mode bar or findInPage
     private var shouldSendAlphaChangeAction: Bool {
         guard let tab = tabManager.selectedTab,
               let tabURL = tab.url else { return false }
