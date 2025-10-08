@@ -54,7 +54,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
 
-        GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+        GleanMetrics.Pings.shared.fxSuggestOhttp.testBeforeNextSubmit { _ in
             XCTAssertEqual(GleanMetrics.FxSuggest.pingType.testGetValue(), "fxsuggest-impression")
             XCTAssertEqual(
                 GleanMetrics.FxSuggest.contextId.testGetValue()?.uuidString,

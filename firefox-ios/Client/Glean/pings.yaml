@@ -44,7 +44,7 @@ fx-accounts:
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
 
-fx-suggest:
+fx-suggest-ohttp:
   description: |
     A ping representing a single event occurring with or to a Firefox Suggestion.
     Distinguishable by its `ping_type`.
@@ -52,11 +52,14 @@ fx-suggest:
   include_client_id: false
   uploader_capabilities:
     - ohttp
+  metadata:
+    include_info_sections: false
   bugs:
     - https://github.com/mozilla-mobile/firefox-ios/issues/16589
     - https://github.com/mozilla-mobile/firefox-ios/issues/26928
   data_reviews:
     - https://github.com/mozilla-mobile/firefox-ios/pull/17556
+    - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
     - ttran@mozilla.com

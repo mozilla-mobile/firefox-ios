@@ -70,7 +70,7 @@ struct FxSuggestTelemetry {
             gleanWrapper.recordString(for: GleanMetrics.FxSuggest.advertiser,
                                       value: EventInfo.wikipediaAdvertiser.rawValue)
         }
-        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.fxSuggest)
+        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.fxSuggestOhttp)
     }
 
     func impressionEvent(telemetryInfo: RustFirefoxSuggestionTelemetryInfo,
@@ -126,6 +126,6 @@ struct FxSuggestTelemetry {
                                       value: EventInfo.wikipediaAdvertiser.rawValue)
         }
 
-        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.fxSuggest)
+        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.fxSuggestOhttp)
     }
 }

@@ -30,7 +30,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
     func testClickEventPing_givenWikipediaInfo_thenPingSent() throws {
         TelemetryContextualIdentifier.setupContextId()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
-        GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+        GleanMetrics.Pings.shared.fxSuggestOhttp.testBeforeNextSubmit { _ in
             let event = try XCTUnwrap(GleanMetrics.Awesomebar.searchResultTap.testGetValue())
             XCTAssertEqual(event[0].extra?["type"], FxSuggestTelemetry.EventInfo.wikipediaSuggestion.rawValue)
 
@@ -62,7 +62,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
     func testClickEventPing_givenAmpInfo_thenPingSent() throws {
         TelemetryContextualIdentifier.setupContextId()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
-        GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+        GleanMetrics.Pings.shared.fxSuggestOhttp.testBeforeNextSubmit { _ in
             let event = try XCTUnwrap(GleanMetrics.Awesomebar.searchResultTap.testGetValue())
             XCTAssertEqual(event[0].extra?["type"], FxSuggestTelemetry.EventInfo.ampSuggestion.rawValue)
 
@@ -119,7 +119,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
     func testImpressionEventPing_givenWikipediaInfo_thenPingSent() throws {
         TelemetryContextualIdentifier.setupContextId()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
-        GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+        GleanMetrics.Pings.shared.fxSuggestOhttp.testBeforeNextSubmit { _ in
             let event = try XCTUnwrap(GleanMetrics.Awesomebar.searchResultImpression.testGetValue())
             XCTAssertEqual(event[0].extra?["type"], FxSuggestTelemetry.EventInfo.wikipediaSuggestion.rawValue)
             XCTAssertEqual(
@@ -153,7 +153,7 @@ final class FxSuggestTelemetryTests: XCTestCase {
     func testImpressionEventPing_givenAmpInfo_thenPingSent() throws {
         TelemetryContextualIdentifier.setupContextId()
         let expectation = expectation(description: "The Firefox Suggest ping was sent")
-        GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
+        GleanMetrics.Pings.shared.fxSuggestOhttp.testBeforeNextSubmit { _ in
             let event = try XCTUnwrap(GleanMetrics.Awesomebar.searchResultImpression.testGetValue())
             XCTAssertEqual(event[0].extra?["type"], FxSuggestTelemetry.EventInfo.ampSuggestion.rawValue)
             XCTAssertEqual(
