@@ -17,7 +17,21 @@ public protocol SessionCreator: AnyObject {
     func currentActiveStore() -> WKJavaScriptAlertStore?
 }
 
+//typealias VoidReturnCallback<T> = (T) -> Void
+//
 //class WKSessionCreator: SessionCreator {
+//    func alertStore(for webView: WKWebView) -> (any WKJavaScriptAlertStore)? {
+//        
+//    }
+//    
+//    func isSessionActive(for webView: WKWebView) -> Bool {
+//        
+//    }
+//    
+//    func currentActiveStore() -> (any WKJavaScriptAlertStore)? {
+//        <#code#>
+//    }
+//    
 //    private let dependencies: EngineSessionDependencies
 //    var onNewSessionCreated: VoidReturnCallback<EngineSession>?
 //
@@ -27,7 +41,7 @@ public protocol SessionCreator: AnyObject {
 //
 //    func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
 //        // TODO: FXIOS-13668 The newly created popup session should have the parent privacy settings
-// Add comment to ticket for SampleBrowser
+//// Add comment to ticket for SampleBrowser
 //        let configurationProvider = DefaultWKEngineConfigurationProvider(configuration: configuration)
 //        let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
 //                                                     dependencies: dependencies,

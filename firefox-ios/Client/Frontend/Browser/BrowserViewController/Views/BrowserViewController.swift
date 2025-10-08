@@ -295,8 +295,12 @@ class BrowserViewController: UIViewController,
 
     // TODO: FXIOS-13669 The session dependencies shouldn't be empty
     private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
-        engineResponder: DefaultUIHandler.factory(sessionDependencies: .empty(),
-                                                  sessionCreator: tabManager as? SessionCreator),
+        engineResponder: DefaultUIHandler.factory(
+            sessionDependencies: .empty(),
+            alertFactory: DefaultAlertFactory(),
+            alertPresenter: AlertPresenter(presenter: self),
+            sessionCreator: tabManager as? SessionCreator
+        ),
         legacyResponder: self
     )
     /// The ui delegate used by a `WKWebView`

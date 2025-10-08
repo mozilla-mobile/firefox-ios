@@ -8,24 +8,24 @@ import XCTest
 import Common
 @testable import WebEngine
 
-@MainActor
-final class WKSessionCreatorTests: XCTestCase {
-    func testCreatePopupSession_callsClosureWithValidSession() {
-        let subject = createSubject()
-        let expectation = expectation(description: "wait for session to be created")
-
-        subject.onNewSessionCreated = { session in
-            expectation.fulfill()
-        }
-        let config = WKWebViewConfiguration()
-        _ = subject.createPopupSession(configuration: config, parent: WKWebView(frame: .zero, configuration: config))
-
-        wait(for: [expectation])
-    }
-
-    func createSubject() -> WKSessionCreator {
-        let subject = WKSessionCreator(dependencies: .empty())
-        trackForMemoryLeaks(subject)
-        return subject
-    }
-}
+//@MainActor
+//final class WKSessionCreatorTests: XCTestCase {
+//    func testCreatePopupSession_callsClosureWithValidSession() {
+//        let subject = createSubject()
+//        let expectation = expectation(description: "wait for session to be created")
+//
+//        subject.onNewSessionCreated = { session in
+//            expectation.fulfill()
+//        }
+//        let config = WKWebViewConfiguration()
+//        _ = subject.createPopupSession(configuration: config, parent: WKWebView(frame: .zero, configuration: config))
+//
+//        wait(for: [expectation])
+//    }
+//
+//    func createSubject() -> WKSessionCreator {
+//        let subject = WKSessionCreator(dependencies: .empty())
+//        trackForMemoryLeaks(subject)
+//        return subject
+//    }
+//}

@@ -12,25 +12,28 @@ class MockWKEngineSession: WKEngineSession {
     let webviewProvider: MockWKWebViewProvider!
     let mockTelemetryProxy = MockEngineTelemetryProxy()
     nonisolated(unsafe) var callJavascriptMethodCalled = 0
-
+    
     init() async {
         self.webviewProvider = MockWKWebViewProvider()
         let defaultDependencies =  DefaultTestDependencies(mockTelemetryProxy: mockTelemetryProxy)
-        super.init(userScriptManager: MockWKUserScriptManager(),
-                   dependencies: defaultDependencies.sessionDependencies,
-                   configurationProvider: MockWKEngineConfigurationProvider(),
-                   webViewProvider: webviewProvider,
-                   contentScriptManager: MockWKContentScriptManager(),
-                   scriptResponder: EngineSessionScriptResponder(),
-                   metadataFetcher: DefaultMetadataFetcherHelper(),
-                   navigationHandler: DefaultNavigationHandler(),
-                   uiHandler: DefaultUIHandler.factory(
-                    sessionDependencies: defaultDependencies.sessionDependencies,
-                    sessionCreator: MockSessionCreator()
-                   ),
-                   readerModeDelegate: MockWKReaderModeDelegate())!
+        super.init(
+            userScriptManager: MockWKUserScriptManager(),
+            dependencies: defaultDependencies.sessionDependencies,
+            configurationProvider: MockWKEngineConfigurationProvider(),
+            webViewProvider: webviewProvider,
+            contentScriptManager: MockWKContentScriptManager(),
+            scriptResponder: EngineSessionScriptResponder(),
+            metadataFetcher: DefaultMetadataFetcherHelper(),
+            navigationHandler: DefaultNavigationHandler(),
+            uiHandler: DefaultUIHandler.factory(
+                sessionDependencies: defaultDependencies.sessionDependencies,
+                modalPresenter: MockModalPresenter(),
+                sessionCreator: MockSessionCreator()
+            ),
+            readerModeDelegate: MockWKReaderModeDelegate()
+        )!
     }
-
+    
     override func callJavascriptMethod(_ method: String, scope: String?) {
         callJavascriptMethodCalled += 1
     }

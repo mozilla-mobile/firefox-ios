@@ -66,7 +66,12 @@ class WKEngineSession: NSObject,
         let scriptResponder = EngineSessionScriptResponder()
         let metadataFetcher = DefaultMetadataFetcherHelper()
         let navigationHandler = DefaultNavigationHandler()
-        let uiHandler = DefaultUIHandler.factory(sessionDependencies: dependencies)
+        let uiHandler = DefaultUIHandler.factory(
+            sessionDependencies: dependencies,
+            modalPresenter: DefaultModalPresenter(
+                presenter: nil
+            )
+        )
 
         return WKEngineSession(
             userScriptManager: userScriptManager,

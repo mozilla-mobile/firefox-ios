@@ -56,23 +56,6 @@ public protocol WKUIHandler: WKUIDelegate {
     )
 }
 
-@MainActor
-public class AlertPresenter {
-    weak var presenter: UIViewController?
-
-    public init(presenter: UIViewController?) {
-        self.presenter = presenter
-    }
-
-    func present(_ alert: UIViewController) {
-        presenter?.present(alert, animated: true)
-    }
-
-    func canPresent() -> Bool {
-        return presenter?.presentedViewController == nil
-    }
-}
-
 public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertControllerDelegate {
     public weak var delegate: EngineSessionDelegate?
     private weak var sessionCreator: SessionCreator?
@@ -82,7 +65,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
     private let application: Application
     private let policyDecider: WKPolicyDecider
     private let alertFactory: WKJavaScriptAlertInfoFactory?
-    private let alertPresenter: AlertPresenter
+    private let modalPresenter: ModalPresenter
     private let logger: Logger
 
     // TODO: FXIOS-13670 With Swift 6 we can use default params in the init
@@ -90,7 +73,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
     public static func factory(
         sessionDependencies: EngineSessionDependencies,
         alertFactory: WKJavaScriptAlertInfoFactory? = nil,
-        alertPresenter: AlertPresenter = AlertPresenter(presenter: nil),
+        modalPresenter: ModalPresenter,
         sessionCreator: SessionCreator? = nil
     ) -> DefaultUIHandler {
         let policyDecider = WKPolicyDeciderFactory()
@@ -99,7 +82,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
             sessionDependencies: sessionDependencies,
             sessionCreator: sessionCreator,
             alertFactory: alertFactory,
-            alertPresenter: alertPresenter,
+            modalPresenter: modalPresenter,
             application: application,
             policyDecider: policyDecider
         )
@@ -108,7 +91,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
     init(sessionDependencies: EngineSessionDependencies,
          sessionCreator: SessionCreator?,
          alertFactory: WKJavaScriptAlertInfoFactory? = nil,
-         alertPresenter: AlertPresenter,
+         modalPresenter: ModalPresenter,
          application: Application,
          policyDecider: WKPolicyDecider,
          logger: Logger = DefaultLogger.shared
@@ -118,7 +101,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
         self.policyDecider = policyDecider
         self.application = application
         self.alertFactory = alertFactory
-        self.alertPresenter = alertPresenter
+        self.modalPresenter = modalPresenter
         self.logger = logger
         super.init()
     }
@@ -208,11 +191,11 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                 spamCallback()
             }
-        } else if sessionCreator?.isSessionActive(for: webView) == true, alertPresenter.canPresent() {
+        } else if sessionCreator?.isSessionActive(for: webView) == true, modalPresenter.canPresent() {
             logger.log("JavaScript \(alert.type.rawValue) panel will be presented.", level: .info, category: .webview)
             let alertController = alert.alertController()
             alertController.delegate = self
-            alertPresenter.present(alertController)
+            modalPresenter.present(alertController, animated: true)
         } else if let store = sessionCreator?.alertStore(for: webView) {
             logger.log("JavaScript \(alert.type.rawValue) panel is queued.", level: .info, category: .webview)
             store.queueJavascriptAlertPrompt(alert)
@@ -264,11 +247,11 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
     private func checkForJSAlerts() {
         guard let store = sessionCreator?.currentActiveStore(), store.hasJavascriptAlertPrompt() else { return }
 
-        if alertPresenter.canPresent() {
+        if modalPresenter.canPresent() {
             guard let nextAlert = store.dequeueJavascriptAlertPrompt() else { return }
             let controller = nextAlert.alertController()
             controller.delegate = self
-            alertPresenter.present(controller)
+            modalPresenter.present(controller, animated: true)
         } else {
             // We cannot show the alert right now but there is one queued on the selected tab
             // check after a delay if we can show it

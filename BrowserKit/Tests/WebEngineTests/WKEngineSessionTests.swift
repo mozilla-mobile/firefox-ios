@@ -585,7 +585,10 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testUIHandlerIsActiveSetTrue() {
-        let uiHandler = DefaultUIHandler.factory(sessionDependencies: DefaultTestDependencies().sessionDependencies)
+        let uiHandler = DefaultUIHandler.factory(
+            sessionDependencies: DefaultTestDependencies().sessionDependencies,
+            modalPresenter: MockModalPresenter()
+        )
 
         let subject = createSubject(uiHandler: uiHandler)
 
@@ -595,7 +598,10 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testUIHandlerIsActiveSetFalse() {
-        let uiHandler = DefaultUIHandler.factory(sessionDependencies: DefaultTestDependencies().sessionDependencies)
+        let uiHandler = DefaultUIHandler.factory(
+            sessionDependencies: DefaultTestDependencies().sessionDependencies,
+            modalPresenter: MockModalPresenter()
+        )
 
         let subject = createSubject(uiHandler: uiHandler)
 
@@ -606,7 +612,10 @@ final class WKEngineSessionTests: XCTestCase {
     }
 
     func testSettingEngineSessionDelegateSetsUIHandlerDelegate() {
-        let uiHandler = DefaultUIHandler.factory(sessionDependencies: DefaultTestDependencies().sessionDependencies)
+        let uiHandler = DefaultUIHandler.factory(
+            sessionDependencies: DefaultTestDependencies().sessionDependencies,
+            modalPresenter: MockModalPresenter()
+        )
         let subject = createSubject(uiHandler: uiHandler)
 
         subject?.delegate = engineSessionDelegate
@@ -620,7 +629,10 @@ final class WKEngineSessionTests: XCTestCase {
                        line: UInt = #line,
                        uiHandler: WKUIHandler? = nil) -> WKEngineSession? {
         let sessionDependencies = DefaultTestDependencies().sessionDependencies
-        let defaultUIHandler = uiHandler ?? DefaultUIHandler.factory(sessionDependencies: sessionDependencies)
+        let defaultUIHandler = uiHandler ?? DefaultUIHandler.factory(
+            sessionDependencies: sessionDependencies,
+            modalPresenter: MockModalPresenter()
+        )
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
                                             dependencies: DefaultTestDependencies().sessionDependencies,
                                             configurationProvider: configurationProvider,
