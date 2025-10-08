@@ -82,4 +82,10 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         multipleChoiceSelections[cardName] = action
         onMultipleChoiceActionTap(action, cardName)
     }
+
+    public func skipOnboarding() {
+        let currentIndex = min(max(pageCount, 0), onboardingCards.count - 1)
+        let currentCardName = onboardingCards[currentIndex].name
+        onComplete(currentCardName)
+    }
 }

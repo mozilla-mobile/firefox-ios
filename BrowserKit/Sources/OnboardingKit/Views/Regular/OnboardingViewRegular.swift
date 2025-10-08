@@ -38,11 +38,10 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 .bridge
                 .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
             }
-            Button(action: skipOnboarding) {
+            Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)
                     .bold()
                     .foregroundColor(skipTextColor)
-                    .dynamicTypeSize(...DynamicTypeSize.accessibility1)
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
             .bridge.glassButtonStyle()
@@ -86,11 +85,5 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
         let color = theme.colors
         cardBackgroundColor = Color(color.layer2)
         skipTextColor = Color(theme.colors.textOnDark)
-    }
-
-    private func skipOnboarding() {
-        let currentIndex = min(max(viewModel.pageCount, 0), viewModel.onboardingCards.count - 1)
-        let currentCardName = viewModel.onboardingCards[currentIndex].name
-        viewModel.onComplete(currentCardName)
     }
 }
