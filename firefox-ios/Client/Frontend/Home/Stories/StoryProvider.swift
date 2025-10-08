@@ -9,7 +9,7 @@ import Shared
 final class StoryProvider: FeatureFlaggable, Sendable {
     private struct Constants {
         static let defaultNumberOfHomepageStories = 12
-        static let defaultNumberOfDiscoverMoreStories = 25
+        static let defaultNumberOfDiscoverMoreStories = 20
     }
 
     private let merinoAPI: MerinoStoriesProviding
