@@ -2895,6 +2895,43 @@ extension String {
                 comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.")
         }
 
+        public struct Translation {
+            public static let Title = MZLocalizedString(
+                key: "Settings.Translation.Title.v145",
+                tableName: "Settings",
+                value: "Translation",
+                comment: "In the settings menu, in the General section, this is the title for the Translation settings section."
+            )
+
+            public static let SettingOn = MZLocalizedString(
+                key: "Settings.Translation.SettingOn.v145",
+                tableName: "Settings",
+                value: "On",
+                comment: "In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled."
+            )
+
+            public static let SettingOff = MZLocalizedString(
+                key: "Settings.Translation.SettingOff.v145",
+                tableName: "Settings",
+                value: "Off",
+                comment: "In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled."
+            )
+
+            public static let SectionTitle = MZLocalizedString(
+                key: "Settings.Translation.SectionTitle.v145",
+                tableName: "Settings",
+                value: "Translation Preferences",
+                comment: "This is the section title text for the the Translation feature under the Translation settings section."
+            )
+
+            public static let ToggleTitle = MZLocalizedString(
+                key: "Settings.Translation.ToggleTitle.v145",
+                tableName: "Settings",
+                value: "Enable Translations",
+                comment: "This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section."
+            )
+        }
+
         public struct AppIconSelection {
             public static let SettingsOptionName = MZLocalizedString(
                 key: "Settings.AppIconSelection.SettingsOptionName.v136",
@@ -3539,6 +3576,145 @@ extension String {
             tableName: "TabsTray",
             value: "1 Month Ago",
             comment: "The label for a button that closes tabs older than 1 month ago. Shown in a menu under the tabs tray.")
+    }
+}
+
+// MARK: - Translations
+extension String {
+    public struct Translations {
+        public struct Banner {
+            public static let TitleLabel = MZLocalizedString(
+                key: "Translations.Banner.TitleLabel.v145",
+                tableName: "Translations",
+                value: "Translate page to %@?",
+                comment: "On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they can translate the page to another language. %@ is the other language (e.g. English).")
+            public static let TranslateButton = MZLocalizedString(
+                key: "Translations.Banner.TranslateButton.v145",
+                tableName: "Translations",
+                value: "Translate",
+                comment: "On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage.")
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "Translations.Banner.Close.Button.AccessibilityLabel.v145",
+                tableName: "Translations",
+                value: "Close Translation Panel",
+                comment: "On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner.")
+            public static let LoadingButtonAccessibilityLabel = MZLocalizedString(
+                key: "Translations.Banner.Loading.Button.AccessibilityLabel.v145",
+                tableName: "Translations",
+                value: "Translating page",
+                comment: "On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the loading button that appears when the page is being translated.")
+            public static let ConfirmationTitleLabel = MZLocalizedString(
+                key: "Translations.Banner.ConfirmationTitleLabel.v145",
+                tableName: "Translations",
+                value: "Translated from %1$@ to %2$@",
+                comment: "On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that the page has been translated to another language. %1$@ is the original language and %2$@ is the language that the page was translated to.")
+            public static let OpenSettingsButtonAccessibilityLabel = MZLocalizedString(
+                key: "Translations.Banner.OpenSettings.Button.AccessibilityLabel.v145",
+                tableName: "Translations",
+                value: "Open Language Preferences",
+                comment: "On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the chevron button that navigates the user to the translation settings page.")
+            public static let ErrorMessageTitleLabel = MZLocalizedString(
+                key: "Translations.Banner.ErrorMessage.TitleLabel.v145",
+                tableName: "Translations",
+                value: "Couldn’t translate page",
+                comment: "On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they hit an error or issue when trying to translate the page.")
+            public static let RetryButton = MZLocalizedString(
+                key: "Translations.Banner.RetryButton.v145",
+                tableName: "Translations",
+                value: "Retry",
+                comment: "On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error.")
+        }
+
+        public struct Sheet {
+            public static let TitleLabel = MZLocalizedString(
+                key: "Translations.Sheet.TitleLabel.v145",
+                tableName: "Translations",
+                value: "Translate Page",
+                comment: "This is the title for the bottom sheet view that allows users to configure their language preferences for the translations feature.")
+            public static let TranslateFromLabel = MZLocalizedString(
+                key: "Translations.Sheet.TranslateFromLabel.v145",
+                tableName: "Translations",
+                value: "Translate From",
+                comment: "This is the text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature.")
+            public static let TranslateToLabel = MZLocalizedString(
+                key: "Translations.Sheet.TranslateToLabel.v145",
+                tableName: "Translations",
+                value: "Translate To",
+                comment: "This is the text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature.")
+            public static let FromLabel = MZLocalizedString(
+                key: "Translations.Sheet.FromLabel.v145",
+                tableName: "Translations",
+                value: "From",
+                comment: "This is a less descriptive text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature.")
+            public static let ToLabel = MZLocalizedString(
+                key: "Translations.Sheet.ToLabel.v145",
+                tableName: "Translations",
+                value: "To",
+                comment: "This is the less descriptive text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature.")
+
+            public static let ChooseLanguageLabel = MZLocalizedString(
+                key: "Translations.Sheet.ChooseLanguage.v145",
+                tableName: "Translations",
+                value: "Choose Language",
+                comment: "This is the text for the cell that indicates that a user can choose a language to translate from, as part of the bottom sheet view for the translations feature.")
+
+            public static let TranslateButton = MZLocalizedString(
+                key: "Translations.Sheet.Button.v145",
+                tableName: "Translations",
+                value: "Translate",
+                comment: "This is the text on the button used to translate a page from one language to another and the button is shown on the translation feature bottom sheet view.")
+            public static let ShowOriginalButton = MZLocalizedString(
+                key: "Translations.Sheet.ShowOriginalButton.v145",
+                tableName: "Translations",
+                value: "Show Original",
+                comment: "This is the text on the secondary button used to restore the translated page to its original language and the button is shown on the translation feature bottom sheet view.")
+            public static let LoadingButton = MZLocalizedString(
+                key: "Translations.Sheet.LoadingButton.v145",
+                tableName: "Translations",
+                value: "Translating page",
+                comment: "This is the text on the secondary button used to indicate that page is being translated and the button is shown on the translation feature bottom sheet view.")
+
+            public struct AccessibilityLabels {
+                public static let TranslateFromAccessibilityLabel = MZLocalizedString(
+                    key: "Translations.Sheet.TranslateFrom.AccessibilityLabel.v145",
+                    tableName: "Translations",
+                    value: "Translate From %@",
+                    comment: "This is the accessibility label for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English).")
+                public static let TranslateToLabel = MZLocalizedString(
+                    key: "Translations.Sheet.TranslateTo.AccessibilityLabel.v145",
+                    tableName: "Translations",
+                    value: "Translate To %@",
+                    comment: "This is the accessibility label for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English).")
+            }
+
+            public struct Error {
+                public static let InternetConnectionTitleLabel = MZLocalizedString(
+                    key: "Translations.Sheet.Error.TitleLabel.v145",
+                    tableName: "Translations",
+                    value: "Couldn’t Load Languages",
+                    comment: "On the translation feature bottom sheet, this is the text for the error message that appears when a user has no internet connection when trying to translate a page.")
+                public static let InternetConnectionSubtitleLabel = MZLocalizedString(
+                    key: "Translations.Sheet.Error.SubtitleLabel.v145",
+                    tableName: "Translations",
+                    value: "Check your internet connection and try again.",
+                    comment: "On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page.")
+                public static let RetryButton = MZLocalizedString(
+                    key: "Translations.Sheet.Error.RetryButton.v145",
+                    tableName: "Translations",
+                    value: "Retry",
+                    comment: "On the translation feature bottom sheet, this is the title for the button that allows the user to try to translate a page again after facing an error.")
+                public static let GeneralTitle = MZLocalizedString(
+                    key: "Translations.Sheet.Error.GeneralTitle.v145",
+                    tableName: "Translations",
+                    value: "Couldn’t Translate Page",
+                    comment: "On the translation feature bottom sheet, this is the text that describes that an error has occurred.")
+                public static let GeneralSubtitle = MZLocalizedString(
+                    key: "Translations.Sheet.Error.GeneralSubtitle.v145",
+                    tableName: "Translations",
+                    value: "Please try again.",
+                    comment: "On the translation feature bottom sheet, this is the text that describes that an error has occurred.")
+            }
+        }
     }
 }
 
@@ -4889,6 +5065,19 @@ extension String {
                 value: "Summarize Page",
                 comment: "On the main menu, the title for the action that will summarize the content of the webpage.")
 
+            public struct Translation {
+                public static let TranslatePageTitle = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Title.v145",
+                    tableName: "MainMenu",
+                    value: "Translate Page",
+                    comment: "On the main menu, the title for the action that will translate the content of the webpage.")
+
+                public static let TranslatedPageTitle = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Translated.Title.v145",
+                    tableName: "MainMenu",
+                    value: "Translated",
+                    comment: "On the main menu, the title for the action that shows that the content of the webpage is already translated.")
+            }
             public struct AccessibilityLabels {
                 public static let DesktopSite = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141",
@@ -4930,6 +5119,19 @@ extension String {
                     tableName: "MainMenu",
                     value: "Summarize Page",
                     comment: "On the main menu, the accessibility label for the action that will summarize the content of the webpage.")
+                public struct Translation {
+                    public static let TranslatedPageTitle = MZLocalizedString(
+                        key: "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145",
+                        tableName: "MainMenu",
+                        value: "Page Translated",
+                        comment: "On the main menu, the accessibility label for the action that shows that the content of the webpage is already translated.")
+
+                    public static let TranslatedPageLanguageLabel = MZLocalizedString(
+                        key: "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145",
+                        tableName: "MainMenu",
+                        value: "Translated to %@",
+                        comment: "On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English).")
+                }
                 public static let CollapsedHint = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142",
                     tableName: "MainMenu",
@@ -6799,6 +7001,24 @@ extension String {
             tableName: "Toolbar",
             value: "Summarize page",
             comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
+
+        struct Translation {
+            public static let ButtonInactiveAccessibilityLabel = MZLocalizedString(
+                key: "Toolbar.Translation.ButtonInactive.AccessibilityLabel.v145",
+                tableName: "Toolbar",
+                value: "Translate page",
+                comment: "Accessibility label for the translation button that can be displayed in the address toolbar and used to translate a webpage.")
+            public static let LoadingButtonAccessibilityLabel = MZLocalizedString(
+                key: "Toolbar.Translation.LoadingButton.AccessibilityLabel.v145",
+                tableName: "Toolbar",
+                value: "Translating page",
+                comment: "Accessibility label for a loading button that can be displayed in the address toolbar to indicate that the page is in the process of being translated.")
+            public static let ButtonActiveAccessibilityLabel = MZLocalizedString(
+                key: "Toolbar.Translation.ButtonActive.AccessibilityLabel.v145",
+                tableName: "Toolbar",
+                value: "Show page in original language",
+                comment: "Accessibility label for the translation button that can be displayed in the address toolbar and is shown to indicate the page is already translated.")
+        }
 
         public static let TabsButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.Tabs.Button.A11y.Label.v135",
