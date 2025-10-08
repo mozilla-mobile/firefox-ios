@@ -256,11 +256,11 @@ class TopSiteCell: ObservableCollectionViewCell, ReusableCell {
 
         onBecomeVisible = { [weak self] cell in
             print("isVisible", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false)
-        } // This will eventually become the impression callback
+        } // This is an optional callback for whether it is visble at all (but not above view time threshold)
 
         onDwellMet = { [weak self] cell in
             print("Viewed for 1 Second!", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false)
-        } // This will eventually become the click callback
+        } // This will eventually become the impression callback
     }
 
     // Add insets to favicons with transparent backgrounds
