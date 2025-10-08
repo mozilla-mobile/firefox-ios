@@ -55,6 +55,8 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
 
             VStack {
                 primaryButton
+                // Hidden spacer button to maintain consistent layout spacing
+                // when secondary button is not present
                 Button(" ", action: {})
                     .font(UX.CardView.secondaryActionFont)
                     .buttonStyle(.borderedProminent)
