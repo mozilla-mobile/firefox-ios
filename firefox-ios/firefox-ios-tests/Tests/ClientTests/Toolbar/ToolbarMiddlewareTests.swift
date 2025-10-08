@@ -17,6 +17,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     var toolbarManager: ToolbarManager!
     var mockGleanWrapper: MockGleanWrapper!
     var summarizationChecker: MockSummarizationChecker!
+    var mockRecentSearchProvider: MockRecentSearchProvider!
     var windowManager: MockWindowManager!
     var tabManager: MockTabManager!
     var profile: MockProfile!
@@ -26,6 +27,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         setIsHostedSummaryEnabled(false)
         mockGleanWrapper = MockGleanWrapper()
         summarizationChecker = MockSummarizationChecker()
+        mockRecentSearchProvider = MockRecentSearchProvider()
         tabManager = MockTabManager()
         profile = MockProfile()
         windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
@@ -41,6 +43,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     override func tearDown() {
         mockGleanWrapper = nil
         summarizationChecker = nil
+        mockRecentSearchProvider = nil
         tabManager = nil
         profile = nil
         windowManager = nil
@@ -791,6 +794,42 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine)
     }
 
+    func test_didSubmitSearchTerm_withProperPayload_addsRecentSearchToHistoryStorage() {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            url: URL(string: "https://example.com")!,
+            searchTerm: "cookies",
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 1)
+    }
+
+    func test_didSubmitSearchTerm_withoutURL_doesNotAddRecentSearchToHistoryStorage() {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            searchTerm: "cookies",
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
+    func test_didSubmitSearchTerm_withoutSearchTerm_doesNotAddRecentSearchToHistoryStorage() {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
     // MARK: - Helpers
     private func createSubject(manager: ToolbarManager) -> ToolbarMiddleware {
         return ToolbarMiddleware(
@@ -798,6 +837,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
             profile: profile,
             summarizationChecker: summarizationChecker,
+            recentSearchProvider: mockRecentSearchProvider,
             windowManager: windowManager
         )
     }

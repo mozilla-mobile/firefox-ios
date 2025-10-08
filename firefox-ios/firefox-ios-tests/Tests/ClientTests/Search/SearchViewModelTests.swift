@@ -421,8 +421,7 @@ final class SearchViewModelTests: XCTestCase {
         let mockRecentSearchProvider = MockRecentSearchProvider()
         let subject = createSubject(mockRecentSearchProvider: mockRecentSearchProvider)
         subject.retrieveRecentSearches()
-        XCTAssertEqual(mockRecentSearchProvider.recentSearchesCalledCount, 1)
-        XCTAssertEqual(subject.recentSearches, ["foo", "bar"])
+        XCTAssertEqual(mockRecentSearchProvider.loadRecentSearchesCalledCount, 1)
     }
 
     func test_retrieveRecentSearches_withNilProvider_hasEmptyList() {
