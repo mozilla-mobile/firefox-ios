@@ -117,18 +117,24 @@ public struct DefaultDynamicFontHelper: DynamicFontHelper {
                                             sizeCap: CGFloat? = nil,
                                             weight: Font.Weight? = nil,
                                             design: Font.Design = .default) -> Font {
-        var font = Font.system(textStyle, design: design)
+        // Convert SwiftUI TextStyle to UIKit TextStyle using TextStyling
+        let uiTextStyle = TextStyling.toUIFontTextStyle(textStyle)
 
+        // Convert SwiftUI weight to UIKit weight using TextStyling
+        let uiWeight = weight.map { TextStyling.toUIFontWeight($0) }
+
+        // Use the existing preferredFont method to get proper scaling with size cap
+        let uiFont = preferredFont(withTextStyle: uiTextStyle,
+                                   size: size,
+                                   sizeCap: sizeCap,
+                                   weight: uiWeight,
+                                   symbolicTraits: nil)
+
+        // Convert back to SwiftUI Font with the calculated size
+        var font = Font.system(size: uiFont.pointSize, design: design)
         if let weight = weight {
             font = font.weight(weight)
         }
-
-        // Apply size cap if specified
-        if let sizeCap = sizeCap {
-            // Create a custom font that respects the size cap
-            return Font.custom("", size: min(size, sizeCap), relativeTo: textStyle)
-        }
-
         return font
     }
 

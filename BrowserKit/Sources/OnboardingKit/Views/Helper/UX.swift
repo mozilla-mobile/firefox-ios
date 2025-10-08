@@ -83,6 +83,10 @@ enum UX {
             static let vertical: CGFloat = 16
         }
 
+        struct Font {
+            static let skipButtonSizeCap: CGFloat = 23
+        }
+
         struct Layout {
             static let logoSize = CGSize(width: 150, height: 150)
             static let buttonCornerRadius: CGFloat = 12

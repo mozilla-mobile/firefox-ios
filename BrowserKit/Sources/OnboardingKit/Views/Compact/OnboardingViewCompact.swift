@@ -52,9 +52,8 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
             Button(action: skipOnboarding) {
                 Text(viewModel.skipText)
-                    .bold()
+                    .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
                     .foregroundColor(skipTextColor)
-                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
             .bridge.glassButtonStyle()
