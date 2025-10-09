@@ -253,13 +253,16 @@ class TabManagerImplementation: NSObject,
         }
         backupCloseTabs = tabs
 
-        for tab in currentModeTabs {
-            self.removeTab(tab.tabUUID)
+        for (index, tab) in currentModeTabs.enumerated() {
+            self.removeTab(tab, flushToDisk: false)
+            if tab == currentModeTabs.last {
+                self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
+            }
         }
-
         // Save the tab state that existed prior to removals (preserves original selected tab)
         backupCloseTab = currentSelectedTab
 
+        // Persist changes after tabs have been removed
         commitChanges()
     }
 
