@@ -61,51 +61,9 @@ class ReadingListTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306995
-    func testAddToReadingListPrivateMode_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
-
-        // Initially reading list is empty
-        checkReadingListNumberOfItems(items: 0)
-        app.buttons["Done"].waitAndTap()
-        // Add item to reading list and check that it appears
-        addContentToReaderView()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(LibraryPanel_ReadingList)
-
-        // Check that there is one item
-        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        mozWaitForElementToExist(savedToReadingList)
-        checkReadingListNumberOfItems(items: 1)
-        app.buttons["Done"].waitAndTap()
-        updateScreenGraph()
-        // Check that it appears on regular mode
-        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        navigator.goto(LibraryPanel_ReadingList)
-        checkReadingListNumberOfItems(items: 1)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306995
     func testAddToReadingListPrivateMode_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)

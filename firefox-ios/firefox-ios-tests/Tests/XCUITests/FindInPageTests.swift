@@ -4,7 +4,7 @@
 
 import XCTest
 
-class FindInPageTests: FeatureFlaggedTestBase {
+class FindInPageTests: BaseTestCase {
     private func openFindInPageFromMenu(openSite: String) {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -195,29 +195,7 @@ class FindInPageTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323803
-    func testBarDisappearsWhenOpeningTabsTray_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        openFindInPageFromMenu(openSite: userState.url!)
-
-        // Dismiss keyboard
-        app.buttons[AccessibilityIdentifiers.FindInPage.findInPageCloseButton].waitAndTap()
-        navigator.nowAt(BrowserTab)
-
-        // Going to tab tray and back to the website hides the search field.
-        navigator.goto(TabTray)
-
-        app.cells.staticTexts["The Book of Mozilla"].firstMatch.waitAndTap()
-        XCTAssertFalse(app.searchFields["find.searchField"].exists)
-        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton].exists)
-        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton].exists)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2323803
-    func testBarDisappearsWhenOpeningTabsTray_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testBarDisappearsWhenOpeningTabsTray() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 

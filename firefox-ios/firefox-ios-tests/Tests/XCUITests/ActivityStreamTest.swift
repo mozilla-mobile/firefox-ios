@@ -123,64 +123,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2272220
-    func testTopSitesRemoveAllExceptPinnedClearPrivateData_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-
-        waitForExistence(TopSiteCellgroup)
-        if iPad() {
-            app.textFields.element(boundBy: 0).waitAndTap()
-            app.typeText("mozilla.org\n")
-        } else {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-            navigator.openURL("mozilla.org")
-        }
-        waitUntilPageLoad()
-        // navigator.performAction(Action.AcceptRemovingAllTabs)
-        navigator.goto(TabTray)
-        app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        let topSitesCells = app.collectionViews.links["TopSitesCell"]
-        if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
-        } else {
-            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
-        }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
-        if #available(iOS 16, *) {
-            topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
-        } else {
-            topSitesCells.staticTexts["Mozilla — Internet for people, not profit"].press(forDuration: 1)
-        }
-        selectOptionFromContextMenu(option: "Pin")
-        if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
-        } else {
-            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
-        }
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        navigator.goto(ClearPrivateDataSettings)
-        navigator.performAction(Action.AcceptClearPrivateData)
-        navigator.goto(HomePanelsScreen)
-        if #available(iOS 16, *) {
-            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
-        } else {
-            waitForExistence(topSitesCells.staticTexts["Mozilla — Internet for people, not profit"], timeout: TIMEOUT_LONG)
-        }
-        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2272220
-    func testTopSitesRemoveAllExceptPinnedClearPrivateData_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-
+    func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         waitForExistence(TopSiteCellgroup)
         if iPad() {
             app.textFields.element(boundBy: 0).waitAndTap()
@@ -337,10 +280,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     }
 
     // Smoketest
-    func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-
+    func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
@@ -365,10 +305,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     }
 
     // SmokeTest TAE
-    func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOn_TAE() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-
+    func testTopSitesOpenInNewPrivateTabDefaultTopSite_TAE() {
         XCTExpectFailure("The app was not launched", strict: false) {
             topSites.assertVisible()
         }
@@ -396,75 +333,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         tabTray.assertFirstCellVisible()
 
         tabTray.assertTabCount(1)
-    }
-
-    // Smoketest
-    func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-
-        XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
-        }
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        // Open one of the sites from Topsites and wait until page is loaded
-        // Long tap on apple top site, second cell
-        mozWaitForElementToExist(app.collectionViews["FxCollectionView"].links[defaultTopSite["bookmarkLabel"]!])
-        app.collectionViews["FxCollectionView"].links[defaultTopSite["bookmarkLabel"]!].press(forDuration: 1)
-        selectOptionFromContextMenu(option: "Open in a Private Tab")
-        // Check that two tabs are open and one of them is the default top site one
-        navigator.nowAt(HomePanelsScreen)
-        waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
-        var numTabsOpen = app.collectionViews.element(boundBy: 1).cells.count
-        if iPad() {
-            navigator.goto(TabTray)
-            numTabsOpen = app.otherElements[tabsTray].collectionViews.cells.count
-            waitForExistence(app.otherElements[tabsTray].collectionViews.cells.firstMatch)
-        } else {
-            waitForExistence(app.collectionViews.element(boundBy: 1).cells.firstMatch)
-        }
-        XCTAssertEqual(numTabsOpen, 1, "New tab not open")
-    }
-
-    // SmokeTest TAE
-    func testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff_TAE() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSites.assertVisible()
-        }
-
-        toolbar.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
-
-        // Long-press a default top site using the screen object
-        let siteName = defaultTopSite["bookmarkLabel"]!
-        topSites.longPressOnSite(named: siteName)
-
-        // Select the context menu option
-        contextMenu.openInPrivateTab()
-
-        navigator.nowAt(HomePanelsScreen)
-        BaseTestCase().waitForTabsButton()
-
-        // Toggle private mode
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-
-        // Assert that the new tab exists in the tab tray
-        tabTray.assertCellExists(named: siteName)
-
-        if iPad() {
-            navigator.goto(TabTray)
-            tabTray.assertFirstCellVisible()
-            tabTray.assertTabCount(1)
-        } else {
-            // Assert the number of open tabs on iPhone, assuming a different tab UI
-            tabTray.assertiPhoneTabCount(1)
-        }
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
