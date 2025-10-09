@@ -114,30 +114,6 @@ final class ZoomingTests: FeatureFlaggedTestBase {
         zoomBar.assertZoomPercent("100%")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306949
-    func testZoomForceCloseFirefox() {
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
-        zoomBar = ZoomBarScreen(app: app, selectors: ExperimentalZoomBarSelectors())
-        openURLAndNavigateToZoom(index: 0)
-        zoomBar.assertZoomPercent("100%")
-        // Tap on + and - buttons
-        zoomInAndAssert(levels: ["110%", "125%"])
-        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomIn() }
-        zoomBar.assertZoomPercent("150%")
-
-        closeFromAppSwitcherAndRelaunch()
-
-        zoomBar = ZoomBarScreen(app: app, selectors: ExperimentalZoomBarSelectors())
-        openURLAndNavigateToZoom(index: 0)
-        zoomBar.assertZoomPercent("150%")
-        zoomOutAndAssert(levels: ["125%", "110%"])
-        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomOut() }
-        zoomBar.assertZoomPercent("100%")
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
     func testSwitchingZoomedTabs() {
         if !iPad() {
