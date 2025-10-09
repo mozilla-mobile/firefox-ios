@@ -23,8 +23,15 @@ struct DragCancellableSecondaryButton: View {
             .padding(.horizontal, UX.DragCancellableButton.horizontalPadding)
             .frame(maxWidth: .infinity)
             .background(
-                RoundedRectangle(cornerRadius: UX.DragCancellableButton.cornerRadius)
-                    .fill(Color(uiColor: theme.colors.actionSecondary))
+                Group {
+                    if #available(iOS 26.0, *) {
+                        Capsule()
+                            .fill(Color(uiColor: theme.colors.actionSecondary))
+                    } else {
+                        RoundedRectangle(cornerRadius: UX.DragCancellableButton.cornerRadius)
+                            .fill(Color(uiColor: theme.colors.actionSecondary))
+                    }
+                }
             )
             .foregroundColor(Color(uiColor: theme.colors.textSecondary))
             .accessibility(identifier: accessibilityIdentifier)
