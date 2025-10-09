@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public struct DynamicFont {
+public struct DynamicFont: Sendable {
     let textStyle: Font.TextStyle
     let size: CGFloat
     let sizeCap: CGFloat?
