@@ -55,9 +55,7 @@ class DragAndDropTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2390210
-    func testRearrangeMoreThan3TabsTabTraytabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testRearrangeMoreThan3TabsTabTraytab() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)

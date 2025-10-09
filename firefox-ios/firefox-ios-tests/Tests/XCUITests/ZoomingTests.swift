@@ -51,9 +51,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
-    func testZoomingActionsLandscape_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testZoomingActionsLandscape() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -84,9 +82,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
-    func testZoomForceCloseFirefox_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testZoomForceCloseFirefox() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -119,9 +115,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
-    func testZoomForceCloseFirefox_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testZoomForceCloseFirefox() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -145,9 +139,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
-    func testSwitchingZoomedTabs_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testSwitchingZoomedTabs() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -163,9 +155,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2609150
-    func testSwitchingZoomedTabsLandscape_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testSwitchingZoomedTabsLandscape() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         validateZoomLevelOnSwitchingTabs()
     }

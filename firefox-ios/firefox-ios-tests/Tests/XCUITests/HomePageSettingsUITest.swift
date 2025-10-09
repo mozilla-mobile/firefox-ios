@@ -216,12 +216,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307033
-    func testJumpBackIn_tabTrayExperimentOff() throws {
+    func testJumpBackIn() throws {
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest,
                       "Jump back in removed from the new home panel")
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: exampleUrl))
@@ -288,11 +286,10 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307034
-    func testRecentlySaved_tabTrayExperimentOff() throws {
+    func testRecentlySaved() throws {
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest,
                       "Recently saved was removed from the new home panel")
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launch()
@@ -386,9 +383,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307032
-    func testShortcutsRows_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testShortcutsRows() {
         addWebsitesToShortcut(website: path(forTestPage: url_1))
         addWebsitesToShortcut(website: path(forTestPage: url_2["url"]!))
         addWebsitesToShortcut(website: path(forTestPage: url_3))

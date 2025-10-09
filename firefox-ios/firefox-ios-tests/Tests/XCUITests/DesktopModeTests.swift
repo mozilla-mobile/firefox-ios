@@ -88,7 +88,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
     }
 }
 
-class DesktopModeTestsIphone: FeatureFlaggedTestBase {
+class DesktopModeTestsIphone: BaseTestCase {
     var browserScreen: BrowserScreen!
     var toolbarScreen: ToolbarScreen!
     var mainMenuScreen: MainMenuScreen!
@@ -232,50 +232,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306856
-    func testPrivateModeOffAlsoRemovesFromNormalMode_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(RequestDesktopSite) // toggle on
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        // is now on in normal mode
-
-        navigator.nowAt(BrowserTab)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(RequestDesktopSite) // toggle off
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        // is now off in private, mode, confirm it is off in normal mode
-
-        navigator.nowAt(BrowserTab)
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306856
-    func testPrivateModeOffAlsoRemovesFromNormalMode_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testPrivateModeOffAlsoRemovesFromNormalMode() {
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -314,41 +271,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306857
-    func testPrivateModeOnHasNoAffectOnNormalMode_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(RequestDesktopSite)
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts["DESKTOP_UA"])
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        navigator.nowAt(BrowserTab)
-        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.webViews.staticTexts["MOBILE_UA"])
-            XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-        }
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306857
-    func testPrivateModeOnHasNoAffectOnNormalMode_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testPrivateModeOnHasNoAffectOnNormalMode() {
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -379,92 +302,10 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
         }
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306852
-    // smoketest
-    func testLongPressReload_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
-
-        navigator.nowAt(BrowserTab)
-        if #unavailable(iOS 16) {
-            // iOS 15 displays a toast that covers the reload button
-            sleep(2)
-        }
-        navigator.goto(ReloadLongPressMenu)
-        navigator.performAction(Action.ToggleRequestDesktopSite)
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        // Covering scenario that when reloading the page should preserve Desktop site
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.ReloadURL)
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        waitUntilPageLoad()
-        navigator.nowAt(NewTabScreen)
-        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
-        navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306852
-    // Smoketest TAE
-    func testLongPressReload_tabTrayExperimentOff_TAE() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        if skipPlatform { return }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
-        browserScreen.assertMobileUserAgentIsDisplayed()
-
-        navigator.nowAt(BrowserTab)
-        browserScreen.handleIos15ToastIfNecessary()
-        switchToDesktopSite()
-        browserScreen.assertDesktopUserAgentIsDisplayed()
-
-        // Covering scenario that when reloading the page should preserve Desktop site
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.ReloadURL)
-        waitUntilPageLoad()
-        browserScreen.assertDesktopUserAgentIsDisplayed()
-
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-
-        navigator.performAction(Action.AcceptRemovingAllTabs)
-        waitUntilPageLoad()
-        navigator.nowAt(NewTabScreen)
-        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
-        navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-        waitUntilPageLoad()
-        browserScreen.assertDesktopUserAgentIsDisplayed()
-    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // Smoketest
-    func testLongPressReload_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testLongPressReload() {
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -509,9 +350,7 @@ class DesktopModeTestsIphone: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // Smoketest TAE
-    func testLongPressReload_tabTrayExperimentOn_TAE() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testLongPressReload_TAE() {
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)

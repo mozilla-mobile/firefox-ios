@@ -124,40 +124,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307058
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // SmokeTest
-    func testImageOnOff_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        // Select no images or hide images, check it's hidden or not
-        waitUntilPageLoad()
-
-        // Select hide images under Browsing Settings page
-        let blockImagesSwitch = app.otherElements.tables.cells.switches[
-            AccessibilityIdentifiers.Settings.BlockImages.title
-        ]
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
-
-        mozWaitForElementToExist(blockImagesSwitch)
-        app.swipeUp()
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: false)
-
-        // Select show images
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        mozWaitForElementToExist(blockImagesSwitch)
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: true)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307058
-    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
-    // SmokeTest
-    func testImageOnOff_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testImageOnOff() {
         // Select no images or hide images, check it's hidden or not
         waitUntilPageLoad()
 

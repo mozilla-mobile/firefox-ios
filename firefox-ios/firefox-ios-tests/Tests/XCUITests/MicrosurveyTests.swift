@@ -5,19 +5,18 @@
 import Common
 import XCTest
 
-final class MicrosurveyTests: FeatureFlaggedTestBase {
+final class MicrosurveyTests: BaseTestCase {
     override func setUp() {
         launchArguments = [
             LaunchArguments.SkipIntro,
             LaunchArguments.ResetMicrosurveyExpirationCount
         ]
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         super.setUp()
         app.launch()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776931
-    func testShowMicrosurvey_tabTrayExperimentOff() {
+    func testShowMicrosurvey() {
         generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.waitAndTap()
@@ -42,7 +41,7 @@ final class MicrosurveyTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776934
-    func testCloseButtonDismissesSurveyAndPrompt_tabTrayExperimentOff() {
+    func testCloseButtonDismissesSurveyAndPrompt() {
         generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.waitAndTap()
@@ -57,7 +56,7 @@ final class MicrosurveyTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776933
-    func testCloseButtonDismissesMicrosurveyPrompt_tabTrayExperimentOff() {
+    func testCloseButtonDismissesMicrosurveyPrompt() {
         // Workaround: The microsurvey prompt may not appear on the first run due to retained app
         // state or missing triggers.
         // To ensure the prompt is shown, the app is terminated and relaunched to make sure the
@@ -79,7 +78,7 @@ final class MicrosurveyTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776932
-    func testURLBorderHiddenWhenMicrosurveyPromptShown_tabTrayExperimentOff() throws {
+    func testURLBorderHiddenWhenMicrosurveyPromptShown() throws {
         guard !iPad() else {
             throw XCTSkip("Toolbar option not available for iPad")
         }

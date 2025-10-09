@@ -5,7 +5,7 @@
 import XCTest
 
 let websiteUrl = "www.mozilla.org"
-class NewTabSettingsTest: FeatureFlaggedTestBase {
+class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
@@ -21,39 +21,6 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
                 app.tables.cells["NewTabAsCustomURL"]
             ]
         )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307027
-    // Smoketest
-    func testChangeNewTabSettingsShowBlankPage_HomepageOff() {
-        addLaunchArgument(jsonFileName: "homepageSearchBarOff", featureName: "homepage-redesign-feature")
-        addLaunchArgument(jsonFileName: "storiesRedesignOff", featureName: "homepage-redesign-feature")
-        app.launch()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(NewTabSettings)
-        mozWaitForElementToExist(app.navigationBars["New Tab"])
-
-        navigator.performAction(Action.SelectNewTabAsBlankPage)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        // Keyboard is not focused with the experiment ON on iPhone
-        // For iPad the keyboard is shown
-        if iPad() {
-            XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-            let keyboardCount = app.keyboards.count
-            XCTAssertEqual(keyboardCount, 1, "The keyboard should be shown on iPad")
-        } else {
-            XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-            let keyboardCount = app.keyboards.count
-            XCTAssertEqual(keyboardCount, 0, "The keyboard should not show")
-        }
-        XCTAssertFalse(
-            app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].isHittable,
-            "TopSitesCell should not be visible or interactable on the current screen"
-        )
-        mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
-        mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
@@ -167,32 +134,7 @@ class NewTabSettingsTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306877
     // Smoketest
-    func testKeyboardRaisedWhenTabOpenedFromTabTray_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        // Add New tab and set it as Blank
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(NewTabSettings)
-        mozWaitForElementToExist(app.navigationBars["New Tab"])
-        navigator.performAction(Action.SelectNewTabAsBlankPage)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        validateKeyboardIsRaisedAndDismissed()
-
-        // Switch to Private Browsing
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-
-        validateKeyboardIsRaisedAndDismissed()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306877
-    // Smoketest
-    func testKeyboardNotRaisedWhenTabOpenedFromTabTray_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testKeyboardNotRaisedWhenTabOpenedFromTabTray() {
         // Add New tab and set it as Blank
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
