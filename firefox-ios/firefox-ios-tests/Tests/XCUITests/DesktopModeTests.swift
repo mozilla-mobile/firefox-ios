@@ -302,7 +302,6 @@ class DesktopModeTestsIphone: BaseTestCase {
         }
     }
 
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // Smoketest
     func testLongPressReload() {
