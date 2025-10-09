@@ -354,8 +354,8 @@ extension String {
             public static let Title = MZLocalizedString(
                 key: "ContextualHints.Translations.Title.v145",
                 tableName: "ContextualHints",
-                value: "Firefox Speaks Your Language",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar.")
+                value: "%@ Speaks Your Language",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar. %@ is the app name (e.g. Firefox).")
             public static let Body = MZLocalizedString(
                 key: "ContextualHints.Translations.Body.v145",
                 tableName: "ContextualHints",
