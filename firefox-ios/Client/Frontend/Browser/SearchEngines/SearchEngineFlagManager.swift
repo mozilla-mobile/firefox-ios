@@ -8,7 +8,7 @@ struct SearchEngineFlagManager {
     /// Whether Search Engine Consolidation is enabled.
     /// If enabled, search engines are fetched from Remote Settings rather than our pre-bundled XML files.
     static var isSECEnabled: Bool {
-        guard !AppConstants.isRunningUnitTest else { return false }
+        guard !AppConstants.isRunningUnitTest && !AppConstants.isRunningUITests else { return false }
         return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.searchEngineConsolidation, checking: .buildOnly)
     }
 }
