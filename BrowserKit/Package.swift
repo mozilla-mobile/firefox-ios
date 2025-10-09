@@ -136,7 +136,11 @@ let package = Package(
                             .enableExperimentalFeature("StrictConcurrency")]),
         .testTarget(
             name: "TabDataStoreTests",
-            dependencies: ["TabDataStore"]),
+            dependencies: ["TabDataStore"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]
+        ),
         .target(
             name: "Redux",
             dependencies: ["Common"],
