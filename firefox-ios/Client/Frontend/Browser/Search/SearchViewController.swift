@@ -544,9 +544,11 @@ class SearchViewController: SiteTableViewController,
         var title: String
         switch section {
         case SearchListSection.recentSearches.rawValue:
+            guard !viewModel.recentSearches.isEmpty else { return nil }
             // TODO: FXIOS-13644 - Add proper strings when finalized
             title = "Recent Searches"
         case SearchListSection.trendingSearches.rawValue:
+            guard !viewModel.trendingSearches.isEmpty else { return nil }
             // TODO: FXIOS-13644 - Add proper strings when finalized
             let engineName = viewModel.searchEnginesManager?.defaultEngine?.shortName ?? ""
             title = "Trending on \(engineName)"

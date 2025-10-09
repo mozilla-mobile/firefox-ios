@@ -3850,7 +3850,7 @@ class BrowserViewController: UIViewController,
                 toast.removeFromSuperview()
             }
             // Instead of showing homepage when user enters overlay mode,
-            // we want to show the zero search state with trending searches
+            // we want to show the zero search state with trending searches or recent searches
             if !isRecentOrTrendingSearchEnabled {
                 showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             }

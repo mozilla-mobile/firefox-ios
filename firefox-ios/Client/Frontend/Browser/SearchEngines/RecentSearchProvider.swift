@@ -13,7 +13,7 @@ protocol RecentSearchProvider {
 }
 
 /// A provider that manages recent search terms from a user's history storage.
-struct DefaultRecentSearchProvider: RecentSearchProvider {
+final class DefaultRecentSearchProvider: RecentSearchProvider {
     private let historyStorage: HistoryHandler
     private let logger: Logger
     private let nimbus: FxNimbus
@@ -58,21 +58,12 @@ struct DefaultRecentSearchProvider: RecentSearchProvider {
     /// We don't have an interface to fetch only a certain amount, so we follow what Android does for now.
     func loadRecentSearches(completion: @escaping ([String]) -> Void) {
       // TODO: FXIOS-13782 Use get_most_recent method to fetch history
-      historyStorage.getHistoryMetadataSince(since: Int64.min) { result in
+      historyStorage.getHistoryMetadataSince(since: Int64.min) { [weak self] result in
           if case .success(let historyMetadata) = result {
-              let filteredResult = Dictionary(
-                historyMetadata.compactMap { item -> (String, Int64)? in
-                    guard let term = item.searchTerm else { return nil }
-                    return (term, item.createdAt)
-                },
-                uniquingKeysWith: { old, new in new }
-              )
-
-              let recentSearches = filteredResult
-                  .sorted { $0.value > $1.value }
-                  .map { $0.key }
-                  .prefix(maxNumberOfSuggestions)
-              completion(Array(recentSearches))
+              let uniqueSearchTermResult = historyMetadata.compactMap { $0.searchTerm }
+                  .uniqued()
+                  .prefix(self?.maxNumberOfSuggestions ?? 5)
+              completion(Array(uniqueSearchTermResult))
           } else {
               completion([])
           }

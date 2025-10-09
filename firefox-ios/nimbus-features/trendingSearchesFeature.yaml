@@ -22,4 +22,4 @@ features:
       - channel: developer
         value:
           enabled: true
-          max-suggestions: 3
+          max-suggestions: 3c
