@@ -8812,12 +8812,6 @@
 		8A720C612A4CBB370003018A /* SupportSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A732A812DE8AFCA0099F575 /* FxSuggestTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxSuggestTelemetry.swift; sourceTree = "<group>"; };
 		8A7368AC27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanRemoveQuickActionBookmark.swift; sourceTree = "<group>"; };
-		8A73D83F2E980A430051FABA /* 0000-use-markdown-architectural-decision-records.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "0000-use-markdown-architectural-decision-records.md"; sourceTree = "<group>"; };
-		8A73D8402E980A430051FABA /* 0001-modernize-logging-solution.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "0001-modernize-logging-solution.md"; sourceTree = "<group>"; };
-		8A73D8412E980A430051FABA /* 0002-coordinators-for-navigation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "0002-coordinators-for-navigation.md"; sourceTree = "<group>"; };
-		8A73D8422E980A430051FABA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		8A73D8432E980A430051FABA /* template.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = template.md; sourceTree = "<group>"; };
-		8A73D8442E980A430051FABA /* update-readme.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "update-readme.sh"; sourceTree = "<group>"; };
 		8A75AF9B2DE8A1C700B2C592 /* StartAtHomeMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeMiddleware.swift; sourceTree = "<group>"; };
 		8A75F1B728B558E20054E34D /* MessageCardDataAdaptorImplementationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCardDataAdaptorImplementationTests.swift; sourceTree = "<group>"; };
 		8A75F1D428B56A2C0054E34D /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
@@ -13260,19 +13254,6 @@
 			path = SectionHeader;
 			sourceTree = "<group>";
 		};
-		8A73D8452E980A430051FABA /* adr */ = {
-			isa = PBXGroup;
-			children = (
-				8A73D83F2E980A430051FABA /* 0000-use-markdown-architectural-decision-records.md */,
-				8A73D8402E980A430051FABA /* 0001-modernize-logging-solution.md */,
-				8A73D8412E980A430051FABA /* 0002-coordinators-for-navigation.md */,
-				8A73D8422E980A430051FABA /* README.md */,
-				8A73D8432E980A430051FABA /* template.md */,
-				8A73D8442E980A430051FABA /* update-readme.sh */,
-			);
-			path = adr;
-			sourceTree = "<group>";
-		};
 		8A7653C028A2E54800924ABF /* Stories */ = {
 			isa = PBXGroup;
 			children = (
@@ -15906,7 +15887,6 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				8A73D8452E980A430051FABA /* adr */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
 				F84B21C01A090F8100AAB793 /* Client */,
