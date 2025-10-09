@@ -240,48 +240,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-    @MainActor
-    func testWebViewDecidePolicyForNavigationAction_allowMarketPlaceScheme_whenUserAction() {
-        let subject = createSubject()
-        let url = URL(string: "marketplace-kit://install?exampleApp.com")!
-        let tab = createTab()
-        tabManager.tabs = [tab]
-        let navigationAction = MockNavigationAction(url: url, type: .linkActivated)
-
-        subject.webView(tab.webView!,
-                        decidePolicyFor: navigationAction) { policy in
-            XCTAssertEqual(policy, .allow)
-        }
-    }
-
-    @MainActor
-    func testWebViewDecidePolicyForNavigationAction_cancelMarketPlaceScheme_whenNotMainFrame() {
-        let subject = createSubject()
-        let url = URL(string: "marketplace-kit://install?exampleApp.com")!
-        let tab = createTab()
-        tabManager.tabs = [tab]
-        let navigationAction = MockNavigationAction(url: url, type: .linkActivated, isMainFrame: false)
-
-        subject.webView(tab.webView!,
-                        decidePolicyFor: navigationAction) { policy in
-            XCTAssertEqual(policy, .cancel)
-        }
-    }
-
-    @MainActor
-    func testWebViewDecidePolicyForNavigationAction_cancelMarketPlaceScheme_whenReloadAction() {
-        let subject = createSubject()
-        let url = URL(string: "marketplace-kit://install?exampleApp.com")!
-        let tab = createTab()
-        tabManager.tabs = [tab]
-        let navigationAction = MockNavigationAction(url: url, type: .reload)
-
-        subject.webView(tab.webView!,
-                        decidePolicyFor: navigationAction) { policy in
-            XCTAssertEqual(policy, .cancel)
-        }
-    }
-
     // MARK: - Authentication
 
     @MainActor
@@ -410,19 +368,9 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 }
 
-final class MockFrameInfo: WKFrameInfo {
-    private let main: Bool
-    init(isMainFrame: Bool) {
-        self.main = isMainFrame
-        super.init()
-    }
-    override var isMainFrame: Bool { main }
-}
-
 class MockNavigationAction: WKNavigationAction {
     private var type: WKNavigationType?
     private var urlRequest: URLRequest
-    private var frame: WKFrameInfo?
 
     override var navigationType: WKNavigationType {
         return type ?? .other
@@ -431,14 +379,10 @@ class MockNavigationAction: WKNavigationAction {
     override var request: URLRequest {
         return urlRequest
     }
-    override var targetFrame: WKFrameInfo? {
-        return frame
-    }
 
-    init(url: URL, type: WKNavigationType? = nil, isMainFrame: Bool = true) {
+    init(url: URL, type: WKNavigationType? = nil) {
         self.type = type
         self.urlRequest = URLRequest(url: url)
-        self.frame = MockFrameInfo(isMainFrame: isMainFrame)
     }
 }
 
