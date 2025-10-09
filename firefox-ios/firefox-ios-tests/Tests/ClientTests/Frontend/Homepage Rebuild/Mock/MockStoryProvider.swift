@@ -7,20 +7,20 @@ import MozillaAppServices
 
 @testable import Client
 
-final class MockStoryProvider: StoryProviderInterface {
+final class MockStoryProvider: StoryProviderInterface, @unchecked Sendable {
     var fetchHomepageStoriesCalled = 0
     var fetchDiscoverMoreStoriesCalled = 0
 
     func fetchHomepageStories() async -> [MerinoStory] {
         fetchHomepageStoriesCalled += 1
 
-        getMockStoriesData().compactMap { MerinoStory(from: $0) }
+        return getMockStoriesData().compactMap { MerinoStory(from: $0) }
     }
 
     func fetchDiscoverMoreStories() async -> [MerinoStory] {
         fetchDiscoverMoreStoriesCalled += 1
 
-        getMockStoriesData.compactMap { MerinoStory(from: $0) }
+        return getMockStoriesData().compactMap { MerinoStory(from: $0) }
     }
 
     private func getMockStoriesData() -> [RecommendationDataItem] {
