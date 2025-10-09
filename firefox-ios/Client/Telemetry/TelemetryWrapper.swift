@@ -153,7 +153,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         if let pingUploader = GleanPingUploader() {
             gleanConfig = Configuration(
                 channel: AppConstants.buildChannel.rawValue,
-                logLevel: .off,
+                logLevel: .debug,
                 httpClient: pingUploader
             )
         } else {

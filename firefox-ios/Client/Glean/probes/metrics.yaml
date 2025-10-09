@@ -3388,7 +3388,7 @@ fx_suggest:
       - najiang@mozilla.com
     expires: never
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
   position:
     type: quantity
     unit: non-negative integer
@@ -3407,7 +3407,7 @@ fx_suggest:
       - najiang@mozilla.com
     expires: never
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
   block_id:
     type: quantity
     description: |
@@ -3425,7 +3425,7 @@ fx_suggest:
     expires: never
     unit: integer
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
   advertiser:
     type: string
     description: |
@@ -3442,7 +3442,7 @@ fx_suggest:
       - najiang@mozilla.com
     expires: never
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
   is_clicked:
     type: boolean
     description: >
@@ -3461,7 +3461,7 @@ fx_suggest:
       - najiang@mozilla.com
     expires: never
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
   reporting_url:
     type: url
     description: |
@@ -3479,7 +3479,7 @@ fx_suggest:
       - najiang@mozilla.com
     expires: never
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
   context_id:
     type: uuid
     description: |
@@ -3496,7 +3496,7 @@ fx_suggest:
       - najiang@mozilla.com
     expires: never
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
   iab_category:
     type: string
     description: |
@@ -3514,7 +3514,7 @@ fx_suggest:
       - najiang@mozilla.com
     expires: never
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
   country:
     type: string
     description: >
@@ -3532,7 +3532,7 @@ fx_suggest:
       - najiang@mozilla.com
     expires: never
     send_in_pings:
-      - fx-suggest
+      - fx-suggest-ohttp
 
 # Window (iPad) metrics
 windows:
