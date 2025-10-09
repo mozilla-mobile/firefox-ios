@@ -1,6 +1,6 @@
 # 2. Coordinator Pattern for Navigation
 
-Date: 2023-3-23
+Date: 2023-03-23
 
 ## Status
 
