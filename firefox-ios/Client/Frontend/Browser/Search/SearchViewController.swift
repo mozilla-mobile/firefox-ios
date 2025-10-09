@@ -461,8 +461,13 @@ class SearchViewController: SiteTableViewController,
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
         case .trendingSearches:
-            // TODO: FXIOS-13689 - Implement tapping on trending search
-            break
+            guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
+            guard let trendingSearch = viewModel.trendingSearches[safe: indexPath.row],
+                  let url = defaultEngine.searchURLForQuery(trendingSearch)
+            else { return }
+
+            searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: trendingSearch)
+
         case .searchSuggestions:
             guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
