@@ -539,6 +539,13 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // Handle MarketplaceKit URL
+        if url.scheme == "marketplace-kit" {
+            let shouldAllowNavigation = shouldAllowMarketplaceKitNavigation(navigationAction)
+            decisionHandler(shouldAllowNavigation ? .allow : .cancel)
+            return
+        }
+
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: decisionHandler)
         if navigationHandler.shouldFilterDataScheme(url: url) {
             navigationHandler.filterDataScheme(url: url, navigationAction: navigationAction)
@@ -1188,6 +1195,16 @@ private extension BrowserViewController {
         if url.absoluteString == deeplinkUrl { return true }
 
         return false
+    }
+
+    // Handle MarketPlaceKitNavigation
+    // Allow only explicit user tap on a top level link
+    private func shouldAllowMarketplaceKitNavigation(_ navigationAction: WKNavigationAction) -> Bool {
+        guard navigationAction.navigationType == .linkActivated,
+              navigationAction.targetFrame?.isMainFrame == true else {
+            return false
+        }
+        return true
     }
 
     // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com
