@@ -164,7 +164,10 @@ let package = Package(
                             .enableUpcomingFeature("InferSendableFromCaptures")]),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"]),
+            dependencies: ["ToolbarKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+        ]),
         .target(
             name: "MenuKit",
             dependencies: ["Common", "ComponentLibrary"],
