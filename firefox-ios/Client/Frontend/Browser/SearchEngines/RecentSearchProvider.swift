@@ -60,9 +60,19 @@ struct DefaultRecentSearchProvider: RecentSearchProvider {
       // TODO: FXIOS-13782 Use get_most_recent method to fetch history
       historyStorage.getHistoryMetadataSince(since: Int64.min) { result in
           if case .success(let historyMetadata) = result {
-              let searches = historyMetadata.compactMap { $0.searchTerm }
-              let recentSearches = Array(searches.prefix(maxNumberOfSuggestions))
-              completion(recentSearches)
+              let filteredResult = Dictionary(
+                historyMetadata.compactMap { item -> (String, Int64)? in
+                    guard let term = item.searchTerm else { return nil }
+                    return (term, item.createdAt)
+                },
+                uniquingKeysWith: { old, new in new }
+              )
+
+              let recentSearches = filteredResult
+                  .sorted { $0.value > $1.value }
+                  .map { $0.key }
+                  .prefix(maxNumberOfSuggestions)
+              completion(Array(recentSearches))
           } else {
               completion([])
           }
