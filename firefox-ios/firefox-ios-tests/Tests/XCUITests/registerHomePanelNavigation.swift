@@ -26,7 +26,7 @@ func registerHomePanelNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAp
             }
         }
 
-        if !isTablet {
+        if !isTablet && XCUIDevice.shared.orientation.isPortrait {
             screenState.tap(app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell], to: URLBarOpen)
         }
 
