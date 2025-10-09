@@ -59,7 +59,6 @@ fx-suggest-ohttp:
     - https://github.com/mozilla-mobile/firefox-ios/issues/26928
   data_reviews:
     - https://github.com/mozilla-mobile/firefox-ios/pull/17556
-    - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
   notification_emails:
     - fx-ios-data-stewards@mozilla.com
     - ttran@mozilla.com
