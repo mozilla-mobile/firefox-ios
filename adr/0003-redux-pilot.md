@@ -1,4 +1,4 @@
-# 3. Redux-style Unidirectional Data Flow
+# 3. Redux Pilot
 
 Date: 2023-09-07
 
