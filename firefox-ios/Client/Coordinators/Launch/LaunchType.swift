@@ -46,7 +46,11 @@ enum LaunchType {
         switch self {
         case .termsOfService:
             return true
-        case .intro, .update:
+        case .intro(let introManager):
+            // For intro onboarding, use full screen on iPad only when modern onboarding is enabled
+            return isIphone || introManager.isModernOnboardingEnabled
+        case .update:
+            // For update onboarding, always use iPhone-only behavior for now
             return isIphone
         case .survey:
             return true
