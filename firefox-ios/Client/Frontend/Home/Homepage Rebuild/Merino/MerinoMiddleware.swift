@@ -42,7 +42,9 @@ final class MerinoMiddleware {
 
     private func getPocketDataAndUpdateState(for action: Action) {
         Task {
-            let merinoStories = await merinoManager.getMerinoItems()
+            let source: StorySource
+            source = action as? StoriesFeedAction != nil ? .storiesFeed : .homepage
+            let merinoStories = await merinoManager.getMerinoItems(source: source)
             store.dispatchLegacy(
                 MerinoAction(
                     merinoStories: merinoStories,

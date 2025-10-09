@@ -499,7 +499,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     private func getPopulatedCollectionViewState(from currentState: HomepageState) async -> HomepageState {
         let merinoManager = MockMerinoManager()
-        let merinoStories = await merinoManager.getMerinoItems()
+        let merinoStories = await merinoManager.getMerinoItems(source: .homepage)
         return HomepageState.reducer(
             currentState,
             MerinoAction(
