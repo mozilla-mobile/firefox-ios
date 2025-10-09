@@ -240,6 +240,48 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+//    @MainActor
+//    func testWebViewDecidePolicyForNavigationAction_allowMarketPlaceScheme_whenUserAction() {
+//        let subject = createSubject()
+//        let url = URL(string: "marketplace-kit://install?exampleApp.com")!
+//        let tab = createTab()
+//        tabManager.tabs = [tab]
+//        let navigationAction = MockNavigationAction(url: url, type: .linkActivated)
+//
+//        subject.webView(tab.webView!,
+//                        decidePolicyFor: navigationAction) { policy in
+//            XCTAssertEqual(policy, .allow)
+//        }
+//    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_cancelMarketPlaceScheme_whenNotMainFrame() {
+        let subject = createSubject()
+        let url = URL(string: "marketplace-kit://install?exampleApp.com")!
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let navigationAction = MockNavigationAction(url: url, type: .linkActivated)
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: navigationAction) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_cancelMarketPlaceScheme_whenReloadAction() {
+        let subject = createSubject()
+        let url = URL(string: "marketplace-kit://install?exampleApp.com")!
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let navigationAction = MockNavigationAction(url: url, type: .reload)
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: navigationAction) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
     // MARK: - Authentication
 
     @MainActor
