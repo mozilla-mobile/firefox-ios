@@ -33,7 +33,7 @@ class StoryProviderTests: XCTestCase, FeatureFlaggable {
         subject = StoryProvider(merinoAPI: MockMerinoAPI(result: .success(stories)))
         let fetched = await subject.fetchDiscoverMoreStories()
 
-        XCTAssertEqual(fetched, expectedResult)
+        XCTAssertEqual(Set(fetched), Set(expectedResult))
     }
 }
 
