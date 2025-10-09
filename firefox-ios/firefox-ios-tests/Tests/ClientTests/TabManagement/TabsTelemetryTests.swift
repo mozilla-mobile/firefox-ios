@@ -10,32 +10,51 @@ import Common
 
 // TODO: FXIOS-13742 - Migrate TabsTelemetryTests to use mock telemetry or GleanWrapper
 class TabsTelemetryTests: XCTestCase {
-    var profile: Profile!
-    var inactiveTabsManager: MockInactiveTabsManager!
+    var gleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
-
-        profile = MockProfile()
-        inactiveTabsManager = MockInactiveTabsManager()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        setupTelemetry(with: profile)
+        gleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
-        profile = nil
-        tearDownTelemetry()
+        gleanWrapper = nil
         super.tearDown()
     }
 
     func testTabSwitchMeasurement() throws {
-        let subject = TabsTelemetry()
+        let subject = createSubject()
 
         subject.startTabSwitchMeasurement()
         subject.stopTabSwitchMeasurement()
 
-        let resultValue = try XCTUnwrap(GleanMetrics.Tabs.tabSwitch.testGetValue())
-        XCTAssertEqual(1, resultValue.count, "Should have been measured once")
-        XCTAssertEqual(0, GleanMetrics.Tabs.tabSwitch.testGetNumRecordedErrors(.invalidValue))
+        let event = GleanMetrics.Tabs.tabSwitch
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.last as? TimingDistributionMetricType)
+
+        XCTAssertEqual(gleanWrapper.stopAndAccumulateCalled, 1)
+        XCTAssertEqual(gleanWrapper.savedEvents.count, 2)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func testrackConsecutiveCrashTelemetry() throws {
+        let subject = createSubject()
+        let numberOfCrash: UInt = 2
+        typealias EventExtrasType = GleanMetrics.Webview.ProcessDidTerminateExtra
+        let event = GleanMetrics.Webview.processDidTerminate
+
+        subject.trackConsecutiveCrashTelemetry(attemptNumber: numberOfCrash)
+
+        let savedExtras = try XCTUnwrap(gleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(gleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.consecutiveCrash, Int32(numberOfCrash))
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    private func createSubject() -> TabsTelemetry {
+        let subject = TabsTelemetry(gleanWrapper: gleanWrapper)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
