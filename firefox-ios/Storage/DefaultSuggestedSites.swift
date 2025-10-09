@@ -141,7 +141,7 @@ open class DefaultSuggestedSites {
             ),
             Site.createSuggestedSite(
                 url: "https://ameblo.jp/",
-                title: "アメブロ",
+                title: "Amebaブログ",
                 trackingId: 801,
                 faviconResource: .bundleAsset(
                     name: "ameblo",
