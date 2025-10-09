@@ -107,7 +107,7 @@ final class SummarizeCoordinator: BaseCoordinator,
             linkButtonURL: SupportUtils.URLForTopic("summarize-pages-ios"),
             allowButtonTitle: .Summarizer.ToSInfoPanelContinueButtonLabel,
             allowButtonA11yId: AccessibilityIdentifiers.Summarizer.tosAllowButton,
-            allowButtonA11yLabel: .Summarizer.ToSInfoPanelAllowButtonAccessibilityLabel,
+            allowButtonA11yLabel: .Summarizer.ToSInfoPanelAllowButtonAccessibilityLabel
         )
 
         let model = SummarizeViewConfiguration(
