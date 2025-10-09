@@ -9,6 +9,7 @@ import Common
 import Shared
 
 @available(iOS 17, *)
+@MainActor
 class DownloadLiveActivityWrapper: DownloadProgressDelegate {
     private struct UX {
         static let updateCooldown = 0.75 // Update Cooldown in Seconds
@@ -19,7 +20,7 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
         case delayed = 3_000_000_000 // Milliseconds to dismissal
     }
 
-    let throttler = ConcurrencyThrottler(seconds: UX.updateCooldown)
+    let throttler: ConcurrencyThrottlerProtocol = ConcurrencyThrottler(seconds: UX.updateCooldown)
 
     var downloadLiveActivity: Activity<DownloadLiveActivityAttributes>?
 
@@ -68,17 +69,13 @@ class DownloadLiveActivityWrapper: DownloadProgressDelegate {
 
     func updateCombinedBytesDownloaded(value: Int64) {
         throttler.throttle {
-            Task {
-                await self.update()
-            }
+            await self.update()
         }
     }
 
     func updateCombinedTotalBytesExpected(value: Int64?) {
         throttler.throttle {
-            Task {
-                await self.update()
-            }
+            await self.update()
         }
     }
 }

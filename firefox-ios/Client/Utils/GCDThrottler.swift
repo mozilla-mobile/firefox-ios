@@ -5,13 +5,13 @@
 import Foundation
 import Common
 
-protocol ThrottleProtocol {
+protocol GCDThrottlerProtocol {
     func throttle(completion: @escaping @Sendable () -> Void)
 }
 
 /// For any work that needs to be delayed, you can wrap it inside a throttler
 /// and specify the delay time, in seconds, and queue.
-class GCDThrottler: ThrottleProtocol {
+class GCDThrottler: GCDThrottlerProtocol {
     private let defaultDelay = 0.35
 
     private let threshold: Double

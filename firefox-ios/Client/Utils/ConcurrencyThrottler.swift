@@ -3,7 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Foundation
 
-class ConcurrencyThrottler: ThrottleProtocol {
+protocol ConcurrencyThrottlerProtocol {
+    func throttle(completion: @escaping @Sendable () async -> Void)
+}
+
+class ConcurrencyThrottler: ConcurrencyThrottlerProtocol {
     private var lastUpdateTime = Date.distantPast
     private var delay: Double
     private var taskComplete = true
@@ -14,16 +18,14 @@ class ConcurrencyThrottler: ThrottleProtocol {
         self.delay = delay
     }
 
-    func throttle(completion: @escaping () -> Void) {
+    func throttle(completion: @escaping @Sendable () async -> Void) {
         let currentTime = Date()
 
         guard taskComplete && (lastUpdateTime.timeIntervalSinceNow < -delay) else { return }
         taskComplete = false
 
         Task {
-            await MainActor.run {
-                completion()
-            }
+            await completion()
             lastUpdateTime = currentTime
             taskComplete = true
         }
