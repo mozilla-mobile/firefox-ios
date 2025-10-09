@@ -50,9 +50,9 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 .padding(.bottom)
             }
 
-            Button(action: skipOnboarding) {
+            Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)
-                    .bold()
+                    .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
                     .foregroundColor(skipTextColor)
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
@@ -99,14 +99,8 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
     }
 
-    private func skipOnboarding() {
-        let currentIndex = min(max(viewModel.pageCount, 0), viewModel.onboardingCards.count - 1)
-        let currentCardName = viewModel.onboardingCards[currentIndex].name
-        viewModel.onComplete(currentCardName)
-    }
-
     private func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        skipTextColor = Color(theme.colors.textInverted)
+        skipTextColor = Color(theme.colors.textOnDark)
     }
 }
