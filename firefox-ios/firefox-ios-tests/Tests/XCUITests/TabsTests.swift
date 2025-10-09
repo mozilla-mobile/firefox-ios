@@ -603,6 +603,7 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2355537
     // Smoketest
     func testAddPrivateTabByLongPressTabsButton() {
+        app.launch()
         if skipPlatform { return }
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -646,6 +647,7 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306860
     // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
+        app.launch()
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)

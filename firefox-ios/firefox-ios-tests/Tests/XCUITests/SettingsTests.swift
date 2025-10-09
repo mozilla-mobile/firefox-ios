@@ -126,6 +126,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     // SmokeTest
     func testImageOnOff() {
         // Select no images or hide images, check it's hidden or not
+        app.launch()
         waitUntilPageLoad()
 
         // Select hide images under Browsing Settings page
