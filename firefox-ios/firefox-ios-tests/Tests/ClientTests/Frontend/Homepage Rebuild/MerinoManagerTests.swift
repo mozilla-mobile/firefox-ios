@@ -8,49 +8,29 @@ import MozillaAppServices
 @testable import Client
 
 final class MerinoManagerTests: XCTestCase {
-    func test_getMerinoItems_withSuccess_returnExpectedStories() async {
-        let subject = createSubject(
-            with: MockMerinoAPI(result: .success(getMockStoriesData()))
-        )
-        let stories = await subject.getMerinoItems()
+    let storyProvider = MockStoryProvider()
+
+    func test_getMerinoItems_withHomepageSource_returnExpectedStories() async {
+        let subject = createSubject(with: storyProvider)
+        let stories = await subject.getMerinoItems(source: .homepage)
         XCTAssertEqual(stories.count, 3)
+        XCTAssertEqual(storyProvider.fetchHomepageStoriesCalled, 1)
     }
 
-    func test_getMerinoItems_withSucess_returnEmptyStories() async {
-        let subject = createSubject(
-            with: MockMerinoAPI(result: .success([]))
-        )
-        let stories = await subject.getMerinoItems()
-        XCTAssertEqual(stories.count, 0)
-    }
-
-    func test_getMerinoItems_withFailure_returnEmptyStories() async {
-        let subject = createSubject(
-            with: MockMerinoAPI(result: .failure(TestError.example))
-        )
-        let stories = await subject.getMerinoItems()
-        XCTAssertEqual(stories.count, 0)
+    func test_getMerinoItems_withStoriesFeedSource_returnExpectedStories() async {
+        let subject = createSubject(with: storyProvider)
+        let stories = await subject.getMerinoItems(source: .storiesFeed)
+        XCTAssertEqual(stories.count, 3)
+        XCTAssertEqual(storyProvider.fetchDiscoverMoreStoriesCalled, 1)
     }
 
     private func createSubject(
-        with merinoAPI: MockMerinoAPI,
+        with storyProvider: MockStoryProvider,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> MerinoManager {
-        let subject = MerinoManager(merinoAPI: merinoAPI)
+        let subject = MerinoManager(storyProvider: storyProvider)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
-    }
-
-    private func getMockStoriesData() -> [RecommendationDataItem] {
-        return [
-            .makeItem("feed1"),
-            .makeItem("feed2"),
-            .makeItem("feed3"),
-        ]
-    }
-
-    enum TestError: Error {
-        case example
     }
 }

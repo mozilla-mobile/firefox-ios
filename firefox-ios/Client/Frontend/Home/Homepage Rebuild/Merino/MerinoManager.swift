@@ -9,10 +9,10 @@ protocol MerinoManagerProvider: Sendable {
 }
 
 final class MerinoManager: MerinoManagerProvider {
-    private let storyProvider: StoryProvider
+    private let storyProvider: StoryProviderInterface
 
-    init(merinoAPI: MerinoStoriesProviding) {
-        self.storyProvider = StoryProvider(merinoAPI: merinoAPI)
+    init(storyProvider: StoryProviderInterface) {
+        self.storyProvider = storyProvider
     }
 
     func getMerinoItems(source: StorySource) async -> [MerinoStoryConfiguration] {

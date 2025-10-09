@@ -6,7 +6,12 @@ import Foundation
 import MozillaAppServices
 import Shared
 
-final class StoryProvider: FeatureFlaggable, Sendable {
+protocol StoryProviderInterface: Sendable {
+    func fetchHomepageStories() async -> [MerinoStory]
+    func fetchDiscoverMoreStories() async -> [MerinoStory]
+}
+
+final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     private struct Constants {
         static let defaultNumberOfHomepageStories = 12
         static let defaultNumberOfDiscoverMoreStories = 20

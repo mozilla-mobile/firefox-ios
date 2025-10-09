@@ -8,32 +8,63 @@ import MozillaAppServices
 @testable import Client
 
 class StoryProviderTests: XCTestCase, FeatureFlaggable {
-    var subject: StoryProvider!
-
-    override func tearDown() {
-        super.tearDown()
-        subject = nil
-    }
-
     func testFetchingStories_forHomepage_returnsList() async {
-        let stories: [RecommendationDataItem] = (0...30).map { .makeItem("feed\($0)") }
+        let stories: [RecommendationDataItem] = (0..<30).map { .makeItem("feed\($0)") }
         let expectedNumberOfStories = featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly) ? 9 : 12
         let expectedResult = Array(stories.prefix(expectedNumberOfStories)).map(MerinoStory.init)
 
-        subject = StoryProvider(merinoAPI: MockMerinoAPI(result: .success(stories)))
+        let subject = createSubject(with: MockMerinoAPI(result: .success(stories)))
         let fetched = await subject.fetchHomepageStories()
 
         XCTAssertEqual(fetched, expectedResult)
     }
 
-    func testFetchingStories_forDiscoverMore_returnsList() async {
-        let stories: [RecommendationDataItem] = (0...30).map { .makeItem("feed\($0)") }
-        let expectedResult = Array(stories.prefix(25)).map(MerinoStory.init)
+    func testFetchingStories_forHomepage_returnsEmptyList() async {
+        let subject = createSubject(with: MockMerinoAPI(result: .success([])))
+        let fetched = await subject.fetchHomepageStories()
 
-        subject = StoryProvider(merinoAPI: MockMerinoAPI(result: .success(stories)))
+        XCTAssertEqual(fetched.count, 0)
+    }
+
+    func testFetchingStories_forHomepage_withError_returnsEmptyList() async {
+        let subject = createSubject(with: MockMerinoAPI(result: .failure(TestError.default)))
+        let fetched = await subject.fetchHomepageStories()
+
+        XCTAssertEqual(fetched.count, 0)
+    }
+
+    func testFetchingStories_forStoriesFeed_returnsList() async {
+        let stories: [RecommendationDataItem] = (0..<20).map { .makeItem("feed\($0)") }
+        let expectedResult = stories.map(MerinoStory.init)
+
+        let subject = createSubject(with: MockMerinoAPI(result: .success(stories)))
         let fetched = await subject.fetchDiscoverMoreStories()
 
         XCTAssertEqual(fetched, expectedResult)
+    }
+
+    func testFetchingStories_forStoriesFeed_returnsEmptyList() async {
+        let subject = createSubject(with: MockMerinoAPI(result: .success([])))
+        let fetched = await subject.fetchDiscoverMoreStories()
+
+        XCTAssertEqual(fetched.count, 0)
+    }
+
+    func testFetchingStories_forStoriesFeed_withError_returnsEmptyList() async {
+        let subject = createSubject(with: MockMerinoAPI(result: .failure(TestError.default)))
+        let fetched = await subject.fetchDiscoverMoreStories()
+
+        XCTAssertEqual(fetched.count, 0)
+    }
+
+    private func createSubject(
+        with merinoAPI: MockMerinoAPI,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> StoryProvider {
+        let subject = StoryProvider(merinoAPI: merinoAPI)
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }
 
