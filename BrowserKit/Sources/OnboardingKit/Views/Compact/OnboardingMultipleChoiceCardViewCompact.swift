@@ -93,6 +93,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             .if(sizeCategory <= .extraExtraLarge) { view in
                 view.frame(height: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
             }
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     var primaryButton: some View {
