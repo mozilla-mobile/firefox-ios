@@ -21,4 +21,4 @@ features:
       - channel: developer
         value:
           enabled: true
-          max-suggestions: 8
+          max-suggestions: 5
