@@ -1198,7 +1198,7 @@ private extension BrowserViewController {
     }
 
     // Handle MarketPlaceKitNavigation
-    // Allow only explicit user-tap on a top-level link
+    // Allow only explicit user tap on a top level link
     private func shouldAllowMarketplaceKitNavigation(_ navigationAction: WKNavigationAction) -> Bool {
         guard navigationAction.navigationType == .linkActivated,
               navigationAction.targetFrame?.isMainFrame == true else {
