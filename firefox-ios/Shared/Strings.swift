@@ -349,6 +349,19 @@ extension String {
                 value: "Tap here to start a fresh private session. Delete your history, cookies — everything.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode.")
         }
+
+        public struct Translations {
+            public static let Title = MZLocalizedString(
+                key: "ContextualHints.Translations.Title.v145",
+                tableName: "ContextualHints",
+                value: "Firefox Speaks Your Language",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new translation icon on the toolbar.")
+            public static let Body = MZLocalizedString(
+                key: "ContextualHints.Translations.Body.v145",
+                tableName: "ContextualHints",
+                value: "Fast, private translations are ready when you are.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the body description of one that points the user to the new translation icon on the toolbar.")
+        }
     }
 }
 
