@@ -55,7 +55,7 @@
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Ինչպես է դա աշխատում";
 
-/* The label for the accept button on the Terms of Service information panel in the summarizer. */
+/* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
 "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Շարունակել";
 
 /* The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox). */

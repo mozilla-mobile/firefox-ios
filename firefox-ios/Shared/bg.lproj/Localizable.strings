@@ -17,7 +17,7 @@
 "About" = "Относно";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "Добавяне на пряк път";
+"ActivityStream.ContextMenu.AddToShortcuts" = "Добавяне към преки пътища";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Закачане";
@@ -572,10 +572,10 @@
 "Keyboard.Shortcuts.ShowDownloads" = "Показване на изтеглянията";
 
 /* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowFirstTab" = "Показване на първи раздел";
+"Keyboard.Shortcuts.ShowFirstTab" = "Показване на първия раздел";
 
 /* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowHistory" = "Показване на история";
+"Keyboard.Shortcuts.ShowHistory" = "Показване на историята";
 
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowLastTab" = "Показване на последния раздел";
@@ -614,13 +614,13 @@
 "LibraryPanel.History.DeleteGroupedItem.v104" = "Изтриване";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
-"LibraryPanel.History.NoHistoryFound.v99" = "Няма намерена история";
+"LibraryPanel.History.NoHistoryFound.v99" = "Няма намерена история на сърфиране";
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
 "LibraryPanel.History.RecentlyClosedTabs.v99" = "Последно затворени раздели";
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
-"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Въведете търсене";
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Въведете думи за търсене";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
 "LibraryPanel.History.SyncedHistory.v100" = "Синхронизирана история";
