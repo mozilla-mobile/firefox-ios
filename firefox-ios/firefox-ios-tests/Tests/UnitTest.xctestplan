@@ -220,8 +220,7 @@
         "TermsOfServiceTelemetryTests",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
-        "VersionSettingTests\/testCopyAppVersion()",
-        "WebServerTests\/testWebServerIsServingRequests()"
+        "VersionSettingTests\/testCopyAppVersion()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
