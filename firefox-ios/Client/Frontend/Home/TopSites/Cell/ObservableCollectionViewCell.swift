@@ -4,6 +4,26 @@
 
 import UIKit
 
+/**
+ A cell that can detect and react to changes in “in-view” and “visible” states using  area and time thresholds.
+
+ We distinguish between "In-view" and "visible" as follows:
+ - **In-view:**
+        More than a given fraction (`inViewFractionThreshold`) of the cell’s area is unobscured in the viewport.
+ - **Visible:**
+        The cell remains in-view continuously for at least `visibleTimeThresholdSeconds`.
+ Callbacks and configuration:
+ - `onAboveInViewThreshold`:
+        Callback that may fire multiple times over the cell’s lifetime. Called when the cell goes from !inView  to inView.
+ - `onAboveVisibleTimeThreshold`:
+        Callback that can fire only once over the cell’s lifetime. Called when the cell becomes visible as defined above.
+ - `inViewFractionThreshold`:
+        The fraction of the cell’s total area that must be unobscured in the viewport to count as in-view.
+ - `visibleTimeThresholdSeconds`:
+        The continuous time (in seconds) the cell must remain in-view to count as visible.
+ - `isVisibilityMonitoringEnabled`:
+        When `false`, the cell does not track in-view/visible state and behaves like a normal `UICollectionViewCell`.
+ */
 class ObservableCollectionViewCell: UICollectionViewCell {
     // MARK: Public config
     var visibilityDebugLabel = ""
@@ -11,31 +31,31 @@ class ObservableCollectionViewCell: UICollectionViewCell {
         didSet {
             if isVisibilityMonitoringEnabled {
                 startObservingIfNeeded()
-                checkVisibility()
+                checkIfCellIsInView()
             } else {
                 stopObserving()
-                stopDwellTimer()
-                wasPreviouslyVisible = false
+                stopVisibilityTimer()
+                wasPreviouslyInView = false
             }
         }
     }
-    var visibilityFractionThreshold: CGFloat = 0.5
-    var onBecomeVisible: ((ObservableCollectionViewCell) -> Void)?
-    var dwellThresholdSeconds: TimeInterval = 1.0
-    var onDwellMet: ((ObservableCollectionViewCell) -> Void)?
+    var inViewFractionThreshold: CGFloat = 0.5
+    var onAboveInViewThreshold: ((ObservableCollectionViewCell) -> Void)?
+    var visibleTimeThresholdSeconds: TimeInterval = 1.0
+    var onAboveVisibleTimeThreshold: ((ObservableCollectionViewCell) -> Void)?
 
-    // MARK: Visibility state
-    var isVisible: Bool { visibleAreaFraction >= visibilityFractionThreshold }
-    private var wasPreviouslyVisible = false
+    // MARK: In-view State
+    var isInView: Bool { inViewAreaFraction >= inViewFractionThreshold }
+    private var wasPreviouslyInView = false
 
-    // MARK: Dwell state
-    private var dwellTimer: Timer?
-    private var dwellFiredForThisLifetime = false
+    // MARK: Visibility State
+    private var visibilityTimer: Timer?
+    private var wasVisibleForThisLifetime = false
 
-    // MARK: Visibility Logic
+    // MARK: In-view Fraction Logic
     private var observedScrollViews: Set<UIScrollView> = []
 
-    private var visibleAreaFraction: CGFloat {
+    private var inViewAreaFraction: CGFloat {
         guard let window = window, !isHidden, alpha > 0.01, !bounds.isEmpty else { return 0 }
         var rect = convert(bounds, to: window).intersection(window.bounds)
         if rect.isNull { return 0 }
@@ -60,16 +80,16 @@ class ObservableCollectionViewCell: UICollectionViewCell {
     // MARK: Lifecycle
     override func prepareForReuse() {
         stopObserving()
-        stopDwellTimer()
-        wasPreviouslyVisible = false
-        dwellFiredForThisLifetime = false
+        stopVisibilityTimer()
+        wasPreviouslyInView = false
+        wasVisibleForThisLifetime = false
         super.prepareForReuse()
     }
 
     override func layoutSubviews() {
         if isVisibilityMonitoringEnabled {
             startObservingIfNeeded()
-            checkVisibility()
+            checkIfCellIsInView()
         }
         super.layoutSubviews()
     }
@@ -77,7 +97,7 @@ class ObservableCollectionViewCell: UICollectionViewCell {
     override func willMove(toWindow newWindow: UIWindow?) {
         // If the cell leaves the screen without prepareForReuse() being called we want to make sure we stop the timer
         if newWindow == nil {
-            stopDwellTimer()
+            stopVisibilityTimer()
         }
         super.willMove(toWindow: newWindow)
     }
@@ -103,45 +123,45 @@ class ObservableCollectionViewCell: UICollectionViewCell {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             return
         }
-        checkVisibility()
+        checkIfCellIsInView()
     }
 
-    private func checkVisibility() {
-        let nowVisible = isVisible
+    private func checkIfCellIsInView() {
+        let nowInView = isInView
 
         // Cell coming into view (not visible -> visible)
-        if !wasPreviouslyVisible && nowVisible {
-            onBecomeVisible?(self)
-            startDwellTimerIfNeeded()
+        if !wasPreviouslyInView && nowInView {
+            onAboveInViewThreshold?(self)
+            startVisibilityTimerIfNeeded()
         }
 
         // Cell leaving view (visible -> not visible)
-        if wasPreviouslyVisible && !nowVisible {
-            stopDwellTimer()
+        if wasPreviouslyInView && !nowInView {
+            stopVisibilityTimer()
         }
 
-        wasPreviouslyVisible = nowVisible
+        wasPreviouslyInView = nowInView
     }
 
-    // MARK: Dwell timer
-    private func startDwellTimerIfNeeded() {
-        guard dwellTimer == nil, !dwellFiredForThisLifetime else { return }
-        let t = Timer(timeInterval: dwellThresholdSeconds, repeats: false) { [weak self] _ in
+    // MARK: Visibility timer
+    private func startVisibilityTimerIfNeeded() {
+        guard visibilityTimer == nil, !wasVisibleForThisLifetime else { return }
+        let t = Timer(timeInterval: visibleTimeThresholdSeconds, repeats: false) { [weak self] _ in
             guard let self = self else { return }
             // Ensure still visible above threshold
-            if self.isVisible && !self.dwellFiredForThisLifetime {
-                self.dwellFiredForThisLifetime = true
-                self.onDwellMet?(self)
+            if self.isInView && !self.wasVisibleForThisLifetime {
+                self.wasVisibleForThisLifetime = true
+                self.onAboveVisibleTimeThreshold?(self)
             }
-            self.stopDwellTimer()
+            self.stopVisibilityTimer()
         }
-        t.tolerance = dwellThresholdSeconds * 0.1
+        t.tolerance = visibleTimeThresholdSeconds * 0.1
         RunLoop.main.add(t, forMode: .common)
-        dwellTimer = t
+        visibilityTimer = t
     }
 
-    private func stopDwellTimer() {
-        dwellTimer?.invalidate()
-        dwellTimer = nil
+    private func stopVisibilityTimer() {
+        visibilityTimer?.invalidate()
+        visibilityTimer = nil
     }
 }

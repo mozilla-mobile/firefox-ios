@@ -250,17 +250,17 @@ class TopSiteCell: ObservableCollectionViewCell, ReusableCell {
         guard topSite.isSponsored else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
-        visibilityFractionThreshold = 0.5
-        dwellThresholdSeconds = 1.0
+        inViewFractionThreshold = 0.5
+        visibleTimeThresholdSeconds = 1.0
         isVisibilityMonitoringEnabled = true
 
-        onBecomeVisible = { [weak self] cell in
-            print("isVisible", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false)
-        } // This is an optional callback for whether it is visble at all (but not above view time threshold)
+        onAboveInViewThreshold = { [weak self] cell in
+            print("isVisible", self?.visibilityDebugLabel ?? "Unknown", self?.isInView ?? false)
+        } // This is an optional callback for whether it is in-view at all (but not above view time threshold)
 
-        onDwellMet = { [weak self] cell in
-            print("Viewed for 1 Second!", self?.visibilityDebugLabel ?? "Unknown", self?.isVisible ?? false)
-        } // This will eventually become the impression callback
+        onAboveVisibleTimeThreshold = { [weak self] cell in
+            print("Viewed for 1 Second!", self?.visibilityDebugLabel ?? "Unknown", self?.isInView ?? false)
+        } // This fires when the cell is in-view for a continous time period. It only fires once for the lifetime.
     }
 
     // Add insets to favicons with transparent backgrounds
