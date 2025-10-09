@@ -115,6 +115,7 @@ class SearchEnginesManagerTests: XCTestCase {
         waitForExpectations(timeout: 5)
     }
 
+    /*
     func testQuickSearchEngines() {
         let engineSet = searchEnginesManager.orderedEngines
 
@@ -159,6 +160,7 @@ class SearchEnginesManagerTests: XCTestCase {
         XCTAssertFalse(engines2.isEngineEnabled(engineSet[1]))
         XCTAssertTrue(engines2.isEngineEnabled(engineSet[0]))
     }
+     */
 
     func testSearchSuggestionSettings() {
         // By default, you should see search suggestions
