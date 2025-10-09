@@ -79,6 +79,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .if(sizeCategory <= .large) { view in
                 view.frame(minHeight: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
             }
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder
