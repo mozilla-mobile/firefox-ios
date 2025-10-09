@@ -64,10 +64,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     weak var delegate: SearchEngineDelegate?
     private var logger: Logger = DefaultLogger.shared
 
-    private lazy var isSECEnabled: Bool = {
-        // Disabling SEC in unit tests for now. Will revisit soon.
-        return AppConstants.isRunningUnitTest ? false : SearchEngineFlagManager.isSECEnabled
-    }()
+    private lazy var isSECEnabled: Bool = { SearchEngineFlagManager.isSECEnabled }()
 
     init(prefs: Prefs,
          files: FileAccessor,
