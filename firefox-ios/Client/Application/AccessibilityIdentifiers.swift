@@ -737,14 +737,10 @@ struct AccessibilityIdentifiers {
         static let brandLabel = "summaryBrandLabel"
         static let brandImage = "summaryBrandImage"
         static let summaryTableView = "summaryTextView"
-        static let errorLabel = "errorLabel"
-        static let errorButton = "errorButton"
-        static let tosTitleLabel = "tosTitleLabel"
-        static let tosDescriptionText = "tosDescriptionText"
-        static let tosCancelButton = "tosCancel"
-        static let tosCloseButton = "tosCloseButton"
+        static let errorContentView = "errorContentView"
+        static let retryErrorButton = "retryErrorButton"
+        static let closeSummaryErrorButton = "closeSummaryErrorButton"
         static let tosAllowButton = "tosAllowButton"
-        static let tosLinkButton = "tosLinkButton"
     }
 
     struct ShareTo {

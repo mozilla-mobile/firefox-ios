@@ -360,6 +360,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
     }
 
+    var isRecentSearchEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -1975,7 +1979,7 @@ class BrowserViewController: UIViewController,
 
         let trendingClient = TrendingSearchClient(searchEngine: searchEnginesManager.defaultEngine)
 
-        let recentSearchProvider = getRecentSearchProvider(with: searchEnginesManager.defaultEngine?.engineID)
+        let recentSearchProvider = DefaultRecentSearchProvider(historyStorage: profile.places)
 
         let searchViewModel = SearchViewModel(
             isPrivate: isPrivate,
@@ -2001,19 +2005,6 @@ class BrowserViewController: UIViewController,
 
         self.searchController = searchController
         self.searchSessionState = .active
-    }
-
-    private func getRecentSearchProvider(with engineID: String?) -> RecentSearchProvider? {
-        // TODO: FXIOS-13684 We should investigate in making defaultSearchEngine non-nil
-        guard let engineID else {
-            logger.log(
-                "Unable to retrieve engineID",
-                level: .warning,
-                category: .searchEngines
-            )
-            return nil
-        }
-        return DefaultRecentSearchProvider(searchEngineID: engineID)
     }
 
     func showSearchController() {
@@ -3025,6 +3016,19 @@ class BrowserViewController: UIViewController,
         searchTelemetry.shouldSetUrlTypeSearch = true
 
         finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
+
+        dispatchSubmitSearchTermAction(with: searchURL, searchTerm: text)
+    }
+
+    private func dispatchSubmitSearchTermAction(with searchURL: URL, searchTerm: String) {
+        guard isRecentSearchEnabled else { return }
+        let action = ToolbarAction(
+            url: searchURL,
+            searchTerm: searchTerm,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+        store.dispatch(action)
     }
 
     // MARK: Opening New Tabs

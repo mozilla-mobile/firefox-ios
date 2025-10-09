@@ -66,11 +66,13 @@ public struct LocalizedErrorsViewConfiguration {
     let pageStillLoadingMessage: String
     let genericErrorMessage: String
 
-    let errorLabelA11yId: String
-    let errorButtonA11yId: String
+    let errorContentA11yId: String
     let retryButtonLabel: String
+    let retryButtonA11yLabel: String
+    let retryButtonA11yId: String
     let closeButtonLabel: String
-    let acceptToSButtonLabel: String
+    let closeButtonA11yLabel: String
+    let closeButtonA11yId: String
 
     public init(
         rateLimitedMessage: String,
@@ -78,65 +80,54 @@ public struct LocalizedErrorsViewConfiguration {
         summarizationNotAvailableMessage: String,
         pageStillLoadingMessage: String,
         genericErrorMessage: String,
-        errorLabelA11yId: String,
-        errorButtonA11yId: String,
+        errorContentA11yId: String,
         retryButtonLabel: String,
+        retryButtonA11yLabel: String,
+        retryButtonA11yId: String,
         closeButtonLabel: String,
-        acceptToSButtonLabel: String
+        closeButtonA11yLabel: String,
+        closeButtonA11yId: String
     ) {
         self.rateLimitedMessage = rateLimitedMessage
         self.unsafeContentMessage = unsafeContentMessage
         self.summarizationNotAvailableMessage = summarizationNotAvailableMessage
         self.pageStillLoadingMessage = pageStillLoadingMessage
         self.genericErrorMessage = genericErrorMessage
-        self.errorLabelA11yId = errorLabelA11yId
-        self.errorButtonA11yId = errorButtonA11yId
+        self.errorContentA11yId = errorContentA11yId
         self.retryButtonLabel = retryButtonLabel
+        self.retryButtonA11yLabel = retryButtonA11yLabel
+        self.retryButtonA11yId = retryButtonA11yId
         self.closeButtonLabel = closeButtonLabel
-        self.acceptToSButtonLabel = acceptToSButtonLabel
+        self.closeButtonA11yLabel = closeButtonA11yLabel
+        self.closeButtonA11yId = closeButtonA11yId
     }
 }
 
 public struct TermOfServiceViewConfiguration {
     let titleLabel: String
-    let titleLabelA11yId: String
     let descriptionText: String
-    let descriptionTextA11yId: String
     let linkButtonLabel: String
     let linkButtonURL: URL?
     let allowButtonTitle: String
     let allowButtonA11yId: String
     let allowButtonA11yLabel: String
-    let cancelButtonTitle: String
-    let cancelButtonA11yId: String
-    let cancelButtonA11yLabel: String
 
     public init(
         titleLabel: String,
-        titleLabelA11yId: String,
         descriptionText: String,
-        descriptionTextA11yId: String,
         linkButtonLabel: String,
         linkButtonURL: URL?,
         allowButtonTitle: String,
         allowButtonA11yId: String,
-        allowButtonA11yLabel: String,
-        cancelButtonTitle: String,
-        cancelButtonA11yId: String,
-        cancelButtonA11yLabel: String
+        allowButtonA11yLabel: String
     ) {
         self.titleLabel = titleLabel
-        self.titleLabelA11yId = titleLabelA11yId
         self.descriptionText = descriptionText
-        self.descriptionTextA11yId = descriptionTextA11yId
         self.linkButtonLabel = linkButtonLabel
         self.linkButtonURL = linkButtonURL
         self.allowButtonTitle = allowButtonTitle
         self.allowButtonA11yId = allowButtonA11yId
         self.allowButtonA11yLabel = allowButtonA11yLabel
-        self.cancelButtonTitle = cancelButtonTitle
-        self.cancelButtonA11yId = cancelButtonA11yId
-        self.cancelButtonA11yLabel = cancelButtonA11yLabel
     }
 }
 

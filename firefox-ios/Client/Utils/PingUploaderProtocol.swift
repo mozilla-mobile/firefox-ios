@@ -34,19 +34,6 @@ extension PingUploaderProtocol {
         request.httpMethod = HTTPMethod.post.rawValue
         request.httpShouldHandleCookies = false
 
-        // NOTE: We're using `URLSession.uploadTask` which ignores the `httpBody` and
-        // instead takes the body payload as a parameter to add to the request.
-        // However in tests we're using OHHTTPStubs to stub out the HTTP upload.
-        // It has the known limitation that it doesn't simulate data upload,
-        // because the underlying protocol doesn't expose a hook for that.
-        // By setting `httpBody` here the data is still attached to the request,
-        // so OHHTTPStubs sees it.
-        // It shouldn't be too bad memory-wise and not duplicate the data in memory.
-        // This should only be a reference and Swift keeps track of all the places it's needed.
-        //
-        // See https://github.com/AliSoftware/OHHTTPStubs#known-limitations.
-        request.httpBody = data
-
         return request
     }
 }

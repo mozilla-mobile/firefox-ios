@@ -24,7 +24,7 @@ class EditBookmarkViewController: UIViewController,
         return themeManager.getCurrentTheme(for: currentWindowUUID)
     }
 
-    private lazy var tableView: UITableView = .build { view in
+    private lazy var tableView: UITableView = .build({ view in
         view.delegate = self
         view.register(cellType: EditBookmarkCell.self)
         view.register(cellType: OneLineTableViewCell.self)
@@ -35,7 +35,14 @@ class EditBookmarkViewController: UIViewController,
                                                     size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
         view.tableHeaderView = headerSpacerView
         view.keyboardDismissMode = .onDrag
-    }
+    }, {
+        if #available(iOS 26.0, *) {
+            UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            UITableView()
+        }
+    })
+
     private lazy var saveBarButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
             title: String.Bookmarks.Menu.EditBookmarkSave,
@@ -124,7 +131,6 @@ class EditBookmarkViewController: UIViewController,
     }
 
     // MARK: - Setup
-
     private func setupSubviews() {
         view.addSubview(tableView)
         NSLayoutConstraint.activate([

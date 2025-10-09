@@ -4,66 +4,68 @@
 
 import Common
 import Shared
+import Storage
 
 /// Abstraction for any search client that can return trending searches. Able to mock for testing.
 protocol RecentSearchProvider {
-    var recentSearches: [String] { get }
-    func addRecentSearch(_ term: String)
-    func clearRecentSearches()
+    func addRecentSearch(_ term: String, url: String?)
+    func loadRecentSearches(completion: @escaping ([String]) -> Void)
 }
 
-/// A provider that manages recent search terms for a specific search engine.
+/// A provider that manages recent search terms from a user's history storage.
 struct DefaultRecentSearchProvider: RecentSearchProvider {
-    private let searchEngineID: String
-    private let prefs: Prefs
+    private let historyStorage: HistoryHandler
+    private let logger: Logger
     private let nimbus: FxNimbus
-
-    private let baseKey = PrefsKeys.Search.recentSearchesCache
-
-    // Namespaced key = "recentSearchesCacheBaseKey.[engineID]"
-    private var recentSearchesKey: String {
-        "\(baseKey).\(searchEngineID)"
-    }
-
-    var recentSearches: [String] {
-        prefs.objectForKey(recentSearchesKey) ?? []
-    }
 
     private var maxNumberOfSuggestions: Int {
         return nimbus.features.recentSearchesFeature.value().maxSuggestions
     }
 
     init(
-        profile: Profile = AppContainer.shared.resolve(),
-        searchEngineID: String,
+        historyStorage: HistoryHandler,
+        logger: Logger = DefaultLogger.shared,
         nimbus: FxNimbus = FxNimbus.shared
     ) {
-        self.searchEngineID = searchEngineID
-        self.prefs = profile.prefs
+        self.historyStorage = historyStorage
+        self.logger = logger
         self.nimbus = nimbus
     }
 
-    /// Adds a search term to the persisted recent searches list, ensuring it avoid duplicates,
-    /// and does not exceed `maxNumberOfSuggestions`.
+    /// Adds a search term to our history storage, `Rust Places` and saved in `places.db` locally.
     ///
     /// - Parameter term: The search term to store.
-    func addRecentSearch(_ term: String) {
+    func addRecentSearch(_ term: String, url: String?) {
+        guard let url else {
+            logger.log("Url is needed to store recent search in history, but was nil.",
+                       level: .debug,
+                       category: .searchEngines)
+            return
+        }
         let trimmed = term.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
-        var searches = recentSearches
-
-        searches.removeAll { $0.caseInsensitiveCompare(trimmed) == .orderedSame }
-        searches.insert(trimmed, at: 0)
-
-        if searches.count > maxNumberOfSuggestions {
-            searches = Array(searches.prefix(maxNumberOfSuggestions))
-        }
-
-        prefs.setObject(searches, forKey: recentSearchesKey)
+        historyStorage.noteHistoryMetadata(
+            for: trimmed.lowercased(),
+            and: url,
+            completion: { _ in }
+        )
     }
 
-    func clearRecentSearches() {
-        prefs.removeObjectForKey(recentSearchesKey)
+    /// Retrieves list of search terms from our history storage, `Rust Places` and saved in `places.db` locally.
+    ///
+    /// Only care about returning the `maxNumberOfSuggestions`.
+    /// We don't have an interface to fetch only a certain amount, so we follow what Android does for now.
+    func loadRecentSearches(completion: @escaping ([String]) -> Void) {
+      // TODO: FXIOS-13782 Use get_most_recent method to fetch history
+      historyStorage.getHistoryMetadataSince(since: Int64.min) { result in
+          if case .success(let historyMetadata) = result {
+              let searches = historyMetadata.compactMap { $0.searchTerm }
+              let recentSearches = Array(searches.prefix(maxNumberOfSuggestions))
+              completion(recentSearches)
+          } else {
+              completion([])
+          }
+      }
     }
 }
