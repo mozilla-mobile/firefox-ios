@@ -142,6 +142,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
 
+        case ToolbarActionType.didTapOnTranslate:
+            // TODO: FXIOS-11973 For MVP purpose, should remove or modify.
+            return handleLeadingPageActionsUpdate(state: state, action: action)
+
         case ToolbarActionType.readerModeStateChanged:
             return handleReaderModeStateChangedAction(state: state, action: action)
 
@@ -290,6 +294,33 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: toolbarAction.readerModeState,
             canSummarize: toolbarAction.canSummarize,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleLeadingPageActionsUpdate(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: leadingPageActions(action: toolbarAction, addressBarState: state),
+            trailingPageActions: state.trailingPageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -949,6 +980,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
             let shareAction = shareAction(enabled: isLoading == false,
                                           hasAlternativeLocationColor: hasAlternativeLocationColor)
             actions.append(shareAction)
+            let translateAction = translateAction(
+                isEnabled: isLoading == false,
+                isActive: action.translationConfiguration?.hasTranslated ?? false,
+                hasAlternativeLocationColor: hasAlternativeLocationColor
+            )
+            actions.append(translateAction)
         }
 
         return actions
@@ -1190,5 +1227,21 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yHint: .TabLocationReloadAccessibilityHint,
             a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
             a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+    }
+
+    private static func translateAction(
+        isEnabled: Bool,
+        isActive: Bool,
+        hasAlternativeLocationColor: Bool
+    ) -> ToolbarActionConfiguration {
+        let inactiveImageName = StandardImageIdentifiers.Medium.translate
+        let activeImageName = StandardImageIdentifiers.Medium.translateActive
+        return ToolbarActionConfiguration(
+            actionType: .translate,
+            iconName: isActive ? activeImageName : inactiveImageName,
+            isEnabled: isEnabled,
+            hasCustomColor: !hasAlternativeLocationColor,
+            a11yLabel: .Toolbars.Translation.ButtonActiveAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.translateButton)
     }
 }

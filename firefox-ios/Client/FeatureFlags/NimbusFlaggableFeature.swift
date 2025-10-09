@@ -63,6 +63,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tosFeature
     case touFeature
     case trackingProtectionRefactor
+    case translations
     case trendingSearches
     case unifiedAds
     case unifiedSearch
@@ -93,6 +94,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
+                .translations,
                 .downloadLiveActivities,
                 .appleSummarizer,
                 .hostedSummarizer,
@@ -183,6 +185,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tosFeature,
                 .touFeature,
                 .trackingProtectionRefactor,
+                .translations,
                 .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,

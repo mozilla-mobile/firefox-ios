@@ -208,9 +208,22 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     }
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
-        if let existingImage = configuration?.image { return existingImage }
+        // TODO: FXIOS-11973 For MVP purpose, should revisit
+        let inactiveImageName = StandardImageIdentifiers.Medium.translate
+        let activeImageName = StandardImageIdentifiers.Medium.translateActive
+        let isTranslateButton = element.iconName == inactiveImageName || element.iconName == activeImageName
+
+        if let existingImage = configuration?.image, !isTranslateButton {
+            return existingImage
+        }
+
         guard let iconName = element.iconName else { return nil }
-        let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+        var image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+
+        if element.iconName == StandardImageIdentifiers.Medium.translateActive {
+            image = UIImage(named: iconName)
+        }
+
         return element.isFlippedForRTL ? image?.imageFlippedForRightToLeftLayoutDirection() : image
     }
 

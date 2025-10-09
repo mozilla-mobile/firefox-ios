@@ -313,6 +313,7 @@ final class AddressToolbarContainerModel: Equatable {
 
     static func == (lhs: AddressToolbarContainerModel, rhs: AddressToolbarContainerModel) -> Bool {
         lhs.navigationActions == rhs.navigationActions &&
+        lhs.leadingPageActions == rhs.leadingPageActions &&
         lhs.trailingPageActions == rhs.trailingPageActions &&
         lhs.browserActions == rhs.browserActions &&
 

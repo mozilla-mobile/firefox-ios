@@ -30,6 +30,7 @@ struct AccessibilityIdentifiers {
         static let searchButton = "TabToolbar.searchButton"
         static let stopButton = "TabToolbar.stopButton"
         static let bookmarksButton = "TabToolbar.libraryButton"
+        static let translateButton = "TabToolbar.translateButton"
     }
 
     struct Browser {
