@@ -63,12 +63,28 @@ final class SwitchDetailedView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layoutIfNeeded()
+
+        if #available(iOS 26.0, *) {
+            let calculatedHeight = actionContentView.frame.height
+            if calculatedHeight > 0 {
+                actionContentView.layer.cornerRadius = calculatedHeight / 2
+                actionContentView.layer.masksToBounds = true
+            }
+        } else {
+            actionContentView.layer.cornerRadius = UX.actionContentCornerRadius
+        }
+    }
+
     private func setup() {
         addSubview(contentStackView)
         contentStackView.addArrangedSubview(actionContentView)
         actionContentView.addSubview(actionTitleLabel)
         actionContentView.addSubview(actionSwitch)
         contentStackView.addArrangedSubview(actionDescriptionLabel)
+
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: topAnchor),
             contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
