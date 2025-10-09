@@ -10,7 +10,7 @@ import Storage
 import UIKit
 
 /// The TopSite cell that appears for the homepage rebuild project.
-class TopSiteCell: UICollectionViewCell, ReusableCell {
+class TopSiteCell: ObservableCollectionViewCell, ReusableCell {
     // MARK: - Variables
 
     private var homeTopSite: TopSiteConfiguration?
@@ -149,6 +149,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         self.theme = theme
         homeTopSite = topSite
         titleLabel.text = topSite.title
+        visibilityDebugLabel = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
         accessibilityTraits = .link
 
@@ -249,6 +250,17 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         guard topSite.isSponsored else { return }
 
         sponsoredLabel.text = topSite.sponsoredText
+        inViewFractionThreshold = 0.5
+        visibleTimeThresholdSeconds = 1.0
+        isVisibilityMonitoringEnabled = true
+
+        onAboveInViewThreshold = { [weak self] cell in
+            print("isVisible", self?.visibilityDebugLabel ?? "Unknown", self?.isInView ?? false)
+        } // This is an optional callback for whether it is in-view at all (but not above view time threshold)
+
+        onAboveVisibleTimeThreshold = { [weak self] cell in
+            print("Viewed for 1 Second!", self?.visibilityDebugLabel ?? "Unknown", self?.isInView ?? false)
+        } // This fires when the cell is in-view for a continous time period. It only fires once for the lifetime.
     }
 
     // Add insets to favicons with transparent backgrounds
