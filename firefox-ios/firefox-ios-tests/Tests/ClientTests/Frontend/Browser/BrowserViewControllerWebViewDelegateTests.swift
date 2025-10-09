@@ -410,9 +410,20 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     }
 }
 
+final class MockFrameInfo: WKFrameInfo {
+    private let main: Bool
+
+    init(isMainFrame: Bool) {
+        self.main = isMainFrame
+        super.init()
+    }
+    override var isMainFrame: Bool { main }
+}
+
 class MockNavigationAction: WKNavigationAction {
     private var type: WKNavigationType?
     private var urlRequest: URLRequest
+    private var frame: WKFrameInfo?
 
     override var navigationType: WKNavigationType {
         return type ?? .other
@@ -422,9 +433,14 @@ class MockNavigationAction: WKNavigationAction {
         return urlRequest
     }
 
-    init(url: URL, type: WKNavigationType? = nil) {
+    override var targetFrame: WKFrameInfo? {
+       return frame
+    }
+
+    init(url: URL, type: WKNavigationType? = nil, isMainFrame: Bool = true) {
         self.type = type
         self.urlRequest = URLRequest(url: url)
+        self.frame = MockFrameInfo(isMainFrame: isMainFrame)
     }
 }
 
