@@ -46,4 +46,32 @@ final class BrowserScreen {
             BaseTestCase().mozWaitForElementToNotExist(addressAutofillButton, timeout: timeout)
         }
     }
+
+    private func assertUserAgentTextExists(_ text: String, timeout: TimeInterval = TIMEOUT) {
+        let pred = NSPredicate(
+            format: "elementType == %d AND label == %@",
+            XCUIElement.ElementType.staticText.rawValue,
+            text
+        )
+        let query = app.webViews.descendants(matching: .staticText).matching(pred)
+        let element = query.firstMatch
+
+        BaseTestCase().mozWaitForElementToExist(element, timeout: timeout)
+        XCTAssertTrue(element.exists, "Expected UA text '\(text)' was not found in the web view.")
+    }
+
+    func assertDesktopUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {
+        assertUserAgentTextExists("DESKTOP_UA", timeout: timeout)
+    }
+
+    func assertMobileUserAgentIsDisplayed(timeout: TimeInterval = TIMEOUT) {
+        assertUserAgentTextExists("MOBILE_UA", timeout: timeout)
+    }
+
+    func handleIos15ToastIfNecessary() {
+        if #unavailable(iOS 16) {
+            // iOS 15 displays a toast that covers the reload button
+            sleep(2)
+        }
+    }
 }
