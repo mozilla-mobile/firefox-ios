@@ -9,7 +9,6 @@ This log lists the architectural decisions for MADR.
 * [ADR-0000](0000-use-markdown-architectural-decision-records.md) - Use Markdown Architectural Decision Records
 * [ADR-0001](0001-modernize-logging-solution.md) - Modernize Logging Solution
 * [ADR-0002](0002-coordinators-for-navigation.md) - Coordinator Pattern for Navigation
-* [ADR-0003](0003-redux-style-unidirectional-data-flow.md) - Redux-style Unidirectional Data Flow
 
 <!-- adrlogstop -->
 

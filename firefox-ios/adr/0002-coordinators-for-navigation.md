@@ -34,8 +34,8 @@ This involves introducing:
 
 ### Negative
 - Initial implementation complexity and migration cost.
-- Potential risk of creating “massive coordinators” if responsibilities are not well defined.
-- Difficulty of integration with SwiftUI navigation, since coordinators are designed to work with UIKit.
+- Potential risk of creating “massive coordinators” if responsibilities are not well defined
+- Difficulty of integration with SwiftUI navigation, since coordinators are designed to work with UIKit 
 
 ## References
 - [Proposal](https://docs.google.com/document/d/1fYN63KDPjL8wl2ZQ3qu_p8lt-MGQ-koIi6m369zpU4c/edit?usp=sharing)

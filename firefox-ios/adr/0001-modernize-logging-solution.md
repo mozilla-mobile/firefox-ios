@@ -9,7 +9,7 @@ Accepted
 ## Context
 
 Debugging issues encountered by users on production builds of Firefox for iOS is currently inefficient and unreliable. Our existing logging setup provides minimal visibility into user actions or application state leading up to a crash or bug. Logs are:
-- Scattered across three separate log files (browser, sync, keychain).
+- Scattered across three separate files (browser, sync, keychain).
 - Produced through seven different mechanisms (XCGLogger, os_log, NSLog, print, and Sentry logs, among others).
 - Noisy and inconsistent, often lacking actionable information about user actions or app flow.
 - Difficult to retrieve, requiring users to manually share logs via a complex debug process.
@@ -24,7 +24,7 @@ Given upcoming large-scale refactors and the need for greater production observa
 
 ## Decision
 
-We will modernize Firefox iOS logging by introducing a new local logging abstraction layer built on top of [SwiftyBeaver](https://github.com/SwiftyBeaver/SwiftyBeaver), with selective Sentry integration for critical and aggregated logs. Sentry will receive breadcrumbs so we can debug the current context when we have a crash.
+We will modernize Firefox iOS logging by introducing a new local logging abstraction layer built on top of [SwiftyBeaver](https://github.com/SwiftyBeaver/SwiftyBeaver), with selective Sentry integration for critical and aggregated logs.
 
 This approach focuses first on improving local log quality, consistency, and accessibility. Once local reliability and structure are established, the team can explore partial cloud ingestion for Beta/Nightly builds if we wish.
 
