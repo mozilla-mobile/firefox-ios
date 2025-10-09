@@ -12,10 +12,6 @@ class AutofillTelemetryBase {
   EVENT_CATEGORY = null;
   EVENT_OBJECT_FORM_INTERACTION = null;
 
-  HISTOGRAM_NUM_USES = null;
-  HISTOGRAM_PROFILE_NUM_USES = null;
-  HISTOGRAM_PROFILE_NUM_USES_KEY = null;
-
   #initFormEventExtra(value) {
     let extra = {};
     for (const field of Object.values(this.SUPPORTED_FIELDS)) {
@@ -183,17 +179,6 @@ class AutofillTelemetryBase {
     throw new Error("Not implemented.");
   }
 
-  recordNumberOfUse(records) {
-    let histogram = Services.telemetry.getKeyedHistogramById(
-      this.HISTOGRAM_PROFILE_NUM_USES
-    );
-    histogram.clear();
-
-    for (let record of records) {
-      histogram.add(this.HISTOGRAM_PROFILE_NUM_USES_KEY, record.timesUsed);
-    }
-  }
-
   recordIframeLayoutDetection(flowId, fieldDetails) {
     const fieldsInMainFrame = [];
     const fieldsInIframe = [];
@@ -237,9 +222,6 @@ export class AddressTelemetry extends AutofillTelemetryBase {
   EVENT_CATEGORY = "address";
   EVENT_OBJECT_FORM_INTERACTION = "AddressForm";
   EVENT_OBJECT_FORM_INTERACTION_EXT = "AddressFormExt";
-
-  HISTOGRAM_PROFILE_NUM_USES = "AUTOFILL_PROFILE_NUM_USES";
-  HISTOGRAM_PROFILE_NUM_USES_KEY = "address";
 
   // Fields that are recorded in `address_form` and `address_form_ext` telemetry
   SUPPORTED_FIELDS = {
@@ -316,10 +298,6 @@ class CreditCardTelemetry extends AutofillTelemetryBase {
   EVENT_CATEGORY = "creditcard";
   EVENT_OBJECT_FORM_INTERACTION = "CcFormV2";
 
-  HISTOGRAM_NUM_USES = "CREDITCARD_NUM_USES";
-  HISTOGRAM_PROFILE_NUM_USES = "AUTOFILL_PROFILE_NUM_USES";
-  HISTOGRAM_PROFILE_NUM_USES_KEY = "credit_card";
-
   // Mapping of field name used in formautofill code to the field name
   // used in the telemetry.
   SUPPORTED_FIELDS = {
@@ -366,23 +344,6 @@ class CreditCardTelemetry extends AutofillTelemetryBase {
 
     if (consecutiveCcNumberCount) {
       recordCount(consecutiveCcNumberCount);
-    }
-  }
-
-  recordNumberOfUse(records) {
-    super.recordNumberOfUse(records);
-
-    if (!this.HISTOGRAM_NUM_USES) {
-      return;
-    }
-
-    let histogram = Services.telemetry.getHistogramById(
-      this.HISTOGRAM_NUM_USES
-    );
-    histogram.clear();
-
-    for (let record of records) {
-      histogram.add(record.timesUsed);
     }
   }
 
@@ -461,14 +422,6 @@ export class AutofillTelemetry {
   static recordAutofillProfileCount(type, count) {
     const telemetry = this.#getTelemetryByType(type);
     telemetry.recordAutofillProfileCount(count);
-  }
-
-  /**
-   * Utility functions for address/credit card number of use
-   */
-  static recordNumberOfUse(type, records) {
-    const telemetry = this.#getTelemetryByType(type);
-    telemetry.recordNumberOfUse(records);
   }
 
   static recordFormSubmissionHeuristicCount(label) {
