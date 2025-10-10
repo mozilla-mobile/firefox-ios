@@ -23,7 +23,7 @@ public struct TextFieldViewModel {
     public let clearButtonA11yLabel: String
 }
 
-public class TextField: UITextField, ThemeApplicable {
+final public class TextField: UITextField, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()

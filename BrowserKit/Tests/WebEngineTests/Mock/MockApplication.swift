@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MockApplication: Application {
+final class MockApplication: Application {
     var openCalled = 0
     var canOpenCalled = 0
     var canOpenURL = true

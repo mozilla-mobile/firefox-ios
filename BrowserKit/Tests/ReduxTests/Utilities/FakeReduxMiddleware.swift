@@ -6,7 +6,7 @@ import Foundation
 
 @testable import Redux
 
-class FakeReduxMiddleware {
+final class FakeReduxMiddleware {
     lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
         switch action.actionType {
         case FakeReduxActionType.requestInitialValue:

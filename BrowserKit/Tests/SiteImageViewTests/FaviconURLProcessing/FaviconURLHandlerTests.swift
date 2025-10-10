@@ -5,7 +5,7 @@
 import XCTest
 @testable import SiteImageView
 
-class FaviconURLHandlerTests: XCTestCase {
+final class FaviconURLHandlerTests: XCTestCase {
     let siteURL = URL(string: "https://www.firefox.com")!
     let faviconURL = URL(string: "https://www.firefox.com/image")!
 

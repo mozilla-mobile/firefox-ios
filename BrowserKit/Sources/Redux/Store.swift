@@ -8,7 +8,7 @@ import Common
 /// Stores your entire app state in the form of a single data structure.
 /// This state can only be modified by dispatching Actions to the store.
 /// Whenever the state of the store changes, the store will notify all store subscriber.
-public class Store<State: StateType & Sendable>: DefaultDispatchStore {
+final public class Store<State: StateType & Sendable>: DefaultDispatchStore {
     typealias SubscriptionType = SubscriptionWrapper<State>
 
     public var state: State {

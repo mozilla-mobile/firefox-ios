@@ -5,7 +5,7 @@
 import XCTest
 @testable import SiteImageView
 
-class FaviconURLCacheTests: XCTestCase {
+final class FaviconURLCacheTests: XCTestCase {
     var mockFileManager: MockURLCacheFileManager!
 
     override func setUp() {

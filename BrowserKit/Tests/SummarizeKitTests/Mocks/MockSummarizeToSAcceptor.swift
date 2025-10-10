@@ -5,7 +5,7 @@
 import Foundation
 @testable import SummarizeKit
 
-class MockSummarizeToSAcceptor: SummarizeTermOfServiceAcceptor {
+final class MockSummarizeToSAcceptor: SummarizeTermOfServiceAcceptor {
     var acceptTosConsentCalled = 0
     var denyTosConsentCalled = 0
 

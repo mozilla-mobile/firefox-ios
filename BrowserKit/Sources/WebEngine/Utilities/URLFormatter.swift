@@ -16,7 +16,7 @@ public protocol URLFormatter {
     func getURL(entry: String) -> URL?
 }
 
-public class DefaultURLFormatter: URLFormatter {
+final public class DefaultURLFormatter: URLFormatter {
     private var securityManager: SecurityManager
 
     public init(securityManager: SecurityManager = DefaultSecurityManager()) {

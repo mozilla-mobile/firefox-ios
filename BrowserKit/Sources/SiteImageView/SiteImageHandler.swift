@@ -10,7 +10,7 @@ public protocol SiteImageHandler {
     func clearAllCaches()
 }
 
-public class DefaultSiteImageHandler: SiteImageHandler {
+final public class DefaultSiteImageHandler: SiteImageHandler {
     private let urlHandler: FaviconURLHandler
     private let imageHandler: ImageHandler
 

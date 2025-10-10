@@ -82,7 +82,7 @@ final class SiteImageViewTests: XCTestCase {
     }
 }
 
-class MockSiteImageHandler: SiteImageHandler {
+final class MockSiteImageHandler: SiteImageHandler {
     var image = UIImage()
     var siteURL: URL?
     var faviconURL: URL?

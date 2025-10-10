@@ -4,7 +4,7 @@
 
 import UIKit
 
-class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self

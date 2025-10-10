@@ -228,7 +228,7 @@ public func jsonsToStrings(_ arr: [[String: Any]]?) -> [String]? {
 }
 
 // Encapsulate a callback in a way that we can use it with NSTimer.
-private class Callback {
+final private class Callback {
     private let handler: () -> Void
 
     init(handler: @escaping () -> Void) {

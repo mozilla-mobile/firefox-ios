@@ -8,7 +8,7 @@ import SwiftUI
 ///
 /// Usage: `PortraitOnlyHostingController(rootView: MySwiftUIView())`
 @available(iOS 13.0, *)
-public class PortraitOnlyHostingController<Content: View>: UIHostingController<Content> {
+final public class PortraitOnlyHostingController<Content: View>: UIHostingController<Content> {
     override public init(rootView: Content) {
         super.init(rootView: rootView)
     }

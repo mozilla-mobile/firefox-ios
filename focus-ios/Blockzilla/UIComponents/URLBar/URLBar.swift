@@ -11,7 +11,7 @@ enum Source: String {
    case action, shortcut, suggestion, topsite, widget, none
 }
 
-class URLBar: UIView {
+final class URLBar: UIView {
     fileprivate var viewModel: URLBarViewModel
     private var cancellables: Set<AnyCancellable> = []
 
@@ -1168,7 +1168,7 @@ extension URLBar: UIDragInteractionDelegate {
     }
 }
 
-private class URLTextField: AutocompleteTextField {
+final private class URLTextField: AutocompleteTextField {
     // Disable user interaction on resign so that touch and hold on URL bar creates menu
     override func resignFirstResponder() -> Bool {
         isUserInteractionEnabled = false

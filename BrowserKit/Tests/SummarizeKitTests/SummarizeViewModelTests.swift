@@ -14,7 +14,7 @@ extension Result {
     }
 }
 
-class MockDateProvider: DateProvider {
+final class MockDateProvider: DateProvider {
     var returnedDates: [Date] = []
 
     func currentDate() -> Date {

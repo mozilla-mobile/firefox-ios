@@ -9,7 +9,7 @@ enum TooltipTracking {
     case showUntilDismissed  // New behavior - show until explicitly dismissed
 }
 
-public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
+final public class OnboardingEventsHandlerV2: OnboardingEventsHandling {
     private let setShownTips: (Set<ToolTipRoute>) -> Void
 
     @Published public var route: ToolTipRoute?

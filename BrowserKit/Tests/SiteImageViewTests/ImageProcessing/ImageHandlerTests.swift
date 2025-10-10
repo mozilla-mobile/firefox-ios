@@ -430,7 +430,7 @@ private final class MockFaviconFetcher: FaviconFetcher, @unchecked Sendable {
 }
 
 // MARK: - MockLetterImageGenerator
-private class MockLetterImageGenerator: LetterImageGenerator, @unchecked Sendable {
+final private class MockLetterImageGenerator: LetterImageGenerator, @unchecked Sendable {
     var image = UIImage()
     var generateLetterImageCalled = 0
     var capturedSiteString: String?

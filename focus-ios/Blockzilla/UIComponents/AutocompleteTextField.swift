@@ -18,7 +18,7 @@ protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
 }
 
-public class AutocompleteTextField: UITextField, UITextFieldDelegate {
+final public class AutocompleteTextField: UITextField, UITextFieldDelegate {
     var autocompleteDelegate: AutocompleteTextFieldDelegate?
     // AutocompleteTextLabel represents the actual autocomplete text.
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
@@ -349,7 +349,7 @@ public func debounce(_ delay: TimeInterval, action: @escaping () -> Void) -> () 
 }
 
 // Encapsulate a callback in a way that we can use it with NSTimer.
-private class Callback {
+final private class Callback {
     private let handler: () -> Void
 
     init(handler: @escaping () -> Void) {

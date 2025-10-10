@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 /// The themed `UISwitch` used in the ``PaddedSwitch``
-public class ThemedSwitch: UISwitch, ThemeApplicable {
+final public class ThemedSwitch: UISwitch, ThemeApplicable {
     private var enabledOnColor: UIColor?
     private var disabledOnColor: UIColor?
     private var enabledOffColor: UIColor?

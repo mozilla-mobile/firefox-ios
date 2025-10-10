@@ -7,7 +7,7 @@ import UIKit
 /**
  * Button whose insets are included in its intrinsic size.
  */
-class InsetButton: UIButton {
+final class InsetButton: UIButton {
     init() {
         super.init(frame: CGRect.zero)
     }

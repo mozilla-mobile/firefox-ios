@@ -12,7 +12,7 @@ enum WebViewState {
     case error
 }
 
-class WebViewModel: ObservableObject {
+final class WebViewModel: ObservableObject {
     @Published var state: WebViewState = .loading
     private var webView: WKWebView?
     var url: URL?

@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import DesignSystem
 
-public class OnboardingViewController: UIViewController {
+final public class OnboardingViewController: UIViewController {
     public init(
         config: OnboardingText,
         dismissOnboardingScreen: @escaping (() -> Void)
@@ -295,7 +295,7 @@ public struct OnboardingText {
     }
 }
 
-public class Instruction {
+final public class Instruction {
     let title: String
     let subtitle: String
     let image: UIImage
