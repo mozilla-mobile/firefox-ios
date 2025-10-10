@@ -205,7 +205,7 @@ workflows:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 5
+        - shard_count: 6
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
@@ -305,9 +305,7 @@ workflows:
         timeout: 1200
         inputs:
         - only_testing: |
-            XCUITests/OnboardingTests
             XCUITests/BookmarksTests
-            XCUITests/BrowsingPDFTests
             XCUITests/FindInPageTests
             XCUITests/HomePageSettingsUITests
             XCUITests/NavigationTest
