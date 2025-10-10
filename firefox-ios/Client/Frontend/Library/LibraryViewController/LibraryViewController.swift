@@ -35,20 +35,11 @@ class LibraryViewController: UIViewController, Themeable {
     private var controllerContainerView: UIView = .build { view in }
 
     // UI Elements
-    private lazy var librarySegmentControl: UISegmentedControl = {
-        var librarySegmentControl: UISegmentedControl
-        librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
-        librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
-        librarySegmentControl.selectedSegmentIndex = 1
-        librarySegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
-        librarySegmentControl.translatesAutoresizingMaskIntoConstraints = false
-        return librarySegmentControl
-    }()
+    private var librarySegmentControl: UISegmentedControl
 
     private lazy var segmentControlToolbar: UIToolbar = .build { [weak self] toolbar in
         guard let self = self else { return }
         toolbar.delegate = self
-        toolbar.setItems([UIBarButtonItem(customView: self.librarySegmentControl)], animated: false)
     }
 
     private lazy var topLeftButton: UIBarButtonItem =  {
@@ -84,7 +75,7 @@ class LibraryViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.logger = logger
         self.windowUUID = tabManager.windowUUID
-
+        self.librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -95,8 +86,6 @@ class LibraryViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewSetup()
-
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
@@ -109,7 +98,21 @@ class LibraryViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        recreateSegmentedControl()
         applyTheme()
+    }
+
+    private func recreateSegmentedControl() {
+        let newSegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
+        newSegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
+        newSegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
+        newSegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
+        newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+
+        let newItem = UIBarButtonItem(customView: newSegmentControl)
+        segmentControlToolbar.setItems([newItem], animated: false)
+        librarySegmentControl = newSegmentControl
+        viewSetup()
     }
 
     override func viewDidLayoutSubviews() {
@@ -119,6 +122,8 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func viewSetup() {
+        controllerContainerView.removeFromSuperview()
+        segmentControlToolbar.removeFromSuperview()
         navigationItem.rightBarButtonItem = topRightButton
         view.addSubviews(controllerContainerView, segmentControlToolbar)
 
