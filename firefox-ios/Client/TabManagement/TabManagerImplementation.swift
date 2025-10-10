@@ -256,13 +256,57 @@ class TabManagerImplementation: NSObject,
                                                 isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         backupCloseTabs = tabs
+        guard !currentModeTabs.isEmpty else {
+                    backupCloseTab = currentSelectedTab
+                    commitChanges()
+                    return
+                }
+
+                let previouslySelectedTab = selectedTab
+                let selectedTabWillBeRemoved = previouslySelectedTab?.isPrivate == isPrivateMode
+                let selectedIndexBeforeRemoval = selectedIndex
+                let shouldReselectCurrentTab: Bool
+                if selectedTabWillBeRemoved || selectedIndexBeforeRemoval < 0 {
+                    shouldReselectCurrentTab = false
+                } else {
+                    shouldReselectCurrentTab = currentModeTabs.contains { tab in
+                        guard let removalIndex = tabs.firstIndex(of: tab) else { return false }
+                        return removalIndex < selectedIndexBeforeRemoval
+                    }
+                }
+
+                // Remove all tabs in the requested mode while keeping the others untouched.
+                tabs.removeAll { $0.isPrivate == isPrivateMode }
 
         for tab in currentModeTabs {
-            self.removeTab(tab.tabUUID)
+            tab.cancelDocumentDownload()
+            tab.close()
+
+            delegates.forEach {
+                $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: !self.tabRestoreHasFinished)
+            }
+            TabEvent.post(.didClose, for: tab)
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
         backupCloseTab = currentSelectedTab
+        if selectedTabWillBeRemoved {
+            let fallbackTab: Tab
+            if let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
+                fallbackTab = mostRecentActiveTab
+            } else {
+                fallbackTab = addTab()
+            }
+            selectTab(fallbackTab, previous: previouslySelectedTab)
+        } else if shouldReselectCurrentTab,
+                  let stillSelectedTab = previouslySelectedTab,
+                  tabs.contains(where: { $0 === stillSelectedTab }) {
+            // Ensure the selection index is consistent after removing tabs that were positioned before it.
+            selectTab(stillSelectedTab, previous: stillSelectedTab)
+        } else if tabs.isEmpty {
+            let newTab = addTab()
+            selectTab(newTab, previous: previouslySelectedTab)
+        }
 
         commitChanges()
     }
