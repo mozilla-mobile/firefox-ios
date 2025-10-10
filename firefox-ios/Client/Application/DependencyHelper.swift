@@ -40,7 +40,7 @@ class DependencyHelper {
         AppContainer.shared.register(service: microsurveyManager as MicrosurveyManager)
 
         let merinoManager: MerinoManagerProvider = MerinoManager(
-            merinoAPI: MerinoProvider(prefs: profile.prefs)
+            storyProvider: StoryProvider(merinoAPI: MerinoProvider(prefs: profile.prefs))
         )
         AppContainer.shared.register(service: merinoManager as MerinoManagerProvider)
 

@@ -23,6 +23,7 @@ class RootViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var themeListenerCancellable: Any?
 
     private lazy var navigationToolbar: NavigationToolbarContainer = .build { _ in }
     private lazy var addressToolbarContainer: AddressToolbarContainer =  .build { _ in }
@@ -62,7 +63,7 @@ class RootViewController: UIViewController,
         configureSearchView()
         configureNavigationToolbar()
 
-        listenForThemeChange(view)
+        listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 

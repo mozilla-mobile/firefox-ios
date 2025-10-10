@@ -42,4 +42,37 @@ extension SummarizerError {
             ""
         }
     }
+
+    func errorButtonLabel(for configuration: SummarizeViewConfiguration) -> String {
+        return switch shouldRetrySummarizing {
+        case .retry:
+            configuration.errorMessages.retryButtonLabel
+        case .close:
+            configuration.errorMessages.closeButtonLabel
+        case .acceptToS:
+            configuration.termOfService.allowButtonTitle
+        }
+    }
+
+    func errorButtonA11yLabel(for configuration: SummarizeViewConfiguration) -> String {
+        return switch shouldRetrySummarizing {
+        case .retry:
+            configuration.errorMessages.retryButtonA11yLabel
+        case .close:
+            configuration.errorMessages.closeButtonA11yLabel
+        case .acceptToS:
+            configuration.termOfService.allowButtonA11yLabel
+        }
+    }
+
+    func errorButtonA11yId(for configuration: SummarizeViewConfiguration) -> String {
+        return switch shouldRetrySummarizing {
+        case .retry:
+            configuration.errorMessages.retryButtonA11yId
+        case .close:
+            configuration.errorMessages.closeButtonA11yId
+        case .acceptToS:
+            configuration.termOfService.allowButtonA11yId
+        }
+    }
 }

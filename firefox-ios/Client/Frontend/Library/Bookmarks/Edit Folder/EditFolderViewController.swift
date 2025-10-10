@@ -31,7 +31,7 @@ class EditFolderViewController: UIViewController,
 
     private let viewModel: EditFolderViewModel
 
-    private lazy var tableView: UITableView = .build { view in
+    private lazy var tableView: UITableView = .build({ view in
         view.dataSource = self
         view.delegate = self
         view.register(cellType: EditFolderCell.self)
@@ -42,7 +42,13 @@ class EditFolderViewController: UIViewController,
                                                     size: CGSize(width: 0, height: UX.editFolderCellTopPadding)))
         view.tableHeaderView = headerSpacerView
         view.keyboardDismissMode = .onDrag
-    }
+    }, {
+        if #available(iOS 26.0, *) {
+            UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            UITableView()
+        }
+    })
 
     private lazy var saveBarButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(

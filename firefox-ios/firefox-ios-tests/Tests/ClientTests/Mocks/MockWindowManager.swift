@@ -74,4 +74,8 @@ final class MockWindowManager: WindowManager {
     func window(for tab: TabUUID) -> WindowUUID? {
         wrappedManager.window(for: tab)
     }
+
+    func windowExists(uuid: Common.WindowUUID) -> Bool {
+        wrappedManager.windowExists(uuid: uuid)
+    }
 }

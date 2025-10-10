@@ -10,7 +10,7 @@ import UIKit
 struct SummarizeErrorFormatter {
     let theme: Theme
     let isAccessibilityCategoryEnabled: Bool
-    let viewModel: SummarizeViewConfiguration
+    let configuration: SummarizeViewConfiguration
 
     private var parserConfiguration: DownStylerConfiguration {
         let centeredParagraphStyle = NSMutableParagraphStyle()
@@ -72,18 +72,18 @@ struct SummarizeErrorFormatter {
         case .tosConsentMissing:
             if isAccessibilityCategoryEnabled {
                 return """
-                # \(viewModel.termOfService.titleLabel)
-                [\(viewModel.termOfService.linkButtonLabel)](\(viewModel.termOfService.linkButtonURL?.absoluteString ?? ""))
+                # \(configuration.termOfService.titleLabel)
+                [\(configuration.termOfService.linkButtonLabel)](\(configuration.termOfService.linkButtonURL?.absoluteString ?? ""))
                 """
             }
             return """
-            # \(viewModel.termOfService.titleLabel)
-            ### \(viewModel.termOfService.descriptionText)
-            [\(viewModel.termOfService.linkButtonLabel)](\(viewModel.termOfService.linkButtonURL?.absoluteString ?? ""))
+            # \(configuration.termOfService.titleLabel)
+            ### \(configuration.termOfService.descriptionText)
+            [\(configuration.termOfService.linkButtonLabel)](\(configuration.termOfService.linkButtonURL?.absoluteString ?? ""))
             """
         default:
             return """
-            ## \(error.description(for: viewModel.errorMessages))
+            ## \(error.description(for: configuration.errorMessages))
             """
         }
     }

@@ -220,3 +220,9 @@
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "ഉപയോഗനിബന്ധനകള്‍";
 
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "പൂമുഖം";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "പുതിയ ടാബു്";
+

@@ -47,10 +47,6 @@ class TabManagerImplementation: NSObject,
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
 
-    var isPDFRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pdfRefactor, checking: .buildOnly)
-    }
-
     var count: Int {
         return tabs.count
     }
@@ -836,9 +832,7 @@ class TabManagerImplementation: NSObject,
         assert(Thread.isMainThread)
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
-        if isPDFRefactorEnabled {
-            previous?.pauseDocumentDownload()
-        }
+        previous?.pauseDocumentDownload()
 
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
@@ -883,9 +877,8 @@ class TabManagerImplementation: NSObject,
                                        actionType: PrivateModeActionType.setPrivateModeTo)
         store.dispatchLegacy(action)
 
-        if isPDFRefactorEnabled {
-            tab.resumeDocumentDownload()
-        }
+        tab.resumeDocumentDownload()
+
         didSelectTab(url)
         updateMenuItemsForSelectedTab()
 

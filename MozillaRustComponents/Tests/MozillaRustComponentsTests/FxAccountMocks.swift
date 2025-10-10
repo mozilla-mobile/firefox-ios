@@ -78,7 +78,7 @@ class MockFxAccount: PersistedFirefoxAccount {
     }
 }
 
-class MockFxAccountManager: FxAccountManager {
+final class MockFxAccountManager: FxAccountManager, @unchecked Sendable {
     var storedAccount: PersistedFirefoxAccount?
 
     override func createAccount() -> PersistedFirefoxAccount {
@@ -94,7 +94,7 @@ class MockFxAccountManager: FxAccountManager {
     }
 }
 
-class MockDeviceConstellation: DeviceConstellation {
+final class MockDeviceConstellation: DeviceConstellation, @unchecked Sendable {
     var invocations: [MethodInvocation] = []
     enum MethodInvocation {
         case ensureCapabilities

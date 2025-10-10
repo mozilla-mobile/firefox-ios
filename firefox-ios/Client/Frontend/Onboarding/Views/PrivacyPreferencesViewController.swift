@@ -24,6 +24,7 @@ final class PrivacyPreferencesViewController: UIViewController,
     var themeListenerCancellable: Any?
     var currentWindowUUID: UUID? { windowUUID }
     var notificationCenter: NotificationProtocol
+    private var glassEffectView: UIVisualEffectView?
 
     // MARK: - UI elements
     private lazy var titleLabel: UILabel = .build { label in
@@ -41,6 +42,9 @@ final class PrivacyPreferencesViewController: UIViewController,
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.setTitle(.SettingsSearchDoneButton, for: .normal)
         button.setContentHuggingPriority(.required, for: .horizontal)
+        if #available(iOS 26.0, *) {
+            button.configuration = .glass()
+        }
     }
 
     private lazy var contentScrollView: UIScrollView = .build()
@@ -91,6 +95,10 @@ final class PrivacyPreferencesViewController: UIViewController,
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+
+        if #available(iOS 26.0, *) {
+            setupGlassEffect()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -268,11 +276,50 @@ final class PrivacyPreferencesViewController: UIViewController,
     // MARK: - Themable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer3
+
+        // Only set background color if glass effect is not active
+        if #available(iOS 26.0, *), glassEffectView != nil {
+            view.backgroundColor = .clear
+        } else {
+            view.backgroundColor = theme.colors.layer3
+        }
+
         titleLabel.textColor = theme.colors.textPrimary
         doneButton.setTitleColor(theme.colors.textAccent, for: .normal)
         crashReportsSwitch.applyTheme(theme: theme)
         technicalDataSwitch.applyTheme(theme: theme)
         setupContentViews()
+    }
+
+    // MARK: - Glass Effect
+    @available(iOS 26.0, *)
+    private func setupGlassEffect() {
+        // Only add glass effect if it doesn't already exist
+        guard glassEffectView == nil else { return }
+
+        let effectView = UIVisualEffectView()
+
+        #if canImport(FoundationModels)
+        let glassEffect = UIGlassEffect()
+        glassEffect.isInteractive = true
+        effectView.effect = glassEffect
+        #else
+        effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        #endif
+
+        effectView.clipsToBounds = true
+        effectView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.backgroundColor = .clear
+        view.insertSubview(effectView, at: 0)
+
+        NSLayoutConstraint.activate([
+            effectView.topAnchor.constraint(equalTo: view.topAnchor),
+            effectView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            effectView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            effectView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        glassEffectView = effectView
     }
 }

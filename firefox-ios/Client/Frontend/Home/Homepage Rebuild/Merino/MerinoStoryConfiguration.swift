@@ -15,6 +15,7 @@ final class MerinoStoryConfiguration: Sendable, Equatable, Hashable {
     var title: String { story.title }
     var url: URL? { story.url }
     var imageURL: URL? { story.imageURL }
+    var iconURL: URL? { story.iconURL }
     var description: String {
         return "\(story.publisher)"
     }

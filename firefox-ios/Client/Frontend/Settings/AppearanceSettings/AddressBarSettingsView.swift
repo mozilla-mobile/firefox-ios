@@ -7,7 +7,7 @@ import Common
 import Shared
 
 /// The main view displaying the settings for the address bar position menu.
-struct AddressBarSettingsView: View {
+struct AddressBarSettingsView: View, FeatureFlaggable {
     let windowUUID: WindowUUID
     /// NOTE: To avoid duplication, the old view model is reused in the new address bar setting menu.
     /// TODO(FXIOS-12000): Once the experiment is done, we can remove the old viewmodel and move it to here.
@@ -16,7 +16,22 @@ struct AddressBarSettingsView: View {
     @Environment(\.themeManager)
     var themeManager
 
+    var prefs: Prefs
+
     @State private var currentTheme: Theme?
+
+    var shouldShowNavigationBarConfig: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarMiddleButtonCustomization, checking: .buildOnly)
+    }
+
+    var selectedMiddleButtonType: NavigationBarMiddleButtonType {
+        if let rawValue = prefs.stringForKey(PrefsKeys.Settings.navigationToolbarMiddleButton),
+           let selectedButton = NavigationBarMiddleButtonType(rawValue: rawValue) {
+            return selectedButton
+        }
+
+        return .newTab
+    }
 
     private var addressBarPosition: SearchBarPosition {
         LegacyFeatureFlagsManager.shared.getCustomState(for: .searchBarPosition) ?? .bottom
@@ -42,6 +57,13 @@ struct AddressBarSettingsView: View {
                     onSelected: viewModel.saveSearchBarPosition)
                 .modifier(SectionStyle(theme: currentTheme, cornerRadius: UX.cornerRadius))
             }
+
+            if shouldShowNavigationBarConfig {
+                NavigationToolbarSection(theme: currentTheme,
+                                         selectedOption: selectedMiddleButtonType,
+                                         onChange: updateMiddleNavigationToolbarButton,
+                                         cornerRadius: UX.cornerRadius)
+            }
             Spacer()
         }
         .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))
@@ -53,5 +75,40 @@ struct AddressBarSettingsView: View {
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         }
+    }
+
+    // MARK: NavigationToolbarSection
+
+    private struct NavigationToolbarSection: View {
+        let theme: Theme?
+        let selectedOption: NavigationBarMiddleButtonType
+        let onChange: (NavigationBarMiddleButtonType) -> Void
+        let cornerRadius: CGFloat
+
+        var body: some View {
+            GenericSectionView(
+                theme: theme,
+                title: .Settings.Appearance.NavigationToolbar.SectionHeader,
+                description: .Settings.Appearance.NavigationToolbar.SectionDescription,
+                identifier: AccessibilityIdentifiers.Settings.Appearance.navigationToolbarSectionTitle
+            ) {
+                NavigationBarMiddleButtonSelectionView(
+                    theme: theme,
+                    selectedMiddleButton: selectedOption,
+                    onSelected: onChange)
+                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+            }
+        }
+    }
+
+    /// Updates the middle button in navigation toolbar based on the user's selection.
+    /// - Parameter selectedOption: The selected theme option from ThemeSelectionView.
+    private func updateMiddleNavigationToolbarButton(to selectedOption: NavigationBarMiddleButtonType) {
+        prefs.setString(selectedOption.rawValue, forKey: PrefsKeys.Settings.navigationToolbarMiddleButton)
+
+        let action = ToolbarAction(middleButton: selectedOption,
+                                   windowUUID: windowUUID,
+                                   actionType: ToolbarActionType.navigationMiddleButtonDidChange)
+        store.dispatchLegacy(action)
     }
 }

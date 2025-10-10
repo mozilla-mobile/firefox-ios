@@ -5,20 +5,15 @@
 import Common
 import Foundation
 import WebKit
-
-@objc
-protocol JSPromptAlertControllerDelegate: AnyObject {
-    @MainActor
-    func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController)
-}
+import WebEngine
 
 /// A simple version of UIAlertController that attaches a delegate to the viewDidDisappear method
 /// to allow forwarding the event. The reason this is needed for prompts from Javascript is we
 /// need to invoke the completionHandler passed to us from the WKWebView delegate or else
 /// a runtime exception is thrown.
-class JSPromptAlertController: UIAlertController {
-    var alertInfo: JSAlertInfo?
-    weak var delegate: JSPromptAlertControllerDelegate?
+class JSPromptAlertController: UIAlertController, WKJavaScriptPromptAlertController {
+    var alertInfo: WKJavaScriptAlertInfo?
+    weak var delegate: WKJavascriptPromptAlertControllerDelegate?
     private var handledAction = false
     private var dismissalResult: Any?
 
@@ -26,7 +21,7 @@ class JSPromptAlertController: UIAlertController {
         title: String?,
         message: String?,
         preferredStyle: UIAlertController.Style = .alert,
-        alertInfo: JSAlertInfo
+        alertInfo: WKJavaScriptAlertInfo
     ) {
         self.init(title: title, message: message, preferredStyle: preferredStyle)
         self.alertInfo = alertInfo
@@ -56,24 +51,14 @@ class JSPromptAlertController: UIAlertController {
     }
 }
 
-protocol JSAlertInfo {
-    @MainActor
-    func alertController() -> JSPromptAlertController
-    func cancel()
-    func handleAlertDismissal(_ result: Any?)
-}
-
-protocol JavaScriptAlertProtocol {
-    static var alertType: String { get }
-}
-
-struct MessageAlert: JSAlertInfo {
+struct MessageAlert: WKJavaScriptAlertInfo {
+    let type: WKJavaScriptAlertType = .alert
     let message: String
     let frame: WKFrameInfo
     let completionHandler: () -> Void
     var logger: Logger = DefaultLogger.shared
 
-    func alertController() -> JSPromptAlertController {
+    func alertController() -> WKJavaScriptPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
@@ -99,13 +84,14 @@ struct MessageAlert: JSAlertInfo {
     }
 }
 
-struct ConfirmPanelAlert: JSAlertInfo {
+struct ConfirmPanelAlert: WKJavaScriptAlertInfo {
+    let type: WKJavaScriptAlertType = .confirm
     let message: String
     let frame: WKFrameInfo
     let completionHandler: (Bool) -> Void
     var logger: Logger = DefaultLogger.shared
 
-    func alertController() -> JSPromptAlertController {
+    func alertController() -> WKJavaScriptPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
@@ -137,14 +123,15 @@ struct ConfirmPanelAlert: JSAlertInfo {
     }
 }
 
-struct TextInputAlert: JSAlertInfo {
+struct TextInputAlert: WKJavaScriptAlertInfo {
+    let type: WKJavaScriptAlertType = .textInput
     let message: String
     let frame: WKFrameInfo
     let defaultText: String?
     let completionHandler: (String?) -> Void
     var logger: Logger = DefaultLogger.shared
 
-    func alertController() -> JSPromptAlertController {
+    func alertController() -> WKJavaScriptPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
@@ -182,19 +169,6 @@ struct TextInputAlert: JSAlertInfo {
             logger.log("Text input alert dismissed with no input.", level: .info, category: .webview)
         }
     }
-}
-
-// MARK: - Alert Type Extensions
-extension MessageAlert: JavaScriptAlertProtocol {
-    static var alertType: String { "alert" }
-}
-
-extension ConfirmPanelAlert: JavaScriptAlertProtocol {
-    static var alertType: String { "confirm" }
-}
-
-extension TextInputAlert: JavaScriptAlertProtocol {
-    static var alertType: String { "text input" }
 }
 
 /// Show a title for a JavaScript Panel (alert) based on the WKFrameInfo. On iOS9 we will use the new securityOrigin

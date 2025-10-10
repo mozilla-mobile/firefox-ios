@@ -37,7 +37,7 @@ public struct TextStyling: Sendable {
 
     // MARK: - SwiftUI Font Methods
 
-    public func scaledSwiftUIFont(sizeCap: CGFloat? = nil) -> Font {
+    public func scaledSwiftUIFont(sizeCap: CGFloat? = nil) -> DynamicFont {
         return DefaultDynamicFontHelper.preferredSwiftUIFont(withTextStyle: toSwiftUITextStyle(textStyle),
                                                              size: size,
                                                              sizeCap: sizeCap,
@@ -48,7 +48,7 @@ public struct TextStyling: Sendable {
         return Font.system(size: size, weight: toSwiftUIWeight(weight))
     }
 
-    public func monospacedSwiftUIFont() -> Font {
+    public func monospacedSwiftUIFont() -> DynamicFont {
         return DefaultDynamicFontHelper.preferredSwiftUIFont(withTextStyle: toSwiftUITextStyle(textStyle),
                                                              size: size,
                                                              weight: toSwiftUIWeight(weight),
@@ -73,6 +73,38 @@ public struct TextStyling: Sendable {
     }
 
     private func toSwiftUIWeight(_ style: UIFont.Weight) -> Font.Weight {
+        switch style {
+        case .ultraLight: return .ultraLight
+        case .thin: return .thin
+        case .light: return .light
+        case .regular: return .regular
+        case .medium: return .medium
+        case .semibold: return .semibold
+        case .bold: return .bold
+        case .heavy: return .heavy
+        case .black: return .black
+        default: return .regular
+        }
+    }
+
+    public static func toUIFontTextStyle(_ style: Font.TextStyle) -> UIFont.TextStyle {
+        switch style {
+        case .largeTitle: return .largeTitle
+        case .title: return .title1
+        case .title2: return .title2
+        case .title3: return .title3
+        case .headline: return .headline
+        case .subheadline: return .subheadline
+        case .body: return .body
+        case .callout: return .callout
+        case .footnote: return .footnote
+        case .caption: return .caption1
+        case .caption2: return .caption2
+        @unknown default: return .body
+        }
+    }
+
+    public static func toUIFontWeight(_ style: Font.Weight) -> UIFont.Weight {
         switch style {
         case .ultraLight: return .ultraLight
         case .thin: return .thin

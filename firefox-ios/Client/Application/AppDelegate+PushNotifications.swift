@@ -73,8 +73,9 @@ extension AppDelegate {
     }
 }
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    nonisolated func userNotificationCenter(
+extension AppDelegate: @MainActor UNUserNotificationCenterDelegate {
+    // Called when the user taps on a notification while in background.
+    func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
@@ -86,9 +87,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
             switch response.actionIdentifier {
             case UNNotificationDismissActionIdentifier:
-                await notificationSurfaceManager.didDismissNotification(messageId)
+                notificationSurfaceManager.didDismissNotification(messageId)
             default:
-                await notificationSurfaceManager.didTapNotification(messageId)
+                notificationSurfaceManager.didTapNotification(messageId)
             }
         } else if content.categoryIdentifier == NotificationCloseTabs.notificationCategoryId {
             switch response.actionIdentifier {
@@ -105,11 +106,10 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 
     // Called when the user receives a tab (or any other notification) while in foreground.
-    nonisolated func userNotificationCenter(
+    func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        let profile = await self.profile
         if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
             profile.removeAccount()
 

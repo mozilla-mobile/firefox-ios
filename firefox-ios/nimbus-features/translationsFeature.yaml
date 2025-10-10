@@ -1,0 +1,18 @@
+# The configuration for the translationsFeature feature
+features:
+  translations-feature:
+    description: >
+      Enables translations feature.
+    variables:
+      enabled:
+        description: >
+          Whether or not to enable translations feature.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

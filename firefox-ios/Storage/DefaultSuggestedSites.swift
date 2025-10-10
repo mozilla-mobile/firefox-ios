@@ -128,7 +128,45 @@ open class DefaultSuggestedSites {
                 // FXIOS-11064 We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "https://corporate.jd.com/favicon.ico")!)
             )
-         ]
+         ],
+        "ja_JP": [
+            Site.createSuggestedSite(
+                url: "https://tenki.jp/",
+                title: "tenki.jp",
+                trackingId: 800,
+                faviconResource: .bundleAsset(
+                    name: "tenki",
+                    forRemoteResource: URL(string: "https://static.tenki.jp/images/icon/bookmark/tenkijp_bookmark_icon_114_114.png")!
+                )
+            ),
+            Site.createSuggestedSite(
+                url: "https://ameblo.jp/",
+                title: "Amebaブログ",
+                trackingId: 801,
+                faviconResource: .bundleAsset(
+                    name: "ameblo",
+                    forRemoteResource: URL(string: "https://stat100.ameba.jp/common_style/img/sp/apple-touch-icon.png")!
+                )
+            ),
+            Site.createSuggestedSite(
+                url: "https://m.yahoo.co.jp/",
+                title: "Yahoo! JAPAN",
+                trackingId: 802,
+                faviconResource: .bundleAsset(
+                    name: "yahoo",
+                    forRemoteResource: URL(string: "https://s.yimg.jp/c/icon/s/bsc/2.0/y120.png")!
+                )
+            ),
+            Site.createSuggestedSite(
+                url: "https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8",
+                title: "ウィキペディア",
+                trackingId: 803,
+                faviconResource: .bundleAsset(
+                    name: "wikipedia",
+                    forRemoteResource: URL(string: "https://www.wikipedia.org/static/apple-touch/wikipedia.png")!
+                )
+            )
+         ],
     ]
 
     public static func defaultSites() -> [Site] {

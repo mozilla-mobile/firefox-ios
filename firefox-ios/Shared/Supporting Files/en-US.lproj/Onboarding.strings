@@ -231,3 +231,87 @@
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v143" = "Choose your theme";
+
+/* Button to skip the entire onboarding flow. */
+"Onboarding.Modern.General.Skip.v145" = "Skip";
+
+/* Title for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Title.v145" = "Say goodbye to creepy trackers";
+
+/* Description for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Description.v145" = "One choice protects you everywhere you go on the web. You can always change it later.";
+
+/* Action button to set the app as the default browser. */
+"Onboarding.Modern.Welcome.ActionTreatmentA.v145" = "Set as Default Browser";
+
+/* Button to skip the welcome card. */
+"Onboarding.Modern.Welcome.Skip.v145" = "Not Now";
+
+/* Title for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "Choose your address bar";
+
+/* Action to set the toolbar to the bottom. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "Bottom";
+
+/* Action to set the toolbar to the top. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "Top";
+
+/* Description for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Start typing to get search suggestions, your top sites, bookmarks, history and search engines – all in one place.";
+
+/* Continue button on the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Continue";
+
+/* Title for the theme selection card. */
+"Onboarding.Modern.Customization.Theme.Title.v145" = "Pick your theme";
+
+/* Option for the automatic theme. */
+"Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automatic";
+
+/* Option for the light theme. */
+"Onboarding.Modern.Customization.Theme.Light.v145" = "Light";
+
+/* Option for the dark theme. */
+"Onboarding.Modern.Customization.Theme.Dark.v145" = "Dark";
+
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Pick your favorite theme or have %@ match your device, putting you in control.";
+
+/* Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Sync.Title.v145" = "Take %@ on all your browsing adventures";
+
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "Your bookmarks, passwords, and more sync on any device. Everything’s protected with encryption, so only you can access it.";
+
+/* Button to start the Sync setup process. */
+"Onboarding.Modern.Sync.SignIn.Action.v145" = "Start Syncing";
+
+/* Button to skip the Sync setup during onboarding. */
+"Onboarding.Modern.Sync.Skip.Action.v145" = "Not now";
+
+/* Title for the Terms of Service screen in the v2 onboarding flow. */
+"Onboarding.Modern.TermsOfService.Title.v145" = "Take charge of the internet";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla)*/
+"Onboarding.Modern.TermsOfService.Description.v145" = "Automatic protection of your personal info\nLoad sites fast and search smarter\nBrought to you by the non-profit %@, trusted for over 20 years";
+
+/* Title for the confirmation button on the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Continue";
+
+/* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "By continuing, you agree to the %@";
+
+/* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "%@ Terms of Use.";
+
+/* Agreement text for Privacy Notice. %1$@ is the app name (e.g. Firefox), %2$@ is the placeholder for the Privacy Notice link. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "%1$@ cares about your privacy. Read more in our %2$@";
+
+/* The text for the Privacy Notice link button. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "Privacy Notice.";
+
+/* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@";
+
+/* The text for the Manage settings link button. */
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Manage settings";

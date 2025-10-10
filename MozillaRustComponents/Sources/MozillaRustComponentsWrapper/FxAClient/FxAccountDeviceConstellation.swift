@@ -19,7 +19,7 @@ public enum SendEventError: Error {
 }
 
 // FIXME: FXIOS-13537 Make this type actually Sendable, or isolate or otherwise protect any mutable state
-public final class DeviceConstellation: @unchecked Sendable {
+public class DeviceConstellation: @unchecked Sendable {
     var constellationState: ConstellationState?
     let account: PersistedFirefoxAccount
 

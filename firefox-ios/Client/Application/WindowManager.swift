@@ -74,6 +74,10 @@ protocol WindowManager {
     /// - Returns: the UUID of the window hosting it (if available and open).
     @MainActor
     func window(for tab: TabUUID) -> WindowUUID?
+
+    /// Convenience. Provides opportunity for safety checks or window validation.
+    @MainActor
+    func windowExists(uuid: WindowUUID) -> Bool
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -281,6 +285,11 @@ final class WindowManagerImplementation: WindowManager {
 
     func window(for tab: TabUUID) -> WindowUUID? {
         return allWindowTabManagers().first(where: { $0.tabs.contains(where: { $0.tabUUID == tab }) })?.windowUUID
+    }
+
+    func windowExists(uuid: WindowUUID) -> Bool {
+        guard uuid != .unavailable else { return false }
+        return windows[uuid] != nil
     }
 
     // MARK: - Internal Utilities

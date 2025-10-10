@@ -171,6 +171,17 @@ final class TabManagerMiddleware: FeatureFlaggable {
 
     @MainActor
     private func resolveTabTrayActions(action: TabTrayAction, state: AppState) {
+        // Sanity check to ensure the window this action is for is still around
+        // Short-term fix to avoid potential crashes where actions are processed
+        // after the window scene has been torn down [FXIOS-13809]
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        guard windowManager.windowExists(uuid: action.windowUUID) else {
+            logger.log("Window does not exist (\(action.windowUUID.uuidString.prefix(4))) for resolveTabTrayActions()",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
+
         switch action.actionType {
         case TabTrayActionType.tabTrayDidLoad:
             tabTrayDidLoad(for: action.windowUUID, panelType: action.panelType)

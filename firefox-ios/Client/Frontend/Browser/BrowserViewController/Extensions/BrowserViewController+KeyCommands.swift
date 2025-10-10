@@ -56,15 +56,8 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
-        guard let tab = tabManager.selectedTab else { return }
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.reloadWebsite))
-        } else {
-            if !contentContainer.hasAnyHomepage {
-                tab.reload()
-            }
-        }
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.reloadWebsite))
     }
 
     @objc
@@ -73,15 +66,8 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
-        guard let tab = tabManager.selectedTab else { return }
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
-        } else {
-            if !contentContainer.hasAnyHomepage {
-                tab.reload(bypassCache: true)
-            }
-        }
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
     }
 
     @objc
@@ -91,14 +77,9 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "go-back"])
         guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.navigateBack))
-        } else {
-            if !contentContainer.hasAnyHomepage {
-                tab.goBack()
-            }
-        }
+
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.navigateBack))
     }
 
     @objc
@@ -108,14 +89,9 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "go-forward"])
         guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.navigateForward))
-        } else {
-            if !contentContainer.hasAnyHomepage {
-                tab.goForward()
-            }
-        }
+
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.navigateForward))
     }
 
     @objc
@@ -147,12 +123,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "select-location-bar"])
         scrollController.showToolbars(animated: true)
-
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl))
-        } else if let legacyUrlBar {
-            legacyUrlBar.tabLocationViewDidTapLocation(legacyUrlBar.locationView)
-        }
+        store.dispatchLegacy(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl))
     }
 
     @objc
@@ -162,14 +133,8 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
 
-        if isToolbarRefactorEnabled {
-            store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
-                                                      actionType: GeneralBrowserActionType.addNewTab))
-        } else {
-            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-            keyboardPressesHandler().reset()
-        }
+        store.dispatchLegacy(GeneralBrowserAction(windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.addNewTab))
     }
 
     @objc
@@ -421,9 +386,7 @@ extension BrowserViewController {
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
-        if !isToolbarRefactorEnabled, let legacyUrlBar, legacyUrlBar.inOverlayMode {
-            return commands + searchLocationCommands
-        } else if !isEditingText {
+        if !isEditingText {
             return commands + overridesTextEditing
         }
         return commands

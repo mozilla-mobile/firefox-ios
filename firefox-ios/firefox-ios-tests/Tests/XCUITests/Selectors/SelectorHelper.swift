@@ -14,6 +14,8 @@ enum SelectorStrategy {
     case collectionViewById(String)
     case tableById(String)
     case textFieldById(String)
+    case imageById(String)
+    case otherInTablesById(String)
 }
 
 // Selector model (with metadata)
@@ -60,6 +62,10 @@ extension Selector {
             return app.tables[value]
         case .textFieldById:
             return app.textFields[value]
+        case .imageById:
+            return app.images[value]
+        case .otherInTablesById(let id):
+            return app.tables.otherElements[id]
         }
     }
 
@@ -86,6 +92,10 @@ extension Selector {
             return app.tables.matching(identifier: value)
         case .textFieldById:
             return app.textFields.matching(identifier: value)
+        case .imageById:
+            return app.images.matching(identifier: value)
+        case .otherInTablesById(let id):
+            return app.tables.otherElements.matching(identifier: id)
         }
     }
 

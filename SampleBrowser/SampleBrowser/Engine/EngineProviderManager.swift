@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// The `EngineProviderManager` ensures only one engine can exists per application
-actor EngineProviderManager {
+@MainActor
+class EngineProviderManager {
     static let shared = EngineProviderManager()
 
-    private var dependencyManager = EngineDependencyManager()
+    private let dependencyManager = EngineDependencyManager()
     private var engineProvider: EngineProvider?
 
     func getProvider() async -> EngineProvider {

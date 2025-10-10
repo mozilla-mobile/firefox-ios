@@ -57,6 +57,7 @@ class TopSitesHelperTests: XCTestCase {
         return subject
     }
 
+    @MainActor
     func testGetTopSites_withError_completesWithZeroSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let subject = createSubject(mockPinnedSites: false)
@@ -73,6 +74,7 @@ class TopSitesHelperTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    @MainActor
     func testGetTopSites_withFrecencyError_completesWithPinnedSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let subject = createSubject(mockPinnedSites: true, pinnedSites: defaultPinnedSites)
@@ -89,6 +91,7 @@ class TopSitesHelperTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    @MainActor
     func testGetTopSites_withPinnedSitesError_completesWithFrecencySites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let subject = createSubject(
@@ -108,6 +111,7 @@ class TopSitesHelperTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    @MainActor
     func testGetTopSites_filterHideSearchParam() {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let sites = defaultFrecencySites + [
@@ -128,6 +132,7 @@ class TopSitesHelperTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    @MainActor
     func testGetTopSites_removesDuplicates() {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let sites = defaultFrecencySites + defaultFrecencySites
@@ -146,6 +151,7 @@ class TopSitesHelperTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    @MainActor
     func testGetTopSites_defaultSitesHavePrecedenceOverFrecency() {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let sites = [Site.createBasicSite(url: "https://facebook.com", title: "Facebook")]
@@ -163,6 +169,7 @@ class TopSitesHelperTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    @MainActor
     func testGetTopSites_pinnedSitesHasPrecedenceOverDefaultTopSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let subject = createSubject(

@@ -7,10 +7,11 @@ import UIKit
 import Common
 
 struct InfoViewModel {
-    let title: NSAttributedString?
-    let titleA11yId: String
+    let content: NSAttributedString?
+    let contentA11yId: String
     let actionButtonLabel: String
     let actionButtonA11yId: String
+    let actionButtonA11yLabel: String
     let actionButtonCallback: () -> Void
     let linkCallback: (URL) -> Void
 }
@@ -82,10 +83,11 @@ class InfoView: UIView,
 
     func configure(viewModel: InfoViewModel) {
         self.viewModel = viewModel
-        contentView.attributedText = viewModel.title
-        contentView.accessibilityIdentifier = viewModel.titleA11yId
+        contentView.attributedText = viewModel.content
+        contentView.accessibilityIdentifier = viewModel.contentA11yId
         actionButton.configuration?.title = viewModel.actionButtonLabel
         actionButton.accessibilityIdentifier = viewModel.actionButtonA11yId
+        actionButton.accessibilityLabel = viewModel.actionButtonA11yLabel
         actionButton.addAction(UIAction(handler: { _ in
             viewModel.actionButtonCallback()
         }), for: .touchUpInside)

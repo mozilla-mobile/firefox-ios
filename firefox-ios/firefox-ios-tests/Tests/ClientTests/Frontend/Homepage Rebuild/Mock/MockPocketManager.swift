@@ -10,7 +10,7 @@ import MozillaAppServices
 final class MockMerinoManager: MerinoManagerProvider, @unchecked Sendable {
     var getMerinoItemsCalled = 0
 
-    func getMerinoItems() async -> [MerinoStoryConfiguration] {
+    func getMerinoItems(source: StorySource) async -> [MerinoStoryConfiguration] {
         getMerinoItemsCalled += 1
         let stories: [RecommendationDataItem] = [
             .makeItem("feed1"),

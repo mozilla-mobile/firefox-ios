@@ -107,8 +107,9 @@ final class OnboardingService: FeatureFlaggable {
                     buttonAction: popupViewModel.buttonAction,
                     a11yIdRoot: popupViewModel.a11yIdRoot
                 )
-            )
-            completion(.success(.none))
+            ) {
+                completion(.success(.advance(numberOfPages: 1)))
+            }
 
         case .readPrivacyPolicy:
             guard let infoModel = cards
@@ -188,8 +189,11 @@ final class OnboardingService: FeatureFlaggable {
         defaultApplicationHelper.openSettings()
     }
 
-    private func handleOpenInstructionsPopup(from popupViewModel: OnboardingDefaultBrowserModelProtocol) {
-        presentDefaultBrowserPopup(from: popupViewModel) {}
+    private func handleOpenInstructionsPopup(
+        from popupViewModel: OnboardingDefaultBrowserModelProtocol,
+        completion: @escaping () -> Void
+    ) {
+        presentDefaultBrowserPopup(from: popupViewModel, completion: completion)
     }
 
     private func handleReadPrivacyPolicy(from url: URL, completion: @escaping () -> Void) {

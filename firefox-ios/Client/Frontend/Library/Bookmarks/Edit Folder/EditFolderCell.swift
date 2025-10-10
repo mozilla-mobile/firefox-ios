@@ -10,7 +10,11 @@ class EditFolderCell: UITableViewCell,
                       ReusableCell,
                       ThemeApplicable {
     private struct UX {
-        static let textFieldVerticalPadding: CGFloat = 12.0
+        static let textFieldVerticalPadding: CGFloat = if #available(iOS 26.0, *) {
+            14
+        } else {
+            12
+        }
         static let textFieldHorizontalPadding: CGFloat = 16.0
     }
     private lazy var titleTextField: TextField = .build { view in

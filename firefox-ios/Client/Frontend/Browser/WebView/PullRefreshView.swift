@@ -46,9 +46,6 @@ class PullRefreshView: UIView,
         // the smallest window possible has horizontalSizeClass equal to compact, thus behaving like an iPhone.
         return traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
-    private var isToolbarRefactorEnabled: Bool {
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
-    }
 
     init(parentScrollView: UIScrollView?,
          isPortraitOrientation: Bool,
@@ -105,35 +102,38 @@ class PullRefreshView: UIView,
     /// the correct state of the pull to refresh view.
     func startObservingContentScroll() {
         scrollObserver = scrollView?.observe(\.contentOffset) { [weak self] _, _ in
-            guard let scrollView = self?.scrollView, scrollView.isDragging else {
-                if let scrollView = self?.scrollView, scrollView.contentOffset.y <= 0 {
-                    self?.updateElementAlpha()
+            ensureMainThread { [weak self] in
+                guard let scrollView = self?.scrollView, scrollView.isDragging else {
+                    if let scrollView = self?.scrollView, scrollView.contentOffset.y <= 0 {
+                        self?.updateElementAlpha()
+                    }
+
+                    guard let refreshHasFocus = self?.refreshIconHasFocus, refreshHasFocus else { return }
+                    self?.refreshIconHasFocus = false
+                    self?.easterEggGif?.removeFromSuperview()
+                    self?.easterEggGif = nil
+                    self?.scrollObserver?.invalidate()
+                    self?.triggerReloadAnimation()
+                    return
                 }
 
-                guard let refreshHasFocus = self?.refreshIconHasFocus, refreshHasFocus else { return }
-                self?.refreshIconHasFocus = false
-                self?.easterEggGif?.removeFromSuperview()
-                self?.easterEggGif = nil
-                self?.scrollObserver?.invalidate()
-                self?.triggerReloadAnimation()
-                return
-            }
+                let threshold = (self?.computeShrinkingFactor() ?? 1.0) * UX.blinkProgressViewStandardThreshold
 
-            let threshold = (self?.computeShrinkingFactor() ?? 1.0) * UX.blinkProgressViewStandardThreshold
+                if scrollView.contentOffset.y < -threshold {
+                    self?.blinkBackgroundProgressViewIfNeeded()
+                    self?.scheduleEasterEgg()
+                } else if scrollView.contentOffset.y != 0.0 {
+                    self?.easterEggTimer?.cancel()
+                    self?.easterEggTimer = nil
+                    // This check prevents progressView re blink when scrolling the pull refresh
+                    // before the web view is loaded
+                    self?.restoreBackgroundProgressViewIfNeeded()
+                    let rotationAngle = -(scrollView.contentOffset.y) / threshold
 
-            if scrollView.contentOffset.y < -threshold {
-                self?.blinkBackgroundProgressViewIfNeeded()
-                self?.scheduleEasterEgg()
-            } else if scrollView.contentOffset.y != 0.0 {
-                self?.easterEggTimer?.cancel()
-                self?.easterEggTimer = nil
-                // This check prevents progressView re blink when scrolling the pull refresh before the web view is loaded
-                self?.restoreBackgroundProgressViewIfNeeded()
-                let rotationAngle = -(scrollView.contentOffset.y) / threshold
-
-                UIView.animate(withDuration: UX.rotateProgressViewAnimationDuration) {
-                    self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 1.5)
-                    self?.updateElementAlpha()
+                    UIView.animate(withDuration: UX.rotateProgressViewAnimationDuration) {
+                        self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 1.5)
+                        self?.updateElementAlpha()
+                    }
                 }
             }
         }
@@ -247,7 +247,7 @@ class PullRefreshView: UIView,
 
     func applyTheme(theme: any Theme) {
         currentTheme = theme
-        backgroundColor = isToolbarRefactorEnabled ? theme.colors.layerSurfaceLow : theme.colors.layer1
+        backgroundColor = theme.colors.layerSurfaceLow
         progressView.tintColor = theme.colors.iconPrimary
     }
 
@@ -271,6 +271,7 @@ struct EasterEggViewLayoutBuilder {
 
     let easterEggSize: CGSize
 
+    @MainActor
     func layoutEasterEggView(_ view: UIView, superview: UIView, isPortrait: Bool, isIpad: Bool) {
         var isPortrait = isPortrait
         if let screenHeight = UIWindow.keyWindow?.windowScene?.screen.bounds.height,
@@ -285,6 +286,7 @@ struct EasterEggViewLayoutBuilder {
         }
     }
 
+    @MainActor
     private func layoutEasterEggView(_ view: UIView, superview: UIView, position: NSRectAlignment) {
         let constraints: [NSLayoutConstraint] = switch position {
         case .leading:

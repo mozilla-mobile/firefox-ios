@@ -330,6 +330,11 @@ final class TermsOfUseViewController: UIViewController,
         acceptButton.tintColor = currentTheme().colors.textOnDark
         acceptButton.backgroundColor = currentTheme().colors.actionPrimary
         remindMeLaterButton.setTitleColor(currentTheme().colors.actionPrimary, for: .normal)
+        descriptionTextView.linkTextAttributes = [
+            .foregroundColor: currentTheme().colors.textAccent,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        descriptionTextView.attributedText = makeAttributedDescription()
     }
 
     private func currentTheme() -> Theme {

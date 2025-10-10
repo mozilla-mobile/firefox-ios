@@ -7,32 +7,24 @@ import XCTest
 
 @testable import Client
 
+// TODO: FXIOS-13744 - Migrate NotificationManagerTelemetryTests to use mock telemetry or GleanWrapper
 final class NotificationManagerTelemetryTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
-    }
-
-    func test_onboardingNotificationPermission_GleanIsCalled() {
+    func test_onboardingNotificationPermission_GleanIsCalled() throws {
         let isGranted = true
         let subject = createSubject()
 
         subject.sendNotificationPermissionPrompt(isPermissionGranted: isGranted)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.notificationPermissionPrompt)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.notificationPermissionPrompt)
     }
 
-    func test_appNotificationPermission_GleanIsCalled() {
+    func test_appNotificationPermission_GleanIsCalled() throws {
         let subject = createSubject()
         let settings = MockUNNotificationSettings(authorizationStatus: .authorized, alertSetting: .enabled)
 
         subject.sendNotificationPermission(settings: settings)
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.App.notificationPermission)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.App.notificationPermission)
     }
 
     func createSubject() -> NotificationManagerTelemetry {

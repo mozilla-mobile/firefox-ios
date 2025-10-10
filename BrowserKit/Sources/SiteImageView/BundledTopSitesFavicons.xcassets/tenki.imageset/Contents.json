@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "tenki.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

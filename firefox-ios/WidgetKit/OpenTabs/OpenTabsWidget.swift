@@ -111,7 +111,7 @@ struct OpenTabsView: View {
         HStack(alignment: .center, spacing: 15) {
             Image(decorative: StandardImageIdentifiers.Small.externalLink)
                 .foregroundColor(Color("openTabsContentColor"))
-            Text("Open Firefox")
+            Text(String.OpenFirefoxLabel)
                 .foregroundColor(Color("openTabsContentColor"))
                 .lineLimit(1)
                 .font(.system(size: 13, weight: .semibold, design: .default))

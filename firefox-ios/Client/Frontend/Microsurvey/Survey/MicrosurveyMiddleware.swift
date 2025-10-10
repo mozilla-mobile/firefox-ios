@@ -7,7 +7,11 @@ import Redux
 import Common
 
 final class MicrosurveyMiddleware {
-    private let microsurveyTelemetry = MicrosurveyTelemetry()
+    private let microsurveyTelemetry: MicrosurveyTelemetryProtocol
+
+    init(microsurveyTelemetry: MicrosurveyTelemetryProtocol = MicrosurveyTelemetry()) {
+        self.microsurveyTelemetry = microsurveyTelemetry
+    }
 
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID

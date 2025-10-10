@@ -147,13 +147,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .pdfRefactor,
-                titleText: format(string: "PDF Refactor"),
-                statusText: format(string: "Toggle to enable PDF Refactor feature")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .homepageShortcutsLibrary,
                 titleText: format(string: "Shortcuts Library"),
                 statusText: format(string: "Toggle to enable the homepage shortcuts library")

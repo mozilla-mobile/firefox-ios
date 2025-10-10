@@ -70,6 +70,8 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             .scrollBounceBehavior(basedOnSize: true)
             VStack {
                 primaryButton
+                // Hidden spacer button to maintain consistent layout spacing
+                // when secondary button is not present
                 Button(" ", action: {})
                     .font(UX.CardView.secondaryActionFont)
                     .buttonStyle(.borderedProminent)
@@ -93,37 +95,21 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             .if(sizeCategory <= .extraExtraLarge) { view in
                 view.frame(height: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
             }
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     var primaryButton: some View {
-        Group {
-            if #available(iOS 17.0, *) {
-                OnboardingButton.primary(
-                    viewModel.buttons.primary.title,
-                    action: {
-                        onBottomButtonAction(
-                            viewModel.buttons.primary.action,
-                            viewModel.name
-                        )
-                    },
-                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-                    windowUUID: windowUUID,
-                    themeManager: themeManager
+        DragCancellablePrimaryButton(
+            title: viewModel.buttons.primary.title,
+            action: {
+                onBottomButtonAction(
+                    viewModel.buttons.primary.action,
+                    viewModel.name
                 )
-            } else {
-                DragCancellablePrimaryButton(
-                    title: viewModel.buttons.primary.title,
-                    action: {
-                        onBottomButtonAction(
-                            viewModel.buttons.primary.action,
-                            viewModel.name
-                        )
-                    },
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
-                )
-            }
-        }
+            },
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
+        )
     }
 
     private func applyTheme(theme: Theme) {

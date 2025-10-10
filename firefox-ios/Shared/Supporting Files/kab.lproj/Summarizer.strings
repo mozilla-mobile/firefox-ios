@@ -1,15 +1,36 @@
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "Mdel";
 
+/* The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors. */
+"Summarizer.Footnote.Label.v144" = "Tamawt: Asegzel yezmer ad d-yeglu s tuccḍiwin.";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "Yettwasegzel sɣur %@";
+
 /* The label for the error button that allows the user to retry summarizing the page. */
 "Summarizer.RetryButton.Label.v142" = "Ɛreḍ i tikkelt niḍen";
 
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "Sireg";
 
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ yesseqdac tiḥḥerci Apple i usegzel n yisebtar.";
+
 /* The label for the cancel button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.CancelButton.Label.v142" = "Sefsex";
 
+/* The label for the continue button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Kemmel";
+
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Issin ugar";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "Sireg igzulen n yisebtar?";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Amek iteddu";
+
+/* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
+"Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Kemmel";
 

@@ -44,6 +44,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
                 primaryButton
                 secondaryButton
             }
+            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -111,11 +112,10 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
                     )
                 },
                 accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
+                width: UX.CardView.primaryButtonWidthiPad,
                 windowUUID: windowUUID,
                 themeManager: themeManager
             )
-            .padding(.top, UX.CardView.secondaryButtonTopPadding)
-            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
         }
     }
 

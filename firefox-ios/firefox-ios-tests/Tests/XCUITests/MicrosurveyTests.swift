@@ -88,7 +88,10 @@ final class MicrosurveyTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
         generateTriggerForMicrosurvey()
-        XCTAssertFalse(app.otherElements[AccessibilityIdentifiers.Toolbar.urlBarBorder].exists)
+
+        // Will be updated in FXIOS-13566
+//        XCTAssertFalse(app.otherElements[AccessibilityIdentifiers.Toolbar.urlBarBorder].exists)
+
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
         XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)

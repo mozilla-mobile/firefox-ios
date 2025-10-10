@@ -3,28 +3,28 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import OnboardingKit
 import UIKit
+@testable import OnboardingKit
 
-// MARK: - Mock Types for Testing
-enum MockOnboardingType {
+// MARK: - Mock Enums
+enum MockOnboardingType: Sendable {
     case welcome
     case feature
     case completion
 }
 
-enum MockOnboardingPopupActionType {
+enum MockOnboardingPopupActionType: Sendable {
     case dismiss
     case learnMore
 }
 
-enum MockOnboardingMultipleChoiceActionType: String, CaseIterable, Hashable {
+enum MockOnboardingMultipleChoiceActionType: String, CaseIterable, Hashable, Sendable {
     case optionA
     case optionB
     case optionC
 }
 
-enum MockOnboardingActionType: String, CaseIterable, RawRepresentable {
+enum MockOnboardingActionType: String, CaseIterable, RawRepresentable, Sendable {
     case next
     case skip
     case complete
@@ -47,34 +47,33 @@ enum MockOnboardingActionType: String, CaseIterable, RawRepresentable {
     }
 }
 
-// MARK: - Mock Protocol Implementation
-final class MockOnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
+// MARK: - Mock OnboardingCardInfoModel
+struct MockOnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     typealias OnboardingType = MockOnboardingType
     typealias OnboardingPopupActionType = MockOnboardingPopupActionType
     typealias OnboardingMultipleChoiceActionType = MockOnboardingMultipleChoiceActionType
     typealias OnboardingActionType = MockOnboardingActionType
 
-    var cardType: OnboardingCardType
-    var name: String
-    var order: Int
-    var title: String
-    var body: String
-    var instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>?
-    var link: OnboardingLinkInfoModel?
-    var buttons: OnboardingButtons<OnboardingActionType>
-    var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>]
-    var onboardingType: OnboardingType
-    var a11yIdRoot: String
-    var imageID: String
-    var embededLinkText: [EmbeddedLink]
-
-    var defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>?
+    let cardType: OnboardingCardType
+    let name: String
+    let order: Int
+    let title: String
+    let body: String
+    let instructionsPopup: OnboardingInstructionsPopupInfoModel<OnboardingPopupActionType>?
+    let link: OnboardingLinkInfoModel?
+    let buttons: OnboardingButtons<OnboardingActionType>
+    let multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>]
+    let onboardingType: OnboardingType
+    let a11yIdRoot: String
+    let imageID: String
+    let embededLinkText: [EmbeddedLink]
+    let defaultSelectedButton: OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceActionType>?
 
     var image: UIImage? {
         return UIImage(systemName: imageID)
     }
 
-    required init(
+    init(
         cardType: OnboardingCardType,
         name: String,
         order: Int,
@@ -102,24 +101,27 @@ final class MockOnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         self.imageID = imageID
         self.instructionsPopup = instructionsPopup
         self.embededLinkText = embededLinkText
+        self.defaultSelectedButton = multipleChoiceButtons.first
     }
 
     // Convenience initializer for testing
-    convenience init(name: String) {
-        self.init(
+    static func create(name: String, order: Int = 0) -> MockOnboardingCardInfoModel {
+        return MockOnboardingCardInfoModel(
             cardType: .basic,
-            // Assuming OnboardingCardType has a standard case
             name: name,
-            order: 0,
-            title: "Test Title",
-            body: "Test Body",
+            order: order,
+            title: "Test Title for \(name)",
+            body: "Test Body for \(name)",
             link: nil,
             buttons: OnboardingButtons(
                 primary: OnboardingButtonInfoModel(
-                    title: "Primary Title",
-                    action: .complete
+                    title: "Primary Button",
+                    action: .next
                 ),
-                secondary: nil
+                secondary: OnboardingButtonInfoModel(
+                    title: "Secondary Button",
+                    action: .skip
+                )
             ),
             multipleChoiceButtons: [],
             onboardingType: .welcome,

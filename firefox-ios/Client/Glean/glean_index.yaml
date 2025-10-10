@@ -20,7 +20,6 @@ metrics_files:
   - firefox-ios/Client/Glean/probes/library.reading_list_panel.yaml
   - firefox-ios/Client/Glean/probes/metrics.yaml
   - firefox-ios/Client/Glean/probes/microsurvey.yaml
-  - firefox-ios/Client/Glean/probes/reader_mode.yaml
   - firefox-ios/Client/Glean/probes/settings.yaml
   - firefox-ios/Client/Glean/probes/share_sheet.yaml
   - firefox-ios/Client/Glean/probes/homepage.shortcuts_library.yaml

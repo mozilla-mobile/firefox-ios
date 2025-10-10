@@ -119,13 +119,15 @@ class IntegrationTests: FeatureFlaggedTestBase {
 
     func testFxASyncBookmark() {
         app.launch()
+        waitForTabsButton()
+        navigator.nowAt(HomePanelsScreen)
         // Bookmark is added by the DB
         // Sign into Mozilla Account
         navigator.openURL(testingURL)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.Bookmark)
-        navigator.nowAt(BrowserTab)
         signInFxAccounts()
 
         // Wait for initial sync to complete
@@ -148,7 +150,7 @@ class IntegrationTests: FeatureFlaggedTestBase {
         signInFxAccounts()
 
         // We only sync tabs if the user is signed in
-        navigator.nowAt(BrowserTab)
+        navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
         navigator.openURL(testingURL)
         waitUntilPageLoad()
@@ -173,6 +175,8 @@ class IntegrationTests: FeatureFlaggedTestBase {
 
     func testFxASyncLogins() {
         app.launch()
+        waitForTabsButton()
+        navigator.nowAt(HomePanelsScreen)
         navigator.openURL("gmail.com")
         waitUntilPageLoad()
 

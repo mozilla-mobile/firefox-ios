@@ -400,6 +400,22 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterUInt16: FfiConverterPrimitive {
+    typealias FfiType = UInt16
+    typealias SwiftType = UInt16
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt16 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterInt64: FfiConverterPrimitive {
     typealias FfiType = Int64
     typealias SwiftType = Int64
@@ -502,7 +518,12 @@ public protocol RelayClientProtocol: AnyObject, Sendable {
      *
      * This function was originally used to signal acceptance of terms and privacy notices,
      * but now primarily serves to provision (create) the Relay user record if one does not exist.
-     * Returns `Ok(())` on success, or an error if the server call fails.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
      */
     func acceptTerms() throws 
     
@@ -515,22 +536,24 @@ public protocol RelayClientProtocol: AnyObject, Sendable {
      * - `generated_for`: The website for which the address is generated.
      * - `used_on`: Comma-separated list of all websites where this address is used. Only updated by some clients.
      *
-     * ## Open Questions
-     * - See the spike doc and project Jira for clarifications on field semantics.
-     * - Returned error codes are not fully documented.
+     * ## Errors
      *
-     * Returns the newly created [`RelayAddress`] on success, or an error.
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
      */
     func createAddress(description: String, generatedFor: String, usedOn: String) throws  -> RelayAddress
     
     /**
      * Retrieves all Relay addresses associated with the current account.
      *
-     * Returns a vector of [`RelayAddress`] objects on success, or an error if the request fails.
+     * Returns a vector of [`RelayAddress`] objects on success.
      *
-     * ## Known Limitations
-     * - Will return an error if the Relay user record doesn't exist yet (see [`accept_terms`]).
-     * - Error variants are subject to server-side changes.
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
      */
     func fetchAddresses() throws  -> [RelayAddress]
     
@@ -625,7 +648,12 @@ public convenience init(serverUrl: String, authToken: String?)throws  {
      *
      * This function was originally used to signal acceptance of terms and privacy notices,
      * but now primarily serves to provision (create) the Relay user record if one does not exist.
-     * Returns `Ok(())` on success, or an error if the server call fails.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
      */
 open func acceptTerms()throws   {try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_method_relayclient_accept_terms(self.uniffiClonePointer(),$0
@@ -642,11 +670,11 @@ open func acceptTerms()throws   {try rustCallWithError(FfiConverterTypeRelayApiE
      * - `generated_for`: The website for which the address is generated.
      * - `used_on`: Comma-separated list of all websites where this address is used. Only updated by some clients.
      *
-     * ## Open Questions
-     * - See the spike doc and project Jira for clarifications on field semantics.
-     * - Returned error codes are not fully documented.
+     * ## Errors
      *
-     * Returns the newly created [`RelayAddress`] on success, or an error.
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
      */
 open func createAddress(description: String, generatedFor: String, usedOn: String)throws  -> RelayAddress  {
     return try  FfiConverterTypeRelayAddress_lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
@@ -661,11 +689,13 @@ open func createAddress(description: String, generatedFor: String, usedOn: Strin
     /**
      * Retrieves all Relay addresses associated with the current account.
      *
-     * Returns a vector of [`RelayAddress`] objects on success, or an error if the request fails.
+     * Returns a vector of [`RelayAddress`] objects on success.
      *
-     * ## Known Limitations
-     * - Will return an error if the Relay user record doesn't exist yet (see [`accept_terms`]).
-     * - Error variants are subject to server-side changes.
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
      */
 open func fetchAddresses()throws  -> [RelayAddress]  {
     return try  FfiConverterSequenceTypeRelayAddress.lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
@@ -943,7 +973,7 @@ public enum RelayApiError: Swift.Error {
     
     case Network(reason: String
     )
-    case RelayApi(detail: String
+    case Api(status: UInt16, code: String, detail: String
     )
     case Other(reason: String
     )
@@ -966,7 +996,9 @@ public struct FfiConverterTypeRelayApiError: FfiConverterRustBuffer {
         case 1: return .Network(
             reason: try FfiConverterString.read(from: &buf)
             )
-        case 2: return .RelayApi(
+        case 2: return .Api(
+            status: try FfiConverterUInt16.read(from: &buf), 
+            code: try FfiConverterString.read(from: &buf), 
             detail: try FfiConverterString.read(from: &buf)
             )
         case 3: return .Other(
@@ -989,8 +1021,10 @@ public struct FfiConverterTypeRelayApiError: FfiConverterRustBuffer {
             FfiConverterString.write(reason, into: &buf)
             
         
-        case let .RelayApi(detail):
+        case let .Api(status,code,detail):
             writeInt(&buf, Int32(2))
+            FfiConverterUInt16.write(status, into: &buf)
+            FfiConverterString.write(code, into: &buf)
             FfiConverterString.write(detail, into: &buf)
             
         
@@ -1096,13 +1130,13 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 27228) {
+    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 12387) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_create_address() != 37395) {
+    if (uniffi_relay_checksum_method_relayclient_create_address() != 42709) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 30285) {
+    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 52619) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_relay_checksum_constructor_relayclient_new() != 25664) {
