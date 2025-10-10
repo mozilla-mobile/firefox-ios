@@ -2655,6 +2655,7 @@ class BrowserViewController: UIViewController,
     private func handleNavigationActions(for state: BrowserViewControllerState) {
         guard let navigationState = state.navigateTo else { return }
         updateZoomPageBarVisibility(visible: false)
+        webPagePreview.isHidden = true
 
         switch navigationState {
         case .home:

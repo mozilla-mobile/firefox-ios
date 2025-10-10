@@ -53,6 +53,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     weak var delegate: AddressBarPanGestureHandler.Delegate?
     private var homepageScreenshot: UIImage?
     private var toolbarState: ToolbarState?
+    private var isTransitioning = false
     private let prefs: Prefs
 
     private var isRTL: Bool {
@@ -149,7 +150,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         toolbarState?.isShowingNavigationToolbar == true else { return }
         enablePanGestureRecognizer()
     }
-
     // MARK: - Pan Gesture Handling
     @objc
     @MainActor
@@ -180,6 +180,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             statusBarOverlay.showOverlay(animated: !UIAccessibility.isReduceMotionEnabled)
             delegate?.swipeGestureDidBegin()
         case .changed:
+            guard !isTransitioning else { return }
             if nextTab == nil, homepageScreenshot == nil {
                 let homepageScreenshotTool = homepageScreenshotToolProvider?()
                 homepageScreenshot = homepageScreenshotTool?.screenshot(bounds: CGRect(
@@ -231,6 +232,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
 
     @MainActor
     private func handleGestureEndedState(translation: CGPoint, velocity: CGPoint, nextTab: Tab?) {
+        isTransitioning = true
         let shouldShowNewTab = shouldAddNewTab(translation: translation.x, nextTab: nextTab)
 
         // Determine if the transition should be completed based on the translation and velocity.
@@ -260,7 +262,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         } completion: { [self] _ in
             webPagePreview.transitionDidEnd()
             homepageScreenshot = nil
-            webPagePreview.isHidden = true
+            isTransitioning = false
 
             if shouldCompleteTransition {
                 store.dispatchLegacy(
