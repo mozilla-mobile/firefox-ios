@@ -215,8 +215,8 @@ final class ZoomingTests: FeatureFlaggedTestBase {
 
         app.swipeUp()
         app.swipeUp()
-        app.swipeDown()
-        app.swipeDown()
+        app.webViews.firstMatch.swipeDown()
+        app.webViews.firstMatch.swipeDown()
         zoomBar.tapZoomIn()
         zoomBar.assertZoomPercent("75%")
 
