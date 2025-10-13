@@ -609,4 +609,23 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(dimmingView)
         mozWaitForElementToExist(app.tables["SiteTable"])
     }
+
+    // MARK: - Trending Searches
+    func testTrendingSearches_trendingSearchesExperimentOn() {
+        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
+        app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.openURL("https://www.mozilla.org/en-US/")
+        waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+
+        // Trending Search appears
+        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending Searches"])
+        app.tables["SiteTable"].cells.firstMatch.waitAndTap()
+        waitUntilPageLoad()
+
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForElementToExist(url)
+        mozWaitForValueContains(url, value: "google")
+    }
 }
