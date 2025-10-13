@@ -104,10 +104,11 @@ class TabManagerTests: XCTestCase {
     @MainActor
     func testRemoveAllTabsCallsSaveTabSession() {
         let subject = createSubject()
-        _ = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        let tab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab)
         subject.removeAllTabs(isPrivateMode: false)
 
-        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 1)
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 3)
     }
 
     @MainActor
