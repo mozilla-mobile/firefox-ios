@@ -14,6 +14,8 @@ enum SelectorStrategy {
     case collectionViewById(String)
     case tableById(String)
     case textFieldById(String)
+    case imageById(String)
+    case otherInTablesById(String)
 }
 
 // Selector model (with metadata)
@@ -60,6 +62,10 @@ extension Selector {
             return app.tables[value]
         case .textFieldById:
             return app.textFields[value]
+        case .imageById:
+            return app.images[value]
+        case .otherInTablesById(let id):
+            return app.tables.otherElements[id]
         }
     }
 
@@ -86,6 +92,25 @@ extension Selector {
             return app.tables.matching(identifier: value)
         case .textFieldById:
             return app.textFields.matching(identifier: value)
+        case .imageById:
+            return app.images.matching(identifier: value)
+        case .otherInTablesById(let id):
+            return app.tables.otherElements.matching(identifier: id)
         }
+    }
+
+    static func webView(description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d", XCUIElement.ElementType.webView.rawValue)
+        return Selector(strategy: .predicate(p), value: "webView", description: description, groups: groups)
+    }
+
+    static func link(description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label != ''", XCUIElement.ElementType.link.rawValue)
+        return Selector(strategy: .predicate(p), value: "link", description: description, groups: groups)
+    }
+
+    static func linkByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label == %@", XCUIElement.ElementType.link.rawValue, label)
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
     }
 }

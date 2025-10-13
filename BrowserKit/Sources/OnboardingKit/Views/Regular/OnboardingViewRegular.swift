@@ -9,6 +9,7 @@ import Common
 struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var cardBackgroundColor: Color = .clear
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
+    @State private var skipTextColor: Color = .clear
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -26,7 +27,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topTrailing) {
             AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             SheetSizedCard {
@@ -34,11 +35,16 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     tabView
                     pageControl
                 }
-                .background(
-                    RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                        .fill(cardBackgroundColor)
-                )
+                .bridge
+                .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
             }
+            Button(action: viewModel.skipOnboarding) {
+                Text(viewModel.skipText)
+                    .bold()
+                    .foregroundColor(skipTextColor)
+            }
+            .padding(.trailing, UX.Onboarding.Spacing.standard)
+            .bridge.glassButtonStyle()
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -78,5 +84,6 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     private func applyTheme(theme: Theme) {
         let color = theme.colors
         cardBackgroundColor = Color(color.layer2)
+        skipTextColor = Color(theme.colors.textOnDark)
     }
 }

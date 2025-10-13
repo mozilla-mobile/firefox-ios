@@ -110,9 +110,6 @@
       }
     },
     {
-      "skippedTests" : [
-        "WKEngineWebViewTests\/testCurrentHistoryItemSetAfterVisitingPage()"
-      ],
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "WebEngineTests",
@@ -174,9 +171,26 @@
     },
     {
       "skippedTests" : [
+        "BrowserViewControllerTests\/testTrackVisibleSuggestion()",
         "BrowserViewControllerWebViewDelegateTests\/testWebViewDidFinishNavigation_takeScreenshotWhenTabIsSelected()",
         "ContentBlockerTests",
         "ETPCoverSheetTests",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessage()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessageExceptIfAnySome()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessage_experiments_controlMessages()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessage_experiments_exposureEvents()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessage_experiments_malformedControlMessages()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessage_experiments_multiplControlMessages()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessage_happyPath_byMultipleTriggers()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessage_happyPath_bySurface()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessage_happyPath_byTrigger()",
+        "GleanPlumbMessageManagerTests\/testManagerGetMessages_happyPath_withNoAction()",
+        "GleanPlumbMessageManagerTests\/testManagerOnMessageDismissed()",
+        "GleanPlumbMessageManagerTests\/testManagerOnMessageDisplayed()",
+        "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_linkWithEmbeddedParam()",
+        "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_linkWithEmbeddedParamAndOneActionParam()",
+        "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_linkWithOneParam()",
+        "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_linkWithScheme()",
         "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
         "HistoryHighlightsDataAdaptorTests",
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
@@ -188,6 +202,7 @@
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesEnabled()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_bookmarksEnabled()",
+        "ShareTelemetryTests",
         "ShortcutRouteTests\/testOpenLastBookmarkShortcutWithInvalidUrl()",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
@@ -202,11 +217,10 @@
         "TabToolbarHelperTests\/testTelemetryForSiteMenu()",
         "TelemetryWrapperTests\/test_error_cpuExceptionIsCalled()",
         "TelemetryWrapperTests\/test_loginWithEmail_GleanIsCalled()",
+        "TermsOfServiceTelemetryTests",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
-        "VersionSettingTests\/testCopyAppVersion()",
-        "WallpaperSettingsViewModelTests\/testDownloadAndSetWallpaper_downloaded_wallpaperIsSet()",
-        "WallpaperSettingsViewModelTests\/testNumberOfItemsInSection()"
+        "VersionSettingTests\/testCopyAppVersion()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

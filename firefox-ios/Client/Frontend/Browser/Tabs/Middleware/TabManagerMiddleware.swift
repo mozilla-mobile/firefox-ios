@@ -171,6 +171,17 @@ final class TabManagerMiddleware: FeatureFlaggable {
 
     @MainActor
     private func resolveTabTrayActions(action: TabTrayAction, state: AppState) {
+        // Sanity check to ensure the window this action is for is still around
+        // Short-term fix to avoid potential crashes where actions are processed
+        // after the window scene has been torn down [FXIOS-13809]
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        guard windowManager.windowExists(uuid: action.windowUUID) else {
+            logger.log("Window does not exist (\(action.windowUUID.uuidString.prefix(4))) for resolveTabTrayActions()",
+                       level: .warning,
+                       category: .tabs)
+            return
+        }
+
         switch action.actionType {
         case TabTrayActionType.tabTrayDidLoad:
             tabTrayDidLoad(for: action.windowUUID, panelType: action.panelType)
@@ -426,12 +437,6 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
         tabManager.selectTab(tab)
-
-        let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatchLegacy(refreshAction)
 
         let dismissAction = TabTrayAction(windowUUID: uuid,
                                           actionType: TabTrayActionType.dismissTabTray)
@@ -801,31 +806,34 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
         let urlString = tab?.url?.absoluteString ?? ""
+        let profile = self.profile
 
-        profile.places.isBookmarked(url: urlString) { isBookmarkedResult in
-            guard case .success(let isBookmarked) = isBookmarkedResult else {
-                return
-            }
+        profile.places.isBookmarked(url: urlString).uponQueue(.main) { isBookmarkedResult in
+            ensureMainThread {
+                guard case .success(let isBookmarked) = isBookmarkedResult else {
+                    return
+                }
 
-            let canBeSaved: Bool
-            if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
-                canBeSaved = false
-            } else {
-                canBeSaved = true
-            }
+                let canBeSaved: Bool
+                if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
+                    canBeSaved = false
+                } else {
+                    canBeSaved = true
+                }
 
-            let browserProfile = self.profile as? BrowserProfile
-            browserProfile?.tabs.getClientGUIDs { (result, error) in
-                ensureMainThread {
-                    let model = TabPeekModel(canTabBeSaved: canBeSaved,
-                                             canCopyURL: !(tab?.isFxHomeTab ?? false),
-                                             isSyncEnabled: !(result?.isEmpty ?? true),
-                                             screenshot: tab?.screenshot ?? UIImage(),
-                                             accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                    let action = TabPeekAction(tabPeekModel: model,
-                                               windowUUID: uuid,
-                                               actionType: TabPeekActionType.loadTabPeek)
-                    store.dispatchLegacy(action)
+                let browserProfile = profile as? BrowserProfile
+                browserProfile?.tabs.getClientGUIDs { (result, error) in
+                    ensureMainThread {
+                        let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                                 canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                                 isSyncEnabled: !(result?.isEmpty ?? true),
+                                                 screenshot: tab?.screenshot ?? UIImage(),
+                                                 accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
+                        let action = TabPeekAction(tabPeekModel: model,
+                                                   windowUUID: uuid,
+                                                   actionType: TabPeekActionType.loadTabPeek)
+                        store.dispatchLegacy(action)
+                    }
                 }
             }
         }
@@ -961,6 +969,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func dispatchDefaultTabInfo(windowUUID: WindowUUID, selectedTab: Tab, accountData: AccountData) {
         self.dispatchTabInfo(
             info: ProfileTabInfo(isBookmarked: false, isInReadingList: false, isPinned: false),
@@ -990,9 +999,10 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let group = DispatchGroup()
         let dataQueue = DispatchQueue.global()
 
-        var isBookmarkedResult = false
-        var isPinnedResult = false
-        var isInReadingListResult = false
+        // TODO: FXIOS-13675 These should be made actually threadsafe
+        nonisolated(unsafe) var isBookmarkedResult = false
+        nonisolated(unsafe) var isPinnedResult = false
+        nonisolated(unsafe) var isInReadingListResult = false
 
         group.enter()
         getIsBookmarked(url: url, dataQueue: dataQueue) { result in
@@ -1023,6 +1033,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func dispatchTabInfo(
         info: ProfileTabInfo,
         selectedTab: Tab,
@@ -1118,7 +1129,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsBookmarked(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.places.isBookmarked(url: url).uponQueue(dataQueue) { result in
             completion(result.successValue ?? false)
@@ -1128,7 +1139,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsPinned(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.pinnedSites.isPinnedTopSite(url).uponQueue(dataQueue) { result in
             completion(result.successValue ?? false)
@@ -1138,7 +1149,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private func getIsInReadingList(
         url: String,
         dataQueue: DispatchQueue,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping @Sendable (Bool) -> Void
     ) {
         profile.readingList.getRecordWithURL(url).uponQueue(dataQueue) { result in
             completion(result.successValue != nil)

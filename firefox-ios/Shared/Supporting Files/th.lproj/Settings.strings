@@ -64,6 +64,12 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "ที่อยู่";
 
+/* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.Description.v145" = "แก้ไขปุ่มกลางแถบเครื่องมือ";
+
+/* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "ปุ่มแถบเครื่องมือ";
+
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "ค่าเริ่มต้น";
 
@@ -119,22 +125,13 @@
 "Settings.Browsing.Title.v137" = "การเรียกดู";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "เรียนรู้เพิ่มเติม";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "เรียนรู้เพิ่มเติม";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "รายงานข้อขัดข้องช่วยให้เราวินิจฉัยและแก้ไขปัญหาของเบราว์เซอร์ได้";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "สิ่งนี้ช่วยให้เราวินิจฉัยและแก้ไขปัญหาที่เกิดกับเบราว์เซอร์ได้";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "ส่งรายงานข้อขัดข้องโดยอัตโนมัติ";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "เรียนรู้เพิ่มเติม";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "เรียนรู้เพิ่มเติม";
@@ -263,23 +260,20 @@
 "Settings.Summarize.Title.v142" = "สรุปเนื้อหาเว็บ";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "เรียนรู้เพิ่มเติม";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "เรียนรู้เพิ่มเติม";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง %2$@ สำหรับทุกคน";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "ข้อมูลเกี่ยวกับอุปกรณ์ของคุณ การกำหนดค่าฮาร์ดแวร์ และการใช้งานของคุณช่วยปรับปรุงคุณลักษณะ ประสิทธิภาพ และเสถียรภาพของ %@";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "ข้อมูลทางเทคนิคและการโต้ตอบ";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "ส่งข้อมูลทางเทคนิคและการโต้ตอบ";
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "เงื่อนไขการใช้งาน";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "หน้าแรก";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "แท็บใหม่";
 

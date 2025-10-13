@@ -30,23 +30,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
 
-    private static let stopLoadingAction = ToolbarActionConfiguration(
-        actionType: .stopLoading,
-        iconName: StandardImageIdentifiers.Medium.cross,
-        isEnabled: true,
-        hasCustomColor: true,
-        a11yLabel: .TabToolbarStopAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
-
-    private static let reloadAction = ToolbarActionConfiguration(
-        actionType: .reload,
-        iconName: StandardImageIdentifiers.Medium.arrowClockwise,
-        isEnabled: true,
-        hasCustomColor: true,
-        a11yLabel: .TabLocationReloadAccessibilityLabel,
-        a11yHint: .TabLocationReloadAccessibilityHint,
-        a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
-
     private static let cancelEditAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
         iconName: StandardImageIdentifiers.Large.chevronLeft,
@@ -77,15 +60,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         contextualHintType: ContextualHintType.dataClearance.rawValue,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
-
-    private static let summaryAction = ToolbarActionConfiguration(
-        actionType: .summarizer,
-        iconName: StandardImageIdentifiers.Medium.lightning,
-        isEnabled: true,
-        hasCustomColor: true,
-        contextualHintType: ContextualHintType.summarizeToolbarEntry.rawValue,
-        a11yLabel: .Toolbars.SummarizeButtonAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.summarizeButton)
 
     private static let speechToTextAction = ToolbarActionConfiguration(
         actionType: .speechToText,
@@ -502,10 +476,16 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            leadingPageActions: state.leadingPageActions,
-            trailingPageActions: state.trailingPageActions,
-            browserActions: state.browserActions,
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            leadingPageActions: leadingPageActions(action: toolbarAction,
+                                                   addressBarState: state,
+                                                   isEditing: state.isEditing),
+            trailingPageActions: trailingPageActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             borderPosition: toolbarAction.addressBorderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
@@ -960,6 +940,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
 
         if !isShowingNavigationToolbar {
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
@@ -967,11 +948,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
             }
 
             if !isHomepage {
-                let shareAction = shareAction(enabled: isLoading == false)
+                let shareAction = shareAction(enabled: isLoading == false,
+                                              hasAlternativeLocationColor: hasAlternativeLocationColor)
                 actions.append(shareAction)
             }
         } else if !isHomepage, isShowingNavigationToolbar {
-            let shareAction = shareAction(enabled: isLoading == false)
+            let shareAction = shareAction(enabled: isLoading == false,
+                                          hasAlternativeLocationColor: hasAlternativeLocationColor)
             actions.append(shareAction)
         }
 
@@ -990,6 +973,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
         let canSummarize = isReaderModeAction ? action.canSummarize : addressBarState.canSummarize
         let hasEmptySearchField = isEmptySearch ?? addressBarState.isEmptySearch
+        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
 
         guard !isEditing
         else {
@@ -1005,28 +989,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         let isSummarizeFeatureForToolbarOn = DefaultSummarizerNimbusUtils().isToolbarButtonEnabled
         if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active, !UIWindow.isLandscape {
-            actions.append(summaryAction)
+            actions.append(summaryAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
         } else if readerModeState == .active || readerModeState == .available {
-            let readerModeAction = ToolbarActionConfiguration(
-                actionType: .readerMode,
-                iconName: StandardImageIdentifiers.Medium.readerView,
-                isEnabled: true,
-                isSelected: readerModeState == .active,
-                hasCustomColor: true,
-                a11yLabel: .TabLocationReaderModeAccessibilityLabel,
-                a11yHint: .TabLocationReloadAccessibilityHint,
-                a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
-                a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
-            actions.append(readerModeAction)
+            actions.append(readerModeAction(isSelected: readerModeState == .active,
+                                            hasAlternativeLocationColor: hasAlternativeLocationColor))
         }
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
         if isLoading == true {
-            actions.append(stopLoadingAction)
+            actions.append(stopLoadingAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
         } else if isLoading == false {
-            actions.append(reloadAction)
+            actions.append(reloadAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
         }
 
         return actions
@@ -1088,6 +1063,42 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // MARK: - Helper
+    private static func toolbarPosition(action: ToolbarAction) -> AddressToolbarPosition? {
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return nil }
+
+        guard action.actionType as? ToolbarActionType == .toolbarPositionChanged,
+              let toolbarPosition = action.toolbarPosition
+        else {
+            return toolbarState.toolbarPosition
+        }
+
+        switch toolbarPosition {
+        case .top: return .top
+        case .bottom: return .bottom
+        }
+    }
+
+    private static func shouldUseAlternativeLocationColor(action: ToolbarAction) -> Bool {
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return false }
+
+        let isTraitCollectionDidChangeAction = action.actionType as? ToolbarActionType == .traitCollectionDidChange
+        let isShowingNavigationToolbar = if isTraitCollectionDidChangeAction {
+            action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        } else {
+            toolbarState.isShowingNavigationToolbar
+        }
+        let isShowingTopTabs = if isTraitCollectionDidChangeAction {
+            action.isShowingTopTabs ?? toolbarState.isShowingTopTabs
+        } else {
+            toolbarState.isShowingTopTabs
+        }
+
+        let toolbarPosition = toolbarPosition(action: action)
+        return toolbarPosition == .top && !isShowingTopTabs && isShowingNavigationToolbar
+    }
+
     private static func tabsAction(
         numberOfTabs: Int = 1,
         isPrivateMode: Bool = false)
@@ -1140,13 +1151,59 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 
-    private static func shareAction(enabled: Bool) -> ToolbarActionConfiguration {
+    private static func shareAction(enabled: Bool, hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
             actionType: .share,
             iconName: StandardImageIdentifiers.Medium.share,
             isEnabled: enabled,
-            hasCustomColor: true,
+            hasCustomColor: !hasAlternativeLocationColor,
             a11yLabel: .TabLocationShareAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
+    }
+
+    private static func stopLoadingAction(hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .stopLoading,
+            iconName: StandardImageIdentifiers.Medium.cross,
+            isEnabled: true,
+            hasCustomColor: !hasAlternativeLocationColor,
+            a11yLabel: .TabToolbarStopAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
+    }
+
+    private static func reloadAction(hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .reload,
+            iconName: StandardImageIdentifiers.Medium.arrowClockwise,
+            isEnabled: true,
+            hasCustomColor: !hasAlternativeLocationColor,
+            a11yLabel: .TabLocationReloadAccessibilityLabel,
+            a11yHint: .TabLocationReloadAccessibilityHint,
+            a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
+    }
+
+    private static func summaryAction(hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .summarizer,
+            iconName: StandardImageIdentifiers.Medium.lightning,
+            isEnabled: true,
+            hasCustomColor: !hasAlternativeLocationColor,
+            contextualHintType: ContextualHintType.summarizeToolbarEntry.rawValue,
+            a11yLabel: .Toolbars.SummarizeButtonAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.summarizeButton)
+    }
+
+    private static func readerModeAction(isSelected: Bool,
+                                         hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .readerMode,
+            iconName: StandardImageIdentifiers.Medium.readerView,
+            isEnabled: true,
+            isSelected: isSelected,
+            hasCustomColor: !hasAlternativeLocationColor,
+            a11yLabel: .TabLocationReaderModeAccessibilityLabel,
+            a11yHint: .TabLocationReloadAccessibilityHint,
+            a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
+            a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
     }
 }

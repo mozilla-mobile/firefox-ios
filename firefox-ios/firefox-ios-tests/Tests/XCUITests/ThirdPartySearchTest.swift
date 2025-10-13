@@ -19,6 +19,8 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
 
         // Perform a search using a custom search engine
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         app.textFields.firstMatch.waitAndTap()
@@ -45,6 +47,8 @@ class ThirdPartySearchTest: BaseTestCase {
         dismissSearchScreen()
 
         // Perform a search to check
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         app.textFields.firstMatch.typeText("window\n")
 
@@ -64,8 +68,14 @@ class ThirdPartySearchTest: BaseTestCase {
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
 
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         app.navigationBars["Search"].buttons["Settings"].waitAndTap()
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         app.textFields.firstMatch.waitAndTap()
@@ -82,6 +92,8 @@ class ThirdPartySearchTest: BaseTestCase {
         dismissSearchScreen()
 
         // Perform a search to check
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         app.textFields.firstMatch.waitAndTap()
@@ -137,7 +149,6 @@ class ThirdPartySearchTest: BaseTestCase {
         }
 
         app.buttons["customEngineSaveButton"].waitAndTap()
-        app.navigationBars["Add Search Engine"].buttons["Save"].waitAndTap()
 
         // The alert appears on iOS 15 but it disappears by itself immediately.
         if #available(iOS 16, *) {

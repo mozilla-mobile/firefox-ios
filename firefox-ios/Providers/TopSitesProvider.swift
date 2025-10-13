@@ -26,27 +26,29 @@ protocol TopSitesProvider {
 }
 
 extension TopSitesProvider {
-    func getTopSites(numberOfMaxItems: Int = Self.numberOfMaxItems,
-                     completion: @escaping ([Site]?) -> Void) {
-        getTopSites(numberOfMaxItems: numberOfMaxItems, completion: completion)
-    }
-
+    @MainActor
     static var numberOfMaxItems: Int {
         return UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
     }
 
-    var defaultSuggestedSitesKey: String {
-        return "topSites.deletedSuggestedSites"
+    func getTopSites(numberOfMaxItems: Int = Self.numberOfMaxItems,
+                     completion: @escaping ([Site]?) -> Void) {
+        getTopSites(numberOfMaxItems: numberOfMaxItems, completion: completion)
     }
 }
 
-class TopSitesProviderImplementation: TopSitesProvider {
+// TODO: FXIOS-13706 TopSitesProviderImplementation should be concurrency safe
+class TopSitesProviderImplementation: @MainActor TopSitesProvider, @unchecked Sendable {
     private let pinnedSiteFetcher: PinnedSites
     private let placesFetcher: RustPlaces
     private let prefs: Prefs
 
     private var frecencySites = [Site]()
     private var pinnedSites = [Site]()
+
+    var defaultSuggestedSitesKey: String {
+        return "topSites.suggestedSites"
+    }
 
     init(
         placesFetcher: RustPlaces,
@@ -81,15 +83,15 @@ class TopSitesProviderImplementation: TopSitesProvider {
 private extension TopSitesProviderImplementation {
     func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
-        DispatchQueue.global().async { [weak self] in
-            guard let strongSelf = self else { return }
+        let placesFetcher = self.placesFetcher
+        DispatchQueue.global().async {
             // It's possible that the top sites fetch is the
             // very first use of places, lets make sure that
             // our connection is open
-            let placesFetcher = strongSelf.placesFetcher
-            if !strongSelf.placesFetcher.isOpen {
+            if !placesFetcher.isOpen {
                 _ = placesFetcher.reopenIfClosed()
             }
+
             placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems,
                                                  thresholdOption: FrecencyThresholdOption.none)
                 .uponQueue(.global()) { [weak self] result in

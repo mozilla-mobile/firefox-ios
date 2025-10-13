@@ -33,8 +33,11 @@ extension NSItemProvider {
     }
 }
 
-class ActionViewController: SLComposeServiceViewController {
-    private var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
+final class ActionViewController: SLComposeServiceViewController {
+    private var isKlar: Bool {
+        guard let string = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String else { return false }
+        return string.contains("Klar")
+    }
     private var urlScheme: String { return isKlar ? "firefox-klar" : "firefox-focus" }
 
     override func isContentValid() -> Bool { return true }
@@ -97,21 +100,21 @@ class ActionViewController: SLComposeServiceViewController {
     }
 
     private func handleUrl(_ url: NSURL) {
-        // From http://stackoverflow.com/questions/24297273/openurl-not-work-in-action-extension
+        // From https://stackoverflow.com/questions/24297273/openurl-not-work-in-action-extension
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
-        while responder != nil {
+        while let currentResponder = responder {
             if #available(iOS 18.0, *) {
                 if let application = responder as? UIApplication {
                     application.open(url as URL, options: [:], completionHandler: nil)
                 }
             } else {
-                if responder!.responds(to: selectorOpenURL) {
-                    responder!.callSelector(selector: selectorOpenURL, object: url, delay: 0)
+                if currentResponder.responds(to: selectorOpenURL) {
+                    currentResponder.callSelector(selector: selectorOpenURL, object: url, delay: 0)
                 }
             }
 
-            responder = responder!.next
+            responder = currentResponder.next
         }
         finish()
     }

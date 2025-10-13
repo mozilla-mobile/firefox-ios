@@ -4,10 +4,16 @@
 
 import Foundation
 import Common
-
+import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
+    private struct HeaderMeasurementKey: Hashable {
+        let configuration: SectionHeaderConfiguration
+        let containerWidth: Double
+        let contentSizeCategory: UIContentSizeCategory
+    }
+
     struct UX {
         static let standardInset: CGFloat = 16
         static let standardSpacing: CGFloat = 16
@@ -128,6 +134,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private var logger: Logger
     private var windowUUID: WindowUUID
+    /// Each section stores a single cached measurement keyed by the layout inputs (including
+   /// dynamic type) so that we can detect when the environment has changed. The keys capture
+   /// the relevant state for each section, preventing stale heights from being reused when any
+   /// of the inputs differ between layout passes.
+   private var measurementsCache = HomepageLayoutMeasurementCache()
+    private var headerHeightCache: [HeaderMeasurementKey: CGFloat] = [:]
     private var isStoriesRedesignEnabled: Bool {
         return featureFlags.isFeatureEnabled(.homepageStoriesRedesign, checking: .buildOnly)
     }
@@ -253,7 +265,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
             collectionViewWidth: environment.container.contentSize.width
         )
-        let tallestCellHeight = getTallestStoryCellHeight(cellWidth: cellWidth)
+        let storiesMeasurement = getStoriesMeasurement(
+                    environment: environment,
+                    cellWidth: cellWidth
+                )
+        let tallestCellHeight = storiesMeasurement.tallestCellHeight
         let cellHeight = max(tallestCellHeight, UX.PocketConstants.redesignedMinimumCellHeight)
 
         let itemSize = NSCollectionLayoutSize(
@@ -495,10 +511,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
-        let spacerHeight = max(0.1, availableContentHeight - getShortcutsSectionHeight(environment: environment)
-                                                           - getStoriesSectionHeight(environment: environment)
-                                                           - getSearchBarSectionHeight(environment: environment)
-        )
+        let topSitesHeight = getShortcutsSectionHeight(environment: environment)
+        let storiesHeight = getStoriesSectionHeight(environment: environment)
+        let searchBarHeight = getSearchBarSectionHeight(environment: environment)
+        let spacerHeight = max(0.1, availableContentHeight - topSitesHeight - storiesHeight - searchBarHeight)
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .absolute(spacerHeight))
@@ -524,18 +540,52 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" top sites section and returns its height
     private func getShortcutsSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+              state.topSitesState.shouldShowSection else { return 0 }
         var totalHeight: CGFloat = 0
         let topSitesState = state.topSitesState
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let contentSizeCategory = environment.traitCollection.preferredContentSizeCategory
+        let measurementKey = HomepageLayoutMeasurementCache.TopSitesMeasurement.Key(
+            topSites: topSitesState.topSitesData,
+            numberOfRows: topSitesState.numberOfRows,
+            numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
+            headerState: topSitesState.sectionHeaderState,
+            containerWidth: containerWidth,
+            isLandscape: UIDevice.current.orientation.isLandscape,
+            shouldShowSection: topSitesState.shouldShowSection,
+            contentSizeCategory: contentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedHeight = measurementsCache.height(for: measurementKey) {
+                    return cachedHeight
+        }
+
+        guard topSitesState.shouldShowSection else {
+            measurementsCache.setHeight(0, for: measurementKey)
+            return 0
+        }
         let maxRows = topSitesState.numberOfRows
         let cols = topSitesState.numberOfTilesPerRow
         let maxCells = maxRows * cols
+
+        guard maxRows > 0, cols > 0, maxCells > 0 else {
+            measurementsCache.setHeight(0, for: measurementKey)
+            return 0
+        }
+
+        let cellsData = topSitesState.topSitesData.prefix(maxCells)
+        guard !cellsData.isEmpty else {
+            measurementsCache.setHeight(0, for: measurementKey)
+            return 0
+        }
 
         // Add header height
         totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
 
         // Build array of configured cells for the data being displayed on the homepage
-        let allCells = topSitesState.topSitesData.prefix(maxCells).map { data in
+        let allCells = cellsData.map { data in
             let cell = TopSiteCell()
             cell.configure(data, position: 0, theme: LightTheme(), textColor: .black)
             return cell
@@ -552,69 +602,87 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += rowHeights.reduce(0, +)
 
         // Add inter-row spacing
-        // Get number of actual rows shown since TopSitesSectionState::numberOfRows just gives us the user pref of max
-        // number of rows we can show.
-        // totalRows: number of rows we have enough data for
-        // presentedRows: number of rows visible in the UI
-        let totalRows = Int(ceil(Double(topSitesState.topSitesData.count) / Double(cols)))
+        let totalRows = Int(ceil(Double(allCells.count) / Double(cols)))
         let presentedRows = min(maxRows, totalRows)
-        totalHeight += CGFloat(presentedRows - 1) * UX.standardSpacing
+        totalHeight += CGFloat(max(presentedRows - 1, 0)) * UX.standardSpacing
 
         // Add section insets
         totalHeight += UX.TopSitesConstants.getBottomInset()
+        measurementsCache.setHeight(totalHeight, for: measurementKey)
 
         return totalHeight
     }
 
     /// Creates a "dummy" stories section and returns its height
     private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
-        var totalHeight: CGFloat = 0
-        let storiesState = state.merinoState
-
-        // Add header height
-        totalHeight += getHeaderHeight(headerState: storiesState.sectionHeaderState, environment: environment)
-
-        // Add stories height
         let cellWidth = UX.PocketConstants.getAbsoluteCellWidth(
             collectionViewWidth: environment.container.contentSize.width
         )
-        totalHeight += max(getTallestStoryCellHeight(cellWidth: cellWidth), UX.PocketConstants.redesignedMinimumCellHeight)
-
-        // Add section insets
-        totalHeight += UX.standardInset
-
-        return totalHeight
+        let storiesMeasurement = getStoriesMeasurement(
+            environment: environment,
+            cellWidth: cellWidth
+        )
+        return storiesMeasurement.totalHeight
     }
 
     /// Creates a "dummy" search bar section and returns its height
     private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
-                  state.searchState.shouldShowSearchBar else { return 0 }
-        var totalHeight: CGFloat = 0
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
 
-        // Add search bar height
+        let searchState = state.searchState
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let measurementKey = HomepageLayoutMeasurementCache.SearchBarMeasurement.Key(
+            shouldShowSearchBar: searchState.shouldShowSearchBar,
+            containerWidth: containerWidth,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedHeight = measurementsCache.height(for: measurementKey) {
+            return cachedHeight
+        }
+
+        guard searchState.shouldShowSearchBar else {
+            measurementsCache.setHeight(0, for: measurementKey)
+            return 0
+        }
+
         let searchBarCell = SearchBarCell()
-        let containerWidth = environment.container.contentSize.width
+        let width = environment.container.contentSize.width
         let searchBarHeight = searchBarCell.systemLayoutSizeFitting(
-            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         ).height
-        totalHeight += searchBarHeight
 
-        // Add section insets
+        var totalHeight: CGFloat = searchBarHeight
         totalHeight += UX.standardInset
         totalHeight += UX.HeaderConstants.bottomSpacing
+
+        measurementsCache.setHeight(totalHeight, for: measurementKey)
 
         return totalHeight
     }
 
-    /// Creates a "dummy" header and returns it's height
-    private func getHeaderHeight(headerState: SectionHeaderConfiguration,
-                                 environment: NSCollectionLayoutEnvironment) -> CGFloat {
+    /// Creates a "dummy" header and returns its height
+    private func getHeaderHeight(
+        headerState: SectionHeaderConfiguration,
+        environment: NSCollectionLayoutEnvironment
+    ) -> CGFloat {
+        let width = normalizedDimension(environment.container.contentSize.width)
+        let cacheKey = HeaderMeasurementKey(
+            configuration: headerState,
+            containerWidth: width,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+        )
+
+        if let cachedHeight = headerHeightCache[cacheKey] {
+            return cachedHeight
+        }
+
         let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
         header.configure(state: headerState, textColor: .black, theme: LightTheme())
+
         let containerWidth = environment.container.contentSize.width
         let headerHeight = header.systemLayoutSizeFitting(
             CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
@@ -622,6 +690,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             verticalFittingPriority: .fittingSizeLevel
         ).height
 
+        headerHeightCache[cacheKey] = headerHeight
         return headerHeight
     }
 
@@ -630,14 +699,67 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     // Although this calculation occurs every time the layout is updated (with each new HomepageState), no noticeable
     // performance impacts were seen with this O(n) function (where n = number of cells needing to be created, currently 9)
     // TODO: FXIOS-12727 - Investigate replacing this code with `uniformAcrossSiblings` API in iOS 17+
-    private func getTallestStoryCellHeight(cellWidth: CGFloat) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
-        var storyCells: [StoryCell] = []
-        for story in state.merinoState.merinoData {
+    private func getStoriesMeasurement(
+        environment: NSCollectionLayoutEnvironment,
+        cellWidth: CGFloat
+    ) -> HomepageLayoutMeasurementCache.StoriesMeasurement.Result {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
+                tallestCellHeight: 0,
+                totalHeight: 0
+            )
+        }
+
+        let storiesState = state.merinoState
+        let key = HomepageLayoutMeasurementCache.StoriesMeasurement.Key(
+            stories: storiesState.merinoData,
+            headerState: storiesState.sectionHeaderState,
+            cellWidth: normalizedDimension(cellWidth),
+            containerWidth: normalizedDimension(environment.container.contentSize.width),
+            shouldShowSection: storiesState.shouldShowSection,
+            isStoriesRedesignEnabled: isStoriesRedesignEnabled,
+            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
+            )
+
+        // Reuse the cached result when the key matches, overwrite it when inputs change.
+        if let cachedResult = measurementsCache.result(for: key) {
+            return cachedResult
+        }
+
+        guard storiesState.shouldShowSection, !storiesState.merinoData.isEmpty else {
+            let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
+                tallestCellHeight: 0,
+                totalHeight: 0
+            )
+            measurementsCache.setResult(result, for: key)
+            return result
+        }
+
+        let storyCells: [StoryCell] = storiesState.merinoData.map { story in
             let cell = StoryCell()
             cell.configure(story: story, theme: LightTheme())
-            storyCells.append(cell)
+            return cell
         }
-        return HomepageDimensionCalculator.getTallestViewHeight(views: storyCells, viewWidth: cellWidth)
+
+        let tallestCellHeight = HomepageDimensionCalculator.getTallestViewHeight(
+            views: storyCells,
+            viewWidth: cellWidth
+        )
+
+        let headerHeight = getHeaderHeight(headerState: storiesState.sectionHeaderState, environment: environment)
+        let totalHeight = headerHeight
+            + max(tallestCellHeight, UX.PocketConstants.redesignedMinimumCellHeight)
+            + UX.standardInset
+
+        let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
+            tallestCellHeight: tallestCellHeight,
+            totalHeight: totalHeight
+        )
+        measurementsCache.setResult(result, for: key)
+        return result
+    }
+
+    private func normalizedDimension(_ value: CGFloat) -> Double {
+        return Double((value * 1000).rounded() / 1000)
     }
 }

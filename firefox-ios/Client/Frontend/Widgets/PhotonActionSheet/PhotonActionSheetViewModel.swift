@@ -12,6 +12,7 @@ public enum PresentationStyle {
     case popover // when displayed on the iPad
 }
 
+@MainActor
 class PhotonActionSheetViewModel: FeatureFlaggable {
     // MARK: - Properties
     var actions: [[PhotonRowActions]]
@@ -224,10 +225,8 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
     private func getSmallSizeMargins(view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         // Align menu icons with popover icons
         let extraLandscapeSpacing: CGFloat = UIWindow.isLandscape ? 10 : 0
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-        let statusIconSize = isToolbarRefactorEnabled ? 0 : PhotonActionSheetView.UX.StatusIconSize.width
         let halfFrameWidth = view.frame.size.width / 2
-        let rightInset = halfFrameWidth - PhotonActionSheet.UX.spacing - statusIconSize / 2 + extraLandscapeSpacing
+        let rightInset = halfFrameWidth - PhotonActionSheet.UX.spacing / 2 + extraLandscapeSpacing
 
         // Calculate top and bottom insets
         let convertedPoint = view.convert(view.frame.origin, to: viewController.view)

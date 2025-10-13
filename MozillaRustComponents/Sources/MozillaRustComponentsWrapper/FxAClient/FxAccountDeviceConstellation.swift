@@ -8,7 +8,7 @@ public extension Notification.Name {
     static let constellationStateUpdate = Notification.Name("constellationStateUpdate")
 }
 
-public struct ConstellationState {
+public struct ConstellationState: Sendable {
     public let localDevice: Device?
     public let remoteDevices: [Device]
 }
@@ -18,7 +18,8 @@ public enum SendEventError: Error {
     case other(Error)
 }
 
-public class DeviceConstellation {
+// FIXME: FXIOS-13537 Make this type actually Sendable, or isolate or otherwise protect any mutable state
+public class DeviceConstellation: @unchecked Sendable {
     var constellationState: ConstellationState?
     let account: PersistedFirefoxAccount
 
@@ -80,7 +81,9 @@ public class DeviceConstellation {
 
     /// Poll for device events we might have missed (e.g. Push notification missed, or device offline).
     /// Your app should probably call this on a regular basic (e.g. once a day).
-    public func pollForCommands(completionHandler: @escaping (Result<[IncomingDeviceCommand], Error>) -> Void) {
+    public func pollForCommands(
+        completionHandler: @escaping @MainActor @Sendable (Result<[IncomingDeviceCommand], Error>) -> Void
+    ) {
         DispatchQueue.global().async {
             do {
                 let events = try self.account.pollDeviceCommands()
@@ -94,7 +97,7 @@ public class DeviceConstellation {
     /// Send an event to another device such as Send Tab.
     public func sendEventToDevice(targetDeviceId: String,
                                   e: DeviceEventOutgoing,
-                                  completionHandler: ((Result<Void, SendEventError>) -> Void)? = nil)
+                                  completionHandler: (@Sendable (Result<Void, SendEventError>) -> Void)? = nil)
     {
         DispatchQueue.global().async {
             do {
@@ -133,7 +136,7 @@ public class DeviceConstellation {
     /// Once Push has decrypted a payload, send the payload to this method
     /// which will tell the app what to do with it in form of  an `AccountEvent`.
     public func handlePushMessage(pushPayload: String,
-                                  completionHandler: @escaping (Result<AccountEvent, Error>) -> Void)
+                                  completionHandler: @escaping @MainActor @Sendable (Result<AccountEvent, Error>) -> Void)
     {
         DispatchQueue.global().async {
             do {
@@ -178,7 +181,7 @@ public class DeviceConstellation {
     }
 }
 
-public enum DeviceEventOutgoing {
+public enum DeviceEventOutgoing: Sendable {
     case sendTab(title: String, url: String)
     case closeTabs(urls: [String])
 }

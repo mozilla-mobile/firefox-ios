@@ -33,7 +33,7 @@ include:
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
-  - nimbus-features/pdfRefactorFeature.yaml
+  - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/rustFxAKeychainEnabled.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml
@@ -48,6 +48,8 @@ include:
   - nimbus-features/tosFeature.yaml
   - nimbus-features/touFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
+  - nimbus-features/translationsFeature.yaml
+  - nimbus-features/trendingSearchesFeature.yaml
   - nimbus-features/unifiedAds.yaml
   - nimbus-features/updatedPasswordManager.yaml
   - nimbus-features/webEngineIntegrationRefactor.yaml

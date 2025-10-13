@@ -11,7 +11,6 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @State private var textColor: Color = .clear
     @State private var secondaryTextColor: Color = .clear
     @State private var cardBackgroundColor: Color = .clear
-    @State private var secondaryActionColor: Color = .clear
     @Environment(\.sizeCategory)
     private var sizeCategory
 
@@ -48,35 +47,26 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
 
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy) -> some View {
-        VStack(spacing: UX.CardView.cardSecondaryContainerPadding(for: sizeCategory)) {
-            VStack {
-                ScrollView {
-                    VStack(spacing: UX.CardView.spacing) {
-                        titleView
-                            .padding(.top, UX.CardView.titleTopPadding)
-                        imageView
-                        bodyView
-                        Spacer()
-                    }
-                    .padding(.horizontal, UX.CardView.horizontalPadding)
+        VStack {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: UX.CardView.spacing) {
+                    titleView
+                        .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
+                    imageView
+                    bodyView
+                    Spacer()
                 }
-                .scrollBounceBehavior(basedOnSize: true)
-
-                primaryButton
-                    .padding(UX.CardView.verticalPadding)
+                .padding(.horizontal, UX.CardView.horizontalPadding)
             }
-            .frame(
-                width: geometry.size.width,
-                height: geometry.size.height * UX.CardView.cardHeightRatio
-            )
-            .background(
-                RoundedRectangle(cornerRadius: UX.CardView.cornerRadius)
-                    .fill(cardBackgroundColor)
-                    .accessibilityHidden(true)
-            )
-            secondaryButton
-            Spacer()
+            .scrollBounceBehavior(basedOnSize: true)
+
+            VStack {
+                primaryButton
+                secondaryButton
+            }
+            .padding(UX.CardView.verticalPadding)
         }
+        .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
     }
 
     var titleView: some View {
@@ -89,6 +79,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .if(sizeCategory <= .large) { view in
                 view.frame(minHeight: UX.CardView.titleAlignmentMinHeightPadding, alignment: .topLeading)
             }
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder
@@ -112,68 +103,33 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     var primaryButton: some View {
-        Group {
-            if #available(iOS 17.0, *) {
-                Button(
-                    viewModel.buttons.primary.title,
-                    action: {
-                        onBottomButtonAction(
-                            viewModel.buttons.primary.action,
-                            viewModel.name
-                        )
-                    }
+        DragCancellablePrimaryButton(
+            title: viewModel.buttons.primary.title,
+            action: {
+                onBottomButtonAction(
+                    viewModel.buttons.primary.action,
+                    viewModel.name
                 )
-                .font(UX.CardView.primaryActionFont)
-                .accessibility(identifier: "\(viewModel.a11yIdRoot)PrimaryButton")
-                .buttonStyle(PrimaryButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
-            } else {
-                DragCancellablePrimaryButton(
-                    title: viewModel.buttons.primary.title,
-                    action: {
-                        onBottomButtonAction(
-                            viewModel.buttons.primary.action,
-                            viewModel.name
-                        )
-                    },
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
-                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
-                )
-            }
-        }
+            },
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
+        )
     }
 
     @ViewBuilder
     var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
-            Group {
-                if #available(iOS 17.0, *) {
-                    Button(
-                        secondary.title,
-                        action: {
-                            onBottomButtonAction(
-                                secondary.action,
-                                viewModel.name
-                            )
-                        })
-                    .font(UX.CardView.secondaryActionFont)
-                    .foregroundColor(secondaryActionColor)
-                    .padding(.top, UX.CardView.secondaryButtonTopPadding)
-                    .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
-                    .accessibility(identifier: "\(viewModel.a11yIdRoot)SecondaryButton")
-                } else {
-                    DragCancellableSecondaryButton(
-                        title: secondary.title,
-                        action: {
-                            onBottomButtonAction(
-                                secondary.action,
-                                viewModel.name
-                            )
-                        },
-                        accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
-                        secondaryActionColor: secondaryActionColor
+            DragCancellableSecondaryButton(
+                title: secondary.title,
+                action: {
+                    onBottomButtonAction(
+                        secondary.action,
+                        viewModel.name
                     )
-                }
-            }
+                },
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
+            )
         }
     }
 
@@ -182,6 +138,5 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
         cardBackgroundColor = Color(color.layer2)
-        secondaryActionColor = Color(color.textOnDark)
     }
 }

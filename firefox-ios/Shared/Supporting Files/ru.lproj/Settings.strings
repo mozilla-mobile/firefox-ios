@@ -64,6 +64,12 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Адреса";
 
+/* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.Description.v145" = "Сменяет кнопку в центре панели инструментов.";
+
+/* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "Кнопка панели инструментов";
+
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "По умолчанию";
 
@@ -119,22 +125,13 @@
 "Settings.Browsing.Title.v137" = "Просмотр сайтов";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "Подробнее.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "Подробнее";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "Сообщения о падении позволяют нам диагностировать и устранять проблемы с браузером.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "Это помогает нам диагностировать и устранять проблемы с браузером.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "Автоматически отправлять сообщения о падениях";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "Подробнее.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "Подробнее";
@@ -263,23 +260,20 @@
 "Settings.Summarize.Title.v142" = "Резюме страниц";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "Подробнее.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Подробнее";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ стремится собирать только то, что нам необходимо для предоставления и улучшения %2$@ для всех.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "Данные о вашем устройстве, конфигурации оборудования и использовании помогают нам улучшить функции, производительность и стабильность %@.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "Технические данные и данные взаимодействия";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Отправлять технические данные и данные взаимодействия";
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "Условия использования";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "Домой";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Новая вкладка";
 

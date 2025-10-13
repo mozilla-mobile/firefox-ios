@@ -91,18 +91,11 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
                                                 self.titleText.text ?? "")
         closeButton.showsLargeContentViewer = true
         closeButton.largeContentTitle = .TopSitesRemoveButtonLargeContentTitle
-
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-        if isToolbarRefactorEnabled {
-            closeButton.configuration?.image = UIImage.templateImageNamed(StandardImageIdentifiers.Medium.cross)
-            closeButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalPadding,
-                                                                               leading: UX.tabTitlePaddingVersion,
-                                                                               bottom: UX.verticalPadding,
-                                                                               trailing: UX.tabTitlePaddingVersion)
-        } else {
-            closeButton.configuration?.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)
-        }
-
+        closeButton.configuration?.image = UIImage.templateImageNamed(StandardImageIdentifiers.Medium.cross)
+        closeButton.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.verticalPadding,
+                                                                           leading: UX.tabTitlePaddingVersion,
+                                                                           bottom: UX.verticalPadding,
+                                                                           trailing: UX.tabTitlePaddingVersion)
         closeButton.scalesLargeContentImage = true
 
         let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
@@ -137,8 +130,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         titleText.textColor = colors.textPrimary
         closeButton.tintColor = colors.textPrimary
 
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-        let backgroundColor = isToolbarRefactorEnabled ? colors.actionTabActive : colors.layer2
+        let backgroundColor = colors.actionTabActive
         cellBackground.backgroundColor = backgroundColor
         cellBackground.layer.shadowColor = colors.shadowDefault.cgColor
         cellBackground.isHidden = false
@@ -150,18 +142,9 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         titleText.textColor = colors.textPrimary
         closeButton.tintColor = colors.textPrimary
 
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-
-        if isToolbarRefactorEnabled,
-           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-           toolbarState.isTranslucent {
-            cellBackground.backgroundColor = toolbarState.isTranslucent ? .clear : colors.actionTabInactive
-        } else {
-            cellBackground.backgroundColor = isToolbarRefactorEnabled ? colors.actionTabInactive : .clear
-        }
-
+        cellBackground.backgroundColor = .clear
         cellBackground.layer.shadowColor = UIColor.clear.cgColor
-        cellBackground.isHidden = isToolbarRefactorEnabled ? false : true
+        cellBackground.isHidden = false
     }
 
     func applyTheme(theme: Theme) {

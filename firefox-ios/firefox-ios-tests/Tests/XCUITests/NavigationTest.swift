@@ -26,6 +26,8 @@ class NavigationTest: FeatureFlaggedTestBase {
         app.launch()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         mozWaitForElementToExist(app.textFields[searchTextField])
         let defaultValuePlaceholder = app.textFields[searchTextField].placeholderValue!
 
@@ -40,6 +42,7 @@ class NavigationTest: FeatureFlaggedTestBase {
             navigator.performAction(Action.CloseURLBarOpen)
             navigator.nowAt(NewTabScreen)
         }
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -48,6 +51,11 @@ class NavigationTest: FeatureFlaggedTestBase {
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
+        if !iPad() {
+            navigator.nowAt(BrowserTab)
+            navigator.goto(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: "localhost")
@@ -176,7 +184,7 @@ class NavigationTest: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441495
     func testScrollsToTopWithMultipleTabs() {
         app.launch()
-        navigator.goto(TabTray)
+        navigator.nowAt(HomePanelsScreen)
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -213,7 +221,6 @@ class NavigationTest: FeatureFlaggedTestBase {
     func testCopyLink() {
         app.launch()
         longPressLinkOptions(optionSelected: "Copy Link")
-        navigator.goto(NewTabScreen)
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
 
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -249,7 +256,7 @@ class NavigationTest: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         longPressLinkOptions(optionSelected: "Copy Link")
-        navigator.goto(NewTabScreen)
+        navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
 
@@ -420,7 +427,8 @@ class NavigationTest: FeatureFlaggedTestBase {
         XCTAssertEqual(switchValue as? String, "1")
         // Navigate back to the homepage
         navigator.goto(BrowserTab)
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
 
         // Check that there are no pop ups
         navigator.openURL(popUpTestUrl)
@@ -432,6 +440,7 @@ class NavigationTest: FeatureFlaggedTestBase {
         XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
 
         // Now disable the Browsing -> Block PopUps option
+        navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
         navigator.goto(BrowsingSettings)
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
@@ -446,7 +455,6 @@ class NavigationTest: FeatureFlaggedTestBase {
 
         // Check that now pop ups are shown, two sites loaded
         navigator.goto(URLBarOpen)
-        app.buttons["Clear text"].waitAndTap()
         navigator.openURL(popUpTestUrl)
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
@@ -473,6 +481,10 @@ class NavigationTest: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
 
         // Check that there are no pop ups
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openURL(popUpTestUrl)
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "localhost")
@@ -496,11 +508,10 @@ class NavigationTest: FeatureFlaggedTestBase {
         // Navigate back to the homepage
         app.buttons[AccessibilityIdentifiers.Settings.title].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
 
         // Check that now pop ups are shown, two sites loaded
         navigator.goto(URLBarOpen)
-        app.buttons["Clear text"].waitAndTap()
         navigator.openURL(popUpTestUrl)
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
@@ -513,7 +524,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     // Smoketest
     func testSSL() {
         app.launch()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL("https://expired.badssl.com/")
         mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
         XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
@@ -541,6 +553,8 @@ class NavigationTest: FeatureFlaggedTestBase {
         navigator.goto(HomePanelsScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(HomePanelsScreen)
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         mozWaitForElementToExist(app.links["link-created-by-parent"])
     }
@@ -567,6 +581,8 @@ class NavigationTest: FeatureFlaggedTestBase {
     // Smoketest
     func testURLBar() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         urlBar.waitAndTap()
 
@@ -660,6 +676,8 @@ class NavigationTest: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         closeFromAppSwitcherAndRelaunch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.links[website_2["link"]!].waitAndTap()
@@ -697,6 +715,10 @@ class NavigationTest: FeatureFlaggedTestBase {
         // Open website and tap on one of the external article links
         navigator.nowAt(BrowsingSettings)
         navigator.goto(NewTabScreen)
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         validateExternalLink()
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -733,6 +755,9 @@ class NavigationTest: FeatureFlaggedTestBase {
     }
 
     private func openContextMenuForArticleLink() {
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+        }
         navigator.openURL(path(forTestPage: "test-example.html"))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)

@@ -9,7 +9,7 @@ import Common
 import WebKit
 import SummarizeKit
 
-struct BrowserViewControllerState: ScreenState, Equatable {
+struct BrowserViewControllerState: ScreenState {
     enum NavigationType {
         case home
         case back
@@ -138,6 +138,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         } else if let action = action as? StartAtHomeAction {
             return reduceStateForStartAtHomeAction(action: action, state: state)
         } else if let action = action as? ToolbarMiddlewareAction {
+            return reduceStateForToolbarMiddlewareAction(action: action, state: state)
+        } else if let action = action as? ToolbarAction {
             return reduceStateForToolbarAction(action: action, state: state)
         } else if let action = action as? SummarizeAction {
             return reduceStateForSummarizeAction(action: action, state: state)
@@ -170,7 +172,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             NavigationBrowserActionType.tapOnSettingsSection,
             NavigationBrowserActionType.tapOnShareSheet,
             NavigationBrowserActionType.tapOnHomepageSearchBar,
-            NavigationBrowserActionType.tapOnShortcutsShowAllButton:
+            NavigationBrowserActionType.tapOnShortcutsShowAllButton,
+            NavigationBrowserActionType.tapOnAllStoriesButton:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
@@ -217,8 +220,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
     // MARK: - Toolbar Action
 
-    /// Navigate to zero search state after tapping on search button on navigation toolbar
-    static func reduceStateForToolbarAction(
+    /// Navigate to homepage zero search state, which is a scrim layer / dimming view,
+    /// after tapping on search button on navigation toolbar
+    static func reduceStateForToolbarMiddlewareAction(
         action: ToolbarMiddlewareAction,
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
@@ -234,6 +238,27 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 return defaultState(from: state, action: action)
             }
 
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.homepageZeroSearch)
+            )
+        default:
+            return defaultState(from: state, action: action)
+        }
+    }
+
+    /// Navigate to zero search that shows trending / recent searches state
+    /// after tapping on search button on navigation toolbar
+    static func reduceStateForToolbarAction(
+        action: ToolbarAction,
+        state: BrowserViewControllerState
+    ) -> BrowserViewControllerState {
+        switch action.actionType {
+        case ToolbarActionType.didStartEditingUrl, ToolbarActionType.didDeleteSearchTerm:
+            guard case .webview = state.browserViewType else { return defaultState(from: state, action: action) }
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,

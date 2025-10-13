@@ -234,11 +234,8 @@ final class HomepageViewController: UIViewController,
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        // or if the toolbar refactor feature is turned on
-        if homepageState.wallpaperState.wallpaperConfiguration.hasImage || isToolbarRefactorEnabled {
+        if homepageState.wallpaperState.wallpaperConfiguration.hasImage {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(
                 scrollView,
@@ -267,7 +264,6 @@ final class HomepageViewController: UIViewController,
     }
 
     private func handleToolbarStateOnScroll() {
-        guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
         // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEditOnHomepage)
         store.dispatchLegacy(action)
@@ -668,6 +664,9 @@ final class HomepageViewController: UIViewController,
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.merinoState.sectionHeaderState,
+                moreButtonAction: { [weak self] _ in
+                    self?.navigateToStoriesFeed()
+                },
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -841,6 +840,16 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func navigateToStoriesFeed() {
+        store.dispatchLegacy(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.storiesFeed),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnAllStoriesButton
+            )
+        )
+    }
+
     private func dispatchNavigationBrowserAction(with destination: NavigationDestination, actionType: ActionType) {
         store.dispatchLegacy(
             NavigationBrowserAction(
@@ -921,7 +930,7 @@ final class HomepageViewController: UIViewController,
             )
         case .searchBar:
             dispatchNavigationBrowserAction(
-                with: NavigationDestination(.zeroSearch),
+                with: NavigationDestination(.homepageZeroSearch),
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):

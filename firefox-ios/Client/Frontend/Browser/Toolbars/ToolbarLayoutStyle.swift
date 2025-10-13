@@ -13,7 +13,7 @@ enum ToolbarLayoutStyle: String {
     static func style(from type: ToolbarLayoutType?) -> ToolbarLayoutStyle {
         guard let type else { return .version1 }
         switch type {
-        case .version1, .baseline: return .version1
+        case .version1: return .version1
         case .version2: return .version2
         }
     }

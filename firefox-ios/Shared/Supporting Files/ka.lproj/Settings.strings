@@ -64,6 +64,12 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "მისამართები";
 
+/* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.Description.v145" = "ცვლის ღილაკს ხელსაწყოთა ზოლის შუაში.";
+
+/* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "ხელსაწყოთა ღილაკი";
+
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "ნაგულისხმევი";
 
@@ -119,22 +125,13 @@
 "Settings.Browsing.Title.v137" = "გვერდების მონახულება";
 
 /* Title for a link that explains how Mozilla send crash reports. */
-"Settings.CrashReports.Link.v135" = "ვრცლად.";
-
-/* Title for a link that explains how Mozilla send crash reports. */
 "Settings.CrashReports.Link.v136" = "ვრცლად";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
-"Settings.CrashReports.Message.v135" = "უეცარი გათიშვის შეტყობინებები გვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Message.v136" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
 "Settings.CrashReports.Title.v135" = "უეცარი გათიშვის მოხსენებების თვითგაგზავნა";
-
-/* Title for a link that explains how Mozilla send daily usage ping. */
-"Settings.DailyUsagePing.Link.v135" = "ვრცლად.";
 
 /* Title for a link that explains how Mozilla send daily usage ping. */
 "Settings.DailyUsagePing.Link.v136" = "ვრცლად";
@@ -263,23 +260,20 @@
 "Settings.Summarize.Title.v142" = "გვერდის დასკვნა";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
-"Settings.TechnicalData.Link.v135" = "ვრცლად.";
-
-/* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "ვრცლად";
-
-/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %1$@ is the company name (e.g. Mozilla), %2$@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v135" = "%1$@ ისწრაფვის მხოლოდ იმ მონაცემების შეგროვებისკენ, რომელთა მეშვეობითაც %2$@ ყველასთვის უკეთესი გახდება.";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
 "Settings.TechnicalData.Message.v136" = "თქვენი მოწყობილობის მასახიათებლები, აპარატურული გაწყობა და გამოყენების მონაცემები გვეხმარება გავაუმჯობესოთ %@ შესაძლებლობების, წარმადობისა და მდგრადობის კუთხით.";
-
-/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
-"Settings.TechnicalData.Title.v135" = "ტექნიკური და გამოყენების მონაცემები";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "ტექნიკური და გამოყენების მონაცემების გაგზავნა";
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "გამოყენების პირობები";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "მთავარი";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "ახალი ჩანართი";
 

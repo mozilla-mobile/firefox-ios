@@ -6,7 +6,7 @@ import Foundation
 
 /// Error types for summarization flows, mapping underlying model errors to user‑friendly cases.
 /// The UI layer will rely on userMessage to display appropriate messages.
-public enum SummarizerError: Error, LocalizedError, Sendable {
+public enum SummarizerError: Error, LocalizedError {
     case tooLong
     case rateLimited
     case busy

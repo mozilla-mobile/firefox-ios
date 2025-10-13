@@ -187,6 +187,7 @@ private extension JumpBackInViewModel {
 
 // MARK: - Private: Configure UI
 private extension JumpBackInViewModel {
+    @MainActor
     func configureJumpBackInCellForTab(item: Tab, cell: LegacyJumpBackInCell, indexPath: IndexPath) {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site.createBasicSite(url: itemURL, title: item.displayTitle)
@@ -383,6 +384,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
 // MARK: FxHomeSectionHandler
 extension JumpBackInViewModel: HomepageSectionHandler {
+    @MainActor
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
@@ -411,6 +413,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
         return UICollectionViewCell()
     }
 
+    @MainActor
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         // Setup is done through configure(collectionView:indexPath:), shouldn't be called
@@ -432,6 +435,7 @@ extension JumpBackInViewModel: HomepageSectionHandler {
         }
     }
 
+    @MainActor
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         guard let tileLongPressedHandler = onLongPressTileAction else { return }
 

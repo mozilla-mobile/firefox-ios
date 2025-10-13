@@ -188,12 +188,6 @@
 "Onboarding.Sync.Title.v120" = "Сохраняйте шифрование при переходе между устройствами";
 
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
-"Onboarding.TermsOfService.AgreementButtonTitle.v135" = "Согласиться и продолжить";
-
-/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
-"Onboarding.TermsOfService.AgreementButtonTitle.v136" = "Согласиться и продолжить";
-
-/* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.TermsOfService.AgreementButtonTitle.v140" = "Продолжить";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
@@ -207,9 +201,6 @@
 
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.TermsOfService.PrivacyNoticeLink.v135" = "Уведомление о конфиденциальности.";
-
-/* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
-"Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135" = "Подробнее.";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136" = "Подробнее";
@@ -234,9 +225,6 @@
 
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.TermsOfService.TermsOfServiceAgreement.v135" = "Продолжая, вы соглашаетесь с %@";
-
-/* Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. %@ is the app name (e.g. Firefox). */
-"Onboarding.TermsOfService.TermsOfServiceLink.v135" = "Условия использования %@.";
 
 /* Title for the Terms of Service screen in the onboarding process. %@ is the app name (e.g. Firefox). */
 "Onboarding.TermsOfService.Title.v135" = "Добро пожаловать в %@";

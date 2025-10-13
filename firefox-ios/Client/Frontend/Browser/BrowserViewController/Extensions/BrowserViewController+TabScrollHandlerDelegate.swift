@@ -76,7 +76,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
         header.updateAlphaForSubviews(alpha)
 
-        if isMinimalAddressBarEnabled {
+        if shouldSendAlphaChangeAction {
             store.dispatchLegacy(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
@@ -99,7 +99,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
         animator.startAnimation()
 
-        if isMinimalAddressBarEnabled {
+        if shouldSendAlphaChangeAction {
             store.dispatchLegacy(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
@@ -126,7 +126,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         bottomContainerConstraint?.update(offset: bottomContainerOffset)
         bottomContainer.superview?.setNeedsLayout()
 
-        if isMinimalAddressBarEnabled {
+        if shouldSendAlphaChangeAction {
             store.dispatchLegacy(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
@@ -151,7 +151,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
         animator.startAnimation()
 
-        if isMinimalAddressBarEnabled {
+        if shouldSendAlphaChangeAction {
             store.dispatchLegacy(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
@@ -161,6 +161,14 @@ extension BrowserViewController: TabScrollHandler.Delegate {
             )
         }
    }
+
+    // Checks if minimal address bar is enabled and tab is on reader mode bar or findInPage
+    private var shouldSendAlphaChangeAction: Bool {
+        guard let tab = tabManager.selectedTab,
+              let tabURL = tab.url else { return false }
+
+        return isMinimalAddressBarEnabled && !tab.isFindInPageMode && !tabURL.isReaderModeURL
+    }
 
     /// Helper method for testing overKeyboardScrollHeight behavior.
     /// - Parameters:

@@ -5,14 +5,38 @@
 import Common
 import Redux
 
-struct TermsOfUseState: ScreenState, Equatable {
+struct TermsOfUseState: ScreenState {
     let windowUUID: WindowUUID
     var hasAccepted: Bool
     var wasDismissed: Bool
 
-    init(windowUUID: WindowUUID,
-         hasAccepted: Bool = false,
-         wasDismissed: Bool = false) {
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let termsOfUseState = store.state.screenState(
+            TermsOfUseState.self,
+            for: .termsOfUse,
+            window: uuid)
+        else {
+            self.init(windowUUID: uuid)
+            return
+        }
+
+        self.init(windowUUID: termsOfUseState.windowUUID,
+                  hasAccepted: termsOfUseState.hasAccepted,
+                  wasDismissed: termsOfUseState.wasDismissed
+        )
+    }
+
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
+        self.hasAccepted = false
+        self.wasDismissed = false
+    }
+
+    init(
+        windowUUID: WindowUUID,
+        hasAccepted: Bool,
+        wasDismissed: Bool
+    ) {
         self.windowUUID = windowUUID
         self.hasAccepted = hasAccepted
         self.wasDismissed = wasDismissed
@@ -25,9 +49,28 @@ struct TermsOfUseState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<TermsOfUseState> = { state, action in
+        return handleReducer(state: state, action: action)
+    }
+
+    private static func handleReducer(state: TermsOfUseState, action: Action) -> TermsOfUseState {
+        // Only process actions for the current window
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultState(from: state)
+        }
+
+        if let action = action as? TermsOfUseAction {
+            return handleTermsOfUseAction(state: state, action: action)
+        } else {
+            return defaultState(from: state)
+        }
+    }
+
+    private static func handleTermsOfUseAction(state: TermsOfUseState, action: Action) -> TermsOfUseState {
         guard let action = action as? TermsOfUseAction,
               let type = action.actionType as? TermsOfUseActionType,
-              action.windowUUID == state.windowUUID else { return defaultState(from: state) }
+              action.windowUUID == state.windowUUID
+        else { return defaultState(from: state) }
 
         switch type {
         case .termsShown:

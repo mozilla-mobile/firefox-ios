@@ -10,8 +10,8 @@ import ComponentLibrary
 struct DragCancellableSecondaryButton: View {
     let title: String
     let action: () -> Void
+    let theme: Theme
     let accessibilityIdentifier: String
-    let secondaryActionColor: Color
 
     @State private var hasDragged = false
     @State private var startLocation: CGPoint = .zero
@@ -19,9 +19,21 @@ struct DragCancellableSecondaryButton: View {
     var body: some View {
         Text(title)
             .font(UX.CardView.secondaryActionFont)
-            .foregroundColor(secondaryActionColor)
-            .padding(.top, UX.CardView.secondaryButtonTopPadding)
-            .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
+            .padding(.vertical, UX.DragCancellableButton.verticalPadding)
+            .padding(.horizontal, UX.DragCancellableButton.horizontalPadding)
+            .frame(maxWidth: .infinity)
+            .background(
+                Group {
+                    if #available(iOS 26.0, *) {
+                        Capsule()
+                            .fill(Color(uiColor: theme.colors.actionSecondary))
+                    } else {
+                        RoundedRectangle(cornerRadius: UX.DragCancellableButton.cornerRadius)
+                            .fill(Color(uiColor: theme.colors.actionSecondary))
+                    }
+                }
+            )
+            .foregroundColor(Color(uiColor: theme.colors.textSecondary))
             .accessibility(identifier: accessibilityIdentifier)
             .accessibilityAddTraits(.isButton)
             .contentShape(Rectangle())

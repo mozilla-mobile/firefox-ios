@@ -104,6 +104,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
                    level: .info,
                    category: .lifecycle)
 
+        // Perform migration of changed UA file
+        Tab.ChangeUserAgent.performMigration()
+
         return true
     }
 
@@ -195,8 +198,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             self?.profile.cleanupHistoryIfNeeded()
         }
 
-        DispatchQueue.global().async { [weak self] in
-            self?.profile.pollCommands(forcePoll: false)
+        DispatchQueue.global().async { [weak profile] in
+            profile?.pollCommands(forcePoll: false)
         }
 
         updateWallpaperMetadata()
@@ -338,15 +341,18 @@ extension AppDelegate: Notifiable {
     /// When migrated to Scenes, these methods aren't called.
     /// Consider this a temporary solution to calling into those methods.
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIApplication.didBecomeActiveNotification:
-            applicationDidBecomeActive(UIApplication.shared)
-        case UIApplication.willResignActiveNotification:
-            applicationWillResignActive(UIApplication.shared)
-        case UIApplication.didEnterBackgroundNotification:
-            applicationDidEnterBackground(UIApplication.shared)
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIApplication.didBecomeActiveNotification:
+                self.applicationDidBecomeActive(UIApplication.shared)
+            case UIApplication.willResignActiveNotification:
+                self.applicationWillResignActive(UIApplication.shared)
+            case UIApplication.didEnterBackgroundNotification:
+                self.applicationDidEnterBackground(UIApplication.shared)
 
-        default: break
+            default: break
+            }
         }
     }
 }

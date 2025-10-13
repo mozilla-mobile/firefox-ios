@@ -16,6 +16,24 @@
 /* About settings section title */
 "About" = "Относно";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Добавяне към преки пътища";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Закачане";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Откачане";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Влизане отново";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Раздели: %d";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Последно запазени";
+
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Наскоро посетени";
 
@@ -43,6 +61,12 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Адреси и търсене";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Добавяне към списъка за четене";
+
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Адресна лента";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "Винаги изпрати";
 
@@ -67,6 +91,9 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Отметки";
 
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "Редактиране";
+
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "Редактиране на отметка";
 
@@ -75,6 +102,9 @@
 
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Папка";
+
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Настолни отметки";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Нова отметка";
@@ -88,8 +118,20 @@
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Титла";
 
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Пробивът е възникнал на";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Паролите са изтекли или откраднати след последната смяна на паролата. За да защитите този профил, влезте в сайта и сменете паролата си.";
+
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Научете повече";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Отиване на";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Пробив в страница";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Яркост";
@@ -115,8 +157,14 @@
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
 "Closing tab" = "Затваряне на раздел";
 
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Отмятане на препратката";
+
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Отворен е нов поверителен раздел";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Отворен е нов поверителен раздел";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Превключване";
@@ -124,11 +172,20 @@
 /* The label text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Отворен е нов раздел";
 
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "Отворен е нов раздел";
+
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "Копиране на изображението";
 
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Копиране на препратка към изображение";
+
 /* Context menu item for copying a link URL to the clipboard */
 "ContextMenu.CopyLinkButtonTitle" = "Копиране на препратката";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Изтегляне на свързаното";
 
 /* Context menu item for opening a link in a new tab */
 "ContextMenu.OpenInNewTabButtonTitle" = "Отваряне в раздел";
@@ -139,11 +196,17 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Споделяне на препратка";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Настройки на лентата с инструменти";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Раздели, които не сте преглеждали от две седмици, се преместват тук.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Изключване в настройките";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Затваряне";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Не може да добавите страница към списък за четене";
@@ -154,8 +217,14 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Страницата не може да бъде отворена.";
 
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Вградената подобрена защита от проследяване помага да спрете рекламите да ви преследват. Включете строг, за да блокирате още повече тракери, реклами и изскачащи прозорци. ";
+
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Към настройките";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Защита от рекламно проследяване";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Създаване на профил";
@@ -168,6 +237,9 @@
 
 /* Title for default search engine picker. */
 "Default Search Engine" = "Стандартна търсеща машина";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Затваряне";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Настройки на екрана";
@@ -259,6 +331,51 @@
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Начална страница на Firefox";
 
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Персонализиране на началната страница";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Открийте повече";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d мин";
+
+/* This is the title of the Pocket section on Firefox Homepage. */
+"FirefoxHome.Pocket.SectionTitle" = "Истории, провокиращи размисъл";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Премахване";
+
+/* On each Story on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Stories.Minutes.v140" = "мин.: %d";
+
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Страници: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Настройки";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Спонсори и поверителност";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Отваряне на раздела Sync";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Всички синхронизирани раздели";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Избор на раздел";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "Спонсорирано";
+
+/* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Спонсорирано";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Stories.Sponsored.v140" = "Спонсорирано";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Напред";
 
@@ -270,6 +387,18 @@
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Няма връзка с Интернет";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Вписване с камерата си";
+
+/* FxA sign in view qr code instructions */
+"fxa.signin.qr-link-instruction" = "На вашия компютър отворете Firefox и посетете firefox.com/pair";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Готов за сканиране";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Използвайте имейл";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Синхронизиране";
@@ -294,6 +423,9 @@
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Устройство е изключено успешно от Firefox Sync";
+
+/* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
+"FxHomepage.Wallpaper.ButtonLabel.v99" = "Лого на Firefox, смяна на тапета.";
 
 /* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
 "Help" = "Помощ";
@@ -334,11 +466,17 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Наскоро затворени";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Начало";
+
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Отметка";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Премахване от историята";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Отваряне в поверителен раздел";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Отваряне в раздел";
@@ -397,11 +535,98 @@
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "току-що";
 
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Действителен размер";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Добавяне на отметка";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Изчистване на скорошната история";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Търсене отново";
+
+/* A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. */
+"Keyboard.Shortcuts.RefreshWithoutCache.v108" = "Презареждане на игнориращия кеш";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Отметки";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "История";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Инструменти";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Прозорец";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Настройки";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Показване на отметките";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Показване на изтеглянията";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Показване на първия раздел";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Показване на историята";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Показване на последния раздел";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Увеличаване";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Намаляване";
+
 /* This label is meant to signify the section containing a group of items from the past thirty days. */
 "Last month" = "Миналия месец";
 
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Миналата седмица";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Отметки";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "История";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Отказ";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Изтриване";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Изтриване на всички сайтове в %@?";
+
+/* Within the History Panel, users can open an action menu to clear recent history. */
+"LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Премахва история (включително история, синхронизирана от други устройства), бисквитки и друга информация за сърфирането.";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Изтриване";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Няма намерена история на сърфиране";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Последно затворени раздели";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Въведете думи за търсене";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Синхронизирана история";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "По-стари";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Лицензи";
@@ -430,6 +655,18 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.Onboarding.LearnMoreButtonTitle" = "Научете повече";
 
+/* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
+"Logins.PasscodeRequirement.Warning" = "За да използвате функцията за автоматично попълване на Firefox, трябва да имате активирана парола на устройството.";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Вземете паролите си навсякъде";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "Автоматично попълване на пароли за Firefox";
+
+/* Title of the big blue button to enable AutoFill */
+"Logins.WelcomeView.TurnOnAutoFill" = "Включете AutoFill";
+
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Отказ";
 
@@ -441,6 +678,21 @@
 
 /* Button to update the user's password */
 "LoginsHelper.Update.Button" = "Обновяване";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "Филтър";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Няма резултати, отговарящи на търсенето.";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Отказ";
+
+/* Label displaying select a password to fill instruction */
+"LoginsList.SelectPassword.Title" = "Изберете парола за попълване";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "ЗАПАЗЕНИ Влизания";
 
 /* Restore Tabs Prompt Description */
 "Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Изглежда, че Firefox се е сринал преди. Искате ли разделите да бъдат възстановени?";
@@ -454,8 +706,23 @@
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Отметката е добавена";
 
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Добавяне";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Добавено към преки пътища";
+
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Добавяне";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Добавено към списъка за четене";
+
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Добавяне на пряк път";
+
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Отметки";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Копиране на адреса";
@@ -463,11 +730,47 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "Адресът е копиран в системния буфер";
 
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Персонализиране на началната страница";
+
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Изтегляния";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Защитите са ИЗКЛЮЧЕНИ за този сайт";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Защитите са ВКЛЮЧЕНИ за този сайт";
+
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Помощ";
+
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
+"Menu.History.Label" = "История";
+
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Нов поверителен раздел";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Нов раздел";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Изключване на нощния режим";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Включете нощния режим";
+
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Пароли";
+
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Поставяне";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Поставяне и посещаване";
+
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Списък за четене";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "Презареждане без защита от проследяване";
@@ -478,14 +781,77 @@
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "Отметката е премахната";
 
+/* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
+"Menu.RemoveBookmark.Label.v99" = "Премахване";
+
+/* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
+"Menu.RemovedFromShortcuts.v99" = "Премахване от преките пътища";
+
+/* Toast displayed to the user after removing the item to the Shortcuts. */
+"Menu.RemovePin.Confirm2.v99" = "Премахната от Преки пътища";
+
+/* Toast displayed to confirm to the user that his reading list item was correctly removed. */
+"Menu.RemoveReadingList.Confirm.v99" = "Премахната от списък за четене";
+
+/* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
+"Menu.RemoveReadingList.Label.v99" = "Премахване";
+
+/* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
+"Menu.Share.v99" = "Споделяне";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "Синхронизиране и запазване на данни";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "Разделът е изпратен";
+
+/* Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu */
+"Menu.Toolbar.Bookmarks.AccessibilityLabel.v99" = "Отметки";
+
+/* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
+"Menu.Toolbar.Home.AccessibilityLabel.v99" = "Начало";
+
+/* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Проверено от %@";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Настройки на защитите";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "Проследяващо съдържание";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "Социални проследявания";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "Тракери в различни сайтове";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "Добиване на криптовалути";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "Уеб страниците може да зареждат външни реклами, видеоклипове и друго съдържание, което съдържа скрити тракери. Ако блокирате това, уебсайтовете се зареждат по-бързо, но някои бутони, формуляри и полета за вход може да не работят.";
+
 /* Description of cross-site trackers. */
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Тези бисквитки ви следват от сайт на сайт и събират данни за това, което правите онлайн. Те се разполагат от трети страни като рекламодатели и компании за събиране и анализ на статистически данни.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "Добивачите на криптовалути тайно използват изчислителната мощ на вашата система, за да добиват цифрови пари. Скриптовете за добиване на криптовалути изтощават батерията, забавят компютъра и могат да увеличат сметката ви за електроенергия.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Настройките на вашия браузър и компютър са уникални. Компютрите за снемане на отпечатък събират голямо разнообразие от тези уникални настройки, за да създадат потребителски профил, който да се използва за проследяване на вашата страница.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "Социалните мрежи поставят тракери на други уебсайтове, за да изградят по-пълен и целенасочен профил за вас. Блокирането на тези тракери намалява доколко компаниите за социални медии могат да виждат какво правите онлайн.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
 "Menu.TrackingProtectionFingerprintersBlocked.Title" = "Снемане на цифров отпечатък";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Новото в това издание";
+
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. %@ shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "Мащабиране (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "мобилно устройство";
@@ -514,6 +880,9 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "Добре";
 
+/* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
+"Onboarding.WhatsNew.Button.Title" = "Започнете да разглеждате";
+
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Ами сега! Firefox се срина";
 
@@ -535,6 +904,12 @@
 /* Password textbox in Authentication prompt */
 "Password" = "Парола";
 
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Така ще можете да запазите изображението в Camera Roll.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox би желал да има достъп до вашите снимки";
+
 /* Button for closing the menu action sheet */
 "PhotonMenu.close" = "Затваряне";
 
@@ -544,8 +919,17 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Политика на поверителност";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Връзката не е защитена";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Връзката е защитена";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Други търсещи машини";
+
+/* A label indicating the action that a user can rate the Firefox app in the App store. */
+"Ratings.Settings.RateOnAppStore" = "Оценете в App Store";
 
 /* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
 "read" = "прочетена";
@@ -556,20 +940,41 @@
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Режимът за четене е достъпен";
 
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Отбелязване като прочетено";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Отбелязване като непрочетено";
+
 /* Panel accessibility label */
 "Reading list" = "Списък за четене";
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Затворени наскоро";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Показване на всички";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Презареждане";
+
+/* Accessibility label for the reload button */
+"Reload page" = "Презареждане на страницата";
 
 /* Title for the button that removes a reading list item */
 "Remove" = "Премахване";
 
 /* Name for button removing current article from reading list in reader mode */
 "Remove from Reading List" = "Премахване от Списък за четене";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "Отказ";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "Отваряне отново";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "Възстановяване на последния затворен раздел";
 
 /* Accessibility label for button resetting font size in display settings of reader mode */
 "Reset text size" = "Нулиране размера на текста";
@@ -589,6 +994,9 @@
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Данните са невалидни";
 
+/* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
+"ScanQRCode.PermissionError.Message.v100" = "Отворете „Настройки“ > „Firefox“. Разрешаване на Firefox достъп до камера.";
+
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Сканиране на QR";
 
@@ -597,6 +1005,12 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Търсете или въведете адрес";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Превключване към раздел";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Предложение от Firefox";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Новата търсеща машина ще се появи е полето за търсене.";
@@ -643,6 +1057,9 @@
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Отказ";
 
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Затваряне";
+
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Налични устройства:";
 
@@ -655,8 +1072,20 @@
 /* Title of error prompt displayed when an invalid URL is shared. */
 "SendTo.Error.Title" = "Препратката не може да бъде споделяна.";
 
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "Изпращане на раздел";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "Нямате други устройства, свързани към този Firefox Account, достъпни за синхронизация.";
+
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Моля отворете Firefox, отидете в настройки и се впишете, за да продължите.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "Не сте вписани в своя Firefox Account.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "Изпращане";
 
 /* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
 "SentTab_TabArrivingNotification_NoDevice_body" = "Раздел пристигна от друго устройство.";
@@ -709,6 +1138,36 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (заменете заявката с %s)";
 
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the bottom of the screen. */
+"Settings.AddressBar.Bottom.v138" = "Отдолу";
+
+/* In the settings menu, in the Address Bar customization menu, this is the title of the section where the user can toggle the address bar position. */
+"Settings.AddressBar.SectionTitle.v138" = "Разположение на адресната лента";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Address Bar position. */
+"Settings.AddressBar.SettingsTitle.v138" = "Адресна лента";
+
+/* In the settings menu, in the Address Bar customization section, this label indicates that selecting this will make the address bar appear at the top of the screen. */
+"Settings.AddressBar.Top.v138" = "Горе";
+
+/* Browser theme settings section title in Appearance settings */
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Тема за браузър";
+
+/* Title in main app settings for Appearance settings */
+"Settings.Appearance.Title.v137" = "Външен вид";
+
+/* Website Appearance settings section title in Appearance settings */
+"Settings.Appearance.WebsiteAppearance.SectionHeader.v137" = "Изглед на уебсайта";
+
+/* Under Website Appearance section in Appearance menu, this is the text under the toggle describing the dark mode feature. */
+"Settings.Appearance.WebsiteDarkMode.Description.v137" = "Придава на страниците тъмен вид. Някои сайтове може да не изглеждат правилно.";
+
+/* Under Website Appearance section in Appearance menu, this is the title of the toggle to switch dark theme on/off. */
+"Settings.Appearance.WebsiteDarkModeToggle.Title.v137" = "Тъмен режим на уебсайта";
+
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Блокиране на отварянето на външни приложения";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Изчистване на всички данни за сайта";
 
@@ -717,6 +1176,9 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
 "Settings.ClearPrivateData.SectionName" = "Изчистване на лични данни";
+
+/* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Изчистване на елементи: %1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "Копирано в буфера";
@@ -745,6 +1207,15 @@
 /* Title of the alert when prompting the user asking to disconnect. */
 "Settings.Disconnect.Title" = "Изключване от Sync?";
 
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Праг";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "Ръководство за употреба";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "Изберете темата, която искате";
+
 /* Display (theme) setting to choose the theme manually. */
 "Settings.DisplayTheme.Manual.SwitchTitle" = "Ръчно";
 
@@ -757,11 +1228,26 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Темите автоматично ще бъдат променяни въз основа на яркостта на екрана. Може да зададете друг праг за превключване. Кръгчето показва текущата яркост на дисплея.";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Автоматично";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Превключване на режима";
+
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "Превключване въз основа яркостта на екрана";
 
 /* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "Автоматично";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "Системна тема";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Използвайте светъл/тъмен режим на системата";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Избирач на теми";
 
 /* Title in main app settings for Theme settings */
 "Settings.DisplayTheme.Title.v2" = "Тема";
@@ -778,8 +1264,122 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Основни";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Изберете какво да се показва за начална страница.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Изберете какво да бъде включено на началната страница на Firefox.";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
+"Settings.Home.Option.JumpBackIn" = "Влезте отново";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.Pocket" = "Препоръчано от Pocket";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off */
+"Settings.Home.Option.RecentlySaved" = "Последно запазени";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Visited section on the Firfox homepage on or off */
+"Settings.Home.Option.RecentlyVisited" = "Наскоро посетени";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
+"Settings.Home.Option.Shortcuts" = "Бързи клавиши";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
+"Settings.Home.Option.StartAtHome.AfterFourHours" = "Начална страница след четири часа бездействие";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Always" = "Страница";
+
+/* In the settings menu, in the Start at Home customization options, this is text that appears below the section, describing what the section settings do. */
+"Settings.Home.Option.StartAtHome.Description" = "Изберете какво да виждате, когато се върнете към Firefox.";
+
+/* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the last tab they were on, every time they open up Firefox */
+"Settings.Home.Option.StartAtHome.Never" = "Последен раздел";
+
+/* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
+"Settings.Home.Option.StartAtHome.Title" = "Начален екран";
+
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "Включване на началната страница";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper" = "Тапет";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Тапет на Firefox, аметист.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Тапет за Firefox, шарка на beach hills.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Тапет на Firefox, синьо-син шарка.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Изчистен тапет по подразбиране.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Тапет на Firefox, модел на изгрев.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Превключване на цикъла на тапета на началната страница";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Тапет за Firefox, шарка на Twilight hills.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Класически %@";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "НАЧАЛЕН ЕКРАН";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "Научете повече";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Опитайте новата колекция.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Новата колекция Independent Voices.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Ограничено издание";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Променете тапета, като докоснете логото на началната страница на Firefox";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
+"Settings.Home.Option.Wallpaper.Title" = "Тапет";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of toast that comes up when the user changes wallpaper, which lets them know that the wallpaper has been updated. */
+"Settings.Home.Option.Wallpaper.UpdatedToast" = "Тапетът е обновен!";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the button found on the toast that comes up once the user changes wallpaper, and allows users to dismiss the settings page. In this case, consider View as a verb - the action of dismissing settings and seeing the wallpaper. */
+"Settings.Home.Option.Wallpaper.UpdatedToastButton" = "Изглед";
+
 /* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
 "Settings.HomePage.SectionName" = "Начална страница";
+
+/* This string is the title of the setting button which can be clicked to open a page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.Rows.v100" = "Редове";
+
+/* This string is the title of the page to customize the number of rows in the shortcuts section */
+"Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Редове";
+
+/* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Бързи клавиши";
+
+/* This string is the title of the toggle to disable the shortcuts section in the settings page. */
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Бързи клавиши";
+
+/* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Спонсорирани преки пътища";
+
+/* Toggled OFF to hide the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOff.v100" = "Изключено";
+
+/* Toggled ON to show the shortcuts section */
+"Settings.Homepage.Shortcuts.ToggleOn.v100" = "Включено";
 
 /* Title of the setting section containing the URL of the current home page. */
 "Settings.HomePage.URL.Title" = "Текуща начална страница";
@@ -790,8 +1390,17 @@
 /* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
 "Settings.LoginsAndPasswordsTitle" = "Регистрации и пароли";
 
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "Адрес по желание";
+
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Празна страница";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "По избор";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "Начална страница на Firefox";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.HomePage" = "Начална страница";
@@ -808,8 +1417,14 @@
 /* Footer at the bottom of the New Tab screen after entering New Tab in settings */
 "Settings.NewTab.TopSectionNameFooter" = "Изберете какво да виждате в нов раздел";
 
+/* Label for the block images toggle displayed in the settings menu. Enabling this toggle will hide images on any webpage the user visits. */
+"Settings.NoImageModeBlockImages.Label.v99" = "Блокиране на изображения";
+
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "При отваряне на Firefox";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. %@ is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "При отваряне на %@";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Питане за отваряне на копираните препратки";
@@ -819,6 +1434,21 @@
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Приложение за ел. поща";
+
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "Използвайте вашия пръстов отпечатък за достъп до пароли сега.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "Вашите пароли вече са защитени чрез Face ID, Touch ID или парола на устройство.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "Запазване на пароли";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "Пароли";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "Запази влизания";
 
 /* Button displayed at the top of the search settings. */
 "Settings.Search.Done.Button" = "Готово";
@@ -835,6 +1465,18 @@
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Изпращане данни за използването";
 
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.Status" = "Когато продължително натискане на връзки";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "При продължително натискане на връзки";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Показване на визуализациите на връзките";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "Показване в менюто на приложението";
+
 /* The description of the open new tab siri shortcut */
 "Settings.Siri.OpenTabShortcut" = "Отваряне в раздел";
 
@@ -847,17 +1489,86 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Toggle.Link" = "Научете повече.";
 
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Toggle.Message" = "Firefox може, от време на време, да инсталира и извършва проучвания.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Toggle.Title" = "Проучвания";
+
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Впишете се, за да синхронизирате раздели, отметки, пароли и други.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "Синхронизиране и запазване на данни";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "Синхронизиране и запазване на данни";
+
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Неактивни раздели";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Разделите, които не сте преглеждали последните две седмици, се преместват в секцията за неактивни.";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
+"Settings.Tabs.CustomizeTabsSection.TabGroups" = "Групи на раздели";
+
+/* In the settings menu, in the Tabs customization section, this is the title for the Tabs Tray customization section. The tabs tray is accessed from firefox hompage */
+"Settings.Tabs.CustomizeTabsSection.Title" = "Персонализиране на лентата с раздели";
+
+/* In the settings menu, this is the title for the Tabs customization section option */
+"Settings.Tabs.Title" = "Раздели";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen. */
+"Settings.Toolbar.Bottom" = "Отдолу";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Toolbar appearance. */
+"Settings.Toolbar.SettingsTitle" = "Лента с инструменти";
+
+/* In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the top of the screen. */
+"Settings.Toolbar.Top" = "Горе";
 
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Добре, разбрах";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Ако сайт не работи според очакванията, докоснете ключалката в адресната лента и изключете подобрената защита от проследяване за тази страница.";
+
+/* Title for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Title" = "Внимание!";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "БЛОКИРАНЕ";
+
 /* 'Learn more' info link on the Tracking Protection settings screen. */
 "Settings.TrackingProtection.LearnMore" = "Научете повече";
 
+/* Additional information about your Enhanced Tracking Protection */
+"Settings.TrackingProtection.ProtectionCellFooter" = "Намалява насочените реклами и помага да спрете проследяването от страна на рекламодателите на вашето сърфиране.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ако сайт не работи според очакванията, докоснете ключалката в адресната лента и изключете подобрената защита от проследяване за тази страница.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ако сайт не работи според очакванията, докоснете ключалката в адресната лента и изключете подобрената защита от проследяване за тази страница.";
+
+/* Description for standard level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Позволява известно проследяване на рекламите, за да работят правилно уебсайтовете.";
+
+/* Description for strict level tracker protection */
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блокира повече проследявания, реклами и изскачащи прозорци. Страниците се зареждат по-бързо, но някои функции може да не работят.";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "Ниво на защита";
+
 /* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
 "Settings.TrackingProtection.SectionName" = "Защита от проследяване";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "Стандартна (подразбиране)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Стандартна";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Стриктна защита";
@@ -873,6 +1584,9 @@
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "Settings.WebsiteData.ConfirmPrompt" = "Това действие ще изчисти всичките ви данни за сайтове. Това е безвъзвратно.";
+
+/* Description of the confirmation dialog shown when a user tries to clear some of their private data. */
+"Settings.WebsiteData.SelectedConfirmPrompt" = "Това действие ще изчисти избраните елементи. Не може да бъде отменено.";
 
 /* Title displayed in header of the Data Management panel. */
 "Settings.WebsiteData.Title" = "Данни за сайтове";
@@ -900,6 +1614,12 @@
 
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Търсене в Firefox";
+
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "Копиране";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "Изпращане на препратката до устройство";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Предложения при търсене";
@@ -940,14 +1660,47 @@
 /* The button to undo the delete all tabs */
 "Tabs.DeleteAllUndo.Button" = "Отмяна";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Преглед на неактивните раздели";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Скриване на неактивните раздели";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Търсене";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Добавяне на раздел";
+
 /* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Затваряне на всички раздели";
+
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Текущо избран раздел.";
+
+/* In the tab tray, when tab groups appear and there exist tabs that don't belong to any group, those tabs are listed under this header as “Others”. */
+"TabTray.Header.FilteredTabs.SectionHeader" = "Други";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
 "TabTray.InactiveTabs.SectionTitle" = "Неактивни раздели";
 
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Отваряне на нов раздел";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Лични";
+
+/* The title on the button to look at synced tabs. */
+"TabTray.SegmentedControlTitles.SyncedTabs" = "Синхронизирано";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Раздели";
+
+/* The title for the tab tray */
+"TabTray.Title" = "Отворени раздели";
+
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Показване на раздели";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Страницата не можа да бъде показана в изгледа за четене.";
@@ -961,11 +1714,17 @@
 /* Relative date for date in past week. */
 "this week" = "тази седмица";
 
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "вчера";
+
 /* label for Not Now button */
 "Toasts.NotNow" = "Не сега";
 
 /* Open App Store button */
 "Toasts.OpenAppStore" = "Отваряне на App Store";
+
+/* Label for button to undo the action just performed */
+"Toasts.Undo" = "Отмяна";
 
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "Днес";
@@ -982,6 +1741,15 @@
 /* Button shown in editing mode to remove this site from the top sites panel. %@ is the title of the site. */
 "TopSites.RemovePage.Button" = "Премахване на страница - %@";
 
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "Не";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "Да";
+
+/* Prompt for translation. %1$@ is the language the page is in. %2$@ is the name of our local language. %3$@ is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "Тази страница изглежда е в %1$@. Превеждане на %2$@ с %3$@?";
+
 /* Tile title for Twitter */
 "Twitter" = "Туитър";
 
@@ -994,8 +1762,29 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "непрочетена";
 
+/* Debug option */
+"Use stage servers" = "Използвайте сървъри за сцени";
+
 /* Username textbox in Authentication prompt */
 "Username" = "Потребителско име";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Нещо се обърка с тапета.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "Тапетът не можа да бъде променен";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Нещо се обърка при изтеглянето.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "Тапетът не можа да бъде изтеглен";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Отказ";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Нов опит";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Съдържание от Мрежата";

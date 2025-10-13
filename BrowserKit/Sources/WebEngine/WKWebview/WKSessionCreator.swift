@@ -21,6 +21,7 @@ class WKSessionCreator: SessionCreator {
     }
 
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
+        // TODO: FXIOS-13668 The newly created popup session should have the parent privacy settings
         let configurationProvider = DefaultWKEngineConfigurationProvider(configuration: configuration)
         let session = WKEngineSession.sessionFactory(userScriptManager: DefaultUserScriptManager(),
                                                      dependencies: dependencies,

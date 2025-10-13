@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-struct ToolbarState: ScreenState, Sendable, Equatable {
+struct ToolbarState: ScreenState, Sendable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
     var toolbarLayout: ToolbarLayoutStyle
@@ -144,7 +144,8 @@ struct ToolbarState: ScreenState, Sendable, Equatable {
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
-            ToolbarActionType.scrollAlphaDidChange:
+            ToolbarActionType.scrollAlphaDidChange, ToolbarActionType.readerModeStateChanged,
+            ToolbarActionType.navigationMiddleButtonDidChange:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -155,9 +156,6 @@ struct ToolbarState: ScreenState, Sendable, Equatable {
 
         case ToolbarActionType.toolbarPositionChanged:
             return handleToolbarPositionChanged(state: state, action: action)
-
-        case ToolbarActionType.readerModeStateChanged:
-            return handleReaderModeStateChanged(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChanged(state: state, action: action)
@@ -297,30 +295,6 @@ struct ToolbarState: ScreenState, Sendable, Equatable {
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
-        )
-    }
-
-    private static func handleReaderModeStateChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            isPrivateMode: state.isPrivateMode,
-            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: state.isShowingNavigationToolbar,
             isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: state.canGoBack,

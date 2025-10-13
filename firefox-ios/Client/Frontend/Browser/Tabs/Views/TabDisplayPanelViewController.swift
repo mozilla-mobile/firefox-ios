@@ -7,7 +7,9 @@ import Redux
 import UIKit
 
 protocol TabTrayThemeable {
+    @MainActor
     func retrieveTheme() -> Theme
+    @MainActor
     func applyTheme(_ theme: Theme)
 }
 
@@ -31,10 +33,6 @@ final class TabDisplayPanelViewController: UIViewController,
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
         && UIDevice.current.userInterfaceIdiom != .pad
-    }
-
-    private var isToolbarRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
 
     private lazy var layout: TabTrayLayoutType = {

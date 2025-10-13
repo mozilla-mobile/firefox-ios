@@ -91,7 +91,8 @@ class LoginTest: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         saveLogin(givenUrl: testLoginPage)
         // Make sure you can access populated Login List from Browser Tab Menu
         // issue 28625: iOS 15 may not open the menu fully.

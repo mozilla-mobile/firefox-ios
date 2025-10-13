@@ -6,11 +6,13 @@ import Common
 import Foundation
 
 /// Helper to get the metadata fetched out of a `WKEngineSession`
+@MainActor
 protocol MetadataFetcherHelper {
     var delegate: MetadataFetcherDelegate? { get set }
     func fetch(fromSession session: WKEngineSession, url: URL)
 }
 
+@MainActor
 protocol MetadataFetcherDelegate: AnyObject {
     func didLoad(pageMetadata: EnginePageMetadata)
 }

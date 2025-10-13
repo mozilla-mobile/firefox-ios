@@ -77,7 +77,9 @@ final class OnboardingService: FeatureFlaggable {
             completion(.success(.advance(numberOfPages: 3)))
 
         case .syncSignIn:
-            handleSyncSignIn(from: cardName, with: activityEventHelper)
+            handleSyncSignIn(from: cardName, with: activityEventHelper) {
+                completion(.success(.advance(numberOfPages: 1)))
+            }
 
         case .setDefaultBrowser:
             handleSetDefaultBrowser(with: activityEventHelper)
@@ -105,8 +107,9 @@ final class OnboardingService: FeatureFlaggable {
                     buttonAction: popupViewModel.buttonAction,
                     a11yIdRoot: popupViewModel.a11yIdRoot
                 )
-            )
-            completion(.success(.none))
+            ) {
+                completion(.success(.advance(numberOfPages: 1)))
+            }
 
         case .readPrivacyPolicy:
             guard let infoModel = cards
@@ -169,13 +172,14 @@ final class OnboardingService: FeatureFlaggable {
 
     private func handleSyncSignIn(
         from cardName: String,
-        with activityEventHelper: ActivityEventHelper
+        with activityEventHelper: ActivityEventHelper,
+        completion: @escaping () -> Void
     ) {
         activityEventHelper.chosenOptions.insert(.syncSignIn)
         activityEventHelper.updateOnboardingUserActivationEvent()
 
         let fxaParams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
-        presentSignToSync(with: fxaParams, profile: profile)
+        presentSignToSync(with: fxaParams, profile: profile, completion: completion)
     }
 
     private func handleSetDefaultBrowser(with activityEventHelper: ActivityEventHelper) {
@@ -185,8 +189,11 @@ final class OnboardingService: FeatureFlaggable {
         defaultApplicationHelper.openSettings()
     }
 
-    private func handleOpenInstructionsPopup(from popupViewModel: OnboardingDefaultBrowserModelProtocol) {
-        presentDefaultBrowserPopup(from: popupViewModel) {}
+    private func handleOpenInstructionsPopup(
+        from popupViewModel: OnboardingDefaultBrowserModelProtocol,
+        completion: @escaping () -> Void
+    ) {
+        presentDefaultBrowserPopup(from: popupViewModel, completion: completion)
     }
 
     private func handleReadPrivacyPolicy(from url: URL, completion: @escaping () -> Void) {
@@ -229,13 +236,14 @@ final class OnboardingService: FeatureFlaggable {
         hasRegisteredForDefaultBrowserNotification = true
     }
 
-    private func presentSignToSync(with params: FxALaunchParams, profile: Profile) {
+    private func presentSignToSync(with params: FxALaunchParams, profile: Profile, completion: @escaping () -> Void) {
         guard let delegate = delegate else { return }
 
         let signInVC = createSignInViewController(
             windowUUID: windowUUID,
             params: params,
-            profile: profile
+            profile: profile,
+            completion: completion
         )
 
         delegate.present(signInVC, animated: true, completion: nil)
@@ -268,7 +276,8 @@ final class OnboardingService: FeatureFlaggable {
     private func createSignInViewController(
         windowUUID: WindowUUID,
         params: FxALaunchParams,
-        profile: Profile
+        profile: Profile,
+        completion: @escaping () -> Void
     ) -> UIViewController {
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             params,
@@ -286,6 +295,7 @@ final class OnboardingService: FeatureFlaggable {
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
 
         let controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        controller.onViewDismissed = completion
         return controller
     }
 
@@ -305,7 +315,7 @@ final class OnboardingService: FeatureFlaggable {
             closeButtonA11yIdentifier:
                 AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton
         )
-        let bottomSheetVC = BottomSheetViewController(
+        let bottomSheetVC = OnboardingBottomSheetViewController(
             viewModel: bottomSheetViewModel,
             childViewController: instructionsVC,
             usingDimmedBackground: true,

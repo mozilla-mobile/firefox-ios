@@ -4,13 +4,11 @@
 
 import Foundation
 
-class PrintTests: FeatureFlaggedTestBase {
+class PrintTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/3082504
     func testValidatePrintOption() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "toolbar-refactor-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         openUrlAndValidatePrintOptions()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         openUrlAndValidatePrintOptions()
@@ -19,6 +17,8 @@ class PrintTests: FeatureFlaggedTestBase {
     private func openUrlAndValidatePrintOptions() {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenuMore)
         navigator.goto(PrintPage)
         var navigatorBar = ""
         if #available(iOS 17, *) {

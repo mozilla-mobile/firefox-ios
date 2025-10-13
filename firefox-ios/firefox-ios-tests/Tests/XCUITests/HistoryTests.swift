@@ -14,7 +14,7 @@ let webpage = [
 let oldHistoryEntries: [String] = [
     "Internet for people, not profit — Mozilla (US)",
     "Explore / Twitter",
-    "Home - YouTube"
+    "Example Domain"
 ]
 let emptyRecentlyClosedMesg = "Websites you’ve visited recently will show up here."
 // This is part of the info the user will see in recent closed tabs once the default
@@ -195,6 +195,8 @@ class HistoryTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307357
     func testRecentlyClosedWebsiteOpen() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -210,6 +212,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testRecentlyClosedWebsiteClosed_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -241,6 +247,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testRecentlyClosedWebsiteClosed_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -322,6 +332,8 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testRemoveAllTabsButtonRecentlyClosedHistory_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -347,6 +359,8 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testRemoveAllTabsButtonRecentlyClosedHistory_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -372,6 +386,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testClearRecentlyClosedHistory_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -407,6 +425,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testClearRecentlyClosedHistory_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -443,6 +465,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testLongTapOptionsRecentlyClosedItem_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -469,6 +495,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testLongTapOptionsRecentlyClosedItem_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -496,6 +526,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testOpenInNewTabRecentlyClosedItem_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -536,6 +570,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testOpenInNewTabRecentlyClosedItem_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -576,6 +614,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testOpenInNewPrivateTabRecentlyClosedItem_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX()
@@ -616,6 +658,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testOpenInNewPrivateTabRecentlyClosedItem_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
@@ -721,7 +767,7 @@ class HistoryTests: FeatureFlaggedTestBase {
 
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.goto(HomePanelsScreen)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
@@ -745,16 +791,19 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testTabHistory_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         openBookOfMozilla()
         let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
-        urlBarBackButton.press(forDuration: 1)
+        mozWaitElementHittable(element: urlBarBackButton, timeout: 2.0)
+        urlBarBackButton.press(forDuration: 2.0)
         app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
         mozWaitForElementToNotExist(app.tables.staticTexts["The Book of Mozilla"])
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openBookOfMozilla()
+        mozWaitForElementToExist(urlBarBackButton)
         urlBarBackButton.press(forDuration: 1)
         app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
         urlBarBackButton.waitAndTap()
@@ -770,16 +819,19 @@ class HistoryTests: FeatureFlaggedTestBase {
     func testTabHistory_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         openBookOfMozilla()
         let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
-        urlBarBackButton.press(forDuration: 1)
+        mozWaitElementHittable(element: urlBarBackButton, timeout: 2.0)
+        urlBarBackButton.press(forDuration: 1.5)
         app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
         mozWaitForElementToNotExist(app.tables.staticTexts["The Book of Mozilla"])
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openBookOfMozilla()
+        mozWaitForElementToExist(urlBarBackButton)
         urlBarBackButton.press(forDuration: 1)
         app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
         urlBarBackButton.waitAndTap()
@@ -798,6 +850,10 @@ class HistoryTests: FeatureFlaggedTestBase {
     }
 
     private func navigateToPage(isTabTrayOff: Bool = true) {
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openURL("example.com")
         waitUntilPageLoad()
         navigator.goto(TabTray)
@@ -819,7 +875,6 @@ class HistoryTests: FeatureFlaggedTestBase {
     }
 
     private func openBookOfMozilla() {
-        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: bookOfMozilla["file"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -853,7 +908,7 @@ class HistoryTests: FeatureFlaggedTestBase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Last 24 Hours")
         for entry in oldHistoryEntries {
-            mozWaitForElementToExist(app.tables.cells.staticTexts[entry])
+            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
         }
         mozWaitForElementToNotExist(app.staticTexts["Last 24 Hours"])
         mozWaitForElementToExist(app.staticTexts["Older"])
@@ -866,7 +921,7 @@ class HistoryTests: FeatureFlaggedTestBase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Last 7 Days")
         for entry in oldHistoryEntries {
-            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
         }
         mozWaitForElementToNotExist(app.staticTexts["Last 7 Days"])
         mozWaitForElementToExist(app.staticTexts["Older"])
@@ -879,7 +934,7 @@ class HistoryTests: FeatureFlaggedTestBase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Last 4 Weeks")
         for entry in oldHistoryEntries {
-            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
         }
         mozWaitForElementToNotExist(app.staticTexts["Last 4 Weeks"])
         mozWaitForElementToExist(app.staticTexts["Older"])
@@ -909,7 +964,7 @@ class HistoryTests: FeatureFlaggedTestBase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Last 24 Hours")
         for entry in oldHistoryEntries {
-            mozWaitForElementToExist(app.tables.cells.staticTexts[entry])
+            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
         }
         mozWaitForElementToNotExist(app.staticTexts["Last 24 Hours"])
         mozWaitForElementToExist(app.staticTexts["Older"])
@@ -922,7 +977,7 @@ class HistoryTests: FeatureFlaggedTestBase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Last 7 Days")
         for entry in oldHistoryEntries {
-            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
         }
         mozWaitForElementToNotExist(app.staticTexts["Last 7 Days"])
         mozWaitForElementToExist(app.staticTexts["Older"])
@@ -935,7 +990,7 @@ class HistoryTests: FeatureFlaggedTestBase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Last 4 Weeks")
         for entry in oldHistoryEntries {
-            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+            mozWaitForElementToExist(app.tables.cells.staticTexts.elementContainingText(entry))
         }
         mozWaitForElementToNotExist(app.staticTexts["Last 4 Weeks"])
         mozWaitForElementToExist(app.staticTexts["Older"])

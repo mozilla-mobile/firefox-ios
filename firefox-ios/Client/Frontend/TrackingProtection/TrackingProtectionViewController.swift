@@ -190,16 +190,6 @@ class TrackingProtectionViewController: UIViewController,
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        notificationCenter.post(name: .TrackingProtectionViewControllerDidAppear, withObject: windowUUID)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        notificationCenter.post(name: .TrackingProtectionViewControllerDidDismiss, withObject: windowUUID)
-    }
-
     private func setupView() {
         constraints.removeAll()
 

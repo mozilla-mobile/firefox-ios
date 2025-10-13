@@ -475,7 +475,7 @@ class NimbusTests: XCTestCase {
 
         // Opt out of all experiments, which should generate a "disqualification" event for the enrolled
         // experiment
-        try nimbus.setGlobalUserParticipationOnThisThread(false)
+        try nimbus.setExperimentParticipationOnThisThread(false)
 
         // Use the Glean test API to check that the valid event is present
         XCTAssertNotNil(GleanMetrics.NimbusEvents.disqualification.testGetValue(), "Event must have a value")
@@ -518,7 +518,7 @@ class NimbusTests: XCTestCase {
         XCTAssertEqual(nil, enrolledExtra["conflict_slug"], "conflictSlug must match")
     }
 
-    class TestRecordedContext: RecordedContext {
+    class TestRecordedContext: RecordedContext, @unchecked Sendable {
         var recorded: [[String: Any]] = []
         var enabled: Bool
         var eventQueries: [String: String]? = nil

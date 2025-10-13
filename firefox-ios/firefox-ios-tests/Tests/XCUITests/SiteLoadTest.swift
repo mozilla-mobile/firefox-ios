@@ -13,6 +13,7 @@ class SiteLoadTest: BaseTestCase {
         let futureDate = Date().addingTimeInterval(TimeInterval(60 * 60 * durationInHrs))
         var counter = 0
         while Date() < futureDate {
+            navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
             navigator.openURL(site[counter % 5])
             sleep(5)
@@ -21,7 +22,8 @@ class SiteLoadTest: BaseTestCase {
             navigator.goto(TabTray)
 
             navigator.performAction(Action.AcceptRemovingAllTabs)
-            navigator.goto(BrowserTab)
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(BrowserTabMenu)
             mozWaitForElementToNotExist(app.staticTexts["1 tab(s) closed"])
 
             // clear the cache

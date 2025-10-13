@@ -400,6 +400,22 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterUInt16: FfiConverterPrimitive {
+    typealias FfiType = UInt16
+    typealias SwiftType = UInt16
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt16 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterInt64: FfiConverterPrimitive {
     typealias FfiType = Int64
     typealias SwiftType = Int64
@@ -481,15 +497,81 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
+/**
+ * Represents a client for the Relay API.
+ *
+ * Use this struct to connect and authenticate with a Relay server,
+ * managing authorization to call protected endpoints.
+ *
+ * # Authorization
+ * - Clients should use the [fxa_client::FirefoxAccount::getAccessToken()] function
+ * to obtain a relay-scoped access token (scope: `https://identity.mozilla.com/apps/relay`).
+ * - Then, construct the [`RelayClient`] with the access token.
+ * All requests will then be authenticated to the Relay server via `Authorization: Bearer {fxa-access-token}`.
+ * - The Relay server verifies this token with the FxA OAuth `/verify` endpoint.
+ * - Clients are responsible for getting a new access token when needed.
+ */
 public protocol RelayClientProtocol: AnyObject, Sendable {
     
+    /**
+     * Creates a Relay user record in the Relay service database.
+     *
+     * This function was originally used to signal acceptance of terms and privacy notices,
+     * but now primarily serves to provision (create) the Relay user record if one does not exist.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
+     */
     func acceptTerms() throws 
     
+    /**
+     * Creates a new Relay mask (alias) with the specified metadata.
+     *
+     * This is used to generate a new alias for use in an email field.
+     *
+     * - `description`: A label shown in the Relay dashboard; defaults to `generated_for`, user-editable later.
+     * - `generated_for`: The website for which the address is generated.
+     * - `used_on`: Comma-separated list of all websites where this address is used. Only updated by some clients.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
+     */
     func createAddress(description: String, generatedFor: String, usedOn: String) throws  -> RelayAddress
     
+    /**
+     * Retrieves all Relay addresses associated with the current account.
+     *
+     * Returns a vector of [`RelayAddress`] objects on success.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
+     */
     func fetchAddresses() throws  -> [RelayAddress]
     
 }
+/**
+ * Represents a client for the Relay API.
+ *
+ * Use this struct to connect and authenticate with a Relay server,
+ * managing authorization to call protected endpoints.
+ *
+ * # Authorization
+ * - Clients should use the [fxa_client::FirefoxAccount::getAccessToken()] function
+ * to obtain a relay-scoped access token (scope: `https://identity.mozilla.com/apps/relay`).
+ * - Then, construct the [`RelayClient`] with the access token.
+ * All requests will then be authenticated to the Relay server via `Authorization: Bearer {fxa-access-token}`.
+ * - The Relay server verifies this token with the FxA OAuth `/verify` endpoint.
+ * - Clients are responsible for getting a new access token when needed.
+ */
 open class RelayClient: RelayClientProtocol, @unchecked Sendable {
     fileprivate let pointer: UnsafeMutableRawPointer!
 
@@ -529,6 +611,16 @@ open class RelayClient: RelayClientProtocol, @unchecked Sendable {
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
         return try! rustCall { uniffi_relay_fn_clone_relayclient(self.pointer, $0) }
     }
+    /**
+     * Creates a new `RelayClient` instance.
+     *
+     * # Parameters
+     * - `server_url`: Base URL for the Relay API.
+     * - `auth_token`: Optional relay-scoped access token (see struct docs).
+     *
+     * # Returns
+     * A new [`RelayClient`] configured for the specified server and token.
+     */
 public convenience init(serverUrl: String, authToken: String?)throws  {
     let pointer =
         try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
@@ -551,12 +643,39 @@ public convenience init(serverUrl: String, authToken: String?)throws  {
     
 
     
+    /**
+     * Creates a Relay user record in the Relay service database.
+     *
+     * This function was originally used to signal acceptance of terms and privacy notices,
+     * but now primarily serves to provision (create) the Relay user record if one does not exist.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
+     */
 open func acceptTerms()throws   {try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_method_relayclient_accept_terms(self.uniffiClonePointer(),$0
     )
 }
 }
     
+    /**
+     * Creates a new Relay mask (alias) with the specified metadata.
+     *
+     * This is used to generate a new alias for use in an email field.
+     *
+     * - `description`: A label shown in the Relay dashboard; defaults to `generated_for`, user-editable later.
+     * - `generated_for`: The website for which the address is generated.
+     * - `used_on`: Comma-separated list of all websites where this address is used. Only updated by some clients.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
+     */
 open func createAddress(description: String, generatedFor: String, usedOn: String)throws  -> RelayAddress  {
     return try  FfiConverterTypeRelayAddress_lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_method_relayclient_create_address(self.uniffiClonePointer(),
@@ -567,6 +686,17 @@ open func createAddress(description: String, generatedFor: String, usedOn: Strin
 })
 }
     
+    /**
+     * Retrieves all Relay addresses associated with the current account.
+     *
+     * Returns a vector of [`RelayAddress`] objects on success.
+     *
+     * ## Errors
+     *
+     * - `RelayApi`: Returned for any non-successful (non-2xx) HTTP response. Provides the HTTP `status` and response `body`; downstream consumers can inspect these fields. If the response body is JSON with `error_code` or `detail` fields, these are parsed and included for more granular handling; otherwise, the raw response text is used as the error detail.
+     * - `Network`: Returned for transport-level failures, like loss of connectivity, with details in `reason`.
+     * - Other variants may be returned for unexpected deserialization, URL, or backend errors.
+     */
 open func fetchAddresses()throws  -> [RelayAddress]  {
     return try  FfiConverterSequenceTypeRelayAddress.lift(try rustCallWithError(FfiConverterTypeRelayApiError_lift) {
     uniffi_relay_fn_method_relayclient_fetch_addresses(self.uniffiClonePointer(),$0
@@ -630,6 +760,15 @@ public func FfiConverterTypeRelayClient_lower(_ value: RelayClient) -> UnsafeMut
 
 
 
+/**
+ * Represents a Relay email address object returned by the Relay API.
+ *
+ * Includes metadata and statistics for an alias, such as its status,
+ * usage stats, and identifying information.
+ *
+ * See:
+ * https://mozilla.github.io/fx-private-relay/api_docs.html
+ */
 public struct RelayAddress {
     public var maskType: String
     public var enabled: Bool
@@ -834,7 +973,7 @@ public enum RelayApiError: Swift.Error {
     
     case Network(reason: String
     )
-    case RelayApi(detail: String
+    case Api(status: UInt16, code: String, detail: String
     )
     case Other(reason: String
     )
@@ -857,7 +996,9 @@ public struct FfiConverterTypeRelayApiError: FfiConverterRustBuffer {
         case 1: return .Network(
             reason: try FfiConverterString.read(from: &buf)
             )
-        case 2: return .RelayApi(
+        case 2: return .Api(
+            status: try FfiConverterUInt16.read(from: &buf), 
+            code: try FfiConverterString.read(from: &buf), 
             detail: try FfiConverterString.read(from: &buf)
             )
         case 3: return .Other(
@@ -880,8 +1021,10 @@ public struct FfiConverterTypeRelayApiError: FfiConverterRustBuffer {
             FfiConverterString.write(reason, into: &buf)
             
         
-        case let .RelayApi(detail):
+        case let .Api(status,code,detail):
             writeInt(&buf, Int32(2))
+            FfiConverterUInt16.write(status, into: &buf)
+            FfiConverterString.write(code, into: &buf)
             FfiConverterString.write(detail, into: &buf)
             
         
@@ -987,16 +1130,16 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 14409) {
+    if (uniffi_relay_checksum_method_relayclient_accept_terms() != 12387) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_create_address() != 24773) {
+    if (uniffi_relay_checksum_method_relayclient_create_address() != 42709) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 28546) {
+    if (uniffi_relay_checksum_method_relayclient_fetch_addresses() != 52619) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_relay_checksum_constructor_relayclient_new() != 6164) {
+    if (uniffi_relay_checksum_constructor_relayclient_new() != 25664) {
         return InitializationResult.apiChecksumMismatch
     }
 

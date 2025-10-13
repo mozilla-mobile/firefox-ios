@@ -28,6 +28,7 @@ final class InactiveTabsManagerTests: XCTestCase {
         profile = nil
     }
 
+    @MainActor
     func testEmptyInactiveTabs_ForRegularTabs() throws {
         let subject = createSubject()
         let tabs = createTabs(amountOfRegularTabs: 3)
@@ -35,6 +36,7 @@ final class InactiveTabsManagerTests: XCTestCase {
         XCTAssertEqual(inactiveTabs.count, 0)
     }
 
+    @MainActor
     func testEmptyInactiveTabs_ForPrivateTabs() throws {
         let subject = createSubject()
         let tabs = createTabs(amountOfPrivateTabs: 3)
@@ -42,6 +44,7 @@ final class InactiveTabsManagerTests: XCTestCase {
         XCTAssertEqual(inactiveTabs.count, 0)
     }
 
+    @MainActor
     func testEmptyInactiveTabs_ForRegularAndPrivateTabs() throws {
         let subject = createSubject()
         let tabs = createTabs(amountOfRegularTabs: 3,
@@ -50,6 +53,7 @@ final class InactiveTabsManagerTests: XCTestCase {
         XCTAssertEqual(inactiveTabs.count, 0)
     }
 
+    @MainActor
     func testGetInactiveTabs_WithInactiveTabs() throws {
         let subject = createSubject()
         let tabs = createTabs(amountOfRegularTabs: 3,
@@ -67,6 +71,7 @@ final class InactiveTabsManagerTests: XCTestCase {
         return subject
     }
 
+    @MainActor
     private func createTabs(amountOfRegularTabs: Int = 0,
                             amountOfPrivateTabs: Int = 0,
                             amountOfInactiveTabs: Int = 0) -> [Tab] {

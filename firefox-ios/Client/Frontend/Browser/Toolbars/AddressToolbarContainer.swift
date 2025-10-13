@@ -7,6 +7,21 @@ import Redux
 import ToolbarKit
 import UIKit
 
+protocol URLBarViewProtocol {
+    var inOverlayMode: Bool { get }
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool)
+}
+
+/// Describes the reason for leaving overlay mode.
+enum URLBarLeaveOverlayModeReason {
+    /// The user committed their edits.
+    case finished
+
+    /// The user aborted their edits.
+    case cancelled
+}
+
 protocol AddressToolbarContainerDelegate: AnyObject {
     @MainActor
     func searchSuggestions(searchTerm: String)
@@ -38,6 +53,7 @@ final class AddressToolbarContainer: UIView,
                                      AddressToolbarDelegate,
                                      Autocompletable,
                                      URLBarViewProtocol,
+                                     FeatureFlaggable,
                                      PrivateModeUI {
     private enum UX {
         static let toolbarHorizontalPadding: CGFloat = 16
@@ -85,6 +101,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     var parent: UIStackView?
+    var onContainerTap: (() -> Void)?
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private lazy var leftSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
     private lazy var rightSkeletonAddressBar: RegularBrowserAddressToolbar = .build()
@@ -324,6 +341,9 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func setupLayout() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onContainerTapped))
+        addGestureRecognizer(tapGesture)
+
         addSubview(progressBar)
 
         NSLayoutConstraint.activate([
@@ -411,6 +431,11 @@ final class AddressToolbarContainer: UIView,
             }
             let isRTL = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft
             addNewTabLeadingConstraint?.constant = isRTL ? -transform.tx : transform.tx
+        // if the add new tab was modified but we are not adding a new tab then restore it.
+        } else if addNewTabLeadingConstraint?.constant != 0 {
+            addNewTabLeadingConstraint?.constant = 0
+            addNewTabTrailingConstraint?.constant = 0
+            addNewTabView.showHideAddTabIcon(shouldShow: false)
         }
     }
 
@@ -423,6 +448,12 @@ final class AddressToolbarContainer: UIView,
             addNewTabView.applyTheme(theme: theme)
         }
         applyProgressBarTheme(isPrivateMode: model?.isPrivateMode ?? false, theme: theme)
+    }
+
+    // MARK: - GestureRecognizer
+    @objc
+    private func onContainerTapped() {
+        onContainerTap?()
     }
 
     // MARK: - AddressToolbarDelegate
@@ -467,7 +498,10 @@ final class AddressToolbarContainer: UIView,
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)
 
-        if shouldShowSuggestions {
+        // We want to show suggestions if we turn on the trending searches
+        // which displays the zero search state.
+        let isZeroSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        if shouldShowSuggestions || isZeroSearchEnabled {
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         }
     }

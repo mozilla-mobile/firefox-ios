@@ -1,0 +1,29 @@
+name: Comment App Version on Merged PR
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  comment-version:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Read version.txt
+        id: get_version
+        run: echo "version=$(cat version.txt)" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🚀 PR merged to `main`, targeting version: `${{ steps.get_version.outputs.version }}`

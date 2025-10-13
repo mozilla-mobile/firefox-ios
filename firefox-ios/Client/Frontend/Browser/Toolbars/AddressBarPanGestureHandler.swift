@@ -30,6 +30,11 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         static let swipingDuration: TimeInterval = 0.25
         static let swipingVelocity: CGFloat = 250
         static let webPagePreviewAddNewTabScale: CGFloat = 0.6
+        static let webPagePreviewAddNewTabXOffset: CGFloat = 40.0
+        static let webPagePreviewAddNewTabScaleCoefficientA: CGFloat = 0.2
+        static let webPagePreviewAddNewTabScaleCoefficientB: CGFloat = 0.8
+        static let webPagePreviewAddNewTabHeightConstant: CGFloat = 0.4
+        static let webPagePreviewAddNewTabHeightProgressConstant: CGFloat = 0.25
     }
 
     // MARK: - UI Properties
@@ -161,6 +166,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
 
         switch gesture.state {
         case .began:
+            webPagePreview.isHidden = false
             screenshotHelper?.takeScreenshot(
                 selectedTab,
                 windowUUID: windowUUID,
@@ -198,11 +204,16 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
 
         if shouldAddNewTab {
             let progress = abs(translation.x) / contentContainer.frame.width
-            let scale = progress > UX.webPagePreviewAddNewTabScale ? progress : UX.webPagePreviewAddNewTabScale
             let width = isRTL ? -contentContainer.frame.width : contentContainer.frame.width
-            let translation = width * (1 - progress)
-            webPagePreview.transform = CGAffineTransform(scaleX: scale, y: scale).translatedBy(x: translation, y: 0.0)
-            webPagePreview.alpha = progress
+            let height = webPagePreview.frame.height
+            let scale = UX.webPagePreviewAddNewTabScaleCoefficientA * progress + UX.webPagePreviewAddNewTabScaleCoefficientB
+            let translationX = (1 - progress) * (width + UX.webPagePreviewAddNewTabXOffset / scale)
+            let translationY = height * (
+                UX.webPagePreviewAddNewTabHeightConstant - UX.webPagePreviewAddNewTabHeightProgressConstant * progress
+            )
+
+            webPagePreview.transform = .identity.translatedBy(x: translationX, y: translationY)
+            webPagePreview.alpha = scale
             let pageSetting = newTabSettingsProvider?()
             switch pageSetting {
             case .homePage:
@@ -249,6 +260,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         } completion: { [self] _ in
             webPagePreview.transitionDidEnd()
             homepageScreenshot = nil
+            webPagePreview.isHidden = true
 
             if shouldCompleteTransition {
                 store.dispatchLegacy(

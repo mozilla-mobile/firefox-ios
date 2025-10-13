@@ -15,14 +15,10 @@ class WallpaperSelectorViewModelTests: XCTestCase {
 
         wallpaperManager = WallpaperManagerMock()
         addWallpaperCollections()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
+        tearDownTelemetry()
         wallpaperManager = nil
         super.tearDown()
     }
@@ -57,20 +53,24 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         }
     }
 
-    func testRecordsWallpaperSelectorView() {
+    // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
+    func testRecordsWallpaperSelectorView() throws {
+        setupTelemetry(with: MockProfile())
         wallpaperManager = WallpaperManager()
         let subject = createSubject()
         subject.sendImpressionTelemetry()
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorView)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorView)
     }
 
-    func testRecordsWallpaperSelectorClose() {
+    // TODO: FXIOS-13652 - Migrate FixWallpaperSelectorViewModelTests to use mock telemetry or GleanWrapper
+    func testRecordsWallpaperSelectorClose() throws {
+        setupTelemetry(with: MockProfile())
         wallpaperManager = WallpaperManager()
         let subject = createSubject()
         subject.sendDismissImpressionTelemetry()
 
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorClose)
+        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelectorClose)
     }
 
 //    func testClickingCell_recordsWallpaperChange() {

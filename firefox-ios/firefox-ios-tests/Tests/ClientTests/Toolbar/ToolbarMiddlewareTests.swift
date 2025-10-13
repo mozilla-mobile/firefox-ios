@@ -6,6 +6,7 @@ import Common
 import Glean
 import Redux
 import ToolbarKit
+import Shared
 import XCTest
 
 @testable import Client
@@ -16,16 +17,19 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     var toolbarManager: ToolbarManager!
     var mockGleanWrapper: MockGleanWrapper!
     var summarizationChecker: MockSummarizationChecker!
+    var mockRecentSearchProvider: MockRecentSearchProvider!
     var windowManager: MockWindowManager!
     var tabManager: MockTabManager!
+    var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
         setIsHostedSummaryEnabled(false)
         mockGleanWrapper = MockGleanWrapper()
         summarizationChecker = MockSummarizationChecker()
-
+        mockRecentSearchProvider = MockRecentSearchProvider()
         tabManager = MockTabManager()
+        profile = MockProfile()
         windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
                                                      injectedTabManager: tabManager)
@@ -33,13 +37,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         // We must reset the global mock store prior to each test
         setupStore()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
         mockGleanWrapper = nil
         summarizationChecker = nil
+        mockRecentSearchProvider = nil
         tabManager = nil
+        profile = nil
         windowManager = nil
         DependencyHelperMock().reset()
         resetStore()
@@ -66,6 +72,31 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
+        XCTAssertEqual(actionCalled.middleButton, .newTab)
+    }
+
+    func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {
+        profile.prefs.setString(NavigationBarMiddleButtonType.home.rawValue,
+                                forKey: PrefsKeys.Settings.navigationToolbarMiddleButton)
+        let subject = createSubject(manager: toolbarManager)
+        let action = GeneralBrowserMiddlewareAction(
+            toolbarPosition: .top,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+
+        subject.toolbarProvider(mockStore.state, action)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+        let borderPosition = toolbarManager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: 0)
+        let displayBorder = toolbarManager.shouldDisplayNavigationBorder(toolbarPosition: .top)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.didLoadToolbars)
+        XCTAssertEqual(actionCalled.toolbarPosition, action.toolbarPosition)
+        XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
+        XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
+        XCTAssertEqual(actionCalled.middleButton, .home)
     }
 
     func testWebsiteDidScroll_dispatchesBorderPositionChanged() throws {
@@ -763,12 +794,50 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine)
     }
 
+    func test_didSubmitSearchTerm_withProperPayload_addsRecentSearchToHistoryStorage() {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            url: URL(string: "https://example.com")!,
+            searchTerm: "cookies",
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 1)
+    }
+
+    func test_didSubmitSearchTerm_withoutURL_doesNotAddRecentSearchToHistoryStorage() {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            searchTerm: "cookies",
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
+    func test_didSubmitSearchTerm_withoutSearchTerm_doesNotAddRecentSearchToHistoryStorage() {
+        let subject = createSubject(manager: toolbarManager)
+        let action = ToolbarAction(
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.didSubmitSearchTerm
+        )
+
+        subject.toolbarProvider(mockStore.state, action)
+        XCTAssertEqual(mockRecentSearchProvider.addRecentSearchCalledCount, 0)
+    }
+
     // MARK: - Helpers
     private func createSubject(manager: ToolbarManager) -> ToolbarMiddleware {
         return ToolbarMiddleware(
             manager: manager,
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
+            profile: profile,
             summarizationChecker: summarizationChecker,
+            recentSearchProvider: mockRecentSearchProvider,
             windowManager: windowManager
         )
     }

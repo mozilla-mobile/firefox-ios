@@ -57,6 +57,8 @@ class DownloadsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306897
     func testDownloadFileContextMenu() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(testURL)
         waitUntilPageLoad()
         // Verify that the context menu prior to download a file is correct
@@ -208,6 +210,8 @@ class DownloadsTests: FeatureFlaggedTestBase {
      }
 
     private func downloadFile(fileName: String, numberOfDownloads: Int) {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(testURL)
         waitUntilPageLoad()
         app.webViews.firstMatch.swipeLeft()
@@ -223,6 +227,8 @@ class DownloadsTests: FeatureFlaggedTestBase {
     }
 
     private func downloadBLOBFile() {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(testBLOBURL)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Download Text"])
@@ -244,17 +250,17 @@ class DownloadsTests: FeatureFlaggedTestBase {
     func testRemoveUserDataRemovesDownloadedFiles_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
-        navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
         navigator.goto(ClearPrivateDataSettings)
         mozWaitForElementToExist(app.cells.switches["Downloaded Files"])
         XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correctly by default")
 
         // Change the value of the setting to on (make an action for this)
+        navigator.goto(HomePanelsScreen)
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
 
         // Check there is one item
-        navigator.goto(BrowserTabMenu)
+        navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_Downloads)
 
         mozWaitForElementToExist(app.tables["DownloadsTable"])
@@ -287,6 +293,7 @@ class DownloadsTests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correctly by default")
 
         // Change the value of the setting to on (make an action for this)
+        navigator.goto(HomePanelsScreen)
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
 
         // Check there is one item

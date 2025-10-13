@@ -13,7 +13,14 @@ final class ShortcutRouteTests: XCTestCase {
 
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
 
-        XCTAssertEqual(route, .search(url: nil, isPrivate: false, options: [.focusLocationField]))
+        switch route {
+        case .search(let url, let isPrivate, let options):
+            XCTAssertNil(url)
+            XCTAssertFalse(isPrivate)
+            XCTAssertEqual(options, [.focusLocationField])
+        default:
+            XCTFail("The route should be a search route")
+        }
     }
 
     func testNewPrivateTabShortcut() {
@@ -23,7 +30,14 @@ final class ShortcutRouteTests: XCTestCase {
 
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
 
-        XCTAssertEqual(route, .search(url: nil, isPrivate: true, options: [.focusLocationField]))
+        switch route {
+        case .search(let url, let isPrivate, let options):
+            XCTAssertNil(url)
+            XCTAssertTrue(isPrivate)
+            XCTAssertEqual(options, [.focusLocationField])
+        default:
+            XCTFail("The route should be a search route")
+        }
     }
 
     func testOpenLastBookmarkShortcutWithValidUrl() {
@@ -37,8 +51,13 @@ final class ShortcutRouteTests: XCTestCase {
 
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
 
-        XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"),
-                                      isPrivate: false))
+        switch route {
+        case .search(let url, let isPrivate, _):
+            XCTAssertEqual(url, URL(string: "https://www.example.com")!)
+            XCTAssertFalse(isPrivate)
+        default:
+            XCTFail("The route should be a search route")
+        }
     }
 
     // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
@@ -62,7 +81,12 @@ final class ShortcutRouteTests: XCTestCase {
         let shortcutItem = UIApplicationShortcutItem(type: "com.example.app.QRCode",
                                                      localizedTitle: "QR Code")
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
-        XCTAssertEqual(route, .action(action: .showQRCode))
+        switch route {
+        case .action(let action):
+            XCTAssertEqual(action, .showQRCode)
+        default:
+            XCTFail("Expected .action(.showQRCode)")
+        }
     }
 
     func testInvalidShortcut() {

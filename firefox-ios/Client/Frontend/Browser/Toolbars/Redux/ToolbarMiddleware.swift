@@ -6,6 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 import SummarizeKit
+import Shared
 
 final class ToolbarMiddleware: FeatureFlaggable {
     private let manager: ToolbarManager
@@ -13,6 +14,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let windowManager: WindowManager
     private let logger: Logger
     private let toolbarTelemetry: ToolbarTelemetry
+    private let prefs: Prefs
+    private let recentSearchProvider: RecentSearchProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizationChecker: SummarizationCheckerProtocol
     private let summarizerServiceFactory: SummarizerServiceFactory
@@ -29,9 +32,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
     init(manager: ToolbarManager = DefaultToolbarManager(),
          toolbarHelper: ToolbarHelperInterface = ToolbarHelper(),
          toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry(),
+         profile: Profile = AppContainer.shared.resolve(),
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
          summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+         recentSearchProvider: RecentSearchProvider? = nil,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
@@ -40,6 +45,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
         self.summarizerServiceFactory = summarizerServiceFactory
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
+        self.prefs = profile.prefs
+        self.recentSearchProvider = recentSearchProvider ?? DefaultRecentSearchProvider(historyStorage: profile.places)
         self.windowManager = windowManager
         self.logger = logger
     }
@@ -86,6 +93,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let borderPosition = getAddressBorderPosition(toolbarPosition: position)
             let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
 
+            let middleButton = if let rawValue = prefs.stringForKey(PrefsKeys.Settings.navigationToolbarMiddleButton),
+                                  let selectedButton = NavigationBarMiddleButtonType(rawValue: rawValue) {
+                selectedButton
+            } else {
+                NavigationBarMiddleButtonType.newTab
+            }
+
             let action = ToolbarAction(
                 toolbarPosition: toolbarPosition,
                 toolbarLayout: toolbarLayout,
@@ -94,6 +108,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 displayNavBorder: displayBorder,
                 isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
                 canShowDataClearanceAction: canShowDataClearanceAction(),
+                middleButton: middleButton,
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatchLegacy(action)
@@ -161,6 +176,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 actionType: SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine
             )
             store.dispatchLegacy(action)
+
+        case ToolbarActionType.didSubmitSearchTerm:
+            // After a user submits a search term, we want to record it in our history storage via recent search provider
+            guard let url = action.url, let searchTerm = action.searchTerm else { return }
+            recentSearchProvider.addRecentSearch(searchTerm, url: url.absoluteString)
+
         default:
             break
         }

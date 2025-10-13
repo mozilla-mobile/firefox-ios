@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Storage
 
+@MainActor
 final class Debouncer {
     private let delay: TimeInterval
     private var workItem: DispatchWorkItem?
@@ -14,7 +15,7 @@ final class Debouncer {
         self.delay = delay
     }
 
-    func call(action: @escaping () -> Void) {
+    func call(action: @escaping @MainActor @Sendable () -> Void) {
         workItem?.cancel()  // Cancel any previously scheduled work
         workItem = DispatchWorkItem(block: action)
         DispatchQueue.main.asyncAfter(
@@ -24,7 +25,8 @@ final class Debouncer {
 
 /// `AccountSyncHandler` exists to observe certain `TabEventLabel` notifications,
 /// and react accordingly.
-class AccountSyncHandler: TabEventHandler {
+@MainActor
+final class AccountSyncHandler: TabEventHandler, Sendable {
     private let debouncer: Debouncer
     private let profile: Profile
     private let logger: Logger
@@ -36,7 +38,7 @@ class AccountSyncHandler: TabEventHandler {
         .allWindows
 
     // For testing purposes only:
-    private var onSyncCompleted: (() -> Void)?
+    private let onSyncCompleted: (@Sendable () -> Void)?
 
     init(
         with profile: Profile,
@@ -44,7 +46,7 @@ class AccountSyncHandler: TabEventHandler {
         queue: DispatchQueueInterface = DispatchQueue.global(),
         queueDelay: Double = 0.5,
         logger: Logger = DefaultLogger.shared,
-        onSyncCompleted: (() -> Void)? = nil
+        onSyncCompleted: (@Sendable () -> Void)? = nil
     ) {
         self.profile = profile
         self.debouncer = Debouncer(delay: debounceTime)
@@ -83,13 +85,10 @@ class AccountSyncHandler: TabEventHandler {
     private func performClientsAndTabsSync() {
         guard profile.hasSyncableAccount() else { return }
         debouncer.call { [weak self] in
-            ensureMainThread {
-                self?.storeTabs()
-            }
+            self?.storeTabs()
         }
     }
 
-    @MainActor
     private func storeTabs() {
         let tabManagers = windowManager.allWindowTabManagers()
         let windowCount = tabManagers.count

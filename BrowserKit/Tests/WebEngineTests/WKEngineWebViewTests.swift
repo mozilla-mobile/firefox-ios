@@ -6,6 +6,7 @@ import XCTest
 @testable import WebEngine
 import WebKit
 
+@MainActor
 final class WKEngineWebViewTests: XCTestCase {
     private var delegate: MockWKEngineWebViewDelegate!
     private let testURL = URL(string: "https://www.example.com/")!
@@ -20,7 +21,6 @@ final class WKEngineWebViewTests: XCTestCase {
         super.tearDown()
     }
 
-    @MainActor
     func testNoLeaks() {
         let subject = createSubject()
         subject.close()
@@ -29,7 +29,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
     func testLoad_callsObservers() {
         let subject = createSubject()
         let loadingExpectation = expectation(that: \WKWebView.isLoading, on: subject) { _, change in
@@ -85,7 +84,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
     func testLoad_callsBeginRefreshing_onUIRefreshControl() throws {
         let subject = createSubject(pullRefreshViewType: MockUIRefreshControl.self)
         let pullRefresh = try XCTUnwrap(subject.scrollView.refreshControl as? MockUIRefreshControl)
@@ -97,7 +95,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
     func testInit_setupsPullRefresh() throws {
         let subject = createSubject()
 
@@ -111,7 +108,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
     func testInit_withUIRefreshControl_setupsCorrectlyPullRefresh() {
         let subject = createSubject(pullRefreshViewType: UIRefreshControl.self)
 
@@ -119,7 +115,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
     func testScrollWillBeginZooming_removesPullRefresh() {
         let subject = createSubject()
 
@@ -130,7 +125,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
     func testScrollDidEndZooming_setupsPullRefresh() {
         let subject = createSubject()
 
@@ -144,7 +138,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
     func testScrollDidEndZooming_doesntSetupPullRefreshAgain() {
         let subject = createSubject()
 
@@ -157,7 +150,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
     func testTriggerPullRefresh_callsDelegate() throws {
         let subject = createSubject()
         let pullRefresh = try XCTUnwrap(subject.scrollView.subviews.first { $0 is EnginePullRefreshView }
@@ -169,27 +161,6 @@ final class WKEngineWebViewTests: XCTestCase {
         RunLoop.current.run(until: Date().addingTimeInterval(0.1))
     }
 
-    @MainActor
-    func testCurrentHistoryItemSetAfterVisitingPage() {
-        let subject = createSubject()
-        let testURL = URL(string: "https://www.example.com/")!
-
-        let expectation = expectation(description: "Wait for the decision handler to be called")
-
-        XCTAssertNil(subject.currentBackForwardListItem())
-        delegate.webViewPropertyChangedCallback = { webEngineViewProperty in
-            guard webEngineViewProperty == .loading(false) else {return}
-            XCTAssertNotNil(subject.currentBackForwardListItem())
-            self.delegate.webViewPropertyChangedCallback = nil
-            expectation.fulfill()
-        }
-
-        subject.load(URLRequest(url: testURL))
-
-        wait(for: [expectation], timeout: 10)
-    }
-
-    @MainActor
     func createSubject(pullRefreshViewType: EnginePullRefreshViewType = MockEnginePullRefreshView.self,
                        file: StaticString = #filePath,
                        line: UInt = #line) -> DefaultWKEngineWebView {

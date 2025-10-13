@@ -5,18 +5,29 @@
 import Foundation
 
 protocol MerinoManagerProvider: Sendable {
-    func getMerinoItems() async -> [MerinoStoryConfiguration]
+    func getMerinoItems(source: StorySource) async -> [MerinoStoryConfiguration]
 }
 
 final class MerinoManager: MerinoManagerProvider {
-    private let storyProvider: StoryProvider
+    private let storyProvider: StoryProviderInterface
 
-    init(merinoAPI: MerinoStoriesProviding) {
-        self.storyProvider = StoryProvider(merinoAPI: merinoAPI)
+    init(storyProvider: StoryProviderInterface) {
+        self.storyProvider = storyProvider
     }
 
-    func getMerinoItems() async -> [MerinoStoryConfiguration] {
-        let stories = await storyProvider.fetchHomepageStories()
+    func getMerinoItems(source: StorySource) async -> [MerinoStoryConfiguration] {
+        let stories: [MerinoStory]
+        switch source {
+        case .homepage:
+            stories = await storyProvider.fetchHomepageStories()
+        case .storiesFeed:
+            stories = await storyProvider.fetchDiscoverMoreStories()
+        }
         return stories.compactMap { MerinoStoryConfiguration(story: $0) }
     }
+}
+
+enum StorySource {
+    case homepage
+    case storiesFeed
 }

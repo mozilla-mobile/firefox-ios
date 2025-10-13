@@ -59,6 +59,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                     onThemeSelected: updateBrowserTheme,
                     cornerRadius: UX.cornerRadius
                 )
+
                 // Section for toggling website appearance (e.g., dark mode).
                 WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 
@@ -67,6 +68,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                         delegate?.pressedPageZoom()
                     }
                 }
+
                 Spacer()
             }
         }
@@ -135,7 +137,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             GenericSectionView(
                 theme: theme,
                 title: .Settings.Appearance.PageZoom.SectionHeader,
-                identifier: .Settings.Appearance.PageZoom.SectionHeader
+                identifier: AccessibilityIdentifiers.Settings.Appearance.pageZoomTitle
             ) {
                 GenericItemCellView(
                     title: .Settings.Appearance.PageZoom.PageZoomTitle,

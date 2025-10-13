@@ -56,7 +56,8 @@ final class NotificationsSettingsViewController: SettingsTableViewController, Fe
     private let prefs: Prefs
     private let hasAccount: Bool
     private var footerTitle = ""
-    private var notificationManager: NotificationManagerProtocol
+    // TODO: FXIOS-13584 - NotificationsSettingsViewController sending notificationManager risks causing data races
+    private nonisolated(unsafe) var notificationManager: NotificationManagerProtocol
 
     init(prefs: Prefs,
          hasAccount: Bool,

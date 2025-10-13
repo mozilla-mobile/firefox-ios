@@ -113,8 +113,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepageButton, destination: .settings(.homePage))
         let newState = reducer(initialState, action)
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .settings(let route):
+            XCTAssertEqual(route, .homePage)
+        default:
+            XCTFail("destination is not the right type")
+        }
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .settings(.homePage))
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
@@ -128,7 +134,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getNavigationBrowserAction(for: .tapOnCell, destination: .link, url: url)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .link)
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .link:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+
         XCTAssertEqual(newState.navigationDestination?.url?.absoluteString, "www.example.com")
     }
 
@@ -142,7 +155,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getNavigationBrowserAction(for: .tapOnLink, destination: .link, url: url)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .link)
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .link:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+
         XCTAssertEqual(newState.navigationDestination?.url?.absoluteString, "www.example.com")
     }
 
@@ -167,7 +187,19 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .shareSheet(shareSheetConfiguration))
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .shareSheet(let configuration):
+            switch configuration.shareType {
+            case .site(let url):
+                XCTAssertEqual(url, try XCTUnwrap(URL(string: "www.example.com")))
+            default:
+                XCTFail("shareType is not the right type")
+            }
+        default:
+            XCTFail("destination is not the right type")
+        }
+
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
@@ -181,7 +213,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getNavigationBrowserAction(for: .longPressOnCell, destination: .link, url: url)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .link)
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .link:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+
         XCTAssertEqual(newState.navigationDestination?.url?.absoluteString, "www.example.com")
     }
 
@@ -200,7 +239,13 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(initialState, action)
 
         let navigationDestination = try XCTUnwrap(newState.navigationDestination)
-        XCTAssertEqual(navigationDestination.destination, .newTab)
+        switch navigationDestination.destination {
+        case .newTab:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+
         XCTAssertEqual(navigationDestination.url?.absoluteString, "www.example.com")
         XCTAssertFalse(navigationDestination.isPrivate ?? true)
         XCTAssertFalse(navigationDestination.selectNewTab ?? true)
@@ -221,7 +266,13 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(initialState, action)
 
         let navigationDestination = try XCTUnwrap(newState.navigationDestination)
-        XCTAssertEqual(navigationDestination.destination, .newTab)
+        switch navigationDestination.destination {
+        case .newTab:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+
         XCTAssertEqual(navigationDestination.url?.absoluteString, "www.example.com")
         XCTAssertTrue(navigationDestination.isPrivate ?? false)
         XCTAssertTrue(navigationDestination.selectNewTab ?? false)
@@ -236,7 +287,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getNavigationBrowserAction(for: .tapOnSettingsSection, destination: .settings(.topSites))
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .settings(.topSites))
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .settings(let section):
+            XCTAssertEqual(section, .topSites)
+        default:
+            XCTFail("destination is not the right type")
+        }
+
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
@@ -284,8 +342,15 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:])
         )
         let newState = reducer(initialState, action)
-        let config = SummarizerConfig(instructions: "Test instructions", options: [:])
-        XCTAssertEqual(newState.navigationDestination?.destination, .summarizer(config: config))
+        let expectedConfig = SummarizerConfig(instructions: "Test instructions", options: [:])
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .summarizer(let config):
+            XCTAssertEqual(config, expectedConfig)
+        default:
+            XCTFail("destination is not the right type")
+        }
+
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
@@ -297,10 +362,16 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertNil(initialState.navigationDestination)
 
-        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .zeroSearch)
+        let action = getNavigationBrowserAction(for: .tapOnHomepageSearchBar, destination: .homepageZeroSearch)
         let newState = reducer(initialState, action)
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .homepageZeroSearch:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .zeroSearch)
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
@@ -317,8 +388,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
             actionType: ToolbarMiddlewareActionType.didTapButton
         )
         let newState = reducer(initialState, action)
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .homepageZeroSearch:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .zeroSearch)
         XCTAssertEqual(newState.navigationDestination?.url, nil)
     }
 
@@ -335,8 +412,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, nil)
-        XCTAssertEqual(newState.navigationDestination?.url, nil)
+        XCTAssertNil(newState.navigationDestination)
     }
 
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andSearchButtonType_doesNotNavigateToZeroSearch() {
@@ -352,8 +428,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, nil)
-        XCTAssertEqual(newState.navigationDestination?.url, nil)
+        XCTAssertNil(newState.navigationDestination)
     }
 
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andNoButtonType_doesNotNavigateToZeroSearch() {
@@ -368,8 +443,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, nil)
-        XCTAssertEqual(newState.navigationDestination?.url, nil)
+        XCTAssertNil(newState.navigationDestination)
     }
 
     // MARK: - Shortcuts Library
@@ -383,7 +457,33 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let action = getNavigationBrowserAction(for: .tapOnShortcutsShowAllButton, destination: .shortcutsLibrary)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.navigationDestination?.destination, .shortcutsLibrary)
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .shortcutsLibrary:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
+    }
+
+    // MARK: - Stories Feed
+
+    func test_tapOnAllStoriesButton_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnAllStoriesButton, destination: .storiesFeed)
+        let newState = reducer(initialState, action)
+
+        let destination = newState.navigationDestination?.destination
+        switch destination {
+        case .storiesFeed:
+            break
+        default:
+            XCTFail("destination is not the right type")
+        }
     }
 
     // MARK: - Private

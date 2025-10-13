@@ -171,6 +171,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
         self.homepageViewController = homepageController
         homepageController.scrollToTop()
+        // [FXIOS-13651] Fix for WKWebView memory leak. (See comments on related PR.)
+        webviewController?.update(webView: nil)
     }
 
     func homepageScreenshotTool() -> (any Screenshotable)? {
@@ -333,12 +335,7 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - ETPCoordinatorSSLStatusDelegate
 
     var showHasOnlySecureContentInTrackingPanel: Bool {
-        if browserViewController.isToolbarRefactorEnabled {
-            return browserViewController.tabManager.selectedTab?.currentWebView()?.hasOnlySecureContent ?? false
-        }
-
-        guard let bar = browserViewController.legacyUrlBar else { return false }
-        return bar.locationView.hasSecureContent
+        return browserViewController.tabManager.selectedTab?.currentWebView()?.hasOnlySecureContent ?? false
     }
 
     // MARK: - Route handling
@@ -1146,6 +1143,11 @@ class BrowserCoordinator: BaseCoordinator,
         }
         router.present(transcriberViewController, animated: true, completion: nil)
     }
+    
+    func showStoriesFeed() {
+        let storiesFeedViewController = StoriesFeedViewController(windowUUID: windowUUID)
+        router.push(storiesFeedViewController)
+    }
 
     // MARK: Microsurvey
 
@@ -1322,7 +1324,7 @@ class BrowserCoordinator: BaseCoordinator,
     nonisolated private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         // We can only try to download files for `.tab` type shares that have a TemporaryDocument
         guard case let ShareType.tab(_, tab) = shareType,
-              let temporaryDocument = tab.temporaryDocument,
+              let temporaryDocument = await tab.temporaryDocument,
               !temporaryDocument.isDownloading else {
             return shareType
         }

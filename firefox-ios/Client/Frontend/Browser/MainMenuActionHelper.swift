@@ -56,7 +56,8 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol,
+@MainActor
+final class MainMenuActionHelper: PhotonActionSheetProtocol,
                             FeatureFlaggable,
                             CanRemoveQuickActionBookmark,
                             AppVersionUpdateCheckerProtocol {
@@ -68,9 +69,6 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
     private let selectedTab: Tab?
     private let tabUrl: URL?
     private let isFileURL: Bool
-    private var isToolbarRefactorEnabled: Bool {
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
-    }
 
     let themeManager: ThemeManager
     var bookmarksHandler: BookmarksHandler
@@ -89,7 +87,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
     ///   - buttonView: the view from which the menu will be shown
     ///   - toastContainer: the view hosting a toast alert
     ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
-    @MainActor
+
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
@@ -109,7 +107,6 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         self.themeManager = themeManager
     }
 
-    @MainActor
     func getToolbarActions(navigationController: UINavigationController?,
                            completion: @escaping @Sendable @MainActor ([[PhotonRowActions]]) -> Void) {
         var actions: [[PhotonRowActions]] = []
@@ -146,9 +143,10 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
     // MARK: - Update data
 
     private let dataQueue = DispatchQueue(label: "com.moz.mainMenuAction.queue")
-    private var isInReadingList = false
-    private var isBookmarked = false
-    private var isPinned = false
+    // TODO: FXIOS-13791 These properties need to be noniolsated because this work is put on its own queue
+    private nonisolated(unsafe) var isInReadingList = false
+    private nonisolated(unsafe) var isBookmarked = false
+    private nonisolated(unsafe) var isPinned = false
 
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
@@ -233,7 +231,6 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         return section
     }
 
-    @MainActor
     private func getFirstMiscSection(_ navigationController: UINavigationController?) -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -247,10 +244,8 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
             let desktopSiteAction = getRequestDesktopSiteAction()
             append(to: &section, action: desktopSiteAction)
 
-            if isToolbarRefactorEnabled {
-                let trackingProtectionAction = getTrackingProtectionAction()
-                append(to: &section, action: trackingProtectionAction)
-            }
+            let trackingProtectionAction = getTrackingProtectionAction()
+            append(to: &section, action: trackingProtectionAction)
         }
 
         /// In the new experiment, where website theming is different from app theming homepage menu should not show
@@ -492,7 +487,6 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         return openSettings
     }
 
-    @MainActor
     private func getNightModeTitle(_ isNightModeOn: Bool) -> String {
         if themeManager.isNewAppearanceMenuOn {
             return isNightModeOn
@@ -505,7 +499,6 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
         }
     }
 
-    @MainActor
     private func getNightModeAction() -> [PhotonRowActions] {
         var items: [PhotonRowActions] = []
 
@@ -536,7 +529,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
     }
 
     private func syncMenuButton() -> PhotonRowActions? {
-        let action: @Sendable (SingleActionViewModel) -> Void = { [weak self] action in
+        let action: @Sendable @MainActor (SingleActionViewModel) -> Void = { [weak self] action in
             let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
             let parameters = FxASignInViewParameters(launchParameters: fxaParams,
                                                      flowType: .emailLoginFlow,
@@ -673,7 +666,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
     }
 
     // MARK: Reading list
-
+    @MainActor
     private func getReadingListSection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
 
@@ -836,6 +829,7 @@ final class MainMenuActionHelper: @unchecked Sendable, PhotonActionSheetProtocol
 
     // MARK: Password
 
+    @MainActor
     private func getPasswordAction(navigationController: UINavigationController?) -> PhotonRowActions? {
         guard PasswordManagerListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs) else { return nil }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .logins)

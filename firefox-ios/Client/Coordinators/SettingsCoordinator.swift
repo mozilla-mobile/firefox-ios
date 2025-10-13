@@ -160,8 +160,7 @@ final class SettingsCoordinator: BaseCoordinator,
 
         case .theme:
             if themeManager.isNewAppearanceMenuOn {
-                let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                            delegate: self)
+                let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
                 return UIHostingController(rootView: appearanceView)
             } else {
                 return ThemeSettingsController(windowUUID: windowUUID)
@@ -197,7 +196,13 @@ final class SettingsCoordinator: BaseCoordinator,
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
             return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
-               ? UIHostingController(rootView: AddressBarSettingsView(windowUUID: windowUUID, viewModel: viewModel))
+            ? UIHostingController(
+                rootView: AddressBarSettingsView(
+                    windowUUID: windowUUID,
+                    viewModel: viewModel,
+                    prefs: profile.prefs
+                )
+            )
                : SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
 
         case .topSites:
@@ -399,7 +404,8 @@ final class SettingsCoordinator: BaseCoordinator,
             let viewController = UIHostingController(
                 rootView: AddressBarSettingsView(
                 windowUUID: windowUUID,
-                viewModel: viewModel))
+                viewModel: viewModel,
+                prefs: profile.prefs))
             viewController.title = .Settings.AddressBar.AddressBarMenuTitle
             router.push(viewController)
         } else {
@@ -415,8 +421,7 @@ final class SettingsCoordinator: BaseCoordinator,
         store.dispatchLegacy(action)
 
         if themeManager.isNewAppearanceMenuOn {
-            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID,
-                                                        delegate: self)
+            let appearanceView = AppearanceSettingsView(windowUUID: windowUUID, delegate: self)
             let viewController = UIHostingController(rootView: appearanceView)
             viewController.title = .SettingsAppearanceTitle
             router.push(viewController)

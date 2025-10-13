@@ -10,6 +10,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
+    @State private var skipTextColor: Color = .clear
 
     init(
         windowUUID: WindowUUID,
@@ -24,15 +25,14 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topTrailing) {
             AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             VStack {
-                if #available(iOS 17.0, *) {
-                    modernScrollViewCarousel
-                } else {
-                    legacyPagingCarousel
+                Group {
+                    pagingCarousel
                 }
+                .padding(.vertical)
 
                 Spacer()
 
@@ -45,26 +45,29 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 )
                 .padding(.bottom)
             }
+            .accessibilitySortPriority(1)
+            .accessibilityElement(children: .contain)
+
+            Button(action: viewModel.skipOnboarding) {
+                Text(viewModel.skipText)
+                    .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
+                    .foregroundColor(skipTextColor)
+            }
+            .padding(.trailing, UX.Onboarding.Spacing.standard)
+            .bridge.glassButtonStyle()
+            .accessibilitySortPriority(2)
+            .accessibilityLabel(viewModel.skipText)
+        }
+        .onAppear {
+            applyTheme()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            applyTheme()
         }
     }
 
-    @available(iOS 17.0, *)
-    private var modernScrollViewCarousel: some View {
-        ScrollViewCarousel(
-            selection: $viewModel.pageCount,
-            items: viewModel.onboardingCards
-        ) { card in
-            OnboardingCardViewCompact(
-                viewModel: card,
-                windowUUID: windowUUID,
-                themeManager: themeManager,
-                onBottomButtonAction: viewModel.handleBottomButtonAction,
-                onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
-            )
-        }
-    }
-
-    private var legacyPagingCarousel: some View {
+    private var pagingCarousel: some View {
         PagingCarousel(
             selection: $viewModel.pageCount,
             items: viewModel.onboardingCards,
@@ -78,5 +81,10 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
             )
         }
+    }
+
+    private func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        skipTextColor = Color(theme.colors.textOnDark)
     }
 }

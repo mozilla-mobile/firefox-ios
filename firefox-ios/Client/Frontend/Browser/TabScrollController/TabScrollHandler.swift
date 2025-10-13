@@ -41,8 +41,7 @@ final class TabScrollHandler: NSObject,
     }
 
     private var isMinimalAddressBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly) &&
-        featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildOnly)
     }
 
     enum ScrollDirection {
@@ -324,7 +323,6 @@ final class TabScrollHandler: NSObject,
         return isSignificantScroll  // || isFastEnough
     }
 
-    @objc
     private func reload() {
         guard let tabProvider = tabProvider else { return }
         tabProvider.reloadPage()

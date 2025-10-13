@@ -32,9 +32,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testBookmarkingUI_tabTrayExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
 
         // Go to a webpage, and add to bookmarks, check it's added
-        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -43,9 +44,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
-        navigator.performAction(Action.CloseURLBarOpen)
+        if iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
 
         navigator.nowAt(BrowserTab)
@@ -72,7 +74,10 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.launch()
 
         // Go to a webpage, and add to bookmarks, check it's added
-        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -81,9 +86,12 @@ class BookmarksTests: FeatureFlaggedTestBase {
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
-        navigator.performAction(Action.CloseURLBarOpen)
+        if iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
 
         navigator.nowAt(BrowserTab)
@@ -146,7 +154,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testAccessBookmarksFromContextMenu() {
         app.launch()
         // Add a bookmark
-        navigator.nowAt(NewTabScreen)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
@@ -162,6 +171,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // Smoketest
     func testBookmarksAwesomeBar() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         XCTExpectFailure("The app was not launched", strict: false) {
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                      timeout: TIMEOUT_LONG)
@@ -176,6 +187,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "https://mozilla.org")
 
@@ -294,8 +306,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         checkItemsInBookmarksList(items: 1)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306908
-    // Smoketest
     private func addNewBookmark() {
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
@@ -327,10 +337,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         app.launch()
 
         // Verify that there are only 1 cell (desktop bookmark folder)
-        XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                     timeout: TIMEOUT_LONG)
-        }
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
@@ -341,10 +347,12 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
         // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
 
         navigator.openURL(url_3)
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         bookmark()
 
         // Check that it appears in Bookmarks panel
@@ -367,12 +375,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testBookmarkLibraryAddDeleteBookmark_tabTrayExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
-
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                     timeout: TIMEOUT_LONG)
-        }
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)
@@ -382,10 +384,12 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
         // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
 
         navigator.openURL(url_3)
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         bookmark()
 
         // Check that it appears in Bookmarks panel
@@ -427,15 +431,20 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306911
     func testRecentlyBookmarked() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         bookmark()
         navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList(oneItemBookmarked: true)
         navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_1))
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         bookmark()
         navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList(oneItemBookmarked: false)
@@ -444,8 +453,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306866
     func testEditBookmark() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         bookmarkPageAndTapEdit()
         app.buttons["Save"].waitAndTap()
         waitForTabsButton()
@@ -461,12 +473,19 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445808
-    func testLongTapRecentlySavedLink_tabTrayExperimentOff() {
+    func testLongTapRecentlySavedLink_tabTrayExperimentOff() throws {
+        app.launch()
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest, "Bookmark panel from homepage no longer available")
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         validateLongTapOptionsFromBookmarkLink(isExperiment: false)
         forceRestartApp()
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
             validateLongTapOptionsFromBookmarkLink(isExperiment: false)
@@ -474,9 +493,14 @@ class BookmarksTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445808
-    func testLongTapRecentlySavedLink_tabTrayExperimentOn() {
+    func testLongTapRecentlySavedLink_tabTrayExperimentOn() throws {
+        app.launch()
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest, "Bookmark panel from homepage no longer available")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         validateLongTapOptionsFromBookmarkLink(isExperiment: true)
         forceRestartApp()
         app.launch()
@@ -489,8 +513,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307054
     func testBookmark() {
         app.launch()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(url_3)
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         bookmark()
         mozWaitForElementToExist(app.staticTexts["Saved in “Bookmarks”"])
         unbookmark(url: urlLabelExample_3)
@@ -499,10 +526,15 @@ class BookmarksTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2784448
     // Smoketest
-    func testBookmarksToggleIsAvailable() {
+    func testBookmarksToggleIsAvailable() throws {
         app.launch()
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest, "Bookmark toggle is no longer available")
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(url_3)
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         bookmark()
         navigator.nowAt(NewTabScreen)
         // issue 28625: iOS 15 may not open the menu fully.
@@ -542,6 +574,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Go to "Recently saved" section and long tap on one of the links
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         bookmark()
         navigator.performAction(Action.GoToHomePage)
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()

@@ -8,6 +8,7 @@ import XCTest
 final class DefaultRouterTests: XCTestCase {
     var navigationController: MockNavigationController!
 
+    @MainActor
     override func setUp() {
         super.setUp()
         navigationController = MockNavigationController()
@@ -18,6 +19,7 @@ final class DefaultRouterTests: XCTestCase {
         navigationController = nil
     }
 
+    @MainActor
     func testInitialState() {
         let subject = DefaultRouter(navigationController: navigationController)
 
@@ -26,6 +28,7 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(subject.completions.count, 0)
     }
 
+    @MainActor
     func testPresentViewController_presentCalled() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -58,6 +61,7 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(subject.completions.count, 0)
     }
 
+    @MainActor
     func testDismissModule() {
         let subject = DefaultRouter(navigationController: navigationController)
         subject.dismiss()
@@ -76,6 +80,7 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(subject.completions.count, 0)
     }
 
+    @MainActor
     func testPushModule_pushViewController() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -86,6 +91,7 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(subject.completions.count, 1)
     }
 
+    @MainActor
     func testPopViewController() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -100,6 +106,7 @@ final class DefaultRouterTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    @MainActor
     func testSetRootViewController() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -109,6 +116,7 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(navigationController.isNavigationBarHidden, true)
     }
 
+    @MainActor
     func testSetRootViewController_withPushedViewController_completionIsCalled() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -139,6 +147,7 @@ final class DefaultRouterTests: XCTestCase {
         waitForExpectations(timeout: 0.1, handler: nil)
     }
 
+    @MainActor
     func testNavigationControllerDelegate_runsCompletionForPoppedViewController() {
         let subject = DefaultRouter(navigationController: navigationController)
         let expectation = expectation(description: "Completion is called")

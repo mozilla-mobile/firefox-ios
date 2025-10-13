@@ -297,6 +297,9 @@ final class TermsOfUseViewController: UIViewController,
         case .ended:
             if translation.y > UX.panDismissDistance || gesture.velocity(in: view).y > UX.panDismissVelocity {
                 store.dispatchLegacy(TermsOfUseAction(windowUUID: windowUUID, actionType: .gestureDismiss))
+                // In rare external-open flows the Redux subscriber can be delayed for gestures
+                // due to window/state selection timing, so it should be dismissed directly
+                coordinator?.dismissTermsFlow()
             } else {
                 UIView.animate(withDuration: UX.animationDuration,
                                delay: 0,
@@ -327,6 +330,11 @@ final class TermsOfUseViewController: UIViewController,
         acceptButton.tintColor = currentTheme().colors.textOnDark
         acceptButton.backgroundColor = currentTheme().colors.actionPrimary
         remindMeLaterButton.setTitleColor(currentTheme().colors.actionPrimary, for: .normal)
+        descriptionTextView.linkTextAttributes = [
+            .foregroundColor: currentTheme().colors.textAccent,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        descriptionTextView.attributedText = makeAttributedDescription()
     }
 
     private func currentTheme() -> Theme {

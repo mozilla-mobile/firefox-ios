@@ -145,7 +145,10 @@ class WebsiteDataManagementViewController: UIViewController,
         searchController.searchBar.delegate = self
         searchController.searchBar.barStyle = currentTheme().type.getBarStyle()
 
-        navigationItem.hidesSearchBarWhenScrolling = false
+        if #unavailable(iOS 26.0) {
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
+
         navigationItem.searchController = searchController
         self.searchController = searchController
         self.tableView = tableView

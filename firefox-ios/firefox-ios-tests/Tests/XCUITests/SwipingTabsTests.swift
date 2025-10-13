@@ -5,14 +5,7 @@
 import Foundation
 import XCTest
 
-class SwipingTabsTests: FeatureFlaggedTestBase {
-    override func setUp() {
-        addLaunchArgument(jsonFileName: "swipingTabsOn", featureName: "toolbar-refactor-feature")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        super.setUp()
-        app.launch()
-    }
-
+class SwipingTabsTests: BaseTestCase {
     override func tearDown() {
         XCUIDevice.shared.orientation = .portrait
         super.tearDown()
@@ -28,11 +21,16 @@ class SwipingTabsTests: FeatureFlaggedTestBase {
             throw XCTSkip("Swiping tabs is not available for iPad")
         }
         selectToolbarBottom()
+        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)

@@ -8,23 +8,21 @@ import Glean
 import Common
 import Shared
 
+// TODO: FXIOS-13746 - Migrate TermsOfUseTelemetryTests to use mock telemetry or GleanWrapper
 @MainActor
 final class TermsOfUseTelemetryTests: XCTestCase {
     private var telemetry: TermsOfUseTelemetry!
 
     override func setUp() {
         super.setUp()
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
         telemetry = TermsOfUseTelemetry()
+        setupTelemetry(with: MockProfile())
     }
 
     override func tearDown() {
         super.tearDown()
         telemetry = nil
+        tearDownTelemetry()
     }
 
     func testTermsOfUseBottomSheetDisplayed() throws {
@@ -169,7 +167,7 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         XCTAssertEqual(events.count, 2)
     }
 
-    func testSetUsageMetrics() throws {
+    func testSetUsageMetrics_ToU() throws {
         let mockProfile = MockProfile()
         let mockGleanWrapper = MockGleanWrapper()
 
@@ -177,6 +175,23 @@ final class TermsOfUseTelemetryTests: XCTestCase {
         mockProfile.prefs.setString("1", forKey: PrefsKeys.TermsOfUseAcceptedVersion)
         let acceptedDate = Date()
         mockProfile.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
+
+        TermsOfUseTelemetry.setUsageMetrics(gleanWrapper: mockGleanWrapper, profile: mockProfile)
+
+        XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
+    }
+
+    func testSetUsageMetrics_ToS() throws {
+        let mockProfile = MockProfile()
+        let mockGleanWrapper = MockGleanWrapper()
+
+        // Test ToS acceptance
+        mockProfile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
+        mockProfile.prefs.setString("4", forKey: PrefsKeys.TermsOfServiceAcceptedVersion)
+        let acceptedDate = Date()
+        mockProfile.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfServiceAcceptedDate)
+
         TermsOfUseTelemetry.setUsageMetrics(gleanWrapper: mockGleanWrapper, profile: mockProfile)
 
         XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 1)

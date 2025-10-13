@@ -52,20 +52,10 @@ class TabToolbarHelperTests: XCTestCase {
     }
 
     func testTelemetryForSiteMenu() {
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
         let mockToolbar = MockTabToolbar()
         _ = TabToolbarHelper(toolbar: mockToolbar)
         mockToolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(mockToolbar, button: mockToolbar.appMenuButton)
         testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.siteMenu)
-        // Due to changes allow certain custom pings to implement their own opt-out
-        // independent of Glean, custom pings may need to be registered manually in
-        // tests in order to put them in a state in which they can collect data.
-        Glean.shared.registerPings(GleanMetrics.Pings.shared)
-        Glean.shared.resetGlean(clearStores: true)
     }
 
     func test_tabToolBarHelper_basicCreation_doesntLeak() {
@@ -85,7 +75,7 @@ class MockTabsButton: TabsButton {
     }
 }
 
-class MockToolbarButton: ToolbarButton {
+class MockToolbarButton: TabToolbarButton {
     init() {
         super.init(frame: .zero)
     }
@@ -111,25 +101,25 @@ class MockTabToolbar: TabToolbarProtocol {
     var tabsButton: TabsButton { return _tabsButton }
 
     var _bookmarksButton = MockToolbarButton()
-    var bookmarksButton: ToolbarButton { return _bookmarksButton }
+    var bookmarksButton: TabToolbarButton { return _bookmarksButton }
 
     var _addNewTabButton = MockToolbarButton()
-    var addNewTabButton: ToolbarButton { return _addNewTabButton }
+    var addNewTabButton: TabToolbarButton { return _addNewTabButton }
 
     var _appMenuButton = MockToolbarButton()
-    var appMenuButton: ToolbarButton { return _appMenuButton }
+    var appMenuButton: TabToolbarButton { return _appMenuButton }
 
     var _libraryButton = MockToolbarButton()
-    var libraryButton: ToolbarButton { return _libraryButton }
+    var libraryButton: TabToolbarButton { return _libraryButton }
 
     var _forwardButton = MockToolbarButton()
-    var forwardButton: ToolbarButton { return _forwardButton }
+    var forwardButton: TabToolbarButton { return _forwardButton }
 
     var _backButton = MockToolbarButton()
-    var backButton: ToolbarButton { return _backButton }
+    var backButton: TabToolbarButton { return _backButton }
 
     var _multiStateButton = MockToolbarButton()
-    var multiStateButton: ToolbarButton { return _multiStateButton }
+    var multiStateButton: TabToolbarButton { return _multiStateButton }
     var actionButtons: [ThemeApplicable & UIButton] { return [] }
 
     init() {
