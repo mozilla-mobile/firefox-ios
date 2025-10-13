@@ -24,7 +24,7 @@ struct BackupCloseTab {
 class TabManagerImplementation: NSObject,
                                 TabManager,
                                 FeatureFlaggable,
-                                SessionCreator {
+                                WKEngineClientBridge {
     let windowUUID: WindowUUID
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 

@@ -296,10 +296,9 @@ class BrowserViewController: UIViewController,
     // TODO: FXIOS-13669 The session dependencies shouldn't be empty
     private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
         engineResponder: DefaultUIHandler.factory(
-            sessionDependencies: .empty(),
-            alertFactory: DefaultAlertFactory(),
-            alertPresenter: AlertPresenter(presenter: self),
-            sessionCreator: tabManager as? SessionCreator
+            javaScriptAlertFactory: DefaultAlertFactory(),
+            modalPresenter: DefaultModalPresenter(presenter: self),
+            sessionCreator: tabManager as? WKEngineClientBridge
         ),
         legacyResponder: self
     )

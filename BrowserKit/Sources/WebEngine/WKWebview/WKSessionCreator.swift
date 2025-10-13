@@ -5,7 +5,7 @@
 import WebKit
 
 /// Intent to bridge WebEngine code to Client
-public protocol SessionCreator: AnyObject {
+public protocol WKEngineClientBridge: AnyObject {
     /// Creates a popup WKWebView given a configuration and the source WebView for the popup.
     @MainActor
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView?

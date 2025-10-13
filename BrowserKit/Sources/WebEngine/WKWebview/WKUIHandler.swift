@@ -58,49 +58,44 @@ public protocol WKUIHandler: WKUIDelegate {
 
 public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertControllerDelegate {
     public weak var delegate: EngineSessionDelegate?
-    private weak var sessionCreator: SessionCreator?
+    private weak var sessionCreator: WKEngineClientBridge?
 
     public var isActive = false
-    private let sessionDependencies: EngineSessionDependencies
+    private var alertFactory: WKJavaScriptAlertInfoFactory
     private let application: Application
     private let policyDecider: WKPolicyDecider
-    private let alertFactory: WKJavaScriptAlertInfoFactory?
     private let modalPresenter: ModalPresenter
     private let logger: Logger
 
     // TODO: FXIOS-13670 With Swift 6 we can use default params in the init
     @MainActor
     public static func factory(
-        sessionDependencies: EngineSessionDependencies,
-        alertFactory: WKJavaScriptAlertInfoFactory? = nil,
+        javaScriptAlertFactory: WKJavaScriptAlertInfoFactory,
         modalPresenter: ModalPresenter,
-        sessionCreator: SessionCreator? = nil
+        sessionCreator: WKEngineClientBridge? = nil
     ) -> DefaultUIHandler {
         let policyDecider = WKPolicyDeciderFactory()
         let application = UIApplication.shared
         return DefaultUIHandler(
-            sessionDependencies: sessionDependencies,
+            javaScriptAlertFactory: javaScriptAlertFactory,
             sessionCreator: sessionCreator,
-            alertFactory: alertFactory,
             modalPresenter: modalPresenter,
             application: application,
             policyDecider: policyDecider
         )
     }
 
-    init(sessionDependencies: EngineSessionDependencies,
-         sessionCreator: SessionCreator?,
-         alertFactory: WKJavaScriptAlertInfoFactory? = nil,
+    init(javaScriptAlertFactory: WKJavaScriptAlertInfoFactory,
+         sessionCreator: WKEngineClientBridge?,
          modalPresenter: ModalPresenter,
          application: Application,
          policyDecider: WKPolicyDecider,
          logger: Logger = DefaultLogger.shared
     ) {
+        self.alertFactory = javaScriptAlertFactory
         self.sessionCreator = sessionCreator
-        self.sessionDependencies = sessionDependencies
         self.policyDecider = policyDecider
         self.application = application
-        self.alertFactory = alertFactory
         self.modalPresenter = modalPresenter
         self.logger = logger
         super.init()
@@ -140,7 +135,6 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor () -> Void
     ) {
-        guard let alertFactory else { return }
         let alert = alertFactory.makeMessageAlert(message: message, frame: frame, completion: completionHandler)
         handleJavaScriptAlert(alert, for: webView) {
             completionHandler()
@@ -153,7 +147,6 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (Bool) -> Void
     ) {
-        guard let alertFactory else { return }
         let alert = alertFactory.makeConfirmationAlert(message: message, frame: frame) { confirm in
             self.logger.log("JavaScript confirm panel was completed with result: \(confirm)", level: .info, category: .webview)
             completionHandler(confirm)
@@ -170,7 +163,6 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping @MainActor (String?) -> Void
     ) {
-        guard let alertFactory else { return }
         let alert = alertFactory.makeTextInputAlert(message: prompt, frame: frame, defaultText: defaultText) { input in
             self.logger.log("JavaScript text input panel was completed with input", level: .info, category: .webview)
             completionHandler(input)

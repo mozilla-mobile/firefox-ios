@@ -52,7 +52,7 @@ class MockWKJavaScriptAlertStore: WKJavaScriptAlertStore {
     }
 }
 
-class MockSessionCreator: SessionCreator {
+class MockSessionCreator: WKEngineClientBridge {
     var createPopupSessionCalled = 0
     var alertStoreCalled = 0
     var isSessionActiveCalled = 0

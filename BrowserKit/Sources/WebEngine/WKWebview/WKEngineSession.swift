@@ -67,7 +67,7 @@ class WKEngineSession: NSObject,
         let metadataFetcher = DefaultMetadataFetcherHelper()
         let navigationHandler = DefaultNavigationHandler()
         let uiHandler = DefaultUIHandler.factory(
-            sessionDependencies: dependencies,
+            javaScriptAlertFactory: dependencies.javaScriptAlertFactory,
             modalPresenter: DefaultModalPresenter(
                 presenter: nil
             )
