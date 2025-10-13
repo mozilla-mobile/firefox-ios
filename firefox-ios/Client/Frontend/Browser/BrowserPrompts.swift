@@ -52,15 +52,28 @@ class JSPromptAlertController: UIAlertController, WKJavaScriptPromptAlertControl
 }
 
 struct DefaultAlertFactory: WKJavaScriptAlertInfoFactory {
-    func makeMessageAlert(message: String, frame: WKFrameInfo, completion: @escaping @MainActor () -> Void) -> WKJavaScriptAlertInfo {
+    func makeMessageAlert(
+        message: String,
+        frame: WKFrameInfo,
+        completion: @escaping @MainActor () -> Void
+    ) -> WKJavaScriptAlertInfo {
         return MessageAlert(message: message, frame: frame, completionHandler: completion)
     }
 
-    func makeConfirmationAlert(message: String, frame: WKFrameInfo, completion: @escaping @MainActor (Bool) -> Void) -> WKJavaScriptAlertInfo {
+    func makeConfirmationAlert(
+        message: String,
+        frame: WKFrameInfo,
+        completion: @escaping @MainActor (Bool) -> Void
+    ) -> WKJavaScriptAlertInfo {
         return ConfirmPanelAlert(message: message, frame: frame, completionHandler: completion)
     }
 
-    func makeTextInputAlert(message: String, frame: WKFrameInfo, defaultText: String?, completion: @escaping @MainActor (String?) -> Void) -> WKJavaScriptAlertInfo {
+    func makeTextInputAlert(
+        message: String,
+        frame: WKFrameInfo,
+        defaultText: String?,
+        completion: @escaping @MainActor (String?) -> Void
+    ) -> WKJavaScriptAlertInfo {
         return TextInputAlert(message: message, frame: frame, defaultText: defaultText, completionHandler: completion)
     }
 }
