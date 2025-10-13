@@ -35,7 +35,7 @@ final class StoriesFeedStateTests: XCTestCase {
             MerinoAction(
                 merinoStories: stories,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories
             )
         )
 
