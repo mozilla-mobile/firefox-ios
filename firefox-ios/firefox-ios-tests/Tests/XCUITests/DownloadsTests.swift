@@ -13,6 +13,9 @@ let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-downloa
 let testBLOBFileSize = "35 bytes"
 
 class DownloadsTests: FeatureFlaggedTestBase {
+    var downloadsScreen: DownloadsScreen!
+    var browserScreen: BrowserScreen!
+
     override func tearDown() {
         defer { super.tearDown() }
 
@@ -98,6 +101,20 @@ class DownloadsTests: FeatureFlaggedTestBase {
                 app.tables.cells.staticTexts[testFileSize]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306898
+    // Smoketest TAE
+    func testDownloadFile_TAE() {
+        downloadsScreen = DownloadsScreen(app: app)
+        app.launch()
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_Downloads)
+
+        downloadsScreen.assertNumberOfDownloadedItems(expectedCount: 1)
+        // There should be one item downloaded. It's name and size should be shown
+        downloadsScreen.assertDownloadedFileDetailsAreVisible(fileName: testFileNameDownloadPanel, fileSize: testFileSize)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306899
@@ -331,5 +348,16 @@ class DownloadsTests: FeatureFlaggedTestBase {
         app.buttons["Downloads"].waitAndTap()
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 1)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306895
+    // Smoketest TAE
+    func testToastButtonToGoToDownloads_TAE() {
+        browserScreen = BrowserScreen(app: app)
+        downloadsScreen = DownloadsScreen(app: app)
+        app.launch()
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
+        browserScreen.tapDownloadsToastButton()
+        downloadsScreen.assertNumberOfDownloadedItems(expectedCount: 1)
     }
 }

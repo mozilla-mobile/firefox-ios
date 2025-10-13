@@ -114,6 +114,8 @@
         "DesktopModeTestsIphone",
         "DisplaySettingTests",
         "DomainAutocompleteTests",
+        "DownloadsTests\/testDownloadFile_TAE()",
+        "DownloadsTests\/testToastButtonToGoToDownloads_TAE()",
         "DragAndDropTestIpad",
         "DragAndDropTests",
         "EngagementNotificationTests",
