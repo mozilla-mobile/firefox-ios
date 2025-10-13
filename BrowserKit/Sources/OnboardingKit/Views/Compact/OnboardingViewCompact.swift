@@ -30,7 +30,11 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 Group {
-                    pagingCarousel
+                    if #available(iOS 17.0, *) {
+                        modernScrollViewCarousel
+                    } else {
+                        legacyPagingCarousel
+                    }
                 }
                 .padding(.vertical)
 
@@ -45,8 +49,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 )
                 .padding(.bottom)
             }
-            .accessibilitySortPriority(1)
-            .accessibilityElement(children: .contain)
 
             Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)
@@ -55,8 +57,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
             .bridge.glassButtonStyle()
-            .accessibilitySortPriority(2)
-            .accessibilityLabel(viewModel.skipText)
         }
         .onAppear {
             applyTheme()
@@ -67,7 +67,23 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
     }
 
-    private var pagingCarousel: some View {
+    @available(iOS 17.0, *)
+    private var modernScrollViewCarousel: some View {
+        ScrollViewCarousel(
+            selection: $viewModel.pageCount,
+            items: viewModel.onboardingCards
+        ) { card in
+            OnboardingCardViewCompact(
+                viewModel: card,
+                windowUUID: windowUUID,
+                themeManager: themeManager,
+                onBottomButtonAction: viewModel.handleBottomButtonAction,
+                onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
+            )
+        }
+    }
+
+    private var legacyPagingCarousel: some View {
         PagingCarousel(
             selection: $viewModel.pageCount,
             items: viewModel.onboardingCards,

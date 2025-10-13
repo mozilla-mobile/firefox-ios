@@ -99,17 +99,34 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     }
 
     var primaryButton: some View {
-        DragCancellablePrimaryButton(
-            title: viewModel.buttons.primary.title,
-            action: {
-                onBottomButtonAction(
-                    viewModel.buttons.primary.action,
-                    viewModel.name
+        Group {
+            if #available(iOS 17.0, *) {
+                OnboardingButton.primary(
+                    viewModel.buttons.primary.title,
+                    action: {
+                        onBottomButtonAction(
+                            viewModel.buttons.primary.action,
+                            viewModel.name
+                        )
+                    },
+                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+                    windowUUID: windowUUID,
+                    themeManager: themeManager
                 )
-            },
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
-        )
+            } else {
+                DragCancellablePrimaryButton(
+                    title: viewModel.buttons.primary.title,
+                    action: {
+                        onBottomButtonAction(
+                            viewModel.buttons.primary.action,
+                            viewModel.name
+                        )
+                    },
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
+                )
+            }
+        }
     }
 
     private func applyTheme(theme: Theme) {

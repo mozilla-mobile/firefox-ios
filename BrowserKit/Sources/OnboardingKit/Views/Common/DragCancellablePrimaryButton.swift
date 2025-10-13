@@ -23,15 +23,8 @@ struct DragCancellablePrimaryButton: View {
             .padding(.horizontal, UX.DragCancellableButton.horizontalPadding)
             .frame(maxWidth: .infinity)
             .background(
-                Group {
-                    if #available(iOS 26.0, *) {
-                        Capsule()
-                            .fill(Color(uiColor: theme.colors.actionPrimary))
-                    } else {
-                        RoundedRectangle(cornerRadius: UX.DragCancellableButton.cornerRadius)
-                            .fill(Color(uiColor: theme.colors.actionPrimary))
-                    }
-                }
+                RoundedRectangle(cornerRadius: UX.DragCancellableButton.cornerRadius)
+                    .fill(Color(uiColor: theme.colors.actionPrimary))
             )
             .foregroundColor(Color(uiColor: theme.colors.textInverted))
             .accessibility(identifier: accessibilityIdentifier)

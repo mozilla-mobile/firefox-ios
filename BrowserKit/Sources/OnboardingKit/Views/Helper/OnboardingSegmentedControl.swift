@@ -30,7 +30,44 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
 
     @ViewBuilder
     private func segmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
-        dragCancellableSegmentedButton(for: item)
+        Group {
+            if #available(iOS 17.0, *) {
+                legacySegmentedButton(for: item)
+            } else {
+                dragCancellableSegmentedButton(for: item)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func legacySegmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
+        Button {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                selection = item.action
+            }
+        } label: {
+            VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
+                let isSelected = item.action == selection
+
+                itemImage(item: item, isSelected: isSelected)
+
+                itemContent(item: item, isSelected: isSelected)
+            }
+            .frame(
+                maxWidth: .infinity,
+                minHeight: UX.SegmentedControl.buttonMinHeight,
+                alignment: .top
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+        .accessibilityElement()
+        .accessibilityLabel("\(item.title)")
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAddTraits(
+            item.action == selection ? .isSelected : []
+        )
     }
 
     @ViewBuilder
