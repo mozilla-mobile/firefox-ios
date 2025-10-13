@@ -14,7 +14,7 @@
 "About.privateBullet3" = "清除 Cookie、搜尋紀錄、上網紀錄";
 
 /* Label on About screen */
-"About.privateBulletHeader" = "可當作私密瀏覽器使用：";
+"About.privateBulletHeader" = "可當作隱私瀏覽器使用：";
 
 /* Label for row in About screen */
 "About.rowHelp" = "說明";
