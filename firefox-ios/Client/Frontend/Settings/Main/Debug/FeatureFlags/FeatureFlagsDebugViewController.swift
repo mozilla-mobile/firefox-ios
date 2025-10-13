@@ -147,6 +147,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .recentSearches,
+                titleText: format(string: "Search - Recent"),
+                statusText: format(string: "Toggle to enable the recent searches feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .trendingSearches,
+                titleText: format(string: "Search - Trending"),
+                statusText: format(string: "Toggle to enable the trending searches feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageShortcutsLibrary,
                 titleText: format(string: "Shortcuts Library"),
                 statusText: format(string: "Toggle to enable the homepage shortcuts library")
