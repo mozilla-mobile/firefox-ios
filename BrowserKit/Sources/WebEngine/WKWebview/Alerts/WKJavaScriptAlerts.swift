@@ -52,13 +52,13 @@ public protocol WKJavaScriptAlertInfoFactory {
         frame: WKFrameInfo,
         completion: @escaping @MainActor () -> Void
     ) -> WKJavaScriptAlertInfo
-    
+
     func makeConfirmationAlert(
         message: String,
         frame: WKFrameInfo,
         completion: @escaping @MainActor (Bool) -> Void
     ) -> WKJavaScriptAlertInfo
-    
+
     func makeTextInputAlert(
         message: String,
         frame: WKFrameInfo,

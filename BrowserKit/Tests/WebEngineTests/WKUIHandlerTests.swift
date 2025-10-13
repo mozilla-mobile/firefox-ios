@@ -171,83 +171,83 @@ final class WKUIHandlerTests: XCTestCase {
         XCTAssertEqual(mockApplication.canOpenCalled, 1)
         XCTAssertEqual(mockApplication.openCalled, 0)
     }
-    
+
     // MARK: - JS Alerts tests
-    
+
     func test_runJavaScriptAlertPanel_whenAlertIsThrottled() {
         let subject = createSubject()
         let throttler = MockPopupThrottler()
         let store = MockWKJavaScriptAlertStore(popupThrottler: throttler)
         throttler.stubCanShowAlert = false
         sessionCreator.stubStore = store
-        
+
         subject.webView(MockWKWebView(), runJavaScriptAlertPanelWithMessage: "", initiatedByFrame: MockWKFrameInfo()) {}
-      
+
         XCTAssertEqual(throttler.canShowAlertCalled, 1)
         XCTAssertEqual(throttler.willShowAlertCalled, 0)
     }
-    
+
     func test_runJavaScriptAlertPanel_whenAlertIsNotThrottled() {
         let subject = createSubject()
         let throttler = MockPopupThrottler()
         let store = MockWKJavaScriptAlertStore(popupThrottler: throttler)
-    
+
         sessionCreator.stubStore = store
-        
+
         subject.webView(MockWKWebView(), runJavaScriptAlertPanelWithMessage: "", initiatedByFrame: MockWKFrameInfo()) {}
-      
+
         XCTAssertEqual(throttler.canShowAlertCalled, 1)
         XCTAssertEqual(throttler.willShowAlertCalled, 1)
     }
-    
+
     func test_runJavaScriptAlertPanel_whenSessionActive_andCanPresentAlert() {
         let subject = createSubject()
-        
+
         subject.webView(MockWKWebView(), runJavaScriptAlertPanelWithMessage: "", initiatedByFrame: MockWKFrameInfo()) {}
-        
+
         XCTAssertEqual(sessionCreator.isSessionActiveCalled, 2)
         XCTAssertEqual(alertFactory.makeMessageAlertCalled, 1)
         XCTAssertEqual(alertFactory.stubAlert.alertControllerCalled, 1)
         XCTAssertEqual(modalPresenter.canPresentCalled, 1)
         XCTAssertEqual(modalPresenter.presentCalled, 1)
     }
-    
+
     func test_runJavaScriptAlertPanel_whenAlertIsStored() {
         let subject = createSubject()
         let store = MockWKJavaScriptAlertStore(popupThrottler: MockPopupThrottler())
         sessionCreator.stubStore = store
         modalPresenter.stubCanPresent = false
-        
+
         subject.webView(MockWKWebView(), runJavaScriptAlertPanelWithMessage: "", initiatedByFrame: MockWKFrameInfo()) {}
-        
+
         XCTAssertEqual(sessionCreator.isSessionActiveCalled, 2)
         XCTAssertEqual(alertFactory.makeMessageAlertCalled, 1)
         XCTAssertEqual(sessionCreator.alertStoreCalled, 2)
         XCTAssertEqual(store.queueJavascriptAlertPromptCalled, 1)
     }
-    
+
     func test_runJavaScriptConfirmPanel_makeConfirmAlert() {
         let subject = createSubject()
-        
+
         subject.webView(
             MockWKWebView(),
             runJavaScriptConfirmPanelWithMessage: "",
             initiatedByFrame: MockWKFrameInfo()
         ) { _ in }
-        
+
         XCTAssertEqual(alertFactory.makeConfirmationAlertCalled, 1)
     }
-    
+
     func test_runJavaScriptTextInputPanel_makeConfirmAlert() {
         let subject = createSubject()
-        
+
         subject.webView(
             MockWKWebView(),
             runJavaScriptTextInputPanelWithPrompt: "",
             defaultText: "",
             initiatedByFrame: MockWKFrameInfo()
         ) { _ in }
-        
+
         XCTAssertEqual(alertFactory.makeTextInputAlertCalled, 1)
     }
 
@@ -266,4 +266,3 @@ final class WKUIHandlerTests: XCTestCase {
         return uiHandler
     }
 }
-

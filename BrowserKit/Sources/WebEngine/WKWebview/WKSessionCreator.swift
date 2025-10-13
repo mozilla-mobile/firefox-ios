@@ -9,17 +9,17 @@ public protocol WKEngineClientBridge: AnyObject {
     /// Creates a popup WKWebView given a configuration and the source WebView for the popup.
     @MainActor
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView?
-    
+
     func alertStore(for webView: WKWebView) -> WKJavaScriptAlertStore?
-    
+
     func isSessionActive(for webView: WKWebView) -> Bool
-    
+
     func currentActiveStore() -> WKJavaScriptAlertStore?
 }
 
-//typealias VoidReturnCallback<T> = (T) -> Void
+// typealias VoidReturnCallback<T> = (T) -> Void
 //
-//class WKSessionCreator: SessionCreator {
+// class WKSessionCreator: SessionCreator {
 //    func alertStore(for webView: WKWebView) -> (any WKJavaScriptAlertStore)? {
 //        
 //    }
@@ -51,4 +51,4 @@ public protocol WKEngineClientBridge: AnyObject {
 //        onNewSessionCreated?(session)
 //        return webView
 //    }
-//}
+// }

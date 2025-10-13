@@ -39,7 +39,7 @@ public protocol WKUIHandler: WKUIDelegate {
     )
 
     func webViewDidClose(_ webView: WKWebView)
-    
+
     // TODO: - Add task
     func webView(
         _ webView: WKWebView,
@@ -171,7 +171,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
             completionHandler("")
         }
     }
-    
+
     private func handleJavaScriptAlert(
         _ alert: WKJavaScriptAlertInfo,
         for webView: WKWebView,
@@ -193,7 +193,7 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
             store.queueJavascriptAlertPrompt(alert)
         }
     }
-    
+
     private func jsAlertExceedsSpamLimits(_ webView: WKWebView) -> Bool {
         guard sessionCreator?.isSessionActive(for: webView) == true,
               let store = sessionCreator?.alertStore(for: webView) else {
@@ -229,13 +229,13 @@ public class DefaultUIHandler: NSObject, WKUIHandler, WKJavascriptPromptAlertCon
         }
         decisionHandler(.prompt)
     }
-    
+
     // MARK: - WKJavaScriptAlertControllerDelegate
-    
+
     public func promptAlertControllerDidDismiss(_ alertController: any WKJavaScriptPromptAlertController) {
         checkForJSAlerts()
     }
-    
+
     private func checkForJSAlerts() {
         guard let store = sessionCreator?.currentActiveStore(), store.hasJavascriptAlertPrompt() else { return }
 

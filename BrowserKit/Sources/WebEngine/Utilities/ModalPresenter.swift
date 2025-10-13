@@ -7,7 +7,7 @@ import UIKit
 @MainActor
 public protocol ModalPresenter {
     func present(_ controller: UIViewController, animated: Bool)
-    
+
     func canPresent() -> Bool
 }
 

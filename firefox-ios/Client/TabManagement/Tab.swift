@@ -821,7 +821,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab, WKJavaScriptAl
 
         TabEvent.post(.didToggleDesktopMode, for: self)
     }
-    
+
     // MARK: - WKJavaScriptAlertStore
 
     func cancelQueuedAlerts() {

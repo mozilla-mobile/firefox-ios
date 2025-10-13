@@ -9,11 +9,11 @@ class MockModalPresenter: ModalPresenter {
     var presentCalled = 0
     var canPresentCalled = 0
     var stubCanPresent = true
-    
+
     func present(_ controller: UIViewController, animated: Bool) {
         presentCalled += 1
     }
-    
+
     func canPresent() -> Bool {
         canPresentCalled += 1
         return stubCanPresent

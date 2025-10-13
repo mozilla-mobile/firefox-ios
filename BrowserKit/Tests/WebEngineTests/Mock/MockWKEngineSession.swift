@@ -12,7 +12,7 @@ class MockWKEngineSession: WKEngineSession {
     let webviewProvider: MockWKWebViewProvider!
     let mockTelemetryProxy = MockEngineTelemetryProxy()
     nonisolated(unsafe) var callJavascriptMethodCalled = 0
-    
+
     init() async {
         self.webviewProvider = MockWKWebViewProvider()
         let defaultDependencies =  DefaultTestDependencies(mockTelemetryProxy: mockTelemetryProxy)
@@ -33,7 +33,7 @@ class MockWKEngineSession: WKEngineSession {
             readerModeDelegate: MockWKReaderModeDelegate()
         )!
     }
-    
+
     override func callJavascriptMethod(_ method: String, scope: String?) {
         callJavascriptMethodCalled += 1
     }

@@ -1253,20 +1253,20 @@ class TabManagerImplementation: NSObject,
     }
 
     // MARK: - SessionCreator
-    
+
     func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
         guard let parentTab = self[parent] else { return nil }
         return addPopupForParentTab(profile: profile, parentTab: parentTab, configuration: configuration).webView
     }
-    
+
     func currentActiveStore() -> (any WKJavaScriptAlertStore)? {
         return selectedTab
     }
-    
+
     func alertStore(for webView: WKWebView) -> (any WKJavaScriptAlertStore)? {
         return self[webView]
     }
-    
+
     func isSessionActive(for webView: WKWebView) -> Bool {
         guard let tab = self[webView] else { return false }
         return tab === selectedTab

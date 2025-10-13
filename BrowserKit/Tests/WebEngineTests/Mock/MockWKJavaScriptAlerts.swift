@@ -10,7 +10,7 @@ class MockWKJavaScriptPromptAlertController: UIViewController, WKJavaScriptPromp
     var alertInfo: (any WKJavaScriptAlertInfo)?
     weak var delegate: (any WKJavascriptPromptAlertControllerDelegate)?
     var setDismissalResultCalled = 0
-    
+
     func setDismissalResult(_ result: Any?) {
         setDismissalResultCalled += 1
     }
@@ -22,20 +22,20 @@ class MockWKJavaScriptAlertInfo: WKJavaScriptAlertInfo {
     var cancelCalled = 0
     var handleAlertDismissalCalled = 0
     let controller = MockWKJavaScriptPromptAlertController()
-    
+
     init(type: WKJavaScriptAlertType) {
         self.type = type
     }
-    
+
     func alertController() -> any WKJavaScriptPromptAlertController {
         alertControllerCalled += 1
         return controller
     }
-    
+
     func cancel() {
         cancelCalled += 1
     }
-    
+
     func handleAlertDismissal(_ result: Any?) {
         handleAlertDismissalCalled += 1
     }
@@ -46,7 +46,7 @@ class MockWKJavaScriptAlertFactory: WKJavaScriptAlertInfoFactory {
     var makeMessageAlertCalled = 0
     var makeConfirmationAlertCalled = 0
     var makeTextInputAlertCalled = 0
-    
+
     func makeMessageAlert(
         message: String,
         frame: WKFrameInfo,
@@ -55,7 +55,7 @@ class MockWKJavaScriptAlertFactory: WKJavaScriptAlertInfoFactory {
         makeMessageAlertCalled += 1
         return stubAlert
     }
-    
+
     func makeConfirmationAlert(
         message: String,
         frame: WKFrameInfo,
@@ -64,7 +64,7 @@ class MockWKJavaScriptAlertFactory: WKJavaScriptAlertInfoFactory {
         makeConfirmationAlertCalled += 1
         return stubAlert
     }
-    
+
     func makeTextInputAlert(
         message: String,
         frame: WKFrameInfo,
