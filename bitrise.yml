@@ -330,7 +330,7 @@ workflows:
         inputs:
         - only_testing: $BITRISE_TEST_SHARDS_PATH_FIREFOX/$BITRISE_IO_PARALLEL_INDEX
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
-        - xcodebuild_options: '"-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "3" "COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xcodebuild_options: '"-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2" "COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
   determine_apps_affected:
