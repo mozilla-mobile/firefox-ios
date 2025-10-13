@@ -23,7 +23,6 @@ struct NavigationBarMiddleButtonSelectionView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-
             GenericSelectableItemCellView(
                 title: NavigationBarMiddleButtonType.newTab.label,
                 isSelected: selectedMiddleButton == NavigationBarMiddleButtonType.newTab,
@@ -35,7 +34,7 @@ struct NavigationBarMiddleButtonSelectionView: View {
 
             Divider()
                 .padding(UX.sectionPadding)
-            
+
             GenericSelectableItemCellView(
                 title: NavigationBarMiddleButtonType.home.label,
                 isSelected: selectedMiddleButton == NavigationBarMiddleButtonType.home,
