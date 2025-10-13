@@ -102,6 +102,50 @@ final class UnleashTests: XCTestCase {
         XCTAssertTrue(Unleash.isLoaded)
         XCTAssertNotEqual(Unleash.model.id, firstId, "Id should change after reset")
     }
+
+    func testQueryParametersWithMockedUser() {
+        let originalUser = User.shared
+
+        var mockUser = User()
+        mockUser.versionOnInstall = "2.5.0"
+        mockUser.marketCode = Local.make(for: .init(identifier: "de-de"))
+        mockUser.searchCount = 150
+        User.shared = mockUser
+
+        let parameters = Unleash.queryParameters(appVersion: "3.0.0")
+        XCTAssertEqual(parameters["versionOnInstall"], "2.5.0")
+        XCTAssertEqual(parameters["market"], "de-de")
+        XCTAssertEqual(parameters["personalCounterSearches"], "150")
+        XCTAssertEqual(parameters["appVersion"], "3.0.0")
+
+        User.shared = originalUser
+    }
+
+    func testQueryParametersWithMockedLocale() {
+        let originalLocaleSource = Unleash.localeSource
+
+        let mockLocale = MockLocale("fr", countryName: "France")
+        Unleash.localeSource = mockLocale
+
+        let parameters = Unleash.queryParameters(appVersion: "2.0.0")
+        XCTAssertEqual(parameters["deviceRegion"], "fr")
+        XCTAssertEqual(parameters["country"], "France")
+
+        Unleash.localeSource = originalLocaleSource
+    }
+
+    func testQueryParametersWithMockedLocaleNilCountry() {
+        let originalLocaleSource = Unleash.localeSource
+
+        let mockLocale = MockLocale("xx", countryName: nil)
+        Unleash.localeSource = mockLocale
+
+        let parameters = Unleash.queryParameters(appVersion: "1.5.0")
+        XCTAssertEqual(parameters["deviceRegion"], "xx")
+        XCTAssertEqual(parameters["country"], "Unknown")
+
+        Unleash.localeSource = originalLocaleSource
+    }
 }
 
 extension UnleashTests {

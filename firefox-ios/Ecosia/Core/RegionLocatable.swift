@@ -6,4 +6,5 @@
 /// see: `DeviceRegionChangeProvider.swift`
 public protocol RegionLocatable {
     var regionIdentifierLowercasedWithFallbackValue: String { get }
+    var englishLocalizedCountryName: String? { get }
 }

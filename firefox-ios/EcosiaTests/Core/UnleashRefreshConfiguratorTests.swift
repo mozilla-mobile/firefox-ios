@@ -88,14 +88,3 @@ final class UnleashRefreshConfiguratorTests: XCTestCase {
         XCTAssertTrue(Unleash.shouldRefresh, "Unleash should refresh after a device region change.")
     }
 }
-
-extension UnleashRefreshConfiguratorTests {
-
-    struct MockLocale: RegionLocatable {
-        var regionIdentifierLowercasedWithFallbackValue: String
-
-        init(_ identifier: String) {
-            self.regionIdentifierLowercasedWithFallbackValue = identifier
-        }
-    }
-}

@@ -21,6 +21,11 @@ extension Locale {
     public var regionIdentifierLowercasedWithFallbackValue: String {
         regionIdentifier?.lowercased() ?? "us"
     }
+
+    public var englishLocalizedCountryName: String? {
+        guard let regionIdentifier = regionIdentifier else { return nil }
+        return Locale(identifier: "en_US").localizedString(forRegionCode: regionIdentifier)
+    }
 }
 
 extension Locale: RegionLocatable {}

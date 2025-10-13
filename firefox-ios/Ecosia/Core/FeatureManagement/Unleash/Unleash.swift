@@ -29,8 +29,15 @@ public enum Unleash: UnleashProtocol {
         return queue.sync { _isLoaded }
     }
 
+    /// Locale source for dependency injection (for testing purposes)
+    static var localeSource: RegionLocatable = Locale.current
+
     static var currentDeviceRegion: String {
-        Locale.current.regionIdentifierLowercasedWithFallbackValue
+        localeSource.regionIdentifierLowercasedWithFallbackValue
+    }
+
+    static var englishCountryName: String? {
+        localeSource.englishLocalizedCountryName
     }
 
     public static func queryParameters(appVersion: String) -> Context {
@@ -41,6 +48,8 @@ public enum Unleash: UnleashProtocol {
          "environment": Environment.current.urlProvider.unleash,
          "market": User.shared.marketCode.rawValue,
          "deviceRegion": currentDeviceRegion,
+         // Mapped from device region to enabled Web flags with geo-ip based context field
+         "country": englishCountryName ?? "Unknown",
          "personalCounterSearches": "\(User.shared.searchCount)"]
     }
 
