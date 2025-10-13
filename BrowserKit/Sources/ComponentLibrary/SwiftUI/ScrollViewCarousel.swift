@@ -5,17 +5,13 @@
 import SwiftUI
 
 private struct ScrollViewCarouselUX {
-    static let itemWidthRatio: CGFloat = 0.85
-    static let interItemSpacing: CGFloat = 12
     static let swipeAnimation: Animation = .interactiveSpring(response: 0.3, dampingFraction: 0.7)
-    static let stackSpacing: CGFloat = 0
-    static let centerDivisionFactor: CGFloat = 2
-    static let selectedAccessibilityPriority = 1.0
-    static let unselectedAccessibilityPriority = 0.0
+    static let stackSpacing: CGFloat = 10
     static let reduceMotionAnimationDuration = 0.3
-    static let notificationDelay = 0.3
-    static let incrementValue = 1
-    static let decrementValue = 1
+    static let contentMarginHorizontal: CGFloat = 24
+    static let containerFrameSpacing: CGFloat = 0
+    static let containerFrameCount = 1
+    static let containerFrameSpan = 1
 }
 
 /// A horizontal scrolling carousel that displays items with smooth scrolling and swipe gestures.
@@ -41,54 +37,46 @@ public struct ScrollViewCarousel<Item, Content: View>: View {
     }
 
     public var body: some View {
-        GeometryReader { geometry in
-            scrollViewContent(for: geometry.size)
-                .scrollPosition(id: $scrollPosition)
-                .scrollTargetBehavior(.viewAligned)
-                .scrollClipDisabled()
-                .onChange(of: scrollPosition, handleScrollPositionChange)
-                .onChange(of: selection, handleSelectionChange)
-                .accessibilityElement(children: .contain)
-                .accessibilityAdjustableAction(handleAccessibilityAdjustment)
-                .onAppear {
-                    scrollPosition = selection
-                }
-        }
-        .clipped()
-    }
-
-    private func itemWidth(for size: CGSize) -> CGFloat {
-        size.width * ScrollViewCarouselUX.itemWidthRatio
-    }
-
-    private func scrollViewContent(for size: CGSize) -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: ScrollViewCarouselUX.stackSpacing) {
-                ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                    content(item)
-                        .frame(width: itemWidth(for: size))
-                        .padding(.trailing, index == items.count - 1 ? 0 : ScrollViewCarouselUX.interItemSpacing)
-                        .accessibilityElement(children: .contain)
-                        .accessibilitySortPriority(
-                            index == selection
-                            ? ScrollViewCarouselUX.selectedAccessibilityPriority
-                            : ScrollViewCarouselUX.unselectedAccessibilityPriority
-                        )
-                        .accessibilityAddTraits(index == selection ? [.isSelected] : [])
-                        .accessibilityHidden(index != selection)
-                        .accessibilityScrollAction { edge in
-                            switch edge {
-                            case .leading: handleDecrementAction()
-                            case .trailing: handleIncrementAction()
-                            default: break
-                            }
-                        }
-                        .id(index)
-                }
-            }
-            .padding(.horizontal, (size.width - itemWidth(for: size)) / ScrollViewCarouselUX.centerDivisionFactor)
-            .scrollTargetLayout()
+            scrollViewContent()
         }
+        .scrollPosition(id: $scrollPosition)
+        .scrollTargetBehavior(.viewAligned)
+        .contentMargins(
+            .horizontal,
+            ScrollViewCarouselUX.contentMarginHorizontal,
+            for: .scrollContent
+        )
+        .scrollIndicators(.never)
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.allowsDirectInteraction)
+        .accessibilityAdjustableAction { direction in
+            handleAccessibilityAdjustment(direction: direction)
+        }
+        .onChange(of: scrollPosition, handleScrollPositionChange)
+        .onChange(of: selection, handleSelectionChange)
+        .onAppear {
+            scrollPosition = selection
+        }
+    }
+
+    private func scrollViewContent() -> some View {
+        LazyHStack(spacing: ScrollViewCarouselUX.stackSpacing) {
+            ForEach(Array(items.enumerated()), id: \.offset) { index, item in
+                content(item)
+                    .containerRelativeFrame(
+                        .horizontal,
+                        count: ScrollViewCarouselUX.containerFrameCount,
+                        span: ScrollViewCarouselUX.containerFrameSpan,
+                        spacing: ScrollViewCarouselUX.containerFrameSpacing
+                    )
+                    .accessibilityElement(children: .contain)
+                    .accessibilityAddTraits(selection == index ? [.isSelected] : [])
+                    .accessibilityValue("\(index + 1)")
+                    .id(index)
+            }
+        }
+        .scrollTargetLayout()
     }
 
     private func handleScrollPositionChange(_ oldValue: Int?, _ newPosition: Int?) {
@@ -111,32 +99,27 @@ public struct ScrollViewCarousel<Item, Content: View>: View {
             scrollPosition = newValue
         }
         provideFeedback()
-        postScreenChangedNotification()
     }
 
     private func handleAccessibilityAdjustment(direction: AccessibilityAdjustmentDirection) {
+        let currentIndex = selection
+        var newIndex: Int?
+
         switch direction {
-        case .increment: handleIncrementAction()
-        case .decrement: handleDecrementAction()
-        @unknown default: break
+        case .increment:
+            if currentIndex < items.count - 1 {
+                newIndex = currentIndex + 1
+            }
+        case .decrement:
+            if currentIndex > 0 {
+                newIndex = currentIndex - 1
+            }
+        @unknown default:
+            break
         }
-    }
 
-    private func handleIncrementAction() {
-        if selection < items.count - ScrollViewCarouselUX.incrementValue {
-            selection += ScrollViewCarouselUX.incrementValue
-        }
-    }
-
-    private func handleDecrementAction() {
-        if selection > Int(ScrollViewCarouselUX.unselectedAccessibilityPriority) {
-            selection -= ScrollViewCarouselUX.decrementValue
-        }
-    }
-
-    private func postScreenChangedNotification() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + ScrollViewCarouselUX.notificationDelay) {
-            UIAccessibility.post(notification: .screenChanged, argument: nil)
+        if let newIndex = newIndex {
+            selection = newIndex
         }
     }
 
@@ -144,5 +127,7 @@ public struct ScrollViewCarousel<Item, Content: View>: View {
         if !reduceMotion {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         }
+        // Announce page change for accessibility
+        UIAccessibility.post(notification: .pageScrolled, argument: nil)
     }
 }
