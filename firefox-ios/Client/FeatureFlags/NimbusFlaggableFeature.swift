@@ -63,6 +63,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case tosFeature
     case touFeature
     case trackingProtectionRefactor
+    case translation
     case trendingSearches
     case unifiedAds
     case unifiedSearch
@@ -136,6 +137,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .startAtHome:
             return FlagKeys.StartAtHome
+        case .translation:
+            return FlagKeys.Translation
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
                 .addressAutofillEdit,
