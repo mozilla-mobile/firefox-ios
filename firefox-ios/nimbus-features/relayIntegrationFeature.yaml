@@ -2,7 +2,7 @@
 features:
   relay-integration-feature:
     description: >
-      This feature is for managing the roll out of Relay integration in iOS
+      This feature is for managing the roll out of Relay email masking integration in iOS
     variables:
       enabled:
         description: >
