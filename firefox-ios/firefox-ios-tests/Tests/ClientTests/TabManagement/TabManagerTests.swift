@@ -108,17 +108,35 @@ class TabManagerTests: XCTestCase {
         subject.selectTab(tab)
         subject.removeAllTabs(isPrivateMode: false)
 
+        // Save tab session is actually called 3 times for one remove all call
+        // 1. Save tab session for currently selected tab before delete to preserve scroll position
+        // 1. AddTab for the new created homepage tab calls commitChanges
+        // 2. selectTab persists changes for currently selected tab before moving to new Tab
         XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 3)
     }
 
     @MainActor
-    func testRemoveAllTabsForNotPrivateMode() {
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() {
+        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = false
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
         subject.removeAllTabs(isPrivateMode: false)
-        XCTAssertEqual(subject.tabs.count, 4)
+        // 5, private mode tabs (4) plus one new normal tab (1)
+        XCTAssertEqual(subject.tabs.count, 5)
+    }
+
+    @MainActor
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() {
+        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
+        var tabs = generateTabs(count: 5)
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
+        let subject = createSubject(tabs: tabs)
+        XCTAssertEqual(subject.tabs.count, 9)
+        subject.removeAllTabs(isPrivateMode: false)
+        // One new normal tab (1)
+        XCTAssertEqual(subject.tabs.count, 1)
     }
 
     @MainActor
