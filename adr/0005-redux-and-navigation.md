@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-Redux needs to integrate navigation inside it's state so we can properly navigate with coordinators. 
+Redux needs to integrate navigation inside it's state so we can properly navigate with coordinators. This approach reduces redundancy by centralizing navigation handling in `BrowserViewControllerState`, ensuring that coordinators manage navigation consistently even when destinations overlap across different states.
 
 ## Decision
 
@@ -28,6 +28,7 @@ These changes formalize a pattern: navigation is expressed as Redux state or act
 
 ### Negative
 - Partial legacy overlap: Some parts may still use Coordinators only, leading to hybrid models until full migration.
+- This `BrowserViewControllerState` could get bloated.
 
 ## References
 
