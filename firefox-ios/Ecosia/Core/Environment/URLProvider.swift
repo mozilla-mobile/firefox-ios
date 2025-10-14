@@ -179,6 +179,6 @@ public enum URLProvider {
     }
 
     public var storeWriteReviewPage: URL {
-        URL(string: "https://itunes.apple.com/app/id1474845552/action=write-review")!
+        URL(string: "https://itunes.apple.com/app/id670881887?action=write-review")!
     }
 }
