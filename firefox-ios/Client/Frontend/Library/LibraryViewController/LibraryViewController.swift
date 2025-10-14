@@ -35,7 +35,10 @@ class LibraryViewController: UIViewController, Themeable {
     private var controllerContainerView: UIView = .build { view in }
 
     // UI Elements
-    private var librarySegmentControl: UISegmentedControl
+    private lazy var librarySegmentControl: UISegmentedControl = .build { librarySegmentControl in
+        librarySegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
+        librarySegmentControl.selectedSegmentIndex = 1
+    }
 
     private lazy var segmentControlToolbar: UIToolbar = .build { [weak self] toolbar in
         guard let self = self else { return }
@@ -75,7 +78,6 @@ class LibraryViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.logger = logger
         self.windowUUID = tabManager.windowUUID
-        self.librarySegmentControl = UISegmentedControl(items: viewModel.segmentedControlItems)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -86,6 +88,8 @@ class LibraryViewController: UIViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewSetup()
+
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
@@ -108,11 +112,17 @@ class LibraryViewController: UIViewController, Themeable {
         newSegmentControl.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.segmentedControl
         newSegmentControl.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         newSegmentControl.translatesAutoresizingMaskIntoConstraints = false
+        librarySegmentControl = newSegmentControl
 
         let newItem = UIBarButtonItem(customView: newSegmentControl)
+
+        librarySegmentControl.selectedSegmentIndex = viewModel.selectedPanel?.rawValue ?? 0
         segmentControlToolbar.setItems([newItem], animated: false)
-        librarySegmentControl = newSegmentControl
-        viewSetup()
+
+        NSLayoutConstraint.activate([
+            librarySegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
+            librarySegmentControl.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height),
+        ])
     }
 
     override func viewDidLayoutSubviews() {
@@ -122,8 +132,6 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func viewSetup() {
-        controllerContainerView.removeFromSuperview()
-        segmentControlToolbar.removeFromSuperview()
         navigationItem.rightBarButtonItem = topRightButton
         view.addSubviews(controllerContainerView, segmentControlToolbar)
 
@@ -367,6 +375,8 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func updateSegmentControl() {
+        guard librarySegmentControl.numberOfSegments > 0 else { return }
+
         let panelState = getCurrentPanelState()
 
         switch panelState {
