@@ -39,6 +39,10 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go to Private browsing to open a website and check if it appears on History
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
 
+        if userState.isPrivate {
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            navigator.nowAt(BrowserTab)
+        }
         navigator.openURL(url2)
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "localhost")
@@ -75,6 +79,10 @@ class PrivateBrowsingTest: BaseTestCase {
         // Open one tab in private browsing and check the total number of tabs
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
 
+        if userState.isPrivate {
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            navigator.nowAt(BrowserTab)
+        }
         navigator.goto(URLBarOpen)
         waitUntilPageLoad()
         navigator.openURL(url3)
@@ -105,24 +113,21 @@ class PrivateBrowsingTest: BaseTestCase {
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
 
         //  Open a Private tab
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        if userState.isPrivate {
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            navigator.nowAt(BrowserTab)
+        }
         navigator.openURL(url2)
         waitUntilPageLoad()
         waitForTabsButton()
 
         // Go back to regular browser
-        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
-        app.cells.staticTexts["Homepage"].waitAndTap()
-        navigator.nowAt(NewTabScreen)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
 
         // Go back to private browsing and check that the tab has been closed
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        waitForElementsToExist(
-            [
-                app.otherElements[tabsTray],
-                app.staticTexts["Private Browsing"]
-            ]
-        )
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        mozWaitForElementToExist(app.otherElements[tabsTray])
         checkOpenTabsBeforeClosingPrivateMode()
     }
 
@@ -133,11 +138,13 @@ class PrivateBrowsingTest: BaseTestCase {
      */
     // https://mozilla.testrail.io/index.php?/cases/view/2307011
     func testClearIndexedDB() {
-        navigator.nowAt(NewTabScreen)
-
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
 
         func checkIndexedDBIsCreated() {
+            if userState.isPrivate {
+                app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+                navigator.nowAt(BrowserTab)
+            }
             navigator.openURL(urlIndexedDB)
             waitUntilPageLoad()
             waitForElementsToExist(
@@ -148,14 +155,14 @@ class PrivateBrowsingTest: BaseTestCase {
             )
         }
 
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         checkIndexedDBIsCreated()
 
-        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
         // checkIndexedDBIsCreated()
 
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
         // checkIndexedDBIsCreated()
     }
@@ -164,7 +171,7 @@ class PrivateBrowsingTest: BaseTestCase {
     func testPrivateBrowserPanelView() {
         navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
 
         let numPrivTabsFirstTime = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(
@@ -175,14 +182,18 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // If a private tab is open Private Browsing screen is not shown anymore
 
+        if userState.isPrivate {
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+            navigator.nowAt(BrowserTab)
+        }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         // Wait until the page loads and go to regular browser
         waitUntilPageLoad()
         waitForTabsButton()
-        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
 
         // Go back to private browsing
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
 
         navigator.nowAt(TabTray)
         let numPrivTabsOpen = app.otherElements[tabsTray].cells.count
@@ -192,9 +203,9 @@ class PrivateBrowsingTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307012
     // Smoketest
     func testLongPressLinkOptionsPrivateMode() {
-        navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-example.html"))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
@@ -212,10 +223,12 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2497357
-    func testAllPrivateTabsRestore() {
+    func testAllPrivateTabsRestore() throws {
         // Several tabs opened in private tabs tray. Tap on the trashcan
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest, "Undo toast no longer available with the new tab tray")
+        navigator.nowAt(HomePanelsScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         for _ in 1...4 {
             navigator.createNewTab()
             if app.keyboards.element.isVisible() && !iPad() {
@@ -295,7 +308,7 @@ fileprivate extension BaseTestCase {
         let numPrivTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(
             numPrivTabs,
-            0,
+            1,
             "The private tab should have been closed"
         )
     }
@@ -312,7 +325,7 @@ fileprivate extension BaseTestCase {
     }
 }
 
-class PrivateBrowsingTestIphone: FeatureFlaggedTestBase {
+class PrivateBrowsingTestIphone: BaseTestCase {
     override func setUp() {
         specificForPlatform = .phone
         if !iPad() {
@@ -328,6 +341,8 @@ class PrivateBrowsingTestIphone: FeatureFlaggedTestBase {
 
         // Go to Private mode
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(urlExample)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links.firstMatch)

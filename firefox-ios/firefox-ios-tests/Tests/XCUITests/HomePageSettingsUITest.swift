@@ -256,7 +256,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest,
                       "Jump back in removed from the new home panel")
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)

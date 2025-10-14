@@ -9,7 +9,6 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
-        app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -26,7 +25,6 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
-        app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -53,7 +51,6 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
     func testChangeNewTabSettingsShowFirefoxHome() {
-        app.launch()
         // Set to history page first since FF Home is default
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -82,7 +79,6 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307029
     // Smoketest
     func testChangeNewTabSettingsShowCustomURL() {
-        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         mozWaitForElementToExist(app.navigationBars["New Tab"])
@@ -109,7 +105,6 @@ class NewTabSettingsTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307030
     func testChangeNewTabSettingsLabel() {
-        app.launch()
         navigator.nowAt(NewTabScreen)
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectNewTabAsCustomURL)
@@ -156,7 +151,6 @@ class NewTabSettingsTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
-        app.launch()
         // Set a custom URL
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)

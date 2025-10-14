@@ -23,7 +23,6 @@ let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
-        app.launch()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
         navigator.nowAt(HomePanelsScreen)
@@ -79,7 +78,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441489
     func testTapSignInShowsFxAFromTour() {
-        app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
@@ -93,7 +91,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441493
     func testTapSigninShowsFxAFromSettings() {
-        app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -162,7 +159,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441495
     func testScrollsToTopWithMultipleTabs() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
@@ -182,7 +178,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306836
     // Smoketest
     func testLongPressLinkOptions() {
-        app.launch()
         openContextMenuForArticleLink()
         waitForElementsToExist(
             [
@@ -198,7 +193,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441496
     func testCopyLink() {
-        app.launch()
         longPressLinkOptions(optionSelected: "Copy Link")
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2)
 
@@ -307,7 +301,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441498
     func testDownloadLink() {
-        app.launch()
         longPressLinkOptions(optionSelected: "Download Link")
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables["Context Menu"].buttons[StandardImageIdentifiers.Large.download].waitAndTap()
@@ -328,7 +321,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441499
     func testShareLink() {
-        app.launch()
         longPressLinkOptions(optionSelected: "Share Link")
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.cells["Copy"])
@@ -427,7 +419,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
     func testSSL() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL("https://expired.badssl.com/")
@@ -446,7 +437,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307022
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testWriteToChildPopupTab() {
-        app.launch()
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowsingSettings)
@@ -466,7 +456,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307020
     // Smoketest
     func testVerifyBrowserTabMenu() {
-        app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
@@ -484,7 +473,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
@@ -541,7 +529,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441774
     func testBookmarkLink() {
-        app.launch()
         // Long-tap on an article link. Choose "Bookmark Link".
         openContextMenuForArticleLink()
         app.buttons["Bookmark Link"].waitAndTap()
@@ -557,7 +544,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2695828
     func testBackArrowNavigation() {
-        app.launch()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         closeFromAppSwitcherAndRelaunch()

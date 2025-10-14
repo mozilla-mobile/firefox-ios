@@ -521,7 +521,6 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
         app.launch()
         navigator.goto(SearchSettings)
@@ -537,7 +536,7 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -565,7 +564,6 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
         app.launch()
         // Disable general search suggests

@@ -8,6 +8,17 @@ class FindInPageTests: BaseTestCase {
     var browserScreen: BrowserScreen!
     var findInPageScreen: FindInPageScreen!
 
+    private func navigateToOpenFindInPage(openSite: String) {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(openSite)
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+
+        navigator.goto(FindInPage)
+    }
+
     private func openFindInPageFromMenu(openSite: String) {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)

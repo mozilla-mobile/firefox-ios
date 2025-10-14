@@ -193,8 +193,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951438
-    func testBrowsingSettingsOptionSubtitles_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+    func testBrowsingSettingsOptionSubtitles() {
         app.launch()
         validateBrowsingUI()
         // Repeat steps for dark mode
@@ -369,12 +368,11 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         // Navigate to the Browsing settings screen
         navigator.goto(BrowsingSettings)
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Settings.Browsing.links])
 
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         waitForElementsToExist(
             [
-                app.switches[settingsQuery.Browsing.inactiveTabsSwitch],
                 table.cells[settingsQuery.OpenWithMail.title],
                 app.switches[settingsQuery.OfferToOpen.title],
                 table.cells[settingsQuery.Browsing.autoPlay],
@@ -383,13 +381,12 @@ class SettingsTests: FeatureFlaggedTestBase {
                 app.switches[settingsQuery.BlockExternal.title]
             ]
         )
-        XCTAssertEqual(app.switches[settingsQuery.Browsing.inactiveTabsSwitch].value as? String,
+        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
                        "1",
-                       "Inactive tabs - toggle in not enabled by default")
+                       "Show links previews - toggle is not enabled by default")
         XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String,
                        "0",
                        "Offer to Open Copied Links - toggle is not disabled by default")
-        app.swipeUp()
         XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String,
                        "1",
                        "Block Pop-up  Windows - toggle is not enabled by default")

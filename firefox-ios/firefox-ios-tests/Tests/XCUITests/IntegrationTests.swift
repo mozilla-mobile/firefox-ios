@@ -93,7 +93,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistory() {
-        app.launch()
         // History is generated using the DB so go directly to Sign in
         // Sign into Mozilla Account
         navigator.goto(BrowserTabMenu)
@@ -104,7 +103,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncPageUsingChinaFxA() {
-        app.launch()
         // History is generated using the DB so go directly to Sign in
         // Sign into Mozilla Account
         navigator.goto(BrowserTabMenu)
@@ -118,7 +116,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncBookmark() {
-        app.launch()
         waitForTabsButton()
         navigator.nowAt(HomePanelsScreen)
         // Bookmark is added by the DB
@@ -135,7 +132,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncBookmarkDesktop() {
-        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -146,7 +142,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncTabs() {
-        app.launch()
         signInFxAccounts()
 
         // We only sync tabs if the user is signed in
@@ -174,7 +169,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncLogins() {
-        app.launch()
         waitForTabsButton()
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL("gmail.com")
@@ -197,7 +191,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncHistoryDesktop() {
-        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -210,7 +203,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncPasswordDesktop() {
-        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -252,7 +244,6 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxADisconnectConnect() {
-        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 

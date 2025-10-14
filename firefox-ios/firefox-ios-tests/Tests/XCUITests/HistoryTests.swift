@@ -31,8 +31,7 @@ class HistoryTests: BaseTestCase {
     let testWithDB = [
         "testOpenHistoryFromBrowserContextMenuOptions",
         "testClearHistoryFromSettings",
-        "testClearRecentHistory_tabTrayExperimentOn",
-        "testClearRecentHistory_tabTrayExperimentOff"
+        "testClearRecentHistory"
     ]
 
     // This DDBB contains those 4 websites listed in the name
@@ -57,7 +56,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307300
     func testEmptyHistoryListFirstTime() {
-        app.launch()
         navigator.nowAt(NewTabScreen)
 
         // Go to History List from Top Sites and check it is empty
@@ -87,7 +85,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307487
     func testClearHistoryFromSettings() throws {
-        app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             navigator.nowAt(NewTabScreen)
             // Browse to have an item in history list
@@ -147,7 +144,6 @@ class HistoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307357
     func testRecentlyClosedWebsiteOpen() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         // Open "Book of Mozilla"
@@ -200,6 +196,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         openBookOfMozilla()
         closeFirstTabByX(isTabTrayOn: true)
 
@@ -399,6 +396,8 @@ class HistoryTests: BaseTestCase {
         // Open the two tabs in private mode. It is necessary to open two sites.
         // When one tab is closed private mode, the private mode still has something opened.
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: bookOfMozilla["file"]!))
         waitUntilPageLoad()
         navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))

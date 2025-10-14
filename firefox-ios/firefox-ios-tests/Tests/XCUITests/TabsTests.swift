@@ -163,6 +163,8 @@ class TabsTests: BaseTestCase {
         navigator.back()
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
@@ -175,8 +177,8 @@ class TabsTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         }
 
+        navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
-        navigator.back()
         if iPad() {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         } else {
@@ -236,7 +238,6 @@ class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306884
     // Smoketest
     func testOpenNewTabLandscape() {
-        app.launch()
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -551,7 +552,7 @@ fileprivate extension BaseTestCase {
     }
 }
 
-class TabsTestsIphone: FeatureFlaggedTestBase {
+class TabsTestsIphone: BaseTestCase {
     override func setUp() {
         specificForPlatform = .phone
         if !iPad() {
@@ -590,12 +591,11 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
     // Smoketest
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
-        app.launch()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+        navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
-        navigator.back()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
@@ -603,13 +603,12 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2355537
     // Smoketest
     func testAddPrivateTabByLongPressTabsButton() {
-        app.launch()
         if skipPlatform { return }
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
+        navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
-        navigator.back()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         let privateIdentifier = "\(AccessibilityIdentifiers.TabTray.selectorCell)0"
         mozWaitForElementToExist(app.buttons[privateIdentifier])
@@ -622,7 +621,6 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
     // Smoketest
     func testSwitchBetweenTabsToastButton() {
         if skipPlatform { return }
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(urlExample)
@@ -647,7 +645,6 @@ class TabsTestsIphone: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306860
     // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
-        app.launch()
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)

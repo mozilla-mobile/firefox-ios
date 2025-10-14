@@ -109,7 +109,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306906
     func testAccessBookmarksFromContextMenu() {
-        app.launch()
         // Add a bookmark
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -127,7 +126,6 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306907
     // Smoketest
     func testBookmarksAwesomeBar() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -170,7 +168,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306913
     func testAddBookmark() throws {
-        app.launch()
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
 
@@ -182,7 +179,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306914
     func testAddNewFolder() {
-        app.launch()
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
         mozWaitForElementToExist(app.navigationBars["Bookmarks"])
@@ -214,7 +210,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306915
     func testAddNewMarker() throws {
-        app.launch()
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
 
@@ -236,7 +231,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306916
     func testDeleteBookmarkSwiping() throws {
-        app.launch()
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
 
@@ -250,7 +244,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306917
     func testDeleteBookmarkContextMenu() throws {
-        app.launch()
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
 
@@ -325,7 +318,6 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306910
     // Smoketest
     func testDesktopFoldersArePresent() throws {
-        app.launch()
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest, "Desktop folder is no longer available")
 
@@ -345,7 +337,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306911
     func testRecentlyBookmarked() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
@@ -367,7 +358,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306866
     func testEditBookmark() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
@@ -389,7 +379,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445808
     func testLongTapRecentlySavedLink() throws {
-        app.launch()
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest, "Bookmark panel from homepage no longer available")
         navigator.nowAt(HomePanelsScreen)
@@ -405,7 +394,6 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307054
     func testBookmark() {
-        app.launch()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(url_3)
@@ -420,7 +408,6 @@ class BookmarksTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2784448
     // Smoketest
     func testBookmarksToggleIsAvailable() throws {
-        app.launch()
         let shouldSkipTest = true
         try XCTSkipIf(shouldSkipTest, "Bookmark toggle is no longer available")
         navigator.nowAt(HomePanelsScreen)

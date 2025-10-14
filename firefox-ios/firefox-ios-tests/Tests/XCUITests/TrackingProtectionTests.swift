@@ -140,7 +140,6 @@ class TrackingProtectionTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
     func testProtectionLevelMoreInfoMenu() {
-        app.launch()
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
@@ -169,7 +168,6 @@ class TrackingProtectionTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307063
     func testStrictTrackingProtection() {
-        app.launch()
         navigator.goto(TrackingProtectionSettings)
         // Enable Strict Protection Level
         enableStrictMode()

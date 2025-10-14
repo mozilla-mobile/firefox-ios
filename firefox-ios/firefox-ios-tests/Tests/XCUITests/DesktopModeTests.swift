@@ -105,7 +105,6 @@ class DesktopModeTestsIphone: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306853
     func testClearPrivateData() {
-        app.launch()
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -136,7 +135,6 @@ class DesktopModeTestsIphone: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306855
     func testSameHostInMultipleTabs() {
-        app.launch()
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -177,7 +175,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306854
     // Smoketest
     func testChangeModeInSameTab() {
-        app.launch()
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -207,7 +204,6 @@ class DesktopModeTestsIphone: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306854
     // Smoketest TAE
     func testChangeModeInSameTab_TAE() {
-        app.launch()
         if skipPlatform { return }
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)

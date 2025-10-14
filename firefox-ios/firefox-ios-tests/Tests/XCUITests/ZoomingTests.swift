@@ -4,7 +4,7 @@
 
 import XCTest
 
-final class ZoomingTests: FeatureFlaggedTestBase {
+final class ZoomingTests: BaseTestCase {
     private var zoomBar: ZoomBarScreen!
 
     override func setUp() {
@@ -23,7 +23,6 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306947
     // Smoketest
     func testZoomingActions() {
-        app.launch()
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
