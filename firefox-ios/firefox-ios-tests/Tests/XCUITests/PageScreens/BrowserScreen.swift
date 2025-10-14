@@ -26,7 +26,7 @@ final class BrowserScreen {
     }
 
     func tapBackButton() {
-        let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
+        let backButton = sel.BACK_BUTTON.element(in: app)
         backButton.waitAndTap()
     }
 
@@ -73,5 +73,10 @@ final class BrowserScreen {
             // iOS 15 displays a toast that covers the reload button
             sleep(2)
         }
+    }
+
+    func tapDownloadsToastButton() {
+        let downloadsButton = sel.DOWNLOADS_TOAST_BUTTON.element(in: app)
+        downloadsButton.waitAndTap()
     }
 }

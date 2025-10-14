@@ -145,6 +145,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2344430
     func testClearURLTextUsingBackspace() {
         app.launch()
+        homepageSearchBar.tapIfExists()
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()

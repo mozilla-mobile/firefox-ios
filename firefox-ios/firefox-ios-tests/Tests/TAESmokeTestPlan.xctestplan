@@ -144,7 +144,6 @@
         "DomainAutocompleteTests\/test5NoMatches()",
         "DomainAutocompleteTests\/test6DeleteEntireString()",
         "DomainAutocompleteTests\/testMixedCaseAutocompletion()",
-        "DownloadsTests",
         "DownloadsTests\/testDeleteDownloadedFile()",
         "DownloadsTests\/testDownloadBLOBFile()",
         "DownloadsTests\/testDownloadFile()",
