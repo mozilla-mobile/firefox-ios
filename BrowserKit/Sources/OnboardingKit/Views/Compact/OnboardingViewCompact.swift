@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-fileprivate struct LocalUX {
+private struct LocalUX {
     static let verticalPadding: CGFloat = 32.0
     static let horizontalPadding: CGFloat = 24.0
 }
@@ -16,7 +16,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     @State private var skipTextColor: Color = .clear
-    
+
     init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
@@ -45,13 +45,13 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     .accessibilitySortPriority(2)
                     .accessibilityLabel(viewModel.skipText)
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                    
+
                     tabView
                         .accessibilitySortPriority(1)
                         .accessibilityElement(children: .contain)
-                    
+
                     Spacer()
-                    
+
                     CustomPageControl(
                         currentPage: $viewModel.pageCount,
                         numberOfPages: viewModel.onboardingCards.count,
@@ -60,7 +60,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                         style: .compact
                     )
                     .padding(.bottom, geo.safeAreaInsets.bottom)
-                    
                 }
                 .ignoresSafeArea(.all, edges: .bottom)
             }
@@ -75,7 +74,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             }
         }
     }
-    
+
     private var tabView: some View {
         TabView(selection: $viewModel.pageCount) {
             ForEach(Array(viewModel.onboardingCards.enumerated()), id: \.element.name) { index, card in

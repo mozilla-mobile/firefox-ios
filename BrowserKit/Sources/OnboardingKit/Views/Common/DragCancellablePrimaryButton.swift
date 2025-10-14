@@ -39,7 +39,7 @@ extension View {
             self.buttonStyle(.plain).background(tint)
         }
     }
-    
+
     @ViewBuilder
     func backgroundClipShape() -> some View {
         if #available(iOS 26.0, *) {

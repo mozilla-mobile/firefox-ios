@@ -327,7 +327,7 @@ struct FluidFourStopGradient: View {
                         CGPoint(x: 0.80, y: 0.9),
                         CGPoint(x: 1.1, y: 0.2),
                         CGPoint(x: 0.0, y: 1.0)]
-    
+
     struct CircleProp {
         let color: Color
         let speed: CGFloat
