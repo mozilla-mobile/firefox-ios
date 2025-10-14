@@ -312,7 +312,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkRelayIntegration(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.relayIntegration.value()
+        let config = nimbus.features.relayIntegrationFeature.value()
         return config.enabled
     }
 
