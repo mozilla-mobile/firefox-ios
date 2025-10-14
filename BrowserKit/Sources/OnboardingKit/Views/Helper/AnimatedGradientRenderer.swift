@@ -270,65 +270,33 @@ struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
 
 struct AnimatedGradientMetalView: View {
     @State private var gradientColors: [Color] = []
-    @StateObject private var rendererStore: RendererStore
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
     init(
-        metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice(),
         windowUUID: WindowUUID,
         themeManager: ThemeManager
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        // Set speed to 0 if reduce motion is enabled, otherwise use normal speed
-        let speed: Float = UIAccessibility.isReduceMotionEnabled
-        ? AnimatedGradientUX.reducedMotionSpeed
-        : AnimatedGradientUX.normalAnimationSpeed
-        _rendererStore = StateObject(wrappedValue: RendererStore(device: metalDevice, speed: speed))
+        // TODO: reduced motion
     }
 
     var body: some View {
-        if let delegate = rendererStore.renderer {
-            AnimatedGradientMetalViewRepresentable(delegate: delegate)
-                .onAppear {
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                    updateAnimationSpeedForReduceMotion()
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-                    guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                }
-                .onReceive(
-                    NotificationCenter.default.publisher(
-                        for: UIAccessibility.reduceMotionStatusDidChangeNotification
-                    )
-                ) { _ in
-                    updateAnimationSpeedForReduceMotion()
-                }
-        } else {
-            LinearGradient(
-                gradient: Gradient(
-                    colors: gradientColors
-                ),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        Group {
+            if !gradientColors.isEmpty {
+                FluidFourStopGradient(colors: gradientColors)
+            } else {
+                Color.clear
             }
         }
-    }
-
-    private func updateAnimationSpeedForReduceMotion() {
-        let speed: Float = UIAccessibility.isReduceMotionEnabled
-        ? AnimatedGradientUX.reducedMotionSpeed
-        : AnimatedGradientUX.normalAnimationSpeed
-        rendererStore.renderer?.animationSpeedMultiplier = speed
+        .onAppear {
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
     }
 
     private func applyTheme(theme: Theme) {
@@ -339,15 +307,6 @@ struct AnimatedGradientMetalView: View {
             Color(color.gradientOnboardingStop3),
             Color(color.gradientOnboardingStop4)
         ]
-
-        rendererStore.renderer?.updatePaletteForCurrentTheme(
-            palette: GradientPalette(
-                gradientOnboardingStop1: SIMD3<Float>(color.gradientOnboardingStop1),
-                gradientOnboardingStop2: SIMD3<Float>(color.gradientOnboardingStop2),
-                gradientOnboardingStop3: SIMD3<Float>(color.gradientOnboardingStop3),
-                gradientOnboardingStop4: SIMD3<Float>(color.gradientOnboardingStop4)
-            )
-        )
     }
 }
 
@@ -359,4 +318,78 @@ class RendererStore: ObservableObject {
     init(device: MTLDevice?, speed: Float) {
         self.renderer = AnimatedGradientRenderer(device: device, speed: speed)
     }
+}
+
+struct FluidFourStopGradient: View {
+    let colors: [Color]
+    let speeds: [CGFloat] = [0.8, 0.6, 1.5, 1.1]
+    let centerPoints = [CGPoint(x: 0.1, y: 0.3),
+                        CGPoint(x: 0.80, y: 0.9),
+                        CGPoint(x: 1.1, y: 0.2),
+                        CGPoint(x: 0.0, y: 1.0)]
+    
+    struct CircleProp {
+        let color: Color
+        let speed: CGFloat
+        let centerPoint: CGPoint
+    }
+
+    var baseInfluence: CGFloat = 0.36
+    var pulsationAmplitude: CGFloat = 0.01
+    var pulsationSpeed: CGFloat = 1.0
+    var motionRadius: CGFloat = 0.20
+    var offset: CGFloat = 0.1
+
+    var body: some View {
+        TimelineView(.animation) { timeline in
+            GeometryReader { geo in
+                let t = timeline.date.timeIntervalSinceReferenceDate
+                let size = geo.size
+                let minSide = min(size.width, size.height)
+
+                let influence = minSide * (
+                    baseInfluence + offset
+                    + pulsationAmplitude * CGFloat(sin(t * pulsationSpeed))
+                )
+                var index = -1
+                let centerPoints = centerPoints.map { point in
+                    index += 1
+                    let point = animate(point, t: t, speed: speeds[index] * 0.6, r: motionRadius, in: size)
+                    return CircleProp(color: colors[index], speed: 0.0, centerPoint: point)
+                }
+
+                ZStack {
+                    ForEach(centerPoints, id: \.color) { color in
+                        blob(color: color.color, center: color.centerPoint, radius: influence)
+                    }
+                }
+                .compositingGroup()
+                .blendMode(.plusLighter)
+                .drawingGroup(opaque: false, colorMode: .linear)
+                .ignoresSafeArea()
+            }
+        }
+    }
+
+    private func animate(_ baseUnit: CGPoint, t: TimeInterval, speed: Double, r: CGFloat, in size: CGSize) -> CGPoint {
+        let angle = t * speed
+        let c = CGPoint(x: baseUnit.x * size.width, y: baseUnit.y * size.height)
+        let d = r * min(size.width, size.height)
+        return CGPoint(x: c.x + d * CGFloat(sin(angle)),
+                       y: c.y + d * CGFloat(cos(angle)))
+    }
+
+    private func blob(color: Color, center: CGPoint, radius: CGFloat) -> some View {
+        Circle()
+            .fill(color)
+            .frame(width: radius * 4, height: radius * 4)
+            .position(center)
+            .blur(radius: radius * 0.2)
+    }
+}
+
+#Preview {
+    FluidFourStopGradient(colors: [
+        Color.red, Color.blue, Color.orange, Color.yellow
+    ])
 }

@@ -12,46 +12,18 @@ struct DragCancellableSegmentedButton<Action: Equatable & Hashable & Sendable>: 
     let isSelected: Bool
     let action: () -> Void
 
-    @State private var hasDragged = false
-    @State private var startLocation: CGPoint = .zero
-
     var body: some View {
-        VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
-            itemImage(item: item, isSelected: isSelected)
-            itemContent(item: item, isSelected: isSelected)
+        Button {
+            action()
+        } label: {
+            VStack(spacing: UX.SegmentedControl.outerVStackSpacing) {
+                itemImage(item: item, isSelected: isSelected)
+                itemContent(item: item, isSelected: isSelected)
+            }
         }
         .frame(maxWidth: .infinity, minHeight: UX.SegmentedControl.buttonMinHeight, alignment: .top)
         .accessibilityAddTraits(.isButton)
         .contentShape(Rectangle())
-        .onTapGesture {
-            if !hasDragged {
-                action()
-            }
-        }
-        .simultaneousGesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { value in
-                    let translation = value.translation
-
-                    // If this is the first change, record the start location
-                    if startLocation == .zero {
-                        startLocation = value.startLocation
-                    }
-
-                    // Check if we've moved far enough to consider it a drag
-                    let distance = sqrt(pow(translation.width, 2) + pow(translation.height, 2))
-                    if distance > UX.DragCancellableButton.dragThreshold && !hasDragged {
-                        hasDragged = true
-                    }
-                }
-                .onEnded { _ in
-                    // Reset drag state after a short delay
-                    DispatchQueue.main.asyncAfter(deadline: .now() + UX.DragCancellableButton.resetDelay) {
-                        hasDragged = false
-                        startLocation = .zero
-                    }
-                }
-        )
     }
 
     @ViewBuilder

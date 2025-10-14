@@ -17,7 +17,6 @@ enum UX {
         static let portraitHeightRatio: CGFloat = 0.7
         static let maxHeight: CGFloat = 712
 
-        static let cardTopPadding: CGFloat = 32
         static func cardSecondaryContainerPadding(for sizeCategory: ContentSizeCategory) -> CGFloat {
             switch sizeCategory {
             case .accessibilityExtraExtraExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraLarge:
@@ -48,6 +47,8 @@ enum UX {
         static let cornerRadius: CGFloat = 20
         static let secondaryButtonBottomPadding: CGFloat = 24
         static let primaryButtonWidthiPad: CGFloat = 313
+        static let cardTopPadding: CGFloat = 20.0
+        static let cardBottomPadding: CGFloat = 60.0
 
         // Font sizes for base metrics
         static let titleFontSize: CGFloat = 28

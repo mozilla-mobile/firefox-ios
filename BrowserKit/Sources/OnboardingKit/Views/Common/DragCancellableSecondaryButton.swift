@@ -6,65 +6,25 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-// MARK: - DragCancellableSecondaryButton
 struct DragCancellableSecondaryButton: View {
     let title: String
     let action: () -> Void
     let theme: Theme
     let accessibilityIdentifier: String
 
-    @State private var hasDragged = false
-    @State private var startLocation: CGPoint = .zero
-
     var body: some View {
-        Text(title)
-            .font(UX.CardView.secondaryActionFont)
-            .padding(.vertical, UX.DragCancellableButton.verticalPadding)
-            .padding(.horizontal, UX.DragCancellableButton.horizontalPadding)
-            .frame(maxWidth: .infinity)
-            .background(
-                Group {
-                    if #available(iOS 26.0, *) {
-                        Capsule()
-                            .fill(Color(uiColor: theme.colors.actionSecondary))
-                    } else {
-                        RoundedRectangle(cornerRadius: UX.DragCancellableButton.cornerRadius)
-                            .fill(Color(uiColor: theme.colors.actionSecondary))
-                    }
-                }
-            )
-            .foregroundColor(Color(uiColor: theme.colors.textSecondary))
-            .accessibility(identifier: accessibilityIdentifier)
-            .accessibilityAddTraits(.isButton)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                if !hasDragged {
-                    action()
-                }
-            }
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { value in
-                        let translation = value.translation
-
-                        // If this is the first change, record the start location
-                        if startLocation == .zero {
-                            startLocation = value.startLocation
-                        }
-
-                        // Check if we've moved far enough to consider it a drag
-                        let distance = sqrt(pow(translation.width, 2) + pow(translation.height, 2))
-                        if distance > UX.DragCancellableButton.dragThreshold && !hasDragged {
-                            hasDragged = true
-                        }
-                    }
-                    .onEnded { _ in
-                        // Reset drag state after a short delay
-                        DispatchQueue.main.asyncAfter(deadline: .now() + UX.DragCancellableButton.resetDelay) {
-                            hasDragged = false
-                            startLocation = .zero
-                        }
-                    }
-            )
+        Button(action: {
+            action()
+        }, label: {
+            Text(title)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, UX.DragCancellableButton.verticalPadding)
+                .padding(.horizontal, UX.DragCancellableButton.horizontalPadding)
+        })
+        .font(UX.CardView.primaryActionFont)
+        .foregroundColor(Color(uiColor: theme.colors.textSecondary))
+        .accessibility(identifier: accessibilityIdentifier)
+        .glassProperEffect(tint: Color(uiColor: theme.colors.actionSecondary))
+        .backgroundClipShape()
     }
 }

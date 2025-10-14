@@ -34,13 +34,14 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     var body: some View {
         GeometryReader { geometry in
             cardContent(geometry: geometry)
-                .padding(.top, UX.CardView.cardTopPadding)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
                     guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+//                    withAnimation {
+                        applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+//                    }
                 }
         }
     }

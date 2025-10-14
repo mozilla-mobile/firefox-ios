@@ -40,13 +40,14 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     var body: some View {
         GeometryReader { geometry in
             scrollViewContent(geometry: geometry)
-                .padding(.top, UX.CardView.cardTopPadding)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
                     guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+//                    withAnimation {
+                        applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+//                    }
                 }
         }
     }
