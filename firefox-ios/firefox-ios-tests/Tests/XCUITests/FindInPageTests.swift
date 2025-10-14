@@ -5,6 +5,20 @@
 import XCTest
 
 class FindInPageTests: FeatureFlaggedTestBase {
+    var browserScreen: BrowserScreen!
+    var findInPageScreen: FindInPageScreen!
+
+    private func navigateToOpenFindInPage(openSite: String) {
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+        navigator.openURL(openSite)
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+
+        navigator.goto(FindInPage)
+    }
+
     private func openFindInPageFromMenu(openSite: String) {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -101,6 +115,37 @@ class FindInPageTests: FeatureFlaggedTestBase {
         // Tapping on close dismisses the search bar
         navigator.goto(BrowserTab)
         mozWaitForElementToNotExist(app.textFields["Book"])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306851
+    // Smoketest TAE
+    func testFindFromMenu_TAE() {
+        browserScreen = BrowserScreen(app: app)
+        findInPageScreen = FindInPageScreen(app: app)
+        let searchTerm = "Book"
+        app.launch()
+        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigateToOpenFindInPage(openSite: userState.url!)
+
+        findInPageScreen.waitForFindInPageBarToAppear()
+        findInPageScreen.searchForText(searchTerm)
+
+        findInPageScreen.assertResultsCountIsDisplayed("1 of 6")
+
+        findInPageScreen.tapNextResult()
+        findInPageScreen.assertResultsCountIsDisplayed("2 of 6")
+
+        findInPageScreen.tapNextResult()
+        findInPageScreen.assertResultsCountIsDisplayed("3 of 6")
+
+        findInPageScreen.tapPreviousResult()
+        findInPageScreen.assertResultsCountIsDisplayed("2 of 6")
+
+        findInPageScreen.tapPreviousResult()
+        findInPageScreen.assertResultsCountIsDisplayed("1 of 6")
+
+        navigator.goto(BrowserTab)
+        findInPageScreen.assertSearchBarDisappeared(searchKeyword: searchTerm)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323705

@@ -81,16 +81,7 @@ extension Selector {
     static func imageId(_ id: String, description: String, groups: [String] = []) -> Selector {
         Selector(strategy: .imageById(id), value: id, description: description, groups: groups)
     }
-/*
-    static func buttonByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
-        let predicate = NSPredicate(
-            format: "elementType == %d AND label == %@",
-            XCUIElement.ElementType.button.rawValue,
-            label
-        )
-        return Selector(strategy: .predicate(predicate), value: label, description: description, groups: groups)
-    }
-*/
+
     static func tableOtherById(_ id: String, description: String, groups: [String] = []) -> Selector {
         Selector(strategy: .otherInTablesById(id), value: id, description: description, groups: groups)
     }
@@ -157,5 +148,15 @@ extension Selector {
                         value: text,
                         description: description,
                         groups: groups)
+    }
+
+    static func searchFieldById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .predicate(
+            NSPredicate(format: "elementType == %d AND identifier == %@", XCUIElement.ElementType.searchField.rawValue, id)
+            ),
+                 value: id,
+                 description: description,
+                 groups: groups
+        )
     }
 }
