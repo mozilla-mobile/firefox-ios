@@ -445,6 +445,7 @@
         "SearchTests\/testSearchIconOnAboutHome()",
         "SearchTests\/testSearchSuggestions()",
         "SearchTests\/testSearchWithFirefoxOption()",
+        "SearchTests\/testTrendingSearches_trendingSearchesExperimentOn()",
         "SettingsTests\/testAutofillPasswordSettingsOptionSubtitles()",
         "SettingsTests\/testAutoplayOptionUI()",
         "SettingsTests\/testBrowsingSettingsOptionSubtitles()",

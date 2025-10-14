@@ -150,6 +150,7 @@
         "ReportSiteTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
+        "SearchTests\/testTrendingSearches_trendingSearchesExperimentOn()",
         "SettingsTests\/testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff()",
         "SettingsTests\/testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn()",
         "SettingsTests\/testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn()",
