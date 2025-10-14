@@ -314,7 +314,7 @@ workflows:
             XCUITests/SearchTests
             XCUITests/SettingsTests
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0,isHeadless=YES
-        - xcodebuild_options: '"-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "3" "COMPILER_INDEX_STORE_ENABLE=NO"'
+        - xcodebuild_options: '"-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2" "COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.0-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
 
@@ -1616,11 +1616,11 @@ workflows:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - configuration: Fennec_Testing
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
+        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0,isHeadless=YES
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
         - maximum_test_repetitions: 5
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
 
   #
