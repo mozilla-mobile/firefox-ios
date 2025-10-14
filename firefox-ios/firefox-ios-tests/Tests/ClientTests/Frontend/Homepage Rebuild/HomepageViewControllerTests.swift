@@ -505,7 +505,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             MerinoAction(
                 merinoStories: merinoStories,
                 windowUUID: windowUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
     }

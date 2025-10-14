@@ -61,7 +61,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         XCTAssertEqual(newState.shortcuts.count, initialState.shortcuts.count)
     }
 
-    func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
+    func test_retrievedUpdatedSitesAction_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = shortcutsLibraryReducer()
 
@@ -87,7 +87,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         XCTAssertEqual(newState.shortcuts.compactMap { $0.title }, ["hello"])
     }
 
-    func test_retrievedUpdatedStoriesAction_withEmptyShortcuts_returnsDefaultState() throws {
+    func test_retrievedUpdatedSitesAction_withEmptyShortcuts_returnsDefaultState() throws {
         let initialState = createSubject()
         let reducer = shortcutsLibraryReducer()
 
