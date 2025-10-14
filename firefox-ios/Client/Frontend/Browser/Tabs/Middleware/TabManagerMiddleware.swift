@@ -877,32 +877,31 @@ final class TabManagerMiddleware: FeatureFlaggable {
         dispatchDefaultTabInfo(windowUUID: windowUUID, selectedTab: selectedTab, accountData: accountData)
         let isSummarizerEnabled = isSummarizerEnabled
         fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
-            ensureMainThread {
-                if isSummarizerEnabled {
-                    Task {
-                        let summarizeMiddleware = SummarizerMiddleware()
-                        let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
-                        let contentType = summarizationCheckResult?.contentType ?? .generic
-                        self?.dispatchTabInfo(
-                            info: profileTabInfo,
-                            selectedTab: selectedTab,
-                            windowUUID: windowUUID,
-                            accountData: accountData,
-                            canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                            summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
-                        )
-                        self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
-                    }
-                } else {
+            assert(Thread.isMainThread)
+            if isSummarizerEnabled {
+                Task {
+                    let summarizeMiddleware = SummarizerMiddleware()
+                    let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
+                    let contentType = summarizationCheckResult?.contentType ?? .generic
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
-                        canSummarize: false
+                        canSummarize: summarizationCheckResult?.canSummarize ?? false,
+                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
                     )
                     self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
                 }
+            } else {
+                self?.dispatchTabInfo(
+                    info: profileTabInfo,
+                    selectedTab: selectedTab,
+                    windowUUID: windowUUID,
+                    accountData: accountData,
+                    canSummarize: false
+                )
+                self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
             }
         }
     }
@@ -933,7 +932,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
 
     private func fetchProfileTabInfo(
         for tabURL: URL?,
-        dataLoadingCompletion: ((ProfileTabInfo) -> Void)?
+        dataLoadingCompletion: (@MainActor (ProfileTabInfo) -> Void)?
     ) {
         guard let tabURL = tabURL, let url = absoluteStringFrom(tabURL) else {
             dataLoadingCompletion?(
@@ -972,7 +971,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
             group.leave()
         }
 
-        group.notify(queue: dataQueue) {
+        group.notify(queue: DispatchQueue.main) {
             dataLoadingCompletion?(
                 ProfileTabInfo(
                     isBookmarked: isBookmarkedResult,
