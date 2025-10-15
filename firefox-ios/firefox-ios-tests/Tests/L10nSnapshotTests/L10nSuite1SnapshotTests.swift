@@ -112,8 +112,9 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testWebViewAuthenticationDialog() {
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
-        navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
+        navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/")
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.staticTexts["Authentication required"])
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.nowAt(BasicAuthDialog)
         snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
