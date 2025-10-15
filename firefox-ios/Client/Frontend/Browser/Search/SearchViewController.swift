@@ -550,7 +550,11 @@ class SearchViewController: SiteTableViewController,
         switch section {
         case SearchListSection.trendingSearches.rawValue:
             // TODO: FXIOS-13644 - Add proper strings when finalized
-            title = "Trending Searches"
+            if let engineName = viewModel.searchEnginesManager?.defaultEngine?.shortName {
+                title = "Trending on \(engineName)"
+            } else {
+                title = ""
+            }
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
