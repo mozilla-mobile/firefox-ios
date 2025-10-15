@@ -59,7 +59,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                         themeManager: themeManager,
                         style: .compact
                     )
-                    .padding(.bottom, geo.safeAreaInsets.bottom)
+                    .padding(.bottom, pageControllPadding(safeAreaBottomInset: geo.safeAreaInsets.bottom))
                 }
                 .ignoresSafeArea(.all, edges: .bottom)
             }
@@ -92,6 +92,13 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+    }
+    
+    private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
+        if safeAreaBottomInset == 0 {
+            return 15.0
+        }
+        return safeAreaBottomInset * 0.5
     }
 
     private func applyTheme() {

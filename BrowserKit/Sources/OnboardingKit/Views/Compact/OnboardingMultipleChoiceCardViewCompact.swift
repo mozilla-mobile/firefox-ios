@@ -57,7 +57,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                 titleView
                     .padding(.top, UX.CardView.titleCompactTopPadding)
 
-                Spacer()
+                Spacer(minLength: UX.CardView.minContentSpacing)
                 OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                     selection: $selectedAction,
                     items: viewModel.multipleChoiceButtons
@@ -65,7 +65,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                 .onChange(of: selectedAction) { newAction in
                     onMultipleChoiceAction(newAction, viewModel.name)
                 }
-                Spacer()
+                Spacer(minLength: UX.CardView.minContentSpacing)
                 VStack(spacing: UX.CardView.buttonsSpacing) {
                     primaryButton
                     // Hidden spacer button to maintain consistent layout spacing

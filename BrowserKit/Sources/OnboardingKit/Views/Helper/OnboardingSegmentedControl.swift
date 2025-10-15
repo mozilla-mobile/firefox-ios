@@ -18,7 +18,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: UX.SegmentedControl.containerSpacing) {
+        VStack(alignment: .leading, spacing: UX.CardView.contentSpacing) {
             HStack(alignment: .top, spacing: UX.SegmentedControl.containerSpacing) {
                 ForEach(Array(items.enumerated()), id: \.element.action) { index, item in
                     segmentedButton(for: item)
@@ -46,9 +46,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
                 }
             }
         )
-        .accessibilityElement()
         .accessibilityLabel("\(item.title)")
-        .accessibilityAddTraits(.isButton)
         .accessibilityAddTraits(
             item.action == selection ? .isSelected : []
         )

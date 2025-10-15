@@ -30,6 +30,7 @@ enum UX {
         static let contentSpacing: CGFloat = 34.0
         static let buttonsSpacing: CGFloat = 10.0
         static let buttonsBottomPadding: CGFloat = 16.0
+        static let minContentSpacing: CGFloat = 20.0
 
         static let titleAlignmentMinHeightPadding: CGFloat = 80
         static let cardHorizontalPadding: CGFloat = 16.0
@@ -57,6 +58,7 @@ enum UX {
         static let titleFont = FXFontStyles.Bold.title1.scaledSwiftUIFont()
         static let bodyFont = FXFontStyles.Regular.subheadline.scaledSwiftUIFont()
         static let primaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
+        static let primaryActionGlassFont = FXFontStyles.Bold.headline.scaledSwiftUIFont()
         static let secondaryActionFont = FXFontStyles.Bold.callout.scaledSwiftUIFont()
     }
 
@@ -103,11 +105,10 @@ enum UX {
         }
     }
 
-    enum DragCancellableButton {
+    enum Button {
         static let verticalPadding: CGFloat = 12
         static let horizontalPadding: CGFloat = 12
         static let cornerRadius: CGFloat = 8
-        static let dragThreshold: CGFloat = 5
-        static let resetDelay: TimeInterval = 0.1
+        static let glassCornerRadius: CGFloat = 25
     }
 }

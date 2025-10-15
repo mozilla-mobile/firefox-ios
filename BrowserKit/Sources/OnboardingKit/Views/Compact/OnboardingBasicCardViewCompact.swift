@@ -51,12 +51,12 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                 titleView
                     .padding(.top, UX.CardView.titleCompactTopPadding)
 
-                Spacer()
+                Spacer(minLength: UX.CardView.minContentSpacing)
                 VStack(spacing: UX.CardView.contentSpacing) {
                     imageView(geometry: geometry)
                     bodyView
                 }
-                Spacer()
+                Spacer(minLength: UX.CardView.minContentSpacing)
                 VStack(spacing: UX.CardView.buttonsSpacing) {
                     primaryButton
                     secondaryButton
@@ -87,7 +87,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     func imageView(geometry: GeometryProxy) -> some View {
         if let img = viewModel.image {
             // at maximum the image is half of the card size
-            let imgHeight = min(img.size.height * 1.2, geometry.size.height * 0.5)
+            let imgHeight = min(img.size.height * 1.4, geometry.size.height * 0.5)
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -102,6 +102,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .font(UX.CardView.bodyFont)
             .foregroundColor(secondaryTextColor)
             .multilineTextAlignment(.center)
+            .lineLimit(nil)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
 
