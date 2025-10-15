@@ -67,7 +67,6 @@ final class TermsOfUseViewController: UIViewController,
         imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
         imageView.heightAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: UX.logoSize).isActive = true
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfUse.logo
     }
 
