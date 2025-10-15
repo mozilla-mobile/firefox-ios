@@ -723,7 +723,8 @@ class SearchViewController: SiteTableViewController,
         switch section {
         case .trendingSearches:
             if let trendingSearch = viewModel.trendingSearches[safe: indexPath.row] {
-                let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch)
+                let arrowImageName = StandardImageIdentifiers.Large.arrowTrendingLarge
+                let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch, and: arrowImageName)
                 oneLineCell.configure(viewModel: oneLineCellViewModel)
                 cell = oneLineCell
             }
@@ -824,6 +825,7 @@ class SearchViewController: SiteTableViewController,
 
     private func oneLineCellModelForSearch(
         with text: String,
+        and imageName: String = SearchViewControllerUX.SearchImage,
         shouldShowAccessoryView: Bool = true
     ) -> OneLineTableViewCellViewModel {
         let appendButton = UIButton(type: .roundedRect)
@@ -834,7 +836,7 @@ class SearchViewController: SiteTableViewController,
         appendButton.addAction(action, for: .touchUpInside)
         let viewModel = OneLineTableViewCellViewModel(
             title: text,
-            leftImageView: UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate),
+            leftImageView: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate),
             accessoryView: shouldShowAccessoryView ? appendButton : nil,
             accessoryType: .none,
             editingAccessoryView: nil)
