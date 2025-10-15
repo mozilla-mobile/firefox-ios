@@ -1012,7 +1012,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                 let translateAction = translateAction(
                     isEnabled: isLoading == false,
                     isActive: action.translationConfiguration?.hasTranslated ?? false,
-                    hasAlternativeLocationColor: hasAlternativeLocationColor
+                    hasAlternativeLocationColor: hasAlternativeLocationColor,
                 )
                 actions.append(translateAction)
             }
@@ -1271,6 +1271,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             iconName: isActive ? activeImageName : inactiveImageName,
             isEnabled: isEnabled,
             hasCustomColor: !hasAlternativeLocationColor,
+            hasHighlightedColor: false,
             a11yLabel: .Toolbars.Translation.ButtonActiveAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.translateButton)
     }

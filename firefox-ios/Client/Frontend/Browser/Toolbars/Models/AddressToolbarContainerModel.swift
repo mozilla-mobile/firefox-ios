@@ -264,6 +264,7 @@ final class AddressToolbarContainerModel: Equatable {
                 isFlippedForRTL: action.isFlippedForRTL,
                 isSelected: action.isSelected,
                 hasCustomColor: action.hasCustomColor,
+                hasHighlightedColor: action.hasHighlightedColor,
                 largeContentTitle: action.largeContentTitle,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
