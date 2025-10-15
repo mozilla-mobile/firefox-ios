@@ -86,8 +86,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @ViewBuilder
     func imageView(geometry: GeometryProxy) -> some View {
         if let img = viewModel.image {
-            // at maximum the image is half of the card size
-            let imgHeight = min(img.size.height * 1.4, geometry.size.height * 0.5)
+            let imgHeight = min(img.size.height, geometry.size.height * 0.5)
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
