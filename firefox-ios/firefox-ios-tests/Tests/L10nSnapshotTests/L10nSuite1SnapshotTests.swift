@@ -31,6 +31,12 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testIntro() {
+        mozWaitForElementToExist(app.scrollViews.staticTexts["TermsOfService.Title"])
+        mozWaitForElementToExist(app.scrollViews.staticTexts["TermsOfService.Subtitle"])
+        snapshot("Onboarding-0")
+
+        // Agree to the terms of service
+        app.buttons["TermsOfService.AgreeAndContinueButton"].waitAndTap()
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
         snapshot("Onboarding-1")
