@@ -22,6 +22,7 @@ struct DragCancellableSecondaryButton: View {
             .padding(.vertical, UX.DragCancellableButton.verticalPadding)
             .padding(.horizontal, UX.DragCancellableButton.horizontalPadding)
             .frame(maxWidth: .infinity)
+            .fixedSize(horizontal: false, vertical: true)
             .background(
                 Group {
                     if #available(iOS 26.0, *) {
