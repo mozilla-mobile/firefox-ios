@@ -9,6 +9,7 @@ import Common
 struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var cardBackgroundColor: Color = .clear
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
+    // TODO: - refactor code
     @State private var skipTextColor: Color = .clear
 
     let windowUUID: WindowUUID
@@ -44,7 +45,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     .foregroundColor(skipTextColor)
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
-            .bridge.glassButtonStyle(tint: themeManager.getCurrentTheme(for: windowUUID).colors.layer2.color)
+            .skipButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-private extension View {
+extension View {
     @ViewBuilder
     func primaryButtonStyle(theme: Theme) -> some View {
         if #available(iOS 26.0, *) {
@@ -32,6 +32,18 @@ private extension View {
                 .background(theme.colors.actionSecondary.color)
                 .font(UX.CardView.primaryActionFont)
                 .foregroundStyle(theme.colors.textSecondary.color)
+        }
+    }
+    
+    @ViewBuilder
+    func skipButtonStyle(theme: Theme) -> some View {
+        if #available(iOS 26.0, *) {
+            self.buttonStyle(.glassProminent)
+                .tint(theme.colors.layer2.color)
+                .foregroundStyle(theme.colors.textSecondary.color)
+        } else {
+            self.buttonStyle(.borderless)
+                .foregroundStyle(theme.colors.textInverted.color)
         }
     }
 

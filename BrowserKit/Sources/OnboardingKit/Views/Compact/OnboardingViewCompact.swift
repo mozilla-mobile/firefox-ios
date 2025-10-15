@@ -15,7 +15,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    @State private var skipTextColor: Color = .clear
+    @State private var theme: Theme
 
     init(
         windowUUID: WindowUUID,
@@ -24,6 +24,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         _viewModel = StateObject(
             wrappedValue: viewModel
         )
@@ -38,10 +39,9 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     Button(action: viewModel.skipOnboarding) {
                         Text(viewModel.skipText)
                             .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
-                            .foregroundColor(skipTextColor)
                     }
                     .padding(.trailing, UX.Onboarding.Spacing.standard)
-                    .bridge.glassButtonStyle(tint: themeManager.getCurrentTheme(for: windowUUID).colors.layer2.color)
+                    .skipButtonStyle(theme: theme)
                     .accessibilitySortPriority(2)
                     .accessibilityLabel(viewModel.skipText)
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -102,7 +102,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     }
 
     private func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        skipTextColor = Color(theme.colors.textInverted)
+        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }
