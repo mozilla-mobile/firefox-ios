@@ -107,6 +107,7 @@ enum UX {
 
     enum Button {
         static let verticalPadding: CGFloat = 12
+        static let verticalGlassPadding: CGFloat = 6
         static let horizontalPadding: CGFloat = 12
         static let cornerRadius: CGFloat = 8
         static let glassCornerRadius: CGFloat = 25

@@ -6,13 +6,6 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-
-private extension UIColor {
-    var color: Color {
-        return Color(uiColor: self)
-    }
-}
-
 private extension View {
     @ViewBuilder
     func primaryButtonStyle(theme: Theme) -> some View {
@@ -50,6 +43,15 @@ private extension View {
             self.clipShape(RoundedRectangle(cornerRadius: UX.Button.cornerRadius))
         }
     }
+    
+    @ViewBuilder
+    func paddedVersion(_ inset: Edge.Set, old: CGFloat, new: CGFloat) -> some View {
+        if #available(iOS 26, *) {
+            self.padding(inset, new)
+        } else {
+            self.padding(inset, old)
+        }
+    }
 }
 
 struct OnboardingPrimaryButton: View {
@@ -63,9 +65,9 @@ struct OnboardingPrimaryButton: View {
             action()
         }, label: {
             Text(title)
-                .padding(.vertical, UX.Button.verticalPadding)
-                .padding(.horizontal, UX.Button.horizontalPadding)
                 .frame(maxWidth: .infinity)
+                .paddedVersion(.vertical, old: UX.Button.verticalPadding, new: UX.Button.verticalGlassPadding)
+                .padding(.horizontal, UX.Button.horizontalPadding)
         })
         .accessibility(identifier: accessibilityIdentifier)
         .primaryButtonStyle(theme: theme)
@@ -85,7 +87,7 @@ struct OnboardingSecondaryButton: View {
         }, label: {
             Text(title)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, UX.Button.verticalPadding)
+                .paddedVersion(.vertical, old: UX.Button.verticalPadding, new: UX.Button.verticalGlassPadding)
                 .padding(.horizontal, UX.Button.horizontalPadding)
         })
         .accessibility(identifier: accessibilityIdentifier)

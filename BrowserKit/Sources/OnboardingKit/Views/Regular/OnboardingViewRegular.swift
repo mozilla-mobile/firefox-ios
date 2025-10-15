@@ -44,7 +44,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     .foregroundColor(skipTextColor)
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
-            .bridge.glassButtonStyle()
+            .bridge.glassButtonStyle(tint: themeManager.getCurrentTheme(for: windowUUID).colors.layer2.color)
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

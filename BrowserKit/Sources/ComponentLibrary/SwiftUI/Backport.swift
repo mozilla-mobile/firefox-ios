@@ -11,9 +11,9 @@ public struct CompatibilityBridge<Content> {
 public extension CompatibilityBridge where Content: View {
     @MainActor
     @ViewBuilder
-    func glassButtonStyle() -> some View {
+    func glassButtonStyle(tint: Color) -> some View {
         if #available(iOS 26, *) {
-            content.buttonStyle(.glass)
+            content.buttonStyle(.glassProminent).tint(tint)
         } else {
             content.buttonStyle(.plain)
         }
