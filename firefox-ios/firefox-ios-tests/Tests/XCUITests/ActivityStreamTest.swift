@@ -124,6 +124,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2272220
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
+        app.launch()
         waitForExistence(TopSiteCellgroup)
         if iPad() {
             app.textFields.element(boundBy: 0).waitAndTap()
@@ -281,6 +282,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
 
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
+        app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
