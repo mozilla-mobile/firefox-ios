@@ -49,7 +49,7 @@ final class StoriesFeedDiffableDataSourceTests: XCTestCase {
             MerinoAction(
                 merinoStories: createStories(count: 10),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories
             )
         )
 

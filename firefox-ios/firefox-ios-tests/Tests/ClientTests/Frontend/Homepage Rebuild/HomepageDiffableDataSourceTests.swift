@@ -67,7 +67,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             MerinoAction(
                 merinoStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
 
@@ -131,7 +131,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             MerinoAction(
                 merinoStories: createStories(),
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
 

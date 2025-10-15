@@ -41,7 +41,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
-    func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
+    func test_retrievedUpdatedSitesAction_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 
@@ -67,7 +67,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, ["hello"])
     }
 
-    func test_retrievedUpdatedStoriesAction_returnsDefaultState() throws {
+    func test_retrievedUpdatedSitesAction_returnsDefaultState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
 

@@ -25,10 +25,11 @@ final class MerinoMiddleware {
     lazy var pocketSectionProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case HomepageActionType.initialize,
-            StoriesFeedActionType.initialize,
             HomepageMiddlewareActionType.enteredForeground,
             MerinoActionType.toggleShowSectionSetting:
-            self.getPocketDataAndUpdateState(for: action)
+            self.getHomepageStoriesAndUpdateState(for: action)
+        case StoriesFeedActionType.initialize:
+            self.getStoriesFeedStoriesAndUpdateState(for: action)
         case MerinoActionType.tapOnHomepageMerinoCell:
             self.sendOpenPocketItemTelemetry(for: action)
         case MerinoActionType.viewedSection:
@@ -40,16 +41,27 @@ final class MerinoMiddleware {
         }
     }
 
-    private func getPocketDataAndUpdateState(for action: Action) {
+    private func getHomepageStoriesAndUpdateState(for action: Action) {
         Task {
-            let source: StorySource
-            source = action as? StoriesFeedAction != nil ? .storiesFeed : .homepage
-            let merinoStories = await merinoManager.getMerinoItems(source: source)
+            let merinoStories = await merinoManager.getMerinoItems(source: .homepage)
             store.dispatchLegacy(
                 MerinoAction(
                     merinoStories: merinoStories,
                     windowUUID: action.windowUUID,
-                    actionType: MerinoMiddlewareActionType.retrievedUpdatedStories
+                    actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+                )
+            )
+        }
+    }
+
+    private func getStoriesFeedStoriesAndUpdateState(for action: Action) {
+        Task {
+            let merinoStories = await merinoManager.getMerinoItems(source: .storiesFeed)
+            store.dispatchLegacy(
+                MerinoAction(
+                    merinoStories: merinoStories,
+                    windowUUID: action.windowUUID,
+                    actionType: MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories
                 )
             )
         }
