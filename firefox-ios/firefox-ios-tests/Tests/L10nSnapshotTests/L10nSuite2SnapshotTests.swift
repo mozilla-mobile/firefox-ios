@@ -35,7 +35,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     // From here on it is fine to load pages
     @MainActor
     func testLongPressOnTextOptions() {
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -52,7 +51,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testURLBar() {
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.goto(URLBarOpen)
         snapshot("URLBar-01")
 
@@ -79,7 +77,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testMenuOnWebPage() {
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(BrowserTabMenu)
@@ -94,7 +91,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testPageMenuOnWebPage() {
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -104,7 +100,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testFxASignInPage() {
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)

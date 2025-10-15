@@ -121,7 +121,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func test3ReloadButtonContextMenu() {
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -154,7 +153,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testHistoryTableContextMenu() {
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"], timeout: 5)
@@ -168,8 +166,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testBookmarksTableContextMenu() {
-        sleep(3)
-        app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell].waitAndTap()
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
         // There is no other way the test work with the new Copied.. snackbar ahow on iOS14
