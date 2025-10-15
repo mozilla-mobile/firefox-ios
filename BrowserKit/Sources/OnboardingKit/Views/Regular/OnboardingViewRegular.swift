@@ -84,7 +84,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     private func applyTheme(theme: Theme) {
         let color = theme.colors
-        cardBackgroundColor = Color(color.layer2)
+        cardBackgroundColor = Color(color.layer2.withAlphaComponent(0.9))
         skipTextColor = Color(theme.colors.textOnDark)
     }
 }

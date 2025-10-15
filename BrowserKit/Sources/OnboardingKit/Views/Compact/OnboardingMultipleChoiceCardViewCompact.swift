@@ -119,6 +119,6 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     private func applyTheme(theme: Theme) {
         let color = theme.colors
         textColor = Color(color.textPrimary)
-        cardBackgroundColor = Color(color.layer2)
+        cardBackgroundColor = Color(color.layer2.withAlphaComponent(0.9))
     }
 }

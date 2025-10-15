@@ -140,6 +140,6 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         let color = theme.colors
         textColor = Color(color.textPrimary)
         secondaryTextColor = Color(color.textSecondary)
-        cardBackgroundColor = Color(color.layer2)
+        cardBackgroundColor = Color(color.layer2.withAlphaComponent(0.9))
     }
 }
