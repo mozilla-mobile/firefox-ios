@@ -113,6 +113,9 @@ final class NimbusFeatureFlagLayer {
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
 
+        case .relayIntegration:
+            return checkRelayIntegration(from: nimbus)
+
         case .hostedSummarizerToolbarEntrypoint:
            return checkHostedSummarizerToolbarEntrypoint(from: nimbus)
 
@@ -309,6 +312,10 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.navigationHint
+    }
+
+    private func checkRelayIntegration(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.relayIntegrationFeature.value().enabled
     }
 
     private func checkToolbarUpdateHintFeature(from nimbus: FxNimbus) -> Bool {

@@ -34,6 +34,7 @@ include:
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
+  - nimbus-features/relayIntegrationFeature.yaml
   - nimbus-features/revertUnsafeContinuationsRefactor.yaml
   - nimbus-features/rustFxAKeychainEnabled.yaml
   - nimbus-features/searchEngineConsolidationFeature.yaml

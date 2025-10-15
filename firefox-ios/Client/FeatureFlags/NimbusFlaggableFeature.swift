@@ -39,6 +39,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case noInternetConnectionErrorPage
     case recentSearches
     case reportSiteIssue
+    case relayIntegration
     case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
     case splashScreen
@@ -175,6 +176,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .relayIntegration,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
