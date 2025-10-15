@@ -17,7 +17,7 @@ on:
 jobs:
   get-screenshots:
     name: Generate screenshots
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Clone firefox-ios repo
         uses: actions/checkout@v4

@@ -13,7 +13,7 @@ on:
 jobs:
   determine-locales:
     name: Determine lists of locales
-    runs-on: macos-15
+    runs-on: macos-26
     outputs:
       group1: ${{ steps.my_locales.outputs.group1 }}
       group2: ${{ steps.my_locales.outputs.group2 }}
@@ -37,7 +37,7 @@ jobs:
   
   compile:
     name: Compile Focus for L10n
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Clone firefox-ios repo
         uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
         run: |
           xcodebuild build-for-testing -scheme FocusSnapshotTests \
             -project focus-ios/Blockzilla.xcodeproj \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=26.0' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
             -derivedDataPath l10n-screenshots-dd
       - name: Targzip Derived Data
         run: |
@@ -91,7 +91,7 @@ jobs:
   merge-screenshots:
     name: Merge all screenshots
     needs: generate-screenshots
-    runs-on: macOS-15
+    runs-on: macos-26
     steps:
       - name: Merge screenshots
         uses: actions/upload-artifact/merge@v4
