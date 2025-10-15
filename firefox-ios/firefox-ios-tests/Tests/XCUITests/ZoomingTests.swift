@@ -4,7 +4,7 @@
 
 import XCTest
 
-final class ZoomingTests: FeatureFlaggedTestBase {
+final class ZoomingTests: BaseTestCase {
     private var zoomBar: ZoomBarScreen!
 
     override func setUp() {
@@ -23,7 +23,6 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306947
     // Smoketest
     func testZoomingActions() {
-        app.launch()
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -51,9 +50,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3003915
-    func testZoomingActionsLandscape_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testZoomingActionsLandscape() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -84,9 +81,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
-    func testZoomForceCloseFirefox_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testZoomForceCloseFirefox() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -118,36 +113,8 @@ final class ZoomingTests: FeatureFlaggedTestBase {
         zoomBar.assertZoomPercent("100%")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306949
-    func testZoomForceCloseFirefox_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
-        zoomBar = ZoomBarScreen(app: app, selectors: ExperimentalZoomBarSelectors())
-        openURLAndNavigateToZoom(index: 0)
-        zoomBar.assertZoomPercent("100%")
-        // Tap on + and - buttons
-        zoomInAndAssert(levels: ["110%", "125%"])
-        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomIn() }
-        zoomBar.assertZoomPercent("150%")
-
-        closeFromAppSwitcherAndRelaunch()
-
-        zoomBar = ZoomBarScreen(app: app, selectors: ExperimentalZoomBarSelectors())
-        openURLAndNavigateToZoom(index: 0)
-        zoomBar.assertZoomPercent("150%")
-        zoomOutAndAssert(levels: ["125%", "110%"])
-        zoomBar.assertBookTextHeightChanged { zoomBar.tapZoomOut() }
-        zoomBar.assertZoomPercent("100%")
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306948
-    func testSwitchingZoomedTabs_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testSwitchingZoomedTabs() {
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
@@ -163,9 +130,7 @@ final class ZoomingTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2609150
-    func testSwitchingZoomedTabsLandscape_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testSwitchingZoomedTabsLandscape() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         validateZoomLevelOnSwitchingTabs()
     }
