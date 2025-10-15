@@ -6,6 +6,14 @@ import Common
 import Redux
 import ToolbarKit
 
+// Translations Feature Payload
+struct TranslationConfiguration: Equatable, FeatureFlaggable {
+    var canTranslate: Bool {
+        featureFlags.isFeatureEnabled(.translation, checking: .buildAndUser)
+    }
+    let hasTranslated: Bool
+}
+
 struct ToolbarAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
@@ -32,6 +40,8 @@ struct ToolbarAction: Action {
     let isLoading: Bool?
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
+    // Payload related to the translation feature (i.e. show translate button, show active / inactive)
+    let translationConfiguration: TranslationConfiguration?
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
 
@@ -58,6 +68,7 @@ struct ToolbarAction: Action {
          isLoading: Bool? = nil,
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
+         translationConfiguration: TranslationConfiguration? = nil,
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          windowUUID: WindowUUID,
@@ -88,6 +99,7 @@ struct ToolbarAction: Action {
         self.canShowDataClearanceAction = canShowDataClearanceAction
         self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
+        self.translationConfiguration = translationConfiguration
         self.middleButton = middleButton
     }
 }
@@ -123,6 +135,8 @@ enum ToolbarActionType: ActionType {
     case didStartTyping
     case translucencyDidChange
     case navigationMiddleButtonDidChange
+    // TODO: FXIOS-11973 For MVP purpose, should remove or modify.
+    case didTapOnTranslate
 }
 
 struct ToolbarMiddlewareAction: Action {
