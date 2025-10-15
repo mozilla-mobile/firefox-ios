@@ -108,9 +108,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 displayNavBorder: displayBorder,
                 isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
                 canShowDataClearanceAction: canShowDataClearanceAction(),
+                translationConfiguration: TranslationConfiguration(
+                    hasTranslated: false
+                ),
                 middleButton: middleButton,
                 windowUUID: uuid,
-                actionType: ToolbarActionType.didLoadToolbars)
+                actionType: ToolbarActionType.didLoadToolbars
+            )
             store.dispatchLegacy(action)
 
         case GeneralBrowserMiddlewareActionType.websiteDidScroll:
@@ -324,6 +328,19 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatchLegacy(action)
             }
+        case .translate:
+            // TODO: FXIOS-11973 For MVP purpose, should remove or modify
+            // Eventually we want a translations middeware that retrieve from back end and up date UI
+            guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+            else { return }
+            let translateIconName = toolbarState.addressToolbar.leadingPageActions[safe: 1]?.iconName
+            let isTranslateActive = translateIconName == StandardImageIdentifiers.Medium.translateActive
+            let toolbarAction = ToolbarAction(
+                translationConfiguration: TranslationConfiguration(hasTranslated: !isTranslateActive),
+                windowUUID: action.windowUUID,
+                actionType: ToolbarActionType.didTapOnTranslate
+            )
+            store.dispatchLegacy(toolbarAction)
         default:
             break
         }
