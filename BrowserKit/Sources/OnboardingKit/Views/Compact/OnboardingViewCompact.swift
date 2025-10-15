@@ -69,7 +69,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     @available(iOS 17.0, *)
     private var modernScrollViewCarousel: some View {
-        ScrollViewCarousel(
+        UIKitCarousel(
             selection: $viewModel.pageCount,
             items: viewModel.onboardingCards
         ) { card in
