@@ -6,45 +6,52 @@ import Foundation
 import Glean
 
 struct TermsOfServiceTelemetry {
+    private let gleanWrapper: GleanWrapper
+
+    init(gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
+        self.gleanWrapper = gleanWrapper
+    }
+
     func termsOfServiceScreenDisplayed() {
-        GleanMetrics.Onboarding.termsOfServiceCard.record()
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceCard)
     }
 
     func technicalInteractionDataSwitched(to value: Bool) {
         let extra = GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra(changedTo: value)
-        GleanMetrics.Onboarding.toggleTechnicalInteractionData.record(extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.toggleTechnicalInteractionData, extras: extra)
     }
 
     func automaticCrashReportsSwitched(to value: Bool) {
         let extra = GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra(changedTo: value)
-        GleanMetrics.Onboarding.toggleAutomaticCrashReports.record(extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.toggleAutomaticCrashReports, extras: extra)
     }
 
     func termsOfServiceLinkTapped() {
-        GleanMetrics.Onboarding.termsOfServiceLinkClicked.record()
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceLinkClicked)
     }
 
     func termsOfServicePrivacyNoticeLinkTapped() {
-        GleanMetrics.Onboarding.termsOfServicePrivacyNoticeLinkClicked.record()
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServicePrivacyNoticeLinkClicked)
     }
 
     func termsOfServiceManageLinkTapped() {
-        GleanMetrics.Onboarding.termsOfServiceManageLinkClicked.record()
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceManageLinkClicked)
     }
 
     func termsOfServiceAcceptButtonTapped(acceptedDate: Date) {
-        GleanMetrics.Onboarding.termsOfServiceAccepted.record()
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceAccepted)
         recordDateAndVersion(acceptedDate: acceptedDate)
     }
 
     func recordDateAndVersion(acceptedDate: Date) {
-        // Record the ToU version and date metrics with onboarding surface
+        let termsOfUseVersion: Int64 = 4
         let acceptedExtra = GleanMetrics.TermsOfUse.AcceptedExtra(
-            surface: TermsOfUseTelemetry.Surface.onboarding.rawValue,
-            touVersion: String(TermsOfUseTelemetry().termsOfUseVersion)
+            surface: "onboarding",
+            touVersion: String(termsOfUseVersion)
         )
-        GleanMetrics.TermsOfUse.accepted.record(acceptedExtra)
-        GleanMetrics.UserTermsOfUse.versionAccepted.set(TermsOfUseTelemetry().termsOfUseVersion)
-        GleanMetrics.UserTermsOfUse.dateAccepted.set(acceptedDate)
+
+        gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.accepted, extras: acceptedExtra)
+        gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: termsOfUseVersion)
+        gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
     }
 }
