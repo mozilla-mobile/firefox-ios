@@ -156,6 +156,6 @@ final class ThemeManagerMiddleware: ThemeManagerProvider {
             windowUUID: oldAction.windowUUID,
             actionType: newActionType)
 
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 }
