@@ -106,6 +106,7 @@ public struct PrefsKeys {
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
+        public static let Translation = "translationFeatureKey"
     }
 
     public struct HomepageSettings {

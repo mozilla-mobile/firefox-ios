@@ -34,5 +34,8 @@ protocol GeneralSettingsDelegate: AnyObject {
     func pressedSummarize()
 
     @MainActor
+    func pressedTranslation()
+
+    @MainActor
     func pressedAutoFillsPasswords()
 }
