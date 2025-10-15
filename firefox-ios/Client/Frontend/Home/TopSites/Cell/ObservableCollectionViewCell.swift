@@ -60,7 +60,7 @@ class ObservableCollectionViewCell: UICollectionViewCell {
 
         // The cell's location with respect to the window's coordinate system
         var visibleRectInWindow = convert(bounds, to: window).intersection(window.bounds)
-        if visibleRectInWindow.isNull { return 0 }
+        guard !visibleRectInWindow.isNull else { return 0 }
 
         // We need to verify that there aren't views clipping and obscuring this view.
         // If they are, we need to subtract that intersection away for our final visible area calc.
