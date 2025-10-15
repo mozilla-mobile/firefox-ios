@@ -131,7 +131,7 @@ extension PreviewModel {
             a11yIdRoot: "onboarding_welcomeInstructionsPopup"
         )
     )
-
+    
     static let signToSync = PreviewModel(
         cardType: .basic,
         name: "signToSync",
@@ -149,7 +149,7 @@ extension PreviewModel {
         imageID: "onboardingSyncWithIcons",
         instructionsPopup: nil
     )
-
+    
     static let customizationToolbar = PreviewModel(
         cardType: .multipleChoice,
         name: "customizationToolbar",
@@ -178,7 +178,7 @@ extension PreviewModel {
         imageID: "toolbar",
         instructionsPopup: nil
     )
-
+    
     static let tos = PreviewModel(
         cardType: .basic,
         name: "tos",
@@ -214,7 +214,9 @@ extension PreviewModel {
             )
         ]
     )
+    
 }
+
 
 extension PreviewModel {
     /// All of the built-in preview cards

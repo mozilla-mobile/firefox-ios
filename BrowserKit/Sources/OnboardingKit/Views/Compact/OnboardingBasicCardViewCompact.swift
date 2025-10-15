@@ -39,34 +39,34 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
                     guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-//                    withAnimation {
-                        applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-//                    }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
         }
     }
 
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy) -> some View {
-        VStack {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: UX.CardView.spacing) {
-                    titleView
-                        .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
+        ScrollView(showsIndicators: false) {
+            VStack {
+                titleView
+                    .padding(.top, UX.CardView.titleCompactTopPadding)
+                
+                Spacer()
+                VStack(spacing: UX.CardView.contentSpacing) {
                     imageView
                     bodyView
-                    Spacer()
                 }
-                .padding(.horizontal, UX.CardView.horizontalPadding)
+                Spacer()
+                VStack(spacing: UX.CardView.buttonsSpacing) {
+                    primaryButton
+                    secondaryButton
+                }
+                .padding(.bottom, UX.CardView.buttonsBottomPadding)
             }
-            .scrollBounceBehavior(basedOnSize: true)
-
-            VStack {
-                primaryButton
-                secondaryButton
-            }
-            .padding(UX.CardView.verticalPadding)
+            .padding(.horizontal, UX.CardView.cardHorizontalPadding)
+            .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
         }
+        .scrollBounceBehavior(basedOnSize: true)
         .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
     }
 

@@ -39,50 +39,51 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
 
     var body: some View {
         GeometryReader { geometry in
-            scrollViewContent(geometry: geometry)
+            cardContent(geometry: geometry)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
                     guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-//                    withAnimation {
-                        applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-//                    }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
         }
     }
-
-    private func scrollViewContent(geometry: GeometryProxy) -> some View {
-        VStack {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: UX.CardView.spacing) {
-                    titleView
-                        .padding(.top, UX.CardView.titleTopPadding(for: geometry.size.height))
-                    OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
-                        selection: $selectedAction,
-                        items: viewModel.multipleChoiceButtons
-                    )
-                    .onChange(of: selectedAction) { newAction in
-                        onMultipleChoiceAction(newAction, viewModel.name)
-                    }
-                }
-                .padding(.horizontal, UX.CardView.horizontalPadding)
-            }
-            .scrollBounceBehavior(basedOnSize: true)
+    
+    @ViewBuilder
+    private func cardContent(geometry: GeometryProxy) -> some View {
+        ScrollView(showsIndicators: false) {
             VStack {
-                primaryButton
-                // Hidden spacer button to maintain consistent layout spacing
-                // when secondary button is not present
-                Button(" ", action: {})
-                    .font(UX.CardView.secondaryActionFont)
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .opacity(0)
-                    .accessibilityHidden(true)
-                    .disabled(true)
+                titleView
+                    .padding(.top, UX.CardView.titleCompactTopPadding)
+                
+                Spacer()
+                OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
+                    selection: $selectedAction,
+                    items: viewModel.multipleChoiceButtons
+                )
+                .onChange(of: selectedAction) { newAction in
+                    onMultipleChoiceAction(newAction, viewModel.name)
+                }
+                Spacer()
+                VStack(spacing: UX.CardView.buttonsSpacing) {
+                    primaryButton
+                    // Hidden spacer button to maintain consistent layout spacing
+                    // when secondary button is not present
+                    Button(" ", action: {})
+                        .font(UX.CardView.secondaryActionFont)
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+                        .opacity(0)
+                        .accessibilityHidden(true)
+                        .disabled(true)
+                }
+                .padding(.bottom, UX.CardView.buttonsBottomPadding)
             }
-            .padding(UX.CardView.verticalPadding)
+            .padding(.horizontal, UX.CardView.cardHorizontalPadding)
+            .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
         }
+        .scrollBounceBehavior(basedOnSize: true)
         .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
     }
 

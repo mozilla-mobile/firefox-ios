@@ -96,6 +96,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     private func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        skipTextColor = Color(theme.colors.textOnDark)
+        skipTextColor = Color(theme.colors.textInverted)
     }
 }
