@@ -105,6 +105,8 @@ final class OnboardingService: FeatureFlaggable {
                     instructionSteps: popupViewModel.instructionSteps,
                     buttonTitle: popupViewModel.buttonTitle,
                     buttonAction: popupViewModel.buttonAction,
+                    secondaryButtonTitle: popupViewModel.secondaryButtonTitle,
+                    secondaryButtonAction: popupViewModel.secondaryButtonAction,
                     a11yIdRoot: popupViewModel.a11yIdRoot
                 )
             ) {

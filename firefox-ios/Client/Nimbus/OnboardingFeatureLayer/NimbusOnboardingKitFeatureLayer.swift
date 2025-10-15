@@ -160,6 +160,8 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 },
             buttonTitle: data.buttonTitle,
             buttonAction: data.buttonAction,
+            secondaryButtonTitle: data.secondaryButtonTitle,
+            secondaryButtonAction: data.secondaryButtonAction,
             a11yIdRoot: a11yID)
     }
 }

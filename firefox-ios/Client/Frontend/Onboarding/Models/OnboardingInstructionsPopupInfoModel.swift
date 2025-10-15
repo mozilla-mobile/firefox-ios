@@ -9,6 +9,8 @@ struct OnboardingInstructionsPopupInfoModel: OnboardingDefaultBrowserModelProtoc
     var instructionSteps: [String]
     var buttonTitle: String
     var buttonAction: OnboardingInstructionsPopupActions
+    var secondaryButtonTitle: String?
+    var secondaryButtonAction: OnboardingInstructionsPopupActions?
     var a11yIdRoot: String
 
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString] {

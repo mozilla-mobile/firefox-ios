@@ -9,6 +9,8 @@ protocol OnboardingDefaultBrowserModelProtocol {
     var instructionSteps: [String] { get set }
     var buttonTitle: String { get set }
     var buttonAction: OnboardingInstructionsPopupActions { get set }
+    var secondaryButtonTitle: String? { get set }
+    var secondaryButtonAction: OnboardingInstructionsPopupActions? { get set }
     var a11yIdRoot: String { get set }
 
     func getAttributedStrings(with font: UIFont) -> [NSAttributedString]

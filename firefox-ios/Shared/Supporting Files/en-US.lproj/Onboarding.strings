@@ -16,6 +16,9 @@
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "Switch Your Default Browser";
 
+/* The title of the secondary button on the Default Browser Popup, which allows users to dismiss the popup without taking action. */
+"DefaultBrowserPopup.SecondaryButtonTitle.v145" = "I'll Do This Later";
+
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. %@ is the app name (e.g. Firefox). */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "Customize %@";
 

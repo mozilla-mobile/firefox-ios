@@ -61,8 +61,25 @@ class OnboardingInstructionPopupViewController: UIViewController,
         stack.spacing = UX.textStackViewSpacing
     }
 
+    private lazy var buttonStackView: UIStackView = .build { stack in
+        stack.backgroundColor = .clear
+        stack.alignment = .fill
+        stack.distribution = .fill
+        stack.axis = .vertical
+        stack.spacing = 16
+    }
+
     private lazy var primaryButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
+    }
+
+    private lazy var secondaryButton: UIButton = .build { button in
+        button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
+        button.backgroundColor = .clear
+        button.layer.borderWidth = 0
+        button.layer.cornerRadius = 0
+        button.titleLabel?.font = FXFontStyles.Bold.callout.scaledFont()
+        button.contentHorizontalAlignment = .center
     }
 
     var viewModel: OnboardingDefaultBrowserModelProtocol
@@ -128,7 +145,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
             if traitCollection.horizontalSizeClass == .regular {
                 topPadding = UX.topPaddingPad
                 leadingPadding = UX.leadingPaddingPad
-                trailingPadding = UX.leadingPaddingPad
+                trailingPadding = UX.trailingPaddingPad
                 bottomPadding = UX.bottomPaddingPad
             } else {
                 topPadding = UX.topPaddingPhone
@@ -171,8 +188,8 @@ class OnboardingInstructionPopupViewController: UIViewController,
                     constant: -bottomPadding
                 ),
                 textStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                primaryButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                primaryButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+                buttonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+                buttonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
             ]
         )
     }
@@ -184,14 +201,30 @@ class OnboardingInstructionPopupViewController: UIViewController,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.PrimaryButton"
         )
         primaryButton.configure(viewModel: buttonViewModel)
+
+        // Configure secondary button if provided
+        if let secondaryTitle = viewModel.secondaryButtonTitle {
+            let secondaryButtonViewModel = SecondaryRoundedButtonViewModel(
+                title: secondaryTitle,
+                a11yIdentifier: "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.SecondaryButton"
+            )
+            secondaryButton.setTitle(secondaryTitle, for: .normal)
+            secondaryButton.isHidden = false
+        } else {
+            secondaryButton.isHidden = true
+        }
     }
     private func addViewsToView() {
         createLabels(from: viewModel.instructionSteps)
 
+        // Add buttons to button stack view
+        buttonStackView.addArrangedSubview(primaryButton)
+        buttonStackView.addArrangedSubview(secondaryButton)
+
         contentStackView.addArrangedSubview(titleLabel)
         numeratedLabels.forEach { textStackView.addArrangedSubview($0) }
         contentStackView.addArrangedSubview(textStackView)
-        contentStackView.addArrangedSubview(primaryButton)
+        contentStackView.addArrangedSubview(buttonStackView)
 
         contentContainerView.addSubview(contentStackView)
         view.addSubview(contentContainerView)
@@ -248,14 +281,30 @@ class OnboardingInstructionPopupViewController: UIViewController,
         }
     }
 
+    @objc
+    func secondaryAction() {
+        guard let secondaryAction = viewModel.secondaryButtonAction else { return }
+
+        switch secondaryAction {
+        case .openIosFxSettings:
+            didTapButton = true
+            DefaultApplicationHelper().openSettings()
+        case .dismissAndNextCard:
+            dismissDelegate?.dismissSheetViewController { self.buttonTappedFinishFlow?() }
+        case .dismiss:
+            dismissDelegate?.dismissSheetViewController(completion: nil)
+        }
+    }
+
     // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         titleLabel.textColor = theme.colors.textPrimary
         numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
 
-        // Call applyTheme() on primaryButton to let it handle theme-specific styling
+        // Call applyTheme() on both buttons to let them handle theme-specific styling
         primaryButton.applyTheme(theme: theme)
+        secondaryButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
 
         view.backgroundColor = theme.colors.layer1
     }

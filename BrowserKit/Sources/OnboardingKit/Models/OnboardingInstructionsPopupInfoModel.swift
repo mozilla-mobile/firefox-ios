@@ -19,6 +19,8 @@ public struct OnboardingInstructionsPopupInfoModel
     public let instructionSteps: [String]
     public let buttonTitle: String
     public let buttonAction: OnboardingPopupActionType
+    public let secondaryButtonTitle: String?
+    public let secondaryButtonAction: OnboardingPopupActionType?
     public let a11yIdRoot: String
 
     public init(
@@ -26,12 +28,16 @@ public struct OnboardingInstructionsPopupInfoModel
         instructionSteps: [String],
         buttonTitle: String,
         buttonAction: OnboardingPopupActionType,
+        secondaryButtonTitle: String?,
+        secondaryButtonAction: OnboardingPopupActionType?,
         a11yIdRoot: String
     ) {
         self.title = title
         self.instructionSteps = instructionSteps
         self.buttonTitle = buttonTitle
         self.buttonAction = buttonAction
+        self.secondaryButtonTitle = secondaryButtonTitle
+        self.secondaryButtonAction = secondaryButtonAction
         self.a11yIdRoot = a11yIdRoot
     }
 }

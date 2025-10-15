@@ -238,6 +238,8 @@ features:
                 title: Onboarding/DefaultBrowserPopup.Title.v114
                 button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
                 button-action: open-ios-fx-settings
+                secondary-button-title: Onboarding/DefaultBrowserPopup.SecondaryButtonTitle.v145
+                secondary-button-action: dismiss
                 instructions:
                   - Onboarding/DefaultBrowserPopup.FirstLabel.v114
                   - Onboarding/DefaultBrowserPopup.SecondLabel.v114
@@ -496,7 +498,18 @@ objects:
           The action the button should have.
           Default is `dismiss-and-next-card`
         default: dismiss-and-next-card
-
+      secondary-button-title:
+        type: Option<Text>
+        description: >
+          The title for the optional secondary button.
+          If null, no secondary button will be shown.
+        default: null
+      secondary-button-action:
+        type: Option<OnboardingInstructionsPopupActions>
+        description: >
+          The action the secondary button should take.
+          If null, no secondary button will be shown.
+        default: null
 enums:
   OnboardingVariant:
     description: >
