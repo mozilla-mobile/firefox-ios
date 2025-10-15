@@ -283,7 +283,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func testTakeMarketingScreenshots() {
         let searchBar = app.cells[AccessibilityIdentifiers.FirefoxHomepage.SearchBar.itemCell]
         let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
-        let searchTextfield = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
 
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         snapshot("00TopSites")
@@ -294,32 +293,16 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // load some web pages in some new tabs
         navigator.goto(NewTabScreen)
-        searchBar.waitAndTap()
-        mozWaitForElementToNotExist(searchBar)
-        mozWaitForElementToExist(searchTextfield)
         navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
-        waitForTabsButton()
-        addNewTabButton.waitAndTap()
-        mozWaitForElementToNotExist(addNewTabButton)
-        if searchBar.exists {
-            searchBar.waitAndTap()
-        }
-        mozWaitForElementToNotExist(searchBar)
-        mozWaitForElementToExist(searchTextfield)
+        navigator.goto(TabTray)
+        navigator.goto(NewTabScreen)
         navigator.openURL("https://mozilla.org/firefox/desktop")
         waitUntilPageLoad()
-        waitForTabsButton()
-        addNewTabButton.waitAndTap()
-        mozWaitForElementToNotExist(addNewTabButton)
-        if searchBar.exists {
-            searchBar.waitAndTap()
-        }
-        mozWaitForElementToNotExist(searchBar)
-        mozWaitForElementToExist(searchTextfield)
+        navigator.goto(TabTray)
+        navigator.goto(NewTabScreen)
         navigator.openURL("https://mozilla.org/firefox/new")
         waitUntilPageLoad()
-        waitForTabsButton()
         mozWaitForElementToExist(addNewTabButton)
         navigator.goto(TabTray)
         snapshot("02TabTray")
