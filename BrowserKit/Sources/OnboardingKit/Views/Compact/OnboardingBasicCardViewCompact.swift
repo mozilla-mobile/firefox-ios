@@ -53,7 +53,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                 
                 Spacer()
                 VStack(spacing: UX.CardView.contentSpacing) {
-                    imageView
+                    imageView(geometry: geometry)
                     bodyView
                 }
                 Spacer()
@@ -82,14 +82,16 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             }
             .fixedSize(horizontal: false, vertical: true)
     }
-
+    
     @ViewBuilder
-    var imageView: some View {
+    func imageView(geometry: GeometryProxy) -> some View {
         if let img = viewModel.image {
+            // at maximum the image is half of the card size
+            let imgHeight = min(img.size.height * 1.2, geometry.size.height * 0.5)
             Image(uiImage: img)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(height: UX.CardView.imageHeight)
+                .frame(maxHeight: imgHeight)
                 .accessibilityHidden(true)
                 .accessibility(identifier: "\(viewModel.a11yIdRoot)ImageView")
         }
@@ -104,7 +106,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     var primaryButton: some View {
-        DragCancellablePrimaryButton(
+        OnboardingPrimaryButton(
             title: viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
@@ -120,7 +122,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     @ViewBuilder
     var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
-            DragCancellableSecondaryButton(
+            OnboardingSecondaryButton(
                 title: secondary.title,
                 action: {
                     onBottomButtonAction(

@@ -35,7 +35,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
 
     @ViewBuilder
     private func dragCancellableSegmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
-        DragCancellableSegmentedButton(
+        OnboardingSegmentedButton(
             item: item,
             isSelected: item.action == selection,
             action: {

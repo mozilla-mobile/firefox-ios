@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct DragCancellableSecondaryButton: View {
+struct OnboardingSecondaryButton: View {
     let title: String
     let action: () -> Void
     let theme: Theme

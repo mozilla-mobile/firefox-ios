@@ -70,13 +70,16 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                     primaryButton
                     // Hidden spacer button to maintain consistent layout spacing
                     // when secondary button is not present
-                    Button(" ", action: {})
-                        .font(UX.CardView.secondaryActionFont)
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                        .opacity(0)
-                        .accessibilityHidden(true)
-                        .disabled(true)
+                    OnboardingSecondaryButton(
+                        title: " ",
+                        action: {
+                            
+                        },
+                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                        accessibilityIdentifier: "")
+                    .opacity(0.0)
+                    .disabled(true)
+                    .accessibilityHidden(true)
                 }
                 .padding(.bottom, UX.CardView.buttonsBottomPadding)
             }
@@ -101,7 +104,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     }
 
     var primaryButton: some View {
-        DragCancellablePrimaryButton(
+        OnboardingPrimaryButton(
             title: viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(

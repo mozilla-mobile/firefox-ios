@@ -6,8 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-// MARK: - DragCancellableSegmentedButton
-struct DragCancellableSegmentedButton<Action: Equatable & Hashable & Sendable>: View {
+struct OnboardingSegmentedButton<Action: Equatable & Hashable & Sendable>: View {
     let item: OnboardingMultipleChoiceButtonModel<Action>
     let isSelected: Bool
     let action: () -> Void

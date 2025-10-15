@@ -6,8 +6,7 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-// MARK: - DragCancellablePrimaryButton
-struct DragCancellablePrimaryButton: View {
+struct OnboardingPrimaryButton: View {
     let title: String
     let action: () -> Void
     let theme: Theme
@@ -48,4 +47,14 @@ extension View {
             self.clipShape(RoundedRectangle(cornerRadius: UX.DragCancellableButton.cornerRadius))
         }
     }
+}
+
+#Preview {
+    OnboardingPrimaryButton(
+        title: "This is the but",
+        action: {
+            
+        },
+        theme: LightTheme(),
+        accessibilityIdentifier: "")
 }
