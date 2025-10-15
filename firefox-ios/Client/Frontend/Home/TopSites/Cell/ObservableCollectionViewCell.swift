@@ -57,19 +57,29 @@ class ObservableCollectionViewCell: UICollectionViewCell {
 
     private var inViewAreaFraction: CGFloat {
         guard let window = window, !isHidden, alpha > 0.01, !bounds.isEmpty else { return 0 }
-        var rect = convert(bounds, to: window).intersection(window.bounds)
-        if rect.isNull { return 0 }
-        var a = superview
-        while let s = a, s !== window {
-            if s.clipsToBounds {
-                rect = rect.intersection(s.convert(s.bounds, to: window))
-                if rect.isNull { return 0 }
+
+        // The cell's location with respect to the window's coordinate system
+        var visibleRectInWindow = convert(bounds, to: window).intersection(window.bounds)
+        if visibleRectInWindow.isNull { return 0 }
+
+        // We need to verify that there aren't views clipping and obscuring this view.
+        // If they are, we need to subtract that intersection away for our final visible area calc.
+        // Everything is done with respect to the window's coordnates.
+        var currentAncestor: UIView? = superview
+        while let ancestorView = currentAncestor, ancestorView !== window {
+            if ancestorView.clipsToBounds {
+                let ancestorClipRect = ancestorView.convert(ancestorView.bounds, to: window)
+                visibleRectInWindow = visibleRectInWindow.intersection(ancestorClipRect)
+                if visibleRectInWindow.isNull { return 0 }
             }
-            a = s.superview
+            currentAncestor = ancestorView.superview
         }
-        let total = bounds.width * bounds.height
-        guard total > 0 else { return 0 }
-        return max(0, min(1, (rect.width * rect.height) / total))
+
+        let totalArea = bounds.width * bounds.height
+        guard totalArea > 0 else { return 0 }
+        let visibleArea = visibleRectInWindow.width * visibleRectInWindow.height
+
+        return max(0, min(1, visibleArea / totalArea))
     }
 
     private var scrollViews: [UIScrollView] {
