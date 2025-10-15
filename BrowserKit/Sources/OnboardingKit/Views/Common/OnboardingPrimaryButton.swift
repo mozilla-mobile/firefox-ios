@@ -53,7 +53,6 @@ extension View {
     OnboardingPrimaryButton(
         title: "This is the but",
         action: {
-            
         },
         theme: LightTheme(),
         accessibilityIdentifier: "")

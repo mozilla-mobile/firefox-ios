@@ -49,14 +49,14 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                 }
         }
     }
-    
+
     @ViewBuilder
     private func cardContent(geometry: GeometryProxy) -> some View {
         ScrollView(showsIndicators: false) {
             VStack {
                 titleView
                     .padding(.top, UX.CardView.titleCompactTopPadding)
-                
+
                 Spacer()
                 OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
                     selection: $selectedAction,
@@ -73,7 +73,6 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                     OnboardingSecondaryButton(
                         title: " ",
                         action: {
-                            
                         },
                         theme: themeManager.getCurrentTheme(for: windowUUID),
                         accessibilityIdentifier: "")

@@ -30,13 +30,11 @@ enum UX {
         static let contentSpacing: CGFloat = 34.0
         static let buttonsSpacing: CGFloat = 10.0
         static let buttonsBottomPadding: CGFloat = 16.0
-        
+
         static let titleAlignmentMinHeightPadding: CGFloat = 80
         static let cardHorizontalPadding: CGFloat = 16.0
         // TODO: - check older
-        
-        
-        
+
         static let cardHeightRatio: CGFloat = 0.8
         static let spacing: CGFloat = 24
         static let regularSizeSpacing: CGFloat = 48

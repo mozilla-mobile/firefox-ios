@@ -50,7 +50,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             VStack {
                 titleView
                     .padding(.top, UX.CardView.titleCompactTopPadding)
-                
+
                 Spacer()
                 VStack(spacing: UX.CardView.contentSpacing) {
                     imageView(geometry: geometry)
@@ -82,7 +82,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             }
             .fixedSize(horizontal: false, vertical: true)
     }
-    
+
     @ViewBuilder
     func imageView(geometry: GeometryProxy) -> some View {
         if let img = viewModel.image {
