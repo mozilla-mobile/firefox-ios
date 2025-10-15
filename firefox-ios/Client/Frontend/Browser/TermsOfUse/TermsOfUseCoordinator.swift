@@ -66,7 +66,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     }
 
     func dismissTermsFlow() {
-        presentedVC?.dismiss(animated: true) { [weak self] in
+        router.dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinish(from: self)
         }
