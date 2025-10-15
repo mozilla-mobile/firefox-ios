@@ -19,7 +19,7 @@ extension View {
                 .foregroundStyle(theme.colors.textInverted.color)
         }
     }
-    
+
     @ViewBuilder
     func secondaryButtonStyle(theme: Theme) -> some View {
         if #available(iOS 26.0, *) {
@@ -34,7 +34,7 @@ extension View {
                 .foregroundStyle(theme.colors.textSecondary.color)
         }
     }
-    
+
     @ViewBuilder
     func skipButtonStyle(theme: Theme) -> some View {
         if #available(iOS 26.0, *) {
@@ -55,7 +55,7 @@ extension View {
             self.clipShape(RoundedRectangle(cornerRadius: UX.Button.cornerRadius))
         }
     }
-    
+
     @ViewBuilder
     func paddedVersion(_ inset: Edge.Set, old: CGFloat, new: CGFloat) -> some View {
         if #available(iOS 26, *) {

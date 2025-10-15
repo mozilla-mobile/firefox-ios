@@ -93,7 +93,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
     }
-    
+
     private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
         if safeAreaBottomInset == 0 {
             return 15.0
