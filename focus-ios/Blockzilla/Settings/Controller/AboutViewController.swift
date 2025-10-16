@@ -188,7 +188,7 @@ private protocol AboutHeaderViewDelegate: AnyObject {
     func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView)
 }
 
-final private class AboutHeaderView: UIView {
+private final class AboutHeaderView: UIView {
     weak var delegate: AboutHeaderViewDelegate?
 
     private lazy var logo: UIImageView = {

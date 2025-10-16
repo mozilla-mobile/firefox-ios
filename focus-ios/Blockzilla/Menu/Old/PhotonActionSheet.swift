@@ -262,7 +262,7 @@ final class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableVie
     }
 }
 
-final private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
+private final class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
     static let Padding: CGFloat = 12
 
     lazy var titleLabel: UILabel = {
@@ -315,7 +315,7 @@ final private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterVie
     }
 }
 
-final private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
+private final class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
     private let separatorLineView = UIView()
 
     override init(reuseIdentifier: String?) {

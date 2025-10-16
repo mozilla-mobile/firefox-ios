@@ -50,7 +50,7 @@ public protocol KeyboardHelperDelegate: AnyObject {
 /**
  * Convenience class for observing keyboard state.
  */
-final public class KeyboardHelper: NSObject {
+public final class KeyboardHelper: NSObject {
     public var currentState: KeyboardState?
 
     private var delegates = [WeakKeyboardDelegate]()
@@ -131,7 +131,7 @@ final public class KeyboardHelper: NSObject {
     }
 }
 
-final private class WeakKeyboardDelegate {
+private final class WeakKeyboardDelegate {
     weak var delegate: KeyboardHelperDelegate?
 
     init(_ delegate: KeyboardHelperDelegate) {

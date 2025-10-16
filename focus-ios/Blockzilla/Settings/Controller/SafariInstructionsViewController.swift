@@ -39,7 +39,7 @@ final class SafariInstructionsViewController: UIViewController {
     }
 }
 
-final private class DisabledStateView: UIView {
+private final class DisabledStateView: UIView {
     private lazy var label: SmartLabel = {
         let label = SmartLabel()
         label.text = UIConstants.strings.safariInstructionsNotEnabled

@@ -41,7 +41,7 @@ final class SubscriptionWrapper<State>: Hashable {
     }
 }
 
-final public class Subscription<State> {
+public final class Subscription<State> {
     public var observer: ((State?, State) -> Void)?
 
     init() {}

@@ -7,7 +7,7 @@ import Foundation
 import WebKit
 
 @MainActor
-final public class WKEngine: Engine {
+public final class WKEngine: Engine {
     private let sourceTimerFactory: DispatchSourceTimerFactory
     private var shutdownWebServerTimer: DispatchSourceInterface?
     private let userScriptManager: WKUserScriptManager

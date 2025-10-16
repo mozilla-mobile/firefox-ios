@@ -25,7 +25,7 @@ public protocol CustomAutocompleteSource: AutocompleteSource {
     func remove(at index: Int) -> CustomCompletionResult
 }
 
-final public class CustomCompletionSource: CustomAutocompleteSource {
+public final class CustomCompletionSource: CustomAutocompleteSource {
     private lazy var regex = getRegex()
     var enableCustomDomainAutocomplete: () -> Bool
     var getCustomDomainSetting: () -> AutoCompleteSuggestions

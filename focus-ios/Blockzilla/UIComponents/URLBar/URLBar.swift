@@ -1168,7 +1168,7 @@ extension URLBar: UIDragInteractionDelegate {
     }
 }
 
-final private class URLTextField: AutocompleteTextField {
+private final class URLTextField: AutocompleteTextField {
     // Disable user interaction on resign so that touch and hold on URL bar creates menu
     override func resignFirstResponder() -> Bool {
         isUserInteractionEnabled = false

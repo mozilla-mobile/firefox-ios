@@ -54,7 +54,7 @@ final class InstructionsView: UIView {
     }
 }
 
-final private class InstructionView: UIView {
+private final class InstructionView: UIView {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
