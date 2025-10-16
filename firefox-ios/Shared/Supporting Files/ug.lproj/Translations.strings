@@ -1,0 +1,72 @@
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
+"Translations.Banner.Close.Button.AccessibilityLabel.v145" = "تەرجىمە كۆزنەكچىنى ياپ";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that the page has been translated to another language. %1$@ is the original language and %2$@ is the language that the page was translated to. */
+"Translations.Banner.ConfirmationTitleLabel.v145" = "%1$@ دىن %2$@ غا تەرجىمە قىلىندى";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they hit an error or issue when trying to translate the page. */
+"Translations.Banner.ErrorMessage.TitleLabel.v145" = "بەتنى تەرجىمە قىلالمايدۇ";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the loading button that appears when the page is being translated. */
+"Translations.Banner.Loading.Button.AccessibilityLabel.v145" = "بەتنى تەرجىمە قىلىۋاتىدۇ";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the chevron button that navigates the user to the translation settings page. */
+"Translations.Banner.OpenSettings.Button.AccessibilityLabel.v145" = "تىل مايىللىقىنى ئاچ";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error. */
+"Translations.Banner.RetryButton.v145" = "قايتا سىنا";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they can translate the page to another language. %@ is the other language (e.g. English). */
+"Translations.Banner.TitleLabel.v145" = "بەتنى %@ غا تەرجىمە قىلامدۇ؟";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage. */
+"Translations.Banner.TranslateButton.v145" = "تەرجىمە";
+
+/* This is the text on the button used to translate a page from one language to another and the button is shown on the translation feature bottom sheet view. */
+"Translations.Sheet.Button.v145" = "تەرجىمە";
+
+/* This is the text for the cell that indicates that a user can choose a language to translate from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.ChooseLanguage.v145" = "تىل تاللىنىدۇ";
+
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralSubtitle.v145" = "قايتا سىناڭ.";
+
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralTitle.v145" = "بەتنى تەرجىمە قىلالمايدۇ";
+
+/* On the translation feature bottom sheet, this is the title for the button that allows the user to try to translate a page again after facing an error. */
+"Translations.Sheet.Error.RetryButton.v145" = "قايتا سىنا";
+
+/* On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page. */
+"Translations.Sheet.Error.SubtitleLabel.v145" = "ئىنتېرنېت باغلىنىشىڭىزنى تەكشۈرۈپ ئاندىن قايتا سىناڭ.";
+
+/* On the translation feature bottom sheet, this is the text for the error message that appears when a user has no internet connection when trying to translate a page. */
+"Translations.Sheet.Error.TitleLabel.v145" = "تىلنى يۈكلىيەلمەيدۇ";
+
+/* This is a less descriptive text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.FromLabel.v145" = "مەنبە تەرجىمە تىلى";
+
+/* This is the text on the secondary button used to indicate that page is being translated and the button is shown on the translation feature bottom sheet view. */
+"Translations.Sheet.LoadingButton.v145" = "بەتنى تەرجىمە قىلىۋاتىدۇ";
+
+/* This is the text on the secondary button used to restore the translated page to its original language and the button is shown on the translation feature bottom sheet view. */
+"Translations.Sheet.ShowOriginalButton.v145" = "ئەسلىنى كۆرسەت";
+
+/* This is the title for the bottom sheet view that allows users to configure their language preferences for the translations feature. */
+"Translations.Sheet.TitleLabel.v145" = "بەت تەرجىمە";
+
+/* This is the less descriptive text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.ToLabel.v145" = "نىشان تەرجىمە تىلى";
+
+/* This is the accessibility label for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
+"Translations.Sheet.TranslateFrom.AccessibilityLabel.v145" = "%@ دىن تەرجىمە قىلىدۇ";
+
+/* This is the text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.TranslateFromLabel.v145" = "مەنبە تىل";
+
+/* This is the accessibility label for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
+"Translations.Sheet.TranslateTo.AccessibilityLabel.v145" = "%@ غا تەرجىمە قىلىندى";
+
+/* This is the text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.TranslateToLabel.v145" = "نىشان تىل";
+
