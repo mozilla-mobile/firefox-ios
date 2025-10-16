@@ -158,12 +158,10 @@ class StoriesFeedViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
+        let sectionProvider = StoriesFeedSectionLayoutProvider()
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
-            let section = StoriesFeedSectionLayoutProvider.createStoriesFeedSectionLayout(
-                for: environment
-            )
-            return section
+            return sectionProvider.createStoriesFeedSectionLayout(for: environment)
         }
         return layout
     }
