@@ -12,20 +12,16 @@ struct StoriesFeedSectionLayoutProvider {
         static let topSectionInset: CGFloat = 10
         static let minimumSectionHorizontalInset: CGFloat = 16
         static let minimumCellsPerRow = 1
-
-        // Calculates the horizontal inset given the size of the container and number of cells we need to show
-        static func getHorizontalInsets(for containerWidth: CGFloat, cellCount: Int) -> CGFloat {
-            let totalCellWidth = UX.cellSize.width * CGFloat(cellCount)
-            let totalCellSpacing = CGFloat(cellCount) * UX.interItemSpacing
-            return max(UX.minimumSectionHorizontalInset,
-                       (containerWidth - totalCellWidth - totalCellSpacing + UX.interItemSpacing) / 2)
-        }
     }
 
     func createStoriesFeedSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let itemSize: NSCollectionLayoutSize
+        // For iOS 17+ we use uniform height across cells in the same group (row) which is the height of the tallest cell
+        // in the group.
+        // For iOS 16 and earlier, we allow the cell to grow as big as it needs to show it's content, often resulting in
+        // groups of cells with uneven heights
         if #available(iOS 17.0, *) {
             itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
@@ -46,7 +42,7 @@ struct StoriesFeedSectionLayoutProvider {
         )
 
         let containerWidth = environment.container.effectiveContentSize.width
-        let cellCount = numberOfCellsThatFit(in: containerWidth)
+        let cellCount = StoriesFeedDimensionCalculator.numberOfCellsThatFit(in: containerWidth)
 
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
@@ -55,7 +51,7 @@ struct StoriesFeedSectionLayoutProvider {
         )
         group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.interItemSpacing)
 
-        let horizontalInsets = UX.getHorizontalInsets(for: containerWidth, cellCount: cellCount)
+        let horizontalInsets = StoriesFeedDimensionCalculator.horizontalInset(for: containerWidth, cellCount: cellCount)
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: UX.topSectionInset,
@@ -66,20 +62,5 @@ struct StoriesFeedSectionLayoutProvider {
         section.interGroupSpacing = UX.interGroupSpacing
 
         return section
-    }
-
-    // Calculates the number of cells that fit given a container's width, including spacing between items and minimum
-    // horizontal insets
-    private func numberOfCellsThatFit(in containerWidth: CGFloat) -> Int {
-        // # of cells that would fit in container
-        let cellsPerRow = containerWidth / UX.cellSize.width
-        // Amount of space used by inter-item spacing and horizontal insets
-        let spacingAdjustment = (cellsPerRow > 1 ? (cellsPerRow - 1) * UX.interItemSpacing : 0) //
-                                + (UX.minimumSectionHorizontalInset * 2)
-        // Available container width for cells
-        let adjustedContainerWidth = containerWidth - spacingAdjustment
-        // Number of cells that will fit in a row, considering inter-item spacing and horizontal insets
-        let adjustedCellsPerRow = Int(adjustedContainerWidth / UX.cellSize.width)
-        return max(UX.minimumCellsPerRow, adjustedCellsPerRow)
     }
 }
