@@ -22,6 +22,32 @@ $tags:
 # Add your new metrics and/or events here.
 # Toolbar related metrics
 toolbar:
+  middle_button_config:
+    type: event
+    description: |
+      Records the users configuration of the middle button
+    extra_keys:
+      type:
+        description: What type of middle button is configured (home / newTab).
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30060
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  middle_button_customization_enabled:
+    type: boolean
+    description: |
+      Records whether the middle button customization is enabled for the user or not.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/30060
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
   qr_scan_button_tapped:
     type: event
     description: |
