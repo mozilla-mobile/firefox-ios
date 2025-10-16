@@ -53,6 +53,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     var searchQuery = "" {
         didSet {
             querySuggestClient()
+            handleShowingOrHidingQuickSearchEngines(with: oldValue, newValue: searchQuery)
         }
     }
 
@@ -123,12 +124,6 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         )
     }
 
-    // Show list of recent searches if user puts focus in the address bar but does not enter any text.
-    var shouldShowRecentSearches: Bool {
-        let isOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
-        return isOn && searchQuery.isEmpty
-    }
-
     private var hasBookmarksSuggestions: Bool {
         return !bookmarkSites.isEmpty &&
         shouldShowBookmarksSuggestions
@@ -158,10 +153,22 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
                                                    || shouldShowSponsoredSuggestions))
     }
 
+    // MARK: - Zero Search State Variables
+    // Determines whether we should zero search state based on searchQuery being empty.
+    var isZeroSearchState: Bool {
+        return searchQuery.isEmpty
+    }
+
+    // Show list of recent searches if user puts focus in the address bar but does not enter any text.
+    var shouldShowRecentSearches: Bool {
+        let isOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return isOn && isZeroSearchState
+    }
+
     // Show list of trending searches if user puts focus in the address bar but does not enter any text.
     var shouldShowTrendingSearches: Bool {
         let isOn = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-        return isOn && searchQuery.isEmpty
+        return isOn && isZeroSearchState
     }
 
     init(isPrivate: Bool, isBottomSearchBar: Bool,
@@ -188,6 +195,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     func shouldShowHeader(for section: Int) -> Bool {
         switch section {
         case SearchListSection.trendingSearches.rawValue:
+            guard !trendingSearches.isEmpty else { return false }
             return shouldShowTrendingSearches
         case SearchListSection.firefoxSuggestions.rawValue:
             return hasFirefoxSuggestions
@@ -297,7 +305,8 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     @MainActor
     func retrieveTrendingSearches() async {
         do {
-            let results = try await trendingSearchClient.getTrendingSearches()
+            let searchEngine = searchEnginesManager?.defaultEngine
+            let results = try await trendingSearchClient.getTrendingSearches(for: searchEngine)
             trendingSearches = results
         } catch {
             logger.log(
@@ -396,6 +405,22 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
             return false
         }
+    }
+
+    /// Handles reloading the quick search engine list when the search text transitions
+    /// between empty and non-empty value.
+    ///
+    /// This method determines whether should hit showing the quick search engines code.
+    /// It triggers a reload only when search text changes from empty to non-empty or vice-versa.
+    /// For example, when the user starts typing (empty → non-empty)
+    /// or clears the search field (non-empty → empty).
+    ///
+    /// - Parameters:
+    ///   - oldValue: The previous search text value.
+    ///   - newValue: The updated search text value.
+    private func handleShowingOrHidingQuickSearchEngines(with oldValue: String, newValue: String) {
+        guard oldValue.isEmpty != newValue.isEmpty else { return }
+        delegate?.reloadSearchEngines()
     }
 
     /// Sets up the suggestClient used to query our searches

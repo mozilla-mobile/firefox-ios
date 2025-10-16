@@ -387,18 +387,31 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(shouldShowHeader)
     }
 
-    func test_shouldShowHeader_forTrendingSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() async {
+    func test_shouldShowHeader_withTrendingSearches_withFFOn_andSearchTermEmpty_showsHeader() async {
+        setupNimbusTrendingSearchesTesting(isEnabled: true)
+        let mockClient = MockTrendingSearchClient(result: .success(["foo", "bar"]))
+        let subject = createSubject(mockTrendingClient: mockClient)
+        await subject.retrieveTrendingSearches()
+        subject.searchQuery = ""
+        let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        XCTAssertEqual(subject.trendingSearches, ["foo", "bar"])
+        XCTAssertTrue(shouldShowHeader)
+    }
+
+    func test_shouldShowHeader_withNoTrendingSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() async {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
         subject.searchQuery = ""
         let shouldShowHeader = subject.shouldShowHeader(for: 0)
-        XCTAssertTrue(shouldShowHeader)
+        XCTAssertEqual(subject.trendingSearches, [])
+        XCTAssertFalse(shouldShowHeader)
     }
 
     func test_shouldShowHeader_forTrendingSearches_withoutFeatureFlagOn_doesNotShowHeader() async {
         setupNimbusTrendingSearchesTesting(isEnabled: false)
         let subject = createSubject()
         let shouldShowHeader = subject.shouldShowHeader(for: 0)
+        XCTAssertEqual(subject.trendingSearches, [])
         XCTAssertFalse(shouldShowHeader)
     }
 
