@@ -10,7 +10,7 @@ final class MockTrendingSearchClient: TrendingSearchClientProvider, Sendable {
     init(result: Result<[String], Error> = .success([])) {
         self.result = result
     }
-    func getTrendingSearches() async throws -> [String] {
+    func getTrendingSearches(for searchEngine: TrendingSearchEngine?) async throws -> [String] {
         try result.get()
     }
 }

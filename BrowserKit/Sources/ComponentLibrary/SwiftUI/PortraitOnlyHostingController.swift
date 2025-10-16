@@ -32,4 +32,8 @@ public final class PortraitOnlyHostingController<Content: View>: UIHostingContro
     override public var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
     }
+
+    override public var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
 }

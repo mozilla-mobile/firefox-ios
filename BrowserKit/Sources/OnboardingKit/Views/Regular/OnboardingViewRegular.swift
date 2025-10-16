@@ -6,6 +6,7 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
+// TODO: - FXIOS-13874 sync ipad layout with iPhone
 struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var cardBackgroundColor: Color = .clear
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
@@ -28,15 +29,14 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
+            AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             SheetSizedCard {
                 VStack {
                     tabView
                     pageControl
                 }
-                .bridge
-                .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
+                .cardBackground(theme: themeManager.getCurrentTheme(for: windowUUID), cornerRadius: UX.CardView.cornerRadius)
             }
             Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)
@@ -44,7 +44,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     .foregroundColor(skipTextColor)
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
-            .bridge.glassButtonStyle()
+            .skipButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

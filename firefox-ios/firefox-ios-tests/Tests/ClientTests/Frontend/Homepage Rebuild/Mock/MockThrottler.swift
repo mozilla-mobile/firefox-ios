@@ -4,12 +4,12 @@
 
 @testable import Client
 
-class MockThrottler: ThrottleProtocol {
+class MockThrottler: GCDThrottlerProtocol {
     private(set) var didCallThrottle = false
 
     init() {}
 
-    func throttle(completion: @escaping () -> Void) {
+    func throttle(completion: @escaping @Sendable () -> Void) {
         didCallThrottle = true
         completion()
     }
