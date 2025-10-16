@@ -4,8 +4,11 @@
 
 import WebKit
 
-
-/// TODO(Issam): Add comment explain why we need this in the first place. It would have been easier if the aarchitecture could be modeled using a server like request-response. But that's not possible with the way the code is setup now in JS. Also the main reason we need a fancy bridge is that webkit postMessages don't support transferables. So we can't forward a raw port between two webviews :(
+/// TODO(Issam): Add comment explain why we need this in the first place.
+/// It would have been easier if the aarchitecture could be modeled using a server like request-response.
+/// But that's not possible with the way the code is setup now in JS.
+/// Also the main reason we need a fancy bridge is that webkit postMessages don't support transferables.
+/// So we can't forward a raw port between two webviews :(
 
 /// Which side of the forwarder to send to.
 enum BridgeSide { case left, right }
@@ -32,7 +35,8 @@ final class WebViewBridge: NSObject, WKScriptMessageHandler, BridgeProtocol {
         super.init()
         // NOTE(Issam): We remove then add to make things idempotent
         // otherwise if for any reason we land here and we already have these setup, we will crash
-        // TODO(Issam): Make these enums and probably namespace them translations-*, we can have a custom data type for bridge ends maybe ?
+        // TODO(Issam): Make these enums and probably namespace them translations-*,
+        // we can have a custom data type for bridge ends maybe ?
         // TODO(Issam): We should probably make this a custom world at least for the page.
         leftView.configuration.userContentController.removeScriptMessageHandler(forName: "left")
         leftView.configuration.userContentController.add(self, contentWorld: .defaultClient, name: "left")

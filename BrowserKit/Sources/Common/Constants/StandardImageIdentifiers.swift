@@ -41,6 +41,7 @@ public struct StandardImageIdentifiers {
         public static let sunFill = "sunFillMedium"
         public static let translate = "translateMedium"
         public static let translateActive = "translateActiveMedium"
+        public static let loadingImage = "loadingImage"
     }
 
     // Icon size 24x24

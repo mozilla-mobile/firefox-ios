@@ -213,7 +213,9 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         // TODO: FXIOS-11973 For MVP purpose, should revisit
         let inactiveImageName = StandardImageIdentifiers.Medium.translate
         let activeImageName = StandardImageIdentifiers.Medium.translateActive
-        let isTranslateButton = element.iconName == inactiveImageName || element.iconName == activeImageName
+        let isTranslateButton = element.iconName == inactiveImageName ||
+        element.iconName == activeImageName ||
+        element.iconName == StandardImageIdentifiers.Medium.loadingImage
 
         if let existingImage = configuration?.image, !isTranslateButton {
             return existingImage

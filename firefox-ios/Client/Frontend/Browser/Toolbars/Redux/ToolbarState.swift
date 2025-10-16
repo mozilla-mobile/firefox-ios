@@ -147,7 +147,8 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.scrollAlphaDidChange, ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange,
             ToolbarMiddlewareActionType.didTapButton,
-            ToolbarActionType.didTapOnTranslate:
+            ToolbarActionType.didTapOnTranslate,
+            ToolbarActionType.translationCompleted:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:

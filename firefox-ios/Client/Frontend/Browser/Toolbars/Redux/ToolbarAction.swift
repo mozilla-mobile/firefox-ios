@@ -11,7 +11,8 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     var canTranslate: Bool {
         featureFlags.isFeatureEnabled(.translation, checking: .buildAndUser)
     }
-    let hasTranslated: Bool
+    let isTranslateActive: Bool
+    let isLoading: Bool
 }
 
 struct ToolbarAction: Action {
@@ -137,6 +138,7 @@ enum ToolbarActionType: ActionType {
     case navigationMiddleButtonDidChange
     // TODO: FXIOS-11973 For MVP purpose, should remove or modify.
     case didTapOnTranslate
+    case translationCompleted
 }
 
 struct ToolbarMiddlewareAction: Action {

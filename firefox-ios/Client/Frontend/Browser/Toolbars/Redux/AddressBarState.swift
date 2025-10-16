@@ -146,7 +146,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
 
-        case ToolbarActionType.didTapOnTranslate:
+        case ToolbarActionType.didTapOnTranslate, ToolbarActionType.translationCompleted:
             // TODO: FXIOS-11973 For MVP purpose, should remove or modify.
             return handleLeadingPageActionsUpdate(state: state, action: action)
 
@@ -328,7 +328,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
+            translationConfiguration: toolbarAction.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -1011,7 +1011,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
             if addressBarState.translationConfiguration?.canTranslate ?? false {
                 let translateAction = translateAction(
                     isEnabled: isLoading == false,
-                    isActive: action.translationConfiguration?.hasTranslated ?? false,
+                    isActive: action.translationConfiguration?.isTranslateActive ?? false,
+                    isLoading: action.translationConfiguration?.isLoading ?? false,
                     hasAlternativeLocationColor: hasAlternativeLocationColor,
                 )
                 actions.append(translateAction)
@@ -1262,13 +1263,24 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func translateAction(
         isEnabled: Bool,
         isActive: Bool,
+        isLoading: Bool,
         hasAlternativeLocationColor: Bool
     ) -> ToolbarActionConfiguration {
         let inactiveImageName = StandardImageIdentifiers.Medium.translate
         let activeImageName = StandardImageIdentifiers.Medium.translateActive
+        let loadingImage = StandardImageIdentifiers.Medium.loadingImage
+
+        var buttonImage = inactiveImageName
+
+        if isLoading {
+            buttonImage = loadingImage
+        } else if isActive {
+            buttonImage = activeImageName
+        }
+
         return ToolbarActionConfiguration(
             actionType: .translate,
-            iconName: isActive ? activeImageName : inactiveImageName,
+            iconName: buttonImage,
             isEnabled: isEnabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,

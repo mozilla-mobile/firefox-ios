@@ -13,7 +13,6 @@ enum TranslationSchemeError: LocalizedError {
     case internalError(underlying: Error)
 }
 
-
 /// A tiny custom-scheme handler with simple "routing" by host.
 ///
 /// Expected URL forms (query-style):

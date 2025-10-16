@@ -47,7 +47,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
     }
 
     /// NOTE: The pivot language is used to pivot between two different language translations
-    /// when there is not a model available to translate directly between the two. In this case "en" is common between the various supported models.
+    /// when there is not a model available to translate directly between the two.
+    /// In this case "en" is common between the various supported models.
     /// For instance given the following two models: `fr` -> `en` and `en` -> `it`, we can translate `fr` -> `it`
     private static let PIVOT_LANGUAGE = "en"
 
@@ -106,29 +107,48 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
 
         // Attempt to find a direct model pair first like jp -> ar
         if let directModels = getModelFiles(records: records, from: sourceLang, to: targetLang) {
-            logger.log("Found direct model for \(sourceLang)->\(targetLang)",
-                       level: .debug, category: .remoteSettings)
+            logger.log(
+                "Found direct model for \(sourceLang)->\(targetLang)",
+                level: .debug,
+                category: .remoteSettings
+            )
             return makeModelResponse([makeModelEntry(directModels, from: sourceLang, to: targetLang)])
         }
 
         // Try pivot models as fallback meaning we try to find two pairs such that when we want to translate
         // jp -> ar and no direct model exists.
-        // Instead translate using `PIVOT_LANGUAGE` ( which is most likely English since that's what we have the most coverage for )
+        // Instead translate using `PIVOT_LANGUAGE`
+        // ( which is most likely English since that's what we have the most coverage for )
         // Then to translate jp -> ar we translate jp -> PIVOT_LANGUAGE and then PIVOT_LANGUAGE -> ar
-        guard let sourceToPivot = getModelFiles(records: records, from: sourceLang, to: Self.PIVOT_LANGUAGE),
-              let pivotToTarget = getModelFiles(records: records, from: Self.PIVOT_LANGUAGE, to: targetLang) else {
-            logger.log("No direct or pivot models found for \(sourceLang)->\(targetLang)",
-                       level: .warning, category: .remoteSettings)
+        guard let sourceToPivot = getModelFiles(
+            records: records,
+            from: sourceLang,
+            to: Self.PIVOT_LANGUAGE
+        ), let pivotToTarget = getModelFiles(
+            records: records,
+            from: Self.PIVOT_LANGUAGE,
+            to: targetLang
+        )
+        else {
+            logger.log(
+                "No direct or pivot models found for \(sourceLang)->\(targetLang)",
+                level: .warning,
+                category: .remoteSettings
+            )
             return nil
         }
-        
+
         var entries: [[String: Any]] = []
         entries.append(makeModelEntry(sourceToPivot, from: sourceLang, to: Self.PIVOT_LANGUAGE))
         entries.append(makeModelEntry(pivotToTarget, from: Self.PIVOT_LANGUAGE, to: targetLang))
         return makeModelResponse(entries)
     }
 
-    private func getModelFiles(records: [RemoteSettingsRecord], from sourceLang: String, to targetLang: String) -> [String: Any]? {
+    private func getModelFiles(
+        records: [RemoteSettingsRecord],
+        from sourceLang: String,
+        to targetLang: String
+    ) -> [String: Any]? {
         var modelFiles = [String: Any]()
         for record in records {
             guard let fields: ModelFieldsRecord = decodeRecord(record),
@@ -156,7 +176,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
 
         return modelFiles.isEmpty ? nil : modelFiles
     }
-    
+
     /// Build a single payload object from one fileset.
     /// returns: ["sourceLanguage": ..., "targetLanguage": ..., "languageModelFiles": files]
     private func makeModelEntry(_ files: [String: Any], from: String, to: String) -> [String: Any] {

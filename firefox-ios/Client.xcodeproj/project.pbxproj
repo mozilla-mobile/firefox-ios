@@ -1389,6 +1389,7 @@
 		AA24AD322E7C3A8F008659A3 /* TrendingSearchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */; };
 		AA24AD342E7C3AD2008659A3 /* MockTrendingSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */; };
 		AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */; };
+		AA58666B2EA1522100B166F2 /* TranslationsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA58666A2EA1521C00B166F2 /* TranslationsMiddleware.swift */; };
 		AA742C7A2E90358400CF55B3 /* MockMicrosurveyTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */; };
 		AA742C7C2E904B9B00CF55B3 /* MicrosurveyTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C7B2E904B9500CF55B3 /* MicrosurveyTelemetryTests.swift */; };
 		AAB4321B2E8187190075E47F /* RecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321A2E8187130075E47F /* RecentSearchProvider.swift */; };
@@ -1518,7 +1519,6 @@
 		C283EED22E4D5356008EB540 /* SummarizerConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */; };
 		C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */; };
 		C28CAABF2E5C8C660049D7C7 /* InsetUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */; };
-		C29210C92EA02F22001EB727 /* AppAttestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29210C82EA02F1D001EB727 /* AppAttestHelper.swift */; };
 		C29210CB2EA10B27001EB727 /* LanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29210CA2EA10B22001EB727 /* LanguageDetector.swift */; };
 		C29B64812AD6959E00F3244B /* QRCodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */; };
 		C29B64832AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */; };
@@ -9470,6 +9470,7 @@
 		AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingSearchClientTests.swift; sourceTree = "<group>"; };
 		AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrendingSearchEngine.swift; sourceTree = "<group>"; };
 		AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentSearchProvider.swift; sourceTree = "<group>"; };
+		AA58666A2EA1521C00B166F2 /* TranslationsMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsMiddleware.swift; sourceTree = "<group>"; };
 		AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMicrosurveyTelemetry.swift; sourceTree = "<group>"; };
 		AA742C7B2E904B9500CF55B3 /* MicrosurveyTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyTelemetryTests.swift; sourceTree = "<group>"; };
 		AA80494199BED7BAA77241A9 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Storage.strings"; sourceTree = "<group>"; };
@@ -9755,7 +9756,6 @@
 		C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManagerTests.swift; sourceTree = "<group>"; };
 		C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigSource.swift; sourceTree = "<group>"; };
 		C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetUpdatable.swift; sourceTree = "<group>"; };
-		C29210C82EA02F1D001EB727 /* AppAttestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAttestHelper.swift; sourceTree = "<group>"; };
 		C29210CA2EA10B22001EB727 /* LanguageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetector.swift; sourceTree = "<group>"; };
 		C29B428A81B120AFF0666037 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Menu.strings; sourceTree = "<group>"; };
 		C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinator.swift; sourceTree = "<group>"; };
@@ -14284,8 +14284,8 @@
 		C265D6D22E9D7236004AF985 /* Translations */ = {
 			isa = PBXGroup;
 			children = (
+				AA58666A2EA1521C00B166F2 /* TranslationsMiddleware.swift */,
 				C29210CA2EA10B22001EB727 /* LanguageDetector.swift */,
-				C29210C82EA02F1D001EB727 /* AppAttestHelper.swift */,
 				C265D6DB2E9DAF5B004AF985 /* WebViewBridge.swift */,
 				C265D6D52E9D7904004AF985 /* TranslationsEngine.swift */,
 				C265D6D32E9D723E004AF985 /* TranslationsSchemeHandler.swift */,
@@ -18681,7 +18681,6 @@
 				964FA97728A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift in Sources */,
 				8A1E3BDF28CBA81E003388C4 /* SponsoredContentFilterUtility.swift in Sources */,
 				8A5BD95F2878B7B6000FE773 /* TopSitesWidgetManager.swift in Sources */,
-				C29210C92EA02F22001EB727 /* AppAttestHelper.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				81E9B6E82E2AB73400CE6FF6 /* MerinoStory.swift in Sources */,
 				E1442FD2294782D9003680B0 /* UIViewController+Extension.swift in Sources */,
@@ -19197,6 +19196,7 @@
 				5A96FB5A2D94357800917B12 /* ScreenshotSetting.swift in Sources */,
 				0A49784A2C53E63200B1E82A /* TrackingProtectionViewController.swift in Sources */,
 				8A48807C2E68922400AD43D5 /* GleanOhttpUploader.swift in Sources */,
+				AA58666B2EA1522100B166F2 /* TranslationsMiddleware.swift in Sources */,
 				0AFE9BF12CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift in Sources */,
 				8A9E041B2D4D08350022ED90 /* BookmarkConfiguration.swift in Sources */,
 				8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */,

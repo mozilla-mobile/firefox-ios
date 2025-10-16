@@ -9,7 +9,6 @@ import SummarizeKit
 import Shared
 import NaturalLanguage
 
-
 final class ToolbarMiddleware: FeatureFlaggable {
     private let manager: ToolbarManager
     private let toolbarHelper: ToolbarHelperInterface
@@ -111,7 +110,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
                 canShowDataClearanceAction: canShowDataClearanceAction(),
                 translationConfiguration: TranslationConfiguration(
-                    hasTranslated: false
+                    isTranslateActive: false,
+                    isLoading: false
                 ),
                 middleButton: middleButton,
                 windowUUID: uuid,
@@ -331,30 +331,25 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 store.dispatchLegacy(action)
             }
         case .translate:
-            Task { @MainActor in
-                // TODO: FXIOS-11973 For MVP purpose, should remove or modify
-                // Eventually we want a translations middeware that retrieve from back end and up date UI
-                guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
-                else { return }
-                guard let selectedTab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
-                let translateIconName = toolbarState.addressToolbar.leadingPageActions[safe: 1]?.iconName
-                let isTranslateActive = translateIconName == StandardImageIdentifiers.Medium.translateActive
-                guard let webView = selectedTab.webView else { return }
-                if(!isTranslateActive) {
-                    guard let pageLanguage = await self.checkTranslations(selectedTab) else { return }
-                    guard let deviceLanguage = Locale.current.languageCode else { return }
-                    TranslationsEngine.shared.bridge(to: webView)
-                    /// TODO(Issam): `window.__firefox__.Translations` can be a namespace constant
-                    let jsCallArgs = """
-                {from: "\(pageLanguage)", to: "\(deviceLanguage)"}
-                """
-                    webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.Translations.startEverything(\(jsCallArgs))")
-                    webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.Translations.startEverything(\(jsCallArgs))")
-                } else {
-                    webView.reload()
-                }
+            guard let toolbarState = state.screenState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: action.windowUUID
+            )
+            else { return }
+            let translateIconName = toolbarState.addressToolbar.leadingPageActions[safe: 1]?.iconName
+            let isTranslateActive = translateIconName == StandardImageIdentifiers.Medium.translateActive
+
+            if isTranslateActive {
                 let toolbarAction = ToolbarAction(
-                    translationConfiguration: TranslationConfiguration(hasTranslated: !isTranslateActive),
+                    translationConfiguration: TranslationConfiguration(isTranslateActive: false, isLoading: false),
+                    windowUUID: action.windowUUID,
+                    actionType: ToolbarActionType.didTapOnTranslate
+                )
+                store.dispatchLegacy(toolbarAction)
+            } else {
+                let toolbarAction = ToolbarAction(
+                    translationConfiguration: TranslationConfiguration(isTranslateActive: false, isLoading: true),
                     windowUUID: action.windowUUID,
                     actionType: ToolbarActionType.didTapOnTranslate
                 )
@@ -362,19 +357,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
             }
         default:
             break
-        }
-    }
-
-    @MainActor
-    func checkTranslations(_ tab: Tab) async -> String? {
-        guard let webView = tab.webView else { return nil }
-        do {
-            let sample = try await LanguageDetector.extractSample(from: webView)
-            guard let textSample = sample else { return nil }
-            return LanguageDetector.detectLanguage(of: textSample)
-        } catch {
-            print("[dbg][issam]Translations language sample error: \(error)")
-            return nil
         }
     }
 

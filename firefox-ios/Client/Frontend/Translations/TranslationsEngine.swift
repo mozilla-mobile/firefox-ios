@@ -6,7 +6,6 @@ import WebKit
 
 @MainActor
 final class TranslationsEngine {
-
     /// TODO(Issam): Temporary for now to make sure we don't create more than one.
     /// For later, we either have to use a singelton or instantiate this somewhere with app lifetime.
     /// We could probably lazy load it but it's cheap enough that there is no need to do that maybe ?
