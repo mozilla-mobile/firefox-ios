@@ -87,7 +87,10 @@ jobs:
         locales: [ 
           "${{ needs.determine-locales.outputs.group1 }}", 
           "${{ needs.determine-locales.outputs.group2 }}",
-          "${{ needs.determine-locales.outputs.group3 }}"]  
+          "${{ needs.determine-locales.outputs.group3 }}",
+          "${{ needs.determine-locales.outputs.group4 }}",
+          "${{ needs.determine-locales.outputs.group5 }}"
+        ]
     uses: ./.github/workflows/focus-ios-l10n-locales.yml
     with:
       locales: "${{ matrix.locales }}"
