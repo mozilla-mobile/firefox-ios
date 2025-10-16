@@ -44,14 +44,13 @@ struct TermsOfServiceTelemetry {
     }
 
     func recordDateAndVersion(acceptedDate: Date) {
-        let termsOfUseVersion: Int64 = 4
         let acceptedExtra = GleanMetrics.TermsOfUse.AcceptedExtra(
-            surface: "onboarding",
-            touVersion: String(termsOfUseVersion)
+            surface: TermsOfUseTelemetry.Surface.onboarding.rawValue,
+            touVersion: String(TermsOfUseTelemetry().termsOfUseVersion)
         )
 
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.accepted, extras: acceptedExtra)
-        gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: termsOfUseVersion)
+        gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: TermsOfUseTelemetry().termsOfUseVersion)
         gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
     }
 }
