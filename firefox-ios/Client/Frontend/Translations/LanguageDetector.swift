@@ -20,6 +20,13 @@ struct LanguageDetector {
         return sample
     }
 
+    @MainActor
+    static func isDone(from webView: WKWebView) async throws -> Bool {
+        let js = "return await window.__firefox__.Translations.isDone()"
+        let _ = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
+        return true
+    }
+
     /// Detects the dominant language of a given text and returns its BCP-47 code (e.g. `"en"`, `"fr"`).
     static func detectLanguage(of text: String) -> String? {
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {

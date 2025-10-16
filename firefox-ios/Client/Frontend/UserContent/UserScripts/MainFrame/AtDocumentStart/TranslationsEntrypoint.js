@@ -49,11 +49,18 @@ const startEverything = ({from, to}) => {
     sendToEngine(message);
 };
 
+// TODO(Issam): Just mock for now to unblock UI. 
+// This should be properly implemented later but the calling code shouldn't care.
+const isDone = async () => {
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  return true;
+};
 
+// document.addEventListener("DiscardTranslations", () => sendToEngine({ type: "DiscardTranslations", innerWindowId }));
 
 Object.defineProperty(window.__firefox__, "Translations", {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: Object.freeze({ getLanguageSampleWhenReady, startEverything })
+    value: Object.freeze({ getLanguageSampleWhenReady, startEverything, isDone })
 });

@@ -29,6 +29,7 @@ window.receive = (message) => {
     case "DiscardTranslations":
     case "ForceShutdown": {
       handleActorMessage(message);
+      // We need to delete this after we send over the messages and the engine is really done.
       channels.delete(id);
       break;
     }
