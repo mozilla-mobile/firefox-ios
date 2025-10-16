@@ -342,7 +342,7 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441500
     func testShareLinkPrivateMode() {
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.cells["Copy"])
@@ -520,11 +520,13 @@ class NavigationTest: BaseTestCase {
             // Waiting is needed before switching to private tab in order to display the expected domain
             sleep(3)
             // workaround end
-            app.buttons[StandardImageIdentifiers.Large.privateMode].waitAndTap()
+            navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         }
         numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of private opened tabs should be 1")
-        mozWaitForElementToExist(app.otherElements[tabsTray].cells.element(boundBy: 0).staticTexts["Example Domains"])
+        let identifier = "TabDisplayView.tabCell_1_0"
+        XCTAssertEqual(app.cells.matching(identifier: identifier).element.label,
+                       "Example Domains")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441774
@@ -575,7 +577,7 @@ class NavigationTest: BaseTestCase {
         // Go to Settings -> Browsing and disable "Block external links" toggle
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowsingSettings)
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
         let switchBlockLinks = app.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockExternal.title]
         scrollToElement(switchBlockLinks)
         if let switchValue = switchBlockLinks.value as? String, switchValue == "1" {
@@ -590,7 +592,9 @@ class NavigationTest: BaseTestCase {
         }
         validateExternalLink()
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         validateExternalLink(isPrivate: true)
     }
 
