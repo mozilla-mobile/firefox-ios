@@ -6,10 +6,10 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
+// TODO: - FXIOS-13874 sync ipad layout with iPhone
 struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @State private var cardBackgroundColor: Color = .clear
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
-    // TODO: - refactor code
     @State private var skipTextColor: Color = .clear
 
     let windowUUID: WindowUUID
@@ -83,7 +83,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     private func applyTheme(theme: Theme) {
         let color = theme.colors
-        cardBackgroundColor = Color(color.layer2.withAlphaComponent(0.9))
+        cardBackgroundColor = Color(color.layer2)
         skipTextColor = Color(theme.colors.textOnDark)
     }
 }

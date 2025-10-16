@@ -34,9 +34,6 @@ enum UX {
 
         static let titleAlignmentMinHeightPadding: CGFloat = 80
         static let cardHorizontalPadding: CGFloat = 16.0
-        // TODO: - check older
-
-        static let cardHeightRatio: CGFloat = 0.8
         static let spacing: CGFloat = 24
         static let regularSizeSpacing: CGFloat = 48
         static let tosSpacing: CGFloat = 48
@@ -50,6 +47,7 @@ enum UX {
         static let primaryButtonWidthiPad: CGFloat = 313
         static let cardTopPadding: CGFloat = 20.0
         static let cardBottomPadding: CGFloat = 60.0
+        static let carouselDotBottomPadding: CGFloat = 16
 
         // Font sizes for base metrics
         static let titleFontSize: CGFloat = 28

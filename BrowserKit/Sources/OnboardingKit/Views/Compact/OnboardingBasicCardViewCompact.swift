@@ -6,22 +6,6 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-@MainActor
-protocol ThemeableView: View {
-    var theme: Theme { get set }
-    var windowUUID: WindowUUID { get }
-
-    func applyTheme()
-}
-
-extension View {
-    func listenToThemeChanges(onChange: @escaping (WindowUUID?) -> Void) -> some View {
-        return self.onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            onChange($0.windowUUID)
-        }
-    }
-}
-
 // MARK: - Updated OnboardingBasicCardViewCompact
 struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
     @State var theme: Theme

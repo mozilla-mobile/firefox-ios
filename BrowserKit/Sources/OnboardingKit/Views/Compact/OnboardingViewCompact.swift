@@ -7,7 +7,6 @@ import Common
 import ComponentLibrary
 
 private struct LocalUX {
-    static let verticalPadding: CGFloat = 32.0
     static let horizontalPadding: CGFloat = 24.0
 }
 
@@ -88,7 +87,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 .tag(index)
                 .padding(.top, UX.CardView.cardTopPadding)
                 .padding(.bottom, UX.CardView.cardBottomPadding)
-                .padding(.horizontal, LocalUX.horizontalPadding)
+                .padding(.horizontal, UX.CardView.horizontalPadding)
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -96,7 +95,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
         if safeAreaBottomInset == 0 {
-            return 15.0
+            return UX.CardView.carouselDotBottomPadding
         }
         return safeAreaBottomInset * 0.5
     }
