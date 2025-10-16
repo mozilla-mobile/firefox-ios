@@ -374,6 +374,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(SummarizeSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
+        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
+            generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         generalSettings += [
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
         ]

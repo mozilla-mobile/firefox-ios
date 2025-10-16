@@ -9,7 +9,6 @@ struct StoriesFeedSectionLayoutProvider {
         static let cellSize = CGSize(width: 361, height: 282)
         static let interItemSpacing: CGFloat = 16
         static let interGroupSpacing: CGFloat = 16
-        static let fractionalGroupWidth: CGFloat = 0.92
         static let topSectionInset: CGFloat = 10
     }
 

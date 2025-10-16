@@ -149,7 +149,6 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         toolbarState?.isShowingNavigationToolbar == true else { return }
         enablePanGestureRecognizer()
     }
-
     // MARK: - Pan Gesture Handling
     @objc
     @MainActor
@@ -257,12 +256,13 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             CGAffineTransform(translationX: targetPreview, y: 0) : .identity
             webPagePreview.alpha = shouldCompleteTransition ? 1.0 : 0.0
             webPagePreview.transform = shouldCompleteTransition ? .identity : previewTransform
+            disablePanGestureRecognizer()
         } completion: { [self] _ in
             webPagePreview.transitionDidEnd()
             homepageScreenshot = nil
-            webPagePreview.isHidden = true
-
+            enablePanGestureRecognizer()
             if shouldCompleteTransition {
+                webPagePreview.isHidden = true
                 store.dispatchLegacy(
                     ToolbarAction(
                         shouldAnimate: false,

@@ -40,5 +40,6 @@ enum MerinoActionType: ActionType {
 }
 
 enum MerinoMiddlewareActionType: ActionType {
-    case retrievedUpdatedStories
+    case retrievedUpdatedHomepageStories
+    case retrievedUpdatedStoriesFeedStories
 }

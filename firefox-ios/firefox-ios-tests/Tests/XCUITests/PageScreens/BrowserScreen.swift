@@ -26,7 +26,7 @@ final class BrowserScreen {
     }
 
     func tapBackButton() {
-        let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
+        let backButton = sel.BACK_BUTTON.element(in: app)
         backButton.waitAndTap()
     }
 
@@ -73,5 +73,27 @@ final class BrowserScreen {
             // iOS 15 displays a toast that covers the reload button
             sleep(2)
         }
+    }
+
+    func tapDownloadsToastButton() {
+        let downloadsButton = sel.DOWNLOADS_TOAST_BUTTON.element(in: app)
+        downloadsButton.waitAndTap()
+    }
+
+    func assertMozillaPageLoaded(urlField: XCUIElement) {
+        BaseTestCase().mozWaitForElementToExist(sel.MENU_BUTTON.element(in: app))
+        BaseTestCase().mozWaitForElementToExist(sel.STATIC_TEXT_MOZILLA.element(in: app))
+        BaseTestCase().mozWaitForValueContains(urlField, value: "mozilla.org")
+    }
+
+    func assertExampleDomainLoaded(urlField: XCUIElement) {
+        BaseTestCase().mozWaitForElementToExist(sel.STATIC_TEXT_EXAMPLE_DOMAIN.element(in: app))
+        BaseTestCase().mozWaitForValueContains(urlField, value: "example.com")
+    }
+
+    func clearURL() {
+        let clearButton = sel.CLEAR_TEXT_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(clearButton)
+        clearButton.waitAndTap()
     }
 }

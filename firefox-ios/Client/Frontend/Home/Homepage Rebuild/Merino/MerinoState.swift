@@ -45,7 +45,7 @@ struct MerinoState: StateType, Equatable {
         }
 
         switch action.actionType {
-        case MerinoMiddlewareActionType.retrievedUpdatedStories:
+        case MerinoMiddlewareActionType.retrievedUpdatedHomepageStories:
             return handlePocketStoriesAction(action, state: state)
         case MerinoActionType.toggleShowSectionSetting:
             return handleSettingsToggleAction(action, state: state)

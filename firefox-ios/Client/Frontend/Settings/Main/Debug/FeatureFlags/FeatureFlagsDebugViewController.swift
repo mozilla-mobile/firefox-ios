@@ -196,6 +196,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .translation,
+                titleText: format(string: "Translations"),
+                statusText: format(string: "Toggle to enable translations feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .hntTopSitesVisualRefresh,
                 titleText: format(string: "Top Sites Visual Refresh"),
                 statusText: format(string: "Toggle to enable the top sites visual refresh")

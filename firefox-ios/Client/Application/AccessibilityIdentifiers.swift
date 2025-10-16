@@ -694,6 +694,10 @@ struct AccessibilityIdentifiers {
             static let title = "DisplayThemeOption"
         }
 
+        struct Translation {
+            static let title = "Settings.Translation.Title"
+        }
+
         struct BlockImages {
             static let title = "Block Images"
         }

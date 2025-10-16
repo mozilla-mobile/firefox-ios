@@ -43,6 +43,7 @@ public struct OnboardingButton: View {
         Button(action: action) {
             Text(title)
                 .font(.headline)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: width ?? .infinity)
                 .foregroundColor(foregroundColor)
         }
