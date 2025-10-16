@@ -262,8 +262,6 @@ workflows:
 
             echo "Running Danger"
             swift run danger-swift ci
-    - cache-push@2.7.1:
-        is_always_run: true
     - slack@4.2.1:
         is_always_run: true
         inputs:
@@ -774,7 +772,6 @@ workflows:
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
     - deploy-to-bitrise-io@2.10.0: {}
-    - cache-push@2.7.1: {}
     - slack@4.2.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
@@ -833,7 +830,6 @@ workflows:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
-    - cache-push@2.7.1: {}
     envs:
     - opts:
         is_expand: false
