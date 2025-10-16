@@ -517,10 +517,11 @@ open class MozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
     public func uniffiClonePointer() -> UnsafeMutableRawPointer {
         return try! rustCall { uniffi_ads_client_fn_clone_mozadsclient(self.pointer, $0) }
     }
-public convenience init() {
+public convenience init(dbPath: String) {
     let pointer =
         try! rustCall() {
-    uniffi_ads_client_fn_constructor_mozadsclient_new($0
+    uniffi_ads_client_fn_constructor_mozadsclient_new(
+        FfiConverterString.lower(dbPath),$0
     )
 }
     self.init(unsafeFromRawPointer: pointer)
@@ -1065,15 +1066,15 @@ public func FfiConverterTypeIABContent_lower(_ value: IabContent) -> RustBuffer 
 
 public struct MozAd {
     public var altText: String?
-    public var blockKey: String?
-    public var callbacks: AdCallbacks?
-    public var format: String?
-    public var imageUrl: String?
-    public var url: String?
+    public var blockKey: String
+    public var callbacks: AdCallbacks
+    public var format: String
+    public var imageUrl: String
+    public var url: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(altText: String?, blockKey: String?, callbacks: AdCallbacks?, format: String?, imageUrl: String?, url: String?) {
+    public init(altText: String?, blockKey: String, callbacks: AdCallbacks, format: String, imageUrl: String, url: String) {
         self.altText = altText
         self.blockKey = blockKey
         self.callbacks = callbacks
@@ -1131,21 +1132,21 @@ public struct FfiConverterTypeMozAd: FfiConverterRustBuffer {
         return
             try MozAd(
                 altText: FfiConverterOptionString.read(from: &buf), 
-                blockKey: FfiConverterOptionString.read(from: &buf), 
-                callbacks: FfiConverterOptionTypeAdCallbacks.read(from: &buf), 
-                format: FfiConverterOptionString.read(from: &buf), 
-                imageUrl: FfiConverterOptionString.read(from: &buf), 
-                url: FfiConverterOptionString.read(from: &buf)
+                blockKey: FfiConverterString.read(from: &buf), 
+                callbacks: FfiConverterTypeAdCallbacks.read(from: &buf), 
+                format: FfiConverterString.read(from: &buf), 
+                imageUrl: FfiConverterString.read(from: &buf), 
+                url: FfiConverterString.read(from: &buf)
         )
     }
 
     public static func write(_ value: MozAd, into buf: inout [UInt8]) {
         FfiConverterOptionString.write(value.altText, into: &buf)
-        FfiConverterOptionString.write(value.blockKey, into: &buf)
-        FfiConverterOptionTypeAdCallbacks.write(value.callbacks, into: &buf)
-        FfiConverterOptionString.write(value.format, into: &buf)
-        FfiConverterOptionString.write(value.imageUrl, into: &buf)
-        FfiConverterOptionString.write(value.url, into: &buf)
+        FfiConverterString.write(value.blockKey, into: &buf)
+        FfiConverterTypeAdCallbacks.write(value.callbacks, into: &buf)
+        FfiConverterString.write(value.format, into: &buf)
+        FfiConverterString.write(value.imageUrl, into: &buf)
+        FfiConverterString.write(value.url, into: &buf)
     }
 }
 
@@ -1659,30 +1660,6 @@ fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterOptionTypeAdCallbacks: FfiConverterRustBuffer {
-    typealias SwiftType = AdCallbacks?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeAdCallbacks.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeAdCallbacks.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
 fileprivate struct FfiConverterOptionTypeAdContentCategory: FfiConverterRustBuffer {
     typealias SwiftType = AdContentCategory?
 
@@ -1913,7 +1890,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_ads_client_checksum_method_mozadsclient_request_ads() != 19172) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_constructor_mozadsclient_new() != 60968) {
+    if (uniffi_ads_client_checksum_constructor_mozadsclient_new() != 2889) {
         return InitializationResult.apiChecksumMismatch
     }
 
