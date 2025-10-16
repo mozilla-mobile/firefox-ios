@@ -3,360 +3,147 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
-import MetalKit
 import Common
 
-struct GradientPalette {
-    var gradientOnboardingStop1: SIMD3<Float>
-    var gradientOnboardingStop2: SIMD3<Float>
-    var gradientOnboardingStop3: SIMD3<Float>
-    var gradientOnboardingStop4: SIMD3<Float>
-
-    static let defaultColors = GradientPalette(
-        gradientOnboardingStop1: SIMD3<Float>(0.996, 0.514, 0.000),
-        gradientOnboardingStop2: SIMD3<Float>(0.180, 0.506, 0.996),
-        gradientOnboardingStop3: SIMD3<Float>(0.949, 0.020, 0.004),
-        gradientOnboardingStop4: SIMD3<Float>(0.996, 0.396, 0.000)
-    )
-}
-
-private enum AnimatedGradientUX {
-    static let timeIncrementPerFrame: Float = 0.0045
-    static let vertexShaderFunctionName = "animatedGradientVertex"
-    static let fragmentShaderFunctionName = "animatedGradientFragment"
-    static let fullScreenQuadVertexCount = 4
-    static let timeBufferIndex = 0
-    static let normalAnimationSpeed: Float = 2.0
-    static let reducedMotionSpeed: Float = 0.0
-}
-
-extension SIMD3 where Scalar == Float {
-    init(_ color: UIColor) {
-        var r: CGFloat = 0
-        var g: CGFloat = 0
-        var b: CGFloat = 0
-        var a: CGFloat = 0
-        color.getRed(&r, green: &g, blue: &b, alpha: &a)
-        self.init(Float(r), Float(g), Float(b))
+struct RotatingBlendGradient: View {
+    private struct UX {
+        static let speeds: [CGFloat] = [0.8, 0.6, 1.5, 1.1]
+        static let centerPoints = [CGPoint(x: 0.1, y: 0.3),
+                                   CGPoint(x: 0.80, y: 0.9),
+                                   CGPoint(x: 1.1, y: 0.2),
+                                   CGPoint(x: 0.0, y: 1.1)]
+        static let baseInfluence: CGFloat = 0.36
+        static let pulsationAmplitude: CGFloat = 0.01
+        static let pulsationSpeed: CGFloat = 0.8
+        static let motionRadius: CGFloat = 0.05
+        static let offset: CGFloat = 0.1
     }
-}
 
-@MainActor
-class AnimatedGradientRenderer: NSObject, MTKViewDelegate {
-    private let logger: Logger
-    private let commandQueue: MTLCommandQueue
-    private let renderPipelineState: MTLRenderPipelineState
-    private var currentTime: Float = 0.0
-    let metalDevice: MTLDevice
+    private struct CircleProp {
+        let color: Color
+        let centerPoint: CGPoint
+    }
 
-    // Add a weak reference to the MTKView to trigger redraws
-    private weak var metalView: MTKView?
+    let colors: [Color]
 
-    private var palette = GradientPalette.defaultColors
-
-    // Configurable animation speed multiplier (1.0 = normal, 2.0 = 2x faster, etc.)
-    var animationSpeedMultiplier: Float = 1.0 {
-        didSet {
-            triggerRedraw()
+    var body: some View {
+        GeometryReader { geo in
+            Group {
+                if UIAccessibility.isReduceMotionEnabled {
+                    scene(at: 0, size: geo.size)
+                } else {
+                    TimelineView(.animation) { timeline in
+                        let time = timeline.date.timeIntervalSinceReferenceDate
+                        scene(at: time, size: geo.size)
+                    }
+                }
+            }
         }
     }
 
-    init?(logger: Logger = DefaultLogger.shared, device: MTLDevice?, speed: Float = 1.0) {
-        self.logger = logger
+    @ViewBuilder
+    private func scene(at time: TimeInterval, size: CGSize) -> some View {
+        let minSide = min(size.width, size.height)
 
-        if let device {
-            metalDevice = device
-        } else {
-            logger.log("No Metal device available", level: .fatal, category: .onboarding)
-            return nil
-        }
-
-        guard let queue = metalDevice.makeCommandQueue() else {
-            logger.log(
-                "Failed to create Metal command queue",
-                level: .fatal,
-                category: .onboarding
-            )
-            return nil
-        }
-        commandQueue = queue
-
-        let shaderLibrary: MTLLibrary
-        do {
-            shaderLibrary = try metalDevice.makeDefaultLibrary(bundle: .module)
-        } catch {
-            logger.log(
-                "Failed to create Metal default library: \(error)",
-                level: .fatal,
-                category: .onboarding
-            )
-            return nil
-        }
-
-        guard let vertexFunction = shaderLibrary.makeFunction(name: AnimatedGradientUX.vertexShaderFunctionName) else {
-            let errorMessage = "Missing vertex shader function: \(AnimatedGradientUX.vertexShaderFunctionName)"
-            logger.log(errorMessage, level: .fatal, category: .onboarding)
-            return nil
-        }
-
-        guard let fragmentFunction = shaderLibrary.makeFunction(name: AnimatedGradientUX.fragmentShaderFunctionName) else {
-            let errorMessage = "Missing fragment shader function: \(AnimatedGradientUX.fragmentShaderFunctionName)"
-            logger.log(errorMessage, level: .fatal, category: .onboarding)
-            return nil
-        }
-
-        let pipelineDescriptor = MTLRenderPipelineDescriptor()
-        pipelineDescriptor.vertexFunction = vertexFunction
-        pipelineDescriptor.fragmentFunction = fragmentFunction
-        pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-
-        do {
-            renderPipelineState = try metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        } catch {
-            logger.log(
-                "Failed to create render pipeline state: \(error)",
-                level: .fatal,
-                category: .onboarding
-            )
-            return nil
-        }
-
-        super.init()
-
-        // Set the initial speed
-        self.animationSpeedMultiplier = speed
-
-        updatePaletteForCurrentTheme(palette: palette)
-
-        logger.log(
-            "AnimatedGradientRenderer initialized successfully with speed \(speed)x",
-            level: .info,
-            category: .onboarding
+        let influence = minSide * (
+            UX.baseInfluence + UX.offset
+            + UX.pulsationAmplitude * CGFloat(sin(time * UX.pulsationSpeed))
         )
-    }
+        let properties = properties(at: time, size: size)
 
-    // Method to set the MTKView reference
-    func setMetalView(_ view: MTKView) {
-        metalView = view
-    }
-
-    func updatePaletteForCurrentTheme(palette: GradientPalette) {
-        self.palette = palette
-        triggerRedraw()
-    }
-
-    private func triggerRedraw() {
-        metalView?.setNeedsDisplay()
-    }
-
-    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        // Simple implementation - no complex texture management
-    }
-
-    func draw(in view: MTKView) {
-        // Store reference to view if not already set
-        if metalView == nil {
-            metalView = view
+        ZStack {
+            ForEach(properties, id: \.color) { color in
+                blob(color: color.color, center: color.centerPoint, radius: influence)
+            }
         }
+        .compositingGroup()
+        .blendMode(.plusLighter)
+        .drawingGroup(opaque: false, colorMode: .linear)
+        .ignoresSafeArea()
+    }
 
-        guard let currentDrawable = view.currentDrawable else {
-            logger.log(
-                "No current drawable available",
-                level: .warning,
-                category: .onboarding
+    private func properties(at time: TimeInterval, size: CGSize) -> [CircleProp] {
+        var properties = [CircleProp]()
+        for index in 0..<colors.count {
+            let baseCenterPoint = valueFor(index: index, array: UX.centerPoints)
+            let speed = valueFor(index: index, array: UX.speeds)
+            let animatedCenterPoint = animateCenterPoint(
+                baseCenterPoint,
+                time: time,
+                speed: speed,
+                radius: UX.motionRadius,
+                in: size
             )
-            return
+            properties.append(CircleProp(color: colors[index], centerPoint: animatedCenterPoint))
         }
-
-        guard let renderPassDescriptor = view.currentRenderPassDescriptor else {
-            logger.log(
-                "No current render pass descriptor available",
-                level: .warning,
-                category: .onboarding
-            )
-            return
-        }
-
-        guard let commandBuffer = commandQueue.makeCommandBuffer() else {
-            logger.log(
-                "Failed to create command buffer",
-                level: .warning,
-                category: .onboarding
-            )
-            return
-        }
-
-        guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else {
-            logger.log(
-                "Failed to create render command encoder",
-                level: .warning,
-                category: .onboarding
-            )
-            return
-        }
-
-        encodeRenderCommands(with: renderEncoder)
-        renderEncoder.endEncoding()
-
-        commandBuffer.present(currentDrawable)
-        commandBuffer.commit()
-
-        advanceAnimationTime()
+        return properties
     }
 
-    private func encodeRenderCommands(with encoder: MTLRenderCommandEncoder) {
-        encoder.setRenderPipelineState(renderPipelineState)
-
-        var timeValue = currentTime
-        encoder.setFragmentBytes(
-            &timeValue,
-            length: MemoryLayout<Float>.size,
-            index: AnimatedGradientUX.timeBufferIndex
-        )
-
-        var currentPalette = palette
-        encoder.setFragmentBytes(&currentPalette,
-                                 length: MemoryLayout<GradientPalette>.stride,
-                                 index: 1)
-
-        // Pass the speed multiplier to the shader
-        var speedMultiplier = animationSpeedMultiplier
-        encoder.setFragmentBytes(
-            &speedMultiplier,
-            length: MemoryLayout<Float>.size,
-            index: 2
-        )
-
-        encoder.drawPrimitives(
-            type: .triangleStrip,
-            vertexStart: 0,
-            vertexCount: AnimatedGradientUX.fullScreenQuadVertexCount
-        )
+    private func valueFor<T>(index: Int, array: [T]) -> T {
+        precondition(!array.isEmpty, "Array must not be empty")
+        let numberOfElements = array.count
+        // simple equation that for index out of bounds gives the corresponding in the array.
+        // The array has fixed values and index is not related to it.
+        let circularIndex = ((index % numberOfElements) + numberOfElements) % numberOfElements
+        return array[circularIndex]
     }
 
-    private func advanceAnimationTime() {
-        // Only advance time if speed multiplier is greater than 0
-        if animationSpeedMultiplier > 0 {
-            currentTime += AnimatedGradientUX.timeIncrementPerFrame * animationSpeedMultiplier
-        }
+    private func animateCenterPoint(
+        _ centerPoint: CGPoint,
+        time: TimeInterval,
+        speed: Double,
+        radius: CGFloat,
+        in size: CGSize
+    ) -> CGPoint {
+        let angle = time * speed
+        // We normalize the position and radius by the actual canvas size
+        let normalizedPosition = CGPoint(x: centerPoint.x * size.width, y: centerPoint.y * size.height)
+        let normalizedRadius = radius * min(size.width, size.height)
+        return CGPoint(x: normalizedPosition.x + normalizedRadius * CGFloat(sin(angle)),
+                       y: normalizedPosition.y + normalizedRadius * CGFloat(cos(angle)))
+    }
+
+    private func blob(color: Color, center: CGPoint, radius: CGFloat) -> some View {
+        Circle()
+            .fill(color)
+            .frame(width: radius * 4, height: radius * 4)
+            .position(center)
+            .blur(radius: radius * 0.2)
     }
 }
 
-struct AnimatedGradientMetalViewRepresentable: UIViewRepresentable {
-    private weak var delegate: AnimatedGradientRenderer?
-
-    init(delegate: AnimatedGradientRenderer) {
-        self.delegate = delegate
-    }
-
-    func makeUIView(context: Context) -> MTKView {
-        let metalView = MTKView()
-        metalView.device = delegate?.metalDevice
-        metalView.framebufferOnly = false
-        metalView.colorPixelFormat = .bgra8Unorm
-        metalView.delegate = delegate
-
-        // Set the view reference in the delegate so it can trigger redraws
-        delegate?.setMetalView(metalView)
-
-        return metalView
-    }
-
-    func updateUIView(_ uiView: MTKView, context: Context) {
-        // Ensure the delegate still has the view reference
-        delegate?.setMetalView(uiView)
-    }
-}
-
-struct AnimatedGradientMetalView: View {
+struct AnimatedGradientView: ThemeableView {
+    @State var theme: Theme
     @State private var gradientColors: [Color] = []
-    @StateObject private var rendererStore: RendererStore
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
 
     init(
-        metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice(),
         windowUUID: WindowUUID,
         themeManager: ThemeManager
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        // Set speed to 0 if reduce motion is enabled, otherwise use normal speed
-        let speed: Float = UIAccessibility.isReduceMotionEnabled
-        ? AnimatedGradientUX.reducedMotionSpeed
-        : AnimatedGradientUX.normalAnimationSpeed
-        _rendererStore = StateObject(wrappedValue: RendererStore(device: metalDevice, speed: speed))
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
     var body: some View {
-        if let delegate = rendererStore.renderer {
-            AnimatedGradientMetalViewRepresentable(delegate: delegate)
-                .onAppear {
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                    updateAnimationSpeedForReduceMotion()
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-                    guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                }
-                .onReceive(
-                    NotificationCenter.default.publisher(
-                        for: UIAccessibility.reduceMotionStatusDidChangeNotification
-                    )
-                ) { _ in
-                    updateAnimationSpeedForReduceMotion()
-                }
-        } else {
-            LinearGradient(
-                gradient: Gradient(
-                    colors: gradientColors
-                ),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
+        RotatingBlendGradient(colors: [
+            theme.colors.gradientOnboardingStop1.color,
+            theme.colors.gradientOnboardingStop2.color,
+            theme.colors.gradientOnboardingStop3.color,
+            theme.colors.gradientOnboardingStop4.color
+        ])
+        .onAppear {
+            applyTheme()
+        }
+        .listenToThemeChanges { window in
+            guard window == windowUUID else { return }
+            applyTheme()
         }
     }
 
-    private func updateAnimationSpeedForReduceMotion() {
-        let speed: Float = UIAccessibility.isReduceMotionEnabled
-        ? AnimatedGradientUX.reducedMotionSpeed
-        : AnimatedGradientUX.normalAnimationSpeed
-        rendererStore.renderer?.animationSpeedMultiplier = speed
-    }
-
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        gradientColors = [
-            Color(color.gradientOnboardingStop1),
-            Color(color.gradientOnboardingStop2),
-            Color(color.gradientOnboardingStop3),
-            Color(color.gradientOnboardingStop4)
-        ]
-
-        rendererStore.renderer?.updatePaletteForCurrentTheme(
-            palette: GradientPalette(
-                gradientOnboardingStop1: SIMD3<Float>(color.gradientOnboardingStop1),
-                gradientOnboardingStop2: SIMD3<Float>(color.gradientOnboardingStop2),
-                gradientOnboardingStop3: SIMD3<Float>(color.gradientOnboardingStop3),
-                gradientOnboardingStop4: SIMD3<Float>(color.gradientOnboardingStop4)
-            )
-        )
-    }
-}
-
-// Wrapper class to manage the optional renderer
-@MainActor
-class RendererStore: ObservableObject {
-    let renderer: AnimatedGradientRenderer?
-
-    init(device: MTLDevice?, speed: Float) {
-        self.renderer = AnimatedGradientRenderer(device: device, speed: speed)
+    func applyTheme() {
+        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }

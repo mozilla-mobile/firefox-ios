@@ -6,11 +6,15 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
+private struct LocalUX {
+    static let horizontalPadding: CGFloat = 24.0
+}
+
 struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    @State private var skipTextColor: Color = .clear
+    @State private var theme: Theme
 
     init(
         windowUUID: WindowUUID,
@@ -19,72 +23,84 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         _viewModel = StateObject(
             wrappedValue: viewModel
         )
     }
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
-                .edgesIgnoringSafeArea(.all)
-            VStack {
-                Group {
-                    pagingCarousel
+        GeometryReader { geo in
+            ZStack {
+                AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
+                    .ignoresSafeArea()
+                VStack {
+                    Button(action: viewModel.skipOnboarding) {
+                        Text(viewModel.skipText)
+                            .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
+                    }
+                    .padding(.trailing, UX.Onboarding.Spacing.standard)
+                    .skipButtonStyle(theme: theme)
+                    .accessibilitySortPriority(2)
+                    .accessibilityLabel(viewModel.skipText)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+
+                    tabView
+                        .accessibilitySortPriority(1)
+                        .accessibilityElement(children: .contain)
+
+                    Spacer()
+
+                    CustomPageControl(
+                        currentPage: $viewModel.pageCount,
+                        numberOfPages: viewModel.onboardingCards.count,
+                        windowUUID: windowUUID,
+                        themeManager: themeManager,
+                        style: .compact
+                    )
+                    .padding(.bottom, pageControllPadding(safeAreaBottomInset: geo.safeAreaInsets.bottom))
                 }
-                .padding(.vertical)
-
-                Spacer()
-
-                CustomPageControl(
-                    currentPage: $viewModel.pageCount,
-                    numberOfPages: viewModel.onboardingCards.count,
-                    windowUUID: windowUUID,
-                    themeManager: themeManager,
-                    style: .compact
-                )
-                .padding(.bottom)
+                .ignoresSafeArea(.all, edges: .bottom)
             }
-            .accessibilitySortPriority(1)
-            .accessibilityElement(children: .contain)
-
-            Button(action: viewModel.skipOnboarding) {
-                Text(viewModel.skipText)
-                    .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
-                    .foregroundColor(skipTextColor)
-            }
-            .padding(.trailing, UX.Onboarding.Spacing.standard)
-            .bridge.glassButtonStyle()
-            .accessibilitySortPriority(2)
-            .accessibilityLabel(viewModel.skipText)
         }
         .onAppear {
             applyTheme()
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme()
+            withAnimation {
+                applyTheme()
+            }
         }
     }
 
-    private var pagingCarousel: some View {
-        PagingCarousel(
-            selection: $viewModel.pageCount,
-            items: viewModel.onboardingCards,
-            disableInteractionDuringTransition: false
-        ) { card in
-            OnboardingCardViewCompact(
-                viewModel: card,
-                windowUUID: windowUUID,
-                themeManager: themeManager,
-                onBottomButtonAction: viewModel.handleBottomButtonAction,
-                onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
-            )
+    private var tabView: some View {
+        TabView(selection: $viewModel.pageCount) {
+            ForEach(Array(viewModel.onboardingCards.enumerated()), id: \.element.name) { index, card in
+                OnboardingCardViewCompact(
+                    viewModel: card,
+                    windowUUID: windowUUID,
+                    themeManager: themeManager,
+                    onBottomButtonAction: viewModel.handleBottomButtonAction,
+                    onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
+                )
+                .tag(index)
+                .padding(.top, UX.CardView.cardTopPadding)
+                .padding(.bottom, UX.CardView.cardBottomPadding)
+                .padding(.horizontal, UX.CardView.horizontalPadding)
+            }
         }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+    }
+
+    private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
+        if safeAreaBottomInset == 0 {
+            return UX.CardView.carouselDotBottomPadding
+        }
+        return safeAreaBottomInset * 0.5
     }
 
     private func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        skipTextColor = Color(theme.colors.textOnDark)
+        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }

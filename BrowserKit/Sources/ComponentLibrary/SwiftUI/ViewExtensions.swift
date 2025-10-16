@@ -33,6 +33,4 @@ extension View {
             return false
         }
     }
-
-    public var bridge: CompatibilityBridge<Self> { CompatibilityBridge(content: self) }
 }
