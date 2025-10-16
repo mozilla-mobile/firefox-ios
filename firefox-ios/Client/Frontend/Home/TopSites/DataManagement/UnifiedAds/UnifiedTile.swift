@@ -11,20 +11,20 @@ struct UnifiedTile: Decodable {
     let url: String
     let callbacks: UnifiedTileCallback
     let imageUrl: String
-    let name: String?
+    let name: String
     let blockKey: String
 
-    static func from(mozAdsPlacement: MozAdsPlacement) -> UnifiedTile {
+    static func from(name: String, mozAdsPlacement: MozAdsPlacement) -> UnifiedTile {
         let content = mozAdsPlacement.content
         return UnifiedTile(
             format: content.format,
             url: content.url,
             callbacks: UnifiedTileCallback(
-                click: content.callbacks?.click,
-                impression: content.callbacks?.impression
+                click: content.callbacks.click ?? "",
+                impression: content.callbacks.impression ?? ""
             ),
             imageUrl: content.imageUrl,
-            name: content.altText ?? "",
+            name: name,
             blockKey: content.blockKey
         )
     }

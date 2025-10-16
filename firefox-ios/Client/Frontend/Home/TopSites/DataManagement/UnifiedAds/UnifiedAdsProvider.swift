@@ -159,7 +159,9 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         ]
         do {
             let placementsResult = try self.adsClient.requestAds(mozAdConfigs: placements)
-            let unifiedTiles = placementsResult.values.map { UnifiedTile.from(mozAdsPlacement: $0) }
+            let unifiedTiles: [UnifiedTile] = placementsResult.map { key, value in
+                UnifiedTile.from(name: key, mozAdsPlacement: value)
+            }
             self.logger.log("Ads client request successful", level: .info, category: .homepage)
             // TODO(Regression): we need to implement the cache feature in the Rust component
             completion(.success(unifiedTiles))

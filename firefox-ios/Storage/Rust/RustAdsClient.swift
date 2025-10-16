@@ -6,6 +6,12 @@ import Foundation
 import class MozillaAppServices.MozAdsClient
 
 public final class RustAdsClient {
-    public static let shared = MozAdsClient()
+    public static let shared = MozAdsClient(dbPath: getDatabaseURL())
     private init() {}
+}
+
+func getDatabaseURL() -> String {
+    let fileManager = FileManager.default
+    let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+    return documentsURL.appendingPathComponent("ads-client.db").path
 }
