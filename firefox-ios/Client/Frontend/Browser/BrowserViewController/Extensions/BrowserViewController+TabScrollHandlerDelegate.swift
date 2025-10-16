@@ -33,7 +33,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
             let originTop: CGFloat = (state == .expanded) ? 0 : headerOffset
             let topOffset = clamp(offset: originTop - clampProgress, min: headerOffset, max: 0)
             headerTopConstraint?.update(offset: topOffset)
-            header.superview?.setNeedsLayout()
+            header.superview?.layoutIfNeeded()
         }
 
         // Bottom toolbar: range [0 ... height]
@@ -41,7 +41,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         let originBottom: CGFloat = (state == .expanded) ? bottomContainerHeight : 0
         let bottomOffset = clamp(offset: originBottom + clampProgress, min: 0, max: bottomContainerHeight)
         bottomContainerConstraint?.update(offset: bottomOffset)
-        bottomContainer.superview?.setNeedsLayout()
+        bottomContainer.superview?.layoutIfNeeded()
     }
 
     func showToolbar() {
@@ -87,29 +87,6 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         }
     }
 
-    private func animateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: UX.topToolbarDuration, curve: .easeOut) { [weak self] in
-            guard let self else { return }
-
-            headerTopConstraint?.update(offset: topOffset)
-            header.superview?.setNeedsLayout()
-
-            header.updateAlphaForSubviews(alpha)
-        }
-
-        animator.startAnimation()
-
-        if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
-                ToolbarAction(
-                    scrollAlpha: Float(alpha),
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaDidChange
-                )
-            )
-        }
-    }
-
     private func updateBottomToolbar(bottomContainerOffset: CGFloat,
                                      overKeyboardContainerOffset: CGFloat,
                                      alpha: CGFloat) {
@@ -137,19 +114,42 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         }
     }
 
+    private func animateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
+        headerTopConstraint?.update(offset: topOffset)
+
+        UIView.animate(withDuration: UX.topToolbarDuration,
+                       delay: 0,
+                       options: [.curveEaseOut, .beginFromCurrentState]) { [weak self] in
+            guard let self else { return }
+
+            header.superview?.layoutIfNeeded()
+            header.updateAlphaForSubviews(alpha)
+        }
+
+        if shouldSendAlphaChangeAction {
+            store.dispatchLegacy(
+                ToolbarAction(
+                    scrollAlpha: Float(alpha),
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaDidChange
+                )
+            )
+        }
+    }
+
     private func animateBottomToolbar(bottomOffset: CGFloat,
                                       overKeyboardOffset: CGFloat,
                                       alpha: CGFloat) {
-        let animator = UIViewPropertyAnimator(duration: UX.bottomToolbarDuration, curve: .easeOut) { [weak self] in
+        bottomContainerConstraint?.update(offset: bottomOffset)
+        overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
+
+        UIView.animate(withDuration: UX.bottomToolbarDuration,
+                       delay: 0,
+                       options: [.curveEaseOut, .beginFromCurrentState]) { [weak self] in
             guard let self else { return }
-            bottomContainerConstraint?.update(offset: bottomOffset)
-            bottomContainer.superview?.setNeedsLayout()
 
-            overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
-            overKeyboardContainer.superview?.setNeedsLayout()
+            bottomContainer.superview?.layoutIfNeeded()
         }
-
-        animator.startAnimation()
 
         if shouldSendAlphaChangeAction {
             store.dispatchLegacy(
