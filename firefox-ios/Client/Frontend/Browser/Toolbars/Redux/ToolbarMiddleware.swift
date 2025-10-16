@@ -100,6 +100,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 NavigationBarMiddleButtonType.newTab
             }
 
+            toolbarTelemetry.middleButtonConfig(buttonType: middleButton)
+            toolbarTelemetry.middleButtonCustomization(isEnabled: featureFlags.isFeatureEnabled(
+                .toolbarMiddleButtonCustomization,
+                checking: .buildOnly))
+
             let action = ToolbarAction(
                 toolbarPosition: toolbarPosition,
                 toolbarLayout: toolbarLayout,
