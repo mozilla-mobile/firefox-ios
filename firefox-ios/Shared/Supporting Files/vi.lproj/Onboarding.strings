@@ -79,44 +79,107 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v115" = "Bỏ qua";
 
+/* Option for the automatic theme. */
+"Onboarding.Modern.Customization.Theme.Automatic.v145" = "Tự động";
+
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
 "Onboarding.Modern.Customization.Theme.Continue.Action.v140" = "Tiếp tục";
+
+/* Option for the dark theme. */
+"Onboarding.Modern.Customization.Theme.Dark.v145" = "Tối";
+
+/* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Chọn chủ đề yêu thích của bạn hoặc để %@ giống với thiết bị của bạn, giúp bạn kiểm soát mọi thứ.";
+
+/* Option for the light theme. */
+"Onboarding.Modern.Customization.Theme.Light.v145" = "Sáng";
+
+/* Title for the theme selection card. */
+"Onboarding.Modern.Customization.Theme.Title.v145" = "Chọn chủ đề của bạn";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "Phía dưới";
 
+/* Action to set the toolbar to the bottom. */
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "Dưới cùng";
+
+/* Continue button on the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Tiếp tục";
+
+/* Description for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Bắt đầu nhập để nhận gợi ý tìm kiếm, các trang web hàng đầu, dấu trang, lịch sử và công cụ tìm kiếm – tất cả tại một nơi.";
+
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Chọn nơi đặt thanh địa chỉ của bạn";
+
+/* Title for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Title.v145" = "Chọn thanh địa chỉ của bạn";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Phía trên";
 
+/* Action to set the toolbar to the top. */
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "Trên cùng";
+
+/* Button to skip the entire onboarding flow. */
+"Onboarding.Modern.General.Skip.v145" = "Bỏ qua";
+
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "Lưu dấu trang, lịch sử và mật khẩu của bạn trên mọi thiết bị.";
+
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "Dấu trang, mật khẩu và nhiều nội dung khác của bạn sẽ được đồng bộ hóa trên mọi thiết bị. Mọi thứ đều được bảo vệ bằng mã hóa, vì vậy chỉ bạn mới có thể truy cập.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "Bắt đầu đồng bộ hoá";
 
+/* Button to start the Sync setup process. */
+"Onboarding.Modern.Sync.SignIn.Action.v145" = "Bắt đầu đồng bộ hoá";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.Skip.Action.v140" = "Không phải bây giờ";
+
+/* Button to skip the Sync setup during onboarding. */
+"Onboarding.Modern.Sync.Skip.Action.v145" = "Không phải bây giờ";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Sync.Title.v140" = "Bắt đầu tức thì từ nơi bạn đã dừng lại";
 
+/* Title for the Sync card in the v2 onboarding flow. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.Sync.Title.v145" = "Hãy để %@ tham gia mọi cuộc phiêu lưu duyệt web của bạn";
+
 /* Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen. */
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v140" = "Tiếp tục";
+
+/* Title for the confirmation button on the Terms of Service screen. */
+"Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Tiếp tục";
+
+/* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
+"Onboarding.Modern.TermsOfService.Description.v145" = "Tự động bảo vệ thông tin cá nhân của bạn\nTải trang web nhanh và tìm kiếm thông minh hơn\nĐược mang đến cho bạn bởi tổ chức phi lợi nhuận %@, được tin cậy trong hơn 20 năm";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Quản lý";
 
+/* The text for the Manage settings link button. */
+"Onboarding.Modern.TermsOfService.ManageLink.v145" = "Quản lý cài đặt";
+
 /* Agreement text for sending diagnostic and interaction data to Mozilla in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is company name (e.g. Mozilla), %3$@ is a Manage link button which redirect the user to another screen in order to manage the data collection preferences. */
 "Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v140" = "Để giúp cải thiện trình duyệt, %1$@ gửi dữ liệu chẩn đoán và tương tác đến %2$@. %3$@";
+
+/* Agreement text for sending data. %1$@ is the app name, %2$@ is the company name, %3$@ is the placeholder for the Manage settings link. */
+"Onboarding.Modern.TermsOfService.ManagePreferenceAgreement.v145" = "Để giúp cải thiện trình duyệt, %1$@ gửi dữ liệu chẩn đoán và tương tác đến %2$@. %3$@";
 
 /* Agreement text for Privacy Notice in the Terms of Service screen. %1$@ is the app name (e.g. Firefox), %2$@ is for the Privacy Notice link button that redirect the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v140" = "%1$@ quan tâm đến quyền riêng tư của bạn. Đọc thêm trong %2$@ của chúng tôi";
 
+/* Agreement text for Privacy Notice. %1$@ is the app name (e.g. Firefox), %2$@ is the placeholder for the Privacy Notice link. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeAgreement.v145" = "%1$@ quan tâm đến quyền riêng tư của bạn. Đọc thêm trong %2$@ của chúng tôi";
+
 /* Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page. */
 "Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v140" = "Thông báo về quyền riêng tư.";
+
+/* The text for the Privacy Notice link button. */
+"Onboarding.Modern.TermsOfService.PrivacyNoticeLink.v145" = "Thông báo về quyền riêng tư.";
 
 /* A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. */
 "Onboarding.Modern.TermsOfService.PrivacyPreferences.LearnMore.v140" = "Tìm hiểu thêm";
@@ -142,8 +205,17 @@
 /* Agreement text for Terms of Service in the Terms of Service screen. %@ is the Terms of Service link button that redirect the user to the Terms of Service page. */
 "Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v140" = "Bằng cách tiếp tục, bạn đồng ý với %@";
 
+/* Agreement text for Terms of Service. %@ is the placeholder for the Terms of Use link. */
+"Onboarding.Modern.TermsOfService.TermsOfServiceAgreement.v145" = "Bằng cách tiếp tục, bạn đồng ý với %@";
+
+/* The text for the Terms of Use link button. %@ is the app name (e.g. Firefox). */
+"Onboarding.Modern.TermsOfService.TermsOfUseLink.v145" = "Điều khoản sử dụng %@.";
+
 /* Title for the Terms of Service screen in the onboarding process. */
 "Onboarding.Modern.TermsOfService.Title.v140" = "Nâng cấp cách duyệt web của bạn";
+
+/* Title for the Terms of Service screen in the v2 onboarding flow. */
+"Onboarding.Modern.TermsOfService.Title.v145" = "Làm chủ Internet";
 
 /* Title for the Terms of Use button link, in the Terms of Use screen for redirecting the user to the Terms of Use page. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.TermsOfUse.TermsOfUseLink.v140" = "Điều khoản sử dụng %@.";
@@ -151,14 +223,26 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Modern.Welcome.ActionTreatementA.v140" = "Đặt làm trình duyệt mặc định";
 
+/* Action button to set the app as the default browser. */
+"Onboarding.Modern.Welcome.ActionTreatmentA.v145" = "Đặt làm trình duyệt mặc định";
+
 /* String used to describe Firefox on the welcome onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Welcome.Description.v140" = "Một lựa chọn bảo vệ bạn mọi lúc mọi nơi trên web. Bạn luôn có thể thay đổi sau.";
+
+/* Description for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Description.v145" = "Một lựa chọn bảo vệ bạn mọi lúc mọi nơi trên web. Bạn luôn có thể thay đổi sau.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Modern.Welcome.Skip.v140" = "Không phải bây giờ";
 
+/* Button to skip the welcome card. */
+"Onboarding.Modern.Welcome.Skip.v145" = "Không phải bây giờ";
+
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Modern.Welcome.Title.v140" = "Nói lời tạm biệt với quảng cáo rùng rợn";
+
+/* Title for the welcome card in the v2 onboarding flow. */
+"Onboarding.Modern.Welcome.Title.v145" = "Nói lời tạm biệt với những kẻ theo dõi đáng sợ";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Tiếp tục";

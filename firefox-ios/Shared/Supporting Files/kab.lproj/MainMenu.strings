@@ -355,6 +355,9 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "Sekles umuɣ arnaw";
 
+/* On the main menu, the accessibility label for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142" = "Segzel asebter";
+
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Ddu ɣer usmel n tnarit";
 
@@ -388,6 +391,9 @@
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Sekles";
 
+/* On the main menu, the title for the action that will summarize the content of the webpage. */
+"MainMenu.ToolsSection.SummarizePage.Title.v142" = "Segzel asebter";
+
 /* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "Ddu ɣer usmel n tnarit";
 
@@ -396,6 +402,18 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Ifecka";
+
+/* On the main menu, the accessibility label for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145" = "Yettwasuqqel usebter";
+
+/* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "Yettwasuqqel ɣer %@";
+
+/* On the main menu, the title for the action that will translate the content of the webpage. */
+"MainMenu.ToolsSection.Translation.Title.v145" = "Suqel asebter";
+
+/* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Yettwasuqqel";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
 "MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Yensa";

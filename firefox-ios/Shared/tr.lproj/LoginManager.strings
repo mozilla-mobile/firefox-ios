@@ -20,7 +20,7 @@
 "DeleteLoginAlert.DeleteButton.Cancel.v122" = "İptal";
 
 /* Label for the button used to delete the current login. */
-"DeleteLoginAlert.DeleteButton.Title.v122" = "Kaldır";
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Sil";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
 "DeleteLoginAlert.Message.Local.v122" = "Bu işlemi geri alamazsınız.";
@@ -29,7 +29,7 @@
 "DeleteLoginAlert.Message.Synced.v122" = "Bu parola, eşitlenen tüm cihazlarınızdan silinecektir.";
 
 /* Title for the prompt that appears when the user deletes a login. */
-"DeleteLoginsAlert.Title.v122" = "Parola kaldırılsın mı?";
+"DeleteLoginsAlert.Title.v122" = "Parola silinsin mi?";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Seçimi temizle";
@@ -41,7 +41,7 @@
 "Hide" = "Gizle";
 
 /* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
-"LoginList.DeleteToast.v135" = "Parola kaldırıldı";
+"LoginList.DeleteToast.v135" = "Parola silindi";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
 "Logins will be permanently removed." = "Hesaplar kalıcı olarak silinecektir.";
