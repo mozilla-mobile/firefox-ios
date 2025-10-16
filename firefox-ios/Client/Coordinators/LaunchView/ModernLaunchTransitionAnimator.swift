@@ -86,7 +86,7 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
 
         containerView.addSubview(toController.view)
         containerView.addSubview(fromController.view)
-        
+
         UIView.animate(withDuration: UX.totalDuration, delay: 0.0, options: []) {
             launchController?.startLoaderAnimation()
             fromController.view.alpha = 0.0
