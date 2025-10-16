@@ -1507,12 +1507,19 @@
 		C24B31292E86B8470049134A /* GenericSelectableItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */; };
 		C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */; };
 		C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */; };
+		C265D6D42E9D7244004AF985 /* TranslationsSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265D6D32E9D723E004AF985 /* TranslationsSchemeHandler.swift */; };
+		C265D6D62E9D7908004AF985 /* TranslationsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265D6D52E9D7904004AF985 /* TranslationsEngine.swift */; };
+		C265D6D82E9D7E34004AF985 /* TranslationsEngine.js in Resources */ = {isa = PBXBuildFile; fileRef = C265D6D72E9D7E33004AF985 /* TranslationsEngine.js */; };
+		C265D6DA2E9D7E72004AF985 /* TranslationsEngine.html in Resources */ = {isa = PBXBuildFile; fileRef = C265D6D92E9D7E72004AF985 /* TranslationsEngine.html */; };
+		C265D6DC2E9DAF60004AF985 /* WebViewBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C265D6DB2E9DAF5B004AF985 /* WebViewBridge.swift */; };
 		C283EECC2E4D2C02008EB540 /* ASSummarizerRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */; };
 		C283EECE2E4D4DC7008EB540 /* RemoteSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */; };
 		C283EED02E4D4FE7008EB540 /* SummarizerConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */; };
 		C283EED22E4D5356008EB540 /* SummarizerConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */; };
 		C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */; };
 		C28CAABF2E5C8C660049D7C7 /* InsetUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */; };
+		C29210C92EA02F22001EB727 /* AppAttestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29210C82EA02F1D001EB727 /* AppAttestHelper.swift */; };
+		C29210CB2EA10B27001EB727 /* LanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29210CA2EA10B22001EB727 /* LanguageDetector.swift */; };
 		C29B64812AD6959E00F3244B /* QRCodeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */; };
 		C29B64832AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */; };
 		C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */; };
@@ -9736,6 +9743,11 @@
 		C24B31282E86B82E0049134A /* GenericSelectableItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSelectableItemCellView.swift; sourceTree = "<group>"; };
 		C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinator.swift; sourceTree = "<group>"; };
 		C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinatorTests.swift; sourceTree = "<group>"; };
+		C265D6D32E9D723E004AF985 /* TranslationsSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsSchemeHandler.swift; sourceTree = "<group>"; };
+		C265D6D52E9D7904004AF985 /* TranslationsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsEngine.swift; sourceTree = "<group>"; };
+		C265D6D72E9D7E33004AF985 /* TranslationsEngine.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = TranslationsEngine.js; path = Client/Assets/TranslationsEngine.js; sourceTree = "<group>"; };
+		C265D6D92E9D7E72004AF985 /* TranslationsEngine.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = TranslationsEngine.html; path = Client/Frontend/UserContent/UserScripts/TranslationsEngine/TranslationsEngine.html; sourceTree = "<group>"; };
+		C265D6DB2E9DAF5B004AF985 /* WebViewBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewBridge.swift; sourceTree = "<group>"; };
 		C26C4D1F8CFB13730BA74DF5 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSummarizerRemoteConfig.swift; sourceTree = "<group>"; };
 		C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSummarizerConfigSource.swift; sourceTree = "<group>"; };
@@ -9743,6 +9755,8 @@
 		C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManagerTests.swift; sourceTree = "<group>"; };
 		C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigSource.swift; sourceTree = "<group>"; };
 		C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetUpdatable.swift; sourceTree = "<group>"; };
+		C29210C82EA02F1D001EB727 /* AppAttestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAttestHelper.swift; sourceTree = "<group>"; };
+		C29210CA2EA10B22001EB727 /* LanguageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetector.swift; sourceTree = "<group>"; };
 		C29B428A81B120AFF0666037 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Menu.strings; sourceTree = "<group>"; };
 		C29B64802AD6959E00F3244B /* QRCodeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinator.swift; sourceTree = "<group>"; };
 		C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockQRCodeParentCoordinator.swift; sourceTree = "<group>"; };
@@ -14267,6 +14281,18 @@
 			path = WebsiteDataManagement;
 			sourceTree = "<group>";
 		};
+		C265D6D22E9D7236004AF985 /* Translations */ = {
+			isa = PBXGroup;
+			children = (
+				C29210CA2EA10B22001EB727 /* LanguageDetector.swift */,
+				C29210C82EA02F1D001EB727 /* AppAttestHelper.swift */,
+				C265D6DB2E9DAF5B004AF985 /* WebViewBridge.swift */,
+				C265D6D52E9D7904004AF985 /* TranslationsEngine.swift */,
+				C265D6D32E9D723E004AF985 /* TranslationsSchemeHandler.swift */,
+			);
+			path = Translations;
+			sourceTree = "<group>";
+		};
 		C29B64EC2AD937C200F3244B /* QRCode */ = {
 			isa = PBXGroup;
 			children = (
@@ -15958,6 +15984,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				C265D6D92E9D7E72004AF985 /* TranslationsEngine.html */,
+				C265D6D72E9D7E33004AF985 /* TranslationsEngine.js */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -16225,6 +16253,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				C265D6D22E9D7236004AF985 /* Translations */,
 				0B78DC6C2E3C9CDA00804872 /* Summarizer */,
 				8A1A93572B757C7B0069C190 /* LottieFiles */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
@@ -17344,6 +17373,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C265D6DA2E9D7E72004AF985 /* TranslationsEngine.html in Resources */,
+				C265D6D82E9D7E34004AF985 /* TranslationsEngine.js in Resources */,
 				8A94DB962E0F16E80005FE69 /* homepageSearchBarOff.json in Resources */,
 				8A94DB972E0F16E80005FE69 /* homepageSearchBarOn.json in Resources */,
 				8A3709E42DC16531004B9350 /* defaultEnabledOn.json in Resources */,
@@ -18448,6 +18479,7 @@
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				1DCEC3F42D600AE000129966 /* ASSearchEngineProvider.swift in Sources */,
 				C88E7A592A0553440072E638 /* OnboardingCardInfoModel.swift in Sources */,
+				C265D6D42E9D7244004AF985 /* TranslationsSchemeHandler.swift in Sources */,
 				B2DFB7E32B619E2B0004CEA5 /* AddressCellView.swift in Sources */,
 				EDD334952D10BEEB004516D0 /* UserDefaults+valueExists.swift in Sources */,
 				C87A121A28C2451A0097ED51 /* WallpaperMigrationUtility.swift in Sources */,
@@ -18649,6 +18681,7 @@
 				964FA97728A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift in Sources */,
 				8A1E3BDF28CBA81E003388C4 /* SponsoredContentFilterUtility.swift in Sources */,
 				8A5BD95F2878B7B6000FE773 /* TopSitesWidgetManager.swift in Sources */,
+				C29210C92EA02F22001EB727 /* AppAttestHelper.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				81E9B6E82E2AB73400CE6FF6 /* MerinoStory.swift in Sources */,
 				E1442FD2294782D9003680B0 /* UIViewController+Extension.swift in Sources */,
@@ -18748,6 +18781,7 @@
 				23ED80FF25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift in Sources */,
 				8A3EF80D2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift in Sources */,
 				E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */,
+				C265D6D62E9D7908004AF985 /* TranslationsEngine.swift in Sources */,
 				C7B376E32E870173006B2D32 /* StoriesFeedCell.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
 				5AD3B67C2CF65DE600AFA1FE /* LocaleInterface.swift in Sources */,
@@ -18828,8 +18862,10 @@
 				8A5D1CBF2A30DC75005AD35C /* SyncNowSetting.swift in Sources */,
 				210E0EB8298D9D4500BB4F33 /* DefaultSearchEngineProvider.swift in Sources */,
 				8AE80BBA2891C0C300BC12EA /* JumpBackInSectionLayout.swift in Sources */,
+				C29210CB2EA10B27001EB727 /* LanguageDetector.swift in Sources */,
 				21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */,
 				AB4FB4DB2C89FB10005EF0CC /* BlockedTrackersHeaderView.swift in Sources */,
+				C265D6DC2E9DAF60004AF985 /* WebViewBridge.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				8A15AB752D5FDB80008BB03C /* AutoplaySettingsViewController.swift in Sources */,
 				C84655FF2887A06B00861B4A /* WallpaperFilePathProvider.swift in Sources */,

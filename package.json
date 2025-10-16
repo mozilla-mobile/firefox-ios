@@ -4,7 +4,7 @@
   "description": "Firefox for iOS",
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "dev": "webpack --config webpack.config.js --mode development --watch"
+    "dev": "webpack --config webpack.config.js --mode development --watch --stats-children"
   },
   "repository": {
     "type": "git",
@@ -13,6 +13,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
+    "body-parser": "^2.2.0",
     "darkreader": "^4.9.89",
     "dompurify": "^3.2.4",
     "page-metadata-parser": "1.1.4"
@@ -23,7 +24,9 @@
     "babel-loader": "^8.2.5",
     "glob": "^8.0.1",
     "lodash": "^4.17.21",
+    "script-loader": "^0.7.2",
     "webpack": "^5.94.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "worker-loader": "^3.0.8"
   }
 }

@@ -38,13 +38,18 @@ protocol TranslationModelsFetching {
 }
 
 final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
-    static let shared = ASTranslationModelsFetcher()
-    // Pin versions to avoid using unsupported models
+    /// Pin versions to avoid using unsupported models
     private enum Constants {
-        static let translatorVersion = "2.0"
-        static let modelsVersion = "1.0"
+        static let translatorVersion = "3.0"
+        // NOTE(Issam): Skip version for now with the assumption that prod for now only has ready models
+        // static let modelsVersion = "2.2"
         static let translatorName = "bergamot-translator"
     }
+
+    /// NOTE: The pivot language is used to pivot between two different language translations
+    /// when there is not a model available to translate directly between the two. In this case "en" is common between the various supported models.
+    /// For instance given the following two models: `fr` -> `en` and `en` -> `it`, we can translate `fr` -> `it`
+    private static let PIVOT_LANGUAGE = "en"
 
     private let service: RemoteSettingsService
     private let modelsClient: RemoteSettingsClient?
@@ -77,7 +82,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
 
     /// Fetches the wasm binary for the translator that matches the pinned version.
     func fetchTranslatorWASM() -> Data? {
-        guard let records = translatorsClient?.getRecords() else {
+        guard let records = translatorsClient?.getRecords(syncIfEmpty: true) else {
             logger.log("No translator records found", level: .warning, category: .remoteSettings)
             return nil
         }
@@ -92,28 +97,52 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
+    /// If no direct model is found, attempts to find pivot models through English.
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data? {
-        guard let records = modelsClient?.getRecords() else {
+        guard let records = modelsClient?.getRecords(syncIfEmpty: true) else {
             logger.log("No model records found.", level: .warning, category: .remoteSettings)
             return nil
         }
 
-        var languageModelFiles = [String: Any]()
+        // Attempt to find a direct model pair first like jp -> ar
+        if let directModels = getModelFiles(records: records, from: sourceLang, to: targetLang) {
+            logger.log("Found direct model for \(sourceLang)->\(targetLang)",
+                       level: .debug, category: .remoteSettings)
+            return makeModelResponse([makeModelEntry(directModels, from: sourceLang, to: targetLang)])
+        }
 
+        // Try pivot models as fallback meaning we try to find two pairs such that when we want to translate
+        // jp -> ar and no direct model exists.
+        // Instead translate using `PIVOT_LANGUAGE` ( which is most likely English since that's what we have the most coverage for )
+        // Then to translate jp -> ar we translate jp -> PIVOT_LANGUAGE and then PIVOT_LANGUAGE -> ar
+        guard let sourceToPivot = getModelFiles(records: records, from: sourceLang, to: Self.PIVOT_LANGUAGE),
+              let pivotToTarget = getModelFiles(records: records, from: Self.PIVOT_LANGUAGE, to: targetLang) else {
+            logger.log("No direct or pivot models found for \(sourceLang)->\(targetLang)",
+                       level: .warning, category: .remoteSettings)
+            return nil
+        }
+        
+        var entries: [[String: Any]] = []
+        entries.append(makeModelEntry(sourceToPivot, from: sourceLang, to: Self.PIVOT_LANGUAGE))
+        entries.append(makeModelEntry(pivotToTarget, from: Self.PIVOT_LANGUAGE, to: targetLang))
+        return makeModelResponse(entries)
+    }
+
+    private func getModelFiles(records: [RemoteSettingsRecord], from sourceLang: String, to targetLang: String) -> [String: Any]? {
+        var modelFiles = [String: Any]()
         for record in records {
-            guard
-                let fields: ModelFieldsRecord = decodeRecord(record),
-                fields.fromLang == sourceLang,
-                fields.toLang == targetLang,
-                fields.version == Constants.modelsVersion
-            else { continue }
-
-            guard let attachment = try? modelsClient?.getAttachment(record: record) else {
-                logger.log("Cannot fetch model attachment.", level: .warning, category: .remoteSettings)
-                return nil
+            guard let fields: ModelFieldsRecord = decodeRecord(record),
+                  fields.fromLang == sourceLang,
+                  fields.toLang == targetLang,
+                  // See note about `modelsVersion` where it's defined
+                  // fields.version == Constants.modelsVersion,
+                  let attachment = try? modelsClient?.getAttachment(record: record) else {
+                continue
             }
 
-            languageModelFiles[fields.fileType] = [
+            // TODO(Issam): Add comment why we send this shape over.
+            // TODO(Issam): Maybe we should also make this typed ?
+            modelFiles[fields.fileType] = [
                 "buffer": attachment.base64EncodedString(),
                 "record": [
                     "fromLang": fields.fromLang,
@@ -125,6 +154,22 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
             ]
         }
 
-        return try? JSONSerialization.data(withJSONObject: ["languageModelFiles": languageModelFiles])
+        return modelFiles.isEmpty ? nil : modelFiles
+    }
+    
+    /// Build a single payload object from one fileset.
+    /// returns: ["sourceLanguage": ..., "targetLanguage": ..., "languageModelFiles": files]
+    private func makeModelEntry(_ files: [String: Any], from: String, to: String) -> [String: Any] {
+        return [
+            "sourceLanguage": from,
+            "targetLanguage": to,
+            "languageModelFiles": files
+        ]
+    }
+
+    // TODO(Issam): Let's make this strongly typed instead of `[String: Any]`
+    private func makeModelResponse(_ entries: [[String: Any]]) -> Data? {
+        guard !entries.isEmpty else { return nil }
+        return try? JSONSerialization.data(withJSONObject: entries, options: [])
     }
 }

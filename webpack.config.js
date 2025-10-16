@@ -2,6 +2,7 @@ const glob = require("glob");
 const path = require("path");
 const webpack = require("webpack");
 const Overrides = require("./firefox-ios/Client/Assets/CC_Script/Overrides.ios.js");
+const replaceImportScripts = require("./babel-plugins/replace-importScripts");
 
 const AllFramesAtDocumentStart = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/*.{js,mjs}"
@@ -26,6 +27,9 @@ const NightModeAllFramesAtDocumentStart = glob.sync(
 );
 const AddressFormManager = glob.sync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AddressFormManager/*.{js,mjs}"
+);
+const TranslationsEngine = glob.sync(
+  "./firefox-ios/Client/Frontend/UserContent/UserScripts/TranslationsEngine/*.{js,mjs}"
 );
 
 // Ensure the first script loaded at document start is __firefox__.js
@@ -75,6 +79,7 @@ module.exports = {
     NightModeAllFramesAtDocumentStart,
     AutofillAllFramesAtDocumentStart,
     AddressFormManager,
+    TranslationsEngine,
   },
   output: {
     filename: "[name].js",
@@ -86,6 +91,28 @@ module.exports = {
         test: /\.mjs$/,
         include: [path.resolve(__dirname, "firefox-ios/Client/Assets/CC_Script/")],
         type: "javascript/auto",
+      },
+      // NOTE(Issam): Inlines workers as blob urls to avoid any requests runtime.
+      // Additionally, convert importScripts to normal imports that are resolved at build time.
+      // Can we get away with translations://worker.js and that would bypass the security error ?
+      {
+        test: /\.worker\.js$/,
+        use: [
+          {
+            loader: "worker-loader",
+            options: {
+              inline: "no-fallback",
+              esModule: false,
+            },
+          },
+          {
+            loader: "babel-loader",
+            options: {
+              presets: [],
+              plugins: [[replaceImportScripts, { useScriptLoader: true }]],
+            },
+          },
+        ],
       },
     ],
   },

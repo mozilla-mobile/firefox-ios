@@ -180,6 +180,9 @@ final class AppLaunchUtil: Sendable {
         updateSessionCount()
 //        adjustHelper.setupAdjust()
         AppEventQueue.signal(event: .postLaunchDependenciesComplete)
+        // TODO(Issam): Just for debugging so the webview shows up in the inspector.
+        // NOTE(Issam): Also this probably where we want to grap device lang <-> en models so they are available.
+        _ = TranslationsEngine.shared
     }
 
     private func setUserAgent() {
