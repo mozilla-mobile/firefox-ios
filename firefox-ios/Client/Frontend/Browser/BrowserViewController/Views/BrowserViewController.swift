@@ -1678,14 +1678,32 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustBottomSearchBarForKeyboard() {
-        guard isBottomSearchBar,
-              let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0
-        else {
+        let keyboardHeight = keyboardState?.intersectionHeightForView(view)
+        let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
+        store.dispatchLegacy(
+            ToolbarAction(
+                shouldShowKeyboard: isKeyboardVisible,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.keyboardStateDidChange
+            )
+        )
+
+        guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
             overKeyboardContainer.removeKeyboardSpacer()
+            guard #available(iOS 26.0, *) else { return }
+            store.dispatchLegacy(
+                ToolbarAction(
+                    scrollAlpha: 1,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.scrollAlphaDidChange
+                )
+            )
             return
         }
-
-        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: keyboardHeight)
+        let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
+            view: tabManager.selectedTab?.webView?.accessoryView
+        )
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: keyboardHeight-toolbarHeightOffset)
 
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
