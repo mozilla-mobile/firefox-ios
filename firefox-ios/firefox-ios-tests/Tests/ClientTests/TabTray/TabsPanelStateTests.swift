@@ -30,7 +30,8 @@ final class TabPanelStateTests: XCTestCase {
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: inactiveTabs,
-                                              isInactiveTabsExpanded: false)
+                                              isInactiveTabsExpanded: false,
+                                              enableDeleteTabsButton: true)
         let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
@@ -51,7 +52,8 @@ final class TabPanelStateTests: XCTestCase {
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: inactiveTabs,
-                                              isInactiveTabsExpanded: false)
+                                              isInactiveTabsExpanded: false,
+                                              enableDeleteTabsButton: true)
         let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didChangeTabPanel)
@@ -89,7 +91,8 @@ final class TabPanelStateTests: XCTestCase {
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
-                                              isInactiveTabsExpanded: false)
+                                              isInactiveTabsExpanded: false,
+                                              enableDeleteTabsButton: true)
         let action = TabPanelMiddlewareAction(
             tabDisplayModel: tabDisplayModel,
             windowUUID: .XCTestDefaultUUID,
@@ -110,7 +113,8 @@ final class TabPanelStateTests: XCTestCase {
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
-                                              isInactiveTabsExpanded: false)
+                                              isInactiveTabsExpanded: false,
+                                              enableDeleteTabsButton: true)
         let action = TabPanelMiddlewareAction(
             tabDisplayModel: tabDisplayModel,
             inactiveTabModels: inactiveTabs,
