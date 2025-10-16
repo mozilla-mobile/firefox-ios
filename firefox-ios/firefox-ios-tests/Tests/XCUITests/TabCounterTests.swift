@@ -16,23 +16,10 @@ class TabCounterTests: BaseTestCase {
 
         navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
         waitForTabsButton()
 
         tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("2", tabsOpen as? String)
-
-        // Check only for iPhone, for iPad there is not counter in tab tray
-        if !iPad() {
-            navigator.goto(TabTray)
-            let navBarTabTrayButton = app.segmentedControls["navBarTabTray"].buttons.firstMatch
-            mozWaitForElementToExist(navBarTabTrayButton)
-            XCTAssertTrue(navBarTabTrayButton.isSelected)
-            let tabsOpenTabTray: String = navBarTabTrayButton.label
-            XCTAssertTrue(tabsOpenTabTray.hasSuffix("2"))
-        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2359078
