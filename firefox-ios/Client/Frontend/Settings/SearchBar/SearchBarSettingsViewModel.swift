@@ -66,7 +66,7 @@ extension SearchBarLocationProvider {
         guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
             return .bottom
         }
-
+        print("FF: what is happening to position \(position)")
         return position
     }
 

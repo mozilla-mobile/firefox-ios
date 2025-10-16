@@ -6,11 +6,25 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
+@MainActor
+protocol ThemeableView: View {
+    var theme: Theme { get set }
+    var windowUUID: WindowUUID { get }
+
+    func applyTheme()
+}
+
+extension View {
+    func listenToThemeChanges(onChange: @escaping (WindowUUID?) -> Void) -> some View {
+        return self.onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
+            onChange($0.windowUUID)
+        }
+    }
+}
+
 // MARK: - Updated OnboardingBasicCardViewCompact
-struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var textColor: Color = .clear
-    @State private var secondaryTextColor: Color = .clear
-    @State private var cardBackgroundColor: Color = .clear
+struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+    @State var theme: Theme
     @Environment(\.sizeCategory)
     private var sizeCategory
 
@@ -29,17 +43,18 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
     var body: some View {
         GeometryReader { geometry in
             cardContent(geometry: geometry)
                 .onAppear {
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                    applyTheme()
                 }
-                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                    guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                .listenToThemeChanges { window in
+                    guard window == windowUUID else { return }
+                    applyTheme()
                 }
         }
     }
@@ -67,13 +82,13 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
             .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
         }
         .scrollBounceBehavior(basedOnSize: true)
-        .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
+        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
     }
 
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .foregroundColor(textColor)
+            .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
@@ -99,7 +114,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     var bodyView: some View {
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
-            .foregroundColor(secondaryTextColor)
+            .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .lineLimit(nil)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
@@ -114,7 +129,7 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                     viewModel.name
                 )
             },
-            theme: themeManager.getCurrentTheme(for: windowUUID),
+            theme: theme,
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
     }
@@ -130,16 +145,13 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                         viewModel.name
                     )
                 },
-                theme: themeManager.getCurrentTheme(for: windowUUID),
+                theme: theme,
                 accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
             )
         }
     }
 
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        textColor = Color(color.textPrimary)
-        secondaryTextColor = Color(color.textSecondary)
-        cardBackgroundColor = Color(color.layer2.withAlphaComponent(0.9))
+    func applyTheme() {
+        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }

@@ -29,15 +29,14 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
+            AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             SheetSizedCard {
                 VStack {
                     tabView
                     pageControl
                 }
-                .bridge
-                .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
+                .cardBackground(theme: themeManager.getCurrentTheme(for: windowUUID), cornerRadius: UX.CardView.cornerRadius)
             }
             Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)

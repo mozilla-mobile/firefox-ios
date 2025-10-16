@@ -19,18 +19,4 @@ public extension CompatibilityBridge where Content: View {
             content.buttonStyle(.plain)
         }
     }
-
-    @MainActor
-    @ViewBuilder
-    func cardBackground(_ color: Color, cornerRadius: CGFloat) -> some View {
-        if #available(iOS 26, *) {
-            content.glassEffect(.regular.tint(color), in: .rect(cornerRadius: cornerRadius))
-        } else {
-            content.background(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(color)
-                    .accessibilityHidden(true)
-            )
-        }
-    }
 }

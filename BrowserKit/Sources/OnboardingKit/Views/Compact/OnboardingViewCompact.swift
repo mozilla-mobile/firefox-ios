@@ -33,7 +33,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
+                AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
                     .ignoresSafeArea()
                 VStack {
                     Button(action: viewModel.skipOnboarding) {

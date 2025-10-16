@@ -31,31 +31,68 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
             return
         }
 
-        let containerView = transitionContext.containerView
-        let finalFrame = transitionContext.finalFrame(for: toViewController)
-
         if isDismissing {
+            animateDismiss(
+                using: transitionContext,
+                fromController: fromViewController,
+                toController: toViewController
+            )
         } else {
+            animatePresent(
+                using: transitionContext,
+                fromController: fromViewController,
+                toController: toViewController
+            )
         }
-
-        toViewController.view.frame = finalFrame
-        containerView.addSubview(toViewController.view)
-
-        UIView.animate(
-            withDuration: UX.totalDuration,
-            delay: UX.fadeDelay,
-            options: [.curveEaseIn],
-            animations: {
-            self.fadeOutLaunchScreenLoader(fromViewController)
-            },
-        completion: { finished in
-            transitionContext.completeTransition(finished)
-        })
     }
 
-    private func fadeOutLaunchScreenLoader(_ viewController: UIViewController) {
-        if let modernLaunchVC = viewController as? ModernLaunchScreenViewController {
-            modernLaunchVC.fadeOutLoader()
+    func animatePresent(
+        using transitionContext: UIViewControllerContextTransitioning,
+        fromController: UIViewController,
+        toController: UIViewController
+    ) {
+        let fromSnapshot = fromController.view.snapshot
+        let image = UIImageView(image: fromSnapshot)
+        let containerView = transitionContext.containerView
+        let finalFrame = transitionContext.finalFrame(for: toController)
+        let launchController = fromController as? ModernLaunchScreenViewController
+
+        toController.view.frame = finalFrame
+        toController.view.alpha = 0.6
+
+        containerView.addSubview(toController.view)
+        containerView.addSubview(image)
+        image.pinToSuperview()
+
+        UIView.animate(withDuration: UX.totalDuration, delay: 0.0, options: []) {
+            toController.view.alpha = UX.finalAlpha
+            launchController?.stopLoaderAnimation()
+            image.alpha = 0.0
+        } completion: { _ in
+            image.removeFromSuperview()
+            transitionContext.completeTransition(true)
+        }
+    }
+
+    func animateDismiss(
+        using transitionContext: UIViewControllerContextTransitioning,
+        fromController: UIViewController,
+        toController: UIViewController
+    ) {
+        let containerView = transitionContext.containerView
+        let finalFrame = transitionContext.finalFrame(for: toController)
+        toController.view.frame = finalFrame
+        let launchController = toController as? ModernLaunchScreenViewController
+
+        containerView.addSubview(toController.view)
+        containerView.addSubview(fromController.view)
+        
+        UIView.animate(withDuration: UX.totalDuration, delay: 0.0, options: []) {
+            launchController?.startLoaderAnimation()
+            fromController.view.alpha = 0.0
+        } completion: { _ in
+            transitionContext.completeTransition(true)
+            fromController.view.removeFromSuperview()
         }
     }
 }

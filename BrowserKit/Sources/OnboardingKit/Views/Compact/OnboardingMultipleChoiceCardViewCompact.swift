@@ -6,9 +6,8 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var textColor: Color = .clear
-    @State private var cardBackgroundColor: Color = .clear
+struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+    @State var theme: Theme
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
     @Environment(\.sizeCategory)
     var sizeCategory
@@ -31,6 +30,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         guard let defaultAction = viewModel.defaultSelectedButton?.action else {
             return nil
         }
@@ -41,11 +41,11 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
         GeometryReader { geometry in
             cardContent(geometry: geometry)
                 .onAppear {
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                    applyTheme()
                 }
-                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                    guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                .listenToThemeChanges { window in
+                    guard window == windowUUID else { return }
+                    applyTheme()
                 }
         }
     }
@@ -86,13 +86,13 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             .frame(minHeight: geometry.size.height, maxHeight: .infinity, alignment: .center)
         }
         .scrollBounceBehavior(basedOnSize: true)
-        .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
+        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
     }
 
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .foregroundColor(textColor)
+            .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
@@ -111,14 +111,12 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
                     viewModel.name
                 )
             },
-            theme: themeManager.getCurrentTheme(for: windowUUID),
+            theme: theme,
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
     }
 
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        textColor = Color(color.textPrimary)
-        cardBackgroundColor = Color(color.layer2.withAlphaComponent(0.9))
+    func applyTheme() {
+        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }

@@ -48,6 +48,20 @@ extension View {
     }
 
     @ViewBuilder
+    func cardBackground(theme: Theme, cornerRadius: CGFloat = 0.0) -> some View {
+        if #available(iOS 26, *) {
+            self.glassEffect(.clear.interactive().tint(theme.colors.layer2.color.opacity(0.95)),
+                             in: .rect(cornerRadius: cornerRadius))
+        } else {
+            self.background(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(theme.colors.layer2.color)
+                    .accessibilityHidden(true)
+            )
+        }
+    }
+
+    @ViewBuilder
     func backgroundClipShape() -> some View {
         if #available(iOS 26.0, *) {
             self.buttonBorderShape(.roundedRectangle(radius: UX.Button.glassCornerRadius))

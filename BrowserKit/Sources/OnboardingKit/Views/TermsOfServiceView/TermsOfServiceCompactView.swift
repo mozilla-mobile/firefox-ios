@@ -35,7 +35,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
             let heightScale = geometry.size.height / UX.CardView.baseHeight
             let scale = min(widthScale, heightScale)
             ZStack {
-                AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
+                AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
                     .ignoresSafeArea()
                     .accessibilityHidden(true)
                 VStack {
@@ -80,7 +80,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .bridge.cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
+        .cardBackground(theme: themeManager.getCurrentTheme(for: windowUUID), cornerRadius: UX.CardView.cornerRadius)
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
         .accessibilityElement(children: .contain)
         .padding(.vertical)

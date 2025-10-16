@@ -32,7 +32,7 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
 
     public var body: some View {
         ZStack {
-            AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
+            AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
                 .ignoresSafeArea()
                 .accessibilityHidden(true)
 
@@ -73,8 +73,7 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
                 }
                 .scrollBounceBehavior(basedOnSize: true)
             }
-            .bridge
-            .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
+            .cardBackground(theme: themeManager.getCurrentTheme(for: windowUUID), cornerRadius: UX.CardView.cornerRadius)
             .padding(.horizontal, UX.CardView.horizontalPadding)
             .accessibilityElement(children: .contain)
         }
