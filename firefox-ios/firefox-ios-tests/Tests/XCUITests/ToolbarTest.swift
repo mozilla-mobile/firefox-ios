@@ -28,6 +28,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
      * Tests landscape page navigation enablement with the URL bar with tab switching.
      */
     func testLandscapeNavigationWithTabSwitch() {
+        app.launch()
         homepageSearchBar.tapIfExists()
         let urlPlaceholder = "Search or enter address"
         let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
@@ -144,6 +145,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306870
     func testOpenNewTabButtonOnToolbar() throws {
+        app.launch()
         homepageSearchBar.tapIfExists()
         if iPad() {
             throw XCTSkip("iPhone only test")
