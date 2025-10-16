@@ -15,9 +15,9 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
     // MARK: - UX Constants
     private enum UX {
         static let totalDuration: TimeInterval = 0.4
-        static let initialAlpha: CGFloat = 0.0
-        static let finalAlpha: CGFloat = 1.0
-        static let fadeDelay: TimeInterval = 0.0
+        static let clearAlpha: CGFloat = 0.0
+        static let midAlpha: CGFloat = 0.6
+        static let opaqueAlpha: CGFloat = 1.0
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -58,16 +58,16 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         let launchController = fromController as? ModernLaunchScreenViewController
 
         toController.view.frame = finalFrame
-        toController.view.alpha = 0.6
+        toController.view.alpha = UX.midAlpha
 
         containerView.addSubview(toController.view)
         containerView.addSubview(image)
         image.pinToSuperview()
 
-        UIView.animate(withDuration: UX.totalDuration, delay: 0.0, options: []) {
-            toController.view.alpha = UX.finalAlpha
+        UIView.animate(withDuration: UX.totalDuration) {
+            toController.view.alpha = UX.opaqueAlpha
             launchController?.stopLoaderAnimation()
-            image.alpha = 0.0
+            image.alpha = UX.clearAlpha
         } completion: { _ in
             image.removeFromSuperview()
             transitionContext.completeTransition(true)
@@ -87,9 +87,9 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
         containerView.addSubview(toController.view)
         containerView.addSubview(fromController.view)
 
-        UIView.animate(withDuration: UX.totalDuration, delay: 0.0, options: []) {
+        UIView.animate(withDuration: UX.totalDuration) {
             launchController?.startLoaderAnimation()
-            fromController.view.alpha = 0.0
+            fromController.view.alpha = UX.clearAlpha
         } completion: { _ in
             transitionContext.completeTransition(true)
             fromController.view.removeFromSuperview()
