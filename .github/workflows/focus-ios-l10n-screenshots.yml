@@ -18,6 +18,8 @@ jobs:
       group1: ${{ steps.my_locales.outputs.group1 }}
       group2: ${{ steps.my_locales.outputs.group2 }}
       group3: ${{ steps.my_locales.outputs.group3 }}
+      group4: ${{ steps.my_locales.outputs.group4 }}
+      group5: ${{ steps.my_locales.outputs.group5 }}
     steps:
       - name: Clone firefoxios-l10n repo
         uses: actions/checkout@v4
@@ -27,14 +29,18 @@ jobs:
         id: my_locales
         run: |
           ls | grep -e "^..$" -e "^..-..$" > locales.txt
-          split -n 3 locales.txt locales-
+          split -n 5 locales.txt locales-
           group1=`tr '\n' ' ' < locales-aa`
           group2=`tr '\n' ' ' < locales-ab`
           group3=`tr '\n' ' ' < locales-ac`
+          group4=`tr '\n' ' ' < locales-ad`
+          group5=`tr '\n' ' ' < locales-ae`
           echo "group1=$group1" >> $GITHUB_OUTPUT
           echo "group2=$group2" >> $GITHUB_OUTPUT
           echo "group3=$group3" >> $GITHUB_OUTPUT
-  
+          echo "group4=$group4" >> $GITHUB_OUTPUT
+          echo "group5=$group5" >> $GITHUB_OUTPUT
+
   compile:
     name: Compile Focus for L10n
     runs-on: macos-26

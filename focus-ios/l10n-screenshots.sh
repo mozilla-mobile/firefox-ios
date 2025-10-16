@@ -32,21 +32,20 @@ fi
 
 DEVICE="iPhone 17"
 
-for lang in $LOCALES; do
-    # start simple with Focus only
-    echo "Snapshotting on $DEVICE"
-    mkdir -p "l10n-screenshots/$lang"
-    fastlane snapshot --project focus-ios/Blockzilla.xcodeproj --scheme "FocusSnapshotTests" \
-      --derived_data_path l10n-screenshots-dd \
-      --number_of_retries 0 \
-      --concurrent_simulators false \
-      --skip_open_summary \
-      --xcargs "-maximum-parallel-testing-workers 1" \
-      --erase_simulator --localize_simulator \
-      --ios_version "26.0" \
-      --devices "$DEVICE" \
-      --languages "$lang" \
-      --output_directory "l10n-screenshots/$lang" \
-      $EXTRA_FAST_LANE_ARGS
-    echo "Fastlane exited with code: $?"
-done
+# ...existing code...
+# start simple with Focus only
+IFS=','
+LOCALES="$*"
+echo "Snapshotting on $DEVICE"
+fastlane snapshot --project focus-ios/Blockzilla.xcodeproj --scheme "FocusSnapshotTests" \
+  --derived_data_path l10n-screenshots-dd \
+  --number_of_retries 0 \
+  --concurrent_simulators false \
+  --skip_open_summary \
+  --xcargs "-maximum-parallel-testing-workers 1" \
+  --erase_simulator --localize_simulator \
+  --ios_version "26.0" \
+  --devices "$DEVICE" \
+  --languages "$LOCALES" \
+  $EXTRA_FAST_LANE_ARGS
+echo "Fastlane exited with code: $?"
