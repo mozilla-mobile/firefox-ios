@@ -26,93 +26,81 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
     func testRecordTermsOfServiceScreenDisplayedThenGleanIsCalled() throws {
         subject.termsOfServiceScreenDisplayed()
         
+        let event = GleanMetrics.Onboarding.termsOfServiceCard
         let savedEvent = try XCTUnwrap(
             gleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
         )
-        let expectedMetricType = type(of: GleanMetrics.Onboarding.termsOfServiceCard)
-        let resultMetricType = type(of: savedEvent)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
     }
 
     func testRecordTermsOfServiceTechnicalInteractionDataSwitchedThenGleanIsCalled() throws {
         subject.technicalInteractionDataSwitched(to: true)
         
+        let event = GleanMetrics.Onboarding.toggleTechnicalInteractionData
         let savedEvent = try XCTUnwrap(
             gleanWrapper.savedEvents.last as? EventMetricType<GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra>
         )
         let savedExtras = try XCTUnwrap(
             gleanWrapper.savedExtras.last as? GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Onboarding.toggleTechnicalInteractionData)
-        let resultMetricType = type(of: savedEvent)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.changedTo, true)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
     }
 
     func testRecordTermsOfServiceAutomaticCrashReportsSwitchedThenGleanIsCalled() throws {
         subject.automaticCrashReportsSwitched(to: true)
         
+        let event = GleanMetrics.Onboarding.toggleAutomaticCrashReports
         let savedEvent = try XCTUnwrap(
             gleanWrapper.savedEvents.last as? EventMetricType<GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra>
         )
         let savedExtras = try XCTUnwrap(
             gleanWrapper.savedExtras.last as? GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra
         )
-        let expectedMetricType = type(of: GleanMetrics.Onboarding.toggleAutomaticCrashReports)
-        let resultMetricType = type(of: savedEvent)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.changedTo, true)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
     }
 
     func testRecordTermsOfServiceLinkTappedThenGleanIsCalled() throws {
         subject.termsOfServiceLinkTapped()
         
+        let event = GleanMetrics.Onboarding.termsOfServiceLinkClicked
         let savedEvent = try XCTUnwrap(
             gleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
         )
-        let expectedMetricType = type(of: GleanMetrics.Onboarding.termsOfServiceLinkClicked)
-        let resultMetricType = type(of: savedEvent)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
     }
 
     func testRecordTermsOfServicePrivacyNoticeLinkTappedThenGleanIsCalled() throws {
         subject.termsOfServicePrivacyNoticeLinkTapped()
         
+        let event = GleanMetrics.Onboarding.termsOfServicePrivacyNoticeLinkClicked
         let savedEvent = try XCTUnwrap(
             gleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
         )
-        let expectedMetricType = type(of: GleanMetrics.Onboarding.termsOfServicePrivacyNoticeLinkClicked)
-        let resultMetricType = type(of: savedEvent)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
     }
 
     func testRecordTermsOfServiceManageLinkTappedThenGleanIsCalled() throws {
         subject.termsOfServiceManageLinkTapped()
         
+        let event = GleanMetrics.Onboarding.termsOfServiceManageLinkClicked
         let savedEvent = try XCTUnwrap(
             gleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
         )
-        let expectedMetricType = type(of: GleanMetrics.Onboarding.termsOfServiceManageLinkClicked)
-        let resultMetricType = type(of: savedEvent)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
     }
 
     func testRecordTermsOfServiceAcceptButtonTappedThenGleanIsCalled() throws {
