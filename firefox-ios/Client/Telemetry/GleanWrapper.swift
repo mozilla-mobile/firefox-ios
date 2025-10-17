@@ -17,7 +17,7 @@ protocol GleanWrapper {
     func recordEvent<NoExtras>(for metric: EventMetricType<NoExtras>) where NoExtras: EventExtras
     func incrementCounter(for metric: CounterMetricType)
     func recordString(for metric: StringMetricType, value: String)
-    func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String)
+    func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String)
     func setBoolean(for metric: BooleanMetricType, value: Bool)
     func recordQuantity(for metric: QuantityMetricType, value: Int64)
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64)
@@ -84,7 +84,7 @@ struct DefaultGleanWrapper: GleanWrapper {
         metric.set(value)
     }
 
-    func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String) {
+    func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String) {
         metric[label].add()
     }
 
