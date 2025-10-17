@@ -446,7 +446,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTranslation() {
-        let viewController = TranslationSettingsViewController(windowUUID: windowUUID)
+        let viewController = TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         router.push(viewController)
     }
 
