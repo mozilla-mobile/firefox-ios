@@ -100,7 +100,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
         return safeAreaBottomInset * 0.5
     }
-    
+
     private func handleAccessibilityScroll(from edge: Edge) {
         if edge == .leading {
             viewModel.scrollToPreviousPage()
