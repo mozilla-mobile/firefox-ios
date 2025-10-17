@@ -105,6 +105,13 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         largeContentTitle = element.a11yLabel
         largeContentImage = image
 
+        if element.iconName == StandardImageIdentifiers.Medium.loadingImage {
+            config.image = nil
+            makeLoadingButton()
+        } else {
+            hideLoadingIcon()
+        }
+
         configuration = config
         if let badgeName = element.badgeImageName {
             addBadgeIcon(imageName: badgeName)
@@ -143,6 +150,28 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
+    }
+
+    private var spinner: UIActivityIndicatorView?
+
+    private func makeLoadingButton(style: UIActivityIndicatorView.Style = .medium) {
+        if spinner == nil {
+            let loadingView = UIActivityIndicatorView(style: style)
+            loadingView.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(loadingView)
+            NSLayoutConstraint.activate([
+                loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
+                loadingView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            ])
+            spinner = loadingView
+        }
+        spinner?.startAnimating()
+    }
+
+    private func hideLoadingIcon() {
+        spinner?.stopAnimating()
+        spinner?.removeFromSuperview()
+        spinner = nil
     }
 
     private func addBadgeIcon(imageName: String) {

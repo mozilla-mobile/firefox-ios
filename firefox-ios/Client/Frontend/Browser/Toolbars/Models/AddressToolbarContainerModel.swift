@@ -292,6 +292,7 @@ final class AddressToolbarContainerModel: Equatable {
         return { button in
             let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                  buttonTapped: button,
+                                                 buttonImage: action.iconName,
                                                  gestureType: .tap,
                                                  windowUUID: windowUUID,
                                                  actionType: ToolbarMiddlewareActionType.didTapButton)

@@ -15,13 +15,18 @@ final class TranslationsMiddleware {
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
-        guard let action = (action as? ToolbarAction), let configuration = action.translationConfiguration else { return }
         switch action.actionType {
-        case ToolbarActionType.didTapOnTranslate:
+        case ToolbarMiddlewareActionType.didTapButton:
+            guard let action = (action as? ToolbarMiddlewareAction) else { return }
+            guard let gestureType = action.gestureType,
+                  let type = action.buttonType else { return }
+            guard gestureType == .tap,
+                  type == .translate else { return }
+
             guard let selectedTab = self.windowManager.tabManager(for: action.windowUUID).selectedTab,
                     let webView = selectedTab.webView
             else { return }
-            if !configuration.isLoading {
+            if action.buttonImage == StandardImageIdentifiers.Medium.translateActive {
                 webView.reload()
             } else {
                 self.startTranslation(for: action)
@@ -32,7 +37,7 @@ final class TranslationsMiddleware {
         }
     }
 
-    private func startTranslation(for action: ToolbarAction) {
+    private func startTranslation(for action: ToolbarMiddlewareAction) {
         Task { @MainActor in
             guard let selectedTab = self.windowManager.tabManager(for: action.windowUUID).selectedTab,
                     let webView = selectedTab.webView

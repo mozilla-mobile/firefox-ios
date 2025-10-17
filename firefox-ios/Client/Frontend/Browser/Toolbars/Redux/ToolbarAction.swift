@@ -146,12 +146,14 @@ struct ToolbarMiddlewareAction: Action {
     let actionType: ActionType
     let buttonType: ToolbarActionConfiguration.ActionType?
     let buttonTapped: UIButton?
+    let buttonImage: String?
     let gestureType: ToolbarButtonGesture?
     let scrollOffset: CGPoint?
     let readerModeState: ReaderModeState?
 
     init(buttonType: ToolbarActionConfiguration.ActionType? = nil,
          buttonTapped: UIButton? = nil,
+         buttonImage: String? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          scrollOffset: CGPoint? = nil,
          readerModeState: ReaderModeState? = nil,
@@ -160,6 +162,7 @@ struct ToolbarMiddlewareAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.buttonType = buttonType
+        self.buttonImage = buttonImage
         self.buttonTapped = buttonTapped
         self.readerModeState = readerModeState
         self.gestureType = gestureType
