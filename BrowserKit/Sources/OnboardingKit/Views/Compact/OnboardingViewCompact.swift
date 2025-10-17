@@ -107,14 +107,14 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
         return safeAreaBottomInset * 0.5
     }
-    
+
     private func handleBottomButtonAction(action: ViewModel.OnboardingActionType, card: String) {
         viewModel.handleBottomButtonAction(action: action, cardName: card)
         if action.rawValue.contains("forward") {
             UIAccessibility.post(notification: .screenChanged, argument: nil)
         }
     }
-    
+
     // MARK: - Theme
 
     private func applyTheme() {
