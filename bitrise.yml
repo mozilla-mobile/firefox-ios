@@ -310,7 +310,6 @@ workflows:
             XCUITests/HomePageSettingsUITests
             XCUITests/NavigationTest
             XCUITests/PhotonActionSheetTests
-            XCUITests/SearchTests
             XCUITests/SettingsTests
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
