@@ -8,120 +8,137 @@ import XCTest
 @testable import Client
 
 final class TermsOfServiceTelemetryTests: XCTestCase {
-    var gleanWrapper: MockGleanWrapper!
-    var subject: TermsOfServiceTelemetry!
+    var mockGleanWrapper: MockGleanWrapper!
 
     override func setUp() {
         super.setUp()
-        gleanWrapper = MockGleanWrapper()
-        subject = TermsOfServiceTelemetry(gleanWrapper: gleanWrapper)
+        mockGleanWrapper = MockGleanWrapper()
     }
 
     override func tearDown() {
-        gleanWrapper = nil
-        subject = nil
+        mockGleanWrapper = nil
         super.tearDown()
     }
 
     func testRecordTermsOfServiceScreenDisplayedThenGleanIsCalled() throws {
-        subject.termsOfServiceScreenDisplayed()
-        
+        let subject = createSubject()
         let event = GleanMetrics.Onboarding.termsOfServiceCard
-        let savedEvent = try XCTUnwrap(
-            gleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
+
+        subject.termsOfServiceScreenDisplayed()
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
-        
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordTermsOfServiceTechnicalInteractionDataSwitchedThenGleanIsCalled() throws {
-        subject.technicalInteractionDataSwitched(to: true)
-        
+        let subject = createSubject()
         let event = GleanMetrics.Onboarding.toggleTechnicalInteractionData
-        let savedEvent = try XCTUnwrap(
-            gleanWrapper.savedEvents.last as? EventMetricType<GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra>
-        )
+        typealias EventExtrasType = GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra
+
+        subject.technicalInteractionDataSwitched(to: true)
+
         let savedExtras = try XCTUnwrap(
-            gleanWrapper.savedExtras.last as? GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra
+            mockGleanWrapper.savedExtras.first as? EventExtrasType
         )
-        
-        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.changedTo, true)
-        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordTermsOfServiceAutomaticCrashReportsSwitchedThenGleanIsCalled() throws {
-        subject.automaticCrashReportsSwitched(to: true)
-        
+        let subject = createSubject()
         let event = GleanMetrics.Onboarding.toggleAutomaticCrashReports
-        let savedEvent = try XCTUnwrap(
-            gleanWrapper.savedEvents.last as? EventMetricType<GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra>
-        )
+        typealias EventExtrasType = GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra
+
+        subject.automaticCrashReportsSwitched(to: true)
+
         let savedExtras = try XCTUnwrap(
-            gleanWrapper.savedExtras.last as? GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra
+            mockGleanWrapper.savedExtras.first as? EventExtrasType
         )
-        
-        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.changedTo, true)
-        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordTermsOfServiceLinkTappedThenGleanIsCalled() throws {
-        subject.termsOfServiceLinkTapped()
-        
+        let subject = createSubject()
         let event = GleanMetrics.Onboarding.termsOfServiceLinkClicked
-        let savedEvent = try XCTUnwrap(
-            gleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
+
+        subject.termsOfServiceLinkTapped()
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
-        
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordTermsOfServicePrivacyNoticeLinkTappedThenGleanIsCalled() throws {
-        subject.termsOfServicePrivacyNoticeLinkTapped()
-        
+        let subject = createSubject()
         let event = GleanMetrics.Onboarding.termsOfServicePrivacyNoticeLinkClicked
-        let savedEvent = try XCTUnwrap(
-            gleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
+
+        subject.termsOfServicePrivacyNoticeLinkTapped()
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
-        
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordTermsOfServiceManageLinkTappedThenGleanIsCalled() throws {
-        subject.termsOfServiceManageLinkTapped()
-        
+        let subject = createSubject()
         let event = GleanMetrics.Onboarding.termsOfServiceManageLinkClicked
-        let savedEvent = try XCTUnwrap(
-            gleanWrapper.savedEvents.last as? EventMetricType<NoExtras>
+
+        subject.termsOfServiceManageLinkTapped()
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<NoExtras>
         )
-        
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        XCTAssert(savedEvent === event, "Received \(savedEvent) instead of \(event)")
+
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
     func testRecordTermsOfServiceAcceptButtonTappedThenGleanIsCalled() throws {
+        let subject = createSubject()
         let acceptedDate = Date()
+
         subject.termsOfServiceAcceptButtonTapped(acceptedDate: acceptedDate)
-        
+
         // Should record the terms of service accepted event
-        XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
-        
+        XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
+
         // Should record the ToU accepted event with extras
-        XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
-        
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+
         // Should record the version and date metrics
-        XCTAssertEqual(gleanWrapper.recordQuantityCalled, 1)
-        XCTAssertEqual(gleanWrapper.recordDatetimeCalled, 1)
-        
+        XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
+
         // Verify the ToU accepted event extras
         let savedExtras = try XCTUnwrap(
-            gleanWrapper.savedExtras.last as? GleanMetrics.TermsOfUse.AcceptedExtra
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.TermsOfUse.AcceptedExtra
         )
         XCTAssertEqual(savedExtras.surface, "onboarding")
         XCTAssertEqual(savedExtras.touVersion, "4")
+    }
+
+    private func createSubject() -> TermsOfServiceTelemetry {
+        return TermsOfServiceTelemetry(gleanWrapper: mockGleanWrapper)
     }
 }
