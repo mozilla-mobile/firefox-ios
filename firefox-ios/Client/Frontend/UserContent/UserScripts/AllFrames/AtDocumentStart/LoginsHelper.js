@@ -490,7 +490,8 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   // define the field types for focus events
   const FocusFieldType = {
     username: "username",
-    password: "password"
+    password: "password",
+    email: "email"
   };
 
   function getUsernameAndPassword(field, isSubmission) {
@@ -539,6 +540,11 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         fieldType:
           field === username ? FocusFieldType.username : FocusFieldType.password,
       });
+    } else if (field.type === FocusFieldType.email) {
+        webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
+            type: "fieldType",
+            fieldType: FocusFieldType.email,
+        });
     }
   }
 
