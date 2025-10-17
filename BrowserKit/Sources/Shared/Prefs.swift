@@ -106,7 +106,6 @@ public struct PrefsKeys {
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
-        public static let Translation = "translationFeatureKey"
     }
 
     public struct HomepageSettings {
@@ -167,6 +166,7 @@ public struct PrefsKeys {
         public static let closePrivateTabs = "ClosePrivateTabs"
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
+        public static let translationsFeature = "settings.translationFeature"
     }
 
     // Activity Stream
