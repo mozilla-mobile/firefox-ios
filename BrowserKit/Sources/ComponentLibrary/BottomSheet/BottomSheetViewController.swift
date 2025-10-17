@@ -31,6 +31,7 @@ public class BottomSheetViewController: UIViewController,
         static let initialSpringVelocity: CGFloat = 1
         static let springWithDamping = 0.7
         static let animationDuration = 0.5
+        static let glassAlpha = 0.95
     }
 
     public var notificationCenter: NotificationProtocol
@@ -182,6 +183,8 @@ public class BottomSheetViewController: UIViewController,
 
         #if canImport(FoundationModels)
         let glassEffect = UIGlassEffect()
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        glassEffect.tintColor = theme.colors.layer2.withAlphaComponent(UX.glassAlpha)
         glassEffect.isInteractive = true
         effectView.effect = glassEffect
         #else
