@@ -33,7 +33,7 @@ struct HomepageState: ScreenState, Equatable {
     let availableContentHeight: CGFloat
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let homepageState = store.state.screenState(
+        guard let homepageState = appState.screenState(
             HomepageState.self,
             for: .homepage,
             window: uuid
@@ -133,6 +133,7 @@ struct HomepageState: ScreenState, Equatable {
         }
     }
 
+    @MainActor
     private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
         return HomepageState(
             windowUUID: state.windowUUID,
@@ -151,6 +152,7 @@ struct HomepageState: ScreenState, Equatable {
         )
     }
 
+    @MainActor
     private static func handleEmbeddedHomepageAction(state: HomepageState,
                                                      action: Action,
                                                      isZeroSearch: Bool) -> HomepageState {
@@ -171,6 +173,7 @@ struct HomepageState: ScreenState, Equatable {
         )
     }
 
+    @MainActor
     private static func handleAvailableContentHeightChangeAction(state: HomepageState, action: Action) -> HomepageState {
         guard let availableContentHeight = (action as? HomepageAction)?.availableContentHeight else {
             return defaultState(from: state)
@@ -193,6 +196,7 @@ struct HomepageState: ScreenState, Equatable {
         )
     }
 
+    @MainActor
     private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
         return HomepageState(
             windowUUID: state.windowUUID,
@@ -211,6 +215,7 @@ struct HomepageState: ScreenState, Equatable {
         )
     }
 
+    @MainActor
     private static func handleSpacerInitialization(action: Action, state: Self) -> HomepageState {
         guard let isSpacerEnabled = (action as? HomepageAction)?.shouldShowSpacer else {
             return defaultState(from: state)
@@ -234,25 +239,14 @@ struct HomepageState: ScreenState, Equatable {
     }
 
     private static func defaultState(from state: HomepageState, action: Action?) -> HomepageState {
-        var headerState = state.headerState
-        var messageState = state.messageState
-        var merinoState = state.merinoState
-        var topSitesState = state.topSitesState
-        var searchState = state.searchState
-        var jumpBackInState = state.jumpBackInState
-        var bookmarkState = state.bookmarkState
-        var wallpaperState = state.wallpaperState
-
-        if let action {
-            headerState = HeaderState.reducer(state.headerState, action)
-            messageState = MessageCardState.reducer(state.messageState, action)
-            merinoState = MerinoState.reducer(state.merinoState, action)
-            searchState = SearchBarState.reducer(state.searchState, action)
-            jumpBackInState = JumpBackInSectionState.reducer(state.jumpBackInState, action)
-            bookmarkState = BookmarksSectionState.reducer(state.bookmarkState, action)
-            topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
-            wallpaperState = WallpaperState.reducer(state.wallpaperState, action)
-        }
+        let headerState = HeaderState.defaultState(from: state.headerState)
+        let messageState = MessageCardState.defaultState(from: state.messageState)
+        let merinoState = MerinoState.defaultState(from: state.merinoState)
+        let topSitesState = TopSitesSectionState.defaultState(from: state.topSitesState)
+        let searchState = SearchBarState.defaultState(from: state.searchState)
+        let jumpBackInState = JumpBackInSectionState.defaultState(from: state.jumpBackInState)
+        let bookmarkState = BookmarksSectionState.defaultState(from: state.bookmarkState)
+        let wallpaperState = WallpaperState.defaultState(from: state.wallpaperState)
 
         return HomepageState(
             windowUUID: state.windowUUID,

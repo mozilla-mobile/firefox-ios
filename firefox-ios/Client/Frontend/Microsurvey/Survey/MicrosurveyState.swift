@@ -11,7 +11,7 @@ struct MicrosurveyState: ScreenState {
     var showPrivacy: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let microsurveyState = store.state.screenState(
+        guard let microsurveyState = appState.screenState(
             MicrosurveyState.self,
             for: .microsurvey,
             window: uuid

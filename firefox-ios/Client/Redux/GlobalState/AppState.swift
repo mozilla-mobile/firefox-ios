@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-struct AppState: StateType {
+struct AppState: StateType, Sendable {
     let activeScreens: ActiveScreensState
 
     static let reducer: Reducer<Self> = { state, action in

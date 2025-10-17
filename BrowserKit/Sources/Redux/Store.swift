@@ -79,8 +79,10 @@ public class Store<State: StateType & Sendable>: DefaultDispatchStore {
             return
         }
 
-        actionQueue.append(action)
-        processQueuedActions()
+        MainActor.assumeIsolated {
+            actionQueue.append(action)
+            processQueuedActions()
+        }
     }
 
     @MainActor
@@ -91,6 +93,7 @@ public class Store<State: StateType & Sendable>: DefaultDispatchStore {
         processQueuedActions()
     }
 
+    @MainActor
     private func processQueuedActions() {
         guard !isProcessingActions else { return }
         isProcessingActions = true
@@ -101,6 +104,7 @@ public class Store<State: StateType & Sendable>: DefaultDispatchStore {
         isProcessingActions = false
     }
 
+    @MainActor
     private func executeAction(_ action: Action) {
         // Each active screen state is given an opportunity to be reduced using the dispatched action
         // (Note: this is true even if the action's UUID differs from the screen's window's UUID).

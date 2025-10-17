@@ -54,7 +54,7 @@ struct BrowserViewControllerState: ScreenState {
     var navigationDestination: NavigationDestination?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let bvcState = store.state.screenState(
+        guard let bvcState = appState.screenState(
             BrowserViewControllerState.self,
             for: .browserViewController,
             window: uuid)
@@ -155,6 +155,7 @@ struct BrowserViewControllerState: ScreenState {
     }
 
     // MARK: - Navigation Browser Action
+    @MainActor
     static func reduceStateForNavigationBrowserAction(
         action: NavigationBrowserAction,
         state: BrowserViewControllerState
@@ -186,6 +187,7 @@ struct BrowserViewControllerState: ScreenState {
     }
 
     // MARK: - Start At Home Action
+    @MainActor
     static func reduceStateForStartAtHomeAction(
         action: StartAtHomeAction,
         state: BrowserViewControllerState
@@ -199,6 +201,7 @@ struct BrowserViewControllerState: ScreenState {
     }
 
     // MARK: - Summarize Action
+    @MainActor
     static func reduceStateForSummarizeAction(
         action: SummarizeAction,
         state: BrowserViewControllerState
@@ -221,6 +224,7 @@ struct BrowserViewControllerState: ScreenState {
 
     /// Navigate to homepage zero search state, which is a scrim layer / dimming view,
     /// after tapping on search button on navigation toolbar
+    @MainActor
     static func reduceStateForToolbarMiddlewareAction(
         action: ToolbarMiddlewareAction,
         state: BrowserViewControllerState
@@ -251,6 +255,7 @@ struct BrowserViewControllerState: ScreenState {
 
     /// Navigate to zero search that shows trending / recent searches state
     /// after tapping on search button on navigation toolbar
+    @MainActor
     static func reduceStateForToolbarAction(
         action: ToolbarAction,
         state: BrowserViewControllerState
@@ -270,6 +275,7 @@ struct BrowserViewControllerState: ScreenState {
         }
     }
 
+    @MainActor
     static func reduceStateForMicrosurveyAction(action: MicrosurveyPromptAction,
                                                 state: BrowserViewControllerState) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -279,6 +285,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     static func reduceStateForGeneralBrowserAction(action: GeneralBrowserAction,
                                                    state: BrowserViewControllerState) -> BrowserViewControllerState {
         switch action.actionType {
@@ -338,6 +345,7 @@ struct BrowserViewControllerState: ScreenState {
         }
     }
 
+    @MainActor
     private static func handleShowToastAction(state: BrowserViewControllerState,
                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         guard let toastType = action.toastType else {
@@ -351,6 +359,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowAndLeaveOverlayAction(state: BrowserViewControllerState,
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         let showOverlay = action.showOverlay ?? false
@@ -362,6 +371,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleGoToHomepageAction(state: BrowserViewControllerState,
                                                  action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -373,6 +383,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleAddNewTabAction(state: BrowserViewControllerState,
                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -384,6 +395,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowQRcodeReaderAction(state: BrowserViewControllerState,
                                                      action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -395,6 +407,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowBackForwardListAction(state: BrowserViewControllerState,
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -406,6 +419,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowTrackingProtectionDetailsAction(
         state: BrowserViewControllerState,
         action: GeneralBrowserAction) -> BrowserViewControllerState {
@@ -419,6 +433,7 @@ struct BrowserViewControllerState: ScreenState {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         }
 
+    @MainActor
     private static func handleShowMenuAction(state: BrowserViewControllerState,
                                              action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -431,6 +446,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowTabsLongPressAction(state: BrowserViewControllerState,
                                                       action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -442,6 +458,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowReloadLongPressAction(state: BrowserViewControllerState,
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -454,6 +471,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowLocationViewLongPressActionSheetAction(
         state: BrowserViewControllerState,
         action: GeneralBrowserAction) -> BrowserViewControllerState {
@@ -466,6 +484,7 @@ struct BrowserViewControllerState: ScreenState {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         }
 
+    @MainActor
     private static func handleNavigateBackAction(state: BrowserViewControllerState,
                                                  action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -477,6 +496,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleNavigateForwardAction(state: BrowserViewControllerState,
                                                     action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -488,6 +508,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowTabTrayAction(state: BrowserViewControllerState,
                                                 action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -499,6 +520,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleReloadWebsiteAction(state: BrowserViewControllerState,
                                                   action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -510,6 +532,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleReloadWebsiteNoCacheAction(state: BrowserViewControllerState,
                                                          action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -521,6 +544,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleStopLoadingWebsiteAction(state: BrowserViewControllerState,
                                                        action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -532,6 +556,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowShareAction(state: BrowserViewControllerState,
                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -544,6 +569,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowReaderModeAction(state: BrowserViewControllerState,
                                                    action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -555,6 +581,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowNewTabLongPressAction(state: BrowserViewControllerState,
                                                         action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -566,6 +593,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleAddToReadingListLongPressAction(state: BrowserViewControllerState,
                                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -577,6 +605,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleClearDataAction(state: BrowserViewControllerState,
                                               action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -587,6 +616,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowPasswordGeneratorAction(state: BrowserViewControllerState,
                                                           action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -598,6 +628,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     private static func handleShowSummarizerAction(state: BrowserViewControllerState,
                                                    action: GeneralBrowserAction) -> BrowserViewControllerState {
         return BrowserViewControllerState(
@@ -610,10 +641,7 @@ struct BrowserViewControllerState: ScreenState {
 
     private static func defaultState(from state: BrowserViewControllerState,
                                      action: Action?) -> BrowserViewControllerState {
-        var microsurveyState = state.microsurveyState
-        if let action {
-            microsurveyState = MicrosurveyPromptState.reducer(state.microsurveyState, action)
-        }
+        let microsurveyState = MicrosurveyPromptState.defaultState(from: state.microsurveyState)
 
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
@@ -627,6 +655,7 @@ struct BrowserViewControllerState: ScreenState {
         return defaultState(from: state, action: nil)
     }
 
+    @MainActor
     static func resolveStateForUpdateSelectedTab(action: GeneralBrowserAction,
                                                  state: BrowserViewControllerState) -> BrowserViewControllerState {
         let isAboutHomeURL = InternalURL(action.selectedTabURL)?.isAboutHomeURL ?? false
@@ -647,6 +676,7 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
+    @MainActor
     static func resolveStateForStartAtHome(
         action: StartAtHomeAction,
         state: BrowserViewControllerState
