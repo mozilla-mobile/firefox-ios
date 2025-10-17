@@ -31,9 +31,10 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         )
         let expectedMetricType = type(of: GleanMetrics.Onboarding.termsOfServiceCard)
         let resultMetricType = type(of: savedEvent)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
-        XCTAssert(resultMetricType == expectedMetricType)
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
     func testRecordTermsOfServiceTechnicalInteractionDataSwitchedThenGleanIsCalled() throws {
@@ -47,10 +48,11 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         )
         let expectedMetricType = type(of: GleanMetrics.Onboarding.toggleTechnicalInteractionData)
         let resultMetricType = type(of: savedEvent)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
-        XCTAssert(resultMetricType == expectedMetricType)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.changedTo, true)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
     func testRecordTermsOfServiceAutomaticCrashReportsSwitchedThenGleanIsCalled() throws {
@@ -64,10 +66,11 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         )
         let expectedMetricType = type(of: GleanMetrics.Onboarding.toggleAutomaticCrashReports)
         let resultMetricType = type(of: savedEvent)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
-        XCTAssert(resultMetricType == expectedMetricType)
         XCTAssertEqual(gleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(savedExtras.changedTo, true)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
     func testRecordTermsOfServiceLinkTappedThenGleanIsCalled() throws {
@@ -78,9 +81,10 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         )
         let expectedMetricType = type(of: GleanMetrics.Onboarding.termsOfServiceLinkClicked)
         let resultMetricType = type(of: savedEvent)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
-        XCTAssert(resultMetricType == expectedMetricType)
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
     func testRecordTermsOfServicePrivacyNoticeLinkTappedThenGleanIsCalled() throws {
@@ -91,9 +95,10 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         )
         let expectedMetricType = type(of: GleanMetrics.Onboarding.termsOfServicePrivacyNoticeLinkClicked)
         let resultMetricType = type(of: savedEvent)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
-        XCTAssert(resultMetricType == expectedMetricType)
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
     func testRecordTermsOfServiceManageLinkTappedThenGleanIsCalled() throws {
@@ -104,9 +109,10 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         )
         let expectedMetricType = type(of: GleanMetrics.Onboarding.termsOfServiceManageLinkClicked)
         let resultMetricType = type(of: savedEvent)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
         
-        XCTAssert(resultMetricType == expectedMetricType)
         XCTAssertEqual(gleanWrapper.recordEventNoExtraCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
     }
 
     func testRecordTermsOfServiceAcceptButtonTappedThenGleanIsCalled() throws {
