@@ -22,22 +22,22 @@ struct BookmarksTelemetry {
 
     func addBookmark(eventLabel: EventLabel) {
         gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Bookmarks.add,
-                                           label: eventLabel.rawValue)
+                                             label: eventLabel.rawValue)
     }
 
     func deleteBookmark(eventLabel: EventLabel) {
         gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Bookmarks.delete,
-                                           label: eventLabel.rawValue)
+                                             label: eventLabel.rawValue)
     }
 
     func openBookmarksSite(eventLabel: EventLabel) {
         gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Bookmarks.open,
-                                           label: eventLabel.rawValue)
+                                             label: eventLabel.rawValue)
     }
 
     func editBookmark(eventLabel: EventLabel) {
         gleanWrapper.incrementLabeledCounter(for: GleanMetrics.Bookmarks.edit,
-                                           label: eventLabel.rawValue)
+                                             label: eventLabel.rawValue)
     }
 
      func addBookmarkFolder() {
