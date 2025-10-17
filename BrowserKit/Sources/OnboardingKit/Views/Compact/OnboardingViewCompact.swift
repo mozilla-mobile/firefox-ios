@@ -81,7 +81,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     viewModel: card,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
-                    onBottomButtonAction: viewModel.handleBottomButtonAction,
+                    onBottomButtonAction: handleBottomButtonAction,
                     onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
                 )
                 .tag(index)
@@ -91,6 +91,14 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .accessibilityElement(children: .contain)
+        .accessibilityScrollAction { edge in
+            if edge == .leading {
+                viewModel.pageCount -= 1
+            } else if edge == .trailing {
+                viewModel.pageCount += 1
+            }
+        }
     }
 
     private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
@@ -99,6 +107,15 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
         return safeAreaBottomInset * 0.5
     }
+    
+    private func handleBottomButtonAction(action: ViewModel.OnboardingActionType, card: String) {
+        viewModel.handleBottomButtonAction(action: action, cardName: card)
+        if action.rawValue.contains("forward") {
+            UIAccessibility.post(notification: .screenChanged, argument: nil)
+        }
+    }
+    
+    // MARK: - Theme
 
     private func applyTheme() {
         theme = themeManager.getCurrentTheme(for: windowUUID)
