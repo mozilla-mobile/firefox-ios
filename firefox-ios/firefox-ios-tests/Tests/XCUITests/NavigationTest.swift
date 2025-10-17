@@ -418,6 +418,7 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
+    // FIXME: FXIOS-13888 Test disabled in the SmokeTest plan; it is failing on some Bitrise PRs but passes locally.
     func testSSL() {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
