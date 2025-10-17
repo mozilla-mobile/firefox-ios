@@ -240,7 +240,7 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         let resultMetricType = type(of: savedMetric)
         let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
 
-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 1)
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(mockGleanWrapper?.savedLabel as? String, "top_sites")
     }
