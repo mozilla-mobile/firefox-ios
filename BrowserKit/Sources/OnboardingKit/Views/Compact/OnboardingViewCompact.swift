@@ -94,9 +94,9 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         .accessibilityElement(children: .contain)
         .accessibilityScrollAction { edge in
             if edge == .leading {
-                viewModel.pageCount -= 1
+                viewModel.scrollToPreviousPage()
             } else if edge == .trailing {
-                viewModel.pageCount += 1
+                viewModel.scrollToNextPage()
             }
         }
     }
