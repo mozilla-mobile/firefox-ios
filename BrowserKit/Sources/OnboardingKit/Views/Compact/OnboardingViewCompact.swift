@@ -41,13 +41,10 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     }
                     .padding(.trailing, UX.Onboarding.Spacing.standard)
                     .skipButtonStyle(theme: theme)
-                    .accessibilitySortPriority(2)
                     .accessibilityLabel(viewModel.skipText)
                     .frame(maxWidth: .infinity, alignment: .trailing)
 
                     tabView
-                        .accessibilitySortPriority(1)
-                        .accessibilityElement(children: .contain)
 
                     Spacer()
 
@@ -60,22 +57,13 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     )
                     .padding(.bottom, pageControllPadding(safeAreaBottomInset: geo.safeAreaInsets.bottom))
                 }
+                .accessibilityScrollAction { edge in
+                    handleAccessibilityScroll(from: edge)
+                }
                 .ignoresSafeArea(.all, edges: .bottom)
             }
         }
-        .accessibilityScrollAction { edge in
-            if edge == .leading {
-                viewModel.scrollToPreviousPage()
-            } else if edge == .trailing {
-                viewModel.scrollToNextPage()
-            }
-            switch edge {
-            case .leading, .trailing:
-                UIAccessibility.post(notification: .screenChanged, argument: nil)
-            default:
-                break
-            }
-        }
+        .accessibilityElement(children: .contain)
         .onAppear {
             applyTheme()
         }
@@ -104,7 +92,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-        .accessibilityElement(children: .contain)
     }
 
     private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
@@ -112,6 +99,21 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             return UX.CardView.carouselDotBottomPadding
         }
         return safeAreaBottomInset * 0.5
+    }
+    
+    private func handleAccessibilityScroll(from edge: Edge) {
+        if edge == .leading {
+            viewModel.scrollToPreviousPage()
+        } else if edge == .trailing {
+            viewModel.scrollToNextPage()
+        }
+        switch edge {
+        case .leading, .trailing:
+            DispatchQueue.main.async {
+                UIAccessibility.post(notification: .screenChanged, argument: nil)
+            }
+        default: break
+        }
     }
 
     private func handleBottomButtonAction(action: ViewModel.OnboardingActionType, card: String) {
