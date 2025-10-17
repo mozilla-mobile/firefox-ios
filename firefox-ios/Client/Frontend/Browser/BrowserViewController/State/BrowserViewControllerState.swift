@@ -182,7 +182,7 @@ struct BrowserViewControllerState: ScreenState {
                 navigationDestination: action.navigationDestination
             )
         default:
-            return defaultState(from: state, action: action)
+            return passthroughState(from: state, action: action)
         }
     }
 
@@ -196,7 +196,7 @@ struct BrowserViewControllerState: ScreenState {
         case StartAtHomeMiddlewareActionType.startAtHomeCheckCompleted:
             return resolveStateForStartAtHome(action: action, state: state)
         default:
-            return defaultState(from: state, action: action)
+            return passthroughState(from: state, action: action)
         }
     }
 
@@ -216,7 +216,7 @@ struct BrowserViewControllerState: ScreenState {
                 navigationDestination: NavigationDestination(.summarizer(config: action.summarizerConfig))
             )
         default:
-            return defaultState(from: state, action: action)
+            return passthroughState(from: state, action: action)
         }
     }
 
@@ -238,7 +238,7 @@ struct BrowserViewControllerState: ScreenState {
             )?.searchState.shouldShowSearchBar ?? false
 
             guard shouldShowSearchBar, action.buttonType == .search else {
-                return defaultState(from: state, action: action)
+                return passthroughState(from: state, action: action)
             }
 
             return BrowserViewControllerState(
@@ -249,7 +249,7 @@ struct BrowserViewControllerState: ScreenState {
                 navigationDestination: NavigationDestination(.homepageZeroSearch)
             )
         default:
-            return defaultState(from: state, action: action)
+            return passthroughState(from: state, action: action)
         }
     }
 
@@ -262,7 +262,7 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         switch action.actionType {
         case ToolbarActionType.didStartEditingUrl, ToolbarActionType.didDeleteSearchTerm:
-            guard case .webview = state.browserViewType else { return defaultState(from: state, action: action) }
+            guard case .webview = state.browserViewType else { return passthroughState(from: state, action: action) }
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
@@ -271,7 +271,7 @@ struct BrowserViewControllerState: ScreenState {
                 navigationDestination: NavigationDestination(.zeroSearch)
             )
         default:
-            return defaultState(from: state, action: action)
+            return passthroughState(from: state, action: action)
         }
     }
 
@@ -341,7 +341,7 @@ struct BrowserViewControllerState: ScreenState {
         case GeneralBrowserActionType.showSummarizer:
             return handleShowSummarizerAction(state: state, action: action)
         default:
-            return defaultState(from: state, action: action)
+            return passthroughState(from: state, action: action)
         }
     }
 
@@ -639,9 +639,12 @@ struct BrowserViewControllerState: ScreenState {
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
-    private static func defaultState(from state: BrowserViewControllerState,
-                                     action: Action?) -> BrowserViewControllerState {
-        let microsurveyState = MicrosurveyPromptState.defaultState(from: state.microsurveyState)
+    @MainActor
+    private static func passthroughState(
+        from state: BrowserViewControllerState,
+        action: Action
+    ) -> BrowserViewControllerState {
+        let microsurveyState = MicrosurveyPromptState.reducer(state.microsurveyState, action)
 
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
@@ -652,7 +655,13 @@ struct BrowserViewControllerState: ScreenState {
     }
 
     static func defaultState(from state: BrowserViewControllerState) -> BrowserViewControllerState {
-        return defaultState(from: state, action: nil)
+        let microsurveyState = MicrosurveyPromptState.defaultState(from: state.microsurveyState)
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            microsurveyState: microsurveyState
+        )
     }
 
     @MainActor
