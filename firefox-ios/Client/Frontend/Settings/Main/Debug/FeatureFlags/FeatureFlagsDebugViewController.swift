@@ -175,6 +175,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .tabScrollRefactorFeature,
+                titleText: format(string: "Tab scroll refactor"),
+                statusText: format(string: "Toggle to enable tab scroll refactor feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .tabTrayUIExperiments,
                 titleText: format(string: "Tab Tray UI Experiment"),
                 statusText: format(string: "Toggle to use the new tab tray UI")

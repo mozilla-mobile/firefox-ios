@@ -2,7 +2,7 @@
 "DefaultBrowserCard.BetterInternet.Description.v108" = "Да направите Firefox вашият браузър по подразбиране е глас за отворен и достъпен интернет.";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Title.v108" = "По подразбиране за по-добър интернет";
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Преминаване към по-добър интернет";
 
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Научете как";

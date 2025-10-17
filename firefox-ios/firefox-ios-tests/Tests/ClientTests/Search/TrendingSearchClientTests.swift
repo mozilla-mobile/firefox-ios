@@ -22,7 +22,7 @@ final class TrendingSearchClientTest: XCTestCase {
         loadStubResponse(response: sampleResponse, statusCode: 200, error: nil)
         let subject = createSubject()
 
-        let result = try await subject.getTrendingSearches()
+        let result = try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
 
         let expectedResult = [
             "funny cat videos",
@@ -35,8 +35,8 @@ final class TrendingSearchClientTest: XCTestCase {
     }
 
     func test_getTrendingSearches_forEngineWithNoTrendingURL_returnsEmptySearches() async throws {
-        let subject = createSubject(for: MockTrendingSearchEngine(url: nil))
-        let searches = try await subject.getTrendingSearches()
+        let subject = createSubject()
+        let searches = try await subject.getTrendingSearches(for: MockTrendingSearchEngine(url: nil))
         XCTAssertEqual(searches, [])
     }
 
@@ -45,7 +45,7 @@ final class TrendingSearchClientTest: XCTestCase {
         loadStubResponse(response: nil, statusCode: 200, error: nil)
 
         await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
-            try await subject.getTrendingSearches()
+            try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
         } verify: { err in
              XCTAssertEqual(err, .unableToParseJsonData)
         }
@@ -56,7 +56,7 @@ final class TrendingSearchClientTest: XCTestCase {
         loadStubResponse(response: nil, statusCode: 404, error: nil)
 
         await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
-            try await subject.getTrendingSearches()
+            try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
         } verify: { err in
              XCTAssertEqual(err, .invalidHTTPResponse)
         }
@@ -68,7 +68,7 @@ final class TrendingSearchClientTest: XCTestCase {
         loadStubResponse(response: nil, statusCode: 200, error: TestError.example)
 
         await assertAsyncThrows(ofType: Error.self) {
-            try await subject.getTrendingSearches()
+            try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
         } verify: { err in
             XCTAssertNotNil(err)
         }
@@ -79,7 +79,7 @@ final class TrendingSearchClientTest: XCTestCase {
         let subject = createSubject()
 
         await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
-            try await subject.getTrendingSearches()
+            try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
         } verify: { err in
              XCTAssertEqual(err, .unableToParseJsonData)
         }
@@ -90,18 +90,16 @@ final class TrendingSearchClientTest: XCTestCase {
         let subject = createSubject()
 
         await assertAsyncThrows(ofType: TrendingSearchClientError.self) {
-            try await subject.getTrendingSearches()
+            try await subject.getTrendingSearches(for: MockTrendingSearchEngine())
         } verify: { err in
             XCTAssertEqual(err, .unableToParseJsonData)
         }
     }
 
     // MARK: - Helpers
-    private func createSubject(
-        for searchEngine: TrendingSearchEngine = MockTrendingSearchEngine()
-    ) -> TrendingSearchClient {
+    private func createSubject() -> TrendingSearchClient {
         let session = makeMockedSession()
-        let subject = TrendingSearchClient(searchEngine: searchEngine, session: session)
+        let subject = TrendingSearchClient(session: session)
         trackForMemoryLeaks(subject)
         return subject
     }
