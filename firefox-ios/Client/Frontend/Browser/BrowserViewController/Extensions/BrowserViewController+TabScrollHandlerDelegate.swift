@@ -67,8 +67,8 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
     private func updateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
         guard UIAccessibility.isReduceMotionEnabled else {
-         animateTopToolbar(topOffset: topOffset, alpha: alpha)
-          return
+            animateTopToolbar(topOffset: topOffset, alpha: alpha)
+            return
         }
 
         headerTopConstraint?.update(offset: topOffset)
@@ -91,10 +91,10 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                                      overKeyboardContainerOffset: CGFloat,
                                      alpha: CGFloat) {
         guard UIAccessibility.isReduceMotionEnabled else {
-         animateBottomToolbar(bottomOffset: bottomContainerOffset,
-                              overKeyboardOffset: overKeyboardContainerOffset,
-                              alpha: alpha)
-          return
+            animateBottomToolbar(bottomOffset: bottomContainerOffset,
+                                 overKeyboardOffset: overKeyboardContainerOffset,
+                                 alpha: alpha)
+            return
         }
 
         overKeyboardContainerConstraint?.update(offset: overKeyboardContainerOffset)
