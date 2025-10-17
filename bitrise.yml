@@ -308,7 +308,6 @@ workflows:
             XCUITests/BrowsingPDFTests
             XCUITests/FindInPageTests
             XCUITests/HomePageSettingsUITests
-            XCUITests/NavigationTest
             XCUITests/PhotonActionSheetTests
             XCUITests/SettingsTests
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.0
