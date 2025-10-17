@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import MozillaAppServices
+import Account
 
 /// Describes public protocol for Relay component to track state and facilitate
 /// messaging between the BVC, keyboard accessory, and A~S Relay APIs.
@@ -45,5 +47,20 @@ final class RelayController: RelayControllerProtocol {
 
         // TODO: [FXIOS-13625] Forthcoming.
         return true
+    }
+
+    // MARK: - Private Utilities
+
+    private func hasRelayAccount() -> Bool {
+        guard profile.hasAccount() else { return false }
+        guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return false }
+
+        switch result {
+        case .success(let clients):
+            return clients.contains(where: { $0.name == "Firefox Relay" }) // TBD / WIP.
+        case .failure(let error):
+            logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
+            return false
+        }
     }
 }
