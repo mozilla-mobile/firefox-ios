@@ -54,6 +54,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.jumpBackInTabs.first?.accessibilityLabel, "www.mozilla.org, Www.Mozilla.Org")
     }
 
+    @MainActor
     func test_fetchMostRecentSyncedTabAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = jumpBackInSectionReducer()
@@ -74,6 +75,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.mostRecentSyncedTab?.accessibilityLabel, "Tab pickup: Mozilla, Fake client")
     }
 
+    @MainActor
     func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = jumpBackInSectionReducer()
@@ -91,6 +93,7 @@ final class JumpBackInSectionStateTests: XCTestCase {
         XCTAssertTrue(newState.shouldShowSection)
     }
 
+    @MainActor
     func test_toggleShowSectionSetting_withToggleOff_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = jumpBackInSectionReducer()
