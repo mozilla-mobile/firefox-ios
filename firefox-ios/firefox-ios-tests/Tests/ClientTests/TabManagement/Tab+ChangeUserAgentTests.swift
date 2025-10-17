@@ -154,17 +154,17 @@ class ChangeUserAgentTests: XCTestCase {
     }
 
     func testMigrationMovesFile() {
-        testMigrationHelper()
+        migrationHelper()
         XCTAssert(FileManager.default.fileExists(atPath: file.path))
     }
 
     func testMigrationKeepsData() {
-        testMigrationHelper()
+        migrationHelper()
         let data = try? Data(contentsOf: file)
         XCTAssert(data == Data("test".utf8))
     }
 
-    private func testMigrationHelper() {
+    private func migrationHelper() {
         // Write dummy data to a file at the old location
         let oldFile = {
             let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
