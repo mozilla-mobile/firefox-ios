@@ -540,7 +540,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         fieldType:
           field === username ? FocusFieldType.username : FocusFieldType.password,
       });
-    } else if (field.type === FocusFieldType.email) {
+    } else if (Logic.isInferredEmailField(field)) {
         webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
             type: "fieldType",
             fieldType: FocusFieldType.email,
