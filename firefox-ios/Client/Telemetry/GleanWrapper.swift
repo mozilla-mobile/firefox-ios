@@ -20,6 +20,7 @@ protocol GleanWrapper {
     func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String)
     func setBoolean(for metric: BooleanMetricType, value: Bool)
     func recordQuantity(for metric: QuantityMetricType, value: Int64)
+    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String)
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64)
     func recordUrl(for metric: UrlMetricType, value: URL)
     func recordDatetime(for metric: DatetimeMetricType, value: Date)
@@ -94,6 +95,10 @@ struct DefaultGleanWrapper: GleanWrapper {
 
     func recordQuantity(for metric: QuantityMetricType, value: Int64) {
         metric.set(value)
+    }
+
+    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String) {
+        metric[label].set(value)
     }
 
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {

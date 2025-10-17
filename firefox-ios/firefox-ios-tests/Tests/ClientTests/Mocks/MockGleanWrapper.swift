@@ -88,7 +88,14 @@ class MockGleanWrapper: GleanWrapper {
         recordQuantityCalled += 1
     }
 
+    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String) {
+        savedEvents.append(metric)
+        recordLabelCalled += 1
+    }
+
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {
+        savedLabel = label
+        savedValues.append(value)
         savedEvents.append(metric)
         recordLabeledQuantityCalled += 1
     }
