@@ -143,7 +143,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
         }
    }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306870
+    // https://mozilla.testrail.io/index.php?/cases/view/3197644
     func testOpenNewTabButtonOnToolbar() throws {
         app.launch()
         homepageSearchBar.tapIfExists()
@@ -156,9 +156,8 @@ class ToolbarTests: FeatureFlaggedTestBase {
             // Repeat steps on private mode
             // validateAddNewTabButtonOnToolbar() does not work on iOS 15
             if #available(iOS 16, *) {
-                navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+                navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
                 navigator.performAction(Action.OpenNewTabFromTabTray)
-                app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
                 validateAddNewTabButtonOnToolbar(isPrivate: true)
             }
         }

@@ -620,7 +620,7 @@ class SearchTests: FeatureFlaggedTestBase {
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         // Trending Search appears
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending Searches"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Trending on Google"])
         app.tables["SiteTable"].cells.firstMatch.waitAndTap()
         waitUntilPageLoad()
 

@@ -624,7 +624,7 @@ class NavigationTest: BaseTestCase {
         }
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
-        XCTAssertEqual(tabsButton.value as? String, "2")
+        XCTAssertEqual(tabsButton.value as? String, "1", "Total number of opened tabs should be 1")
     }
 
     private func openContextMenuForArticleLink() {
