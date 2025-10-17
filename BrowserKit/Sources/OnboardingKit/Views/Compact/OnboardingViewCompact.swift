@@ -41,13 +41,10 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     }
                     .padding(.trailing, UX.Onboarding.Spacing.standard)
                     .skipButtonStyle(theme: theme)
-                    .accessibilitySortPriority(2)
                     .accessibilityLabel(viewModel.skipText)
                     .frame(maxWidth: .infinity, alignment: .trailing)
 
                     tabView
-                        .accessibilitySortPriority(1)
-                        .accessibilityElement(children: .contain)
 
                     Spacer()
 
@@ -60,9 +57,13 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     )
                     .padding(.bottom, pageControllPadding(safeAreaBottomInset: geo.safeAreaInsets.bottom))
                 }
+                .accessibilityScrollAction { edge in
+                    handleAccessibilityScroll(from: edge)
+                }
                 .ignoresSafeArea(.all, edges: .bottom)
             }
         }
+        .accessibilityElement(children: .contain)
         .onAppear {
             applyTheme()
         }
@@ -81,7 +82,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     viewModel: card,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
-                    onBottomButtonAction: viewModel.handleBottomButtonAction,
+                    onBottomButtonAction: handleBottomButtonAction,
                     onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
                 )
                 .tag(index)
@@ -99,6 +100,30 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
         return safeAreaBottomInset * 0.5
     }
+
+    private func handleAccessibilityScroll(from edge: Edge) {
+        if edge == .leading {
+            viewModel.scrollToPreviousPage()
+        } else if edge == .trailing {
+            viewModel.scrollToNextPage()
+        }
+        switch edge {
+        case .leading, .trailing:
+            DispatchQueue.main.async {
+                UIAccessibility.post(notification: .screenChanged, argument: nil)
+            }
+        default: break
+        }
+    }
+
+    private func handleBottomButtonAction(action: ViewModel.OnboardingActionType, card: String) {
+        viewModel.handleBottomButtonAction(action: action, cardName: card)
+        if action.rawValue.contains("forward") {
+            UIAccessibility.post(notification: .screenChanged, argument: nil)
+        }
+    }
+
+    // MARK: - Theme
 
     private func applyTheme() {
         theme = themeManager.getCurrentTheme(for: windowUUID)
