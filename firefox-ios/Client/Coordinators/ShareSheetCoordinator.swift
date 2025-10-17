@@ -91,13 +91,15 @@ class ShareSheetCoordinator: BaseCoordinator,
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
             switch shareType {
+            case let .file(url: url):
+                if url.isFileURL, let relatedTabURL = relatedTab?.url {
+                    showSendToDevice(url: relatedTabURL, relatedTab: nil)
+                } else {
+                    dequeueNotShownJSAlert()
+                }
             case let .tab(_, tab):
                 showSendToDevice(url: shareType.wrappedURL, relatedTab: tab)
             default:
-                if shareType.wrappedURL.isFileURL, let relatedTabURL = relatedTab?.url {
-                    showSendToDevice(url: relatedTabURL, relatedTab: nil)
-                    return
-                }
                 showSendToDevice(url: shareType.wrappedURL, relatedTab: nil)
             }
         case .copyToPasteboard:
