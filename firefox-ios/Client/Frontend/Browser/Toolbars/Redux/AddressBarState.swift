@@ -133,20 +133,24 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // swiftlint:disable:next closure_body_length
-    static let reducer: Reducer<Self> = { state, action in
+    static let reducer: Reducer<Self> = {
+        state,
+        action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
             return defaultState(from: state)
         }
-
+        
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbarsAction(state: state, action: action)
-
+            
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
-
-        case ToolbarActionType.didTapOnTranslate, ToolbarActionType.translationCompleted:
+            
+        case ToolbarActionType.didTapOnTranslate,
+            ToolbarActionType.translationCompleted,
+            ToolbarActionType.receivedTranslationLanguage:
             // TODO: FXIOS-11973 For MVP purpose, should remove or modify.
             return handleLeadingPageActionsUpdate(state: state, action: action)
 
@@ -1008,7 +1012,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                           hasAlternativeLocationColor: hasAlternativeLocationColor)
             actions.append(shareAction)
 
-            if addressBarState.translationConfiguration?.canTranslate ?? false {
+            // Configure Translation Button
+            // Show only if can translate and has page language 
+            let canTranslate = addressBarState.translationConfiguration?.canTranslate ?? false
+            let pageLanguage = addressBarState.translationConfiguration?.pageLanguage
+            if canTranslate && pageLanguage != nil {
                 let translateAction = translateAction(
                     isEnabled: isLoading == false,
                     isActive: action.translationConfiguration?.isTranslateActive ?? false,

@@ -16,6 +16,10 @@ final class TranslationsMiddleware {
     lazy var translationsProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
+        case ToolbarMiddlewareActionType.urlDidChange:
+            guard let action = (action as? ToolbarMiddlewareAction) else { return }
+            self.checkTranslations(for: action)
+
         case ToolbarMiddlewareActionType.didTapButton:
             guard let action = (action as? ToolbarMiddlewareAction) else { return }
             guard let gestureType = action.gestureType,
@@ -32,8 +36,27 @@ final class TranslationsMiddleware {
                 self.startTranslation(for: action)
             }
             break
+
         default:
            break
+        }
+    }
+
+    private func checkTranslations(for action: ToolbarMiddlewareAction) {
+        Task { @MainActor in
+            guard let selectedTab = self.windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
+            let pageLanguage = await self.checkTranslations(selectedTab)
+            let shouldTranslate = pageLanguage != Locale.current.languageCode
+            let toolbarAction = ToolbarAction(
+                translationConfiguration: TranslationConfiguration(
+                    isTranslateActive: false,
+                    isLoading: false,
+                    pageLanguage: shouldTranslate ? pageLanguage : nil
+                ),
+                windowUUID: action.windowUUID,
+                actionType: ToolbarActionType.receivedTranslationLanguage
+            )
+            store.dispatch(toolbarAction)
         }
     }
 
@@ -42,8 +65,8 @@ final class TranslationsMiddleware {
             guard let selectedTab = self.windowManager.tabManager(for: action.windowUUID).selectedTab,
                     let webView = selectedTab.webView
             else { return }
-            guard let pageLanguage = await self.checkTranslations(selectedTab) else { return }
             guard let deviceLanguage = Locale.current.languageCode else { return }
+            guard let pageLanguage = await self.checkTranslations(selectedTab) else { return }
             TranslationsEngine.shared.bridge(to: webView)
             /// TODO(Issam): `window.__firefox__.Translations` can be a namespace constant
             let jsCallArgs = """
@@ -52,7 +75,11 @@ final class TranslationsMiddleware {
             webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.Translations.startEverything(\(jsCallArgs))")
             try? await LanguageDetector.isDone(from: webView)
             let toolbarAction = ToolbarAction(
-                translationConfiguration: TranslationConfiguration(isTranslateActive: true, isLoading: false),
+                translationConfiguration: TranslationConfiguration(
+                    isTranslateActive: true,
+                    isLoading: false,
+                    pageLanguage: pageLanguage
+                ),
                 windowUUID: action.windowUUID,
                 actionType: ToolbarActionType.translationCompleted
             )

@@ -8,11 +8,14 @@ import ToolbarKit
 
 // Translations Feature Payload
 struct TranslationConfiguration: Equatable, FeatureFlaggable {
+    // Determines if we should show the translate icon
     var canTranslate: Bool {
-        featureFlags.isFeatureEnabled(.translation, checking: .buildAndUser)
+        featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
     }
+    // Determines if translation icon is active (aka page has been translated) or inactive
     let isTranslateActive: Bool
     let isLoading: Bool
+    var pageLanguage: String? = nil
 }
 
 struct ToolbarAction: Action {
@@ -139,6 +142,7 @@ enum ToolbarActionType: ActionType {
     // TODO: FXIOS-11973 For MVP purpose, should remove or modify.
     case didTapOnTranslate
     case translationCompleted
+    case receivedTranslationLanguage
 }
 
 struct ToolbarMiddlewareAction: Action {

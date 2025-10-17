@@ -339,17 +339,18 @@ final class ToolbarMiddleware: FeatureFlaggable {
             else { return }
             let translateIconName = toolbarState.addressToolbar.leadingPageActions[safe: 1]?.iconName
             let isTranslateActive = translateIconName == StandardImageIdentifiers.Medium.translateActive
+            let pageLanguage = toolbarState.addressToolbar.translationConfiguration?.pageLanguage
 
             if isTranslateActive {
                 let toolbarAction = ToolbarAction(
-                    translationConfiguration: TranslationConfiguration(isTranslateActive: false, isLoading: false),
+                    translationConfiguration: TranslationConfiguration(isTranslateActive: false, isLoading: false, pageLanguage: pageLanguage),
                     windowUUID: action.windowUUID,
                     actionType: ToolbarActionType.didTapOnTranslate
                 )
                 store.dispatchLegacy(toolbarAction)
             } else {
                 let toolbarAction = ToolbarAction(
-                    translationConfiguration: TranslationConfiguration(isTranslateActive: false, isLoading: true),
+                    translationConfiguration: TranslationConfiguration(isTranslateActive: false, isLoading: true, pageLanguage: pageLanguage),
                     windowUUID: action.windowUUID,
                     actionType: ToolbarActionType.didTapOnTranslate
                 )
