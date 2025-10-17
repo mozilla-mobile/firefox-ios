@@ -59,6 +59,7 @@ final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     var fileExists = false
     var urlsForDirectoryCalled = 0
     var contentOfDirectoryCalled = 0
+    var moveItemAtURLCalled = 0
     var removeItemAtPathCalled = 0
     var removeItemAtURLCalled = 0
     var copyItemCalled = 0
@@ -92,6 +93,10 @@ final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
     ) throws -> [String] {
         contentOfDirectoryAtPathCalled += 1
         return []
+    }
+
+    func moveItem(at: URL, to: URL) throws {
+        moveItemAtURLCalled += 1
     }
 
     func removeItem(atPath path: String) throws {

@@ -15,7 +15,6 @@ class ChangeUserAgentTests: XCTestCase {
     }
 
     private var testFilename: String!
-
     private var file: URL!
 
     override func setUp() {
@@ -154,29 +153,11 @@ class ChangeUserAgentTests: XCTestCase {
     }
 
     func testMigrationMovesFile() {
-        migrationHelper()
-        XCTAssert(FileManager.default.fileExists(atPath: file.path))
-    }
+        let fileManager = MockFileManager()
+        fileManager.fileExists = true
+        Tab.ChangeUserAgent.performMigration(fileManager: fileManager)
 
-    func testMigrationKeepsData() {
-        migrationHelper()
-        let data = try? Data(contentsOf: file)
-        XCTAssert(data == Data("test".utf8))
-    }
-
-    private func migrationHelper() {
-        // Write dummy data to a file at the old location
-        let oldFile = {
-            let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            return root.appendingPathComponent(testFilename)
-        }()
-        try? Data("test".utf8).write(to: oldFile)
-
-        // Make sure the test file is not present at the new location to avoid errors
-        try? FileManager.default.removeItem(at: file)
-        XCTAssertFalse(FileManager.default.fileExists(atPath: file.path))
-
-        Tab.ChangeUserAgent.performMigration()
+        XCTAssertEqual(fileManager.moveItemAtURLCalled, 1)
     }
 
     // MARK: removeMobilePrefixFrom tests

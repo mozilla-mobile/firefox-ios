@@ -225,7 +225,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
-     @MainActor
+    @MainActor
     func testWebViewDecidePolicyForNavigationAction_allowsLoading_whenLoadingLocalPDFurlPreviouslyDownloaded() {
         let subject = createSubject()
         let tab = createTab()
