@@ -74,26 +74,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .newTab)
 
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.MiddleButtonConfigExtra>
+        let savedValue = try XCTUnwrap(
+            mockGleanWrapper.savedValues.first as? String
         )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.MiddleButtonConfigExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.middleButtonConfig)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.type, "newTab")
-
-        let savedBoolean = try XCTUnwrap(mockGleanWrapper.savedEvents.last as? BooleanMetric)
-        let expectedBooleanMetricType = type(of: GleanMetrics.Toolbar.middleButtonCustomizationEnabled)
-        let resultBooleanMetricType = type(of: savedBoolean)
-
-        XCTAssert(resultBooleanMetricType == expectedBooleanMetricType)
-        XCTAssertEqual(mockGleanWrapper.setBooleanCalled, 1)
+        XCTAssertEqual(savedValue, "newTab")
     }
 
     func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {

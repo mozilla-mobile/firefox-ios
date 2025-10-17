@@ -12,13 +12,8 @@ struct ToolbarTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func middleButtonConfig(buttonType: NavigationBarMiddleButtonType) {
-        let extra = GleanMetrics.Toolbar.MiddleButtonConfigExtra(type: buttonType.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.middleButtonConfig, extras: extra)
-    }
-
-    func middleButtonCustomization(isEnabled: Bool) {
-        gleanWrapper.setBoolean(for: GleanMetrics.Toolbar.middleButtonCustomizationEnabled, value: isEnabled)
+    func middleButtonType(_ buttonType: NavigationBarMiddleButtonType) {
+        gleanWrapper.recordString(for: GleanMetrics.UserToolbar.middleButtonType, value: buttonType.rawValue)
     }
 
     // Tap
