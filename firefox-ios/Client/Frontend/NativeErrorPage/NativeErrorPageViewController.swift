@@ -157,7 +157,7 @@ final class NativeErrorPageViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .nativeErrorPage)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -167,10 +167,12 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     nonisolated func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .nativeErrorPage)
-        store.dispatchLegacy(action)
+        ensureMainThread {
+            let action = ScreenAction(windowUUID: self.windowUUID,
+                                      actionType: ScreenActionType.closeScreen,
+                                      screen: .nativeErrorPage)
+            store.dispatch(action)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -187,8 +189,8 @@ final class NativeErrorPageViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        store.dispatchLegacy(NativeErrorPageAction(windowUUID: windowUUID,
-                                                   actionType: NativeErrorPageActionType.errorPageLoaded))
+        store.dispatch(NativeErrorPageAction(windowUUID: windowUUID,
+                                             actionType: NativeErrorPageActionType.errorPageLoaded))
     }
 
     override func viewWillTransition(
@@ -323,14 +325,16 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     @objc
-    private func didTapReload() {
-        store.dispatchLegacy(
-            GeneralBrowserAction(
-                isNativeErrorPage: true,
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.reloadWebsite
+    private nonisolated func didTapReload() {
+        ensureMainThread {
+            store.dispatch(
+                GeneralBrowserAction(
+                    isNativeErrorPage: true,
+                    windowUUID: self.windowUUID,
+                    actionType: GeneralBrowserActionType.reloadWebsite
+                )
             )
-        )
+        }
     }
 
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {
