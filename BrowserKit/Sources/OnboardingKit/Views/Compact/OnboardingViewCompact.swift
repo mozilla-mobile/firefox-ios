@@ -63,6 +63,19 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                 .ignoresSafeArea(.all, edges: .bottom)
             }
         }
+        .accessibilityScrollAction { edge in
+            if edge == .leading {
+                viewModel.scrollToPreviousPage()
+            } else if edge == .trailing {
+                viewModel.scrollToNextPage()
+            }
+            switch edge {
+            case .leading, .trailing:
+                UIAccessibility.post(notification: .screenChanged, argument: nil)
+            default:
+                break
+            }
+        }
         .onAppear {
             applyTheme()
         }
@@ -92,13 +105,6 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         .accessibilityElement(children: .contain)
-        .accessibilityScrollAction { edge in
-            if edge == .leading {
-                viewModel.scrollToPreviousPage()
-            } else if edge == .trailing {
-                viewModel.scrollToNextPage()
-            }
-        }
     }
 
     private func pageControllPadding(safeAreaBottomInset: CGFloat) -> CGFloat {
