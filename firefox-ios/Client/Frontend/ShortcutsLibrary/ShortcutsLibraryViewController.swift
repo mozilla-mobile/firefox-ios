@@ -296,6 +296,20 @@ class ShortcutsLibraryViewController: UIViewController,
                 toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ]
         }
+        // Position the toast slightly below its final location to set up a smooth upward slide animation
+        toast.transform = CGAffineTransform(translationX: 0, y: 80)
+        
+        // Animate the toast into place with a smooth slide-up motion
+        UIView.animate(
+            withDuration: 0.3,             // Duration of the animation (0.3 seconds for a smooth effect)
+            delay: 0,                      // Start immediately with no delay
+            options: [.curveEaseOut],      // Ease-out curve: slows down at the end for a natural finish
+            animations: {
+                // Reset the transform to identity, bringing the toast back to its original position
+                toast.transform = .identity
+            },
+            completion: nil                // No additional actions after the animation completes
+        )
     }
 
     // MARK: - Selectors
