@@ -573,6 +573,12 @@ class URLBar: UIView {
         }
     }
 
+    private func addUrlBarBackgroundViewConstraints() {
+        urlBarBackgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIConstants.layout.urlBarBorderInset)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
