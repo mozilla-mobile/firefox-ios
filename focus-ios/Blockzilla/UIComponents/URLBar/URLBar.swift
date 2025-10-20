@@ -484,6 +484,18 @@ class URLBar: UIView {
         addLayoutGuide(rightBarViewLayoutGuide)
     }
 
+    private func addLeftBarViewConstraints() {
+        leftBarViewLayoutGuide.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
+            make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
+
+            hideToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide).offset(UIConstants.layout.urlBarMargin).constraint)
+
+            showToolsetConstraints.append(make.leading.equalTo( forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
