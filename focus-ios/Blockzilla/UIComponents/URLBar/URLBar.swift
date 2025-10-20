@@ -635,6 +635,16 @@ class URLBar: UIView {
         }
     }
 
+    private func addCollapsedUrlAndLockWrapperConstraints() {
+        collapsedUrlAndLockWrapper.snp.makeConstraints { make in
+            make.centerX.equalTo(self)
+            make.top.bottom.equalTo(truncatedUrlText)
+            make.height.equalTo(UIConstants.layout.collapsedUrlBarHeight)
+            make.leading.equalTo(truncatedUrlText)
+            make.trailing.equalTo(truncatedUrlText)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
