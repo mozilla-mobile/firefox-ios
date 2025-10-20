@@ -457,6 +457,11 @@ class URLBar: UIView {
         bindViewModelEvents()
     }
 
+    private func setupInteractions() {
+        let dragInteraction = UIDragInteraction(delegate: self)
+        urlBarBackgroundView.addInteraction(dragInteraction)
+    }
+
     private func setupViewHierarchy() {
         addSubview(backButton)
         addSubview(forwardButton)
