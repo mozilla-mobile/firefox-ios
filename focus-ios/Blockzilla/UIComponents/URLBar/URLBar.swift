@@ -507,6 +507,22 @@ class URLBar: UIView {
         }
     }
 
+    private func addBackButtonConstraints() {
+        var toolsetButtonWidthMultiplier: CGFloat {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                return 0.04
+            } else {
+                return 0.05
+            }
+        }
+
+        backButton.snp.makeConstraints { make in
+            make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
+            make.centerY.equalTo(self)
+            make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
