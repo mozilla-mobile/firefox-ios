@@ -292,167 +292,26 @@ class URLBar: UIView {
         super.init(frame: CGRect.zero)
         isIPadRegularDimensions = traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .regular
 
-        let dragInteraction = UIDragInteraction(delegate: self)
-        urlBarBackgroundView.addInteraction(dragInteraction)
-
-        addSubview(backButton)
-        addSubview(forwardButton)
-        addSubview(deleteButton)
-        addSubview(contextMenuButton)
-
-        urlBarBackgroundView.addSubview(textAndLockContainer)
-
-        addSubview(cancelButton)
-        textAndLockContainer.addSubview(stopReloadButton)
-        addSubview(urlBarBorderView)
-        urlBarBorderView.addSubview(urlBarBackgroundView)
-        collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
-        addSubview(collapsedUrlAndLockWrapper)
-        textAndLockContainer.addSubview(urlTextField)
-        addSubview(shieldIcon)
-        addSubview(progressBar)
-
-        var toolsetButtonWidthMultiplier: CGFloat {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                return 0.04
-            } else {
-                return 0.05
-            }
-        }
-
-        addLayoutGuide(leftBarViewLayoutGuide)
-        leftBarViewLayoutGuide.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
-            make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
-
-            hideToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide).offset(UIConstants.layout.urlBarMargin).constraint)
-
-            showToolsetConstraints.append(make.leading.equalTo( forwardButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
-        }
-
-        addLayoutGuide(rightBarViewLayoutGuide)
-        rightBarViewLayoutGuide.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
-
-            hideToolsetConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
-
-            showToolsetConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.urlBarIPadToolsetOffset).constraint)
-        }
-
-        backButton.snp.makeConstraints { make in
-            make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
-            make.centerY.equalTo(self)
-            make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier)
-        }
-
-        forwardButton.snp.makeConstraints { make in
-            make.leading.equalTo(backButton.snp.trailing)
-            make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
-        }
-
-        contextMenuButton.snp.makeConstraints { make in
-            if inBrowsingMode {
-                make.trailing.equalTo(safeAreaLayoutGuide)
-            } else {
-                make.trailing.equalTo(safeAreaLayoutGuide).offset(-UIConstants.layout.contextMenuButtonMargin)
-            }
-            make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.layout.contextMenuButtonSize)
-        }
-
-        deleteButton.snp.makeConstraints { make in
-            make.trailing.equalTo(contextMenuButton.snp.leading).inset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : UIConstants.layout.deleteButtonMarginContextMenu)
-            make.centerY.equalTo(self)
-            make.size.equalTo(backButton)
-        }
-
-        urlBarBorderView.snp.makeConstraints { make in
-            make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
-            make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
-
-            compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
-            if inBrowsingMode {
-                compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
-            } else {
-                compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.contextMenuButtonMargin).constraint)
-            }
-
-            expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
-
-            showLeftBarViewConstraints.append(make.leading.lessThanOrEqualTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
-
-            hideLeftBarViewConstraints.append(make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset).constraint)
-
-            showToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarIconInset).constraint)
-        }
-
-        urlBarBackgroundView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIConstants.layout.urlBarBorderInset)
-        }
-
+        setupInteractions()
+        setupViewHierarchy()
+        setupLayoutGuides()
+        addLeftBarViewConstraints()
+        addRightBarViewConstraints()
+        addBackButtonConstraints()
+        addForwardButtonConstraints()
+        addContextMenuButtonConstraints()
+        addDeleteButtonConstraints()
+        addUrlBarBorderViewConstraints()
+        addUrlBarBackgroundViewConstraints()
         addShieldConstraints()
-
-        cancelButton.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(leftBarViewLayoutGuide)
-            make.top.bottom.equalToSuperview()
-        }
-
-        textAndLockContainer.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.equalToSuperview().priority(999)
-            make.trailing.equalToSuperview()
-
-            showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
-
-            hideLeftBarViewConstraints.append(make.leading.equalToSuperview().offset(UIConstants.layout.urlBarTextInset).constraint)
-            centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
-        }
-
-        stopReloadButton.snp.makeConstraints { make in
-            make.trailing.equalTo(urlBarBorderView)
-            make.leading.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize)
-            make.center.equalToSuperview()
-        }
-
-        urlTextField.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(shieldIcon.snp.trailing).offset(5)
-
-            showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
-
-            hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
-            showPageActionsConstraints.append(make.trailing.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize).constraint)
-        }
-
-        progressBar.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.bottom.equalTo(self).offset(UIConstants.layout.progressBarHeight)
-            make.height.equalTo(UIConstants.layout.progressBarHeight)
-        }
-
-        truncatedUrlText.snp.makeConstraints { make in
-            make.centerY.equalTo(self).offset(8)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().offset(UIConstants.layout.truncatedUrlTextOffset)
-        }
-
-        collapsedUrlAndLockWrapper.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.bottom.equalTo(truncatedUrlText)
-            make.height.equalTo(UIConstants.layout.collapsedUrlBarHeight)
-            make.leading.equalTo(truncatedUrlText)
-            make.trailing.equalTo(truncatedUrlText)
-        }
-
-        hideLeftBarViewConstraints.forEach { $0.activate() }
-        showLeftBarViewConstraints.forEach { $0.deactivate() }
-        showToolsetConstraints.forEach { $0.deactivate() }
-        expandedBarConstraints.forEach { $0.activate() }
-        updateToolsetConstraints()
-
+        addCancelButtonConstraints()
+        addTextAndLockContainerConstraints()
+        addStopReloadButtonConstraints()
+        addUrlTextFieldConstraints()
+        addProgressBarConstraints()
+        addTruncatedUrlTextConstraints()
+        addCollapsedUrlAndLockWrapperConstraints()
+        setupInitialState()
         bindButtonActions()
         bindViewModelEvents()
     }
