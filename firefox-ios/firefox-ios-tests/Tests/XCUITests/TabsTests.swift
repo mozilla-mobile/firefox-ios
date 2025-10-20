@@ -324,15 +324,17 @@ class TabsTests: BaseTestCase {
         // Scroll down to view all open tabs thumbnails
         navigator.goto(TabTray)
         app.swipeUp()
-        let navBarTabTray = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
-        let navBarTabTrayButton = app.segmentedControls[navBarTabTray].buttons.firstMatch
-        mozWaitForElementToExist(navBarTabTrayButton)
-        let tabsOpenTabTray: String = navBarTabTrayButton.label
-        XCTAssertTrue(tabsOpenTabTray.hasSuffix(numTab!))
+        if iPad() {
+            let navBarTabTray = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
+            let navBarTabTrayButton = app.segmentedControls[navBarTabTray].buttons.firstMatch
+            mozWaitForElementToExist(navBarTabTrayButton)
+            let tabsOpenTabTray: String = navBarTabTrayButton.label
+            XCTAssertTrue(tabsOpenTabTray.hasSuffix(numTab!))
+        }
         let tabsTrayCell = app.otherElements[tabsTray].cells
         // Go to a tab that is below the fold of the scrollable “Open Tabs” view
         if !iPad() {
-            tabsTrayCell.staticTexts.element(boundBy: 3).waitAndTap()
+            tabsTrayCell.element(boundBy: 3).waitAndTap()
         } else {
             XCTAssertTrue(Int(numTab!) == 11)
             tabsTrayCell.staticTexts.element(boundBy: 6).waitAndTap()

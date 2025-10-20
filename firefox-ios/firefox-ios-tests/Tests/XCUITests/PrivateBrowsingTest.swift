@@ -105,13 +105,6 @@ class PrivateBrowsingTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307006
     func testClosePrivateTabsOptionClosesPrivateTabs() {
-        // Check that Close Private Tabs when closing the Private Browsing Button is off by default
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.goto(SettingsScreen)
-
-        // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
-
         //  Open a Private tab
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         if userState.isPrivate {
@@ -124,6 +117,9 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Go back to regular browser
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        app.otherElements[tabsTray].cells.firstMatch.waitAndTap()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
 
         // Go back to private browsing and check that the tab has been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -308,7 +304,7 @@ fileprivate extension BaseTestCase {
         let numPrivTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(
             numPrivTabs,
-            1,
+            0,
             "The private tab should have been closed"
         )
     }
@@ -375,14 +371,16 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
         if skipPlatform { return }
         waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.openURL(url2)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
 
         // Leave PM by tapping on PM shourt cut
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
         waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         checkOpenTabsBeforeClosingPrivateMode()
     }
 
