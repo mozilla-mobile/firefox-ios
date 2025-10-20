@@ -167,12 +167,10 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     nonisolated func unsubscribeFromRedux() {
-        ensureMainThread {
-            let action = ScreenAction(windowUUID: self.windowUUID,
-                                      actionType: ScreenActionType.closeScreen,
-                                      screen: .nativeErrorPage)
-            store.dispatch(action)
-        }
+        let action = ScreenAction(windowUUID: self.windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .nativeErrorPage)
+        store.dispatchLegacy(action)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -326,15 +324,13 @@ final class NativeErrorPageViewController: UIViewController,
 
     @objc
     private nonisolated func didTapReload() {
-        ensureMainThread {
-            store.dispatch(
-                GeneralBrowserAction(
-                    isNativeErrorPage: true,
-                    windowUUID: self.windowUUID,
-                    actionType: GeneralBrowserActionType.reloadWebsite
-                )
+        store.dispatchLegacy(
+            GeneralBrowserAction(
+                isNativeErrorPage: true,
+                windowUUID: self.windowUUID,
+                actionType: GeneralBrowserActionType.reloadWebsite
             )
-        }
+        )
     }
 
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {
