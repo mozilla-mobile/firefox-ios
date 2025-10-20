@@ -645,6 +645,14 @@ class URLBar: UIView {
         }
     }
 
+    private func setupInitialState() {
+        hideLeftBarViewConstraints.forEach { $0.activate() }
+        showLeftBarViewConstraints.forEach { $0.deactivate() }
+        showToolsetConstraints.forEach { $0.deactivate() }
+        expandedBarConstraints.forEach { $0.activate() }
+        updateToolsetConstraints()
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
