@@ -5,6 +5,7 @@
 import Common
 import MozillaAppServices
 import Account
+import Shared
 
 /// Describes public protocol for Relay component to track state and facilitate
 /// messaging between the BVC, keyboard accessory, and A~S Relay APIs.
@@ -19,6 +20,11 @@ protocol RelayControllerProtocol {
 }
 
 final class RelayController: RelayControllerProtocol {
+    private enum RelayOAuthClientID: String {
+        case release = "7f1a38400a0df47b"
+        case stage = "41b4363ae36440a9"
+    }
+
     // MARK: - Properties
 
     static let shared = RelayController()
@@ -51,13 +57,21 @@ final class RelayController: RelayControllerProtocol {
 
     // MARK: - Private Utilities
 
+    private func isFxAStaging() -> Bool {
+        let prefs = profile.prefs
+        return prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
+    }
+
     private func hasRelayAccount() -> Bool {
         guard profile.hasAccount() else { return false }
         guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return false }
 
         switch result {
         case .success(let clients):
-            return clients.contains(where: { $0.name == "Firefox Relay" }) // TBD / WIP.
+            return clients.contains(where: {
+                let OAuthID = isFxAStaging() ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
+                return $0.clientId == OAuthID
+            })
         case .failure(let error):
             logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
             return false
