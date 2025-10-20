@@ -69,6 +69,7 @@
         "ActivityStreamTest\/testTopSites3RemoveDefaultTopSite()",
         "ActivityStreamTest\/testTopSites4OpenInNewTab()",
         "ActivityStreamTest\/testTopSitesAdd()",
+        "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite_TAE()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOff_TAE()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite_tabTrayExperimentOn_TAE()",
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab_HomepageOff_TAE()",
