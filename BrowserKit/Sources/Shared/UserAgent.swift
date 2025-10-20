@@ -99,12 +99,9 @@ public enum UserAgentPlatform {
 
 struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
-    private static let focusMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitMobile) Version/18.6")
     private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
 
     static let customMobileUAForDomain = [
-        // TODO: FXIOS-8027, FXIOS-11230, FXIOS-13891 PayPal buttons open blank tabs
-        "paypal.com": focusMobileUA,
         // TODO: FXIOS-13391 [webcompat] "connection error" only on FxiOS/* UA (bug 1983983)
         "tver.jp": safariMobileUA,
         // TODO: FXIOS-13096 [webcompat] UA version parsed as "Safari 0" (webcompat #170304)
@@ -115,7 +112,7 @@ struct CustomUserAgentConstant {
 
     static let customDesktopUAForDomain = [
         // TODO: FXIOS-8027, FXIOS-11230, FXIOS-13891 PayPal buttons open blank tabs
-        "paypal.com": focusMobileUA,
+        "paypal.com": defaultMobileUA,
         // FXIOS-10251: Do not appear as desktop/Safari for firefox.com/pair
         "firefox.com": defaultMobileUA
     ]
