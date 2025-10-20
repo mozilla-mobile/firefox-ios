@@ -627,6 +627,14 @@ class URLBar: UIView {
         }
     }
 
+    private func addTruncatedUrlTextConstraints() {
+        truncatedUrlText.snp.makeConstraints { make in
+            make.centerY.equalTo(self).offset(8)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().offset(UIConstants.layout.truncatedUrlTextOffset)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
