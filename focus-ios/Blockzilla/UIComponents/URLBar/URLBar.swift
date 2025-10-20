@@ -599,6 +599,14 @@ class URLBar: UIView {
         }
     }
 
+    private func addStopReloadButtonConstraints() {
+        stopReloadButton.snp.makeConstraints { make in
+            make.trailing.equalTo(urlBarBorderView)
+            make.leading.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize)
+            make.center.equalToSuperview()
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
