@@ -260,15 +260,20 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
         if #unavailable(iOS 26.0) { layer.cornerRadius = UX.cornerRadius }
 
+        let navigationButtons =  if #available(iOS 26.0, *) {
+            [nextButton, fixedSpacer, previousButton]
+        } else {
+            [previousButton, fixedSpacer, nextButton]
+        }
+
         toolbar.items = [
             currentAccessoryView,
-            flexibleSpacer,
-            previousButton,
-            fixedSpacer,
-            nextButton,
+            flexibleSpacer
+        ].compactMap { $0 } +
+        navigationButtons + [
             fixedSpacer,
             doneButton
-        ].compactMap { $0 }
+        ]
 
         toolbar.accessibilityElements = [
             currentAccessoryView?.customView,
