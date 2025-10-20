@@ -96,6 +96,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .noInternetConnectionErrorPage,
                 .recentSearches,
                 .searchEngineConsolidation,
+                .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
                 .touFeature,
@@ -139,8 +140,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .startAtHome:
             return FlagKeys.StartAtHome
-        case .translation:
-            return FlagKeys.Translation
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
                 .addressAutofillEdit,
@@ -191,6 +190,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tosFeature,
                 .touFeature,
                 .trackingProtectionRefactor,
+                .translation,
                 .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,

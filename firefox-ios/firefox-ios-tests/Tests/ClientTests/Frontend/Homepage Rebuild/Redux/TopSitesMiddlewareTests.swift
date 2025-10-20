@@ -193,7 +193,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         try checkTopSitesPressedMetrics(label: "zero-search", position: "0", tileType: "sponsored")
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 1)
         XCTAssertEqual(unifiedAdsTelemetry.sendClickTelemetryCalled, 0)
@@ -222,7 +222,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         try checkTopSitesPressedMetrics(label: "zero-search", position: "0", tileType: "sponsored")
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(unifiedAdsTelemetry.sendClickTelemetryCalled, 1)
         XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 0)
@@ -254,7 +254,7 @@ final class TopSitesMiddlewareTests: XCTestCase, StoreTestUtility {
         try checkTopSitesPressedMetrics(label: "origin-other", position: "1", tileType: "suggested")
 
         XCTAssertEqual(mockGleanWrapper.savedEvents.count, 2)
-        XCTAssertEqual(mockGleanWrapper.recordLabelCalled, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementLabeledCounterCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
         XCTAssertEqual(sponsoredTelemetry.sendClickTelemetryCalled, 0)
         XCTAssertEqual(unifiedAdsTelemetry.sendImpressionTelemetryCalled, 0)

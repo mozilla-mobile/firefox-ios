@@ -18,7 +18,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: UX.SegmentedControl.containerSpacing) {
+        VStack(alignment: .leading, spacing: UX.CardView.contentSpacing) {
             HStack(alignment: .top, spacing: UX.SegmentedControl.containerSpacing) {
                 ForEach(Array(items.enumerated()), id: \.element.action) { index, item in
                     segmentedButton(for: item)
@@ -30,12 +30,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
 
     @ViewBuilder
     private func segmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
-        dragCancellableSegmentedButton(for: item)
-    }
-
-    @ViewBuilder
-    private func dragCancellableSegmentedButton(for item: OnboardingMultipleChoiceButtonModel<Action>) -> some View {
-        DragCancellableSegmentedButton(
+        OnboardingSegmentedButton(
             item: item,
             isSelected: item.action == selection,
             action: {
@@ -46,9 +41,7 @@ struct OnboardingSegmentedControl<Action: Equatable & Hashable & Sendable>: View
                 }
             }
         )
-        .accessibilityElement()
         .accessibilityLabel("\(item.title)")
-        .accessibilityAddTraits(.isButton)
         .accessibilityAddTraits(
             item.action == selection ? .isSelected : []
         )

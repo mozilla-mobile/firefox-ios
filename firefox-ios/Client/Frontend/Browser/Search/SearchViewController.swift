@@ -304,46 +304,47 @@ class SearchViewController: SiteTableViewController,
         )
 
         leftEdge = searchButton.trailingAnchor
+        if !viewModel.isZeroSearchState {
+            for engine in viewModel.quickSearchEngines {
+                let engineButton: UIButton = .build()
+                engineButton.setImage(engine.image, for: [])
+                engineButton.imageView?.contentMode = .scaleAspectFit
+                engineButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
+                engineButton.imageView?.layer.cornerRadius = 4
+                engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
+                engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
+                engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
 
-        for engine in viewModel.quickSearchEngines {
-            let engineButton: UIButton = .build()
-            engineButton.setImage(engine.image, for: [])
-            engineButton.imageView?.contentMode = .scaleAspectFit
-            engineButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
-            engineButton.imageView?.layer.cornerRadius = 4
-            engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-            engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
-            engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
+                if let imageView = engineButton.imageView {
+                    NSLayoutConstraint.activate([
+                        imageView.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
+                        imageView.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize)
+                    ])
+                }
 
-            if let imageView = engineButton.imageView {
-                NSLayoutConstraint.activate([
-                    imageView.widthAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize),
-                    imageView.heightAnchor.constraint(equalToConstant: SearchViewControllerUX.FaviconSize)
-                ])
+                searchEngineScrollViewContent.addSubview(engineButton)
+                NSLayoutConstraint.activate(
+                    [
+                        engineButton.widthAnchor.constraint(
+                            equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)
+                        ),
+                        engineButton.heightAnchor.constraint(
+                            equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)
+                        ),
+                        engineButton.leadingAnchor.constraint(equalTo: leftEdge),
+                        engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
+                        engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
+                    ]
+                )
+
+                if engine === self.viewModel.searchEnginesManager?.quickSearchEngines.last {
+                    engineButton.trailingAnchor.constraint(
+                        equalTo: searchEngineScrollViewContent.trailingAnchor
+                    ).isActive = true
+                }
+
+                leftEdge = engineButton.trailingAnchor
             }
-
-            searchEngineScrollViewContent.addSubview(engineButton)
-            NSLayoutConstraint.activate(
-                [
-                    engineButton.widthAnchor.constraint(
-                        equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonWidth)
-                    ),
-                    engineButton.heightAnchor.constraint(
-                        equalToConstant: CGFloat(SearchViewControllerUX.EngineButtonHeight)
-                    ),
-                    engineButton.leadingAnchor.constraint(equalTo: leftEdge),
-                    engineButton.topAnchor.constraint(equalTo: searchEngineScrollViewContent.topAnchor),
-                    engineButton.bottomAnchor.constraint(equalTo: searchEngineScrollViewContent.bottomAnchor)
-                ]
-            )
-
-            if engine === self.viewModel.searchEnginesManager?.quickSearchEngines.last {
-                engineButton.trailingAnchor.constraint(
-                    equalTo: searchEngineScrollViewContent.trailingAnchor
-                ).isActive = true
-            }
-
-            leftEdge = engineButton.trailingAnchor
         }
     }
 
@@ -550,7 +551,11 @@ class SearchViewController: SiteTableViewController,
         switch section {
         case SearchListSection.trendingSearches.rawValue:
             // TODO: FXIOS-13644 - Add proper strings when finalized
-            title = "Trending Searches"
+            if let engineName = viewModel.searchEnginesManager?.defaultEngine?.shortName {
+                title = "Trending on \(engineName)"
+            } else {
+                title = ""
+            }
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
@@ -723,7 +728,8 @@ class SearchViewController: SiteTableViewController,
         switch section {
         case .trendingSearches:
             if let trendingSearch = viewModel.trendingSearches[safe: indexPath.row] {
-                let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch)
+                let arrowImageName = StandardImageIdentifiers.Large.arrowTrendingLarge
+                let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch, and: arrowImageName)
                 oneLineCell.configure(viewModel: oneLineCellViewModel)
                 cell = oneLineCell
             }
@@ -824,6 +830,7 @@ class SearchViewController: SiteTableViewController,
 
     private func oneLineCellModelForSearch(
         with text: String,
+        and imageName: String = SearchViewControllerUX.SearchImage,
         shouldShowAccessoryView: Bool = true
     ) -> OneLineTableViewCellViewModel {
         let appendButton = UIButton(type: .roundedRect)
@@ -834,7 +841,7 @@ class SearchViewController: SiteTableViewController,
         appendButton.addAction(action, for: .touchUpInside)
         let viewModel = OneLineTableViewCellViewModel(
             title: text,
-            leftImageView: UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate),
+            leftImageView: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate),
             accessoryView: shouldShowAccessoryView ? appendButton : nil,
             accessoryType: .none,
             editingAccessoryView: nil)
@@ -883,6 +890,8 @@ class SearchViewController: SiteTableViewController,
             reloadData()
         case .SearchSettingsChanged:
             reloadSearchEngines()
+            // We fetch new list since trending searches are specific to the search engine.
+            loadTrendingSearches()
         case .SponsoredAndNonSponsoredSuggestionsChanged:
             guard !viewModel.searchQuery.isEmpty else { return }
             Task {

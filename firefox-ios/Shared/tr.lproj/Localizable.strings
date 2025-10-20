@@ -767,7 +767,7 @@
 "Menu.Paste.Title" = "Yapıştır";
 
 /* The title for the button that lets you paste and go to a URL */
-"Menu.PasteAndGo.Title" = "Yapıştır ve git";
+"Menu.PasteAndGo.Title" = "Yapıştır ve Git";
 
 /* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "Okuma listesi";
@@ -1754,7 +1754,7 @@
 "Twitter" = "Twitter";
 
 /* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
-"UIMenuItem.PasteGo" = "Yapıştır ve git";
+"UIMenuItem.PasteGo" = "Yapıştır ve Git";
 
 /* Search in New Tab Text selection menu item */
 "UIMenuItem.SearchWithFirefox" = "Firefox ile ara";

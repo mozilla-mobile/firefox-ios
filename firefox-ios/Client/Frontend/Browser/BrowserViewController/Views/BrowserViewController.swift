@@ -1995,7 +1995,7 @@ class BrowserViewController: UIViewController,
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
 
-        let trendingClient = TrendingSearchClient(searchEngine: searchEnginesManager.defaultEngine)
+        let trendingClient = TrendingSearchClient()
 
         let recentSearchProvider = DefaultRecentSearchProvider(historyStorage: profile.places)
 

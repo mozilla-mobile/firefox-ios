@@ -395,7 +395,7 @@
 "fxa.signin.qr-link-instruction" = "На вашия компютър отворете Firefox и посетете firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Готов за сканиране";
+"fxa.signin.ready-to-scan" = "В готовност за сканиране";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Използвайте имейл";
@@ -788,7 +788,7 @@
 "Menu.RemovedFromShortcuts.v99" = "Премахване от преките пътища";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2.v99" = "Премахната от Преки пътища";
+"Menu.RemovePin.Confirm2.v99" = "Премахната от преките пътища";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
 "Menu.RemoveReadingList.Confirm.v99" = "Премахната от списък за четене";
@@ -1076,13 +1076,13 @@
 "SendTo.NavBar.Title" = "Изпращане на раздел";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Нямате други устройства, свързани към този Firefox Account, достъпни за синхронизация.";
+"SendTo.NoDevicesFound.Message" = "Нямате други устройства, свързани към този Firefox профил, които да са достъпни за синхронизация.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Моля отворете Firefox, отидете в настройки и се впишете, за да продължите.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Не сте вписани в своя Firefox Account.";
+"SendTo.NotSignedIn.Title" = "Не сте вписани в своя Firefox профил.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Изпращане";
@@ -1151,7 +1151,7 @@
 "Settings.AddressBar.Top.v138" = "Горе";
 
 /* Browser theme settings section title in Appearance settings */
-"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Тема за браузър";
+"Settings.Appearance.BrowserTheme.SectionHeader.v137" = "Тема на четеца";
 
 /* Title in main app settings for Appearance settings */
 "Settings.Appearance.Title.v137" = "Външен вид";
@@ -1310,7 +1310,7 @@
 "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Тапет на Firefox, аметист.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Тапет за Firefox, шарка на beach hills.";
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Тапет за Firefox, шарка на дюни.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Тапет на Firefox, синьо-син шарка.";

@@ -14,7 +14,7 @@ public protocol TrendingSearchEngine: Sendable {
 
 /// Abstraction for any search client that can return trending searches. Able to mock for testing.
 public protocol TrendingSearchClientProvider: Sendable {
-    func getTrendingSearches() async throws -> [String]
+    func getTrendingSearches(for searchEngine: TrendingSearchEngine?) async throws -> [String]
 }
 
 enum TrendingSearchClientError: Error {
@@ -28,7 +28,6 @@ enum TrendingSearchClientError: Error {
 /// searches endpoint, fetches the data over the network, and parses it into
 /// a list of searches.
 final class TrendingSearchClient: TrendingSearchClientProvider, Sendable {
-    private let searchEngine: TrendingSearchEngine?
     private let logger: Logger
     private let urlSession: URLSession
     private let nimbus: FxNimbus
@@ -38,7 +37,6 @@ final class TrendingSearchClient: TrendingSearchClientProvider, Sendable {
     }
 
     init(
-        searchEngine: TrendingSearchEngine?,
         logger: Logger = DefaultLogger.shared,
         session: URLSession = makeURLSession(
             userAgent: UserAgent
@@ -47,13 +45,12 @@ final class TrendingSearchClient: TrendingSearchClientProvider, Sendable {
         ),
         nimbus: FxNimbus = FxNimbus.shared
     ) {
-        self.searchEngine = searchEngine
         self.logger = logger
         self.urlSession = session
         self.nimbus = nimbus
     }
 
-    func getTrendingSearches() async throws -> [String] {
+    func getTrendingSearches(for searchEngine: TrendingSearchEngine? = nil) async throws -> [String] {
         do {
             // We expect some engines to not have a trending url,
             // so return empty instead of always returning an error

@@ -93,6 +93,18 @@ extension Selector {
         return Selector(strategy: .predicate(p), value: id, description: description, groups: groups)
     }
 
+    static func cellByLabel(_ label: String, description: String, groups: [String]) -> Selector {
+        let p = NSPredicate(format: "elementType == %d AND label == %@",
+                            XCUIElement.ElementType.cell.rawValue,
+                            label
+        )
+        return Selector(strategy: .predicate(p), value: label, description: description, groups: groups)
+    }
+
+    static func linkById(_ id: String, description: String, groups: [String] = []) -> Selector {
+            Selector(strategy: .linkById(id), value: id, description: description, groups: groups)
+    }
+
     static func imageById(_ id: String, description: String, groups: [String] = []) -> Selector {
         Selector(
             strategy: .predicate(
@@ -157,6 +169,19 @@ extension Selector {
                  value: id,
                  description: description,
                  groups: groups
+        )
+    }
+
+    static func linkStaticTextByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+        let predicate = NSPredicate(
+            format: "elementType == %d AND label == %@",
+            XCUIElement.ElementType.staticText.rawValue,
+            label
+        )
+        return Selector(strategy: .predicate(predicate),
+                        value: label,
+                        description: description,
+                        groups: groups
         )
     }
 }

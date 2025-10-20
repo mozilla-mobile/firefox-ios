@@ -46,7 +46,6 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307117
-    // Smoketest
     func testOpenLinkFromPDF() {
         // Sometimes the test fails before opening the URL
         // Let's make sure the homepage is ready
@@ -73,7 +72,6 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307117
-    // Smoketest TAE
     func testOpenLinkFromPDF_TAE() {
         // Sometimes the test fails before opening the URL. Let's make sure the homepage is ready
         topSites.assertVisible()
