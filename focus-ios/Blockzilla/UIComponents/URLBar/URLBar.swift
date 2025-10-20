@@ -543,6 +543,14 @@ class URLBar: UIView {
         }
     }
 
+    private func addDeleteButtonConstraints() {
+        deleteButton.snp.makeConstraints { make in
+            make.trailing.equalTo(contextMenuButton.snp.leading).inset(isIPadRegularDimensions ? UIConstants.layout.deleteButtonOffset : UIConstants.layout.deleteButtonMarginContextMenu)
+            make.centerY.equalTo(self)
+            make.size.equalTo(backButton)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
