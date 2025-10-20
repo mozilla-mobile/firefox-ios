@@ -10,11 +10,11 @@ private struct LocalUX {
     static let horizontalPadding: CGFloat = 24.0
 }
 
-struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    @State private var theme: Theme
+    @State var theme: Theme
 
     init(
         windowUUID: WindowUUID,
@@ -64,15 +64,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
             }
         }
         .accessibilityElement(children: .contain)
-        .onAppear {
-            applyTheme()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            withAnimation {
-                applyTheme()
-            }
-        }
+        .listenToThemeChanges(theme: $theme, manager: themeManager)
     }
 
     private var tabView: some View {
@@ -121,11 +113,5 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         if action.rawValue.contains("forward") {
             UIAccessibility.post(notification: .screenChanged, argument: nil)
         }
-    }
-
-    // MARK: - Theme
-
-    private func applyTheme() {
-        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }

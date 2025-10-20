@@ -6,10 +6,8 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var textColor: Color = .clear
-    @State private var secondaryTextColor: Color = .clear
-    @State private var cardBackgroundColor: Color = .clear
+struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+    @State var theme: Theme
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -26,6 +24,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
     var body: some View {
@@ -46,19 +45,13 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
             }
             .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
         }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
+        .listenToThemeChanges(theme: $theme, manager: themeManager)
     }
 
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .foregroundColor(textColor)
+            .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
@@ -80,7 +73,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     var bodyView: some View {
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
-            .foregroundColor(secondaryTextColor)
+            .foregroundColor(Color(theme.colors.textSecondary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
@@ -96,8 +89,7 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
             },
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
             width: UX.CardView.primaryButtonWidthiPad,
-            windowUUID: windowUUID,
-            themeManager: themeManager
+            theme: theme
         )
     }
 
@@ -113,16 +105,8 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
                 },
                 accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
                 width: UX.CardView.primaryButtonWidthiPad,
-                windowUUID: windowUUID,
-                themeManager: themeManager
+                theme: theme
             )
         }
-    }
-
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        textColor = Color(color.textPrimary)
-        secondaryTextColor = Color(color.textSecondary)
-        cardBackgroundColor = Color(color.layer2)
     }
 }

@@ -6,14 +6,11 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var textColor: Color = .clear
-    @State private var secondaryTextColor: Color = .clear
-    @State private var cardBackgroundColor: Color = .clear
-
+public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+    @State public var theme: Theme
     @StateObject private var viewModel: TosFlowViewModel<ViewModel>
-    let windowUUID: WindowUUID
-    var themeManager: ThemeManager
+    public let windowUUID: WindowUUID
+    public var themeManager: ThemeManager
     public let onEmbededLinkAction: (TosAction) -> Void
 
     public init(
@@ -26,6 +23,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onEmbededLinkAction = onEmbededLinkAction
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
     // MARK: - Body
@@ -45,15 +43,9 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                         .padding(.bottom)
                 }
                 .padding(.top, UX.CardView.cardTopPadding)
-                .onAppear {
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-                    guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-                }
             }
         }
+        .listenToThemeChanges(theme: $theme, manager: themeManager)
     }
 
     @ViewBuilder
@@ -80,7 +72,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 .padding(UX.CardView.verticalPadding * scale)
                 .padding(.bottom)
         }
-        .cardBackground(theme: themeManager.getCurrentTheme(for: windowUUID), cornerRadius: UX.CardView.cornerRadius)
+        .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
         .padding(.horizontal, UX.CardView.horizontalPadding * scale)
         .accessibilityElement(children: .contain)
         .padding(.vertical)
@@ -92,7 +84,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         VStack(alignment: .center, spacing: UX.Onboarding.Spacing.standard) {
             ForEach(Array(viewModel.configuration.embededLinkText.enumerated()), id: \.element.linkText) { index, link in
                 AttributedLinkText<TosAction>(
-                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    theme: theme,
                     fullText: link.fullText,
                     linkText: link.linkText,
                     action: link.action,
@@ -118,7 +110,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     var titleView: some View {
         Text(viewModel.configuration.title)
             .font(UX.CardView.titleFont)
-            .foregroundColor(textColor)
+            .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
@@ -129,7 +121,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
         Text(viewModel.configuration.body)
             .fixedSize(horizontal: false, vertical: true)
             .font(UX.CardView.bodyFont)
-            .foregroundColor(secondaryTextColor)
+            .foregroundColor(Color(theme.colors.textSecondary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)DescriptionLabel")
             .accessibilityLabel(viewModel.configuration.body)
@@ -144,15 +136,7 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
                 )
             },
             accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton",
-            windowUUID: windowUUID,
-            themeManager: themeManager
+            theme: theme
         )
-    }
-
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        textColor = Color(color.textPrimary)
-        secondaryTextColor = Color(color.textSecondary)
-        cardBackgroundColor = Color(color.layer2)
     }
 }

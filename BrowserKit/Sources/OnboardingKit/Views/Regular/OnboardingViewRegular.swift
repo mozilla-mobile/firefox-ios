@@ -7,10 +7,9 @@ import ComponentLibrary
 import Common
 
 // TODO: - FXIOS-13874 sync ipad layout with iPhone
-struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var cardBackgroundColor: Color = .clear
+struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+    @State var theme: Theme
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
-    @State private var skipTextColor: Color = .clear
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -22,6 +21,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         _viewModel = StateObject(
             wrappedValue: viewModel
         )
@@ -36,23 +36,17 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     tabView
                     pageControl
                 }
-                .cardBackground(theme: themeManager.getCurrentTheme(for: windowUUID), cornerRadius: UX.CardView.cornerRadius)
+                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
             }
             Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)
                     .bold()
-                    .foregroundColor(skipTextColor)
+                    .foregroundColor(Color(theme.colors.textOnDark))
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
-            .skipButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID))
+            .skipButtonStyle(theme: theme)
         }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
+        .listenToThemeChanges(theme: $theme, manager: themeManager)
     }
 
     private var tabView: some View {
@@ -79,11 +73,5 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
             themeManager: themeManager
         )
         .padding(.bottom)
-    }
-
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        cardBackgroundColor = Color(color.layer2)
-        skipTextColor = Color(theme.colors.textOnDark)
     }
 }

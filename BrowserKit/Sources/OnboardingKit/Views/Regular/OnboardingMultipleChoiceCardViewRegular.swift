@@ -6,9 +6,8 @@ import SwiftUI
 import Common
 import ComponentLibrary
 
-struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var textColor: Color = .clear
-    @State private var cardBackgroundColor: Color = .clear
+struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+    @State var theme: Theme
     @State private var selectedAction: ViewModel.OnboardingMultipleChoiceActionType
 
     let windowUUID: WindowUUID
@@ -29,6 +28,7 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
         self.themeManager = themeManager
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         guard let defaultAction = viewModel.defaultSelectedButton?.action else {
             return nil
         }
@@ -42,6 +42,7 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
                     titleView
                         .padding(.top, UX.CardView.titleTopPadding)
                     OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
+                        theme: theme,
                         selection: $selectedAction,
                         items: viewModel.multipleChoiceButtons
                     )
@@ -67,19 +68,13 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
             }
             .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
         }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
+        .listenToThemeChanges(theme: $theme, manager: themeManager)
     }
 
     var titleView: some View {
         Text(viewModel.title)
             .font(UX.CardView.titleFont)
-            .foregroundColor(textColor)
+            .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
             .accessibility(addTraits: .isHeader)
@@ -98,14 +93,7 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
             },
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
             width: UX.CardView.primaryButtonWidthiPad,
-            windowUUID: windowUUID,
-            themeManager: themeManager
+            theme: theme
         )
-    }
-
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        textColor = Color(color.textPrimary)
-        cardBackgroundColor = Color(color.layer2)
     }
 }

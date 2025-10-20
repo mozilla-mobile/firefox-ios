@@ -7,10 +7,6 @@ import ComponentLibrary
 import Common
 
 public struct TermsOfServiceView<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var textColor: Color = .clear
-    @State private var secondaryTextColor: Color = .clear
-    @State private var cardBackgroundColor: Color = .clear
-
     @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass
