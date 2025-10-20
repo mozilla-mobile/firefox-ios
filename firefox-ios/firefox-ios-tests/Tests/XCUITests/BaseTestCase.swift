@@ -621,7 +621,6 @@ extension XCUIElement {
     func tapAndTypeText(_ text: String, timeout: TimeInterval? = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         self.tap()
-        BaseTestCase().mozWaitElementEnabled(element: self, timeout: timeout ?? TIMEOUT)
         self.typeText(text)
     }
 
