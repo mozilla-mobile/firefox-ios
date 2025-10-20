@@ -457,6 +457,23 @@ class URLBar: UIView {
         bindViewModelEvents()
     }
 
+    private func setupViewHierarchy() {
+        addSubview(backButton)
+        addSubview(forwardButton)
+        addSubview(deleteButton)
+        addSubview(contextMenuButton)
+        urlBarBackgroundView.addSubview(textAndLockContainer)
+        addSubview(cancelButton)
+        textAndLockContainer.addSubview(stopReloadButton)
+        addSubview(urlBarBorderView)
+        urlBarBorderView.addSubview(urlBarBackgroundView)
+        collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
+        addSubview(collapsedUrlAndLockWrapper)
+        textAndLockContainer.addSubview(urlTextField)
+        addSubview(shieldIcon)
+        addSubview(progressBar)
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
