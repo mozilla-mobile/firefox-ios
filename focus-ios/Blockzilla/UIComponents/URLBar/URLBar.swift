@@ -531,6 +531,18 @@ class URLBar: UIView {
         }
     }
 
+    private func addContextMenuButtonConstraints() {
+        contextMenuButton.snp.makeConstraints { make in
+            if inBrowsingMode {
+                make.trailing.equalTo(safeAreaLayoutGuide)
+            } else {
+                make.trailing.equalTo(safeAreaLayoutGuide).offset(-UIConstants.layout.contextMenuButtonMargin)
+            }
+            make.centerY.equalTo(self)
+            make.size.equalTo(UIConstants.layout.contextMenuButtonSize)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
