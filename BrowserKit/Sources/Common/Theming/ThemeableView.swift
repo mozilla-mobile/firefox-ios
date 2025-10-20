@@ -27,7 +27,8 @@ struct ThemeChangeListener<Content: View>: View {
     var body: some View {
         content
            #if DEBUG
-            // For SwiftUI previews: responds to Xcode's light/dark mode toggle since NotificationCenter doesn't work in preview environment
+            // For SwiftUI previews: responds to Xcode's light/dark mode toggle 
+            // since NotificationCenter doesn't work in preview environment
             .onChange(of: colorScheme) { newScheme in
                 let newTheme: any Theme = newScheme == .dark ? DarkTheme() : LightTheme()
                 theme = newTheme
