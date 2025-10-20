@@ -3572,7 +3572,7 @@ extension String {
         public static let TabTrayCloseTabsTitle = MZLocalizedString(
             key: "TabTrayCloseOneTabTitle.v145",
             tableName: "TabsTray",
-            value: "Close Tabs: %@",
+            value: "Close Tabs (%@)",
             comment: "Text for a button in the tabs tray used delete current active tabs. Placeholder is for the number of tabs that will be going to be closed.")
         public static let TabTrayCloseTabsOlderThanTitle = MZLocalizedString(
             key: "TabTrayCloseTabsOlderThanTitle.v140",
