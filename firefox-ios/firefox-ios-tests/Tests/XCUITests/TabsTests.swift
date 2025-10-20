@@ -590,7 +590,8 @@ class TabsTestsIphone: BaseTestCase {
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
+        // Adding tapping action to avoid the test to fail in bitrise
+        app.buttons["Cancel"].tapIfExists()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
