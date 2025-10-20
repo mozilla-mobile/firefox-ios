@@ -586,6 +586,19 @@ class URLBar: UIView {
         }
     }
 
+    private func addTextAndLockContainerConstraints() {
+        textAndLockContainer.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.equalToSuperview().priority(999)
+            make.trailing.equalToSuperview()
+
+            showLeftBarViewConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
+
+            hideLeftBarViewConstraints.append(make.leading.equalToSuperview().offset(UIConstants.layout.urlBarTextInset).constraint)
+            centeredURLConstraints.append(make.centerX.equalToSuperview().constraint)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
