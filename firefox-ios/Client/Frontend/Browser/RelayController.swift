@@ -68,10 +68,8 @@ final class RelayController: RelayControllerProtocol {
 
         switch result {
         case .success(let clients):
-            return clients.contains(where: {
-                let OAuthID = isFxAStaging() ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
-                return $0.clientId == OAuthID
-            })
+            let OAuthID = isFxAStaging() ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
+            return clients.contains(where: { $0.clientId == OAuthID })
         case .failure(let error):
             logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
             return false
