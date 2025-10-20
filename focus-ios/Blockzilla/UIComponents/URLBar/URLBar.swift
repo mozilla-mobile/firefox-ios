@@ -474,6 +474,11 @@ class URLBar: UIView {
         addSubview(progressBar)
     }
 
+    private func setupLayoutGuides() {
+        addLayoutGuide(leftBarViewLayoutGuide)
+        addLayoutGuide(rightBarViewLayoutGuide)
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
