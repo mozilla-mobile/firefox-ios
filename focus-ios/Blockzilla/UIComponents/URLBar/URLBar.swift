@@ -523,6 +523,14 @@ class URLBar: UIView {
         }
     }
 
+    private func addForwardButtonConstraints() {
+        forwardButton.snp.makeConstraints { make in
+            make.leading.equalTo(backButton.snp.trailing)
+            make.centerY.equalTo(self)
+            make.size.equalTo(backButton)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
