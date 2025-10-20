@@ -579,6 +579,13 @@ class URLBar: UIView {
         }
     }
 
+    private func addCancelButtonConstraints() {
+        cancelButton.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(leftBarViewLayoutGuide)
+            make.top.bottom.equalToSuperview()
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
