@@ -607,6 +607,18 @@ class URLBar: UIView {
         }
     }
 
+    private func addUrlTextFieldConstraints() {
+        urlTextField.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(shieldIcon.snp.trailing).offset(5)
+
+            showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
+
+            hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
+            showPageActionsConstraints.append(make.trailing.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize).constraint)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
