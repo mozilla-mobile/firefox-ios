@@ -619,6 +619,14 @@ class URLBar: UIView {
         }
     }
 
+    private func addProgressBarConstraints() {
+        progressBar.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self)
+            make.bottom.equalTo(self).offset(UIConstants.layout.progressBarHeight)
+            make.height.equalTo(UIConstants.layout.progressBarHeight)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
