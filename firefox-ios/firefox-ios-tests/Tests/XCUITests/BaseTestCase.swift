@@ -611,7 +611,7 @@ extension XCUIElement {
     /// Waits for the UI element and then taps if it exists.
     func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout ?? TIMEOUT)
-        if self.elementType == .button || self.elementType == .link {
+        if self.elementType == .button {
             BaseTestCase().mozWaitElementHittable(element: self, timeout: timeout ?? TIMEOUT)
         }
         self.tap()
