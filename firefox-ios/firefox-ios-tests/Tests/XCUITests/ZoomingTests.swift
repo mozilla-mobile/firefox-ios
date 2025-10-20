@@ -204,17 +204,29 @@ final class ZoomingTests: BaseTestCase {
         zoomBar.assertZoomPercent("100%")
 
         // Reopen the tab 0 (should be in 175%), then zoom out to 100%
-        selectTabTrayWebsites(tab: 0)
+        if !iPad() || userState.isPrivate {
+            selectTabTrayWebsites(tab: 0)
+        } else {
+            selectTabTrayWebsites(tab: 1)
+        }
         zoomBar.assertZoomPercent("175%")
         zoomBar.tapZoomOut(times: 4)
 
         // Open the tab 1 (should be in 110%), zoom out to 100%
-        selectTabTrayWebsites(tab: 1)
+        if !iPad() || userState.isPrivate {
+            selectTabTrayWebsites(tab: 1)
+        } else {
+            selectTabTrayWebsites(tab: 3)
+        }
         zoomBar.assertZoomPercent("110%")
         zoomBar.tapZoomOut(times: 1)
 
         // Open the tab 2 (should be in 100%)
-        selectTabTrayWebsites(tab: 2)
+        if !iPad() || userState.isPrivate {
+            selectTabTrayWebsites(tab: 2)
+        } else {
+            selectTabTrayWebsites(tab: 5)
+        }
         zoomBar.assertZoomPercent("100%")
     }
 

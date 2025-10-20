@@ -117,7 +117,9 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306865
     // Smoketest
-    func testCloseAllTabsUndo() {
+    func testCloseAllTabsUndo() throws {
+        let shouldSkipTest = true
+        try XCTSkipIf(shouldSkipTest, "Undo toast no longer available with the new tab tray")
         if !iPad() {
             navigator.nowAt(HomePanelsScreen)
             navigator.goto(URLBarOpen)
