@@ -551,6 +551,28 @@ class URLBar: UIView {
         }
     }
 
+    private func addUrlBarBorderViewConstraints() {
+        urlBarBorderView.snp.makeConstraints { make in
+            make.height.equalTo(UIConstants.layout.urlBarBorderHeight).priority(.medium)
+            make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
+
+            compressedBarConstraints.append(make.height.equalTo(UIConstants.layout.urlBarBorderHeight).constraint)
+            if inBrowsingMode {
+                compressedBarConstraints.append(make.trailing.equalTo(safeAreaLayoutGuide.snp.trailing).inset(UIConstants.layout.urlBarMargin).constraint)
+            } else {
+                compressedBarConstraints.append(make.trailing.equalTo(contextMenuButton.snp.leading).offset(-UIConstants.layout.contextMenuButtonMargin).constraint)
+            }
+
+            expandedBarConstraints.append(make.trailing.equalTo(rightBarViewLayoutGuide.snp.trailing).constraint)
+
+            showLeftBarViewConstraints.append(make.leading.lessThanOrEqualTo(leftBarViewLayoutGuide.snp.trailing).offset(UIConstants.layout.urlBarIconInset).constraint)
+
+            hideLeftBarViewConstraints.append(make.leading.equalTo(shieldIcon.snp.leading).offset(-UIConstants.layout.urlBarIconInset).constraint)
+
+            showToolsetConstraints.append(make.leading.equalTo(leftBarViewLayoutGuide.snp.leading).offset(UIConstants.layout.urlBarIconInset).constraint)
+        }
+    }
+
     fileprivate func bindButtonActions() {
         shieldIcon
             .publisher(event: .touchUpInside)
