@@ -134,6 +134,6 @@ struct AnimatedGradientView: ThemeableView {
             theme.colors.gradientOnboardingStop3.color,
             theme.colors.gradientOnboardingStop4.color
         ])
-        .listenToThemeChanges(theme: $theme, manager: themeManager)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 }

@@ -41,7 +41,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
         GeometryReader { geometry in
             cardContent(geometry: geometry)
         }
-        .listenToThemeChanges(theme: $theme, manager: themeManager)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     @ViewBuilder

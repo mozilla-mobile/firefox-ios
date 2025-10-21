@@ -46,7 +46,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             .padding(.trailing, UX.Onboarding.Spacing.standard)
             .skipButtonStyle(theme: theme)
         }
-        .listenToThemeChanges(theme: $theme, manager: themeManager)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     private var tabView: some View {

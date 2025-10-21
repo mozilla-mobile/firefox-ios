@@ -68,7 +68,7 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
             }
             .padding(.bottom, UX.CardView.secondaryButtonBottomPadding)
         }
-        .listenToThemeChanges(theme: $theme, manager: themeManager)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     var titleView: some View {

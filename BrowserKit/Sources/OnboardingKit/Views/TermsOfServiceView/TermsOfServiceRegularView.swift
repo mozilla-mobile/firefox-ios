@@ -35,7 +35,7 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
                 .accessibilityHidden(true)
             termsContent
         }
-        .listenToThemeChanges(theme: $theme, manager: themeManager)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     // MARK: - Main Content

@@ -64,7 +64,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             }
         }
         .accessibilityElement(children: .contain)
-        .listenToThemeChanges(theme: $theme, manager: themeManager)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     private var tabView: some View {
