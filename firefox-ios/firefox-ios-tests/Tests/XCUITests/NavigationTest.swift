@@ -420,15 +420,15 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testSSL() {
         navigator.nowAt(HomePanelsScreen)
-        waitForTabsButton()
         navigator.goto(URLBarOpen)
         navigator.openURL("https://expired.badssl.com/")
         mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
         XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
         app.buttons["Go Back"].waitAndTap()
-        navigator.nowAt(HomePanelsScreen)
-        waitForTabsButton()
-        navigator.openNewURL(urlString: "https://expired.badssl.com/")
+        mozWaitForElementToNotExist(app.webViews.otherElements["This Connection is Untrusted"])
+        // SearchbarCell may not appear, so open a new tab just to be sure.
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL("https://expired.badssl.com/")
         mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
         XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
         app.buttons["Advanced"].waitAndTap()
