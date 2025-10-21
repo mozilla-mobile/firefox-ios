@@ -33,14 +33,8 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
     var body: some View {
         GeometryReader { geometry in
             cardContent(geometry: geometry)
-                .onAppear {
-                    applyTheme()
-                }
-                .listenToThemeChanges { window in
-                    guard window == windowUUID else { return }
-                    applyTheme()
-                }
         }
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     @ViewBuilder
@@ -133,9 +127,5 @@ struct OnboardingBasicCardViewCompact<ViewModel: OnboardingCardInfoModelProtocol
                 accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
             )
         }
-    }
-
-    func applyTheme() {
-        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }
