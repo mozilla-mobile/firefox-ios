@@ -6793,7 +6793,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-08-27T15:19:08Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-10-01T15:18:26Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -10691,7 +10691,7 @@ watches
 // https://www.iana.org/domains/root/db/weather.html
 weather
 
-// weatherchannel : International Business Machines Corporation
+// weatherchannel : The Weather Company, LLC
 // https://www.iana.org/domains/root/db/weatherchannel.html
 weatherchannel
 
@@ -12446,6 +12446,8 @@ cafjs.com
 canva-apps.cn
 my.canvasite.cn
 canva-apps.com
+canva-hosted-embed.com
+canvacode.com
 rice-labs.com
 canva.run
 my.canva.site
@@ -12771,6 +12773,7 @@ icp1.io
 *.raw.icp1.io
 *.icp.net
 caffeine.site
+caffeine.xyz
 
 // dhosting.pl Sp. z o.o. : https://dhosting.pl/
 // Submitted by Michal Kokoszkiewicz <bok@dhosting.pl>
@@ -13989,10 +13992,6 @@ ir.md
 // Submitted by William Harrison <webmaster@is-a-good.dev>
 is-a-good.dev
 
-// is-a.dev : https://is-a.dev
-// Submitted by William Harrison <security@is-a.dev>
-is-a.dev
-
 // IServ GmbH : https://iserv.de
 // Submitted by Kim Brodowski <info@iserv.de>
 iservschule.de
@@ -14089,8 +14088,9 @@ myjino.ru
 // Submitted by Daniel Fariña <ingenieria@jotelulu.com>
 jote.cloud
 jotelulu.cloud
-jote-dr-lt1.com
-jote-rd-lt1.com
+eu1-plenit.com
+la1-plenit.com
+us1-plenit.com
 
 // JouwWeb B.V. : https://www.jouwweb.nl
 // Submitted by Camilo Sperberg <tech@webador.com>
@@ -14222,10 +14222,6 @@ ggff.net
 // Localcert : https://localcert.dev
 // Submitted by Lann Martin <security@localcert.dev>
 *.user.localcert.dev
-
-// LocalCert : https://localcert.net
-// Submitted by William Harrison <security@localcert.net>
-localcert.net
 
 // Localtonet : https://localtonet.com/
 // Submitted by Burak Isleyici <support@localtonet.com>
@@ -15871,11 +15867,13 @@ beta.wmcloud.org
 wmflabs.org
 
 // William Harrison : https://wharrison.com.au
-// Submitted by William Harrison <security@wharrison.com.au>
+// Submitted by William Harrison <security@hrsn.net>
 wdh.app
 hrsn.au
 vps.hrsn.au
 hrsn.dev
+is-a.dev
+localcert.net
 
 // Windsurf : https://windsurf.com
 // Submitted by Douglas Chen <psl@windsurf.com>
