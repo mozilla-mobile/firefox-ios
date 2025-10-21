@@ -13,7 +13,7 @@ on:
 jobs:
   determine-locales:
     name: Determine lists of locales
-    runs-on: macos-15
+    runs-on: macos-26
     outputs:
       locales: ${{ steps.my_locales.outputs.locales }}
     steps:
@@ -32,7 +32,7 @@ jobs:
 
   compile:
     name: Compile Focus for L10n
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Clone firefox-ios repo
         uses: actions/checkout@v4
@@ -69,6 +69,7 @@ jobs:
   generate-screenshots:
     name: Generate Screenshots
     needs: [determine-locales, compile]
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -83,7 +84,7 @@ jobs:
   merge-screenshots:
     name: Merge all screenshots
     needs: generate-screenshots
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Merge screenshots
         uses: actions/upload-artifact/merge@v4
