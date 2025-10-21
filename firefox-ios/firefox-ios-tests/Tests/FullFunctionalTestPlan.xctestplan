@@ -168,6 +168,7 @@
         "HomePageSettingsUITests\/testSetCustomURLAsHome()",
         "HomePageSettingsUITests\/testTyping()",
         "HomePageUITest",
+        "InactiveTabsTest\/testInactiveTabs()",
         "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",
         "JumpBackInTests\/testGroupedTabs()",
