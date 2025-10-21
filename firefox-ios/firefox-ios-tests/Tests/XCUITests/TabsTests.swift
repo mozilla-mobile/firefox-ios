@@ -371,7 +371,7 @@ class TabsTests: BaseTestCase {
         navigator.goto(TabTray)
         let tabsTrayCell = app.otherElements[tabsTray].cells
         XCTAssertEqual(tabsTrayCell.count, 2)
-        XCTAssertTrue(app.buttons.elementContainingText("2").exists)
+        mozWaitForElementToExist(app.buttons["2"])
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         // Repeat for private browsing mode
         navigator.performAction(Action.ToggleExperimentPrivateMode)
