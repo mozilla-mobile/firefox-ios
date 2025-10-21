@@ -279,7 +279,13 @@ class ReadingListTests: FeatureFlaggedTestBase {
         }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
+        let keyboard = app.keyboards.firstMatch
+        var nrOfTaps = 3
+        while keyboard.exists && nrOfTaps > 0 {
+            cancelButton.waitAndTap()
+            nrOfTaps -= 1
+        }
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         // issue 28625: iOS 15 may not open the menu fully.
