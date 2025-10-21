@@ -51,7 +51,10 @@ struct TermsOfServiceTelemetry {
         )
 
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.accepted, extras: acceptedExtra)
-        gleanWrapper.recordQuantity(for: GleanMetrics.UserTermsOfUse.versionAccepted, value: TermsOfUseTelemetry().termsOfUseVersion)
+        gleanWrapper.recordQuantity(
+            for: GleanMetrics.UserTermsOfUse.versionAccepted,
+            value: TermsOfUseTelemetry().termsOfUseVersion
+        )
         gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
     }
 }

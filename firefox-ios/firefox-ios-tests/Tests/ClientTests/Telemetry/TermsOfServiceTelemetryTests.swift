@@ -121,7 +121,7 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         let acceptedDate = Date()
         let expectedVersion = "4"
         let expectedSurface = "onboarding"
-        
+
         let onboardingEvent = GleanMetrics.Onboarding.termsOfServiceAccepted
         let touAcceptedEvent = GleanMetrics.TermsOfUse.accepted
         let versionMetric = GleanMetrics.UserTermsOfUse.versionAccepted
