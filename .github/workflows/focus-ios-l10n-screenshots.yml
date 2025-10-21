@@ -69,7 +69,6 @@ jobs:
   generate-screenshots:
     name: Generate Screenshots
     needs: [determine-locales, compile]
-    timeout-minutes: 30
     strategy:
       fail-fast: false
       max-parallel: 1
