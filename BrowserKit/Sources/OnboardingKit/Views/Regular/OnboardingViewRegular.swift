@@ -40,11 +40,11 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             }
             Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)
-                    .bold()
-                    .foregroundColor(Color(theme.colors.textOnDark))
+                    .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
             .skipButtonStyle(theme: theme)
+            .accessibilityLabel(viewModel.skipText)
         }
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
