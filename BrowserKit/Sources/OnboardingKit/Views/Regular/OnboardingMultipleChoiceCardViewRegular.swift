@@ -83,17 +83,17 @@ struct OnboardingMultipleChoiceCardViewRegular<ViewModel: OnboardingCardInfoMode
     }
 
     var primaryButton: some View {
-        OnboardingButton.primary(
-            viewModel.buttons.primary.title,
+        OnboardingPrimaryButton(
+            title: viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
                     viewModel.name
                 )
             },
-            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-            width: UX.CardView.primaryButtonWidthiPad,
-            theme: theme
+            theme: theme,
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
+        .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
     }
 }

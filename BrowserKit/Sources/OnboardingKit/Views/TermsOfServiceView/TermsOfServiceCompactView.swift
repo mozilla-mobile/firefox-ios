@@ -128,15 +128,15 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     }
 
     var primaryButton: some View {
-        OnboardingButton.primary(
-            viewModel.configuration.buttons.primary.title,
+        OnboardingPrimaryButton(
+            title: viewModel.configuration.buttons.primary.title,
             action: {
                 viewModel.handleEmbededLinkAction(
                     action: .accept
                 )
             },
-            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton",
-            theme: theme
+            theme: theme,
+            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
         )
     }
 }

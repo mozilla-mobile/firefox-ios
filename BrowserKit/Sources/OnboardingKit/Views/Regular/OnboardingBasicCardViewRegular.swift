@@ -79,34 +79,34 @@ struct OnboardingBasicCardViewRegular<ViewModel: OnboardingCardInfoModelProtocol
     }
 
     var primaryButton: some View {
-        OnboardingButton.primary(
-            viewModel.buttons.primary.title,
+        OnboardingPrimaryButton(
+            title: viewModel.buttons.primary.title,
             action: {
                 onBottomButtonAction(
                     viewModel.buttons.primary.action,
                     viewModel.name
                 )
             },
-            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
-            width: UX.CardView.primaryButtonWidthiPad,
-            theme: theme
+            theme: theme,
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
+        .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
     }
 
     @ViewBuilder var secondaryButton: some View {
         if let secondary = viewModel.buttons.secondary {
-            OnboardingButton.secondary(
-                secondary.title,
+            OnboardingSecondaryButton(
+                title: secondary.title,
                 action: {
                     onBottomButtonAction(
                         secondary.action,
                         viewModel.name
                     )
                 },
-                accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton",
-                width: UX.CardView.primaryButtonWidthiPad,
-                theme: theme
+                theme: theme,
+                accessibilityIdentifier: "\(viewModel.a11yIdRoot)SecondaryButton"
             )
+            .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
         }
     }
 }

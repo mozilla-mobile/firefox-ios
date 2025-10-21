@@ -118,16 +118,16 @@ public struct TermsOfServiceRegularView<ViewModel: OnboardingCardInfoModelProtoc
     }
 
     var primaryButton: some View {
-        OnboardingButton.primary(
-            viewModel.configuration.buttons.primary.title,
+        OnboardingPrimaryButton(
+            title: viewModel.configuration.buttons.primary.title,
             action: {
                 viewModel.handleEmbededLinkAction(
                     action: .accept
                 )
             },
-            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton",
-            width: UX.CardView.primaryButtonWidthiPad,
-            theme: theme
+            theme: theme,
+            accessibilityIdentifier: "\(viewModel.configuration.a11yIdRoot)PrimaryButton"
         )
+        .frame(maxWidth: UX.CardView.primaryButtonWidthiPad)
     }
 }
