@@ -221,16 +221,14 @@ class PrivateBrowsingTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2497357
     func testAllPrivateTabsRestore() throws {
         // Several tabs opened in private tabs tray. Tap on the trashcan
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Undo toast no longer available with the new tab tray")
+        if !iPad() {
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
+        }
         navigator.nowAt(HomePanelsScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         for _ in 1...4 {
             navigator.createNewTab()
-            if app.keyboards.element.isVisible() && !iPad() {
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-                navigator.performAction(Action.CloseURLBarOpen)
-            }
         }
         navigator.goto(TabTray)
         var numTab = app.otherElements[tabsTray].cells.count
@@ -239,9 +237,6 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Validate Close All Tabs and Cancel options
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCancelButton])
-        }
 
         // Tap on "Close All Tabs"
         app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].waitAndTap()
