@@ -157,7 +157,7 @@ final class NativeErrorPageViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .nativeErrorPage)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -167,7 +167,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     nonisolated func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
+        let action = ScreenAction(windowUUID: self.windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .nativeErrorPage)
         store.dispatchLegacy(action)
@@ -187,8 +187,8 @@ final class NativeErrorPageViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        store.dispatchLegacy(NativeErrorPageAction(windowUUID: windowUUID,
-                                                   actionType: NativeErrorPageActionType.errorPageLoaded))
+        store.dispatch(NativeErrorPageAction(windowUUID: windowUUID,
+                                             actionType: NativeErrorPageActionType.errorPageLoaded))
     }
 
     override func viewWillTransition(
@@ -323,11 +323,11 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     @objc
-    private func didTapReload() {
+    private nonisolated func didTapReload() {
         store.dispatchLegacy(
             GeneralBrowserAction(
                 isNativeErrorPage: true,
-                windowUUID: windowUUID,
+                windowUUID: self.windowUUID,
                 actionType: GeneralBrowserActionType.reloadWebsite
             )
         )
