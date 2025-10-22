@@ -38,9 +38,8 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         let subject = createSubject()
         let event = GleanMetrics.Onboarding.toggleTechnicalInteractionData
         typealias EventExtrasType = GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra
-        let expectedValue = true
 
-        subject.technicalInteractionDataSwitched(to: expectedValue)
+        subject.technicalInteractionDataSwitched(to: true)
 
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? EventExtrasType
@@ -50,7 +49,7 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         )
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.changedTo, expectedValue)
+        XCTAssertEqual(savedExtras.changedTo, true)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -58,9 +57,7 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         let subject = createSubject()
         let event = GleanMetrics.Onboarding.toggleAutomaticCrashReports
         typealias EventExtrasType = GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra
-        let expectedValue = true
-
-        subject.automaticCrashReportsSwitched(to: expectedValue)
+        subject.automaticCrashReportsSwitched(to: true)
 
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? EventExtrasType
@@ -70,7 +67,7 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         )
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(savedExtras.changedTo, expectedValue)
+        XCTAssertEqual(savedExtras.changedTo, true)
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
@@ -119,8 +116,6 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
     func testRecordTermsOfServiceAcceptButtonTappedThenGleanIsCalled() throws {
         let subject = createSubject()
         let acceptedDate = Date()
-        let expectedVersion = "4"
-        let expectedSurface = "onboarding"
 
         let onboardingEvent = GleanMetrics.Onboarding.termsOfServiceAccepted
         let touAcceptedEvent = GleanMetrics.TermsOfUse.accepted
@@ -148,8 +143,8 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
         let savedExtras = try XCTUnwrap(
             mockGleanWrapper.savedExtras.first as? AcceptedExtra
         )
-        XCTAssertEqual(savedExtras.surface, expectedSurface)
-        XCTAssertEqual(savedExtras.touVersion, expectedVersion)
+        XCTAssertEqual(savedExtras.surface, "onboarding")
+        XCTAssertEqual(savedExtras.touVersion, "4")
 
         let savedVersionMetric = try XCTUnwrap(
             mockGleanWrapper.savedEvents[2] as? QuantityMetricType
