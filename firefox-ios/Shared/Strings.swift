@@ -7015,7 +7015,7 @@ extension String {
             value: "Summarize page",
             comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
 
-        struct Translation {
+        public struct Translation {
             public static let ButtonInactiveAccessibilityLabel = MZLocalizedString(
                 key: "Toolbar.Translation.ButtonInactive.AccessibilityLabel.v145",
                 tableName: "Toolbar",

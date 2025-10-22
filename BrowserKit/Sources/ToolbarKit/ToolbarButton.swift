@@ -37,6 +37,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
 
     private var isTextButton = false
     private var hasCustomColor = false
+    private var hasHighlightedColor = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,6 +60,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         isSelected = element.isSelected
         isTextButton = element.title != nil
         hasCustomColor = element.hasCustomColor
+        hasHighlightedColor = element.hasHighlightedColor
         self.notificationCenter = notificationCenter
 
         let image = imageConfiguredForRTL(for: element)
@@ -208,9 +210,22 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     }
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
-        if let existingImage = configuration?.image { return existingImage }
+        // TODO: FXIOS-11973 For MVP purpose, should revisit
+        let inactiveImageName = StandardImageIdentifiers.Medium.translate
+        let activeImageName = StandardImageIdentifiers.Medium.translateActive
+        let isTranslateButton = element.iconName == inactiveImageName || element.iconName == activeImageName
+
+        if let existingImage = configuration?.image, !isTranslateButton {
+            return existingImage
+        }
+
         guard let iconName = element.iconName else { return nil }
-        let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+        var image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+
+        if element.iconName == StandardImageIdentifiers.Medium.translateActive {
+            image = UIImage(named: iconName)
+        }
+
         return element.isFlippedForRTL ? image?.imageFlippedForRightToLeftLayoutDirection() : image
     }
 
@@ -257,7 +272,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     public func applyTheme(theme: Theme) {
         let colors = theme.colors
         foregroundColorNormal = hasCustomColor ? colors.iconSecondary : colors.iconPrimary
-        foregroundColorHighlighted = colors.actionPrimary
+        foregroundColorHighlighted = hasHighlightedColor ? colors.actionPrimary : colors.iconPrimary
         foregroundColorDisabled = colors.iconDisabled
         backgroundColorNormal = .clear
 

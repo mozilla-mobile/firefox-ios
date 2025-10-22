@@ -2447,6 +2447,9 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
+            translationConfiguration: TranslationConfiguration(
+                hasTranslated: false
+            ),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatchLegacy(action)
