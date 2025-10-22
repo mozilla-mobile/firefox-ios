@@ -748,6 +748,7 @@ open class BrowserProfile: Profile,
         RustFirefoxAccounts.shared.disconnect()
 
         // Not available in extensions
+        // swiftlint:disable:next line_length
         #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER && !MOZ_TARGET_ACTIONEXTENSION
         unregisterRemoteNotifications()
         #endif
