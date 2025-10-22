@@ -129,9 +129,10 @@ final class ZoomingTests: BaseTestCase {
         } else if XCUIDevice.shared.orientation == .landscapeLeft && userState.isPrivate == false {
             homepageSearchBar.tapIfExists()
             navigator.nowAt(BrowserTab)
+        } else if iPad() && userState.isPrivate == false {
+            navigator.nowAt(BrowserTab)
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            navigator.nowAt(BrowserTab)
         }
         navigator.openURL(websites[index])
         waitUntilPageLoad()
@@ -204,29 +205,17 @@ final class ZoomingTests: BaseTestCase {
         zoomBar.assertZoomPercent("100%")
 
         // Reopen the tab 0 (should be in 175%), then zoom out to 100%
-        if !iPad() || userState.isPrivate {
-            selectTabTrayWebsites(tab: 0)
-        } else {
-            selectTabTrayWebsites(tab: 1)
-        }
+        selectTabTrayWebsites(tab: 0)
         zoomBar.assertZoomPercent("175%")
         zoomBar.tapZoomOut(times: 4)
 
         // Open the tab 1 (should be in 110%), zoom out to 100%
-        if !iPad() || userState.isPrivate {
-            selectTabTrayWebsites(tab: 1)
-        } else {
-            selectTabTrayWebsites(tab: 3)
-        }
+        selectTabTrayWebsites(tab: 1)
         zoomBar.assertZoomPercent("110%")
         zoomBar.tapZoomOut(times: 1)
 
         // Open the tab 2 (should be in 100%)
-        if !iPad() || userState.isPrivate {
-            selectTabTrayWebsites(tab: 2)
-        } else {
-            selectTabTrayWebsites(tab: 5)
-        }
+        selectTabTrayWebsites(tab: 2)
         zoomBar.assertZoomPercent("100%")
     }
 
