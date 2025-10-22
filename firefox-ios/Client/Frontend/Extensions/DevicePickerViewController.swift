@@ -8,6 +8,8 @@ import Storage
 import Account
 import SwiftUI
 import Common
+import Localizations
+import MozillaAppServices
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
     @MainActor
