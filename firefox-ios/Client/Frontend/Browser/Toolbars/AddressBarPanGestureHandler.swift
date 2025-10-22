@@ -82,7 +82,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
         self.prefs = prefs
         super.init()
         subscribeToRedux()
-        setupGesture()
+//        setupGesture()
     }
 
     deinit {
@@ -90,9 +90,9 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     private func setupGesture() {
-        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        addressToolbarContainer.addGestureRecognizer(gesture)
-        panGestureRecognizer = gesture
+//        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+//        addressToolbarContainer.addGestureRecognizer(gesture)
+//        panGestureRecognizer = gesture
     }
 
     // MARK: - Redux

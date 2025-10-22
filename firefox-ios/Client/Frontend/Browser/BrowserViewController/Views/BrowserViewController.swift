@@ -18,6 +18,7 @@ import WidgetKit
 import SummarizeKit
 import ActivityKit
 import Glean
+import ComponentLibrary
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
@@ -994,6 +995,10 @@ class BrowserViewController: UIViewController,
         super.viewDidLoad()
 
         setupEssentialUI()
+        view.insertSubview(fancyView, at: 0)
+        fancyView.pinToSuperview()
+        setupGesture()
+        fancyView.alpha = 0
         subscribeToRedux()
         enqueueTabRestoration()
 
@@ -1002,6 +1007,46 @@ class BrowserViewController: UIViewController,
         Task(priority: .background) { [weak self] in
             // App startup telemetry accesses RustLogins to queryLogins, shouldn't be on the app startup critical path
             await self?.trackStartupTelemetry()
+        }
+    }
+
+    let fancyView: SwipeAwayTabPreview = .build()
+
+    // FUN GESTURE!
+    private func setupGesture() {
+        addressToolbarContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(onFancyGestureRecognize)))
+    }
+
+    @objc private func onFancyGestureRecognize(gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            fancyView.addImage(image: tabManager.selectedTab?.screenshot ?? .checkmark)
+            UIView.animate(withDuration: 2.0) { [self] in
+                fancyView.alpha = 1
+                fancyView.layer.zPosition = 1000
+            }
+
+        case .changed:
+            let translation = gesture.translation(in: view)
+            fancyView.transform = .identity.translatedBy(x: translation.x, y: translation.y)
+        case .ended:
+            let velocity = gesture.velocity(in: view)
+            if velocity.y < -500 {
+                UIView.animate(withDuration: 0.3) { [self] in
+                    fancyView.transform = .identity.scaledBy(x: 0.2, y: 0.2)
+                    fancyView.alpha = 0
+                    fancyView.layer.zPosition = 0
+                } completion: { [weak self] _ in
+                    self?.navigationHandler?.showTabTray(selectedPanel: .tabs)
+                }
+            } else {
+                UIView.animate(withDuration: 0.3) { [self] in
+                    fancyView.alpha = 0
+                    fancyView.layer.zPosition = 0
+                }
+            }
+        default:
+            break
         }
     }
 
