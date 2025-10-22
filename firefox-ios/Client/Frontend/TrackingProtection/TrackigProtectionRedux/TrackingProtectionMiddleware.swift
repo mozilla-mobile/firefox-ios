@@ -6,6 +6,7 @@ import Foundation
 import Redux
 import Common
 
+@MainActor
 final class TrackingProtectionMiddleware {
     private let telemetryWrapper = TrackingProtectionTelemetry()
 
@@ -36,7 +37,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionActionType.toggleTrackingProtectionStatus
         )
-        store.dispatchLegacy(newAction)
+        store.dispatch(newAction)
     }
 
     private func clearCookiesAndSiteData(windowUUID: WindowUUID) {
@@ -44,7 +45,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.clearCookies
         )
-        store.dispatchLegacy(newAction)
+        store.dispatch(newAction)
         telemetryWrapper.clearCookiesAndSiteData()
     }
 
@@ -53,7 +54,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.showAlert
         )
-        store.dispatchLegacy(newAction)
+        store.dispatch(newAction)
         telemetryWrapper.showClearCookiesAlert()
     }
 
@@ -62,7 +63,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.dismissTrackingProtection
         )
-        store.dispatchLegacy(newAction)
+        store.dispatch(newAction)
         telemetryWrapper.dismissTrackingProtection()
     }
 
@@ -71,7 +72,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.showTrackingProtectionDetails
         )
-        store.dispatchLegacy(newAction)
+        store.dispatch(newAction)
         telemetryWrapper.showTrackingProtectionDetails()
     }
 
@@ -80,7 +81,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.showBlockedTrackersDetails
         )
-        store.dispatchLegacy(newAction)
+        store.dispatch(newAction)
         telemetryWrapper.showBlockedTrackersDetails()
     }
 
@@ -89,7 +90,7 @@ final class TrackingProtectionMiddleware {
             windowUUID: windowUUID,
             actionType: TrackingProtectionMiddlewareActionType.navigateToSettings
         )
-        store.dispatchLegacy(newAction)
+        store.dispatch(newAction)
         telemetryWrapper.tappedShowSettings()
     }
 }
