@@ -497,7 +497,6 @@
         "TabsTests\/testCloseAllTabsPrivateMode()",
         "TabsTests\/testCloseAllTabsPrivateMode_tabTrayExperimentOff()",
         "TabsTests\/testCloseAllTabsPrivateMode_tabTrayExperimentOn()",
-        "TabsTests\/testCloseAllTabsUndo()",
         "TabsTests\/testCloseAllTabs_tabTrayExperimentOff()",
         "TabsTests\/testCloseOneTab()",
         "TabsTests\/testCloseOneTabUndo()",
