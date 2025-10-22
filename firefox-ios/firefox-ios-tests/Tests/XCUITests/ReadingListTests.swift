@@ -279,6 +279,10 @@ class ReadingListTests: FeatureFlaggedTestBase {
         }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
+        // Clare's alternative fix
+        // mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        // mozWaitElementHittable(element: app.links["TopSitesCell"].firstMatch, timeout: TIMEOUT)
+        // app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
         let keyboard = app.keyboards.firstMatch
         var nrOfTaps = 3
