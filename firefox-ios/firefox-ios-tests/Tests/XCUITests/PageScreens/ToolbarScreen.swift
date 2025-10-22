@@ -14,6 +14,7 @@ final class ToolbarScreen {
     }
 
     private var tabsButton: XCUIElement { sel.TABS_BUTTON.element(in: app) }
+    private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app)}
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
         let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
@@ -42,7 +43,6 @@ final class ToolbarScreen {
     }
 
     func assertNewTabButtonExist() {
-        let newTabButton = sel.NEW_TAB_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(newTabButton)
     }
 

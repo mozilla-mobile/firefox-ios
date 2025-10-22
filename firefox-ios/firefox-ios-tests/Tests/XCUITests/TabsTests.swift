@@ -180,6 +180,35 @@ class TabsTests: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306865
+    // Smoketest TAE
+    func testCloseAllTabsUndo_TAE() throws {
+        if !iPad() {
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
+        }
+        toolBarScreen = ToolbarScreen(app: app)
+        firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+        // A different tab than home is open to do the proper checks
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
+        toolBarScreen.assertTabsButtonExists()
+        navigator.nowAt(BrowserTab)
+        toolBarScreen.tapOnTabsButton()
+        tabTrayScreen.tapOnNewTabButton()
+        navigator.goto(TabTray)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        // Close all tabs, undo it and check that the number of tabs is correct
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        tabTrayScreen.undoRemovingAllTabs()
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        tabTrayScreen.waitForTabWithLabel(urlLabel)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2354473
     // Smoketest
     func testCloseAllTabsPrivateModeUndo() {

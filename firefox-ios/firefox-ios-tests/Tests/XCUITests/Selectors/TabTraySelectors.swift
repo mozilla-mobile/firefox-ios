@@ -10,6 +10,7 @@ protocol TabTraySelectorsSet {
     var IPHONE_TAB_TRAY_COLLECTION_VIEW: Selector { get }
     var FIRST_CELL: Selector { get }
     var NEW_TAB_BUTTON: Selector { get }
+    var UNDO_BUTTON: Selector { get }
     func cell(named name: String) -> Selector
     func tabCellWithIndex(_ index: Int, _ urlLabel: String, _ selectedTab: String) -> Selector
     func tabCellAtIndex(index: Int) -> Selector
@@ -56,6 +57,12 @@ struct TabTraySelectors: TabTraySelectorsSet {
         groups:["tabtray"]
     )
 
+    let UNDO_BUTTON = Selector.staticTextByExactLabel(
+        "Undo",
+        description: "Undo button displayed after removing all tabs",
+        groups: ["tabtray"]
+    )
+
     func cell(named name: String) -> Selector {
         Selector.staticTextByLabel(
             name,
@@ -95,5 +102,6 @@ struct TabTraySelectors: TabTraySelectorsSet {
     }
 
     var all: [Selector] { [TABSTRAY_CONTAINER, COLLECTION_VIEW,
-                           IPHONE_TAB_TRAY_COLLECTION_VIEW, FIRST_CELL, NEW_TAB_BUTTON] }
+                           IPHONE_TAB_TRAY_COLLECTION_VIEW, FIRST_CELL, NEW_TAB_BUTTON,
+                            UNDO_BUTTON] }
 }

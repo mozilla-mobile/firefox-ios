@@ -87,4 +87,15 @@ final class TabTrayScreen {
         BaseTestCase().mozWaitForElementToExist(tabButton)
         XCTAssertTrue(tabButton.isEnabled, "Tab button at index \(index) should be enabled")
     }
+
+    func undoRemovingAllTabs() {
+        let undoButton = sel.UNDO_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(undoButton)
+        undoButton.waitAndTap()
+    }
+
+    func waitForTabWithLabel(_ label: String) {
+        let tabStaticText = app.cells.staticTexts[label]
+        BaseTestCase().mozWaitForElementToExist(tabStaticText)
+    }
 }
