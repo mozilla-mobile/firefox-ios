@@ -555,7 +555,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -602,7 +601,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 

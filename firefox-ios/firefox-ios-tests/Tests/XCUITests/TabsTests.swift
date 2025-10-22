@@ -118,29 +118,18 @@ class TabsTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306865
     // Smoketest
     func testCloseAllTabsUndo() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Undo toast no longer available with the new tab tray")
         if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
         }
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
-        if iPad() {
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-        } else {
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-        }
-        if iPad() {
-            navigator.goto(TabTray)
-        } else {
-            navigator.performAction(Action.CloseURLBarOpen)
-        }
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        navigator.goto(TabTray)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -149,9 +138,6 @@ class TabsTests: BaseTestCase {
             app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
         navigator.nowAt(BrowserTab)
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-        }
         navigator.goto(TabTray)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
@@ -356,24 +342,24 @@ class TabsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306869
     func testTabTrayContextMenuCloseTab() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Undo toast no longer available with the new tab tray")
+        if !iPad() {
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
+        }
         // Have multiple tabs opened in the tab tray
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         addTabsAndUndoCloseTabAction(nrOfTabs: 3)
         // Repeat steps for private browsing mode
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         addTabsAndUndoCloseTabAction(nrOfTabs: 4)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306868
     func testTabTrayCloseMultipleTabs() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Undo toast no longer available with the new tab tray")
         if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
         }
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
@@ -384,36 +370,26 @@ class TabsTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         let tabsTrayCell = app.otherElements[tabsTray].cells
-        if !iPad() {
-            let button = AccessibilityIdentifiers.Toolbar.tabsButton
-            let numTab = app.buttons[button].value as? String
-            XCTAssertEqual(numTab, "\(tabsTrayCell.count)")
-        } else {
-            XCTAssertEqual(tabsTrayCell.count, 2)
-            XCTAssertTrue(app.buttons.elementContainingText("2").exists)
-        }
+        XCTAssertEqual(tabsTrayCell.count, 2)
+        mozWaitForElementToExist(app.buttons["2"])
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         // Repeat for private browsing mode
-        navigator.performAction(Action.TogglePrivateMode)
+        navigator.performAction(Action.ToggleExperimentPrivateMode)
         validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].waitAndTap()
         // Only the latest tab closed is restored
-        if !iPad() {
-            let tabsTrayCell = app.otherElements[tabsTray].cells
-            XCTAssertEqual(1, tabsTrayCell.count)
-        }
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306867
-    func testCloseOneTabUndo() {
+    func testCloseOneTabUndo() throws {
+        if !iPad() {
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
+        }
         // Open a few tabs
         waitForTabsButton()
-        if !iPad() {
-            navigator.nowAt(HomePanelsScreen)
-            navigator.goto(URLBarOpen)
-        }
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
         navigator.createNewTab()
@@ -425,42 +401,25 @@ class TabsTests: BaseTestCase {
         navigator.goto(TabTray)
 
         // Experiment from #25337: "Undo" button no longer available on iPhone.
-        if iPad() {
-            // Tap "x"
-            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].buttons[StandardImageIdentifiers.Large.cross].tap()
-            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
-            app.buttons["Undo"].waitAndTap()
-            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        // Tap "x"
+        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].buttons[StandardImageIdentifiers.Large.cross].tap()
+        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        app.buttons["Undo"].waitAndTap()
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
 
-            // Long press tab. Tap "Close Tab" from the context menu
-            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].press(forDuration: 2)
-            mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
-            app.collectionViews.buttons["Close Tab"].waitAndTap()
-            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
-            app.buttons["Undo"].waitAndTap()
-            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        // Long press tab. Tap "Close Tab" from the context menu
+        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].press(forDuration: 2)
+        mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
+        app.collectionViews.buttons["Close Tab"].waitAndTap()
+        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        app.buttons["Undo"].waitAndTap()
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
 
-            // Swipe tab
-            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].swipeLeft()
-            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
-            app.buttons["Undo"].waitAndTap()
-            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
-        } else {
-            // Tap "x"
-            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"]
-                .buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
-            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
-
-            // Long press tab. Tap "Close Tab" from the context menu
-            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_1"].press(forDuration: 2)
-            mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
-            app.collectionViews.buttons["Close Tab"].waitAndTap()
-            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
-
-            // Swipe tab
-            app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_0"].swipeLeft()
-            mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_0"])
-        }
+        // Swipe tab
+        app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"].swipeLeft()
+        mozWaitForElementToNotExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
+        app.buttons["Undo"].waitAndTap()
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_1_2"])
     }
 
     private func validateToastWhenClosingMultipleTabs() {
@@ -469,15 +428,11 @@ class TabsTests: BaseTestCase {
         waitUntilPageLoad()
         for _ in 1...4 {
             navigator.createNewTab()
-            if app.keyboards.element.isVisible() && !iPad() {
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-                navigator.performAction(Action.CloseURLBarOpen)
-            }
         }
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
         // Close multiple tabs by pressing X button
-        let closeButton = AccessibilityIdentifiers.TabTray.closeButton
+        let closeButton = StandardImageIdentifiers.Large.cross
         for _ in 0...3 {
             app.collectionViews.cells["Homepage. Currently selected tab."].buttons[closeButton].waitAndTap()
         }
@@ -487,10 +442,6 @@ class TabsTests: BaseTestCase {
     private func addTabsAndUndoCloseTabAction(nrOfTabs: Int) {
         for _ in 1...nrOfTabs {
             navigator.createNewTab()
-            if app.keyboards.element.isVisible() && !iPad() {
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-                navigator.performAction(Action.CloseURLBarOpen)
-            }
         }
         let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("4", numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
