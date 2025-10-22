@@ -28723,8 +28723,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ActionExtensionIcons;
 				INFOPLIST_KEY_CFBundleDisplayName = ActionExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -28802,8 +28802,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ActionExtensionIcons;
 				INFOPLIST_KEY_CFBundleDisplayName = ActionExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -28881,8 +28881,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ActionExtensionIcons;
 				INFOPLIST_KEY_CFBundleDisplayName = ActionExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -28959,8 +28959,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ActionExtensionIcons;
 				INFOPLIST_KEY_CFBundleDisplayName = ActionExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -29037,8 +29037,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ActionExtensionIcons;
 				INFOPLIST_KEY_CFBundleDisplayName = ActionExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -29115,8 +29115,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extensions/ActionExtension/Info.plist;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ActionExtensionIcons;
 				INFOPLIST_KEY_CFBundleDisplayName = ActionExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Mozilla. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
