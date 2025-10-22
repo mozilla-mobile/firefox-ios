@@ -55,7 +55,7 @@ struct NewTabSelectors: NewTabSelectorSet {
         groups: ["NewTabSelector"]
     )
 
-    let SWITCH_BUTTON: Selector = Selector.buttonId(
+    let SWITCH_BUTTON = Selector.buttonId(
         IDs.switchButton,
         description: "Switch button",
         groups: ["NewTabSelector"]

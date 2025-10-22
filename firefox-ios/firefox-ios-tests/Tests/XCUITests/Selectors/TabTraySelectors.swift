@@ -54,7 +54,7 @@ struct TabTraySelectors: TabTraySelectorsSet {
     let NEW_TAB_BUTTON = Selector.buttonId(
         IDs.newTabButton,
         description: "New Tab Button on TabTray",
-        groups:["tabtray"]
+        groups: ["tabtray"]
     )
 
     let UNDO_BUTTON = Selector.staticTextByExactLabel(
