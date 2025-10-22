@@ -8,7 +8,7 @@ import Common
 public class SwipeAwayTabPreview: UIView {
     let screenShotView: UIImageView = .build()
 
-    public override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
@@ -21,18 +21,18 @@ public class SwipeAwayTabPreview: UIView {
         screenShotView.image = image
         screenShotView.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
     }
-    
+
     public func translate(position: CGPoint) {
         screenShotView.transform = .identity.translatedBy(x: position.x, y: position.y).scaledBy(
             x: 0.6,
             y: 0.6
         )
     }
-    
+
     public func restore() {
         screenShotView.transform = .identity
     }
-    
+
     public func tossPreview() {
         screenShotView.transform = .identity.translatedBy(x: 0, y: -500).scaledBy(
             x: 0.6,
@@ -46,7 +46,7 @@ public class SwipeAwayTabPreview: UIView {
             addSubview(background)
             background.pinToSuperview()
         }
-        
+
         addSubviews(screenShotView)
         NSLayoutConstraint.activate([
             screenShotView.topAnchor.constraint(equalTo: topAnchor),
