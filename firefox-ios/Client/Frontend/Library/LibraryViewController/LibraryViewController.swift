@@ -59,7 +59,7 @@ class LibraryViewController: UIViewController, Themeable {
     private lazy var topRightButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
             title: String.AppSettingsDone,
-            style: .done,
+            style: .plain,
             target: self,
             action: #selector(topRightButtonAction)
         )
@@ -301,14 +301,23 @@ class LibraryViewController: UIViewController, Themeable {
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
+            if #available(iOS 26.0, *) {
+                topRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .bookmarks(state: .itemEditModeInvalidField):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
+            if #available(iOS 26.0, *) {
+                topRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = false
         default:
             topRightButton.title = String.AppSettingsDone
+            if #available(iOS 26.0, *) {
+                topRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         }

@@ -30,6 +30,8 @@ struct CreditCardInputView: View {
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
     @State var barButtonColor: Color = .clear
+    @State var saveButtonColor: Color = .clear
+    @State var editButtonColor: Color = .clear
     @State var saveButtonDisabledColor: Color = .clear
 
     var body: some View {
@@ -169,6 +171,8 @@ struct CreditCardInputView: View {
         backgroundColor = Color(color.layer1)
         textFieldBackgroundColor = Color(color.layer2)
         barButtonColor = Color(color.actionPrimary)
+        saveButtonColor = Color(color.textAccent)
+        editButtonColor = Color(color.textPrimary)
         saveButtonDisabledColor = Color(color.textSecondary)
     }
 
@@ -210,7 +214,16 @@ struct CreditCardInputView: View {
                 }
             }
         }
-        .foregroundColor(viewModel.isRightBarButtonEnabled ? barButtonColor : saveButtonDisabledColor)
+        .modifier(
+            CreditCardViewButtonStyle(
+                isEnabled: viewModel.isRightBarButtonEnabled,
+                barButtonColor: barButtonColor,
+                editStateColor: editButtonColor,
+                saveStateColor: saveButtonColor,
+                saveDisableStateColor: saveButtonDisabledColor,
+                buttonState: btnState
+            )
+        )
         .onDisappear {
             viewModel.isRightBarButtonEnabled = false
         }

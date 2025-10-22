@@ -164,3 +164,26 @@ struct ToggleStyle: ViewModifier {
         }
     }
 }
+
+struct CreditCardViewButtonStyle: ViewModifier {
+    let isEnabled: Bool
+    let barButtonColor: Color
+    let editStateColor: Color
+    let saveStateColor: Color
+    let saveDisableStateColor: Color
+    let buttonState: CreditCardRightBarButton
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .foregroundColor(
+                    !isEnabled ? saveDisableStateColor :
+                        buttonState == .edit ? editStateColor :
+                        saveStateColor
+                )
+        } else {
+            content
+                .foregroundColor(isEnabled ? barButtonColor : saveDisableStateColor)
+        }
+    }
+}

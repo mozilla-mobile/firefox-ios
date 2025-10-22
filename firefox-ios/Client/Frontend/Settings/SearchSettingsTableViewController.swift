@@ -123,10 +123,14 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         if !(self.navigationController is ThemedNavigationController) {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(
                 title: .SettingsSearchDoneButton,
-                style: .done,
+                style: .plain,
                 target: self,
                 action: #selector(self.dismissAnimated)
             )
+            if #available(iOS 26.0, *) {
+                let textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+                self.navigationItem.leftBarButtonItem?.tintColor = textColor
+            }
         }
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -584,6 +588,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         showDeletion = editing
         UIView.performWithoutAnimation {
             self.navigationItem.rightBarButtonItem?.title = editing ? .SettingsSearchDoneButton : .SettingsSearchEditButton
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            let textColor = editing ? theme.colors.textAccent : theme.colors.textPrimary
+            self.navigationItem.rightBarButtonItem?.tintColor = textColor
         }
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         navigationItem.rightBarButtonItem?.action = editing ?
