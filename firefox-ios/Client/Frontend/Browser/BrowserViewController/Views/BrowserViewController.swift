@@ -1014,35 +1014,56 @@ class BrowserViewController: UIViewController,
 
     // FUN GESTURE!
     private func setupGesture() {
-        addressToolbarContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(onFancyGestureRecognize)))
+        addressToolbarContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self,
+                                                                            action: #selector(onFancyGestureRecognize)))
     }
 
     @objc private func onFancyGestureRecognize(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .began:
-            fancyView.addImage(image: tabManager.selectedTab?.screenshot ?? .checkmark)
-            UIView.animate(withDuration: 2.0) { [self] in
+            guard let tab = tabManager.selectedTab else { return }
+            screenshotHelper.takeScreenshot(
+                tab,
+                windowUUID: windowUUID,
+                screenshotBounds: view.bounds
+            )
+            UIView.animate(withDuration: 0.3) { [self] in
+                fancyView.addImage(image: tabManager.selectedTab?.screenshot ?? .checkmark,
+                                   startingPoint: bottomContainer.frame.size.height)
                 fancyView.alpha = 1
                 fancyView.layer.zPosition = 1000
             }
 
         case .changed:
             let translation = gesture.translation(in: view)
-            fancyView.transform = .identity.translatedBy(x: translation.x, y: translation.y)
+            fancyView.translate(position: translation)
         case .ended:
             let velocity = gesture.velocity(in: view)
             if velocity.y < -500 {
-                UIView.animate(withDuration: 0.3) { [self] in
-                    fancyView.transform = .identity.scaledBy(x: 0.2, y: 0.2)
-                    fancyView.alpha = 0
-                    fancyView.layer.zPosition = 0
+                store.dispatchLegacy(
+                    TabPanelViewAction(
+                        panelType: .tabs,
+                        tabUUID: tabManager.selectedTab?.tabUUID,
+                        windowUUID: windowUUID,
+                        actionType: TabPanelViewActionType.closeTab
+                    )
+                )
+                UIView.animate(withDuration: 0.1) { [self] in
+                    fancyView.tossPreview()
                 } completion: { [weak self] _ in
-                    self?.navigationHandler?.showTabTray(selectedPanel: .tabs)
+                    UIView.animate(withDuration: 0.2) {
+                        self?.fancyView.alpha = 0.0
+                        self?.fancyView.layer.zPosition = 0
+                    } completion: { _ in
+                        self?.fancyView.restore()
+                    }
                 }
             } else {
                 UIView.animate(withDuration: 0.3) { [self] in
                     fancyView.alpha = 0
                     fancyView.layer.zPosition = 0
+                } completion: { [weak self] _ in
+                    self?.fancyView.restore()
                 }
             }
         default:

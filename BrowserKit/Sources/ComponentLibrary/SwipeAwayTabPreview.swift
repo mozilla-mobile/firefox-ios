@@ -8,15 +8,6 @@ import Common
 public class SwipeAwayTabPreview: UIView {
     let screenShotView: UIImageView = .build()
 
-    public override var transform: CGAffineTransform {
-        set {
-            screenShotView.transform = newValue
-        }
-        get {
-            return screenShotView.transform
-        }
-    }
-
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -26,22 +17,48 @@ public class SwipeAwayTabPreview: UIView {
         fatalError()
     }
 
-    public func addImage(image: UIImage) {
+    public func addImage(image: UIImage, startingPoint: CGFloat) {
         screenShotView.image = image
+        screenShotView.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+    }
+    
+    public func translate(position: CGPoint) {
+        screenShotView.transform = .identity.translatedBy(x: position.x, y: position.y).scaledBy(
+            x: 0.6,
+            y: 0.6
+        )
+    }
+    
+    public func restore() {
+        screenShotView.transform = .identity
+    }
+    
+    public func tossPreview() {
+        screenShotView.transform = .identity.translatedBy(x: 0, y: -500).scaledBy(
+            x: 0.6,
+            y: 0.6
+        )
     }
 
     func setup() {
-        backgroundColor = .black
-        screenShotView.backgroundColor = .systemPink
+        if #available(iOS 26.0, *) {
+            let background = UIVisualEffectView(effect: UIGlassEffect(style: .regular))
+            addSubview(background)
+            background.pinToSuperview()
+        }
+        
         addSubviews(screenShotView)
         NSLayoutConstraint.activate([
-            screenShotView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            screenShotView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            screenShotView.heightAnchor.constraint(equalToConstant: 300),
-            screenShotView.widthAnchor.constraint(equalToConstant: 250)
+            screenShotView.topAnchor.constraint(equalTo: topAnchor),
+            screenShotView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            screenShotView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            screenShotView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
-        screenShotView.layer.cornerRadius = 10
-        screenShotView.image = .checkmark
+        screenShotView.layer.cornerRadius = 55.0
+        screenShotView.layer.masksToBounds = true
+        screenShotView.clipsToBounds = true
+        screenShotView.contentMode = .scaleAspectFill
+        screenShotView.backgroundColor = .red
     }
 }
 
