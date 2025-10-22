@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 /// Stores information related to an image request inside SiteImageView.
 public struct SiteImageModel {
