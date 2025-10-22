@@ -31,6 +31,8 @@ public struct ToolbarElement: Equatable {
 
     /// Indicates if the element has a custom color
     let hasCustomColor: Bool
+    
+    let shouldPulse: Bool
 
     /// Indicates if the element has a highlighted color when tapping on it
     let hasHighlightedColor: Bool
@@ -78,6 +80,7 @@ public struct ToolbarElement: Equatable {
                 isSelected: Bool = false,
                 hasCustomColor: Bool = false,
                 hasHighlightedColor: Bool = false,
+                shouldPulse: Bool = false,
                 largeContentTitle: String? = nil,
                 contextualHintType: String? = nil,
                 a11yLabel: String,
@@ -108,6 +111,7 @@ public struct ToolbarElement: Equatable {
         self.a11yCustomActionName = a11yCustomActionName
         self.a11yCustomAction = a11yCustomAction
         self.hasLongPressAction = hasLongPressAction
+        self.shouldPulse = shouldPulse
     }
 
     public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {
@@ -120,6 +124,7 @@ public struct ToolbarElement: Equatable {
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
         lhs.isSelected == rhs.isSelected &&
         lhs.hasCustomColor == rhs.hasCustomColor &&
+        lhs.shouldPulse == rhs.shouldPulse &&
         lhs.largeContentTitle == rhs.largeContentTitle &&
         lhs.contextualHintType == rhs.contextualHintType &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&

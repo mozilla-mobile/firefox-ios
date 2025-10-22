@@ -1276,7 +1276,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     ) -> ToolbarActionConfiguration {
         let inactiveImageName = StandardImageIdentifiers.Medium.translate
         let activeImageName = StandardImageIdentifiers.Medium.translateActive
-        let loadingImage = StandardImageIdentifiers.Medium.loadingImage
+        let loadingImage = StandardImageIdentifiers.Medium.translateActive
 
         var buttonImage = inactiveImageName
 
@@ -1292,6 +1292,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isEnabled: isEnabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
+            shouldPulse: true,
             a11yLabel: .Toolbars.Translation.ButtonActiveAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.translateButton)
     }

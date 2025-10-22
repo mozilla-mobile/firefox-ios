@@ -37,6 +37,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var isSelected = false
     var hasCustomColor = false
     var hasHighlightedColor = true
+    var shouldPulse: Bool = false
     var largeContentTitle: String?
     var contextualHintType: String?
     var a11yLabel: String

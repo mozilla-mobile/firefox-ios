@@ -105,8 +105,8 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         largeContentTitle = element.a11yLabel
         largeContentImage = image
 
-        if element.iconName == StandardImageIdentifiers.Medium.loadingImage {
-            config.image = nil
+            if element.iconName == StandardImageIdentifiers.Medium.translateActive, element.shouldPulse {
+//            config.image = nil
             makeLoadingButton()
         } else {
             hideLoadingIcon()
@@ -155,23 +155,35 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private var spinner: UIActivityIndicatorView?
 
     private func makeLoadingButton(style: UIActivityIndicatorView.Style = .medium) {
-        if spinner == nil {
-            let loadingView = UIActivityIndicatorView(style: style)
-            loadingView.translatesAutoresizingMaskIntoConstraints = false
-            addSubview(loadingView)
-            NSLayoutConstraint.activate([
-                loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
-                loadingView.centerYAnchor.constraint(equalTo: centerYAnchor)
-            ])
-            spinner = loadingView
-        }
-        spinner?.startAnimating()
+//        if spinner == nil {
+            pulse(view: self)
+//            let loadingView = UIActivityIndicatorView(style: style)
+//            loadingView.translatesAutoresizingMaskIntoConstraints = false
+//            addSubview(loadingView)
+//            NSLayoutConstraint.activate([
+//                loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
+//                loadingView.centerYAnchor.constraint(equalTo: centerYAnchor)
+//            ])
+//            spinner = loadingView
+//        }
+//        spinner?.startAnimating()
+    }
+
+    func pulse(view: UIView) {
+        UIView.animate(withDuration: 0.8,
+                       delay: 0,
+                       options: [.allowUserInteraction, .autoreverse, .repeat],
+                       animations: {
+            view.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        }, completion: nil)
     }
 
     private func hideLoadingIcon() {
-        spinner?.stopAnimating()
-        spinner?.removeFromSuperview()
-        spinner = nil
+        layer.removeAnimation(forKey: "pulse.scale")
+        transform = .identity
+//        spinner?.stopAnimating()
+//        spinner?.removeFromSuperview()
+//        spinner = nil
     }
 
     private func addBadgeIcon(imageName: String) {
