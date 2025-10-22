@@ -457,7 +457,7 @@ class BaseTestCase: XCTestCase {
 
     func openNewTabAndValidateURLisPaste(url: String) {
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        app.buttons["Cancel"].waitAndTap()
+        app.buttons["Cancel"].tapWithRetry()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
         if !iPad() {
