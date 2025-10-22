@@ -13,13 +13,13 @@ features:
         description: >
           Maximum number of ToU bottom sheet reminders that can be displayed
         type: Int
-        default: 3
+        default: 2
     defaults:
       - channel: beta
         value:
           status: false
-          max-reminders-count: 3
+          max-reminders-count: 2
       - channel: developer
         value:
           status: false
-          max-reminders-count: 3
+          max-reminders-count: 2

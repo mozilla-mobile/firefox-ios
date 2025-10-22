@@ -121,7 +121,8 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let shownAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction1)
 
-        let dismissAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
+        let dismissAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
+                                              actionType: TermsOfUseActionType.gestureDismiss)
         middleware.termsOfUseProvider(AppState(), dismissAction1)
 
         let dismissAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
@@ -148,7 +149,8 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction)
 
-        let remindAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
+        let remindAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
+                                             actionType: TermsOfUseActionType.remindMeLaterTapped)
         middleware.termsOfUseProvider(AppState(), remindAction1)
 
         let remindAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
