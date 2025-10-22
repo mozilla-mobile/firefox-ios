@@ -331,6 +331,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 store.dispatchLegacy(action)
             }
         case .translate:
+            // This tappung is handled in the translation middleware.
             guard let toolbarState = state.screenState(
                 ToolbarState.self,
                 for: .toolbar,

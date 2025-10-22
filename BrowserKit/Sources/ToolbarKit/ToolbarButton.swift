@@ -63,6 +63,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         hasHighlightedColor = element.hasHighlightedColor
         self.notificationCenter = notificationCenter
 
+        // look into changing the item
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.title ?? element.a11yLabel,
                               image: image,
@@ -105,12 +106,13 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         largeContentTitle = element.a11yLabel
         largeContentImage = image
 
-            if element.iconName == StandardImageIdentifiers.Medium.translateActive, element.shouldPulse {
-//            config.image = nil
-            makeLoadingButton()
-        } else {
-            hideLoadingIcon()
-        }
+            if element.iconName == StandardImageIdentifiers.Medium.translateActive {
+                if element.shouldPulse {
+                    makeLoadingButton()
+                } else {
+                    hideLoadingIcon()
+                }
+            }
 
         configuration = config
         if let badgeName = element.badgeImageName {
@@ -172,14 +174,14 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     func pulse(view: UIView) {
         UIView.animate(withDuration: 0.8,
                        delay: 0,
-                       options: [.allowUserInteraction, .autoreverse, .repeat],
+                       options: [.autoreverse, .repeat],
                        animations: {
-            view.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            view.transform = CGAffineTransform(scaleX: -1, y: 1)
         }, completion: nil)
     }
 
     private func hideLoadingIcon() {
-        layer.removeAnimation(forKey: "pulse.scale")
+        layer.removeAllAnimations()     // cancels any repeating UIView animations
         transform = .identity
 //        spinner?.stopAnimating()
 //        spinner?.removeFromSuperview()

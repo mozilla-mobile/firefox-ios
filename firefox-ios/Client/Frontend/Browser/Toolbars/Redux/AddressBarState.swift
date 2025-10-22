@@ -403,7 +403,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
-            translationConfiguration: state.translationConfiguration,
+            translationConfiguration: nil,
             didStartTyping: state.didStartTyping,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -1279,11 +1279,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let loadingImage = StandardImageIdentifiers.Medium.translateActive
 
         var buttonImage = inactiveImageName
+        var shouldPulse = false
 
         if isLoading {
             buttonImage = loadingImage
+            shouldPulse = true
         } else if isActive {
             buttonImage = activeImageName
+            shouldPulse = false
         }
 
         return ToolbarActionConfiguration(
@@ -1292,7 +1295,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isEnabled: isEnabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
-            shouldPulse: true,
+            shouldPulse: shouldPulse,
             a11yLabel: .Toolbars.Translation.ButtonActiveAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.translateButton)
     }

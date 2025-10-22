@@ -27,7 +27,7 @@ public struct AddressToolbarConfiguration {
     /// Whether toolbar change should be displayed animated
     let shouldAnimate: Bool
 
-    let shouldPulse: Bool = false
+    let shouldPulse = false
 
     public let uxConfiguration: AddressToolbarUXConfiguration
 
@@ -40,7 +40,8 @@ public struct AddressToolbarConfiguration {
                 browserActions: [ToolbarElement],
                 borderPosition: AddressToolbarBorderPosition?,
                 uxConfiguration: AddressToolbarUXConfiguration,
-                shouldAnimate: Bool) {
+                shouldAnimate: Bool
+    ) {
         self.locationViewConfiguration = locationViewConfiguration
         self.navigationActions = navigationActions
         self.leadingPageActions = leadingPageActions
