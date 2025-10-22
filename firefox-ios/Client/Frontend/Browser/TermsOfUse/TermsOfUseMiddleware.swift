@@ -84,12 +84,12 @@ class TermsOfUseMiddleware {
         // Record telemetry for ToU impression
         telemetry.termsOfUseDisplayed()
     }
-    
+
     private func incrementRemindersCount() {
         // Only increment for reminders - after the first dismissal
         let hasBeenDismissedBefore = self.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil
         guard hasBeenDismissedBefore else { return }
-        
+
         let currentCount = self.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         self.prefs.setInt(Int32(currentCount + 1), forKey: PrefsKeys.TermsOfUseRemindersCount)
     }

@@ -116,15 +116,16 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         XCTAssertEqual(remindersCount, 0, "First gesture dismissal should not increment reminders count")
         XCTAssertNotNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
     }
-    
+
     func testMiddleware_secondDismissal_incrementsRemindersCount() {
         let shownAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction1)
-        
+
         let dismissAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
         middleware.termsOfUseProvider(AppState(), dismissAction1)
 
-        let dismissAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
+        let dismissAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
+                                              actionType: TermsOfUseActionType.gestureDismiss)
         middleware.termsOfUseProvider(AppState(), dismissAction2)
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
@@ -135,7 +136,8 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction)
 
-        let remindAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
+        let remindAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
+                                            actionType: TermsOfUseActionType.remindMeLaterTapped)
         middleware.termsOfUseProvider(AppState(), remindAction)
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
@@ -145,11 +147,12 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
     func testMiddleware_remindMeLaterTapped_secondDismissal_incrementsCount() {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction)
-        
+
         let remindAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
         middleware.termsOfUseProvider(AppState(), remindAction1)
 
-        let remindAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
+        let remindAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
+                                             actionType: TermsOfUseActionType.remindMeLaterTapped)
         middleware.termsOfUseProvider(AppState(), remindAction2)
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
@@ -164,11 +167,13 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         middleware.termsOfUseProvider(AppState(), gestureAction)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 0)
 
-        let remindAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.remindMeLaterTapped)
+        let remindAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
+                                            actionType: TermsOfUseActionType.remindMeLaterTapped)
         middleware.termsOfUseProvider(AppState(), remindAction)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 1)
 
-        let gestureAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
+        let gestureAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID,
+                                              actionType: TermsOfUseActionType.gestureDismiss)
         middleware.termsOfUseProvider(AppState(), gestureAction2)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 2)
     }
