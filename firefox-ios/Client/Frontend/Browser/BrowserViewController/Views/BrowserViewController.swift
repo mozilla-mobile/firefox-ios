@@ -1025,7 +1025,7 @@ class BrowserViewController: UIViewController,
         verticalPan = gesture
         overKeyboardContainer.addGestureRecognizer(gesture)
     }
-    
+
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // allow only your two pans to work together
@@ -1035,7 +1035,7 @@ class BrowserViewController: UIViewController,
         }
         return false
     }
-    
+
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let pan = gestureRecognizer as? UIPanGestureRecognizer else { return true }
         let velocity = pan.velocity(in: view)

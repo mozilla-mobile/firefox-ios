@@ -88,7 +88,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     deinit {
         unsubscribeFromRedux()
     }
-    
+
     var gesture: UIGestureRecognizer?
 
     private func setupGesture() {
