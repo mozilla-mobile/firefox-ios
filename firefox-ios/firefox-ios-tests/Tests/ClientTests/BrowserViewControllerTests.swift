@@ -38,13 +38,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     override func tearDown() {
-        tearDownTelemetry()
         profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
         recordVisitManager = nil
         resetStore()
+        DependencyHelperMock().reset()
         super.tearDown()
     }
 
