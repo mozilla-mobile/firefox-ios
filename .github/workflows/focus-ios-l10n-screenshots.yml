@@ -71,7 +71,7 @@ jobs:
     needs: [determine-locales, compile]
     strategy:
       fail-fast: false
-      max-parallel: 1
+      max-parallel: 2
       matrix:
         locale: ${{ fromJson(needs.determine-locales.outputs.locales) }}
     uses: ./.github/workflows/focus-ios-l10n-locales.yml
