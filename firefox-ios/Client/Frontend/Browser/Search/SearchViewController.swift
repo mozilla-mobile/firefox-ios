@@ -728,7 +728,7 @@ class SearchViewController: SiteTableViewController,
         switch section {
         case .trendingSearches:
             if let trendingSearch = viewModel.trendingSearches[safe: indexPath.row] {
-                let arrowImageName = StandardImageIdentifiers.Large.arrowTrendingLarge
+                let arrowImageName = StandardImageIdentifiers.Large.arrowTrending
                 let oneLineCellViewModel = oneLineCellModelForSearch(with: trendingSearch, and: arrowImageName)
                 oneLineCell.configure(viewModel: oneLineCellViewModel)
                 cell = oneLineCell
