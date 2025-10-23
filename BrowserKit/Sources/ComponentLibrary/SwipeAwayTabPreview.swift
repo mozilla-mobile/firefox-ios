@@ -62,7 +62,7 @@ public class SwipeAwayTabPreview: UIView, ThemeApplicable {
         }
 
         addSubview(screenShotView)
-        
+
         if #available(iOS 26.0, *) {
             let cardBack = UIVisualEffectView(effect: UIGlassEffect(style: .regular))
             screenShotView.addSubview(cardBack)
@@ -75,20 +75,19 @@ public class SwipeAwayTabPreview: UIView, ThemeApplicable {
         deleteOverlay.layer.cornerRadius = 55.0
         deleteOverlay.backgroundColor = .systemRed.withAlphaComponent(0.8)
         deleteOverlay.alpha = 0.0
-        
-        
+
         NSLayoutConstraint.activate([
             screenShotView.topAnchor.constraint(equalTo: topAnchor, constant: 100.0),
             screenShotView.leadingAnchor.constraint(equalTo: leadingAnchor),
             screenShotView.trailingAnchor.constraint(equalTo: trailingAnchor),
             screenShotView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100.0),
-            
+
             favicon.centerYAnchor.constraint(equalTo: screenShotView.centerYAnchor),
             favicon.centerXAnchor.constraint(equalTo: screenShotView.centerXAnchor),
             favicon.heightAnchor.constraint(equalToConstant: 80.0),
             favicon.widthAnchor.constraint(equalToConstant: 80.0),
         ])
-      
+
         screenShotView.layer.masksToBounds = false
         screenShotView.layer.shadowColor = UIColor.black.cgColor
         screenShotView.layer.shadowOffset = CGSize(width: 2, height: 4)
@@ -96,7 +95,7 @@ public class SwipeAwayTabPreview: UIView, ThemeApplicable {
         screenShotView.layer.shadowOpacity = 0.5
         screenShotView.contentMode = .scaleToFill
     }
-    
+
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2.withAlphaComponent(0.5)
     }
