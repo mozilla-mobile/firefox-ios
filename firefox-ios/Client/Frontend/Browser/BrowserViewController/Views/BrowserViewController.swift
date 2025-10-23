@@ -28,6 +28,7 @@ import struct MozillaAppServices.VisitObservation
 import enum MozillaAppServices.VisitType
 
 class BrowserViewController: UIViewController,
+                             UIGestureRecognizerDelegate,
                              SearchBarLocationProvider,
                              Themeable,
                              LibraryPanelDelegate,
@@ -1011,11 +1012,43 @@ class BrowserViewController: UIViewController,
     }
 
     let fancyView: SwipeAwayTabPreview = .build()
+    var horizontalPan: UIGestureRecognizer?
+    var verticalPan: UIGestureRecognizer?
 
     // FUN GESTURE!
     private func setupGesture() {
-        bottomContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self,
-                                                                    action: #selector(onFancyGestureRecognize)))
+        let gesture = UIPanGestureRecognizer(target: self,
+                                             action: #selector(onFancyGestureRecognize))
+        gesture.delegate = self
+        addressBarPanGestureHandler?.gesture?.delegate = self
+        horizontalPan = addressBarPanGestureHandler?.gesture
+        verticalPan = gesture
+        overKeyboardContainer.addGestureRecognizer(gesture)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // allow only your two pans to work together
+        if (gestureRecognizer == horizontalPan && otherGestureRecognizer == verticalPan) ||
+           (gestureRecognizer == verticalPan && otherGestureRecognizer == horizontalPan) {
+            return true
+        }
+        return false
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let pan = gestureRecognizer as? UIPanGestureRecognizer else { return true }
+        let velocity = pan.velocity(in: view)
+
+        if gestureRecognizer == horizontalPan {
+            // horizontal only if X velocity dominates
+            return abs(velocity.x) > abs(velocity.y)
+        } else if gestureRecognizer == verticalPan {
+            // vertical only if Y velocity dominates
+            return abs(velocity.y) > abs(velocity.x)
+        }
+
+        return true
     }
 
     @objc private func onFancyGestureRecognize(gesture: UIPanGestureRecognizer) {

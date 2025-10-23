@@ -88,9 +88,12 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     deinit {
         unsubscribeFromRedux()
     }
+    
+    var gesture: UIGestureRecognizer?
 
     private func setupGesture() {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        self.gesture = gesture
         addressToolbarContainer.addGestureRecognizer(gesture)
         panGestureRecognizer = gesture
     }
