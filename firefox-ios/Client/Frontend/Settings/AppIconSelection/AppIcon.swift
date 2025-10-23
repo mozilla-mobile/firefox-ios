@@ -66,6 +66,25 @@ enum AppIcon: String, CaseIterable {
     /// A version of the app icon with a gradient background, purple fading to blue fading to green.
     case northernLights
 
+    // MARK: Fun
+    case cool
+
+    case cuddling
+
+    case flaming
+
+    case minimal
+
+    case momo
+
+    case pixelated
+
+    case pride
+
+    case retro2004
+
+    case retro2017
+
     /// The name of the asset to display in the app selection.
     var displayName: String {
         switch self {
@@ -107,6 +126,25 @@ enum AppIcon: String, CaseIterable {
             return .Settings.AppIconSelection.AppIconNames.Midnight
         case .northernLights:
             return .Settings.AppIconSelection.AppIconNames.NorthernLights
+        // MARK: Fun
+        case .cool:
+            <#code#>
+        case .cuddling:
+            <#code#>
+        case .flaming:
+            <#code#>
+        case .minimal:
+            <#code#>
+        case .momo:
+            <#code#>
+        case .pixelated:
+            <#code#>
+        case .pride:
+            <#code#>
+        case .retro2004:
+            <#code#>
+        case .retro2017:
+            <#code#>
         }
     }
 
@@ -155,6 +193,25 @@ enum AppIcon: String, CaseIterable {
             return "appIconAlternate_gradient_midnight"
         case .northernLights:
             return "appIconAlternate_gradient_northernLights"
+        // MARK: Fun
+        case .cool:
+            return "appIconAlternate_fun_cool"
+        case .cuddling:
+            return "appIconAlternate_fun_cuddling"
+        case .flaming:
+            return "appIconAlternate_fun_flaming"
+        case .minimal:
+            return "appIconAlternate_fun_minimal"
+        case .momo:
+            return "appIconAlternate_fun_momo"
+        case .pixelated:
+            return "appIconAlternate_fun_pixelated"
+        case .pride:
+            return "appIconAlternate_fun_pride"
+        case .retro2004:
+            return "appIconAlternate_fun_retro2004"
+        case .retro2017:
+            return "appIconAlternate_fun_retro2017"
         }
     }
 
@@ -199,6 +256,25 @@ enum AppIcon: String, CaseIterable {
             return "AppIcon_Alt_Gradient_Midnight"
         case .northernLights:
             return "AppIcon_Alt_Gradient_NorthernLights"
+        // MARK: Fun
+        case .cool:
+            return "AppIcon_Alt_Fun_Cool"
+        case .cuddling:
+            return "AppIcon_Alt_Fun_Cuddling"
+        case .flaming:
+            return "AppIcon_Alt_Fun_Flaming"
+        case .minimal:
+            return "AppIcon_Alt_Fun_Minimal"
+        case .momo:
+            return "AppIcon_Alt_Fun_Momo"
+        case .pixelated:
+            return "AppIcon_Alt_Fun_Pixelated"
+        case .pride:
+            return "AppIcon_Alt_Fun_Pride"
+        case .retro2004:
+            return "AppIcon_Alt_Fun_Retro2004"
+        case .retro2017:
+            return "AppIcon_Alt_Fun_Retro2017"
         }
     }
 
