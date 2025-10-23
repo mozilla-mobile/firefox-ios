@@ -1050,12 +1050,12 @@ class BrowserViewController: UIViewController,
                     UIView.animate(withDuration: 0.3) { [self] in
                         fancyView.alpha = 0.0
                         fancyView.layer.zPosition = 0
-                    } completion: { _ in
-                        fancyView.restore()
+                    } completion: { [weak self] _ in
+                        self?.fancyView.restore()
                     }
                 }
             } else {
-                if abs(translation.y) < 200 {
+                if abs(translation.y) > 130 {
                     navigationHandler?.showTabTray(selectedPanel: .tabs)
                 }
                 UIView.animate(withDuration: 0.3) { [self] in
