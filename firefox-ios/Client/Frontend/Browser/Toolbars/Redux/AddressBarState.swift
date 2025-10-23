@@ -133,21 +133,19 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // swiftlint:disable:next closure_body_length
-    static let reducer: Reducer<Self> = {
-        state,
-        action in
+    static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
             return defaultState(from: state)
         }
-        
+
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
             return handleDidLoadToolbarsAction(state: state, action: action)
-            
+
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
-            
+
         case ToolbarActionType.didTapOnTranslate,
             ToolbarActionType.translationCompleted,
             ToolbarActionType.receivedTranslationLanguage:

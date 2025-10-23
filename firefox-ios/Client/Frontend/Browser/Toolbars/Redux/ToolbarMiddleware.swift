@@ -344,14 +344,22 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
             if isTranslateActive {
                 let toolbarAction = ToolbarAction(
-                    translationConfiguration: TranslationConfiguration(isTranslateActive: false, isLoading: false, pageLanguage: pageLanguage),
+                    translationConfiguration: TranslationConfiguration(
+                        isTranslateActive: false,
+                        isLoading: false,
+                        pageLanguage: pageLanguage
+                    ),
                     windowUUID: action.windowUUID,
                     actionType: ToolbarActionType.didTapOnTranslate
                 )
                 store.dispatchLegacy(toolbarAction)
             } else {
                 let toolbarAction = ToolbarAction(
-                    translationConfiguration: TranslationConfiguration(isTranslateActive: false, isLoading: true, pageLanguage: pageLanguage),
+                    translationConfiguration: TranslationConfiguration(
+                        isTranslateActive: false,
+                        isLoading: true,
+                        pageLanguage: pageLanguage
+                    ),
                     windowUUID: action.windowUUID,
                     actionType: ToolbarActionType.didTapOnTranslate
                 )

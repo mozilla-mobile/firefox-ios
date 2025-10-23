@@ -15,7 +15,7 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     // Determines if translation icon is active (aka page has been translated) or inactive
     let isTranslateActive: Bool
     let isLoading: Bool
-    var pageLanguage: String? = nil
+    var pageLanguage: String?
 }
 
 struct ToolbarAction: Action {

@@ -31,7 +31,7 @@ public struct ToolbarElement: Equatable {
 
     /// Indicates if the element has a custom color
     let hasCustomColor: Bool
-    
+
     let shouldPulse: Bool
 
     /// Indicates if the element has a highlighted color when tapping on it
