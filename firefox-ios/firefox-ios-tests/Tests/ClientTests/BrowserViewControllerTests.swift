@@ -12,7 +12,6 @@ import Shared
 
 @testable import Client
 
-// TODO: FXIOS-13741 - Migrate BrowserViewControllerTests to use mock telemetry or GleanWrapper
 class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     var profile: MockProfile!
     var tabManager: MockTabManager!
@@ -50,28 +49,10 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testTrackVisibleSuggestion() {
-        TelemetryContextualIdentifier.setupContextId()
         let subject = createSubject()
-        let expectation = expectation(description: "The Firefox Suggest ping was sent")
-
-        GleanMetrics.Pings.shared.fxSuggest.testBeforeNextSubmit { _ in
-            XCTAssertEqual(GleanMetrics.FxSuggest.pingType.testGetValue(), "fxsuggest-impression")
-            XCTAssertEqual(
-                GleanMetrics.FxSuggest.contextId.testGetValue()?.uuidString,
-                TelemetryContextualIdentifier.contextId
-            )
-            XCTAssertEqual(GleanMetrics.FxSuggest.isClicked.testGetValue(), false)
-            XCTAssertEqual(GleanMetrics.FxSuggest.position.testGetValue(), 3)
-            XCTAssertEqual(GleanMetrics.FxSuggest.blockId.testGetValue(), 1)
-            XCTAssertEqual(GleanMetrics.FxSuggest.advertiser.testGetValue(), "test advertiser")
-            XCTAssertEqual(GleanMetrics.FxSuggest.iabCategory.testGetValue(), "999 - Test Category")
-            XCTAssertEqual(GleanMetrics.FxSuggest.reportingUrl.testGetValue(), "https://example.com/ios_test_impression_reporting_url")
-            XCTAssertEqual(GleanMetrics.FxSuggest.country.testGetValue(), "US")
-            expectation.fulfill()
-        }
-
         let locale = Locale(identifier: "en-US")
-        let telemetry = FxSuggestTelemetry(locale: locale)
+        let gleanWrapper = MockGleanWrapper()
+        let telemetry = FxSuggestTelemetry(locale: locale, gleanWrapper: gleanWrapper)
         subject.trackVisibleSuggestion(telemetryInfo: .firefoxSuggestion(
             RustFirefoxSuggestionTelemetryInfo.amp(
                 blockId: 1,
@@ -84,7 +65,12 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
             didTap: false
         ), suggestTelemetry: telemetry)
 
-        wait(for: [expectation], timeout: 5.0)
+        guard let savedPing = gleanWrapper.savedPing as? Ping<NoReasonCodes> else {
+            XCTFail("savedPing is not of type Ping<NoReasonCodes>")
+            return
+        }
+        XCTAssert(savedPing === GleanMetrics.Pings.shared.fxSuggest, "FxSuggest ping called")
+        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
     }
 
     func testAppWillResignActiveNotification_takesScreenshot_ifNoViewIsPresented() {
