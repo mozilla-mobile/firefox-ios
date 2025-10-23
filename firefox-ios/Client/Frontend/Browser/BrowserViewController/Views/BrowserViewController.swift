@@ -4736,6 +4736,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     private var shouldCancelEditing: Bool {
+        // Prevent closing suggestions when scrolling the suggestions list 
+        if searchController != nil || overlayManager.inOverlayMode {
+            return false
+        }
+
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         guard newTabChoice != .topSites, newTabChoice != .blankPage else { return false }
 
