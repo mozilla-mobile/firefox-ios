@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 public class SwipeAwayTabPreview: UIView {
-    let screenShotView: UIImageView = .build()
+    public let screenShotView: UIImageView = .build()
 
     override public init(frame: CGRect) {
         super.init(frame: frame)

@@ -1059,12 +1059,14 @@ class BrowserViewController: UIViewController,
                     }
                 }
             } else {
-                UIView.animate(withDuration: 0.3) { [self] in
-                    fancyView.alpha = 0
-                    fancyView.layer.zPosition = 0
-                } completion: { [weak self] _ in
-                    self?.fancyView.restore()
-                }
+                // fancyView.restore()
+                navigationHandler?.showTabTray(selectedPanel: .tabs)
+//                UIView.animate(withDuration: 0.3) { [self] in
+//                    fancyView.alpha = 0
+//                    fancyView.layer.zPosition = 0
+//                } completion: { [weak self] _ in
+//                    self?.fancyView.restore()
+//                }
             }
         default:
             break
