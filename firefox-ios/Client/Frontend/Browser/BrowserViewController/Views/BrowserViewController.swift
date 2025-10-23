@@ -1014,21 +1014,16 @@ class BrowserViewController: UIViewController,
 
     // FUN GESTURE!
     private func setupGesture() {
-        addressToolbarContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self,
-                                                                            action: #selector(onFancyGestureRecognize)))
+        bottomContainer.addGestureRecognizer(UIPanGestureRecognizer(target: self,
+                                                                    action: #selector(onFancyGestureRecognize)))
     }
 
     @objc private func onFancyGestureRecognize(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .began:
-            guard let tab = tabManager.selectedTab else { return }
-            screenshotHelper.takeScreenshot(
-                tab,
-                windowUUID: windowUUID,
-                screenshotBounds: view.bounds
-            )
+            fancyView.applyTheme(theme: themeManager.getCurrentTheme(for: currentWindowUUID))
             UIView.animate(withDuration: 0.3) { [self] in
-                fancyView.addImage(image: tabManager.selectedTab?.screenshot ?? .checkmark,
+                fancyView.addImage(url: tabManager.selectedTab?.url?.absoluteString ?? "",
                                    startingPoint: bottomContainer.frame.size.height)
                 fancyView.alpha = 1
                 fancyView.layer.zPosition = 1000
@@ -1039,7 +1034,8 @@ class BrowserViewController: UIViewController,
             fancyView.translate(position: translation)
         case .ended:
             let velocity = gesture.velocity(in: view)
-            if velocity.y < -500 {
+            let translation = gesture.translation(in: view)
+            if velocity.y < -500 || translation.y < -(view.bounds.height / 2.7) {
                 UIView.animate(withDuration: 0.1) { [self] in
                     fancyView.tossPreview()
                 } completion: { [self] _ in
@@ -1051,7 +1047,7 @@ class BrowserViewController: UIViewController,
                             actionType: TabPanelViewActionType.closeTab
                         )
                     )
-                    UIView.animate(withDuration: 0.3) {
+                    UIView.animate(withDuration: 0.3) { [self] in
                         fancyView.alpha = 0.0
                         fancyView.layer.zPosition = 0
                     } completion: { _ in
@@ -1059,14 +1055,15 @@ class BrowserViewController: UIViewController,
                     }
                 }
             } else {
-                // fancyView.restore()
-                navigationHandler?.showTabTray(selectedPanel: .tabs)
-//                UIView.animate(withDuration: 0.3) { [self] in
-//                    fancyView.alpha = 0
-//                    fancyView.layer.zPosition = 0
-//                } completion: { [weak self] _ in
-//                    self?.fancyView.restore()
-//                }
+                if abs(translation.y) < 200 {
+                    navigationHandler?.showTabTray(selectedPanel: .tabs)
+                }
+                UIView.animate(withDuration: 0.3) { [self] in
+                    fancyView.alpha = 0
+                    fancyView.layer.zPosition = 0
+                } completion: { [weak self] _ in
+                    self?.fancyView.restore()
+                }
             }
         default:
             break
