@@ -4184,6 +4184,7 @@ extension BrowserViewController: HomePanelDelegate {
         let tab = tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
         // Select new tab automatically if needed
         guard !selectNewTab else {
+            cancelEditMode()
             tabManager.selectTab(tab)
             return
         }
