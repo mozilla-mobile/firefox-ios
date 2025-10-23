@@ -14,6 +14,7 @@ class UnifiedAdsProviderTests: XCTestCase {
         super.setUp()
         TelemetryContextualIdentifier.setupContextId()
         networking = MockContileNetworking()
+        LegacyFeatureFlagsManager.shared.set(feature: .adsClient, to: false, isDebug: true)
     }
 
     override func tearDown() {

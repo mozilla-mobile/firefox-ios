@@ -4,7 +4,9 @@
 
 import Common
 import Foundation
+import MozillaAppServices
 import Shared
+import Storage
 
 typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
 
@@ -15,19 +17,22 @@ protocol UnifiedAdsProviderInterface: Sendable {
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
     ///   - completion: Returns an array of Tiles, can be empty
-    func fetchTiles(timestamp: Timestamp, completion: @escaping (UnifiedTileResult) -> Void)
+    func fetchTiles(timestamp: Shared.Timestamp, completion: @escaping (UnifiedTileResult) -> Void)
 }
 
 extension UnifiedAdsProviderInterface {
-    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping (UnifiedTileResult) -> Void) {
+    func fetchTiles(
+        timestamp: Shared.Timestamp = Date.now(), completion: @escaping (UnifiedTileResult) -> Void
+    ) {
         fetchTiles(timestamp: timestamp, completion: completion)
     }
 }
 
 final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable, Sendable {
+    private let adsClient: MozAdsClientProtocol
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
-    let maxCacheAge: Timestamp = OneMinuteInMilliseconds * 30
+    let maxCacheAge: Shared.Timestamp = OneMinuteInMilliseconds * 30
     let urlCache: URLCache
     private let logger: Logger
     private let networking: ContileNetworking
@@ -42,10 +47,13 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     init(
-        networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
+        adsClient: MozAdsClientProtocol = RustAdsClient.shared,
+        networking: ContileNetworking = DefaultContileNetwork(
+            with: NetworkUtils.defaultURLSession()),
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {
+        self.adsClient = adsClient
         self.logger = logger
         self.networking = networking
         self.urlCache = urlCache
@@ -61,34 +69,43 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         let placements: [AdPlacement]
     }
 
-    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping (UnifiedTileResult) -> Void) {
-        guard let request = buildRequest() else {
-            completion(.failure(Error.noDataAvailable))
-            return
-        }
-
-        // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
-        var cacheRequest = request
-        cacheRequest.httpBody = nil
-        if let cachedData = findCachedData(for: cacheRequest, timestamp: timestamp, maxCacheAge: maxCacheAge) {
-            decode(data: cachedData, completion: completion)
+    func fetchTiles(
+        timestamp: Shared.Timestamp = Date.now(), completion: @escaping (UnifiedTileResult) -> Void
+    ) {
+        if featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly) {
+            fetchTilesWithAdsClient(completion: completion)
         } else {
-            fetchTiles(request: request, completion: completion)
+            guard let request = buildRequest() else {
+                completion(.failure(Error.noDataAvailable))
+                return
+            }
+
+            // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
+            var cacheRequest = request
+            cacheRequest.httpBody = nil
+            if let cachedData = findCachedData(
+                for: cacheRequest, timestamp: timestamp, maxCacheAge: maxCacheAge) {
+                decode(data: cachedData, completion: completion)
+            } else {
+                fetchTiles(request: request, completion: completion)
+            }
         }
     }
 
     private func buildRequest() -> URLRequest? {
         guard let resourceEndpoint = resourceEndpoint else {
-            logger.log("The resource URL is invalid: \(String(describing: resourceEndpoint))",
-                       level: .warning,
-                       category: .legacyHomepage)
+            logger.log(
+                "The resource URL is invalid: \(String(describing: resourceEndpoint))",
+                level: .warning,
+                category: .homepage)
             return nil
         }
 
         guard let contextId = TelemetryContextualIdentifier.contextId else {
-            logger.log("No context id: \(String(describing: TelemetryContextualIdentifier.contextId))",
-                       level: .warning,
-                       category: .legacyHomepage)
+            logger.log(
+                "No context id: \(String(describing: TelemetryContextualIdentifier.contextId))",
+                level: .warning,
+                category: .homepage)
             return nil
         }
 
@@ -96,7 +113,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             context_id: contextId,
             placements: [
                 AdPlacement(placement: TileOrder.position1.rawValue, count: 1),
-                AdPlacement(placement: TileOrder.position2.rawValue, count: 1)
+                AdPlacement(placement: TileOrder.position2.rawValue, count: 1),
             ]
         )
 
@@ -109,9 +126,10 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             let jsonData = try JSONEncoder().encode(requestBody)
             request.httpBody = jsonData
         } catch {
-            logger.log("The request body is invalid: \(String(describing: requestBody))",
-                       level: .warning,
-                       category: .legacyHomepage)
+            logger.log(
+                "The request body is invalid: \(String(describing: requestBody))",
+                level: .warning,
+                category: .homepage)
             return nil
         }
         return request
@@ -133,6 +151,26 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
         }
     }
 
+    private func fetchTilesWithAdsClient(completion: @escaping (UnifiedTileResult) -> Void) {
+        self.logger.log("Fetching tiles with ads client", level: .info, category: .homepage)
+        let placements = [
+            MozAdsPlacementConfig(placementId: TileOrder.position1.rawValue, iabContent: nil),
+            MozAdsPlacementConfig(placementId: TileOrder.position2.rawValue, iabContent: nil)
+        ]
+        do {
+            let placementsResult = try self.adsClient.requestAds(mozAdConfigs: placements)
+            let unifiedTiles: [UnifiedTile] = placementsResult.map { key, value in
+                UnifiedTile.from(name: key, mozAdsPlacement: value)
+            }
+            self.logger.log("Ads client request successful", level: .info, category: .homepage)
+            // TODO(Regression): we need to implement the cache feature in the Rust component
+            completion(.success(unifiedTiles))
+        } catch {
+            self.logger.log("Ads client request failed", level: .warning, category: .homepage)
+            completion(.failure(Error.noDataAvailable))
+        }
+    }
+
     private func decode(data: Data, completion: @escaping (UnifiedTileResult) -> Void) {
         do {
             let decoder = JSONDecoder()
@@ -147,9 +185,10 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
             }
             completion(.success(tiles))
         } catch let error {
-            self.logger.log("Unable to parse with error: \(error)",
-                            level: .warning,
-                            category: .legacyHomepage)
+            self.logger.log(
+                "Unable to parse with error: \(error)",
+                level: .warning,
+                category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
     }
