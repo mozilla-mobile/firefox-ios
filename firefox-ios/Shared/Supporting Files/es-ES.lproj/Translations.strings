@@ -1,0 +1,18 @@
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
+"Translations.Banner.Close.Button.AccessibilityLabel.v145" = "Cerrar panel de traducciones";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that the page has been translated to another language. %1$@ is the original language and %2$@ is the language that the page was translated to. */
+"Translations.Banner.ConfirmationTitleLabel.v145" = "Traducido de %1$@ a %2$@";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they hit an error or issue when trying to translate the page. */
+"Translations.Banner.ErrorMessage.TitleLabel.v145" = "No se pudo traducir la página";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the loading button that appears when the page is being translated. */
+"Translations.Banner.Loading.Button.AccessibilityLabel.v145" = "Traduciendo página";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the chevron button that navigates the user to the translation settings page. */
+"Translations.Banner.OpenSettings.Button.AccessibilityLabel.v145" = "Abrir preferencias de idioma";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error. */
+"Translations.Banner.RetryButton.v145" = "Reintentar";
+
