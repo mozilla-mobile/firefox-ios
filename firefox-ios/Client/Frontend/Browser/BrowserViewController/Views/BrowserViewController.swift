@@ -1040,22 +1040,22 @@ class BrowserViewController: UIViewController,
         case .ended:
             let velocity = gesture.velocity(in: view)
             if velocity.y < -500 {
-                store.dispatchLegacy(
-                    TabPanelViewAction(
-                        panelType: .tabs,
-                        tabUUID: tabManager.selectedTab?.tabUUID,
-                        windowUUID: windowUUID,
-                        actionType: TabPanelViewActionType.closeTab
-                    )
-                )
                 UIView.animate(withDuration: 0.1) { [self] in
                     fancyView.tossPreview()
-                } completion: { [weak self] _ in
-                    UIView.animate(withDuration: 0.2) {
-                        self?.fancyView.alpha = 0.0
-                        self?.fancyView.layer.zPosition = 0
+                } completion: { [self] _ in
+                    store.dispatchLegacy(
+                        TabPanelViewAction(
+                            panelType: .tabs,
+                            tabUUID: tabManager.selectedTab?.tabUUID,
+                            windowUUID: windowUUID,
+                            actionType: TabPanelViewActionType.closeTab
+                        )
+                    )
+                    UIView.animate(withDuration: 0.3) {
+                        fancyView.alpha = 0.0
+                        fancyView.layer.zPosition = 0
                     } completion: { _ in
-                        self?.fancyView.restore()
+                        fancyView.restore()
                     }
                 }
             } else {

@@ -23,7 +23,8 @@ public class SwipeAwayTabPreview: UIView {
     }
 
     public func translate(position: CGPoint) {
-        screenShotView.transform = .identity.translatedBy(x: position.x, y: position.y).scaledBy(
+        screenShotView.transform = .identity.translatedBy(x: position.x,
+                                                          y: position.y).scaledBy(
             x: 0.6,
             y: 0.6
         )
@@ -57,7 +58,7 @@ public class SwipeAwayTabPreview: UIView {
         screenShotView.layer.cornerRadius = 55.0
         screenShotView.layer.masksToBounds = true
         screenShotView.clipsToBounds = true
-        screenShotView.contentMode = .scaleAspectFill
+        screenShotView.contentMode = .scaleToFill
         screenShotView.backgroundColor = .red
     }
 }
