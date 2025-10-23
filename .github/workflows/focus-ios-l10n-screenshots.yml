@@ -76,13 +76,14 @@ jobs:
         locale: ${{ fromJson(needs.determine-locales.outputs.locales) }}
     uses: ./.github/workflows/focus-ios-l10n-locales.yml
     with:
-      locales: "${{ matrix.locale }}"
+      locale: "${{ matrix.locale }}"
       branch: "${{ inputs.branch }}"
       derived-data: "xcode-l10n-focus-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}"
 
   merge-screenshots:
     name: Merge all screenshots
     needs: generate-screenshots
+    if: success() || failure()
     runs-on: macos-26
     steps:
       - name: Merge screenshots
