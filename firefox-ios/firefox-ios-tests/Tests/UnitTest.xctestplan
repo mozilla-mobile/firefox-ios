@@ -216,7 +216,6 @@
         "TabToolbarHelperTests\/testTelemetryForSiteMenu()",
         "TelemetryWrapperTests\/test_error_cpuExceptionIsCalled()",
         "TelemetryWrapperTests\/test_loginWithEmail_GleanIsCalled()",
-        "TermsOfServiceTelemetryTests",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
         "VersionSettingTests\/testCopyAppVersion()"
