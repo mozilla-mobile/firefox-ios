@@ -5,7 +5,7 @@
 import Foundation
 import SafariServices
 
-class Utils {
+final class Utils {
     static func reloadSafariContentBlocker() {
         let identifier = AppInfo.contentBlockerBundleIdentifier
         SFContentBlockerManager.reloadContentBlocker(withIdentifier: identifier) { error in

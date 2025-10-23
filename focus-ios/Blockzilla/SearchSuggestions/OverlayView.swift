@@ -17,7 +17,7 @@ protocol OverlayViewDelegate: AnyObject {
     func overlayView(_ overlayView: OverlayView, didTapArrowText text: String)
 }
 
-class IndexedInsetButton: InsetButton {
+final class IndexedInsetButton: InsetButton {
     private var index = 0
     func setIndex(_ i: Int) {
         index = i
@@ -27,7 +27,7 @@ class IndexedInsetButton: InsetButton {
     }
 }
 
-class OverlayView: UIView {
+final class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
     private let addToAutocompleteButton = InsetButton()
     private var searchQuery = ""

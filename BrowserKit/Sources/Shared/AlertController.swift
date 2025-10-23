@@ -5,7 +5,7 @@
 import UIKit
 
 // Subclassed to support accessibility identifiers
-public class AlertController: UIAlertController {
+public final class AlertController: UIAlertController {
     private var accessibilityIdentifiers = [UIAlertAction: String]()
 
     public func addAction(_ action: UIAlertAction, accessibilityIdentifier: String) {
