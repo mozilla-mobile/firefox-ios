@@ -33,6 +33,9 @@ public class SwipeAwayTabPreview: UIView, ThemeApplicable {
         let shouldShowRemoveOverlay = position.y < -(bounds.size.height / 2.7)
         print("FF: postion: \(position.y), shouldShowRemoveOverlay: \(shouldShowRemoveOverlay)")
         let shouldAnimateOverlay = deleteOverlay.alpha != (shouldShowRemoveOverlay ? 1 : 0)
+        if shouldAnimateOverlay {
+            addHaptics()
+        }
         UIView.animate(withDuration: 0.15) {
             self.deleteOverlay.alpha = shouldShowRemoveOverlay ? 1 : 0
         }
@@ -41,6 +44,12 @@ public class SwipeAwayTabPreview: UIView, ThemeApplicable {
             x: 0.7,
             y: 0.7
         )
+    }
+
+    private func addHaptics() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.prepare()
+        impactFeedback.impactOccurred()
     }
 
     public func restore() {
