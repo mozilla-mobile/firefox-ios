@@ -1027,10 +1027,10 @@ class BrowserViewController: UIViewController,
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // allow only your two pans to work together
         if (gestureRecognizer == horizontalPan && otherGestureRecognizer == verticalPan) ||
-           (gestureRecognizer == verticalPan && otherGestureRecognizer == horizontalPan) {
+            (gestureRecognizer == verticalPan && otherGestureRecognizer == horizontalPan) {
             return true
         }
         return false
