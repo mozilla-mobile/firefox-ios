@@ -1059,7 +1059,7 @@ class BrowserViewController: UIViewController,
                     }
                 }
             } else {
-                //fancyView.restore()
+                // fancyView.restore()
                 navigationHandler?.showTabTray(selectedPanel: .tabs)
 //                UIView.animate(withDuration: 0.3) { [self] in
 //                    fancyView.alpha = 0
