@@ -219,7 +219,7 @@ open class KeyboardHelper: NSObject, Notifiable {
 }
 
 // MARK: - WeakKeyboardDelegate
-private class WeakKeyboardDelegate {
+private final class WeakKeyboardDelegate {
     weak var delegate: KeyboardHelperDelegate?
 
     init(_ delegate: KeyboardHelperDelegate) {

@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
+final class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
     enum AboutSection: CaseIterable {
         case aboutHeader
         case aboutCategories
@@ -188,7 +188,7 @@ private protocol AboutHeaderViewDelegate: AnyObject {
     func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView)
 }
 
-private class AboutHeaderView: UIView {
+private final class AboutHeaderView: UIView {
     weak var delegate: AboutHeaderViewDelegate?
 
     private lazy var logo: UIImageView = {

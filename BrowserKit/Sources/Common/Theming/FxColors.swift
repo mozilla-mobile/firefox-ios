@@ -7,7 +7,7 @@ import UIKit
 // This class contains all official Firefox colors
 // referenced in https://www.figma.com/file/DyIIHvRgqt2EXfAVn1gV9c/Firefox-Colors?node-id=90%3A0
 // You should never call those colors directly, they should only be called from a theme within the theme manager.
-class FXColors {
+final class FXColors {
     // MARK: - Black & White
     static let Black = UIColor(rgb: 0x000000)
     static let White = UIColor(rgb: 0xffffff)

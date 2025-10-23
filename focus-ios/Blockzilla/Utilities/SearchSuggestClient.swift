@@ -8,7 +8,7 @@ let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
-class SearchSuggestClient {
+final class SearchSuggestClient {
     private var request: NSMutableURLRequest?
 
     func getSuggestions(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {

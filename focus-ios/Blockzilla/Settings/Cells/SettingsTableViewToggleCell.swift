@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SettingsTableViewToggleCell: SettingsTableViewCell {
+final class SettingsTableViewToggleCell: SettingsTableViewCell {
     private let newLabel = SmartLabel()
     var navigationController: UINavigationController?
 

@@ -5,7 +5,7 @@
 import Foundation
 import Combine
 
-public class OnboardingEventsHandlerV1: OnboardingEventsHandling {
+public final class OnboardingEventsHandlerV1: OnboardingEventsHandling {
     private let setShownTips: (Set<ToolTipRoute>) -> Void
 
     @Published public var route: ToolTipRoute?

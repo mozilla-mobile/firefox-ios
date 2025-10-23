@@ -4,7 +4,7 @@
 
 import UIKit
 
-class TipsPageViewController: UIViewController {
+final class TipsPageViewController: UIViewController {
     enum State {
         case showTips
         case showEmpty(controller: UIViewController)
