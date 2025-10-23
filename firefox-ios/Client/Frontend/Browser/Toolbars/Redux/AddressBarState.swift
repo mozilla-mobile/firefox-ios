@@ -29,6 +29,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     let isEmptySearch: Bool
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
     let alternativeSearchEngine: SearchEngineModel?
+    let translationConfiguration: TranslationConfiguration?
 
     private static let cancelEditAction = ToolbarActionConfiguration(
         actionType: .cancelEdit,
@@ -80,6 +81,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: false,
             readerModeState: nil,
             canSummarize: false,
+            translationConfiguration: nil,
             didStartTyping: false,
             isEmptySearch: true,
             alternativeSearchEngine: nil
@@ -103,6 +105,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
          isLoading: Bool,
          readerModeState: ReaderModeState?,
          canSummarize: Bool,
+         translationConfiguration: TranslationConfiguration?,
          didStartTyping: Bool,
          isEmptySearch: Bool,
          alternativeSearchEngine: SearchEngineModel?) {
@@ -126,6 +129,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         self.isEmptySearch = isEmptySearch
         self.alternativeSearchEngine = alternativeSearchEngine
         self.canSummarize = canSummarize
+        self.translationConfiguration = translationConfiguration
     }
 
     // swiftlint:disable:next closure_body_length
@@ -231,6 +235,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: false,
             readerModeState: nil,
             canSummarize: false,
+            translationConfiguration: nil,
             didStartTyping: false,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -258,6 +263,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -290,6 +296,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: toolbarAction.readerModeState,
             canSummarize: toolbarAction.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -323,6 +330,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: toolbarAction.isLoading ?? state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -359,6 +367,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: toolbarAction.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -392,6 +401,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -425,6 +435,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -458,6 +469,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -491,6 +503,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -523,6 +536,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -557,6 +571,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -598,6 +613,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -630,6 +646,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -658,6 +675,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -688,6 +706,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -718,6 +737,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: true,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -748,6 +768,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: false,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -775,6 +796,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: false,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -802,6 +824,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: true,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -831,6 +854,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: selectedSearchEngine
@@ -858,6 +882,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: nil
@@ -883,6 +908,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: state.isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -949,6 +975,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
             let shareAction = shareAction(enabled: isLoading == false,
                                           hasAlternativeLocationColor: hasAlternativeLocationColor)
             actions.append(shareAction)
+
+            // TODO: FXIOS-13930 - Add loading and active mode to the translation icon
+            // Check if action has an updated configuration, otherwise default to state.
+            let canTranslateFromAction = action.translationConfiguration?.canTranslate ?? false
+            let canTranslateFromState = addressBarState.translationConfiguration?.canTranslate ?? false
+            if canTranslateFromAction || canTranslateFromState {
+                let translateAction = translateAction(
+                    enabled: isLoading == false,
+                    hasAlternativeLocationColor: hasAlternativeLocationColor
+                )
+                actions.append(translateAction)
+            }
         }
 
         return actions
@@ -1190,5 +1228,22 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yHint: .TabLocationReloadAccessibilityHint,
             a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
             a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+    }
+
+    // Sets up translation icon on the toolbar
+    // We handle tapping differently for translation button by showing a loading icon, so no highlighted color is needed.
+    private static func translateAction(
+        enabled: Bool,
+        hasAlternativeLocationColor: Bool
+    ) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .translate,
+            iconName: StandardImageIdentifiers.Medium.translate,
+            isEnabled: enabled,
+            hasCustomColor: !hasAlternativeLocationColor,
+            hasHighlightedColor: false,
+            a11yLabel: .Toolbars.Translation.ButtonInactiveAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.translateButton
+        )
     }
 }
