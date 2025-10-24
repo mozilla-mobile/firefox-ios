@@ -46,26 +46,26 @@ final class BookmarksViewController: SiteTableViewController,
         case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
             if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+                bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
             }
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
             }
             bottomRightButton.isEnabled = true
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditModeInvalidField):
             bottomRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+                bottomRightButton.tintColor = currentTheme().colors.textAccent
             }
             bottomRightButton.isEnabled = false
             return [flexibleSpace, bottomRightButton]

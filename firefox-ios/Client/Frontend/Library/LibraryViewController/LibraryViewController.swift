@@ -302,21 +302,21 @@ class LibraryViewController: UIViewController, Themeable {
         case .bookmarks(state: .itemEditMode):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
             if #available(iOS 26.0, *) {
-                topRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+                topRightButton.tintColor = currentTheme().colors.textAccent
             }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .bookmarks(state: .itemEditModeInvalidField):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
             if #available(iOS 26.0, *) {
-                topRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+                topRightButton.tintColor = currentTheme().colors.textAccent
             }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = false
         default:
             topRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
-                topRightButton.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+                topRightButton.tintColor = currentTheme().colors.textPrimary
             }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
@@ -372,7 +372,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func setupToolBarAppearance() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1
@@ -385,9 +385,9 @@ class LibraryViewController: UIViewController, Themeable {
 
     private func updateSegmentControl() {
         guard librarySegmentControl.numberOfSegments > 0 else { return }
-
+        
         let panelState = getCurrentPanelState()
-
+        
         switch panelState {
         case .bookmarks(state: .inFolderEditMode):
             let affectedOptions: [LibraryPanelType] = [.history, .downloads, .readingList]
@@ -401,6 +401,10 @@ class LibraryViewController: UIViewController, Themeable {
         }
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.getCurrentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
@@ -408,7 +412,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        let theme = currentTheme()
         view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
