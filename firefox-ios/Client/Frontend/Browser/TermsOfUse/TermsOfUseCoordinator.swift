@@ -28,21 +28,28 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private let notificationCenter: NotificationProtocol
+    private let nimbus: FxNimbus
 
     private var presentedVC: TermsOfUseViewController?
     private let prefs: Prefs
     private let hoursSinceDismissedTerms = 120 // 120 hours (5 days)
     private let debugMinutesSinceDismissed = 1 // 1 minute used for testing
 
+    private var maxRemindersCount: Int {
+        return nimbus.features.touFeature.value().maxRemindersCount
+    }
+
     init(windowUUID: WindowUUID,
          router: Router,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         prefs: Prefs) {
+         prefs: Prefs,
+         nimbus: FxNimbus = FxNimbus.shared) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.prefs = prefs
+        self.nimbus = nimbus
         super.init(router: router)
     }
 
@@ -93,12 +100,16 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
         let hasAcceptedTermsOfService = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
         guard !hasAcceptedTermsOfUse && !hasAcceptedTermsOfService else { return false }
 
-        // 3. Check if this is the first time it is shown
+        // 3. Check reminders count limit from Nimbus
+        let currentRemindersCount = prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
+        guard currentRemindersCount < maxRemindersCount else { return false }
+
+        // 4. Check if this is the first time it is shown
         // Show on fresh install or next app open for existing users
         let hasShownFirstTime = prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
         guard hasShownFirstTime else { return true }
 
-        // 4. Check if user dismissed and timeout period expired
+        // 5. Check if user dismissed and timeout period expired
         guard let dismissedTimestamp = prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) else {
             // No dismissal record - user hasn't explicitly dismissed, so show it
             return true
@@ -106,7 +117,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
         let dismissedDate = Date.fromTimestamp(dismissedTimestamp)
 
-        // 5. After timeout period show on any trigger context
+        // 6. After timeout period show on any trigger context
         return hasTimeoutPeriodElapsed(since: dismissedDate)
     }
 
