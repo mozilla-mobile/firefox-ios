@@ -6,9 +6,8 @@ import UIKit
 
 /// Adds an option to share a tab to another synced device.
 class SendToDeviceActivity: CustomAppActivity {
-    // Send to Device is only available for URLs that are not files
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        return !url.isFileURL
+        return true
     }
 
     override func prepare(withActivityItems activityItems: [Any]) {}

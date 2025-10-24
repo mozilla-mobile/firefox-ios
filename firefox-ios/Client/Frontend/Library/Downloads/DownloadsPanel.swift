@@ -158,7 +158,7 @@ class DownloadsPanel: UIViewController,
 
     private func shareDownloadedFile(_ downloadedFile: DownloadedFile, indexPath: IndexPath) {
         let shareActivityViewController = ShareManager.createActivityViewController(
-            shareType: .file(url: downloadedFile.path),
+            shareType: .downloadedFile(url: downloadedFile.path),
             shareMessage: nil,
             completionHandler: { _, _ in }
         )

@@ -90,13 +90,13 @@ class ShareSheetCoordinator: BaseCoordinator,
         // be necessary, but this JS alert code is fragile right now so let's not touch it until FXIOS-10334 is underway.
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
-            // Cannot send file:// URLs to another synced device
-            guard !shareType.wrappedURL.isFileURL else {
-                dequeueNotShownJSAlert()
-                return
-            }
-
             switch shareType {
+            case let .file(url: url):
+                if url.isFileURL, let relatedTabURL = relatedTab?.url {
+                    showSendToDevice(url: relatedTabURL, relatedTab: nil)
+                } else {
+                    dequeueNotShownJSAlert()
+                }
             case let .tab(_, tab):
                 showSendToDevice(url: shareType.wrappedURL, relatedTab: tab)
             default:

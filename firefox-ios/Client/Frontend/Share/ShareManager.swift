@@ -60,6 +60,13 @@ class ShareManager: NSObject {
                 activityItems.append(TitleSubtitleActivityItemProvider(shareMessage: explicitShareMessage))
             }
 
+        case .downloadedFile(let downloadedFileURL):
+            activityItems.append(URLActivityItemProvider(url: downloadedFileURL))
+
+            if let explicitShareMessage {
+                activityItems.append(TitleSubtitleActivityItemProvider(shareMessage: explicitShareMessage))
+            }
+
         case .site(let siteURL):
             activityItems.append(URLActivityItemProvider(url: siteURL))
 
@@ -122,11 +129,16 @@ class ShareManager: NSObject {
 
     @MainActor
     private static func getApplicationActivities(forShareType shareType: ShareType) -> [UIActivity] {
-        var appActivities = [UIActivity]()
+        switch shareType {
+        case .downloadedFile(let url):
+            return []
+        default:
+            var appActivities = [UIActivity]()
 
-        // Only acts on non-file URLs to send links to synced devices. Will ignore file URLs it can't handle.
-        appActivities.append(SendToDeviceActivity(activityType: .sendToDevice, url: shareType.wrappedURL))
+            // Only acts on non-file URLs to send links to synced devices. Will ignore file URLs it can't handle.
+            appActivities.append(SendToDeviceActivity(activityType: .sendToDevice, url: shareType.wrappedURL))
 
-        return appActivities
+            return appActivities
+        }
     }
 }

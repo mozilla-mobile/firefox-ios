@@ -15,6 +15,7 @@ import Foundation
 ///            available.
 enum ShareType {
     case file(url: URL)
+    case downloadedFile(url: URL)
     case site(url: URL)
     case tab(url: URL, tab: any ShareTab)
 
@@ -22,6 +23,8 @@ enum ShareType {
     var wrappedURL: URL {
         switch self {
         case let .file(url):
+            return url
+        case let .downloadedFile(url):
             return url
         case let .site(url):
             return url
@@ -35,6 +38,8 @@ enum ShareType {
         switch self {
         case .file:
             return "file"
+        case .downloadedFile:
+            return "downloadedFile"
         case .site:
             return "site"
         case .tab:
