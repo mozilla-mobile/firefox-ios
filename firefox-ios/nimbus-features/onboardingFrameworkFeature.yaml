@@ -33,7 +33,7 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enableModernUi: false
+          enableModernUi: true
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"

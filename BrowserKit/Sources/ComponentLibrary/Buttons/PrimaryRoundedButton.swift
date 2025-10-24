@@ -34,7 +34,11 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        configuration = UIButton.Configuration.filled()
+        if #available(iOS 26.0, *) {
+            configuration = .prominentGlass()
+        } else {
+            configuration = UIButton.Configuration.filled()
+        }
         titleLabel?.adjustsFontForContentSizeCategory = true
 
         // Fix for https://openradar.appspot.com/FB12472792

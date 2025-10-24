@@ -23,9 +23,9 @@ class OnboardingInstructionPopupViewController: UIViewController,
         static let topPaddingPhone: CGFloat = 30
         static let topPaddingPad: CGFloat = 60
         static let leadingPaddingPhone: CGFloat = 40
-        static let leadingPaddingPad: CGFloat = 200
+        static let leadingPaddingPad: CGFloat = 100
         static let trailingPaddingPhone: CGFloat = 40
-        static let trailingPaddingPad: CGFloat = 200
+        static let trailingPaddingPad: CGFloat = 100
         static let bottomPaddingPhone: CGFloat = 20
         static let bottomPaddingPad: CGFloat = 60
     }
@@ -257,7 +257,11 @@ class OnboardingInstructionPopupViewController: UIViewController,
         // Call applyTheme() on primaryButton to let it handle theme-specific styling
         primaryButton.applyTheme(theme: theme)
 
-        view.backgroundColor = theme.colors.layer1
+        if #available(iOS 26.0, *) {
+            view.backgroundColor = .clear
+        } else {
+            view.backgroundColor = theme.colors.layer1
+        }
     }
 }
 
