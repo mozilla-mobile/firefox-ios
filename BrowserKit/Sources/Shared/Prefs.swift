@@ -33,6 +33,7 @@ public struct PrefsKeys {
     public static let TermsOfUseImpressionCount = "TermsOfUseImpressionCount"
     public static let TermsOfUseRemindMeLaterCount = "TermsOfUseRemindMeLaterCount"
     public static let TermsOfUseDismissCount = "TermsOfUseDismissCount"
+    public static let TermsOfUseRemindersCount = "TermsOfUseRemindersCount"
     public static let TermsOfUseRemindMeLaterTapDate = "TermsOfUseRemindMeLaterTapDate"
     public static let TermsOfUseLearnMoreTapDate = "TermsOfUseLearnMoreTapDate"
     public static let TermsOfUsePrivacyNoticeTapDate = "TermsOfUsePrivacyNoticeTapDate"

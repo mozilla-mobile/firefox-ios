@@ -71,13 +71,13 @@ class BaseTestCase: XCTestCase {
         let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
         if icon.exists {
             icon.press(forDuration: 1.5)
-            springboard.buttons["Remove App"].waitAndTap()
+            springboard.buttons["Remove App"].tapWithRetry()
             mozWaitForElementToNotExist(springboard.buttons["Remove App"])
             mozWaitForElementToExist(springboard.alerts.firstMatch)
-            springboard.alerts.buttons["Delete App"].waitAndTap()
+            springboard.alerts.buttons["Delete App"].tapWithRetry()
             mozWaitForElementToNotExist(springboard.alerts.buttons["Delete App"])
             mozWaitForElementToExist(springboard.alerts.firstMatch)
-            springboard.alerts.buttons["Delete"].waitAndTap()
+            springboard.alerts.buttons["Delete"].tapWithRetry()
         }
     }
 
@@ -457,7 +457,7 @@ class BaseTestCase: XCTestCase {
 
     func openNewTabAndValidateURLisPaste(url: String) {
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
-        app.buttons["Cancel"].waitAndTap()
+        app.buttons["Cancel"].tapWithRetry()
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         let pasteAction = app.tables.buttons[AccessibilityIdentifiers.Photon.pasteAction]
         if !iPad() {
