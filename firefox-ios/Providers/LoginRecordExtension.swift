@@ -6,6 +6,7 @@ import Storage
 import AuthenticationServices
 
 import struct MozillaAppServices.Login
+import Shared
 
 extension LoginRecord {
     public var passwordCredentialIdentity: ASPasswordCredentialIdentity {
