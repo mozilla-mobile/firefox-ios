@@ -111,7 +111,9 @@ struct CustomUserAgentConstant {
     ]
 
     static let customDesktopUAForDomain = [
+        // TODO: FXIOS-8027, FXIOS-11230, FXIOS-13891 PayPal buttons open blank tabs
         "paypal.com": defaultMobileUA,
+        // FXIOS-10251: Do not appear as desktop/Safari for firefox.com/pair
         "firefox.com": defaultMobileUA
     ]
 }
