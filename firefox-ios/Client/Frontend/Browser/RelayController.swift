@@ -19,6 +19,7 @@ protocol RelayControllerProtocol {
     func emailFocusShouldDisplayRelayPrompt(url: String) -> Bool
 }
 
+@MainActor
 final class RelayController: RelayControllerProtocol {
     private enum RelayOAuthClientID: String {
         case release = "7f1a38400a0df47b"
