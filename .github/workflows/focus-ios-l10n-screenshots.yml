@@ -83,7 +83,7 @@ jobs:
   merge-screenshots:
     name: Merge all screenshots
     needs: generate-screenshots
-    if: success() || failure()
+    if: always()
     runs-on: macos-26
     steps:
       - name: Merge screenshots
