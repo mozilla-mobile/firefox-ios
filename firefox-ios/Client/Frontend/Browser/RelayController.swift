@@ -16,6 +16,7 @@ protocol RelayControllerProtocol {
     ///    - Allow and Block lists
     /// - Parameter String: The website URL.
     /// - Returns: `true` if the website is valid for Relay, after checking block/allow lists.
+    @MainActor
     func emailFocusShouldDisplayRelayPrompt(url: String) -> Bool
 }
 
