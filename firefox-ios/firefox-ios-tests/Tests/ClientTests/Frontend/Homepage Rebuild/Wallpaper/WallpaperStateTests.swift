@@ -21,6 +21,7 @@ final class WallpaperStateTests: XCTestCase {
         XCTAssertNil(initialState.wallpaperConfiguration.logoTextColor)
     }
 
+    @MainActor
     func test_wallpaperDidInitialize_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
@@ -50,6 +51,7 @@ final class WallpaperStateTests: XCTestCase {
         XCTAssertEqual(newState.wallpaperConfiguration.logoTextColor, .black)
     }
 
+    @MainActor
     func test_wallpaperDidChange_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()

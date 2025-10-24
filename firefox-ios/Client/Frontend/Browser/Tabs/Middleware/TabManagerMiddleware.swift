@@ -906,6 +906,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func provideProfileImage(forWindow windowUUID: WindowUUID, accountData: AccountData) {
         if let iconURL = accountData.iconURL {
             GeneralizedImageFetcher().getImageFor(url: iconURL) { image in
