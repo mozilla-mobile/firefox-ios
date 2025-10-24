@@ -418,7 +418,6 @@ class NavigationTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
-    // FIXME: FXIOS-13888 Test disabled in the SmokeTest plan; it is failing on some Bitrise PRs but passes locally.
     func testSSL() {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -426,8 +425,10 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
         XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
         app.buttons["Go Back"].waitAndTap()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.openNewURL(urlString: "https://expired.badssl.com/")
+        mozWaitForElementToNotExist(app.webViews.otherElements["This Connection is Untrusted"])
+        // SearchbarCell may not appear, so open a new tab just to be sure.
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL("https://expired.badssl.com/")
         mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
         XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
         app.buttons["Advanced"].waitAndTap()
@@ -608,11 +609,7 @@ class NavigationTest: BaseTestCase {
         // Note: Additional matches may also appear if the external website updates.
         XCTAssertEqual(app.links.matching(identifier: "SauceDemo.com").count, 1, "Too many matches")
 
-        if #available(iOS 18, *) {
-            scrollToElement(app.links["SauceDemo.com"].firstMatch)
-        } else {
-            app.swipeUp()
-        }
+        app.swipeUp()
         app.links["SauceDemo.com"].firstMatch.tap(force: true)
         waitUntilPageLoad()
         // Sometimes first tap is not working on iPad
@@ -625,7 +622,7 @@ class NavigationTest: BaseTestCase {
         }
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
-        XCTAssertEqual(tabsButton.value as? String, "1", "Total number of opened tabs should be 1")
+        XCTAssertEqual(tabsButton.value as? String, "2", "Total number of opened tabs should be 2")
     }
 
     private func openContextMenuForArticleLink() {

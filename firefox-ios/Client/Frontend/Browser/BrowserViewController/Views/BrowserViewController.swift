@@ -1678,15 +1678,15 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustBottomSearchBarForKeyboard() {
+        /// On iOS 26+, we use `UIKeyboardLayoutGuide` (https://developer.apple.com/documentation/uikit/uikeyboardlayoutguide)
+        /// to avoid keyboard frame calculation issues. The legacy `keyboardFrameEndUserInfoKey` API returns
+        /// incorrect keyboard frames when autofill displays suggested credentials above the keyboard.
+        /// It  might be an apple bug.
+        /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
+        let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
+
         let keyboardHeight = keyboardState?.intersectionHeightForView(view)
         let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
-        store.dispatchLegacy(
-            ToolbarAction(
-                shouldShowKeyboard: isKeyboardVisible,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.keyboardStateDidChange
-            )
-        )
 
         guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
             overKeyboardContainer.removeKeyboardSpacer()
@@ -1703,7 +1703,8 @@ class BrowserViewController: UIViewController,
         let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
             view: tabManager.selectedTab?.webView?.accessoryView
         )
-        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: keyboardHeight-toolbarHeightOffset)
+        let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight-toolbarHeightOffset)
 
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
@@ -4202,6 +4203,7 @@ extension BrowserViewController: HomePanelDelegate {
         let tab = tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
         // Select new tab automatically if needed
         guard !selectNewTab else {
+            cancelEditMode()
             tabManager.selectTab(tab)
             return
         }
@@ -4692,6 +4694,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        store.dispatchLegacy(
+            ToolbarAction(
+                shouldShowKeyboard: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.keyboardStateDidChange
+            )
+        )
         keyboardState = nil
         updateViewConstraints()
 

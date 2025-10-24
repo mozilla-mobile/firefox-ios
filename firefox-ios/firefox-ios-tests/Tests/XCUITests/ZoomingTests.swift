@@ -129,9 +129,10 @@ final class ZoomingTests: BaseTestCase {
         } else if XCUIDevice.shared.orientation == .landscapeLeft && userState.isPrivate == false {
             homepageSearchBar.tapIfExists()
             navigator.nowAt(BrowserTab)
+        } else if iPad() && userState.isPrivate == false {
+            navigator.nowAt(BrowserTab)
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            navigator.nowAt(BrowserTab)
         }
         navigator.openURL(websites[index])
         waitUntilPageLoad()

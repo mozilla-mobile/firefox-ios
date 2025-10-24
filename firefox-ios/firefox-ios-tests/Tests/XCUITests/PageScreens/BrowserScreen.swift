@@ -14,6 +14,7 @@ final class BrowserScreen {
     }
 
     private var addressBar: XCUIElement { sel.ADDRESS_BAR.element(in: app) }
+    private var cancelButton: XCUIElement { sel.CANCEL_BUTTON_URL_BAR.element(in: app) }
 
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
@@ -154,5 +155,30 @@ final class BrowserScreen {
     func tapOnAddressBar() {
         let urlElement = addressBar
         urlElement.waitAndTap()
+    }
+
+    func assertCancelButtonOnUrlBarExist() {
+        BaseTestCase().mozWaitForElementToExist(cancelButton)
+    }
+
+    func assertPrivateBrowsingLabelExist() {
+        let privateBrowsing = sel.PRIVATE_BROWSING.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(privateBrowsing)
+    }
+
+    func tapCancelButtonOnUrlBarExist() {
+        cancelButton.waitAndTap()
+    }
+
+    func tapCancelButtonIfExist() {
+        sel.CANCEL_BUTTON.element(in: app).tapIfExists()
+    }
+
+    func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.LINK_RFC_2606.element(in: app), timeout: timeout)
+    }
+
+    func addressToolbarContainValue(value: String) {
+        BaseTestCase().mozWaitForValueContains(addressBar, value: value)
     }
 }
