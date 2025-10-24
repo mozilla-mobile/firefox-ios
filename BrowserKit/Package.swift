@@ -174,7 +174,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "MenuKitTests",
-            dependencies: ["MenuKit"]),
+            dependencies: ["MenuKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]
+        ),
         .target(
             name: "SummarizeKit",
             dependencies: [
