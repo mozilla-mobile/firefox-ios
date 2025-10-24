@@ -385,9 +385,9 @@ class LibraryViewController: UIViewController, Themeable {
 
     private func updateSegmentControl() {
         guard librarySegmentControl.numberOfSegments > 0 else { return }
-        
+
         let panelState = getCurrentPanelState()
-        
+
         switch panelState {
         case .bookmarks(state: .inFolderEditMode):
             let affectedOptions: [LibraryPanelType] = [.history, .downloads, .readingList]
