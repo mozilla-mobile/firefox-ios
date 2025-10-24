@@ -164,3 +164,36 @@ struct ToggleStyle: ViewModifier {
         }
     }
 }
+
+struct CreditCardViewButtonStyle: ViewModifier {
+    let isEnabled: Bool
+    let theme: Theme
+    let buttonState: CreditCardRightBarButton
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.foregroundColor(getColorForiOS26())
+        } else {
+            content.foregroundColor(getColorForLegacyiOS())
+        }
+    }
+
+    private func getColorForiOS26() -> Color {
+        if !isEnabled {
+            return Color(theme.colors.textSecondary)
+        }
+
+        switch buttonState {
+        case .edit:
+            return Color(theme.colors.textPrimary)
+        default:
+            return Color(theme.colors.textAccent)
+        }
+    }
+
+    private func getColorForLegacyiOS() -> Color {
+        return isEnabled
+            ? Color(theme.colors.actionPrimary)
+            : Color(theme.colors.textSecondary)
+    }
+}

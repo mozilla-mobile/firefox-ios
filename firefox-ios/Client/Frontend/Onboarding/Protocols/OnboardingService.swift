@@ -290,7 +290,11 @@ final class OnboardingService: FeatureFlaggable {
             style: .plain,
             target: self,
             action: #selector(dismissSelector))
-        buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+        if #available(iOS 26.0, *) {
+            buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+        } else {
+            buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+        }
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
 
