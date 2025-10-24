@@ -195,6 +195,14 @@ final class AddressToolbarContainer: UIView,
         let isEditingAddress = state?.addressToolbar.isEditing == true
         let isBottomToolbar = state?.toolbarPosition == .bottom
 
+        store.dispatchLegacy(
+            ToolbarAction(
+                shouldShowKeyboard: hasAccessoryView,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.keyboardStateDidChange
+            )
+        )
+
         let shouldAdjustForAccessory = hasAccessoryView
         && !isEditingAddress
         && isBottomToolbar
