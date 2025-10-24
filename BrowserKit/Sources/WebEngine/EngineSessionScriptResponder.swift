@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 /// The object responsible to respond to events thrown from scripts added to the `EngineSession`
-class EngineSessionScriptResponder: ContentScriptDelegate {
+final class EngineSessionScriptResponder: ContentScriptDelegate {
     weak var session: EngineSession?
 
     func contentScriptDidSendEvent(_ event: ScriptEvent) {

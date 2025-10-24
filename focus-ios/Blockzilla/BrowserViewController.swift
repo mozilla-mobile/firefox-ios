@@ -13,7 +13,7 @@ import Onboarding
 import AppShortcuts
 import SwiftUI
 
-class BrowserViewController: UIViewController {
+final class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
     private lazy var trackingProtectionManager = TrackingProtectionManager(

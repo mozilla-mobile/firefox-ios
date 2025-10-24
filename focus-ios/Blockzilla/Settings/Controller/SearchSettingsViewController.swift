@@ -8,7 +8,7 @@ protocol SearchSettingsViewControllerDelegate: AnyObject {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine)
 }
 
-class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     weak var delegate: SearchSettingsViewControllerDelegate?
 
     private let searchEngineManager: SearchEngineManager

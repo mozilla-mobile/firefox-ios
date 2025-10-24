@@ -6,7 +6,7 @@ import Foundation
 import Kingfisher
 import Common
 
-class DefaultSiteImageDownloader: ImageDownloader, @unchecked Sendable, SiteImageDownloader {
+final class DefaultSiteImageDownloader: ImageDownloader, @unchecked Sendable, SiteImageDownloader {
     var timeoutDelay: Double { return 10 }
     var logger: Logger
 

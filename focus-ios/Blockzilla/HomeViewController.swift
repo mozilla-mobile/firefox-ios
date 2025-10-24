@@ -11,7 +11,7 @@ protocol HomeViewControllerDelegate: AnyObject {
     func homeViewControllerDidTouchEmptyArea(_ controller: HomeViewController)
 }
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     weak var delegate: HomeViewControllerDelegate?
     private lazy var tipView: UIView = {
         let tipView = UIView()

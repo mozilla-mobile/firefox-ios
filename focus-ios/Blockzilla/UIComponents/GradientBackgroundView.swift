@@ -4,7 +4,7 @@
 
 import UIKit
 
-class GradientBackgroundView: UIView {
+final class GradientBackgroundView: UIView {
     init(alpha: Float = 0.1, startPoint: CGPoint = CGPoint(x: -0.2, y: 0), endPoint: CGPoint = CGPoint(x: 1.2, y: 1), background: UIColor = .gradientBackground) {
         super.init(frame: CGRect.zero)
 
@@ -39,7 +39,7 @@ class GradientBackgroundView: UIView {
     }
 }
 
-class IntroCardGradientBackgroundView: UIView {
+final class IntroCardGradientBackgroundView: UIView {
     init(alpha: Float = 1) {
         super.init(frame: CGRect.zero)
 

@@ -4,7 +4,7 @@
 
 import WebKit
 
-class WKErrorPageHandler: WKInternalSchemeResponse {
+final class WKErrorPageHandler: WKInternalSchemeResponse {
     static let path = WKInternalURL.Path.errorpage.rawValue
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
