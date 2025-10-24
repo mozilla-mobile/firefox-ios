@@ -32,6 +32,7 @@ struct ToolbarAction: Action {
     let isLoading: Bool?
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
+    let shouldShowKeyboard: Bool?
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
 
@@ -58,6 +59,7 @@ struct ToolbarAction: Action {
          isLoading: Bool? = nil,
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
+         shouldShowKeyboard: Bool? = nil,
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          windowUUID: WindowUUID,
@@ -86,6 +88,7 @@ struct ToolbarAction: Action {
         self.isLoading = isLoading
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
+        self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
         self.middleButton = middleButton
@@ -105,7 +108,7 @@ enum ToolbarActionType: ActionType {
     case didStartEditingUrl
     case cancelEditOnHomepage
     case cancelEdit
-    case hideKeyboard
+    case keyboardStateDidChange
     case animationStateChanged
     case readerModeStateChanged
     case backForwardButtonStateChanged

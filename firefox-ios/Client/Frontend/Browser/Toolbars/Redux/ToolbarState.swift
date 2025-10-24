@@ -139,7 +139,7 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.cancelEditOnHomepage,
-            ToolbarActionType.hideKeyboard, ToolbarActionType.websiteLoadingStateDidChange,
+            ToolbarActionType.keyboardStateDidChange, ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,

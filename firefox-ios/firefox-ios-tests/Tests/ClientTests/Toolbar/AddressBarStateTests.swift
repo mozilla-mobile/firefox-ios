@@ -689,7 +689,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
 }
 
-    func test_hideKeyboardAction_returnsExpectedState() {
+    func test_keyboardStateDidChangedAction_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
@@ -699,8 +699,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(
             initialState,
             ToolbarAction(
+                shouldShowKeyboard: false,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.hideKeyboard
+                actionType: ToolbarActionType.keyboardStateDidChange
             )
         )
 
