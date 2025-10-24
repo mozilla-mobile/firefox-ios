@@ -80,8 +80,7 @@ public class Store<State: StateType & Sendable>: DefaultDispatchStore {
         }
 
         MainActor.assumeIsolated {
-            actionQueue.append(action)
-            processQueuedActions()
+            dispatch(action)
         }
     }
 
