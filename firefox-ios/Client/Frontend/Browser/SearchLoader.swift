@@ -109,6 +109,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         }
     }
 
+    @MainActor
     private func updateUIWithBookmarksAsSitesResults(queries: [[Site]],
                                                      timerid: TimerId,
                                                      oldValue: String) {

@@ -14,10 +14,12 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     protocol Delegate: AnyObject {
         /// Called when the pan gesture begins during a swipe operation.
         /// This method is invoked once when the user starts swiping between tabs.
+        @MainActor
         func swipeGestureDidBegin()
 
         /// Called when the pan gesture ends, either by completion, cancellation, or failure.
         /// This method is invoked once at the end of the swipe operation, regardless of outcome.
+        @MainActor
         func swipeGestureDidEnd()
     }
 

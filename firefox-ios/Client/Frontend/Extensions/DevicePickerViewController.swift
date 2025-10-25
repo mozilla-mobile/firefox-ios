@@ -129,8 +129,10 @@ class DevicePickerViewController: UITableViewController {
         notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate,
                                                               object: nil,
                                                               queue: .main) { [weak self ] _ in
-            self?.loadList()
-            self?.refreshControl?.endRefreshing()
+            ensureMainThread { [self] in
+                self?.loadList()
+                self?.refreshControl?.endRefreshing()
+            }
         }
 
         RustFirefoxAccounts.shared.accountManager?.deviceConstellation()?.refreshState()

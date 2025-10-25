@@ -21,6 +21,7 @@ enum JumpBackInSectionLayout: Equatable {
     case mediumWithSyncedTab // synced tab is displayed first and then jumpBackIn
 
     // The width dimension of a cell / group; takes into account how many groups will be displayed
+    @MainActor
     var widthDimension: NSCollectionLayoutDimension {
         switch self {
         case .compactJumpBackIn, .compactSyncedTab, .compactJumpBackInAndSyncedTab:
@@ -53,6 +54,7 @@ enum JumpBackInSectionLayout: Equatable {
     }
 
     // The maximum number of items to display in the whole section
+    @MainActor
     func maxItemsToDisplay(hasAccount: Bool,
                            device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
     ) -> JumpBackInDisplayGroupCount {

@@ -9,9 +9,12 @@ import Common
 import class MozillaAppServices.FeatureHolder
 
 protocol SearchViewDelegate: AnyObject {
+    @MainActor
     func reloadSearchEngines()
+    @MainActor
     func reloadTableView()
-    var searchData: Cursor<Site> { get set}
+    @MainActor
+    var searchData: Cursor<Site> { get set }
 }
 
 class SearchViewModel: FeatureFlaggable, LoaderListener {
@@ -35,11 +38,13 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     var searchFeature: FeatureHolder<Search>
     private var searchTelemetry: SearchTelemetry
 
+    @MainActor
     var bookmarkSites: [Site] {
         delegate?.searchData.compactMap { $0 }
             .filter { $0.isBookmarked == true } ?? []
     }
 
+    @MainActor
     var historySites: [Site] {
         delegate?.searchData.compactMap { $0 }
             .filter { $0.isBookmarked == false } ?? []
@@ -50,6 +55,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private let isPrivate: Bool
     let isBottomSearchBar: Bool
     var savedQuery = ""
+    @MainActor
     var searchQuery = "" {
         didSet {
             querySuggestClient()
@@ -57,6 +63,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         }
     }
 
+    @MainActor
     var quickSearchEngines: [OpenSearchEngine] {
         guard let defaultEngine = searchEnginesManager?.defaultEngine else { return [] }
 
@@ -71,6 +78,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         return engines!
     }
 
+    @MainActor
     var searchEnginesManager: SearchEnginesManager? {
         didSet {
             guard let defaultEngine = searchEnginesManager?.defaultEngine else { return }
@@ -101,6 +109,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     /// Whether to show suggestions from the search engine.
     /// Does not show when search term in url is empty (aka zero search state).
+    @MainActor
     var shouldShowSearchEngineSuggestions: Bool {
         let shouldShowSuggestions = searchEnginesManager?.shouldShowSearchSuggestions ?? false
         return shouldShowSuggestions && !searchQuery.isEmpty
@@ -124,16 +133,19 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         )
     }
 
+    @MainActor
     private var hasBookmarksSuggestions: Bool {
         return !bookmarkSites.isEmpty &&
         shouldShowBookmarksSuggestions
     }
 
+    @MainActor
     private var hasHistorySuggestions: Bool {
         return !historySites.isEmpty &&
         shouldShowBrowsingHistorySuggestions
     }
 
+    @MainActor
     private var hasHistoryAndBookmarksSuggestions: Bool {
         let dataCount = delegate?.searchData.count
         return dataCount != 0 &&
@@ -142,6 +154,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     }
 
     /// Does not show when search term in url is empty (aka zero search state).
+    @MainActor
     var hasFirefoxSuggestions: Bool {
         guard !searchQuery.isEmpty else { return false }
         return hasBookmarksSuggestions
@@ -155,17 +168,20 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     // MARK: - Zero Search State Variables
     // Determines whether we should zero search state based on searchQuery being empty.
+    @MainActor
     var isZeroSearchState: Bool {
         return searchQuery.isEmpty
     }
 
     // Show list of recent searches if user puts focus in the address bar but does not enter any text.
+    @MainActor
     var shouldShowRecentSearches: Bool {
         let isOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
         return isOn && isZeroSearchState
     }
 
     // Show list of trending searches if user puts focus in the address bar but does not enter any text.
+    @MainActor
     var shouldShowTrendingSearches: Bool {
         let isOn = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
         return isOn && isZeroSearchState
@@ -192,6 +208,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
     }
 
+    @MainActor
     func shouldShowHeader(for section: Int) -> Bool {
         switch section {
         case SearchListSection.trendingSearches.rawValue:
@@ -206,6 +223,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         }
     }
 
+    @MainActor
     func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
@@ -376,6 +394,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         }
     }
 
+    @MainActor
     func searchRemoteTabs(for searchString: String) {
         filteredRemoteClientTabs.removeAll()
         for remoteClientTab in remoteClientTabs where remoteClientTab.tab.title.lowercased().contains(searchQuery) {
@@ -418,6 +437,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     /// - Parameters:
     ///   - oldValue: The previous search text value.
     ///   - newValue: The updated search text value.
+    @MainActor
     private func handleShowingOrHidingQuickSearchEngines(with oldValue: String, newValue: String) {
         guard oldValue.isEmpty != newValue.isEmpty else { return }
         delegate?.reloadSearchEngines()
@@ -441,15 +461,17 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     // MARK: LoaderListener
     func loader(dataLoaded data: Cursor<Site>) {
-        let previousData = self.delegate?.searchData
-        self.delegate?.searchData = if shouldShowSponsoredSuggestions {
-            ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
-        } else {
-            data
-        }
+        ensureMainThread {
+            let previousData = self.delegate?.searchData
+            self.delegate?.searchData = if self.shouldShowSponsoredSuggestions {
+                ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
+            } else {
+                data
+            }
 
-        if previousData?.asArray() != self.delegate?.searchData.asArray() {
-            delegate?.reloadTableView()
+            if previousData?.asArray() != self.delegate?.searchData.asArray() {
+                self.delegate?.reloadTableView()
+            }
         }
     }
 }

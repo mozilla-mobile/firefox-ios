@@ -161,7 +161,7 @@ class WebContextMenuActionsProvider {
     @MainActor
     func addSaveImage(url: URL,
                       getImageData: @escaping (URL, @Sendable @escaping (Data) -> Void) -> Void,
-                      writeToPhotoAlbum: @Sendable @escaping (UIImage) -> Void) {
+                      writeToPhotoAlbum: @escaping @Sendable @MainActor (UIImage) -> Void) {
         actions.append(UIAction(
             title: .ContextMenuSaveImage,
             identifier: UIAction.Identifier("linkContextMenu.saveImage")
@@ -173,8 +173,10 @@ class WebContextMenuActionsProvider {
                         creationRequest.addResource(with: .photo, data: data, options: nil)
                     }
                 } else {
-                    guard let image = UIImage(data: data) else { return }
-                    writeToPhotoAlbum(image)
+                    ensureMainThread {
+                        guard let image = UIImage(data: data) else { return }
+                        writeToPhotoAlbum(image)
+                    }
                 }
             }
             self.recordOptionSelectedTelemetry(option: .saveImage)

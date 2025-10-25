@@ -28,10 +28,12 @@ class KeyboardPressesHandler {
         return isOptionPressed && !isCmdPressed
     }
 
+    @MainActor
     func handlePressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         handlePress(presses, with: event, pressedIfFound: true)
     }
 
+    @MainActor
     func handlePressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         handlePress(presses, with: event, pressedIfFound: false)
     }
@@ -60,6 +62,7 @@ class KeyboardPressesHandler {
     ///   - presses: A set of UIPress instances that represent the presses that occurred
     ///   - event: The event to which the presses belong
     ///   - pressedIfFound: Determines if we should press or not the keys that were found
+    @MainActor
     private func handlePress(_ presses: Set<UIPress>, with event: UIPressesEvent?, pressedIfFound: Bool) {
         for press in presses {
             guard let key = press.key?.keyCode else { continue }

@@ -6,6 +6,7 @@ import Common
 import Foundation
 
 protocol StatusBarScrollDelegate: AnyObject {
+    @MainActor
     func scrollViewDidScroll(_ scrollView: UIScrollView, statusBarFrame: CGRect?, theme: Theme)
 }
 

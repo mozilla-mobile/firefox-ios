@@ -27,7 +27,9 @@ class ExperimentsViewController: UIViewController {
         )
 
         NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: .main) { _ in
-            self.onExperimentsApplied()
+            ensureMainThread {
+                self.onExperimentsApplied()
+            }
         }
     }
 
