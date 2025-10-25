@@ -37,11 +37,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
+    @MainActor
     func startNavigationButtonDoubleTapTimer() {
         guard isToolbarNavigationHintEnabled else { return }
         if navigationHintDoubleTapTimer == nil {
             navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
-                self.navigationHintDoubleTapTimer = nil
+                ensureMainThread {
+                    self.navigationHintDoubleTapTimer = nil
+                }
             }
         } else {
             navigationHintDoubleTapTimer = nil

@@ -8,12 +8,16 @@ import Foundation
 protocol ToolbarHelperInterface {
     var isToolbarRefactorEnabled: Bool { get }
     var isToolbarTranslucencyEnabled: Bool { get }
+    @MainActor
     var isReduceTransparencyEnabled: Bool { get }
+    @MainActor
     var glassEffectAlpha: CGFloat { get }
 
     func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool
     func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool
+    @MainActor
     func shouldBlur() -> Bool
+    @MainActor
     func backgroundAlpha() -> CGFloat
 }
 
@@ -30,10 +34,12 @@ final class ToolbarHelper: ToolbarHelperInterface {
         FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
     }
 
+    @MainActor
     var isReduceTransparencyEnabled: Bool {
         UIAccessibility.isReduceTransparencyEnabled
     }
 
+    @MainActor
     var glassEffectAlpha: CGFloat {
         guard shouldBlur() else { return 1 }
         #if canImport(FoundationModels)
@@ -53,12 +59,14 @@ final class ToolbarHelper: ToolbarHelperInterface {
                && traitCollection.horizontalSizeClass == .regular
     }
 
+    @MainActor
     func shouldBlur() -> Bool {
         return isToolbarRefactorEnabled &&
             isToolbarTranslucencyEnabled &&
             !isReduceTransparencyEnabled
     }
 
+    @MainActor
     func backgroundAlpha() -> CGFloat {
         guard shouldBlur() else { return 1.0 }
 

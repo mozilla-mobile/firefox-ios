@@ -47,6 +47,7 @@ final class SearchViewModelTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testHasFirefoxSuggestionsWhenAllConditionsAreFalse() {
         let subject = createSubject()
         searchEnginesManager.shouldShowBookmarksSuggestions = false
@@ -60,6 +61,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(subject.hasFirefoxSuggestions)
     }
 
+    @MainActor
     func testHasFirefoxSuggestionsWhenFirefoxSuggestionsExistButShouldNotShowIsFalse() {
         let subject = createSubject()
         subject.firefoxSuggestions = [
@@ -70,6 +72,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(subject.hasFirefoxSuggestions)
     }
 
+    @MainActor
     func test_hasFirefoxSuggestions_whenFirefoxSuggestionsExist_andSearchTermIsNotEmpty_shouldShowIsTrue() {
         let subject = createSubject()
         subject.searchQuery = "searchTerm"
@@ -80,6 +83,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertTrue(subject.hasFirefoxSuggestions)
     }
 
+    @MainActor
     func testHasFirefoxSuggestions_whenFirefoxSuggestionsExist_andSearchTermIsEmpty_shouldShowIsTrue() {
         let subject = createSubject()
         subject.searchQuery = ""
@@ -144,6 +148,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
+    @MainActor
     func testSyncedTabsAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
         searchEnginesManager.shouldShowSponsoredSuggestions = true
         let remoteTab1 = RemoteTab(
@@ -181,6 +186,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(subject.filteredRemoteClientTabs.count, 2)
     }
 
+    @MainActor
     func testSyncedTabsAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
         searchEnginesManager.shouldShowSponsoredSuggestions = false
 
@@ -296,6 +302,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
+    @MainActor
     func testLoad_forHistoryAndBookmarks_doesNotTriggerReloadForSameSuggestions() async throws {
         searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
@@ -308,6 +315,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
+    @MainActor
     func testLoad_multipleTimes_doesNotTriggerReloadForSameSuggestions() async throws {
         searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
@@ -352,6 +360,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(subject.firefoxSuggestions.count, 1)
     }
 
+    @MainActor
     func testQuickSearchEnginesWithSearchSuggestionsEnabled() {
         let subject = createSubject()
         subject.searchEnginesManager = searchEnginesManager
@@ -364,6 +373,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(quickSearchEngines.count, 5)
     }
 
+    @MainActor
     func testQuickSearchEnginesWithSearchSuggestionsDisabled() {
         searchEnginesManager.shouldShowSearchSuggestions = false
         let subject = createSubject()
@@ -379,6 +389,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     // MARK: Trending Searches
+    @MainActor
     func test_shouldShowHeader_forTrendingSearches_withFFOn_andSearchTerm_doesNotShowHeader() async {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
@@ -387,6 +398,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(shouldShowHeader)
     }
 
+    @MainActor
     func test_shouldShowHeader_withTrendingSearches_withFFOn_andSearchTermEmpty_showsHeader() async {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let mockClient = MockTrendingSearchClient(result: .success(["foo", "bar"]))
@@ -398,6 +410,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertTrue(shouldShowHeader)
     }
 
+    @MainActor
     func test_shouldShowHeader_withNoTrendingSearches_withFFOn_andSearchTermEmpty_doesNotShowHeader() async {
         setupNimbusTrendingSearchesTesting(isEnabled: true)
         let subject = createSubject()
@@ -407,6 +420,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(shouldShowHeader)
     }
 
+    @MainActor
     func test_shouldShowHeader_forTrendingSearches_withoutFeatureFlagOn_doesNotShowHeader() async {
         setupNimbusTrendingSearchesTesting(isEnabled: false)
         let subject = createSubject()
