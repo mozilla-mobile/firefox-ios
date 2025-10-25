@@ -702,12 +702,14 @@ public func FfiConverterTypeBackend_lower(_ value: Backend) -> UnsafeMutableRawP
 public struct ClientSettings {
     public var timeout: UInt32
     public var redirectLimit: UInt32
+    public var ohttpChannel: String?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(timeout: UInt32 = UInt32(0), redirectLimit: UInt32 = UInt32(10)) {
+    public init(timeout: UInt32 = UInt32(0), redirectLimit: UInt32 = UInt32(10), ohttpChannel: String?) {
         self.timeout = timeout
         self.redirectLimit = redirectLimit
+        self.ohttpChannel = ohttpChannel
     }
 }
 
@@ -724,12 +726,16 @@ extension ClientSettings: Equatable, Hashable {
         if lhs.redirectLimit != rhs.redirectLimit {
             return false
         }
+        if lhs.ohttpChannel != rhs.ohttpChannel {
+            return false
+        }
         return true
     }
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(timeout)
         hasher.combine(redirectLimit)
+        hasher.combine(ohttpChannel)
     }
 }
 
@@ -743,13 +749,15 @@ public struct FfiConverterTypeClientSettings: FfiConverterRustBuffer {
         return
             try ClientSettings(
                 timeout: FfiConverterUInt32.read(from: &buf), 
-                redirectLimit: FfiConverterUInt32.read(from: &buf)
+                redirectLimit: FfiConverterUInt32.read(from: &buf), 
+                ohttpChannel: FfiConverterOptionString.read(from: &buf)
         )
     }
 
     public static func write(_ value: ClientSettings, into buf: inout [UInt8]) {
         FfiConverterUInt32.write(value.timeout, into: &buf)
         FfiConverterUInt32.write(value.redirectLimit, into: &buf)
+        FfiConverterOptionString.write(value.ohttpChannel, into: &buf)
     }
 }
 
@@ -766,6 +774,91 @@ public func FfiConverterTypeClientSettings_lift(_ buf: RustBuffer) throws -> Cli
 #endif
 public func FfiConverterTypeClientSettings_lower(_ value: ClientSettings) -> RustBuffer {
     return FfiConverterTypeClientSettings.lower(value)
+}
+
+
+/**
+ * Configuration for an OHTTP channel
+ */
+public struct OhttpConfig {
+    /**
+     * The relay URL that will proxy requests
+     */
+    public var relayUrl: String
+    /**
+     * The gateway host that provides encryption keys and decrypts requests
+     */
+    public var gatewayHost: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * The relay URL that will proxy requests
+         */relayUrl: String, 
+        /**
+         * The gateway host that provides encryption keys and decrypts requests
+         */gatewayHost: String) {
+        self.relayUrl = relayUrl
+        self.gatewayHost = gatewayHost
+    }
+}
+
+#if compiler(>=6)
+extension OhttpConfig: Sendable {}
+#endif
+
+
+extension OhttpConfig: Equatable, Hashable {
+    public static func ==(lhs: OhttpConfig, rhs: OhttpConfig) -> Bool {
+        if lhs.relayUrl != rhs.relayUrl {
+            return false
+        }
+        if lhs.gatewayHost != rhs.gatewayHost {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(relayUrl)
+        hasher.combine(gatewayHost)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeOhttpConfig: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> OhttpConfig {
+        return
+            try OhttpConfig(
+                relayUrl: FfiConverterString.read(from: &buf), 
+                gatewayHost: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: OhttpConfig, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.relayUrl, into: &buf)
+        FfiConverterString.write(value.gatewayHost, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeOhttpConfig_lift(_ buf: RustBuffer) throws -> OhttpConfig {
+    return try FfiConverterTypeOhttpConfig.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeOhttpConfig_lower(_ value: OhttpConfig) -> RustBuffer {
+    return FfiConverterTypeOhttpConfig.lower(value)
 }
 
 
@@ -1126,6 +1219,15 @@ public enum ViaductError: Swift.Error {
     case UrlError(String
     )
     case NonTlsUrl
+    case OhttpChannelNotConfigured(String
+    )
+    case OhttpConfigFetchFailed(String
+    )
+    case OhttpRequestError(String
+    )
+    case OhttpResponseError(String
+    )
+    case OhttpNotSupported
 }
 
 
@@ -1158,6 +1260,19 @@ public struct FfiConverterTypeViaductError: FfiConverterRustBuffer {
             try FfiConverterString.read(from: &buf)
             )
         case 8: return .NonTlsUrl
+        case 9: return .OhttpChannelNotConfigured(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 10: return .OhttpConfigFetchFailed(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 11: return .OhttpRequestError(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 12: return .OhttpResponseError(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 13: return .OhttpNotSupported
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -1205,6 +1320,30 @@ public struct FfiConverterTypeViaductError: FfiConverterRustBuffer {
         case .NonTlsUrl:
             writeInt(&buf, Int32(8))
         
+        
+        case let .OhttpChannelNotConfigured(v1):
+            writeInt(&buf, Int32(9))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpConfigFetchFailed(v1):
+            writeInt(&buf, Int32(10))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpRequestError(v1):
+            writeInt(&buf, Int32(11))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpResponseError(v1):
+            writeInt(&buf, Int32(12))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case .OhttpNotSupported:
+            writeInt(&buf, Int32(13))
+        
         }
     }
 }
@@ -1242,6 +1381,30 @@ extension ViaductError: Foundation.LocalizedError {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
+    typealias SwiftType = String?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterString.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterString.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionData: FfiConverterRustBuffer {
     typealias SwiftType = Data?
 
@@ -1260,6 +1423,31 @@ fileprivate struct FfiConverterOptionData: FfiConverterRustBuffer {
         case 1: return try FfiConverterData.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
+    typealias SwiftType = [String]
+
+    public static func write(_ value: [String], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterString.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [String]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterString.read(from: &buf))
+        }
+        return seq
     }
 }
 
@@ -1496,11 +1684,50 @@ public func allowAndroidEmulatorLoopback()  {try! rustCall() {
     )
 }
 }
+/**
+ * Clear all OHTTP channel configurations
+ */
+public func clearOhttpChannels()  {try! rustCall() {
+    uniffi_viaduct_fn_func_clear_ohttp_channels($0
+    )
+}
+}
+/**
+ * Configure default OHTTP channels for common Mozilla services
+ * This sets up:
+ * - "relay1": For general telemetry and services through Mozilla's shared gateway
+ * - "merino": For Firefox Suggest recommendations through Merino's dedicated relay/gateway
+ */
+public func configureDefaultOhttpChannels()throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
+    uniffi_viaduct_fn_func_configure_default_ohttp_channels($0
+    )
+}
+}
+/**
+ * Configure an OHTTP channel with the given configuration
+ * If an existing OHTTP config exists with the same name, it will be overwritten
+ */
+public func configureOhttpChannel(channel: String, config: OhttpConfig)throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
+    uniffi_viaduct_fn_func_configure_ohttp_channel(
+        FfiConverterString.lower(channel),
+        FfiConverterTypeOhttpConfig_lower(config),$0
+    )
+}
+}
 public func initBackend(backend: Backend)throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
     uniffi_viaduct_fn_func_init_backend(
         FfiConverterTypeBackend_lower(backend),$0
     )
 }
+}
+/**
+ * List all configured OHTTP channels
+ */
+public func listOhttpChannels() -> [String]  {
+    return try!  FfiConverterSequenceString.lift(try! rustCall() {
+    uniffi_viaduct_fn_func_list_ohttp_channels($0
+    )
+})
 }
 
 private enum InitializationResult {
@@ -1521,7 +1748,19 @@ private let initializationResult: InitializationResult = {
     if (uniffi_viaduct_checksum_func_allow_android_emulator_loopback() != 38617) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_viaduct_checksum_func_clear_ohttp_channels() != 32054) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_configure_default_ohttp_channels() != 54321) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_configure_ohttp_channel() != 58989) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_viaduct_checksum_func_init_backend() != 21801) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_list_ohttp_channels() != 59719) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_viaduct_checksum_method_backend_send_request() != 4029) {

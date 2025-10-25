@@ -591,12 +591,6 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
     func getFeatureConfigVariables(featureId: String) throws  -> String?
     
     /**
-     * Getter and setter for global user participation (applies to both experiments and rollouts).
-     * For simplicity, the getter returns the experiment participation value.
-     */
-    func getGlobalUserParticipation() throws  -> Bool
-    
-    /**
      * Getter and setter for user's participation in rollouts.
      * Possible values are:
      * * `true`: the user will enroll in rollouts as usual.
@@ -708,8 +702,6 @@ public protocol NimbusClientProtocol: AnyObject, Sendable {
      * `set_experiment_participation` or `set_rollout_participation` instead.
      */
     func setFetchEnabled(flag: Bool) throws 
-    
-    func setGlobalUserParticipation(optIn: Bool) throws  -> [EnrollmentChangeEvent]
     
     func setRolloutParticipation(optIn: Bool) throws  -> [EnrollmentChangeEvent]
     
@@ -919,17 +911,6 @@ open func getFeatureConfigVariables(featureId: String)throws  -> String?  {
 }
     
     /**
-     * Getter and setter for global user participation (applies to both experiments and rollouts).
-     * For simplicity, the getter returns the experiment participation value.
-     */
-open func getGlobalUserParticipation()throws  -> Bool  {
-    return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_get_global_user_participation(self.uniffiClonePointer(),$0
-    )
-})
-}
-    
-    /**
      * Getter and setter for user's participation in rollouts.
      * Possible values are:
      * * `true`: the user will enroll in rollouts as usual.
@@ -1117,14 +1098,6 @@ open func setFetchEnabled(flag: Bool)throws   {try rustCallWithError(FfiConverte
         FfiConverterBool.lower(flag),$0
     )
 }
-}
-    
-open func setGlobalUserParticipation(optIn: Bool)throws  -> [EnrollmentChangeEvent]  {
-    return try  FfiConverterSequenceTypeEnrollmentChangeEvent.lift(try rustCallWithError(FfiConverterTypeNimbusError_lift) {
-    uniffi_nimbus_fn_method_nimbusclient_set_global_user_participation(self.uniffiClonePointer(),
-        FfiConverterBool.lower(optIn),$0
-    )
-})
 }
     
 open func setRolloutParticipation(optIn: Bool)throws  -> [EnrollmentChangeEvent]  {
@@ -4368,9 +4341,6 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_nimbusclient_get_feature_config_variables() != 7354) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_nimbusclient_get_global_user_participation() != 53001) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_nimbus_checksum_method_nimbusclient_get_rollout_participation() != 60391) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4411,9 +4381,6 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_set_fetch_enabled() != 64996) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_nimbus_checksum_method_nimbusclient_set_global_user_participation() != 42180) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_nimbusclient_set_rollout_participation() != 7151) {
