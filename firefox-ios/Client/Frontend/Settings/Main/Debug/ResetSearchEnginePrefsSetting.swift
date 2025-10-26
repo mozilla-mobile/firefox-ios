@@ -19,7 +19,7 @@ class ResetSearchEnginePrefsSetting: HiddenSetting {
         searchEngineManager.resetPrefs()
 
         // Provide courtesy message
-        let alert = UIAlertController(title: "Search Preferences Reeset",
+        let alert = UIAlertController(title: "Search Preferences Reset",
                                       message: "Please quit & relaunch Firefox for changes to take effect.",
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
