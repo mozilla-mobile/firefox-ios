@@ -1578,14 +1578,16 @@ class BrowserViewController: UIViewController,
 
     private func updateHeaderConstraints() {
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
+        let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         header.snp.remakeConstraints { make in
             // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
-            // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt).
+            // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
+            // on iOS 26. Prior to iOS 26, safe area inset was updating correctly on rotation.
             // Impact: Header remains partially visible when scrolling.
             // Workaround: Manually adjust constraints based on orientation.
             // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
             // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-            let topConstraint = isNavToolbar ? view.safeArea.top : view.snp.top
+            let topConstraint = (isNavToolbar || shouldShowTopTabs) ? view.safeArea.top : view.snp.top
             if isBottomSearchBar {
                 make.left.right.equalTo(view)
                 make.top.equalTo(view.safeArea.top)
