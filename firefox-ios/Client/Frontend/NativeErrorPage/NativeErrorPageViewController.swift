@@ -83,7 +83,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .natural
+        label.textAlignment = .center
         label.text = .NativeErrorPage.NoInternetConnection.TitleLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.titleLabel
         label.accessibilityTraits = .header
@@ -93,7 +93,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .natural
+        label.textAlignment = .center
         label.text = .NativeErrorPage.NoInternetConnection.Description
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.errorDescriptionLabel
     }
