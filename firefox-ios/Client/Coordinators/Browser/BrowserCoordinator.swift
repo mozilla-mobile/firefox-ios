@@ -680,9 +680,12 @@ class BrowserCoordinator: BaseCoordinator,
 
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
+
         if selectedTab.mimeType == MIMEType.PDF {
             showShareSheetForCurrentlySelectedTab()
         } else {
+            let remoteURL = selectedTab.webView?.url
+
             selectedTab.webView?.createPDF { [weak self] result in
                 guard let self else { return }
                 switch result {
@@ -694,7 +697,7 @@ class BrowserCoordinator: BaseCoordinator,
                     do {
                         try data.write(to: outputURL)
                         startShareSheetCoordinator(
-                            shareType: .file(url: outputURL),
+                            shareType: .file(url: outputURL, remoteURL: remoteURL),
                             shareMessage: nil,
                             sourceView: self.browserViewController.addressToolbarContainer,
                             sourceRect: nil,
@@ -1329,7 +1332,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         // If we successfully got a temp file URL, share it like a downloaded file
-        return .file(url: fileURL)
+        return .file(url: fileURL, remoteURL: shareType.wrappedURL)
     }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type

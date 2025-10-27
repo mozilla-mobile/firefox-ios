@@ -53,7 +53,8 @@ class ShareManager: NSObject {
         var activityItems: [Any] = []
 
         switch shareType {
-        case .file(let fileURL):
+        case .file(let fileURL, let remoteURL):
+            // Might have to pass this.
             activityItems.append(URLActivityItemProvider(url: fileURL))
 
             if let explicitShareMessage {
@@ -124,8 +125,19 @@ class ShareManager: NSObject {
     private static func getApplicationActivities(forShareType shareType: ShareType) -> [UIActivity] {
         var appActivities = [UIActivity]()
 
-        // Only acts on non-file URLs to send links to synced devices. Will ignore file URLs it can't handle.
-        appActivities.append(SendToDeviceActivity(activityType: .sendToDevice, url: shareType.wrappedURL))
+        // Set up the "Send to Device" activity, which shares URLs between a Firefox account user's synced devices. We can
+        // only share URLs to real websites, not internal `file://` URLs.
+        switch shareType {
+        case .file(_, let remoteURL):
+            // Some downloaded files may have an associated remote URL (if the file was just downloaded in the tab).
+            // Files which are shared from the Downloads panel will NOT have any associated remote URL (we don't store that
+            // history).
+            if let remoteURL {
+                appActivities.append(SendToDeviceActivity(activityType: .sendToDevice, url: remoteURL))
+            }
+        default:
+            appActivities.append(SendToDeviceActivity(activityType: .sendToDevice, url: shareType.wrappedURL))
+        }
 
         return appActivities
     }
