@@ -43,7 +43,7 @@ class SendToDeviceHelper {
                 self.delegate?.dismissInstructionsView()
             })
             let hostingViewController = UIHostingController(rootView: instructionsView)
-            #if MOZ_TARGET_SHARETO
+            #if MOZ_TARGET_SHARETO || MOZ_TARGET_ACTIONEXTENSION
                 return hostingViewController
             #else
                 let navigationController = UINavigationController(rootViewController: hostingViewController)
@@ -56,7 +56,7 @@ class SendToDeviceHelper {
         let devicePickerViewController = DevicePickerViewController(profile: profile)
         devicePickerViewController.pickerDelegate = delegate
         devicePickerViewController.shareItem = shareItem
-        #if MOZ_TARGET_SHARETO
+        #if MOZ_TARGET_SHARETO || MOZ_TARGET_ACTIONEXTENSION
         return devicePickerViewController
         #else
         let navigationController = UINavigationController(rootViewController: devicePickerViewController)
