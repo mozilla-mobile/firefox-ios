@@ -358,12 +358,10 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func loadRecentSearches() {
-        guard viewModel.shouldShowRecentSearches else { return }
         viewModel.retrieveRecentSearches()
     }
 
     private func loadTrendingSearches() {
-        guard viewModel.shouldShowTrendingSearches else { return }
         Task {
             await viewModel.retrieveTrendingSearches()
             reloadTableView()
