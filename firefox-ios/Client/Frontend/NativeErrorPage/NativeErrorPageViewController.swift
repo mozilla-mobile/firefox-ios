@@ -44,12 +44,6 @@ final class NativeErrorPageViewController: UIViewController,
             bottom: -16,
             trailing: -64
         )
-        static let iPadPadding = NSDirectionalEdgeInsets(
-            top: 100,
-            leading: 166,
-            bottom: -16,
-            trailing: -166
-        )
     }
 
     private lazy var scrollView: UIScrollView = .build()
@@ -271,46 +265,31 @@ final class NativeErrorPageViewController: UIViewController,
             ),
             scrollView.bottomAnchor.constraint(
                 equalTo: view.bottomAnchor
-            )
-        ]
+            ),
 
-        portraitContraintsList = [
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
-                constant: self.isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top
+                constant: isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top
             ),
             scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: self.isLandscape ? UX.landscapePadding.leading : UX.portraitPadding.leading
+                constant: isLandscape ? UX.landscapePadding.leading : UX.portraitPadding.leading
             ),
             scrollContainer.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: self.isLandscape ? UX.landscapePadding.trailing : UX.portraitPadding.trailing
+                constant: isLandscape ? UX.landscapePadding.trailing : UX.portraitPadding.trailing
             ),
             scrollContainer.bottomAnchor.constraint(
                 equalTo: scrollView.bottomAnchor,
-                constant: self.isLandscape ? UX.landscapePadding.bottom : UX.portraitPadding.bottom
+                constant: isLandscape ? UX.landscapePadding.bottom : UX.portraitPadding.bottom
             ),
+        ]
+
+        portraitContraintsList = [
             foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
         ]
 
         landscapeContraintsList = [
-            scrollContainer.topAnchor.constraint(
-                equalTo: scrollView.topAnchor,
-                constant: UX.iPadPadding.top
-            ),
-            scrollContainer.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: UX.iPadPadding.leading
-            ),
-            scrollContainer.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: UX.iPadPadding.trailing
-            ),
-            scrollContainer.bottomAnchor.constraint(
-                equalTo: scrollView.bottomAnchor,
-                constant: UX.iPadPadding.bottom
-            ),
             foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
             reloadButton.widthAnchor.constraint(
                 equalTo: contentStack.widthAnchor
@@ -327,7 +306,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private func showViewForCurrentOrientation() {
-        scrollContainer.axis = self.shouldUseHorizontalLayout ? .horizontal : .vertical
+        scrollContainer.axis = shouldUseHorizontalLayout ? .horizontal : .vertical
     }
 
     // MARK: ThemeApplicable
