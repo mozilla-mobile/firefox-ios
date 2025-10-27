@@ -303,6 +303,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
                     disabledEngineIDsPrefsKey,
                     legacy_disabledEngineNamesPrefsKey]
         keys.forEach { prefs.removeObjectForKey($0) }
+        resetCustomEngines()
     }
 
     // MARK: - Private
@@ -393,6 +394,12 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
             return []
         }
     }()
+
+    private func resetCustomEngines() {
+        guard let customEngineFilePath = try? customEngineFilePath else { return }
+        let url = URL(fileURLWithPath: customEngineFilePath)
+        try? FileManager.default.removeItem(at: url)
+    }
 
     private func saveCustomEngines() {
         do {
