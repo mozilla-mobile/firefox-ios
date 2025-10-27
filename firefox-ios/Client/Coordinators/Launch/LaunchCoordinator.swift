@@ -173,8 +173,7 @@ final class LaunchCoordinator: BaseCoordinator,
         let view = TermsOfServiceView(
             viewModel: viewModel,
             windowUUID: windowUUID,
-            themeManager: themeManager,
-            onEmbededLinkAction: { _ in }
+            themeManager: themeManager
         )
 
         let viewController = PortraitOnlyHostingController(rootView: view)
