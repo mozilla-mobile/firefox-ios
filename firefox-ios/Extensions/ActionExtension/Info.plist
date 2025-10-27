@@ -33,6 +33,8 @@
 				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
 				<integer>1</integer>
 			</dict>
+			<key>NSExtensionActionWantsFullScreenPresentation</key>
+			<true/>
 			<key>NSExtensionIconFile</key>
 			<string>ActionExtensionIcons</string>
 		</dict>
