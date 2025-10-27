@@ -49,6 +49,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func testTrackVisibleSuggestion() {
+        TelemetryContextualIdentifier.setupContextId()
         let subject = createSubject()
         let locale = Locale(identifier: "en-US")
         let gleanWrapper = MockGleanWrapper()
