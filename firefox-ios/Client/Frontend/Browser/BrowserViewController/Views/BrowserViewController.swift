@@ -4503,12 +4503,17 @@ extension BrowserViewController: TabManagerDelegate {
     /// - Parameters:
     ///   - isHomeTab: A Boolean value indicating whether the current tab is the home page.
     ///   - webView: The `WKWebView` instance to be displayed.
+    ///   - webView: The `WKWebView` instance to be displayed.
     ///   - previousTab: The previously selected tab, used to dispatch action only if opening a new homepage
     ///   after viewing a homepage. We want to dispatch an action that triggers impression telemetry.
     private func updateEmbeddedContent(isHomeTab: Bool, with webView: WKWebView, previousTab: Tab?) {
         if isHomeTab {
             updateInContentHomePanel(webView.url)
-            guard previousTab?.isFxHomeTab ?? false else { return }
+            // Fix for #29068: Removed guard that prevented telemetry when navigating to homepage from non-homepage tabs.
+            // The guard `previousTab?.isFxHomeTab ?? false` only allowed telemetry when switching between homepages,
+            // causing missing homepage.viewed events when opening new tabs via the "+" toolbar button from regular webpages.
+            // Telemetry should fire whenever a user lands on the homepage, regardless of the previous tab type.
+            // guard previousTab?.isFxHomeTab ?? false else { return }
             store.dispatchLegacy(
                 GeneralBrowserAction(
                     windowUUID: windowUUID,
