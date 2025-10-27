@@ -32,7 +32,6 @@ final class NativeErrorPageViewController: UIViewController,
         static let logoSizeWidthiPad: CGFloat = 240
         static let mainStackSpacing: CGFloat = 24
         static let textStackSpacing: CGFloat = 16
-        static let reloadButtonIpadMultiplier = 0.7146
         static let portraitPadding = NSDirectionalEdgeInsets(
             top: 120,
             leading: 32,
@@ -59,15 +58,11 @@ final class NativeErrorPageViewController: UIViewController,
         stackView.spacing = UX.mainStackSpacing
     }
 
-    private lazy var textStack: UIStackView = .build { stackView in
+    private lazy var contentStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
         stackView.spacing = UX.textStackSpacing
-    }
-
-    private lazy var commonContainer: UIStackView = .build { stackView in
-        stackView.axis = .vertical
-        stackView.spacing = UX.mainStackSpacing
-        stackView.distribution = .fill
     }
 
     private lazy var foxImage: UIImageView = .build { imageView in
@@ -104,8 +99,40 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private var commonContraintsList = [NSLayoutConstraint]()
-    private var iPhoneContraintsList = [NSLayoutConstraint]()
-    private var iPadContraintsList = [NSLayoutConstraint]()
+    private var portraitContraintsList = [NSLayoutConstraint]()
+    private var landscapeContraintsList = [NSLayoutConstraint]()
+
+    private var isLandscape: Bool {
+        return UIDevice.current.isIphoneLandscape
+    }
+
+    // Helper function to switch layout to 'portrait' is ContentSizeCategory is large or more
+    private var isLargeContentSizeCategory: Bool {
+        switch traitCollection.preferredContentSizeCategory {
+        case .accessibilityExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraExtraExtraLarge:
+            return true
+        default:
+            return false
+        }
+    }
+
+    /// Determines whether the layout should use a horizontal axis based on
+    /// the current device type, orientation, and Dynamic Type settings.
+    /// - If the **content size category** is large, the layout always uses a **vertical** axis
+    /// - Otherwise, if the device is an **iPad**, the layout uses a **horizontal** axis,
+    ///   as there is sufficient screen space for side-by-side elements.
+    /// - On **iPhone**, the layout is horizontal only when in **landscape** orientation.
+    ///
+    /// - Returns: `true` if a horizontal layout should be used; `false` if vertical.
+    var shouldUseHorizontalLayout: Bool {
+        guard !isLargeContentSizeCategory else { return false }
+
+        if shouldUseiPadSetup() {
+            return true
+        } else {
+            return isLandscape
+        }
+    }
 
     init(
         windowUUID: WindowUUID,
@@ -220,18 +247,18 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private func setupLayout() {
-        textStack.addArrangedSubview(titleLabel)
-        textStack.addArrangedSubview(errorDescriptionLabel)
-        commonContainer.addArrangedSubview(textStack)
-        commonContainer.addArrangedSubview(reloadButton)
+        contentStack.addArrangedSubview(titleLabel)
+        contentStack.addArrangedSubview(errorDescriptionLabel)
+        contentStack.setCustomSpacing(UX.mainStackSpacing, after: errorDescriptionLabel)
+        contentStack.addArrangedSubview(reloadButton)
         scrollContainer.addArrangedSubview(foxImage)
-        scrollContainer.addArrangedSubview(commonContainer)
+        scrollContainer.addArrangedSubview(contentStack)
         scrollView.addSubview(scrollContainer)
         view.addSubview(scrollView)
     }
 
     func adjustConstraints() {
-        NSLayoutConstraint.deactivate(iPhoneContraintsList + iPadContraintsList + commonContraintsList)
+        NSLayoutConstraint.deactivate(portraitContraintsList + landscapeContraintsList + commonContraintsList)
         commonContraintsList = [
             scrollView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
@@ -247,7 +274,7 @@ final class NativeErrorPageViewController: UIViewController,
             )
         ]
 
-        iPhoneContraintsList = [
+        portraitContraintsList = [
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
                 constant: self.isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top
@@ -267,7 +294,7 @@ final class NativeErrorPageViewController: UIViewController,
             foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
         ]
 
-        iPadContraintsList = [
+        landscapeContraintsList = [
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
                 constant: UX.iPadPadding.top
@@ -286,31 +313,21 @@ final class NativeErrorPageViewController: UIViewController,
             ),
             foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
             reloadButton.widthAnchor.constraint(
-                equalTo: commonContainer.widthAnchor,
-                multiplier: UX.reloadButtonIpadMultiplier
+                equalTo: contentStack.widthAnchor
             )
         ]
 
         NSLayoutConstraint.activate(commonContraintsList)
 
-        if shouldUseiPadSetup() {
-            NSLayoutConstraint.activate(iPadContraintsList)
+        if shouldUseiPadSetup() && !isLargeContentSizeCategory {
+            NSLayoutConstraint.activate(landscapeContraintsList)
         } else {
-            NSLayoutConstraint.activate(iPhoneContraintsList)
+            NSLayoutConstraint.activate(portraitContraintsList)
         }
-    }
-
-    private var isLandscape: Bool {
-        return UIDevice.current.isIphoneLandscape
     }
 
     private func showViewForCurrentOrientation() {
-        commonContainer.distribution = .equalCentering
-        if shouldUseiPadSetup() {
-            scrollContainer.axis = .horizontal // Use horizontal layout for iPad setup
-        } else {
-            scrollContainer.axis = self.isLandscape ? .horizontal : .vertical // For non-iPad or compact size classes
-        }
+        scrollContainer.axis = self.shouldUseHorizontalLayout ? .horizontal : .vertical
     }
 
     // MARK: ThemeApplicable
