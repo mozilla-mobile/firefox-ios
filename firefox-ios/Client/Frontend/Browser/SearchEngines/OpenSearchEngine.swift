@@ -3,8 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearchEngine {
+    static let logger: Logger = DefaultLogger.shared
     static let supportsSecureCoding = true
 
     struct UX {
@@ -110,8 +112,13 @@ final class OpenSearchEngine: NSObject, NSSecureCoding, Sendable, TrendingSearch
         self.isCustomEngine = isCustomEngine
         self.image = image
 
-        self.engineID = (aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String) ??
-        Self.generateCustomEngineID()
+        self.engineID = (aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String) ?? {
+            let customID = Self.generateCustomEngineID()
+            OpenSearchEngine.logger.log("[SEC] Decoding '\(shortName)', applied custom ID: \(customID)",
+                                        level: .info,
+                                        category: .remoteSettings)
+            return customID
+        }()
         self.telemetrySuffix = aDecoder.decodeObject(forKey: CodingKeys.telemetrySuffix.rawValue) as? String
         self.suggestTemplate = nil
         self.trendingTemplate = nil
