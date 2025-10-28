@@ -29,7 +29,16 @@ struct HomepageState: ScreenState, Equatable {
     /// This needs to be set properly for telemetry and the contextual pop overs that appears on homepage
     let isZeroSearch: Bool
     let shouldTriggerImpression: Bool
+
+    /// `shouldShowSpacer` is true when the homepage redesign, which pins the stories section to the bottom of the homepage,
+    /// is enabled on iPhone. This forces the space between the shortcuts section and the stories section to be as far apart
+    /// as possible. This value is kept in state because it depends on the feature flag manager
     let shouldShowSpacer: Bool
+
+    /// `availableContentHeight` represents the height available for the homepage content to occupy when the address is not
+    /// being edited. This is used to keep the homepage layout constant, such that it doesn't shift when the homepage's
+    /// view size changes eg when the address bar is tapped and the keyboard is presented. This value is kept in state
+    /// because it is determined by BVC
     let availableContentHeight: CGFloat
 
     init(appState: AppState, uuid: WindowUUID) {
