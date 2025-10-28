@@ -266,6 +266,7 @@ final class AddressToolbarContainerModel: Equatable {
                 isFlippedForRTL: action.isFlippedForRTL,
                 isSelected: action.isSelected,
                 hasCustomColor: action.hasCustomColor,
+                hasHighlightedColor: action.hasHighlightedColor,
                 largeContentTitle: action.largeContentTitle,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
@@ -315,9 +316,9 @@ final class AddressToolbarContainerModel: Equatable {
 
     static func == (lhs: AddressToolbarContainerModel, rhs: AddressToolbarContainerModel) -> Bool {
         lhs.navigationActions == rhs.navigationActions &&
+        lhs.leadingPageActions == rhs.leadingPageActions &&
         lhs.trailingPageActions == rhs.trailingPageActions &&
         lhs.browserActions == rhs.browserActions &&
-
         lhs.toolbarLayoutStyle == rhs.toolbarLayoutStyle &&
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineName == rhs.searchEngineName &&
