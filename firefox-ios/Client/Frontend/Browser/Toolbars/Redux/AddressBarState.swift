@@ -1231,7 +1231,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     // Sets up translation icon on the toolbar
-    // We handle tapping differently for translation button by showing a loading icon, so no highlighted color is needed.
+    //
+    // We handle tapping differently for translation button by showing a loading icon
+    // instead of a highlighted color is needed.
+    // If we kept the highlighted color, then it will cause the translation icon to flicker
+    // when switching from inactive icon to loading icon when user taps on it. Hence, `hasHighlightedColor: false`.
     private static func translateAction(
         enabled: Bool,
         hasAlternativeLocationColor: Bool
