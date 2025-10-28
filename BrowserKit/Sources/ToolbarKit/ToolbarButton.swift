@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-public enum ToolbarButtonGesture {
+public enum ToolbarButtonGesture: Sendable {
     case tap
     case longPress
 }
