@@ -6,13 +6,13 @@ import SwiftUI
 import Common
 
 public struct AttributedLinkText<Action: RawRepresentable>: View where Action.RawValue == String {
+    let theme: Theme
     let fullText: String
     let linkText: String
     let action: Action
     let linkAction: (Action) -> Void
 
     @State private var attributedString: AttributedString
-    let theme: Theme
 
     public init(
         theme: Theme,

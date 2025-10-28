@@ -13,6 +13,9 @@ final class BrowserScreen {
         self.sel = selectors
     }
 
+    private var addressBar: XCUIElement { sel.ADDRESS_BAR.element(in: app) }
+    private var cancelButton: XCUIElement { sel.CANCEL_BUTTON_URL_BAR.element(in: app) }
+
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
         BaseTestCase().mozWaitForValueContains(addressBar, value: value, timeout: timeout)
@@ -95,5 +98,87 @@ final class BrowserScreen {
         let clearButton = sel.CLEAR_TEXT_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(clearButton)
         clearButton.waitAndTap()
+    }
+
+    func assertFirefoxHomepageElementsCached() {
+        let topSitesLinkID = "FirefoxHomepage.TopSites.itemCell"
+        let youTubeLinkText = "YouTube"
+
+        let topSitesLink = app.links[topSitesLinkID]
+        let youTubeText = app.links.staticTexts[youTubeLinkText]
+
+        BaseTestCase().mozWaitForElementToExist(topSitesLink)
+        BaseTestCase().mozWaitForElementToExist(youTubeText)
+    }
+
+    func assertKeyboardFocusState(isFocusedOniPad: Bool) {
+        var addressBar: XCUIElement { sel.ADDRESS_BAR.element(in: app) }
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let hasFocus = addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false
+            XCTAssertEqual(hasFocus, isFocusedOniPad, "The keyboard focus state on iPad is incorrect.")
+
+            let keyboardCount = app.keyboards.count
+                XCTAssertEqual(keyboardCount, 1, "The keyboard should be shown on iPad")
+            } else {
+                let hasFocus = addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false
+                XCTAssertEqual(hasFocus, false, "The keyboard focus state on iPhone should be false.")
+
+                let keyboardCount = app.keyboards.count
+                XCTAssertEqual(keyboardCount, 0, "The keyboard should not show on iPhone")
+            }
+    }
+
+    func assertKeyboardBehaviorOnNewTab() {
+        let addressBarElement = addressBar
+        BaseTestCase().mozWaitForElementToExist(addressBarElement)
+
+        XCTAssertFalse(addressBarElement.isSelected, "The URL should not have focus when tab is opened.")
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let keyboardVisible = app.keyboards.element.isVisible()
+            XCTAssertTrue(keyboardVisible, "The keyboard should be shown on iPad for a new tab.")
+        } else {
+            let keyboardVisible = app.keyboards.element.isVisible()
+            XCTAssertFalse(keyboardVisible, "The keyboard should not be shown on iPhone for a new tab.")
+        }
+    }
+
+    func assertURLAndKeyboardUnfocused(expectedURLValue: String) {
+        let urlElement = addressBar
+
+        BaseTestCase().mozWaitForValueContains(urlElement, value: expectedURLValue)
+
+        XCTAssertFalse(urlElement.isSelected, "The URL should not have focus when custom page is loaded.")
+        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown.")
+    }
+
+    func tapOnAddressBar() {
+        let urlElement = addressBar
+        urlElement.waitAndTap()
+    }
+
+    func assertCancelButtonOnUrlBarExist() {
+        BaseTestCase().mozWaitForElementToExist(cancelButton)
+    }
+
+    func assertPrivateBrowsingLabelExist() {
+        let privateBrowsing = sel.PRIVATE_BROWSING.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(privateBrowsing)
+    }
+
+    func tapCancelButtonOnUrlBarExist() {
+        cancelButton.waitAndTap()
+    }
+
+    func tapCancelButtonIfExist() {
+        sel.CANCEL_BUTTON.element(in: app).tapIfExists()
+    }
+
+    func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.LINK_RFC_2606.element(in: app), timeout: timeout)
+    }
+
+    func addressToolbarContainValue(value: String) {
+        BaseTestCase().mozWaitForValueContains(addressBar, value: value)
     }
 }

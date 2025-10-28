@@ -26,9 +26,9 @@ final class LaunchCoordinator: BaseCoordinator,
                                OnboardingServiceDelegate {
     private let profile: Profile
     private let isIphone: Bool
-    private let modernLaunchTransitionDelegate = ModernLaunchTransitionDelegate()
     let windowUUID: WindowUUID
     let themeManager: ThemeManager = AppContainer.shared.resolve()
+    private let modernTransitionDelegate = ModernLaunchTransitionDelegate()
     weak var parentCoordinator: LaunchCoordinatorDelegate?
 
     init(router: Router,
@@ -179,7 +179,8 @@ final class LaunchCoordinator: BaseCoordinator,
 
         let viewController = PortraitOnlyHostingController(rootView: view)
         viewController.modalPresentationStyle = .fullScreen
-        viewController.transitioningDelegate = modernLaunchTransitionDelegate
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.transitioningDelegate = modernTransitionDelegate
 
         router.present(viewController, animated: true)
     }
@@ -298,7 +299,7 @@ final class LaunchCoordinator: BaseCoordinator,
         let hostingController = PortraitOnlyHostingController(rootView: view)
         hostingController.modalPresentationStyle = .fullScreen
         hostingController.modalTransitionStyle = .crossDissolve
-        hostingController.transitioningDelegate = modernLaunchTransitionDelegate
+        hostingController.transitioningDelegate = modernTransitionDelegate
 
         router.present(hostingController, animated: true)
     }

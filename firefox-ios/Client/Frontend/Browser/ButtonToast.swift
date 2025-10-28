@@ -22,6 +22,7 @@ class ButtonToast: Toast {
         static let buttonBorderRadius: CGFloat = 8
         static let buttonBorderWidth: CGFloat = 1
         static let topBottomButtonPadding: CGFloat = 8
+        static let animationDuration: TimeInterval = 0.3
     }
 
     // MARK: - UI

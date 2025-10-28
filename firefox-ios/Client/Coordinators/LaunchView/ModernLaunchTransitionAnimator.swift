@@ -6,15 +6,18 @@ import UIKit
 
 /// Custom transition animator for modern launch screen to onboarding/ToS transitions
 class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    let isDismissing: Bool
+
+    init(isDismissing: Bool) {
+        self.isDismissing = isDismissing
+    }
+
     // MARK: - UX Constants
     private enum UX {
-        static let totalDuration: TimeInterval = 0.6
-        static let fadeOutDurationRatio = 0.4
-        static let fadeInDurationRatio = 0.6
-        static let initialAlpha: CGFloat = 0.0
-        static let finalAlpha: CGFloat = 1.0
-        static let fadeOutDelay: TimeInterval = 0
-        static let fadeInDelay: TimeInterval = 0
+        static let totalDuration: TimeInterval = 0.4
+        static let clearAlpha: CGFloat = 0.0
+        static let midAlpha: CGFloat = 0.6
+        static let opaqueAlpha: CGFloat = 1.0
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -28,34 +31,68 @@ class ModernLaunchTransitionAnimator: NSObject, UIViewControllerAnimatedTransiti
             return
         }
 
-        let containerView = transitionContext.containerView
-        let finalFrame = transitionContext.finalFrame(for: toViewController)
-
-        toViewController.view.frame = finalFrame
-        toViewController.view.alpha = UX.initialAlpha
-        containerView.addSubview(toViewController.view)
-
-        fadeOutLaunchScreenLoader(fromViewController) {
-            // Once the loader fade-out completes, start the fade-in animation
-            UIView.animate(
-                withDuration: UX.totalDuration * UX.fadeInDurationRatio,
-                delay: UX.fadeInDelay,
-                options: [.curveEaseIn],
-                animations: {
-                    toViewController.view.alpha = UX.finalAlpha
-                }
-            ) { finished in
-                transitionContext.completeTransition(finished)
-            }
+        if isDismissing {
+            animateDismiss(
+                using: transitionContext,
+                fromController: fromViewController,
+                toController: toViewController
+            )
+        } else {
+            animatePresent(
+                using: transitionContext,
+                fromController: fromViewController,
+                toController: toViewController
+            )
         }
     }
 
-    private func fadeOutLaunchScreenLoader(_ viewController: UIViewController, completion: @escaping () -> Void) {
-        if let modernLaunchVC = viewController as? ModernLaunchScreenViewController {
-            modernLaunchVC.fadeOutLoader(completion: completion)
-        } else {
-            // If it's not a ModernLaunchScreenViewController, just call the completion immediately
-            completion()
+    func animatePresent(
+        using transitionContext: UIViewControllerContextTransitioning,
+        fromController: UIViewController,
+        toController: UIViewController
+    ) {
+        let fromSnapshot = fromController.view.snapshot
+        let image = UIImageView(image: fromSnapshot)
+        let containerView = transitionContext.containerView
+        let finalFrame = transitionContext.finalFrame(for: toController)
+        let launchController = fromController as? ModernLaunchScreenViewController
+
+        toController.view.frame = finalFrame
+        toController.view.alpha = UX.midAlpha
+
+        containerView.addSubview(toController.view)
+        containerView.addSubview(image)
+        image.pinToSuperview()
+
+        UIView.animate(withDuration: UX.totalDuration) {
+            toController.view.alpha = UX.opaqueAlpha
+            launchController?.stopLoaderAnimation()
+            image.alpha = UX.clearAlpha
+        } completion: { _ in
+            image.removeFromSuperview()
+            transitionContext.completeTransition(true)
+        }
+    }
+
+    func animateDismiss(
+        using transitionContext: UIViewControllerContextTransitioning,
+        fromController: UIViewController,
+        toController: UIViewController
+    ) {
+        let containerView = transitionContext.containerView
+        let finalFrame = transitionContext.finalFrame(for: toController)
+        toController.view.frame = finalFrame
+        let launchController = toController as? ModernLaunchScreenViewController
+
+        containerView.addSubview(toController.view)
+        containerView.addSubview(fromController.view)
+
+        UIView.animate(withDuration: UX.totalDuration) {
+            launchController?.startLoaderAnimation()
+            fromController.view.alpha = UX.clearAlpha
+        } completion: { _ in
+            transitionContext.completeTransition(true)
+            fromController.view.removeFromSuperview()
         }
     }
 }

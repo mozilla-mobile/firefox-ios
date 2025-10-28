@@ -365,7 +365,7 @@
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "保存子菜单";
 
 /* On the main menu, the accessibility label for the action that will summarize the content of the webpage. */
-"MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142" = "总结页面";
+"MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142" = "生成页面摘要";
 
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "切换到桌面版网站";
@@ -401,7 +401,7 @@
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "保存";
 
 /* On the main menu, the title for the action that will summarize the content of the webpage. */
-"MainMenu.ToolsSection.SummarizePage.Title.v142" = "总结页面";
+"MainMenu.ToolsSection.SummarizePage.Title.v142" = "生成页面摘要";
 
 /* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "切换到桌面版网站";
@@ -411,6 +411,18 @@
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "工具";
+
+/* On the main menu, the accessibility label for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145" = "页面已翻译";
+
+/* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "已翻译成%@";
+
+/* On the main menu, the title for the action that will translate the content of the webpage. */
+"MainMenu.ToolsSection.Translation.Title.v145" = "翻译页面";
+
+/* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
+"MainMenu.ToolsSection.Translation.Translated.Title.v145" = "已翻译";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
 "MainMenu.WebsiteDarkModeOffV2.Title.v142" = "关";

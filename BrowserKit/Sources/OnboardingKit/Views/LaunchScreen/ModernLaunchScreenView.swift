@@ -19,7 +19,7 @@ public struct ModernLaunchScreenView: View {
 
     public var body: some View {
         ZStack {
-            AnimatedGradientMetalView(
+            AnimatedGradientView(
                 windowUUID: windowUUID,
                 themeManager: themeManager
             )

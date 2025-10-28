@@ -105,13 +105,6 @@ class PrivateBrowsingTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307006
     func testClosePrivateTabsOptionClosesPrivateTabs() {
-        // Check that Close Private Tabs when closing the Private Browsing Button is off by default
-        navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.goto(SettingsScreen)
-
-        // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
-
         //  Open a Private tab
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         if userState.isPrivate {
@@ -124,6 +117,9 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Go back to regular browser
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        app.otherElements[tabsTray].cells.firstMatch.waitAndTap()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
 
         // Go back to private browsing and check that the tab has been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
@@ -225,16 +221,14 @@ class PrivateBrowsingTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2497357
     func testAllPrivateTabsRestore() throws {
         // Several tabs opened in private tabs tray. Tap on the trashcan
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "Undo toast no longer available with the new tab tray")
+        if !iPad() {
+            let shouldSkipTest = true
+            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
+        }
         navigator.nowAt(HomePanelsScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         for _ in 1...4 {
             navigator.createNewTab()
-            if app.keyboards.element.isVisible() && !iPad() {
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-                navigator.performAction(Action.CloseURLBarOpen)
-            }
         }
         navigator.goto(TabTray)
         var numTab = app.otherElements[tabsTray].cells.count
@@ -243,9 +237,6 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Validate Close All Tabs and Cancel options
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
-        if !iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCancelButton])
-        }
 
         // Tap on "Close All Tabs"
         app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].waitAndTap()
@@ -308,7 +299,7 @@ fileprivate extension BaseTestCase {
         let numPrivTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(
             numPrivTabs,
-            1,
+            0,
             "The private tab should have been closed"
         )
     }
@@ -375,14 +366,16 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
         if skipPlatform { return }
         waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.openURL(url2)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
 
         // Leave PM by tapping on PM shourt cut
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
         waitForTabsButton()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         checkOpenTabsBeforeClosingPrivateMode()
     }
 

@@ -19,6 +19,7 @@ class DataManagementTests: BaseTestCase {
         mozWaitForElementToNotExist(app.alerts.buttons["OK"])
         XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
         // Navigate back to the browser
+        mozWaitElementEnabled(element: app.buttons["Data Management"], timeout: TIMEOUT)
         app.buttons["Data Management"].waitAndTap()
         app.buttons["Settings"].waitAndTap()
         app.buttons["Done"].waitAndTap()

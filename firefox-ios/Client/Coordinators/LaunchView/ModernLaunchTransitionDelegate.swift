@@ -4,13 +4,18 @@
 
 import UIKit
 
-/// Transition delegate for coordinating the custom animation
 class ModernLaunchTransitionDelegate: NSObject, UIViewControllerTransitioningDelegate {
+    func animationController(
+        forDismissed dismissed: UIViewController
+    ) -> (any UIViewControllerAnimatedTransitioning)? {
+        return ModernLaunchTransitionAnimator(isDismissing: true)
+    }
+
     func animationController(
         forPresented presented: UIViewController,
         presenting: UIViewController,
         source: UIViewController
-    ) -> UIViewControllerAnimatedTransitioning? {
-        return ModernLaunchTransitionAnimator()
+    ) -> (any UIViewControllerAnimatedTransitioning)? {
+        return ModernLaunchTransitionAnimator(isDismissing: false)
     }
 }
