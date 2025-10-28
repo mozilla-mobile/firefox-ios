@@ -14,6 +14,7 @@ protocol SearchViewDelegate: AnyObject {
     var searchData: Cursor<Site> { get set}
 }
 
+@MainActor
 class SearchViewModel: FeatureFlaggable, LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager

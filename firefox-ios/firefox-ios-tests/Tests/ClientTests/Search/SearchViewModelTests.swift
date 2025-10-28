@@ -8,6 +8,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class SearchViewModelTests: XCTestCase {
     var profile: MockProfile!
     var mockDelegate: MockSearchDelegate!

@@ -885,20 +885,23 @@ class SearchViewController: SiteTableViewController,
     // MARK: - Notifiable
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            reloadData()
-        case .SearchSettingsChanged:
-            reloadSearchEngines()
-            // We fetch new list since trending searches are specific to the search engine.
-            loadTrendingSearches()
-        case .SponsoredAndNonSponsoredSuggestionsChanged:
-            guard !viewModel.searchQuery.isEmpty else { return }
-            Task {
-                await viewModel.loadFirefoxSuggestions()
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                self.reloadData()
+            case .SearchSettingsChanged:
+                self.reloadSearchEngines()
+                // We fetch new list since trending searches are specific to the search engine.
+                self.loadTrendingSearches()
+            case .SponsoredAndNonSponsoredSuggestionsChanged:
+                guard !self.viewModel.searchQuery.isEmpty else { return }
+                Task {
+                    await self.viewModel.loadFirefoxSuggestions()
+                }
+            default:
+                break
             }
-        default:
-            break
         }
     }
 
