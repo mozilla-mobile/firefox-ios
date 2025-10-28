@@ -4,9 +4,9 @@
 "use strict";
 
 /// Maximum number of characters to include in the sample.
-/// cld2 is designed at least 200+ characters for reliable detection.
+/// `cld2` is designed for at least 200+ characters for reliable detection.
 /// Reference: https://github.com/CLD2Owners/cld2?tab=readme-ov-file#summary
-/// Apple’s NLLanguageRecognizer documentation states that confidence improves with more input but does not specify a maximum.
+/// Apple’s `NLLanguageRecognizer` documentation states that confidence improves with more input but does not specify a maximum.
 /// Apple research has shown that accuracy plateaus around 50 characters with no meaningful gains beyond that.
 /// Reference: https://machinelearning.apple.com/research/language-identification-from-very-short-strings
 /// 2000 characters is chosen as a safe upper bound to ensure sufficient context for mixed-language or noisy inputs while maintaining performance.
@@ -30,7 +30,7 @@ const getLanguageSample = (maxChars = MAX_LANGUAGE_SAMPLE_CHARS) => {
 
   /// NOTE: For pages longer than maxChars, take two samples:
   /// - Start sample: first N characters (where N = maxChars/2 - 1). The -1 is to account for the separator.
-  /// - Middle sample: N characters starting from the middle of the document
+  /// - Middle sample: N characters starting from the middle of the document.
   /// Extracting two samples helps capture a more representative linguistic profile of the page.
   const sampleSize = Math.floor(maxChars / 2 - 1);
   const midpoint = Math.floor(text.length / 2);
