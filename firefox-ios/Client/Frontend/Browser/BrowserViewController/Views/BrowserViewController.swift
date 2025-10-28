@@ -97,8 +97,6 @@ class BrowserViewController: UIViewController,
     let documentLogger: DocumentLogger
     var downloadHelper: DownloadHelper?
 
-    private lazy var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
-
     // MARK: Optional UI elements
 
     var topTabsViewController: TopTabsViewController?
@@ -112,7 +110,6 @@ class BrowserViewController: UIViewController,
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
-    var currentMiddleButtonState: MiddleButtonState?
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
@@ -2202,19 +2199,16 @@ class BrowserViewController: UIViewController,
         // No tab
         guard let tab = tabManager.selectedTab else {
             handleMiddleButtonState(state)
-            currentMiddleButtonState = state
             return
         }
 
         // Tab with starting page
         if tab.isURLStartingPage {
             handleMiddleButtonState(state)
-            currentMiddleButtonState = state
             return
         }
 
         handleMiddleButtonState(.home)
-        currentMiddleButtonState = .home
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
