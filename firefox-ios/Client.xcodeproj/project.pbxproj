@@ -1544,6 +1544,7 @@
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
 		C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */; };
 		C710FDB72DCBDBEF0046475F /* TopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */; };
+		C7149E002EB14E2400C1FF00 /* StoriesWebviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7149DFF2EB14E2400C1FF00 /* StoriesWebviewViewController.swift */; };
 		C714D27E2E4539BE00FC02E6 /* ShortcutsLibraryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */; };
 		C714D2822E4549BB00FC02E6 /* ShortcutsLibraryAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */; };
 		C714D6372E46570700FC02E6 /* ShortcutsLibraryStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714D6362E46570700FC02E6 /* ShortcutsLibraryStateTests.swift */; };
@@ -9815,6 +9816,7 @@
 		C6C94C1CB6286845DEAF8EDD /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C706CBEE2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		C710FDB62DCBDBEF0046475F /* TopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteCell.swift; sourceTree = "<group>"; };
+		C7149DFF2EB14E2400C1FF00 /* StoriesWebviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesWebviewViewController.swift; sourceTree = "<group>"; };
 		C714D27D2E4539BE00FC02E6 /* ShortcutsLibraryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryState.swift; sourceTree = "<group>"; };
 		C714D2812E4549BB00FC02E6 /* ShortcutsLibraryAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryAction.swift; sourceTree = "<group>"; };
 		C714D6362E46570700FC02E6 /* ShortcutsLibraryStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsLibraryStateTests.swift; sourceTree = "<group>"; };
@@ -14403,6 +14405,7 @@
 				C7B376E22E870173006B2D32 /* StoriesFeedCell.swift */,
 				C7B376E42E870E80006B2D32 /* StoriesFeedDiffableDataSource.swift */,
 				C7B37A332E8AFCF7006B2D32 /* StoriesFeedSectionLayoutProvider.swift */,
+				C7149DFF2EB14E2400C1FF00 /* StoriesWebviewViewController.swift */,
 			);
 			path = StoriesFeed;
 			sourceTree = "<group>";
@@ -18993,6 +18996,7 @@
 				8A5D1CAC2A30D70B005AD35C /* OpenWithSetting.swift in Sources */,
 				8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */,
 				43D16B7A29831C7F009F8279 /* CreditCardAutofillToggle.swift in Sources */,
+				C7149E002EB14E2400C1FF00 /* StoriesWebviewViewController.swift in Sources */,
 				214099672DD392D1004881E1 /* ZoomSiteListView.swift in Sources */,
 				C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */,
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
