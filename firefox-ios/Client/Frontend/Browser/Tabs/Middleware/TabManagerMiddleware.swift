@@ -328,9 +328,13 @@ final class TabManagerMiddleware: FeatureFlaggable {
     }
 
     @MainActor
-    private func privateTabsCountText(for windowUUID: WindowUUID) -> String {
-        let tabManager = tabManager(for: windowUUID)
-        return (tabManager.privateTabs.count < 100) ? tabManager.privateTabs.count.description : "\u{221E}"
+    private func normalTabsCountTextForTabTray(for windowUUID: WindowUUID) -> String {
+        return tabManager(for: windowUUID).normalTabs.count.description
+    }
+
+    @MainActor
+    private func privateTabsCountTextForTabTray(for windowUUID: WindowUUID) -> String {
+        return tabManager(for: windowUUID).privateTabs.count.description
     }
 
     @MainActor
@@ -371,8 +375,8 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let isPrivate = panelType == .privateTabs
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            normalTabsCount: normalTabsCountText(for: window),
-                            privateTabsCount: privateTabsCountText(for: window),
+                            normalTabsCount: normalTabsCountTextForTabTray(for: window),
+                            privateTabsCount: privateTabsCountTextForTabTray(for: window),
                             hasSyncableAccount: false,
                             enableDeleteTabsButton: shouldEnableDeleteTabsButton(for: window, isPrivateMode: isPrivate))
     }
@@ -388,7 +392,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let tabDisplayModel = TabDisplayModel(
             isPrivateMode: isPrivateMode,
             tabs: tabs,
-            normalTabsCount: normalTabsCountText(for: uuid),
+            normalTabsCount: normalTabsCountTextForTabTray(for: uuid),
             inactiveTabs: inactiveTabs,
             isInactiveTabsExpanded: false,
             enableDeleteTabsButton: shouldEnableDeleteTabsButton(for: uuid, isPrivateMode: isPrivateMode)
