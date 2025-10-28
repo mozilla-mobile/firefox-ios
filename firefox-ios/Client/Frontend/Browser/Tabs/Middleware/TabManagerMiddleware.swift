@@ -901,9 +901,11 @@ final class TabManagerMiddleware: FeatureFlaggable {
         guard let selectedTab = tabManager(for: windowUUID).selectedTab else { return }
 
         if let url = selectedTab.url {
-            selectedTab.toggleChangeUserAgent()
+            // When the user changes user agent do the new request using the original URL
+            let originalURL = InternalURL(url)?.originalURLFromErrorPage ?? url
+            selectedTab.toggleChangeUserAgent(originalURL: originalURL)
             Tab.ChangeUserAgent.updateDomainList(
-                forUrl: url,
+                forUrl: originalURL,
                 isChangedUA: selectedTab.changedUserAgent,
                 isPrivate: selectedTab.isPrivate
             )
