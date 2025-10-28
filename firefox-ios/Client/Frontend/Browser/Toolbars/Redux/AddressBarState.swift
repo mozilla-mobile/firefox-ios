@@ -1274,17 +1274,17 @@ struct AddressBarState: StateType, Sendable, Equatable {
     ) -> ToolbarActionConfiguration {
         let inactiveImageName = StandardImageIdentifiers.Medium.translate
         let activeImageName = StandardImageIdentifiers.Medium.translateActive
-        let loadingImage = StandardImageIdentifiers.Medium.translateActive
+        let loadingImage = StandardImageIdentifiers.Medium.loadingImage
 
         var buttonImage = inactiveImageName
-        var shouldPulse = false
+//        var shouldPulse = false
 
         if isLoading {
             buttonImage = loadingImage
-            shouldPulse = true
+//            shouldPulse = true
         } else if isActive {
             buttonImage = activeImageName
-            shouldPulse = false
+//            shouldPulse = false
         }
 
         return ToolbarActionConfiguration(
@@ -1293,7 +1293,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isEnabled: isEnabled,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
-            shouldPulse: shouldPulse,
+            shouldPulse: false,
             a11yLabel: .Toolbars.Translation.ButtonActiveAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.translateButton)
     }

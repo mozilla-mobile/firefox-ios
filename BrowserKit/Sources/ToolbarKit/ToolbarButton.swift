@@ -106,13 +106,15 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         largeContentTitle = element.a11yLabel
         largeContentImage = image
 
-            if element.iconName == StandardImageIdentifiers.Medium.translateActive {
-                if element.shouldPulse {
+            if element.iconName == StandardImageIdentifiers.Medium.loadingImage {
+//                if element.shouldPulse {
                     makeLoadingButton()
-                } else {
-                    hideLoadingIcon()
-                }
-            }
+//                } else {
+//                    hideLoadingIcon()
+//                }
+        } else {
+            hideLoadingIcon()
+        }
 
         configuration = config
         if let badgeName = element.badgeImageName {
@@ -157,35 +159,35 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
     private var spinner: UIActivityIndicatorView?
 
     private func makeLoadingButton(style: UIActivityIndicatorView.Style = .medium) {
-//        if spinner == nil {
-            pulse(view: self)
-//            let loadingView = UIActivityIndicatorView(style: style)
-//            loadingView.translatesAutoresizingMaskIntoConstraints = false
-//            addSubview(loadingView)
-//            NSLayoutConstraint.activate([
-//                loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
-//                loadingView.centerYAnchor.constraint(equalTo: centerYAnchor)
-//            ])
-//            spinner = loadingView
-//        }
-//        spinner?.startAnimating()
+        if spinner == nil {
+//            pulse(view: self)
+            let loadingView = UIActivityIndicatorView(style: style)
+            loadingView.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(loadingView)
+            NSLayoutConstraint.activate([
+                loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
+                loadingView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            ])
+            spinner = loadingView
+        }
+        spinner?.startAnimating()
     }
 
-    func pulse(view: UIView) {
-        UIView.animate(withDuration: 0.8,
-                       delay: 0,
-                       options: [.autoreverse, .repeat],
-                       animations: {
-            view.transform = CGAffineTransform(scaleX: -1, y: 1)
-        }, completion: nil)
-    }
+//    func pulse(view: UIView) {
+//        UIView.animate(withDuration: 0.8,
+//                       delay: 0,
+//                       options: [.autoreverse, .repeat],
+//                       animations: {
+//            view.transform = CGAffineTransform(scaleX: -1, y: 1)
+//        }, completion: nil)
+//    }
 
     private func hideLoadingIcon() {
-        layer.removeAllAnimations()     // cancels any repeating UIView animations
-        transform = .identity
-//        spinner?.stopAnimating()
-//        spinner?.removeFromSuperview()
-//        spinner = nil
+//        layer.removeAllAnimations()     // cancels any repeating UIView animations
+//        transform = .identity
+        spinner?.stopAnimating()
+        spinner?.removeFromSuperview()
+        spinner = nil
     }
 
     private func addBadgeIcon(imageName: String) {
