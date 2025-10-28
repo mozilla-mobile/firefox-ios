@@ -1187,6 +1187,10 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Terms of Use
 
     func showTermsOfUse(context: TriggerContext = .appLaunch) {
+        guard !childCoordinators.contains(where: { $0 is TermsOfUseCoordinator }) else {
+            return // route is handled with existing child coordinator
+        }
+
         let presenter = (homepageViewController ?? legacyHomepageViewController) ?? browserViewController
 
         let router = DefaultRouter(navigationController: presenter.navigationController ?? UINavigationController())

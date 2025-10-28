@@ -124,41 +124,9 @@ class SettingsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307058
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // SmokeTest
-    func testImageOnOff_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testImageOnOff() {
         // Select no images or hide images, check it's hidden or not
-        waitUntilPageLoad()
-
-        // Select hide images under Browsing Settings page
-        let blockImagesSwitch = app.otherElements.tables.cells.switches[
-            AccessibilityIdentifiers.Settings.BlockImages.title
-        ]
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
-
-        mozWaitForElementToExist(blockImagesSwitch)
-        app.swipeUp()
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: false)
-
-        // Select show images
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        mozWaitForElementToExist(blockImagesSwitch)
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: true)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307058
-    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
-    // SmokeTest
-    func testImageOnOff_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
         app.launch()
-        // Select no images or hide images, check it's hidden or not
         waitUntilPageLoad()
 
         // Select hide images under Browsing Settings page
@@ -225,8 +193,7 @@ class SettingsTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2951438
-    func testBrowsingSettingsOptionSubtitles_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
+    func testBrowsingSettingsOptionSubtitles() {
         app.launch()
         validateBrowsingUI()
         // Repeat steps for dark mode
@@ -442,12 +409,11 @@ class SettingsTests: FeatureFlaggedTestBase {
 
         // Navigate to the Browsing settings screen
         navigator.goto(BrowsingSettings)
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.tabs])
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Settings.Browsing.links])
 
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         waitForElementsToExist(
             [
-                app.switches[settingsQuery.Browsing.inactiveTabsSwitch],
                 table.cells[settingsQuery.OpenWithMail.title],
                 app.switches[settingsQuery.OfferToOpen.title],
                 table.cells[settingsQuery.Browsing.autoPlay],
@@ -456,13 +422,12 @@ class SettingsTests: FeatureFlaggedTestBase {
                 app.switches[settingsQuery.BlockExternal.title]
             ]
         )
-        XCTAssertEqual(app.switches[settingsQuery.Browsing.inactiveTabsSwitch].value as? String,
+        XCTAssertEqual(app.switches[settingsQuery.ShowLink.title].value as? String,
                        "1",
-                       "Inactive tabs - toggle in not enabled by default")
+                       "Show links previews - toggle is not enabled by default")
         XCTAssertEqual(app.switches[settingsQuery.OfferToOpen.title].value as? String,
                        "0",
                        "Offer to Open Copied Links - toggle is not disabled by default")
-        app.swipeUp()
         XCTAssertEqual(app.switches[settingsQuery.Browsing.blockPopUps].value as? String,
                        "1",
                        "Block Pop-up  Windows - toggle is not enabled by default")

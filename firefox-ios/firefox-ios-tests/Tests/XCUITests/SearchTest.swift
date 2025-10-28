@@ -521,7 +521,6 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
         app.launch()
         navigator.goto(SearchSettings)
@@ -537,7 +536,7 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -556,7 +555,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -565,7 +563,6 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
         addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
         app.launch()
         // Disable general search suggests
@@ -583,7 +580,9 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -602,7 +601,6 @@ class SearchTests: FeatureFlaggedTestBase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
 
@@ -620,7 +618,7 @@ class SearchTests: FeatureFlaggedTestBase {
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
 
         // Trending Search appears
-        mozWaitForElementToExist(app.tables["SiteTable"].otherElements["Trending Searches"])
+        mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Trending on Google"])
         app.tables["SiteTable"].cells.firstMatch.waitAndTap()
         waitUntilPageLoad()
 

@@ -1,6 +1,9 @@
 /* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
 "Summarizer.AppleBrand.Label.v142" = "Shrnutí službou Apple Intelligence";
 
+/* The a11y label for the close button in the summary view. */
+"Summarizer.CloseButton.Accessibility.Label.v145" = "Zavřít souhrn";
+
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "Zavřít";
 
@@ -25,11 +28,17 @@
 /* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
 "Summarizer.HostedBrand.Label.v142" = "Shrnutí službou %@";
 
+/* The a11y label for the loading label on the summarize loading screen. */
+"Summarizer.Loading.Accessibility.Label.v145" = "Načítání souhrnu";
+
 /* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
 "Summarizer.Loading.Label.v142" = "Vytváří se shrnutí…";
 
 /* The label for the error button that allows the user to retry summarizing the page. */
 "Summarizer.RetryButton.Label.v142" = "Opakovat";
+
+/* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "Přetažením nebo klepnutím webové stránky zavřete souhrn";
 
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "Povolit";

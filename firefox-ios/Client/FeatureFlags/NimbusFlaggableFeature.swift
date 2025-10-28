@@ -39,6 +39,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case noInternetConnectionErrorPage
     case recentSearches
     case reportSiteIssue
+    case relayIntegration
     case revertUnsafeContinuationsRefactor
     case searchEngineConsolidation
     case splashScreen
@@ -74,9 +75,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appearanceMenu,
+                .appleSummarizer,
                 .addressBarMenu,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
+                .downloadLiveActivities,
                 .hntTopSitesVisualRefresh,
                 .homepageRebuild,
                 .homepageStoriesRedesign,
@@ -84,6 +87,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .homepageShortcutsLibrary,
                 .homepageDiscoverMoreButton,
                 .homepageDiscoverMoreExperience,
+                .hostedSummarizer,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
@@ -92,13 +96,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .noInternetConnectionErrorPage,
                 .recentSearches,
                 .searchEngineConsolidation,
+                .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
-                .trackingProtectionRefactor,
-                .downloadLiveActivities,
-                .appleSummarizer,
-                .hostedSummarizer,
                 .touFeature,
+                .trackingProtectionRefactor,
+                .translation,
                 .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,
@@ -137,8 +140,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .startAtHome:
             return FlagKeys.StartAtHome
-        case .translation:
-            return FlagKeys.Translation
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .appearanceMenu,
                 .addressAutofillEdit,
@@ -174,6 +175,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .relayIntegration,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
@@ -188,6 +190,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tosFeature,
                 .touFeature,
                 .trackingProtectionRefactor,
+                .translation,
                 .trendingSearches,
                 .unifiedAds,
                 .unifiedSearch,

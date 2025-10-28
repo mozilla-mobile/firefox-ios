@@ -99,12 +99,15 @@ final class SummarizeCoordinator: BaseCoordinator,
 
         let tosViewModel = TermOfServiceViewConfiguration(
             titleLabel: .Summarizer.ToSInfoPanelTitleLabel,
-            descriptionText: String(format: .Summarizer.ToSInfoPanelLabel, AppName.shortName.rawValue),
+            descriptionText: String(
+                format: .Summarizer.ToSInfoPanelLabel,
+                AppName.shortName.rawValue
+            ),
             linkButtonLabel: .Summarizer.ToSInfoPanelLinkButtonLabel,
             linkButtonURL: SupportUtils.URLForTopic("summarize-pages-ios"),
             allowButtonTitle: .Summarizer.ToSInfoPanelContinueButtonLabel,
             allowButtonA11yId: AccessibilityIdentifiers.Summarizer.tosAllowButton,
-            allowButtonA11yLabel: .Summarizer.ToSInfoPanelAllowButtonAccessibilityLabel,
+            allowButtonA11yLabel: .Summarizer.ToSInfoPanelAllowButtonAccessibilityLabel
         )
 
         let model = SummarizeViewConfiguration(

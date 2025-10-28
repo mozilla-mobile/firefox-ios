@@ -14,6 +14,7 @@ class MockGleanWrapper: GleanWrapper {
     var incrementCounterCalled = 0
     var recordStringCalled = 0
     var recordLabelCalled = 0
+    var incrementLabeledCounterCalled = 0
     var setBooleanCalled = 0
     var recordQuantityCalled = 0
     var recordLabeledQuantityCalled = 0
@@ -71,10 +72,10 @@ class MockGleanWrapper: GleanWrapper {
         recordStringCalled += 1
     }
 
-    func recordLabel(for metric: LabeledMetricType<CounterMetricType>, label: String) {
+    func incrementLabeledCounter(for metric: LabeledMetricType<CounterMetricType>, label: String) {
         savedLabel = label
         savedEvents.append(metric)
-        recordLabelCalled += 1
+        incrementLabeledCounterCalled += 1
     }
 
     func setBoolean(for metric: BooleanMetricType, value: Bool) {
@@ -87,7 +88,14 @@ class MockGleanWrapper: GleanWrapper {
         recordQuantityCalled += 1
     }
 
+    func recordLabel(for metric: LabeledMetricType<StringMetricType>, label: String, value: String) {
+        savedEvents.append(metric)
+        recordLabelCalled += 1
+    }
+
     func recordLabeledQuantity(for metric: LabeledMetricType<QuantityMetricType>, label: String, value: Int64) {
+        savedLabel = label
+        savedValues.append(value)
         savedEvents.append(metric)
         recordLabeledQuantityCalled += 1
     }

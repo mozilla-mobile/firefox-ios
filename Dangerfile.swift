@@ -334,7 +334,7 @@ class CodeUsageDetector {
                 return """
                 ### 🧑‍💻 New `Task {}` detected
                 New `Task {}` added in file %@ at line %d.
-                Please tag a concurrency reviewer: \(contacts)
+                Please add a concurrency reviewer on your PR: \(contacts)
                 """
             }
         }
@@ -503,7 +503,7 @@ func checkStringsFile() {
         markdown("""
         ### ✍️ **Strings Updated**
         Detected changes in `Shared/Strings.swift`.
-        To keep strings up to standards, please tag a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) for review. 🌍
+        To keep strings up to standards, please add a member of the [firefox-ios-l10n team](https://github.com/orgs/mozilla-mobile/teams/firefox-ios-l10n) as reviewer. 🌍
         """)
     }
 }

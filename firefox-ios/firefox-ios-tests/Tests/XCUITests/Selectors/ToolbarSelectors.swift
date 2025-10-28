@@ -6,12 +6,16 @@ import XCTest
 
 protocol ToolbarSelectorsSet {
     var SETTINGS_MENU_BUTTON: Selector { get }
+    var TABS_BUTTON: Selector { get }
+    var NEW_TAB_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
 struct ToolbarSelectors: ToolbarSelectorsSet {
     private enum IDs {
         static let settingsMenuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
+        static let tabsButton = AccessibilityIdentifiers.Toolbar.tabsButton
+        static let newTabButton = AccessibilityIdentifiers.Toolbar.addNewTabButton
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -20,5 +24,17 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["toolbar"]
     )
 
-    var all: [Selector] { [SETTINGS_MENU_BUTTON] }
+    let TABS_BUTTON = Selector.buttonId(
+        IDs.tabsButton,
+        description: "Tabs button on the toolbar",
+        groups: ["toolbar"]
+    )
+
+    let NEW_TAB_BUTTON = Selector.buttonId(
+        IDs.newTabButton,
+        description: "New Tab Button on Toolbar",
+        groups: ["toolbar"]
+    )
+
+    var all: [Selector] { [SETTINGS_MENU_BUTTON, TABS_BUTTON] }
 }

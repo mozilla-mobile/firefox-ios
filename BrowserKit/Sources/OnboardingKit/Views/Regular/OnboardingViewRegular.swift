@@ -6,10 +6,10 @@ import SwiftUI
 import ComponentLibrary
 import Common
 
-struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
-    @State private var cardBackgroundColor: Color = .clear
+// TODO: - FXIOS-13874 sync ipad layout with iPhone
+struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
+    @State var theme: Theme
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
-    @State private var skipTextColor: Color = .clear
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -21,6 +21,7 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.theme = themeManager.getCurrentTheme(for: windowUUID)
         _viewModel = StateObject(
             wrappedValue: viewModel
         )
@@ -28,31 +29,24 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            AnimatedGradientMetalView(windowUUID: windowUUID, themeManager: themeManager)
+            AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
                 .edgesIgnoringSafeArea(.all)
             SheetSizedCard {
                 VStack {
                     tabView
                     pageControl
                 }
-                .bridge
-                .cardBackground(cardBackgroundColor, cornerRadius: UX.CardView.cornerRadius)
+                .cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
             }
             Button(action: viewModel.skipOnboarding) {
                 Text(viewModel.skipText)
-                    .bold()
-                    .foregroundColor(skipTextColor)
+                    .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
             }
             .padding(.trailing, UX.Onboarding.Spacing.standard)
-            .bridge.glassButtonStyle()
+            .skipButtonStyle(theme: theme)
+            .accessibilityLabel(viewModel.skipText)
         }
-        .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) {
-            guard let uuid = $0.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        }
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     private var tabView: some View {
@@ -79,11 +73,5 @@ struct OnboardingViewRegular<ViewModel: OnboardingCardInfoModelProtocol>: View {
             themeManager: themeManager
         )
         .padding(.bottom)
-    }
-
-    private func applyTheme(theme: Theme) {
-        let color = theme.colors
-        cardBackgroundColor = Color(color.layer2)
-        skipTextColor = Color(theme.colors.textOnDark)
     }
 }

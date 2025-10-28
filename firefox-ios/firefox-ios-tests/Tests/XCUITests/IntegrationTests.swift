@@ -13,7 +13,7 @@ private let historyItemSavedOnDesktop = "https://www.example.com/"
 private let loginEntry = "https://accounts.google.com"
 private let tabOpenInDesktop = "https://example.com/"
 
-class IntegrationTests: FeatureFlaggedTestBase {
+class IntegrationTests: BaseTestCase {
     let testWithDB = ["testFxASyncHistory"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
@@ -93,7 +93,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
     }
 
     func testFxASyncHistory() {
-        app.launch()
         // History is generated using the DB so go directly to Sign in
         // Sign into Mozilla Account
         navigator.goto(BrowserTabMenu)
@@ -104,7 +103,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
     }
 
     func testFxASyncPageUsingChinaFxA() {
-        app.launch()
         // History is generated using the DB so go directly to Sign in
         // Sign into Mozilla Account
         navigator.goto(BrowserTabMenu)
@@ -118,7 +116,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
     }
 
     func testFxASyncBookmark() {
-        app.launch()
         waitForTabsButton()
         navigator.nowAt(HomePanelsScreen)
         // Bookmark is added by the DB
@@ -135,7 +132,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
     }
 
     func testFxASyncBookmarkDesktop() {
-        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -146,7 +142,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
     }
 
     func testFxASyncTabs() {
-        app.launch()
         signInFxAccounts()
 
         // We only sync tabs if the user is signed in
@@ -174,7 +169,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
     }
 
     func testFxASyncLogins() {
-        app.launch()
         waitForTabsButton()
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL("gmail.com")
@@ -197,7 +191,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
     }
 
     func testFxASyncHistoryDesktop() {
-        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -210,7 +203,6 @@ class IntegrationTests: FeatureFlaggedTestBase {
     }
 
     func testFxASyncPasswordDesktop() {
-        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -232,9 +224,7 @@ class IntegrationTests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
     }
 
-    func testFxASyncTabsDesktop_tabTrayExperimentOn() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
+    func testFxASyncTabsDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
 
@@ -253,33 +243,7 @@ class IntegrationTests: FeatureFlaggedTestBase {
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
     }
 
-    func testFxASyncTabsDesktop_tabTrayExperimentOff() {
-        addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        // Sign into Mozilla Account
-        signInFxAccounts()
-
-        // Wait for initial sync to complete
-        waitForInitialSyncComplete()
-
-        // Check synced Tabs
-        app.buttons["Done"].waitAndTap()
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(TabTray)
-        // Bug: We can't toggle modes from the tab tray on iOS 26
-        // https://github.com/mozilla-mobile/firefox-ios/issues/29114
-        /*
-        navigator.performAction(Action.ToggleSyncMode)
-
-        // Need to swipe to get the data on the screen on focus
-        app.swipeDown()
-        mozWaitForElementToExist(app.tables.otherElements["profile1"])
-        XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
-        */
-    }
-
     func testFxADisconnectConnect() {
-        app.launch()
         // Sign into Mozilla Account
         signInFxAccounts()
 

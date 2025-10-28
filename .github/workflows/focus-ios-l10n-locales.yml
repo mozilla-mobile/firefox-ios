@@ -2,7 +2,7 @@ name: L10n Focus iOS screenshots (one set of locales only)
 on:
   workflow_call:
     inputs:
-      locales:
+      locale:
         required: true
         type: string
       branch:
@@ -17,7 +17,8 @@ on:
 jobs:
   get-screenshots:
     name: Generate screenshots
-    runs-on: macos-15
+    runs-on: macos-26
+    timeout-minutes: 30
     steps:
       - name: Clone firefox-ios repo
         uses: actions/checkout@v4
@@ -47,12 +48,10 @@ jobs:
         continue-on-error: true
         id: screenshots
         run: |
-          focus-ios/l10n-screenshots.sh --test-without-building ${{ inputs.locales }}
-          hash=`echo "${{ inputs.locales }}" | shasum | awk '{print $1}'`
-          echo "hash=$hash" >> $GITHUB_OUTPUT
+          focus-ios/l10n-screenshots.sh --test-without-building ${{ inputs.locale }}
       - name: Upload screenshots
         uses: actions/upload-artifact@v4.6.0
         with:
           path: ./l10n-screenshots
           retention-days: 90
-          name: Screenshots-${{ steps.screenshots.outputs.hash }}
+          name: Screenshots-${{ inputs.locale }}

@@ -58,6 +58,7 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
         let closureLogger = logger
 
         // First load the unordered engines, based on the current locale and language
+        // swiftlint:disable closure_body_length
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { engineResults in
@@ -85,6 +86,10 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
             closureLogger.log("[SEC] Search order prefs: YES. Will apply (identifiers): \(orderedEngineNames)",
                               level: .info,
                               category: .remoteSettings)
+            let unorderedDbgInfo = unorderedEngines.map { $0.shortName + "(\($0.engineID))" }
+            closureLogger.log("[SEC] Unordered engines: \(unorderedDbgInfo)",
+                              level: .info,
+                              category: .remoteSettings)
             let orderedEngines = unorderedEngines.sorted { engine1, engine2 in
                 let index1 = orderedEngineNames.firstIndex(of: engine1.engineID)
                 let index2 = orderedEngineNames.firstIndex(of: engine2.engineID)
@@ -109,6 +114,7 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
 
             ensureMainThread { completion(finalEngineOrderingPrefs, orderedEngines) }
         })
+        // swiftlint:enable closure_body_length
     }
 
     private func getUnorderedBundledEnginesFor(locale: Locale,
