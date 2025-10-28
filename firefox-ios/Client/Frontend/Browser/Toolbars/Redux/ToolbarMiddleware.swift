@@ -79,6 +79,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
 
