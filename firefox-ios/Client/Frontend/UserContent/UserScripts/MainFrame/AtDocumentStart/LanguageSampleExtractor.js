@@ -15,13 +15,20 @@
 /// For more context: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter
 const MAX_LANGUAGE_SAMPLE_CHARS = 2000;
 
+/// Exposed helper to get a language sample after the document is ready.
+/// This is intended to be used in swift and to be passed to a language detection API.
+export const getLanguageSampleWhenReady = async () => {
+  await documentReady();
+  return getLanguageSample();
+};
+
 /// Extracts a sample of text from the current page to help with language detection.
 /// To better capture the overall linguistic characteristics of the page, the extracted sample
 /// consists of two sections of the page content, one from the start and one from the middle.
 /// This sample is forwarded to a language detector ( e.g `NLLanguageRecognizer` or `cld2` )
 const getLanguageSample = (maxChars = MAX_LANGUAGE_SAMPLE_CHARS) => {
   /// NOTE: This is enough for text sampling. If we want extra processing of the text, 
-  /// beyond just collapsing whitespaces, we can use `extractContent` from the summarizer.
+  /// beyond just collapsing whitespaces, we can use `extractContent` from `Summarizer.js`.
   const text = (document.body?.innerText || document.documentElement?.innerText || "")
     .replace(/\s+/g, " ")
     .trim();
@@ -29,7 +36,8 @@ const getLanguageSample = (maxChars = MAX_LANGUAGE_SAMPLE_CHARS) => {
   if(text.length <= maxChars) return text;
 
   /// NOTE: For pages longer than maxChars, take two samples:
-  /// - Start sample: first N characters (where N = maxChars/2 - 1). The -1 is to account for the separator.
+  /// - Start sample: first N characters (where N = maxChars/2 - 1). 
+  //    The -1 is to account for the whitespace separator when we join the samples.
   /// - Middle sample: N characters starting from the middle of the document.
   /// Extracting two samples helps capture a more representative linguistic profile of the page.
   const sampleSize = Math.floor(maxChars / 2 - 1);
@@ -53,10 +61,3 @@ const documentReady = () =>  new Promise(resolve => {
     });
   }
 });
-
-/// Exposed helper to get a language sample after the document is ready.
-/// This is intended to be used in swift and to be passed to a language detection API.
-export const getLanguageSampleWhenReady = async () => {
-  await documentReady();
-  return getLanguageSample();
-};
