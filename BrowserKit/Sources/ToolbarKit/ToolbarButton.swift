@@ -107,6 +107,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         largeContentImage = image
 
             if element.iconName == StandardImageIdentifiers.Medium.loadingImage {
+                config.image = nil
 //                if element.shouldPulse {
                     makeLoadingButton()
 //                } else {
