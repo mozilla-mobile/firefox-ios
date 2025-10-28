@@ -5,6 +5,7 @@
 import Redux
 import XCTest
 import Common
+import Shared
 import SummarizeKit
 
 @testable import Client
@@ -380,7 +381,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Translation Configuration
-    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsExpectedState() {
+    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsEnabled_returnsTranslateButton() {
         setTranslationsFeatureEnabled(enabled: true)
         setupStore()
         let initialState = createSubject()
@@ -402,7 +403,29 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
     }
 
-    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsDisabled_returnsExpectedState() {
+    func test_urlDidChangeAction_withTranslationConfiguration_andTranslationsSettingsEnabled_showsNoTranslateButton() {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.leadingPageActions.count, 1)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    func test_urlDidChangeAction_withTranslationConfiguration_andFFDisabled_doesNotIncludeTranslateButton() {
         setTranslationsFeatureEnabled(enabled: false)
         setupStore()
         let initialState = createSubject()
