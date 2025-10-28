@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import "resource://gre/modules/shared/Helpers.ios.mjs";
+import { ZstdInit } from '@oneidentity/zstd-js/wasm/decompress/index.js';
 
 Node.prototype.ownerGlobal = window;
 
@@ -57,54 +58,6 @@ globalThis.Services = {
   }
 };
 
-// // QUESTION(Issam): It would be better if the code in the engine ingests these as is.
-// // TODO(Issam): Can we send the binary data as is from siwift and use new Uint8Array(byteArray) only 
-// // to convert the binary array to a typed one.
-// const base64ToArrayBuffer = (base64) => {
-//   const binaryString = atob(base64);
-//   const length = binaryString.length;
-//   const bytes = new Uint8Array(length);
-//   for (let i = 0; i < length; i++) {
-//     bytes[i] = binaryString.charCodeAt(i);
-//   }
-//   return bytes;
-// };
-
-// // QUESTION(Issam): It would be better if the code in the engine ingests these as is.
-// // TODO(Issam): Can we send the binary data as is from siwift and use new Uint8Array(byteArray) only 
-// // to convert the binary array to a typed one.
-const base64ToArrayBuffer = (base64) => {
-  const binary = atob(base64);
-  return Uint8Array.from(binary, c => c.charCodeAt(0)).buffer;
-}
-
-// // NOTE(Issam): Wasm is bundled using webpack. Language models are fetched from swift.
-// // Is this a good approach ?
-// export const getAllModels = async (sourceLanguage, targetLanguage) => {
-//   // NOTE(Issam): Most processing is done in swift. If we manage to accept base64 encoded models
-//   // Then we can omit the processing here all together.
-//   // TODO(Issam): models in base64 to array buffer
-//   // languageModelFiles: {
-//   //     lex: {buffer: ""}
-//   //     vocab: {buffer: ""}
-//   //     model: {buffer: ""}
-//   // }
-//   const modelsForLanguagePair =
-//     await webkit.messageHandlers.translationsBackground.postMessage({
-//       type: "getModels",
-//       payload: {
-//         sourceLanguage,
-//         targetLanguage,
-//       },
-//     });
-
-//   const languageModelFiles = modelsForLanguagePair.languageModelFiles;
-//   for (const model of Object.values(languageModelFiles)) {
-//     model.buffer = base64ToArrayBuffer(model.buffer);
-//   }
-//   return modelsForLanguagePair;
-// };
-
 globalThis.TE_getLogLevel = () => { };
 globalThis.TE_log = (message) => console.log("TE_log ---- ", message);
 globalThis.log = (message) => console.log("log ---- ", message);
@@ -114,21 +67,33 @@ globalThis.TE_logError = (...error) =>
 globalThis.TE_getLogLevel = () => { };
 globalThis.TE_destroyEngineProcess = () => { };
 globalThis.TE_reportEnginePerformance = () => { };
-globalThis.TE_requestEnginePayload = async ({ sourceLanguage, targetLanguage  }) => {
-  const modelsURL = `translations://app/models?from=${encodeURIComponent(sourceLanguage)}&to=${encodeURIComponent(targetLanguage)}`;
-  const modelsResponse = await fetch(modelsURL);
-  if (!modelsResponse.ok) throw new Error(`Model fetch failed: ${modelsResponse.status}`);
-  const translationModelPayloads = await modelsResponse.json();
-  // TODO(Issam): I hate this extra processing we should just send it as a binary array. 
-  const processedPayloads = processTranslationPayloads(translationModelPayloads);
-  // TODO(Issam): Use Promise.all to parallelize this with fetching the wasm so we don't wait for one then the other.
+globalThis.TE_requestEnginePayload = async ({ sourceLanguage, targetLanguage }) => {
+  let receivedEngineRequest = performance.now();
+  const params = new URLSearchParams({ from: sourceLanguage, to: targetLanguage });
+  const modelsURL = `translations://app/models?${params.toString()}`;
   const translatorURL = `translations://app/translator`;
-  const translatorResponse = await fetch(translatorURL);
-  if (!translatorResponse.ok) throw new Error(`Translator fetch failed: ${translatorResponse.status}`);
-  const bergamotTranslator = await translatorResponse.json();
 
+  // Fetch both in parallel
+  const [modelsData, translatorData] = await Promise.all([
+    fetchJson(modelsURL, "Model metadata"),    
+    fetchBinary(translatorURL, "Translator WASM"),
+  ]);
+
+  console.log("oooo --- [timestamp] TE_requestEnginePayload 1", performance.now() - receivedEngineRequest);
+  /// NOTE(Issam): base64 is very slow to decode this is a bottleneck. 
+  /// Looking at logs fetching takes < 1s but this processing hangs for a while.
+  /// We should fetch the wasm directly and .arrayBuffer() it directly.
+  /// For the models we should fetch the json and the binary buffer separately.
+  /// And we can construct the payloads here.
+  /// Right now on the japanese site it can take up to 36250ms to decode the models according to performance.now() - receivedEngineRequest.
+  const [processedPayloads, bergamotWasmArrayBuffer] = await Promise.all([
+    processTranslationPayloads(modelsData),
+    translatorData,
+  ]);
+
+  console.log("oooo --- [timestamp] TE_requestEnginePayload 2", performance.now() - receivedEngineRequest);
   return {
-    bergamotWasmArrayBuffer: base64ToArrayBuffer(bergamotTranslator.wasm),
+    bergamotWasmArrayBuffer,
     translationModelPayloads: processedPayloads,
     isMocked: false,
   };
@@ -138,20 +103,141 @@ globalThis.TE_resolveForceShutdown = () => { };
 globalThis.TE_addProfilerMarker = () => { };
 
 
+/// Helper to fetch JSON data with descriptive error messages
+const fetchJson = async (url, resourceName) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch ${resourceName}: ${response.status} ${response.statusText}`
+    );
+  }
+  return response.json();
+}
+
+/// Helper to fetch JSON data with descriptive error messages
+const fetchBinary = async (url, resourceName) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch ${resourceName}: ${response.status} ${response.statusText}`
+    );
+  }
+  return response.arrayBuffer();
+}
+
 // TODO(Issam): We should figure a better way to do this instead of all the extra processing here.
 // Maybe we can send the binary data as is from swift and use new Uint8Array(byteArray) only 
 // to convert the binary array to a typed one.
-const processTranslationPayloads = (payloads) =>
-  payloads.map(payload => {
-    const processedFiles = {};
-    for (const [type, file] of Object.entries(payload.languageModelFiles)) {
-      processedFiles[type] = {
-        ...file,
-        buffer: base64ToArrayBuffer(file.buffer),
-      };
+// const processTranslationPayloads = async (payloads) =>
+//   payloads.map(payload => {
+//     const processedFiles = {};
+//     for (const [type, file] of Object.entries(payload.languageModelFiles)) {
+//       processedFiles[type] = {
+//         ...file,
+//         buffer: base64ToArrayBuffer(file.buffer),
+//       };
+//     }
+//     return { ...payload, languageModelFiles: processedFiles };
+//   });
+
+// const processTranslationPayloads = async (payloads) =>
+//   payloads.map(payload => {
+//     const processedFiles = {};
+//     console.log("oooo --- processTranslationPayloads payload ", payload);
+//     for (const [type, file] of Object.entries(payload.languageModelFiles)) {
+//       const buffer = await fetch(`translations://app/model?bufferId=${file.record.id}`)
+//       processedFiles[type] = { ...file, bufffer: await buffer.arrayBuffer() };
+//       console.log("oooo --- processTranslationPayloads file ", file.record.id);
+//     }
+//     return { ...payload, languageModelFiles: processedFiles };
+//   });
+
+
+/// NOTE(Issam): Fully parallel: all payloads in parallel, and all files within each payload in parallel.
+// const processTranslationPayloads = async (payloads) => {
+//   return Promise.all(
+//     payloads.map(async (payload) => {
+//       const entries = Object.entries(payload.languageModelFiles);
+
+//       const processedEntries = await Promise.all(
+//         entries.map(async ([type, file]) => {
+//           const res = await fetch(`translations://app/models-buffer?id=${file.record.id}`);
+//           if (!res.ok) throw new Error(`Fetch failed for ${file.record.id}: ${res.status}`);
+//           const buffer = await res.arrayBuffer();
+//           console.log("zzzz --- processTranslationPayloads fetched buffer for ", file.record.id);
+//           // const compressed = new Uint8Array(buffer);
+//           // const decompressed = fzstd.decompress(compressed);
+//           return [type, { ...file, buffer }];
+//         })
+//       );
+//       return {
+//         ...payload,
+//         languageModelFiles: Object.fromEntries(processedEntries),
+//       };
+//     })
+//   );
+// };
+
+// const processTranslationPayloads = async (payloads) => {
+//   let receivedEngineRequest = performance.now();
+//   const result = [];
+//   console.log("oooo --- [timestamp] processTranslationPayloads 1", performance.now() - receivedEngineRequest);
+//   for (const payload of payloads) {
+//     const filesOut = {};
+
+//     for (const [type, file] of Object.entries(payload.languageModelFiles)) {
+//       const url = `translations://app/models-buffer?id=${file.record.id}`;
+//       const res = await Promise.any([fetch(url), fetch(url), fetch(url), fetch(url), fetch(url)]);
+//       if (res.status !== 0) {
+//         throw new Error(`Fetch failed for ${file.record.id}: ${res.status}`);
+//       }
+//       const buffer = await res.arrayBuffer();
+//       const compressed = new Uint8Array(buffer);
+//       const decompressed = fzstd.decompress(compressed);
+//       console.log("oooo --- [timestamp] processTranslationPayloads 2", performance.now() - receivedEngineRequest);
+//       filesOut[type] = { ...file, buffer: decompressed.buffer };
+//     }
+
+//     result.push({
+//       ...payload,
+//       languageModelFiles: filesOut,
+//     });
+//   }
+//   console.log("oooo --- [timestamp] processTranslationPayloads 3", performance.now() - receivedEngineRequest);
+//   return result;
+// };
+
+const processTranslationPayloads = async (payloads) => {
+  const { ZstdSimple, ZstdStream } = await ZstdInit();
+console.log("oooo --- ZstdInit done", ZstdSimple, ZstdStream, ZstdInit);
+  const result = [];
+  for (const payload of payloads) {
+    const filesOut = {};
+    for(const [type, file] of Object.entries(payload.languageModelFiles)) {
+      const buffer = await fetchBinary(`translations://app/models-buffer?id=${file.record.id}`, "Model buffer fetch");
+      console.log("iiiii  1 processTranslationPayloads --- done and now waiting ???");
+      // const compressed = new Uint8Array(buffer);
+      // console.log("iiiii  2 processTranslationPayloads --- done and now waiting ???");
+      // const decompressed = ZstdSimple.decompress(compressed);      
+      // console.log("iiiii  3 processTranslationPayloads --- done and now waiting ???");
+      filesOut[type] = { ...file, buffer: buffer };
+      // console.log("oooo --- processTranslationPayloads processing modelFile 1");
+      // const compressed = new Uint8Array(buffer);
+      // console.log("oooo --- processTranslationPayloads processing modelFile 2", compressed.length);
+      // const decompressed = fzstd.decompress(compressed);
+      // console.log("oooo --- processTranslationPayloads processing modelFile 3");
+      // filesOut[type] = { ...file, buffer };
     }
-    return { ...payload, languageModelFiles: processedFiles };
-  });
+    result.push({
+      ...payload,
+      languageModelFiles: filesOut,
+    });
+    console.log("iiiii processTranslationPayloads --- done and now waiting ???");
+    // // Yield to event loop to avoid blocking ???????
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+  return result;
+};
 
 // NOTE(Issam): Calling new Worker(url) will cause a security error since we are loading from an unsafe context.
 // To bypass this we inline the worker and override the Worker constructor. This way we don't have to touch the shared code.

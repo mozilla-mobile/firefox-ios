@@ -31,6 +31,7 @@ final class TranslationsMiddleware {
                     let webView = selectedTab.webView
             else { return }
             if action.buttonImage == StandardImageIdentifiers.Medium.translateActive {
+                self.discardTranslations(for: action)
                 webView.reload()
             } else {
                 self.startTranslation(for: action)
@@ -84,6 +85,15 @@ final class TranslationsMiddleware {
                 actionType: ToolbarActionType.translationCompleted
             )
             store.dispatch(toolbarAction)
+        }
+    }
+
+    private func discardTranslations(for action: ToolbarMiddlewareAction) {
+        Task { @MainActor in
+            guard let selectedTab = self.windowManager.tabManager(for: action.windowUUID).selectedTab,
+                    let webView = selectedTab.webView
+            else { return }
+            webView.evaluateJavascriptInDefaultContentWorld("window.__firefox__.Translations.discardTranslations()")
         }
     }
 

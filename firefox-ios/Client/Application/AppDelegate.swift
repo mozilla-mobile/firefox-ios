@@ -10,6 +10,7 @@ import Glean
 import TabDataStore
 
 import class MozillaAppServices.Viaduct
+import MozillaAppServices
 
 class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     let logger = DefaultLogger.shared
@@ -165,6 +166,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         logger.log("didFinishLaunchingWithOptions end",
                    level: .info,
                    category: .lifecycle)
+        
+//        let appAttest = AppAttestClient()
+//        let challenge = "VEVTVF9DSEFMTExFTkdFX0JBU0U2NFVSTA=="
+//
+//        appAttest.generateAndSendAttestation(challenge: challenge) { result in
+//            switch result {
+//            case .success(let keyId):
+//                print("Got keyId: \(keyId) ✅")
+//                let payload: [String: Any] = ["text": "Please summarize this article."]
+//                appAttest.generateAndSendAssertion(keyId: keyId, payload: payload, challenge: challenge) { result in
+//                    switch result {
+//                    case .success:
+//                        print("Assertion sent successfully ✅")
+//                    case .failure(let error):
+//                        print("Assertion failed ❌", error)
+//                    }
+//                }
+//
+//            case .failure(let error):
+//                print("Attestation failed ❌", error)
+//            }
+//        }
 
         return true
     }

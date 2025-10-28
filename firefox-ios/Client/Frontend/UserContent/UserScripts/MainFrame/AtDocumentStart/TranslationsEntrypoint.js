@@ -14,7 +14,11 @@ const sendToEngine = (message) => {
 
 window.receive = (message) => {
     console.log("[dbg][issam][TranslationsEntrypoint.js] receive from engine:", message);
-    port1.postMessage(message);
+    /// TODO(Issam): Engine ends after like 15 seconds. But it's weird how we establish connection.
+    // For now, we just ignore this and rely on the message channel.
+    if(message.type !== "TranslationsPort:EngineTerminated") {
+        port1.postMessage(message);
+    }
 };
 
 port1.onmessage = (message) => {
@@ -49,6 +53,10 @@ const startEverything = ({from, to}) => {
     sendToEngine(message);
 };
 
+const discardTranslations = ({from, to}) => {
+    sendToEngine({ type: "DiscardTranslations", innerWindowId })
+};
+
 // TODO(Issam): Just mock for now to unblock UI. 
 // This should be properly implemented later but the calling code shouldn't care.
 const isDone = async () => {
@@ -56,11 +64,9 @@ const isDone = async () => {
   return true;
 };
 
-// document.addEventListener("DiscardTranslations", () => sendToEngine({ type: "DiscardTranslations", innerWindowId }));
-
 Object.defineProperty(window.__firefox__, "Translations", {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: Object.freeze({ getLanguageSampleWhenReady, startEverything, isDone })
+    value: Object.freeze({ getLanguageSampleWhenReady, startEverything, isDone, discardTranslations })
 });

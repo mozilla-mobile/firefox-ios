@@ -13,9 +13,11 @@
   "license": "MPL-2.0",
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
+    "@oneidentity/zstd-js": "^1.0.3",
     "body-parser": "^2.2.0",
     "darkreader": "^4.9.89",
     "dompurify": "^3.2.4",
+    "fzstd": "^0.1.1",
     "page-metadata-parser": "1.1.4"
   },
   "devDependencies": {

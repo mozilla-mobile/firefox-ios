@@ -35,7 +35,8 @@ final class TranslationsEngine {
         self.webView = WKWebView(frame: .zero, configuration: config)
         self.webView.isHidden = true
 
-        #if targetEnvironment(simulator)
+        // NOTE(Issam): We always need this ??? or just simulator ?
+//        #if targetEnvironment(simulator)
         // Allow Safari Web Inspector only when running in simulator.
         // Requires to toggle `show features for web developers` in
         // Safari > Settings > Advanced menu.
@@ -47,7 +48,7 @@ final class TranslationsEngine {
            let window = windowScene.windows.first {
             window.addSubview(self.webView)
         }
-        #endif
+//        #endif
         loadEntrypointHTML()
     }
 

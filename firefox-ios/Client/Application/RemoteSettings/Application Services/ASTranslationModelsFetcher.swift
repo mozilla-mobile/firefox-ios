@@ -16,8 +16,11 @@ struct TranslatorFieldsRecord: Codable {
 /// https://firefox.settings.services.mozilla.com/v1/buckets/main/collections/translations-models/records
 struct ModelFieldsRecord: Codable {
     let fileType: String
+    // v2 names these sourceLanguage and targetLanguage
     let fromLang: String
     let toLang: String
+    // let sourceLanguage: String
+    // let targetLanguage: String
     let version: String
     let name: String
     let schema: Int64
@@ -79,6 +82,31 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
     private func decodeRecord<T: Codable>(_ record: RemoteSettingsRecord) -> T? {
         guard let data = record.fields.data(using: .utf8) else { return nil }
         return try? decoder.decode(T.self, from: data)
+    }
+    
+    private func decodeRecordVerbose<T: Decodable>(_ record: RemoteSettingsRecord, as type: T.Type) -> T? {
+        guard let data = record.fields.data(using: .utf8) else {
+            logger.log("decode: fields not UTF-8 for id=\(record.id)", level: .fatal, category: .remoteSettings)
+            return nil
+        }
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch let DecodingError.keyNotFound(key, ctx) {
+            logger.log("decode keyNotFound id=\(record.id) key=\(key.stringValue) path=\(ctx.codingPath) context=\(ctx.debugDescription)", level: .fatal, category: .remoteSettings)
+        } catch let DecodingError.typeMismatch(type, ctx) {
+            logger.log("decode typeMismatch id=\(record.id) type=\(type) path=\(ctx.codingPath) context=\(ctx.debugDescription)", level: .fatal, category: .remoteSettings)
+        } catch let DecodingError.valueNotFound(value, ctx) {
+            logger.log("decode valueNotFound id=\(record.id) value=\(value) path=\(ctx.codingPath) context=\(ctx.debugDescription)", level: .fatal, category: .remoteSettings)
+        } catch let DecodingError.dataCorrupted(ctx) {
+            logger.log("decode dataCorrupted id=\(record.id) context=\(ctx.debugDescription)", level: .fatal, category: .remoteSettings)
+        } catch {
+            logger.log("decode unknown error id=\(record.id) err=\(error)", level: .fatal, category: .remoteSettings)
+        }
+        // Optional: print a small preview of the raw JSON for this record
+        if let preview = String(data: data.prefix(512), encoding: .utf8) {
+            logger.log("decode raw fields preview id=\(record.id): \(preview)", level: .debug, category: .remoteSettings)
+        }
+        return nil
     }
 
     /// Fetches the wasm binary for the translator that matches the pinned version.
@@ -143,6 +171,59 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
         entries.append(makeModelEntry(pivotToTarget, from: Self.PIVOT_LANGUAGE, to: targetLang))
         return makeModelResponse(entries)
     }
+//
+//    /// TODO(Issam): Add comment and refactor so we can fetch by id / lang pair.
+//    func fetchModelsBuffer(withID id: String) -> Data? {
+//        guard let records = modelsClient?.getRecords(syncIfEmpty: true) else {
+//            logger.log("No model records found.", level: .warning, category: .remoteSettings)
+//            return nil
+//        }
+//
+//        // NOTE(Issam): We do this because we have no way of finding by id
+//        guard let record = records.first(where: { $0.id == id }) else {
+//            logger.log("No record found with id: \(id)", level: .warning, category: .remoteSettings)
+//            return nil
+//        }
+//
+//        guard let attachment = try? modelsClient?.getAttachment(record: record) else {
+//            logger.log("No attachment found for record with id: \(id)", level: .warning, category: .remoteSettings)
+//            return nil
+//        }
+//
+//        return attachment
+//    }
+
+    func fetchModelsBuffer(withID id: String) -> Data? {
+        guard let client = modelsClient,
+              let records = client.getRecords(syncIfEmpty: true),
+              let record = records.first(where: { $0.id == id }) else { return nil }
+        do {
+            return try client.getAttachment(record: record)
+        } catch {
+            logger.log("getAttachment failed for \(id): \(error)",
+                       level: .fatal, category: .remoteSettings)
+            return nil
+        }
+    }
+
+//    
+//    func fetchModelsBuffer(withID id: String) -> Data? {
+//        guard let records = modelsClient?.getRecords(syncIfEmpty: true) else {
+//            logger.log("No model records found.", level: .warning, category: .remoteSettings)
+//            return nil
+//        }
+//
+//        guard let record = records.first(where: { $0.id == id }) else {
+//            logger.log("No record found with id: \(id)", level: .warning, category: .remoteSettings)
+//            return nil
+//        }
+//
+//        guard let attachment = try? modelsClient?.getAttachment(record: record) else {
+//            logger.log("No attachment found for record with id: \(id)", level: .warning, category: .remoteSettings)
+//            return nil
+//        }
+//        return attachment
+//    }
 
     private func getModelFiles(
         records: [RemoteSettingsRecord],
@@ -151,25 +232,28 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
     ) -> [String: Any]? {
         var modelFiles = [String: Any]()
         for record in records {
-            guard let fields: ModelFieldsRecord = decodeRecord(record),
+            if record.id == "cfa3fd50-8bd4-4770-bae4-8e7e640aa9e3" {
+                print("ppppp --- record id: \(record.id)")
+            }
+            guard let fields = decodeRecordVerbose(record, as: ModelFieldsRecord.self),
                   fields.fromLang == sourceLang,
-                  fields.toLang == targetLang,
+                  fields.toLang == targetLang
                   // See note about `modelsVersion` where it's defined
                   // fields.version == Constants.modelsVersion,
-                  let attachment = try? modelsClient?.getAttachment(record: record) else {
+            else {
                 continue
             }
 
             // TODO(Issam): Add comment why we send this shape over.
             // TODO(Issam): Maybe we should also make this typed ?
             modelFiles[fields.fileType] = [
-                "buffer": attachment.base64EncodedString(),
                 "record": [
                     "fromLang": fields.fromLang,
                     "toLang": fields.toLang,
                     "fileType": fields.fileType,
                     "version": fields.version,
                     "name": fields.name,
+                    "id": record.id
                 ]
             ]
         }
