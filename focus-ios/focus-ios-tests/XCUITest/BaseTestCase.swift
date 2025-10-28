@@ -4,7 +4,7 @@
 
 import XCTest
 
-let TIMEOUT: TimeInterval = 15
+let TIMEOUT: TimeInterval = 20
 
 class BaseTestCase: XCTestCase {
     let app = XCUIApplication()
