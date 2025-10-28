@@ -637,13 +637,13 @@ public func FfiConverterTypeMozAdsClient_lower(_ value: MozAdsClient) -> UnsafeM
 
 
 public struct AdCallbacks {
-    public var click: String?
-    public var impression: String?
-    public var report: String?
+    public var click: AdsClientUrl
+    public var impression: AdsClientUrl
+    public var report: AdsClientUrl?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(click: String?, impression: String?, report: String?) {
+    public init(click: AdsClientUrl, impression: AdsClientUrl, report: AdsClientUrl?) {
         self.click = click
         self.impression = impression
         self.report = report
@@ -685,16 +685,16 @@ public struct FfiConverterTypeAdCallbacks: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AdCallbacks {
         return
             try AdCallbacks(
-                click: FfiConverterOptionString.read(from: &buf), 
-                impression: FfiConverterOptionString.read(from: &buf), 
-                report: FfiConverterOptionString.read(from: &buf)
+                click: FfiConverterTypeAdsClientUrl.read(from: &buf), 
+                impression: FfiConverterTypeAdsClientUrl.read(from: &buf), 
+                report: FfiConverterOptionTypeAdsClientUrl.read(from: &buf)
         )
     }
 
     public static func write(_ value: AdCallbacks, into buf: inout [UInt8]) {
-        FfiConverterOptionString.write(value.click, into: &buf)
-        FfiConverterOptionString.write(value.impression, into: &buf)
-        FfiConverterOptionString.write(value.report, into: &buf)
+        FfiConverterTypeAdsClientUrl.write(value.click, into: &buf)
+        FfiConverterTypeAdsClientUrl.write(value.impression, into: &buf)
+        FfiConverterOptionTypeAdsClientUrl.write(value.report, into: &buf)
     }
 }
 
@@ -1708,6 +1708,30 @@ fileprivate struct FfiConverterOptionTypeIABContent: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionTypeAdsClientUrl: FfiConverterRustBuffer {
+    typealias SwiftType = AdsClientUrl?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeAdsClientUrl.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeAdsClientUrl.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
     typealias SwiftType = [String]
 
@@ -1856,6 +1880,50 @@ fileprivate struct FfiConverterDictionaryStringSequenceTypeMozAd: FfiConverterRu
         return dict
     }
 }
+
+
+/**
+ * Typealias from the type name used in the UDL file to the builtin type.  This
+ * is needed because the UDL type name is used in function/method signatures.
+ */
+public typealias AdsClientUrl = String
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAdsClientUrl: FfiConverter {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AdsClientUrl {
+        return try FfiConverterString.read(from: &buf)
+    }
+
+    public static func write(_ value: AdsClientUrl, into buf: inout [UInt8]) {
+        return FfiConverterString.write(value, into: &buf)
+    }
+
+    public static func lift(_ value: RustBuffer) throws -> AdsClientUrl {
+        return try FfiConverterString.lift(value)
+    }
+
+    public static func lower(_ value: AdsClientUrl) -> RustBuffer {
+        return FfiConverterString.lower(value)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAdsClientUrl_lift(_ value: RustBuffer) throws -> AdsClientUrl {
+    return try FfiConverterTypeAdsClientUrl.lift(value)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAdsClientUrl_lower(_ value: AdsClientUrl) -> RustBuffer {
+    return FfiConverterTypeAdsClientUrl.lower(value)
+}
+
 
 private enum InitializationResult {
     case ok

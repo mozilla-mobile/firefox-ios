@@ -5,20 +5,53 @@
 import Foundation
 import XCTest
 
+@preconcurrency import struct MozillaAppServices.AdCallbacks
+@preconcurrency import protocol MozillaAppServices.MozAdsClientProtocol
+@preconcurrency import struct MozillaAppServices.MozAd
+@preconcurrency import struct MozillaAppServices.MozAdsPlacement
+@preconcurrency import struct MozillaAppServices.MozAdsPlacementConfig
+
 @testable import Client
 
+class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
+    var mockPlacements: [String: MozAdsPlacement]?
+    var mockError: Error?
+
+    func clearCache() throws {}
+
+    func cycleContextId() throws -> String {
+        return "test-context-id"
+    }
+
+    func recordClick(placement: MozAdsPlacement) throws {}
+
+    func recordImpression(placement: MozAdsPlacement) throws {}
+
+    func reportAd(placement: MozAdsPlacement) throws {}
+
+    func requestAds(mozAdConfigs: [MozAdsPlacementConfig]) throws -> [String: MozAdsPlacement] {
+        if let error = mockError {
+            throw error
+        }
+        return mockPlacements ?? [:]
+    }
+}
+
 class UnifiedAdsProviderTests: XCTestCase {
+    private var mockAdsClient: MockMozAdsClient!
     private var networking: MockContileNetworking!
 
     override func setUp() {
         super.setUp()
         TelemetryContextualIdentifier.setupContextId()
+        mockAdsClient = MockMozAdsClient()
         networking = MockContileNetworking()
         LegacyFeatureFlagsManager.shared.set(feature: .adsClient, to: false, isDebug: true)
     }
 
     override func tearDown() {
         networking = nil
+        mockAdsClient = nil
         super.tearDown()
     }
 
@@ -182,11 +215,81 @@ class UnifiedAdsProviderTests: XCTestCase {
         }
     }
 
+    // MARK: - Ads Client Tests
+
+    func testFetchTilesWithAdsClient_whenSuccessful_thenReturnsTiles() {
+        LegacyFeatureFlagsManager.shared.set(feature: .adsClient, to: true, isDebug: true)
+
+        let placementConfig1 = MozAdsPlacementConfig(placementId: "newtab_mobile_tile_1", iabContent: nil)
+        let placementConfig2 = MozAdsPlacementConfig(placementId: "newtab_mobile_tile_2", iabContent: nil)
+
+        let adContent1 = MozAd(
+            altText: nil,
+            blockKey: "12345",
+            callbacks: AdCallbacks(click: "https://www.test2.com", impression: "https://www.test3.com", report: nil),
+            format: "tile",
+            imageUrl: "https://www.test4.com",
+            url: "https://www.test1.com"
+        )
+
+        let adContent2 = MozAd(
+            altText: nil,
+            blockKey: "6789",
+            callbacks: AdCallbacks(click: "https://www.test6.com", impression: "https://www.test7.com", report: nil),
+            format: "tile",
+            imageUrl: "https://www.test8.com",
+            url: "https://www.test5.com"
+        )
+
+        let placement1 = MozAdsPlacement(placementConfig: placementConfig1, content: adContent1)
+        let placement2 = MozAdsPlacement(placementConfig: placementConfig2, content: adContent2)
+
+        mockAdsClient.mockPlacements = [
+            "newtab_mobile_tile_1": placement1,
+            "newtab_mobile_tile_2": placement2
+        ]
+
+        let subject = createSubject(adsClient: mockAdsClient)
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 2)
+                XCTAssertEqual(tiles[0].name, "newtab_mobile_tile_1")
+                XCTAssertEqual(tiles[0].url, "https://www.test1.com")
+                XCTAssertEqual(tiles[1].name, "newtab_mobile_tile_2")
+                XCTAssertEqual(tiles[1].url, "https://www.test5.com")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testFetchTilesWithAdsClient_whenError_thenFailsWithError() {
+        LegacyFeatureFlagsManager.shared.set(feature: .adsClient, to: true, isDebug: true)
+
+        mockAdsClient.mockError = NSError(domain: "test", code: 1)
+
+        let subject = createSubject(adsClient: mockAdsClient)
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .failure(error as UnifiedAdsProvider.Error):
+                XCTAssertEqual(error, UnifiedAdsProvider.Error.noDataAvailable)
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+        }
+    }
+
     // MARK: - Helper functions
 
-    func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsProvider {
+    func createSubject(
+        file: StaticString = #filePath,
+        line: UInt = #line,
+    ) -> UnifiedAdsProvider {
         let cache = URLCache(memoryCapacity: 100000, diskCapacity: 1000, directory: URL(string: "/dev/null"))
-        let subject = UnifiedAdsProvider(networking: networking, urlCache: cache)
+        let subject = UnifiedAdsProvider(adsClient: mockAdsClient, networking: networking, urlCache: cache)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

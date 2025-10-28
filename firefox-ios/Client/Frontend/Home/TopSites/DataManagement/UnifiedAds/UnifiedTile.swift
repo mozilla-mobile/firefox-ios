@@ -20,8 +20,8 @@ struct UnifiedTile: Decodable {
             format: content.format,
             url: content.url,
             callbacks: UnifiedTileCallback(
-                click: content.callbacks.click ?? "",
-                impression: content.callbacks.impression ?? ""
+                click: content.callbacks.click,
+                impression: content.callbacks.impression
             ),
             imageUrl: content.imageUrl,
             name: name,
