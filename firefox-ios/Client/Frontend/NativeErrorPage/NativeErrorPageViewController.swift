@@ -92,9 +92,9 @@ final class NativeErrorPageViewController: UIViewController,
         button.isEnabled = true
     }
 
-    private var commonContraintsList = [NSLayoutConstraint]()
-    private var portraitContraintsList = [NSLayoutConstraint]()
-    private var landscapeContraintsList = [NSLayoutConstraint]()
+    private var commonConstraintsList = [NSLayoutConstraint]()
+    private var portraitConstraintsList = [NSLayoutConstraint]()
+    private var landscapeConstraintsList = [NSLayoutConstraint]()
 
     private var isLandscape: Bool {
         return UIDevice.current.isIphoneLandscape
@@ -118,7 +118,7 @@ final class NativeErrorPageViewController: UIViewController,
     /// - On **iPhone**, the layout is horizontal only when in **landscape** orientation.
     ///
     /// - Returns: `true` if a horizontal layout should be used; `false` if vertical.
-    var shouldUseHorizontalLayout: Bool {
+    private var shouldUseHorizontalLayout: Bool {
         guard !isLargeContentSizeCategory else { return false }
 
         if shouldUseiPadSetup() {
@@ -252,8 +252,8 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func adjustConstraints() {
-        NSLayoutConstraint.deactivate(portraitContraintsList + landscapeContraintsList + commonContraintsList)
-        commonContraintsList = [
+        NSLayoutConstraint.deactivate(portraitConstraintsList + landscapeConstraintsList + commonConstraintsList)
+        commonConstraintsList = [
             scrollView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
             ),
@@ -285,23 +285,23 @@ final class NativeErrorPageViewController: UIViewController,
             ),
         ]
 
-        portraitContraintsList = [
+        portraitConstraintsList = [
             foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
         ]
 
-        landscapeContraintsList = [
+        landscapeConstraintsList = [
             foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
             reloadButton.widthAnchor.constraint(
                 equalTo: contentStack.widthAnchor
             )
         ]
 
-        NSLayoutConstraint.activate(commonContraintsList)
+        NSLayoutConstraint.activate(commonConstraintsList)
 
-        if shouldUseiPadSetup() && !isLargeContentSizeCategory {
-            NSLayoutConstraint.activate(landscapeContraintsList)
+        if shouldUseHorizontalLayout {
+            NSLayoutConstraint.activate(landscapeConstraintsList)
         } else {
-            NSLayoutConstraint.activate(portraitContraintsList)
+            NSLayoutConstraint.activate(portraitConstraintsList)
         }
     }
 
