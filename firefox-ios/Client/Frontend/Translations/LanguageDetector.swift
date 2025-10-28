@@ -15,7 +15,7 @@ struct LanguageDetector {
         let js = "return await window.__firefox__.Translations.getLanguageSampleWhenReady()"
         let result = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
         guard let sample = result as? String, !sample.isEmpty else {
-            print("[dbg][issam] xxxxx ---- No language sample extracted");
+            print("[dbg][issam] xxxxx ---- No language sample extracted")
             return nil
         }
         return sample

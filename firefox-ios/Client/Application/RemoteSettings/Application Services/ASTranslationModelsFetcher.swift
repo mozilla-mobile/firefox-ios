@@ -83,7 +83,7 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
         guard let data = record.fields.data(using: .utf8) else { return nil }
         return try? decoder.decode(T.self, from: data)
     }
-    
+
     private func decodeRecordVerbose<T: Decodable>(_ record: RemoteSettingsRecord, as type: T.Type) -> T? {
         guard let data = record.fields.data(using: .utf8) else {
             logger.log("decode: fields not UTF-8 for id=\(record.id)", level: .fatal, category: .remoteSettings)
@@ -200,8 +200,11 @@ final class ASTranslationModelsFetcher: TranslationModelsFetching, Sendable {
         do {
             return try client.getAttachment(record: record)
         } catch {
-            logger.log("getAttachment failed for \(id): \(error)",
-                       level: .fatal, category: .remoteSettings)
+            logger.log(
+                "getAttachment failed for \(id): \(error)",
+                level: .fatal,
+                category: .remoteSettings
+            )
             return nil
         }
     }

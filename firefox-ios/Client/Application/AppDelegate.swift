@@ -9,7 +9,6 @@ import Common
 import Glean
 import TabDataStore
 
-import class MozillaAppServices.Viaduct
 import MozillaAppServices
 
 class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
@@ -166,7 +165,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         logger.log("didFinishLaunchingWithOptions end",
                    level: .info,
                    category: .lifecycle)
-        
+
 //        let appAttest = AppAttestClient()
 //        let challenge = "VEVTVF9DSEFMTExFTkdFX0JBU0U2NFVSTA=="
 //
