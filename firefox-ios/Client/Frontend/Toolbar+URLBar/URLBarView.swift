@@ -1120,9 +1120,9 @@ extension URLBarView {
 
     func updateUIElementsWithTheme(_ theme: Theme) {
         progressBar.backgroundColor = theme.colors.ecosia.backgroundTertiary
-        progressBar.setGradientColors(startColor: theme.colors.ecosia.stateLoading,
-                                      middleColor: theme.colors.ecosia.stateLoading,
-                                      endColor: theme.colors.ecosia.stateLoading)
+        progressBar.setGradientColors(startColor: theme.colors.ecosia.highlighter,
+                                      middleColor: theme.colors.ecosia.highlighter,
+                                      endColor: theme.colors.ecosia.highlighter)
         locationTextField?.applyUIMode(isPrivate: isPrivate, theme: theme)
         locationTextField?.applyTheme(theme: theme)
         locationActiveBorderColor = theme.colors.ecosia.buttonBackgroundPrimary

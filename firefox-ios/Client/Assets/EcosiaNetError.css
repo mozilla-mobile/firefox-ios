@@ -7,11 +7,11 @@ file, You can obtain one at http://mozilla.org/MPL/2.0
 /* Light mode */
 @media (prefers-color-scheme: light) {
 :root {
-    --body-bg: #F0F0EB;
+    --body-bg: #FFFFFF;
     --body-color: #333333;
     --error-title-text-color: #333333;
     --error-short-desc-color: #6C6C6C;
-    --refresh-button-color: #008009;
+    --refresh-button-color: #333333;
 }
 }
 
@@ -22,7 +22,7 @@ file, You can obtain one at http://mozilla.org/MPL/2.0
     --body-color: #FFFFFF;
     --error-title-text-color: #FFFFFF;
     --error-short-desc-color: #DEDED9;
-    --refresh-button-color: #5DD25E;
+    --refresh-button-color: #FFFFFF;
 }
 }
 

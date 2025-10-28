@@ -55,7 +55,7 @@ class NTPLibraryShortcutView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         title.textColor = theme.colors.ecosia.textPrimary
-        button.tintColor = theme.colors.ecosia.iconSecondary
+        button.tintColor = theme.colors.ecosia.buttonContentSecondary
         button.backgroundColor = theme.colors.ecosia.backgroundElevation1
     }
 }

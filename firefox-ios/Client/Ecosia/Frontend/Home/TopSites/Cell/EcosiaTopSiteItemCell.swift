@@ -131,27 +131,22 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
         let siteURLString = topSite.site.url
 
-        if let defaultSuggestedSite = DefaultSuggestedSites.EcosiaDefaultSuggestedSite.fromURL(siteURLString) {
-            titleLabel.text = defaultSuggestedSite.localizedTitle
-            imageView.image = .init(named: defaultSuggestedSite.faviconName, in: .ecosia, with: nil)
-        } else {
-            titleLabel.text = topSite.title
-            var imageResource: SiteResource?
+        titleLabel.text = topSite.title
+        var imageResource: SiteResource?
 
-            if let site = topSite.site as? SponsoredTile,
-               let url = URL(string: site.imageURL, invalidCharacters: false) {
-                imageResource = .remoteURL(url: url)
-            } else if let site = topSite.site as? PinnedSite {
-                imageResource = site.faviconResource
-            } else if let site = topSite.site as? SuggestedSite {
-                imageResource = site.faviconResource
-            }
-
-            let viewModel = FaviconImageViewModel(siteURLString: siteURLString,
-                                                  siteResource: imageResource,
-                                                  faviconCornerRadius: UX.iconCornerRadius)
-            imageView.setFavicon(viewModel)
+        if let site = topSite.site as? SponsoredTile,
+           let url = URL(string: site.imageURL, invalidCharacters: false) {
+            imageResource = .remoteURL(url: url)
+        } else if let site = topSite.site as? PinnedSite {
+            imageResource = site.faviconResource
+        } else if let site = topSite.site as? SuggestedSite {
+            imageResource = site.faviconResource
         }
+
+        let viewModel = FaviconImageViewModel(siteURLString: siteURLString,
+                                              siteResource: imageResource,
+                                              faviconCornerRadius: UX.iconCornerRadius)
+        imageView.setFavicon(viewModel)
 
         configurePinnedSite(topSite)
         applyTheme(theme: theme)

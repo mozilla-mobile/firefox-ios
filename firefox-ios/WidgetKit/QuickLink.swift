@@ -102,12 +102,7 @@ enum QuickLink: Int {
             return [Color("TertiaryBackground")]
         }
          */
-        switch self {
-        case .search:
-            return [.ecosiaBundledColorWithName("PrimaryBrand")]
-        default:
-            return [.ecosiaBundledColorWithName("TertiaryBackground")]
-        }
+        return [.ecosiaBundledColorWithName("TertiaryBackground")]
     }
 
     public var textColor: Color {
@@ -119,12 +114,7 @@ enum QuickLink: Int {
             return .init("PrimaryText")
         }
          */
-        switch self {
-        case .search:
-            return .ecosiaBundledColorWithName("PrimaryBackground")
-        default:
-            return .ecosiaBundledColorWithName("PrimaryText")
-        }
+        return .ecosiaBundledColorWithName("PrimaryText")
     }
 
     public var iconColor: Color {
@@ -136,11 +126,6 @@ enum QuickLink: Int {
             return .init("SecondaryIcon")
         }
          */
-        switch self {
-        case .search:
-            return .ecosiaBundledColorWithName("PrimaryBackground")
-        default:
-            return .ecosiaBundledColorWithName("PrimaryText")
-        }
+        return .ecosiaBundledColorWithName("PrimaryText")
     }
 }

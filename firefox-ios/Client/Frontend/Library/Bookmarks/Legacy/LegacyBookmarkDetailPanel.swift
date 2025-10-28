@@ -248,6 +248,9 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
         deleteBookmarkButton.backgroundColor = currentTheme().colors.layer5
         deleteBookmarkButton.setTitle(.Bookmarks.Menu.DeleteBookmark, for: .normal)
         deleteBookmarkButton.setTitleColor(currentTheme().colors.textCritical, for: .normal)
+        // Ecosia: Fix edit bookmark navigation items color
+        navigationItem.rightBarButtonItem?.tintColor = currentTheme().colors.actionPrimary
+        navigationItem.leftBarButtonItem?.tintColor = currentTheme().colors.actionPrimary
     }
 
     override func reloadData() {

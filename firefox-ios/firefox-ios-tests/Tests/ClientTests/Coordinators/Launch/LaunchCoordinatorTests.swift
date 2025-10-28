@@ -38,6 +38,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Intro
+    /* Ecosia: Disable Onboarding dependant tests since LaunchCoordinator.presentIntroOnboarding is temporarily disabled
     func testStart_introNotIphone_present() throws {
         let introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let subject = createSubject(isIphone: false)
@@ -61,6 +62,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         // XCTAssertNotNil(pushedVC as? IntroViewController)
         XCTAssertNotNil(pushedVC as? WelcomeNavigation)
     }
+    */
 
     // MARK: - Update
     func testStart_updateNotIphone_present() throws {

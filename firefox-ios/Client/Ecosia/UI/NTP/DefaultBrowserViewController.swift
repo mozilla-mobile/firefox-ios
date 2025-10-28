@@ -234,7 +234,7 @@ final class DefaultBrowserViewController: UIViewController, Themeable {
         actionButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .normal)
         skipButton.setTitleColor(theme.colors.ecosia.buttonBackgroundPrimary, for: .normal)
         actionButton.backgroundColor = theme.colors.ecosia.buttonBackgroundPrimary
-        triviaView.backgroundColor = theme.colors.ecosia.backgroundSecondary
+        triviaView.backgroundColor = theme.colors.ecosia.backgroundElevation1
         triviaTitleLabel.textColor = theme.colors.ecosia.textPrimary
         triviaDecriptionLabel.textColor = theme.colors.ecosia.textSecondary
         beforeView.applyTheme(theme: theme)

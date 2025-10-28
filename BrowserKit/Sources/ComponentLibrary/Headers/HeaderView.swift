@@ -249,7 +249,10 @@ public final class HeaderView: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         self.tintColor = theme.colors.layer2
         closeButton.setImage(buttonImage, for: .normal)
+        /* Ecosia: Update close button background color
         closeButton.backgroundColor = theme.colors.layer2
+         */
+        closeButton.backgroundColor = theme.colors.ecosia.buttonBackgroundSecondary
         horizontalLine.backgroundColor = theme.colors.borderPrimary
     }
 }

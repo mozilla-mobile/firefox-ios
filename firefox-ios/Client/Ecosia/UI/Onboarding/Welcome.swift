@@ -24,6 +24,11 @@ final class Welcome: UIViewController {
     private var stackBottonConstraint: NSLayoutConstraint!
     private var stackTopConstraint: NSLayoutConstraint!
 
+    private lazy var theme: Theme = {
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        return themeManager.getCurrentTheme(for: windowUUID)
+    }()
+
     private var zoomedOut = false
     private weak var delegate: WelcomeDelegate?
     let windowUUID: WindowUUID
@@ -69,7 +74,7 @@ final class Welcome: UIViewController {
 
     private func addOverlay() {
         let overlay = UIView()
-        overlay.backgroundColor = .init(named: "splash")
+        overlay.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         overlay.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(overlay)
         self.overlay = overlay
@@ -79,10 +84,9 @@ final class Welcome: UIViewController {
         overlay.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         overlay.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        let overlayLogo = UIImageView(image: .init(named: "ecosiaLogoLaunch")?.withRenderingMode(.alwaysTemplate))
+        let overlayLogo = UIImageView(image: .init(named: "ecosiaLogoLaunch"))
         overlayLogo.translatesAutoresizingMaskIntoConstraints = false
         overlayLogo.contentMode = .scaleAspectFit
-        overlayLogo.tintColor = .init(named: "splashLogoTint")
         overlay.addSubview(overlayLogo)
         self.overlayLogo = overlayLogo
 

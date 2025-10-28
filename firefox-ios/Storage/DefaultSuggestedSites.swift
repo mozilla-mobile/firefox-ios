@@ -7,7 +7,7 @@ import Ecosia
 import SiteImageView
 
 open class DefaultSuggestedSites {
-    /* Ecosia: Replace Default Suggested Sites
+    /* Ecosia: Remove Default Suggested Sites
     private static let urlMap = [
         "https://www.amazon.com/": [
             "as": "https://www.amazon.in",
@@ -133,14 +133,9 @@ open class DefaultSuggestedSites {
         ]
     ]
      */
-    public static let sites = [
-        EcosiaDefaultSuggestedSite.financialReports.asSuggestedSite(),
-        EcosiaDefaultSuggestedSite.privacy.asSuggestedSite(),
-        EcosiaDefaultSuggestedSite.treesUpdate.asSuggestedSite()
-    ]
 
     public static func defaultSites() -> [Site] {
-        /* Ecosia: Simply return Ecosia sites
+        /* Ecosia: Remove default sites
         let locale = Locale.current
         let defaultSites = sites[locale.identifier] ?? sites["default"]
         return defaultSites?.map { data in
@@ -153,68 +148,6 @@ open class DefaultSuggestedSites {
             return data
         } ?? []
          */
-        sites
-    }
-}
-
-/*
- Ecosia: We add the default suggested sites representation with an helper enum.
- This enum provides a structured way to define and retrieve default suggested sites
- based on their URL.
- It's an handy way to define and retrieve default suggested sites in a type-safe way.
- We use the fromUrl to get a suggested site and perform some logic especially within the
- Client/Ecosia/Frontend/Home/TopSites/Cell/EcosiaTopSiteItemCell.swift to assign the correct
- tile's title and icon based on the URL.
- */
-public extension DefaultSuggestedSites {
-
-    enum EcosiaDefaultSuggestedSite: String, CaseIterable {
-
-        case financialReports = "Financial reports"
-        case privacy = "Privacy"
-        case treesUpdate = "Trees update"
-
-        var url: String {
-            switch self {
-            case .financialReports:
-                return Ecosia.Environment.current.urlProvider.financialReports.absoluteString
-            case .privacy:
-                return Ecosia.Environment.current.urlProvider.privacy.absoluteString
-            case .treesUpdate:
-                return Ecosia.Environment.current.urlProvider.trees.absoluteString
-            }
-        }
-
-        var trackingId: Int {
-            switch self {
-            case .financialReports: return 901
-            case .privacy: return 902
-            case .treesUpdate: return 903
-            }
-        }
-
-        public var faviconName: String {
-            switch self {
-            case .financialReports: return "financialReports"
-            case .privacy: return "privacy"
-            case .treesUpdate: return "treesUpdate"
-            }
-        }
-
-        var faviconResource: SiteResource {
-            .bundleAsset(name: faviconName, forRemoteResource: URL(string: url)!)
-        }
-
-        public var localizedTitle: String {
-            return Bundle.ecosia.localizedString(forKey: self.rawValue, value: "", table: "Ecosia")
-        }
-
-        public static func fromURL(_ url: String) -> EcosiaDefaultSuggestedSite? {
-            return Self.allCases.first { $0.url == url }
-        }
-
-        func asSuggestedSite() -> SuggestedSite {
-            SuggestedSite(url: url, title: localizedTitle, trackingId: trackingId, faviconResource: faviconResource)
-        }
+        []
     }
 }

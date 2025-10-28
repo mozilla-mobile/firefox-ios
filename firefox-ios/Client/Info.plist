@@ -126,6 +126,7 @@
 		<string>NewYorkMedium-BoldItalic.otf</string>
 		<string>NewYorkMedium-Regular.otf</string>
 		<string>NewYorkMedium-RegularItalic.otf</string>
+        <string>FoundersGroteskCondensed-Semibold.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

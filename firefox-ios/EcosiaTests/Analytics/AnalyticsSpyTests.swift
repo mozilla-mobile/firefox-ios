@@ -705,24 +705,6 @@ final class AnalyticsSpyTests: XCTestCase {
         XCTAssertEqual(analyticsSpy.ntpTopSitePositionCalled, NSNumber(value: position), "Analytics should track ntpTopSitePositionCalled correctly.")
     }
 
-    func testTilePressedTracksAnalyticsForDefaultSite() {
-        // Arrange
-        let viewModel = TopSitesViewModel(profile: profileMock,
-                                          isZeroSearch: false,
-                                          theme: EcosiaLightTheme(),
-                                          wallpaperManager: WallpaperManager())
-        let topSite = TopSite(site: Site(url: Environment.current.urlProvider.financialReports.absoluteString, title: "Example Site"))
-        let position = 1
-
-        // Act
-        viewModel.tilePressed(site: topSite, position: position)
-
-        // Assert
-        XCTAssertEqual(analyticsSpy.ntpTopSiteActionCalled, .click, "Analytics should track ntpTopSiteActionCalled as .click.")
-        XCTAssertEqual(analyticsSpy.ntpTopSitePropertyCalled, .default, "Analytics should track ntpTopSitePropertyCalled as .default.")
-        XCTAssertEqual(analyticsSpy.ntpTopSitePositionCalled, NSNumber(value: position), "Analytics should track ntpTopSitePositionCalled correctly.")
-    }
-
     func testTilePressedTracksAnalyticsForMostVisitedSite() {
         // Arrange
         let viewModel = TopSitesViewModel(profile: profileMock,

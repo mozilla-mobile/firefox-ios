@@ -66,10 +66,10 @@ class TopSitesHelperTests: XCTestCase {
                 XCTFail("Has no sites")
                 return
             }
-            /* Ecosia: Update minimum top sites with Ecosia's
+            /* Ecosia: Update with removed default sites
             XCTAssertEqual(sites.count, 5, "Contains 5 default sites")
              */
-            XCTAssertEqual(sites.count, 3, "Contains 3 default sites")
+            XCTAssertEqual(sites.count, 0, "Contains no default sites")
             expectation.fulfill()
         }
 
@@ -85,10 +85,10 @@ class TopSitesHelperTests: XCTestCase {
                 XCTFail("Has no sites")
                 return
             }
-            /* Ecosia: update number of items
+            /* Ecosia: Update with removed default sites
             XCTAssertEqual(sites.count, 7, "Contains 5 default sites and two pinned sites")
              */
-            XCTAssertEqual(sites.count, 5, "Contains 3 default sites and two pinned sites")
+            XCTAssertEqual(sites.count, 2, "Contains no default sites and two pinned sites")
             expectation.fulfill()
         }
 
@@ -107,10 +107,10 @@ class TopSitesHelperTests: XCTestCase {
                 XCTFail("Has no sites")
                 return
             }
-            /* Ecosia: adjust espected number as we have 3 default sites only
+            /* Ecosia: Update with removed default sites
             XCTAssertEqual(sites.count, 7, "Contains 5 default sites and 2 frecency sites")
              */
-            XCTAssertEqual(sites.count, 5, "Contains 3 default sites and 2 frecency sites")
+            XCTAssertEqual(sites.count, 2, "Contains no default sites and 2 frecency sites")
             expectation.fulfill()
         }
 
@@ -128,17 +128,17 @@ class TopSitesHelperTests: XCTestCase {
                 XCTFail("Has no sites")
                 return
             }
-            /* Ecosia: adjust espected number as we have 3 default sites only
+            /* Ecosia: Update with removed default sites
             XCTAssertEqual(sites.count, 7, "Contains 5 default sites and 2 frecency sites, no sponsored urls")
              */
-            XCTAssertEqual(sites.count, 5, "Contains 3 default sites and 2 frecency sites, no sponsored urls")
+            XCTAssertEqual(sites.count, 2, "Contains no default sites and 2 frecency sites, no sponsored urls")
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
-    func testGetTopSites_removesDuplicates() {
+    func testGetTopSites_removesDuplicates() { //
         let expectation = expectation(description: "Expect top sites to be fetched")
         let sites = defaultFrecencySites + defaultFrecencySites
 
@@ -149,17 +149,17 @@ class TopSitesHelperTests: XCTestCase {
                 XCTFail("Has no sites")
                 return
             }
-            /* Ecosia: adjust espected number as we have 3 default sites only
+            /* Ecosia: Update with removed default sites
             XCTAssertEqual(sites.count, 7, "Contains 5 default sites and 2 frecency sites, no frecency duplicates")
              */
-            XCTAssertEqual(sites.count, 5, "Contains 3 default sites and 2 frecency sites, no frecency duplicates")
+            XCTAssertEqual(sites.count, 2, "Contains no default sites and 2 frecency sites, no frecency duplicates")
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
-    func testGetTopSites_defaultSitesHavePrecedenceOverFrecency() {
+    func testGetTopSites_defaultSitesHavePrecedenceOverFrecency() { //
         let expectation = expectation(description: "Expect top sites to be fetched")
         let sites = [Site(url: "https://facebook.com", title: "Facebook")]
         let subject = createSubject(mockPinnedSites: true, frecencySitesToAdd: sites)
@@ -169,17 +169,17 @@ class TopSitesHelperTests: XCTestCase {
                 XCTFail("Has no sites")
                 return
             }
-            /* Ecosia: adjust espected number as we have 3 default sites only
+            /* Ecosia: Update with removed default sites
             XCTAssertEqual(sites.count, 5, "Contains only 5 default sites, no duplicates of defaults sites")
              */
-            XCTAssertEqual(sites.count, 4, "Contains only 3 default sites, no duplicates of defaults sites")
+            XCTAssertEqual(sites.count, 1, "Contains only no default sites, no duplicates of defaults sites")
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
-    func testGetTopSites_pinnedSitesHasPrecedenceOverDefaultTopSites() {
+    func testGetTopSites_pinnedSitesHasPrecedenceOverDefaultTopSites() { //
         let expectation = expectation(description: "Expect top sites to be fetched")
         let subject = createSubject(
             mockPinnedSites: true,
@@ -194,10 +194,10 @@ class TopSitesHelperTests: XCTestCase {
                 XCTFail("Has no sites")
                 return
             }
-            /* Ecosia: adjust espected number as we have 3 default sites only
+            /* Ecosia: Update with removed default sites
             XCTAssertEqual(sites.count, 5, "Contains only 4 default sites, and " + "one pinned site that replaced the default site")
              */
-            XCTAssertEqual(sites.count, 4, "Contains only 3 default sites, and "
+            XCTAssertEqual(sites.count, 1, "Contains no default sites, and "
                            + "one pinned site that replaced the default site")
             expectation.fulfill()
         }

@@ -82,18 +82,7 @@ struct TopSitesView: View {
         let url = site.url
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
             Group {
-                // Ecosia: Update default suggested sites entries
-                if let ecosiaDefaultSuggestedSite = DefaultSuggestedSites.EcosiaDefaultSuggestedSite.fromURL(url) {
-                    // Ecosia: Disable accessibility label otherwise as it requires a mojor work on Firefox code to support it appropriately
-                    // swiftlint:disable accessibility_label_for_image
-                    Image(ecosiaDefaultSuggestedSite.faviconName, bundle: .ecosia)
-                        .resizable()
-                        .scaledToFit()
-                    // swiftlint:enable accessibility_label_for_image
-                /* Ecosia: Update default suggested sites entries
                 if let image = entry.favicons[site.faviconImageCacheKey] {
-                 */
-                } else if let image = entry.favicons[site.faviconImageCacheKey] {
                     image
                         .resizable()
                         .scaledToFit()

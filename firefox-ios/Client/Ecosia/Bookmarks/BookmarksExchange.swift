@@ -78,9 +78,10 @@ final class BookmarksExchange: BookmarksExchangable {
     @MainActor
     func `import`(from fileURL: URL, in viewController: UIViewController) async throws {
         guard let view = viewController.view else { return }
+        let theme = themeFromView(view: view)
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = .init(named: "splashLogoTint")
+        activityIndicator.color = theme.colors.ecosia.brandPrimary
         activityIndicator.startAnimating()
 
         let toast = SimpleToast()
@@ -89,7 +90,7 @@ final class BookmarksExchange: BookmarksExchangable {
             .localized(.importingBookmarks),
             image: .view(activityIndicator),
             bottomContainer: view,
-            theme: themeFromView(view: view),
+            theme: theme,
             bottomInset: view.layoutMargins.bottom
         )
 

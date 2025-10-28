@@ -40,7 +40,6 @@ struct OpenTabsView: View {
         VStack(alignment: .leading) {
             Link(destination: linkToContainingApp("?uuid=\(tab.uuid)", query: query)) {
                 HStack(alignment: .center, spacing: 15) {
-                    /* Ecosia: Update default suggested sites entries
                     if entry.favicons[tab.imageKey] != nil {
                         (entry.favicons[tab.imageKey])!.resizable().frame(width: 16, height: 16)
                     } else {
@@ -50,24 +49,9 @@ struct OpenTabsView: View {
                     }
 
                     Text(tab.title!)
+                    /* Ecosia: update color
                         .foregroundColor(Color.white)
-                     */                    
-                    // Ecosia: Disable accessibility label otherwise as it requires a major work on Firefox code to support it appropriately
-                    // swiftlint:disable accessibility_label_for_image
-                    if let ecosiaDefaultSuggestedSite = suggestedSite(from: tab.url) {
-                        Image(ecosiaDefaultSuggestedSite.faviconName, bundle: .ecosia)
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                    } else if entry.favicons[tab.imageKey] != nil {
-                        (entry.favicons[tab.imageKey])!.resizable().frame(width: 16, height: 16)
-                    } else {
-                        Image(decorative: StandardImageIdentifiers.Large.globe)
-                            .foregroundColor(.ecosiaBundledColorWithName("PrimaryText"))
-                            .frame(width: 16, height: 16)
-                        // swiftlint:enable accessibility_label_for_image
-                    }
-
-                    Text(suggestedSite(from: tab.url)?.localizedTitle ?? tab.title!)
+                     */
                         .foregroundColor(.ecosiaBundledColorWithName("PrimaryText"))
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
@@ -180,14 +164,5 @@ struct OpenTabsView: View {
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
         return URL(string: urlString, invalidCharacters: false)!
-    }
-}
-
-// Ecosia: Helper to get a default suggested site from a URL
-extension OpenTabsView {
-
-    func suggestedSite(from url: URL?) -> DefaultSuggestedSites.EcosiaDefaultSuggestedSite? {
-        guard let url else { return nil }
-        return .fromURL(url.absoluteString)
     }
 }

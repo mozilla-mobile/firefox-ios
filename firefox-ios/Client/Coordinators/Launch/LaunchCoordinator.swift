@@ -46,6 +46,8 @@ class LaunchCoordinator: BaseCoordinator,
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManager,
                                         isFullScreen: Bool) {
+        /* Ecosia: Disable old onboarding since outdated. Remove and clean up once properly updated.
+        
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let introViewModel = IntroViewModel(introScreenManager: manager,
@@ -83,6 +85,9 @@ class LaunchCoordinator: BaseCoordinator,
              */
             router.present(introViewController, animated: true)
         }
+        
+        */
+        parentCoordinator?.didFinishLaunch(from: self)
     }
 
     // MARK: - Update

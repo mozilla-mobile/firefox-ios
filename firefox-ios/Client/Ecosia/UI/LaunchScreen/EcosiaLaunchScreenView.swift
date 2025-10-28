@@ -9,8 +9,16 @@ public class EcosiaLaunchScreenView: UIView {
     private static let viewName = "EcosiaLaunchScreen"
 
     public class func fromNib() -> UIView {
-        return Bundle.main.loadNibNamed(EcosiaLaunchScreenView.viewName,
-                                        owner: nil,
-                                        options: nil)![0] as! UIView
+        let view = Bundle.main.loadNibNamed(EcosiaLaunchScreenView.viewName,
+                                            owner: nil,
+                                            options: nil)![0] as! UIView
+
+        // XIB uses systemBackground as fallback since asset catalog colors in XIBs
+        // can briefly show "Any Appearance" variant before switching to correct appearance
+        if let color = UIColor(named: "launchScreenBackground") {
+            view.backgroundColor = color
+        }
+
+        return view
     }
 }

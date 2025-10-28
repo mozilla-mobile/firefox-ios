@@ -6,6 +6,7 @@ import Account
 import Common
 import Shared
 import UIKit
+import Ecosia
 
 struct SettingsUX {
     static let TableViewHeaderFooterHeight = CGFloat(44)
@@ -193,10 +194,16 @@ class PaddedSwitch: UIView {
         static let padding: CGFloat = 8
     }
 
+    /* Ecosia: Use themed Switch
     let switchView: UISwitch
+     */
+    let switchView: EcosiaThemedSwitch
 
     init() {
+        /* Ecosia: Use themed Switch
         self.switchView = UISwitch()
+         */
+        self.switchView = EcosiaThemedSwitch()
         super.init(frame: .zero)
 
         addSubview(switchView)
@@ -347,6 +354,9 @@ class BoolSetting: Setting, FeatureFlaggable {
             onTintColor: theme.colors.actionPrimary,
             isEnabled: enabled
         )
+
+        // Ecosia: Apply Switch theme when cell is configured (triggered on theme change)
+        control.switchView.applyTheme(theme: theme)
 
         displayBool(control.switchView)
         if let title = title {

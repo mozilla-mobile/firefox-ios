@@ -7,6 +7,7 @@ public extension CGFloat {
 }
 
 public struct EcosiaFloatDesignSystemFoundations {
+    public let font = EcosiaTypography()
     public let space = EcosiaSpacing()
     public let borderRadius = EcosiaBorders()
 }

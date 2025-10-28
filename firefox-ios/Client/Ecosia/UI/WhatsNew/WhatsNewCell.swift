@@ -77,10 +77,10 @@ extension WhatsNewCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         if #available(iOS 14, *) {
             guard var updatedConfiguration = contentConfigurationToUpdate as? UIListContentConfiguration else { return }
-            updatedConfiguration.image = item.image?.tinted(withColor: theme.colors.ecosia.iconSecondary)
+            updatedConfiguration.image = item.image?.tinted(withColor: theme.colors.ecosia.iconDecorative)
             contentConfiguration = updatedConfiguration
         } else {
-            imageView?.image = item.image?.tinted(withColor: theme.colors.ecosia.iconSecondary)
+            imageView?.image = item.image?.tinted(withColor: theme.colors.ecosia.iconDecorative)
         }
     }
 }

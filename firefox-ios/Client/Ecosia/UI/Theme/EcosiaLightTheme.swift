@@ -21,7 +21,7 @@ class EcosiaLightColourPalette: EcosiaThemeColourPalette {
 
     // MARK: - Layers
     var layer1: UIColor { ecosia.backgroundPrimaryDecorative }
-    var layer2: UIColor { fallbackTheme.colors.layer2 }
+    var layer2: UIColor { ecosia.backgroundElevation1 }
     var layer3: UIColor { ecosia.backgroundPrimaryDecorative }
     var layer4: UIColor { fallbackTheme.colors.layer4 }
     var layer5: UIColor { ecosia.backgroundSecondary }
@@ -85,9 +85,9 @@ class EcosiaLightColourPalette: EcosiaThemeColourPalette {
 
     // MARK: - Icons
     var iconPrimary: UIColor { ecosia.buttonContentSecondary }
-    var iconSecondary: UIColor { ecosia.iconSecondary }
+    var iconSecondary: UIColor { ecosia.buttonContentSecondary }
     var iconDisabled: UIColor { fallbackTheme.colors.iconDisabled }
-    var iconAccent: UIColor { ecosia.iconSecondary }
+    var iconAccent: UIColor { ecosia.iconDecorative }
     var iconOnColor: UIColor { fallbackTheme.colors.iconOnColor }
     var iconCritical: UIColor { ecosia.stateError }
     var iconSpinner: UIColor { fallbackTheme.colors.iconSpinner }
@@ -111,6 +111,8 @@ class EcosiaLightColourPalette: EcosiaThemeColourPalette {
 }
 
 private struct EcosiaLightSemanticColors: EcosiaSemanticColors {
+    var backgroundNeutralInverse: UIColor = EcosiaColor.Gray80
+    var backgroundFeatured: UIColor = EcosiaColor.Grellow100
     var backgroundPrimary: UIColor = EcosiaColor.White
     var backgroundPrimaryDecorative: UIColor = EcosiaColor.Gray10
     var backgroundSecondary: UIColor = EcosiaColor.Gray10
@@ -118,23 +120,28 @@ private struct EcosiaLightSemanticColors: EcosiaSemanticColors {
     var backgroundQuaternary: UIColor = EcosiaColor.Gray20
     var backgroundElevation1: UIColor = EcosiaColor.White
     var backgroundElevation2: UIColor = EcosiaColor.White
-    var backgroundBrandSecondaryAlt: UIColor = EcosiaColor.DarkGreen50
     var borderDecorative: UIColor = EcosiaColor.Gray30
-    var brandPrimary: UIColor = EcosiaColor.Green50
-    var buttonBackgroundPrimary: UIColor = EcosiaColor.Green50
-    var buttonBackgroundPrimaryActive: UIColor = EcosiaColor.DarkGreen50
+    var brandFeatured: UIColor = EcosiaColor.Grellow100
+    var brandPrimary: UIColor = EcosiaColor.Gray70
+    var buttonBackgroundFeatured: UIColor = EcosiaColor.Grellow100
+    var buttonBackgroundFeaturedActive: UIColor = EcosiaColor.Grellow300
+    var buttonBackgroundFeaturedHover: UIColor = EcosiaColor.Grellow200
+    var buttonBackgroundPrimary: UIColor = EcosiaColor.Gray70
+    var buttonBackgroundPrimaryActive: UIColor = EcosiaColor.Gray50
     var buttonBackgroundSecondary: UIColor = EcosiaColor.White
+    var buttonBackgroundSecondaryActive: UIColor = EcosiaColor.Gray40
     var buttonBackgroundSecondaryHover: UIColor = EcosiaColor.Gray30
     var buttonContentSecondary: UIColor = EcosiaColor.Gray70
-    var buttonBackgroundTransparentActive: UIColor = EcosiaColor.Green70.withAlphaComponent(0.24)
-    var iconSecondary: UIColor = EcosiaColor.Green50
+    var buttonContentSecondaryStatic: UIColor = EcosiaColor.Gray70
+    var highlighter: UIColor = EcosiaColor.Grellow100.withAlphaComponent(0.32)
     var iconDecorative: UIColor = EcosiaColor.Gray50
     var iconInverseStrong: UIColor = EcosiaColor.White
     var segmentedControlBackgroundActive: UIColor = EcosiaColor.White
     var segmentedControlBackgroundRest: UIColor = EcosiaColor.Gray30
     var stateDisabled: UIColor = EcosiaColor.Gray30
     var stateError: UIColor = EcosiaColor.Red50
-    var stateLoading: UIColor = EcosiaColor.Green10
+    var switchKnobActive: UIColor = EcosiaColor.White
+    var switchKnobDisabled: UIColor = EcosiaColor.White
     var textPrimary: UIColor = EcosiaColor.Gray70
     var textInversePrimary: UIColor = EcosiaColor.White
     var textSecondary: UIColor = EcosiaColor.Gray50

@@ -145,7 +145,10 @@ public final class NavigationHeaderView: UIView {
         let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
             .withTintColor(theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
+        /* Ecosia: Update close button background color
         closeButton.backgroundColor = theme.colors.layer2
+         */
+        closeButton.backgroundColor = theme.colors.ecosia.buttonBackgroundSecondary
         backButton.tintColor = theme.colors.iconAccent
         backButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary

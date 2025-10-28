@@ -237,7 +237,7 @@ class ButtonToast: Toast {
         /* Ecosia: Add `horizontalStackView` background as the Toast view is made clear
            so to have the padding effect from bottom, left and right
          */
-        horizontalStackView.backgroundColor = theme.colors.ecosia.buttonBackgroundPrimaryActive
+        horizontalStackView.backgroundColor = theme.colors.ecosia.backgroundNeutralInverse
         // Ecosia: Review ToastView to look like v104
         // roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
     }

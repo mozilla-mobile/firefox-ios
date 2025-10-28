@@ -17,18 +17,8 @@ class MultiplyImpact: UIViewController, Themeable {
         private init() {}
         static let hardcodedDarkTextColor = EcosiaDarkTheme().colors.ecosia.textPrimary
         static let defaultPadding: CGFloat = 16
-        static let subtitleTopMargin: CGFloat = 8
+        static let subtitleMargin: CGFloat = 8
         static let defaultCornerRadius: CGFloat = 10
-
-        struct ForestAndWaves {
-            private init() {}
-            static let waveHeight: CGFloat = 34
-            static let forestOffsetTypePad: CGFloat = 38
-            static let forestOffsetTypePhone: CGFloat = 26
-            static let forestHeightTypePad: CGFloat = 135
-            static let forestWidthTypePad: CGFloat = 544
-            static let forestTopMargin: CGFloat = 24
-        }
 
         struct Card {
             private init() {}
@@ -64,8 +54,6 @@ class MultiplyImpact: UIViewController, Themeable {
 
     private weak var subtitle: UILabel?
     private weak var topBackground: UIView?
-    private weak var forestOverlay: UIView?
-    private weak var waves: UIImageView?
     private weak var yourInvites: UILabel?
     private lazy var referralImpactRowView: NTPImpactRowView = {
         let view = NTPImpactRowView(info: referralInfo)
@@ -151,22 +139,6 @@ class MultiplyImpact: UIViewController, Themeable {
         subtitle.adjustsFontForContentSizeCategory = true
         content.addSubview(subtitle)
         self.subtitle = subtitle
-
-        let forest = UIImageView(image: .init(named: "forestIcons"))
-        forest.translatesAutoresizingMaskIntoConstraints = false
-        forest.contentMode = .bottom
-        content.addSubview(forest)
-
-        let forestOverlay = UIView()
-        forestOverlay.translatesAutoresizingMaskIntoConstraints = false
-        forest.addSubview(forestOverlay)
-        self.forestOverlay = forestOverlay
-
-        let waves = UIImageView(image: .init(named: "wavesBottom"))
-        waves.translatesAutoresizingMaskIntoConstraints = false
-        waves.contentMode = .scaleToFill
-        content.addSubview(waves)
-        self.waves = waves
 
         let yourInvites = UILabel()
         yourInvites.text = .localized(.yourInvites)
@@ -323,43 +295,18 @@ class MultiplyImpact: UIViewController, Themeable {
         content.rightAnchor.constraint(equalTo: scroll.frameLayoutGuide.rightAnchor).isActive = true
         content.bottomAnchor.constraint(equalTo: scroll.contentLayoutGuide.bottomAnchor).isActive = true
 
-        subtitle.topAnchor.constraint(equalTo: content.topAnchor, constant: UX.subtitleTopMargin).isActive = true
+        subtitle.topAnchor.constraint(equalTo: content.topAnchor, constant: UX.subtitleMargin).isActive = true
         subtitle.leftAnchor.constraint(equalTo: content.leftAnchor, constant: UX.defaultPadding).isActive = true
         subtitle.rightAnchor.constraint(lessThanOrEqualTo: content.rightAnchor, constant: -UX.defaultPadding).isActive = true
-
-        forest.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        forest.topAnchor.constraint(equalTo: subtitle.bottomAnchor, constant: UX.ForestAndWaves.forestTopMargin).isActive = true
-
-        if view.traitCollection.userInterfaceIdiom == .pad {
-            forest.widthAnchor.constraint(equalToConstant: UX.ForestAndWaves.forestWidthTypePad).isActive = true
-            forest.heightAnchor.constraint(equalToConstant: UX.ForestAndWaves.forestHeightTypePad).isActive = true
-            waves.bottomAnchor.constraint(equalTo: forest.bottomAnchor, constant: -UX.ForestAndWaves.forestOffsetTypePad).isActive = true
-            forestOverlay.topAnchor.constraint(equalTo: forest.bottomAnchor, constant: -UX.ForestAndWaves.forestOffsetTypePad).isActive = true
-            forestOverlay.bottomAnchor.constraint(equalTo: forest.bottomAnchor, constant: UX.ForestAndWaves.forestOffsetTypePad).isActive = true
-            forest.contentMode = .scaleAspectFit
-        } else {
-            forest.leadingAnchor.constraint(equalTo: content.leadingAnchor).isActive = true
-            forest.trailingAnchor.constraint(equalTo: content.trailingAnchor).isActive = true
-            waves.bottomAnchor.constraint(equalTo: forest.bottomAnchor, constant: -UX.ForestAndWaves.forestOffsetTypePhone).isActive = true
-            forestOverlay.topAnchor.constraint(equalTo: forest.bottomAnchor, constant: -UX.ForestAndWaves.forestOffsetTypePhone).isActive = true
-            forestOverlay.bottomAnchor.constraint(equalTo: forest.bottomAnchor, constant: UX.ForestAndWaves.forestOffsetTypePhone).isActive = true
-        }
-
-        waves.leadingAnchor.constraint(equalTo: content.leadingAnchor).isActive = true
-        waves.trailingAnchor.constraint(equalTo: content.trailingAnchor).isActive = true
-        waves.heightAnchor.constraint(equalToConstant: UX.ForestAndWaves.waveHeight).isActive = true
 
         topBackground.leadingAnchor.constraint(equalTo: content.leadingAnchor).isActive = true
         topBackground.trailingAnchor.constraint(equalTo: content.trailingAnchor).isActive = true
         topBackground.topAnchor.constraint(equalTo: content.topAnchor).isActive = true
-        topBackground.bottomAnchor.constraint(equalTo: waves.bottomAnchor).isActive = true
-
-        forestOverlay.leadingAnchor.constraint(equalTo: content.leadingAnchor).isActive = true
-        forestOverlay.trailingAnchor.constraint(equalTo: content.trailingAnchor).isActive = true
+        topBackground.bottomAnchor.constraint(equalTo: subtitle.bottomAnchor, constant: UX.subtitleMargin).isActive = true
 
         yourInvites.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: UX.defaultPadding).isActive = true
         yourInvites.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -UX.defaultPadding).isActive = true
-        yourInvites.topAnchor.constraint(equalTo: waves.bottomAnchor, constant: UX.defaultPadding).isActive = true
+        yourInvites.topAnchor.constraint(equalTo: topBackground.bottomAnchor, constant: UX.defaultPadding).isActive = true
 
         referralImpactRowView.leftAnchor.constraint(equalTo: content.leftAnchor, constant: UX.defaultPadding).isActive = true
         referralImpactRowView.rightAnchor.constraint(equalTo: content.rightAnchor, constant: -UX.defaultPadding).isActive = true
@@ -426,15 +373,11 @@ class MultiplyImpact: UIViewController, Themeable {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
 
         view.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
-        inviteButton.backgroundColor = theme.colors.ecosia.brandPrimary
-        inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .normal)
-        inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .highlighted)
-        inviteButton.setTitleColor(theme.colors.ecosia.textInversePrimary, for: .selected)
+        inviteButton.backgroundColor = theme.colors.ecosia.buttonBackgroundFeatured
+        inviteButton.setTitleColor(theme.colors.ecosia.buttonContentSecondaryStatic, for: .normal)
         learnMoreButton?.setTitleColor(theme.colors.ecosia.brandPrimary, for: .normal)
-        waves?.tintColor = theme.colors.ecosia.backgroundPrimaryDecorative
-        topBackground?.backgroundColor = theme.colors.ecosia.backgroundBrandSecondaryAlt
-        forestOverlay?.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
-        subtitle?.textColor = UX.hardcodedDarkTextColor
+        topBackground?.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
+        subtitle?.textColor = theme.colors.ecosia.textSecondary
         copyControl?.backgroundColor = theme.colors.ecosia.backgroundSecondary
         copyControl?.layer.borderColor = theme.colors.ecosia.borderDecorative.cgColor
         moreSharingMethods?.textColor = theme.colors.ecosia.textSecondary
@@ -465,14 +408,14 @@ class MultiplyImpact: UIViewController, Themeable {
     private func updateBarAppearance(theme: Theme) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.largeTitleTextAttributes = [.foregroundColor: UX.hardcodedDarkTextColor]
-        appearance.titleTextAttributes = [.foregroundColor: UX.hardcodedDarkTextColor]
-        appearance.backgroundColor = theme.colors.ecosia.backgroundBrandSecondaryAlt
+        appearance.largeTitleTextAttributes = [.foregroundColor: theme.colors.ecosia.textPrimary]
+        appearance.titleTextAttributes = [.foregroundColor: theme.colors.ecosia.textPrimary]
+        appearance.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
         appearance.shadowColor = nil
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.backgroundBrandSecondaryAlt
-        navigationController?.navigationBar.tintColor = theme.type == .light ? UX.hardcodedDarkTextColor : theme.colors.ecosia.brandPrimary
+        navigationController?.navigationBar.backgroundColor = theme.colors.ecosia.backgroundPrimaryDecorative
+        navigationController?.navigationBar.tintColor = theme.colors.ecosia.buttonContentSecondary
     }
 
     private func updateInviteLink() {

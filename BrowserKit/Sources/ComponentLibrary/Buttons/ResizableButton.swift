@@ -19,6 +19,13 @@ open class ResizableButton: UIButton {
         }
     }
 
+    // Ecosia: Add support to custom font
+    public var customFont: UIFont? {
+        didSet {
+            updateFontConfiguration()
+        }
+    }
+
     override public init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -68,6 +75,24 @@ open class ResizableButton: UIButton {
         configuration = UIButton.Configuration.plain()
         configuration?.titleLineBreakMode = .byWordWrapping
         updateContentInsets()
+        // Ecosia: Add support to custom font
+        updateFontConfiguration()
+    }
+
+    // Ecosia: Add support to custom font
+    private func updateFontConfiguration() {
+        guard let font = customFont else { return }
+
+        configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            // Respect Dynamic Type scaling if the original font does
+            if incoming.font?.fontDescriptor.symbolicTraits.contains(.traitBold) ?? false {
+                outgoing.font = UIFontMetrics.default.scaledFont(for: font)
+            } else {
+                outgoing.font = font
+            }
+            return outgoing
+        }
     }
 
     private func updateContentInsets() {

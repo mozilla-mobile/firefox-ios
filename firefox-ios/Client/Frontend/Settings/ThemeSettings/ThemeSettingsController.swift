@@ -7,6 +7,7 @@ import Foundation
 import Redux
 import Shared
 import ComponentLibrary
+import Ecosia
 
 class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     typealias SubscriberStateType = ThemeSettingsState
@@ -236,12 +237,19 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
 
+            /* Ecosia: Use EcosiaThemedSwitch
             let control = ThemedSwitch()
             control.applyTheme(theme: theme)
+             */
+            let control = EcosiaThemedSwitch()
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
+            /* Ecosia: No need for `onTintColor` with EcosiaThemedSwitch
             control.onTintColor = theme.colors.actionPrimary
+             */
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
             control.isOn = themeState.useSystemAppearance
+            // Ecosia: Apply theme only after `isOn` to use correct color
+            control.applyTheme(theme: theme)
 
             cell.accessoryView = control
         case .automaticBrightness:

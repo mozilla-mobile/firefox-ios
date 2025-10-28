@@ -69,8 +69,6 @@ class TopSitesViewModel {
     private func ecosiaAnalyticsProperty(forSite site: Site) -> Analytics.Property.TopSite {
         if (site as? PinnedSite) != nil {
             return .pinned
-        } else if topSiteHistoryManager.isDefaultTopSite(site: site) {
-            return .default
         } else {
             return .mostVisited
         }

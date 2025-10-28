@@ -49,6 +49,7 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
+    /* Ecosia: Disable Onboarding dependant tests since LaunchCoordinator.presentIntroOnboarding is temporarily disabled
     func testLaunchWithLaunchType_launchFromScene() {
         let subject = createSubject()
         subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
@@ -56,6 +57,7 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }
+    */
 
     func testLaunchWithLaunchType_launchFromBrowser() {
         let subject = createSubject()
@@ -74,6 +76,7 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
+    /* Ecosia: Disable Onboarding dependant tests since LaunchCoordinator.presentIntroOnboarding is temporarily disabled
     func testChildLaunchCoordinatorIsDone_startsBrowser() throws {
         let subject = createSubject()
         subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
@@ -84,6 +87,7 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
+    */
 
     func testHandleRoute_launchNotFinished_routeSaved() {
         let subject = createSubject()

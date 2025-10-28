@@ -89,7 +89,7 @@ extension NTPImpactCellViewModel: HomepageViewModelProtocol {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        .init(title: .localized(.climateImpact), isButtonHidden: true)
+        .emptyHeader
     }
 
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
@@ -112,13 +112,6 @@ extension NTPImpactCellViewModel: HomepageViewModelProtocol {
             supplementaryItems.append(
                 .init(layoutSize: .init(widthDimension: .fractionalWidth(1),
                                         heightDimension: .absolute(1)),
-                      elementKind: UICollectionView.elementKindSectionHeader,
-                      alignment: .top)
-            )
-        } else {
-            supplementaryItems.append(
-                .init(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                        heightDimension: .estimated(100)),
                       elementKind: UICollectionView.elementKindSectionHeader,
                       alignment: .top)
             )

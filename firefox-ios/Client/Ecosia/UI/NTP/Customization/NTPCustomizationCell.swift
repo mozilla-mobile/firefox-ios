@@ -65,7 +65,7 @@ final class NTPCustomizationCell: UICollectionViewCell, ThemeApplicable, Reusabl
         button.imageView?.tintColor = theme.colors.ecosia.buttonContentSecondary
         button.setTitleColor(theme.colors.ecosia.buttonContentSecondary, for: .normal)
         button.setBackgroundColor(theme.colors.ecosia.buttonBackgroundSecondary, forState: .normal)
-        button.setBackgroundColor(theme.colors.ecosia.buttonBackgroundTransparentActive, forState: .highlighted)
+        button.setBackgroundColor(theme.colors.ecosia.buttonBackgroundSecondaryActive, forState: .highlighted)
     }
 
     @objc func touchButtonAction() {

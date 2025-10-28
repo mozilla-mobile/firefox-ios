@@ -6,6 +6,7 @@ import Shared
 import UIKit
 import Common
 import SiteImageView
+import Ecosia
 
 struct ETPMenuUX {
     struct Fonts {
@@ -123,7 +124,10 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
         label.adjustsFontForContentSizeCategory = true
     }
 
+    /* Ecosia: Use themed Switch
     private let toggleSwitch: UISwitch = .build { toggleSwitch in
+     */
+    private let toggleSwitch: EcosiaThemedSwitch = .build { toggleSwitch in
         toggleSwitch.isEnabled = true
     }
 
@@ -523,8 +527,11 @@ extension EnhancedTrackingProtectionMenuVC {
             connectionImage.tintColor = theme.colors.iconPrimary
         }
         toggleView.backgroundColor = theme.colors.layer2
+        /* Ecosia: Use applyTheme from EcosiaThemedSwitch
         toggleSwitch.tintColor = theme.colors.actionPrimary
         toggleSwitch.onTintColor = theme.colors.actionPrimary
+         */
+        toggleSwitch.applyTheme(theme: theme)
         toggleStatusLabel.textColor = theme.colors.textSecondary
         protectionView.backgroundColor = theme.colors.layer2
         protectionButton.setTitleColor(theme.colors.textAccent, for: .normal)

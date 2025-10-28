@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Ecosia
 
 final class TrackingProtectionToggleView: UIView, ThemeApplicable {
     private struct UX {
@@ -25,7 +26,10 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
+    /* Ecosia: Use themed Switch
     private let toggleSwitch: UISwitch = .build { toggleSwitch in
+     */
+    private let toggleSwitch: EcosiaThemedSwitch = .build { toggleSwitch in
         toggleSwitch.isEnabled = true
     }
 
@@ -131,8 +135,11 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         self.backgroundColor = theme.colors.layer2
+        /* Ecosia: Use applyTheme from EcosiaThemedSwitch
         toggleSwitch.tintColor = theme.colors.actionPrimary
         toggleSwitch.onTintColor = theme.colors.actionPrimary
+         */
+        toggleSwitch.applyTheme(theme: theme)
         toggleStatusLabel.textColor = theme.colors.textSecondary
     }
 }

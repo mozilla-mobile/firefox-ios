@@ -25,6 +25,7 @@ class TopSitesViewModelTests: XCTestCase {
         self.profile = nil
     }
 
+    /* Ecosia: Remove default sites dependant tests since DefaultSuggestedSites.defaultSites is empty
     func testDeletionOfSingleSuggestedSite() {
         let viewModel = TopSitesViewModel(profile: profile,
                                           isZeroSearch: false,
@@ -61,6 +62,7 @@ class TopSitesViewModelTests: XCTestCase {
         let newSites = topSitesProvider.defaultTopSites(profile.prefs)
         XCTAssertTrue(newSites.isEmpty)
     }
+    */
 }
 
 // MARK: Helper methods

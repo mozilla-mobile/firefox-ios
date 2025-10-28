@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Ecosia logo-1.pdf",
+      "filename" : "ecosia-logo.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Ecosia logo (1).pdf",
+      "filename" : "ecosia-logo-dark.pdf",
       "idiom" : "universal"
     }
   ],

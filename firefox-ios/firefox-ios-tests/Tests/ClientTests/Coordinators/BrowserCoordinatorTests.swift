@@ -791,6 +791,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(windowManager.closePrivateTabsMultiActionCalled, 1)
     }
 
+    /* Ecosia: Disable Onboarding dependant tests since LaunchCoordinator.presentIntroOnboarding is temporarily disabled
     func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
         let subject = createSubject()
         subject.browserHasLoaded()
@@ -801,6 +802,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }
+    */
 
     // MARK: - Saved route
 

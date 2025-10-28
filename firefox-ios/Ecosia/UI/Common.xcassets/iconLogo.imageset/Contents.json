@@ -1,17 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Logo.pdf",
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "Logo 1.pdf",
+      "filename" : "Type=E + Tree Circle, Size=hdpi (36).pdf",
       "idiom" : "universal"
     }
   ],
