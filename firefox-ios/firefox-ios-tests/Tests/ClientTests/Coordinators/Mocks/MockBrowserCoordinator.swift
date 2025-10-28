@@ -216,7 +216,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showStoriesFeedCalled += 1
     }
 
-    func showStoriesWebView() {
+    func showStoriesWebView(url: URL?) {
         showStoriesWebViewCalled += 1
     }
 
