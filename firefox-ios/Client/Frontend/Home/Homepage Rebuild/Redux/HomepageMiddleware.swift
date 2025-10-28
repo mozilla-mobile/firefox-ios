@@ -9,7 +9,7 @@ import Common
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
 @MainActor
-final class HomepageMiddleware: FeatureFlaggable {
+final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private let homepageTelemetry: HomepageTelemetry
     private let notificationCenter: NotificationProtocol
     private let windowManager: WindowManager
@@ -124,18 +124,14 @@ final class HomepageMiddleware: FeatureFlaggable {
             .RustPlacesOpened
         ]
 
-        notifications.forEach {
-            notificationCenter.addObserver(
-                self,
-                selector: #selector(handleNotifications),
-                name: $0,
-                object: nil
-            )
-        }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: notifications
+        )
     }
 
-    @objc
-    private nonisolated func handleNotifications(_ notification: Notification) {
+    func handleNotifications(_ notification: Notification) {
         // This update occurs for all windows and we need to pass along
         // the windowUUID to any subsequent actions or state changes.
         // Time complexity: O(n), where n is the number of windows in windowManager.windows

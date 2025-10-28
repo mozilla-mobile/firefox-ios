@@ -16,7 +16,9 @@ protocol JumpBackInDelegate: AnyObject {
     func didLoadNewData()
 }
 
-actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggable {
+actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor,
+                                            FeatureFlaggable,
+                                            Notifiable {
     // MARK: Properties
 
     nonisolated let notificationCenter: NotificationProtocol
@@ -53,12 +55,12 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
                                                   .ProfileDidFinishSyncing,
                                                   .FirefoxAccountChanged,
                                                   .TabDataUpdated]
-        notifications.forEach {
-            notificationCenter.addObserver(self,
-                                           selector: #selector(handleNotifications),
-                                           name: $0,
-                                           object: nil)
-        }
+
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: notifications
+        )
 
         Task {
             await self.updateTabsAndAccountData()
@@ -170,18 +172,19 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         mostRecentSyncedTab = JumpBackInSyncedTab(client: mostRecentTab.client, tab: mostRecentTab.tab)
     }
 
-    @MainActor
-    @objc
-    func handleNotifications(_ notification: Notification) {
+    nonisolated func handleNotifications(_ notification: Notification) {
+        let notificationName = notification.name
+        let windowUUID = notification.windowUUID
+
         Task {
-            switch notification.name {
+            switch notificationName {
             case .ShowHomepage,
                     .TabDataUpdated,
                     .TabsTrayDidClose,
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
-                guard let uuid = notification.windowUUID,
-                    await uuid == windowUUID
+                guard let uuid = windowUUID,
+                    uuid == windowUUID
                 else { return }
                 await updateTabsData()
             case .ProfileDidFinishSyncing,
