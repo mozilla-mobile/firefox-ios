@@ -609,29 +609,34 @@ final class TabManagerMiddleware: FeatureFlaggable {
         tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
         let normalCount = tabManager.normalTabs.count
         let privateCount = tabManager.privateTabs.count
-        tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
-        triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
+        Task.detached(priority: .userInitiated) {
+            await tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
+            await MainActor.run {
+                assert(Thread.isMainThread)
+                self.triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
 
-        if tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled {
-            let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
-                                                  windowUUID: uuid,
-                                                  actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatchLegacy(action)
-        } else {
-            if !isTabTrayUIExperimentsEnabled {
-                let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatchLegacy(toastAction)
+                if tabsState.isPrivateMode && !self.isTabTrayUIExperimentsEnabled {
+                    let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
+                                                          windowUUID: uuid,
+                                                          actionType: TabPanelMiddlewareActionType.showToast)
+                    store.dispatchLegacy(action)
+                } else {
+                    if !self.isTabTrayUIExperimentsEnabled {
+                        let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
+                                                               windowUUID: uuid,
+                                                               actionType: GeneralBrowserActionType.showToast)
+                        store.dispatchLegacy(toastAction)
+                    }
+                    self.addNewTabIfPrivate(uuid: uuid)
+                }
+
+                if !tabsState.isPrivateMode {
+                    let dismissAction = TabTrayAction(windowUUID: uuid,
+                                                      actionType: TabTrayActionType.dismissTabTray)
+                    store.dispatchLegacy(dismissAction)
+                }
             }
-            addNewTabIfPrivate(uuid: uuid)
-        }
-
-        if !tabsState.isPrivateMode {
-            let dismissAction = TabTrayAction(windowUUID: uuid,
-                                              actionType: TabTrayActionType.dismissTabTray)
-            store.dispatchLegacy(dismissAction)
         }
     }
 
