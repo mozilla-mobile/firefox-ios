@@ -79,7 +79,7 @@ typealias TabUUID = String
 
 @MainActor
 class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
-    static let privateModeKey = "PrivateModeKey"
+    static nonisolated let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
         get {
@@ -808,10 +808,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         self.screenshot = screenshot
     }
 
-    func toggleChangeUserAgent() {
-        changedUserAgent = !changedUserAgent
+    func toggleChangeUserAgent(originalURL: URL? = nil) {
+        changedUserAgent.toggle()
+        let activeURL = originalURL ?? url
 
-        if changedUserAgent, let url = url {
+        if changedUserAgent, let url = activeURL {
             let url = ChangeUserAgent().removeMobilePrefixFrom(url: url)
             let request = URLRequest(url: url)
             webView?.load(request)

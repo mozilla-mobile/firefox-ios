@@ -16,6 +16,7 @@ final class StoriesFeedStateTests: XCTestCase {
         XCTAssertEqual(initialState.storiesData, [])
     }
 
+    @MainActor
     func test_retrievedUpdatedStoriesAction_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = storiesFeedReducer()

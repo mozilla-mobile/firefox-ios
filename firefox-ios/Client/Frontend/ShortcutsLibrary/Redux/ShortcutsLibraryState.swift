@@ -11,7 +11,7 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
     let shouldRecordImpressionTelemetry: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let shortcutsLibraryState = store.state.screenState(
+        guard let shortcutsLibraryState = appState.screenState(
             ShortcutsLibraryState.self,
             for: .shortcutsLibrary,
             window: uuid

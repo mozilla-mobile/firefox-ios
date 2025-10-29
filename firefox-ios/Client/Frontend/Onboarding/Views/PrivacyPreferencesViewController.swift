@@ -268,7 +268,9 @@ final class PrivacyPreferencesViewController: UIViewController,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            setDetentSize()
+            ensureMainThread {
+                self.setDetentSize()
+            }
         default: break
         }
     }

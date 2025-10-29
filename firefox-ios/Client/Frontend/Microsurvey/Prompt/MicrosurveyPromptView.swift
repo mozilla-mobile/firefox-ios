@@ -218,7 +218,9 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustIconSize()
+            ensureMainThread {
+                self.adjustIconSize()
+            }
         default: break
         }
     }

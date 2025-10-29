@@ -5,6 +5,7 @@
 import XCTest
 @testable import Redux
 
+@MainActor
 final class StoreTests: XCTestCase {
     var mockState = MockState()
 
@@ -22,7 +23,7 @@ final class StoreTests: XCTestCase {
             windowUUID: UUID(),
             actionType: FakeReduxActionType.counterIncreased)
 
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         XCTAssertEqual(MockState.actionsReduced[0] as? FakeReduxActionType, FakeReduxActionType.counterIncreased)
     }
@@ -35,17 +36,17 @@ final class StoreTests: XCTestCase {
         let action1 = FakeReduxAction(
             windowUUID: UUID(),
             actionType: FakeReduxActionType.counterIncreased)
-        store.dispatchLegacy(action1)
+        store.dispatch(action1)
 
         let action2 = FakeReduxAction(
             windowUUID: UUID(),
             actionType: FakeReduxActionType.counterDecreased)
-        store.dispatchLegacy(action2)
+        store.dispatch(action2)
 
         let action3 = FakeReduxAction(
             windowUUID: UUID(),
             actionType: FakeReduxActionType.increaseCounter)
-        store.dispatchLegacy(action3)
+        store.dispatch(action3)
 
         XCTAssertEqual(MockState.actionsReduced[0] as? FakeReduxActionType, FakeReduxActionType.counterIncreased)
         XCTAssertEqual(MockState.actionsReduced[1] as? FakeReduxActionType, FakeReduxActionType.counterDecreased)
@@ -64,8 +65,8 @@ final class StoreTests: XCTestCase {
             actionType: FakeReduxActionType.counterIncreased)
 
         Task.detached(priority: .background) {
-            store.dispatchLegacy(action)
             await MainActor.run {
+                store.dispatch(action)
                 expectation.fulfill()
             }
         }
@@ -86,8 +87,8 @@ final class StoreTests: XCTestCase {
             let action1 = FakeReduxAction(
                 windowUUID: UUID(),
                 actionType: FakeReduxActionType.counterIncreased)
-            store.dispatchLegacy(action1)
             await MainActor.run {
+                store.dispatch(action1)
                 expectation.fulfill()
             }
         }
@@ -95,12 +96,12 @@ final class StoreTests: XCTestCase {
         let action2 = FakeReduxAction(
             windowUUID: UUID(),
             actionType: FakeReduxActionType.counterDecreased)
-        store.dispatchLegacy(action2)
+        store.dispatch(action2)
 
         let action3 = FakeReduxAction(
             windowUUID: UUID(),
             actionType: FakeReduxActionType.increaseCounter)
-        store.dispatchLegacy(action3)
+        store.dispatch(action3)
 
         await fulfillment(of: [expectation])
 
@@ -121,18 +122,18 @@ final class StoreTests: XCTestCase {
             let action2 = FakeReduxAction(
                 windowUUID: UUID(),
                 actionType: FakeReduxActionType.increaseCounter)
-            store.dispatchLegacy(action2)
+            store.dispatch(action2)
 
             let action3 = FakeReduxAction(
                 windowUUID: UUID(),
                 actionType: FakeReduxActionType.decreaseCounter)
-            store.dispatchLegacy(action3)
+            store.dispatch(action3)
         }
         let action = FakeReduxAction(
             windowUUID: UUID(),
             actionType: FakeReduxActionType.counterIncreased)
 
-        store.dispatchLegacy(action)
+        store.dispatch(action)
 
         XCTAssertEqual(MockState.actionsReduced[0] as? FakeReduxActionType, FakeReduxActionType.counterIncreased)
         XCTAssertEqual(MockState.actionsReduced[1] as? FakeReduxActionType, FakeReduxActionType.increaseCounter)

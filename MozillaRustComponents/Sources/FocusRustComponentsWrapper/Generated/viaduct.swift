@@ -1126,6 +1126,15 @@ public enum ViaductError: Swift.Error {
     case UrlError(String
     )
     case NonTlsUrl
+    case OhttpChannelNotConfigured(String
+    )
+    case OhttpConfigFetchFailed(String
+    )
+    case OhttpRequestError(String
+    )
+    case OhttpResponseError(String
+    )
+    case OhttpNotSupported
 }
 
 
@@ -1158,6 +1167,19 @@ public struct FfiConverterTypeViaductError: FfiConverterRustBuffer {
             try FfiConverterString.read(from: &buf)
             )
         case 8: return .NonTlsUrl
+        case 9: return .OhttpChannelNotConfigured(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 10: return .OhttpConfigFetchFailed(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 11: return .OhttpRequestError(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 12: return .OhttpResponseError(
+            try FfiConverterString.read(from: &buf)
+            )
+        case 13: return .OhttpNotSupported
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -1204,6 +1226,30 @@ public struct FfiConverterTypeViaductError: FfiConverterRustBuffer {
         
         case .NonTlsUrl:
             writeInt(&buf, Int32(8))
+        
+        
+        case let .OhttpChannelNotConfigured(v1):
+            writeInt(&buf, Int32(9))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpConfigFetchFailed(v1):
+            writeInt(&buf, Int32(10))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpRequestError(v1):
+            writeInt(&buf, Int32(11))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case let .OhttpResponseError(v1):
+            writeInt(&buf, Int32(12))
+            FfiConverterString.write(v1, into: &buf)
+            
+        
+        case .OhttpNotSupported:
+            writeInt(&buf, Int32(13))
         
         }
     }

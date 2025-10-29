@@ -12,27 +12,42 @@ import Common
 import Glean
 
 protocol ToolBarActionMenuDelegate: AnyObject {
+    @MainActor
     func updateToolbarState()
+    @MainActor
     func addBookmark(urlString: String, title: String?, site: Site?)
 
     @discardableResult
+    @MainActor
     func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
+    @MainActor
     func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
-
+    @MainActor
     func showLibrary(panel: LibraryPanelType)
+    @MainActor
     func showViewController(viewController: UIViewController)
+    @MainActor
     func showToast(_ bookmarkURL: String?, _ title: String?, message: String, toastAction: MenuButtonToastAction)
+    @MainActor
     func showFindInPage()
+    @MainActor
     func showCustomizeHomePage()
+    @MainActor
     func showZoomPage(tab: Tab)
+    @MainActor
     func showCreditCardSettings()
+    @MainActor
     func showSignInView(fxaParameters: FxASignInViewParameters)
+    @MainActor
     func showFilePicker(fileURL: URL)
+    @MainActor
     func showEditBookmark()
+    @MainActor
     func showTrackingProtection()
 }
 
 extension ToolBarActionMenuDelegate {
+    @MainActor
     func showToast(_ urlString: String? = nil, _ title: String? = nil, message: String, toastAction: MenuButtonToastAction) {
         showToast(urlString, title, message: message, toastAction: toastAction)
     }

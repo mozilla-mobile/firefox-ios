@@ -9,7 +9,7 @@ import Shared
 class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFlaggable {
     let prefs: Prefs
     var numberOfRows: Int32
-    static let defaultNumberOfRows: Int32 = 2
+    nonisolated static let defaultNumberOfRows: Int32 = 2
 
     init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs

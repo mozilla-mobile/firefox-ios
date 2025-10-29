@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-class WKEngineView: UIView, EngineView, FullscreenDelegate {
+final class WKEngineView: UIView, EngineView, FullscreenDelegate {
     private var session: WKEngineSession?
     private var logger: Logger
     private var sessionlifeCycleManager: WKSessionLifecycleManager

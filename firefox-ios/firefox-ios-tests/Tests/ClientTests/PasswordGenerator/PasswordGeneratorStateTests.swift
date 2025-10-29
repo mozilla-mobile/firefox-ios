@@ -18,6 +18,7 @@ final class PasswordGeneratorStateTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testUpdateGeneratedPassword() {
         let initialState = createSubject()
         let reducer = passwordGeneratorReducer()

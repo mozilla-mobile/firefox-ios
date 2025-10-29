@@ -10,7 +10,7 @@ protocol WKWebServerUtil {
     func stopWebServer()
 }
 
-class DefaultWKWebServerUtil: WKWebServerUtil {
+final class DefaultWKWebServerUtil: WKWebServerUtil {
     private var readerModeHandler: WKReaderModeHandlersProtocol
     private var webServer: WKEngineWebServerProtocol
     private let logger: Logger

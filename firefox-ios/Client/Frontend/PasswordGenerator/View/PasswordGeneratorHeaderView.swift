@@ -87,7 +87,9 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            applyDynamicFontChange()
+            ensureMainThread {
+                self.applyDynamicFontChange()
+            }
         default: break
         }
     }

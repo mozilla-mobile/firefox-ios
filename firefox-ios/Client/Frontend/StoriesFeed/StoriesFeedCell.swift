@@ -167,7 +167,9 @@ class StoriesFeedCell: UICollectionViewCell,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            titleLabel.numberOfLines = getNumberOfLinesForTitle()
+            ensureMainThread {
+                self.titleLabel.numberOfLines = self.getNumberOfLinesForTitle()
+            }
         default: break
         }
     }

@@ -10,7 +10,8 @@ import Redux
 
 import struct MozillaAppServices.Device
 
-class RemoteTabsPanelMiddleware {
+@MainActor
+final class RemoteTabsPanelMiddleware {
     private let profile: Profile
     var notificationCenter: NotificationProtocol
 
@@ -26,21 +27,11 @@ class RemoteTabsPanelMiddleware {
     }
 
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { [self] state, action in
-        // TODO: FXIOS-12557 We assume that we are isolated to the Main Actor
-        // because we dispatch to the main thread in the store. We will want to
-        // also isolate that to the @MainActor to remove this.
-        guard Thread.isMainThread else {
-            assertionFailure("RemoteTabsPanelMiddleware is not being called from the main thread!")
-            return
-        }
-
-        MainActor.assumeIsolated {
-            let uuid = action.windowUUID
-            if let action = action as? RemoteTabsPanelAction {
-                self.resolveRemoteTabsPanelActions(action: action, state: state)
-            } else {
-                self.resolveHomepageActions(action: action, state: state)
-            }
+        let uuid = action.windowUUID
+        if let action = action as? RemoteTabsPanelAction {
+            self.resolveRemoteTabsPanelActions(action: action, state: state)
+        } else {
+            self.resolveHomepageActions(action: action, state: state)
         }
     }
 
@@ -54,7 +45,7 @@ class RemoteTabsPanelMiddleware {
             let accountChangeAction = TabTrayAction(hasSyncableAccount: self.hasSyncableAccount,
                                                     windowUUID: uuid,
                                                     actionType: TabTrayActionType.firefoxAccountChanged)
-            store.dispatchLegacy(accountChangeAction)
+            store.dispatch(accountChangeAction)
         case RemoteTabsPanelActionType.refreshTabs:
             self.getSyncState(window: uuid)
         case RemoteTabsPanelActionType.refreshTabsWithCache:

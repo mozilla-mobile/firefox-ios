@@ -93,7 +93,7 @@ public struct ReadabilityResult: Sendable {
 }
 
 // NSObject wrapper around ReadabilityResult Swift struct for adding into the NSCache
-class ReadabilityResultWrapper: NSObject {
+final class ReadabilityResultWrapper: NSObject {
     let result: ReadabilityResult
 
     init(readabilityResult: ReadabilityResult) {

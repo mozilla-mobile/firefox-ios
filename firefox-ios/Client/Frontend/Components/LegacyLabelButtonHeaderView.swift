@@ -173,10 +173,13 @@ extension LegacyLabelButtonHeaderView: ThemeApplicable {
 // MARK: - Notifiable
 extension LegacyLabelButtonHeaderView: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            adjustLayout()
-        default: break
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                self.adjustLayout()
+            default: break
+            }
         }
     }
 }

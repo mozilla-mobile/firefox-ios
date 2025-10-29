@@ -8,8 +8,11 @@ import ToolbarKit
 import UIKit
 
 protocol URLBarViewProtocol {
+    @MainActor
     var inOverlayMode: Bool { get }
+    @MainActor
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
+    @MainActor
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool)
 }
 

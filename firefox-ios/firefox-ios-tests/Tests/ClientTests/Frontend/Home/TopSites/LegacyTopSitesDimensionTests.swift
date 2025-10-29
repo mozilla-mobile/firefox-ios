@@ -7,6 +7,7 @@ import Storage
 
 @testable import Client
 
+@MainActor
 class LegacyTopSitesDimensionTests: XCTestCase {
     struct DeviceSize {
         static let iPhone14 = CGSize(width: 390, height: 844)

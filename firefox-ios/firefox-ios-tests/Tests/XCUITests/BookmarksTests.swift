@@ -108,7 +108,7 @@ class BookmarksTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306906
-    func testAccessBookmarksFromContextMenu() {
+    func testValidateBookmarksOptions() {
         // Add a bookmark
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -166,17 +166,6 @@ class BookmarksTests: BaseTestCase {
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306913
-    func testAddBookmark() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
-
-        addNewBookmark()
-        // Verify that clicking on bookmark opens the website
-        app.tables["Bookmarks List"].cells.element(boundBy: 1).waitAndTap()
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2306914
     func testAddNewFolder() {
         navigator.goto(LibraryPanel_Bookmarks)
@@ -206,27 +195,6 @@ class BookmarksTests: BaseTestCase {
         let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
         XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306915
-    func testAddNewMarker() throws {
-        let shouldSkipTest = true
-        try XCTSkipIf(shouldSkipTest, "No longer possible to add manually a page as bookmarked")
-
-        navigator.goto(LibraryPanel_Bookmarks)
-        navigator.nowAt(MobileBookmarks)
-        navigator.performAction(Action.AddNewSeparator)
-        app.buttons["Done"].waitAndTap()
-        // There is one item plus the default Desktop Bookmarks folder
-        checkItemsInBookmarksList(items: 2)
-
-        // Remove it
-        navigator.nowAt(MobileBookmarks)
-        navigator.performAction(Action.RemoveItemMobileBookmarks)
-        mozWaitForElementToExist(app.buttons["Delete"])
-        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        checkItemsInBookmarksList(items: 1)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306916

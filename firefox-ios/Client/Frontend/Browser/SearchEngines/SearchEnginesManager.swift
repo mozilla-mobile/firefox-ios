@@ -117,6 +117,12 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
         ) ?? false
+        shouldShowTrendingSearches = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showTrendingSearches
+        ) ?? true
+        shouldShowRecentSearches = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showRecentSearches
+        ) ?? true
     }
 
     var defaultEngine: OpenSearchEngine? {
@@ -240,6 +246,24 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         }
     }
 
+    var shouldShowTrendingSearches = true {
+        didSet {
+            prefs.setBool(
+                shouldShowTrendingSearches,
+                forKey: PrefsKeys.SearchSettings.showTrendingSearches
+            )
+        }
+    }
+
+    var shouldShowRecentSearches = true {
+        didSet {
+            prefs.setBool(
+                shouldShowRecentSearches,
+                forKey: PrefsKeys.SearchSettings.showRecentSearches
+            )
+        }
+    }
+
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
         if isSECEnabled {
             return !disabledEngines.contains(engine.engineID)
@@ -319,6 +343,9 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
                                          engineOrderingPrefs: enginePrefs,
                                          prefsMigrator: DefaultSearchEnginePrefsMigrator(),
                                          completion: completion)
+        // After decoding our engines, ensure we save them back to disk, to ensure any
+        // defaults generated during decoding (e.g. UUIDs for custom engines) are re-saved
+        saveCustomEngines()
     }
 
     private func getSearchPrefs() -> SearchEnginePrefs {

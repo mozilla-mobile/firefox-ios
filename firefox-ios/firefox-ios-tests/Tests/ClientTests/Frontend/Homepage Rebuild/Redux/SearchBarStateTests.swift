@@ -16,6 +16,7 @@ final class SearchBarStateTests: XCTestCase {
         XCTAssertFalse(initialState.shouldShowSearchBar)
     }
 
+    @MainActor
     func test_configuredSearchBarAction_withTrue_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = searchBarReducer()
@@ -33,6 +34,7 @@ final class SearchBarStateTests: XCTestCase {
         XCTAssertTrue(newState.shouldShowSearchBar)
     }
 
+    @MainActor
     func test_configuredSearchBarAction_withFalse_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = searchBarReducer()
@@ -50,6 +52,7 @@ final class SearchBarStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSearchBar)
     }
 
+    @MainActor
     func test_enteredZeroSearchState_withGeneralBrowserAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = searchBarReducer()
@@ -66,6 +69,7 @@ final class SearchBarStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSearchBar)
     }
 
+    @MainActor
     func test_didUnhideToolbar_withGeneralBrowserAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = searchBarReducer()

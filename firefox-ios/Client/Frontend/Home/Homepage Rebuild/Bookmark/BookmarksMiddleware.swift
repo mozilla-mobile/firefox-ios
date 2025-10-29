@@ -6,6 +6,7 @@ import Common
 import Redux
 import Storage
 
+@MainActor
 final class BookmarksMiddleware {
     private let bookmarksHandler: BookmarksHandler
     private let bookmarkItemsLimit: UInt = 8
@@ -26,26 +27,25 @@ final class BookmarksMiddleware {
     }
 
     private func handleInitializeBookmarksAction(windowUUID: WindowUUID) {
-        bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit) { [weak self] bookmarks in
-            let bookmarks = bookmarks.map {
-                BookmarkConfiguration(
-                    site: Site.createBasicSite(
-                        url: $0.url,
-                        title: $0.title,
-                        isBookmarked: true
+        bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit) { bookmarks in
+            ensureMainThread {
+                let bookmarks = bookmarks.map {
+                    BookmarkConfiguration(
+                        site: Site.createBasicSite(
+                            url: $0.url,
+                            title: $0.title,
+                            isBookmarked: true
+                        )
                     )
-                )
-            }
-            self?.dispatchBookmarksAction(windowUUID: windowUUID, updatedBookmarks: bookmarks)
-        }
-    }
+                }
 
-    private func dispatchBookmarksAction(windowUUID: WindowUUID, updatedBookmarks: [BookmarkConfiguration]) {
-        let newAction = BookmarksAction(
-            bookmarks: updatedBookmarks,
-            windowUUID: windowUUID,
-            actionType: BookmarksMiddlewareActionType.initialize
-        )
-        store.dispatchLegacy(newAction)
+                let newAction = BookmarksAction(
+                    bookmarks: bookmarks,
+                    windowUUID: windowUUID,
+                    actionType: BookmarksMiddlewareActionType.initialize
+                )
+                store.dispatch(newAction)
+            }
+        }
     }
 }

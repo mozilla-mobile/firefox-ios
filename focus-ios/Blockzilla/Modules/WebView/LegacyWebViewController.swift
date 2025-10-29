@@ -45,7 +45,7 @@ protocol LegacyWebControllerDelegate: AnyObject {
     func webController(_ controller: LegacyWebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
 }
 
-class LegacyWebViewController: UIViewController, LegacyWebController {
+final class LegacyWebViewController: UIViewController, LegacyWebController {
     private enum ScriptHandlers: String, CaseIterable {
         case focusTrackingProtection
         case focusTrackingProtectionPostLoad

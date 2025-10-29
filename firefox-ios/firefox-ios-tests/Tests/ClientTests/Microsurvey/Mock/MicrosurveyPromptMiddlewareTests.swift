@@ -7,6 +7,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class MicrosurveyPromptMiddlewareTests: XCTestCase {
     private var mockMicrosurveyManager: MockMicrosurveySurfaceManager!
     var mockStore: MockStoreForMiddleware<AppState>!

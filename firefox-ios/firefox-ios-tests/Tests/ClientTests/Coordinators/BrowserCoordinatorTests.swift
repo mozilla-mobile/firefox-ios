@@ -664,7 +664,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     // MARK: - Stories Feed
 
-    func testStoriesFeed_showsStoriesFeed() throws {
+    func testShowStoriesFeed_showsStoriesFeed() throws {
         let subject = createSubject()
 
         subject.showStoriesFeed()

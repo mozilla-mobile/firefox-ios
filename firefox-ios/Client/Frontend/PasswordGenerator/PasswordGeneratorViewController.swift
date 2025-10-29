@@ -238,7 +238,9 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            applyDynamicFontChange()
+            ensureMainThread {
+                self.applyDynamicFontChange()
+            }
         case UIApplication.willResignActiveNotification:
             store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
                                                          actionType: PasswordGeneratorActionType.hidePassword))

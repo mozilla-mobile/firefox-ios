@@ -97,8 +97,6 @@ class BrowserViewController: UIViewController,
     let documentLogger: DocumentLogger
     var downloadHelper: DownloadHelper?
 
-    private lazy var wallpaperManager: WallpaperManagerInterface = WallpaperManager()
-
     // MARK: Optional UI elements
 
     var topTabsViewController: TopTabsViewController?
@@ -112,7 +110,6 @@ class BrowserViewController: UIViewController,
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
-    var currentMiddleButtonState: MiddleButtonState?
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
@@ -356,11 +353,12 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
-    var isTrendingSearchEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+    private var isPreSearchEnabled: Bool {
+        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
-    var isRecentSearchEnabled: Bool {
+    private var isRecentSearchEnabled: Bool {
         return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
     }
 
@@ -2202,19 +2200,16 @@ class BrowserViewController: UIViewController,
         // No tab
         guard let tab = tabManager.selectedTab else {
             handleMiddleButtonState(state)
-            currentMiddleButtonState = state
             return
         }
 
         // Tab with starting page
         if tab.isURLStartingPage {
             handleMiddleButtonState(state)
-            currentMiddleButtonState = state
             return
         }
 
         handleMiddleButtonState(.home)
-        currentMiddleButtonState = .home
     }
 
     private func handleMiddleButtonState(_ state: MiddleButtonState) {
@@ -2455,6 +2450,7 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
+            translationConfiguration: TranslationConfiguration(prefs: profile.prefs),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatchLegacy(action)
@@ -2606,6 +2602,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showShortcutsLibrary()
         case .storiesFeed:
             navigationHandler?.showStoriesFeed()
+        case .storiesWebView:
+            navigationHandler?.showStoriesWebView(url: type.url)
         }
     }
 
@@ -3294,12 +3292,14 @@ class BrowserViewController: UIViewController,
 
         if webViewStatus == .finishedNavigation {
             let isSelectedTab = (tab == tabManager.selectedTab)
+            let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
 
-            if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
+            // Screenshots are not needed when the tab is not selected or when opening a tab from the stories feed
+            if !isSelectedTab, !isStoriesFeed, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
-                webView.frame = contentContainer.frame
-                view.insertSubview(webView, at: 0)
+                        webView.frame = contentContainer.frame
+                        view.insertSubview(webView, at: 0)
                 // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
                 // touch-screen keyboard from the background even though they shouldn't be able to.
                 webView.resignFirstResponder()
@@ -3806,7 +3806,7 @@ class BrowserViewController: UIViewController,
     /// text has been entered.
     /// We only want to display if webview, user has either trending searches or recent searches enabled.
     private func showZeroSearchView() {
-        guard contentContainer.hasWebView, isTrendingSearchEnabled else {
+        guard contentContainer.hasWebView, isPreSearchEnabled else {
             hideSearchController()
             return
         }
@@ -3856,8 +3856,8 @@ class BrowserViewController: UIViewController,
                 toast.removeFromSuperview()
             }
             // Instead of showing homepage when user enters overlay mode,
-            // we want to show the zero search state with trending searches
-            if !isTrendingSearchEnabled {
+            // we want to show the zero search state if trending searches or recent searches is enabled
+            if !isPreSearchEnabled {
                 showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             }
         }

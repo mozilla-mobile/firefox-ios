@@ -35,6 +35,7 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return .emptyHeader
     }
 
+    @MainActor
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))

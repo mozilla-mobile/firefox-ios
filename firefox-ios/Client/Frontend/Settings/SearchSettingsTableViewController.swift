@@ -26,6 +26,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     private enum Section: Int, CaseIterable {
         case defaultEngine
         case alternateEngines
+        case preSearch
         case searchEnginesSuggestions
         case firefoxSuggestSettings
 
@@ -35,6 +36,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 return .Settings.Search.DefaultSearchEngineTitle
             case .alternateEngines:
                 return .Settings.Search.AlternateSearchEnginesTitle
+            case .preSearch:
+                // TODO: FXIOS-13644 - Add proper strings when finalized
+                return "Pre Search"
             case .searchEnginesSuggestions:
                 return .Settings.Search.EnginesSuggestionsTitle
             case .firefoxSuggestSettings:
@@ -54,6 +58,28 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return !model.shouldShowBookmarksSuggestions &&
         !model.shouldShowSyncedTabsSuggestions &&
         !model.shouldShowBrowsingHistorySuggestions
+    }
+
+    // MARK: - Pre Search Section
+    var isTrendingSearchesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+    }
+
+    var isRecentSearchesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+    }
+
+    // Determines how to display the pre search settings based on the feature flags
+    private var visiblePreSearchItems: [PreSearchItem] {
+        var items: [PreSearchItem] = []
+        if isTrendingSearchesEnabled { items.append(.trendingSearches) }
+        if isRecentSearchesEnabled { items.append(.recentSearches) }
+        return items
+    }
+
+    private enum PreSearchItem: Int, CaseIterable {
+        case trendingSearches
+        case recentSearches
     }
 
     private enum SearchSuggestItem: Int, CaseIterable {
@@ -172,6 +198,15 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case .alternateEngines:
             configureCellForAlternateEnginesAction(cell: cell, indexPath: indexPath)
 
+        case .preSearch:
+            let item = visiblePreSearchItems[indexPath.item]
+            switch item {
+            case .trendingSearches:
+                configureCellForTrendingSearchesAction(cell: cell)
+            case .recentSearches:
+                configureCellForRecentSearchesAction(cell: cell)
+            }
+
         case .searchEnginesSuggestions:
             switch indexPath.item {
             case SearchSuggestItem.defaultSuggestions.rawValue:
@@ -179,6 +214,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
             case SearchSuggestItem.privateSuggestions.rawValue:
                 configureCellForPrivateSuggestionsAction(cell: cell)
+
             default: break
             }
 
@@ -302,6 +338,39 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         }
     }
 
+    // MARK: Pre Search Cells
+    private func configureCellForTrendingSearchesAction(cell: ThemedSubtitleTableViewCell) {
+        if isTrendingSearchesEnabled {
+            // TODO: FXIOS-13644 - Add proper strings when finalized
+            buildSettingWith(
+                prefKey: PrefsKeys.SearchSettings.showTrendingSearches,
+                defaultValue: model.shouldShowTrendingSearches,
+                titleText: String.localizedStringWithFormat(
+                    "Show Trending Searches"
+                ),
+                cell: cell,
+                selector: #selector(didToggleShowTrendingSearches)
+            )
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showTrendingSearches
+        }
+    }
+
+    private func configureCellForRecentSearchesAction(cell: ThemedSubtitleTableViewCell) {
+        if isRecentSearchesEnabled {
+            // TODO: FXIOS-13644 - Add proper strings when finalized
+            buildSettingWith(
+                prefKey: PrefsKeys.SearchSettings.showRecentSearches,
+                defaultValue: model.shouldShowRecentSearches,
+                titleText: String.localizedStringWithFormat(
+                    "Show Recent Searches"
+                ),
+                cell: cell,
+                selector: #selector(didToggleShowRecentSearches)
+            )
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showRecentSearches
+        }
+    }
+
     private func configureCellForBrowsingHistoryAction(cell: ThemedSubtitleTableViewCell) {
         buildSettingWith(
             prefKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions,
@@ -396,6 +465,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             .searchEnginesSuggestions,
             .firefoxSuggestSettings
         ]
+        if isTrendingSearchesEnabled || isRecentSearchesEnabled {
+            sectionsToDisplay.insert(.preSearch, at: 2)
+        }
         return sectionsToDisplay.count
     }
 
@@ -408,6 +480,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             // The first engine -- the default engine -- is not shown in the alternate search engines list.
             // But the option to add a Search Engine is.
             return model.orderedEngines.count
+        case .preSearch:
+            return visiblePreSearchItems.count
         case .searchEnginesSuggestions:
             return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
             ? SearchSuggestItem.allCases.count : 1
@@ -442,7 +516,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                                                 theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
             }
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
-        case .searchEnginesSuggestions:
+        case .searchEnginesSuggestions, .preSearch:
             return nil
         case .firefoxSuggestSettings:
             guard indexPath.item == FirefoxSuggestItem.suggestionLearnMore.rawValue else { return nil }
@@ -460,7 +534,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     ) -> UITableViewCell.EditingStyle {
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
-        case .defaultEngine, .searchEnginesSuggestions, .firefoxSuggestSettings:
+        case .defaultEngine, .preSearch, .searchEnginesSuggestions, .firefoxSuggestSettings:
             return UITableViewCell.EditingStyle.none
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
@@ -514,7 +588,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
-        case .defaultEngine, .searchEnginesSuggestions, .firefoxSuggestSettings:
+        case .defaultEngine, .preSearch, .searchEnginesSuggestions, .firefoxSuggestSettings:
             return false
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count
@@ -692,6 +766,16 @@ extension SearchSettingsTableViewController {
     @objc
     func didToggleShowSearchSuggestionsInPrivateMode(_ toggle: ThemedSwitch) {
         model.shouldShowPrivateModeSearchSuggestions = toggle.isOn
+    }
+
+    @objc
+    func didToggleShowTrendingSearches(_ toggle: ThemedSwitch) {
+        model.shouldShowTrendingSearches = toggle.isOn
+    }
+
+    @objc
+    func didToggleShowRecentSearches(_ toggle: ThemedSwitch) {
+        model.shouldShowRecentSearches = toggle.isOn
     }
 
     @objc

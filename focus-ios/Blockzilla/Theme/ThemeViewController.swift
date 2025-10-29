@@ -5,7 +5,7 @@
 import UIKit
 import UIHelpers
 
-class ThemeViewController: UIViewController {
+final class ThemeViewController: UIViewController {
     enum ThemeSection {
         case systemTheme
         case themePicker

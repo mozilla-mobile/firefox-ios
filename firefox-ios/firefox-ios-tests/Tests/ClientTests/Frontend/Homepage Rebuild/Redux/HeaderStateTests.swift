@@ -16,6 +16,7 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertFalse(initialState.showiPadSetup)
     }
 
+    @MainActor
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
@@ -34,6 +35,7 @@ final class HeaderStateTests: XCTestCase {
         XCTAssertTrue(newState.showiPadSetup)
     }
 
+    @MainActor
     func test_initializeAction_withoutIpadSetup_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()

@@ -18,6 +18,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testShowPromptAction() {
         let initialState = createSubject()
         let reducer = microsurveyReducer()
@@ -34,6 +35,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         XCTAssertEqual(newState.showSurvey, false)
     }
 
+    @MainActor
     func testDismissPromptAction() {
         let initialState = MicrosurveyPromptState(
             windowUUID: .XCTestDefaultUUID,
@@ -52,6 +54,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         XCTAssertEqual(newState.showSurvey, false)
     }
 
+    @MainActor
     func testShowSurveyAction() {
         let initialState = createSubject()
         let reducer = microsurveyReducer()
@@ -65,6 +68,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         XCTAssertEqual(newState.showPrompt, true)
     }
 
+    @MainActor
     func testDefaultAction() {
         let initialState = MicrosurveyPromptState(
             windowUUID: .XCTestDefaultUUID,

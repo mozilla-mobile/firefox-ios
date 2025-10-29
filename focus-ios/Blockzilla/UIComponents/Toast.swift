@@ -4,7 +4,7 @@
 
 import UIKit
 
-class Toast {
+final class Toast {
     private let text: String
 
     init(text: String) {
