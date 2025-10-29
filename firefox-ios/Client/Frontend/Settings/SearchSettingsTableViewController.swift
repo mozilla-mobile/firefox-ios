@@ -37,8 +37,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             case .alternateEngines:
                 return .Settings.Search.AlternateSearchEnginesTitle
             case .preSearch:
-                // TODO: FXIOS-13644 - Add proper strings when finalized
-                return "Pre Search"
+                return ""
             case .searchEnginesSuggestions:
                 return .Settings.Search.EnginesSuggestionsTitle
             case .firefoxSuggestSettings:
@@ -341,13 +340,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     // MARK: Pre Search Cells
     private func configureCellForTrendingSearchesAction(cell: ThemedSubtitleTableViewCell) {
         if isTrendingSearchesEnabled {
-            // TODO: FXIOS-13644 - Add proper strings when finalized
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showTrendingSearches,
                 defaultValue: model.shouldShowTrendingSearches,
-                titleText: String.localizedStringWithFormat(
-                    "Show Trending Searches"
-                ),
+                titleText: .Settings.Search.SearchZero.TrendingSearchesToggle,
                 cell: cell,
                 selector: #selector(didToggleShowTrendingSearches)
             )
@@ -357,13 +353,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     private func configureCellForRecentSearchesAction(cell: ThemedSubtitleTableViewCell) {
         if isRecentSearchesEnabled {
-            // TODO: FXIOS-13644 - Add proper strings when finalized
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showRecentSearches,
                 defaultValue: model.shouldShowRecentSearches,
-                titleText: String.localizedStringWithFormat(
-                    "Show Recent Searches"
-                ),
+                titleText: .Settings.Search.SearchZero.RecentSearchesToggle,
                 cell: cell,
                 selector: #selector(didToggleShowRecentSearches)
             )

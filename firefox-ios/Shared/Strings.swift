@@ -2333,6 +2333,24 @@ extension String {
             value: "Google Search",
             comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This string will be used as a header for Google search results listed as suggestions.")
     }
+
+    public struct SearchZero {
+        public static let RecentSearchesSectionTitle = MZLocalizedString(
+            key: "SearchZero.RecentSearches.SectionTitle.v146",
+            tableName: "SearchZero",
+            value: "Recent Searches",
+            comment: "When user taps on the address bar, the user enters the search zero view. The user can see their recent searches in this view. This is the title of the section that shows the list of their recent searches.")
+        public static let ClearButtonTitlee = MZLocalizedString(
+            key: "SearchZero.Clear.ButtonTitle.v146",
+            tableName: "SearchZero",
+            value: "Clear",
+            comment: "When user taps on the address bar, the user enters the zero search view. The user can see a button to clear their recent searches. This is the title of the button that clears the list of recent searches.")
+        public static let TrendingSearchesSectionTitle = MZLocalizedString(
+            key: "SearchZero.TrendingSearches.SectionTitle.v146",
+            tableName: "SearchZero",
+            value: "Trending on %@",
+            comment: "When user taps on the address bar, the user enters the zero search view. The user can see trending searches associated with a specific search engine. This is the title of the section that shows the list of trending searches. %@ is the search engine name.")
+    }
 }
 
 extension String {
@@ -3335,6 +3353,18 @@ extension String {
                     comment: "Accessibility label for Learn more about Firefox Suggest.")
             }
 
+            public struct SearchZero {
+                public static let TrendingSearchesToggle = MZLocalizedString(
+                    key: "Settings.SearchZero.TrendingSearches.Toggle.v146",
+                    tableName: "SearchZero",
+                    value: "Show Trending Searches",
+                    comment: "In the Search page of the Settings menu, this is the title for the toggle that shows or hides the trending searches when a user views the search zero state. The search zero state is when the user taps on the address bar and has yet to type a search term.")
+                public static let RecentSearchesToggle = MZLocalizedString(
+                    key: "Settings.SearchZero.RecentSearches.Toggle.v146",
+                    tableName: "SearchZero",
+                    value: "Show Recent Searches",
+                    comment: "In the Search page of the Settings menu, this is the title for the toggle that shows or hides the recent searches when a user views the search zero state. The search zero state is when the user taps on the address bar and has yet to type a search term.")
+            }
             public struct Suggest {
                 public static let AddressBarSettingsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.AddressBarSetting.Title.v124",
