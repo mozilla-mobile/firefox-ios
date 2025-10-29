@@ -20,28 +20,33 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         return baseOffset + UX.minimalHeaderOffset
     }
 
-    /// Interactive toolbar transition.
-    /// Top bar moves in [headerOffset, 0] using `originTop - clampProgress`
-    /// Bottom bar moves in [0, height]using `originBottom + clampProgress`
-    /// Values are clamped to their ranges, then layout is requested.
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
         // Clamp movement to the intended direction (toward `state`)
         let clampProgress = (state == .collapsed) ? max(0, progress) : min(0, progress)
 
-        // Top toolbar: range [headerOffset ... 0]
-        if !isBottomSearchBar {
-            let originTop: CGFloat = (state == .expanded) ? 0 : headerOffset
-            let topOffset = clamp(offset: originTop - clampProgress, min: headerOffset, max: 0)
-            headerTopConstraint?.update(offset: topOffset)
-            header.superview?.layoutIfNeeded()
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       options: [.curveEaseOut]) { [self] in
+            if state == .collapsed {
+                if isBottomSearchBar {
+                    bottomContainer.transform = .identity.translatedBy(x: 0, y: clampProgress)
+                    overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: clampProgress)
+                    bottomBlurView.transform = .identity.translatedBy(x: 0, y: clampProgress)
+                } else {
+                    header.transform = .identity.translatedBy(x: 0, y: -clampProgress)
+                    topBlurView.transform = .identity.translatedBy(x: 0, y: -clampProgress)
+                }
+            } else {
+                if isBottomSearchBar {
+                    bottomContainer.transform = .identity
+                    overKeyboardContainer.transform = .identity
+                    bottomBlurView.transform = .identity
+                } else {
+                    header.transform = .identity
+                    topBlurView.transform = .identity
+                }
+            }
         }
-
-        // Bottom toolbar: range [0 ... height]
-        let bottomContainerHeight = getBottomContainerSize().height
-        let originBottom: CGFloat = (state == .expanded) ? bottomContainerHeight : 0
-        let bottomOffset = clamp(offset: originBottom + clampProgress, min: 0, max: bottomContainerHeight)
-        bottomContainerConstraint?.update(offset: bottomOffset)
-        bottomContainer.superview?.layoutIfNeeded()
     }
 
     func showToolbar() {
@@ -67,7 +72,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
 
     private func updateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
         guard UIAccessibility.isReduceMotionEnabled else {
-            animateTopToolbar(topOffset: topOffset, alpha: alpha)
+            animateTopToolbar(alpha: alpha)
             return
         }
 
@@ -91,9 +96,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                                      overKeyboardContainerOffset: CGFloat,
                                      alpha: CGFloat) {
         guard UIAccessibility.isReduceMotionEnabled else {
-            animateBottomToolbar(bottomOffset: bottomContainerOffset,
-                                 overKeyboardOffset: overKeyboardContainerOffset,
-                                 alpha: alpha)
+            animateBottomToolbar(alpha: alpha)
             return
         }
 
@@ -114,16 +117,19 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         }
     }
 
-    private func animateTopToolbar(topOffset: CGFloat, alpha: CGFloat) {
-        headerTopConstraint?.update(offset: topOffset)
-
+    private func animateTopToolbar(alpha: CGFloat) {
+        let isShowing = alpha == 1
         UIView.animate(withDuration: UX.topToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut, .beginFromCurrentState]) { [weak self] in
-            guard let self else { return }
-
-            header.superview?.layoutIfNeeded()
-            header.updateAlphaForSubviews(alpha)
+                       options: [.curveEaseOut]) { [self] in
+            if !isShowing {
+                header.transform = .identity.translatedBy(x: 0, y: -topBlurView.frame.height)
+                topBlurView.transform = .identity.translatedBy(x: 0,
+                                                               y: -topBlurView.frame.height)
+            } else {
+                header.transform = .identity
+                topBlurView.transform = .identity
+            }
         }
 
         if shouldSendAlphaChangeAction {
@@ -135,20 +141,23 @@ extension BrowserViewController: TabScrollHandler.Delegate {
                 )
             )
         }
-    }
+   }
 
-    private func animateBottomToolbar(bottomOffset: CGFloat,
-                                      overKeyboardOffset: CGFloat,
-                                      alpha: CGFloat) {
-        bottomContainerConstraint?.update(offset: bottomOffset)
-        overKeyboardContainerConstraint?.update(offset: overKeyboardOffset)
-
+    private func animateBottomToolbar(alpha: CGFloat) {
+        let isShowing = alpha == 1
+        let customOffset: CGFloat = getBottomContainerSize().height + overKeyboardContainerHeight
         UIView.animate(withDuration: UX.bottomToolbarDuration,
                        delay: 0,
-                       options: [.curveEaseOut, .beginFromCurrentState]) { [weak self] in
-            guard let self else { return }
-
-            bottomContainer.superview?.layoutIfNeeded()
+                       options: [.curveEaseOut]) { [self] in
+            if !isShowing {
+                bottomContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
+                overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: customOffset)
+                bottomBlurView.transform = .identity.translatedBy(x: 0, y: customOffset)
+            } else {
+                bottomContainer.transform = .identity
+                overKeyboardContainer.transform = .identity
+                bottomBlurView.transform = .identity
+            }
         }
 
         if shouldSendAlphaChangeAction {
