@@ -68,9 +68,11 @@ class SyncNowSetting: WithAccountSetting,
     }
 
     func startRotateSyncIcon() {
-        DispatchQueue.main.async {
-            self.imageView.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
-        }
+        self.imageView.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
+    }
+
+    func stopRotateSyncIcon() {
+        self.imageView.layer.removeAllAnimations()
     }
 
     // MARK: Notifiable
@@ -78,7 +80,7 @@ class SyncNowSetting: WithAccountSetting,
         guard notification.name == .ProfileDidFinishSyncing else { return }
 
         ensureMainThread {
-            self.imageView.layer.removeAllAnimations()
+            self.stopRotateSyncIcon()
         }
     }
 
