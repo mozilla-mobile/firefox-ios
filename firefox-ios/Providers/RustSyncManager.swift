@@ -376,7 +376,7 @@ public class RustSyncManager: NSObject, SyncManager {
                                      dispatchGroup: DispatchGroupInterface,
                                      loginKey: String?,
                                      creditCardKey: String?,
-                                     completion: @escaping (([String], [String: String])) -> Void) {
+                                     completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
         var registeredPlaces = false
@@ -431,7 +431,7 @@ public class RustSyncManager: NSObject, SyncManager {
 
     func getEnginesAndKeys(engines: [RustSyncManagerAPI.TogglableEngine],
                            dispatchGroup: DispatchGroupInterface = DispatchGroup(),
-                           completion: @escaping (([String], [String: String])) -> Void) {
+                           completion: @escaping @Sendable (([String], [String: String])) -> Void) {
         logins.getStoredKey { loginResult in
             let loginKey: String?
 
