@@ -58,6 +58,7 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
         let closureLogger = logger
 
         // First load the unordered engines, based on the current locale and language
+        // swiftlint:disable closure_body_length
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { engineResults in
@@ -122,6 +123,7 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
             let finalEngineOutput = orderedEngines
             ensureMainThread { completion(finalEngineOrderingPrefs, finalEngineOutput) }
         })
+        // swiftlint:enable closure_body_length
     }
 
     private func getUnorderedBundledEnginesFor(locale: Locale,
