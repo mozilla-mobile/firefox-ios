@@ -121,6 +121,7 @@ class CreditCardTableViewController: UIViewController,
         tableView.reloadData()
     }
 
+    // MARK: Notifiable
     func handleNotifications(_ notification: Notification) {
         guard notification.name == UIAccessibility.announcementDidFinishNotification else { return }
 
