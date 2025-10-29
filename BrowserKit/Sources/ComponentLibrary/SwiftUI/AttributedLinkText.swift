@@ -32,7 +32,6 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.isLink)
             .accessibilityLabel(fullText)
-            .accessibilityHint("Double tap to activate link")
             .accessibilityAction {
                 linkAction(action)
             }
@@ -48,7 +47,7 @@ public struct AttributedLinkText<Action: RawRepresentable>: View where Action.Ra
                 return .systemAction
             })
     }
-    
+
     private var attributedString: AttributedString {
         var attrString = AttributedString(fullText)
         attrString.foregroundColor = Color(uiColor: theme.colors.textSecondary)
