@@ -423,14 +423,18 @@ class CodeUsageDetector {
 
     private func detect(keywords: [Keywords], inLines lines: [String], file: String) {
         for keyword in keywords {
-            detect(keyword: keyword.keyword, inLines: lines, file: file, message: keyword.message)
+            detect(keyword: keyword, inLines: lines, file: file, message: keyword.message)
         }
     }
 
-    private func detect(keyword: String, inLines lines: [String], file: String, message: String) {
-        for (index, line) in lines.enumerated() where line.contains(keyword) {
+    private func detect(keyword: Keywords, inLines lines: [String], file: String, message: String) {
+        for (index, line) in lines.enumerated() where line.contains(keyword.keyword) {
             let lineNumber = index + 1
-            fail(String(format: message, file, lineNumber))
+            if keyword.shouldComment {
+                markdown(String(format: message, file, lineNumber))
+            } else {
+                fail(String(format: message, file, lineNumber))
+            }
         }
     }
 }
