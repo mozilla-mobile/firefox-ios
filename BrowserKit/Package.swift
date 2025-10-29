@@ -201,7 +201,10 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ContentBlockingGeneratorTests",
-            dependencies: ["ContentBlockingGenerator"]),
+            dependencies: ["ContentBlockingGenerator"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .target(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],
