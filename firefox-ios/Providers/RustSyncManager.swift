@@ -422,7 +422,8 @@ public class RustSyncManager: NSObject, SyncManager {
                  rustEngines.append(engine.rawValue)
              }
         }
-
+        // FXIOS-13954 - This is to be revisited once we are on Swift 6.2 with default main actor isolation.
+        // This isn't updating any UI elements within the completion block, so not touching it for now
         dispatchGroup.notify(queue: .global()) {
             completion((rustEngines, localEncryptionKeys))
         }
