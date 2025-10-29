@@ -10,7 +10,10 @@ public enum ToolbarButtonGesture: Sendable {
     case longPress
 }
 
-class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
+class ToolbarButton: UIButton,
+                     ThemeApplicable,
+                     UIGestureRecognizerDelegate,
+                     Notifiable {
     private struct UX {
         static let verticalInset: CGFloat = 10
         static let horizontalInset: CGFloat = 10
@@ -191,12 +194,10 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         self.largeContentViewerInteraction = largeContentViewerInteraction
         addInteraction(largeContentViewerInteraction)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(largeContentViewerInteractionDidChange),
-            name: UILargeContentViewerInteraction.enabledStatusDidChangeNotification,
-            object: nil
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UILargeContentViewerInteraction.enabledStatusDidChangeNotification]
         )
     }
 
@@ -251,9 +252,12 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         }
     }
 
-    @objc
-    private func largeContentViewerInteractionDidChange() {
-        setMinimumPressDuration()
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == UILargeContentViewerInteraction.enabledStatusDidChangeNotification else { return }
+
+        ensureMainThread {
+            self.setMinimumPressDuration()
+        }
     }
 
     // MARK: - ThemeApplicable
