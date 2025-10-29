@@ -252,6 +252,7 @@ class ToolbarButton: UIButton,
         }
     }
 
+    // MARK: Notifiable
     func handleNotifications(_ notification: Notification) {
         guard notification.name == UILargeContentViewerInteraction.enabledStatusDidChangeNotification else { return }
 

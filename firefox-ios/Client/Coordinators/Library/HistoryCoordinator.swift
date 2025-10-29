@@ -46,6 +46,7 @@ class HistoryCoordinator: BaseCoordinator,
         )
     }
 
+    // MARK: Notifiable
     func handleNotifications(_ notification: Notification) {
         guard notification.name == .OpenClearRecentHistory else { return }
 
