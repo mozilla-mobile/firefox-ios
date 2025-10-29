@@ -319,6 +319,9 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
                                          engineOrderingPrefs: enginePrefs,
                                          prefsMigrator: DefaultSearchEnginePrefsMigrator(),
                                          completion: completion)
+        // After decoding our engines, ensure we save them back to disk, to ensure any
+        // defaults generated during decoding (e.g. UUIDs for custom engines) are re-saved
+        saveCustomEngines()
     }
 
     private func getSearchPrefs() -> SearchEnginePrefs {
