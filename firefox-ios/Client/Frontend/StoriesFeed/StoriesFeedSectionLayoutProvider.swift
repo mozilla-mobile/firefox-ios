@@ -7,7 +7,7 @@ import Foundation
 struct StoriesFeedSectionLayoutProvider {
     struct UX {
         static let cellSize = CGSize(width: 361, height: 282)
-        static let interItemSpacing: CGFloat = 16
+        static let interItemSpacing: CGFloat = 20
         static let interGroupSpacing: CGFloat = 16
         static let topSectionInset: CGFloat = 10
         static let minimumSectionHorizontalInset: CGFloat = 16
