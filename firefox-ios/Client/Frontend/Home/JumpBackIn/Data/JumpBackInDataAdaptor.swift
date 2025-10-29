@@ -47,7 +47,6 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor,
 
         self.mainQueue = mainQueue
 
-        // FIXME: FXIOS-12995 Use Notifiable
         let notifications: [Notification.Name] = [.ShowHomepage,
                                                   .TabsTrayDidClose,
                                                   .TabsTrayDidSelectHomeTab,

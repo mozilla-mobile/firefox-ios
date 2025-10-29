@@ -282,6 +282,7 @@ extension WallpaperSettingsViewController: Notifiable {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
             ensureMainThread {
+                // Reload the entire collection view as the section headers are not adjusting their size correctly otherwise
                 self.collectionView.reloadData()
             }
         default: break
