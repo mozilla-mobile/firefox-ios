@@ -4,7 +4,7 @@
 
 import Foundation
 
-class TelemetryManager {
+final class TelemetryManager {
     static let shared = TelemetryManager()
 
     // Flag to disable/enable the telemetry feature

@@ -5,7 +5,7 @@
 import Foundation
 import LocalAuthentication
 
-class TipManager {
+final class TipManager {
     @UserDefault(key: TipKey.releaseTip, defaultValue: true)
     static var releaseTip: Bool
 

@@ -9,7 +9,7 @@ protocol SearchSuggestionsPromptViewDelegate: AnyObject {
     func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool)
 }
 
-class SearchSuggestionsPromptView: UIView {
+final class SearchSuggestionsPromptView: UIView {
     weak var delegate: SearchSuggestionsPromptViewDelegate?
     static let respondedToSearchSuggestionsPrompt = "SearchSuggestionPrompt"
 
