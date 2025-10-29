@@ -263,35 +263,6 @@ class PrivateBrowsingTest: BaseTestCase {
         numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
     }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307003
-    func testHamburgerMenuNewPrivateTab() throws {
-        throw XCTSkip("Skipping. The option to open new private tab is not available on the new menu")
-        /*
-        addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "tab-tray-ui-experiments")
-        app.launch()
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.openURL(urlExample)
-        waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
-        // Validate menu option New Private Tab
-        let newPrivateTab = app.staticTexts["New Private Tab"]
-        mozWaitForElementToExist(newPrivateTab)
-        scrollToElement(newPrivateTab)
-        // Tap on "New private tab" option
-        newPrivateTab.waitAndTap()
-        // Tap on "New private tab" option
-        navigator.nowAt(NewTabScreen)
-        if #available(iOS 16, *) {
-            navigator.nowAt(NewTabScreen)
-            if !app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].isHittable {
-                navigator.performAction(Action.CloseURLBarOpen)
-            }
-            navigator.goto(TabTray)
-            let numTab = app.otherElements[tabsTray].cells.count
-            XCTAssertEqual(2, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-        }*/
-    }
 }
 
 fileprivate extension BaseTestCase {
