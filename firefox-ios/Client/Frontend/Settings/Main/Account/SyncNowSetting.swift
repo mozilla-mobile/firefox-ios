@@ -6,7 +6,8 @@ import Common
 import Foundation
 import Shared
 
-class SyncNowSetting: WithAccountSetting {
+class SyncNowSetting: WithAccountSetting,
+                      Notifiable {
     private weak var settingsDelegate: AccountSettingsDelegate?
     private var notificationCenter: NotificationProtocol
 
@@ -27,11 +28,13 @@ class SyncNowSetting: WithAccountSetting {
         self.notificationCenter = notificationCenter
         super.init(settings: settings)
 
-        // FIXME: FXIOS-12995 Use Notifiable
-        notificationCenter.addObserver(self,
-                                       selector: #selector(stopRotateSyncIcon),
-                                       name: .ProfileDidFinishSyncing,
-                                       object: nil)
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [
+                .ProfileDidFinishSyncing
+            ]
+        )
     }
 
     private lazy var timestampFormatter: DateFormatter = {
@@ -70,9 +73,11 @@ class SyncNowSetting: WithAccountSetting {
         }
     }
 
-    @objc
-    func stopRotateSyncIcon() {
-        DispatchQueue.main.async {
+    // MARK: Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == .ProfileDidFinishSyncing else { return }
+
+        ensureMainThread {
             self.imageView.layer.removeAllAnimations()
         }
     }
