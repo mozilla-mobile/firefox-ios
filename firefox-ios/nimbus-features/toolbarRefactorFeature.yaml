@@ -48,7 +48,7 @@ features:
         description: >
           Enables the middle button customization for navigation toolbar.
         type: Boolean
-        default: false
+        default: true
       layout:
         description: >
           The type of layout of the toolbars.
@@ -66,7 +66,7 @@ features:
           swiping_tabs: true
           translucency: true
           minimal_address_bar: false
-          middle_button_customization: false
+          middle_button_customization: true
           layout: version1
       - channel: developer
         value:
