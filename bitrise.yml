@@ -816,7 +816,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.226.1
+            gem install fastlane -v 2.226.0
             fastlane -version
             xcodebuild -version
 
