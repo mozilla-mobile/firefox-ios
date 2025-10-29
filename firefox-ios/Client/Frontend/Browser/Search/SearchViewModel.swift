@@ -346,6 +346,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     // Loads recent searches from the default search engine and updates `recentSearches`.
     // Falls back to an empty list on error.
+    @MainActor
     func retrieveRecentSearches() {
         guard shouldShowRecentSearches else {
             recentSearches = []
