@@ -34,13 +34,14 @@ private enum RemoteCommand: String {
     case unknown
 }
 
+@MainActor
 class FxAWebViewModel: FeatureFlaggable {
     fileprivate let pageType: FxAPageType
     fileprivate let profile: Profile
     fileprivate var deepLinkParams: FxALaunchParams
     fileprivate(set) var baseURL: URL?
     let fxAWebViewTelemetry = FxAWebViewTelemetry()
-    private var shouldAskForNotificationPermission: Bool
+    private let shouldAskForNotificationPermission: Bool
     private let logger: Logger
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
@@ -383,13 +384,15 @@ extension FxAWebViewModel {
             NotificationManager().requestAuthorization { granted, error in
                 guard error == nil else { return }
                 if granted {
-                    if self.userDefaults.object(forKey: PrefsKeys.Notifications.SyncNotifications) == nil {
-                        self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
+                    ensureMainThread {
+                        if self.userDefaults.object(forKey: PrefsKeys.Notifications.SyncNotifications) == nil {
+                            self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
+                        }
+                        if self.userDefaults.object(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
+                            self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+                        }
+                        NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                     }
-                    if self.userDefaults.object(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
-                        self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
-                    }
-                    NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
             }
         }
