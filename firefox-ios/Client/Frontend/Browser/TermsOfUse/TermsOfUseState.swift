@@ -11,7 +11,7 @@ struct TermsOfUseState: ScreenState {
     var wasDismissed: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let termsOfUseState = store.state.screenState(
+        guard let termsOfUseState = appState.screenState(
             TermsOfUseState.self,
             for: .termsOfUse,
             window: uuid)

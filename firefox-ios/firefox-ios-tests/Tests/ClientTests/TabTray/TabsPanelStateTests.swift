@@ -20,6 +20,7 @@ final class TabPanelStateTests: XCTestCase {
     }
 
     // MARK: - TabPanelMiddlewareActionType
+    @MainActor
     func testTabsState_didLoadTabPanel() {
         let initialState = createInitialState()
         XCTAssertTrue(initialState.tabs.isEmpty)
@@ -42,6 +43,7 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertFalse(newState.isInactiveTabsExpanded)
     }
 
+    @MainActor
     func testTabsState_didChangeTabPanel() {
         let initialState = createInitialState()
         XCTAssertTrue(initialState.tabs.isEmpty)
@@ -64,6 +66,7 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertFalse(newState.isInactiveTabsExpanded)
     }
 
+    @MainActor
     func testTabsState_willAppearTabPanel() throws {
         let tabs = createOneSelectedTab()
         let expectedIndex = tabs.firstIndex(where: \.isSelected)
@@ -83,6 +86,7 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertEqual(expectedIndex, scrollState.toIndex)
     }
 
+    @MainActor
     func testTabsState_refreshTabs() throws {
         let initialState = createInitialState()
         let reducer = tabsPanelReducer()
@@ -103,6 +107,7 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertEqual(newState.tabs, tabs)
     }
 
+    @MainActor
     func testTabsState_refreshInactiveTabs() throws {
         let initialState = createInitialState()
         XCTAssertTrue(initialState.inactiveTabs.isEmpty)
@@ -125,6 +130,7 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertEqual(newState.inactiveTabs, inactiveTabs, "Expected inactive tabs were: \(inactiveTabs)")
     }
 
+    @MainActor
     func testTabsState_IsInactiveTabsExpanded() {
         let initialState = createInitialState()
         XCTAssertFalse(initialState.isInactiveTabsExpanded)

@@ -20,6 +20,7 @@ struct JumpBackInCellViewModel {
 /// A cell used in Home page Jump Back In section
 class LegacyJumpBackInCell: UICollectionViewCell, ReusableCell {
     struct UX {
+        @MainActor
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12

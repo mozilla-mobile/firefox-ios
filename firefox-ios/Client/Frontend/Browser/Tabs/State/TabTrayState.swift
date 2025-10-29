@@ -36,9 +36,11 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let panelState = store.state.screenState(TabTrayState.self,
-                                                       for: .tabsTray,
-                                                       window: uuid) else {
+        guard let panelState = appState.screenState(
+            TabTrayState.self,
+            for: .tabsTray,
+            window: uuid
+        ) else {
             self.init(windowUUID: uuid, panelType: .tabs)
             return
         }
@@ -114,6 +116,7 @@ struct TabTrayState: ScreenState, Equatable {
         return defaultState(from: state)
     }
 
+    @MainActor
     static func reduceTabTrayAction(action: TabTrayAction, state: TabTrayState) -> TabTrayState {
         switch action.actionType {
         case TabTrayActionType.didLoadTabTray:
@@ -160,6 +163,7 @@ struct TabTrayState: ScreenState, Equatable {
         }
     }
 
+    @MainActor
     static func reduceTabPanelMiddlewareAction(action: TabPanelMiddlewareAction, state: TabTrayState) -> TabTrayState {
         switch action.actionType {
         case TabPanelMiddlewareActionType.didChangeTabPanel:
@@ -202,6 +206,7 @@ struct TabTrayState: ScreenState, Equatable {
         }
     }
 
+    @MainActor
     static func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
         switch action.actionType {
         case TabPanelViewActionType.closeAllTabs:

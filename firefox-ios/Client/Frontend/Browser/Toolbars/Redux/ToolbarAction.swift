@@ -34,6 +34,7 @@ struct ToolbarAction: Action {
     let canShowDataClearanceAction: Bool?
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
+    let translationConfiguration: TranslationConfiguration?
 
     init(toolbarPosition: SearchBarPosition? = nil,
          toolbarLayout: ToolbarLayoutStyle? = nil,
@@ -60,6 +61,7 @@ struct ToolbarAction: Action {
          canShowDataClearanceAction: Bool? = nil,
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
+         translationConfiguration: TranslationConfiguration? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -89,6 +91,7 @@ struct ToolbarAction: Action {
         self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
         self.middleButton = middleButton
+        self.translationConfiguration = translationConfiguration
     }
 }
 

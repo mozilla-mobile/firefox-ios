@@ -99,6 +99,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
     }
 
+    @MainActor
     private func updateSectionLayout(for traitCollection: UITraitCollection,
                                      isPortrait: Bool,
                                      device: UIUserInterfaceIdiom,
@@ -133,12 +134,14 @@ class JumpBackInViewModel: FeatureFlaggable {
         return !recentTabs.isEmpty
     }
 
+    @MainActor
     private var isMultitasking: Bool {
         guard let window = UIWindow.keyWindow else { return false }
 
         return window.frame.width != window.screen.bounds.width && window.frame.width != window.screen.bounds.height
     }
 
+    @MainActor
     private func isPadInLandscapeSplit(split: CGFloat,
                                        isPortrait: Bool,
                                        device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
@@ -198,6 +201,7 @@ private extension JumpBackInViewModel {
         cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
+    @MainActor
     func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: LegacySyncedTabCell, indexPath: IndexPath) {
         let itemURL = item.tab.URL.absoluteString
         let site = Site.createBasicSite(url: itemURL, title: item.tab.title)
@@ -220,6 +224,7 @@ private extension JumpBackInViewModel {
         )
     }
 
+    @MainActor
     private func defaultSection(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         let groupWidth = sectionLayout.widthDimension
 
@@ -262,6 +267,7 @@ private extension JumpBackInViewModel {
     }
 
     // compact layout with synced tab
+    @MainActor
     private func sectionWithSyncedTabCompact(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
         // Items
         let syncedTabCellHeight = UX.syncedTabCellPortraitCompactHeight
@@ -348,6 +354,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return hasJumpBackIn || hasSyncedTab
     }
 
+    @MainActor
     func refreshData(for traitCollection: UITraitCollection,
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
@@ -473,6 +480,7 @@ extension JumpBackInViewModel: JumpBackInDelegate {
         self.isSyncTabFeatureEnabled = await self.jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled()
     }
 
+    @MainActor
     private func reloadView() {
         guard self.isEnabled else { return }
         self.delegate?.reloadView()

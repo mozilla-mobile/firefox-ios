@@ -30,6 +30,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(initialState.availableContentHeight, 0)
     }
 
+    @MainActor
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = homepageReducer()
@@ -51,6 +52,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
     }
 
+    @MainActor
     func test_embeddedHomepageAction_withTrueZeroSearch_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = homepageReducer()
@@ -70,6 +72,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
     }
 
+    @MainActor
     func test_embeddedHomepageAction_withFalseZeroSearch_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = homepageReducer()
@@ -89,6 +92,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
     }
 
+    @MainActor
     func test_didSelectedTabChangeToHomepageAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = homepageReducer()
@@ -107,6 +111,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
     }
 
+    @MainActor
     func test_handleAvailableContentHeightChangeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = homepageReducer()
