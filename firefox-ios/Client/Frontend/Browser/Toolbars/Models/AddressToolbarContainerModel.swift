@@ -261,6 +261,8 @@ final class AddressToolbarContainerModel: Equatable {
                 title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
                 maskImageName: action.maskImageName,
+                templateModeforImage: action.templateModeForImage,
+                shouldUseLoadingSpinner: action.shouldUseLoadingSpinner,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,

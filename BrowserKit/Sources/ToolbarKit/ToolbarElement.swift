@@ -17,6 +17,12 @@ public struct ToolbarElement: Equatable {
     /// Mask name of the badge's toolbar element
     let maskImageName: String?
 
+    /// Indiciated whether to use template mode or not for an image
+    let templateModeforImage: Bool
+
+    /// TODO: FXIOS-13949 Should investigate if there is a better way to do this
+    let shouldUseLoadingSpinner: Bool
+
     /// Number of open tabs
     let numberOfTabs: Int?
 
@@ -72,6 +78,8 @@ public struct ToolbarElement: Equatable {
                 title: String? = nil,
                 badgeImageName: String? = nil,
                 maskImageName: String? = nil,
+                templateModeforImage: Bool = true,
+                shouldUseLoadingSpinner: Bool = false,
                 numberOfTabs: Int? = nil,
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
@@ -92,6 +100,8 @@ public struct ToolbarElement: Equatable {
         self.title = title
         self.badgeImageName = badgeImageName
         self.maskImageName = maskImageName
+        self.templateModeforImage = templateModeforImage
+        self.shouldUseLoadingSpinner = shouldUseLoadingSpinner
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
@@ -115,6 +125,8 @@ public struct ToolbarElement: Equatable {
         lhs.title == rhs.title &&
         lhs.badgeImageName == rhs.badgeImageName &&
         lhs.maskImageName == rhs.maskImageName &&
+        lhs.templateModeforImage == rhs.templateModeforImage &&
+        lhs.shouldUseLoadingSpinner == rhs.shouldUseLoadingSpinner &&
         lhs.numberOfTabs == rhs.numberOfTabs &&
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
