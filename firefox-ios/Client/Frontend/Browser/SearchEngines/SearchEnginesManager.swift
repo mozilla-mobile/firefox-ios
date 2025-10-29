@@ -117,6 +117,12 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
         ) ?? false
+        shouldShowTrendingSearches = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showTrendingSearches
+        ) ?? true
+        shouldShowRecentSearches = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showRecentSearches
+        ) ?? true
     }
 
     var defaultEngine: OpenSearchEngine? {
@@ -236,6 +242,24 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
             prefs.setBool(
                 shouldShowPrivateModeSearchSuggestions,
                 forKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
+            )
+        }
+    }
+
+    var shouldShowTrendingSearches = true {
+        didSet {
+            prefs.setBool(
+                shouldShowTrendingSearches,
+                forKey: PrefsKeys.SearchSettings.showTrendingSearches
+            )
+        }
+    }
+
+    var shouldShowRecentSearches = true {
+        didSet {
+            prefs.setBool(
+                shouldShowRecentSearches,
+                forKey: PrefsKeys.SearchSettings.showRecentSearches
             )
         }
     }

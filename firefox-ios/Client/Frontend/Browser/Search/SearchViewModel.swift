@@ -177,15 +177,17 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     // Show list of recent searches if user puts focus in the address bar but does not enter any text.
     @MainActor
     var shouldShowRecentSearches: Bool {
-        let isOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
-        return isOn && isZeroSearchState
+        let isFeatureOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isSettingsToggleOn = model.shouldShowRecentSearches
+        return isFeatureOn && isSettingsToggleOn && isZeroSearchState
     }
 
     // Show list of trending searches if user puts focus in the address bar but does not enter any text.
     @MainActor
     var shouldShowTrendingSearches: Bool {
-        let isOn = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-        return isOn && isZeroSearchState
+        let isFeatureOn = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isSettingsToggleOn = model.shouldShowTrendingSearches
+        return isFeatureOn && isSettingsToggleOn && isZeroSearchState
     }
 
     init(isPrivate: Bool, isBottomSearchBar: Bool,
@@ -323,6 +325,11 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     // Falls back to an empty list on error.
     @MainActor
     func retrieveTrendingSearches() async {
+        guard shouldShowTrendingSearches else {
+            trendingSearches = []
+            return
+        }
+
         do {
             let searchEngine = searchEnginesManager?.defaultEngine
             let results = try await trendingSearchClient.getTrendingSearches(for: searchEngine)
@@ -339,7 +346,13 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     // Loads recent searches from the default search engine and updates `recentSearches`.
     // Falls back to an empty list on error.
+    @MainActor
     func retrieveRecentSearches() {
+        guard shouldShowRecentSearches else {
+            recentSearches = []
+            return
+        }
+
         guard let recentSearchProvider else {
             logger.log(
                 "Recent searches provider is nil, return empty list.",
