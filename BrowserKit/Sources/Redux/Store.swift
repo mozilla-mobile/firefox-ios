@@ -69,18 +69,25 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         }
     }
 
+    // Silencing the warnings under `dispatchLegacy` method while we migrate to the new `dispatch`
+    private struct UnsafeSendable<T>: @unchecked Sendable {
+        let value: T
+    }
+
     public nonisolated func dispatchLegacy(_ action: Action) {
         logger.log("Legacy dispatched action: \(action.debugDescription)", level: .info, category: .redux)
 
         guard Thread.isMainThread else {
+            let unsafeSelf = UnsafeSendable(value: self)
             Task { @MainActor in
-                dispatch(action)
+                unsafeSelf.value.dispatch(action)
             }
             return
         }
 
+        let unsafeSelf = UnsafeSendable(value: self)
         MainActor.assumeIsolated {
-            dispatch(action)
+            unsafeSelf.value.dispatch(action)
         }
     }
 
