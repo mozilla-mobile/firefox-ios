@@ -2447,5 +2447,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-26.0.x
+    stack: osx-xcode-26.1.x-edge
     machine_type_id: g2.mac.4large
