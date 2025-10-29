@@ -746,7 +746,9 @@ extension BookmarksViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
-            reloadData()
+            ensureMainThread {
+                self.reloadData()
+            }
         default:
             break
         }
