@@ -9,6 +9,14 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         return calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
     }
 
+    // Checks if minimal address bar is enabled and tab is on reader mode bar or findInPage
+    private var shouldSendAlphaChangeAction: Bool {
+        guard let tab = tabManager.selectedTab,
+              let tabURL = tab.url else { return false }
+
+        return isMinimalAddressBarEnabled && !tab.isFindInPageMode && !tabURL.isReaderModeURL
+    }
+
     private var headerOffset: CGFloat {
         let baseOffset = -getHeaderSize().height
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
@@ -20,31 +28,30 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         return baseOffset + UX.minimalHeaderOffset
     }
 
+    /// Animates the toolbar transition between expanded and collapsed states based on scroll progress.
+    /// This method applies a smooth translation transform to either the top or bottom toolbar
+    /// (depending on whether `isBottomSearchBar` is true), animating its movement as the user scrolls.
+    /// - Parameters:
+    ///   - progress: The current scroll progress used to determine the translation amount.
+    /// Positive values indicate upward scrolling (collapsing), and negative values indicate downward scrolling (expanding).
+    ///   - state: The target display state of the toolbar (`.collapsed` or `.expanded`).
     func updateToolbarTransition(progress: CGFloat, towards state: TabScrollHandler.ToolbarDisplayState) {
-        // Clamp movement to the intended direction (toward `state`)
-        let clampProgress = (state == .collapsed) ? max(0, progress) : min(0, progress)
+        let isCollapsing = (state == .collapsed)
+        let clampProgress = isCollapsing ? max(0, progress) : min(0, progress)
 
-        UIView.animate(withDuration: 0.5,
-                       delay: 0,
-                       options: [.curveEaseOut]) { [self] in
-            if state == .collapsed {
-                if isBottomSearchBar {
-                    bottomContainer.transform = .identity.translatedBy(x: 0, y: clampProgress)
-                    overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: clampProgress)
-                    bottomBlurView.transform = .identity.translatedBy(x: 0, y: clampProgress)
-                } else {
-                    header.transform = .identity.translatedBy(x: 0, y: -clampProgress)
-                    topBlurView.transform = .identity.translatedBy(x: 0, y: -clampProgress)
-                }
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut]) { [self] in
+            if isBottomSearchBar {
+                let translationY = isCollapsing ? clampProgress : 0
+                let transform = CGAffineTransform(translationX: 0, y: translationY)
+                bottomContainer.transform = transform
+                overKeyboardContainer.transform = transform
+                bottomBlurView.transform = transform
             } else {
-                if isBottomSearchBar {
-                    bottomContainer.transform = .identity
-                    overKeyboardContainer.transform = .identity
-                    bottomBlurView.transform = .identity
-                } else {
-                    header.transform = .identity
-                    topBlurView.transform = .identity
-                }
+                let topTransform = isCollapsing
+                    ? CGAffineTransform(translationX: 0, y: -clampProgress)
+                    : .identity
+                header.transform = topTransform
+                topBlurView.transform = topTransform
             }
         }
     }
@@ -170,14 +177,6 @@ extension BrowserViewController: TabScrollHandler.Delegate {
             )
         }
    }
-
-    // Checks if minimal address bar is enabled and tab is on reader mode bar or findInPage
-    private var shouldSendAlphaChangeAction: Bool {
-        guard let tab = tabManager.selectedTab,
-              let tabURL = tab.url else { return false }
-
-        return isMinimalAddressBarEnabled && !tab.isFindInPageMode && !tabURL.isReaderModeURL
-    }
 
     /// Helper method for testing overKeyboardScrollHeight behavior.
     /// - Parameters:
