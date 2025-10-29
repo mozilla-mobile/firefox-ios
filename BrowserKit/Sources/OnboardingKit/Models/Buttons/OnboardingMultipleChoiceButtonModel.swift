@@ -18,7 +18,19 @@ public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction
             return image
         }
         // Fallback to the main bundle
-        return UIImage(named: finalImageID, in: Bundle.main, compatibleWith: nil)
+        if let image = UIImage(named: finalImageID, in: Bundle.main, compatibleWith: nil) {
+            return image
+        }
+        
+        // If selected version not found, fallback to non-selected version
+        if isSelected {
+            if let image = UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) {
+                return image
+            }
+            return UIImage(named: imageID, in: Bundle.main, compatibleWith: nil)
+        }
+        
+        return nil
     }
 
     public init(title: String, action: OnboardingMultipleChoiceActionType, imageID: String) {
