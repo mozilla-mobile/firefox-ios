@@ -6,6 +6,7 @@
 import XCTest
 import PDFKit
 
+@MainActor
 class FxAWebViewModelTests: XCTestCase {
     var viewModel: FxAWebViewModel!
     var deeplinkParams: FxALaunchParams!
