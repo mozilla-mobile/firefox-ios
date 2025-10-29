@@ -221,7 +221,7 @@ class StoriesFeedViewController: UIViewController,
                 url: config.url,
                 visitType: .link
             )
-            store.dispatchLegacy(
+            store.dispatch(
                 NavigationBrowserAction(
                     navigationDestination: destination,
                     windowUUID: windowUUID,
