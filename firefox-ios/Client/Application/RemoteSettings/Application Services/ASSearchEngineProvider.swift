@@ -85,16 +85,10 @@ final class ASSearchEngineProvider: SearchEngineProvider, Sendable {
             closureLogger.log("[SEC] Search order prefs: YES. Will apply (identifiers): \(orderedEngineNames)",
                               level: .info,
                               category: .remoteSettings)
-<<<<<<< HEAD
-            let orderedEngines = unorderedEngines.sorted { engine1, engine2 in
-                let index1 = orderedEngineNames.firstIndex(of: engine1.engineID)
-                let index2 = orderedEngineNames.firstIndex(of: engine2.engineID)
-=======
             let unorderedDbgInfo = unorderedEngines.map { $0.shortName + "(\($0.engineID))" }
             closureLogger.log("[SEC] Unordered engines: \(unorderedDbgInfo)",
                               level: .info,
                               category: .remoteSettings)
->>>>>>> 406650004 (Bugfix FXIOS-13898 [SEC] Fix bug causing search engine default to not be respected (#30225))
 
             var orderedEngines: [OpenSearchEngine] = []
             var availableEngines = unorderedEngines
