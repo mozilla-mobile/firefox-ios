@@ -73,6 +73,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         }
     }
 
+    @MainActor
     var query = "" {
         didSet {
             let timerid = GleanMetrics.Awesomebar.queryTime.start()
@@ -145,11 +146,13 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         }
     }
 
+    @MainActor
     func setQueryWithoutAutocomplete(_ query: String) {
         skipNextAutocomplete = true
         self.query = query
     }
 
+    @MainActor
     fileprivate func completionForURL(_ url: String) -> String? {
         // Extract the pre-path substring from the URL. This should be more efficient than parsing via
         // NSURL since we need to only look at the beginning of the string.
@@ -178,6 +181,7 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
         return completionForDomain(domain)
     }
 
+    @MainActor
     fileprivate func completionForDomain(_ domain: String) -> String? {
         let domainWithDotPrefix = ".\(domain)"
         if let range = domainWithDotPrefix.range(of: ".\(query)", options: .caseInsensitive, range: nil, locale: nil) {
