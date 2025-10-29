@@ -3569,6 +3569,11 @@ extension String {
             tableName: "TabsTray",
             value: "Close Old Tabs…",
             comment: "Text for a button in the tabs tray used to open another menu to close older tabs.")
+        public static let TabTrayCloseTabsTitle = MZLocalizedString(
+            key: "TabTrayCloseOneTabTitle.v145",
+            tableName: "TabsTray",
+            value: "Close Tabs (%@)",
+            comment: "Text for a button in the tabs tray used delete current active tabs. Placeholder is for the number of tabs that will be going to be closed.")
         public static let TabTrayCloseTabsOlderThanTitle = MZLocalizedString(
             key: "TabTrayCloseTabsOlderThanTitle.v140",
             tableName: "TabsTray",
@@ -5463,11 +5468,6 @@ extension String {
             tableName: "Menu",
             value: "Request Mobile Site",
             comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.")
-        public static let AppMenuCloseAllTabsTitleString = MZLocalizedString(
-            key: "Menu.CloseAllTabsAction.Title",
-            tableName: "Menu",
-            value: "Close All Tabs",
-            comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
 
         public static let AppMenuSettingsTitleString = MZLocalizedString(
             key: "Menu.OpenSettingsAction.Title",
@@ -8347,6 +8347,11 @@ extension String {
                 tableName: "TabLocation",
                 value: "Connection not secure",
                 comment: "Accessibility label for the security icon in url bar")
+            public static let AppMenuCloseAllTabsTitleString = MZLocalizedString(
+                key: "Menu.CloseAllTabsAction.Title",
+                tableName: "Menu",
+                value: "Close All Tabs",
+                comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
         }
     }
 }

@@ -15,11 +15,13 @@ struct TabTrayState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var selectedPanel: TabTrayPanelType
     var normalTabsCount: String
+    var privateTabsCount: String
     var hasSyncableAccount: Bool
     var shouldDismiss: Bool
     var toastType: ToastType?
     var windowUUID: WindowUUID
     var showCloseConfirmation: Bool
+    var enableDeleteTabsButton: Bool?
 
     var navigationTitle: String {
         return selectedPanel.navTitle
@@ -47,10 +49,12 @@ struct TabTrayState: ScreenState, Equatable {
                   isPrivateMode: panelState.isPrivateMode,
                   selectedPanel: panelState.selectedPanel,
                   normalTabsCount: panelState.normalTabsCount,
+                  privateTabsCount: panelState.privateTabsCount,
                   hasSyncableAccount: panelState.hasSyncableAccount,
                   shouldDismiss: panelState.shouldDismiss,
                   toastType: panelState.toastType,
-                  showCloseConfirmation: panelState.showCloseConfirmation)
+                  showCloseConfirmation: panelState.showCloseConfirmation,
+                  enableDeleteTabsButton: panelState.enableDeleteTabsButton)
     }
 
     init(windowUUID: WindowUUID) {
@@ -58,6 +62,7 @@ struct TabTrayState: ScreenState, Equatable {
                   isPrivateMode: false,
                   selectedPanel: .tabs,
                   normalTabsCount: "0",
+                  privateTabsCount: "0",
                   hasSyncableAccount: false,
                   toastType: nil)
     }
@@ -67,6 +72,7 @@ struct TabTrayState: ScreenState, Equatable {
                   isPrivateMode: panelType == .privateTabs,
                   selectedPanel: panelType,
                   normalTabsCount: "0",
+                  privateTabsCount: "0",
                   hasSyncableAccount: false)
     }
 
@@ -74,18 +80,22 @@ struct TabTrayState: ScreenState, Equatable {
          isPrivateMode: Bool,
          selectedPanel: TabTrayPanelType,
          normalTabsCount: String,
+         privateTabsCount: String,
          hasSyncableAccount: Bool,
          shouldDismiss: Bool = false,
          toastType: ToastType? = nil,
-         showCloseConfirmation: Bool = false) {
+         showCloseConfirmation: Bool = false,
+         enableDeleteTabsButton: Bool? = nil) {
         self.windowUUID = windowUUID
         self.isPrivateMode = isPrivateMode
         self.selectedPanel = selectedPanel
         self.normalTabsCount = normalTabsCount
+        self.privateTabsCount = privateTabsCount
         self.hasSyncableAccount = hasSyncableAccount
         self.shouldDismiss = shouldDismiss
         self.toastType = toastType
         self.showCloseConfirmation = showCloseConfirmation
+        self.enableDeleteTabsButton = enableDeleteTabsButton
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -115,7 +125,9 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: tabTrayModel.isPrivateMode,
                                 selectedPanel: tabTrayModel.selectedPanel,
                                 normalTabsCount: tabTrayModel.normalTabsCount,
-                                hasSyncableAccount: tabTrayModel.hasSyncableAccount)
+                                privateTabsCount: tabTrayModel.privateTabsCount,
+                                hasSyncableAccount: tabTrayModel.hasSyncableAccount,
+                                enableDeleteTabsButton: tabTrayModel.enableDeleteTabsButton)
 
         case TabTrayActionType.changePanel:
             guard let panelType = action.panelType else { return defaultState(from: state) }
@@ -123,6 +135,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: panelType == .privateTabs,
                                 selectedPanel: panelType,
                                 normalTabsCount: state.normalTabsCount,
+                                privateTabsCount: state.privateTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount)
 
         case TabTrayActionType.dismissTabTray:
@@ -130,6 +143,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: state.normalTabsCount,
+                                privateTabsCount: state.privateTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount,
                                 shouldDismiss: true)
 
@@ -141,6 +155,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: state.normalTabsCount,
+                                privateTabsCount: state.privateTabsCount,
                                 hasSyncableAccount: isSyncAccountEnabled)
 
         default:
@@ -158,7 +173,9 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: tabDisplayModel.isPrivateMode,
                                 selectedPanel: panelType,
                                 normalTabsCount: tabDisplayModel.normalTabsCount,
-                                hasSyncableAccount: state.hasSyncableAccount)
+                                privateTabsCount: "\(tabDisplayModel.tabs.filter({ $0.isPrivate == true }).count)",
+                                hasSyncableAccount: state.hasSyncableAccount,
+                                enableDeleteTabsButton: tabDisplayModel.enableDeleteTabsButton)
 
         case TabPanelMiddlewareActionType.refreshTabs:
             // Only update the normal tab count if the tabs being refreshed are not private
@@ -169,7 +186,9 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: tabCount,
-                                hasSyncableAccount: state.hasSyncableAccount)
+                                privateTabsCount: state.privateTabsCount,
+                                hasSyncableAccount: state.hasSyncableAccount,
+                                enableDeleteTabsButton: tabDisplayModel.enableDeleteTabsButton)
 
         case TabPanelMiddlewareActionType.showToast:
             guard let type = action.toastType else { return defaultState(from: state) }
@@ -178,6 +197,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: state.normalTabsCount,
+                                privateTabsCount: state.privateTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount,
                                 toastType: type)
 
@@ -194,6 +214,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
                                 normalTabsCount: state.normalTabsCount,
+                                privateTabsCount: state.privateTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount,
                                 showCloseConfirmation: true)
 
@@ -207,6 +228,7 @@ struct TabTrayState: ScreenState, Equatable {
                             isPrivateMode: state.isPrivateMode,
                             selectedPanel: state.selectedPanel,
                             normalTabsCount: state.normalTabsCount,
+                            privateTabsCount: state.privateTabsCount,
                             hasSyncableAccount: state.hasSyncableAccount)
     }
 }

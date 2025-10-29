@@ -303,6 +303,20 @@ final class TabManagerMiddleware: FeatureFlaggable {
         return (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
     }
 
+    private func normalTabsCountTextForTabTray(for windowUUID: WindowUUID) -> String {
+        return tabManager(for: windowUUID).normalTabs.count.description
+    }
+
+    private func privateTabsCountTextForTabTray(for windowUUID: WindowUUID) -> String {
+        return tabManager(for: windowUUID).privateTabs.count.description
+    }
+
+    private func shouldEnableDeleteTabsButton(for windowUUID: WindowUUID, isPrivateMode: Bool) -> Bool {
+        let tabManager = tabManager(for: windowUUID)
+        let tabsCount = !isPrivateMode ? tabManager.normalTabs.count : tabManager.privateTabs.count
+        return tabsCount > 0 ? true : false
+    }
+
     private func openSelectedURL(url: URL, showOverlay: Bool, windowUUID: WindowUUID) {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .open,
@@ -332,8 +346,10 @@ final class TabManagerMiddleware: FeatureFlaggable {
         let isPrivate = panelType == .privateTabs
         return TabTrayModel(isPrivateMode: isPrivate,
                             selectedPanel: panelType,
-                            normalTabsCount: normalTabsCountText(for: window),
-                            hasSyncableAccount: false)
+                            normalTabsCount: normalTabsCountTextForTabTray(for: window),
+                            privateTabsCount: privateTabsCountTextForTabTray(for: window),
+                            hasSyncableAccount: false,
+                            enableDeleteTabsButton: shouldEnableDeleteTabsButton(for: window, isPrivateMode: isPrivate))
     }
 
     /// Gets initial model for TabDisplay from `TabManager`, including list of tabs and inactive tabs.
@@ -343,11 +359,14 @@ final class TabManagerMiddleware: FeatureFlaggable {
                                      uuid: WindowUUID) -> TabDisplayModel {
         let tabs = refreshTabs(for: isPrivateMode, uuid: uuid)
         let inactiveTabs = refreshInactiveTabs(for: isPrivateMode, uuid: uuid)
-        let tabDisplayModel = TabDisplayModel(isPrivateMode: isPrivateMode,
-                                              tabs: tabs,
-                                              normalTabsCount: normalTabsCountText(for: uuid),
-                                              inactiveTabs: inactiveTabs,
-                                              isInactiveTabsExpanded: false)
+        let tabDisplayModel = TabDisplayModel(
+            isPrivateMode: isPrivateMode,
+            tabs: tabs,
+            normalTabsCount: normalTabsCountTextForTabTray(for: uuid),
+            inactiveTabs: inactiveTabs,
+            isInactiveTabsExpanded: false,
+            enableDeleteTabsButton: shouldEnableDeleteTabsButton(for: uuid, isPrivateMode: isPrivateMode)
+        )
         return tabDisplayModel
     }
 
