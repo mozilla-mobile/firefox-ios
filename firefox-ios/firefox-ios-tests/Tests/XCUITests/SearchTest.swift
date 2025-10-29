@@ -644,8 +644,8 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(trendingSearchSuggestSwitch)
         mozWaitForElementToNotExist(recentSearchSuggestSwitch)
 
-        app.navigationBars["Search"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
 
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL("https://www.mozilla.org/en-US/")
@@ -669,8 +669,8 @@ class SearchTests: FeatureFlaggedTestBase {
 
         trendingSearchSuggestSwitch.waitAndTap()
 
-        app.navigationBars["Search"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
 
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL("https://www.mozilla.org/en-US/")
@@ -698,8 +698,8 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(trendingSearchSuggestSwitch)
         mozWaitForElementToNotExist(recentSearchSuggestSwitch)
 
-        app.navigationBars["Search"].buttons["Settings"].tap()
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
 
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL("https://www.mozilla.org/en-US/")
