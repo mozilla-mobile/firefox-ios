@@ -9,6 +9,7 @@ import WebKit
 import Common
 import SiteImageView
 
+// FIXME: FXIOS-13958 @objcMembers is unsafe with main actor isolation
 @objcMembers
 class HistoryPanel: UIViewController,
                     LibraryPanel,
@@ -297,11 +298,9 @@ class HistoryPanel: UIViewController,
                 self?.viewModel.removeAllData()
             }
 
-            DispatchQueue.main.async {
-                self?.applySnapshot()
-                self?.tableView.reloadData()
-                self?.refreshRecentlyClosedCell()
-            }
+            self?.applySnapshot()
+            self?.tableView.reloadData()
+            self?.refreshRecentlyClosedCell()
         }
     }
 
