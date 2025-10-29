@@ -574,6 +574,7 @@ class HistoryTests: BaseTestCase {
         shouldKeepOldEntries: Bool,
         oldEntries: [String]
     ) {
+        let olderText = "Older"
         navigateToPage(isTabTrayOff: false)
         navigator.performAction(Action.ClearRecentHistory)
         historyScreen.tapOnClearRecentHistoryOption(optionSelected: option)
@@ -585,7 +586,7 @@ class HistoryTests: BaseTestCase {
         }
 
         historyScreen.waitForStaticText(option, shouldExist: false)
-        historyScreen.waitForStaticText("Older", shouldExist: shouldKeepOldEntries)
+        historyScreen.waitForStaticText(olderText, shouldExist: shouldKeepOldEntries)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306894
