@@ -13,7 +13,7 @@ public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction
     func image(isSelected: Bool) -> UIImage? {
         let finalImageID = isSelected ? "\(imageID)Selected" : imageID
 
-        // Load from package's bundle bundle if available
+        // Load from package's bundle if available
         if let image = UIImage(named: finalImageID, in: Bundle.module, compatibleWith: nil) {
             return image
         }
@@ -24,10 +24,7 @@ public struct OnboardingMultipleChoiceButtonModel<OnboardingMultipleChoiceAction
 
         // If selected version not found, fallback to non-selected version
         if isSelected {
-            if let image = UIImage(named: imageID, in: Bundle.module, compatibleWith: nil) {
-                return image
-            }
-            return UIImage(named: imageID, in: Bundle.main, compatibleWith: nil)
+            return image(isSelected: false)
         }
 
         return nil
