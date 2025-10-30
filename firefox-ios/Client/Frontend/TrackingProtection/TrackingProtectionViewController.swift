@@ -138,7 +138,7 @@ class TrackingProtectionViewController: UIViewController,
         subscribeToRedux()
     }
 
-    deinit {
+    isolated deinit {
         unsubscribeFromRedux()
     }
 
@@ -255,11 +255,11 @@ class TrackingProtectionViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: self.windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .trackingProtection)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: Content View
@@ -357,7 +357,7 @@ class TrackingProtectionViewController: UIViewController,
         constraints.append(contentsOf: trackersConnectionConstraints)
         trackersView.trackersButtonCallback = { [weak self] in
             guard let self else { return }
-            store.dispatchLegacy(
+            store.dispatch(
                 TrackingProtectionAction(
                     windowUUID: self.windowUUID,
                     actionType: TrackingProtectionActionType.tappedShowBlockedTrackers
@@ -367,7 +367,7 @@ class TrackingProtectionViewController: UIViewController,
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
             guard let self, model.connectionSecure else { return }
 
-            store.dispatchLegacy(
+            store.dispatch(
                 TrackingProtectionAction(
                     windowUUID: self.windowUUID,
                     actionType: TrackingProtectionActionType.tappedShowTrackingProtectionDetails
@@ -576,7 +576,7 @@ class TrackingProtectionViewController: UIViewController,
 
     @objc
     private func didTapClearCookiesAndSiteData() {
-        store.dispatchLegacy(
+        store.dispatch(
             TrackingProtectionAction(windowUUID: self.windowUUID,
                                      actionType: TrackingProtectionActionType.tappedShowClearCookiesAlert)
         )
@@ -584,7 +584,7 @@ class TrackingProtectionViewController: UIViewController,
 
     @objc
     func protectionSettingsTapped() {
-        store.dispatchLegacy(
+        store.dispatch(
             TrackingProtectionAction(windowUUID: self.windowUUID,
                                      actionType: TrackingProtectionActionType.tappedShowSettings)
         )
@@ -594,7 +594,7 @@ class TrackingProtectionViewController: UIViewController,
     func openSettingsTapped() {
         let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
         if !isContentBlockingConfigEnabled {
-            store.dispatchLegacy(
+            store.dispatch(
                 TrackingProtectionAction(windowUUID: self.windowUUID,
                                          actionType: TrackingProtectionActionType.tappedShowSettings)
             )
@@ -614,7 +614,7 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func showSettings() {
-        store.dispatchLegacy(
+        store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.trackingProtectionSettings),
                 windowUUID: self.windowUUID,
