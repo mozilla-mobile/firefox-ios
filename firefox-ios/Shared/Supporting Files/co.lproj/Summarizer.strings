@@ -1,0 +1,81 @@
+/* The label displayed in the summary report when the summary was generated using Apple Intelligence. */
+"Summarizer.AppleBrand.Label.v142" = "Riassuntu da Apple Intelligence";
+
+/* The a11y label for the close button in the summary view. */
+"Summarizer.CloseButton.Accessibility.Label.v145" = "Chjode u riassuntu";
+
+/* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
+"Summarizer.CloseButton.Label.v142" = "Chjode";
+
+/* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
+"Summarizer.Error.MissingPageContent.Message.v142" = "A pagina hè in corsu di caricamentu. Ci vole à aspettà ch’ella sia caricata sana eppò fate un cliccu nant’à « Riassume ».";
+
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "Impussibule di riassume quella pagina subitu. Pruvate torna un’altra volta.";
+
+/* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
+"Summarizer.Error.Unknown.Message.v142" = "Sbagliu durante u riassuntu di a pagina. Pruvate torna un’altra volta.";
+
+/* The error message displayed when the summarizer encounters unsafe content while summarizing a page. */
+"Summarizer.Error.UnsafeWebsite.Message.v142" = "Hè statu scupertu un cuntenutu limitatu. Sta pagina puderia esse ristrinta o soprattuttu visuale.";
+
+/* The error message displayed when the summarizer encounters unsupported content while summarizing a page (e.g unsupported language, content too long). */
+"Summarizer.Error.UnsupportedContent.Message.v142" = "Stu situ web ùn permette micca di riassume u so cuntenutu. Pruvate cù un’altra pagina.";
+
+/* The description is displayed at the end of the summary report as a footnote to the users in that the report can contain errors. */
+"Summarizer.Footnote.Label.v144" = "Nota : u riassuntu puderia cuntene sbaglii.";
+
+/* The label displayed in the summary report when the summary was generated using by a third-party service. %@ refers to the name of the service/app (e.g Firefox). */
+"Summarizer.HostedBrand.Label.v142" = "Riassuntu da %@";
+
+/* The a11y label for the loading label on the summarize loading screen. */
+"Summarizer.Loading.Accessibility.Label.v145" = "Caricamentu di u riassuntu";
+
+/* When the user uses the summarizing feature, this is the loading label that is shown while the summarization is being performed. */
+"Summarizer.Loading.Label.v142" = "Generazione di u riassuntu…";
+
+/* The a11y label for the retry button in the summary view when the summarizer fails with an error that allows retrying to summarize the page. */
+"Summarizer.RetryButton.Accessibility.Label.v145" = "Pruvà torna à riassume a pagina web";
+
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "Pruvà torna";
+
+/* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "Fate sguillà o picchichjate a pagina web per chjode u riassuntu";
+
+/* The label for the allow button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.AllowButton.Label.v142" = "Permette";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ impiegheghja Apple Intelligence per riassume e pagine.";
+
+/* The label for the cancel button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.CancelButton.Label.v142" = "Abbandunà";
+
+/* The label for the continue button on the Terms of Service alert. */
+"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Cuntinuà";
+
+/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ impiegheghja un’IA per riassume e pagine, è manda sti riassunti nant’à u vostru apparechju.";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Sapene di più";
+
+/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
+"Summarizer.ToS.Alert.Title.Label.v142" = "Permette i riassunti di pagina ?";
+
+/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
+"Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Cumu què funziuneghja";
+
+/* The a11y label for the allow button on the info panel when the user has not yet accepted the ToS. */
+"Summarizer.ToS.InfoPanel.AllowButton.Accessibility.Label.v145" = "Accettà l’accunsentu";
+
+/* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
+"Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Cuntinuà";
+
+/* The message for the Terms of Service alert that asks the user if they want to continue to summarize the page. %@ is the app name (e.g Firefox). */
+"Summarizer.ToS.InfoPanel.Label.v143" = "Fighjate i punti principali in poche seconde cù %@. ";
+
+/* The title for the Terms of Service information panel that asks the user if they want to summarize this page. */
+"Summarizer.ToS.InfoPanel.Title.Label.v143" = "Riassume sta pagina ?";
+

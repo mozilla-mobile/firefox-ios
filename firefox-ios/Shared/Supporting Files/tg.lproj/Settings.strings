@@ -289,3 +289,6 @@
 /* In the settings menu, in the General section, this is the title for the Translation settings section. */
 "Settings.Translation.Title.v145" = "Тарҷума";
 
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "Фаъол кардани тарҷумаҳо";
+
