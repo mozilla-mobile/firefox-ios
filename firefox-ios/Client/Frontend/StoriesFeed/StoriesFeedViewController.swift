@@ -89,6 +89,11 @@ class StoriesFeedViewController: UIViewController,
         trackVisibleItemImpressions()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        resetTrackedObjects()
+    }
+
     // MARK: - Redux
     func subscribeToRedux() {
         let action = ScreenAction(
@@ -237,6 +242,12 @@ class StoriesFeedViewController: UIViewController,
                     actionType: NavigationBrowserActionType.tapOnCell
                 )
             )
+            store.dispatch(
+                StoriesFeedAction(
+                    windowUUID: windowUUID,
+                    actionType: StoriesFeedActionType.telemetry(.tappedStory(atIndex: indexPath.row + 1))
+                )
+            )
         }
     }
 
@@ -255,12 +266,13 @@ class StoriesFeedViewController: UIViewController,
             ensureMainThread {
                 guard let collectionView = self.collectionView else {
                     self.logger.log(
-                        "Homepage collectionview should not have been nil, unable to track impression",
+                        "Stories collectionview should not have been nil, unable to track impression",
                         level: .warning,
-                        category: .homepage
+                        category: .storiesFeed
                     )
                     return
                 }
+
                 for indexPath in collectionView.indexPathsForVisibleItems {
                     guard let item = self.dataSource?.itemIdentifier(for: indexPath) else { continue }
                     self.handleTrackingImpressions(with: item, at: indexPath.item)
@@ -272,9 +284,12 @@ class StoriesFeedViewController: UIViewController,
     private func handleTrackingImpressions(with item: StoriesFeedItem, at index: Int) {
         guard !alreadyTrackedStories.contains(item) else { return }
         alreadyTrackedStories.insert(item)
-//        guard case .topSite(let config, _) = item else { return }
-//        dispatchTopSitesAction(at: index, config: config, actionType: TopSitesActionType.topSitesSeen)
-        print("RGB - \(item) at \(index)")
+        store.dispatch(
+            StoriesFeedAction(
+                windowUUID: windowUUID,
+                actionType: StoriesFeedActionType.telemetry(.storiesImpression(atIndex: index + 1))
+            )
+        )
     }
 
     private func resetTrackedObjects() {

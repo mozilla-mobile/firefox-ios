@@ -27,7 +27,8 @@ enum StoriesFeedActionType: ActionType {
 }
 
 enum StoriesFeedTelemetryAction {
-    case storiesImpression
-    case tappedStory
-    case dismissedStoryView
+    case storiesFeedClosed
+    case storiesFeedViewed
+    case storiesViewed(atIndex: Int)
+    case tappedStory(atIndex: Int)
 }

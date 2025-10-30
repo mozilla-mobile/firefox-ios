@@ -15,14 +15,39 @@ final class StoriesFeedTelemetryMiddleware {
 
     lazy var storiesFeedTelemetryProvider: Middleware<AppState> = { _, action in
         switch action.actionType {
-        case StoriesFeedActionType.storiesImpression:
-            testTelemetryCase()
+        case StoriesFeedActionType.telemetry(let telemetryAction):
+            self.handleTelemetry(action: telemetryAction)
         default:
             break
         }
     }
 
-    private func testTelemetryCase() {
-        print("adudenamedruby - I AM HERE!")
+    private func handleTelemetry(action: StoriesFeedTelemetryAction) {
+        switch action {
+        case .storiesFeedClosed:
+            storiesFeedClosed()
+        case .storiesFeedViewed:
+            storiesFeedViewed()
+        case .storiesViewed(let index):
+            sendImpressionTelemetryFor(storyIndex: index)
+        case .tappedStory(let index):
+            sendStoryTappedTelemetry(atIndex: index)
+        }
+    }
+
+    private func sendImpressionTelemetryFor(storyIndex: Int) {
+        print("RGB - impression at \(storyIndex)")
+    }
+
+    private func storiesFeedClosed() {
+        print("RGB - Stories Feed Viewed")
+    }
+
+    private func storiesFeedViewed() {
+        print("RGB - Stories Feed Viewed")
+    }
+
+    private func sendStoryTappedTelemetry(atIndex: Int) {
+        print("RGB - story tapped at \(atIndex)")
     }
 }
