@@ -23,12 +23,4 @@ struct StoriesFeedAction: Action {
 
 enum StoriesFeedActionType: ActionType {
     case initialize
-    case telemetry(StoriesFeedTelemetryAction)
-}
-
-enum StoriesFeedTelemetryAction {
-    case storiesFeedClosed
-    case storiesFeedViewed
-    case storiesViewed(atIndex: Int)
-    case tappedStory(atIndex: Int)
 }

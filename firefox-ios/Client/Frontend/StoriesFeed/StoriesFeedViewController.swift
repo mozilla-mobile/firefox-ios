@@ -29,6 +29,7 @@ class StoriesFeedViewController: UIViewController,
     // Telemetry related
     private var alreadyTrackedStories = Set<StoriesFeedItem>()
     private let trackingImpressionsThrottler: GCDThrottlerProtocol
+    private let telemetry: StoriesFeedTelemetry
 
     // MARK: - Private constants
     private let logger: Logger
@@ -38,6 +39,7 @@ class StoriesFeedViewController: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
+         telemetry: StoriesFeedTelemetry = StoriesFeedTelemetry(),
          throttler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
@@ -46,6 +48,7 @@ class StoriesFeedViewController: UIViewController,
         self.logger = logger
         self.storiesFeedState = StoriesFeedState(windowUUID: windowUUID)
         self.trackingImpressionsThrottler = throttler
+        self.telemetry = telemetry
 
         super.init(nibName: nil, bundle: nil)
 
@@ -57,6 +60,7 @@ class StoriesFeedViewController: UIViewController,
     }
 
     deinit {
+        telemetry.storiesFeedClosed()
         unsubscribeFromRedux()
     }
 
@@ -77,6 +81,7 @@ class StoriesFeedViewController: UIViewController,
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
+        telemetry.storiesFeedViewed()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -230,6 +235,7 @@ class StoriesFeedViewController: UIViewController,
 
         switch item {
         case .stories(let config):
+            telemetry.sendStoryTappedTelemetry(atIndex: indexPath.row)
             let destination = NavigationDestination(
                 .storiesWebView,
                 url: config.url,
@@ -240,12 +246,6 @@ class StoriesFeedViewController: UIViewController,
                     navigationDestination: destination,
                     windowUUID: windowUUID,
                     actionType: NavigationBrowserActionType.tapOnCell
-                )
-            )
-            store.dispatch(
-                StoriesFeedAction(
-                    windowUUID: windowUUID,
-                    actionType: StoriesFeedActionType.telemetry(.tappedStory(atIndex: indexPath.row + 1))
                 )
             )
         }
@@ -284,12 +284,7 @@ class StoriesFeedViewController: UIViewController,
     private func handleTrackingImpressions(with item: StoriesFeedItem, at index: Int) {
         guard !alreadyTrackedStories.contains(item) else { return }
         alreadyTrackedStories.insert(item)
-        store.dispatch(
-            StoriesFeedAction(
-                windowUUID: windowUUID,
-                actionType: StoriesFeedActionType.telemetry(.storiesImpression(atIndex: index + 1))
-            )
-        )
+        telemetry.sendImpressionTelemetryFor(storyIndex: index + 1)
     }
 
     private func resetTrackedObjects() {

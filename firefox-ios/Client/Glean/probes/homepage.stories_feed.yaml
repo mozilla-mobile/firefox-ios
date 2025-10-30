@@ -34,10 +34,18 @@ homepage.stories_feed:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - StoriesFeed
   story_viewed:
     type: event
     description: |
       Records the stories the user can see (impressions) when they stop scrolling.
+    extra_keys:
+      index:
+        type: quantity
+        description: |
+          The index of the story
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:
@@ -45,10 +53,18 @@ homepage.stories_feed:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - StoriesFeed
   story_tapped:
     type: event
     description: |
       Recorded when a user taps on a story in the stories feed screen.
+    extra_keys:
+      index:
+        type: quantity
+        description: |
+          The index of the story
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/28354
     data_reviews:
@@ -56,6 +72,9 @@ homepage.stories_feed:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - StoriesFeed
   viewed:
     type: event
     description: |
@@ -67,3 +86,6 @@ homepage.stories_feed:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
+    metadata:
+      tags:
+        - StoriesFeed
