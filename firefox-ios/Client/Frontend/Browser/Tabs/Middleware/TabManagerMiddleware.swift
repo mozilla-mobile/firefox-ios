@@ -993,7 +993,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
             group.leave()
         }
 
-        group.notify(queue: DispatchQueue.main) {
+        group.notify(queue: .main) {
             dataLoadingCompletion?(
                 ProfileTabInfo(
                     isBookmarked: isBookmarkedResult,
