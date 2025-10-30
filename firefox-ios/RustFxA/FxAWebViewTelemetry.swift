@@ -45,7 +45,7 @@ class FxAWebViewTelemetry {
 
     init(telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared) {
           self.telemetryWrapper = telemetryWrapper
-      }
+    }
 
     func getFlowFromUrl(fxaUrl: URL?) -> FxAUrlPathStartedFlow? {
         guard let url = fxaUrl,
