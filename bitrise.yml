@@ -1410,7 +1410,7 @@ workflows:
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
             SDK="iphoneos"
-            IOS_VERSION="26.0"
+            IOS_VERSION="16.4"
             DESTINATION="generic/platform=iOS"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
@@ -1470,9 +1470,6 @@ workflows:
             # do not double-quote $TEST_PLAN, as it is a wildcard and we need it to expand
             ( cd "$PRODUCTS_DIR" && zip -r "${SCHEME}.zip" "${SCHEME}-${SDK}" ${TEST_PLAN}*.xctestrun )
             mv "${PRODUCTS_DIR}/${SCHEME}.zip" "$TARGET_ARCHIVE"
-    - cache-pull@2.7.2:
-        inputs:
-        - cache_paths: "$HOME/google-cloud-sdk"
     - script@1.2.1:
         title: Install Google Cloud SDK
         inputs:
@@ -1488,11 +1485,6 @@ workflows:
               bash install.sh --disable-prompts
               source $HOME/google-cloud-sdk/path.bash.inc
             fi
-    - cache-push@2.7.1:
-        inputs:
-        - cache_paths: "$HOME/google-cloud-sdk"
-        - ignore_check_on_paths: "!/Users/vagrant/Library/Developer/Xcode/DerivedData/**"
-        - compress_archive: "true"
     - script@1.2.1:
         title: Run Performance Tests in Firebase Test Lab
         inputs:
