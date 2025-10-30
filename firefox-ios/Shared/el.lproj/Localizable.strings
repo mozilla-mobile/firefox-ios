@@ -1127,7 +1127,7 @@
 "Settings.AddCustomEngine.Title" = "Προσθήκη μηχανής αναζήτησης";
 
 /* The title for the field which sets the title for a custom search engine. */
-"Settings.AddCustomEngine.TitleLabel" = "Τίτλος";
+"Settings.AddCustomEngine.TitleLabel" = "Τιτλος";
 
 /* The placeholder for Title Field when saving a custom search engine. */
 "Settings.AddCustomEngine.TitlePlaceholder" = "Μηχανή αναζήτησης";
