@@ -228,7 +228,7 @@ class ToolbarButton: UIButton, ThemeApplicable, UIGestureRecognizerDelegate {
         guard let iconName = element.iconName, let baseImage = UIImage(named: iconName) else {
             return nil
         }
-        let image = element.templateModeforImage
+        let image = element.templateModeForImage
             ? baseImage.withRenderingMode(.alwaysTemplate)
             : baseImage
 

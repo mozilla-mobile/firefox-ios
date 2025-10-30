@@ -17,8 +17,8 @@ public struct ToolbarElement: Equatable {
     /// Mask name of the badge's toolbar element
     let maskImageName: String?
 
-    /// Indiciated whether to use template mode or not for an image
-    let templateModeforImage: Bool
+    /// Indicated whether to use template mode or not for an image
+    let templateModeForImage: Bool
 
     /// TODO: FXIOS-13949 Should investigate if there is a better way to do this
     let shouldUseLoadingSpinner: Bool
@@ -78,7 +78,7 @@ public struct ToolbarElement: Equatable {
                 title: String? = nil,
                 badgeImageName: String? = nil,
                 maskImageName: String? = nil,
-                templateModeforImage: Bool = true,
+                templateModeForImage: Bool = true,
                 shouldUseLoadingSpinner: Bool = false,
                 numberOfTabs: Int? = nil,
                 isEnabled: Bool,
@@ -100,7 +100,7 @@ public struct ToolbarElement: Equatable {
         self.title = title
         self.badgeImageName = badgeImageName
         self.maskImageName = maskImageName
-        self.templateModeforImage = templateModeforImage
+        self.templateModeForImage = templateModeForImage
         self.shouldUseLoadingSpinner = shouldUseLoadingSpinner
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
@@ -125,7 +125,7 @@ public struct ToolbarElement: Equatable {
         lhs.title == rhs.title &&
         lhs.badgeImageName == rhs.badgeImageName &&
         lhs.maskImageName == rhs.maskImageName &&
-        lhs.templateModeforImage == rhs.templateModeforImage &&
+        lhs.templateModeForImage == rhs.templateModeForImage &&
         lhs.shouldUseLoadingSpinner == rhs.shouldUseLoadingSpinner &&
         lhs.numberOfTabs == rhs.numberOfTabs &&
         lhs.isEnabled == rhs.isEnabled &&

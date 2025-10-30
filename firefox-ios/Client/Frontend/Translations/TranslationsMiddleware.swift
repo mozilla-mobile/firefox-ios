@@ -25,14 +25,14 @@ final class TranslationsMiddleware {
 
         case ToolbarMiddlewareActionType.didTapButton:
             guard let action = (action as? ToolbarMiddlewareAction) else { return }
-            self.handleTappingOnTranslateButtion(for: action, and: state)
+            self.handleTappingOnTranslateButton(for: action, and: state)
 
         default:
            break
         }
     }
 
-    private func handleTappingOnTranslateButtion(for action: ToolbarMiddlewareAction, and state: AppState) {
+    private func handleTappingOnTranslateButton(for action: ToolbarMiddlewareAction, and state: AppState) {
         guard let gestureType = action.gestureType,
               let type = action.buttonType else { return }
         guard gestureType == .tap,
@@ -63,7 +63,7 @@ final class TranslationsMiddleware {
         // TODO: FXIOS-13844 - Only updates icon for now, connect with backend
         if translationConfiguration.state == .inactive {
             self.handleUpdatingTranslationIcon(for: action, with: .loading)
-            self.retrievedTranslations(for: action)
+            self.retrieveTranslations(for: action)
         } else if translationConfiguration.state == .active {
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
         }
@@ -90,7 +90,6 @@ final class TranslationsMiddleware {
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
         // We dispatch an action for now, but eventually we want to inject a script
         // to check if the page language differs from our locale language.
-        // We want to show
         guard action.translationConfiguration?.canTranslate == true else { return }
         let toolbarAction = ToolbarAction(
             translationConfiguration: TranslationConfiguration(
@@ -105,7 +104,7 @@ final class TranslationsMiddleware {
 
     // TODO: FXIOS-13844 - Start translation a page and dispatch action after completion
     @MainActor
-    private func retrievedTranslations(for action: ToolbarMiddlewareAction) {
+    private func retrieveTranslations(for action: ToolbarMiddlewareAction) {
         // We dispatch an action for now, but eventually we want to inject a script
         // to check if the page language differs from our locale language
         // When translation completed, we want icon to be active mode.
