@@ -60,7 +60,6 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tappedPreviousButton), for: .touchUpInside)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
-        button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
         button.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
         return button
@@ -70,7 +69,6 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tappedNextButton), for: .touchUpInside)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
-        button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
         button.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
         return button
