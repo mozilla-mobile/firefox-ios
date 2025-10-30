@@ -5,11 +5,10 @@
 import Common
 import UIKit
 
-public class PrimaryRoundedGlassButton: PrimaryRoundedButton {
+public class SecondaryRoundedGlassButton: SecondaryRoundedButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        // Override the configuration for iOS 26+ to use glass effect
         if #available(iOS 26.0, *) {
             configuration = .prominentGlass()
         }

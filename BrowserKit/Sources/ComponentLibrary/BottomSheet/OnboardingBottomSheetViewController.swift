@@ -9,6 +9,9 @@ import UIKit
 /// A specialized bottom sheet controller for onboarding flows that uses viewWillAppear for animations
 @MainActor
 public class OnboardingBottomSheetViewController: BottomSheetViewController {
+    private struct UX {
+        static let multiplieriPadWidth: CGFloat = 0.75
+    }
     private var iPadWidthConstraints: [NSLayoutConstraint] = []
     private var iPadContentConstraints: [NSLayoutConstraint] = []
     private var originalScrollContentWidthConstraint: NSLayoutConstraint?
@@ -67,7 +70,7 @@ public class OnboardingBottomSheetViewController: BottomSheetViewController {
         // Add new constraints for 75% width and center positioning
         iPadWidthConstraints = [
             sheetView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            sheetView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.75)
+            sheetView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: UX.multiplieriPadWidth)
         ]
 
         NSLayoutConstraint.activate(iPadWidthConstraints)
