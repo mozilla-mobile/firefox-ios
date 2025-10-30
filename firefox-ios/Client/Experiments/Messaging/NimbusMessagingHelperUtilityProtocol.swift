@@ -6,14 +6,14 @@ import Foundation
 
 import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 
-protocol NimbusMessagingHelperUtilityProtocol {
+protocol NimbusMessagingHelperUtilityProtocol: Sendable {
     func createNimbusMessagingHelper() -> NimbusMessagingHelperProtocol?
 }
 
-class NimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
-    private let createMessageHelper: () -> NimbusMessagingHelperProtocol?
+final class NimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
+    private let createMessageHelper: @Sendable () -> NimbusMessagingHelperProtocol?
 
-    init(createMessageHelper: @escaping () -> NimbusMessagingHelperProtocol? = Experiments.createJexlHelper) {
+    init(createMessageHelper: @escaping @Sendable () -> NimbusMessagingHelperProtocol? = Experiments.createJexlHelper) {
         self.createMessageHelper = createMessageHelper
     }
 
