@@ -202,7 +202,7 @@ class MainMenuViewController: UIViewController,
                 level: .fatal,
                 category: .lifecycle
             )
-            assertionFailure("MainMenuViewController was not deallocated on the main thread. Redux was not cleaned up.")
+            assertionFailure("The view controller was not deallocated on the main thread. Redux was not cleaned up.")
             return
         }
 

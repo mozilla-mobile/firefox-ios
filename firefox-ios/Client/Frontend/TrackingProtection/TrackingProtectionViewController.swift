@@ -149,7 +149,7 @@ class TrackingProtectionViewController: UIViewController,
                 level: .fatal,
                 category: .lifecycle
             )
-            assertionFailure("TrackingProtectionViewController was not deallocated on the main thread. Redux was not cleaned up.")
+            assertionFailure("The view controller was not deallocated on the main thread. Redux was not cleaned up.")
             return
         }
 
