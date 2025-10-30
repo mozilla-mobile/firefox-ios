@@ -7,12 +7,12 @@ import UIKit
 import Shared
 import SiteImageView
 
-class CustomSearchError: MaybeErrorType {
+struct CustomSearchError: MaybeErrorType {
     enum Reason {
         case DuplicateEngine, FormInput
     }
 
-    var reason: Reason
+    let reason: Reason
 
     internal var description: String {
         return "Search Engine Not Added"
