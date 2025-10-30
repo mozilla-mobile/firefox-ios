@@ -70,7 +70,10 @@ public class OnboardingBottomSheetViewController: BottomSheetViewController {
         // Add new constraints for 75% width and center positioning
         iPadWidthConstraints = [
             sheetView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            sheetView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: UX.multiplieriPadWidth)
+            sheetView.widthAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.widthAnchor,
+                multiplier: UX.multiplieriPadWidth
+            )
         ]
 
         NSLayoutConstraint.activate(iPadWidthConstraints)
