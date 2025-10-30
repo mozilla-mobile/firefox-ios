@@ -96,7 +96,7 @@ class MainMenuViewController: UIViewController,
         self.themeManager = themeManager
         self.logger = logger
         self.mainMenuHelper = mainMenuHelper
-        menuState = MainMenuState(windowUUID: windowUUID)
+        self.menuState = MainMenuState(windowUUID: windowUUID)
         self.lastOrientation = UIDevice.current.orientation
         super.init(nibName: nil, bundle: nil)
 
@@ -130,7 +130,7 @@ class MainMenuViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
                 actionType: MainMenuActionType.viewDidLoad
@@ -195,7 +195,20 @@ class MainMenuViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            logger.log(
+                "MainMenuViewController was not deallocated on the main thread. Redux was not cleaned up.",
+                level: .fatal,
+                category: .lifecycle
+            )
+            assertionFailure("The view controller was not deallocated on the main thread. Redux was not cleaned up.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     private func updateBlur() {
@@ -235,7 +248,7 @@ class MainMenuViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         adjustLayout()
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.updateMenuAppearance
@@ -255,7 +268,7 @@ class MainMenuViewController: UIViewController,
                 self?.adjustLayout()
             }
         }, completion: nil)
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
                 actionType: MainMenuActionType.viewWillTransition
@@ -348,7 +361,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        store.dispatchLegacy(
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.showScreen,
@@ -363,8 +376,8 @@ class MainMenuViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
-        store.dispatchLegacy(
+    func unsubscribeFromRedux() {
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,
@@ -404,7 +417,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func dispatchCloseMenuAction() {
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapCloseMenu,
@@ -413,19 +426,8 @@ class MainMenuViewController: UIViewController,
         )
     }
 
-    private func dispatchSyncSignInAction() {
-        store.dispatchLegacy(
-            MainMenuAction(
-                windowUUID: self.windowUUID,
-                actionType: MainMenuActionType.tapNavigateToDestination,
-                navigationDestination: MenuNavigationDestination(.syncSignIn),
-                currentTabInfo: menuState.currentTabInfo
-            )
-        )
-    }
-
     private func dispatchSiteProtectionAction() {
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -436,7 +438,7 @@ class MainMenuViewController: UIViewController,
     }
 
     private func dispatchDefaultBrowserAction() {
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.tapNavigateToDestination,
@@ -572,7 +574,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        store.dispatchLegacy(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuActionType.menuDismissed,

@@ -5257,7 +5257,7 @@ extension String {
 
         public struct Submenus {
             public struct Tools {
-                public static let PageZoomV2 = MZLocalizedString(
+                public static let PageZoom = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.PageZoomV2.Title.v141",
                     tableName: "MainMenu",
                     value: "Page Zoom",

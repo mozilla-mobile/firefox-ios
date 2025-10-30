@@ -204,13 +204,13 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case .settings:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.settings)
 
-        case .printSheetV2:
+        case .printSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.print)
 
         case .shareSheet:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.share)
 
-        case .saveAsPDFV2:
+        case .saveAsPDF:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.saveAsPDF)
 
         case .syncSignIn:
