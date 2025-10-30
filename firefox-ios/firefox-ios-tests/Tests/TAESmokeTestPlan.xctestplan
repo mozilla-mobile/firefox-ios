@@ -84,8 +84,6 @@
         "BookmarksTests\/testBookmarksAwesomeBar()",
         "BookmarksTests\/testBookmarksToggleIsAvailable()",
         "BookmarksTests\/testDeleteBookmarkContextMenu()",
-        "BookmarksTests\/testDeleteBookmarkSwiping()",
-        "BookmarksTests\/testDesktopFoldersArePresent()",
         "BookmarksTests\/testEditBookmark()",
         "BookmarksTests\/testLongTapRecentlySavedLink_tabTrayExperimentOff()",
         "BookmarksTests\/testLongTapRecentlySavedLink_tabTrayExperimentOn()",
