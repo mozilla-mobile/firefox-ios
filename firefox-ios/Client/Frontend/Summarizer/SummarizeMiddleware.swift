@@ -6,6 +6,7 @@ import Common
 import Redux
 import SummarizeKit
 
+@MainActor
 final class SummarizerMiddleware {
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizationChecker: SummarizationCheckerProtocol
@@ -66,7 +67,7 @@ final class SummarizerMiddleware {
         let result = await checkSummarizationResult(tab)
         let contentType = result?.contentType ?? .generic
         guard result?.canSummarize == true else { return }
-        store.dispatchLegacy(
+        store.dispatch(
             SummarizeAction(
                 windowUUID: action.windowUUID,
                 actionType: SummarizeMiddlewareActionType.configuredSummarizer,

@@ -15,6 +15,7 @@ final class BrowserScreen {
 
     private var addressBar: XCUIElement { sel.ADDRESS_BAR.element(in: app) }
     private var cancelButton: XCUIElement { sel.CANCEL_BUTTON_URL_BAR.element(in: app) }
+    private var bookText: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT.element(in: app) }
 
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
@@ -180,5 +181,13 @@ final class BrowserScreen {
 
     func addressToolbarContainValue(value: String) {
         BaseTestCase().mozWaitForValueContains(addressBar, value: value)
+    }
+
+    func tapOnBookOfMozilla() {
+        bookText.waitAndTap()
+    }
+
+    func waitForBookOfMozillaToDisappear(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToNotExist(bookText, timeout: timeout)
     }
 }

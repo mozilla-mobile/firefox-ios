@@ -251,11 +251,6 @@ private extension WallpaperSettingsViewController {
         viewModel.selectHomepageTab()
     }
 
-    func preferredContentSizeChanged(_ notification: Notification) {
-        // Reload the complete collection view as the section headers are not adjusting their size correctly otherwise
-        collectionView.reloadData()
-    }
-
     func downloadAndSetWallpaper(at indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? WallpaperCollectionViewCell
             else { return }
@@ -286,7 +281,10 @@ extension WallpaperSettingsViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            preferredContentSizeChanged(notification)
+            ensureMainThread {
+                // Reload the entire collection view as the section headers are not adjusting their size correctly otherwise
+                self.collectionView.reloadData()
+            }
         default: break
         }
     }

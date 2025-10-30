@@ -47,9 +47,11 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
     }
 
     @objc
-    private func openClearHistory() {
-        guard let historyPanel = router.rootViewController as? HistoryPanel else { return }
-        historyPanel.showClearRecentHistory()
+    private nonisolated func openClearHistory() {
+        ensureMainThread {
+            guard let historyPanel = self.router.rootViewController as? HistoryPanel else { return }
+            historyPanel.showClearRecentHistory()
+        }
     }
 
     // MARK: - HistoryCoordinatorDelegate

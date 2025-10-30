@@ -1142,6 +1142,14 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(storiesFeedViewController)
     }
 
+    func showStoriesWebView(url: URL?) {
+        guard let url else { return }
+        let tab = tabManager.addTab(URLRequest(url: url), afterTab: nil, zombie: false, isPrivate: false)
+        guard let webView = tab.webView else { return }
+        let webviewViewController = StoriesWebviewViewController(windowUUID: windowUUID, webView: webView)
+        router.push(webviewViewController)
+    }
+
     // MARK: Microsurvey
 
     func showMicrosurvey(model: MicrosurveyModel) {

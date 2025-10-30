@@ -18,6 +18,7 @@ final class MicrosurveyStateTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testDismissSurveyAction() {
         let initialState = createSubject()
         let reducer = microsurveyReducer()
@@ -31,6 +32,7 @@ final class MicrosurveyStateTests: XCTestCase {
         XCTAssertEqual(newState.showPrivacy, false)
     }
 
+    @MainActor
     func testSubmitSurveyAction() {
         let initialState = createSubject()
         let reducer = microsurveyReducer()

@@ -49,6 +49,7 @@ class StoryViewModel: @unchecked Sendable {
 
     // The dimension of a cell
     // Fractions for iPhone to only show a slight portion of the next column
+    @MainActor
     func getWidthDimension(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                            isLandscape: Bool = UIWindow.isLandscape) -> NSCollectionLayoutDimension {
         if device == .pad {

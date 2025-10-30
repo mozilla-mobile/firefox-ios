@@ -13,7 +13,7 @@ struct NativeErrorPageState: ScreenState {
     var url: URL?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let nativeErrorPageState = store.state.screenState(
+        guard let nativeErrorPageState = appState.screenState(
             NativeErrorPageState.self,
             for: .nativeErrorPage,
             window: uuid

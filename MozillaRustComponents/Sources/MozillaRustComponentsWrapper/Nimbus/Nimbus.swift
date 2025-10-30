@@ -234,13 +234,6 @@ extension Nimbus {
         postEnrollmentCalculation(changes)
     }
 
-    @available(*, deprecated,
-               message: "Use setExperimentParticipationOnThisThread and setRolloutParticipationOnThisThread instead")
-    func setGlobalUserParticipationOnThisThread(_ value: Bool) throws {
-        let changes = try nimbusClient.setGlobalUserParticipation(optIn: value)
-        postEnrollmentCalculation(changes)
-    }
-
     func initializeOnThisThread() throws {
         try nimbusClient.initialize()
     }
@@ -298,18 +291,6 @@ extension Nimbus: NimbusUserConfiguration {
         set {
             _ = catchAll(dbQueue) { _ in
                 try self.setRolloutParticipationOnThisThread(newValue)
-            }
-        }
-    }
-
-    @available(*, deprecated, message: "Use experimentParticipation and rolloutParticipation instead")
-    public var globalUserParticipation: Bool {
-        get {
-            catchAll { try nimbusClient.getGlobalUserParticipation() } ?? true
-        }
-        set {
-            _ = catchAll(dbQueue) { _ in
-                try self.setGlobalUserParticipationOnThisThread(newValue)
             }
         }
     }
@@ -471,15 +452,6 @@ public final class NimbusDisabled: NimbusApi, @unchecked Sendable {
 
     public var experimentParticipation: Bool = false
     public var rolloutParticipation: Bool = false
-
-    @available(*, deprecated, message: "Use experimentParticipation and rolloutParticipation instead")
-    public var globalUserParticipation: Bool {
-        get { return experimentParticipation && rolloutParticipation }
-        set {
-            experimentParticipation = newValue
-            rolloutParticipation = newValue
-        }
-    }
 }
 
 public extension NimbusDisabled {
