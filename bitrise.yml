@@ -1581,7 +1581,7 @@ workflows:
             python3 perfTestTransform.py
     meta:
       bitrise.io:
-        stack: osx-xcode-26.0.x
+        stack: osx-xcode-16.4.x
         machine_type_id: g2.mac.4large
 
   Firefox_Unit_Tests:
