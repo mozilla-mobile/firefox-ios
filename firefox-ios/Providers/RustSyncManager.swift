@@ -344,15 +344,15 @@ public class RustSyncManager: NSObject, SyncManager {
         return engineEnablements
     }
 
-    public class ScopedKeyError: MaybeErrorType {
+    public struct ScopedKeyError: MaybeErrorType {
         public let description = "No key data found for scope."
     }
 
-    public class DeviceIdError: MaybeErrorType {
+    public struct DeviceIdError: MaybeErrorType {
         public let description = "Failed to get deviceId."
     }
 
-    public class NoTokenServerURLError: MaybeErrorType {
+    public struct NoTokenServerURLError: MaybeErrorType {
         public let description = "Failed to get token server endpoint url."
     }
 
