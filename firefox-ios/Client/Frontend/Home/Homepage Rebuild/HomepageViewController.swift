@@ -346,7 +346,7 @@ final class HomepageViewController: UIViewController,
             actionType: ScreenActionType.closeScreen,
             screen: .homepage
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: - Theming

@@ -173,7 +173,7 @@ final class MicrosurveyViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .microsurvey)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     override func viewDidLoad() {

@@ -191,7 +191,7 @@ final class NativeErrorPageViewController: UIViewController,
         let action = ScreenAction(windowUUID: self.windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .nativeErrorPage)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     required init?(coder aDecoder: NSCoder) {

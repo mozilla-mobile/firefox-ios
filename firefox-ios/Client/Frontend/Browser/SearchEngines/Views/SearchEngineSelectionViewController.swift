@@ -111,7 +111,7 @@ class SearchEngineSelectionViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatchLegacy(
+        store.dispatch(
             ScreenAction(
                 windowUUID: windowUUID,
                 actionType: ScreenActionType.closeScreen,

@@ -192,7 +192,7 @@ class RemoteTabsPanel: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .remoteTabsPanel)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     func newState(state: RemoteTabsPanelState) {

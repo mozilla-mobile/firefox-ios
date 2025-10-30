@@ -73,7 +73,7 @@ final class TabPeekViewController: UIViewController,
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .tabPeek)
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     private func setupWithScreenshot() {
