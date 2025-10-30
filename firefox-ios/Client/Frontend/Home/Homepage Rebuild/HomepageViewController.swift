@@ -52,6 +52,7 @@ final class HomepageViewController: UIViewController,
     private let syncTabContextualHintViewController: ContextualHintViewController
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
+    private var hasLaidOutSubviews = false
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -137,15 +138,6 @@ final class HomepageViewController: UIViewController,
         setupLayout()
         configureDataSource()
 
-        store.dispatchLegacy(
-            HomepageAction(
-                numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
-                showiPadSetup: shouldUseiPadSetup(),
-                windowUUID: windowUUID,
-                actionType: HomepageActionType.initialize
-            )
-        )
-
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
@@ -188,6 +180,22 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        /// FXIOS-13970: Legacy homepage layout was appearing blank on iOS 15. The root cause was from applying the diffable
+        /// data source snapshot before the view had finished it's first layout pass, causing the snapshot to be ignored.
+        /// This issue seems to be resolved by the SDK on later iOS versions
+        if !hasLaidOutSubviews {
+            hasLaidOutSubviews = true
+            store.dispatchLegacy(
+                HomepageAction(
+                    numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
+                    showiPadSetup: shouldUseiPadSetup(),
+                    windowUUID: windowUUID,
+                    actionType: HomepageActionType.initialize
+                )
+            )
+        }
+
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
 
