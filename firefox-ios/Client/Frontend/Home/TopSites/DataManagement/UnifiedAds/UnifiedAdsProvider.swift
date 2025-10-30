@@ -153,20 +153,20 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
 
     private func fetchTilesWithAdsClient(completion: @escaping (UnifiedTileResult) -> Void) {
         self.logger.log("Fetching tiles with ads client", level: .info, category: .homepage)
-        let placements = [
-            MozAdsPlacementConfig(placementId: TileOrder.position1.rawValue, iabContent: nil),
-            MozAdsPlacementConfig(placementId: TileOrder.position2.rawValue, iabContent: nil)
+        let mozAdRequests = [
+            MozAdsPlacementRequest(placementId: TileOrder.position1.rawValue, iabContent: nil),
+            MozAdsPlacementRequest(placementId: TileOrder.position2.rawValue, iabContent: nil)
         ]
         do {
-            let placementsResult = try self.adsClient.requestAds(mozAdConfigs: placements)
-            let unifiedTiles: [UnifiedTile] = placementsResult.map { key, value in
-                UnifiedTile.from(name: key, mozAdsPlacement: value)
+            let mozAdsPlacements = try self.adsClient.requestAds(mozAdRequests: mozAdRequests, options: nil)
+            let unifiedTiles: [UnifiedTile] = mozAdsPlacements.map { name, mozAdsPlacement in
+                UnifiedTile.from(name: name, mozAdsPlacement: mozAdsPlacement)
             }
             self.logger.log("Ads client request successful", level: .info, category: .homepage)
             // TODO(Regression): we need to implement the cache feature in the Rust component
             completion(.success(unifiedTiles))
-        } catch {
-            self.logger.log("Ads client request failed", level: .warning, category: .homepage)
+        } catch let error {
+            self.logger.log("Ads client request failed: \(error)", level: .warning, category: .homepage)
             completion(.failure(Error.noDataAvailable))
         }
     }

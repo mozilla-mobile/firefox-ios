@@ -3,13 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
 import XCTest
-
-@preconcurrency import struct MozillaAppServices.AdCallbacks
-@preconcurrency import protocol MozillaAppServices.MozAdsClientProtocol
-@preconcurrency import struct MozillaAppServices.MozAd
-@preconcurrency import struct MozillaAppServices.MozAdsPlacement
-@preconcurrency import struct MozillaAppServices.MozAdsPlacementConfig
 
 @testable import Client
 
@@ -29,7 +24,10 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
 
     func reportAd(placement: MozAdsPlacement) throws {}
 
-    func requestAds(mozAdConfigs: [MozAdsPlacementConfig]) throws -> [String: MozAdsPlacement] {
+    func requestAds(
+        mozAdRequests: [MozAdsPlacementRequest],
+        options: MozAdsRequestOptions?
+    ) throws -> [String: MozAdsPlacement] {
         if let error = mockError {
             throw error
         }
@@ -220,8 +218,8 @@ class UnifiedAdsProviderTests: XCTestCase {
     func testFetchTilesWithAdsClient_whenSuccessful_thenReturnsTiles() {
         LegacyFeatureFlagsManager.shared.set(feature: .adsClient, to: true, isDebug: true)
 
-        let placementConfig1 = MozAdsPlacementConfig(placementId: "newtab_mobile_tile_1", iabContent: nil)
-        let placementConfig2 = MozAdsPlacementConfig(placementId: "newtab_mobile_tile_2", iabContent: nil)
+        let placementRequest1 = MozAdsPlacementRequest(placementId: "newtab_mobile_tile_1", iabContent: nil)
+        let placementRequest2 = MozAdsPlacementRequest(placementId: "newtab_mobile_tile_2", iabContent: nil)
 
         let adContent1 = MozAd(
             altText: nil,
@@ -241,24 +239,26 @@ class UnifiedAdsProviderTests: XCTestCase {
             url: "https://www.test5.com"
         )
 
-        let placement1 = MozAdsPlacement(placementConfig: placementConfig1, content: adContent1)
-        let placement2 = MozAdsPlacement(placementConfig: placementConfig2, content: adContent2)
+        let placement1 = MozAdsPlacement(placementRequest: placementRequest1, content: adContent1)
+        let placement2 = MozAdsPlacement(placementRequest: placementRequest2, content: adContent2)
 
         mockAdsClient.mockPlacements = [
             "newtab_mobile_tile_1": placement1,
             "newtab_mobile_tile_2": placement2
         ]
 
-        let subject = createSubject(adsClient: mockAdsClient)
+        let subject = createSubject()
 
         subject.fetchTiles { result in
             switch result {
             case let .success(tiles):
                 XCTAssertEqual(tiles.count, 2)
-                XCTAssertEqual(tiles[0].name, "newtab_mobile_tile_1")
-                XCTAssertEqual(tiles[0].url, "https://www.test1.com")
-                XCTAssertEqual(tiles[1].name, "newtab_mobile_tile_2")
-                XCTAssertEqual(tiles[1].url, "https://www.test5.com")
+                let actual = Dictionary(uniqueKeysWithValues: tiles.map { ($0.name, $0.url) })
+                let expected = [
+                    "newtab_mobile_tile_1": "https://www.test1.com",
+                    "newtab_mobile_tile_2": "https://www.test5.com"
+                ]
+                XCTAssertEqual(actual, expected)
             default:
                 XCTFail("Expected success, got \(result) instead")
             }
@@ -270,7 +270,7 @@ class UnifiedAdsProviderTests: XCTestCase {
 
         mockAdsClient.mockError = NSError(domain: "test", code: 1)
 
-        let subject = createSubject(adsClient: mockAdsClient)
+        let subject = createSubject()
 
         subject.fetchTiles { result in
             switch result {
