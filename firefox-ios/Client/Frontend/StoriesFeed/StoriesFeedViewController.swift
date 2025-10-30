@@ -26,6 +26,10 @@ class StoriesFeedViewController: UIViewController,
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    // Telemetry related
+    private var alreadyTrackedStories = Set<StoriesFeedItem>()
+    private let trackingImpressionsThrottler: GCDThrottlerProtocol
+
     // MARK: - Private constants
     private let logger: Logger
 
@@ -33,13 +37,15 @@ class StoriesFeedViewController: UIViewController,
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         throttler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.5)
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
         self.storiesFeedState = StoriesFeedState(windowUUID: windowUUID)
+        self.trackingImpressionsThrottler = throttler
 
         super.init(nibName: nil, bundle: nil)
 
@@ -76,6 +82,11 @@ class StoriesFeedViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigationBar(animated: animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackVisibleItemImpressions()
     }
 
     // MARK: - Redux
@@ -227,6 +238,47 @@ class StoriesFeedViewController: UIViewController,
                 )
             )
         }
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        trackVisibleItemImpressions()
+    }
+
+    // MARK: - Telemetry
+    /// Used to track impressions. If the user has already seen the item on the homepage, we only record the impression once.
+    /// We want to track at initial seen as well as when users scrolls.
+    /// A throttle is added in order to capture what the users has seen. When we scroll to top programmatically,
+    /// the impressions were being tracked, but to match user's perspective, we add a throttle to delay.
+    /// Time complexity: O(n) due to iterating visible items.
+    private func trackVisibleItemImpressions() {
+        trackingImpressionsThrottler.throttle { [self] in
+            ensureMainThread {
+                guard let collectionView = self.collectionView else {
+                    self.logger.log(
+                        "Homepage collectionview should not have been nil, unable to track impression",
+                        level: .warning,
+                        category: .homepage
+                    )
+                    return
+                }
+                for indexPath in collectionView.indexPathsForVisibleItems {
+                    guard let item = self.dataSource?.itemIdentifier(for: indexPath) else { continue }
+                    self.handleTrackingImpressions(with: item, at: indexPath.item)
+                }
+            }
+        }
+    }
+
+    private func handleTrackingImpressions(with item: StoriesFeedItem, at index: Int) {
+        guard !alreadyTrackedStories.contains(item) else { return }
+        alreadyTrackedStories.insert(item)
+//        guard case .topSite(let config, _) = item else { return }
+//        dispatchTopSitesAction(at: index, config: config, actionType: TopSitesActionType.topSitesSeen)
+        print("RGB - \(item) at \(index)")
+    }
+
+    private func resetTrackedObjects() {
+        alreadyTrackedStories.removeAll()
     }
 
     // MARK: - Themeable

@@ -46,12 +46,12 @@ features:
       - channel: developer
         value:
           enabled: false
-          search-bar: true
-          shortcuts-library: false
+          search-bar: false
+          shortcuts-library: true
           stories-redesign: true
           discover-more-feature-configuration:
-            discover-more-v1-experience: false
-            show-discover-more-button: false
+            discover-more-v1-experience: true
+            show-discover-more-button: true
 
 objects:
   DiscoverMoreConfiguration:

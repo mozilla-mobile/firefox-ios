@@ -83,6 +83,7 @@ let middlewares = [
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
     StartAtHomeMiddleware().startAtHomeProvider,
     ShortcutsLibraryMiddleware().shortcutsLibraryProvider,
+    StoriesFeedTelemetryMiddleware().storiesFeedTelemetryProvider,
     SummarizerMiddleware().summarizerProvider,
     TermsOfUseMiddleware().termsOfUseProvider,
     TranslationsMiddleware().translationsProvider
