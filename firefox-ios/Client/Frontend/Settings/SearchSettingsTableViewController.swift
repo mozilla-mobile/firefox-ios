@@ -37,6 +37,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             case .alternateEngines:
                 return .Settings.Search.AlternateSearchEnginesTitle
             case .preSearch:
+                // This section doesn't have a title since we don't want
+                // to introduce a new term such as pre-search for users.
+                // There should be some rework of the search settings in the future
+                // so that cross-platform we're more in sync.
                 return ""
             case .searchEnginesSuggestions:
                 return .Settings.Search.EnginesSuggestionsTitle

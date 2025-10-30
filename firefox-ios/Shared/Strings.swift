@@ -2339,17 +2339,17 @@ extension String {
             key: "SearchZero.RecentSearches.SectionTitle.v146",
             tableName: "SearchZero",
             value: "Recent Searches",
-            comment: "When user taps on the address bar, the user enters the search zero view. The user can see their recent searches in this view. This is the title of the section that shows the list of their recent searches.")
+            comment: "When a user taps on the address bar, they can see their recent searches. This is the title of the section that shows the list of their recent searches.")
         public static let ClearButtonTitlee = MZLocalizedString(
             key: "SearchZero.Clear.ButtonTitle.v146",
             tableName: "SearchZero",
             value: "Clear",
-            comment: "When user taps on the address bar, the user enters the zero search view. The user can see a button to clear their recent searches. This is the title of the button that clears the list of recent searches.")
+            comment: "When a user taps on the address bar, they can see their recent searches. This is the title of the button that the user can tap on to clear the list of their recent searches.")
         public static let TrendingSearchesSectionTitle = MZLocalizedString(
             key: "SearchZero.TrendingSearches.SectionTitle.v146",
             tableName: "SearchZero",
             value: "Trending on %@",
-            comment: "When user taps on the address bar, the user enters the zero search view. The user can see trending searches associated with a specific search engine. This is the title of the section that shows the list of trending searches. %@ is the search engine name.")
+            comment: "When a user taps on the address bar, they can see their trending searches. This is the title of the section that shows the list of their trending searches. %@ is the search engine name.")
     }
 }
 
