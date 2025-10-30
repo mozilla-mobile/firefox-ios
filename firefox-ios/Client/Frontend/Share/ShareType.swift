@@ -7,6 +7,8 @@ import Foundation
 /// Preconfigured sharing schemes which the share manager knows how to handle.
 ///     file: Include a file URL (`file://`). Best used for sharing downloaded files. If possible, the remote URL is saved
 ///           as well for `Send to Device` and other activities which share the content off-device without an attachment.
+///           Note that remote URLs are only set for online files (e.g. PDFs viewed in the tab), not downloaded files (PDFs
+///           opened in a tab from the DownloadsPanel).
 ///     site: Include a website URL (`http(s)://`). Best used for sharing library/bookmarks, etc. without an active tab.
 ///           Shares configured using .site will not append a title to Messages but will have a subtitle in Mail.
 ///     tab:  Include a URL and a tab to share. If sharing a tab with an active webView, then additional sharing

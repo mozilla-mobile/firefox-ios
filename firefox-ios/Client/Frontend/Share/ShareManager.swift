@@ -53,8 +53,7 @@ class ShareManager: NSObject {
         var activityItems: [Any] = []
 
         switch shareType {
-        case .file(let fileURL, let remoteURL):
-            // Might have to pass this.
+        case .file(let fileURL, _):
             activityItems.append(URLActivityItemProvider(url: fileURL))
 
             if let explicitShareMessage {
@@ -130,7 +129,7 @@ class ShareManager: NSObject {
         switch shareType {
         case .file(_, let remoteURL):
             // Some downloaded files may have an associated remote URL (if the file was just downloaded in the tab).
-            // Files which are shared from the Downloads panel will NOT have any associated remote URL (we don't store that
+            // Files which are shared from the Downloads Panel will NOT have any associated remote URL (we don't store that
             // history).
             if let remoteURL {
                 appActivities.append(SendToDeviceActivity(activityType: .sendToDevice, url: remoteURL))
