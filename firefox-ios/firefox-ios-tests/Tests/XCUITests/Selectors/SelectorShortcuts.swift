@@ -188,4 +188,16 @@ extension Selector {
                         groups: groups
         )
     }
+
+    static func switchById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .predicate(
+            NSPredicate(format: "elementType == %d AND identifier == %@",
+                        XCUIElement.ElementType.switch.rawValue,
+                        id)
+            ),
+                 value: id,
+                 description: description,
+                 groups: groups
+        )
+    }
 }
