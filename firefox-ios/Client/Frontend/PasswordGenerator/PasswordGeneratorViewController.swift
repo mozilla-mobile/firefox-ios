@@ -95,7 +95,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         )
     }
 
-    deinit {
+    isolated deinit {
         unsubscribeFromRedux()
     }
 
@@ -213,7 +213,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,

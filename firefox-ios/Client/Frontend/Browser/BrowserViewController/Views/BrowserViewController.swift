@@ -469,25 +469,10 @@ class BrowserViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
+    isolated deinit {
         logger.log("BVC deallocating (window: \(windowUUID))", level: .info, category: .lifecycle)
         unsubscribeFromRedux()
-        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
-        // KVO observation removal directly requires self so we can not use the apple
-        // recommended work around here.
-        guard Thread.isMainThread else {
-            logger.log(
-                "BVC was not deallocated on the main thread. KVOs were not cleaned up.",
-                level: .fatal,
-                category: .lifecycle
-            )
-            assertionFailure("BVC was not deallocated on the main thread. KVOs were not cleaned up.")
-            return
-        }
-
-        MainActor.assumeIsolated {
-            observedWebViews.forEach({ stopObserving(webView: $0) })
-        }
+        observedWebViews.forEach({ stopObserving(webView: $0) })
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -895,7 +880,7 @@ class BrowserViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .browserViewController)

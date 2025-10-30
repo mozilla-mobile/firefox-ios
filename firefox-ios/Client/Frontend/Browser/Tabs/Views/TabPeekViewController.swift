@@ -40,7 +40,7 @@ final class TabPeekViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
+    isolated deinit {
         unsubscribeFromRedux()
     }
 
@@ -69,7 +69,7 @@ final class TabPeekViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .tabPeek)

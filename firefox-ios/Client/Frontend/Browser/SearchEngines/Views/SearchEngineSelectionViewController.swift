@@ -49,7 +49,7 @@ class SearchEngineSelectionViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
+    isolated deinit {
         unsubscribeFromRedux()
     }
 
@@ -110,7 +110,7 @@ class SearchEngineSelectionViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         store.dispatchLegacy(
             ScreenAction(
                 windowUUID: windowUUID,

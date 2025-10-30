@@ -66,7 +66,7 @@ class RemoteTabsPanel: UIViewController,
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    deinit {
+    isolated deinit {
         unsubscribeFromRedux()
     }
 
@@ -188,7 +188,7 @@ class RemoteTabsPanel: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .remoteTabsPanel)

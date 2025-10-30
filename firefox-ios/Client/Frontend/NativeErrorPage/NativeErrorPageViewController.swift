@@ -187,7 +187,7 @@ final class NativeErrorPageViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: self.windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .nativeErrorPage)
@@ -198,7 +198,7 @@ final class NativeErrorPageViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
+    isolated deinit {
         unsubscribeFromRedux()
     }
 

@@ -169,7 +169,7 @@ final class MicrosurveyViewController: UIViewController,
         })
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .microsurvey)
@@ -195,7 +195,7 @@ final class MicrosurveyViewController: UIViewController,
         )
     }
 
-    deinit {
+    isolated deinit {
         unsubscribeFromRedux()
     }
 

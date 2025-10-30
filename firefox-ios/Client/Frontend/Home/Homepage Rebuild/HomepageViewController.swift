@@ -121,7 +121,7 @@ final class HomepageViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
+    isolated deinit {
         unsubscribeFromRedux()
     }
 
@@ -340,7 +340,7 @@ final class HomepageViewController: UIViewController,
         self.homepageState = state
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(
             windowUUID: windowUUID,
             actionType: ScreenActionType.closeScreen,
