@@ -25,7 +25,7 @@ public protocol NimbusMessagingProtocol {
     var events: NimbusEventStore { get }
 }
 
-public protocol NimbusMessagingHelperProtocol: NimbusStringHelperProtocol, NimbusTargetingHelperProtocol, Sendable {
+public protocol NimbusMessagingHelperProtocol: NimbusStringHelperProtocol, NimbusTargetingHelperProtocol {
     /**
      * Clear the JEXL cache
      */
