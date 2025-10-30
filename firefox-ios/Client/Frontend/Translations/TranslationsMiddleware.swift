@@ -10,6 +10,7 @@ import Common
 final class TranslationsMiddleware {
     private let profile: Profile
     private let logger: Logger
+
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
@@ -34,9 +35,10 @@ final class TranslationsMiddleware {
 
     private func handleTappingOnTranslateButton(for action: ToolbarMiddlewareAction, and state: AppState) {
         guard let gestureType = action.gestureType,
-              let type = action.buttonType else { return }
-        guard gestureType == .tap,
-              type == .translate else { return }
+              let type = action.buttonType,
+              gestureType == .tap,
+              type == .translate
+        else { return }
 
         guard let toolbarState = state.screenState(
             ToolbarState.self,
