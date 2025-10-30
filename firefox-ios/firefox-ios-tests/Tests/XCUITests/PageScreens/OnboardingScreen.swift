@@ -33,7 +33,6 @@ final class OnboardingScreen {
         let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
         let secondary = sel.secondaryButton(rootId: rootA11yId).element(in: app)
 
-        print(app.debugDescription)
         BaseTestCase().mozWaitForElementToExist(title)
         XCTAssertEqual(title.label, expectedTitle)
         XCTAssertEqual(description.label, expectedDescription)
