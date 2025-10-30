@@ -2340,7 +2340,7 @@ extension String {
             tableName: "SearchZero",
             value: "Recent Searches",
             comment: "When a user taps on the address bar, they can see their recent searches. This is the title of the section that shows the list of their recent searches.")
-        public static let ClearButtonTitlee = MZLocalizedString(
+        public static let ClearButtonTitle = MZLocalizedString(
             key: "SearchZero.Clear.ButtonTitle.v146",
             tableName: "SearchZero",
             value: "Clear",
