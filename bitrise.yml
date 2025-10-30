@@ -1599,7 +1599,7 @@ workflows:
         stack: osx-xcode-16.2.x
         machine_type_id: g2.mac.4large
 
-  Firefox_Unit_Tests:
+  Firefox_Unit_Tests_iOS26:
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -1618,6 +1618,12 @@ workflows:
         - maximum_test_repetitions: 3
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
+  Firefox_Unit_Tests_iOS18:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
     - xcode-test@6.0.1:
         is_always_run: true
         timeout: 1800
@@ -1631,6 +1637,12 @@ workflows:
         - maximum_test_repetitions: 3
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
+  Firefox_Unit_Tests_iOS17:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
     - xcode-test@6.0.1:
         is_always_run: true
         timeout: 1800
