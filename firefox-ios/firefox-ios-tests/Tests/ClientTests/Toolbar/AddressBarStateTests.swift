@@ -566,7 +566,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
     }
 
-    func test_scrollAlphaDidChangeAction_returnsExpectedState() {
+    func test_scrollAlphaNeedsUpdateAction_returnsExpectedState() {
         setupStore()
         let initialState = ToolbarState(windowUUID: windowUUID)
         let reducer = ToolbarState.reducer
@@ -576,7 +576,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             ToolbarAction(
                 scrollAlpha: 0,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.scrollAlphaDidChange
+                actionType: ToolbarActionType.scrollAlphaNeedsUpdate
             )
         )
 

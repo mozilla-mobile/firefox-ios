@@ -144,7 +144,7 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
             ToolbarActionType.didSetSearchTerm, ToolbarActionType.didStartTyping,
             ToolbarActionType.animationStateChanged, ToolbarActionType.translucencyDidChange,
-            ToolbarActionType.scrollAlphaDidChange, ToolbarActionType.readerModeStateChanged,
+            ToolbarActionType.scrollAlphaNeedsUpdate, ToolbarActionType.readerModeStateChanged,
             ToolbarActionType.navigationMiddleButtonDidChange:
             return handleToolbarUpdates(state: state, action: action)
 

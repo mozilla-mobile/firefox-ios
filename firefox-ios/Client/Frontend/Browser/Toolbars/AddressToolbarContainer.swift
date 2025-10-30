@@ -188,10 +188,9 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.isHidden = true
     }
 
-    func offsetForKeyboardAccessory(view: AccessoryViewProvider?) -> CGFloat {
+    func offsetForKeyboardAccessory(hasAccessoryView: Bool) -> CGFloat {
         guard #available(iOS 26.0, *), let windowUUID else { return 0 }
 
-        let hasAccessoryView = view != nil
         let isEditingAddress = state?.addressToolbar.isEditing == true
         let isBottomToolbar = state?.toolbarPosition == .bottom
 
@@ -203,16 +202,16 @@ final class AddressToolbarContainer: UIView,
             )
         )
 
-        let shouldAdjustForAccessory = hasAccessoryView
-        && !isEditingAddress
-        && isBottomToolbar
+        let shouldAdjustForAccessory = hasAccessoryView &&
+                                       !isEditingAddress &&
+                                       isBottomToolbar
 
         if shouldAdjustForAccessory {
             store.dispatchLegacy(
                 ToolbarAction(
                     scrollAlpha: 0,
                     windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaDidChange
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
                 )
             )
         }

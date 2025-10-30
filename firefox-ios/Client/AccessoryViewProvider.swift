@@ -13,13 +13,20 @@ enum AccessoryType {
 final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
     // MARK: - Constants
     private struct UX {
-        static let accessoryViewHeight: CGFloat = if #available(iOS 26.0, *) { 62 } else { 56 }
-        static let fixedSpacerWidth: CGFloat = 10
+        static let accessoryViewHeight: CGFloat = 56
+        static let fixedSpacerWidth: CGFloat = if #available(iOS 26.0, *) { 16 } else { 10 }
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
+        static let leadingTrailingOffset: CGFloat = 12
+        static let topOffset: CGFloat = 2
+        static let bottomOffset: CGFloat = 8
+        static let backgroundViewHeight: CGFloat = 44
         static let spacerViewHeight: CGFloat = 4
         static let cornerRadius: CGFloat = 24.0
+        static let backgroundCornerRadius: CGFloat = 22
+        static let shadowRadius: CGFloat = 10
+        static let shadowOffset = CGSize(width: 0, height: 2)
     }
 
     // MARK: - Properties
@@ -47,60 +54,53 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
 
     // MARK: - UI Elements
     private let toolbar: UIToolbar = .build()
-
     private let toolbarTopHeightSpacer: UIView = .build()
 
-    private lazy var barButtonsGroup = UIBarButtonItemGroup(
-        barButtonItems: [
-            nextButton,
-            previousButton
-        ],
-        representativeItem: nil
-    )
-
-    private lazy var previousButton: UIBarButtonItem = {
+    private lazy var previousButton: UIButton = {
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tappedPreviousButton), for: .touchUpInside)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
-        let barButton = UIBarButtonItem(customView: button)
-        barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
-        barButton.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
-        return barButton
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
+        button.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
+        return button
     }()
 
-    private lazy var nextButton: UIBarButtonItem = {
+    private lazy var nextButton: UIButton = {
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tappedNextButton), for: .touchUpInside)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
-        let barButton = UIBarButtonItem(customView: button)
-        barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
-        barButton.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
+        button.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
+        return button
+    }()
+
+    private lazy var navigationButtonsStackView: UIStackView = .build {
+        $0.spacing = UX.fixedSpacerWidth
+        $0.alignment = .center
+    }
+
+    /// On iOS 26+, `UIBarButtonItem` has a fixed default padding between elements that cannot be reduced.
+    /// To work around this limitation, we wrap the next and previous buttons in a `UIStackView` where
+    /// we can control the spacing between them, then add the stack view as a single `UIBarButtonItem`.
+    private lazy var navigationButtonsBarItem: UIBarButtonItem = {
+        let barButton = UIBarButtonItem(customView: navigationButtonsStackView)
+        if #available(iOS 26.0, *) { barButton.hidesSharedBackground = true }
         return barButton
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
-        if #available(iOS 26.0, *) {
-            button.setImage(UIImage(named: StandardImageIdentifiers.Large.checkmark), for: .normal)
-        } else {
-            button.setTitle(.CreditCard.Settings.Done, for: .normal)
-        }
+        button.setImage(UIImage(named: StandardImageIdentifiers.Large.checkmark), for: .normal)
         button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
         button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         let barButton = UIBarButtonItem(customView: button)
+        if #available(iOS 26.0, *) { barButton.hidesSharedBackground = true }
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         return barButton
     }()
 
-    private lazy var fixedSpacer: UIBarButtonItem = {
-        let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
-                                          target: nil,
-                                          action: nil)
-        fixedSpacer.width = CGFloat(UX.fixedSpacerWidth)
-        return fixedSpacer
-    }()
-
-    private let flexibleSpacer = UIBarButtonItem(systemItem: .flexibleSpace)
     private let leadingFixedSpacer: UIView = .build()
     private let trailingFixedSpacer: UIView = .build()
 
@@ -116,6 +116,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         accessoryView.accessibilityIdentifier =
             AccessibilityIdentifiers.Browser.KeyboardAccessory.creditCardAutofillButton
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
@@ -131,6 +132,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         accessoryView.accessibilityIdentifier =
             AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
@@ -145,6 +147,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         accessoryView.accessibilityLabel = .PasswordAutofill.UseSavedPasswordFromKeyboard
         accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Autofill.footerPrimaryAction
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
@@ -159,6 +162,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         accessoryView.accessibilityLabel = .PasswordGenerator.KeyboardAccessoryButtonLabel
         accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.keyboardButton
         accessoryView.isAccessibilityElement = true
+        if #available(iOS 26.0, *) { accessoryView.hidesSharedBackground = true }
         return accessoryView
     }()
 
@@ -174,6 +178,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
                                  height: UX.accessoryViewHeight))
 
         setupLayout()
+        configureToolbarItems()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         startObservingNotifications(
@@ -188,17 +193,26 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard #available(iOS 26.0, *) else { return }
+        backgroundView.layer.shadowPath = UIBezierPath(
+            roundedRect: backgroundView.bounds,
+            cornerRadius: UX.backgroundCornerRadius
+        ).cgPath
+    }
+
     override func removeFromSuperview() {
         super.removeFromSuperview()
         // Reset showing of credit card when dismissing the view
         // This is required otherwise it will always show credit card view
         // even if the input isn't of type credit card
         currentAccessoryView = nil
-        setupLayout()
+        configureToolbarItems()
     }
 
-    // MARK: - Theme and Layout
-
+    // MARK: - Layout
     func reloadViewFor(_ accessoryType: AccessoryType) {
         switch accessoryType {
         case .standard:
@@ -213,8 +227,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         case .passwordGenerator:
             currentAccessoryView = passwordGeneratorView
         }
-
-        setupLayout()
+        configureToolbarItems()
         layoutIfNeeded()
     }
 
@@ -234,30 +247,46 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         spacer.accessibilityElementsHidden = true
     }
 
+    private lazy var backgroundView: UIView = .build {
+        $0.layer.cornerRadius = UX.backgroundCornerRadius
+        $0.layer.shadowRadius = UX.shadowRadius
+        $0.layer.shadowOffset = UX.shadowOffset
+        $0.layer.shadowOpacity = 1
+    }
+
     private func setupLayout() {
+        [nextButton, previousButton].forEach { navigationButtonsStackView.addArrangedSubview($0) }
         setupHeightSpacer(toolbarTopHeightSpacer, height: UX.spacerViewHeight)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
         if #unavailable(iOS 26.0) { layer.cornerRadius = UX.cornerRadius }
 
-        let navigationButtons = if #available(iOS 26.0, *) {
-            barButtonsGroup.barButtonItems
+        addSubview(toolbarTopHeightSpacer)
+        if #available(iOS 26.0, *) {
+            addSubview(backgroundView)
+            backgroundView.addSubview(toolbar)
+
+            NSLayoutConstraint.activate([
+                backgroundView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                                        constant: UX.leadingTrailingOffset),
+                backgroundView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
+                                                         constant: -UX.leadingTrailingOffset),
+                backgroundView.topAnchor.constraint(lessThanOrEqualTo: topAnchor, constant: UX.topOffset),
+                backgroundView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -UX.bottomOffset),
+                backgroundView.heightAnchor.constraint(equalToConstant: UX.backgroundViewHeight),
+
+                toolbar.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor),
+                toolbar.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor),
+                toolbar.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor)
+            ])
         } else {
-            [previousButton, fixedSpacer, nextButton]
+            addSubview(toolbar)
+            NSLayoutConstraint.activate([
+                toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
+                toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
+                toolbar.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ])
         }
-
-        toolbar.items = [currentAccessoryView, flexibleSpacer].compactMap { $0 }
-        + navigationButtons
-        + [fixedSpacer, doneButton]
-
-        toolbar.accessibilityElements = [
-            currentAccessoryView?.customView,
-            previousButton.customView,
-            nextButton.customView,
-            doneButton.customView
-        ].compactMap { $0 }
-
-        addSubviews(toolbarTopHeightSpacer, toolbar)
 
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
@@ -268,21 +297,44 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
             toolbarTopHeightSpacer.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
 
             toolbar.topAnchor.constraint(equalTo: toolbarTopHeightSpacer.bottomAnchor),
-            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
 
+    // MARK: - Private Methods
+    private func configureToolbarItems() {
+        toolbar.setItems([
+            navigationButtonsBarItem,
+            .flexibleSpace(),
+            currentAccessoryView,
+            .flexibleSpace(),
+            .fixedSpace(UX.fixedSpacerWidth),
+            doneButton
+        ].compactMap { $0 }, animated: true)
+
+        toolbar.accessibilityElements = [
+            currentAccessoryView?.customView,
+            previousButton,
+            nextButton,
+            doneButton.customView
+        ].compactMap { $0 }
+    }
+
+    // MARK: - ThemeApplicable
     func applyTheme() {
         let colors = themeManager.getCurrentTheme(for: windowUUID).colors
-        let buttonsBackgroundColor: UIColor = if #available(iOS 26.0, *) { .clear } else { colors.layer5Hover }
+        let barButtonsTintColor = if #available(iOS 26.0, *) { colors.iconPrimary } else { colors.iconAccentBlue }
+        let buttonsBackgroundColor: UIColor = if #available(iOS 26.0, *) {
+            .clear
+        } else {
+            colors.layer5Hover
+        }
+        if #available(iOS 26.0, *) { backgroundView.backgroundColor = colors.layerSurfaceMedium }
+        if #available(iOS 26.0, *) { backgroundView.layer.shadowColor = colors.shadowStrong.cgColor }
 
         backgroundColor = .clear
-        [previousButton, nextButton, doneButton].forEach {
-            $0.tintColor = if #available(iOS 26.0, *) { colors.iconPrimary } else { colors.iconAccentBlue }
-            $0.customView?.tintColor = if #available(iOS 26.0, *) { colors.iconPrimary } else { colors.iconAccentBlue }
-        }
+        doneButton.customView?.tintColor = barButtonsTintColor
+        previousButton.tintColor = barButtonsTintColor
+        nextButton.tintColor = barButtonsTintColor
 
         [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView].forEach {
             $0.accessoryImageViewTintColor = colors.iconPrimary

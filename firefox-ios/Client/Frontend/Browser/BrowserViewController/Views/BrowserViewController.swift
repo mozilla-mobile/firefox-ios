@@ -1695,16 +1695,16 @@ class BrowserViewController: UIViewController,
                 ToolbarAction(
                     scrollAlpha: 1,
                     windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaDidChange
+                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
                 )
             )
             return
         }
         let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
-            view: tabManager.selectedTab?.webView?.accessoryView
+            hasAccessoryView: tabManager.selectedTab?.webView?.accessoryView != nil
         )
         let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
-        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight-toolbarHeightOffset)
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
 
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 

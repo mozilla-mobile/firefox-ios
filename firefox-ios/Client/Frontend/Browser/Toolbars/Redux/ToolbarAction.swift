@@ -99,7 +99,7 @@ enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
     case urlDidChange
-    case scrollAlphaDidChange
+    case scrollAlphaNeedsUpdate
     case didSetTextInLocationView
     case borderPositionChanged
     case toolbarPositionChanged
