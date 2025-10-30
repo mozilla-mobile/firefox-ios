@@ -177,7 +177,10 @@ public class BottomSheetViewController: UIViewController,
     @available(iOS 26.0, *)
     private func setupGlassEffect() {
         // Only add glass effect if it doesn't already exist
-        guard glassEffectView == nil else { return }
+        guard glassEffectView == nil else {
+            updateGlassEffectTint()
+            return
+        }
 
         let effectView = UIVisualEffectView()
 
@@ -206,6 +209,18 @@ public class BottomSheetViewController: UIViewController,
         ])
 
         glassEffectView = effectView
+    }
+
+    @available(iOS 26.0, *)
+    private func updateGlassEffectTint() {
+        #if canImport(FoundationModels)
+        guard let effectView = glassEffectView,
+              let glassEffect = effectView.effect as? UIGlassEffect else { return }
+
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        glassEffect.tintColor = theme.colors.layer2.withAlphaComponent(UX.glassAlpha)
+        glassEffectView?.effect = glassEffect
+        #endif
     }
 
     @available(iOS 26.0, *)
