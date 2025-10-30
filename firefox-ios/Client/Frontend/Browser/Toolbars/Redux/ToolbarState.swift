@@ -149,7 +149,8 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.navigationMiddleButtonDidChange,
             ToolbarActionType.didStartTranslatingPage,
             ToolbarActionType.translationCompleted,
-            ToolbarActionType.receivedTranslationLanguage:
+            ToolbarActionType.receivedTranslationLanguage,
+            ToolbarActionType.didReceiveErrorTranslating:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:

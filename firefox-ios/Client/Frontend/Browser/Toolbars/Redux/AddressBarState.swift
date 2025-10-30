@@ -148,7 +148,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         case ToolbarActionType.didStartTranslatingPage,
             ToolbarActionType.translationCompleted,
-            ToolbarActionType.receivedTranslationLanguage:
+            ToolbarActionType.receivedTranslationLanguage,
+            ToolbarActionType.didReceiveErrorTranslating:
             return handleLeadingPageChangedAction(state: state, action: action)
 
         case ToolbarActionType.readerModeStateChanged:

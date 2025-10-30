@@ -131,6 +131,7 @@ enum ToolbarActionType: ActionType {
     case didStartTranslatingPage
     case translationCompleted
     case receivedTranslationLanguage
+    case didReceiveErrorTranslating
 }
 
 struct ToolbarMiddlewareAction: Action {
