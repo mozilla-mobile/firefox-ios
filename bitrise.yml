@@ -1617,7 +1617,7 @@ workflows:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
         - configuration: Fennec_Testing
-        - destination: ${{ matrix.destination }}
+        - destination: "${{ matrix.destination }}"
         - test_plan: UnitTest
         - test_repetition_mode: until_failure
         - maximum_test_repetitions: 3
