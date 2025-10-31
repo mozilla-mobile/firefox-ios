@@ -53,6 +53,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
     }
 
+    // This is never called. Laurie - ask why
     func configureNavigationContextualHint(_ view: UIView) {
         navigationContextHintVC.configure(
             anchor: view,
@@ -497,7 +498,11 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     }
 
     func showTrackingProtection() {
-        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
-                                            actionType: GeneralBrowserActionType.showTrackingProtectionDetails))
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showTrackingProtectionDetails
+            )
+        )
     }
 }

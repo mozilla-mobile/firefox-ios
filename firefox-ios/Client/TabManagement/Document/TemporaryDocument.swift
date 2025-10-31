@@ -69,9 +69,9 @@ final class DefaultTemporaryDocument: NSObject,
     private var currentDownloadTask: URLSessionDownloadTask?
 
     private var onDownload: ((URL?) -> Void)?
-    var onDownloadProgressUpdate: ((Double) -> Void)?
+    var onDownloadProgressUpdate: (@MainActor (Double) -> Void)?
     var onDownloadStarted: VoidReturnCallback?
-    var onDownloadError: ((Error?) -> Void)?
+    var onDownloadError: (@MainActor (Error?) -> Void)?
     var isDownloading: Bool {
         return currentDownloadTask != nil
     }

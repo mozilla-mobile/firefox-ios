@@ -648,7 +648,7 @@ class BrowserViewController: UIViewController,
     }
 
     @objc
-    fileprivate func appMenuBadgeUpdate() {
+    fileprivate nonisolated func appMenuBadgeUpdate() {
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = isActionNeeded
 
@@ -659,12 +659,15 @@ class BrowserViewController: UIViewController,
         )?.showMenuWarningBadge
 
         guard showWarningBadge != shouldShowWarningBadge else { return }
-        let action = ToolbarAction(
-            showMenuWarningBadge: showWarningBadge,
-            windowUUID: windowUUID,
-            actionType: ToolbarActionType.showMenuWarningBadge
-        )
-        store.dispatch(action)
+
+        ensureMainThread {
+            let action = ToolbarAction(
+                showMenuWarningBadge: showWarningBadge,
+                windowUUID: self.windowUUID,
+                actionType: ToolbarActionType.showMenuWarningBadge
+            )
+            store.dispatch(action)
+        }
     }
 
     private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
@@ -1194,16 +1197,17 @@ class BrowserViewController: UIViewController,
     }
 
     @objc
-    private func onReduceTransparencyStatusDidChange(_ notification: Notification) {
-        updateToolbarDisplay()
-
-        store.dispatch(
-            ToolbarAction(
-                isTranslucent: toolbarHelper.shouldBlur(),
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.translucencyDidChange
+    private nonisolated func onReduceTransparencyStatusDidChange(_ notification: Notification) {
+        ensureMainThread {
+            self.updateToolbarDisplay()
+            store.dispatch(
+                ToolbarAction(
+                    isTranslucent: self.toolbarHelper.shouldBlur(),
+                    windowUUID: self.windowUUID,
+                    actionType: ToolbarActionType.translucencyDidChange
+                )
             )
-        )
+        }
     }
 
     /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
@@ -2326,9 +2330,10 @@ class BrowserViewController: UIViewController,
                 nil
             }
             guard let url else { break }
-            if !url.isFxHomeUrl {
+//            if !url.isFxHomeUrl {
+            // TODO: laurie
                 updateToolbarAnimationStateIfNeeded()
-            }
+//            }
             // Security safety check (Bugzilla #1933079)
             if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
                 tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
@@ -3136,8 +3141,11 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Toolbar Refactor Deeplink Helper Method.
     private func cancelEditMode() {
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        ensureMainThread {
+            let action = ToolbarAction(windowUUID: self.windowUUID,
+                                       actionType: ToolbarActionType.cancelEdit)
+            store.dispatch(action)
+        }
     }
 
     func closeAllPrivateTabs() {
@@ -4298,12 +4306,15 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     @objc
-    func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
-        // Update search icon when the search engine changes
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
-        store.dispatch(action)
-        searchController?.reloadSearchEngines()
-        searchController?.reloadData()
+    private nonisolated func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
+        ensureMainThread {
+            // Update search icon when the search engine changes
+            let action = ToolbarAction(windowUUID: self.windowUUID,
+                                       actionType: ToolbarActionType.searchEngineDidChange)
+            store.dispatch(action)
+            self.searchController?.reloadSearchEngines()
+            self.searchController?.reloadData()
+        }
     }
 
     func setLocationView(text: String, search: Bool) {
