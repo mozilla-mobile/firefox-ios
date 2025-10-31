@@ -26,9 +26,7 @@ final class ImpressionTrackerTests: XCTestCase {
 
         mutating func record(_ ips: [IndexPath]) {
             calls += 1
-
             payloads.append(ips)
-            print(payloads)
         }
     }
 
