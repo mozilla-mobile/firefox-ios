@@ -263,7 +263,7 @@
 "Settings.TechnicalData.Link.v136" = "Μάθετε περισσότερα";
 
 /* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
-"Settings.TechnicalData.Message.v136" = "Τα δεδομένα της συσκευής, των ρυθμίσεων υλικού και της χρήσης σας, μάς βοηθούν να βελτιώσουμε τις λειτουργίες, τις επιδόσεις και τη σταθερότητα του %@.";
+"Settings.TechnicalData.Message.v136" = "Τα δεδομένα σχετικά με τη συσκευή σας, τη διαμόρφωση του υλικού της και τη χρήση συμβάλλουν στη βελτίωση των λειτουργιών, των επιδόσεων και της σταθερότητας του %@.";
 
 /* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
 "Settings.TechnicalData.Title.v136" = "Αποστολή τεχνικών δεδομένων και δεδομένων αλληλεπίδρασης";

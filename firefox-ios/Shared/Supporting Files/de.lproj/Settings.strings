@@ -239,7 +239,7 @@
 "Settings.Studies.Message.v136" = "Probieren Sie Funktionen und Ideen aus, bevor sie für alle freigegeben werden.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
-"Settings.Studies.Title.v136" = "Installieren und Studien durchführen";
+"Settings.Studies.Title.v136" = "Studien installieren und durchführen";
 
 /* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
 "Settings.Summarize.FooterTitle.v142" = "Bietet Zugriff auf Zusammenfassungsseiten.";

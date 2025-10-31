@@ -176,6 +176,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
             navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
+            navigator.nowAt(TabTray)
             navigator.performAction(Action.OpenNewTabFromTabTray)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String, "2")

@@ -20,7 +20,7 @@ enum URLType: String {
     case organicSearch
 }
 
-class SearchInContentTelemetry {
+final class SearchInContentTelemetry {
     private var code = ""
     private var provider = ""
     private var urlType: URLType = .regular

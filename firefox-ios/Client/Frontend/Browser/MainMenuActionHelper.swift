@@ -12,27 +12,42 @@ import Common
 import Glean
 
 protocol ToolBarActionMenuDelegate: AnyObject {
+    @MainActor
     func updateToolbarState()
+    @MainActor
     func addBookmark(urlString: String, title: String?, site: Site?)
 
     @discardableResult
+    @MainActor
     func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
+    @MainActor
     func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
-
+    @MainActor
     func showLibrary(panel: LibraryPanelType)
+    @MainActor
     func showViewController(viewController: UIViewController)
+    @MainActor
     func showToast(_ bookmarkURL: String?, _ title: String?, message: String, toastAction: MenuButtonToastAction)
+    @MainActor
     func showFindInPage()
+    @MainActor
     func showCustomizeHomePage()
+    @MainActor
     func showZoomPage(tab: Tab)
+    @MainActor
     func showCreditCardSettings()
+    @MainActor
     func showSignInView(fxaParameters: FxASignInViewParameters)
+    @MainActor
     func showFilePicker(fileURL: URL)
+    @MainActor
     func showEditBookmark()
+    @MainActor
     func showTrackingProtection()
 }
 
 extension ToolBarActionMenuDelegate {
+    @MainActor
     func showToast(_ urlString: String? = nil, _ title: String? = nil, message: String, toastAction: MenuButtonToastAction) {
         showToast(urlString, title, message: message, toastAction: toastAction)
     }
@@ -133,9 +148,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
                 // Immutable copies need to be passed across async boundaries
                 let actions = actions
-                DispatchQueue.main.async {
-                    completion(actions)
-                }
+                completion(actions)
             })
         }
     }
@@ -150,7 +163,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     /// Update data to show the proper menus related to the page
     /// - Parameter dataLoadingCompletion: Complete when the loading of data from the profile is done
-    private func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
+    private func updateData(dataLoadingCompletion: (@MainActor @Sendable () -> Void)? = nil) {
         var url: String?
 
         if let tabUrl = tabUrl, tabUrl.isReaderModeURL, let tabUrlDecoded = tabUrl.decodeReaderModeURL {
@@ -169,8 +182,7 @@ final class MainMenuActionHelper: PhotonActionSheetProtocol,
         getIsPinned(url: url, group: group)
         getIsInReadingList(url: url, group: group)
 
-        let dataQueue = DispatchQueue.global()
-        group.notify(queue: dataQueue) {
+        group.notify(queue: .main) {
             dataLoadingCompletion?()
         }
     }

@@ -86,6 +86,10 @@ extension Selector {
         Selector(strategy: .otherInTablesById(id), value: id, description: description, groups: groups)
     }
 
+    static func tableCellById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .tableCellById(id), value: id, description: description, groups: groups)
+    }
+
     static func cellById(_ id: String, description: String, groups: [String] = []) -> Selector {
         let p = NSPredicate(format: "elementType == %d AND identifier == %@",
                             XCUIElement.ElementType.cell.rawValue,
@@ -182,6 +186,18 @@ extension Selector {
                         value: label,
                         description: description,
                         groups: groups
+        )
+    }
+
+    static func switchById(_ id: String, description: String, groups: [String] = []) -> Selector {
+        Selector(strategy: .predicate(
+            NSPredicate(format: "elementType == %d AND identifier == %@",
+                        XCUIElement.ElementType.switch.rawValue,
+                        id)
+            ),
+                 value: id,
+                 description: description,
+                 groups: groups
         )
     }
 }

@@ -128,7 +128,10 @@ let package = Package(
         ),
         .testTarget(
             name: "CommonTests",
-            dependencies: ["Common"]),
+            dependencies: ["Common"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .target(
             name: "TabDataStore",
             dependencies: ["Common"],
@@ -174,7 +177,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "MenuKitTests",
-            dependencies: ["MenuKit"]),
+            dependencies: ["MenuKit"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]
+        ),
         .target(
             name: "SummarizeKit",
             dependencies: [
@@ -201,7 +208,10 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ContentBlockingGeneratorTests",
-            dependencies: ["ContentBlockingGenerator"]),
+            dependencies: ["ContentBlockingGenerator"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .target(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],

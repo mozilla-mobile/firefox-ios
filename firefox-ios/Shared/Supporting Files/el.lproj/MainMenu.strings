@@ -338,7 +338,7 @@
 "MainMenu.ToolsSection.AccessibilityLabels.CollapsedHint.v142" = "Σε σύμπτυξη";
 
 /* On the main menu, the accessibility label for the action that will switch a site user agent value, if available. */
-"MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Έκδοση υπολογιστή";
+"MainMenu.ToolsSection.AccessibilityLabels.DesktopSite.Title.v141" = "Έκδοση για υπολογιστές";
 
 /* On the main menu, the accessibility label hint for the action that will show more menu options in the current section of the menu. Hint will be called when menu is expanded. */
 "MainMenu.ToolsSection.AccessibilityLabels.ExpandedHint.v142" = "Σε ανάπτυξη";
@@ -368,10 +368,10 @@
 "MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142" = "Σύνοψη σελίδας";
 
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
-"MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Εναλλαγή στην έκδοση υπολογιστή";
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Εναλλαγή στην έκδοση για υπολογιστές";
 
 /* On the main menu, the accessibility label for the action that will switch a site from the desktop version to the mobile version. */
-"MainMenu.ToolsSection.AccessibilityLabels.SwitchToMobileSite.v132" = "Εναλλαγή στην έκδοση κινητού";
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToMobileSite.v132" = "Εναλλαγή στην έκδοση για κινητές συσκευές";
 
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Εργαλεία";
@@ -383,7 +383,7 @@
 "MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode.Title.v142" = "Σκουρόχρωμη λειτουργία ιστοτόπων";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
-"MainMenu.ToolsSection.DesktopSite.Title.v141" = "Έκδοση υπολογιστή";
+"MainMenu.ToolsSection.DesktopSite.Title.v141" = "Έκδοση για υπολογιστές";
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Εύρεση στη σελίδα…";
@@ -404,10 +404,10 @@
 "MainMenu.ToolsSection.SummarizePage.Title.v142" = "Σύνοψη σελίδας";
 
 /* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
-"MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "Εναλλαγή στην έκδοση υπολογιστή";
+"MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "Εναλλαγή στην έκδοση για υπολογιστές";
 
 /* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
-"MainMenu.ToolsSection.SwitchToMobileSite.Title.v131" = "Εναλλαγή στην έκδοση κινητού";
+"MainMenu.ToolsSection.SwitchToMobileSite.Title.v131" = "Εναλλαγή στην έκδοση για κινητές συσκευές";
 
 /* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Εργαλεία";

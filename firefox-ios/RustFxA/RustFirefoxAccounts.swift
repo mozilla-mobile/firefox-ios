@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Storage
 
 import class MozillaAppServices.FxAccountManager
 import class MozillaAppServices.FxAConfig
@@ -175,13 +176,18 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
             fatalError("Missing or invalid 'MozDevelopmentTeam' key in Info.plist")
         }
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
+        let useRustKeychainForFxA = prefs?.boolForKey(PrefsKeys.RustFxaKeychainEnabled) ?? false
+
+        if useRustKeychainForFxA {
+            RustFxAKeychain.reportFxaKeychainUsageTelemetry()
+        }
 
         return FxAccountManager(
             config: config,
             deviceConfig: deviceConfig,
             applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
             keychainAccessGroup: accessGroupIdentifier,
-            useRustKeychainForFxA: prefs?.boolForKey(PrefsKeys.RustFxaKeychainEnabled) ?? false
+            useRustKeychainForFxA: useRustKeychainForFxA
         )
     }
 

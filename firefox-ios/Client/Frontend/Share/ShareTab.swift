@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol ShareTab {
+protocol ShareTab: Sendable {
     @MainActor
     var displayTitle: String { get }
     @MainActor

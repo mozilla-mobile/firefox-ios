@@ -13,7 +13,9 @@ class StoriesFeedCell: UICollectionViewCell,
     struct UX {
         static let cellCornerRadius: CGFloat = 16
         static let thumbnailSize = CGSize(width: 345, height: 180)
+        static let thumbnailHoritonztalInsets: CGFloat = 8
         static let thumbnailCornerRadius: CGFloat = 8
+        static let attributionStackViewBottomInset: CGFloat = 16
         static let attributionStackViewSpacing: CGFloat = 8
         static let attributionFaviconSize = CGSize(width: 16, height: 16)
         static let faviconCornerRadius: CGFloat = 0
@@ -120,8 +122,10 @@ class StoriesFeedCell: UICollectionViewCell,
 
         NSLayoutConstraint.activate([
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.verticalSpacing),
-            thumbnailImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            thumbnailImageView.widthAnchor.constraint(equalToConstant: UX.thumbnailSize.width),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                        constant: UX.thumbnailHoritonztalInsets),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                         constant: -UX.thumbnailHoritonztalInsets),
             thumbnailImageView.heightAnchor.constraint(equalToConstant: UX.thumbnailSize.height),
 
             titleLabel.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: UX.verticalSpacing),
@@ -134,8 +138,8 @@ class StoriesFeedCell: UICollectionViewCell,
                                                           constant: UX.horizontalInsets),
             attributionStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                            constant: -UX.horizontalInsets),
-            attributionStackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
-                                                         constant: -UX.horizontalInsets),
+            attributionStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                         constant: -UX.attributionStackViewBottomInset),
 
             attributionFaviconImageView.heightAnchor.constraint(equalToConstant: UX.attributionFaviconSize.height),
             attributionFaviconImageView.widthAnchor.constraint(equalToConstant: UX.attributionFaviconSize.width),
@@ -167,7 +171,9 @@ class StoriesFeedCell: UICollectionViewCell,
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            titleLabel.numberOfLines = getNumberOfLinesForTitle()
+            ensureMainThread {
+                self.titleLabel.numberOfLines = self.getNumberOfLinesForTitle()
+            }
         default: break
         }
     }

@@ -577,6 +577,7 @@ private class ToolbarHelperMock: ToolbarHelperInterface {
     var isToolbarTranslucencyEnabled = true
     var isReduceTransparencyEnabled = false
 
+    @MainActor
     var glassEffectAlpha: CGFloat {
         guard shouldBlur() else { return 1 }
         if #available(iOS 26, *) { return .zero } else { return UX.backgroundAlphaForBlur }
@@ -592,12 +593,14 @@ private class ToolbarHelperMock: ToolbarHelperInterface {
                && traitCollection.horizontalSizeClass == .regular
     }
 
+    @MainActor
     func shouldBlur() -> Bool {
         return isToolbarRefactorEnabled &&
             isToolbarTranslucencyEnabled &&
             !isReduceTransparencyEnabled
     }
 
+    @MainActor
     func backgroundAlpha() -> CGFloat {
         guard shouldBlur() else { return 1.0 }
 
