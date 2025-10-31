@@ -9,6 +9,7 @@ import Common
 @MainActor
 final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
+    
     private let telemetryWrapper: TelemetryWrapperProtocol
     private let defaults: UserDefaultsInterface
     private let windowManager: WindowManager
