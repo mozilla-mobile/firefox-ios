@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-public class SecondaryRoundedGlassButton: SecondaryRoundedButton {
+public final class SecondaryRoundedGlassButton: SecondaryRoundedButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
