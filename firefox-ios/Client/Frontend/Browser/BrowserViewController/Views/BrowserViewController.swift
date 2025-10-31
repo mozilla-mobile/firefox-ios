@@ -2259,18 +2259,15 @@ class BrowserViewController: UIViewController,
         )
     }
 
-    override func observeValue(
+    override nonisolated func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
         change: [NSKeyValueChangeKey: Any]?,
         context: UnsafeMutableRawPointer?
     ) {
-        guard let webView = object as? WKWebView,
-              let tab = tabManager[webView]
-        else { return }
-
         guard let kp = keyPath,
-              let path = KVOConstants(rawValue: kp)
+              let path = KVOConstants(rawValue: kp),
+              let webView = object as? WKWebView
         else {
             logger.log("BVC observeValue webpage unhandled KVO",
                        level: .info,
@@ -2278,6 +2275,18 @@ class BrowserViewController: UIViewController,
                        description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
+
+        ensureMainThread {
+            self.observeValue(path: path, webView: webView, change: change)
+        }
+    }
+
+    @MainActor
+    private func observeValue(path: KVOConstants,
+                              webView: WKWebView,
+                              change: [NSKeyValueChangeKey: Any]?) {
+        guard let tab = tabManager[webView]
+        else { return }
 
         switch path {
         case .estimatedProgress:
@@ -2330,10 +2339,9 @@ class BrowserViewController: UIViewController,
                 nil
             }
             guard let url else { break }
-//            if !url.isFxHomeUrl {
-            // TODO: laurie
+            if !url.isFxHomeUrl {
                 updateToolbarAnimationStateIfNeeded()
-//            }
+            }
             // Security safety check (Bugzilla #1933079)
             if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
                 tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
@@ -2394,18 +2402,18 @@ class BrowserViewController: UIViewController,
                   selectedTabURL == webViewURL else { return }
 
             // TODO: FXIOS-12158 Add back after investigating why video player is broken
-//        case .fullscreenState:
-//            if #available(iOS 16.0, *) {
-//                guard webView.fullscreenState == .enteringFullscreen ||
-//                        webView.fullscreenState == .exitingFullscreen else { return }
-//                if webView.fullscreenState == .enteringFullscreen {
-//                    fullscreenDelegate?.enteringFullscreen()
-//                } else {
-//                    fullscreenDelegate?.exitingFullscreen()
-//                }
-//            }
+            //        case .fullscreenState:
+            //            if #available(iOS 16.0, *) {
+            //                guard webView.fullscreenState == .enteringFullscreen ||
+            //                        webView.fullscreenState == .exitingFullscreen else { return }
+            //                if webView.fullscreenState == .enteringFullscreen {
+            //                    fullscreenDelegate?.enteringFullscreen()
+            //                } else {
+            //                    fullscreenDelegate?.exitingFullscreen()
+            //                }
+            //            }
         default:
-            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
+            assertionFailure("Unhandled KVO key: \(path.rawValue)")
         }
     }
 
