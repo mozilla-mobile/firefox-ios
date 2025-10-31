@@ -67,7 +67,7 @@ enum ToastType: Equatable {
         case .closedAllInactiveTabs:
             return tabPanelAction(for: TabPanelViewActionType.undoCloseAllInactiveTabs, uuid: uuid)
         case .retryTranslatingPage:
-            return TranslationsAction(windowUUID: uuid, actionType: TranslationsActionType.didTapOnRetry)
+            return TranslationsAction(windowUUID: uuid, actionType: TranslationsActionType.didTapRetryFailedTranslation)
         case .clearCookies,
                 .addBookmark,
                 .addToReadingList,

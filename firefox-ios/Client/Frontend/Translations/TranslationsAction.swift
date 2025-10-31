@@ -19,5 +19,5 @@ struct TranslationsAction: Action {
 }
 
 enum TranslationsActionType: ActionType {
-    case didTapOnRetry
+    case didTapRetryFailedTranslation
 }

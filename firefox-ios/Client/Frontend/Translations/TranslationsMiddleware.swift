@@ -28,7 +28,7 @@ final class TranslationsMiddleware {
             guard let action = (action as? ToolbarMiddlewareAction) else { return }
             self.handleTappingOnTranslateButton(for: action, and: state)
 
-        case TranslationsActionType.didTapOnRetry:
+        case TranslationsActionType.didTapRetryFailedTranslation:
             guard let action = (action as? TranslationsAction) else { return }
             self.handleTappingRetryButtonOnToast(for: action, and: state)
 
@@ -150,7 +150,7 @@ final class TranslationsMiddleware {
             with: .inactive,
             and: action.windowUUID
         )
-        dispatchToastAction(for: action.windowUUID)
+        dispatchShowRetryTranslationToastAction(for: action.windowUUID)
     }
 
     private func dispatchAction(
@@ -164,12 +164,12 @@ final class TranslationsMiddleware {
                 state: state
             ),
             windowUUID: windowUUID,
-            actionType: ToolbarActionType.didReceiveErrorTranslating
+            actionType: actionType
         )
         store.dispatch(toolbarAction)
     }
 
-    private func dispatchToastAction(
+    private func dispatchShowRetryTranslationToastAction(
         for windowUUID: WindowUUID
     ) {
         let toastAction = GeneralBrowserAction(
