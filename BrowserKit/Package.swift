@@ -95,7 +95,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "ComponentLibraryTests",
-            dependencies: ["ComponentLibrary"]),
+            dependencies: ["ComponentLibrary"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]
+        ),
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
