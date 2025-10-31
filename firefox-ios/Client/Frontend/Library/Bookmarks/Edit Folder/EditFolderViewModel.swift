@@ -58,6 +58,7 @@ class EditFolderViewModel {
         return isFolderSelected && !isFolderCollapsed
     }
 
+    @MainActor
     func selectFolder(_ folder: Folder) {
         isFolderCollapsed.toggle()
         if isFolderCollapsed {

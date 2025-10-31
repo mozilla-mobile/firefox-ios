@@ -27,7 +27,7 @@ class Toast: UIView, ThemeApplicable, Notifiable {
 
     public var notificationCenter: NotificationProtocol = NotificationCenter.default
     var animationConstraint: NSLayoutConstraint?
-    var completionHandler: ((Bool) -> Void)?
+    var completionHandler: (@MainActor (Bool) -> Void)?
 
     weak var viewController: UIViewController?
 
