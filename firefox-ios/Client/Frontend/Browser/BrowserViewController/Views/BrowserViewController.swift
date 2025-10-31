@@ -523,6 +523,7 @@ class BrowserViewController: UIViewController,
 
         crashTracker.updateData()
         ratingPromptManager.showRatingPromptIfNeeded()
+        _ = RelayController.shared // Ensure RelayController is init'd early to allow for account notification observers.
     }
 
     private func didAddPendingBlobDownloadToQueue() {
