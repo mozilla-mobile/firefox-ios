@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "tree (1).pdf",
+      "filename" : "tree.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "tree (2).pdf",
+      "filename" : "tree-dark.pdf",
       "idiom" : "universal"
     }
   ],
