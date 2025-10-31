@@ -190,4 +190,8 @@ final class BrowserScreen {
     func waitForBookOfMozillaToDisappear(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToNotExist(bookText, timeout: timeout)
     }
+
+    func assertAddressBar_LockIconExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON.element(in: app))
+    }
 }
