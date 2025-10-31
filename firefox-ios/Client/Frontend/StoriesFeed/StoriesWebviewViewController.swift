@@ -10,6 +10,11 @@ import Common
 
 class StoriesWebviewViewController: UIViewController,
                                     Themeable {
+    private struct UX {
+        static let navigationTitleStackViewSpacing: CGFloat = 4
+        static let shieldImageSize = CGSize(width: 14, height: 14)
+    }
+
     // MARK: - Themeable Properties
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -17,7 +22,25 @@ class StoriesWebviewViewController: UIViewController,
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
 
+    // MARK: - Private Properties
     private var webView: WKWebView
+
+    // MARK: - UI Properties
+    private let navigationTitleStackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.spacing = UX.navigationTitleStackViewSpacing
+    }
+
+    private lazy var domainLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Bold.body.scaledFont()
+        label.numberOfLines = 1
+        label.text = self.webView.url?.normalizedHost ?? self.webView.url?.absoluteString ?? "X"
+    }
+
+    private let shieldImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.shieldCheckmark)?.withRenderingMode(.alwaysTemplate)
+    }
 
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -38,21 +61,12 @@ class StoriesWebviewViewController: UIViewController,
         super.viewDidLoad()
 
         setupWebView()
+        setupNavigationTitle()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
 
     // MARK: Helper functions
-    private func applyNavigationBarTheme(theme: Theme) {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = theme.colors.layer1
-        appearance.shadowColor = .clear
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-    }
-
     private func setupWebView() {
         view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -64,9 +78,33 @@ class StoriesWebviewViewController: UIViewController,
         ])
     }
 
+    private func setupNavigationTitle() {
+        navigationTitleStackView.addArrangedSubview(shieldImageView)
+        navigationTitleStackView.addArrangedSubview(domainLabel)
+
+        NSLayoutConstraint.activate([
+            shieldImageView.widthAnchor.constraint(equalToConstant: UX.shieldImageSize.width),
+            shieldImageView.heightAnchor.constraint(equalToConstant: UX.shieldImageSize.height)
+        ])
+
+        navigationItem.titleView = navigationTitleStackView
+    }
+
+    private func applyNavigationBarTheme(theme: Theme) {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = theme.colors.layer1
+        appearance.shadowColor = .clear
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+    }
+
     // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         applyNavigationBarTheme(theme: theme)
+        domainLabel.textColor = theme.colors.textPrimary
+        shieldImageView.tintColor = theme.colors.iconPrimary
     }
 }
