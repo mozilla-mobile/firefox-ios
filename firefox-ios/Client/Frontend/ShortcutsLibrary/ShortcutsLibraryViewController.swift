@@ -269,22 +269,31 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     func showOpenedNewTabToast(tab: Tab) {
-        let viewModel = ButtonToastViewModel(labelText: ToastType.openNewTab.title,
-                                             buttonText: ToastType.openNewTab.buttonText)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: currentTheme,
-                                completion: { buttonPressed in
-            if buttonPressed {
-                store.dispatchLegacy(
-                    ShortcutsLibraryAction(
-                        tab: tab,
-                        windowUUID: self.windowUUID,
-                        actionType: ShortcutsLibraryActionType.switchTabToastButtonTapped
+        let viewModel = ButtonToastViewModel(
+            labelText: ToastType.openNewTab.title,
+            buttonText: ToastType.openNewTab.buttonText
+        )
+        
+        let toast = ButtonToast(
+            viewModel: viewModel,
+            theme: currentTheme,
+            completion: { buttonPressed in
+                if buttonPressed {
+                    store.dispatchLegacy(
+                        ShortcutsLibraryAction(
+                            tab: tab,
+                            windowUUID: self.windowUUID,
+                            actionType: ShortcutsLibraryActionType.switchTabToastButtonTapped
+                        )
                     )
-                )
+                }
             }
-        })
-
+        )
+        // 🔹 If a previous toast is still visible, dismiss it first
+        if let existingToast = view.subviews.first(where: { $0 is ButtonToast }) as? ButtonToast {
+            existingToast.dismiss(false)
+        }
+        // 🔹 Add the new toast
         toast.showToast(viewController: self,
                         delay: Toast.UX.toastDelayBefore,
                         duration: Toast.UX.toastDismissAfter) { toast in
@@ -296,17 +305,32 @@ class ShortcutsLibraryViewController: UIViewController,
                 toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ]
         }
-        // Offset the toast by its height to prepare for slide-in animation
-        toast.transform = CGAffineTransform(translationX: 0, y: toast.frame.height)
-        UIView.animate(
-            withDuration: ButtonToast.UX.animationDuration,
-            delay: 0,
-            options: [.curveEaseOut],
-            animations: {
-                toast.transform = .identity
-            },
-            completion: nil
-        )
+        // 🔹 Delay animation until layout finishes
+        DispatchQueue.main.async {
+            guard let container = toast.superview else { return }
+            // Remove any old animations
+            toast.layer.removeAllAnimations()
+            // Force layout so frame is valid
+            container.layoutIfNeeded()
+            toast.layoutIfNeeded()
+            // 🔹 Fade + Slide animation
+            let offsetY = toast.bounds.height + 20 // Use actual height instead of hardcoded 80
+            
+            // Start below screen
+            toast.alpha = 0.0
+            toast.transform = CGAffineTransform(translationX: 0, y: offsetY)
+            
+            UIView.animate(
+                withDuration: ButtonToast.UX.animationDuration,
+                delay: 0,
+                options: [.curveEaseOut, .beginFromCurrentState],
+                animations: {
+                    toast.alpha = 1.0
+                    toast.transform = .identity
+                },
+                completion: nil
+            )
+        }
     }
 
     // MARK: - Selectors
