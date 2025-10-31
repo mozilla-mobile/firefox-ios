@@ -13,7 +13,8 @@ import SummarizeKit
 import enum MozillaAppServices.BookmarkRoots
 
 @MainActor
-final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark {    
+final class TabManagerMiddleware: FeatureFlaggable,
+                                  CanRemoveQuickActionBookmark {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager

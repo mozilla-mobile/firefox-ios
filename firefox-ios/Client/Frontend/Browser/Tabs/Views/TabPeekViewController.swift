@@ -116,7 +116,7 @@ final class TabPeekViewController: UIViewController,
                 let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
                                            windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.removeBookmark)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 return
             })
         }
