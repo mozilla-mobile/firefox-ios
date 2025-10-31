@@ -6,6 +6,7 @@ import Foundation
 import XCTest
 
 extension XCTestCase {
+    // TODO: Needs group discussion on solution for warnings
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(
