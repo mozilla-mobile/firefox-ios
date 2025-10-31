@@ -100,10 +100,6 @@ class StoriesFeedViewController: UIViewController,
         trackVisibleItemImpressions(sampleOnly: true)
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-
     // MARK: - Redux
     func subscribeToRedux() {
         let action = ScreenAction(

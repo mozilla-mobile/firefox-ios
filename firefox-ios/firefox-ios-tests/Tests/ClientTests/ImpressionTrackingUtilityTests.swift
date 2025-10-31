@@ -67,7 +67,7 @@ final class ImpressionTrackerTests: XCTestCase {
         subject.flush { validator.record($0) }
 
         XCTAssertEqual(validator.calls, 1)
-        XCTAssertEqual(asSet(validator.payloads[0]), [a, b,c])
+        XCTAssertEqual(asSet(validator.payloads[0]), [a, b, c])
     }
 
     func testDuplicateMarks_AreDeDuplicated() {
@@ -139,7 +139,11 @@ final class ImpressionTrackerTests: XCTestCase {
         subject.flush { validator.record($0) }
 
         XCTAssertEqual(validator.calls, 1)
-        XCTAssertEqual(asSet(validator.payloads[0]), [itemOne, sameAsItemOneButDifferentSection], "Different sections must be treated as distinct.")
+        XCTAssertEqual(
+            asSet(validator.payloads[0]),
+            [itemOne, sameAsItemOneButDifferentSection],
+            "Different sections must be treated as distinct."
+        )
     }
 
     func testInterleavedFlushes_SendsOnlyNewItemsEachTime() {
