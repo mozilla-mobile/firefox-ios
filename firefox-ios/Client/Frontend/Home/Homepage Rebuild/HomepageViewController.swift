@@ -122,7 +122,15 @@ final class HomepageViewController: UIViewController,
     }
 
     deinit {
-        unsubscribeFromRedux()
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            unsubscribeFromRedux()
+        }
     }
 
     func stopCFRsTimer() {
@@ -340,13 +348,13 @@ final class HomepageViewController: UIViewController,
         self.homepageState = state
     }
 
-    nonisolated func unsubscribeFromRedux() {
+    func unsubscribeFromRedux() {
         let action = ScreenAction(
             windowUUID: windowUUID,
             actionType: ScreenActionType.closeScreen,
             screen: .homepage
         )
-        store.dispatchLegacy(action)
+        store.dispatch(action)
     }
 
     // MARK: - Theming
