@@ -66,6 +66,7 @@ class EditFolderViewModelTests: XCTestCase {
         XCTAssertFalse(subject.shouldShowDisclosureIndicator(isFolderSelected: false))
     }
 
+    @MainActor
     func testShouldShowDisclosureIndicator_whenIsNotFolderSelectedAfterSelectFolder() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         subject.selectFolder(Folder(title: "Test", guid: "", indentation: 0))
@@ -73,6 +74,7 @@ class EditFolderViewModelTests: XCTestCase {
         XCTAssertTrue(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
     }
 
+    @MainActor
     func testSelectFolder_callsOnFolderStatusUpdate() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         let expectation = expectation(description: "onFolderStatusUpdate should be called")
@@ -84,6 +86,7 @@ class EditFolderViewModelTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    @MainActor
     func testSelectFolder_callsGetFolderStructure() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         let expectation = expectation(description: "onFolderStatusUpdate should be called")
