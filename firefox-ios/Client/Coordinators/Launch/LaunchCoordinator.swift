@@ -249,7 +249,11 @@ final class LaunchCoordinator: BaseCoordinator,
     @MainActor
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
-        let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let onboardingModel = NimbusOnboardingKitFeatureLayer(
+            onboardingVariant: manager.onboardingVariant
+        ).getOnboardingModel(
+            for: .freshInstall
+        )
         let activityEventHelper = ActivityEventHelper()
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
