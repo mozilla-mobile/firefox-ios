@@ -532,9 +532,14 @@ final class AddressToolbarContainer: UIView,
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)
 
-        // We want to show suggestions if we turn on the trending searches
-        // which displays the zero search state.
-        let isZeroSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        // We want to show suggestions if we turn on the trending searches or recent searches
+        // which displays the zero search state. Only if not in private mode.
+        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isRecentOrTrendingSearchEnabled = isTrendingSearchEnabled || isRecentSearchEnabled
+        let isPrivateMode = model?.isPrivateMode ?? false
+        let isZeroSearchEnabled = isRecentOrTrendingSearchEnabled && !isPrivateMode
+
         if shouldShowSuggestions || isZeroSearchEnabled {
             delegate?.openSuggestions(searchTerm: locationText ?? "")
         }
