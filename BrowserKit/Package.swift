@@ -199,7 +199,11 @@ let package = Package(
             ]
         ),
         .testTarget(name: "SummarizeKitTests",
-                    dependencies: ["SummarizeKit"]),
+                    dependencies: ["SummarizeKit"],
+                    swiftSettings: [
+                        .unsafeFlags(["-enable-testing"]),
+                        .enableExperimentalFeature("StrictConcurrency")
+                    ]),
         .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary", "MenuKit"],

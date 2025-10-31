@@ -4,12 +4,27 @@
 
 @testable import SummarizeKit
 import XCTest
+import Common
 
-final class SummarizerServiceTests: XCTestCase {
+final class SummarizerServiceTests: XCTestCase, @unchecked Sendable {
     static let mockResponse = ["Summarized", "content"]
     static let maxWords = 100
     static let maxWordCount = 50
-    var mockWebView = MockWebView(URL(string: "https://foo.com")!)
+    private var mockWebView: MockWebView!
+
+    override func setUp() {
+        super.setUp()
+        ensureMainThread {
+            self.mockWebView = MockWebView(URL(string: "https://foo.com")!)
+        }
+    }
+
+    override func tearDown() {
+        ensureMainThread {
+            self.mockWebView = nil
+        }
+        super.tearDown()
+    }
 
     func testSummarizerServiceReturnsSummary() async throws {
         let subject = createSubject()
