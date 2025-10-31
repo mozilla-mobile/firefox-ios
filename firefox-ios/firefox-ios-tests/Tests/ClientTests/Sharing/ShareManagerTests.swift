@@ -36,7 +36,7 @@ final class ShareManagerTests: XCTestCase {
         let testShareActivityType = UIActivity.ActivityType.message
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testFileURL),
+            forShareType: .file(url: testFileURL, remoteURL: nil),
             withExplicitShareMessage: nil
         )
 
@@ -62,7 +62,7 @@ final class ShareManagerTests: XCTestCase {
         let testMessage = "Test message"
         let testSubtitle = "Test subtitle"
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testFileURL),
+            forShareType: .file(url: testFileURL, remoteURL: nil),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
         )
 
@@ -109,7 +109,7 @@ final class ShareManagerTests: XCTestCase {
         let testShareActivityType = UIActivity.ActivityType.message
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testWebURL),
+            forShareType: .file(url: testWebURL, remoteURL: nil),
             withExplicitShareMessage: nil
         )
 
@@ -136,7 +136,7 @@ final class ShareManagerTests: XCTestCase {
         let testSubtitle = "Test subtitle"
 
         let activityItems = ShareManager.getActivityItems(
-            forShareType: .file(url: testWebURL),
+            forShareType: .file(url: testWebURL, remoteURL: nil),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
         )
 
