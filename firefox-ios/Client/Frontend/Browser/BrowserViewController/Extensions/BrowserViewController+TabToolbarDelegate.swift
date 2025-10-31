@@ -53,7 +53,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
     }
 
-    // This is never called. Laurie - ask why
     func configureNavigationContextualHint(_ view: UIView) {
         navigationContextHintVC.configure(
             anchor: view,
