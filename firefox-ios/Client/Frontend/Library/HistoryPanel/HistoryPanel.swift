@@ -9,6 +9,7 @@ import WebKit
 import Common
 import SiteImageView
 
+// FIXME: FXIOS-13958 @objcMembers is unsafe with main actor isolation
 @objcMembers
 class HistoryPanel: UIViewController,
                     LibraryPanel,
@@ -231,8 +232,8 @@ class HistoryPanel: UIViewController,
         // Avoid refreshing if search is in progress
         guard !viewModel.isSearchInProgress else { return }
 
-        viewModel.reloadData { [weak self] success in
-            DispatchQueue.main.async {
+        viewModel.reloadData { success in
+            ensureMainThread { [weak self] in
                 self?.applySnapshot(animatingDifferences: animating)
             }
         }
@@ -297,11 +298,9 @@ class HistoryPanel: UIViewController,
                 self?.viewModel.removeAllData()
             }
 
-            DispatchQueue.main.async {
-                self?.applySnapshot()
-                self?.tableView.reloadData()
-                self?.refreshRecentlyClosedCell()
-            }
+            self?.applySnapshot()
+            self?.tableView.reloadData()
+            self?.refreshRecentlyClosedCell()
         }
     }
 

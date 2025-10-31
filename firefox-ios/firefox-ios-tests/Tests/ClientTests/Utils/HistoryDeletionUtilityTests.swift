@@ -45,6 +45,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
     }
 
     // MARK: - Test url based deletion
+    @MainActor
     func testDeletingSingleItem() {
         let profile = profileSetup(named: "hsd_deleteSingleItem")
         let testSites = [SiteElements(domain: "mozilla")]
@@ -57,6 +58,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testDeletingMultipleItemsEmptyingDatabase() {
         let profile = profileSetup(named: "hsd_deleteMultipleItemsEmptyingDB")
         let sitesToDelete = [SiteElements(domain: "mozilla"),
@@ -74,6 +76,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testDeletingMultipleTopLevelItems() {
         let profile = profileSetup(named: "hsd_deleteMultipleItemsTopLevelItems")
         let sitesToRemain = [SiteElements(domain: "cnn")]
@@ -92,6 +95,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testDeletingMultipleSpecificItems() {
         let profile = profileSetup(named: "hsd_deleteMultipleSpecificItems")
         let sitesToRemain = [SiteElements(domain: "cnn", path: "newsOne/test1.html")]
@@ -117,6 +121,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
     // currently making testing these time frames, with the exception of
     // `.allTime` impossible to test.
 
+    @MainActor
     func testDeletingAllItemsInLastHour() {
         let profile = profileSetup(named: "hsd_deleteLastHour")
         guard let thirtyMinutesAgo = Calendar.current.date(byAdding: .minute,
@@ -139,6 +144,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
+    @MainActor
     func testDeletingItemsInLastHour_WithFurtherHistory() {
         let profile = profileSetup(named: "hsd_deleteLastHour_WithFurtherHistory")
         guard let thirtyMinutesAgo = Calendar.current.date(byAdding: .minute,
@@ -164,6 +170,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
+    @MainActor
     func testDeletingAllItemsInHistoryUsingLastTwentyFourHours() {
         let profile = profileSetup(named: "hsd_deleteLastTwentyFourHours")
         guard let twelveHoursAgo = Calendar.current.date(
@@ -187,6 +194,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
+    @MainActor
     func testDeletingItemsInHistoryUsingLastTwentyFourHours_WithFurtherHistory() {
         let profile = profileSetup(named: "hsd_deleteLastTwentyFourHours_WithFurtherHistory")
         guard let twelveHoursAgo = Calendar.current.date(
@@ -213,6 +221,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
+    @MainActor
     func testDeletingAllItemsInHistoryUsingLastSevenDays() {
         let profile = MockProfile(databasePrefix: "hsd_deleteLastSevenDays")
         guard let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())?.toMicrosecondsSince1970()
@@ -234,6 +243,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
+    @MainActor
     func testDeletingItemsInHistoryUsingLastSevenDays_WithFurtherHistory() {
         let profile = MockProfile(databasePrefix: "hsd_deleteLastSevenDays_WithFurtherHistory")
         guard let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())?.toMicrosecondsSince1970(),
@@ -258,6 +268,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
+    @MainActor
     func testDeletingAllItemsInHistoryUsingLastFourWeeks() {
         let profile = MockProfile(databasePrefix: "hsd_deleteLastFourWeeks")
         guard let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date())?.toMicrosecondsSince1970()
@@ -279,6 +290,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
+    @MainActor
     func testDeletingItemsInHistoryUsingLastFourWeeks_WithFurtherHistory() {
         let profile = MockProfile(databasePrefix: "hsd_deleteLastFourWeeks_WithFurtherHistory")
         guard let twoWeeksAgo = Calendar.current.date(byAdding: .day, value: -14, to: Date())?.toMicrosecondsSince1970(),
@@ -303,6 +315,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
         deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
+    @MainActor
     func testDeletingAllItemsInHistoryUsingAllTime() {
         let profile = MockProfile(databasePrefix: "hsd_deleteAllTime")
         guard let earlierToday = Calendar.current.date(byAdding: .hour,
@@ -371,6 +384,7 @@ private extension HistoryDeletionUtilityTests {
         waitForExpectations(timeout: 5, handler: nil)
     }
 
+    @MainActor
     func deletionWithExpectation(
         since dateOption: HistoryDeletionUtilityDateOptions,
         using profile: MockProfile,
