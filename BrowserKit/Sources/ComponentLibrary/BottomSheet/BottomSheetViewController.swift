@@ -228,12 +228,6 @@ public class BottomSheetViewController: UIViewController,
         #endif
     }
 
-    @available(iOS 26.0, *)
-    private func removeGlassEffect() {
-        glassEffectView?.removeFromSuperview()
-        glassEffectView = nil
-    }
-
     private func setupView() {
         if viewModel.shouldDismissForTapOutside {
             topTapView.addGestureRecognizer(UITapGestureRecognizer(target: self,
