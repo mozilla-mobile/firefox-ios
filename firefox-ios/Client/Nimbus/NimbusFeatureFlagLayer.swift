@@ -4,7 +4,7 @@
 
 import Foundation
 
-final class NimbusFeatureFlagLayer {
+final class NimbusFeatureFlagLayer: Sendable {
     // MARK: - Public methods
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus = FxNimbus.shared
