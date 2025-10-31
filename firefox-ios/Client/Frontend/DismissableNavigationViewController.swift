@@ -4,12 +4,14 @@
 
 import UIKit
 
+@MainActor
 protocol OnViewDismissable: AnyObject {
-    var onViewDismissed: (@MainActor () -> Void)? { get set }
+    var onViewDismissed: (() -> Void)? { get set }
 }
 
 class DismissableNavigationViewController: UINavigationController, OnViewDismissable {
-    var onViewDismissed: (@MainActor () -> Void)?
+    @MainActor
+    var onViewDismissed: (() -> Void)?
     var onViewWillDisappear: (() -> Void)?
 
     override func viewWillDisappear(_ animated: Bool) {
