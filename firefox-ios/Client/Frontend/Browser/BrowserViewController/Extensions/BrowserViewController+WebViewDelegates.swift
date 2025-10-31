@@ -912,7 +912,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                windowUUID: windowUUID,
                                                actionType: NativeErrorPageActionType.receivedError
             )
-            store.dispatchLegacy(action)
+            store.dispatch(action)
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
             ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
@@ -993,13 +993,13 @@ extension BrowserViewController: WKNavigationDelegate {
                     windowUUID: windowUUID,
                     actionType: ToolbarActionType.urlDidChange
                 )
-                store.dispatchLegacy(action)
+                store.dispatch(action)
                 let middlewareAction = ToolbarMiddlewareAction(
                     scrollOffset: scrollController.contentOffset,
                     windowUUID: windowUUID,
                     actionType: ToolbarMiddlewareActionType.urlDidChange
                 )
-                store.dispatchLegacy(middlewareAction)
+                store.dispatch(middlewareAction)
             }
             return
         }
@@ -1036,7 +1036,7 @@ extension BrowserViewController: WKNavigationDelegate {
                                                        windowUUID: windowUUID,
                                                        actionType: NativeErrorPageActionType.receivedError
                     )
-                    store.dispatchLegacy(action)
+                    store.dispatch(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
