@@ -90,13 +90,13 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
 
     private lazy var doneButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
-        button.setTitle(.CreditCard.Settings.Done, for: .normal)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.checkmark), for: .normal)
         button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
         button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         let barButton = UIBarButtonItem(customView: button)
         if #available(iOS 26.0, *) { barButton.hidesSharedBackground = true }
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
+        barButton.accessibilityLabel = .CreditCard.Settings.Done
         return barButton
     }()
 
