@@ -14,7 +14,10 @@ import OnboardingKit
 class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
     var onboardingVariant: OnboardingVariant
-    init(onboardingVariant: OnboardingVariant, with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()) {
+    init(
+        onboardingVariant: OnboardingVariant,
+        with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()
+    ) {
         self.helperUtility = helperUtility
         self.onboardingVariant = onboardingVariant
     }
