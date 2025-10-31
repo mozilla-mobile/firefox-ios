@@ -52,7 +52,7 @@ final class HomepageViewController: UIViewController,
     private let syncTabContextualHintViewController: ContextualHintViewController
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
-    private var hasLaidOutSubviews = false
+    private var didFinishFirstLayout = false
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -184,8 +184,8 @@ final class HomepageViewController: UIViewController,
         /// FXIOS-13970: Legacy homepage layout was appearing blank on iOS 15. The root cause was from applying the diffable
         /// data source snapshot before the view had finished it's first layout pass, causing the snapshot to be ignored.
         /// This issue seems to be resolved by the SDK on later iOS versions
-        if !hasLaidOutSubviews {
-            hasLaidOutSubviews = true
+        if !didFinishFirstLayout {
+            didFinishFirstLayout = true
             store.dispatchLegacy(
                 HomepageAction(
                     numberOfTopSitesPerRow: numberOfTilesPerRow(for: availableWidth),
