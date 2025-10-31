@@ -24,8 +24,7 @@ protocol HistoryDeletionProtocol {
 
 final class HistoryDeletionUtility: HistoryDeletionProtocol, Sendable {
     private let profile: Profile
-    // FIXME: FXIOS-13957 All properties should be truly Sendable
-    private nonisolated(unsafe) let gleanWrapper: GleanWrapper
+    private let gleanWrapper: GleanWrapper
 
     init(with profile: Profile, gleanWrapper: GleanWrapper = DefaultGleanWrapper()) {
         self.profile = profile
