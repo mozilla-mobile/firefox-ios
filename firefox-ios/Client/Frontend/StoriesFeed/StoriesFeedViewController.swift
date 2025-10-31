@@ -27,9 +27,10 @@ class StoriesFeedViewController: UIViewController,
     }
 
     // Telemetry related
-    private var alreadyTrackedStories = Set<StoriesFeedItem>()
-    private let trackingImpressionsThrottler: GCDThrottlerProtocol
     private let telemetry: StoriesFeedTelemetry
+    private let scrollThrottler: GCDThrottlerProtocol
+    private let impressionsThrottler: GCDThrottlerProtocol
+    private let impressionsTracker: ImpressionTrackingUtility
 
     // MARK: - Private constants
     private let logger: Logger
@@ -40,15 +41,19 @@ class StoriesFeedViewController: UIViewController,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
          telemetry: StoriesFeedTelemetry = StoriesFeedTelemetry(),
-         throttler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.5)
+         impressionsThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
+         scrollThrottler: GCDThrottlerProtocol = GCDThrottler(seconds: 0.2),
+         impressionsTracker: ImpressionTrackingUtility = ImpressionTrackingUtility()
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
         self.storiesFeedState = StoriesFeedState(windowUUID: windowUUID)
-        self.trackingImpressionsThrottler = throttler
         self.telemetry = telemetry
+        self.impressionsThrottler = impressionsThrottler
+        self.scrollThrottler = scrollThrottler
+        self.impressionsTracker = impressionsTracker
 
         super.init(nibName: nil, bundle: nil)
 
@@ -61,6 +66,7 @@ class StoriesFeedViewController: UIViewController,
 
     deinit {
         telemetry.storiesFeedClosed()
+        impressionsTracker.reset()
         unsubscribeFromRedux()
     }
 
@@ -91,12 +97,11 @@ class StoriesFeedViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        trackVisibleItemImpressions()
+        trackVisibleItemImpressions(sampleOnly: true)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        resetTrackedObjects()
     }
 
     // MARK: - Redux
@@ -251,42 +256,57 @@ class StoriesFeedViewController: UIViewController,
         }
     }
 
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        trackVisibleItemImpressions()
-    }
-
-    // MARK: - Telemetry
-    /// Used to track impressions. If the user has already seen the item in the feed,
-    /// we only record the impression once. We want to track at initial seen as well as
-    /// when users scrolls. A throttle is added in order to capture what the users has seen.
-    private func trackVisibleItemImpressions() {
-        trackingImpressionsThrottler.throttle { [self] in
-            ensureMainThread {
-                guard let collectionView = self.collectionView else {
-                    self.logger.log(
-                        "Stories collectionview should not have been nil, unable to track impression",
-                        level: .warning,
-                        category: .storiesFeed
-                    )
-                    return
-                }
-
-                for indexPath in collectionView.indexPathsForVisibleItems {
-                    guard let item = self.dataSource?.itemIdentifier(for: indexPath) else { continue }
-                    self.handleTrackingImpressions(with: item, at: indexPath.item)
-                }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollThrottler.throttle { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.trackVisibleItemImpressions(sampleOnly: true)
             }
         }
     }
 
-    private func handleTrackingImpressions(with item: StoriesFeedItem, at index: Int) {
-        guard !alreadyTrackedStories.contains(item) else { return }
-        alreadyTrackedStories.insert(item)
-        telemetry.sendImpressionTelemetryFor(storyIndex: index + 1)
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate { flushImpressions() }
     }
 
-    private func resetTrackedObjects() {
-        alreadyTrackedStories.removeAll()
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { flushImpressions() }
+
+    // MARK: - Telemetry
+    /// The sampleOnly parameter is there to distinguish between “sampling visibility”
+    /// while the user is still scrolling vs. doing a full flush at the end of scrolling.
+    @MainActor
+    private func trackVisibleItemImpressions(sampleOnly: Bool = false) {
+        guard let collectionView else { return }
+
+        let visibleRect = CGRect(origin: collectionView.contentOffset,
+                                 size: collectionView.bounds.size)
+
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            guard let attrs = collectionView.layoutAttributesForItem(at: indexPath) else { continue }
+
+            let cellFrame = attrs.frame
+            let intersection = visibleRect.intersection(cellFrame)
+            guard !intersection.isNull else { continue }
+
+            let cellArea = cellFrame.width * cellFrame.height
+            let visibleArea = intersection.width * intersection.height
+            let ratio = visibleArea / max(cellArea, 1)
+
+            if ratio >= 0.5 {
+                impressionsTracker.markPending(indexPath)
+            }
+
+            if sampleOnly {
+                flushImpressions()
+            }
+        }
+    }
+
+    private func flushImpressions() {
+        impressionsTracker.flush { indexPaths in
+            for indexPath in indexPaths {
+                telemetry.sendImpressionTelemetryFor(storyIndex: indexPath.item)
+            }
+        }
     }
 
     // MARK: - Themeable
