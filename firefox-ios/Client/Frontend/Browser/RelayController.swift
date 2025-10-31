@@ -21,7 +21,7 @@ protocol RelayControllerProtocol {
 }
 
 @MainActor
-final class RelayController: RelayControllerProtocol {
+final class RelayController: RelayControllerProtocol, Notifiable {
     private enum RelayOAuthClientID: String {
         case release = "9ebfe2c2f9ea3c58"
         case stage = "41b4363ae36440a9"
@@ -60,20 +60,25 @@ final class RelayController: RelayControllerProtocol {
     private let config: RelayClientConfiguration
     private var relayRSClient: RelayRemoteSettingsClient?
     private var client: RelayClient?
+    private var isCreatingClient = false
+    private let notificationCenter: NotificationProtocol
 
     // MARK: - Init
 
     private init(logger: Logger = DefaultLogger.shared,
                  profile: Profile = AppContainer.shared.resolve(),
-                 config: RelayClientConfiguration = .prod) {
+                 config: RelayClientConfiguration = .prod,
+                 notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.logger = logger
         self.profile = profile
         self.config = config
+        self.notificationCenter = notificationCenter
         if let rsService = profile.remoteSettingsService {
             relayRSClient = RelayRemoteSettingsClient(rsService: rsService)
         } else {
             logger.log("[RELAY] No RS service available on profile.", level: .warning, category: .autofill)
         }
+        beginObserving()
     }
 
     // MARK: - RelayControllerProtocol
@@ -82,7 +87,7 @@ final class RelayController: RelayControllerProtocol {
         guard Self.isFeatureEnabled else { return false }
         guard let relayRSClient else { return false }
 
-        // Phase 1: we only show Relay for existing signed-in accounts with Relay service
+        // [Relay: Phase 1] Only show for existing signed-in accounts with Relay service
         guard hasRelayAccount() else { return false }
 
         guard let domain = url.baseDomain, let host = url.normalizedHost else { return false }
@@ -92,8 +97,29 @@ final class RelayController: RelayControllerProtocol {
 
     // MARK: - Private Utilities
 
+    private func beginObserving() {
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [Notification.Name.ProfileDidStartSyncing,
+                        Notification.Name.ProfileDidFinishSyncing,
+                        Notification.Name.FirefoxAccountChanged]
+        )
+    }
+
+    func handleNotifications(_ notification: Notification) {
+        logger.log("[RELAY] Received notification '\(notification.name.rawValue)'.", level: .info, category: .autofill)
+        Task { @MainActor in
+            if hasRelayAccount() {
+                createRelayClient()
+            }
+        }
+    }
+
+    /// Creates the Relay client, if needed. This is safe to call redundantly.
     private func createRelayClient() {
         guard client == nil else { return }
+        guard !isCreatingClient else { return }
         guard let acctManager = RustFirefoxAccounts.shared.accountManager else {
             logger.log("[RELAY] Couldn't create client, no account manager.", level: .debug, category: .autofill)
             return
@@ -111,6 +137,7 @@ final class RelayController: RelayControllerProtocol {
                         Task { @MainActor in self.handleRelayClientCreated(clientResult) }
                     } catch {
                         closureLogger.log("[RELAY] Error creating Relay client: \(error)", level: .warning, category: .autofill)
+                        Task { @MainActor in self.isCreatingClient = false }
                     }
                 }
             }
@@ -119,6 +146,7 @@ final class RelayController: RelayControllerProtocol {
 
     private func handleRelayClientCreated(_ client: RelayClient) {
         self.client = client
+        isCreatingClient = false
         logger.log("[RELAY] Relay client created.", level: .info, category: .autofill)
     }
 
@@ -134,10 +162,7 @@ final class RelayController: RelayControllerProtocol {
         switch result {
         case .success(let clients):
             let OAuthID = isFxAStaging() ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
-            let hasRelay = clients.contains(where: { $0.clientId == OAuthID })
-            if hasRelay { createRelayClient() /* TEMP. Added here for early testing. */ }
-
-            return hasRelay
+            return clients.contains(where: { $0.clientId == OAuthID })
         case .failure(let error):
             logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
             return false
