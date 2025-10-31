@@ -291,7 +291,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         }
     }
 
-    func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping () -> Void) {
+    func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping @Sendable () -> Void) {
         // We can't delete a preinstalled engine or an engine that is currently the default.
         guard engine.isCustomEngine && !isEngineDefault(engine) else { return }
 
