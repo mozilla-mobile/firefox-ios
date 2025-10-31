@@ -104,22 +104,23 @@ class Toast: UIView, ThemeApplicable, Notifiable {
 
     func dismiss(_ buttonPressed: Bool) {
         guard !dismissed else { return }
-
         dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
-
         UIView.animate(
             withDuration: UX.toastAnimationDuration,
+            delay: 0,
+            options: [.curveEaseIn, .beginFromCurrentState],
             animations: {
-                self.animationConstraint?.constant = UX.toastHeightWithShadow
-                self.layoutIfNeeded()
+                self.alpha = 0.0
+                self.transform = CGAffineTransform(translationX: 0, y: self.bounds.height + 20)
+            },
+            completion: { _ in
+                self.removeFromSuperview()
+                if !buttonPressed {
+                    self.completionHandler?(false)
+                }
             }
-        ) { finished in
-            self.removeFromSuperview()
-            if !buttonPressed {
-                self.completionHandler?(false)
-            }
-        }
+        )
     }
 
     @objc
