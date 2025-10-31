@@ -655,9 +655,10 @@ class BrowserViewController: UIViewController,
         )?.showMenuWarningBadge
 
         guard showWarningBadge != shouldShowWarningBadge else { return }
+
         let action = ToolbarAction(
             showMenuWarningBadge: showWarningBadge,
-            windowUUID: windowUUID,
+            windowUUID: self.windowUUID,
             actionType: ToolbarActionType.showMenuWarningBadge
         )
         store.dispatch(action)
@@ -2269,9 +2270,10 @@ class BrowserViewController: UIViewController,
                 nil
             }
             guard let url else { break }
-            if !url.isFxHomeUrl {
+//            if !url.isFxHomeUrl {
+            // TODO: laurie
                 updateToolbarAnimationStateIfNeeded()
-            }
+//            }
             // Security safety check (Bugzilla #1933079)
             if let internalURL = InternalURL(url), internalURL.isErrorPage, !internalURL.isAuthorized {
                 tabManager.selectedTab?.webView?.load(URLRequest(url: URL(string: "about:blank")!))
@@ -3079,8 +3081,11 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Toolbar Refactor Deeplink Helper Method.
     private func cancelEditMode() {
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        ensureMainThread {
+            let action = ToolbarAction(windowUUID: self.windowUUID,
+                                       actionType: ToolbarActionType.cancelEdit)
+            store.dispatch(action)
+        }
     }
 
     func closeAllPrivateTabs() {
