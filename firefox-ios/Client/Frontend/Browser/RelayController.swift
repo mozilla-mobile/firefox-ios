@@ -73,29 +73,29 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         self.profile = profile
         self.config = config
         self.notificationCenter = notificationCenter
-        if let rsService = profile.remoteSettingsService {
-            relayRSClient = RelayRemoteSettingsClient(rsService: rsService)
-        } else {
-            logger.log("[RELAY] No RS service available on profile.", level: .warning, category: .autofill)
-        }
+
+        configureRelayRSClient()
         beginObserving()
     }
 
     // MARK: - RelayControllerProtocol
 
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool {
-        guard Self.isFeatureEnabled else { return false }
-        guard let relayRSClient else { return false }
-
-        // [Relay: Phase 1] Only show for existing signed-in accounts with Relay service
-        guard hasRelayAccount() else { return false }
-
+        guard Self.isFeatureEnabled, let relayRSClient, hasRelayAccount() else { return false }
         guard let domain = url.baseDomain, let host = url.normalizedHost else { return false }
         let shouldShow = relayRSClient.shouldShowRelay(host: host, domain: domain, isRelayUser: true)
         return shouldShow
     }
 
     // MARK: - Private Utilities
+
+    private func configureRelayRSClient() {
+        guard let rsService = profile.remoteSettingsService else {
+            logger.log("[RELAY] No RS service available on profile.", level: .warning, category: .autofill)
+            return
+        }
+        relayRSClient = RelayRemoteSettingsClient(rsService: rsService)
+    }
 
     private func beginObserving() {
         startObservingNotifications(
@@ -118,8 +118,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     /// Creates the Relay client, if needed. This is safe to call redundantly.
     private func createRelayClient() {
-        guard client == nil else { return }
-        guard !isCreatingClient else { return }
+        guard client == nil, !isCreatingClient else { return }
         guard let acctManager = RustFirefoxAccounts.shared.accountManager else {
             logger.log("[RELAY] Couldn't create client, no account manager.", level: .debug, category: .autofill)
             return
