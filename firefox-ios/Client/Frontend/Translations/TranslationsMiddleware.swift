@@ -28,6 +28,10 @@ final class TranslationsMiddleware {
             guard let action = (action as? ToolbarMiddlewareAction) else { return }
             self.handleTappingOnTranslateButton(for: action, and: state)
 
+        case TranslationsActionType.didTapRetryFailedTranslation:
+            guard let action = (action as? TranslationsAction) else { return }
+            self.handleTappingRetryButtonOnToast(for: action, and: state)
+
         default:
            break
         }
@@ -71,9 +75,22 @@ final class TranslationsMiddleware {
         }
     }
 
+    private func handleTappingRetryButtonOnToast(for action: TranslationsAction, and state: AppState) {
+        self.handleUpdatingTranslationIcon(for: action, with: .loading)
+        // TODO: FXIOS-13844 - Retrieve translations properly with backend, using fake call for now
+        Task { @MainActor in
+            try? await fetchData()
+            dispatchAction(
+                for: ToolbarActionType.translationCompleted,
+                with: .active,
+                and: action.windowUUID
+            )
+        }
+    }
+
     @MainActor
     private func handleUpdatingTranslationIcon(
-        for action: ToolbarMiddlewareAction,
+        for action: Action,
         with state: TranslationConfiguration.IconState
     ) {
         let toolbarAction = ToolbarAction(
@@ -106,26 +123,70 @@ final class TranslationsMiddleware {
 
     // TODO: FXIOS-13844 - Start translation a page and dispatch action after completion
     @MainActor
-    private func retrieveTranslations(for action: ToolbarMiddlewareAction) {
+    private func retrieveTranslations(for action: Action) {
         // We dispatch an action for now, but eventually we want to inject a script
         // to check if the page language differs from our locale language
         // When translation completed, we want icon to be active mode.
         Task { @MainActor in
-            await fetchData()
-            let toolbarAction = ToolbarAction(
-                translationConfiguration: TranslationConfiguration(
-                    prefs: profile.prefs,
-                    state: .active
-                ),
-                windowUUID: action.windowUUID,
-                actionType: ToolbarActionType.translationCompleted
-            )
-            store.dispatch(toolbarAction)
+            do {
+                try await fetchDataWithError()
+                dispatchAction(
+                    for: ToolbarActionType.translationCompleted,
+                    with: .active,
+                    and: action.windowUUID
+                )
+            } catch {
+                self.handleErrorFromTranslatingPage(for: action)
+            }
         }
     }
 
+    // When we receive an error translating the page, we want to update the translation
+    // icon on the toolbar to be inactive.
+    // We also want to display a toast.
+    private func handleErrorFromTranslatingPage(for action: Action) {
+        dispatchAction(
+            for: ToolbarActionType.didReceiveErrorTranslating,
+            with: .inactive,
+            and: action.windowUUID
+        )
+        dispatchShowRetryTranslationToastAction(for: action.windowUUID)
+    }
+
+    private func dispatchAction(
+        for actionType: ToolbarActionType,
+        with state: TranslationConfiguration.IconState,
+        and windowUUID: WindowUUID
+    ) {
+        let toolbarAction = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(
+                prefs: profile.prefs,
+                state: state
+            ),
+            windowUUID: windowUUID,
+            actionType: actionType
+        )
+        store.dispatch(toolbarAction)
+    }
+
+    private func dispatchShowRetryTranslationToastAction(
+        for windowUUID: WindowUUID
+    ) {
+        let toastAction = GeneralBrowserAction(
+            toastType: .retryTranslatingPage,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserActionType.showToast
+        )
+        store.dispatch(toastAction)
+    }
+
     // TODO: FXIOS-13844 - Simulate a fake asynchronous call for now
-    private func fetchData() async {
+    private func fetchDataWithError() async throws {
+        enum ExampleError: Error { case example }
+        throw ExampleError.example
+    }
+
+    private func fetchData() async throws {
         try? await Task.sleep(nanoseconds: 2_000_000_000)
     }
 }
