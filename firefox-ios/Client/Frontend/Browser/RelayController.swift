@@ -23,8 +23,24 @@ protocol RelayControllerProtocol {
 @MainActor
 final class RelayController: RelayControllerProtocol {
     private enum RelayOAuthClientID: String {
-        case release = "7f1a38400a0df47b"
+        case release = "9ebfe2c2f9ea3c58"
         case stage = "41b4363ae36440a9"
+    }
+
+    private enum RelayClientConfiguration {
+        case prod
+        case staging
+
+        var serverURL: String {
+            switch self {
+            case .prod: return "https://relay.firefox.com"
+            case .staging: assertionFailure("ToDo."); return "<invalid>"  // TBD.
+            }
+        }
+
+        var scope: String {
+            "profile"
+        }
     }
 
     // MARK: - Properties
@@ -32,17 +48,26 @@ final class RelayController: RelayControllerProtocol {
     static let shared = RelayController()
 
     static let isFeatureEnabled = {
-        LegacyFeatureFlagsManager.shared.isFeatureEnabled(.relayIntegration, checking: .buildOnly)
+#if targetEnvironment(simulator) && MOZ_CHANNEL_developer
+        return true
+#else
+        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.relayIntegration, checking: .buildOnly)
+#endif
     }()
 
     private let logger: Logger
     private let profile: Profile
+    private let config: RelayClientConfiguration
+    private var client: RelayClient?
 
     // MARK: - Init
 
-    private init(logger: Logger = DefaultLogger.shared, profile: Profile = AppContainer.shared.resolve()) {
+    private init(logger: Logger = DefaultLogger.shared,
+                 profile: Profile = AppContainer.shared.resolve(),
+                 config: RelayClientConfiguration = .prod) {
         self.logger = logger
         self.profile = profile
+        self.config = config
     }
 
     // MARK: - RelayControllerProtocol
@@ -59,6 +84,36 @@ final class RelayController: RelayControllerProtocol {
 
     // MARK: - Private Utilities
 
+    private func createRelayClient() {
+        guard client == nil else { return }
+        guard let acctManager = RustFirefoxAccounts.shared.accountManager else {
+            logger.log("[RELAY] Couldn't create client, no account manager.", level: .debug, category: .autofill)
+            return
+        }
+
+        let closureLogger = logger
+        Task {
+            acctManager.getAccessToken(scope: config.scope) { [config] result in
+                switch result {
+                case .failure(let error):
+                    closureLogger.log("[RELAY] Error getting access token for Relay: \(error)", level: .warning, category: .autofill)
+                case .success(let tokenInfo):
+                    do {
+                        let clientResult = try RelayClient(serverUrl: config.serverURL, authToken: tokenInfo.token)
+                        Task { @MainActor in self.handleRelayClientCreated(clientResult) }
+                    } catch {
+                        closureLogger.log("[RELAY] Error creating Relay client: \(error)", level: .warning, category: .autofill)
+                    }
+                }
+            }
+        }
+    }
+
+    private func handleRelayClientCreated(_ client: RelayClient) {
+        self.client = client
+        logger.log("[RELAY] Relay client created.", level: .info, category: .autofill)
+    }
+
     private func isFxAStaging() -> Bool {
         let prefs = profile.prefs
         return prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
@@ -71,7 +126,10 @@ final class RelayController: RelayControllerProtocol {
         switch result {
         case .success(let clients):
             let OAuthID = isFxAStaging() ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
-            return clients.contains(where: { $0.clientId == OAuthID })
+            let hasRelay = clients.contains(where: { $0.clientId == OAuthID })
+            if hasRelay { createRelayClient() /* TEMP. Added here for early testing. */ }
+
+            return hasRelay
         case .failure(let error):
             logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .autofill)
             return false
