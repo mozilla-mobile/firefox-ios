@@ -20,7 +20,7 @@ public protocol ToolbarManager {
     func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition) -> Bool
 }
 
-public class DefaultToolbarManager: ToolbarManager {
+public final class DefaultToolbarManager: ToolbarManager {
     public init() {}
 
     public func getAddressBorderPosition(for toolbarPosition: AddressToolbarPosition,

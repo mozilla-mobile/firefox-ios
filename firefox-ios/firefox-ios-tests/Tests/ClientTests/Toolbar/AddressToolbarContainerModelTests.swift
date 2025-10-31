@@ -77,6 +77,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertEqual(viewModel.searchEngineImage, selectedSearchEngine.image)
     }
 
+    @MainActor
     func testConfigureSkeletonAddressBar_withNilParameters() {
         let model = createSubject(withState: createToolbarState())
         let config = model.configureSkeletonAddressBar(with: nil, isReaderModeAvailableOrActive: nil)
@@ -86,6 +87,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertNil(config.locationViewConfiguration.url)
     }
 
+    @MainActor
     func testConfigureSkeletonAddressBar_withNilURL_andReaderModeAvailable() {
         let model = createSubject(withState: createToolbarState())
         let config = model.configureSkeletonAddressBar(with: nil, isReaderModeAvailableOrActive: true)
@@ -95,6 +97,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertNil(config.locationViewConfiguration.url)
     }
 
+    @MainActor
     func testConfigureSkeletonAddressBar_withURL_andReaderModeAvailable() {
         let model = createSubject(withState: createToolbarState())
         let testURL = URL(string: "https://example.com")
@@ -105,6 +108,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         XCTAssertEqual(config.locationViewConfiguration.url, testURL)
     }
 
+    @MainActor
     func testConfigureSkeletonAddressBar_withURL_andReaderModeNotAvailable() {
         let model = createSubject(withState: createToolbarState())
         let testURL = URL(string: "https://example.com")
@@ -186,6 +190,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                isLoading: false,
                                readerModeState: nil,
                                canSummarize: false,
+                               translationConfiguration: nil,
                                didStartTyping: false,
                                isEmptySearch: true,
                                alternativeSearchEngine: withSearchEngine)

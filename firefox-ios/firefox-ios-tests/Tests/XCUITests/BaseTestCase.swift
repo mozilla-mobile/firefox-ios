@@ -303,11 +303,13 @@ class BaseTestCase: XCTestCase {
         userState = navigator.userState
     }
 
-    func addContentToReaderView() {
+    func addContentToReaderView(isHomePageOn: Bool = true) {
         updateScreenGraph()
         userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        if isHomePageOn {
+            navigator.nowAt(HomePanelsScreen)
+            navigator.goto(URLBarOpen)
+        }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         app.buttons["Reader View"].waitAndTap()

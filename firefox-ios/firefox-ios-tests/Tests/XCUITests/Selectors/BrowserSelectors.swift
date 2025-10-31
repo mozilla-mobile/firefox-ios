@@ -16,6 +16,8 @@ protocol BrowserSelectorsSet {
     var PRIVATE_BROWSING: Selector { get }
     var CANCEL_BUTTON: Selector { get }
     var LINK_RFC_2606: Selector { get }
+    var BOOK_OF_MOZILLA_TEXT: Selector { get }
+    var ADDRESSTOOLBAR_LOCKICON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -30,6 +32,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let privateBrowsdingLabel = "Private Browsing"
         static let cancelButton = "Cancel"
         static let rfc = "RFC 2606"
+        static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -98,9 +101,21 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "webview"]
     )
 
+    let BOOK_OF_MOZILLA_TEXT = Selector.staticTextByExactLabel(
+        "The Book of Mozilla",
+        description: "StaticText 'The Book of Mozilla' within table",
+        groups: ["browser", "visualCheck"]
+    )
+
+    let ADDRESSTOOLBAR_LOCKICON = Selector.buttonId(
+        IDs.AddressToolbar_LockIcon,
+        description: "Lock Icon on the Address toolbar",
+        groups: ["browser"]
+    )
+
     var all: [Selector] { [ADDRESS_BAR, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
-                           LINK_RFC_2606]
+                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON]
     }
 }

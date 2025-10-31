@@ -4,7 +4,7 @@
 
 import UIKit
 
-class InstructionsView: UIView {
+final class InstructionsView: UIView {
     private lazy var settingsInstructionView: InstructionView = {
         let settingsIcon = UIImage(named: "instructions-cog")!
         let instructionView = InstructionView(text: UIConstants.strings.instructionToOpenSafari, image: settingsIcon)
@@ -54,7 +54,7 @@ class InstructionsView: UIView {
     }
 }
 
-private class InstructionView: UIView {
+private final class InstructionView: UIView {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit

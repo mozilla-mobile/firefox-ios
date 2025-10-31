@@ -134,13 +134,13 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             )
             navigationHandler?.showSignInView(fxaParameters: fxaParameters)
 
-        case .printSheetV2:
+        case .printSheet:
             navigationHandler?.showPrintSheet()
 
         case .shareSheet:
             navigationHandler?.showShareSheetForCurrentlySelectedTab()
 
-        case .saveAsPDFV2:
+        case .saveAsPDF:
             navigationHandler?.presentSavePDFController()
 
         case .zoom:

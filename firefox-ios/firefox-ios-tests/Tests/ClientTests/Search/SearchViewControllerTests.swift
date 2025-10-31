@@ -8,6 +8,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 class SearchViewControllerTest: XCTestCase {
     var profile: MockProfile!
     var searchEnginesManager: SearchEnginesManager!

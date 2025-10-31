@@ -12,7 +12,7 @@ public protocol SessionCreator: AnyObject {
 
 typealias VoidReturnCallback<T> = (T) -> Void
 
-class WKSessionCreator: SessionCreator {
+final class WKSessionCreator: SessionCreator {
     private let dependencies: EngineSessionDependencies
     var onNewSessionCreated: VoidReturnCallback<EngineSession>?
 

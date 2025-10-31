@@ -11,18 +11,15 @@ public struct TermsOfServiceCompactView<ViewModel: OnboardingCardInfoModelProtoc
     @StateObject private var viewModel: TosFlowViewModel<ViewModel>
     public let windowUUID: WindowUUID
     public var themeManager: ThemeManager
-    public let onEmbededLinkAction: (TosAction) -> Void
 
     public init(
         viewModel: TosFlowViewModel<ViewModel>,
         windowUUID: WindowUUID,
-        themeManager: ThemeManager,
-        onEmbededLinkAction: @escaping (TosAction) -> Void
+        themeManager: ThemeManager
     ) {
         self._viewModel = StateObject(wrappedValue: viewModel)
         self.windowUUID = windowUUID
         self.themeManager = themeManager
-        self.onEmbededLinkAction = onEmbededLinkAction
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 

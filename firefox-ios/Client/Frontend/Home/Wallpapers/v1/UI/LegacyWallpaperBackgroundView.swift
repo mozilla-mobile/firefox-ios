@@ -71,7 +71,10 @@ class LegacyWallpaperBackgroundView: UIView {
 extension LegacyWallpaperBackgroundView: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .WallpaperDidChange: updateImageToCurrentWallpaper()
+        case .WallpaperDidChange:
+            ensureMainThread {
+                self.updateImageToCurrentWallpaper()
+            }
         default: break
         }
     }

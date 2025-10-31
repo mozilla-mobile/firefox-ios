@@ -185,14 +185,14 @@ class TrackingProtectionModel {
             self?.selectedTab?.webView?.reload()
 
             guard let windowUUID = self?.selectedTab?.windowUUID else { return }
-            store.dispatchLegacy(
+            store.dispatch(
                 TrackingProtectionMiddlewareAction(
                     windowUUID: windowUUID,
                     actionType: TrackingProtectionMiddlewareActionType.dismissTrackingProtection
                 )
             )
 
-            store.dispatchLegacy(
+            store.dispatch(
                 GeneralBrowserAction(
                     toastType: .clearCookies,
                     windowUUID: windowUUID,

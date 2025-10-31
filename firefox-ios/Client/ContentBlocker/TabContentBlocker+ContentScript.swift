@@ -41,7 +41,7 @@ extension TabContentBlocker {
                     self.stats = self.stats.create(matchingBlocklist: listItem, host: url.host ?? "")
 
                     guard let windowUUID = self.tab?.currentWebView()?.currentWindowUUID else { return }
-                    store.dispatchLegacy(
+                    store.dispatch(
                         TrackingProtectionAction(windowUUID: windowUUID,
                                                  actionType: TrackingProtectionActionType.updateBlockedTrackerStats)
                     )

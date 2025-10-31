@@ -358,12 +358,10 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func loadRecentSearches() {
-        guard viewModel.shouldShowRecentSearches else { return }
         viewModel.retrieveRecentSearches()
     }
 
     private func loadTrendingSearches() {
-        guard viewModel.shouldShowTrendingSearches else { return }
         Task {
             await viewModel.retrieveTrendingSearches()
             reloadTableView()
@@ -550,9 +548,11 @@ class SearchViewController: SiteTableViewController,
         var title: String
         switch section {
         case SearchListSection.trendingSearches.rawValue:
-            // TODO: FXIOS-13644 - Add proper strings when finalized
             if let engineName = viewModel.searchEnginesManager?.defaultEngine?.shortName {
-                title = "Trending on \(engineName)"
+                title = String(
+                    format: .SearchZero.TrendingSearchesSectionTitle,
+                    engineName
+                )
             } else {
                 title = ""
             }
@@ -885,20 +885,23 @@ class SearchViewController: SiteTableViewController,
     // MARK: - Notifiable
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            reloadData()
-        case .SearchSettingsChanged:
-            reloadSearchEngines()
-            // We fetch new list since trending searches are specific to the search engine.
-            loadTrendingSearches()
-        case .SponsoredAndNonSponsoredSuggestionsChanged:
-            guard !viewModel.searchQuery.isEmpty else { return }
-            Task {
-                await viewModel.loadFirefoxSuggestions()
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                self.reloadData()
+            case .SearchSettingsChanged:
+                self.reloadSearchEngines()
+                // We fetch new list since trending searches are specific to the search engine.
+                self.loadTrendingSearches()
+            case .SponsoredAndNonSponsoredSuggestionsChanged:
+                guard !self.viewModel.searchQuery.isEmpty else { return }
+                Task {
+                    await self.viewModel.loadFirefoxSuggestions()
+                }
+            default:
+                break
             }
-        default:
-            break
         }
     }
 

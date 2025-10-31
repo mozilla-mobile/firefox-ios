@@ -5,6 +5,8 @@
 import XCTest
 
 @testable import Redux
+
+@MainActor
 let store = Store(state: FakeReduxState(),
                   reducer: FakeReduxState.reducer,
                   middlewares: [FakeReduxMiddleware().fakeProvider])
