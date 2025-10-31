@@ -461,6 +461,14 @@ extension BrowserViewController: WKNavigationDelegate {
         // prevent the App from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
         let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+
+        // Stories feed tabs are not managed by tabManager, so just allow them without any special logic
+        let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
+        if isStoriesFeed {
+            decisionHandler(.allow)
+            return
+        }
+
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
