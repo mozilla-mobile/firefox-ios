@@ -6,6 +6,7 @@ import MozillaAppServices
 import Shared
 import Storage
 import XCTest
+import Common
 import SiteImageView
 
 @testable import Client

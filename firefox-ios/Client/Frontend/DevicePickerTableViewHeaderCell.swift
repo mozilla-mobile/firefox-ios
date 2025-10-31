@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import Localizations
 
 class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {

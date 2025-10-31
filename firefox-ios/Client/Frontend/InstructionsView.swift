@@ -4,6 +4,8 @@
 
 import SwiftUI
 import UIKit
+import Common
+import Localizations
 
 protocol InstructionsViewDelegate: AnyObject {
     @MainActor
