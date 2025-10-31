@@ -93,7 +93,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel3
     }
 
-    private lazy var goToSettingsButton: PrimaryRoundedGlassButton = .build { button in
+    private lazy var goToSettingsButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
     }
 

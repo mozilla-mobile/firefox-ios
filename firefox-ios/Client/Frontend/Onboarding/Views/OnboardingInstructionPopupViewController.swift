@@ -61,7 +61,7 @@ class OnboardingInstructionPopupViewController: UIViewController,
         stack.spacing = UX.textStackViewSpacing
     }
 
-    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
+    private lazy var primaryButton: PrimaryRoundedGlassButton = .build { button in
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
     }
 
