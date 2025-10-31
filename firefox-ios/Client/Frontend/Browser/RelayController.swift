@@ -17,7 +17,7 @@ protocol RelayControllerProtocol {
     /// - Parameter String: The website URL.
     /// - Returns: `true` if the website is valid for Relay, after checking block/allow lists.
     @MainActor
-    func emailFocusShouldDisplayRelayPrompt(origin: String) -> Bool
+    func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool
 }
 
 @MainActor
@@ -58,6 +58,7 @@ final class RelayController: RelayControllerProtocol {
     private let logger: Logger
     private let profile: Profile
     private let config: RelayClientConfiguration
+    private var relayRSClient: RelayRemoteSettingsClient?
     private var client: RelayClient?
 
     // MARK: - Init
@@ -68,19 +69,25 @@ final class RelayController: RelayControllerProtocol {
         self.logger = logger
         self.profile = profile
         self.config = config
+        if let rsService = profile.remoteSettingsService {
+            relayRSClient = RelayRemoteSettingsClient(rsService: rsService)
+        } else {
+            logger.log("[RELAY] No RS service available on profile.", level: .warning, category: .autofill)
+        }
     }
 
     // MARK: - RelayControllerProtocol
 
-    func emailFocusShouldDisplayRelayPrompt(origin: String) -> Bool {
+    func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool {
         guard Self.isFeatureEnabled else { return false }
+        guard let relayRSClient else { return false }
 
         // Phase 1: we only show Relay for existing signed-in accounts with Relay service
         guard hasRelayAccount() else { return false }
 
-        // TODO: [FXIOS-13625] Check allow-list via RelayRemoteSettingsClient
-        // https://github.com/mozilla/application-services/pull/7039/files
-        return true
+        guard let domain = url.baseDomain, let host = url.normalizedHost else { return false }
+        let shouldShow = relayRSClient.shouldShowRelay(host: host, domain: domain, isRelayUser: true)
+        return shouldShow
     }
 
     // MARK: - Private Utilities
