@@ -90,6 +90,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
 
     private lazy var doneButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
+        button.setTitle(.CreditCard.Settings.Done, for: .normal)
         button.setImage(UIImage(named: StandardImageIdentifiers.Large.checkmark), for: .normal)
         button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
         button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
