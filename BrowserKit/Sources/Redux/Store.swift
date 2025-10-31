@@ -11,6 +11,7 @@ import Common
 public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     typealias SubscriptionType = SubscriptionWrapper<State>
 
+    @MainActor
     public var state: State {
         didSet {
             subscriptions.forEach {
@@ -26,12 +27,14 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
 
     private var reducer: Reducer<State>
     private var middlewares: [Middleware<State>]
+    @MainActor
     private var subscriptions: Set<SubscriptionType> = []
     private var actionRunning = false
     private let logger: Logger
     private var actionQueue: [Action] = []
     private var isProcessingActions = false
 
+    @MainActor
     public init(state: State,
                 reducer: @escaping Reducer<State>,
                 middlewares: [Middleware<State>] = [],
@@ -43,11 +46,13 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
     }
 
     /// General subscription to app main state
+    @MainActor
     public func subscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State {
         subscribe(subscriber, transform: nil)
     }
 
     /// Adds support to subscribe to subState parts of the store's state
+    @MainActor
     public func subscribe<SubState, S: StoreSubscriber>(
         _ subscriber: S,
         transform: ((Subscription<State>) -> Subscription<SubState>)?
@@ -57,12 +62,14 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         subscribe(subscriber, mainSubscription: originalSubscription, transformedSubscription: transformedSubscription)
     }
 
+    @MainActor
     public func unsubscribe(_ subscriber: any StoreSubscriber) {
         if let index = subscriptions.firstIndex(where: { return $0.subscriber === subscriber }) {
             subscriptions.remove(at: index)
         }
     }
 
+    @MainActor
     public func unsubscribe<S: StoreSubscriber>(_ subscriber: S) where S.SubscriberStateType == State {
         if let index = subscriptions.firstIndex(where: { return $0.subscriber === subscriber }) {
             subscriptions.remove(at: index)
@@ -122,6 +129,7 @@ public final class Store<State: StateType & Sendable>: DefaultDispatchStore {
         state = newState
     }
 
+    @MainActor
     private func subscribe<SubState, S: StoreSubscriber>(
         _ subscriber: S,
         mainSubscription: Subscription<State>,

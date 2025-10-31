@@ -328,13 +328,15 @@ final class NativeErrorPageViewController: UIViewController,
 
     @objc
     private nonisolated func didTapReload() {
-        store.dispatchLegacy(
-            GeneralBrowserAction(
-                isNativeErrorPage: true,
-                windowUUID: self.windowUUID,
-                actionType: GeneralBrowserActionType.reloadWebsite
+        ensureMainThread {
+            store.dispatch(
+                GeneralBrowserAction(
+                    isNativeErrorPage: true,
+                    windowUUID: self.windowUUID,
+                    actionType: GeneralBrowserActionType.reloadWebsite
+                )
             )
-        )
+        }
     }
 
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {

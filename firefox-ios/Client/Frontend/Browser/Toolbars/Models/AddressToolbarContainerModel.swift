@@ -81,14 +81,14 @@ final class AddressToolbarContainerModel: Equatable {
                                                      gestureType: .tap,
                                                      windowUUID: self.windowUUID,
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
             },
             onLongPress: {
                 let action = ToolbarMiddlewareAction(buttonType: .locationView,
                                                      gestureType: .longPress,
                                                      windowUUID: self.windowUUID,
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
-                store.dispatchLegacy(action)
+                store.dispatch(action)
             })
         return AddressToolbarConfiguration(
             locationViewConfiguration: locationViewConfiguration,
@@ -190,6 +190,7 @@ final class AddressToolbarContainerModel: Equatable {
         )
     }
 
+    @MainActor
     init(
         state: ToolbarState,
         profile: Profile,
@@ -252,6 +253,7 @@ final class AddressToolbarContainerModel: Equatable {
         return searchEnginesManager.queryForSearchURL(searchURL)
     }
 
+    @MainActor
     private static func mapActions(_ actions: [ToolbarActionConfiguration],
                                    isShowingTopTabs: Bool,
                                    windowUUID: UUID) -> [ToolbarElement] {
@@ -283,15 +285,17 @@ final class AddressToolbarContainerModel: Equatable {
         }
     }
 
+    @MainActor
     private static func getA11yCustomAction(action: ToolbarActionConfiguration, windowUUID: UUID) -> (() -> Void)? {
         return action.a11yCustomActionName != nil ? {
             let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                  windowUUID: windowUUID,
                                                  actionType: ToolbarMiddlewareActionType.customA11yAction)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         } : nil
     }
 
+    @MainActor
     private static func getOnSelected(action: ToolbarActionConfiguration, windowUUID: UUID) -> ((UIButton) -> Void)? {
         return { button in
             let action = ToolbarMiddlewareAction(buttonType: action.actionType,
@@ -299,10 +303,11 @@ final class AddressToolbarContainerModel: Equatable {
                                                  gestureType: .tap,
                                                  windowUUID: windowUUID,
                                                  actionType: ToolbarMiddlewareActionType.didTapButton)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         }
     }
 
+    @MainActor
     private static func getOnLongPress(action: ToolbarActionConfiguration,
                                        windowUUID: UUID,
                                        isShowingTopTabs: Bool) -> ((UIButton) -> Void)? {
@@ -312,7 +317,7 @@ final class AddressToolbarContainerModel: Equatable {
                                                  gestureType: .longPress,
                                                  windowUUID: windowUUID,
                                                  actionType: ToolbarMiddlewareActionType.didTapButton)
-            store.dispatchLegacy(action)
+            store.dispatch(action)
         } : nil
     }
 
