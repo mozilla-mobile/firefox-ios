@@ -33,9 +33,10 @@ class StoriesWebviewViewController: UIViewController,
     }
 
     private lazy var domainLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Bold.body.scaledFont()
         label.numberOfLines = 1
-        label.text = self.webView.url?.normalizedHost ?? self.webView.url?.absoluteString ?? "X"
+        label.text = self.webView.url?.normalizedHost
     }
 
     private let shieldImageView: UIImageView = .build { imageView in
