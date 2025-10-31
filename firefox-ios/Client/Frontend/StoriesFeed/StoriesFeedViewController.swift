@@ -256,11 +256,9 @@ class StoriesFeedViewController: UIViewController,
     }
 
     // MARK: - Telemetry
-    /// Used to track impressions. If the user has already seen the item on the homepage, we only record the impression once.
-    /// We want to track at initial seen as well as when users scrolls.
-    /// A throttle is added in order to capture what the users has seen. When we scroll to top programmatically,
-    /// the impressions were being tracked, but to match user's perspective, we add a throttle to delay.
-    /// Time complexity: O(n) due to iterating visible items.
+    /// Used to track impressions. If the user has already seen the item in the feed,
+    /// we only record the impression once. We want to track at initial seen as well as
+    /// when users scrolls. A throttle is added in order to capture what the users has seen.
     private func trackVisibleItemImpressions() {
         trackingImpressionsThrottler.throttle { [self] in
             ensureMainThread {

@@ -28,9 +28,9 @@ homepage.stories_feed:
     description: |
       Recorded when a user closes the stories feed via the back button or swipe back gesture.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/28354
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29541
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28953
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -47,9 +47,9 @@ homepage.stories_feed:
         description: |
           The index of the story
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/28354
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29541
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28953
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -66,9 +66,9 @@ homepage.stories_feed:
         description: |
           The index of the story
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/28354
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29541
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28953
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
@@ -80,9 +80,9 @@ homepage.stories_feed:
     description: |
       Recorded when a user sees the stories feed screen.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/28354
+      - https://github.com/mozilla-mobile/firefox-ios/issues/29541
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/28953
+      - https://github.com/mozilla-mobile/firefox-ios/pull/30293
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-01-01"
