@@ -13,9 +13,10 @@ import OnboardingKit
 /// because defaults are not provided herein, but in the fml.
 class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
-
-    init(with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()) {
+    var onboardingVariant: OnboardingVariant
+    init(onboardingVariant: OnboardingVariant, with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()) {
         self.helperUtility = helperUtility
+        self.onboardingVariant = onboardingVariant
     }
 
     func getOnboardingModel(
@@ -45,7 +46,7 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return getOnboardingCards(
             from: cardData.filter {
                 $0.value.onboardingType == onboardingType &&
-                $0.value.uiVariant == .modern
+                $0.value.uiVariant == onboardingVariant
             },
             withConditions: conditionTable
         )
