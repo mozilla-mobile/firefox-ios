@@ -517,6 +517,7 @@ class BrowserViewController: UIViewController,
 
         crashTracker.updateData()
         ratingPromptManager.showRatingPromptIfNeeded()
+        _ = RelayController.shared // Ensure RelayController is init'd early to allow for account notification observers.
     }
 
     @objc
@@ -3915,6 +3916,10 @@ class BrowserViewController: UIViewController,
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
         navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
+
+    private func handleEmailFieldDetected() {
+        // TODO: Message Relay controller. Forthcoming. [FXIOS-13622] [FXIOS-13625]
+    }
 }
 
 extension BrowserViewController: LegacyClipboardBarDisplayHandlerDelegate {
@@ -4025,6 +4030,10 @@ extension BrowserViewController: LegacyTabDelegate {
         logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
             Task {
                 guard let tabURL = tab?.url else { return }
+
+                // Handle email fields separately; currently only used for email masking (Relay service)
+                guard field != .email else { self?.handleEmailFieldDetected(); return }
+
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
                 let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,
                                                                           tabURL: tabURL,
