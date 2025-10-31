@@ -98,6 +98,7 @@ nonisolated(unsafe) var store: any DefaultDispatchStore<AppState> = Store(
     middlewares: AppConstants.isRunningUnitTest ? [] : middlewares
 )
 #else
+@MainActor
 let store: any DefaultDispatchStore<AppState> = Store(state: AppState(),
                                                       reducer: AppState.reducer,
                                                       middlewares: middlewares)
