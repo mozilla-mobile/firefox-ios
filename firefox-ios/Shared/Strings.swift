@@ -6975,6 +6975,11 @@ extension String {
         tableName: "3DTouchActions",
         value: nil,
         comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
+    public static let TabPeekRemoveBookmark = MZLocalizedString(
+        key: "TabPeek.RemoveBookmark.v145",
+        tableName: "3DTouchActions",
+        value: "Remove Bookmark",
+        comment: "Label for preview action on Tab Tray Tab to remove current tab from Bookmarks")
     public static let TabPeekCopyUrl = MZLocalizedString(
         key: "Copy URL",
         tableName: "3DTouchActions",

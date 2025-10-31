@@ -7,6 +7,7 @@ import Common
 
 struct TabPeekState: ScreenState {
     let showAddToBookmarks: Bool
+    let showRemoveBookmark: Bool
     let showSendToDevice: Bool
     let showCopyURL: Bool
     let showCloseTab: Bool
@@ -26,6 +27,7 @@ struct TabPeekState: ScreenState {
 
         self.init(windowUUID: tabPeekState.windowUUID,
                   showAddToBookmarks: tabPeekState.showAddToBookmarks,
+                  showRemoveBookmark: tabPeekState.showRemoveBookmark,
                   showSendToDevice: tabPeekState.showSendToDevice,
                   showCopyURL: tabPeekState.showCopyURL,
                   showCloseTab: tabPeekState.showCloseTab,
@@ -35,6 +37,7 @@ struct TabPeekState: ScreenState {
 
     init(windowUUID: WindowUUID,
          showAddToBookmarks: Bool = false,
+         showRemoveBookmark: Bool = false,
          showSendToDevice: Bool = false,
          showCopyURL: Bool = true,
          showCloseTab: Bool = true,
@@ -42,6 +45,7 @@ struct TabPeekState: ScreenState {
          screenshot: UIImage = UIImage()) {
         self.windowUUID = windowUUID
         self.showAddToBookmarks = showAddToBookmarks
+        self.showRemoveBookmark = showRemoveBookmark
         self.showSendToDevice = showSendToDevice
         self.showCopyURL = showCopyURL
         self.showCloseTab = showCloseTab
@@ -62,6 +66,7 @@ struct TabPeekState: ScreenState {
             }
             return TabPeekState(windowUUID: state.windowUUID,
                                 showAddToBookmarks: tabPeekModel.canTabBeSaved,
+                                showRemoveBookmark: tabPeekModel.canTabBeRemoved,
                                 showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,
                                 showCopyURL: tabPeekModel.canCopyURL,
                                 previewAccessibilityLabel: tabPeekModel.accessiblityLabel,

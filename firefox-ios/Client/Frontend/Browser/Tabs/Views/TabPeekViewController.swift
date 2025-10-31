@@ -108,6 +108,18 @@ final class TabPeekViewController: UIViewController,
                 return
             })
         }
+        if tabPeekState.showRemoveBookmark {
+            actions.append(UIAction(title: .TabPeekRemoveBookmark,
+                                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmarkFill),
+                                    identifier: nil) { [weak self] _ in
+                guard let self else { return }
+                let action = TabPeekAction(tabUUID: self.tabModel.tabUUID,
+                                           windowUUID: self.windowUUID,
+                                           actionType: TabPeekActionType.removeBookmark)
+                store.dispatchLegacy(action)
+                return
+            })
+        }
         if tabPeekState.showCopyURL {
             actions.append(UIAction(title: .TabPeekCopyUrl,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),

@@ -13,7 +13,7 @@ import SummarizeKit
 import enum MozillaAppServices.BookmarkRoots
 
 @MainActor
-final class TabManagerMiddleware: FeatureFlaggable {
+final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark {    
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -24,6 +24,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     private let summarizationChecker: SummarizationCheckerProtocol
     private let summarizerServiceFactory: SummarizerServiceFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
+    var bookmarksHandler: BookmarksHandler
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
@@ -50,6 +51,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtility
         self.profile = profile
+        self.bookmarksHandler = profile.places
         self.summarizationChecker = summarizationChecker
         self.logger = logger
         self.summarizerServiceFactory = summarizerServiceFactory
@@ -114,6 +116,8 @@ final class TabManagerMiddleware: FeatureFlaggable {
             let shareItem = createShareItem(with: tabUUID, and: action.windowUUID)
             addToBookmarks(shareItem)
             setBookmarkQuickActions(with: shareItem, uuid: action.windowUUID)
+        case TabPeekActionType.removeBookmark:
+            removeBookmark(with: tabUUID, uuid: action.windowUUID)
         case TabPeekActionType.copyURL:
             copyURL(tabID: tabUUID, uuid: action.windowUUID)
 
@@ -797,6 +801,7 @@ final class TabManagerMiddleware: FeatureFlaggable {
                 browserProfile?.tabs.getClientGUIDs { (result, error) in
                     ensureMainThread {
                         let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                                 canTabBeRemoved: isBookmarked,
                                                  canCopyURL: !(tab?.isFxHomeTab ?? false),
                                                  isSyncEnabled: !(result?.isEmpty ?? true),
                                                  screenshot: tab?.screenshot ?? UIImage(),
@@ -1208,6 +1213,22 @@ final class TabManagerMiddleware: FeatureFlaggable {
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
+    }
+
+    func removeBookmark(with tabID: TabUUID, uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        guard let tab = tabManager.getTabForUUID(uuid: tabID),
+              let url = tab.url?.absoluteString, !url.isEmpty
+        else { return }
+
+        profile.places.deleteBookmarksWithURL(url: url)
+            .uponQueue(.main) { result in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    guard result.isSuccess else { return }
+                    self.removeBookmarkShortcut()
+                }
+            }
     }
 
     private func addToShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
