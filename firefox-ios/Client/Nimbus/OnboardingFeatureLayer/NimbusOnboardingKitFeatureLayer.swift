@@ -4,6 +4,7 @@
 
 import Shared
 import OnboardingKit
+import Common
 
 /// A translation layer for the `onboardingFrameworkFeature.fml`
 ///
@@ -13,31 +14,76 @@ import OnboardingKit
 /// because defaults are not provided herein, but in the fml.
 class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private var helperUtility: NimbusMessagingHelperUtilityProtocol
+    private let featureFlags: LegacyFeatureFlagsManager
+    private let themeManager: ThemeManager
 
-    init(with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility()) {
+    init(
+        with helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
+        featureFlags: LegacyFeatureFlagsManager = LegacyFeatureFlagsManager.shared,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
         self.helperUtility = helperUtility
+        self.featureFlags = featureFlags
+        self.themeManager = themeManager
     }
 
+    @MainActor
     func getOnboardingModel(
         for onboardingType: OnboardingType,
         from nimbus: FxNimbus = FxNimbus.shared
     ) -> OnboardingKitViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
+        // Get current state for relaunched onboarding
+        let currentToolbarPosition = getCurrentToolbarPosition()
+        let currentThemeAction = getCurrentThemeAction()
+
         let cards = getOrderedOnboardingCards(
             for: onboardingType,
             from: framework.cards,
-            withConditions: framework.conditions)
+            withConditions: framework.conditions,
+            currentToolbarPosition: currentToolbarPosition,
+            currentThemeAction: currentThemeAction)
 
         return OnboardingKitViewModel(
             cards: cards,
             isDismissible: framework.dismissable)
     }
 
+    /// Gets the current toolbar position if one has been set (for relaunched onboarding)
+    private func getCurrentToolbarPosition() -> SearchBarPosition? {
+        // Check if toolbar position has been explicitly set
+        // If nil, it means fresh install and we should use default
+        return featureFlags.getCustomState(for: .searchBarPosition)
+    }
+
+    /// Gets the current theme action based on ThemeManager state
+    @MainActor
+    private func getCurrentThemeAction() -> OnboardingMultipleChoiceAction? {
+        // If system theme is on, return system default
+        if themeManager.systemThemeIsOn {
+            return .themeSystemDefault
+        }
+
+        // Otherwise, check manual theme
+        let manualTheme = themeManager.getUserManualTheme()
+        switch manualTheme {
+        case .light:
+            return .themeLight
+        case .dark:
+            return .themeDark
+        default:
+            // For other cases (nightMode, privateMode), default to system
+            return .themeSystemDefault
+        }
+    }
+
     private func getOrderedOnboardingCards(
         for onboardingType: OnboardingType,
         from cardData: [String: NimbusOnboardingCardData],
-        withConditions conditionTable: [String: String]
+        withConditions conditionTable: [String: String],
+        currentToolbarPosition: SearchBarPosition?,
+        currentThemeAction: OnboardingMultipleChoiceAction?
     ) -> [OnboardingKitCardInfoModel] {
         // Sorting the cards this way, instead of a simple sort, to account for human
         // error in the order naming. If a card name is misspelled, it will be ignored
@@ -47,12 +93,21 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 $0.value.onboardingType == onboardingType &&
                 $0.value.uiVariant == .modern
             },
-            withConditions: conditionTable
+            withConditions: conditionTable,
+            currentToolbarPosition: currentToolbarPosition,
+            currentThemeAction: currentThemeAction
         )
         .sorted(by: { $0.order < $1.order })
         // We have to update the a11yIdRoot using the correct order of the cards
         .enumerated()
         .map { index, card in
+            // Determine which current state to pass based on card name
+            let isToolbarCard = card.name.contains("toolbar")
+            let isThemeCard = card.name.contains("theme")
+
+            let toolbarPosition = isToolbarCard ? currentToolbarPosition : nil
+            let themeAction = isThemeCard ? currentThemeAction : nil
+
             return OnboardingKitCardInfoModel(
                 cardType: card.cardType,
                 name: card.name,
@@ -65,13 +120,18 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 onboardingType: card.onboardingType,
                 a11yIdRoot: "\(card.a11yIdRoot)\(index)",
                 imageID: card.imageID,
-                instructionsPopup: card.instructionsPopup)
+                instructionsPopup: card.instructionsPopup,
+                embededLinkText: card.embededLinkText,
+                currentToolbarPosition: toolbarPosition,
+                currentThemeAction: themeAction)
         }
     }
 
     private func getOnboardingCards(
         from cardData: [String: NimbusOnboardingCardData],
-        withConditions conditionTable: [String: String]
+        withConditions conditionTable: [String: String],
+        currentToolbarPosition: SearchBarPosition?,
+        currentThemeAction: OnboardingMultipleChoiceAction?
     ) -> [OnboardingKitCardInfoModel] {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
@@ -83,6 +143,13 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
         return cardData.compactMap { cardName, cardData in
             if cardIsValid(with: cardData, using: conditionTable, and: helper) {
+                // Determine which current state to pass based on card type
+                let isToolbarCard = cardName.contains("toolbar")
+                let isThemeCard = cardName.contains("theme")
+
+                let toolbarPosition = isToolbarCard ? currentToolbarPosition : nil
+                let themeAction = isThemeCard ? currentThemeAction : nil
+
                 return OnboardingKitCardInfoModel(
                     cardType: OnboardingKit.OnboardingCardType(rawValue: cardData.cardType.rawValue) ?? .basic,
                     name: cardName,
@@ -102,7 +169,10 @@ class NimbusOnboardingKitFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                     imageID: getOnboardingHeaderImageID(from: cardData.image),
                     instructionsPopup: getPopupInfoModel(
                         from: cardData.instructionsPopup,
-                        withA11yID: "")
+                        withA11yID: ""),
+                    embededLinkText: [],
+                    currentToolbarPosition: toolbarPosition,
+                    currentThemeAction: themeAction
                 )
             }
 

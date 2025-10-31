@@ -101,6 +101,7 @@ final class LaunchCoordinator: BaseCoordinator,
                 order: 20,
                 title: .Onboarding.Modern.TermsOfService.Title,
                 body: .Onboarding.Modern.TermsOfService.Subtitle,
+                link: nil,
                 buttons: OnboardingKit.OnboardingButtons(
                     primary: OnboardingKit.OnboardingButtonInfoModel(
                         title: .Onboarding.Modern.TermsOfService.AgreementButtonTitleV3,
@@ -111,6 +112,7 @@ final class LaunchCoordinator: BaseCoordinator,
                 onboardingType: .freshInstall,
                 a11yIdRoot: AccessibilityIdentifiers.TermsOfService.root,
                 imageID: ImageIdentifiers.homeHeaderLogoBall,
+                instructionsPopup: nil,
                 embededLinkText: [
                     EmbeddedLink(
                         fullText: termsOfServiceAgreement,
@@ -178,8 +180,8 @@ final class LaunchCoordinator: BaseCoordinator,
         )
 
         let viewController = PortraitOnlyHostingController(rootView: view)
-        viewController.modalPresentationStyle = .fullScreen
-        viewController.modalTransitionStyle = .crossDissolve
+        viewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        viewController.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
         viewController.transitioningDelegate = modernTransitionDelegate
 
         router.present(viewController, animated: true)
@@ -250,7 +252,7 @@ final class LaunchCoordinator: BaseCoordinator,
     @MainActor
     private func presentModernIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                               isFullScreen: Bool) {
-        let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let onboardingModel = NimbusOnboardingKitFeatureLayer().getOnboardingModel(for: OnboardingType.freshInstall)
         let activityEventHelper = ActivityEventHelper()
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
 
@@ -297,8 +299,8 @@ final class LaunchCoordinator: BaseCoordinator,
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)
-        hostingController.modalPresentationStyle = .fullScreen
-        hostingController.modalTransitionStyle = .crossDissolve
+        hostingController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        hostingController.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
         hostingController.transitioningDelegate = modernTransitionDelegate
 
         router.present(hostingController, animated: true)
