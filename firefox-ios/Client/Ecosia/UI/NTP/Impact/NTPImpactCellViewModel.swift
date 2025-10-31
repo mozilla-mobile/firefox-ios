@@ -14,8 +14,8 @@ protocol NTPImpactCellDelegate: AnyObject {
 final class NTPImpactCellViewModel {
     weak var delegate: NTPImpactCellDelegate?
     var infoItemSections: [[ClimateImpactInfo]] {
-        let firstSection: [ClimateImpactInfo] = [referralInfo]
-        let secondSection: [ClimateImpactInfo] = [totalTreesInfo, totalInvestedInfo]
+        let firstSection: [ClimateImpactInfo] = [totalTreesInfo, totalInvestedInfo]
+        let secondSection: [ClimateImpactInfo] = [referralInfo]
         return [firstSection, secondSection]
     }
     var referralInfo: ClimateImpactInfo {
