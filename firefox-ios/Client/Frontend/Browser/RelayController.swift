@@ -17,7 +17,7 @@ protocol RelayControllerProtocol {
     /// - Parameter String: The website URL.
     /// - Returns: `true` if the website is valid for Relay, after checking block/allow lists.
     @MainActor
-    func emailFocusShouldDisplayRelayPrompt(url: String) -> Bool
+    func emailFocusShouldDisplayRelayPrompt(origin: String) -> Bool
 }
 
 @MainActor
@@ -47,13 +47,13 @@ final class RelayController: RelayControllerProtocol {
 
     // MARK: - RelayControllerProtocol
 
-    func emailFocusShouldDisplayRelayPrompt(url: String) -> Bool {
+    func emailFocusShouldDisplayRelayPrompt(origin: String) -> Bool {
         guard Self.isFeatureEnabled else { return false }
 
-        // TODO: Check for Relay OAuth attached client. Forthcoming.
-        guard profile.hasAccount() else { return false }
+        // Phase 1: we only show Relay for existing signed-in accounts with Relay service
+        guard hasRelayAccount() else { return false }
 
-        // TODO: [FXIOS-13625] Forthcoming.
+        // TODO: [FXIOS-13625] Check allow-list. Forthcoming.
         return true
     }
 
