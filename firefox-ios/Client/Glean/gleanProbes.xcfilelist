@@ -7,6 +7,8 @@ $(PROJECT_DIR)/Client/Glean/probes/autofill.credit_cards.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.password_generator.yaml
 $(PROJECT_DIR)/Client/Glean/probes/autofill.passwords.yaml
 $(PROJECT_DIR)/Client/Glean/probes/history.yaml
+$(PROJECT_DIR)/Client/Glean/probes/homepage.shortcuts_library.yaml
+$(PROJECT_DIR)/Client/Glean/probes/homepage.stories_feed.yaml
 $(PROJECT_DIR)/Client/Glean/probes/library.bookmarks_panel.yaml
 $(PROJECT_DIR)/Client/Glean/probes/library.downloads_panel.yaml
 $(PROJECT_DIR)/Client/Glean/probes/library.history_panel.yaml
@@ -15,7 +17,6 @@ $(PROJECT_DIR)/Client/Glean/probes/metrics.yaml
 $(PROJECT_DIR)/Client/Glean/probes/microsurvey.yaml
 $(PROJECT_DIR)/Client/Glean/probes/settings.yaml
 $(PROJECT_DIR)/Client/Glean/probes/share_sheet.yaml
-$(PROJECT_DIR)/Client/Glean/probes/homepage.shortcuts_library.yaml
 $(PROJECT_DIR)/Client/Glean/probes/tabs_panel.yaml
 $(PROJECT_DIR)/Client/Glean/probes/terms_of_use.yaml
 $(PROJECT_DIR)/Client/Glean/probes/toast.yaml

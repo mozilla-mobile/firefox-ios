@@ -75,6 +75,9 @@ ReadingListPanel:
 ShortcutsLibrary:
   description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
 
+StoriesFeed:
+  description: Corresponds to the stories feed screen where the user can interact with an expanded list of stories.
+
 Summarizer:
   description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
 
@@ -97,12 +100,13 @@ Toolbar:
   description: Corresponds to the toolbar which contains both the address bar and the navigation bar.
 
 TopSites:
-  description: Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)
+  description:
+    Corresponds to the [Feature:TopSites](https://mozilla-hub.atlassian.net/browse/FXIOS-3464)
     label on GitHub.
 
 TrackingProtection:
   description: Corresponds to the enhanced tracking protection bottom sheet which can be displayed over a webpage.
-  
+
 User:
   description: Corresponds to user properties and settings.
 
