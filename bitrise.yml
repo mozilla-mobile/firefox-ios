@@ -1326,12 +1326,11 @@ workflows:
             GCLOUD_OUTPUT=$($HOME/sdk/google-cloud-sdk/bin/gcloud beta firebase test ios run \
                 --type robo \
                 --app "$BITRISE_IPA_PATH" \
-                --device=model=iphonese3,version=18.4 \
+                --device=model=iphonese3,version=18.2 \
                 --device=model=iphone8,version=16.6 \
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --client-details=matrixLabel="Bitrise" \
-                --environment-variables=FIREFOX_SKIP_INTRO=1,FIREFOX_TEST=1 \
                 --quiet 2>&1)
 
             GCLOUD_EXITCODE=$? # this will get the right-most command from the gcloud subshell
