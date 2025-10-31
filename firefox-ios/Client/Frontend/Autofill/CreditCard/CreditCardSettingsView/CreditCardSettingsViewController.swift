@@ -163,7 +163,11 @@ class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePrese
             viewModel.cardInputViewModel.creditCard = creditCard
         }
         viewModel.cardInputViewModel.updateState(state: editState)
-        creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel, windowUUID: windowUUID)
+        creditCardEditView = CreditCardInputView(
+            viewModel: viewModel.cardInputViewModel,
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
         viewModel.cardInputViewModel.dismiss = { [weak self] status, successVal in
             DispatchQueue.main.async {
                 if successVal {

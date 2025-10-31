@@ -53,12 +53,16 @@ class AddCredentialViewController: UIViewController, Themeable {
     fileprivate lazy var saveButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             title: .SettingsAddCustomEngineSaveButtonText,
-            style: .done,
+            style: .plain,
             target: self,
             action: #selector(addCredential)
         )
         button.isEnabled = false
-        button.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+        if #available(iOS 26.0, *) {
+            button.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.textAccent
+        } else {
+            button.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
+        }
         return button
     }()
 
