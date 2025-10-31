@@ -277,9 +277,9 @@ class StoriesFeedViewController: UIViewController,
                                  size: collectionView.bounds.size)
 
         for indexPath in collectionView.indexPathsForVisibleItems {
-            guard let attrs = collectionView.layoutAttributesForItem(at: indexPath) else { continue }
+            guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else { continue }
 
-            let cellFrame = attrs.frame
+            let cellFrame = attributes.frame
             let intersection = visibleRect.intersection(cellFrame)
             guard !intersection.isNull else { continue }
 
@@ -287,7 +287,7 @@ class StoriesFeedViewController: UIViewController,
             let visibleArea = intersection.width * intersection.height
             let ratio = visibleArea / max(cellArea, 1)
 
-            if ratio >= 0.5 {
+            if ratio >= impressionsTracker.impressionThreshold {
                 impressionsTracker.markPending(indexPath)
             }
 

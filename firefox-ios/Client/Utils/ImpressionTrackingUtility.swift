@@ -3,8 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 final class ImpressionTrackingUtility {
+    var impressionThreshold: Double
     private var sent = Set<IndexPath>()
     private var pending = Set<IndexPath>()
+
+    init(withCustomThreshold threshold: Double = 0.5) {
+        self.impressionThreshold = threshold
+    }
 
     func markPending(_ indexPath: IndexPath) {
         pending.insert(indexPath)
