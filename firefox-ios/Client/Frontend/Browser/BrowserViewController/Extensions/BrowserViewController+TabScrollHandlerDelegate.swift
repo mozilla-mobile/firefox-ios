@@ -89,7 +89,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         header.updateAlphaForSubviews(alpha)
 
         if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
+            store.dispatch(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
@@ -114,7 +114,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         bottomContainer.superview?.setNeedsLayout()
 
         if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
+            store.dispatch(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
@@ -140,7 +140,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         }
 
         if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
+            store.dispatch(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: windowUUID,
@@ -168,7 +168,7 @@ extension BrowserViewController: TabScrollHandler.Delegate {
         }
 
         if shouldSendAlphaChangeAction {
-            store.dispatchLegacy(
+            store.dispatch(
                 ToolbarAction(
                     scrollAlpha: Float(alpha),
                     windowUUID: self.windowUUID,
