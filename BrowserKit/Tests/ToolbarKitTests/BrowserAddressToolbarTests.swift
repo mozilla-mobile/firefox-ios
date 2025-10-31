@@ -135,7 +135,7 @@ final class BrowserAddressToolbarTests: XCTestCase {
     }
 
     // MARK: Test helper
-
+    @MainActor
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> BrowserAddressToolbar {
         let subject = BrowserAddressToolbar()
         trackForMemoryLeaks(subject, file: file, line: line)
