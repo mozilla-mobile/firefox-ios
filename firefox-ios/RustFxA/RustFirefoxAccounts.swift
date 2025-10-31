@@ -41,6 +41,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
     // https://searchfox.org/mozilla-central/rev/887d4b5da89a11920ed0fd96b7b7f066927a67db/services/fxaccounts/FxAccountsCommon.js#88
     public static let pushScope = "chrome://fxa-device-update"
     public static let shared = RustFirefoxAccounts()
+
     public var accountManager: FxAccountManager?
     public var avatar: Avatar?
     // TODO: FXIOS-12596 There is no need for this to be static. This should be an easier fix
