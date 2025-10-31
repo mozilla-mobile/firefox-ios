@@ -22,7 +22,7 @@ public struct EcosiaAISearchButton: View {
 
     public var body: some View {
         Button(action: onTap) {
-            Image("twinkle", bundle: .ecosia)
+            Image("ai-sparkle", bundle: .ecosia)
                 .resizable()
                 .renderingMode(.template)
                 .foregroundColor(theme.iconColor)
