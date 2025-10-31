@@ -44,7 +44,13 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                     .accessibilityLabel(viewModel.skipText)
                     .frame(maxWidth: .infinity, alignment: .trailing)
 
-                    tabView
+                    Group {
+                        if #available(iOS 17.0, *) {
+                            modernScrollViewCarousel
+                        } else {
+                            tabView
+                        }
+                    }
 
                     Spacer()
 
@@ -65,6 +71,22 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         }
         .accessibilityElement(children: .contain)
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
+    }
+
+    @available(iOS 17.0, *)
+    private var modernScrollViewCarousel: some View {
+        ScrollViewCarousel(
+            selection: $viewModel.pageCount,
+            items: viewModel.onboardingCards
+        ) { card in
+            OnboardingCardViewCompact(
+                viewModel: card,
+                windowUUID: windowUUID,
+                themeManager: themeManager,
+                onBottomButtonAction: viewModel.handleBottomButtonAction,
+                onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
+            )
+        }
     }
 
     private var tabView: some View {
