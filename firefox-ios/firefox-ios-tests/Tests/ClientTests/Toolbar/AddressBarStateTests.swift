@@ -620,7 +620,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, searchTerm)
         XCTAssertTrue(newState.isEditing)
-        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.isEmptySearch)

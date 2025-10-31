@@ -33,7 +33,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
     var notificationCenter: NotificationProtocol
-    private var currentAccessoryView: AutofillAccessoryViewButtonItem?
+    private var autofillAccessoryView: AutofillAccessoryViewButtonItem?
     let windowUUID: WindowUUID
 
     // Stub closures - these closures will be given as selectors in a future task
@@ -46,7 +46,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     var useStrongPasswordClosure: (() -> Void)?
 
     var hasAccessoryView: Bool {
-        return currentAccessoryView != nil
+        return autofillAccessoryView != nil
     }
     private var searchBarPosition: SearchBarPosition {
         return featureFlags.getCustomState(for: .searchBarPosition) ?? .bottom
@@ -206,7 +206,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         // Reset showing of credit card when dismissing the view
         // This is required otherwise it will always show credit card view
         // even if the input isn't of type credit card
-        currentAccessoryView = nil
+        autofillAccessoryView = nil
         configureToolbarItems()
     }
 
@@ -214,16 +214,16 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     func reloadViewFor(_ accessoryType: AccessoryType) {
         switch accessoryType {
         case .standard:
-            currentAccessoryView = nil
+            autofillAccessoryView = nil
         case .creditCard:
-            currentAccessoryView = creditCardAutofillView
+            autofillAccessoryView = creditCardAutofillView
             sendCreditCardAutofillPromptShownTelemetry()
         case .address:
-            currentAccessoryView = addressAutofillView
+            autofillAccessoryView = addressAutofillView
         case .login:
-            currentAccessoryView = loginAutofillView
+            autofillAccessoryView = loginAutofillView
         case .passwordGenerator:
-            currentAccessoryView = passwordGeneratorView
+            autofillAccessoryView = passwordGeneratorView
         }
         configureToolbarItems()
         layoutIfNeeded()
@@ -257,7 +257,6 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         setupHeightSpacer(toolbarTopHeightSpacer, height: UX.spacerViewHeight)
         setupSpacer(leadingFixedSpacer, width: UX.fixedLeadingSpacerWidth)
         setupSpacer(trailingFixedSpacer, width: UX.fixedTrailingSpacerWidth)
-        if #unavailable(iOS 26.0) { layer.cornerRadius = UX.cornerRadius }
 
         addSubview(toolbarTopHeightSpacer)
         if #available(iOS 26.0, *) {
@@ -278,6 +277,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
                 toolbar.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor)
             ])
         } else {
+            layer.cornerRadius = UX.cornerRadius
             addSubview(toolbar)
             NSLayoutConstraint.activate([
                 toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -303,16 +303,16 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         toolbar.setItems([
             navigationButtonsBarItem,
             .flexibleSpace(),
-            currentAccessoryView,
+            autofillAccessoryView,
             .flexibleSpace(),
             .fixedSpace(UX.fixedSpacerWidth),
             doneButton
         ].compactMap { $0 }, animated: true)
 
         toolbar.accessibilityElements = [
-            currentAccessoryView?.customView,
-            previousButton,
             nextButton,
+            previousButton,
+            autofillAccessoryView?.customView,
             doneButton.customView
         ].compactMap { $0 }
     }
@@ -326,8 +326,10 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
         } else {
             colors.layer5Hover
         }
-        if #available(iOS 26.0, *) { backgroundView.backgroundColor = colors.layerSurfaceMedium }
-        if #available(iOS 26.0, *) { backgroundView.layer.shadowColor = colors.shadowStrong.cgColor }
+        if #available(iOS 26.0, *) {
+            backgroundView.backgroundColor = colors.layerSurfaceMedium
+            backgroundView.layer.shadowColor = colors.shadowStrong.cgColor
+        }
 
         backgroundColor = .clear
         doneButton.customView?.tintColor = barButtonsTintColor
