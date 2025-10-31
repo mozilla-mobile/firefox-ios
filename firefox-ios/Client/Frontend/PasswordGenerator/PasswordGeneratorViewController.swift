@@ -244,18 +244,29 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     }
 
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            ensureMainThread {
-                self.applyDynamicFontChange()
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIContentSizeCategory.didChangeNotification:
+                ensureMainThread {
+                    self.applyDynamicFontChange()
+                }
+            case UIApplication.willResignActiveNotification:
+                store.dispatch(
+                    PasswordGeneratorAction(
+                        windowUUID: self.windowUUID,
+                        actionType: PasswordGeneratorActionType.hidePassword
+                    )
+                )
+            case UIApplication.didBecomeActiveNotification:
+                store.dispatch(
+                    PasswordGeneratorAction(
+                        windowUUID: self.windowUUID,
+                        actionType: PasswordGeneratorActionType.showPassword
+                    )
+                )
+            default: break
             }
-        case UIApplication.willResignActiveNotification:
-            store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                         actionType: PasswordGeneratorActionType.hidePassword))
-        case UIApplication.didBecomeActiveNotification:
-            store.dispatchLegacy(PasswordGeneratorAction(windowUUID: windowUUID,
-                                                         actionType: PasswordGeneratorActionType.showPassword))
-        default: break
         }
     }
 }

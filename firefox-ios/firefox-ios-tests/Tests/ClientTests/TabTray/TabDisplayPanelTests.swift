@@ -17,6 +17,7 @@ final class TabDisplayPanelTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
+    @MainActor
     func testExpandedInactiveTabs_InitialState() {
         let subject = createSubject(isPrivateMode: false,
                                     emptyTabs: false,
@@ -25,6 +26,7 @@ final class TabDisplayPanelTests: XCTestCase {
         XCTAssertTrue(subject.tabsState.isInactiveTabsExpanded)
     }
 
+    @MainActor
     func testIsPrivateTabsEmpty() {
         let subject = createSubject(isPrivateMode: true,
                                     emptyTabs: true,
@@ -33,6 +35,7 @@ final class TabDisplayPanelTests: XCTestCase {
         XCTAssertTrue(subject.tabsState.isPrivateTabsEmpty)
     }
 
+    @MainActor
     func testIsPrivateTabsNotEmpty() {
         let subject = createSubject(isPrivateMode: true,
                                     emptyTabs: false,
@@ -42,6 +45,7 @@ final class TabDisplayPanelTests: XCTestCase {
     }
 
     // MARK: - Private
+    @MainActor
     private func createSubject(isPrivateMode: Bool,
                                emptyTabs: Bool,
                                emptyInactiveTabs: Bool,

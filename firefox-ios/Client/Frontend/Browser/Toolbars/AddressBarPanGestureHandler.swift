@@ -106,7 +106,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
     }
 
     // MARK: - Redux
-    nonisolated func subscribeToRedux() {
+    func subscribeToRedux() {
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
