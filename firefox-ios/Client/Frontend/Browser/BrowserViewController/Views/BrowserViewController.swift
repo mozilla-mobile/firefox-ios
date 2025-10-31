@@ -2342,16 +2342,16 @@ class BrowserViewController: UIViewController,
                   selectedTabURL == webViewURL else { return }
 
             // TODO: FXIOS-12158 Add back after investigating why video player is broken
-            //        case .fullscreenState:
-            //            if #available(iOS 16.0, *) {
-            //                guard webView.fullscreenState == .enteringFullscreen ||
-            //                        webView.fullscreenState == .exitingFullscreen else { return }
-            //                if webView.fullscreenState == .enteringFullscreen {
-            //                    fullscreenDelegate?.enteringFullscreen()
-            //                } else {
-            //                    fullscreenDelegate?.exitingFullscreen()
-            //                }
-            //            }
+//        case .fullscreenState:
+//            if #available(iOS 16.0, *) {
+//                guard webView.fullscreenState == .enteringFullscreen ||
+//                        webView.fullscreenState == .exitingFullscreen else { return }
+//                if webView.fullscreenState == .enteringFullscreen {
+//                    fullscreenDelegate?.enteringFullscreen()
+//                } else {
+//                    fullscreenDelegate?.exitingFullscreen()
+//                }
+//            }
         default:
             assertionFailure("Unhandled KVO key: \(path.rawValue)")
         }
