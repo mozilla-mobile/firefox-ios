@@ -38,7 +38,8 @@ enum SearchLocation: String {
     case quickSearch = "quicksearch"
 }
 
-class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
+// FIXME: FXIOS-13987 Make truly thread safe
+class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable, @unchecked Sendable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
     static let shared = TelemetryWrapper()

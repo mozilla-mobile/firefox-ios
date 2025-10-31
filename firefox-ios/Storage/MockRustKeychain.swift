@@ -5,8 +5,10 @@
 import func MozillaAppServices.createCanary
 import func MozillaAppServices.createKey
 
+// FIXME: FXIOS-13988 Make truly thread safe
 class MockRustKeychain: @unchecked Sendable, KeychainProtocol {
     static let shared = MockRustKeychain()
+
     public let loginsKeyIdentifier = "testLoginsKey"
     public let loginsCanaryKeyIdentifier = "testLoginsCanaryKey"
     public let creditCardKeyIdentifier = "testCCKeyID"
