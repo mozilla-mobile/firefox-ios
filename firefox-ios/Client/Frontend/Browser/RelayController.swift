@@ -78,7 +78,8 @@ final class RelayController: RelayControllerProtocol {
         // Phase 1: we only show Relay for existing signed-in accounts with Relay service
         guard hasRelayAccount() else { return false }
 
-        // TODO: [FXIOS-13625] Check allow-list. Forthcoming.
+        // TODO: [FXIOS-13625] Check allow-list via RelayRemoteSettingsClient
+        // https://github.com/mozilla/application-services/pull/7039/files
         return true
     }
 
