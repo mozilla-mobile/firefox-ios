@@ -47,7 +47,7 @@ class BrowserViewController: UIViewController,
         static let minimalHeaderOffset: CGFloat = 14
 
         static let topToolbarDuration: TimeInterval = 0.3
-        static let bottomToolbarDuration: TimeInterval = 0.5
+        static let bottomToolbarDuration: TimeInterval = 0.4
     }
 
     /// Describes the state of the current search session. This state is used
@@ -223,11 +223,11 @@ class BrowserViewController: UIViewController,
     }()
 
     // MARK: Blur views for translucent toolbars
-    private lazy var topBlurView: UIVisualEffectView = .build { view in
+    lazy var topBlurView: UIVisualEffectView = .build { view in
         view.effect = self.effect
     }
 
-    private lazy var bottomBlurView: UIVisualEffectView = .build { view in
+    lazy var bottomBlurView: UIVisualEffectView = .build { view in
         view.effect = self.effect
     }
 
