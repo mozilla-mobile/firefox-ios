@@ -41,8 +41,8 @@ final class UserAgentBuilderTests: XCTestCase {
 
     func testDefaultMobileUserAgent() {
         let builder = UserAgentBuilder.defaultMobileUserAgent()
-        let systemInfo = "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)"
-        let extensions = "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)"
+        let systemInfo = "(\(UIDevice.current.model); CPU iPhone OS 18_7 like Mac OS X)"
+        let extensions = "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)"
         let testAgent = "\(UserAgent.product) \(systemInfo) \(UserAgent.platform) \(UserAgent.platformDetails) \(extensions)"
         XCTAssertEqual(builder.userAgent(), testAgent)
     }
