@@ -6,7 +6,7 @@ import Glean
 import UIKit
 @testable import Client
 
-class MockGleanWrapper: GleanWrapper {
+class MockGleanWrapper: GleanWrapper, @unchecked Sendable {
     var handleDeeplinkUrlCalled = 0
     var setUploadEnabledCalled = 0
     var recordEventCalled = 0
