@@ -208,14 +208,14 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationToolbar, initialState.navigationToolbar)
     }
 
-    func test_keyboardStateDidChangedAction_returnsExpectedState() {
+    func test_keyboardStateDidChangeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = toolbarReducer()
 
         let newState = reducer(
             initialState,
             ToolbarAction(
-                shouldShowKeyboard: false,
+                shouldShowKeyboard: true,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.keyboardStateDidChange)
         )
