@@ -65,7 +65,7 @@
 "Settings.AddressAutofill.Title.v126" = "地址";
 
 /* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
-"Settings.Appearance.NavigationToolbar.Description.v145" = "更改工具列正中間的按鈕。";
+"Settings.Appearance.NavigationToolbar.Description.v145" = "更改工具列正中間的按鈕外觀。";
 
 /* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
 "Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "工具列按鈕";

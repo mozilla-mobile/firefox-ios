@@ -18,6 +18,7 @@ final class TabPeekStateTests: XCTestCase {
         super.tearDown()
     }
 
+    @MainActor
     func testLoadTabPeekAction_showAddBookmarks_andSendToDevice() {
         let initialState = createSubject()
         let reducer = tabPeekReducer()
@@ -32,6 +33,7 @@ final class TabPeekStateTests: XCTestCase {
         XCTAssertEqual(newState.showSendToDevice, true)
     }
 
+    @MainActor
     func testLoadTabPeekAction_doesNotShowAddBookmarks_orSendToDevice() {
         let initialState = createSubject()
         let reducer = tabPeekReducer()
@@ -53,6 +55,7 @@ final class TabPeekStateTests: XCTestCase {
         XCTAssertEqual(newState.showSendToDevice, false)
     }
 
+    @MainActor
     func testLoadTabPeekAction_showBookmarks_andDoesNotShowDevice() {
         let initialState = createSubject()
         let reducer = tabPeekReducer()

@@ -10,15 +10,18 @@ import WebEngine
 
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
 protocol ReaderModeDelegate: AnyObject {
+    @MainActor
     func readerMode(
         _ readerMode: ReaderMode,
         didChangeReaderModeState state: ReaderModeState,
         forTab tab: Tab
     )
+    @MainActor
     func readerMode(
         _ readerMode: ReaderMode,
         didDisplayReaderizedContentForTab tab: Tab
     )
+    @MainActor
     func readerMode(
         _ readerMode: ReaderMode,
         didParseReadabilityResult readabilityResult: ReadabilityResult,
@@ -48,6 +51,7 @@ class ReaderMode: TabContentScript {
         return ["readerModeMessageHandler"]
     }
 
+    @MainActor
     fileprivate func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {
         switch readerPageEvent {
         case .pageShow:
@@ -57,6 +61,7 @@ class ReaderMode: TabContentScript {
         }
     }
 
+    @MainActor
     fileprivate func handleReaderModeStateChange(_ state: ReaderModeState) {
         self.state = state
         guard let tab else { return }

@@ -12,6 +12,10 @@ struct ToolbarTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
+    func middleButtonType(_ buttonType: NavigationBarMiddleButtonType) {
+        gleanWrapper.recordString(for: GleanMetrics.UserToolbar.middleButtonType, value: buttonType.rawValue)
+    }
+
     // Tap
     func qrCodeButtonTapped(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.QrScanButtonTappedExtra(isPrivate: isPrivate)

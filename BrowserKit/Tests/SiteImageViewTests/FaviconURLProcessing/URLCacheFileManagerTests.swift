@@ -57,6 +57,8 @@ final class MockFileManager: FileManagerProtocol, @unchecked Sendable {
         return []
     }
 
+    func moveItem(at: URL, to: URL) throws {}
+
     func removeItem(atPath path: String) throws {}
 
     func removeItem(at url: URL) throws {}

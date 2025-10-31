@@ -331,6 +331,17 @@ class ShortcutsLibraryViewController: UIViewController,
                 completion: nil
             )
         }
+        // Offset the toast by its height to prepare for slide-in animation
+        toast.transform = CGAffineTransform(translationX: 0, y: toast.frame.height)
+        UIView.animate(
+            withDuration: ButtonToast.UX.animationDuration,
+            delay: 0,
+            options: [.curveEaseOut],
+            animations: {
+                toast.transform = .identity
+            },
+            completion: nil
+        )
     }
 
     // MARK: - Selectors

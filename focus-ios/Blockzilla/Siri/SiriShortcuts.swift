@@ -5,7 +5,7 @@
 import Intents
 import IntentsUI
 
-class SiriShortcuts {
+final class SiriShortcuts {
     enum activityType: String {
         case erase = "EraseIntent"
         case eraseAndOpen = "org.mozilla.ios.Klar.eraseAndOpen"

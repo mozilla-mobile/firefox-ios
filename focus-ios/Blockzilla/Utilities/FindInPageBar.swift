@@ -12,7 +12,7 @@ protocol FindInPageBarDelegate: AnyObject {
     func findInPageDidPressClose(_ findInPage: FindInPageBar)
 }
 
-class FindInPageBar: UIView {
+final class FindInPageBar: UIView {
     weak var delegate: FindInPageBarDelegate?
     private let searchText = UITextField()
     private let matchCountView = UILabel()

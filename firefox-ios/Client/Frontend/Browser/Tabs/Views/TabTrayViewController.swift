@@ -405,6 +405,10 @@ final class TabTrayViewController: UIViewController,
             }
         }
 
+        if let enableDeleteTabsButton = tabTrayState.enableDeleteTabsButton {
+            deleteButton.isEnabled = enableDeleteTabsButton
+        }
+
         // Only apply normal theme when there's no on going animations
         if !themeAnimator.isAnimating && swipeFromIndex == nil {
             applyTheme()
@@ -869,7 +873,8 @@ final class TabTrayViewController: UIViewController,
             )
         }
 
-        alert.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
+        let tabsCountString = tabTrayState.isNormalTabsPanel ? tabTrayState.normalTabsCount : tabTrayState.privateTabsCount
+        alert.addAction(UIAlertAction(title: String(format: .TabsTray.TabTrayCloseTabsTitle, tabsCountString),
                                       style: .destructive,
                                       handler: { _ in
             self.confirmCloseAll()

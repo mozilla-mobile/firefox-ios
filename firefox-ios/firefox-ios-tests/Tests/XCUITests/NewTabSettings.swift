@@ -6,6 +6,11 @@ import XCTest
 
 let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
+    var browserScreen: BrowserScreen!
+    var newTabSettingsScreen: NewTabSettingsScreen!
+    var topSiteScreen: TopSitesScreen!
+    var toolbarScreen: ToolbarScreen!
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
@@ -20,6 +25,16 @@ class NewTabSettingsTest: BaseTestCase {
                 app.tables.cells["NewTabAsCustomURL"]
             ]
         )
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307026
+    // Smoketest TAE
+    func testCheckNewTabSettingsByDefault_TAE() {
+        newTabSettingsScreen = NewTabSettingsScreen(app: app)
+
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        newTabSettingsScreen.assertDefaultOptionsAreVisible()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027
@@ -47,6 +62,27 @@ class NewTabSettingsTest: BaseTestCase {
         // With swiping tabs on, the homepage is cached so it should be having those elements
         mozWaitForElementToExist(app.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToExist(app.links.staticTexts["YouTube"])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2307027
+    // Smoketest TAE
+    func testChangeNewTabSettingsShowBlankPage_TAE() {
+        topSiteScreen = TopSitesScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+
+        newTabSettingsScreen = NewTabSettingsScreen(app: app)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
+
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        // Keyboard is not focused with the experiment ON on iPhone
+        // For iPad the keyboard is shown
+        browserScreen.assertKeyboardFocusState(isFocusedOniPad: true)
+        // With swiping tabs on, the homepage is cached so it should be having those elements
+        topSiteScreen.assertYoutubeTopSitesExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307028
@@ -103,6 +139,30 @@ class NewTabSettingsTest: BaseTestCase {
                                 value: "mozilla")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2307029
+    // Smoketest TAE
+    func testChangeNewTabSettingsShowCustomURL_TAE() {
+        newTabSettingsScreen = NewTabSettingsScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        let targetURL = "mozilla.org"
+
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
+        // Check the placeholder value
+        newTabSettingsScreen.assertURLTextFieldPlaceholderContains(value: "Custom URL")
+        navigator.performAction(Action.SelectNewTabAsCustomURL)
+        // Check the value typed
+        newTabSettingsScreen.typeCustomURL(targetURL)
+        newTabSettingsScreen.assertURLTypedValueIsCorrect(targetURL)
+        // Open new page and check that the custom url is used
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        navigator.nowAt(NewTabScreen)
+        // Check that website is open
+        browserScreen.assertAddressBarContains(value: "mozilla", timeout: TIMEOUT)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307030
     func testChangeNewTabSettingsLabel() {
         navigator.nowAt(NewTabScreen)
@@ -148,6 +208,31 @@ class NewTabSettingsTest: BaseTestCase {
         validateKeyboardIsRaised()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306877
+    // Smoketest TAE
+    func testKeyboardNotRaisedWhenTabOpenedFromTabTray_TAE() {
+        newTabSettingsScreen = NewTabSettingsScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        toolbarScreen.assertSettingsButtonExists()
+        // Add New tab and set it as Blank
+        toolbarScreen.assertSettingsButtonExists()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        newTabSettingsScreen.assertNewTabNavigationBarIsVisible()
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        browserScreen.assertKeyboardBehaviorOnNewTab()
+
+        // Switch to Private Browsing
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+
+        browserScreen.assertKeyboardBehaviorOnNewTab()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
@@ -167,6 +252,30 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306875
+    // Smoketest TAE
+    func testNewTabCustomURLKeyboardNotRaised_TAE() {
+        toolbarScreen = ToolbarScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        newTabSettingsScreen = NewTabSettingsScreen(app: app)
+        let targetURL = "mozilla.org"
+
+        // Set a custom URL
+        toolbarScreen.assertSettingsButtonExists()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(NewTabSettings)
+        navigator.performAction(Action.SelectNewTabAsCustomURL)
+        // Check the value typed
+        newTabSettingsScreen.typeCustomURL(targetURL)
+        newTabSettingsScreen.assertURLTypedValueIsCorrect(targetURL)
+
+        // Open new page and check that the custom url is used and he keyboard is not raised up
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitUntilPageLoad()
+        browserScreen.assertURLAndKeyboardUnfocused(expectedURLValue: "mozilla")
+        browserScreen.tapOnAddressBar()
     }
 
     private func validateKeyboardIsRaisedAndDismissed() {

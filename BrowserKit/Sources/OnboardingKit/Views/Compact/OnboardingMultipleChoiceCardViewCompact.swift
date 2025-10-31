@@ -40,14 +40,8 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
     var body: some View {
         GeometryReader { geometry in
             cardContent(geometry: geometry)
-                .onAppear {
-                    applyTheme()
-                }
-                .listenToThemeChanges { window in
-                    guard window == windowUUID else { return }
-                    applyTheme()
-                }
         }
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     @ViewBuilder
@@ -59,6 +53,7 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
 
                 Spacer(minLength: UX.CardView.minContentSpacing)
                 OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
+                    theme: theme,
                     selection: $selectedAction,
                     items: viewModel.multipleChoiceButtons
                 )
@@ -114,9 +109,5 @@ struct OnboardingMultipleChoiceCardViewCompact<ViewModel: OnboardingCardInfoMode
             theme: theme,
             accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
         )
-    }
-
-    func applyTheme() {
-        theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 }

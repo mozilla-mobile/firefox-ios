@@ -20,6 +20,11 @@ protocol SettingsSelectorsSet {
     var LOGINS_CELL: Selector { get }
     var CREDIT_CARDS_CELL: Selector { get }
     var ADDRESS_CELL: Selector { get }
+    var CLEAR_PRIVATE_DATA_CELL: Selector { get }
+    var ALERT_OK_BUTTON: Selector { get }
+
+    // General
+    var NEW_TAB_CELL: Selector { get }
 
     var all: [Selector] { get }
 }
@@ -105,9 +110,28 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings", "autofill"]
     )
 
+    let CLEAR_PRIVATE_DATA_CELL = Selector.tableCellById(
+        "ClearPrivateData",
+        description: "Cell to initiate clearing private data",
+        groups: ["settings", "privacy"]
+    )
+
+    let ALERT_OK_BUTTON = Selector.buttonId(
+        "OK",
+        description: "OK button on confirmation alert",
+        groups: ["alert"]
+    )
+
+    let NEW_TAB_CELL = Selector.tableCellById(
+        "NewTab",
+        description: "Cell for New Tab option in Settings",
+        groups: ["settings"]
+    )
+
     var all: [Selector] {
         [SETTINGS_TABLE, DONE_BUTTON, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
          CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
-         PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL]
+         PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
+         CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL]
     }
 }

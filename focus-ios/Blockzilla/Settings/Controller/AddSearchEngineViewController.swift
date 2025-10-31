@@ -8,7 +8,7 @@ protocol AddSearchEngineDelegate: AnyObject {
     func addSearchEngineViewController(_ addSearchEngineViewController: AddSearchEngineViewController, name: String, searchTemplate: String)
 }
 
-class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
+final class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private let REQUEST_TIMEOUT: TimeInterval = 4
 
     private var delegate: AddSearchEngineDelegate

@@ -1289,7 +1289,8 @@ private extension BrowserViewController {
     // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
     // so we will block the creation of a new Webview with this check
     func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
-        return navigationAction.sourceFrame.request.url?.baseDomain == "paypal.com"
+        let domain = navigationAction.sourceFrame.request.url?.baseDomain ?? ""
+        return ["paypal.com", "shopify.com"].contains(domain)
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {

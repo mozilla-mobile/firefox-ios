@@ -60,7 +60,8 @@ enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
     }
 }
 
-class CreditCardBottomSheetViewModel {
+@MainActor
+final class CreditCardBottomSheetViewModel {
     private var logger: Logger
     let autofill: CreditCardProvider
     var creditCard: CreditCard? {
@@ -293,7 +294,7 @@ class CreditCardBottomSheetViewModel {
         return decryptedCardNum ?? ""
     }
 
-    private func listStoredCreditCards(completionHandler: @escaping ([CreditCard]?) -> Void) {
+    private func listStoredCreditCards(completionHandler: @Sendable @escaping ([CreditCard]?) -> Void) {
         autofill.listCreditCards(completion: { creditCards, error in
             guard let creditCards = creditCards,
                   error == nil else {

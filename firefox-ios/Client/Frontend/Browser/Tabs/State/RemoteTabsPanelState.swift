@@ -55,9 +55,11 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
     let devices: [Device]
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let panelState = store.state.screenState(RemoteTabsPanelState.self,
-                                                       for: .remoteTabsPanel,
-                                                       window: uuid) else {
+        guard let panelState = appState.screenState(
+            RemoteTabsPanelState.self,
+            for: .remoteTabsPanel,
+            window: uuid
+        ) else {
             self.init(windowUUID: uuid)
             return
         }

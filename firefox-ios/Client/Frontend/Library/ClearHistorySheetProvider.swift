@@ -19,6 +19,7 @@ class ClearHistorySheetProvider {
     /// - Parameters:
     ///   - viewController: The view controller the clear history prompt is shown on
     ///   - didComplete: Did complete a recent history clear up action
+    @MainActor
     func showClearRecentHistory(
         onViewController viewController: UIViewController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
@@ -29,6 +30,7 @@ class ClearHistorySheetProvider {
         viewController.present(alert, animated: true)
     }
 
+    @MainActor
     func createAlertAndConfigureWithArrowIfNeeded(from viewController: UIViewController) -> UIAlertController {
         let alert = UIAlertController(title: .LibraryPanel.History.ClearHistorySheet.Title,
                                       message: nil,
@@ -48,6 +50,7 @@ class ClearHistorySheetProvider {
         return alert
     }
 
+    @MainActor
     func setupActions(
         for alert: UIAlertController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
@@ -57,6 +60,7 @@ class ClearHistorySheetProvider {
         addCancelAction(to: alert)
     }
 
+    @MainActor
     func addDeleteSomeData(
         to alert: UIAlertController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
@@ -84,6 +88,7 @@ class ClearHistorySheetProvider {
         }
     }
 
+    @MainActor
     func addDeleteEverythingOption(
         to alert: UIAlertController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
@@ -107,6 +112,7 @@ class ClearHistorySheetProvider {
         })
     }
 
+    @MainActor
     func addCancelAction(to alert: UIAlertController) {
         let cancelAction = UIAlertAction(title: .CancelString, style: .cancel)
         alert.addAction(cancelAction)

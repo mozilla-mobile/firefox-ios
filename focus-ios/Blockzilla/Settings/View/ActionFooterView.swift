@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ActionFooterView: UIView {
+final class ActionFooterView: UIView {
     lazy var textLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel

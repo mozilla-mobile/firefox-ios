@@ -8,6 +8,7 @@ import Redux
 import UIKit
 
 class StoriesFeedViewController: UIViewController,
+                                 UICollectionViewDelegate,
                                  StoreSubscriber,
                                  Themeable {
     // MARK: - Themeable Properties
@@ -116,6 +117,10 @@ class StoriesFeedViewController: UIViewController,
     private func setupNavigationBar(animated: Bool) {
         title = .FirefoxHomepage.Pocket.AllStories.AllStoriesViewTitle
         navigationController?.setNavigationBarHidden(false, animated: animated)
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 
     private func configureCollectionView() {
@@ -126,6 +131,7 @@ class StoriesFeedViewController: UIViewController,
         }
 
         collectionView.backgroundColor = .clear
+        collectionView.delegate = self
 
         self.collectionView = collectionView
     }
@@ -152,12 +158,10 @@ class StoriesFeedViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
+        let sectionProvider = StoriesFeedSectionLayoutProvider()
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
-            let section = StoriesFeedSectionLayoutProvider.createStoriesFeedSectionLayout(
-                for: environment
-            )
-            return section
+            return sectionProvider.createStoriesFeedSectionLayout(for: environment)
         }
         return layout
     }
@@ -194,6 +198,34 @@ class StoriesFeedViewController: UIViewController,
             let totalCount = dataSource?.snapshot().numberOfItems(inSection: .stories)
             storiesCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
             return storiesCell
+        }
+    }
+
+    // MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataSource?.itemIdentifier(for: indexPath) else {
+            self.logger.log(
+                "Item selected at \(indexPath) but does not navigate anywhere",
+                level: .debug,
+                category: .homepage
+            )
+            return
+        }
+
+        switch item {
+        case .stories(let config):
+            let destination = NavigationDestination(
+                .storiesWebView,
+                url: config.url,
+                visitType: .link
+            )
+            store.dispatch(
+                NavigationBrowserAction(
+                    navigationDestination: destination,
+                    windowUUID: windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnCell
+                )
+            )
         }
     }
 

@@ -8,7 +8,8 @@ import Common
 
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
-final class HomepageMiddleware: FeatureFlaggable {
+@MainActor
+final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private let homepageTelemetry: HomepageTelemetry
     private let notificationCenter: NotificationProtocol
     private let windowManager: WindowManager
@@ -74,7 +75,7 @@ final class HomepageMiddleware: FeatureFlaggable {
     }
 
     private func dispatchSearchBarConfigurationAction(action: Action) {
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 isSearchBarEnabled: self.shouldShowSearchBar(),
                 windowUUID: action.windowUUID,
@@ -84,7 +85,7 @@ final class HomepageMiddleware: FeatureFlaggable {
     }
 
     private func dispatchSpacerConfigurationAction(action: Action) {
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 shouldShowSpacer: self.shouldShowSpacer(),
                 windowUUID: action.windowUUID,
@@ -123,56 +124,55 @@ final class HomepageMiddleware: FeatureFlaggable {
             .RustPlacesOpened
         ]
 
-        notifications.forEach {
-            notificationCenter.addObserver(
-                self,
-                selector: #selector(handleNotifications),
-                name: $0,
-                object: nil
-            )
-        }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: notifications
+        )
     }
 
-    @objc
-    private func handleNotifications(_ notification: Notification) {
+    func handleNotifications(_ notification: Notification) {
         // This update occurs for all windows and we need to pass along
         // the windowUUID to any subsequent actions or state changes.
         // Time complexity: O(n), where n is the number of windows in windowManager.windows
         // In the case of the phone layout, there should only be one window so n = 1
 
         // TODO: FXIOS-12199 Update to improve how we handle notifications for multi-window
-        windowManager.windows.forEach { windowUUID, _ in
-            switch notification.name {
-            case UIApplication.willEnterForegroundNotification:
-                let storiesAction = HomepageAction(
-                    windowUUID: windowUUID,
-                    actionType: HomepageMiddlewareActionType.enteredForeground
-                )
-                store.dispatchLegacy(storiesAction)
+        let notificationName = notification.name
+        ensureMainThread {
+            self.windowManager.windows.forEach { windowUUID, _ in
+                switch notificationName {
+                case UIApplication.willEnterForegroundNotification:
+                    let storiesAction = HomepageAction(
+                        windowUUID: windowUUID,
+                        actionType: HomepageMiddlewareActionType.enteredForeground
+                    )
+                    store.dispatch(storiesAction)
 
-            case .PrivateDataClearedHistory,
-                    .TopSitesUpdated,
-                    .DefaultSearchEngineUpdated:
-                dispatchActionToFetchTopSites(windowUUID: windowUUID)
+                case .PrivateDataClearedHistory,
+                        .TopSitesUpdated,
+                        .DefaultSearchEngineUpdated:
+                    self.dispatchActionToFetchTopSites(windowUUID: windowUUID)
 
-            case .BookmarksUpdated, .RustPlacesOpened:
-                let bookmarksAction = HomepageAction(
-                    windowUUID: windowUUID,
-                    actionType: HomepageMiddlewareActionType.bookmarksUpdated
-                )
-                store.dispatchLegacy(bookmarksAction)
+                case .BookmarksUpdated, .RustPlacesOpened:
+                    let bookmarksAction = HomepageAction(
+                        windowUUID: windowUUID,
+                        actionType: HomepageMiddlewareActionType.bookmarksUpdated
+                    )
+                    store.dispatch(bookmarksAction)
 
-            case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
-                dispatchActionToFetchTopSites(windowUUID: windowUUID)
-                dispatchActionToFetchTabs(windowUUID: windowUUID)
+                case .ProfileDidFinishSyncing, .FirefoxAccountChanged:
+                    self.dispatchActionToFetchTopSites(windowUUID: windowUUID)
+                    self.dispatchActionToFetchTabs(windowUUID: windowUUID)
 
-            default: break
+                default: break
+                }
             }
         }
     }
 
     private func dispatchActionToFetchTopSites(windowUUID: WindowUUID) {
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.topSitesUpdated
@@ -181,13 +181,13 @@ final class HomepageMiddleware: FeatureFlaggable {
     }
 
     private func dispatchActionToFetchTabs(windowUUID: WindowUUID) {
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.jumpBackInLocalTabsUpdated
             )
         )
-        store.dispatchLegacy(
+        store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,
                 actionType: HomepageMiddlewareActionType.jumpBackInRemoteTabsUpdated

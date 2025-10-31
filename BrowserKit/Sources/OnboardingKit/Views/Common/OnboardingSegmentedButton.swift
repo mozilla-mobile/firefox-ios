@@ -7,9 +7,22 @@ import Common
 import ComponentLibrary
 
 struct OnboardingSegmentedButton<Action: Equatable & Hashable & Sendable>: View {
+    let theme: Theme
     let item: OnboardingMultipleChoiceButtonModel<Action>
     let isSelected: Bool
     let action: () -> Void
+
+    init(
+        theme: Theme,
+        item: OnboardingMultipleChoiceButtonModel<Action>,
+        isSelected: Bool,
+        action: @escaping () -> Void
+    ) {
+        self.theme = theme
+        self.item = item
+        self.isSelected = isSelected
+        self.action = action
+    }
 
     var body: some View {
         Button {
@@ -41,7 +54,7 @@ struct OnboardingSegmentedButton<Action: Equatable & Hashable & Sendable>: View 
             VStack {
                 Text(item.title)
                     .font(.footnote)
-                    .foregroundColor(.primary)
+                    .foregroundColor(Color(theme.colors.textPrimary))
                     .multilineTextAlignment(.center)
             }
 

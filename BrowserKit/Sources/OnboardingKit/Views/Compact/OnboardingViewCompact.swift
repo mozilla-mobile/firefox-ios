@@ -10,11 +10,11 @@ private struct LocalUX {
     static let horizontalPadding: CGFloat = 24.0
 }
 
-struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
+struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: ThemeableView {
     @StateObject private var viewModel: OnboardingFlowViewModel<ViewModel>
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
-    @State private var theme: Theme
+    @State var theme: Theme
 
     init(
         windowUUID: WindowUUID,
@@ -41,13 +41,10 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     }
                     .padding(.trailing, UX.Onboarding.Spacing.standard)
                     .skipButtonStyle(theme: theme)
-                    .accessibilitySortPriority(2)
                     .accessibilityLabel(viewModel.skipText)
                     .frame(maxWidth: .infinity, alignment: .trailing)
 
                     tabView
-                        .accessibilitySortPriority(1)
-                        .accessibilityElement(children: .contain)
 
                     Spacer()
 
@@ -60,18 +57,14 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     )
                     .padding(.bottom, pageControllPadding(safeAreaBottomInset: geo.safeAreaInsets.bottom))
                 }
+                .accessibilityScrollAction { edge in
+                    handleAccessibilityScroll(from: edge)
+                }
                 .ignoresSafeArea(.all, edges: .bottom)
             }
         }
-        .onAppear {
-            applyTheme()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            withAnimation {
-                applyTheme()
-            }
-        }
+        .accessibilityElement(children: .contain)
+        .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
 
     private var tabView: some View {
@@ -81,7 +74,7 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     viewModel: card,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
-                    onBottomButtonAction: viewModel.handleBottomButtonAction,
+                    onBottomButtonAction: handleBottomButtonAction,
                     onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
                 )
                 .tag(index)
@@ -100,7 +93,25 @@ struct OnboardingViewCompact<ViewModel: OnboardingCardInfoModelProtocol>: View {
         return safeAreaBottomInset * 0.5
     }
 
-    private func applyTheme() {
-        theme = themeManager.getCurrentTheme(for: windowUUID)
+    private func handleAccessibilityScroll(from edge: Edge) {
+        if edge == .leading {
+            viewModel.scrollToPreviousPage()
+        } else if edge == .trailing {
+            viewModel.scrollToNextPage()
+        }
+        switch edge {
+        case .leading, .trailing:
+            DispatchQueue.main.async {
+                UIAccessibility.post(notification: .screenChanged, argument: nil)
+            }
+        default: break
+        }
+    }
+
+    private func handleBottomButtonAction(action: ViewModel.OnboardingActionType, card: String) {
+        viewModel.handleBottomButtonAction(action: action, cardName: card)
+        if action.rawValue.contains("forward") {
+            UIAccessibility.post(notification: .screenChanged, argument: nil)
+        }
     }
 }

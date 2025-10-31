@@ -15,6 +15,7 @@ final class MessageCardStateTests: XCTestCase {
         XCTAssertNil(initialState.messageCardConfiguration)
     }
 
+    @MainActor
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = messageCardReducer()
@@ -38,6 +39,7 @@ final class MessageCardStateTests: XCTestCase {
         XCTAssertEqual(newState.messageCardConfiguration?.buttonLabel, "Example Button")
     }
 
+    @MainActor
     func test_tappedOnActionButton_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = messageCardReducer()
@@ -59,6 +61,7 @@ final class MessageCardStateTests: XCTestCase {
         XCTAssertNil(newState.messageCardConfiguration)
     }
 
+    @MainActor
     func test_tappedOnCloseButtonAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = messageCardReducer()

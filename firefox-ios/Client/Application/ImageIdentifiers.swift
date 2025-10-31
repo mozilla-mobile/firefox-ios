@@ -87,4 +87,8 @@ struct ImageIdentifiers {
         public static let protectionOff = "protectionPanelOff"
         public static let protectionOn = "protectionPanelOn"
     }
+
+    public struct Translations {
+        public static let translationActive = "translateActive"
+    }
 }

@@ -13,6 +13,9 @@ final class SettingScreen {
         self.sel = selectors
     }
 
+    private var clearDataCell: XCUIElement { sel.CLEAR_PRIVATE_DATA_CELL.element(in: app) }
+    private var okButton: XCUIElement { sel.ALERT_OK_BUTTON.element(in: app)}
+
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
         doneButton.waitAndTap()
@@ -49,5 +52,30 @@ final class SettingScreen {
             settingsTable.cells[sel.ADDRESS_CELL.value]
         ]
         BaseTestCase().waitForElementsToExist(requiredElements)
+    }
+
+    func clearPrivateDataAndConfirm() {
+        clearDataCell.waitAndTap()
+
+        BaseTestCase().mozWaitForElementToExist(okButton)
+        okButton.waitAndTap()
+    }
+
+    func tryTapClearPrivateDataButton() {
+        clearDataCell.waitAndTap()
+    }
+
+    func assertConfirmationAlertNotPresent() {
+        BaseTestCase().mozWaitForElementToNotExist(okButton)
+    }
+
+    func waitForClearPrivateDataCellSync() {
+        BaseTestCase().mozWaitForElementToExist(clearDataCell)
+    }
+
+    func swipeUpFromNewTabCell() {
+        let newTab = sel.NEW_TAB_CELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(newTab)
+        newTab.swipeUp()
     }
 }

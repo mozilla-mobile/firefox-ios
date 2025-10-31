@@ -73,6 +73,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.addressBorderPosition, borderPosition)
         XCTAssertEqual(actionCalled.displayNavBorder, displayBorder)
         XCTAssertEqual(actionCalled.middleButton, .newTab)
+
+        let savedValue = try XCTUnwrap(
+            mockGleanWrapper.savedValues.first as? String
+        )
+        XCTAssertEqual(savedValue, "newTab")
     }
 
     func testBrowserDidLoad_withHomeCustomMiddleButton_dispatchesDidLoadToolbars() throws {

@@ -388,7 +388,9 @@ class ReaderModeStyleViewController: UIViewController, Themeable, Notifiable {
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            adjustLayoutForA11ySizeCategory()
+            ensureMainThread {
+                self.adjustLayoutForA11ySizeCategory()
+            }
         default: break
         }
     }

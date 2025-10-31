@@ -8,6 +8,7 @@ import SiteImageView
 /// A cell used in Home page Jump Back In section
 final class JumpBackInCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable, Notifiable {
     struct UX {
+        @MainActor
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
