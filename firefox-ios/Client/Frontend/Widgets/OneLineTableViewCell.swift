@@ -66,6 +66,9 @@ class OneLineTableViewCell: UITableViewCell,
         label.textAlignment = .natural
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.adjustsFontForContentSizeCategory = true
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private lazy var bottomSeparatorView: UIView = .build { separatorLine in
@@ -106,6 +109,8 @@ class OneLineTableViewCell: UITableViewCell,
                     - safeAreaInsets.right
             }
         }
+        // ✅ Fix wrapping on large screens
+        titleLabel.preferredMaxLayoutWidth = titleLabel.frame.width
     }
 
     private func updateReorderControl() {
